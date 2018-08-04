@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  description: "TheCoin core services.  Published by TheCoin Tech"
+  version: "0.1.0"
+  title: "TheCoin Core"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "thecoincore-210819.appspot.com"
+tags:
+- name: "Rates"
+  description: "The Coin exchange rates service.  This service provides the official rates"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "https"
+paths:
+  /rates/{currencyCode}:
+    get:
+      tags: 
+        - Rates
+      summary: "Exchange Rate"
+      description: "Query exchange rate for THE into the given currency"
+      operationId: "getConversion"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: TheCoin exchange multiplier to the listed currency
+          schema:
+          
+            required:
+              - target
+              - CoinRate
+              - FxRate
+            properties:
+              target:
+                type: integer
+                format: int64
+              CoinRate:
+                type: number
+                format: double
+              FxRate:
+                type: number
+                format: double
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: currencyCode
+        description: "The integer code for the countries currency"
+        required: true
+        type: integer
+      - in: query
+        name: timestamp
+        description: "The timestamp we are requesting valid values for"
+        required: true
+        type: integer
