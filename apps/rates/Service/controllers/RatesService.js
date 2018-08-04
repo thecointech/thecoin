@@ -7,7 +7,7 @@
  *
  * currencyCode Integer The integer code for the countries currency
  * timestamp Integer The timestamp we are requesting valid values for
- * returns inline_response_200
+ * returns FXRate
  **/
 exports.getConversion = function(currencyCode,timestamp) {
   return new Promise(function(resolve, reject) {
@@ -15,6 +15,8 @@ exports.getConversion = function(currencyCode,timestamp) {
     examples['application/json'] = {
   "CoinRate" : 6.027456183070403,
   "FxRate" : 1.4658129805029452,
+  "ValidTill" : 5,
+  "ValidFrom" : 5,
   "target" : 0
 };
     if (Object.keys(examples).length > 0) {

@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "thecoincore-210819.appspot.com"
+host: "thecoincore-212314.appspot.com"
 tags:
 - name: "Rates"
   description: "The Coin exchange rates service.  This service provides the official\
@@ -28,10 +28,6 @@ paths:
       summary: "Exchange Rate"
       description: "Query exchange rate for THE into the given currency"
       operationId: "getConversion"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
       parameters:
       - name: "currencyCode"
         in: "path"
@@ -47,27 +43,35 @@ paths:
         200:
           description: "TheCoin exchange multiplier to the listed currency"
           schema:
-            $ref: "#/definitions/inline_response_200"
+            $ref: "#/definitions/FXRate"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Rates"
 definitions:
-  inline_response_200:
+  FXRate:
     required:
     - "CoinRate"
     - "FxRate"
-    - "target"
+    - "ValidFrom"
+    - "ValidTill"
     properties:
       target:
         type: "integer"
-        format: "int64"
       CoinRate:
         type: "number"
         format: "double"
       FxRate:
         type: "number"
         format: "double"
+      ValidFrom:
+        type: "integer"
+        format: "int64"
+      ValidTill:
+        type: "integer"
+        format: "int64"
     example:
       CoinRate: 6.02745618307040320615897144307382404804229736328125
       FxRate: 1.46581298050294517310021547018550336360931396484375
+      ValidTill: 5
+      ValidFrom: 5
       target: 0

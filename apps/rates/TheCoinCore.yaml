@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "thecoincore-210819.appspot.com"
+host: "thecoincore-212314.appspot.com"
 tags:
 - name: "Rates"
   description: "The Coin exchange rates service.  This service provides the official rates"
@@ -18,6 +18,34 @@ produces:
 - "application/json"
 schemes:
 - "https"
+
+definitions:
+
+  # Exchange rate info for the given country code
+  # When queried, Valid from <= timestamp < ValidTill
+  FXRate:
+    required:
+      - CountryCode
+      - CoinRate
+      - FxRate
+      - ValidFrom
+      - ValidTill
+    properties:
+      target:
+        type: integer
+      CoinRate:
+        type: number
+        format: double
+      FxRate:
+        type: number
+        format: double
+      ValidFrom:
+        type: integer
+        format: int64
+      ValidTill:
+        type: integer
+        format: int64        
+
 paths:
   /rates/{currencyCode}:
     get:
@@ -32,25 +60,9 @@ paths:
         200:
           description: TheCoin exchange multiplier to the listed currency
           schema:
-          
-            required:
-              - target
-              - CoinRate
-              - FxRate
-            properties:
-              target:
-                type: integer
-                format: int64
-              CoinRate:
-                type: number
-                format: double
-              FxRate:
-                type: number
-                format: double
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
+            $ref: "#/definitions/FXRate"
+
+
       parameters:
       - in: path
         name: currencyCode
