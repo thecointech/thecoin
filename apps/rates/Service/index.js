@@ -1,10 +1,12 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path'),
-    http = require('http');
+  path = require('path'),
+  http = require('http');
 
-var app = require('connect')();
+var RatesUpdate = require('./update/UpdateDb');
+
+var app = require('express')();
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 const PORT = process.env.PORT || 8080;
@@ -17,11 +19,17 @@ var options = {
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
+var spec = fs.readFileSync(path.join(__dirname, 'api/swagger.yaml'), 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+
+  // the app is behind a front-facing proxy, 
+  // we use the X-Forwarded-* headers to determine 
+  // the connection and the IP address of the client.
+  // (Enabled in sample, but do we need it?)
+  //app.enable('trust proxy');
 
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
@@ -34,6 +42,19 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
+
+  // Expose an additional endpoint to allow triggering
+  // an update.  This endpoint should be locked
+  // down and only available to the cron job running on GAE
+  app.get('/doUpdate', function (req, res) {
+    RatesUpdate.EnsureRates()
+      .then((success) => {
+        res.status(200).end('success: ' + success);
+      })
+      .catch((err) => {
+        res.status(405).end('unknown exception');
+      });
+  });
 
   // Start the server
   http.createServer(app).listen(PORT, function () {

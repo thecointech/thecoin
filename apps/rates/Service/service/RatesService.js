@@ -1,6 +1,6 @@
 'use strict';
 
-
+const RatesDB = require('../update/UpdateDb');
 /**
  * Exchange Rate
  * Query exchange rate for THE into the given currency
@@ -9,21 +9,18 @@
  * timestamp Integer The timestamp we are requesting valid values for
  * returns FXRate
  **/
-exports.getConversion = function(currencyCode,timestamp) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "CoinRate" : 6.027456183070403,
-  "FxRate" : 1.4658129805029452,
-  "ValidTill" : 5,
-  "ValidFrom" : 5,
-  "target" : 0
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+exports.getConversion = function (currencyCode, timestamp) {
+  return new Promise(function (resolve, reject) {
+    RatesDB.GetCoinRatesFor(timestamp)
+    .then((coinRates) => {
+      let result = {
+        "CoinRate": coinRates.Buy,
+        "FxRate": 1.4658129805029452,
+        "ValidTill": coinRates.ValidUntil,
+        "ValidFrom": coinRates.ValidFrom,
+        "target": currencyCode
+      };
+      resolve(result);
+    });
   });
 }
-
