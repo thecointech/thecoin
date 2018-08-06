@@ -50,14 +50,18 @@ paths:
 definitions:
   FXRate:
     required:
-    - "CoinRate"
+    - "Buy"
     - "FxRate"
+    - "Sell"
     - "ValidFrom"
     - "ValidTill"
     properties:
       target:
         type: "integer"
-      CoinRate:
+      Buy:
+        type: "number"
+        format: "double"
+      Sell:
         type: "number"
         format: "double"
       FxRate:
@@ -70,8 +74,9 @@ definitions:
         type: "integer"
         format: "int64"
     example:
-      CoinRate: 6.02745618307040320615897144307382404804229736328125
-      FxRate: 1.46581298050294517310021547018550336360931396484375
-      ValidTill: 5
+      Sell: 1.46581298050294517310021547018550336360931396484375
+      Buy: 6.02745618307040320615897144307382404804229736328125
+      FxRate: 5.962133916683182377482808078639209270477294921875
+      ValidTill: 2
       ValidFrom: 5
       target: 0

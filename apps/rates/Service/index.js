@@ -47,7 +47,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // an update.  This endpoint should be locked
   // down and only available to the cron job running on GAE
   app.get('/doUpdate', function (req, res) {
-    RatesUpdate.EnsureRates()
+    RatesUpdate.UpdateRates()
       .then((success) => {
         res.status(200).end('success: ' + success);
       })

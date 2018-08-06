@@ -11,16 +11,22 @@ const RatesDB = require('../update/UpdateDb');
  **/
 exports.getConversion = function (currencyCode, timestamp) {
   return new Promise(function (resolve, reject) {
-    RatesDB.GetCoinRatesFor(timestamp)
-    .then((coinRates) => {
+    let coinWait = RatesDB.GetRatesFor('Coin', timestamp);
+    let fxWait = RatesDB.GetRatesFor(currencyCode, timestamp);
+    Promise.all([coinWait, fxWait])
+    .then((coinRates, fxRates) => {
       let result = {
-        "CoinRate": coinRates.Buy,
-        "FxRate": 1.4658129805029452,
+        "Buy": coinRates.Buy,
+        "Sell": coinRates.Sell,
+        "FxRate": fxRates.Exchange,
         "ValidTill": coinRates.ValidUntil,
         "ValidFrom": coinRates.ValidFrom,
         "target": currencyCode
       };
       resolve(result);
+    })
+    .except((error) => {
+      reject('Error in fetch');
     });
   });
 }

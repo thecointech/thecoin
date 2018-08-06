@@ -7,15 +7,12 @@ const Datastore = require('@google-cloud/datastore');
 const fetch = require("node-fetch");
 const ApiKey = require('./ApiKey');
 
-// Instantiate a datastore client
-const datastore = Datastore({
-    projectId: "thecoincore-212314"
-});
-const LatestCoinFXKey = datastore.key(['Coin', 'Latest']);
+
+
 // Timestamps are measured in tenths of a second
 var CoinTimeHZ = 10;
-// We want to pack into an Int32, so set zero date to 2000
-const ZeroTime = new Date(Date.UTC(2000, 1, 1)).getTime();
+// We want to pack into an Int32, so set zero date to quite recently
+const ZeroTime = new Date(Date.UTC(2018, 6, 1)).getTime();
 
 // Utility fns
 function CoinTimeHrs(hrs) { return (hrs * 60 * 60 * CoinTimeHZ); }
@@ -49,22 +46,54 @@ class ExchangeRate {
     }
 }
 
+class FXRate {
+    constructor(rate, timestamp) {
+        this.Rate = rate;
+        this.Timestamp = timestamp;
+    }
+}
+
+// Instantiate a datastore client
+const datastore = Datastore({
+    projectId: "thecoincore-212314"
+});
+
+//
+// All the supported exchanges
+//
+let Exchanges = {
+    Coin: {
+        Name: 'Coin',
+        LatestKey: datastore.key(['Coin', 'Latest']),
+        LatestRate: null
+    },
+    127: {
+        Name: 'CAD',
+        LatestKey: datastore.key([127, 'Latest']),
+        LatestRate: null
+    }
+}
+
 //
 //  Returns the latest stored rate, or null if none present
 //
-let latestCoinRate = null;
-function GetLatestCoinRate() {
-    return new Promise((resolve, error) => {
-        if (latestCoinRate != null) {
-            resolve(latestCoinRate);
+function GetLatestExchangeRate(code) {
+    return new Promise((resolve, reject) => {
+        let exchange = Exchanges[code];
+        if (exchange == null) {
+            reject("Unsupported Currency");
+            return;
+        }
+        if (exchange.LatestRate != null) {
+            resolve(exchange.LatestRate);
             return;
         }
 
         // if we have no cached value, read from DB
-        datastore.get(LatestCoinFXKey, function (err, entity) {
+        datastore.get(exchange.LatestKey, function (err, entity) {
             if (err == null) {
-                latestCoinRate = entity;
-                resolve(latestCoinRate);
+                exchange.LatestRate = entity;
+                resolve(exchange.LatestRate);
             }
             // no error, we just don't have a latest value
             else resolve(null);
@@ -72,14 +101,32 @@ function GetLatestCoinRate() {
     });
 }
 
+function SetMostRecentRate(code, newRecord) {
+    Exchanges[code].LatestRate = newRecord;
+    return datastore.save({
+        key: Exchanges[code].LatestKey,
+        data: newRecord
+    });
+}
+
+function InsertRate(code, ts, newRecord) {
+    let recordKey = datastore.key([code, ts]);
+    return datastore.save({
+        key: recordKey,
+        data: newRecord
+    });
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 //
 // Gets current rates, and if necessary, generates
 // and stores a new rate.  This function may update
 // the existing rate if it decides that the current
 // rate is still valid (ie - if it decides the market is closed)
 //
-async function MaybeUpdateWithNewCoinRate(latest, now) {
-
+async function EnsureLatestCoinRate(now) {
+    let latest = await GetLatestExchangeRate('Coin');
     const validUntil = latest ? latest.ValidUntil : 0;
 
     // Quick exit if we are updating again too quickly
@@ -89,6 +136,10 @@ async function MaybeUpdateWithNewCoinRate(latest, now) {
     if ((validUntil - now) > RateOffsetFromMarket)
         return latest;
 
+    return await UpdateLatestCoinRate(now, validUntil);
+}
+
+async function UpdateLatestCoinRate(now, latestValidUntil) {
     // So we are legitimately updating.  Fetch
     // the latest records.
     var data = await QueryCoinRates();
@@ -117,7 +168,7 @@ async function MaybeUpdateWithNewCoinRate(latest, now) {
 
     // Get the time this entry would be valid from
     const validFrom = TimeToCT(lastTime) + RateOffsetFromMarket;
-    if (validFrom >= validUntil) {
+    if (validFrom >= latestValidUntil) {
 
         // Get a Date object so we can compare things like hours & days
         let lastDate = new Date();
@@ -159,8 +210,8 @@ async function MaybeUpdateWithNewCoinRate(latest, now) {
         let high = parseFloat(lastEntry["2. high"]) / 100;
         let newRecord = new ExchangeRate(low, high, minValidFrom, newValidUntil);
 
-        InsertFXCoin(newRecord);
-        SetMostRecentFXCoin(newRecord);
+        InsertRate('Coin', newRecord.ValidFrom, newRecord);
+        SetMostRecentRate('Coin', newRecord);
         latest = newRecord;
     }
     return latest;
@@ -185,32 +236,63 @@ async function QueryCoinRates() {
     return dataJs;
 }
 
-function InsertFXCoin(newRecord) {
-    let recordKey = datastore.key(['Coin', newRecord.ValidFrom]);
-    return datastore.save({
-        key: recordKey,
-        data: newRecord
-    });
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function QueryForexRate(currencyCode)
+{
+    const ticker = Exchanges[currencyCode].Name;
+    var forexJs = await QueryExchange("CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=" + ticker);
+    return forexJs["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
 }
 
-function SetMostRecentFXCoin(newRecord) {
-    latestCoinRate = newRecord;
-    return datastore.save({
-        key: LatestCoinFXKey,
-        data: newRecord
-    });
+async function EnsureLatestFXRate(currencyCode, now)
+{
+    let latest = await GetLatestExchangeRate(currencyCode);
+    // Only update FX every 5 minutes (it doesn't change that fast.
+    const lastTimestamp = latest ? latest.Timestamp : 0;
+    if (now - lastTimestamp < (CoinUpdateInterval - RateOffsetFromMarket))
+        return latest;
+
+    // Update with the latest USD/CAD forex
+    let rate = await QueryForexRate(currencyCode);
+    let timestamp = now + RateOffsetFromMarket;
+    latest = new FXRate(rate, timestamp);
+    InsertRate(currencyCode, timestamp, latest);
+    SetMostRecentRate(currencyCode, latest);
+    return latest
 }
+
 
 module.exports = {
-    EnsureRates: function () {
-        let currentTimestamp = GetNow();
+    UpdateRates: function () {
+        let now = GetNow();
 
         return new Promise(async (resolve, reject) => {
             try {
-                latestCoin = await GetLatestCoinRate();
-                latestCoin = await MaybeUpdateWithNewCoinRate(latestCoin, currentTimestamp);
-                if (latestCoin != null && latestCoin.ValidUntil > currentTimestamp)
-                    resolve(latestCoin.ValidUntil);
+
+                let waitCoin = EnsureLatestCoinRate(now);
+
+                let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
+                    if (value != "Coin")
+                        accum.push(EnsureLatestFXRate(value, now));
+                    return accum;
+                }, []);
+
+                let latestCoin = await waitCoin;
+                for (let i = 0; i < currencyWaits.length; i++) {
+                    let latestFX = await currencyWaits[i];
+                    if (latestFX.Timestamp < (now - CoinUpdateInterval))
+                    {
+                        console.error("Invalid timestamp: " + CTToDate(latestFX.Timestamp));
+                        resolve(false);
+                        return;
+                    }
+                }
+                if (latestCoin != null && latestCoin.ValidUntil > now)
+                    resolve(CTToDate(latestCoin.ValidUntil));
                 else
                     resolve(false);
             }
@@ -221,13 +303,15 @@ module.exports = {
         });
     },
 
-    GetLatestCoinRate: GetLatestCoinRate,
+    GetLatestRateFor: function(currencyCode) {
+        //GetLatestCoinRate
+    },
 
-    GetCoinRatesFor: function (timestamp) {
+    GetRatesFor: function (timestamp, currencyCode) {
         return new Promise((resolve, reject) => {
             let query = datastore
-                .createQuery('Coin')
-                .filter('__key__', '>', datastore.key(['Coin', timestamp]))
+                .createQuery(currencyCode)
+                .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
                 .limit(1)
 
             datastore.runQuery(query, function (err, entities) {

@@ -26,14 +26,18 @@ definitions:
   FXRate:
     required:
       - CountryCode
-      - CoinRate
+      - Buy
+      - Sell
       - FxRate
       - ValidFrom
       - ValidTill
     properties:
       target:
         type: integer
-      CoinRate:
+      Buy:
+        type: number
+        format: double
+      Sell:
         type: number
         format: double
       FxRate:
