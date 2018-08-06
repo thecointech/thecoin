@@ -6,8 +6,8 @@
 const Datastore = require('@google-cloud/datastore');
 const fetch = require("node-fetch");
 const ApiKey = require('./ApiKey');
-
-
+const tz = require('timezone/loaded');
+const tzus = tz(require("timezone/America"));
 
 // Timestamps are measured in tenths of a second
 var CoinTimeHZ = 10;
@@ -150,7 +150,8 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
         // We can't do much about this, but we should
         // update current latest rate with new ending time.
         // TODO!
-        return latest;
+        console.error('Could not fetch Coin rates!');
+        return null;
     }
 
     // We can only use the last item in the list,
@@ -163,41 +164,35 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
     // This could theoretically break, but the perf
     // bonus of not sorting 100 strings is worth the risk
     // (there is code later verifying that this value is rational)
-    const lastkey = keys[0]; //Math.max(...keys);
+    const lastkey = keys[0];
     const lastTime = Date.parse(lastkey + ' EDT');
+    console.log("Updating for time: " + tzus(lastTime, "%F %R:%S", "America/New_York") + " at time: " + new Date().toString());
 
     // Get the time this entry would be valid from
     const validFrom = TimeToCT(lastTime) + RateOffsetFromMarket;
     if (validFrom >= latestValidUntil) {
 
-        // Get a Date object so we can compare things like hours & days
-        let lastDate = new Date();
-        // !!!IMPORTANT!!!  This only works if your server is in EST
-        // Because mine is, I'm just going to leave it like this,
-        // but future reviews should update this to work in any TZ
-        lastDate.setTime(lastTime);
-
         // New entry, enter it into the database
         // Each entry is valid for 1 minute
         let newValidUntil = validFrom + CoinUpdateInterval;
         // If EOD, add enough time so the market is open again
-        if (lastDate.getHours() == 16) {
+        if (tzus(lastTime, "%-HH", "America/New_York") == "16H") {
             // Add 17.5 hours and 1 minute.  Should be 9:31:30
-            newValidUntil = validFrom + (60 * CoinTimeHZ) + CoinTimeHrs(17.5);
-            // VERIFY: We gotta check this vs leap years etc...
-            let newValidUntilDate = CTToDate(newValidUntil);
-            if (newValidUntilDate.getHours() != 9 || newValidUntilDate.getMinutes() != 31 || newValidUntilDate.getSeconds() != (RateOffsetFromMarket / CoinTimeHZ)) {
-                throw new Exception("Got invalid market start time: " + newValidUntilDate.toString());
+            let newLastTime = tz(lastTime, "+1 day", "-6 hours", "-29 minutes");
+            // Validate this is the correct time
+            if (tzus(newLastTime, "%R:%S", "America/New_York") != "09:31:00") {
+                throw ("Got invalid market start time: " + tzus(newLastTime, "%F %R:%S", "America/New_York"));
             }
             // If it's a friday, skip the weekend
-            if (lastDate.getDay() == 5)
-                newValidUntil += CoinTimeHrs(2 * 24);
+            if (tzus(lastTime, "%w", "America/New_York") == 5) 
+                newLastTime = tz(newLastTime, "+2 days");
+            // If we are still reading yesterdays data 1 hr into the new trading day,
+            // assume the market must be closed and push the validUntil until tomorrow
+            if (now - newValidUntil > CoinTimeHrs(1)) 
+                newLastTime = tz(newLastTime, "+1 day");
 
-            if (now - newValidUntil > CoinTimeHrs(1)) {
-                // If we are still reading yesterdays data 1 hr into the new trading day,
-                // assume the market must be closed and push the validUntil until tomorrow
-                newValidUntil = CoinTimeHrs(24);
-            }
+            newValidUntil = TimeToCT(newLastTime) + RateOffsetFromMarket;
+            console.log('Update Validity until: ' + tzus(newValidUntil * 100 + ZeroTime, "%F %R:%S", "America/New_York"));
         }
 
         // If this validFrom occurred in the past, ensure it always happens
@@ -258,6 +253,7 @@ async function EnsureLatestFXRate(currencyCode, now)
 
     // Update with the latest USD/CAD forex
     let rate = await QueryForexRate(currencyCode);
+    rate = Number.parseFloat(rate);
     let timestamp = now + RateOffsetFromMarket;
     latest = new FXRate(rate, timestamp);
     InsertRate(currencyCode, timestamp, latest);
@@ -308,6 +304,8 @@ module.exports = {
     },
 
     GetRatesFor: function (currencyCode, timestamp) {
+        let test = CTToDate(31708702);
+
         return new Promise((resolve, reject) => {
             let query = datastore
                 .createQuery(currencyCode)
