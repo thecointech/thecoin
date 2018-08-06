@@ -307,17 +307,18 @@ module.exports = {
         //GetLatestCoinRate
     },
 
-    GetRatesFor: function (timestamp, currencyCode) {
+    GetRatesFor: function (currencyCode, timestamp) {
         return new Promise((resolve, reject) => {
             let query = datastore
                 .createQuery(currencyCode)
-                .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
-                .limit(1)
+                .filter('__key__', '<=', datastore.key([currencyCode, timestamp]))
+                //.order('__key__', { descending: true })
+                .limit(10)
 
             datastore.runQuery(query, function (err, entities) {
                 if (err == null) {
                     if (entities.length == 0)
-                        reject("No value registered for: " + timestamp)
+                        reject("No value registered for: " + currencyCode + " at: " + CTToDate(timestamp))
                     else {
                         // entities = An array of records.
                         // Access the Key object for an entity.

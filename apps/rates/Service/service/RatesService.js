@@ -9,24 +9,26 @@ const RatesDB = require('../update/UpdateDb');
  * timestamp Integer The timestamp we are requesting valid values for
  * returns FXRate
  **/
+
 exports.getConversion = function (currencyCode, timestamp) {
   return new Promise(function (resolve, reject) {
     let coinWait = RatesDB.GetRatesFor('Coin', timestamp);
     let fxWait = RatesDB.GetRatesFor(currencyCode, timestamp);
     Promise.all([coinWait, fxWait])
-    .then((coinRates, fxRates) => {
-      let result = {
-        "Buy": coinRates.Buy,
-        "Sell": coinRates.Sell,
-        "FxRate": fxRates.Exchange,
-        "ValidTill": coinRates.ValidUntil,
-        "ValidFrom": coinRates.ValidFrom,
-        "target": currencyCode
-      };
-      resolve(result);
-    })
-    .except((error) => {
-      reject('Error in fetch');
-    });
+      .then(([coinRates, fxRates]) => {
+        let result = {
+          "Buy": coinRates.Buy,
+          "Sell": coinRates.Sell,
+          "FxRate": fxRates.Rate,
+          "ValidTill": coinRates.ValidUntil,
+          "ValidFrom": coinRates.ValidFrom,
+          "target": currencyCode
+        };
+        resolve(result);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject('Error in fetch');
+      });
   });
 }
