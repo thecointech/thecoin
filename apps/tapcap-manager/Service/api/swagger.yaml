@@ -10,14 +10,14 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "192.222.141.84:29554"
+host: "https://tapcap.thecoincore-212314.appspot.com/"
 tags:
 - name: "The"
   description: "The Coin: TapCap manager is responsible for resolving TapCap transactions,\
     \ and tracking user TapCap accounts"
   externalDocs:
     description: "Find out more"
-    url: "http://192.222.141.84/docs"
+    url: "https://tapcap.thecoincore-212314.appspot.com/docs"
 schemes:
 - "https"
 consumes:
