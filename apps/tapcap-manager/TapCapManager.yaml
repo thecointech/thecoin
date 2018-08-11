@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "https://tapcap.thecoincore-212314.appspot.com/"
+host: "tapcap.thecoincore-212314.appspot.com"
 tags:
 - name: "The"
   description: "The Coin: TapCap manager is responsible for resolving TapCap transactions, and tracking user TapCap accounts"
@@ -118,6 +118,18 @@ definitions:
       signature:
         type: string
 
+  # The client finally signs the result, and submits
+  # to the central bank to confirm all has gone to plan
+  TapCapPurchaseFinalSigned:
+    required:
+      - brokerSigned
+      - signature
+    properties:
+      request:
+        $ref: "#/definitions/TapCapPurchaseBrokerSigned"
+      signature:
+        type: string
+
   # ---------------------------------------------------------------- #
 
   # Query the Manager for a clients TapCap balance  
@@ -149,6 +161,7 @@ definitions:
     required:
     - balance
     - weeklyTopup
+    - token
     properties:
       balance:
         type: number
@@ -156,16 +169,8 @@ definitions:
       weeklyTopup:
         type: number
         format: int64
-
-  TapCapQueryResponseSigned:
-    required:
-      - response
-      - signature
-    properties:
-      response:
-        $ref: "#/definitions/TapCapQueryResponse"
-      signature:
-        type: string
+      token: 
+        $ref: "#/definitions/TapCapTokenSigned"
 
   TapCapHistoryRequest:
     required:
@@ -250,16 +255,20 @@ paths:
       operationId: "TapCapBroker"
       responses:
         405:
-          description: "Invalid input"
+          description: Invalid input
         200:
-          description: TapCap Status
+          description: Transaction Result
           schema:
-            $ref: "#/definitions/TapCapQueryResponseSigned"
+            required:
+              - errorCode
+            properties:
+              errorCode:
+                type: integer
 
       parameters:
         - in: body
           name: request
-          description: "TapCap status request"
+          description: "TapCap exchange request"
           required: true
           schema: 
             $ref: "#/definitions/TapCapPurchaseBrokerSigned"
@@ -276,7 +285,7 @@ paths:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/TapCapPurchaseSigned"
+            $ref: "#/definitions/TapCapPurchaseFinalSigned"
 
       parameters:
         - in: body
@@ -285,10 +294,10 @@ paths:
           required: true
           schema: 
             $ref: "#/definitions/TapCapTokenSigned"
-  /tap/state:
+  /tap/status/summary:
     post:
       tags: 
-        - TapCap
+        - Status
       summary: "TapCap current status"
       description: "User TapCap status"
       operationId: "TapCapStatus"
@@ -298,7 +307,7 @@ paths:
         200:
           description: TapCap Status
           schema:
-            $ref: "#/definitions/TapCapQueryResponseSigned"
+            $ref: "#/definitions/TapCapQueryResponse"
 
       parameters:
         - in: body
@@ -308,10 +317,10 @@ paths:
           schema: 
             $ref: "#/definitions/TapCapQueryRequestSigned"
 
-  /tap/history:
+  /tap/status/history:
     post:
       tags:
-        - TapCap
+        - Status
       summary: "TapCap current status"
       description: "User TapCap status"
       operationId: "TapCapHistory"

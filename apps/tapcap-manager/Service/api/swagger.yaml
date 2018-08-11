@@ -10,7 +10,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "https://tapcap.thecoincore-212314.appspot.com/"
+host: "tapcap.thecoincore-212314.appspot.com"
 tags:
 - name: "The"
   description: "The Coin: TapCap manager is responsible for resolving TapCap transactions,\
@@ -34,15 +34,15 @@ paths:
       parameters:
       - in: "body"
         name: "request"
-        description: "TapCap status request"
+        description: "TapCap exchange request"
         required: true
         schema:
           $ref: "#/definitions/TapCapPurchaseBrokerSigned"
       responses:
         200:
-          description: "TapCap Status"
+          description: "Transaction Result"
           schema:
-            $ref: "#/definitions/TapCapQueryResponseSigned"
+            $ref: "#/definitions/inline_response_200"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Transactions"
@@ -63,14 +63,14 @@ paths:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/TapCapPurchaseSigned"
+            $ref: "#/definitions/TapCapPurchaseFinalSigned"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Transactions"
-  /tap/state:
+  /tap/status/summary:
     post:
       tags:
-      - "TapCap"
+      - "Status"
       summary: "TapCap current status"
       description: "User TapCap status"
       operationId: "TapCapStatus"
@@ -85,14 +85,14 @@ paths:
         200:
           description: "TapCap Status"
           schema:
-            $ref: "#/definitions/TapCapQueryResponseSigned"
+            $ref: "#/definitions/TapCapQueryResponse"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "TapCap"
-  /tap/history:
+      x-swagger-router-controller: "Status"
+  /tap/status/history:
     post:
       tags:
-      - "TapCap"
+      - "Status"
       summary: "TapCap current status"
       description: "User TapCap status"
       operationId: "TapCapHistory"
@@ -110,7 +110,7 @@ paths:
             $ref: "#/definitions/TapCapHistoryResponseSigned"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "TapCap"
+      x-swagger-router-controller: "Status"
 definitions:
   TapCapToken:
     required:
@@ -254,6 +254,34 @@ definitions:
         cert: "cert"
         coin: 7.061401241503109105224211816675961017608642578125
       signature: "signature"
+  TapCapPurchaseFinalSigned:
+    required:
+    - "signature"
+    properties:
+      request:
+        $ref: "#/definitions/TapCapPurchaseBrokerSigned"
+      signature:
+        type: "string"
+    example:
+      request:
+        request:
+          request:
+            request:
+              fiat: 0.80082819046101150206595775671303272247314453125
+              currencyCode: 6.02745618307040320615897144307382404804229736328125
+              timestamp: 1.46581298050294517310021547018550336360931396484375
+              token:
+                signature: "signature"
+                token:
+                  clientAccount: "clientAccount"
+                  transactionId: 5.63737665663332876420099637471139430999755859375
+                  availableBalance: 5.962133916683182377482808078639209270477294921875
+                  timestamp: 2.3021358869347654518833223846741020679473876953125
+            signature: "signature"
+          cert: "cert"
+          coin: 7.061401241503109105224211816675961017608642578125
+        signature: "signature"
+      signature: "signature"
   TapCapQueryRequest:
     required:
     - "random"
@@ -284,6 +312,7 @@ definitions:
   TapCapQueryResponse:
     required:
     - "balance"
+    - "token"
     - "weeklyTopup"
     properties:
       balance:
@@ -292,23 +321,18 @@ definitions:
       weeklyTopup:
         type: "number"
         format: "int64"
+      token:
+        $ref: "#/definitions/TapCapTokenSigned"
     example:
       balance: 0.80082819046101150206595775671303272247314453125
       weeklyTopup: 6.02745618307040320615897144307382404804229736328125
-  TapCapQueryResponseSigned:
-    required:
-    - "response"
-    - "signature"
-    properties:
-      response:
-        $ref: "#/definitions/TapCapQueryResponse"
-      signature:
-        type: "string"
-    example:
-      signature: "signature"
-      response:
-        balance: 0.80082819046101150206595775671303272247314453125
-        weeklyTopup: 6.02745618307040320615897144307382404804229736328125
+      token:
+        signature: "signature"
+        token:
+          clientAccount: "clientAccount"
+          transactionId: 5.63737665663332876420099637471139430999755859375
+          availableBalance: 5.962133916683182377482808078639209270477294921875
+          timestamp: 2.3021358869347654518833223846741020679473876953125
   TapCapHistoryRequest:
     required:
     - "fromTimestamp"
@@ -405,6 +429,14 @@ definitions:
           merchantId: "merchantId"
           fiatAmount: 6.02745618307040320615897144307382404804229736328125
           timestamp: 0.80082819046101150206595775671303272247314453125
+  inline_response_200:
+    required:
+    - "errorCode"
+    properties:
+      errorCode:
+        type: "integer"
+    example:
+      errorCode: 0
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
