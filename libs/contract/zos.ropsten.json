@@ -1,0 +1,59 @@
+{
+  "contracts": {
+    "TheCoin": {
+      "address": "0x924dee5d12f06c28c57891799c265bbc983d16bc",
+      "constructorCode": "608060405234801561001057600080fd5b50615a2980620000216000396000f300",
+      "bodyBytecodeHash": "9ca039f70ba0ed72dfbf6813470b2fb46621c2fe6b84d3e972d9cd8edb56a555",
+      "bytecodeHash": "8883f8e2257e23aa979272c3a15f2fd2d8bbfa4cf4f8d92ab6fa2ff6fa1a48b3"
+    }
+  },
+  "proxies": {
+    "TheCoin": [
+      {
+        "address": "0x0d14048b4614747e33a8033f53562ada5d5e870e",
+        "version": "0.1.0",
+        "implementation": "0x7afef7999b6c1a2d93eeed2f047f699cd721e776"
+      },
+      {
+        "address": "0x6d64a71ae43281bf00f165bb542e89d1fd6c0ddb",
+        "version": "0.1.0",
+        "implementation": "0x7afef7999b6c1a2d93eeed2f047f699cd721e776"
+      },
+      {
+        "address": "0x5fc1ad426349a8e8cd25ae8038dfab06f33a50b2",
+        "version": "0.1.0",
+        "implementation": "0x7afef7999b6c1a2d93eeed2f047f699cd721e776"
+      },
+      {
+        "address": "0x2ab35e242522f173f5d37d7314021511137c375d",
+        "version": "0.1.0",
+        "implementation": "0x7afef7999b6c1a2d93eeed2f047f699cd721e776"
+      },
+      {
+        "address": "0xe4101b0a66611836236559de51722a8577b1e255",
+        "version": "0.1.0",
+        "implementation": "0x7afef7999b6c1a2d93eeed2f047f699cd721e776"
+      },
+      {
+        "address": "0x85aa8e5eb92e308f38fc8f6988f4a9d2b7554a5f",
+        "version": "0.1.0",
+        "implementation": "0x924dee5d12f06c28c57891799c265bbc983d16bc"
+      }
+    ]
+  },
+  "app": {
+    "address": "0xa0ca68e53e2788879f7048e5b3a4c9c92b944021"
+  },
+  "version": "0.1.0",
+  "package": {
+    "address": "0x647e869ebafb518c3c94cf5dcbf654c0164ae746"
+  },
+  "provider": {
+    "address": "0xc0c16cc8e494f6311a5aee70ffb31c6031de6ef0"
+  },
+  "stdlib": {
+    "name": "openzeppelin-zos",
+    "version": "1.9.4",
+    "address": "0x70f68e25e8be690af8d54065677091617b9711a8"
+  }
+}

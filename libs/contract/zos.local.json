@@ -1,0 +1,21 @@
+{
+  "contracts": {
+    "TheCoin": {
+      "address": "0x9ec7f5ab7cb22786cdead28185896855541c8b3f",
+      "constructorCode": "608060405233600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550613deb806100546000396000f300",
+      "bodyBytecodeHash": "c44c0524fb2143cae8660849aecd28b51073300f85485d0dd8b9dafb611c413d",
+      "bytecodeHash": "49d850631f52e0c27bc10081c021cc42eea9cb88a18bbb211d8ac6bc02bf8612"
+    }
+  },
+  "proxies": {},
+  "app": {
+    "address": "0x0342c2f636fabaa346208bb05d3d3908fd747a23"
+  },
+  "version": "0.1.0",
+  "package": {
+    "address": "0x7747f2933b2749a8d9df9e4825b9728599867d8a"
+  },
+  "provider": {
+    "address": "0xe8590aed62cca8ab8a6fbf98dbbab8b884f146a0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "TheCoinContract",
+  "version": "0.1.0",
+  "contracts": {
+    "TheCoin": "TheCoin"
+  },
+  "stdlib": {
+    "name": "openzeppelin-zos",
+    "version": "^1.9.4"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "thecoincontract",
+  "version": "1.0.0",
+  "description": "Central contract for THE coin management",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Stephen Taylor",
+  "license": "MIT",
+  "dependencies": {
+    "openzeppelin-zos": "^1.9.4",
+    "zos-lib": "^1.4.1"
+  }
+}
