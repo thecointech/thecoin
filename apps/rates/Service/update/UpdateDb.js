@@ -9,23 +9,6 @@ const ApiKey = require('./ApiKey');
 const tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
-// Timestamps are measured in tenths of a second
-var CoinTimeHZ = 10;
-// We want to pack into an Int32, so set zero date to quite recently
-const ZeroTime = new Date(Date.UTC(2018, 6, 1)).getTime();
-
-// Utility fns
-function CoinTimeHrs(hrs) { return (hrs * 60 * 60 * CoinTimeHZ); }
-function TimeToCT(time) { return Math.floor((time - ZeroTime) / (1000 / CoinTimeHZ)); }
-function DateToCT(date) { return TimeToCT(date.getTime()); }
-function GetNow() { return TimeToCT(Date.now()); }
-
-function CTToDate(ct) {
-    let d = new Date();
-    d.setTime(ZeroTime + (ct * 1000 / CoinTimeHZ));
-    return d;
-}
-
 // Rates come into effect 30 seconds afeter the market rate.
 // This to allow us time to update, and give brokers plenty of time
 // to update their local caches before the new rate comes

@@ -17,17 +17,14 @@ Query exchange rate for THE into the given currency
 
 ### Example
 ```javascript
-var TheCoinCore = require('the_coin_core');
+import TheCoinCore from 'the_coin_core';
 
-var apiInstance = new TheCoinCore.RatesApi();
-
-var currencyCode = 56; // Number | The integer code for the countries currency
-
-var timestamp = 56; // Number | The timestamp we are requesting valid values for
-
-apiInstance.getConversion(currencyCode, timestamp).then(function(data) {
+let apiInstance = new TheCoinCore.RatesApi();
+let currencyCode = 56; // Number | The integer code for the countries currency
+let timestamp = 56; // Number | The timestamp we are requesting valid values for
+apiInstance.getConversion(currencyCode, timestamp).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
-}, function(error) {
+}, (error) => {
   console.error(error);
 });
 
@@ -50,6 +47,6 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 

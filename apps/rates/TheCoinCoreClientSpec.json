@@ -1,3 +1,4 @@
 {
-    "usePromises" : true
+    "usePromises" : true,
+    "useES6": true
 }
