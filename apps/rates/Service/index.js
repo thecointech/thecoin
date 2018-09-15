@@ -7,6 +7,8 @@ var fs = require('fs'),
 var RatesUpdate = require('./update/UpdateDb');
 
 var app = require('express')();
+var cors = require('cors')
+
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 const PORT = process.env.PORT || 8080;
@@ -30,6 +32,23 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // the connection and the IP address of the client.
   // (Enabled in sample, but do we need it?)
   //app.enable('trust proxy');
+  app.use(cors());
+  app.options('*', cors()) // include before other routes
+  // Add headers
+    // app.use(function (req, res, next) {
+
+    //   // Website you wish to allow to connect
+    //   //if (req.path.startsWith('/rate')) {
+    //     res.setHeader('Access-Control-Allow-Origin', '*');
+    //     res.setHeader('Access-Control-Allow-Methods', "GET, POST, PUT, PATCH, DELETE");
+    //     res.setHeader('Access-Control-Allow-Headers', 'content-type');
+    //     // if (req.method === 'OPTIONS') {
+    //     //   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    //     //   return res.status(200).end();
+    //     // }
+    //   //}
+    //   return next();
+    // });
 
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
