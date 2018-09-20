@@ -300,7 +300,8 @@ async function EnsureLatestFXRate(currencyCode, now) {
         else {
             // Search forward in boundary points and keep the last
             // boundary that occured before now.
-            for (let t = lastBoundary; t < nowTime; t += intervalTime)
+            let minBoundaryInterval = nowTime + (RateOffsetFromMarket * (1000 / CoinTimeProto.CoinTimeHZ));
+            for (let t = lastBoundary; t <= minBoundaryInterval; t += intervalTime)
                 lastBoundary = t;
         }
 

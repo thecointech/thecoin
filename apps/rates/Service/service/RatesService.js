@@ -28,7 +28,7 @@ exports.getConversion = function (currencyCode, timestamp) {
       })
       .catch((error) => {
         console.error(error);
-        reject('Error in fetch');
+        reject('{ "Error": "Error in fetch" }');
       });
   });
 }

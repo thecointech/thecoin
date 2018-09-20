@@ -17,7 +17,7 @@ Query exchange rate for THE into the given currency
 
 ### Example
 ```javascript
-import TheCoinCore from 'the_coin_core';
+import TheCoinCore from 'the-coin-core';
 
 let apiInstance = new TheCoinCore.RatesApi();
 let currencyCode = 56; // Number | The integer code for the countries currency
