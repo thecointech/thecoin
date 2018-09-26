@@ -4,8 +4,8 @@
   "description": "TheCoin broker services.  To be implemented allowing exchange of local currency to THESE",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js"
+    "prestart": "npm install",
+    "start": "node index.js"
   },
   "keywords": [
     "swagger"
@@ -15,6 +15,7 @@
   "dependencies": {
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.1"
+    "swagger-tools": "0.10.1",
+    "web3": "^1.0.0-beta.35"
   }
 }

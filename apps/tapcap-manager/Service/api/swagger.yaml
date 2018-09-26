@@ -202,10 +202,10 @@ definitions:
   TapCapPurchaseBroker:
     required:
     - "cert"
+    - "clientRequest"
     - "coin"
-    - "request"
     properties:
-      request:
+      clientRequest:
         $ref: "#/definitions/TapCapPurchaseSigned"
       coin:
         type: "number"
@@ -213,7 +213,8 @@ definitions:
       cert:
         type: "string"
     example:
-      request:
+      cert: "cert"
+      clientRequest:
         request:
           fiat: 0.80082819046101150206595775671303272247314453125
           currencyCode: 6.02745618307040320615897144307382404804229736328125
@@ -226,19 +227,21 @@ definitions:
               availableBalance: 5.962133916683182377482808078639209270477294921875
               timestamp: 2.3021358869347654518833223846741020679473876953125
         signature: "signature"
-      cert: "cert"
       coin: 7.061401241503109105224211816675961017608642578125
   TapCapPurchaseBrokerSigned:
     required:
+    - "purchaseRequest"
     - "signature"
     properties:
-      request:
+      purchaseRequest:
         $ref: "#/definitions/TapCapPurchaseBroker"
       signature:
         type: "string"
     example:
-      request:
-        request:
+      signature: "signature"
+      purchaseRequest:
+        cert: "cert"
+        clientRequest:
           request:
             fiat: 0.80082819046101150206595775671303272247314453125
             currencyCode: 6.02745618307040320615897144307382404804229736328125
@@ -251,21 +254,23 @@ definitions:
                 availableBalance: 5.962133916683182377482808078639209270477294921875
                 timestamp: 2.3021358869347654518833223846741020679473876953125
           signature: "signature"
-        cert: "cert"
         coin: 7.061401241503109105224211816675961017608642578125
-      signature: "signature"
   TapCapPurchaseFinalSigned:
     required:
+    - "brokerSigned"
     - "signature"
     properties:
-      request:
+      brokerSigned:
         $ref: "#/definitions/TapCapPurchaseBrokerSigned"
       signature:
         type: "string"
     example:
-      request:
-        request:
-          request:
+      signature: "signature"
+      brokerSigned:
+        signature: "signature"
+        purchaseRequest:
+          cert: "cert"
+          clientRequest:
             request:
               fiat: 0.80082819046101150206595775671303272247314453125
               currencyCode: 6.02745618307040320615897144307382404804229736328125
@@ -278,10 +283,7 @@ definitions:
                   availableBalance: 5.962133916683182377482808078639209270477294921875
                   timestamp: 2.3021358869347654518833223846741020679473876953125
             signature: "signature"
-          cert: "cert"
           coin: 7.061401241503109105224211816675961017608642578125
-        signature: "signature"
-      signature: "signature"
   TapCapQueryRequest:
     required:
     - "random"
