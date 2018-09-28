@@ -9,19 +9,16 @@ const ApiKey = require('./ApiKey');
 const tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
-const CoinTimeProto = require('./CoinTime').CoinTime;
-const CoinTime = new CoinTimeProto();
-
 // Rates come into effect 30 seconds afeter the market rate.
 // This to allow us time to update, and give brokers plenty of time
 // to update their local caches before the new rate comes
 // into effect.
-const RateOffsetFromMarket = 30 * CoinTimeProto.CoinTimeHZ
+const RateOffsetFromMarket = 30 * 1000
 // How often to update the coin exchange rate/minimum interval
 // a rate is valid for.  For testing period, we set this
 // to a loooong time (3hrs), in production this should be
 // set to 1 minute (shortest possible interval)
-const CoinUpdateInterval = 60 * 60 * 3 * CoinTimeProto.CoinTimeHZ;
+const CoinUpdateInterval = 60 * 60 * 3 * 1000;
 const FXUpdateInterval = CoinUpdateInterval;
 
 class ExchangeRate {
@@ -157,7 +154,7 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
     console.log("Updating for time: " + tzus(lastTime, "%F %R:%S", "America/New_York") + " at time: " + new Date().toString());
 
     // Get the time this entry would be valid from
-    let validFrom = CoinTime.TimeToCT(lastTime + (60 * 1000)) + RateOffsetFromMarket;
+    let validFrom = (lastTime + (60 * 1000)) + RateOffsetFromMarket;
     let validUntil = validFrom + CoinUpdateInterval;
 
     // If our validFrom is less than our latest valid until,
@@ -181,8 +178,8 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
 
     // Check to see that our validFrom is still in the future, and we have
     // enough time to update with the new values (2 seconds, cause why not)
-    if (validFrom < CoinTime.GetNow() + (2 * CoinTimeProto.CoinTimeHZ)) {
-        console.error("Update is happing too late, our previous validity will expires at:" + CoinTime.CTToDate(validFrom));
+    if (validFrom < (now + 2000)) {
+        console.error("Update is happing too late, our previous validity expired at:" + (new Date(validFrom)));
         // We need to know this is happening, but cannot fix it in code (I think).
     }
 
@@ -203,7 +200,7 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
         if ((new Date().getTime() - tzValidUntil) > 1000 * 60 * 15)
             tzValidUntil = tz(tzValidUntil, "+1 day");
 
-        validUntil = CoinTime.TimeToCT(tzValidUntil) + RateOffsetFromMarket;
+        validUntil = tzValidUntil + RateOffsetFromMarket;
 
         // Last check: validUntil must be at least some distance in the future
         // This is an expected case in the first checks on a closed trading day
@@ -214,7 +211,7 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
         while (validUntil < (now + RateOffsetFromMarket))
             validUntil = validUntil + CoinUpdateInterval;
 
-        console.log('Update Validity until: ' + tzus(validUntil * 100 + CoinTimeProto.ZeroTime, "%F %R:%S", "America/New_York"));
+        console.log('Update Validity until: ' + tzus(validUntil, "%F %R:%S", "America/New_York"));
     }
 
     let lastEntry = data[lastkey];
@@ -286,21 +283,20 @@ async function EnsureLatestFXRate(currencyCode, now) {
         // However, we want to ensure that our valid until is set to about FXUpdateInterval
         // in the future, as we assume thats the next time we update.  
 
-        let nowTime = CoinTime.CTToTime(now);
-        let hours = tzus(nowTime, "%H", "America/New_York");
-        let minutes = tzus(nowTime, "%M", "America/New_York");
-        let seconds = tzus(nowTime, "%S", "America/New_York");
+        let hours = tzus(now, "%H", "America/New_York");
+        let minutes = tzus(now, "%M", "America/New_York");
+        let seconds = tzus(now, "%S", "America/New_York");
 
-        let lastBoundary = tz(nowTime, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
-        let intervalTime = FXUpdateInterval * (1000 / CoinTimeProto.CoinTimeHZ);
+        let lastBoundary = tz(now, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
+        let intervalTime = FXUpdateInterval;
         // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
         // In this case we simply offset it backwards 
-        if (lastBoundary > nowTime)
+        if (lastBoundary > now)
             lastBoundary -= intervalTime;
         else {
             // Search forward in boundary points and keep the last
             // boundary that occured before now.
-            let minBoundaryInterval = nowTime + (RateOffsetFromMarket * (1000 / CoinTimeProto.CoinTimeHZ));
+            let minBoundaryInterval = now + RateOffsetFromMarket;
             for (let t = lastBoundary; t <= minBoundaryInterval; t += intervalTime)
                 lastBoundary = t;
         }
@@ -309,7 +305,7 @@ async function EnsureLatestFXRate(currencyCode, now) {
         // set a price in the past)
         validFrom = now;
         // and set this price to be valid until the next boundary
-        validUntil = CoinTime.TimeToCT(lastBoundary) + FXUpdateInterval
+        validUntil = lastBoundary + FXUpdateInterval
     }
     latest = new FXRate(rate, validFrom, validUntil);
     InsertRate(currencyCode, validUntil, latest);
@@ -320,7 +316,7 @@ async function EnsureLatestFXRate(currencyCode, now) {
 
 module.exports = {
     UpdateRates: function () {
-        let now = CoinTime.GetNow();
+        let now = new Date().getTime();
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -337,13 +333,13 @@ module.exports = {
                 for (let i = 0; i < currencyWaits.length; i++) {
                     let latestFX = await currencyWaits[i];
                     if (latestFX.ValidUntil < now) {
-                        console.error("Invalid timestamp: " + CoinTime.CTToDate(latestFX.ValidUntil));
+                        console.error("Invalid timestamp: " + latestFX.ValidUntil);
                         resolve(false);
                         return;
                     }
                 }
                 if (latestCoin != null && latestCoin.ValidUntil > now)
-                    resolve(CoinTime.CTToDate(latestCoin.ValidUntil));
+                    resolve(latestCoin.ValidUntil);
                 else
                     resolve(false);
             }
@@ -359,7 +355,6 @@ module.exports = {
     },
 
     GetRatesFor: function (currencyCode, timestamp) {
-        let test = CoinTime.CTToDate(timestamp);
 
         return new Promise((resolve, reject) => {
             let query = datastore
@@ -371,7 +366,7 @@ module.exports = {
             datastore.runQuery(query, function (err, entities) {
                 if (err == null) {
                     if (entities.length == 0)
-                        reject("No value registered for: " + currencyCode + " at: " + CoinTime.CTToDate(timestamp))
+                        reject("No value registered for: " + currencyCode + " at: " + (new Date(timestamp)))
                     else {
                         // entities = An array of records.
                         // Access the Key object for an entity.
