@@ -1,0 +1,378 @@
+---
+swagger: "2.0"
+info:
+  description: "TheCoin simple broker services.  This sample API is an example of\
+    \ how to setup the simplest low-volume exchange, when combined with the included\
+    \ server code, without external dependencies"
+  version: "0.1.0"
+  title: "THE Coin Broker Sample"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+tags:
+- name: "Purchase"
+  description: "The Coin exchange service.  This API allows clients to request purchase\
+    \ THESE"
+- name: "Sell"
+  description: "The Coin exchange service.  This API allows clients to exchange THESE\
+    \ for CAD"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /exchange/buy/initiate:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Request to buy Coin"
+      description: "Called by the client to exchange CAD for coin"
+      operationId: "requestCoinPurchase"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed buy order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedPurchaseRequest"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}/confirm:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Confirm order opened"
+      description: "Called by the Broker once e-transfer initiated"
+      operationId: "confirmCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed buy order confirm"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedPurchaseConfirm"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}/complete:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Mark buy order complete"
+      description: "Called by the broker to confirm CAD was deposited and coin disbursed"
+      operationId: "completeCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to complete"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed PurchaseComplete"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the purchase is completed"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/:
+    get:
+      tags:
+      - "Purchase"
+      summary: "Query buy order id's"
+      description: "Called by the broker to retrieve all buy orders ID's in the passed\
+        \ state."
+      operationId: "queryCoinPurchasesIds"
+      parameters:
+      - name: "state"
+        in: "query"
+        description: "Numerical state identifier.  Returned array will be all of type\
+          \ state"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "A list of all currently open purchases"
+          schema:
+            $ref: "#/definitions/PurchaseIds"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}:
+    get:
+      tags:
+      - "Purchase"
+      summary: "Query open buy orders"
+      description: "Called by the broker to retrieve all open buy orders."
+      operationId: "queryCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - name: "state"
+        in: "query"
+        description: "Numerical state identifier.  If not present, all states will\
+          \ be returned"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "A list of all currently open purchases"
+          schema:
+            $ref: "#/definitions/PurchaseState"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/sell/initiate:
+    post:
+      tags:
+      - "Sell"
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD"
+      operationId: "requestCoinSale"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed sell order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /exchange/sell/{user}/{id}/complete:
+    post:
+      tags:
+      - "Sell"
+      summary: "Mark coin sale complete"
+      description: "Called by the client to exchange coin for CAD"
+      operationId: "completeCoinSale"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed sell order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+definitions:
+  SignedPurchaseRequest:
+    required:
+    - "cadAmount"
+    - "email"
+    - "signature"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "number"
+        format: "integer"
+      email:
+        type: "string"
+      cadAmount:
+        type: "number"
+        format: "integer"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      cadAmount: 6.02745618307040320615897144307382404804229736328125
+      email: "email"
+      timestamp: 0.80082819046101150206595775671303272247314453125
+  SignedPurchaseConfirm:
+    required:
+    - "signature"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "number"
+        format: "integer"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      timestamp: 0.80082819046101150206595775671303272247314453125
+  PurchaseComplete:
+    required:
+    - "cadAmount"
+    - "cadRate"
+    - "coinAmount"
+    - "coinRate"
+    - "timestamp"
+    - "txHash"
+    properties:
+      timestamp:
+        type: "number"
+        format: "integer"
+      cadAmount:
+        type: "number"
+        format: "integer"
+      coinAmount:
+        type: "number"
+        format: "integer"
+      coinRate:
+        type: "number"
+      cadRate:
+        type: "number"
+      txHash:
+        type: "string"
+    example:
+      cadRate: 5.63737665663332876420099637471139430999755859375
+      coinAmount: 1.46581298050294517310021547018550336360931396484375
+      coinRate: 5.962133916683182377482808078639209270477294921875
+      cadAmount: 6.02745618307040320615897144307382404804229736328125
+      txHash: "txHash"
+      timestamp: 0.80082819046101150206595775671303272247314453125
+  PurchaseResponse:
+    required:
+    - "orderId"
+    properties:
+      orderId:
+        type: "string"
+    example:
+      orderId: "orderId"
+  PurchaseIds:
+    type: "array"
+    items:
+      type: "string"
+  PurchaseState:
+    properties:
+      request:
+        $ref: "#/definitions/SignedPurchaseRequest"
+      confirm:
+        $ref: "#/definitions/SignedPurchaseConfirm"
+      complete:
+        $ref: "#/definitions/PurchaseComplete"
+    example:
+      confirm:
+        signature: "signature"
+        timestamp: 0.80082819046101150206595775671303272247314453125
+      request:
+        signature: "signature"
+        cadAmount: 6.02745618307040320615897144307382404804229736328125
+        email: "email"
+        timestamp: 0.80082819046101150206595775671303272247314453125
+      complete:
+        cadRate: 5.63737665663332876420099637471139430999755859375
+        coinAmount: 1.46581298050294517310021547018550336360931396484375
+        coinRate: 5.962133916683182377482808078639209270477294921875
+        cadAmount: 6.02745618307040320615897144307382404804229736328125
+        txHash: "txHash"
+        timestamp: 0.80082819046101150206595775671303272247314453125
+  SellRequest:
+    required:
+    - "email"
+    - "txHash"
+    properties:
+      email:
+        type: "string"
+      txHash:
+        type: "string"
+      blockNumber:
+        type: "integer"
+  SellComplete:
+    required:
+    - "cadAmount"
+    - "cadRate"
+    - "coinAmount"
+    - "coinRate"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "number"
+        format: "integer"
+      cadAmount:
+        type: "number"
+        format: "integer"
+      coinAmount:
+        type: "number"
+        format: "integer"
+      coinRate:
+        type: "number"
+      cadRate:
+        type: "number"
+  SellResponse:
+    required:
+    - "orderId"
+    properties:
+      orderId:
+        type: "string"
+    example:
+      orderId: "orderId"
+  SignedMessage:
+    required:
+    - "message"
+    - "signature"
+    properties:
+      message:
+        type: "string"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      message: "message"
