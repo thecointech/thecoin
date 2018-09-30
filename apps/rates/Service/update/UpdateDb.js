@@ -373,6 +373,7 @@ module.exports = {
                         const rates = entities[0];
                         if (rates.ValidFrom > timestamp || rates.ValidUntil <= timestamp) {
                             reject("Returned rates " + JSON.stringify(rates) + " did not match match timestamp: " + timestamp);
+                            return;
                         }
                         resolve(rates)
                     }
