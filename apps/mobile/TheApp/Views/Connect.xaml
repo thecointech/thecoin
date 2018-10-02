@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="TheApp.ViewModels.Connect">
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Label Text="Scan the account QR code from the web page" />
+        <Button Text="Begin Scan" Command="{Binding ScanCommand}" />
+        <Label Text="{Binding Address}" />
+        <Entry ReturnType="Go" Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
+        <Button Text="Unlock" IsEnabled="{Binding CanUnlock}" Command="{Binding TryDecrypt}" />
+
+    </StackLayout>
+
+</ContentPage>
