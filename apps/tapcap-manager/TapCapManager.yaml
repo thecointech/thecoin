@@ -50,7 +50,7 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema: 
-            $ref: "./definitions.yaml#/TapCapPurchaseBrokerSigned"
+            $ref: "./definitions.yaml#/MessageSigned" # signed ( TapCapPurchaseBroker )
 
   /tap/client: 
     post:
@@ -64,7 +64,7 @@ paths:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "./definitions.yaml#/TapCapPurchaseFinalSigned"
+            $ref: "./definitions.yaml#/MessageSigned" # TapCapToken
 
       parameters:
         - in: body
@@ -72,8 +72,10 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "./definitions.yaml#/TapCapTokenSigned"
-  /tap/status/summary:
+            $ref: "./definitions.yaml#/MessageSigned" # signed ( signed ( TapCapPurchaseBroker ) )
+
+
+  /status/summary:
     post:
       tags: 
         - Status
@@ -94,14 +96,14 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "./definitions.yaml#/TapCapQueryRequestSigned"
+            $ref: "./definitions.yaml#/MessageSigned" # signed ( TapCapQueryRequest )
 
-  /tap/status/history:
+  /status/history:
     post:
       tags:
         - Status
-      summary: "TapCap current status"
-      description: "User TapCap status"
+      summary: "TapCap history"
+      description: "User TapCap history in the ranges provided"
       operationId: "TapCapHistory"
       parameters:
         - in: body
@@ -109,14 +111,14 @@ paths:
           description: "Purchase Request info"
           required: true
           schema: 
-            $ref: "./definitions.yaml#/TapCapHistoryRequestSigned"
+            $ref: "./definitions.yaml#/MessageSigned" # signed ( TapCapHistoryRequest )
       responses:
         405:
           description: "Invalid input"
         200:
           description: TapCap Status
           schema:
-            $ref: "./definitions.yaml#/TapCapHistoryResponseSigned"
+            $ref: "./definitions.yaml#/TapCapHistoryResponse"
 
 externalDocs:
   description: "Find out more about Swagger"

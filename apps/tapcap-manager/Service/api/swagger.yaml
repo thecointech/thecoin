@@ -37,7 +37,7 @@ paths:
         description: "TapCap exchange request"
         required: true
         schema:
-          $ref: "#/definitions/TapCapPurchaseBrokerSigned"
+          $ref: "#/definitions/MessageSigned"
       responses:
         200:
           description: "Transaction Result"
@@ -58,16 +58,16 @@ paths:
         description: "TapCap status request"
         required: true
         schema:
-          $ref: "#/definitions/TapCapTokenSigned"
+          $ref: "#/definitions/MessageSigned"
       responses:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/TapCapPurchaseFinalSigned"
+            $ref: "#/definitions/MessageSigned"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Transactions"
-  /tap/status/summary:
+  /status/summary:
     post:
       tags:
       - "Status"
@@ -80,7 +80,7 @@ paths:
         description: "TapCap status request"
         required: true
         schema:
-          $ref: "#/definitions/TapCapQueryRequestSigned"
+          $ref: "#/definitions/MessageSigned"
       responses:
         200:
           description: "TapCap Status"
@@ -89,12 +89,12 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Status"
-  /tap/status/history:
+  /status/history:
     post:
       tags:
       - "Status"
-      summary: "TapCap current status"
-      description: "User TapCap status"
+      summary: "TapCap history"
+      description: "User TapCap history in the ranges provided"
       operationId: "TapCapHistory"
       parameters:
       - in: "body"
@@ -102,214 +102,23 @@ paths:
         description: "Purchase Request info"
         required: true
         schema:
-          $ref: "#/definitions/TapCapHistoryRequestSigned"
+          $ref: "#/definitions/MessageSigned"
       responses:
         200:
           description: "TapCap Status"
           schema:
-            $ref: "#/definitions/TapCapHistoryResponseSigned"
+            $ref: "#/definitions/TapCapHistoryResponse"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Status"
 definitions:
-  TapCapToken:
-    required:
-    - "availableBalance"
-    - "clientAccount"
-    - "timestamp"
-    - "transactionId"
-    properties:
-      clientAccount:
-        type: "string"
-      availableBalance:
-        type: "number"
-        format: "int64"
-      transactionId:
-        type: "number"
-      timestamp:
-        type: "number"
-        format: "int64"
-    example:
-      clientAccount: "clientAccount"
-      transactionId: 5.63737665663332876420099637471139430999755859375
-      availableBalance: 5.962133916683182377482808078639209270477294921875
-      timestamp: 2.3021358869347654518833223846741020679473876953125
-  TapCapTokenSigned:
+  MessageSigned:
     required:
     - "signature"
-    - "token"
     properties:
-      token:
-        $ref: "#/definitions/TapCapToken"
       signature:
         type: "string"
     example:
-      signature: "signature"
-      token:
-        clientAccount: "clientAccount"
-        transactionId: 5.63737665663332876420099637471139430999755859375
-        availableBalance: 5.962133916683182377482808078639209270477294921875
-        timestamp: 2.3021358869347654518833223846741020679473876953125
-  TapCapPurchase:
-    required:
-    - "currencyCode"
-    - "fiat"
-    - "timestamp"
-    - "token"
-    properties:
-      fiat:
-        type: "number"
-      currencyCode:
-        type: "number"
-      timestamp:
-        type: "number"
-        format: "int64"
-      token:
-        $ref: "#/definitions/TapCapTokenSigned"
-    example:
-      fiat: 0.80082819046101150206595775671303272247314453125
-      currencyCode: 6.02745618307040320615897144307382404804229736328125
-      timestamp: 1.46581298050294517310021547018550336360931396484375
-      token:
-        signature: "signature"
-        token:
-          clientAccount: "clientAccount"
-          transactionId: 5.63737665663332876420099637471139430999755859375
-          availableBalance: 5.962133916683182377482808078639209270477294921875
-          timestamp: 2.3021358869347654518833223846741020679473876953125
-  TapCapPurchaseSigned:
-    required:
-    - "request"
-    - "signature"
-    properties:
-      request:
-        $ref: "#/definitions/TapCapPurchase"
-      signature:
-        type: "string"
-    example:
-      request:
-        fiat: 0.80082819046101150206595775671303272247314453125
-        currencyCode: 6.02745618307040320615897144307382404804229736328125
-        timestamp: 1.46581298050294517310021547018550336360931396484375
-        token:
-          signature: "signature"
-          token:
-            clientAccount: "clientAccount"
-            transactionId: 5.63737665663332876420099637471139430999755859375
-            availableBalance: 5.962133916683182377482808078639209270477294921875
-            timestamp: 2.3021358869347654518833223846741020679473876953125
-      signature: "signature"
-  TapCapPurchaseBroker:
-    required:
-    - "cert"
-    - "clientRequest"
-    - "coin"
-    properties:
-      clientRequest:
-        $ref: "#/definitions/TapCapPurchaseSigned"
-      coin:
-        type: "number"
-        format: "int64"
-      cert:
-        type: "string"
-    example:
-      cert: "cert"
-      clientRequest:
-        request:
-          fiat: 0.80082819046101150206595775671303272247314453125
-          currencyCode: 6.02745618307040320615897144307382404804229736328125
-          timestamp: 1.46581298050294517310021547018550336360931396484375
-          token:
-            signature: "signature"
-            token:
-              clientAccount: "clientAccount"
-              transactionId: 5.63737665663332876420099637471139430999755859375
-              availableBalance: 5.962133916683182377482808078639209270477294921875
-              timestamp: 2.3021358869347654518833223846741020679473876953125
-        signature: "signature"
-      coin: 7.061401241503109105224211816675961017608642578125
-  TapCapPurchaseBrokerSigned:
-    required:
-    - "purchaseRequest"
-    - "signature"
-    properties:
-      purchaseRequest:
-        $ref: "#/definitions/TapCapPurchaseBroker"
-      signature:
-        type: "string"
-    example:
-      signature: "signature"
-      purchaseRequest:
-        cert: "cert"
-        clientRequest:
-          request:
-            fiat: 0.80082819046101150206595775671303272247314453125
-            currencyCode: 6.02745618307040320615897144307382404804229736328125
-            timestamp: 1.46581298050294517310021547018550336360931396484375
-            token:
-              signature: "signature"
-              token:
-                clientAccount: "clientAccount"
-                transactionId: 5.63737665663332876420099637471139430999755859375
-                availableBalance: 5.962133916683182377482808078639209270477294921875
-                timestamp: 2.3021358869347654518833223846741020679473876953125
-          signature: "signature"
-        coin: 7.061401241503109105224211816675961017608642578125
-  TapCapPurchaseFinalSigned:
-    required:
-    - "brokerSigned"
-    - "signature"
-    properties:
-      brokerSigned:
-        $ref: "#/definitions/TapCapPurchaseBrokerSigned"
-      signature:
-        type: "string"
-    example:
-      signature: "signature"
-      brokerSigned:
-        signature: "signature"
-        purchaseRequest:
-          cert: "cert"
-          clientRequest:
-            request:
-              fiat: 0.80082819046101150206595775671303272247314453125
-              currencyCode: 6.02745618307040320615897144307382404804229736328125
-              timestamp: 1.46581298050294517310021547018550336360931396484375
-              token:
-                signature: "signature"
-                token:
-                  clientAccount: "clientAccount"
-                  transactionId: 5.63737665663332876420099637471139430999755859375
-                  availableBalance: 5.962133916683182377482808078639209270477294921875
-                  timestamp: 2.3021358869347654518833223846741020679473876953125
-            signature: "signature"
-          coin: 7.061401241503109105224211816675961017608642578125
-  TapCapQueryRequest:
-    required:
-    - "random"
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "number"
-        format: "int64"
-      random:
-        type: "string"
-    example:
-      random: "random"
-      timestamp: 0.80082819046101150206595775671303272247314453125
-  TapCapQueryRequestSigned:
-    required:
-    - "request"
-    - "signature"
-    properties:
-      request:
-        $ref: "#/definitions/TapCapQueryRequest"
-      signature:
-        type: "string"
-    example:
-      request:
-        random: "random"
-        timestamp: 0.80082819046101150206595775671303272247314453125
       signature: "signature"
   TapCapQueryResponse:
     required:
@@ -324,54 +133,36 @@ definitions:
         type: "number"
         format: "int64"
       token:
-        $ref: "#/definitions/TapCapTokenSigned"
+        $ref: "#/MessageSigned"
     example:
       balance: 0.80082819046101150206595775671303272247314453125
       weeklyTopup: 6.02745618307040320615897144307382404804229736328125
       token:
         signature: "signature"
-        token:
-          clientAccount: "clientAccount"
-          transactionId: 5.63737665663332876420099637471139430999755859375
-          availableBalance: 5.962133916683182377482808078639209270477294921875
-          timestamp: 2.3021358869347654518833223846741020679473876953125
-  TapCapHistoryRequest:
+  TapCapHistoryResponse:
     required:
-    - "fromTimestamp"
-    - "msgTimestamp"
-    - "untilTimestamp"
+    - "history"
     properties:
-      fromTimestamp:
-        type: "number"
-        format: "int64"
-      untilTimestamp:
-        type: "number"
-        format: "int64"
-      msgTimestamp:
-        type: "number"
-        format: "int64"
+      history:
+        type: "array"
+        items:
+          $ref: "#/TapCapTransaction"
     example:
-      msgTimestamp: 1.46581298050294517310021547018550336360931396484375
-      untilTimestamp: 6.02745618307040320615897144307382404804229736328125
-      fromTimestamp: 0.80082819046101150206595775671303272247314453125
-  TapCapHistoryRequestSigned:
-    required:
-    - "request"
-    - "signature"
-    properties:
-      request:
-        $ref: "#/definitions/TapCapHistoryRequest"
-      signature:
-        type: "string"
-    example:
-      request:
-        msgTimestamp: 1.46581298050294517310021547018550336360931396484375
-        untilTimestamp: 6.02745618307040320615897144307382404804229736328125
-        fromTimestamp: 0.80082819046101150206595775671303272247314453125
-      signature: "signature"
+      history:
+      - coinAmount: 1.46581298050294517310021547018550336360931396484375
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5.962133916683182377482808078639209270477294921875
+        timestamp: 0.80082819046101150206595775671303272247314453125
+      - coinAmount: 1.46581298050294517310021547018550336360931396484375
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5.962133916683182377482808078639209270477294921875
+        timestamp: 0.80082819046101150206595775671303272247314453125
   TapCapTransaction:
     required:
     - "coinAmount"
+    - "coinBalance"
     - "fiatAmount"
     - "merchantId"
     - "timestamp"
@@ -385,52 +176,17 @@ definitions:
       coinAmount:
         type: "number"
         format: "int64"
+      coinBalance:
+        type: "number"
+        format: "int64"
       merchantId:
         type: "string"
     example:
       coinAmount: 1.46581298050294517310021547018550336360931396484375
       merchantId: "merchantId"
       fiatAmount: 6.02745618307040320615897144307382404804229736328125
+      coinBalance: 5.962133916683182377482808078639209270477294921875
       timestamp: 0.80082819046101150206595775671303272247314453125
-  TapCapHistoryResponse:
-    required:
-    - "history"
-    properties:
-      history:
-        type: "array"
-        items:
-          $ref: "#/definitions/TapCapTransaction"
-    example:
-      history:
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        timestamp: 0.80082819046101150206595775671303272247314453125
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        timestamp: 0.80082819046101150206595775671303272247314453125
-  TapCapHistoryResponseSigned:
-    required:
-    - "response"
-    - "signature"
-    properties:
-      response:
-        $ref: "#/definitions/TapCapHistoryResponse"
-      signature:
-        type: "string"
-    example:
-      signature: "signature"
-      response:
-        history:
-        - coinAmount: 1.46581298050294517310021547018550336360931396484375
-          merchantId: "merchantId"
-          fiatAmount: 6.02745618307040320615897144307382404804229736328125
-          timestamp: 0.80082819046101150206595775671303272247314453125
-        - coinAmount: 1.46581298050294517310021547018550336360931396484375
-          merchantId: "merchantId"
-          fiatAmount: 6.02745618307040320615897144307382404804229736328125
-          timestamp: 0.80082819046101150206595775671303272247314453125
   inline_response_200:
     required:
     - "errorCode"
