@@ -184,7 +184,7 @@ definitions:
         type: string
         format: byte
       token:
-        $ref: "#/MessageSigned" # TapCapToken
+        $ref: "#/definitions/MessageSigned" # TapCapToken
 
   # If the broker accepts the request, they generate
   # this response structure, fill out the fields and
@@ -196,7 +196,7 @@ definitions:
       - cert
     properties:
       clientRequest:
-        $ref: "#/MessageSigned" # TapCapPurchase
+        $ref: "#/definitions/MessageSigned" # TapCapPurchase
       coin:  # The amount of coin being charged for this transaction
         type: number
         format: int64
@@ -254,7 +254,7 @@ definitions:
         type: number
         format: int64
       token: 
-        $ref: "#/MessageSigned" # TapCapToken
+        $ref: "#/definitions/MessageSigned" # TapCapToken
 
   TapCapHistoryRequest:
     required:
@@ -305,7 +305,7 @@ definitions:
       history:
         type: array
         items:
-          $ref: "#/TapCapTransaction"   
+          $ref: "#/definitions/TapCapTransaction"   
 
 externalDocs:
   description: "Find out more about Swagger"
