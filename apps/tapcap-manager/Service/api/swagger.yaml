@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: "TheCoin broker services.  To be implemented allowing exchange of local\
-    \ currency to THESE"
+  description: "TheCoin TapCap resolution.  This service is the trusted 3rd party\
+    \ that weekly settles TapCap purchases"
   version: "0.0.1"
   title: "TheCoin Broker"
   contact:
@@ -10,16 +10,13 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "tapcap.thecoincore-212314.appspot.com"
+host: "localhost:8080"
 tags:
-- name: "The"
+- name: "Transactions"
   description: "The Coin: TapCap manager is responsible for resolving TapCap transactions,\
-    \ and tracking user TapCap accounts"
-  externalDocs:
-    description: "Find out more"
-    url: "https://tapcap.thecoincore-212314.appspot.com/docs"
-schemes:
-- "https"
+    \ transfering the appropriate coin from seller to buyer weekly"
+- name: "Status"
+  description: "Users may query their account status"
 consumes:
 - "application/json"
 produces:
