@@ -117,6 +117,69 @@ definitions:
         type: "string"
     example:
       signature: "signature"
+  TapCapToken:
+    required:
+    - "availableBalance"
+    - "clientAccount"
+    - "timestamp"
+    - "transactionId"
+    properties:
+      clientAccount:
+        type: "string"
+      availableBalance:
+        type: "number"
+        format: "int64"
+      transactionId:
+        type: "number"
+      timestamp:
+        type: "number"
+        format: "int64"
+  TapCapPurchase:
+    required:
+    - "certificateRequest"
+    - "currencyCode"
+    - "fiat"
+    - "gpoData"
+    - "timestamp"
+    - "token"
+    properties:
+      fiat:
+        type: "number"
+      currencyCode:
+        type: "number"
+      timestamp:
+        type: "number"
+        format: "int64"
+      gpoData:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      certificateRequest:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      token:
+        $ref: "#/MessageSigned"
+  TapCapPurchaseBroker:
+    required:
+    - "cert"
+    - "clientRequest"
+    - "coin"
+    properties:
+      clientRequest:
+        $ref: "#/MessageSigned"
+      coin:
+        type: "number"
+        format: "int64"
+      cert:
+        type: "string"
+  TapCapQueryRequest:
+    required:
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "number"
+        format: "int64"
   TapCapQueryResponse:
     required:
     - "balance"
@@ -136,26 +199,21 @@ definitions:
       weeklyTopup: 6.02745618307040320615897144307382404804229736328125
       token:
         signature: "signature"
-  TapCapHistoryResponse:
+  TapCapHistoryRequest:
     required:
-    - "history"
+    - "fromTimestamp"
+    - "msgTimestamp"
+    - "untilTimestamp"
     properties:
-      history:
-        type: "array"
-        items:
-          $ref: "#/TapCapTransaction"
-    example:
-      history:
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        coinBalance: 5.962133916683182377482808078639209270477294921875
-        timestamp: 0.80082819046101150206595775671303272247314453125
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        coinBalance: 5.962133916683182377482808078639209270477294921875
-        timestamp: 0.80082819046101150206595775671303272247314453125
+      fromTimestamp:
+        type: "number"
+        format: "int64"
+      untilTimestamp:
+        type: "number"
+        format: "int64"
+      msgTimestamp:
+        type: "number"
+        format: "int64"
   TapCapTransaction:
     required:
     - "coinAmount"
@@ -184,6 +242,26 @@ definitions:
       fiatAmount: 6.02745618307040320615897144307382404804229736328125
       coinBalance: 5.962133916683182377482808078639209270477294921875
       timestamp: 0.80082819046101150206595775671303272247314453125
+  TapCapHistoryResponse:
+    required:
+    - "history"
+    properties:
+      history:
+        type: "array"
+        items:
+          $ref: "#/TapCapTransaction"
+    example:
+      history:
+      - coinAmount: 1.46581298050294517310021547018550336360931396484375
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5.962133916683182377482808078639209270477294921875
+        timestamp: 0.80082819046101150206595775671303272247314453125
+      - coinAmount: 1.46581298050294517310021547018550336360931396484375
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5.962133916683182377482808078639209270477294921875
+        timestamp: 0.80082819046101150206595775671303272247314453125
   inline_response_200:
     required:
     - "errorCode"
