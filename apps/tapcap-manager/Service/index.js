@@ -9,6 +9,7 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 
 var watcher = require('./tapcap/DepositWatcher');
+var DecryptWallet = require('./tapcap/Wallet').DecryptWallet;
 
 var serverPort = 8080;
 

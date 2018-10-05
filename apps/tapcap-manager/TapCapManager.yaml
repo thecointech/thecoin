@@ -120,6 +120,19 @@ paths:
           schema:
             $ref: "#/definitions/TapCapHistoryResponse"
 
+  # a simple endpoint to unlock the wallet included with this thingy
+  # TODO: Find a better - or more automated way - of getting this on the server
+  /unlock:
+    post:
+      tags:
+        - Unlock
+      operationId: "unlock"
+      parameters:
+        - in: header
+          name: X-Request-Key
+          required: true
+          type: string
+
 definitions:
   # A token signed by the TapCapManager
   MessageSigned:
@@ -254,7 +267,7 @@ definitions:
         type: number
         format: int64
       token: 
-        $ref: "#/definitions/MessageSigned" # TapCapToken
+        $ref: "#/definitions/MessageSigned" # sign ( TapCapToken )
 
   TapCapHistoryRequest:
     required:

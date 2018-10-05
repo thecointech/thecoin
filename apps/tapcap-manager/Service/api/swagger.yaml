@@ -108,6 +108,17 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Status"
+  /unlock:
+    post:
+      tags:
+      - "Unlock"
+      operationId: "unlock"
+      parameters:
+      - name: "X-Request-Key"
+        in: "header"
+        required: true
+        type: "string"
+      x-swagger-router-controller: "Unlock"
 definitions:
   MessageSigned:
     required:

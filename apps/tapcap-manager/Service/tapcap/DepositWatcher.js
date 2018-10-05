@@ -1,11 +1,13 @@
 'use strict';
 
 const TheContract = require('./TheContract').TheContract;
-const ds = require('./Datastore').datastore;
+const datastore = require('./Datastore');
 
-const GetLatestKey = (address) => ds.key(["User", address, "tx", "latest"]);
+const ds = datastore.datastore;
+const GetLatestKey = datastore.GetLatestKey;
 
 const LastProcessedKey = ds.key(["Settings", "tapcap"]);
+
 let lastProcessedBlock = 0;
 async function GetProcessedBlockNumber() {
     if (lastProcessedBlock == 0) {
