@@ -5,6 +5,8 @@ using TheApp.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.DryIoc;
+using System.Reflection;
+using System.IO;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TheApp
@@ -29,6 +31,14 @@ namespace TheApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            // Register the contract
+            var assembly = typeof(App).GetTypeInfo().Assembly;
+            var theContractJson = TheCoin.LoadResource.Load(assembly, "TheCoin.json");
+            containerRegistry.RegisterInstance(new TheUtils.TheContract(theContractJson));
+            // Register a single RatesApi object
+            containerRegistry.RegisterInstance<TheCoinCore.Api.IRatesApi>(new TheCoinCore.Api.RatesApi());
+            containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
+
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<Connect>();

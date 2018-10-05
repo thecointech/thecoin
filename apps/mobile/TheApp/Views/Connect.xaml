@@ -10,8 +10,8 @@
         <Button Text="Begin Scan" Command="{Binding ScanCommand}" />
         <Label Text="{Binding Address}" />
         <Entry ReturnType="Go" Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
-        <Button Text="Unlock" IsEnabled="{Binding CanUnlock}" Command="{Binding TryDecrypt}" />
-
+        <Button Text="Unlock" IsEnabled="{Binding CanUnlock}" Command="{Binding TryDecryptCommand}" />
+        <Label Text="{Binding State}" />
     </StackLayout>
 
 </ContentPage>

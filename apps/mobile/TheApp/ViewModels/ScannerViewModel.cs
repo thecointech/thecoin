@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace TheApp.ViewModels
 {
-    public class ScannerViewModel : ViewModelBase
+    internal class ScannerViewModel : ViewModelBase
     {
         private bool _isAnalyzing = true;
         private bool _isScanning = true;
@@ -41,11 +41,14 @@ namespace TheApp.ViewModels
 
         public DelegateCommand QRScanResultCommand { get; private set; }
 
-        public ScannerViewModel(INavigationService navigationService) : base(navigationService)
+        private TheCoin.UserAccount UserAccount;
+
+        public ScannerViewModel(INavigationService navigationService, TheCoin.UserAccount userAccount) : base(navigationService)
         {
             QRScanResultCommand = new DelegateCommand(QRScanResult);
             IsScanning = true;
             IsAnalyzing = true;
+            UserAccount = userAccount;
         }
 
         private void QRScanResult()
@@ -54,8 +57,8 @@ namespace TheApp.ViewModels
             IsScanning = false;
             Device.BeginInvokeOnMainThread(async () =>
             {
-                var results = new NavigationParameters("account=" + Result.Text);
-                await NavigationService.GoBackAsync(results);
+                await UserAccount.SetEncrypted(Result.Text);
+                await NavigationService.GoBackAsync();
             });
 
         }

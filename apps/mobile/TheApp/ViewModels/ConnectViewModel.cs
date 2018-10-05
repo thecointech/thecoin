@@ -12,7 +12,7 @@ using Xamarin.Essentials;
 namespace TheApp.ViewModels
 {
 
-    public class ConnectViewModel : ViewModelBase
+    internal class ConnectViewModel : ViewModelBase
 	{
         private string _Address;
         public string Address
@@ -37,16 +37,18 @@ namespace TheApp.ViewModels
 
         public bool CanUnlock
         {
-            get { return this.EncryptedAccount.Length > 1; }
+            get => UserAccount.NeedsDecrypting();
         }
-
-        private string EncryptedAccount = "";
 
         public DelegateCommand ScanCommand { get; set; }
         public DelegateCommand TryDecryptCommand { get; set; }
 
-        public ConnectViewModel(INavigationService navigationService) : base(navigationService)
+        private TheCoin.UserAccount UserAccount;
+
+        public ConnectViewModel(INavigationService navigationService, TheCoin.UserAccount userAccount) : base(navigationService)
         {
+            UserAccount = userAccount;
+
             ScanCommand = new DelegateCommand(Scan);
             TryDecryptCommand = new DelegateCommand(TryDecrypt);
             State = "Scan for new account";
@@ -59,29 +61,16 @@ namespace TheApp.ViewModels
 
         private async void TryDecrypt()
         {
-            try
+            State = "Attempting decryption";
+            if (await UserAccount.TryDecrypt(Password))
             {
-                State = "Attempting decryption";
-                // First, verify the account pwd
-                var account = Nethereum.Web3.Accounts.Account.LoadFromKeyStore(EncryptedAccount, Password);
-                // Store either the encrypted or decrypted account
-                // For now, we will store the decrypted account, as it takes
-                // quite a long time to decrypt
-                string decryptedAccount = JsonConvert.SerializeObject(account);
-                await SecureStorage.SetAsync("TheCoin.TheApp.account", decryptedAccount);
-                await SecureStorage.SetAsync("TheCoin.TheApp.pass", Password);
-
                 // Go back to the main page with our newly opened account
-                await NavigationService.GoBackAsync(new NavigationParameters()
-                {
-                    { "account", decryptedAccount }
-                });
+                await NavigationService.GoBackAsync();
             }
-            catch (Exception err)
+            else
             {
-                State = err.ToString();
+                State = "Key Failed";
             }
-
         }
 
         private class AccountInfo
@@ -91,25 +80,26 @@ namespace TheApp.ViewModels
 
         public override void OnNavigatedTo(NavigationParameters parameters) 
         {
-            if (parameters.ContainsKey("account"))
-            {
+            //if (parameters.ContainsKey("account"))
+            //{
 
-                try
-                {
-                    EncryptedAccount = parameters["account"].ToString();
+            //    try
+            //    {
+            //        var EncryptedAccount = parameters["account"].ToString();
+                    
+            //        State = "Read new encrypted account";
 
-                    AccountInfo info = new AccountInfo();
-                    info.address = "NotNull";
-                    JsonConvert.PopulateObject(EncryptedAccount, info);
-                    Address = info.address;
-                }
-                catch (Exception /*e*/)
-                {
-                    State = "Read Account Failed";
-                    EncryptedAccount = "";
-                    Address = "";
-                }
-            }
+            //        AccountInfo info = new AccountInfo();
+            //        info.address = "NotNull";
+            //        JsonConvert.PopulateObject(EncryptedAccount, info);
+            //        Address = info.address;
+            //    }
+            //    catch (Exception /*e*/)
+            //    {
+            //        State = "Read Account Failed";
+            //        Address = "";
+            //    }
+            //}
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using TheUtils;
+using TheCoinCore.Api;
 
 namespace TheApp.ViewModels
 {
@@ -17,16 +14,65 @@ namespace TheApp.ViewModels
             set { SetProperty(ref this._Logs, value); }
         }
 
-        private Nethereum.Web3.Accounts.Account Account;
+        private ulong _MainBalance;
+        public ulong MainBalance
+        {
+            get { return this._MainBalance; }
+            set {
+                SetProperty(ref this._MainBalance, value);
+                RaisePropertyChanged("TotalBalance");
+                RaisePropertyChanged("CadBalance");
+            }
+        }
+
+        private ulong _TapCapBalance;
+        public ulong TapCapBalance
+        {
+            get { return this._TapCapBalance; }
+            set {
+                SetProperty(ref this._TapCapBalance, value);
+                RaisePropertyChanged("TotalBalance");
+                RaisePropertyChanged("CadBalance");
+            }
+        }
+
+        private double _CadExchangeRate = 1;
+        public double CadExchangeRate
+        {
+            get { return this._CadExchangeRate; }
+            set {
+                SetProperty(ref this._CadExchangeRate, value);
+                RaisePropertyChanged("CadBalance");
+            }
+        }
+
+        public ulong TotalBalance
+        {
+            get { return MainBalance + TapCapBalance; }
+        }
+
+        public double CadBalance
+        {
+            get { return TheContract.ToHuman((ulong)(TotalBalance * CadExchangeRate)); }
+        }
+
+        public bool CanConnect { get => UserAccount.NeedsDecrypting(); }
+
+        private TheCoin.UserAccount UserAccount;
+        private TheContract TheContract;
+        private IRatesApi Rates;
 
         public DelegateCommand ConnectCommand { get; set; }
 
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount)
             : base(navigationService)
         {
             Title = "Main Page";
-
             Logs = "Your Logs Here";
+
+            TheContract = theContract;
+            Rates = ratesApi;
+            UserAccount = userAccount;
 
             ConnectCommand = new DelegateCommand(BeginConnect);
         }
@@ -36,11 +82,14 @@ namespace TheApp.ViewModels
             NavigationService.NavigateAsync("Connect");
         }
 
-        public override void OnNavigatedTo(NavigationParameters parameters)
+        public override async void OnNavigatedTo(NavigationParameters parameters)
         {
-            if (parameters.ContainsKey("account"))
+            if (UserAccount.TheAccount != null)
             {
-                Account = (Nethereum.Web3.Accounts.Account)parameters["account"];
+                var now = TheCoinTime.Now();
+                var FXRate = await Rates.GetConversionAsync(127, now);
+                CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
+                MainBalance = await TheContract.CoinBalance();
             }
         }
     }
