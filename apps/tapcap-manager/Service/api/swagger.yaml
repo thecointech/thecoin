@@ -118,6 +118,13 @@ paths:
         in: "header"
         required: true
         type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
       x-swagger-router-controller: "Unlock"
 definitions:
   MessageSigned:

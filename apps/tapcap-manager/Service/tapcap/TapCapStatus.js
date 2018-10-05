@@ -16,6 +16,11 @@ async function GetLatest(address) {
     };
 }
 
+function getAccount(data, signature) {
+    return Ethers.Wallet.verifyMessage(data, signature);
+}
+
+function signMessage(message, wallet)
 exports.TapCapStatus = async (request) => {
 	const signature = request.signature;
 	const asString = request.message;
@@ -24,7 +29,15 @@ exports.TapCapStatus = async (request) => {
 	const tcQueryRequest = JSON.parse(asString);
 	const timestamp = tcQueryRequest.timestamp;
 
-	const latest = GetLatest(address);
+	const latest = await GetLatest(address);
 	// TODO: Verify timestamp (sensibly)
-	if (timestamp < )
+	if (timestamp > latest.timestamp) {
+		const tapCapToken = {
+			clientAccount: account,
+			availableBalance: latest.balance,
+			transactionId: latest.nonce,
+			timestamp = Date.now()
+		}
+
+	}
 }
