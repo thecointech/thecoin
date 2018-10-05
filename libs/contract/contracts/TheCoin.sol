@@ -256,15 +256,20 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
             TapCapData storage userAccount = tapCaps[user];
             // Apply the delta to the users account
             if (delta > 0) {
+                // Get abs(delta)
                 uint pdelta = uint(delta);
-                userAccount.TapCapEscrow = userAccount.TapCapEscrow.add(pdelta);
+                // Add directly to the users regular account.  We may not
+                // have permission to interact with the users TapCap
+                balances[user].add(pdelta);
 
-                // Update total
+                // Update total.  Can't use safe-math for this, as
+                // newTotal is a signed int to allow it to go negative.
                 newTotal = totalChange + delta;
                 require(newTotal > totalChange, "int Overflow in processSpending: newTotal <= totalChange");
                 totalChange = newTotal;
             }
             else {
+                // Get abs(delta)
                 uint ndelta = uint(-delta);
                 userAccount.TapCapEscrow = userAccount.TapCapEscrow.sub(ndelta);
 
