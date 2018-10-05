@@ -38,7 +38,7 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema: 
-            $ref: "#/definitions/MessageSigned" # signed ( TapCapPurchaseBroker )
+            $ref: "#/definitions/SignedMessage" # signed ( TapCapPurchaseBroker )
       responses:
         405:
           description: Invalid input
@@ -49,7 +49,7 @@ paths:
               - errorCode
             properties:
               errorCode:
-                type: integer
+                type: number
 
   /tap/client: 
     post:
@@ -63,14 +63,14 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "#/definitions/MessageSigned" # signed ( signed ( TapCapPurchaseBroker ) )
+            $ref: "#/definitions/SignedMessage" # signed ( signed ( TapCapPurchaseBroker ) )
       responses:
         405:
           description: "Invalid input"
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/MessageSigned" # TapCapToken
+            $ref: "#/definitions/SignedMessage" # signed ( TapCapToken )
 
 
   /status/summary:
@@ -86,7 +86,7 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "#/definitions/MessageSigned" # signed ( TapCapQueryRequest )
+            $ref: "#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
       responses:
         405:
           description: "Invalid input"
@@ -108,7 +108,7 @@ paths:
           description: "Purchase Request info"
           required: true
           schema: 
-            $ref: "#/definitions/MessageSigned" # signed ( TapCapHistoryRequest )
+            $ref: "#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
       responses:
         405:
           description: "Invalid input"
@@ -117,7 +117,7 @@ paths:
           schema:
             $ref: "#/definitions/TapCapHistoryResponse"
 
-  # a simple endpoint to unlock the wallet included with this thingy
+  # a simple endpoint to unlock the wallet included with this thingys
   # TODO: Find a better - or more automated way - of getting this on the server
   /unlock:
     post:
@@ -139,13 +139,13 @@ paths:
 
 definitions:
   # A token signed by the TapCapManager
-  MessageSigned:
+  SignedMessage:
     required:
       - message
       - signature
     properties:
-      token:
-        type: message # Any of the below, in string form
+      message:
+        type: string # Any of the below, in string form
       signature:
         type: string
 
@@ -201,7 +201,7 @@ definitions:
         type: string
         format: byte
       token:
-        $ref: "#/definitions/MessageSigned" # TapCapToken
+        $ref: "#/definitions/SignedMessage" # TapCapToken
 
   # If the broker accepts the request, they generate
   # this response structure, fill out the fields and
@@ -213,7 +213,7 @@ definitions:
       - cert
     properties:
       clientRequest:
-        $ref: "#/definitions/MessageSigned" # TapCapPurchase
+        $ref: "#/definitions/SignedMessage" # TapCapPurchase
       coin:  # The amount of coin being charged for this transaction
         type: number
         format: int64
@@ -261,17 +261,13 @@ definitions:
   TapCapQueryResponse:
     required:
     - balance
-    - weeklyTopup
     - token
     properties:
       balance:
         type: number
         format: int64
-      weeklyTopup:
-        type: number
-        format: int64
       token: 
-        $ref: "#/definitions/MessageSigned" # sign ( TapCapToken )
+        $ref: "#/definitions/SignedMessage" # sign ( TapCapToken )
 
   TapCapHistoryRequest:
     required:

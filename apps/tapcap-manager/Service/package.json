@@ -14,9 +14,10 @@
   "private": true,
   "dependencies": {
     "@google-cloud/datastore": "^2.0.0",
-    "connect": "^3.2.0",
+    "cors": "^2.8.4",
     "eslint": "^5.6.1",
     "ethers": "^4.0.2",
+    "express": "^4.16.3",
     "js-yaml": "^3.3.0",
     "swagger-tools": "0.10.1"
   }

@@ -9,5 +9,4 @@ const ropsten = ethers.getDefaultProvider('ropsten');
 
 const theContract = new ethers.Contract(address, abi, ropsten);
 
-
 exports.TheContract = theContract;

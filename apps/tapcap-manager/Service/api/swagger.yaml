@@ -34,7 +34,7 @@ paths:
         description: "TapCap exchange request"
         required: true
         schema:
-          $ref: "#/definitions/MessageSigned"
+          $ref: "#/definitions/SignedMessage"
       responses:
         200:
           description: "Transaction Result"
@@ -55,12 +55,12 @@ paths:
         description: "TapCap status request"
         required: true
         schema:
-          $ref: "#/definitions/MessageSigned"
+          $ref: "#/definitions/SignedMessage"
       responses:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/MessageSigned"
+            $ref: "#/definitions/SignedMessage"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Transactions"
@@ -77,7 +77,7 @@ paths:
         description: "TapCap status request"
         required: true
         schema:
-          $ref: "#/definitions/MessageSigned"
+          $ref: "#/definitions/SignedMessage"
       responses:
         200:
           description: "TapCap Status"
@@ -99,7 +99,7 @@ paths:
         description: "Purchase Request info"
         required: true
         schema:
-          $ref: "#/definitions/MessageSigned"
+          $ref: "#/definitions/SignedMessage"
       responses:
         200:
           description: "TapCap Status"
@@ -127,14 +127,18 @@ paths:
           description: "Invalid input"
       x-swagger-router-controller: "Unlock"
 definitions:
-  MessageSigned:
+  SignedMessage:
     required:
+    - "message"
     - "signature"
     properties:
+      message:
+        type: "string"
       signature:
         type: "string"
     example:
       signature: "signature"
+      message: "message"
   TapCapToken:
     required:
     - "availableBalance"
@@ -177,7 +181,7 @@ definitions:
         format: "byte"
         pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
       token:
-        $ref: "#/definitions/MessageSigned"
+        $ref: "#/definitions/SignedMessage"
   TapCapPurchaseBroker:
     required:
     - "cert"
@@ -185,7 +189,7 @@ definitions:
     - "coin"
     properties:
       clientRequest:
-        $ref: "#/definitions/MessageSigned"
+        $ref: "#/definitions/SignedMessage"
       coin:
         type: "number"
         format: "int64"
@@ -202,21 +206,17 @@ definitions:
     required:
     - "balance"
     - "token"
-    - "weeklyTopup"
     properties:
       balance:
         type: "number"
         format: "int64"
-      weeklyTopup:
-        type: "number"
-        format: "int64"
       token:
-        $ref: "#/definitions/MessageSigned"
+        $ref: "#/definitions/SignedMessage"
     example:
       balance: 0.80082819046101150206595775671303272247314453125
-      weeklyTopup: 6.02745618307040320615897144307382404804229736328125
       token:
         signature: "signature"
+        message: "message"
   TapCapHistoryRequest:
     required:
     - "fromTimestamp"
@@ -285,9 +285,9 @@ definitions:
     - "errorCode"
     properties:
       errorCode:
-        type: "integer"
+        type: "number"
     example:
-      errorCode: 0
+      errorCode: 0.80082819046101150206595775671303272247314453125
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
