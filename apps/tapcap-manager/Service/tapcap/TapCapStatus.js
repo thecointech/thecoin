@@ -1,12 +1,14 @@
 'use strict';
 
+const Ethers = require('ethers')
+
 const { TheContract } = require('./TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
-const { TCWallet } = require('./Wallet')
+const { GetWallet } = require('./Wallet');
 
 async function GetLatest(address) {
     const key = GetLatestKey(address);
-    const results = await ds.get(key);
+    const results = await datastore.get(key);
     const timestamp = Date.now();
     if (results[0])
         return results[0];
@@ -18,14 +20,14 @@ async function GetLatest(address) {
 }
 
 function getAccount(data, signature) {
-    return Ethers.Wallet.verifyMessage(data, signature);
+    return Ethers.utils.verifyMessage(data, signature);
 }
 
 exports.TapCapStatus = async (request) => {
 	const signature = request.signature;
 	const asString = request.message;
 
-	const account = getAccount(asString, signature);
+	const address = getAccount(asString, signature);
 	const tcQueryRequest = JSON.parse(asString);
 	const timestamp = tcQueryRequest.timestamp;
 
@@ -37,7 +39,7 @@ exports.TapCapStatus = async (request) => {
 	
 	// TODO: Only build the token if identity is verified
 	const tapCapTokenData = {
-		clientAccount: account,
+		clientAccount: address,
 		availableBalance: Math.floor(latest.balance / 2),
 		transactionId: latest.nonce,
 		timestamp: Date.now()
@@ -45,7 +47,7 @@ exports.TapCapStatus = async (request) => {
 	const dataStr = JSON.stringify(tapCapTokenData);
 	const TapCapToken = {
 		message: dataStr,
-		signature: TCWallet.signMessage(dataStr)
+		signature: GetWallet().signMessage(dataStr)
 	};
 
 	const response = {

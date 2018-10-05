@@ -17,6 +17,9 @@ tags:
     \ transfering the appropriate coin from seller to buyer weekly"
 - name: "Status"
   description: "Users may query their account status"
+- name: "Unlock"
+  description: "Temp method for unlocking account till we find something better (NOT\
+    \ FOR PUBLIC USE)"
 consumes:
 - "application/json"
 produces:
@@ -27,7 +30,7 @@ paths:
       tags:
       - "Transactions"
       summary: "Broker: Register new TapCap transaction"
-      operationId: "TapCapBroker"
+      operationId: "tapCapBroker"
       parameters:
       - in: "body"
         name: "request"
@@ -48,7 +51,7 @@ paths:
       tags:
       - "Transactions"
       summary: "Client: Confirm new TapCap transaction"
-      operationId: "TapCapClient"
+      operationId: "tapCapClient"
       parameters:
       - in: "body"
         name: "request"
@@ -70,7 +73,7 @@ paths:
       - "Status"
       summary: "TapCap current status"
       description: "User TapCap status"
-      operationId: "TapCapStatus"
+      operationId: "tapCapStatus"
       parameters:
       - in: "body"
         name: "request"
@@ -92,7 +95,7 @@ paths:
       - "Status"
       summary: "TapCap history"
       description: "User TapCap history in the ranges provided"
-      operationId: "TapCapHistory"
+      operationId: "tapCapHistory"
       parameters:
       - in: "body"
         name: "request"
