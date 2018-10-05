@@ -41,6 +41,7 @@ function ProcessPurchase(targetAddress, amount, newBalance, timestamp) {
 }
 
 exports.StartListening = function() {
+    // TODO!!! Process sales (requires watching)
     theContract = new Ethers.Contract(address, abi, ropsten);
 
     theContract.CoinsPurchased = ProcessPurchase,
