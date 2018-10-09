@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -39,8 +39,9 @@ namespace TapCap.Client.Model
         /// <param name="Timestamp">Timestamp (required).</param>
         /// <param name="FiatAmount">FiatAmount (required).</param>
         /// <param name="CoinAmount">CoinAmount (required).</param>
+        /// <param name="CoinBalance">CoinBalance (required).</param>
         /// <param name="MerchantId">MerchantId (required).</param>
-        public TapCapTransaction(decimal? Timestamp = default(decimal?), double? FiatAmount = default(double?), decimal? CoinAmount = default(decimal?), string MerchantId = default(string))
+        public TapCapTransaction(decimal? Timestamp = default(decimal?), double? FiatAmount = default(double?), decimal? CoinAmount = default(decimal?), decimal? CoinBalance = default(decimal?), string MerchantId = default(string))
         {
             // to ensure "Timestamp" is required (not null)
             if (Timestamp == null)
@@ -68,6 +69,15 @@ namespace TapCap.Client.Model
             else
             {
                 this.CoinAmount = CoinAmount;
+            }
+            // to ensure "CoinBalance" is required (not null)
+            if (CoinBalance == null)
+            {
+                throw new InvalidDataException("CoinBalance is a required property for TapCapTransaction and cannot be null");
+            }
+            else
+            {
+                this.CoinBalance = CoinBalance;
             }
             // to ensure "MerchantId" is required (not null)
             if (MerchantId == null)
@@ -99,6 +109,12 @@ namespace TapCap.Client.Model
         public decimal? CoinAmount { get; set; }
 
         /// <summary>
+        /// Gets or Sets CoinBalance
+        /// </summary>
+        [DataMember(Name="coinBalance", EmitDefaultValue=false)]
+        public decimal? CoinBalance { get; set; }
+
+        /// <summary>
         /// Gets or Sets MerchantId
         /// </summary>
         [DataMember(Name="merchantId", EmitDefaultValue=false)]
@@ -115,6 +131,7 @@ namespace TapCap.Client.Model
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
             sb.Append("  CoinAmount: ").Append(CoinAmount).Append("\n");
+            sb.Append("  CoinBalance: ").Append(CoinBalance).Append("\n");
             sb.Append("  MerchantId: ").Append(MerchantId).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -166,6 +183,11 @@ namespace TapCap.Client.Model
                     this.CoinAmount.Equals(input.CoinAmount))
                 ) && 
                 (
+                    this.CoinBalance == input.CoinBalance ||
+                    (this.CoinBalance != null &&
+                    this.CoinBalance.Equals(input.CoinBalance))
+                ) && 
+                (
                     this.MerchantId == input.MerchantId ||
                     (this.MerchantId != null &&
                     this.MerchantId.Equals(input.MerchantId))
@@ -187,6 +209,8 @@ namespace TapCap.Client.Model
                     hashCode = hashCode * 59 + this.FiatAmount.GetHashCode();
                 if (this.CoinAmount != null)
                     hashCode = hashCode * 59 + this.CoinAmount.GetHashCode();
+                if (this.CoinBalance != null)
+                    hashCode = hashCode * 59 + this.CoinBalance.GetHashCode();
                 if (this.MerchantId != null)
                     hashCode = hashCode * 59 + this.MerchantId.GetHashCode();
                 return hashCode;

@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -37,7 +37,7 @@ namespace TapCap.Client.Model
         /// Initializes a new instance of the <see cref="InlineResponse200" /> class.
         /// </summary>
         /// <param name="ErrorCode">ErrorCode (required).</param>
-        public InlineResponse200(int? ErrorCode = default(int?))
+        public InlineResponse200(decimal? ErrorCode = default(decimal?))
         {
             // to ensure "ErrorCode" is required (not null)
             if (ErrorCode == null)
@@ -54,7 +54,7 @@ namespace TapCap.Client.Model
         /// Gets or Sets ErrorCode
         /// </summary>
         [DataMember(Name="errorCode", EmitDefaultValue=false)]
-        public int? ErrorCode { get; set; }
+        public decimal? ErrorCode { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

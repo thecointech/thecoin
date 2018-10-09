@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -111,7 +111,7 @@ namespace TapCap.Client.Client
         public Configuration()
         {
             UserAgent = "Swagger-Codegen/1.0.0/csharp";
-            BasePath = "https://tapcap.thecoincore-212314.appspot.com";
+            BasePath = "https://localhost:8080";
             DefaultHeader = new ConcurrentDictionary<string, string>();
             ApiKey = new ConcurrentDictionary<string, string>();
             ApiKeyPrefix = new ConcurrentDictionary<string, string>();
@@ -127,7 +127,7 @@ namespace TapCap.Client.Client
             IDictionary<string, string> defaultHeader,
             IDictionary<string, string> apiKey,
             IDictionary<string, string> apiKeyPrefix,
-            string basePath = "https://tapcap.thecoincore-212314.appspot.com") : this()
+            string basePath = "https://localhost:8080") : this()
         {
             if (string.IsNullOrWhiteSpace(basePath))
                 throw new ArgumentException("The provided basePath is invalid.", "basePath");

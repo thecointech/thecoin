@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com

@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -25,26 +25,26 @@ namespace TapCap.Client.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// TapCap current status
+        /// TapCap history
         /// </summary>
         /// <remarks>
-        /// User TapCap status
+        /// User TapCap history in the ranges provided
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>TapCapHistoryResponseSigned</returns>
-        TapCapHistoryResponseSigned TapCapHistory (TapCapHistoryRequestSigned request);
+        /// <returns>TapCapHistoryResponse</returns>
+        TapCapHistoryResponse TapCapHistory (SignedMessage request);
 
         /// <summary>
-        /// TapCap current status
+        /// TapCap history
         /// </summary>
         /// <remarks>
-        /// User TapCap status
+        /// User TapCap history in the ranges provided
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>ApiResponse of TapCapHistoryResponseSigned</returns>
-        ApiResponse<TapCapHistoryResponseSigned> TapCapHistoryWithHttpInfo (TapCapHistoryRequestSigned request);
+        /// <returns>ApiResponse of TapCapHistoryResponse</returns>
+        ApiResponse<TapCapHistoryResponse> TapCapHistoryWithHttpInfo (SignedMessage request);
         /// <summary>
         /// TapCap current status
         /// </summary>
@@ -54,7 +54,7 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>TapCapQueryResponse</returns>
-        TapCapQueryResponse TapCapStatus (TapCapQueryRequestSigned request);
+        TapCapQueryResponse TapCapStatus (SignedMessage request);
 
         /// <summary>
         /// TapCap current status
@@ -65,30 +65,30 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>ApiResponse of TapCapQueryResponse</returns>
-        ApiResponse<TapCapQueryResponse> TapCapStatusWithHttpInfo (TapCapQueryRequestSigned request);
+        ApiResponse<TapCapQueryResponse> TapCapStatusWithHttpInfo (SignedMessage request);
         #endregion Synchronous Operations
         #region Asynchronous Operations
         /// <summary>
-        /// TapCap current status
+        /// TapCap history
         /// </summary>
         /// <remarks>
-        /// User TapCap status
+        /// User TapCap history in the ranges provided
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>Task of TapCapHistoryResponseSigned</returns>
-        System.Threading.Tasks.Task<TapCapHistoryResponseSigned> TapCapHistoryAsync (TapCapHistoryRequestSigned request);
+        /// <returns>Task of TapCapHistoryResponse</returns>
+        System.Threading.Tasks.Task<TapCapHistoryResponse> TapCapHistoryAsync (SignedMessage request);
 
         /// <summary>
-        /// TapCap current status
+        /// TapCap history
         /// </summary>
         /// <remarks>
-        /// User TapCap status
+        /// User TapCap history in the ranges provided
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>Task of ApiResponse (TapCapHistoryResponseSigned)</returns>
-        System.Threading.Tasks.Task<ApiResponse<TapCapHistoryResponseSigned>> TapCapHistoryAsyncWithHttpInfo (TapCapHistoryRequestSigned request);
+        /// <returns>Task of ApiResponse (TapCapHistoryResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<TapCapHistoryResponse>> TapCapHistoryAsyncWithHttpInfo (SignedMessage request);
         /// <summary>
         /// TapCap current status
         /// </summary>
@@ -98,7 +98,7 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>Task of TapCapQueryResponse</returns>
-        System.Threading.Tasks.Task<TapCapQueryResponse> TapCapStatusAsync (TapCapQueryRequestSigned request);
+        System.Threading.Tasks.Task<TapCapQueryResponse> TapCapStatusAsync (SignedMessage request);
 
         /// <summary>
         /// TapCap current status
@@ -109,7 +109,7 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>Task of ApiResponse (TapCapQueryResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<TapCapQueryResponse>> TapCapStatusAsyncWithHttpInfo (TapCapQueryRequestSigned request);
+        System.Threading.Tasks.Task<ApiResponse<TapCapQueryResponse>> TapCapStatusAsyncWithHttpInfo (SignedMessage request);
         #endregion Asynchronous Operations
     }
 
@@ -211,30 +211,30 @@ namespace TapCap.Client.Api
         }
 
         /// <summary>
-        /// TapCap current status User TapCap status
+        /// TapCap history User TapCap history in the ranges provided
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>TapCapHistoryResponseSigned</returns>
-        public TapCapHistoryResponseSigned TapCapHistory (TapCapHistoryRequestSigned request)
+        /// <returns>TapCapHistoryResponse</returns>
+        public TapCapHistoryResponse TapCapHistory (SignedMessage request)
         {
-             ApiResponse<TapCapHistoryResponseSigned> localVarResponse = TapCapHistoryWithHttpInfo(request);
+             ApiResponse<TapCapHistoryResponse> localVarResponse = TapCapHistoryWithHttpInfo(request);
              return localVarResponse.Data;
         }
 
         /// <summary>
-        /// TapCap current status User TapCap status
+        /// TapCap history User TapCap history in the ranges provided
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>ApiResponse of TapCapHistoryResponseSigned</returns>
-        public ApiResponse< TapCapHistoryResponseSigned > TapCapHistoryWithHttpInfo (TapCapHistoryRequestSigned request)
+        /// <returns>ApiResponse of TapCapHistoryResponse</returns>
+        public ApiResponse< TapCapHistoryResponse > TapCapHistoryWithHttpInfo (SignedMessage request)
         {
             // verify the required parameter 'request' is set
             if (request == null)
                 throw new ApiException(400, "Missing required parameter 'request' when calling StatusApi->TapCapHistory");
 
-            var localVarPath = "./tap/status/history";
+            var localVarPath = "./status/history";
             var localVarPathParams = new Dictionary<String, String>();
             var localVarQueryParams = new List<KeyValuePair<String, String>>();
             var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
@@ -279,37 +279,37 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<TapCapHistoryResponseSigned>(localVarStatusCode,
+            return new ApiResponse<TapCapHistoryResponse>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (TapCapHistoryResponseSigned) Configuration.ApiClient.Deserialize(localVarResponse, typeof(TapCapHistoryResponseSigned)));
+                (TapCapHistoryResponse) Configuration.ApiClient.Deserialize(localVarResponse, typeof(TapCapHistoryResponse)));
         }
 
         /// <summary>
-        /// TapCap current status User TapCap status
+        /// TapCap history User TapCap history in the ranges provided
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>Task of TapCapHistoryResponseSigned</returns>
-        public async System.Threading.Tasks.Task<TapCapHistoryResponseSigned> TapCapHistoryAsync (TapCapHistoryRequestSigned request)
+        /// <returns>Task of TapCapHistoryResponse</returns>
+        public async System.Threading.Tasks.Task<TapCapHistoryResponse> TapCapHistoryAsync (SignedMessage request)
         {
-             ApiResponse<TapCapHistoryResponseSigned> localVarResponse = await TapCapHistoryAsyncWithHttpInfo(request);
+             ApiResponse<TapCapHistoryResponse> localVarResponse = await TapCapHistoryAsyncWithHttpInfo(request);
              return localVarResponse.Data;
 
         }
 
         /// <summary>
-        /// TapCap current status User TapCap status
+        /// TapCap history User TapCap history in the ranges provided
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">Purchase Request info</param>
-        /// <returns>Task of ApiResponse (TapCapHistoryResponseSigned)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<TapCapHistoryResponseSigned>> TapCapHistoryAsyncWithHttpInfo (TapCapHistoryRequestSigned request)
+        /// <returns>Task of ApiResponse (TapCapHistoryResponse)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<TapCapHistoryResponse>> TapCapHistoryAsyncWithHttpInfo (SignedMessage request)
         {
             // verify the required parameter 'request' is set
             if (request == null)
                 throw new ApiException(400, "Missing required parameter 'request' when calling StatusApi->TapCapHistory");
 
-            var localVarPath = "./tap/status/history";
+            var localVarPath = "./status/history";
             var localVarPathParams = new Dictionary<String, String>();
             var localVarQueryParams = new List<KeyValuePair<String, String>>();
             var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
@@ -354,9 +354,9 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<TapCapHistoryResponseSigned>(localVarStatusCode,
+            return new ApiResponse<TapCapHistoryResponse>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (TapCapHistoryResponseSigned) Configuration.ApiClient.Deserialize(localVarResponse, typeof(TapCapHistoryResponseSigned)));
+                (TapCapHistoryResponse) Configuration.ApiClient.Deserialize(localVarResponse, typeof(TapCapHistoryResponse)));
         }
 
         /// <summary>
@@ -365,7 +365,7 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>TapCapQueryResponse</returns>
-        public TapCapQueryResponse TapCapStatus (TapCapQueryRequestSigned request)
+        public TapCapQueryResponse TapCapStatus (SignedMessage request)
         {
              ApiResponse<TapCapQueryResponse> localVarResponse = TapCapStatusWithHttpInfo(request);
              return localVarResponse.Data;
@@ -377,13 +377,13 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>ApiResponse of TapCapQueryResponse</returns>
-        public ApiResponse< TapCapQueryResponse > TapCapStatusWithHttpInfo (TapCapQueryRequestSigned request)
+        public ApiResponse< TapCapQueryResponse > TapCapStatusWithHttpInfo (SignedMessage request)
         {
             // verify the required parameter 'request' is set
             if (request == null)
                 throw new ApiException(400, "Missing required parameter 'request' when calling StatusApi->TapCapStatus");
 
-            var localVarPath = "./tap/status/summary";
+            var localVarPath = "./status/summary";
             var localVarPathParams = new Dictionary<String, String>();
             var localVarQueryParams = new List<KeyValuePair<String, String>>();
             var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
@@ -439,7 +439,7 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>Task of TapCapQueryResponse</returns>
-        public async System.Threading.Tasks.Task<TapCapQueryResponse> TapCapStatusAsync (TapCapQueryRequestSigned request)
+        public async System.Threading.Tasks.Task<TapCapQueryResponse> TapCapStatusAsync (SignedMessage request)
         {
              ApiResponse<TapCapQueryResponse> localVarResponse = await TapCapStatusAsyncWithHttpInfo(request);
              return localVarResponse.Data;
@@ -452,13 +452,13 @@ namespace TapCap.Client.Api
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="request">TapCap status request</param>
         /// <returns>Task of ApiResponse (TapCapQueryResponse)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<TapCapQueryResponse>> TapCapStatusAsyncWithHttpInfo (TapCapQueryRequestSigned request)
+        public async System.Threading.Tasks.Task<ApiResponse<TapCapQueryResponse>> TapCapStatusAsyncWithHttpInfo (SignedMessage request)
         {
             // verify the required parameter 'request' is set
             if (request == null)
                 throw new ApiException(400, "Missing required parameter 'request' when calling StatusApi->TapCapStatus");
 
-            var localVarPath = "./tap/status/summary";
+            var localVarPath = "./status/summary";
             var localVarPathParams = new Dictionary<String, String>();
             var localVarQueryParams = new List<KeyValuePair<String, String>>();
             var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);

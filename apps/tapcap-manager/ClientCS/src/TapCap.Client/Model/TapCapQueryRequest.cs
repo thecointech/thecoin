@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -37,8 +37,7 @@ namespace TapCap.Client.Model
         /// Initializes a new instance of the <see cref="TapCapQueryRequest" /> class.
         /// </summary>
         /// <param name="Timestamp">Timestamp (required).</param>
-        /// <param name="Random">Random (required).</param>
-        public TapCapQueryRequest(decimal? Timestamp = default(decimal?), string Random = default(string))
+        public TapCapQueryRequest(decimal? Timestamp = default(decimal?))
         {
             // to ensure "Timestamp" is required (not null)
             if (Timestamp == null)
@@ -49,15 +48,6 @@ namespace TapCap.Client.Model
             {
                 this.Timestamp = Timestamp;
             }
-            // to ensure "Random" is required (not null)
-            if (Random == null)
-            {
-                throw new InvalidDataException("Random is a required property for TapCapQueryRequest and cannot be null");
-            }
-            else
-            {
-                this.Random = Random;
-            }
         }
         
         /// <summary>
@@ -65,12 +55,6 @@ namespace TapCap.Client.Model
         /// </summary>
         [DataMember(Name="timestamp", EmitDefaultValue=false)]
         public decimal? Timestamp { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Random
-        /// </summary>
-        [DataMember(Name="random", EmitDefaultValue=false)]
-        public string Random { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -81,7 +65,6 @@ namespace TapCap.Client.Model
             var sb = new StringBuilder();
             sb.Append("class TapCapQueryRequest {\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
-            sb.Append("  Random: ").Append(Random).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -120,11 +103,6 @@ namespace TapCap.Client.Model
                     this.Timestamp == input.Timestamp ||
                     (this.Timestamp != null &&
                     this.Timestamp.Equals(input.Timestamp))
-                ) && 
-                (
-                    this.Random == input.Random ||
-                    (this.Random != null &&
-                    this.Random.Equals(input.Random))
                 );
         }
 
@@ -139,8 +117,6 @@ namespace TapCap.Client.Model
                 int hashCode = 41;
                 if (this.Timestamp != null)
                     hashCode = hashCode * 59 + this.Timestamp.GetHashCode();
-                if (this.Random != null)
-                    hashCode = hashCode * 59 + this.Random.GetHashCode();
                 return hashCode;
             }
         }

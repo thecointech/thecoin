@@ -45,9 +45,10 @@ exports.TapCapStatus = async (request) => {
 		timestamp: Date.now()
 	}
 	const dataStr = JSON.stringify(tapCapTokenData);
+	const tokenSig = await GetWallet().signMessage(dataStr);
 	const TapCapToken = {
 		message: dataStr,
-		signature: GetWallet().signMessage(dataStr)
+		signature: tokenSig
 	};
 
 	const response = {

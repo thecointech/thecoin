@@ -1,20 +1,20 @@
 # TapCap.Client.Api.StatusApi
 
-All URIs are relative to *https://tapcap.thecoincore-212314.appspot.com*
+All URIs are relative to *https://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**TapCapHistory**](StatusApi.md#tapcaphistory) | **POST** /tap/status/history | TapCap current status
-[**TapCapStatus**](StatusApi.md#tapcapstatus) | **POST** /tap/status/summary | TapCap current status
+[**TapCapHistory**](StatusApi.md#tapcaphistory) | **POST** /status/history | TapCap history
+[**TapCapStatus**](StatusApi.md#tapcapstatus) | **POST** /status/summary | TapCap current status
 
 
 <a name="tapcaphistory"></a>
 # **TapCapHistory**
-> TapCapHistoryResponseSigned TapCapHistory (TapCapHistoryRequestSigned request)
+> TapCapHistoryResponse TapCapHistory (SignedMessage request)
 
-TapCap current status
+TapCap history
 
-User TapCap status
+User TapCap history in the ranges provided
 
 ### Example
 ```csharp
@@ -31,12 +31,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new StatusApi();
-            var request = new TapCapHistoryRequestSigned(); // TapCapHistoryRequestSigned | Purchase Request info
+            var request = new SignedMessage(); // SignedMessage | Purchase Request info
 
             try
             {
-                // TapCap current status
-                TapCapHistoryResponseSigned result = apiInstance.TapCapHistory(request);
+                // TapCap history
+                TapCapHistoryResponse result = apiInstance.TapCapHistory(request);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -52,11 +52,11 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**TapCapHistoryRequestSigned**](TapCapHistoryRequestSigned.md)| Purchase Request info | 
+ **request** | [**SignedMessage**](SignedMessage.md)| Purchase Request info | 
 
 ### Return type
 
-[**TapCapHistoryResponseSigned**](TapCapHistoryResponseSigned.md)
+[**TapCapHistoryResponse**](TapCapHistoryResponse.md)
 
 ### Authorization
 
@@ -71,7 +71,7 @@ No authorization required
 
 <a name="tapcapstatus"></a>
 # **TapCapStatus**
-> TapCapQueryResponse TapCapStatus (TapCapQueryRequestSigned request)
+> TapCapQueryResponse TapCapStatus (SignedMessage request)
 
 TapCap current status
 
@@ -92,7 +92,7 @@ namespace Example
         public void main()
         {
             var apiInstance = new StatusApi();
-            var request = new TapCapQueryRequestSigned(); // TapCapQueryRequestSigned | TapCap status request
+            var request = new SignedMessage(); // SignedMessage | TapCap status request
 
             try
             {
@@ -113,7 +113,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**TapCapQueryRequestSigned**](TapCapQueryRequestSigned.md)| TapCap status request | 
+ **request** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
 
 ### Return type
 

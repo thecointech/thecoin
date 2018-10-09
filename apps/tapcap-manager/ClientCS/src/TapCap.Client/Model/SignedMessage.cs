@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -23,36 +23,36 @@ using SwaggerDateConverter = TapCap.Client.Client.SwaggerDateConverter;
 namespace TapCap.Client.Model
 {
     /// <summary>
-    /// TapCapHistoryRequestSigned
+    /// SignedMessage
     /// </summary>
     [DataContract]
-    public partial class TapCapHistoryRequestSigned :  IEquatable<TapCapHistoryRequestSigned>
+    public partial class SignedMessage :  IEquatable<SignedMessage>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TapCapHistoryRequestSigned" /> class.
+        /// Initializes a new instance of the <see cref="SignedMessage" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected TapCapHistoryRequestSigned() { }
+        protected SignedMessage() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="TapCapHistoryRequestSigned" /> class.
+        /// Initializes a new instance of the <see cref="SignedMessage" /> class.
         /// </summary>
-        /// <param name="Request">Request (required).</param>
+        /// <param name="Message">Message (required).</param>
         /// <param name="Signature">Signature (required).</param>
-        public TapCapHistoryRequestSigned(TapCapHistoryRequest Request = default(TapCapHistoryRequest), string Signature = default(string))
+        public SignedMessage(string Message = default(string), string Signature = default(string))
         {
-            // to ensure "Request" is required (not null)
-            if (Request == null)
+            // to ensure "Message" is required (not null)
+            if (Message == null)
             {
-                throw new InvalidDataException("Request is a required property for TapCapHistoryRequestSigned and cannot be null");
+                throw new InvalidDataException("Message is a required property for SignedMessage and cannot be null");
             }
             else
             {
-                this.Request = Request;
+                this.Message = Message;
             }
             // to ensure "Signature" is required (not null)
             if (Signature == null)
             {
-                throw new InvalidDataException("Signature is a required property for TapCapHistoryRequestSigned and cannot be null");
+                throw new InvalidDataException("Signature is a required property for SignedMessage and cannot be null");
             }
             else
             {
@@ -61,10 +61,10 @@ namespace TapCap.Client.Model
         }
         
         /// <summary>
-        /// Gets or Sets Request
+        /// Gets or Sets Message
         /// </summary>
-        [DataMember(Name="request", EmitDefaultValue=false)]
-        public TapCapHistoryRequest Request { get; set; }
+        [DataMember(Name="message", EmitDefaultValue=false)]
+        public string Message { get; set; }
 
         /// <summary>
         /// Gets or Sets Signature
@@ -79,8 +79,8 @@ namespace TapCap.Client.Model
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class TapCapHistoryRequestSigned {\n");
-            sb.Append("  Request: ").Append(Request).Append("\n");
+            sb.Append("class SignedMessage {\n");
+            sb.Append("  Message: ").Append(Message).Append("\n");
             sb.Append("  Signature: ").Append(Signature).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -102,24 +102,24 @@ namespace TapCap.Client.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as TapCapHistoryRequestSigned);
+            return this.Equals(input as SignedMessage);
         }
 
         /// <summary>
-        /// Returns true if TapCapHistoryRequestSigned instances are equal
+        /// Returns true if SignedMessage instances are equal
         /// </summary>
-        /// <param name="input">Instance of TapCapHistoryRequestSigned to be compared</param>
+        /// <param name="input">Instance of SignedMessage to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(TapCapHistoryRequestSigned input)
+        public bool Equals(SignedMessage input)
         {
             if (input == null)
                 return false;
 
             return 
                 (
-                    this.Request == input.Request ||
-                    (this.Request != null &&
-                    this.Request.Equals(input.Request))
+                    this.Message == input.Message ||
+                    (this.Message != null &&
+                    this.Message.Equals(input.Message))
                 ) && 
                 (
                     this.Signature == input.Signature ||
@@ -137,8 +137,8 @@ namespace TapCap.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.Request != null)
-                    hashCode = hashCode * 59 + this.Request.GetHashCode();
+                if (this.Message != null)
+                    hashCode = hashCode * 59 + this.Message.GetHashCode();
                 if (this.Signature != null)
                     hashCode = hashCode * 59 + this.Signature.GetHashCode();
                 return hashCode;

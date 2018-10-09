@@ -1,7 +1,7 @@
 /* 
  * TheCoin Broker
  *
- * TheCoin broker services.  To be implemented allowing exchange of local currency to THESE
+ * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -37,9 +37,8 @@ namespace TapCap.Client.Model
         /// Initializes a new instance of the <see cref="TapCapQueryResponse" /> class.
         /// </summary>
         /// <param name="Balance">Balance (required).</param>
-        /// <param name="WeeklyTopup">WeeklyTopup (required).</param>
         /// <param name="Token">Token (required).</param>
-        public TapCapQueryResponse(decimal? Balance = default(decimal?), decimal? WeeklyTopup = default(decimal?), TapCapTokenSigned Token = default(TapCapTokenSigned))
+        public TapCapQueryResponse(decimal? Balance = default(decimal?), SignedMessage Token = default(SignedMessage))
         {
             // to ensure "Balance" is required (not null)
             if (Balance == null)
@@ -49,15 +48,6 @@ namespace TapCap.Client.Model
             else
             {
                 this.Balance = Balance;
-            }
-            // to ensure "WeeklyTopup" is required (not null)
-            if (WeeklyTopup == null)
-            {
-                throw new InvalidDataException("WeeklyTopup is a required property for TapCapQueryResponse and cannot be null");
-            }
-            else
-            {
-                this.WeeklyTopup = WeeklyTopup;
             }
             // to ensure "Token" is required (not null)
             if (Token == null)
@@ -77,16 +67,10 @@ namespace TapCap.Client.Model
         public decimal? Balance { get; set; }
 
         /// <summary>
-        /// Gets or Sets WeeklyTopup
-        /// </summary>
-        [DataMember(Name="weeklyTopup", EmitDefaultValue=false)]
-        public decimal? WeeklyTopup { get; set; }
-
-        /// <summary>
         /// Gets or Sets Token
         /// </summary>
         [DataMember(Name="token", EmitDefaultValue=false)]
-        public TapCapTokenSigned Token { get; set; }
+        public SignedMessage Token { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -97,7 +81,6 @@ namespace TapCap.Client.Model
             var sb = new StringBuilder();
             sb.Append("class TapCapQueryResponse {\n");
             sb.Append("  Balance: ").Append(Balance).Append("\n");
-            sb.Append("  WeeklyTopup: ").Append(WeeklyTopup).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -139,11 +122,6 @@ namespace TapCap.Client.Model
                     this.Balance.Equals(input.Balance))
                 ) && 
                 (
-                    this.WeeklyTopup == input.WeeklyTopup ||
-                    (this.WeeklyTopup != null &&
-                    this.WeeklyTopup.Equals(input.WeeklyTopup))
-                ) && 
-                (
                     this.Token == input.Token ||
                     (this.Token != null &&
                     this.Token.Equals(input.Token))
@@ -161,8 +139,6 @@ namespace TapCap.Client.Model
                 int hashCode = 41;
                 if (this.Balance != null)
                     hashCode = hashCode * 59 + this.Balance.GetHashCode();
-                if (this.WeeklyTopup != null)
-                    hashCode = hashCode * 59 + this.WeeklyTopup.GetHashCode();
                 if (this.Token != null)
                     hashCode = hashCode * 59 + this.Token.GetHashCode();
                 return hashCode;
