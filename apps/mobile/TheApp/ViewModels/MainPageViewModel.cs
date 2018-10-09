@@ -2,6 +2,7 @@
 using Prism.Navigation;
 using TheUtils;
 using TheCoinCore.Api;
+using TapCap.Client.Api;
 
 namespace TheApp.ViewModels
 {
@@ -60,11 +61,13 @@ namespace TheApp.ViewModels
 
         private TheCoin.UserAccount UserAccount;
         private TheContract TheContract;
+
         private IRatesApi Rates;
+        private IStatusApi TapCapStatus;
 
         public DelegateCommand ConnectCommand { get; set; }
 
-        public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount)
+        public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount, IStatusApi tapCapStatus)
             : base(navigationService)
         {
             Title = "Main Page";
@@ -72,6 +75,7 @@ namespace TheApp.ViewModels
 
             TheContract = theContract;
             Rates = ratesApi;
+            TapCapStatus = tapCapStatus;
             UserAccount = userAccount;
 
             ConnectCommand = new DelegateCommand(BeginConnect);
@@ -89,7 +93,17 @@ namespace TheApp.ViewModels
                 var now = TheCoinTime.Now();
                 var FXRate = await Rates.GetConversionAsync(127, now);
                 CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
+
                 MainBalance = await TheContract.CoinBalance();
+
+                // Create a signed TapCapQueryRequest
+                decimal timestamp = (decimal)TheCoinTime.Now();
+                var req = new TapCap.Client.Model.TapCapQueryRequest(timestamp);
+                var signedReq = UserAccount.MakeSignedMessage(req);
+                var response = await TapCapStatus.TapCapStatusAsync(signedReq);
+
+                TapCapBalance = (ulong)response.Balance.GetValueOrDefault(0);
+                UserAccount.Token = response.Token;
             }
         }
     }

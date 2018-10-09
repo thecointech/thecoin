@@ -37,6 +37,7 @@ namespace TheApp
             containerRegistry.RegisterInstance(new TheUtils.TheContract(theContractJson));
             // Register a single RatesApi object
             containerRegistry.RegisterInstance<TheCoinCore.Api.IRatesApi>(new TheCoinCore.Api.RatesApi());
+            containerRegistry.RegisterInstance<TapCap.Client.Api.IStatusApi>(new TapCap.Client.Api.StatusApi("http://localhost:8080"));
             containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
 
             containerRegistry.RegisterForNavigation<NavigationPage>();

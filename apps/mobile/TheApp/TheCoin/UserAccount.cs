@@ -3,7 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TapCap.Client.Model;
 using Xamarin.Essentials;
+
+using Nethereum.ABI.Encoders;
+using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.Util;
+using Nethereum.Signer;
 
 namespace TheApp.TheCoin
 {
@@ -30,6 +36,8 @@ namespace TheApp.TheCoin
                 TheContract.Connect(value);
             }
         }
+
+        public object Token { get; internal set; }
 
         private string EncryptedAccount = null;
         private TheUtils.TheContract TheContract;
@@ -86,6 +94,31 @@ namespace TheApp.TheCoin
                 return false;
             }
             return true;
+        }
+
+        private static string CreateStringSignature(EthECDSASignature signature)
+        {
+            return "0x" + signature.R.ToHex().PadLeft(64, '0') +
+                   signature.S.ToHex().PadLeft(64, '0') +
+                   signature.V.ToHex();
+        }
+
+        public SignedMessage MakeSignedMessage(object obj)
+        {
+            var message = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+
+            var signer = new Nethereum.Signer.EthereumMessageSigner();
+
+            // The below appears to have an issue where the message is double-hashed
+            // We workaround by explicitly calling the appropriate fn's below
+            //var signature = signer.HashAndSign(message, TheAccount.PrivateKey);
+            
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+            var hash = signer.HashPrefixedMessage(messageBytes);
+            var ethSig = signer.SignAndCalculateV(hash, TheAccount.PrivateKey);
+            string signature = CreateStringSignature(ethSig);
+
+            return new SignedMessage(message, signature);
         }
     }
 }

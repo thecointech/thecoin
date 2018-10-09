@@ -73,33 +73,10 @@ namespace TheApp.ViewModels
             }
         }
 
-        private class AccountInfo
-        {
-            public string address;
-        }
-
         public override void OnNavigatedTo(NavigationParameters parameters) 
         {
-            //if (parameters.ContainsKey("account"))
-            //{
-
-            //    try
-            //    {
-            //        var EncryptedAccount = parameters["account"].ToString();
-                    
-            //        State = "Read new encrypted account";
-
-            //        AccountInfo info = new AccountInfo();
-            //        info.address = "NotNull";
-            //        JsonConvert.PopulateObject(EncryptedAccount, info);
-            //        Address = info.address;
-            //    }
-            //    catch (Exception /*e*/)
-            //    {
-            //        State = "Read Account Failed";
-            //        Address = "";
-            //    }
-            //}
+            if (UserAccount.TheAccount != null)
+                Address = UserAccount.TheAccount.Address;
         }
     }
 }

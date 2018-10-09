@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\tapcap-manager\ClientCS\src\TapCap.Client\TapCap.Client.csproj" />
     <ProjectReference Include="..\..\TheCoinCore\ClientCS\src\TheCoinCore\TheCoinCore.csproj" />
     <ProjectReference Include="..\..\TheUtils\TheUtils.csproj" />
   </ItemGroup>
