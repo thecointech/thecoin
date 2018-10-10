@@ -1,0 +1,40 @@
+swagger: "2.0"
+info:
+  description: "The interace for TapCap between buyers & sellers."
+  version: "0.1.0"
+  title: "THE TapCap supply"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+tags:
+- name: "TapCap"
+  description: "Facilitate a 3-way TapCap transaction"
+consumes:
+- "application/yaml"
+produces:
+- "application/yaml"
+schemes:
+- "http"
+
+definitions:
+
+  SignedMessage:
+    required:
+      - message
+      - signature
+    properties:
+      message:
+        type: string
+      signature:
+        type: string
+
+  SignedPurchaseRequest:
+    required:
+      - timestamp  
+      - amount
+      - pdol
+      - token
+    properties:
