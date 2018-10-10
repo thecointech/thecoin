@@ -1,0 +1,3 @@
+[submodule "the-pricing"]
+	path = the-pricing
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-pricing
