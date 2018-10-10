@@ -1,3 +1,9 @@
 [submodule "the-pricing"]
 	path = the-pricing
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-pricing
+[submodule "the-contract"]
+	path = the-contract
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-contract
+[submodule "the-website"]
+	path = the-website
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website
