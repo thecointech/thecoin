@@ -7,3 +7,6 @@
 [submodule "the-website"]
 	path = the-website
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website
+[submodule "tapcap-manager"]
+	path = tapcap-manager
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/tapcap-manager
