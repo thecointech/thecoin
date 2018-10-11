@@ -16,3 +16,6 @@
 [submodule "broker-cad"]
 	path = broker-cad
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/broker-cad
+[submodule "the-app"]
+	path = the-app
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-app
