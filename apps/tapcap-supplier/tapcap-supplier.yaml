@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8080"
+host: "localhost:8070"
 tags:
 - name: "TapCap"
   description: "Facilitate a 3-way TapCap transaction"
@@ -18,6 +18,36 @@ produces:
 - "application/yaml"
 schemes:
 - "http"
+
+paths:
+  /static:
+    get:
+      summary: "Get the list of static responses to cache for terminal queries"
+      operationId: "getStatic"
+      responses:
+        200:
+          description: Static response cache
+          schema:
+            $ref: /definitions/StaticResponses
+
+  /tap:
+    post:
+      summary: "Get a response to a terminals request for a tapcap transaction"
+      operationId: "requestTapCap"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema: 
+            $ref: "#/definitions/SignedTapcapRequest" # signed ( TapCapPurchaseBroker )
+      responses:
+        405:
+          description: Invalid input
+        200:
+          description: Static response cache
+          schema:
+            $ref: /definitions/StaticResponses
 
 definitions:
 
@@ -31,10 +61,58 @@ definitions:
       signature:
         type: string
 
-  SignedPurchaseRequest:
+  SignedTapcapRequest:
     required:
       - timestamp  
-      - amount
+      - fiatAmount
       - pdol
       - token
+      - signature
     properties:
+      timestamp:
+        type: number
+        format: int64
+      fiatAmount:
+        type: number
+        format: double
+      pdol:
+        type: string
+        format: byte
+      token:
+        $ref: "#/definitions/SignedMessage"
+      signature:
+        type: string # sign ( pdol )
+
+  SignedTapCapResponse:
+    required:
+      - requestPdol
+      - responseData
+      - signature
+    properties:
+      requestPdol:
+        type: string
+        format: byte
+      responseData:
+        type: string
+        format: byte
+      signature:
+        type: string # sign ( pdol )
+
+  StaticResponse:
+    required:
+      - query
+      - response
+    properties:
+      query:
+        type: string
+        format: byte
+      response:
+        type: string
+        format: byte
+
+  StaticResponses:
+    properties:
+      responses:
+        type: array
+        items:
+          $ref: "#/definitions/StaticResponse"   
