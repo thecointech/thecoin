@@ -13,3 +13,6 @@
 [submodule "tapcap-supplier"]
 	path = tapcap-supplier
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/tapcap-supplier
+[submodule "broker-cad"]
+	path = broker-cad
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/broker-cad
