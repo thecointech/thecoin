@@ -28,11 +28,12 @@ paths:
         200:
           description: Static response cache
           schema:
-            $ref: /definitions/StaticResponses
+            $ref: "#/definitions/StaticResponses"
 
   /tap:
     post:
-      summary: "Get a response to a terminals request for a tapcap transaction"
+      summary: "Do TapCap transaction"
+      description: This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
       operationId: "requestTapCap"
       parameters:
         - in: body
@@ -40,14 +41,33 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema: 
-            $ref: "#/definitions/SignedTapcapRequest" # signed ( TapCapPurchaseBroker )
+            $ref: "#/definitions/SignedMessage" # sign (TapCapRequest)
       responses:
         405:
           description: Invalid input
         200:
           description: Static response cache
           schema:
-            $ref: /definitions/StaticResponses
+            $ref: "#/definitions/SignedMessage" # sign (TapCapTransaction)
+  /contest:
+    post:
+      summary: Notify of a contested transaction
+      description: "Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier"
+      operationId: "contestTapCap"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema: 
+            $ref: "#/definitions/SignedTapcapContest"
+      responses:
+        405:
+          description: Invalid input
+        200:
+          description: Server status
+          schema:
+            $ref: "#/definitions/ContestResponse"
 
 definitions:
 
@@ -61,7 +81,26 @@ definitions:
       signature:
         type: string
 
-  SignedTapcapRequest:
+  TapCapRequest:
+    required:
+      - timestamp  
+      - fiatAmount
+      - pdol
+      - token
+    properties:
+      timestamp:
+        type: number
+        format: int64
+      fiatAmount:
+        type: number
+        format: double
+      pdol:
+        type: string
+        format: byte
+      token:
+        $ref: "#/definitions/SignedMessage"
+
+  SignedTapcapContest:
     required:
       - timestamp  
       - fiatAmount
@@ -83,20 +122,29 @@ definitions:
       signature:
         type: string # sign ( pdol )
 
-  SignedTapCapResponse:
+
+  TapCapTransaction:
     required:
-      - requestPdol
-      - responseData
-      - signature
+      - clientTxId          # Clients tx id (matching token)
+      - supplierTxId        # Suppliers transaction ID
+      - fiatRequested       # The amount the client needs
+      - coinCharged         # The coins charged to cover fiatRequested
+      - responseData        # The byte stream to be transmitted to the terminal
     properties:
-      requestPdol:
-        type: string
-        format: byte
+      clientTxId:
+        type: number
+        format: int32
+      supplierTxId:
+        type: number
+        format: int32
+      fiatRequested:
+        type: number
+      coinCharged:
+        type: number
+        format: int64
       responseData:
         type: string
         format: byte
-      signature:
-        type: string # sign ( pdol )
 
   StaticResponse:
     required:
@@ -115,4 +163,11 @@ definitions:
       responses:
         type: array
         items:
-          $ref: "#/definitions/StaticResponse"   
+          $ref: "#/definitions/StaticResponse"
+
+
+  ContestResponse:
+    properties:
+      code:
+        type: number
+        format: integer

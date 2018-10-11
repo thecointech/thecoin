@@ -1,0 +1,235 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "THE TapCap supply",
+    "description" : "The interace for TapCap between buyers & sellers.",
+    "contact" : {
+      "email" : "stephen.taylor.dev@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "0.1.0"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8070/"
+  } ],
+  "tags" : [ {
+    "name" : "TapCap",
+    "description" : "Facilitate a 3-way TapCap transaction"
+  } ],
+  "paths" : {
+    "/static" : {
+      "get" : {
+        "summary" : "Get the list of static responses to cache for terminal queries",
+        "operationId" : "getStatic",
+        "responses" : {
+          "200" : {
+            "description" : "Static response cache",
+            "content" : {
+              "application/yaml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StaticResponses"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tap" : {
+      "post" : {
+        "summary" : "Do TapCap transaction",
+        "description" : "This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal",
+        "operationId" : "requestTapCap",
+        "requestBody" : {
+          "description" : "TapCap exchange request",
+          "content" : {
+            "application/yaml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SignedMessage"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Static response cache",
+            "content" : {
+              "application/yaml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignedMessage"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Invalid input",
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/contest" : {
+      "post" : {
+        "summary" : "Notify of a contested transaction",
+        "description" : "Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier",
+        "operationId" : "contestTapCap",
+        "requestBody" : {
+          "description" : "TapCap exchange request",
+          "content" : {
+            "application/yaml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SignedTapcapContest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Server status",
+            "content" : {
+              "application/yaml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContestResponse"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Invalid input",
+            "content" : { }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "StaticResponse" : {
+        "required" : [ "query", "response" ],
+        "type" : "object",
+        "properties" : {
+          "query" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "response" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          }
+        }
+      },
+      "SignedMessage" : {
+        "required" : [ "message", "signature" ],
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "signature" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SignedTapcapContest" : {
+        "required" : [ "fiatAmount", "pdol", "signature", "timestamp", "token" ],
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "number",
+            "format" : "int64"
+          },
+          "fiatAmount" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "pdol" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "token" : {
+            "$ref" : "#/components/schemas/SignedMessage"
+          },
+          "signature" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ContestResponse" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "number",
+            "format" : "integer"
+          }
+        }
+      },
+      "TapCapTransaction" : {
+        "required" : [ "clientTxId", "coinCharged", "fiatRequested", "responseData", "supplierTxId" ],
+        "type" : "object",
+        "properties" : {
+          "clientTxId" : {
+            "type" : "number",
+            "format" : "int32"
+          },
+          "supplierTxId" : {
+            "type" : "number",
+            "format" : "int32"
+          },
+          "fiatRequested" : {
+            "type" : "number"
+          },
+          "coinCharged" : {
+            "type" : "number",
+            "format" : "int64"
+          },
+          "responseData" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          }
+        }
+      },
+      "StaticResponses" : {
+        "type" : "object",
+        "properties" : {
+          "responses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StaticResponse"
+            }
+          }
+        }
+      },
+      "TapCapRequest" : {
+        "required" : [ "fiatAmount", "pdol", "timestamp", "token" ],
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "number",
+            "format" : "int64"
+          },
+          "fiatAmount" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "pdol" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "token" : {
+            "$ref" : "#/components/schemas/SignedMessage"
+          }
+        }
+      }
+    }
+  }
+}
