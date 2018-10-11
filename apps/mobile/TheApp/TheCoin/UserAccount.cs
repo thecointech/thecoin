@@ -106,18 +106,8 @@ namespace TheApp.TheCoin
         public SignedMessage MakeSignedMessage(object obj)
         {
             var message = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-
-            var signer = new Nethereum.Signer.EthereumMessageSigner();
-
-            // The below appears to have an issue where the message is double-hashed
-            // We workaround by explicitly calling the appropriate fn's below
-            //var signature = signer.HashAndSign(message, TheAccount.PrivateKey);
-            
-            var messageBytes = Encoding.UTF8.GetBytes(message);
-            var hash = signer.HashPrefixedMessage(messageBytes);
-            var ethSig = signer.SignAndCalculateV(hash, TheAccount.PrivateKey);
-            string signature = CreateStringSignature(ethSig);
-
+            var signer = new EthereumMessageSigner();
+            var signature = signer.EncodeUTF8AndSign(message, new EthECKey(TheAccount.PrivateKey));
             return new SignedMessage(message, signature);
         }
     }

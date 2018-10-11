@@ -86,6 +86,11 @@ namespace TheApp.ViewModels
             NavigationService.NavigateAsync("Connect");
         }
 
+        private void TestPurchase()
+        {
+
+        }
+
         public override async void OnNavigatedTo(NavigationParameters parameters)
         {
             if (UserAccount.TheAccount != null)

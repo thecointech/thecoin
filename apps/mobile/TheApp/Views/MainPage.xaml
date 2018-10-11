@@ -29,7 +29,7 @@
             <Label Text="{Binding CadBalance}" Grid.Row="2" Grid.Column="1"/>
         </Grid>
 
-        <Button Text="Test Purchase" Command="{Binding ConnectCommand}" />
+        <Button Text="Test Purchase" Command="{Binding TestPurchase}" />
 
     </StackLayout>
 

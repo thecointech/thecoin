@@ -17,9 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{C1A5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheCoinCore", "..\TheCoinCore\ClientCS\src\TheCoinCore\TheCoinCore.csproj", "{880B1E28-20F8-4F6F-BFE8-2FF74912CB6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conversion.cs", "..\TheCoinUtilities\cs\Conversion.cs\Conversion.cs.csproj", "{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapCap.Client", "..\tapcap-manager\ClientCS\src\TapCap.Client\TapCap.Client.csproj", "{1308E73D-0051-4A64-9D29-911503B8F6C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapCap.Client", "..\tapcap-manager\ClientCS\src\TapCap.Client\TapCap.Client.csproj", "{1308E73D-0051-4A64-9D29-911503B8F6C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -357,46 +355,6 @@ Global
 		{880B1E28-20F8-4F6F-BFE8-2FF74912CB6C}.Release|x64.Build.0 = Release|Any CPU
 		{880B1E28-20F8-4F6F-BFE8-2FF74912CB6C}.Release|x86.ActiveCfg = Release|Any CPU
 		{880B1E28-20F8-4F6F-BFE8-2FF74912CB6C}.Release|x86.Build.0 = Release|Any CPU
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|Any CPU.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|Any CPU.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|ARM.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|ARM.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|iPhone.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|iPhone.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|x64.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|x64.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|x86.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Ad-Hoc|x86.Build.0 = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|Any CPU.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|Any CPU.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|ARM.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|ARM.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|iPhone.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|iPhone.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|iPhoneSimulator.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|iPhoneSimulator.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|x64.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|x64.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|x86.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.AppStore|x86.Build.0 = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|ARM.ActiveCfg = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|iPhone.ActiveCfg = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|x64.ActiveCfg = Debug|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|x64.Build.0 = Debug|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|x86.ActiveCfg = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Debug|x86.Build.0 = Debug|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|Any CPU.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|ARM.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|iPhone.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|iPhoneSimulator.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|x64.ActiveCfg = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|x64.Build.0 = Release|x64
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|x86.ActiveCfg = Release|x86
-		{E9FD2DC6-22D1-42A7-A7F6-3FDB82EB1CAB}.Release|x86.Build.0 = Release|x86
 		{1308E73D-0051-4A64-9D29-911503B8F6C7}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
 		{1308E73D-0051-4A64-9D29-911503B8F6C7}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
 		{1308E73D-0051-4A64-9D29-911503B8F6C7}.Ad-Hoc|ARM.ActiveCfg = Release|Any CPU
