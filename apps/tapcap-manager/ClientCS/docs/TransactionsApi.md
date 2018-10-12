@@ -1,6 +1,6 @@
 # TapCap.Client.Api.TransactionsApi
 
-All URIs are relative to *https://localhost:8080*
+All URIs are relative to *http://localhost:8091*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapcapbroker"></a>
 # **TapCapBroker**
-> InlineResponse200 TapCapBroker (SignedMessage request)
+> Object TapCapBroker (SignedMessage signedMessage)
 
 Broker: Register new TapCap transaction
 
@@ -29,12 +29,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new TransactionsApi();
-            var request = new SignedMessage(); // SignedMessage | TapCap exchange request
+            var signedMessage = new SignedMessage(); // SignedMessage | TapCap exchange request
 
             try
             {
                 // Broker: Register new TapCap transaction
-                InlineResponse200 result = apiInstance.TapCapBroker(request);
+                Object result = apiInstance.TapCapBroker(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -50,11 +50,11 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
 
 ### Return type
 
-[**InlineResponse200**](InlineResponse200.md)
+**Object**
 
 ### Authorization
 
@@ -69,7 +69,7 @@ No authorization required
 
 <a name="tapcapclient"></a>
 # **TapCapClient**
-> SignedMessage TapCapClient (SignedMessage request)
+> SignedMessage TapCapClient (SignedMessage signedMessage)
 
 Client: Confirm new TapCap transaction
 
@@ -88,12 +88,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new TransactionsApi();
-            var request = new SignedMessage(); // SignedMessage | TapCap status request
+            var signedMessage = new SignedMessage(); // SignedMessage | TapCap status request
 
             try
             {
                 // Client: Confirm new TapCap transaction
-                SignedMessage result = apiInstance.TapCapClient(request);
+                SignedMessage result = apiInstance.TapCapClient(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -109,7 +109,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
 
 ### Return type
 

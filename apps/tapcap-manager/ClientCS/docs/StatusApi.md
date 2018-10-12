@@ -1,6 +1,6 @@
 # TapCap.Client.Api.StatusApi
 
-All URIs are relative to *https://localhost:8080*
+All URIs are relative to *http://localhost:8091*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapcaphistory"></a>
 # **TapCapHistory**
-> TapCapHistoryResponse TapCapHistory (SignedMessage request)
+> TapCapHistoryResponse TapCapHistory (SignedMessage signedMessage)
 
 TapCap history
 
@@ -31,12 +31,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new StatusApi();
-            var request = new SignedMessage(); // SignedMessage | Purchase Request info
+            var signedMessage = new SignedMessage(); // SignedMessage | Purchase Request info
 
             try
             {
                 // TapCap history
-                TapCapHistoryResponse result = apiInstance.TapCapHistory(request);
+                TapCapHistoryResponse result = apiInstance.TapCapHistory(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -52,7 +52,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**SignedMessage**](SignedMessage.md)| Purchase Request info | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| Purchase Request info | 
 
 ### Return type
 
@@ -71,7 +71,7 @@ No authorization required
 
 <a name="tapcapstatus"></a>
 # **TapCapStatus**
-> TapCapQueryResponse TapCapStatus (SignedMessage request)
+> TapCapQueryResponse TapCapStatus (SignedMessage signedMessage)
 
 TapCap current status
 
@@ -92,12 +92,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new StatusApi();
-            var request = new SignedMessage(); // SignedMessage | TapCap status request
+            var signedMessage = new SignedMessage(); // SignedMessage | TapCap status request
 
             try
             {
                 // TapCap current status
-                TapCapQueryResponse result = apiInstance.TapCapStatus(request);
+                TapCapQueryResponse result = apiInstance.TapCapStatus(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -113,7 +113,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
 
 ### Return type
 

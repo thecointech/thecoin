@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -32,9 +32,9 @@ class ApiClient {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost:8080
+         * @default http://localhost:8091
          */
-        this.basePath = 'http://localhost:8080'.replace(/\/+$/, '');
+        this.basePath = 'http://localhost:8091'.replace(/\/+$/, '');
 
         /**
          * The authentication methods to be included for all API calls.

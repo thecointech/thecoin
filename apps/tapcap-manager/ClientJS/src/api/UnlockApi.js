@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com

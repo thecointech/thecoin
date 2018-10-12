@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Fiat** | **decimal?** |  | 
 **CurrencyCode** | **decimal?** |  | 
-**Timestamp** | **decimal?** |  | 
+**Timestamp** | **double?** |  | 
 **GpoData** | **byte[]** |  | 
 **CertificateRequest** | **byte[]** |  | 
 **Token** | [**SignedMessage**](SignedMessage.md) |  | 

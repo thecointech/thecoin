@@ -4,9 +4,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ClientAccount** | **string** |  | 
-**AvailableBalance** | **decimal?** |  | 
+**AvailableBalance** | **double?** |  | 
 **TransactionId** | **decimal?** |  | 
-**Timestamp** | **decimal?** |  | 
+**Timestamp** | **double?** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

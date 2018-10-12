@@ -3,10 +3,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timestamp** | **decimal?** |  | 
+**Timestamp** | **double?** |  | 
 **FiatAmount** | **double?** |  | 
-**CoinAmount** | **decimal?** |  | 
-**CoinBalance** | **decimal?** |  | 
+**CoinAmount** | **double?** |  | 
+**CoinBalance** | **double?** |  | 
 **MerchantId** | **string** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -28,7 +28,7 @@ import UnlockApi from './api/UnlockApi';
 
 
 /**
-* TheCoin_TapCap_resolution___This_service_is_the_trusted_3rd_party_that_weekly_settles_TapCap_purchases.<br>
+* The_TapCap_resolution___This_service_is_the_trusted_3rd_party_that_weekly_settles_TapCap_purchases.<br>
 * The <code>index</code> module provides access to constructors for all the classes which comprise the public API.
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
