@@ -2,9 +2,7 @@
 
 
 const Ethers = require('ethers')
-const Datastore = require('@google-cloud/datastore');
-
-const TheCoinSpec = require('../contracts/TheCoin')
+const TheCoinSpec = require('the-contract/build/contracts/TheCoin')
 
 const abi = TheCoinSpec.abi;
 const address = TheCoinSpec.networks[3].address;

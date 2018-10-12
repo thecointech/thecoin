@@ -4,10 +4,13 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
-var app = require('connect')();
+var app = require('express')();
+var cors = require('cors')
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;
+
+var ContractListener = require('./exchange/Contract')
 
 // swaggerRouter configuration
 var options = {
@@ -23,6 +26,9 @@ var swaggerDoc = jsyaml.safeLoad(spec);
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
+  app.use(cors());
+  app.options('*', cors()) // include before other routes
+
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
 
@@ -34,6 +40,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
+
+  ContractListener.StartListening();
 
   // Start the server
   http.createServer(app).listen(serverPort, function () {
