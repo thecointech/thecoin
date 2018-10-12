@@ -1,0 +1,12 @@
+# Compile to Javascript
+-cp src
+Conversion
+-js js/Conversion.js
+-dce full
+--next
+
+# Compile to CS
+-cp src
+Conversion
+-cs cs/Conversion.cs
+-dce full

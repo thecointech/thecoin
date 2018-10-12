@@ -1,0 +1,14 @@
+{
+  "name": "the-utilities",
+  "version": "0.1.0",
+  "description": "Utilities to share amongst TheCoin projects",
+  "main": "Conversion.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "TheCoin"
+  ],
+  "author": "stephen.taylor.dev@gmail.com",
+  "license": "ISC"
+}
