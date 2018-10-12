@@ -9,19 +9,23 @@ REM move .\CoreServer\controllers\DefaultService.js .\CoreServer\service\
 REM cd .\CoreServer
 REM npm start
 
+REM 
+REM NOTE: We are forced to use the older version of swagger-codegemn
 set JAVA_OPTS=-Dfile.encoding=UTF-8
-java -jar .\swagger-codegen-cli.jar generate 		 -i TheCoinCore\TheCoinCore.yaml -l nodejs-server -o TheCoinCore\Service
-java -jar .\openapi-generator-cli-3.2.3.jar generate -i TheCoinCore\TheCoinCore.yaml -l javascript -o TheCoinCore\ClientJS -c TheCoinCore\client-js-spec.json 
-java -jar .\swagger-codegen-cli.jar generate 		 -i TheCoinCore\TheCoinCore.yaml -l csharp -o TheCoinCore\ClientCS -c TheCoinCore\client-cs-spec.json 
+java -jar .\swagger-codegen-cli.jar generate 	-i the-pricing\the-pricing.yaml -l nodejs-server 	-o the-pricing\Service
+java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -l javascript 		-o the-pricing\ClientJS -c the-pricing\client-js-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -l csharp 			-o the-pricing\ClientCS -c the-pricing\client-cs-spec.json 
 
-java -jar .\swagger-codegen-cli.jar generate 		 -i tapcap-manager\TapCapManager.yaml -o tapcap-manager\Service  -l nodejs-server 
-java -jar .\swagger-codegen-cli.jar generate 		 -i tapcap-manager\TapCapManager.yaml -o tapcap-manager\ClientCS -l csharp 		-c tapcap-manager\client-cs-spec.json 
+java -jar .\swagger-codegen-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\Service  -l nodejs-server 
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientCS -l csharp 		-c tapcap-manager\client-cs-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientJS -g javascript 	-c tapcap-manager\client-js-spec.json
 
-java -jar .\openapi-generator-cli.jar generate -i tapcap-manager\TapCapManager.yaml -o tapcap-manager\Service  -l nodejs-server
-java -jar .\openapi-generator-cli-3.2.3.jar generate -i tapcap-manager\TapCapManager.yaml -o tapcap-manager\ClientJS -l javascript -c tapcap-manager\client-js-spec.json 
+java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 	-o broker-cad\Service
+java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -l javascript 	-o broker-cad\ClientJS -c broker-cad\client-js-spec.json 
 
-java -jar .\swagger-codegen-cli.jar generate -i BrokerCAD\BrokerCAD.yaml -l nodejs-server -o BrokerCAD\Service
-java -jar .\openapi-generator-cli-3.2.3.jar generate -i BrokerCAD\BrokerCAD.yaml -l javascript -o BrokerCAD\ClientJS -c BrokerCAD\ClientSpec.json 
+
+java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientCS -l csharp 	 	-c tapcap-supplier\client-cs-spec.json
+java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\Server 	 -g aspnetcore 	-c tapcap-supplier\server-cs-spec.json
 
 REM java -jar .\swagger-codegen-cli.jar generate -i TapCapManager\TapCapManager.yaml -l aspnetcore -c TheCoinBrokerServerSpec.json -o TheCoinBroker\ClientASP
 REM java -jar .\APIs\swagger-codegen-cli.jar generate -i APIs\TheCoinBroker.yaml -l javascript -c APIs\TheCoinBrokerClientSpec.json -o TheCoinBroker/Client

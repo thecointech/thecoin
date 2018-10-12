@@ -19,3 +19,6 @@
 [submodule "the-app"]
 	path = the-app
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-app
+[submodule "the-utilities"]
+	path = the-utilities
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-utilities
