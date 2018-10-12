@@ -13,7 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
-import MessageSigned from '../model/MessageSigned';
+import SignedMessage from '../model/SignedMessage';
 import TapCapHistoryResponse from '../model/TapCapHistoryResponse';
 import TapCapQueryResponse from '../model/TapCapQueryResponse';
 
@@ -40,15 +40,15 @@ export default class StatusApi {
     /**
      * TapCap history
      * User TapCap history in the ranges provided
-     * @param {module:model/MessageSigned} messageSigned Purchase Request info
+     * @param {module:model/SignedMessage} signedMessage Purchase Request info
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TapCapHistoryResponse} and HTTP response
      */
-    tapCapHistoryWithHttpInfo(messageSigned) {
-      let postBody = messageSigned;
+    tapCapHistoryWithHttpInfo(signedMessage) {
+      let postBody = signedMessage;
 
-      // verify the required parameter 'messageSigned' is set
-      if (messageSigned === undefined || messageSigned === null) {
-        throw new Error("Missing the required parameter 'messageSigned' when calling tapCapHistory");
+      // verify the required parameter 'signedMessage' is set
+      if (signedMessage === undefined || signedMessage === null) {
+        throw new Error("Missing the required parameter 'signedMessage' when calling tapCapHistory");
       }
 
 
@@ -76,11 +76,11 @@ export default class StatusApi {
     /**
      * TapCap history
      * User TapCap history in the ranges provided
-     * @param {module:model/MessageSigned} messageSigned Purchase Request info
+     * @param {module:model/SignedMessage} signedMessage Purchase Request info
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TapCapHistoryResponse}
      */
-    tapCapHistory(messageSigned) {
-      return this.tapCapHistoryWithHttpInfo(messageSigned)
+    tapCapHistory(signedMessage) {
+      return this.tapCapHistoryWithHttpInfo(signedMessage)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
@@ -90,15 +90,15 @@ export default class StatusApi {
     /**
      * TapCap current status
      * User TapCap status
-     * @param {module:model/MessageSigned} messageSigned TapCap status request
+     * @param {module:model/SignedMessage} signedMessage TapCap status request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TapCapQueryResponse} and HTTP response
      */
-    tapCapStatusWithHttpInfo(messageSigned) {
-      let postBody = messageSigned;
+    tapCapStatusWithHttpInfo(signedMessage) {
+      let postBody = signedMessage;
 
-      // verify the required parameter 'messageSigned' is set
-      if (messageSigned === undefined || messageSigned === null) {
-        throw new Error("Missing the required parameter 'messageSigned' when calling tapCapStatus");
+      // verify the required parameter 'signedMessage' is set
+      if (signedMessage === undefined || signedMessage === null) {
+        throw new Error("Missing the required parameter 'signedMessage' when calling tapCapStatus");
       }
 
 
@@ -126,11 +126,11 @@ export default class StatusApi {
     /**
      * TapCap current status
      * User TapCap status
-     * @param {module:model/MessageSigned} messageSigned TapCap status request
+     * @param {module:model/SignedMessage} signedMessage TapCap status request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TapCapQueryResponse}
      */
-    tapCapStatus(messageSigned) {
-      return this.tapCapStatusWithHttpInfo(messageSigned)
+    tapCapStatus(signedMessage) {
+      return this.tapCapStatusWithHttpInfo(signedMessage)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

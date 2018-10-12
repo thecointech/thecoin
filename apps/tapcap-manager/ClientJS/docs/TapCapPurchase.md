@@ -8,6 +8,6 @@ Name | Type | Description | Notes
 **timestamp** | **Number** |  | 
 **gpoData** | **Blob** |  | 
 **certificateRequest** | **Blob** |  | 
-**token** | [**MessageSigned**](MessageSigned.md) |  | 
+**token** | [**SignedMessage**](SignedMessage.md) |  | 
 
 

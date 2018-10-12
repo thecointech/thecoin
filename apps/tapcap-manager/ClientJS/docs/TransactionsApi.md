@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapCapBroker"></a>
 # **tapCapBroker**
-> Object tapCapBroker(messageSigned)
+> Object tapCapBroker(signedMessage)
 
 Broker: Register new TapCap transaction
 
@@ -19,8 +19,8 @@ Broker: Register new TapCap transaction
 import TapcapManager from 'tapcap-manager';
 
 let apiInstance = new TapcapManager.TransactionsApi();
-let messageSigned = new TapcapManager.MessageSigned(); // MessageSigned | TapCap exchange request
-apiInstance.tapCapBroker(messageSigned).then((data) => {
+let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | TapCap exchange request
+apiInstance.tapCapBroker(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -32,7 +32,7 @@ apiInstance.tapCapBroker(messageSigned).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageSigned** | [**MessageSigned**](MessageSigned.md)| TapCap exchange request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
 
 ### Return type
 
@@ -49,7 +49,7 @@ No authorization required
 
 <a name="tapCapClient"></a>
 # **tapCapClient**
-> MessageSigned tapCapClient(messageSigned)
+> SignedMessage tapCapClient(signedMessage)
 
 Client: Confirm new TapCap transaction
 
@@ -58,8 +58,8 @@ Client: Confirm new TapCap transaction
 import TapcapManager from 'tapcap-manager';
 
 let apiInstance = new TapcapManager.TransactionsApi();
-let messageSigned = new TapcapManager.MessageSigned(); // MessageSigned | TapCap status request
-apiInstance.tapCapClient(messageSigned).then((data) => {
+let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | TapCap status request
+apiInstance.tapCapClient(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -71,11 +71,11 @@ apiInstance.tapCapClient(messageSigned).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageSigned** | [**MessageSigned**](MessageSigned.md)| TapCap status request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
 
 ### Return type
 
-[**MessageSigned**](MessageSigned.md)
+[**SignedMessage**](SignedMessage.md)
 
 ### Authorization
 

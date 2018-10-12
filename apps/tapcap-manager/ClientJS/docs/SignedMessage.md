@@ -1,4 +1,4 @@
-# TapcapManager.MessageSigned
+# TapcapManager.SignedMessage
 
 ## Properties
 Name | Type | Description | Notes

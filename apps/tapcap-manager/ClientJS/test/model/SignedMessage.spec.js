@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.MessageSigned();
+    instance = new TapcapManager.SignedMessage();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,16 +47,22 @@
       object[property] = value;
   }
 
-  describe('MessageSigned', function() {
-    it('should create an instance of MessageSigned', function() {
-      // uncomment below and update the code to test MessageSigned
-      //var instane = new TapcapManager.MessageSigned();
-      //expect(instance).to.be.a(TapcapManager.MessageSigned);
+  describe('SignedMessage', function() {
+    it('should create an instance of SignedMessage', function() {
+      // uncomment below and update the code to test SignedMessage
+      //var instane = new TapcapManager.SignedMessage();
+      //expect(instance).to.be.a(TapcapManager.SignedMessage);
+    });
+
+    it('should have the property message (base name: "message")', function() {
+      // uncomment below and update the code to test the property message
+      //var instane = new TapcapManager.SignedMessage();
+      //expect(instance).to.be();
     });
 
     it('should have the property signature (base name: "signature")', function() {
       // uncomment below and update the code to test the property signature
-      //var instane = new TapcapManager.MessageSigned();
+      //var instane = new TapcapManager.SignedMessage();
       //expect(instance).to.be();
     });
 

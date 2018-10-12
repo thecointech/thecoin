@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import MessageSigned from './MessageSigned';
+import SignedMessage from './SignedMessage';
 
 /**
  * The TapCapQueryResponse model module.
@@ -24,7 +24,7 @@ class TapCapQueryResponse {
      * Constructs a new <code>TapCapQueryResponse</code>.
      * @alias module:model/TapCapQueryResponse
      * @param balance {Number} 
-     * @param token {module:model/MessageSigned} 
+     * @param token {module:model/SignedMessage} 
      */
     constructor(balance, token) { 
         
@@ -56,7 +56,7 @@ class TapCapQueryResponse {
                 obj['balance'] = ApiClient.convertToType(data['balance'], 'Number');
             }
             if (data.hasOwnProperty('token')) {
-                obj['token'] = MessageSigned.constructFromObject(data['token']);
+                obj['token'] = SignedMessage.constructFromObject(data['token']);
             }
         }
         return obj;
@@ -71,7 +71,7 @@ class TapCapQueryResponse {
 TapCapQueryResponse.prototype['balance'] = undefined;
 
 /**
- * @member {module:model/MessageSigned} token
+ * @member {module:model/SignedMessage} token
  */
 TapCapQueryResponse.prototype['token'] = undefined;
 

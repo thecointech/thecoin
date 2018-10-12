@@ -13,7 +13,7 @@
 
 
 import ApiClient from './ApiClient';
-import MessageSigned from './model/MessageSigned';
+import SignedMessage from './model/SignedMessage';
 import TapCapHistoryRequest from './model/TapCapHistoryRequest';
 import TapCapHistoryResponse from './model/TapCapHistoryResponse';
 import TapCapPurchase from './model/TapCapPurchase';
@@ -66,10 +66,10 @@ export {
     ApiClient,
 
     /**
-     * The MessageSigned model constructor.
-     * @property {module:model/MessageSigned}
+     * The SignedMessage model constructor.
+     * @property {module:model/SignedMessage}
      */
-    MessageSigned,
+    SignedMessage,
 
     /**
      * The TapCapHistoryRequest model constructor.

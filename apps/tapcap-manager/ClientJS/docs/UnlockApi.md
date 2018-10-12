@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="unlock"></a>
 # **unlock**
-> unlock(xRequestKey)
+> String unlock(xRequestKey)
 
 
 
@@ -19,8 +19,8 @@ import TapcapManager from 'tapcap-manager';
 
 let apiInstance = new TapcapManager.UnlockApi();
 let xRequestKey = "xRequestKey_example"; // String | 
-apiInstance.unlock(xRequestKey).then(() => {
-  console.log('API called successfully.');
+apiInstance.unlock(xRequestKey).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
 });
@@ -35,7 +35,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+**String**
 
 ### Authorization
 
@@ -44,5 +44,5 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 

@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import MessageSigned from './MessageSigned';
+import SignedMessage from './SignedMessage';
 
 /**
  * The TapCapPurchaseBroker model module.
@@ -23,7 +23,7 @@ class TapCapPurchaseBroker {
     /**
      * Constructs a new <code>TapCapPurchaseBroker</code>.
      * @alias module:model/TapCapPurchaseBroker
-     * @param clientRequest {module:model/MessageSigned} 
+     * @param clientRequest {module:model/SignedMessage} 
      * @param coin {Number} 
      * @param cert {String} 
      */
@@ -55,7 +55,7 @@ class TapCapPurchaseBroker {
             obj = obj || new TapCapPurchaseBroker();
 
             if (data.hasOwnProperty('clientRequest')) {
-                obj['clientRequest'] = MessageSigned.constructFromObject(data['clientRequest']);
+                obj['clientRequest'] = SignedMessage.constructFromObject(data['clientRequest']);
             }
             if (data.hasOwnProperty('coin')) {
                 obj['coin'] = ApiClient.convertToType(data['coin'], 'Number');
@@ -71,7 +71,7 @@ class TapCapPurchaseBroker {
 }
 
 /**
- * @member {module:model/MessageSigned} clientRequest
+ * @member {module:model/SignedMessage} clientRequest
  */
 TapCapPurchaseBroker.prototype['clientRequest'] = undefined;
 

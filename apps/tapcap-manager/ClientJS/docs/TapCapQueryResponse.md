@@ -4,6 +4,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **balance** | **Number** |  | 
-**token** | [**MessageSigned**](MessageSigned.md) |  | 
+**token** | [**SignedMessage**](SignedMessage.md) |  | 
 
 

@@ -13,7 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
-import MessageSigned from '../model/MessageSigned';
+import SignedMessage from '../model/SignedMessage';
 
 /**
 * Transactions service.
@@ -37,15 +37,15 @@ export default class TransactionsApi {
 
     /**
      * Broker: Register new TapCap transaction
-     * @param {module:model/MessageSigned} messageSigned TapCap exchange request
+     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
      */
-    tapCapBrokerWithHttpInfo(messageSigned) {
-      let postBody = messageSigned;
+    tapCapBrokerWithHttpInfo(signedMessage) {
+      let postBody = signedMessage;
 
-      // verify the required parameter 'messageSigned' is set
-      if (messageSigned === undefined || messageSigned === null) {
-        throw new Error("Missing the required parameter 'messageSigned' when calling tapCapBroker");
+      // verify the required parameter 'signedMessage' is set
+      if (signedMessage === undefined || signedMessage === null) {
+        throw new Error("Missing the required parameter 'signedMessage' when calling tapCapBroker");
       }
 
 
@@ -72,11 +72,11 @@ export default class TransactionsApi {
 
     /**
      * Broker: Register new TapCap transaction
-     * @param {module:model/MessageSigned} messageSigned TapCap exchange request
+     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
      */
-    tapCapBroker(messageSigned) {
-      return this.tapCapBrokerWithHttpInfo(messageSigned)
+    tapCapBroker(signedMessage) {
+      return this.tapCapBrokerWithHttpInfo(signedMessage)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
@@ -85,15 +85,15 @@ export default class TransactionsApi {
 
     /**
      * Client: Confirm new TapCap transaction
-     * @param {module:model/MessageSigned} messageSigned TapCap status request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/MessageSigned} and HTTP response
+     * @param {module:model/SignedMessage} signedMessage TapCap status request
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SignedMessage} and HTTP response
      */
-    tapCapClientWithHttpInfo(messageSigned) {
-      let postBody = messageSigned;
+    tapCapClientWithHttpInfo(signedMessage) {
+      let postBody = signedMessage;
 
-      // verify the required parameter 'messageSigned' is set
-      if (messageSigned === undefined || messageSigned === null) {
-        throw new Error("Missing the required parameter 'messageSigned' when calling tapCapClient");
+      // verify the required parameter 'signedMessage' is set
+      if (signedMessage === undefined || signedMessage === null) {
+        throw new Error("Missing the required parameter 'signedMessage' when calling tapCapClient");
       }
 
 
@@ -109,7 +109,7 @@ export default class TransactionsApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = MessageSigned;
+      let returnType = SignedMessage;
 
       return this.apiClient.callApi(
         '/tap/client', 'POST',
@@ -120,11 +120,11 @@ export default class TransactionsApi {
 
     /**
      * Client: Confirm new TapCap transaction
-     * @param {module:model/MessageSigned} messageSigned TapCap status request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/MessageSigned}
+     * @param {module:model/SignedMessage} signedMessage TapCap status request
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SignedMessage}
      */
-    tapCapClient(messageSigned) {
-      return this.tapCapClientWithHttpInfo(messageSigned)
+    tapCapClient(signedMessage) {
+      return this.tapCapClientWithHttpInfo(signedMessage)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

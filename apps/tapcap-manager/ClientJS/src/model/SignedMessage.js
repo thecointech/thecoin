@@ -14,20 +14,20 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The MessageSigned model module.
- * @module model/MessageSigned
+ * The SignedMessage model module.
+ * @module model/SignedMessage
  * @version 0.0.1
  */
-class MessageSigned {
+class SignedMessage {
     /**
-     * Constructs a new <code>MessageSigned</code>.
-     * @alias module:model/MessageSigned
+     * Constructs a new <code>SignedMessage</code>.
+     * @alias module:model/SignedMessage
      * @param message {String} 
      * @param signature {String} 
      */
     constructor(message, signature) { 
         
-        MessageSigned.initialize(this, message, signature);
+        SignedMessage.initialize(this, message, signature);
     }
 
     /**
@@ -41,15 +41,15 @@ class MessageSigned {
     }
 
     /**
-     * Constructs a <code>MessageSigned</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>SignedMessage</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/MessageSigned} obj Optional instance to populate.
-     * @return {module:model/MessageSigned} The populated <code>MessageSigned</code> instance.
+     * @param {module:model/SignedMessage} obj Optional instance to populate.
+     * @return {module:model/SignedMessage} The populated <code>SignedMessage</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new MessageSigned();
+            obj = obj || new SignedMessage();
 
             if (data.hasOwnProperty('message')) {
                 obj['message'] = ApiClient.convertToType(data['message'], 'String');
@@ -67,17 +67,17 @@ class MessageSigned {
 /**
  * @member {String} message
  */
-MessageSigned.prototype['message'] = undefined;
+SignedMessage.prototype['message'] = undefined;
 
 /**
  * @member {String} signature
  */
-MessageSigned.prototype['signature'] = undefined;
+SignedMessage.prototype['signature'] = undefined;
 
 
 
 
 
 
-export default MessageSigned;
+export default SignedMessage;
 

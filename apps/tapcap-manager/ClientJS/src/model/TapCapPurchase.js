@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import MessageSigned from './MessageSigned';
+import SignedMessage from './SignedMessage';
 
 /**
  * The TapCapPurchase model module.
@@ -28,7 +28,7 @@ class TapCapPurchase {
      * @param timestamp {Number} 
      * @param gpoData {Blob} 
      * @param certificateRequest {Blob} 
-     * @param token {module:model/MessageSigned} 
+     * @param token {module:model/SignedMessage} 
      */
     constructor(fiat, currencyCode, timestamp, gpoData, certificateRequest, token) { 
         
@@ -76,7 +76,7 @@ class TapCapPurchase {
                 obj['certificateRequest'] = ApiClient.convertToType(data['certificateRequest'], 'Blob');
             }
             if (data.hasOwnProperty('token')) {
-                obj['token'] = MessageSigned.constructFromObject(data['token']);
+                obj['token'] = SignedMessage.constructFromObject(data['token']);
             }
         }
         return obj;
@@ -111,7 +111,7 @@ TapCapPurchase.prototype['gpoData'] = undefined;
 TapCapPurchase.prototype['certificateRequest'] = undefined;
 
 /**
- * @member {module:model/MessageSigned} token
+ * @member {module:model/SignedMessage} token
  */
 TapCapPurchase.prototype['token'] = undefined;
 

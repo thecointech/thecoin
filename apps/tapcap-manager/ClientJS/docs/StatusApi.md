@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapCapHistory"></a>
 # **tapCapHistory**
-> TapCapHistoryResponse tapCapHistory(messageSigned)
+> TapCapHistoryResponse tapCapHistory(signedMessage)
 
 TapCap history
 
@@ -21,8 +21,8 @@ User TapCap history in the ranges provided
 import TapcapManager from 'tapcap-manager';
 
 let apiInstance = new TapcapManager.StatusApi();
-let messageSigned = new TapcapManager.MessageSigned(); // MessageSigned | Purchase Request info
-apiInstance.tapCapHistory(messageSigned).then((data) => {
+let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | Purchase Request info
+apiInstance.tapCapHistory(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -34,7 +34,7 @@ apiInstance.tapCapHistory(messageSigned).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageSigned** | [**MessageSigned**](MessageSigned.md)| Purchase Request info | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| Purchase Request info | 
 
 ### Return type
 
@@ -51,7 +51,7 @@ No authorization required
 
 <a name="tapCapStatus"></a>
 # **tapCapStatus**
-> TapCapQueryResponse tapCapStatus(messageSigned)
+> TapCapQueryResponse tapCapStatus(signedMessage)
 
 TapCap current status
 
@@ -62,8 +62,8 @@ User TapCap status
 import TapcapManager from 'tapcap-manager';
 
 let apiInstance = new TapcapManager.StatusApi();
-let messageSigned = new TapcapManager.MessageSigned(); // MessageSigned | TapCap status request
-apiInstance.tapCapStatus(messageSigned).then((data) => {
+let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | TapCap status request
+apiInstance.tapCapStatus(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -75,7 +75,7 @@ apiInstance.tapCapStatus(messageSigned).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageSigned** | [**MessageSigned**](MessageSigned.md)| TapCap status request | 
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap status request | 
 
 ### Return type
 

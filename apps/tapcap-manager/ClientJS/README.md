@@ -72,8 +72,8 @@ var TapcapManager = require('tapcap-manager');
 
 
 var api = new TapcapManager.StatusApi()
-var messageSigned = new TapcapManager.MessageSigned(); // {MessageSigned} Purchase Request info
-api.tapCapHistory(messageSigned).then(function(data) {
+var signedMessage = new TapcapManager.SignedMessage(); // {SignedMessage} Purchase Request info
+api.tapCapHistory(signedMessage).then(function(data) {
   console.log('API called successfully. Returned data: ' + data);
 }, function(error) {
   console.error(error);
@@ -97,7 +97,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
- - [TapcapManager.MessageSigned](docs/MessageSigned.md)
+ - [TapcapManager.SignedMessage](docs/SignedMessage.md)
  - [TapcapManager.TapCapHistoryRequest](docs/TapCapHistoryRequest.md)
  - [TapcapManager.TapCapHistoryResponse](docs/TapCapHistoryResponse.md)
  - [TapcapManager.TapCapPurchase](docs/TapCapPurchase.md)

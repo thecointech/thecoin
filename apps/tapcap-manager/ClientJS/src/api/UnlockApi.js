@@ -36,7 +36,7 @@ export default class UnlockApi {
 
     /**
      * @param {String} xRequestKey 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link String} and HTTP response
      */
     unlockWithHttpInfo(xRequestKey) {
       let postBody = null;
@@ -59,8 +59,8 @@ export default class UnlockApi {
 
       let authNames = [];
       let contentTypes = [];
-      let accepts = [];
-      let returnType = null;
+      let accepts = ['application/json'];
+      let returnType = 'String';
 
       return this.apiClient.callApi(
         '/unlock', 'POST',
@@ -71,7 +71,7 @@ export default class UnlockApi {
 
     /**
      * @param {String} xRequestKey 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link String}
      */
     unlock(xRequestKey) {
       return this.unlockWithHttpInfo(xRequestKey)

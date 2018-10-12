@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**clientRequest** | [**MessageSigned**](MessageSigned.md) |  | 
+**clientRequest** | [**SignedMessage**](SignedMessage.md) |  | 
 **coin** | **Number** |  | 
 **cert** | **String** |  | 
 
