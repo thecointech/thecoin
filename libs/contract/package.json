@@ -1,5 +1,5 @@
 {
-  "name": "thecoincontract",
+  "name": "the-contract",
   "version": "1.0.0",
   "description": "Central contract for THE coin management",
   "main": "index.js",
