@@ -1,11 +1,11 @@
 {
-  "name": "thecoin-core",
+  "name": "the-coin-broker-sample",
   "version": "0.1.0",
-  "description": "TheCoin core services.  Published by TheCoin Tech",
+  "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node index.js"
+	"prestart": "npm install",
+	"start": "node index.js"
   },
   "keywords": [
     "swagger"
@@ -13,10 +13,7 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@google-cloud/datastore": "^1.4.2",
-    "cors": "^2.8.4",
-    "ethers": "^3.0.27",
-    "express": "^4.16.3",
+    "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
     "swagger-tools": "0.10.1"
   }

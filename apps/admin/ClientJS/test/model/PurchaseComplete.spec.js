@@ -90,12 +90,6 @@
       //expect(instance).to.be();
     });
 
-    it('should have the property orderId (base name: "orderId")', function() {
-      // uncomment below and update the code to test the property orderId
-      //var instane = new TheBrokerCad.PurchaseComplete();
-      //expect(instance).to.be();
-    });
-
   });
 
 }));
