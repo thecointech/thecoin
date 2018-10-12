@@ -1,19 +1,19 @@
 ---
 swagger: "2.0"
 info:
-  description: "TheCoin TapCap resolution.  This service is the trusted 3rd party\
-    \ that weekly settles TapCap purchases"
+  description: "The TapCap resolution.  This service is the trusted 3rd party that\
+    \ weekly settles TapCap purchases"
   version: "0.0.1"
-  title: "TheCoin Broker"
+  title: "The TapCap Manager"
   contact:
     email: "stephen.taylor.dev@gmail.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8080"
+host: "localhost:8091"
 tags:
 - name: "Transactions"
-  description: "The Coin: TapCap manager is responsible for resolving TapCap transactions,\
+  description: "The: TapCap manager is responsible for resolving TapCap transactions,\
     \ transfering the appropriate coin from seller to buyer weekly"
 - name: "Status"
   description: "Users may query their account status"

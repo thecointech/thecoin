@@ -11,7 +11,7 @@ var cors = require('cors')
 
 var watcher = require('./tapcap/DepositWatcher');
 
-var serverPort = 8080;
+var serverPort = 8091;
 
 // swaggerRouter configuration
 var options = {
@@ -19,8 +19,6 @@ var options = {
   controllers: path.join(__dirname, './controllers'),
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
-
-// Start watching for ethereum events
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
