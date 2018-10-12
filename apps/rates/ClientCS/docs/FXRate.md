@@ -1,4 +1,4 @@
-# TheCoinCore.Model.FXRate
+# ThePricing.Model.FXRate
 ## Properties
 
 Name | Type | Description | Notes

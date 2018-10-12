@@ -1,6 +1,6 @@
 /**
  * TheCoin Core
- * TheCoin core services.  Published by TheCoin Tech
+ * TheCoin pricing service.  Published by TheCoin Tech
  *
  * OpenAPI spec version: 0.1.0
  * Contact: stephen.taylor.dev@gmail.com
@@ -406,7 +406,7 @@ class ApiClient {
         // Attach previously saved cookies, if enabled
         if (this.enableCookies){
             if (typeof window === 'undefined') {
-                this.agent.attachCookies(request);
+                this.agent._attachCookies(request);
             }
             else {
                 request.withCredentials();
@@ -421,7 +421,7 @@ class ApiClient {
                     try {
                         var data = this.deserialize(response, returnType);
                         if (this.enableCookies && typeof window === 'undefined'){
-                            this.agent.saveCookies(response);
+                            this.agent._saveCookies(response);
                         }
 
                         resolve({data, response});

@@ -1,6 +1,6 @@
 /**
  * TheCoin Core
- * TheCoin core services.  Published by TheCoin Tech
+ * TheCoin pricing service.  Published by TheCoin Tech
  *
  * OpenAPI spec version: 0.1.0
  * Contact: stephen.taylor.dev@gmail.com

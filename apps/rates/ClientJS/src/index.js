@@ -1,6 +1,6 @@
 /**
  * TheCoin Core
- * TheCoin core services.  Published by TheCoin Tech
+ * TheCoin pricing service.  Published by TheCoin Tech
  *
  * OpenAPI spec version: 0.1.0
  * Contact: stephen.taylor.dev@gmail.com
@@ -18,14 +18,14 @@ import RatesApi from './api/RatesApi';
 
 
 /**
-* TheCoin_core_services___Published_by_TheCoin_Tech.<br>
+* TheCoin_pricing_service___Published_by_TheCoin_Tech.<br>
 * The <code>index</code> module provides access to constructors for all the classes which comprise the public API.
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var TheCoinCore = require('index'); // See note below*.
-* var xxxSvc = new TheCoinCore.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new TheCoinCore.Yyy(); // Construct a model instance.
+* var ThePricing = require('index'); // See note below*.
+* var xxxSvc = new ThePricing.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new ThePricing.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -37,8 +37,8 @@ import RatesApi from './api/RatesApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new TheCoinCore.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new TheCoinCore.Yyy(); // Construct a model instance.
+* var xxxSvc = new ThePricing.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new ThePricing.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.

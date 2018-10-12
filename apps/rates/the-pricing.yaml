@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "TheCoin core services.  Published by TheCoin Tech"
+  description: "TheCoin pricing service.  Published by TheCoin Tech"
   version: "0.1.0"
   title: "TheCoin Core"
   contact:
@@ -77,5 +77,5 @@ paths:
         name: timestamp
         description: "The timestamp we are requesting valid values for"
         required: true
-        type: number
-        format: double
+        type: integer
+        format: int64

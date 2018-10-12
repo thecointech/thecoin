@@ -1,6 +1,6 @@
 /**
  * TheCoin Core
- * TheCoin core services.  Published by TheCoin Tech
+ * TheCoin pricing service.  Published by TheCoin Tech
  *
  * OpenAPI spec version: 0.1.0
  * Contact: stephen.taylor.dev@gmail.com
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TheCoinCore);
+    factory(root.expect, root.ThePricing);
   }
-}(this, function(expect, TheCoinCore) {
+}(this, function(expect, ThePricing) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TheCoinCore.FXRate();
+    instance = new ThePricing.FXRate();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,43 +50,43 @@
   describe('FXRate', function() {
     it('should create an instance of FXRate', function() {
       // uncomment below and update the code to test FXRate
-      //var instane = new TheCoinCore.FXRate();
-      //expect(instance).to.be.a(TheCoinCore.FXRate);
+      //var instane = new ThePricing.FXRate();
+      //expect(instance).to.be.a(ThePricing.FXRate);
     });
 
     it('should have the property target (base name: "target")', function() {
       // uncomment below and update the code to test the property target
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property buy (base name: "Buy")', function() {
       // uncomment below and update the code to test the property buy
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property sell (base name: "Sell")', function() {
       // uncomment below and update the code to test the property sell
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property fxRate (base name: "FxRate")', function() {
       // uncomment below and update the code to test the property fxRate
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property validFrom (base name: "ValidFrom")', function() {
       // uncomment below and update the code to test the property validFrom
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property validTill (base name: "ValidTill")', function() {
       // uncomment below and update the code to test the property validTill
-      //var instane = new TheCoinCore.FXRate();
+      //var instane = new ThePricing.FXRate();
       //expect(instance).to.be();
     });
 

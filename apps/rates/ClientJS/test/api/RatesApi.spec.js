@@ -1,6 +1,6 @@
 /**
  * TheCoin Core
- * TheCoin core services.  Published by TheCoin Tech
+ * TheCoin pricing service.  Published by TheCoin Tech
  *
  * OpenAPI spec version: 0.1.0
  * Contact: stephen.taylor.dev@gmail.com
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TheCoinCore);
+    factory(root.expect, root.ThePricing);
   }
-}(this, function(expect, TheCoinCore) {
+}(this, function(expect, ThePricing) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TheCoinCore.RatesApi();
+    instance = new ThePricing.RatesApi();
   });
 
   var getProperty = function(object, getter, property) {
