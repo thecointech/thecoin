@@ -28,9 +28,13 @@ namespace TapCapSupplier.Server.Card
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		List<StaticResponse> IEmvCard.CardStaticResponses()
+		StaticResponses CardStaticResponses()
 		{
-			return __staticResponses;
+			return new StaticResponses()
+			{
+				Responses = __staticResponses,
+				GpoData = 
+			};
 		}
 
 		/// <summary>
@@ -53,7 +57,8 @@ namespace TapCapSupplier.Server.Card
 		private void QueryStaticResponses()
 		{
 			__staticResponses = new List<StaticResponse>();
-			CDOL = null;
+			GPOPdol = null;
+			CryptPdol = null;
 
 			var cmdInitialize = Processing.BuildInitialize(card);
 			var fileData = QueryAndStore(cmdInitialize, "Select File");
@@ -61,6 +66,7 @@ namespace TapCapSupplier.Server.Card
 			var selectApp = Processing.BuildSelectApp(fileData, card);
 			var appData = QueryAndStore(selectApp, "Select App");
 
+			GPOPdol = Processing.FindValue(appData.GetData(), new string[] { "6F", "A5", "9F38" });
 			var gpoQuery = Processing.BuildGPOQuery(appData, card);
 			var gpoData = QueryAndStore(gpoQuery, "Query GPO");
 
@@ -72,9 +78,8 @@ namespace TapCapSupplier.Server.Card
 					var recordQuery = Processing.BuildReadRecordApdu(file, recordNum, card);
 					var recordData = QueryAndStore(recordQuery, "Query Record: " + recordNum);
 
-					var rrtlv = Tlv.ParseTlv(recordData.GetData());
-					if (CDOL == null)
-						CDOL = Processing.FindValue(rrtlv, new string[] { "70", "8C" });
+					if (CryptPdol == null)
+						CryptPdol = Processing.FindValue(recordData.GetData(), new string[] { "70", "8C" });
 				}
 			}
 		}
@@ -117,6 +122,7 @@ namespace TapCapSupplier.Server.Card
 
 		private EmvCardMessager card;
 		private List<StaticResponse> __staticResponses;
-		private byte[] CDOL;
+		private byte[] GPOPdol;
+		private byte[] CryptPdol;
 	}
 }

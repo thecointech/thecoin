@@ -46,18 +46,18 @@ namespace TapCapSupplier.Server.Models
         public decimal? CurrencyCode { get; set; }
 
         /// <summary>
-        /// Gets or Sets GpoPdol
+        /// Gets or Sets GpoData
         /// </summary>
         [Required]
-        [DataMember(Name="gpoPdol")]
-        public byte[] GpoPdol { get; set; }
+        [DataMember(Name="gpoData")]
+        public byte[] GpoData { get; set; }
 
         /// <summary>
-        /// Gets or Sets CryptoPdol
+        /// Gets or Sets CryptoData
         /// </summary>
         [Required]
-        [DataMember(Name="cryptoPdol")]
-        public byte[] CryptoPdol { get; set; }
+        [DataMember(Name="cryptoData")]
+        public byte[] CryptoData { get; set; }
 
         /// <summary>
         /// Gets or Sets Token
@@ -77,8 +77,8 @@ namespace TapCapSupplier.Server.Models
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
             sb.Append("  CurrencyCode: ").Append(CurrencyCode).Append("\n");
-            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
-            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("  GpoData: ").Append(GpoData).Append("\n");
+            sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -132,14 +132,14 @@ namespace TapCapSupplier.Server.Models
                     CurrencyCode.Equals(other.CurrencyCode)
                 ) && 
                 (
-                    GpoPdol == other.GpoPdol ||
-                    GpoPdol != null &&
-                    GpoPdol.Equals(other.GpoPdol)
+                    GpoData == other.GpoData ||
+                    GpoData != null &&
+                    GpoData.Equals(other.GpoData)
                 ) && 
                 (
-                    CryptoPdol == other.CryptoPdol ||
-                    CryptoPdol != null &&
-                    CryptoPdol.Equals(other.CryptoPdol)
+                    CryptoData == other.CryptoData ||
+                    CryptoData != null &&
+                    CryptoData.Equals(other.CryptoData)
                 ) && 
                 (
                     Token == other.Token ||
@@ -164,10 +164,10 @@ namespace TapCapSupplier.Server.Models
                     hashCode = hashCode * 59 + FiatAmount.GetHashCode();
                     if (CurrencyCode != null)
                     hashCode = hashCode * 59 + CurrencyCode.GetHashCode();
-                    if (GpoPdol != null)
-                    hashCode = hashCode * 59 + GpoPdol.GetHashCode();
-                    if (CryptoPdol != null)
-                    hashCode = hashCode * 59 + CryptoPdol.GetHashCode();
+                    if (GpoData != null)
+                    hashCode = hashCode * 59 + GpoData.GetHashCode();
+                    if (CryptoData != null)
+                    hashCode = hashCode * 59 + CryptoData.GetHashCode();
                     if (Token != null)
                     hashCode = hashCode * 59 + Token.GetHashCode();
                 return hashCode;

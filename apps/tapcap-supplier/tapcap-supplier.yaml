@@ -56,7 +56,7 @@ paths:
           description: Static response cache
           schema:
             $ref: "#/definitions/SignedMessage" # sign (TapCapTransaction)
-            
+
   /contest:
     post:
       summary: Notify of a contested transaction
@@ -94,8 +94,8 @@ definitions:
       - timestamp
       - fiatAmount
       - currencyCode
-      - gpoPdol
-      - cryptoPdol
+      - gpoData
+      - cryptoData
       - token
     properties:
       timestamp:
@@ -106,10 +106,10 @@ definitions:
         format: double
       currencyCode:
         type: number
-      gpoPdol:
+      gpoData:
         type: string
         format: byte
-      cryptoPdol:
+      cryptoData:
         type: string
         format: byte
       token:
@@ -174,7 +174,17 @@ definitions:
         format: byte
 
   StaticResponses:
+    required:
+      - gpoPdol
+      - cryptPdol
+      - responses
     properties:
+      gpoPdol:
+        type: string
+        format: byte
+      cryptoPdol:
+        type: string
+        format: byte
       responses:
         type: array
         items:

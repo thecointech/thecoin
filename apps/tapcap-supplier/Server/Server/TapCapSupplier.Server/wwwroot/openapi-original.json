@@ -209,8 +209,19 @@
         }
       },
       "StaticResponses" : {
+        "required" : [ "gpoPdol", "responses" ],
         "type" : "object",
         "properties" : {
+          "gpoPdol" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "cryptoPdol" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
           "responses" : {
             "type" : "array",
             "items" : {
@@ -220,7 +231,7 @@
         }
       },
       "TapCapRequest" : {
-        "required" : [ "cryptoPdol", "currencyCode", "fiatAmount", "gpoPdol", "timestamp", "token" ],
+        "required" : [ "cryptoData", "currencyCode", "fiatAmount", "gpoData", "timestamp", "token" ],
         "type" : "object",
         "properties" : {
           "timestamp" : {
@@ -234,12 +245,12 @@
           "currencyCode" : {
             "type" : "number"
           },
-          "gpoPdol" : {
+          "gpoData" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
             "type" : "string",
             "format" : "byte"
           },
-          "cryptoPdol" : {
+          "cryptoData" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
             "type" : "string",
             "format" : "byte"

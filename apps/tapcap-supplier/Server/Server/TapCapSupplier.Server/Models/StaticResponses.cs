@@ -25,8 +25,22 @@ namespace TapCapSupplier.Server.Models
     public partial class StaticResponses : IEquatable<StaticResponses>
     { 
         /// <summary>
+        /// Gets or Sets GpoPdol
+        /// </summary>
+        [Required]
+        [DataMember(Name="gpoPdol")]
+        public byte[] GpoPdol { get; set; }
+
+        /// <summary>
+        /// Gets or Sets CryptoPdol
+        /// </summary>
+        [DataMember(Name="cryptoPdol")]
+        public byte[] CryptoPdol { get; set; }
+
+        /// <summary>
         /// Gets or Sets Responses
         /// </summary>
+        [Required]
         [DataMember(Name="responses")]
         public List<StaticResponse> Responses { get; set; }
 
@@ -38,6 +52,8 @@ namespace TapCapSupplier.Server.Models
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponses {\n");
+            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
+            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -76,6 +92,16 @@ namespace TapCapSupplier.Server.Models
 
             return 
                 (
+                    GpoPdol == other.GpoPdol ||
+                    GpoPdol != null &&
+                    GpoPdol.Equals(other.GpoPdol)
+                ) && 
+                (
+                    CryptoPdol == other.CryptoPdol ||
+                    CryptoPdol != null &&
+                    CryptoPdol.Equals(other.CryptoPdol)
+                ) && 
+                (
                     Responses == other.Responses ||
                     Responses != null &&
                     Responses.SequenceEqual(other.Responses)
@@ -92,6 +118,10 @@ namespace TapCapSupplier.Server.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
+                    if (GpoPdol != null)
+                    hashCode = hashCode * 59 + GpoPdol.GetHashCode();
+                    if (CryptoPdol != null)
+                    hashCode = hashCode * 59 + CryptoPdol.GetHashCode();
                     if (Responses != null)
                     hashCode = hashCode * 59 + Responses.GetHashCode();
                 return hashCode;

@@ -31,12 +31,49 @@ namespace TapCap.Supplier.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticResponses" /> class.
         /// </summary>
-        /// <param name="responses">responses.</param>
-        public StaticResponses(List<StaticResponse> responses = default(List<StaticResponse>))
+        [JsonConstructorAttribute]
+        protected StaticResponses() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StaticResponses" /> class.
+        /// </summary>
+        /// <param name="gpoPdol">gpoPdol (required).</param>
+        /// <param name="cryptoPdol">cryptoPdol.</param>
+        /// <param name="responses">responses (required).</param>
+        public StaticResponses(byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<StaticResponse> responses = default(List<StaticResponse>))
         {
-            this.Responses = responses;
+            // to ensure "gpoPdol" is required (not null)
+            if (gpoPdol == null)
+            {
+                throw new InvalidDataException("gpoPdol is a required property for StaticResponses and cannot be null");
+            }
+            else
+            {
+                this.GpoPdol = gpoPdol;
+            }
+            // to ensure "responses" is required (not null)
+            if (responses == null)
+            {
+                throw new InvalidDataException("responses is a required property for StaticResponses and cannot be null");
+            }
+            else
+            {
+                this.Responses = responses;
+            }
+            this.CryptoPdol = cryptoPdol;
         }
         
+        /// <summary>
+        /// Gets or Sets GpoPdol
+        /// </summary>
+        [DataMember(Name="gpoPdol", EmitDefaultValue=false)]
+        public byte[] GpoPdol { get; set; }
+
+        /// <summary>
+        /// Gets or Sets CryptoPdol
+        /// </summary>
+        [DataMember(Name="cryptoPdol", EmitDefaultValue=false)]
+        public byte[] CryptoPdol { get; set; }
+
         /// <summary>
         /// Gets or Sets Responses
         /// </summary>
@@ -51,6 +88,8 @@ namespace TapCap.Supplier.Model
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponses {\n");
+            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
+            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -87,6 +126,16 @@ namespace TapCap.Supplier.Model
 
             return 
                 (
+                    this.GpoPdol == input.GpoPdol ||
+                    (this.GpoPdol != null &&
+                    this.GpoPdol.Equals(input.GpoPdol))
+                ) && 
+                (
+                    this.CryptoPdol == input.CryptoPdol ||
+                    (this.CryptoPdol != null &&
+                    this.CryptoPdol.Equals(input.CryptoPdol))
+                ) && 
+                (
                     this.Responses == input.Responses ||
                     this.Responses != null &&
                     this.Responses.SequenceEqual(input.Responses)
@@ -102,6 +151,10 @@ namespace TapCap.Supplier.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                if (this.GpoPdol != null)
+                    hashCode = hashCode * 59 + this.GpoPdol.GetHashCode();
+                if (this.CryptoPdol != null)
+                    hashCode = hashCode * 59 + this.CryptoPdol.GetHashCode();
                 if (this.Responses != null)
                     hashCode = hashCode * 59 + this.Responses.GetHashCode();
                 return hashCode;

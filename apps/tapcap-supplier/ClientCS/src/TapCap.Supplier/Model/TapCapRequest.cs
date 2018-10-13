@@ -39,10 +39,10 @@ namespace TapCap.Supplier.Model
         /// <param name="timestamp">timestamp (required).</param>
         /// <param name="fiatAmount">fiatAmount (required).</param>
         /// <param name="currencyCode">currencyCode (required).</param>
-        /// <param name="gpoPdol">gpoPdol (required).</param>
-        /// <param name="cryptoPdol">cryptoPdol (required).</param>
+        /// <param name="gpoData">gpoData (required).</param>
+        /// <param name="cryptoData">cryptoData (required).</param>
         /// <param name="token">token (required).</param>
-        public TapCapRequest(double? timestamp = default(double?), double? fiatAmount = default(double?), decimal? currencyCode = default(decimal?), byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), SignedMessage token = default(SignedMessage))
+        public TapCapRequest(double? timestamp = default(double?), double? fiatAmount = default(double?), decimal? currencyCode = default(decimal?), byte[] gpoData = default(byte[]), byte[] cryptoData = default(byte[]), SignedMessage token = default(SignedMessage))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -71,23 +71,23 @@ namespace TapCap.Supplier.Model
             {
                 this.CurrencyCode = currencyCode;
             }
-            // to ensure "gpoPdol" is required (not null)
-            if (gpoPdol == null)
+            // to ensure "gpoData" is required (not null)
+            if (gpoData == null)
             {
-                throw new InvalidDataException("gpoPdol is a required property for TapCapRequest and cannot be null");
+                throw new InvalidDataException("gpoData is a required property for TapCapRequest and cannot be null");
             }
             else
             {
-                this.GpoPdol = gpoPdol;
+                this.GpoData = gpoData;
             }
-            // to ensure "cryptoPdol" is required (not null)
-            if (cryptoPdol == null)
+            // to ensure "cryptoData" is required (not null)
+            if (cryptoData == null)
             {
-                throw new InvalidDataException("cryptoPdol is a required property for TapCapRequest and cannot be null");
+                throw new InvalidDataException("cryptoData is a required property for TapCapRequest and cannot be null");
             }
             else
             {
-                this.CryptoPdol = cryptoPdol;
+                this.CryptoData = cryptoData;
             }
             // to ensure "token" is required (not null)
             if (token == null)
@@ -119,16 +119,16 @@ namespace TapCap.Supplier.Model
         public decimal? CurrencyCode { get; set; }
 
         /// <summary>
-        /// Gets or Sets GpoPdol
+        /// Gets or Sets GpoData
         /// </summary>
-        [DataMember(Name="gpoPdol", EmitDefaultValue=false)]
-        public byte[] GpoPdol { get; set; }
+        [DataMember(Name="gpoData", EmitDefaultValue=false)]
+        public byte[] GpoData { get; set; }
 
         /// <summary>
-        /// Gets or Sets CryptoPdol
+        /// Gets or Sets CryptoData
         /// </summary>
-        [DataMember(Name="cryptoPdol", EmitDefaultValue=false)]
-        public byte[] CryptoPdol { get; set; }
+        [DataMember(Name="cryptoData", EmitDefaultValue=false)]
+        public byte[] CryptoData { get; set; }
 
         /// <summary>
         /// Gets or Sets Token
@@ -147,8 +147,8 @@ namespace TapCap.Supplier.Model
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
             sb.Append("  CurrencyCode: ").Append(CurrencyCode).Append("\n");
-            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
-            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("  GpoData: ").Append(GpoData).Append("\n");
+            sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -200,14 +200,14 @@ namespace TapCap.Supplier.Model
                     this.CurrencyCode.Equals(input.CurrencyCode))
                 ) && 
                 (
-                    this.GpoPdol == input.GpoPdol ||
-                    (this.GpoPdol != null &&
-                    this.GpoPdol.Equals(input.GpoPdol))
+                    this.GpoData == input.GpoData ||
+                    (this.GpoData != null &&
+                    this.GpoData.Equals(input.GpoData))
                 ) && 
                 (
-                    this.CryptoPdol == input.CryptoPdol ||
-                    (this.CryptoPdol != null &&
-                    this.CryptoPdol.Equals(input.CryptoPdol))
+                    this.CryptoData == input.CryptoData ||
+                    (this.CryptoData != null &&
+                    this.CryptoData.Equals(input.CryptoData))
                 ) && 
                 (
                     this.Token == input.Token ||
@@ -231,10 +231,10 @@ namespace TapCap.Supplier.Model
                     hashCode = hashCode * 59 + this.FiatAmount.GetHashCode();
                 if (this.CurrencyCode != null)
                     hashCode = hashCode * 59 + this.CurrencyCode.GetHashCode();
-                if (this.GpoPdol != null)
-                    hashCode = hashCode * 59 + this.GpoPdol.GetHashCode();
-                if (this.CryptoPdol != null)
-                    hashCode = hashCode * 59 + this.CryptoPdol.GetHashCode();
+                if (this.GpoData != null)
+                    hashCode = hashCode * 59 + this.GpoData.GetHashCode();
+                if (this.CryptoData != null)
+                    hashCode = hashCode * 59 + this.CryptoData.GetHashCode();
                 if (this.Token != null)
                     hashCode = hashCode * 59 + this.Token.GetHashCode();
                 return hashCode;
