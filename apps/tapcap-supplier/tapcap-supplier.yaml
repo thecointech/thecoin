@@ -89,6 +89,31 @@ definitions:
       signature:
         type: string
 
+  # A token may be presented to a broker
+  # as proof of funds.  If signed by the
+  # broker, it indicates the client is trusted
+  # and has sufficient balance to cover the
+  # available balance listed here.
+  TapCapToken:
+    required:
+      - clientAccount
+      - availableBalance
+      - transactionId
+      - timestamp
+    properties:
+      clientAccount:
+        type: string
+      availableBalance:
+        type: number
+        format: int64    
+      transactionId:
+        type: number
+      # The timestamp of issue.  A broker
+      # may ignore a token if the timestamp is too old
+      timestamp:
+        type: number
+        format: int64
+
   TapCapRequest:
     required:
       - timestamp

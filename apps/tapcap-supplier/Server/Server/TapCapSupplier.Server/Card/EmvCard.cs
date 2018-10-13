@@ -14,7 +14,9 @@ namespace TapCapSupplier.Server.Card
 	/// </summary>
 	public class EmvCard : IEmvCard, IDisposable
 	{
-
+		/// <summary>
+		/// Implementation to handle talking directly to local payment card
+		/// </summary>
 		public EmvCard()
 		{
 			lock(__CardLock)
@@ -28,13 +30,9 @@ namespace TapCapSupplier.Server.Card
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		StaticResponses CardStaticResponses()
+		public StaticResponses CardStaticResponses()
 		{
-			return new StaticResponses()
-			{
-				Responses = __staticResponses,
-				GpoData = 
-			};
+			return staticResponses;
 		}
 
 		/// <summary>
@@ -46,9 +44,16 @@ namespace TapCapSupplier.Server.Card
 		{
 			lock(__CardLock)
 			{
-				var appData = WarmUpCard();
-				var gpoQuery = Processing.BuildGPOQuery(appData, card, request.Pdol);
+				var appData = DoStaticInit();
 
+				var gpoQuery = Processing.BuildGPOQuery(card, request.GpoData);
+				// Set GPO data (response is ignored)
+				card.SendCommand(gpoQuery, "Set Gpo");
+
+				// Generate crypto
+				var cryptoQuery = Processing.BuildCryptSigQuery(card, request.CryptoData);
+				var cryptoSig = card.SendCommand(cryptoQuery, "Gen CryptoSig");
+				return cryptoSig.GetData();
 			}
 		}
 
@@ -56,9 +61,10 @@ namespace TapCapSupplier.Server.Card
 
 		private void QueryStaticResponses()
 		{
-			__staticResponses = new List<StaticResponse>();
-			GPOPdol = null;
-			CryptPdol = null;
+			staticResponses = new StaticResponses()
+			{
+				Responses = new List<StaticResponse>()
+			};
 
 			var cmdInitialize = Processing.BuildInitialize(card);
 			var fileData = QueryAndStore(cmdInitialize, "Select File");
@@ -66,8 +72,9 @@ namespace TapCapSupplier.Server.Card
 			var selectApp = Processing.BuildSelectApp(fileData, card);
 			var appData = QueryAndStore(selectApp, "Select App");
 
-			GPOPdol = Processing.FindValue(appData.GetData(), new string[] { "6F", "A5", "9F38" });
-			var gpoQuery = Processing.BuildGPOQuery(appData, card);
+			staticResponses.GpoPdol = Processing.FindValue(appData.GetData(), new string[] { "6F", "A5", "9F38" });
+			var dummyData = PDOL.GenerateDummyData(staticResponses.GpoPdol);
+			var gpoQuery = Processing.BuildGPOQuery(card, dummyData);
 			var gpoData = QueryAndStore(gpoQuery, "Query GPO");
 
 			var fileList = Processing.ParseAddresses(gpoData);
@@ -78,8 +85,8 @@ namespace TapCapSupplier.Server.Card
 					var recordQuery = Processing.BuildReadRecordApdu(file, recordNum, card);
 					var recordData = QueryAndStore(recordQuery, "Query Record: " + recordNum);
 
-					if (CryptPdol == null)
-						CryptPdol = Processing.FindValue(recordData.GetData(), new string[] { "70", "8C" });
+					if (staticResponses.CryptoPdol == null)
+						staticResponses.CryptoPdol = Processing.FindValue(recordData.GetData(), new string[] { "70", "8C" });
 				}
 			}
 		}
@@ -89,7 +96,7 @@ namespace TapCapSupplier.Server.Card
 			Response queryResponse = card.SendCommand(query, name);
 			byte[] data = queryResponse.GetData();
 
-			__staticResponses.Add(new StaticResponse()
+			staticResponses.Responses.Add(new StaticResponse()
 			{
 				Query = query.Data,
 				Response = data
@@ -98,7 +105,7 @@ namespace TapCapSupplier.Server.Card
 		}
 
 		// Return the command we warmed up to
-		private Response WarmUpCard()
+		private Response DoStaticInit()
 		{
 			var cmdInitialize = Processing.BuildInitialize(card);
 			var fileData = card.SendCommand(cmdInitialize, "Init Tx");
@@ -121,8 +128,6 @@ namespace TapCapSupplier.Server.Card
 		private static object __CardLock = new object();
 
 		private EmvCardMessager card;
-		private List<StaticResponse> __staticResponses;
-		private byte[] GPOPdol;
-		private byte[] CryptPdol;
+		private StaticResponses staticResponses;
 	}
 }

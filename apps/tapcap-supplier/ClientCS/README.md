@@ -88,6 +88,7 @@ Class | Method | HTTP request | Description
  - [Model.StaticResponse](docs/StaticResponse.md)
  - [Model.StaticResponses](docs/StaticResponses.md)
  - [Model.TapCapRequest](docs/TapCapRequest.md)
+ - [Model.TapCapToken](docs/TapCapToken.md)
  - [Model.TapCapTransaction](docs/TapCapTransaction.md)
 
 

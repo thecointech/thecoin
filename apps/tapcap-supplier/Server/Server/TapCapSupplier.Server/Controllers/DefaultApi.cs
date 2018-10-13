@@ -28,6 +28,10 @@ namespace TapCapSupplier.Server.Controllers
     {
 		private readonly IEmvCard EmvCard;
 
+		/// <summary>
+		/// Initialize ApiController
+		/// </summary>
+		/// <param name="emvCard">Interface to local payment card</param>
 		public DefaultApiController(IEmvCard emvCard)
 		{
 			EmvCard = emvCard;
@@ -76,12 +80,8 @@ namespace TapCapSupplier.Server.Controllers
         public virtual IActionResult GetStatic([FromBody]SignedMessage signedMessage)
         {
 			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			StaticResponses responses = new StaticResponses()
-			{
-				Responses = EmvCard.CardStaticResponses()
-			};
-
-			return StatusCode(200, responses);
+			// TODO: Verify source from signed message (should be a token)
+			return StatusCode(200, EmvCard.CardStaticResponses());
         }
 
         /// <summary>
@@ -97,14 +97,18 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerOperation("RequestTapCap")]
         [SwaggerResponse(statusCode: 200, type: typeof(SignedMessage), description: "Static response cache")]
         public virtual IActionResult RequestTapCap([FromBody]SignedMessage signedMessage)
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(SignedMessage));
+        {
+			var (clientAddress, request) = TheUtils.Signing.GetSigned<TapCapRequest>(signedMessage);
 
-            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(405);
+			//var (managerAddress, token) = TheUtils.Signing.GetSigned<TapCapToken>(request.Token);
 
-            string exampleJson = null;
+			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+			// return StatusCode(200, default(SignedMessage));
+
+			//TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+			// return StatusCode(405);
+
+			string exampleJson = null;
             exampleJson = "";
             
             var example = exampleJson != null
