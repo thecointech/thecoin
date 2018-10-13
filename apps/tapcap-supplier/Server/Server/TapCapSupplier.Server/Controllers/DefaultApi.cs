@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using TapCapSupplier.Server.Attributes;
 using TapCapSupplier.Server.Models;
+using TapCapSupplier.Server.Card;
 
 namespace TapCapSupplier.Server.Controllers
 { 
@@ -24,7 +25,14 @@ namespace TapCapSupplier.Server.Controllers
     /// 
     /// </summary>
     public class DefaultApiController : ControllerBase
-    { 
+    {
+		private readonly IEmvCard EmvCard;
+
+		public DefaultApiController(IEmvCard emvCard)
+		{
+			EmvCard = emvCard;
+		}
+
         /// <summary>
         /// Notify of a contested transaction
         /// </summary>
@@ -65,18 +73,24 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerOperation("GetStatic")]
         [SwaggerResponse(statusCode: 200, type: typeof(StaticResponses), description: "Static response cache")]
         public virtual IActionResult GetStatic()
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(StaticResponses));
+        {
+			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+			StaticResponses responses = new StaticResponses()
+			{
+				Responses = EmvCard.CardStaticResponses()
+			};
 
-            string exampleJson = null;
-            exampleJson = "";
+			return StatusCode(200, responses);
+			// return StatusCode(200, default(StaticResponses));
+
+			//string exampleJson = null;
+   //         exampleJson = "";
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<StaticResponses>(exampleJson)
-            : default(StaticResponses);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+   //         var example = exampleJson != null
+   //         ? JsonConvert.DeserializeObject<StaticResponses>(exampleJson)
+   //         : default(StaticResponses);
+   //         //TODO: Change the data returned
+   //         return new ObjectResult(example);
         }
 
         /// <summary>

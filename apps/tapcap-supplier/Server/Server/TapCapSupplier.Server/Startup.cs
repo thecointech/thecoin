@@ -22,6 +22,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TapCapSupplier.Server.Filters;
 
+using TapCapSupplier.Server.Card;
+
 namespace TapCapSupplier.Server
 {
     /// <summary>
@@ -86,6 +88,8 @@ namespace TapCapSupplier.Server
                     // Use [ValidateModelState] on Actions to actually validate it in C# as well!
                     c.OperationFilter<GeneratePathParamsValidationFilter>();
                 });
+
+			services.AddSingleton<IEmvCard, EmvCard>();
         }
 
         /// <summary>
@@ -94,7 +98,8 @@ namespace TapCapSupplier.Server
         /// <param name="app"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseHttpsRedirection();
+			//TODO!
+            //app.UseHttpsRedirection();
             app
                 .UseMvc()
                 .UseDefaultFiles()
