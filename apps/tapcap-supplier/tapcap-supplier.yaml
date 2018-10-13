@@ -21,9 +21,16 @@ schemes:
 
 paths:
   /static:
-    get:
+    post:
       summary: "Get the list of static responses to cache for terminal queries"
       operationId: "getStatic"
+      parameters:
+        - in: body
+          name: request
+          description: "Static data request"
+          required: true
+          schema: 
+            $ref: "#/definitions/SignedMessage" # sign (Token)
       responses:
         200:
           description: Static response cache
@@ -49,6 +56,7 @@ paths:
           description: Static response cache
           schema:
             $ref: "#/definitions/SignedMessage" # sign (TapCapTransaction)
+            
   /contest:
     post:
       summary: Notify of a contested transaction
@@ -83,9 +91,11 @@ definitions:
 
   TapCapRequest:
     required:
-      - timestamp  
+      - timestamp
       - fiatAmount
-      - pdol
+      - currencyCode
+      - gpoPdol
+      - cryptoPdol
       - token
     properties:
       timestamp:
@@ -94,11 +104,16 @@ definitions:
       fiatAmount:
         type: number
         format: double
-      pdol:
+      currencyCode:
+        type: number
+      gpoPdol:
+        type: string
+        format: byte
+      cryptoPdol:
         type: string
         format: byte
       token:
-        $ref: "#/definitions/SignedMessage"
+        $ref: "#/definitions/SignedMessage" # sign(Token)
 
   SignedTapcapContest:
     required:

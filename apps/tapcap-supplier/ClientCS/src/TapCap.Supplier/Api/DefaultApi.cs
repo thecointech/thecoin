@@ -52,8 +52,9 @@ namespace TapCap.Supplier.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>StaticResponses</returns>
-        StaticResponses GetStatic ();
+        StaticResponses GetStatic (SignedMessage signedMessage);
 
         /// <summary>
         /// Get the list of static responses to cache for terminal queries
@@ -62,8 +63,9 @@ namespace TapCap.Supplier.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>ApiResponse of StaticResponses</returns>
-        ApiResponse<StaticResponses> GetStaticWithHttpInfo ();
+        ApiResponse<StaticResponses> GetStaticWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
         /// Do TapCap transaction
         /// </summary>
@@ -115,8 +117,9 @@ namespace TapCap.Supplier.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of StaticResponses</returns>
-        System.Threading.Tasks.Task<StaticResponses> GetStaticAsync ();
+        System.Threading.Tasks.Task<StaticResponses> GetStaticAsync (SignedMessage signedMessage);
 
         /// <summary>
         /// Get the list of static responses to cache for terminal queries
@@ -125,8 +128,9 @@ namespace TapCap.Supplier.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
-        System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo ();
+        System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
         /// Do TapCap transaction
         /// </summary>
@@ -401,10 +405,11 @@ namespace TapCap.Supplier.Api
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>StaticResponses</returns>
-        public StaticResponses GetStatic ()
+        public StaticResponses GetStatic (SignedMessage signedMessage)
         {
-             ApiResponse<StaticResponses> localVarResponse = GetStaticWithHttpInfo();
+             ApiResponse<StaticResponses> localVarResponse = GetStaticWithHttpInfo(signedMessage);
              return localVarResponse.Data;
         }
 
@@ -412,9 +417,13 @@ namespace TapCap.Supplier.Api
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>ApiResponse of StaticResponses</returns>
-        public ApiResponse< StaticResponses > GetStaticWithHttpInfo ()
+        public ApiResponse< StaticResponses > GetStaticWithHttpInfo (SignedMessage signedMessage)
         {
+            // verify the required parameter 'signedMessage' is set
+            if (signedMessage == null)
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->GetStatic");
 
             var localVarPath = "./static";
             var localVarPathParams = new Dictionary<String, String>();
@@ -426,6 +435,7 @@ namespace TapCap.Supplier.Api
 
             // to determine the Content-Type header
             String[] localVarHttpContentTypes = new String[] {
+                "application/yaml"
             };
             String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
 
@@ -437,11 +447,19 @@ namespace TapCap.Supplier.Api
             if (localVarHttpHeaderAccept != null)
                 localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
 
+            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = signedMessage; // byte array
+            }
 
 
             // make the HTTP request
             IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
                 localVarPathParams, localVarHttpContentType);
 
             int localVarStatusCode = (int) localVarResponse.StatusCode;
@@ -461,10 +479,11 @@ namespace TapCap.Supplier.Api
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of StaticResponses</returns>
-        public async System.Threading.Tasks.Task<StaticResponses> GetStaticAsync ()
+        public async System.Threading.Tasks.Task<StaticResponses> GetStaticAsync (SignedMessage signedMessage)
         {
-             ApiResponse<StaticResponses> localVarResponse = await GetStaticAsyncWithHttpInfo();
+             ApiResponse<StaticResponses> localVarResponse = await GetStaticAsyncWithHttpInfo(signedMessage);
              return localVarResponse.Data;
 
         }
@@ -473,9 +492,13 @@ namespace TapCap.Supplier.Api
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo ()
+        public async System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage)
         {
+            // verify the required parameter 'signedMessage' is set
+            if (signedMessage == null)
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->GetStatic");
 
             var localVarPath = "./static";
             var localVarPathParams = new Dictionary<String, String>();
@@ -487,6 +510,7 @@ namespace TapCap.Supplier.Api
 
             // to determine the Content-Type header
             String[] localVarHttpContentTypes = new String[] {
+                "application/yaml"
             };
             String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
 
@@ -498,11 +522,19 @@ namespace TapCap.Supplier.Api
             if (localVarHttpHeaderAccept != null)
                 localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
 
+            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = signedMessage; // byte array
+            }
 
 
             // make the HTTP request
             IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
-                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
                 localVarPathParams, localVarHttpContentType);
 
             int localVarStatusCode = (int) localVarResponse.StatusCode;

@@ -40,7 +40,12 @@ namespace TapCapSupplier.Server.Card
 		/// <returns></returns>
 		public byte[] GenerateCrypto(TapCapRequest request)
 		{
-			throw new NotImplementedException();
+			lock(__CardLock)
+			{
+				var appData = WarmUpCard();
+				var gpoQuery = Processing.BuildGPOQuery(appData, card, request.Pdol);
+
+			}
 		}
 
 		///
@@ -87,6 +92,16 @@ namespace TapCapSupplier.Server.Card
 			return queryResponse;
 		}
 
+		// Return the command we warmed up to
+		private Response WarmUpCard()
+		{
+			var cmdInitialize = Processing.BuildInitialize(card);
+			var fileData = card.SendCommand(cmdInitialize, "Init Tx");
+			var selectApp = Processing.BuildSelectApp(fileData, card);
+			return card.SendCommand(selectApp, "Select App");
+		}
+
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -95,7 +110,10 @@ namespace TapCapSupplier.Server.Card
 			card.Dispose();
 		}
 
-		static object __CardLock = new object();
+		//////////////////////////////////////////////////////////
+
+		// Only one tx may occur at a time
+		private static object __CardLock = new object();
 
 		private EmvCardMessager card;
 		private List<StaticResponse> __staticResponses;

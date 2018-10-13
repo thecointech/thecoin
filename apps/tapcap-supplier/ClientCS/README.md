@@ -75,7 +75,7 @@ All URIs are relative to *http://localhost:8070*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**ContestTapCap**](docs/DefaultApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
-*DefaultApi* | [**GetStatic**](docs/DefaultApi.md#getstatic) | **GET** /static | Get the list of static responses to cache for terminal queries
+*DefaultApi* | [**GetStatic**](docs/DefaultApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
 *DefaultApi* | [**RequestTapCap**](docs/DefaultApi.md#requesttapcap) | **POST** /tap | Do TapCap transaction
 
 

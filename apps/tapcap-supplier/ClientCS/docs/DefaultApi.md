@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:8070*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ContestTapCap**](DefaultApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
-[**GetStatic**](DefaultApi.md#getstatic) | **GET** /static | Get the list of static responses to cache for terminal queries
+[**GetStatic**](DefaultApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
 [**RequestTapCap**](DefaultApi.md#requesttapcap) | **POST** /tap | Do TapCap transaction
 
 
@@ -72,7 +72,7 @@ No authorization required
 
 <a name="getstatic"></a>
 # **GetStatic**
-> StaticResponses GetStatic ()
+> StaticResponses GetStatic (SignedMessage signedMessage)
 
 Get the list of static responses to cache for terminal queries
 
@@ -91,11 +91,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new DefaultApi();
+            var signedMessage = new SignedMessage(); // SignedMessage | Static data request
 
             try
             {
                 // Get the list of static responses to cache for terminal queries
-                StaticResponses result = apiInstance.GetStatic();
+                StaticResponses result = apiInstance.GetStatic(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -108,7 +109,10 @@ namespace Example
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| Static data request | 
 
 ### Return type
 
@@ -120,7 +124,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/yaml
  - **Accept**: application/yaml
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

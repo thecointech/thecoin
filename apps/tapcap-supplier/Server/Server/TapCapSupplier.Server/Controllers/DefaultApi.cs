@@ -66,13 +66,14 @@ namespace TapCapSupplier.Server.Controllers
         /// <summary>
         /// Get the list of static responses to cache for terminal queries
         /// </summary>
+        /// <param name="signedMessage">Static data request</param>
         /// <response code="200">Static response cache</response>
-        [HttpGet]
+        [HttpPost]
         [Route("/static")]
         [ValidateModelState]
         [SwaggerOperation("GetStatic")]
         [SwaggerResponse(statusCode: 200, type: typeof(StaticResponses), description: "Static response cache")]
-        public virtual IActionResult GetStatic()
+        public virtual IActionResult GetStatic([FromBody]SignedMessage signedMessage)
         {
 			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
 			StaticResponses responses = new StaticResponses()
@@ -81,16 +82,6 @@ namespace TapCapSupplier.Server.Controllers
 			};
 
 			return StatusCode(200, responses);
-			// return StatusCode(200, default(StaticResponses));
-
-			//string exampleJson = null;
-   //         exampleJson = "";
-            
-   //         var example = exampleJson != null
-   //         ? JsonConvert.DeserializeObject<StaticResponses>(exampleJson)
-   //         : default(StaticResponses);
-   //         //TODO: Change the data returned
-   //         return new ObjectResult(example);
         }
 
         /// <summary>
