@@ -19,6 +19,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
     <ProjectReference Include="..\..\..\..\TheUtils\TheUtils.csproj" />
   </ItemGroup>
 </Project>

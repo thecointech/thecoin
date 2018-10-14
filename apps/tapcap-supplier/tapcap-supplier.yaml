@@ -104,14 +104,14 @@ definitions:
       clientAccount:
         type: string
       availableBalance:
-        type: number
+        type: integer
         format: int64    
       transactionId:
-        type: number
+        type: integer
       # The timestamp of issue.  A broker
       # may ignore a token if the timestamp is too old
       timestamp:
-        type: number
+        type: integer
         format: int64
 
   TapCapRequest:
@@ -124,13 +124,13 @@ definitions:
       - token
     properties:
       timestamp:
-        type: number
+        type: integer
         format: int64
       fiatAmount:
         type: number
         format: double
       currencyCode:
-        type: number
+        type: integer
       gpoData:
         type: string
         format: byte
@@ -149,7 +149,7 @@ definitions:
       - signature
     properties:
       timestamp:
-        type: number
+        type: integer
         format: int64
       fiatAmount:
         type: number
@@ -172,15 +172,16 @@ definitions:
       - responseData        # The byte stream to be transmitted to the terminal
     properties:
       clientTxId:
-        type: number
+        type: integer
         format: int32
       supplierTxId:
-        type: number
+        type: integer
         format: int32
       fiatRequested:
         type: number
+        format: double
       coinCharged:
-        type: number
+        type: integer
         format: int64
       responseData:
         type: string
@@ -219,5 +220,5 @@ definitions:
   ContestResponse:
     properties:
       code:
-        type: number
-        format: integer
+        type: integer
+        format: int32

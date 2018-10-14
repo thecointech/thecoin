@@ -53,11 +53,16 @@ namespace TapCapSupplier.Server.Card
 			}
 		}
 
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public EmvCardMessager()
 		{
 		}
 
+		/// <summary>
+		/// Dispose of PCSC reader object
+		/// </summary>
 		public void Dispose()
 		{
 			if (_reader != null)
@@ -67,7 +72,13 @@ namespace TapCapSupplier.Server.Card
 			}
 		}
 
-		public Response SendCommand(PCSC.Iso7816.CommandApdu apdu, String command)
+		/// <summary>
+		/// Send command to card, return response
+		/// </summary>
+		/// <param name="apdu"></param>
+		/// <param name="command"></param>
+		/// <returns></returns>
+		public Response SendCommand(CommandApdu apdu, String command)
 		{
 			logger.Trace("Sending Command {0}: {1}", command, BitConverter.ToString(apdu.ToArray()));
 
@@ -89,11 +100,16 @@ namespace TapCapSupplier.Server.Card
 			return response;
 		}
 
-		public PCSC.Iso7816.CommandApdu InitApdu(bool hasData)
+		/// <summary>
+		/// Create an APDU compatible with the underlying card
+		/// </summary>
+		/// <param name="hasData"></param>
+		/// <returns></returns>
+		public CommandApdu InitApdu(bool hasData)
 		{
 			IsoCase commandCase = hasData ? IsoCase.Case4Short : IsoCase.Case2Short;
 
-			return new PCSC.Iso7816.CommandApdu(commandCase, Reader.ActiveProtocol);
+			return new CommandApdu(commandCase, Reader.ActiveProtocol);
 		}
 
 		public Response SendCommand(byte[] data, String origin)
@@ -106,7 +122,7 @@ namespace TapCapSupplier.Server.Card
 			bool hasData = data.Length > 5;
 			var apdu = InitApdu(hasData);
 			apdu.CLA = data[0];
-			apdu.Instruction = (PCSC.Iso7816.InstructionCode)data[1];
+			apdu.Instruction = (InstructionCode)data[1];
 			apdu.P1 = data[2];
 			apdu.P2 = data[3];
 

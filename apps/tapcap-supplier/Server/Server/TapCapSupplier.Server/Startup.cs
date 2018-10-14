@@ -23,6 +23,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using TapCapSupplier.Server.Filters;
 
 using TapCapSupplier.Server.Card;
+using ThePricing.Api;
+using TapCapSupplier.Server.TapCap;
 
 namespace TapCapSupplier.Server
 {
@@ -90,7 +92,10 @@ namespace TapCapSupplier.Server
                 });
 
 			services.AddSingleton<IEmvCard, EmvCard>();
-        }
+			services.AddSingleton<TapCap.TapCap>();
+			services.AddTransient<IRatesApi, RatesApi>();
+			services.AddHostedService<ExchangeRateService>();
+		}
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
