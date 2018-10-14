@@ -29,7 +29,7 @@ namespace TapCapSupplier.Server.Models
         /// </summary>
         [Required]
         [DataMember(Name="timestamp")]
-        public double? Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets FiatAmount
@@ -43,7 +43,7 @@ namespace TapCapSupplier.Server.Models
         /// </summary>
         [Required]
         [DataMember(Name="currencyCode")]
-        public decimal? CurrencyCode { get; set; }
+        public int? CurrencyCode { get; set; }
 
         /// <summary>
         /// Gets or Sets GpoData

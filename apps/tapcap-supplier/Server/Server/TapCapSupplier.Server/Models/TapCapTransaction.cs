@@ -29,28 +29,28 @@ namespace TapCapSupplier.Server.Models
         /// </summary>
         [Required]
         [DataMember(Name="clientTxId")]
-        public double? ClientTxId { get; set; }
+        public int? ClientTxId { get; set; }
 
         /// <summary>
         /// Gets or Sets SupplierTxId
         /// </summary>
         [Required]
         [DataMember(Name="supplierTxId")]
-        public double? SupplierTxId { get; set; }
+        public int? SupplierTxId { get; set; }
 
         /// <summary>
         /// Gets or Sets FiatRequested
         /// </summary>
         [Required]
         [DataMember(Name="fiatRequested")]
-        public decimal? FiatRequested { get; set; }
+        public double? FiatRequested { get; set; }
 
         /// <summary>
         /// Gets or Sets CoinCharged
         /// </summary>
         [Required]
         [DataMember(Name="coinCharged")]
-        public double? CoinCharged { get; set; }
+        public long? CoinCharged { get; set; }
 
         /// <summary>
         /// Gets or Sets ResponseData

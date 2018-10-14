@@ -97,19 +97,14 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerOperation("RequestTapCap")]
         [SwaggerResponse(statusCode: 200, type: typeof(SignedMessage), description: "Static response cache")]
         public virtual IActionResult RequestTapCap([FromBody]SignedMessage signedMessage)
-        {
+        { 
+            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(200, default(SignedMessage));
 
+            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(405);
 
-			// TODO: Validate managerAddress.
-
-			// For now, we only allow token-valid
-			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			// return StatusCode(200, default(SignedMessage));
-
-			//TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			// return StatusCode(405);
-
-			string exampleJson = null;
+            string exampleJson = null;
             exampleJson = "";
             
             var example = exampleJson != null

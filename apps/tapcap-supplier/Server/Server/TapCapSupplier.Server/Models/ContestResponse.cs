@@ -28,7 +28,7 @@ namespace TapCapSupplier.Server.Models
         /// Gets or Sets Code
         /// </summary>
         [DataMember(Name="code")]
-        public double? Code { get; set; }
+        public int? Code { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

@@ -144,14 +144,14 @@
             "type" : "string"
           },
           "availableBalance" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int64"
           },
           "transactionId" : {
-            "type" : "number"
+            "type" : "integer"
           },
           "timestamp" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int64"
           }
         }
@@ -173,7 +173,7 @@
         "type" : "object",
         "properties" : {
           "timestamp" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int64"
           },
           "fiatAmount" : {
@@ -197,8 +197,8 @@
         "type" : "object",
         "properties" : {
           "code" : {
-            "type" : "number",
-            "format" : "integer"
+            "type" : "integer",
+            "format" : "int32"
           }
         }
       },
@@ -207,18 +207,19 @@
         "type" : "object",
         "properties" : {
           "clientTxId" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int32"
           },
           "supplierTxId" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int32"
           },
           "fiatRequested" : {
-            "type" : "number"
+            "type" : "number",
+            "format" : "double"
           },
           "coinCharged" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int64"
           },
           "responseData" : {
@@ -255,7 +256,7 @@
         "type" : "object",
         "properties" : {
           "timestamp" : {
-            "type" : "number",
+            "type" : "integer",
             "format" : "int64"
           },
           "fiatAmount" : {
@@ -263,7 +264,7 @@
             "format" : "double"
           },
           "currencyCode" : {
-            "type" : "number"
+            "type" : "integer"
           },
           "gpoData" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",

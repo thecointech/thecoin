@@ -36,21 +36,21 @@ namespace TapCapSupplier.Server.Models
         /// </summary>
         [Required]
         [DataMember(Name="availableBalance")]
-        public double? AvailableBalance { get; set; }
+        public long? AvailableBalance { get; set; }
 
         /// <summary>
         /// Gets or Sets TransactionId
         /// </summary>
         [Required]
         [DataMember(Name="transactionId")]
-        public decimal? TransactionId { get; set; }
+        public int? TransactionId { get; set; }
 
         /// <summary>
         /// Gets or Sets Timestamp
         /// </summary>
         [Required]
         [DataMember(Name="timestamp")]
-        public double? Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
