@@ -41,7 +41,7 @@ namespace TapCap.Client.Model
         /// <param name="coinAmount">coinAmount (required).</param>
         /// <param name="coinBalance">coinBalance (required).</param>
         /// <param name="merchantId">merchantId (required).</param>
-        public TapCapTransaction(double? timestamp = default(double?), double? fiatAmount = default(double?), double? coinAmount = default(double?), double? coinBalance = default(double?), string merchantId = default(string))
+        public TapCapTransaction(long? timestamp = default(long?), double? fiatAmount = default(double?), long? coinAmount = default(long?), long? coinBalance = default(long?), string merchantId = default(string))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -94,7 +94,7 @@ namespace TapCap.Client.Model
         /// Gets or Sets Timestamp
         /// </summary>
         [DataMember(Name="timestamp", EmitDefaultValue=false)]
-        public double? Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets FiatAmount
@@ -106,13 +106,13 @@ namespace TapCap.Client.Model
         /// Gets or Sets CoinAmount
         /// </summary>
         [DataMember(Name="coinAmount", EmitDefaultValue=false)]
-        public double? CoinAmount { get; set; }
+        public long? CoinAmount { get; set; }
 
         /// <summary>
         /// Gets or Sets CoinBalance
         /// </summary>
         [DataMember(Name="coinBalance", EmitDefaultValue=false)]
-        public double? CoinBalance { get; set; }
+        public long? CoinBalance { get; set; }
 
         /// <summary>
         /// Gets or Sets MerchantId

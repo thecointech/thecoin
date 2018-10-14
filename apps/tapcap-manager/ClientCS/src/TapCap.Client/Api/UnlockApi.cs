@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using RestSharp.Portable;
 using TapCap.Client.Client;
+using TapCap.Client.Model;
 
 namespace TapCap.Client.Api
 {

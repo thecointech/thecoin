@@ -39,10 +39,12 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema: 
-            $ref: "#/definitions/SignedMessage" # signed ( TapCapPurchaseBroker )
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapPurchaseBroker )
       responses:
         405:
           description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: Transaction Result
           schema:
@@ -64,15 +66,16 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "#/definitions/SignedMessage" # signed ( signed ( TapCapPurchaseBroker ) )
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapPurchaseBroker ) )
       responses:
         405:
           description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "#/definitions/SignedMessage" # signed ( TapCapToken )
-
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapToken )
 
   /status/summary:
     post:
@@ -87,10 +90,12 @@ paths:
           description: "TapCap status request"
           required: true
           schema: 
-            $ref: "#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
       responses:
         405:
           description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: TapCap Status
           schema:
@@ -109,10 +114,12 @@ paths:
           description: "Purchase Request info"
           required: true
           schema: 
-            $ref: "#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
       responses:
         405:
           description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: TapCap Status
           schema:
@@ -133,122 +140,14 @@ paths:
       responses:
         405:
           description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: OK
           schema:
             type: string
 
 definitions:
-  # A token signed by the TapCapManager
-  SignedMessage:
-    required:
-      - message
-      - signature
-    properties:
-      message:
-        type: string # Any of the below, in string form
-      signature:
-        type: string
-
-  # A token may be presented to a broker
-  # as proof of funds.  If signed by the
-  # broker, it indicates the client is trusted
-  # and has sufficient balance to cover the
-  # available balance listed here.
-  TapCapToken:
-    required:
-      - clientAccount
-      - availableBalance
-      - transactionId
-      - timestamp
-    properties:
-      clientAccount:
-        type: string
-      availableBalance:
-        type: number
-        format: int64    
-      transactionId:
-        type: number
-      # The timestamp of issue.  A broker
-      # may ignore a token if the timestamp is too old
-      timestamp:
-        type: number
-        format: int64
-
-  # A purchase request is sent to a broker.  If
-  # the broker satisfies the request, the signed
-  # purchase structure may be forwarded to the
-  # manager for settlement
-  TapCapPurchase:
-    required:
-      - fiat
-      - currencyCode
-      - timestamp
-      - gpoData
-      - certificateRequest
-      - token
-    properties:
-      fiat:
-        type: number
-      currencyCode:
-        type: number
-      timestamp:  # Only requests in the past X seconds will be acccepted?  Security risk here?
-        type: number
-        format: int64
-      gpoData:
-        type: string
-        format: byte
-      certificateRequest:
-        type: string
-        format: byte
-      token:
-        $ref: "#/definitions/SignedMessage" # TapCapToken
-
-  # If the broker accepts the request, they generate
-  # this response structure, fill out the fields and
-  # return to the client.
-  TapCapPurchaseBroker:
-    required:
-      - clientRequest
-      - coin
-      - cert
-    properties:
-      clientRequest:
-        $ref: "#/definitions/SignedMessage" # TapCapPurchase
-      coin:  # The amount of coin being charged for this transaction
-        type: number
-        format: int64
-      cert:
-        type: string
-
-  # # The broker signs the return structure to 
-  # # guarantee the purchase will be successful
-  # TapCapPurchaseBrokerSigned:
-  #   required:
-  #     - purchaseRequest
-  #     - signature
-  #   properties:
-  #     purchaseRequest:
-  #       # A purchase request is a JSON String of TapCapPurchaseBroker
-  #       type: string
-  #     signature:
-  #       type: string
-
-  # # The client finally signs the result, and submits
-  # # to the central bank to confirm all has gone to plan
-  # TapCapPurchaseFinalSigned:
-  #   required:
-  #     - brokerSigned
-  #     - signature
-  #   properties:
-  #     brokerSigned:
-  #       # A purchase request is a JSON String of TapCapPurchaseBrokerSigned
-  #       type: string
-  #     signature:
-  #       type: string
-
-  # ---------------------------------------------------------------- #
-
   # Query the Manager for a clients TapCap balance  
   TapCapQueryRequest:
     required:
@@ -298,16 +197,16 @@ definitions:
       - merchantId
     properties:
       timestamp:
-        type: number
+        type: integer
         format: int64
       fiatAmount:
         type: number
         format: double
       coinAmount:
-        type: number
+        type: integer
         format: int64
       coinBalance:
-        type: number
+        type: integer
         format: int64
       merchantId:
         type: string

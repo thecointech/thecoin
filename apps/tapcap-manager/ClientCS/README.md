@@ -84,14 +84,12 @@ Class | Method | HTTP request | Description
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [Model.ErrorMessage](docs/ErrorMessage.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
  - [Model.TapCapHistoryRequest](docs/TapCapHistoryRequest.md)
  - [Model.TapCapHistoryResponse](docs/TapCapHistoryResponse.md)
- - [Model.TapCapPurchase](docs/TapCapPurchase.md)
- - [Model.TapCapPurchaseBroker](docs/TapCapPurchaseBroker.md)
  - [Model.TapCapQueryRequest](docs/TapCapQueryRequest.md)
  - [Model.TapCapQueryResponse](docs/TapCapQueryResponse.md)
- - [Model.TapCapToken](docs/TapCapToken.md)
  - [Model.TapCapTransaction](docs/TapCapTransaction.md)
 
 

@@ -1,13 +1,10 @@
-# TapCap.Client.Model.TapCapTransaction
+# TapCap.Client.Model.ErrorMessage
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timestamp** | **long?** |  | 
-**FiatAmount** | **double?** |  | 
-**CoinAmount** | **long?** |  | 
-**CoinBalance** | **long?** |  | 
-**MerchantId** | **string** |  | 
+**EventId** | **int?** |  | 
+**Message** | **string** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
