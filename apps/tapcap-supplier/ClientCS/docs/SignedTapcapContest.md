@@ -3,7 +3,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timestamp** | **double?** |  | 
+**Timestamp** | **long?** |  | 
 **FiatAmount** | **double?** |  | 
 **Pdol** | **byte[]** |  | 
 **Token** | [**SignedMessage**](SignedMessage.md) |  | 

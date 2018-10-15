@@ -41,7 +41,7 @@ namespace TapCap.Supplier.Model
         /// <param name="pdol">pdol (required).</param>
         /// <param name="token">token (required).</param>
         /// <param name="signature">signature (required).</param>
-        public SignedTapcapContest(double? timestamp = default(double?), double? fiatAmount = default(double?), byte[] pdol = default(byte[]), SignedMessage token = default(SignedMessage), string signature = default(string))
+        public SignedTapcapContest(long? timestamp = default(long?), double? fiatAmount = default(double?), byte[] pdol = default(byte[]), SignedMessage token = default(SignedMessage), string signature = default(string))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -94,7 +94,7 @@ namespace TapCap.Supplier.Model
         /// Gets or Sets Timestamp
         /// </summary>
         [DataMember(Name="timestamp", EmitDefaultValue=false)]
-        public double? Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets FiatAmount

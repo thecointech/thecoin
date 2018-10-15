@@ -1,12 +1,12 @@
-# TapCap.Supplier.Api.DefaultApi
+# TapCap.Supplier.Api.TransactionApi
 
 All URIs are relative to *http://localhost:8070*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ContestTapCap**](DefaultApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
-[**GetStatic**](DefaultApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
-[**RequestTapCap**](DefaultApi.md#requesttapcap) | **POST** /tap | Do TapCap transaction
+[**ContestTapCap**](TransactionApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
+[**GetStatic**](TransactionApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
+[**RequestTapCap**](TransactionApi.md#requesttapcap) | **POST** /tap | Request TapCap transaction
 
 
 <a name="contesttapcap"></a>
@@ -31,7 +31,7 @@ namespace Example
     {
         public void main()
         {
-            var apiInstance = new DefaultApi();
+            var apiInstance = new TransactionApi();
             var signedTapcapContest = new SignedTapcapContest(); // SignedTapcapContest | TapCap exchange request
 
             try
@@ -42,7 +42,7 @@ namespace Example
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.ContestTapCap: " + e.Message );
+                Debug.Print("Exception when calling TransactionApi.ContestTapCap: " + e.Message );
             }
         }
     }
@@ -90,7 +90,7 @@ namespace Example
     {
         public void main()
         {
-            var apiInstance = new DefaultApi();
+            var apiInstance = new TransactionApi();
             var signedMessage = new SignedMessage(); // SignedMessage | Static data request
 
             try
@@ -101,7 +101,7 @@ namespace Example
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStatic: " + e.Message );
+                Debug.Print("Exception when calling TransactionApi.GetStatic: " + e.Message );
             }
         }
     }
@@ -133,7 +133,7 @@ No authorization required
 # **RequestTapCap**
 > SignedMessage RequestTapCap (SignedMessage signedMessage)
 
-Do TapCap transaction
+Request TapCap transaction
 
 This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
 
@@ -151,18 +151,18 @@ namespace Example
     {
         public void main()
         {
-            var apiInstance = new DefaultApi();
+            var apiInstance = new TransactionApi();
             var signedMessage = new SignedMessage(); // SignedMessage | TapCap exchange request
 
             try
             {
-                // Do TapCap transaction
+                // Request TapCap transaction
                 SignedMessage result = apiInstance.RequestTapCap(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.RequestTapCap: " + e.Message );
+                Debug.Print("Exception when calling TransactionApi.RequestTapCap: " + e.Message );
             }
         }
     }

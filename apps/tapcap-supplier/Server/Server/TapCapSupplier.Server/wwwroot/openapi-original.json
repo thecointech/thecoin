@@ -16,12 +16,13 @@
     "url" : "http://localhost:8070/"
   } ],
   "tags" : [ {
-    "name" : "TapCap",
-    "description" : "Facilitate a 3-way TapCap transaction"
+    "name" : "Transaction",
+    "description" : "These API's can be called by a client to affect a TapCap purchase transaction, exchanging THE with the supplier to complete fiat tap transactions"
   } ],
   "paths" : {
     "/static" : {
       "post" : {
+        "tags" : [ "Transaction" ],
         "summary" : "Get the list of static responses to cache for terminal queries",
         "operationId" : "getStatic",
         "requestBody" : {
@@ -45,13 +46,24 @@
                 }
               }
             }
+          },
+          "405" : {
+            "description" : "Invalid input",
+            "content" : {
+              "application/yaml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
           }
         }
       }
     },
     "/tap" : {
       "post" : {
-        "summary" : "Do TapCap transaction",
+        "tags" : [ "Transaction" ],
+        "summary" : "Request TapCap transaction",
         "description" : "This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal",
         "operationId" : "requestTapCap",
         "requestBody" : {
@@ -67,7 +79,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "Static response cache",
+            "description" : "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal",
             "content" : {
               "application/yaml" : {
                 "schema" : {
@@ -78,13 +90,20 @@
           },
           "405" : {
             "description" : "Invalid input",
-            "content" : { }
+            "content" : {
+              "application/yaml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
           }
         }
       }
     },
     "/contest" : {
       "post" : {
+        "tags" : [ "Transaction" ],
         "summary" : "Notify of a contested transaction",
         "description" : "Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier",
         "operationId" : "contestTapCap",
@@ -136,38 +155,6 @@
           }
         }
       },
-      "TapCapToken" : {
-        "required" : [ "availableBalance", "clientAccount", "timestamp", "transactionId" ],
-        "type" : "object",
-        "properties" : {
-          "clientAccount" : {
-            "type" : "string"
-          },
-          "availableBalance" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "transactionId" : {
-            "type" : "integer"
-          },
-          "timestamp" : {
-            "type" : "integer",
-            "format" : "int64"
-          }
-        }
-      },
-      "SignedMessage" : {
-        "required" : [ "message", "signature" ],
-        "type" : "object",
-        "properties" : {
-          "message" : {
-            "type" : "string"
-          },
-          "signature" : {
-            "type" : "string"
-          }
-        }
-      },
       "SignedTapcapContest" : {
         "required" : [ "fiatAmount", "pdol", "signature", "timestamp", "token" ],
         "type" : "object",
@@ -187,6 +174,18 @@
           },
           "token" : {
             "$ref" : "#/components/schemas/SignedMessage"
+          },
+          "signature" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SignedMessage" : {
+        "required" : [ "message", "signature" ],
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
           },
           "signature" : {
             "type" : "string"
@@ -251,33 +250,18 @@
           }
         }
       },
-      "TapCapRequest" : {
-        "required" : [ "cryptoData", "currencyCode", "fiatAmount", "gpoData", "timestamp", "token" ],
+      "ErrorMessage" : {
+        "required" : [ "code", "id", "message" ],
         "type" : "object",
         "properties" : {
-          "timestamp" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "fiatAmount" : {
-            "type" : "number",
-            "format" : "double"
-          },
-          "currencyCode" : {
+          "code" : {
             "type" : "integer"
           },
-          "gpoData" : {
-            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
-            "type" : "string",
-            "format" : "byte"
+          "id" : {
+            "type" : "string"
           },
-          "cryptoData" : {
-            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
-            "type" : "string",
-            "format" : "byte"
-          },
-          "token" : {
-            "$ref" : "#/components/schemas/SignedMessage"
+          "message" : {
+            "type" : "string"
           }
         }
       }

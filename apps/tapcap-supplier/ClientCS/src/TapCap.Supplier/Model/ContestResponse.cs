@@ -32,7 +32,7 @@ namespace TapCap.Supplier.Model
         /// Initializes a new instance of the <see cref="ContestResponse" /> class.
         /// </summary>
         /// <param name="code">code.</param>
-        public ContestResponse(double? code = default(double?))
+        public ContestResponse(int? code = default(int?))
         {
             this.Code = code;
         }
@@ -41,7 +41,7 @@ namespace TapCap.Supplier.Model
         /// Gets or Sets Code
         /// </summary>
         [DataMember(Name="code", EmitDefaultValue=false)]
-        public double? Code { get; set; }
+        public int? Code { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

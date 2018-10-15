@@ -21,7 +21,7 @@ namespace TapCap.Supplier.Api
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public interface IDefaultApi : IApiAccessor
+    public interface ITransactionApi : IApiAccessor
     {
         #region Synchronous Operations
         /// <summary>
@@ -67,7 +67,7 @@ namespace TapCap.Supplier.Api
         /// <returns>ApiResponse of StaticResponses</returns>
         ApiResponse<StaticResponses> GetStaticWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
-        /// Do TapCap transaction
+        /// Request TapCap transaction
         /// </summary>
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
@@ -78,7 +78,7 @@ namespace TapCap.Supplier.Api
         SignedMessage RequestTapCap (SignedMessage signedMessage);
 
         /// <summary>
-        /// Do TapCap transaction
+        /// Request TapCap transaction
         /// </summary>
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
@@ -132,7 +132,7 @@ namespace TapCap.Supplier.Api
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
         System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
-        /// Do TapCap transaction
+        /// Request TapCap transaction
         /// </summary>
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
@@ -143,7 +143,7 @@ namespace TapCap.Supplier.Api
         System.Threading.Tasks.Task<SignedMessage> RequestTapCapAsync (SignedMessage signedMessage);
 
         /// <summary>
-        /// Do TapCap transaction
+        /// Request TapCap transaction
         /// </summary>
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
@@ -158,15 +158,15 @@ namespace TapCap.Supplier.Api
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public partial class DefaultApi : IDefaultApi
+    public partial class TransactionApi : ITransactionApi
     {
         private TapCap.Supplier.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultApi"/> class.
+        /// Initializes a new instance of the <see cref="TransactionApi"/> class.
         /// </summary>
         /// <returns></returns>
-        public DefaultApi(String basePath)
+        public TransactionApi(String basePath)
         {
             this.Configuration = new TapCap.Supplier.Client.Configuration { BasePath = basePath };
 
@@ -174,12 +174,12 @@ namespace TapCap.Supplier.Api
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultApi"/> class
+        /// Initializes a new instance of the <see cref="TransactionApi"/> class
         /// using Configuration object
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public DefaultApi(TapCap.Supplier.Client.Configuration configuration = null)
+        public TransactionApi(TapCap.Supplier.Client.Configuration configuration = null)
         {
             if (configuration == null) // use the default one in Configuration
                 this.Configuration = TapCap.Supplier.Client.Configuration.Default;
@@ -274,7 +274,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedTapcapContest' is set
             if (signedTapcapContest == null)
-                throw new ApiException(400, "Missing required parameter 'signedTapcapContest' when calling DefaultApi->ContestTapCap");
+                throw new ApiException(400, "Missing required parameter 'signedTapcapContest' when calling TransactionApi->ContestTapCap");
 
             var localVarPath = "./contest";
             var localVarPathParams = new Dictionary<String, String>();
@@ -349,7 +349,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedTapcapContest' is set
             if (signedTapcapContest == null)
-                throw new ApiException(400, "Missing required parameter 'signedTapcapContest' when calling DefaultApi->ContestTapCap");
+                throw new ApiException(400, "Missing required parameter 'signedTapcapContest' when calling TransactionApi->ContestTapCap");
 
             var localVarPath = "./contest";
             var localVarPathParams = new Dictionary<String, String>();
@@ -423,7 +423,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->GetStatic");
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionApi->GetStatic");
 
             var localVarPath = "./static";
             var localVarPathParams = new Dictionary<String, String>();
@@ -498,7 +498,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->GetStatic");
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionApi->GetStatic");
 
             var localVarPath = "./static";
             var localVarPathParams = new Dictionary<String, String>();
@@ -551,7 +551,7 @@ namespace TapCap.Supplier.Api
         }
 
         /// <summary>
-        /// Do TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
+        /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
@@ -563,7 +563,7 @@ namespace TapCap.Supplier.Api
         }
 
         /// <summary>
-        /// Do TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
+        /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
@@ -572,7 +572,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->RequestTapCap");
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionApi->RequestTapCap");
 
             var localVarPath = "./tap";
             var localVarPathParams = new Dictionary<String, String>();
@@ -625,7 +625,7 @@ namespace TapCap.Supplier.Api
         }
 
         /// <summary>
-        /// Do TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
+        /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
@@ -638,7 +638,7 @@ namespace TapCap.Supplier.Api
         }
 
         /// <summary>
-        /// Do TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
+        /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
         /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
@@ -647,7 +647,7 @@ namespace TapCap.Supplier.Api
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling DefaultApi->RequestTapCap");
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionApi->RequestTapCap");
 
             var localVarPath = "./tap";
             var localVarPathParams = new Dictionary<String, String>();

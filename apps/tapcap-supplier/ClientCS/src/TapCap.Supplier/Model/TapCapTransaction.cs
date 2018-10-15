@@ -41,7 +41,7 @@ namespace TapCap.Supplier.Model
         /// <param name="fiatRequested">fiatRequested (required).</param>
         /// <param name="coinCharged">coinCharged (required).</param>
         /// <param name="responseData">responseData (required).</param>
-        public TapCapTransaction(double? clientTxId = default(double?), double? supplierTxId = default(double?), decimal? fiatRequested = default(decimal?), double? coinCharged = default(double?), byte[] responseData = default(byte[]))
+        public TapCapTransaction(int? clientTxId = default(int?), int? supplierTxId = default(int?), double? fiatRequested = default(double?), long? coinCharged = default(long?), byte[] responseData = default(byte[]))
         {
             // to ensure "clientTxId" is required (not null)
             if (clientTxId == null)
@@ -94,25 +94,25 @@ namespace TapCap.Supplier.Model
         /// Gets or Sets ClientTxId
         /// </summary>
         [DataMember(Name="clientTxId", EmitDefaultValue=false)]
-        public double? ClientTxId { get; set; }
+        public int? ClientTxId { get; set; }
 
         /// <summary>
         /// Gets or Sets SupplierTxId
         /// </summary>
         [DataMember(Name="supplierTxId", EmitDefaultValue=false)]
-        public double? SupplierTxId { get; set; }
+        public int? SupplierTxId { get; set; }
 
         /// <summary>
         /// Gets or Sets FiatRequested
         /// </summary>
         [DataMember(Name="fiatRequested", EmitDefaultValue=false)]
-        public decimal? FiatRequested { get; set; }
+        public double? FiatRequested { get; set; }
 
         /// <summary>
         /// Gets or Sets CoinCharged
         /// </summary>
         [DataMember(Name="coinCharged", EmitDefaultValue=false)]
-        public double? CoinCharged { get; set; }
+        public long? CoinCharged { get; set; }
 
         /// <summary>
         /// Gets or Sets ResponseData

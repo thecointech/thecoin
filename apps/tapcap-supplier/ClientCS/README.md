@@ -48,7 +48,7 @@ namespace Example
         public void main()
         {
 
-            var apiInstance = new DefaultApi();
+            var apiInstance = new TransactionApi();
             var signedTapcapContest = new SignedTapcapContest(); // SignedTapcapContest | TapCap exchange request
 
             try
@@ -59,7 +59,7 @@ namespace Example
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.ContestTapCap: " + e.Message );
+                Debug.Print("Exception when calling TransactionApi.ContestTapCap: " + e.Message );
             }
 
         }
@@ -74,21 +74,20 @@ All URIs are relative to *http://localhost:8070*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**ContestTapCap**](docs/DefaultApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
-*DefaultApi* | [**GetStatic**](docs/DefaultApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
-*DefaultApi* | [**RequestTapCap**](docs/DefaultApi.md#requesttapcap) | **POST** /tap | Do TapCap transaction
+*TransactionApi* | [**ContestTapCap**](docs/TransactionApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
+*TransactionApi* | [**GetStatic**](docs/TransactionApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
+*TransactionApi* | [**RequestTapCap**](docs/TransactionApi.md#requesttapcap) | **POST** /tap | Request TapCap transaction
 
 
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
  - [Model.ContestResponse](docs/ContestResponse.md)
+ - [Model.ErrorMessage](docs/ErrorMessage.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
  - [Model.SignedTapcapContest](docs/SignedTapcapContest.md)
  - [Model.StaticResponse](docs/StaticResponse.md)
  - [Model.StaticResponses](docs/StaticResponses.md)
- - [Model.TapCapRequest](docs/TapCapRequest.md)
- - [Model.TapCapToken](docs/TapCapToken.md)
  - [Model.TapCapTransaction](docs/TapCapTransaction.md)
 
 

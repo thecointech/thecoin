@@ -18,10 +18,15 @@ produces:
 - "application/yaml"
 schemes:
 - "http"
+tags:
+- name: "Transaction"
+  description: "These API's can be called by a client to affect a TapCap purchase transaction, exchanging THE with the supplier to complete fiat tap transactions"
 
 paths:
   /static:
     post:
+      tags:
+        - Transaction
       summary: "Get the list of static responses to cache for terminal queries"
       operationId: "getStatic"
       parameters:
@@ -29,9 +34,13 @@ paths:
           name: request
           description: "Static data request"
           required: true
-          schema: 
-            $ref: "#/definitions/SignedMessage" # sign (Token)
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (Token)
       responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
         200:
           description: Static response cache
           schema:
@@ -39,7 +48,9 @@ paths:
 
   /tap:
     post:
-      summary: "Do TapCap transaction"
+      tags:
+        - Transaction
+      summary: "Request TapCap transaction"
       description: This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
       operationId: "requestTapCap"
       parameters:
@@ -47,18 +58,22 @@ paths:
           name: request
           description: "TapCap exchange request"
           required: true
-          schema: 
-            $ref: "#/definitions/SignedMessage" # sign (TapCapRequest)
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapClientRequest)
       responses:
         405:
           description: Invalid input
-        200:
-          description: Static response cache
           schema:
-            $ref: "#/definitions/SignedMessage" # sign (TapCapTransaction)
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal"
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapBrokerPurchase)
 
   /contest:
     post:
+      tags:
+        - Transaction
       summary: Notify of a contested transaction
       description: "Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier"
       operationId: "contestTapCap"
@@ -67,7 +82,7 @@ paths:
           name: request
           description: "TapCap exchange request"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/SignedTapcapContest"
       responses:
         405:
@@ -79,70 +94,9 @@ paths:
 
 definitions:
 
-  SignedMessage:
-    required:
-      - message
-      - signature
-    properties:
-      message:
-        type: string
-      signature:
-        type: string
-
-  # A token may be presented to a broker
-  # as proof of funds.  If signed by the
-  # broker, it indicates the client is trusted
-  # and has sufficient balance to cover the
-  # available balance listed here.
-  TapCapToken:
-    required:
-      - clientAccount
-      - availableBalance
-      - transactionId
-      - timestamp
-    properties:
-      clientAccount:
-        type: string
-      availableBalance:
-        type: integer
-        format: int64    
-      transactionId:
-        type: integer
-      # The timestamp of issue.  A broker
-      # may ignore a token if the timestamp is too old
-      timestamp:
-        type: integer
-        format: int64
-
-  TapCapRequest:
-    required:
-      - timestamp
-      - fiatAmount
-      - currencyCode
-      - gpoData
-      - cryptoData
-      - token
-    properties:
-      timestamp:
-        type: integer
-        format: int64
-      fiatAmount:
-        type: number
-        format: double
-      currencyCode:
-        type: integer
-      gpoData:
-        type: string
-        format: byte
-      cryptoData:
-        type: string
-        format: byte
-      token:
-        $ref: "#/definitions/SignedMessage" # sign(Token)
-
   SignedTapcapContest:
     required:
-      - timestamp  
+      - timestamp
       - fiatAmount
       - pdol
       - token
@@ -158,7 +112,7 @@ definitions:
         type: string
         format: byte
       token:
-        $ref: "#/definitions/SignedMessage"
+        $ref: "../common.yaml#/definitions/SignedMessage"
       signature:
         type: string # sign ( pdol )
 
