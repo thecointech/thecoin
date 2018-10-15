@@ -32,8 +32,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Object</returns>
-        Object TapCapBroker (SignedMessage signedMessage);
+        /// <returns>ErrorMessage</returns>
+        ErrorMessage TapCapBroker (SignedMessage signedMessage);
 
         /// <summary>
         /// Broker: Register new TapCap transaction
@@ -43,8 +43,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> TapCapBrokerWithHttpInfo (SignedMessage signedMessage);
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        ApiResponse<ErrorMessage> TapCapBrokerWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
         /// Client: Confirm new TapCap transaction
         /// </summary>
@@ -76,8 +76,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> TapCapBrokerAsync (SignedMessage signedMessage);
+        /// <returns>Task of ErrorMessage</returns>
+        System.Threading.Tasks.Task<ErrorMessage> TapCapBrokerAsync (SignedMessage signedMessage);
 
         /// <summary>
         /// Broker: Register new TapCap transaction
@@ -87,8 +87,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> TapCapBrokerAsyncWithHttpInfo (SignedMessage signedMessage);
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> TapCapBrokerAsyncWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
         /// Client: Confirm new TapCap transaction
         /// </summary>
@@ -215,10 +215,10 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Object</returns>
-        public Object TapCapBroker (SignedMessage signedMessage)
+        /// <returns>ErrorMessage</returns>
+        public ErrorMessage TapCapBroker (SignedMessage signedMessage)
         {
-             ApiResponse<Object> localVarResponse = TapCapBrokerWithHttpInfo(signedMessage);
+             ApiResponse<ErrorMessage> localVarResponse = TapCapBrokerWithHttpInfo(signedMessage);
              return localVarResponse.Data;
         }
 
@@ -227,8 +227,8 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>ApiResponse of Object</returns>
-        public ApiResponse< Object > TapCapBrokerWithHttpInfo (SignedMessage signedMessage)
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        public ApiResponse< ErrorMessage > TapCapBrokerWithHttpInfo (SignedMessage signedMessage)
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
@@ -279,9 +279,9 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<Object>(localVarStatusCode,
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (Object) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
         }
 
         /// <summary>
@@ -289,10 +289,10 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> TapCapBrokerAsync (SignedMessage signedMessage)
+        /// <returns>Task of ErrorMessage</returns>
+        public async System.Threading.Tasks.Task<ErrorMessage> TapCapBrokerAsync (SignedMessage signedMessage)
         {
-             ApiResponse<Object> localVarResponse = await TapCapBrokerAsyncWithHttpInfo(signedMessage);
+             ApiResponse<ErrorMessage> localVarResponse = await TapCapBrokerAsyncWithHttpInfo(signedMessage);
              return localVarResponse.Data;
 
         }
@@ -302,8 +302,8 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<Object>> TapCapBrokerAsyncWithHttpInfo (SignedMessage signedMessage)
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> TapCapBrokerAsyncWithHttpInfo (SignedMessage signedMessage)
         {
             // verify the required parameter 'signedMessage' is set
             if (signedMessage == null)
@@ -354,9 +354,9 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<Object>(localVarStatusCode,
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (Object) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
         }
 
         /// <summary>

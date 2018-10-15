@@ -37,7 +37,7 @@ namespace TapCap.Client.Model
         /// Initializes a new instance of the <see cref="TapCapQueryRequest" /> class.
         /// </summary>
         /// <param name="timestamp">timestamp (required).</param>
-        public TapCapQueryRequest(double? timestamp = default(double?))
+        public TapCapQueryRequest(long? timestamp = default(long?))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -54,7 +54,7 @@ namespace TapCap.Client.Model
         /// Gets or Sets Timestamp
         /// </summary>
         [DataMember(Name="timestamp", EmitDefaultValue=false)]
-        public double? Timestamp { get; set; }
+        public long? Timestamp { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

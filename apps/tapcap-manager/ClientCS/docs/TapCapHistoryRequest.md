@@ -3,9 +3,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FromTimestamp** | **double?** |  | 
-**UntilTimestamp** | **double?** |  | 
-**MsgTimestamp** | **double?** |  | 
+**FromTimestamp** | **long?** |  | 
+**UntilTimestamp** | **long?** |  | 
+**MsgTimestamp** | **long?** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

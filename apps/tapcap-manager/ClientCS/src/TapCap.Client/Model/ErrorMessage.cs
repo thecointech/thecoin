@@ -36,18 +36,28 @@ namespace TapCap.Client.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorMessage" /> class.
         /// </summary>
-        /// <param name="eventId">eventId (required).</param>
+        /// <param name="code">code (required).</param>
+        /// <param name="id">id (required).</param>
         /// <param name="message">message (required).</param>
-        public ErrorMessage(int? eventId = default(int?), string message = default(string))
+        public ErrorMessage(int? code = default(int?), string id = default(string), string message = default(string))
         {
-            // to ensure "eventId" is required (not null)
-            if (eventId == null)
+            // to ensure "code" is required (not null)
+            if (code == null)
             {
-                throw new InvalidDataException("eventId is a required property for ErrorMessage and cannot be null");
+                throw new InvalidDataException("code is a required property for ErrorMessage and cannot be null");
             }
             else
             {
-                this.EventId = eventId;
+                this.Code = code;
+            }
+            // to ensure "id" is required (not null)
+            if (id == null)
+            {
+                throw new InvalidDataException("id is a required property for ErrorMessage and cannot be null");
+            }
+            else
+            {
+                this.Id = id;
             }
             // to ensure "message" is required (not null)
             if (message == null)
@@ -61,10 +71,16 @@ namespace TapCap.Client.Model
         }
         
         /// <summary>
-        /// Gets or Sets EventId
+        /// Gets or Sets Code
         /// </summary>
-        [DataMember(Name="eventId", EmitDefaultValue=false)]
-        public int? EventId { get; set; }
+        [DataMember(Name="code", EmitDefaultValue=false)]
+        public int? Code { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Id
+        /// </summary>
+        [DataMember(Name="id", EmitDefaultValue=false)]
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Message
@@ -80,7 +96,8 @@ namespace TapCap.Client.Model
         {
             var sb = new StringBuilder();
             sb.Append("class ErrorMessage {\n");
-            sb.Append("  EventId: ").Append(EventId).Append("\n");
+            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Message: ").Append(Message).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -117,9 +134,14 @@ namespace TapCap.Client.Model
 
             return 
                 (
-                    this.EventId == input.EventId ||
-                    (this.EventId != null &&
-                    this.EventId.Equals(input.EventId))
+                    this.Code == input.Code ||
+                    (this.Code != null &&
+                    this.Code.Equals(input.Code))
+                ) && 
+                (
+                    this.Id == input.Id ||
+                    (this.Id != null &&
+                    this.Id.Equals(input.Id))
                 ) && 
                 (
                     this.Message == input.Message ||
@@ -137,8 +159,10 @@ namespace TapCap.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.EventId != null)
-                    hashCode = hashCode * 59 + this.EventId.GetHashCode();
+                if (this.Code != null)
+                    hashCode = hashCode * 59 + this.Code.GetHashCode();
+                if (this.Id != null)
+                    hashCode = hashCode * 59 + this.Id.GetHashCode();
                 if (this.Message != null)
                     hashCode = hashCode * 59 + this.Message.GetHashCode();
                 return hashCode;

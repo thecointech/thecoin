@@ -38,7 +38,7 @@ namespace TapCap.Client.Model
         /// </summary>
         /// <param name="balance">balance (required).</param>
         /// <param name="token">token (required).</param>
-        public TapCapQueryResponse(double? balance = default(double?), SignedMessage token = default(SignedMessage))
+        public TapCapQueryResponse(long? balance = default(long?), SignedMessage token = default(SignedMessage))
         {
             // to ensure "balance" is required (not null)
             if (balance == null)
@@ -64,7 +64,7 @@ namespace TapCap.Client.Model
         /// Gets or Sets Balance
         /// </summary>
         [DataMember(Name="balance", EmitDefaultValue=false)]
-        public double? Balance { get; set; }
+        public long? Balance { get; set; }
 
         /// <summary>
         /// Gets or Sets Token

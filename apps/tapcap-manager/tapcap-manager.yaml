@@ -38,8 +38,8 @@ paths:
           name: request
           description: "TapCap exchange request"
           required: true
-          schema: 
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapPurchaseBroker )
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerPurchase )
       responses:
         405:
           description: Invalid input
@@ -48,13 +48,9 @@ paths:
         200:
           description: Transaction Result
           schema:
-            required:
-              - errorCode
-            properties:
-              errorCode:
-                type: number
+            $ref: "../common.yaml#/definitions/ErrorMessage"
 
-  /tap/client: 
+  /tap/client:
     post:
       tags:
         - Transactions
@@ -65,8 +61,8 @@ paths:
           name: request
           description: "TapCap status request"
           required: true
-          schema: 
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapPurchaseBroker ) )
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapBrokerPurchase ) )
       responses:
         405:
           description: "Invalid input"
@@ -79,7 +75,7 @@ paths:
 
   /status/summary:
     post:
-      tags: 
+      tags:
         - Status
       summary: "TapCap current status"
       description: "User TapCap status"
@@ -89,7 +85,7 @@ paths:
           name: request
           description: "TapCap status request"
           required: true
-          schema: 
+          schema:
             $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
       responses:
         405:
@@ -113,7 +109,7 @@ paths:
           name: request
           description: "Purchase Request info"
           required: true
-          schema: 
+          schema:
             $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
       responses:
         405:
@@ -145,49 +141,49 @@ paths:
         200:
           description: OK
           schema:
-            type: string
+            $ref: "../common.yaml#/definitions/ErrorMessage"
 
 definitions:
-  # Query the Manager for a clients TapCap balance  
+  # Query the Manager for a clients TapCap balance
   TapCapQueryRequest:
     required:
     - timestamp
     properties:
       timestamp:  # Only requests in the past X seconds will be acccepted?  Security risk here?
-        type: number
+        type: integer
         format: int64
 
-  # basic stats 
+  # basic stats
   TapCapQueryResponse:
     required:
     - balance
     - token
     properties:
       balance:
-        type: number
+        type: integer
         format: int64
-      token: 
+      token:
         $ref: "#/definitions/SignedMessage" # sign ( TapCapToken )
 
   TapCapHistoryRequest:
     required:
     - fromTimestamp
     - untilTimestamp
-    - msgTimestamp 
+    - msgTimestamp
     properties:
       fromTimestamp:
-        type: number
+        type: integer
         format: int64
       untilTimestamp:
-        type: number
+        type: integer
         format: int64
       # Only requests from the preceding 5 seconds will be fullfilled.
       # This prevents someone copying/cloning a message and using repeating it later.
       msgTimestamp:
-        type: number
+        type: integer
         format: int64
 
-      
+
   TapCapTransaction:
     required:
       - timestamp
@@ -218,7 +214,7 @@ definitions:
       history:
         type: array
         items:
-          $ref: "#/definitions/TapCapTransaction"   
+          $ref: "#/definitions/TapCapTransaction"
 
 externalDocs:
   description: "Find out more about Swagger"

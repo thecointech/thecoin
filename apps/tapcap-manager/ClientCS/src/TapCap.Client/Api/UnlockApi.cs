@@ -32,8 +32,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>string</returns>
-        string Unlock (string xRequestKey);
+        /// <returns>ErrorMessage</returns>
+        ErrorMessage Unlock (string xRequestKey);
 
         /// <summary>
         /// 
@@ -43,8 +43,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>ApiResponse of string</returns>
-        ApiResponse<string> UnlockWithHttpInfo (string xRequestKey);
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        ApiResponse<ErrorMessage> UnlockWithHttpInfo (string xRequestKey);
         #endregion Synchronous Operations
         #region Asynchronous Operations
         /// <summary>
@@ -55,8 +55,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>Task of string</returns>
-        System.Threading.Tasks.Task<string> UnlockAsync (string xRequestKey);
+        /// <returns>Task of ErrorMessage</returns>
+        System.Threading.Tasks.Task<ErrorMessage> UnlockAsync (string xRequestKey);
 
         /// <summary>
         /// 
@@ -66,8 +66,8 @@ namespace TapCap.Client.Api
         /// </remarks>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>Task of ApiResponse (string)</returns>
-        System.Threading.Tasks.Task<ApiResponse<string>> UnlockAsyncWithHttpInfo (string xRequestKey);
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> UnlockAsyncWithHttpInfo (string xRequestKey);
         #endregion Asynchronous Operations
     }
 
@@ -173,10 +173,10 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>string</returns>
-        public string Unlock (string xRequestKey)
+        /// <returns>ErrorMessage</returns>
+        public ErrorMessage Unlock (string xRequestKey)
         {
-             ApiResponse<string> localVarResponse = UnlockWithHttpInfo(xRequestKey);
+             ApiResponse<ErrorMessage> localVarResponse = UnlockWithHttpInfo(xRequestKey);
              return localVarResponse.Data;
         }
 
@@ -185,8 +185,8 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>ApiResponse of string</returns>
-        public ApiResponse< string > UnlockWithHttpInfo (string xRequestKey)
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        public ApiResponse< ErrorMessage > UnlockWithHttpInfo (string xRequestKey)
         {
             // verify the required parameter 'xRequestKey' is set
             if (xRequestKey == null)
@@ -229,9 +229,9 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<string>(localVarStatusCode,
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (string) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
         }
 
         /// <summary>
@@ -239,10 +239,10 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>Task of string</returns>
-        public async System.Threading.Tasks.Task<string> UnlockAsync (string xRequestKey)
+        /// <returns>Task of ErrorMessage</returns>
+        public async System.Threading.Tasks.Task<ErrorMessage> UnlockAsync (string xRequestKey)
         {
-             ApiResponse<string> localVarResponse = await UnlockAsyncWithHttpInfo(xRequestKey);
+             ApiResponse<ErrorMessage> localVarResponse = await UnlockAsyncWithHttpInfo(xRequestKey);
              return localVarResponse.Data;
 
         }
@@ -252,8 +252,8 @@ namespace TapCap.Client.Api
         /// </summary>
         /// <exception cref="TapCap.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="xRequestKey"></param>
-        /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<string>> UnlockAsyncWithHttpInfo (string xRequestKey)
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> UnlockAsyncWithHttpInfo (string xRequestKey)
         {
             // verify the required parameter 'xRequestKey' is set
             if (xRequestKey == null)
@@ -296,9 +296,9 @@ namespace TapCap.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<string>(localVarStatusCode,
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (string) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
         }
 
     }

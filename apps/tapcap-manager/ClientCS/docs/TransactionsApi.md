@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapcapbroker"></a>
 # **TapCapBroker**
-> Object TapCapBroker (SignedMessage signedMessage)
+> ErrorMessage TapCapBroker (SignedMessage signedMessage)
 
 Broker: Register new TapCap transaction
 
@@ -34,7 +34,7 @@ namespace Example
             try
             {
                 // Broker: Register new TapCap transaction
-                Object result = apiInstance.TapCapBroker(signedMessage);
+                ErrorMessage result = apiInstance.TapCapBroker(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -54,7 +54,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**ErrorMessage**](ErrorMessage.md)
 
 ### Authorization
 

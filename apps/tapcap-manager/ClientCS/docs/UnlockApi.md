@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="unlock"></a>
 # **Unlock**
-> string Unlock (string xRequestKey)
+> ErrorMessage Unlock (string xRequestKey)
 
 
 
@@ -32,7 +32,7 @@ namespace Example
 
             try
             {
-                string result = apiInstance.Unlock(xRequestKey);
+                ErrorMessage result = apiInstance.Unlock(xRequestKey);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -52,7 +52,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+[**ErrorMessage**](ErrorMessage.md)
 
 ### Authorization
 

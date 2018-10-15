@@ -39,7 +39,7 @@ namespace TapCap.Client.Model
         /// <param name="fromTimestamp">fromTimestamp (required).</param>
         /// <param name="untilTimestamp">untilTimestamp (required).</param>
         /// <param name="msgTimestamp">msgTimestamp (required).</param>
-        public TapCapHistoryRequest(double? fromTimestamp = default(double?), double? untilTimestamp = default(double?), double? msgTimestamp = default(double?))
+        public TapCapHistoryRequest(long? fromTimestamp = default(long?), long? untilTimestamp = default(long?), long? msgTimestamp = default(long?))
         {
             // to ensure "fromTimestamp" is required (not null)
             if (fromTimestamp == null)
@@ -74,19 +74,19 @@ namespace TapCap.Client.Model
         /// Gets or Sets FromTimestamp
         /// </summary>
         [DataMember(Name="fromTimestamp", EmitDefaultValue=false)]
-        public double? FromTimestamp { get; set; }
+        public long? FromTimestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets UntilTimestamp
         /// </summary>
         [DataMember(Name="untilTimestamp", EmitDefaultValue=false)]
-        public double? UntilTimestamp { get; set; }
+        public long? UntilTimestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets MsgTimestamp
         /// </summary>
         [DataMember(Name="msgTimestamp", EmitDefaultValue=false)]
-        public double? MsgTimestamp { get; set; }
+        public long? MsgTimestamp { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
