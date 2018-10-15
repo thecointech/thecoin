@@ -106,7 +106,10 @@ namespace TapCapSupplier.Server.Controllers
         {
 			var tx = Handler.RequestTransaction(signedMessage);
 			if (tx != null)
+			{
+				// TODO: Sign this
 				return StatusCode(200, tx);
+			}
 
 			return StatusCode(405, new ErrorMessage() {
 				Code = 0,

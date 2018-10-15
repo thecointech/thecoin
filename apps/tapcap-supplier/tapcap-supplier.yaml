@@ -116,31 +116,6 @@ definitions:
       signature:
         type: string # sign ( pdol )
 
-
-  TapCapTransaction:
-    required:
-      - clientTxId          # Clients tx id (matching token)
-      - supplierTxId        # Suppliers transaction ID
-      - fiatRequested       # The amount the client needs
-      - coinCharged         # The coins charged to cover fiatRequested
-      - responseData        # The byte stream to be transmitted to the terminal
-    properties:
-      clientTxId:
-        type: integer
-        format: int32
-      supplierTxId:
-        type: integer
-        format: int32
-      fiatRequested:
-        type: number
-        format: double
-      coinCharged:
-        type: integer
-        format: int64
-      responseData:
-        type: string
-        format: byte
-
   StaticResponse:
     required:
       - query
