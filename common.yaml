@@ -1,0 +1,98 @@
+definitions:
+  # A token signed by the TapCapManager
+  SignedMessage:
+    required:
+      - message
+      - signature
+    properties:
+      message:
+        type: string # Any of the below, in string form
+      signature:
+        type: string
+
+  # Something has gone wrong, notify the user
+  ErrorMessage:
+    required:
+      - eventId       # The unique id of the error when communicating with support
+      - message       # A message to (optionally) display to the user
+    properties:
+      eventId:
+        type: integer
+      message:
+        type: string
+
+  # A token may be presented to a broker
+  # as proof of funds.  If signed by the
+  # broker, it indicates the client is trusted
+  # and has sufficient balance to cover the
+  # available balance listed here.
+  TapCapToken:
+    required:
+      - clientAccount
+      - availableBalance
+      - transactionId
+      - timestamp
+    properties:
+      clientAccount:
+        type: string
+      availableBalance:
+        type: integer
+        format: int64    
+      transactionId:
+        type: number
+      # The timestamp of issue.  A broker
+      # may ignore a token if the timestamp is too old
+      timestamp:
+        type: integer
+        format: int64
+
+  # A purchase request is sent to a broker.  If
+  # the broker satisfies the request, the signed
+  # purchase structure may be forwarded to the
+  # manager for settlement
+  TapCapPurchase:
+    required:
+      - timestamp
+      - fiat
+      - currencyCode
+      - gpoData
+      - cert
+      - token
+    properties:
+      fiat:
+        type: number
+        fomat: double
+      currencyCode:
+        type: integer
+      timestamp:  # Only requests in the past X seconds will be accepted?  Security risk here?
+        type: integer
+        format: int64
+      gpoData:
+        type: string
+        format: byte
+      certificateRequest:
+        type: string
+        format: byte
+      token:
+        $ref: "#/definitions/SignedMessage" # TapCapToken
+
+  # If the broker accepts the request, they generate
+  # this response structure, fill out the fields and
+  # return to the client.
+  TapCapPurchaseBroker:
+    required:
+      - clientRequest
+      - coin
+      - cert
+    properties:
+      clientRequest:
+        $ref: "#/definitions/SignedMessage" # sign ( TapCapPurchase )
+      coin:  # The amount of coin being charged for this transaction
+        type: integer
+        format: int64
+      cert:
+        type: string
+        format: byte
+
+  # ---------------------------------------------------------------- #
+

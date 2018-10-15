@@ -23,8 +23,7 @@ java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager
 java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 	-o broker-cad\Service
 java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -l javascript 	-o broker-cad\ClientJS -c broker-cad\client-js-spec.json 
 
-
-java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientCS -l csharp 	 	-c tapcap-supplier\client-cs-spec.json
+java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientCS -g csharp 	 	-c tapcap-supplier\client-cs-spec.json
 java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\Server 	 -g aspnetcore 	-c tapcap-supplier\server-cs-spec.json
 
 REM java -jar .\swagger-codegen-cli.jar generate -i TapCapManager\TapCapManager.yaml -l aspnetcore -c TheCoinBrokerServerSpec.json -o TheCoinBroker\ClientASP
