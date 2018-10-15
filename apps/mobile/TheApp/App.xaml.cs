@@ -36,11 +36,13 @@ namespace TheApp
             var theContractJson = TheCoin.LoadResource.Load(assembly, "TheCoin.json");
             containerRegistry.RegisterInstance(new TheUtils.TheContract(theContractJson));
             // Register a single RatesApi object
-            containerRegistry.RegisterInstance<TheCoinCore.Api.IRatesApi>(new TheCoinCore.Api.RatesApi());
-            containerRegistry.RegisterInstance<TapCap.Client.Api.IStatusApi>(new TapCap.Client.Api.StatusApi("http://localhost:8080"));
+            containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
+            containerRegistry.RegisterInstance<TapCap.Client.Api.IStatusApi>(new TapCap.Client.Api.StatusApi("http://localhost:8091"));
             containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
 
-            containerRegistry.RegisterForNavigation<NavigationPage>();
+			containerRegistry.RegisterInstance(new Tap.Supplier("http://localhost:8070"));
+
+			containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<Connect>();
             containerRegistry.RegisterForNavigation<Scanner>();

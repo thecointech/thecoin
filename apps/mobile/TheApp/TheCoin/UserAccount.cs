@@ -39,6 +39,21 @@ namespace TheApp.TheCoin
 
         public object Token { get; internal set; }
 
+		public string Address
+		{
+			get
+			{
+				if (TheAccount != null)
+					return TheAccount.Address;
+				if (EncryptedAccount != null)
+				{
+					dynamic fromEncrypted = Newtonsoft.Json.JsonConvert.DeserializeObject(EncryptedAccount);
+					return fromEncrypted.Address;
+				}
+				return "----";
+			}
+		}
+
         private string EncryptedAccount = null;
         private TheUtils.TheContract TheContract;
         private Task InitTask;
@@ -71,7 +86,7 @@ namespace TheApp.TheCoin
 
         public bool NeedsDecrypting()
         {
-            return TheAccount == null && EncryptedAccount == null;
+            return TheAccount == null && EncryptedAccount != null;
         }
 
         public async Task SetEncrypted(string encrypted)
@@ -88,7 +103,8 @@ namespace TheApp.TheCoin
                 var TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
                 // If we are here, then success
                 await SecureStorage.SetAsync(AccountKey, key);
-            }
+				EncryptedAccount = null;
+			}
             catch (Exception)
             {
                 return false;

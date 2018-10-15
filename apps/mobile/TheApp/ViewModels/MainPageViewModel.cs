@@ -1,8 +1,8 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
-using TheUtils;
-using TheCoinCore.Api;
+using ThePricing.Api;
 using TapCap.Client.Api;
+using TheUtils;
 
 namespace TheApp.ViewModels
 {
@@ -102,7 +102,7 @@ namespace TheApp.ViewModels
                 MainBalance = await TheContract.CoinBalance();
 
                 // Create a signed TapCapQueryRequest
-                decimal timestamp = (decimal)TheCoinTime.Now();
+                var timestamp = TheCoinTime.Now();
                 var req = new TapCap.Client.Model.TapCapQueryRequest(timestamp);
                 var signedReq = UserAccount.MakeSignedMessage(req);
                 var response = await TapCapStatus.TapCapStatusAsync(signedReq);

@@ -30,7 +30,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\tapcap-manager\ClientCS\src\TapCap.Client\TapCap.Client.csproj" />
-    <ProjectReference Include="..\..\TheCoinCore\ClientCS\src\TheCoinCore\TheCoinCore.csproj" />
+    <ProjectReference Include="..\..\tapcap-supplier\ClientCS\src\TapCap.Supplier\TapCap.Supplier.csproj" />
+    <ProjectReference Include="..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
     <ProjectReference Include="..\..\TheUtils\TheUtils.csproj" />
   </ItemGroup>
 
@@ -41,10 +42,6 @@
     <EmbeddedResource Update="Views\Scanner.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tap\" />
   </ItemGroup>
 
 </Project>
