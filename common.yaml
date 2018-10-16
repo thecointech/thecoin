@@ -1,0 +1,136 @@
+definitions:
+
+  # A signed message contains the JSON message as a string
+  # and a signature to verify authorship. The message
+  # may be of any type, it is relying that
+  # the two parties in the API (client/server) agree
+  # on what that message should be
+  SignedMessage:
+    required:
+      - message
+      - signature
+    properties:
+      message:
+        type: string
+      signature:
+        type: string
+
+  # A generic error response.
+  ErrorMessage:
+    required:
+      - code      # code of error
+      - id        # an ID to identify the specific failure instance
+      - message   # A message to be displayed to the user.
+    properties:
+      code:
+        type: integer
+      id:
+        type: string
+      message:
+        type: string
+
+  # A token may be presented to a broker
+  # as proof of funds.  If signed by the
+  # broker, it indicates the client is trusted
+  # and has sufficient balance to cover the
+  # available balance listed here.
+  TapCapToken:
+    required:
+      - clientAccount
+      - availableBalance
+      - transactionId
+      - timestamp
+    properties:
+      clientAccount:
+        type: string
+      availableBalance:
+        type: integer
+        format: int64
+      transactionId:
+        type: integer
+      # The timestamp of issue.  A broker
+      # may ignore a token if the timestamp is too old
+      timestamp:
+        type: integer
+        format: int64
+
+  # A purchase request is sent to a broker.  If
+  # the broker satisfies the request, the signed
+  # purchase structure may be forwarded to the
+  # manager for settlement
+  TapCapClientRequest:
+    required:
+      - timestamp
+      - fiatAmount
+      - currencyCode
+      - gpoData
+      - cryptoData
+      - token
+    properties:
+      timestamp:
+        type: integer
+        format: int64
+      fiatAmount:
+        type: number
+        format: double
+      currencyCode:
+        type: integer
+      gpoData:
+        type: string
+        format: byte
+      cryptoData:
+        type: string
+        format: byte
+      token:
+        $ref: "#/definitions/SignedMessage" # sign(Token)
+
+  # A broker figures out how much to charge for a tx,
+  # then signs this message, sends to manager & returns
+  # to client
+  TapCapBrokerPurchase:
+    required:
+      - signedRequest
+      - FxRate
+      - coinCharge
+      - cryptoCertificate	# This data can be sent to the terminal to complete a tx
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage" # sign(TapCapClientRequest)
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: integer
+        format: int64
+      cryptoCertificate:
+        type: string
+        format: byte
+
+  # Exchange rate info for the given country code
+  # When queried, Valid from <= timestamp < ValidTill
+  FXRate:
+    required:
+      - CountryCode
+      - Buy
+      - Sell
+      - FxRate
+      - ValidFrom
+      - ValidTill
+    properties:
+      target:
+        type: integer
+      buy:
+        type: number
+        format: double
+      sell:
+        type: number
+        format: double
+      fxRate:
+        type: number
+        format: double
+      validFrom:
+        type: integer
+        format: int64
+      validTill:
+        type: integer
+        format: int64
+
