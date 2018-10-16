@@ -42,9 +42,11 @@ paths:
         200:
           description: "Transaction Result"
           schema:
-            $ref: "#/definitions/inline_response_200"
+            $ref: "#/definitions/ErrorMessage"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
       x-swagger-router-controller: "Transactions"
   /tap/client:
     post:
@@ -66,6 +68,8 @@ paths:
             $ref: "#/definitions/SignedMessage"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
       x-swagger-router-controller: "Transactions"
   /status/summary:
     post:
@@ -88,6 +92,8 @@ paths:
             $ref: "#/definitions/TapCapQueryResponse"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
       x-swagger-router-controller: "Status"
   /status/history:
     post:
@@ -110,6 +116,8 @@ paths:
             $ref: "#/definitions/TapCapHistoryResponse"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
       x-swagger-router-controller: "Status"
   /unlock:
     post:
@@ -125,11 +133,179 @@ paths:
         200:
           description: "OK"
           schema:
-            type: "string"
+            $ref: "#/definitions/ErrorMessage"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
       x-swagger-router-controller: "Unlock"
 definitions:
+  TapCapQueryRequest:
+    required:
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+        format: "int64"
+  TapCapQueryResponse:
+    required:
+    - "balance"
+    - "token"
+    properties:
+      balance:
+        type: "integer"
+        format: "int64"
+      token:
+        $ref: "#/definitions/SignedMessage"
+    example:
+      balance: 0
+      token:
+        signature: "signature"
+        message: "message"
+  TapCapHistoryRequest:
+    required:
+    - "fromTimestamp"
+    - "msgTimestamp"
+    - "untilTimestamp"
+    properties:
+      fromTimestamp:
+        type: "integer"
+        format: "int64"
+      untilTimestamp:
+        type: "integer"
+        format: "int64"
+      msgTimestamp:
+        type: "integer"
+        format: "int64"
+  TapCapCompletedTransaction:
+    required:
+    - "coinAmount"
+    - "coinBalance"
+    - "fiatAmount"
+    - "merchantId"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+        format: "int64"
+      fiatAmount:
+        type: "number"
+        format: "double"
+      coinAmount:
+        type: "integer"
+        format: "int64"
+      coinBalance:
+        type: "integer"
+        format: "int64"
+      merchantId:
+        type: "string"
+    example:
+      coinAmount: 1
+      merchantId: "merchantId"
+      fiatAmount: 6.02745618307040320615897144307382404804229736328125
+      coinBalance: 5
+      timestamp: 0
+  TapCapHistoryResponse:
+    required:
+    - "history"
+    properties:
+      history:
+        type: "array"
+        items:
+          $ref: "#/definitions/TapCapCompletedTransaction"
+    example:
+      history:
+      - coinAmount: 1
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5
+        timestamp: 0
+      - coinAmount: 1
+        merchantId: "merchantId"
+        fiatAmount: 6.02745618307040320615897144307382404804229736328125
+        coinBalance: 5
+        timestamp: 0
+  TapCapToken:
+    required:
+    - "availableBalance"
+    - "clientAccount"
+    - "timestamp"
+    - "transactionId"
+    properties:
+      clientAccount:
+        type: "string"
+      availableBalance:
+        type: "integer"
+        format: "int64"
+      transactionId:
+        type: "integer"
+      timestamp:
+        type: "integer"
+        format: "int64"
+  TapCapClientRequest:
+    required:
+    - "cryptoData"
+    - "currencyCode"
+    - "fiatAmount"
+    - "gpoData"
+    - "timestamp"
+    - "token"
+    properties:
+      timestamp:
+        type: "integer"
+        format: "int64"
+      fiatAmount:
+        type: "number"
+        format: "double"
+      currencyCode:
+        type: "integer"
+      gpoData:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      cryptoData:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      token:
+        $ref: "#/definitions/SignedMessage"
+  TapCapBrokerPurchase:
+    required:
+    - "FxRate"
+    - "coinCharge"
+    - "cryptoCertificate"
+    - "signedRequest"
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage"
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: "integer"
+        format: "int64"
+      cryptoCertificate:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+  FXRate:
+    properties:
+      target:
+        type: "integer"
+      buy:
+        type: "number"
+        format: "double"
+      sell:
+        type: "number"
+        format: "double"
+      fxRate:
+        type: "number"
+        format: "double"
+      validFrom:
+        type: "integer"
+        format: "int64"
+      validTill:
+        type: "integer"
+        format: "int64"
   SignedMessage:
     required:
     - "message"
@@ -142,7 +318,23 @@ definitions:
     example:
       signature: "signature"
       message: "message"
-  TapCapToken:
+  ErrorMessage:
+    required:
+    - "code"
+    - "id"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+      id:
+        type: "string"
+      message:
+        type: "string"
+    example:
+      code: 0
+      id: "id"
+      message: "message"
+  TapCapToken_2:
     required:
     - "availableBalance"
     - "clientAccount"
@@ -152,145 +344,77 @@ definitions:
       clientAccount:
         type: "string"
       availableBalance:
-        type: "number"
+        type: "integer"
         format: "int64"
       transactionId:
-        type: "number"
+        type: "integer"
       timestamp:
-        type: "number"
+        type: "integer"
         format: "int64"
-  TapCapPurchase:
+  TapCapClientRequest_2:
     required:
-    - "certificateRequest"
+    - "cryptoData"
     - "currencyCode"
-    - "fiat"
+    - "fiatAmount"
     - "gpoData"
     - "timestamp"
     - "token"
     properties:
-      fiat:
-        type: "number"
-      currencyCode:
-        type: "number"
       timestamp:
-        type: "number"
-        format: "int64"
-      gpoData:
-        type: "string"
-        format: "byte"
-        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
-      certificateRequest:
-        type: "string"
-        format: "byte"
-        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
-      token:
-        $ref: "#/definitions/SignedMessage"
-  TapCapPurchaseBroker:
-    required:
-    - "cert"
-    - "clientRequest"
-    - "coin"
-    properties:
-      clientRequest:
-        $ref: "#/definitions/SignedMessage"
-      coin:
-        type: "number"
-        format: "int64"
-      cert:
-        type: "string"
-  TapCapQueryRequest:
-    required:
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "number"
-        format: "int64"
-  TapCapQueryResponse:
-    required:
-    - "balance"
-    - "token"
-    properties:
-      balance:
-        type: "number"
-        format: "int64"
-      token:
-        $ref: "#/definitions/SignedMessage"
-    example:
-      balance: 0.80082819046101150206595775671303272247314453125
-      token:
-        signature: "signature"
-        message: "message"
-  TapCapHistoryRequest:
-    required:
-    - "fromTimestamp"
-    - "msgTimestamp"
-    - "untilTimestamp"
-    properties:
-      fromTimestamp:
-        type: "number"
-        format: "int64"
-      untilTimestamp:
-        type: "number"
-        format: "int64"
-      msgTimestamp:
-        type: "number"
-        format: "int64"
-  TapCapTransaction:
-    required:
-    - "coinAmount"
-    - "coinBalance"
-    - "fiatAmount"
-    - "merchantId"
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "number"
+        type: "integer"
         format: "int64"
       fiatAmount:
         type: "number"
         format: "double"
-      coinAmount:
-        type: "number"
-        format: "int64"
-      coinBalance:
-        type: "number"
-        format: "int64"
-      merchantId:
+      currencyCode:
+        type: "integer"
+      gpoData:
         type: "string"
-    example:
-      coinAmount: 1.46581298050294517310021547018550336360931396484375
-      merchantId: "merchantId"
-      fiatAmount: 6.02745618307040320615897144307382404804229736328125
-      coinBalance: 5.962133916683182377482808078639209270477294921875
-      timestamp: 0.80082819046101150206595775671303272247314453125
-  TapCapHistoryResponse:
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      cryptoData:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      token:
+        $ref: "#/definitions/SignedMessage"
+  TapCapBrokerPurchase_2:
     required:
-    - "history"
+    - "FxRate"
+    - "coinCharge"
+    - "cryptoCertificate"
+    - "signedRequest"
     properties:
-      history:
-        type: "array"
-        items:
-          $ref: "#/definitions/TapCapTransaction"
-    example:
-      history:
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        coinBalance: 5.962133916683182377482808078639209270477294921875
-        timestamp: 0.80082819046101150206595775671303272247314453125
-      - coinAmount: 1.46581298050294517310021547018550336360931396484375
-        merchantId: "merchantId"
-        fiatAmount: 6.02745618307040320615897144307382404804229736328125
-        coinBalance: 5.962133916683182377482808078639209270477294921875
-        timestamp: 0.80082819046101150206595775671303272247314453125
-  inline_response_200:
-    required:
-    - "errorCode"
+      signedRequest:
+        $ref: "#/definitions/SignedMessage"
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: "integer"
+        format: "int64"
+      cryptoCertificate:
+        type: "string"
+        format: "byte"
+        pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+  FXRate_2:
     properties:
-      errorCode:
+      target:
+        type: "integer"
+      buy:
         type: "number"
-    example:
-      errorCode: 0.80082819046101150206595775671303272247314453125
+        format: "double"
+      sell:
+        type: "number"
+        format: "double"
+      fxRate:
+        type: "number"
+        format: "double"
+      validFrom:
+        type: "integer"
+        format: "int64"
+      validTill:
+        type: "integer"
+        format: "int64"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

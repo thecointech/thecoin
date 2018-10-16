@@ -1,4 +1,4 @@
-# TapCap.Client.Model.TapCapHistoryRequest
+# TapCapManager.Client.Model.TapCapHistoryRequest
 ## Properties
 
 Name | Type | Description | Notes

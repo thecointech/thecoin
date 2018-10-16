@@ -1,4 +1,4 @@
-# TapCap.Client.Api.TransactionsApi
+# TapCapManager.Client.Api.TransactionsApi
 
 All URIs are relative to *http://localhost:8091*
 
@@ -18,9 +18,9 @@ Broker: Register new TapCap transaction
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {
@@ -77,9 +77,9 @@ Client: Confirm new TapCap transaction
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {

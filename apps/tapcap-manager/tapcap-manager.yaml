@@ -163,7 +163,7 @@ definitions:
         type: integer
         format: int64
       token:
-        $ref: "#/definitions/SignedMessage" # sign ( TapCapToken )
+        $ref: "../common.yaml#/definitions/SignedMessage" # sign ( TapCapToken )
 
   TapCapHistoryRequest:
     required:
@@ -184,7 +184,7 @@ definitions:
         format: int64
 
 
-  TapCapTransaction:
+  TapCapCompletedTransaction:
     required:
       - timestamp
       - fiatAmount
@@ -214,7 +214,17 @@ definitions:
       history:
         type: array
         items:
-          $ref: "#/definitions/TapCapTransaction"
+          $ref: "#/definitions/TapCapCompletedTransaction"
+
+  # We need to explicitly include definitions that are used but not directly referenced
+  TapCapToken:
+    $ref: '../common.yaml#/definitions/TapCapToken'
+  TapCapClientRequest:
+    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+  TapCapBrokerPurchase:
+    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+  FXRate:
+    $ref: '../common.yaml#/definitions/FXRate'
 
 externalDocs:
   description: "Find out more about Swagger"

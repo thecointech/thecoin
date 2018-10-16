@@ -1,4 +1,4 @@
-# TapCap.Client - the C# library for the The TapCap Manager
+# TapCapManager.Client - the C# library for the The TapCap Manager
 
 The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
 
@@ -27,9 +27,9 @@ Generate the DLL using your preferred tool
 
 Then include the DLL (under the `bin` folder) in the C# project, and use the namespaces:
 ```csharp
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 ```
 <a name="getting-started"></a>
 ## Getting Started
@@ -37,9 +37,9 @@ using TapCap.Client.Model;
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {
@@ -85,12 +85,16 @@ Class | Method | HTTP request | Description
 ## Documentation for Models
 
  - [Model.ErrorMessage](docs/ErrorMessage.md)
+ - [Model.FXRate](docs/FXRate.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
+ - [Model.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
+ - [Model.TapCapClientRequest](docs/TapCapClientRequest.md)
+ - [Model.TapCapCompletedTransaction](docs/TapCapCompletedTransaction.md)
  - [Model.TapCapHistoryRequest](docs/TapCapHistoryRequest.md)
  - [Model.TapCapHistoryResponse](docs/TapCapHistoryResponse.md)
  - [Model.TapCapQueryRequest](docs/TapCapQueryRequest.md)
  - [Model.TapCapQueryResponse](docs/TapCapQueryResponse.md)
- - [Model.TapCapTransaction](docs/TapCapTransaction.md)
+ - [Model.TapCapToken](docs/TapCapToken.md)
 
 
 <a name="documentation-for-authorization"></a>

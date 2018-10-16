@@ -1,4 +1,4 @@
-# TapCap.Client.Api.StatusApi
+# TapCapManager.Client.Api.StatusApi
 
 All URIs are relative to *http://localhost:8091*
 
@@ -20,9 +20,9 @@ User TapCap history in the ranges provided
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {
@@ -81,9 +81,9 @@ User TapCap status
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {

@@ -1,12 +1,12 @@
-# TapCap.Client.Model.TapCapToken
+# TapCapManager.Client.Model.TapCapToken
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ClientAccount** | **string** |  | 
-**AvailableBalance** | **double?** |  | 
-**TransactionId** | **decimal?** |  | 
-**Timestamp** | **double?** |  | 
+**AvailableBalance** | **long?** |  | 
+**TransactionId** | **int?** |  | 
+**Timestamp** | **long?** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

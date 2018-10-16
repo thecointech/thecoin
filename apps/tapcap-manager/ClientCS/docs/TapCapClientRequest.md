@@ -1,10 +1,14 @@
-# TapCapManager.Client.Model.SignedMessage
+# TapCapManager.Client.Model.TapCapClientRequest
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Message** | **string** |  | 
-**Signature** | **string** |  | 
+**Timestamp** | **long?** |  | 
+**FiatAmount** | **double?** |  | 
+**CurrencyCode** | **int?** |  | 
+**GpoData** | **byte[]** |  | 
+**CryptoData** | **byte[]** |  | 
+**Token** | [**SignedMessage**](SignedMessage.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

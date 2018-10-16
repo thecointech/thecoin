@@ -1,4 +1,4 @@
-# TapCap.Client.Api.UnlockApi
+# TapCapManager.Client.Api.UnlockApi
 
 All URIs are relative to *http://localhost:8091*
 
@@ -17,9 +17,9 @@ Method | HTTP request | Description
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Client.Api;
-using TapCap.Client.Client;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
 
 namespace Example
 {
