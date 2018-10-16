@@ -19,41 +19,10 @@ produces:
 schemes:
 - "https"
 
-definitions:
-
-  # Exchange rate info for the given country code
-  # When queried, Valid from <= timestamp < ValidTill
-  FXRate:
-    required:
-      - CountryCode
-      - Buy
-      - Sell
-      - FxRate
-      - ValidFrom
-      - ValidTill
-    properties:
-      target:
-        type: integer
-      Buy:
-        type: number
-        format: double
-      Sell:
-        type: number
-        format: double
-      FxRate:
-        type: number
-        format: double
-      ValidFrom:
-        type: integer
-        format: int64
-      ValidTill:
-        type: integer
-        format: int64        
-
 paths:
   /rates/{currencyCode}:
     get:
-      tags: 
+      tags:
         - Rates
       summary: "Exchange Rate"
       description: "Query exchange rate for THE into the given currency"
@@ -64,8 +33,7 @@ paths:
         200:
           description: TheCoin exchange multiplier to the listed currency
           schema:
-            $ref: "#/definitions/FXRate"
-
+            $ref: "../common.yaml#/definitions/FXRate"
 
       parameters:
       - in: path
