@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Nethereum.Signer;
+using Nethereum.Web3.Accounts;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,29 +24,38 @@ namespace TheUtils
 		//public static string SignTransaction(CurrencyTransaction request, Nethereum.Web3.Accounts.Account from)
 		//{
 		//    var asBytes = ToBytes(request);
-		//    var msgSigner = new Nethereum.Signer.MessageSigner();
+		//    var msgSigner = new MessageSigner();
 		//    return msgSigner.HashAndSign(asBytes, from.PrivateKey);
 		//}
 
 		//// Get address of signing party from passed request
 		//public static string GetSigner(TransactionRequest request)
 		//{
-		//    var signer = new Nethereum.Signer.MessageSigner();
+		//    var signer = new MessageSigner();
 		//    var asBytes = ToBytes(request.Request);
 		//    var asHash = signer.Hash(asBytes.ToArray());
 
 		//    return signer.EcRecover(asHash, request.RequestorSig);
 		//}
 
-		public static (string address, TMessage message) GetSigned<TMessage>(dynamic signedMessage) where TMessage : new()
+		public static (string address, TMessage message) GetSignerAndMessage<TMessage>(dynamic signedMessage) where TMessage : new()
 		{
 			string signature = signedMessage.Signature;
 			string messageStr = signedMessage.Message;
 
-			var signer = new Nethereum.Signer.EthereumMessageSigner();
+			var signer = new EthereumMessageSigner();
 			var address = signer.EncodeUTF8AndEcRecover(messageStr, signature);
 			var result = JsonConvert.DeserializeObject<TMessage>(messageStr);
 			return (address, result);
+		}
+
+		public static TSigned MakeSignedMessage<TSigned>(object obj, Account account) where TSigned : new()
+		{
+			var message = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+			var signer = new EthereumMessageSigner();
+			var signature = signer.EncodeUTF8AndSign(message, new EthECKey(account.PrivateKey));
+			TSigned instance = (TSigned)Activator.CreateInstance(typeof(TSigned), message, signature);
+			return instance;
 		}
 	}
 }
