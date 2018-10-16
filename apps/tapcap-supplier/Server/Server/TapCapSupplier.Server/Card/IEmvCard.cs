@@ -23,6 +23,6 @@ namespace TapCapSupplier.Server.Card
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		byte[] GenerateCrypto(TapCapRequest request);
+		byte[] GenerateCrypto(TapCapClientRequest request);
 	}
 }

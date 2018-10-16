@@ -18,6 +18,7 @@ using System.ComponentModel.DataAnnotations;
 using TapCapSupplier.Server.Attributes;
 using TapCapSupplier.Server.Models;
 using TapCapSupplier.Server.Card;
+using TapCapSupplier.Server.TapCap;
 
 namespace TapCapSupplier.Server.Controllers
 {
@@ -34,6 +35,7 @@ namespace TapCapSupplier.Server.Controllers
 		/// Initialize ApiController
 		/// </summary>
 		/// <param name="emvCard">Interface to local payment card</param>
+		/// <param name="tap">Interface to tx handler</param>
 		public TransactionApiController(IEmvCard emvCard, HandleTx tap)
 		{
 			EmvCard = emvCard;
@@ -113,9 +115,9 @@ namespace TapCapSupplier.Server.Controllers
 
 			return StatusCode(405, new ErrorMessage() {
 				Code = 0,
-				Id = 0,
+				Id = "TODO",
 				Message = "TODO"
-			};
+			});
         }
     }
 }

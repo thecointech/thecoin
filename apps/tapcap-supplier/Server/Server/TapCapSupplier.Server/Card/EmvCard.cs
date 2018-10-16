@@ -40,7 +40,7 @@ namespace TapCapSupplier.Server.Card
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		public byte[] GenerateCrypto(TapCapRequest request)
+		public byte[] GenerateCrypto(TapCapClientRequest request)
 		{
 			lock(__CardLock)
 			{

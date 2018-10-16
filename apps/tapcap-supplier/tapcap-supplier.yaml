@@ -145,9 +145,20 @@ definitions:
         items:
           $ref: "#/definitions/StaticResponse"
 
-
   ContestResponse:
     properties:
       code:
         type: integer
         format: int32
+
+  # We need to explicitly include definitions that are used but not directly referenced
+  TapCapToken:
+    $ref: '../common.yaml#/definitions/TapCapToken'
+  TapCapClientRequest:
+    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+  TapCapBrokerPurchase:
+    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+  FXRate:
+    $ref: '../common.yaml#/definitions/FXRate'
+
+

@@ -19,7 +19,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\tapcap-manager\ClientCS\src\TapCapManager.Client\TapCapManager.Client.csproj" />
     <ProjectReference Include="..\..\..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
-    <ProjectReference Include="..\..\..\..\TheUtils\TheUtils.csproj" />
+    <ProjectReference Include="..\..\..\..\the-utilities\TheUtils\TheUtils.csproj" />
   </ItemGroup>
 </Project>

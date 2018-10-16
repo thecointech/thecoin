@@ -92,16 +92,17 @@ namespace TapCapSupplier.Server
                 });
 
 			services.AddSingleton<IEmvCard, EmvCard>();
-			services.AddSingleton<TapCap.TapCap>();
+			services.AddSingleton<TapCap.HandleTx>();
 			services.AddTransient<IRatesApi, RatesApi>();
 			services.AddHostedService<ExchangeRateService>();
 		}
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        /// </summary>
-        /// <param name="app"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		/// <summary>
+		/// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		/// </summary>
+		/// <param name="app"></param>
+		/// <param name="env"></param>
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 			//TODO!
             //app.UseHttpsRedirection();

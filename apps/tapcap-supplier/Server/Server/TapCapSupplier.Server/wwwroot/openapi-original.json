@@ -155,6 +155,105 @@
           }
         }
       },
+      "FXRate" : {
+        "type" : "object",
+        "properties" : {
+          "target" : {
+            "type" : "integer"
+          },
+          "buy" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "sell" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "fxRate" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "validFrom" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "validTill" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "TapCapToken" : {
+        "required" : [ "availableBalance", "clientAccount", "timestamp", "transactionId" ],
+        "type" : "object",
+        "properties" : {
+          "clientAccount" : {
+            "type" : "string"
+          },
+          "availableBalance" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "timestamp" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "TapCapClientRequest" : {
+        "required" : [ "cryptoData", "currencyCode", "fiatAmount", "gpoData", "timestamp", "token" ],
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fiatAmount" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "currencyCode" : {
+            "type" : "integer"
+          },
+          "gpoData" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "cryptoData" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          },
+          "token" : {
+            "$ref" : "#/components/schemas/SignedMessage"
+          }
+        }
+      },
+      "TapCapBrokerPurchase" : {
+        "required" : [ "FxRate", "coinCharge", "cryptoCertificate", "signedRequest" ],
+        "type" : "object",
+        "properties" : {
+          "signedRequest" : {
+            "$ref" : "#/components/schemas/SignedMessage"
+          },
+          "FxRate" : {
+            "$ref" : "#/components/schemas/FXRate"
+          },
+          "coinCharge" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "cryptoCertificate" : {
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "type" : "string",
+            "format" : "byte"
+          }
+        }
+      },
       "SignedTapcapContest" : {
         "required" : [ "fiatAmount", "pdol", "signature", "timestamp", "token" ],
         "type" : "object",
@@ -198,33 +297,6 @@
           "code" : {
             "type" : "integer",
             "format" : "int32"
-          }
-        }
-      },
-      "TapCapTransaction" : {
-        "required" : [ "clientTxId", "coinCharged", "fiatRequested", "responseData", "supplierTxId" ],
-        "type" : "object",
-        "properties" : {
-          "clientTxId" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "supplierTxId" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "fiatRequested" : {
-            "type" : "number",
-            "format" : "double"
-          },
-          "coinCharged" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "responseData" : {
-            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
-            "type" : "string",
-            "format" : "byte"
           }
         }
       },

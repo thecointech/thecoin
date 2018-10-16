@@ -22,7 +22,7 @@ namespace TapCapSupplier.Server.Models
     /// 
     /// </summary>
     [DataContract]
-    public partial class TapCapRequest : IEquatable<TapCapRequest>
+    public partial class TapCapClientRequest : IEquatable<TapCapClientRequest>
     { 
         /// <summary>
         /// Gets or Sets Timestamp
@@ -73,7 +73,7 @@ namespace TapCapSupplier.Server.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class TapCapRequest {\n");
+            sb.Append("class TapCapClientRequest {\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
             sb.Append("  CurrencyCode: ").Append(CurrencyCode).Append("\n");
@@ -102,15 +102,15 @@ namespace TapCapSupplier.Server.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((TapCapRequest)obj);
+            return obj.GetType() == GetType() && Equals((TapCapClientRequest)obj);
         }
 
         /// <summary>
-        /// Returns true if TapCapRequest instances are equal
+        /// Returns true if TapCapClientRequest instances are equal
         /// </summary>
-        /// <param name="other">Instance of TapCapRequest to be compared</param>
+        /// <param name="other">Instance of TapCapClientRequest to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(TapCapRequest other)
+        public bool Equals(TapCapClientRequest other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -177,12 +177,12 @@ namespace TapCapSupplier.Server.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(TapCapRequest left, TapCapRequest right)
+        public static bool operator ==(TapCapClientRequest left, TapCapClientRequest right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(TapCapRequest left, TapCapRequest right)
+        public static bool operator !=(TapCapClientRequest left, TapCapClientRequest right)
         {
             return !Equals(left, right);
         }

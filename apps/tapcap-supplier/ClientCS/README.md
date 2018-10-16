@@ -84,11 +84,14 @@ Class | Method | HTTP request | Description
 
  - [Model.ContestResponse](docs/ContestResponse.md)
  - [Model.ErrorMessage](docs/ErrorMessage.md)
+ - [Model.FXRate](docs/FXRate.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
  - [Model.SignedTapcapContest](docs/SignedTapcapContest.md)
  - [Model.StaticResponse](docs/StaticResponse.md)
  - [Model.StaticResponses](docs/StaticResponses.md)
- - [Model.TapCapTransaction](docs/TapCapTransaction.md)
+ - [Model.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
+ - [Model.TapCapClientRequest](docs/TapCapClientRequest.md)
+ - [Model.TapCapToken](docs/TapCapToken.md)
 
 
 <a name="documentation-for-authorization"></a>

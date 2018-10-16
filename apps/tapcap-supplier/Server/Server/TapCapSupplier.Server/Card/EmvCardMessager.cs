@@ -112,6 +112,12 @@ namespace TapCapSupplier.Server.Card
 			return new CommandApdu(commandCase, Reader.ActiveProtocol);
 		}
 
+		/// <summary>
+		/// Sends a command to the connected emv card and returns the response
+		/// </summary>
+		/// <param name="data">command to sendx</param>
+		/// <param name="origin">debugging string to enable tracing calls</param>
+		/// <returns></returns>
 		public Response SendCommand(byte[] data, String origin)
 		{
 			// We could simply pass the data directly through by 
