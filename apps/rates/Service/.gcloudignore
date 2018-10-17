@@ -17,3 +17,5 @@
 
 # Node.js dependencies:
 node_modules/
+# Don't send test classes
+test/

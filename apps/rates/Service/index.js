@@ -32,6 +32,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // the connection and the IP address of the client.
   // (Enabled in sample, but do we need it?)
   //app.enable('trust proxy');
+  // TODO: Fix CORS for minimal permisions
   app.use(cors());
   app.options('*', cors()) // include before other routes
   // Add headers
@@ -63,7 +64,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Expose an additional endpoint to allow triggering
-  // an update.  This endpoint should be locked
+  // an update.  
+  // TODO: This endpoint should be locked
   // down and only available to the cron job running on GAE
   app.get('/doUpdate', function (req, res) {
     RatesUpdate.UpdateRates()

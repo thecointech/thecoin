@@ -125,7 +125,15 @@ async function EnsureLatestCoinRate(now) {
 }
 
 async function UpdateLatestCoinRate(now, latestValidUntil) {
-    // So we are legitimately updating.  Fetch
+    let newRecord = await GetLatestCoinRate(now, latestValidUntil);
+    InsertRate('Coin', newRecord.ValidUntil, newRecord);
+    SetMostRecentRate('Coin', newRecord);
+    latest = newRecord;
+    return latest;
+}
+
+async function GetLatestCoinRate(now, latestValidUntil) {
+        // So we are legitimately updating.  Fetch
     // the latest records.
     var data = await QueryCoinRates();
 
@@ -183,10 +191,20 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
         // We need to know this is happening, but cannot fix it in code (I think).
     }
 
+    validUntil = FixCoinValidUntil(validUntil, lastTime, now);
+
+    let lastEntry = data[lastkey];
+    let low = parseFloat(lastEntry["3. low"]) / 1000;
+    let high = parseFloat(lastEntry["2. high"]) / 1000;
+    return new ExchangeRate(low, high, validFrom, validUntil);
+}
+
+function FixCoinValidUntil(validUntil, lastTime, now) {
+    let fixedUntil = validUntil;
     // If EOD, add enough time so the market is open again
-    if (tzus(lastTime, "%-HH%MM", "America/New_York") == "15H59M") {
-        // Last time is 3:59 pm.  Offset this time till market open tomorrow morning
-        let tzValidUntil = tz(lastTime, "+1 day", "-6 hours", "-28 minutes");
+    if (tzus(lastTime, "%-HH%MM", "America/New_York") == "16H00M") {
+        // Last time is 4:00 pm.  Offset this time till market open tomorrow morning
+        let tzValidUntil = tz(lastTime, "+1 day", "-6 hours", "-29 minutes");
         // Validate this is the correct time - valid until 30 seconds past our first data
         if (tzus(tzValidUntil, "%R:%S", "America/New_York") !== "09:31:00") {
             throw ("Got invalid market start time: " + tzus(tzValidUntil, "%F %R:%S", "America/New_York"));
@@ -197,10 +215,10 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
 
         // If we are still reading yesterdays data 15 mins into the new trading day,
         // assume the market must be closed and push the validUntil until tomorrow
-        if ((new Date().getTime() - tzValidUntil) > 1000 * 60 * 15)
+        if ((now - tzValidUntil) > 1000 * 60 * 15)
             tzValidUntil = tz(tzValidUntil, "+1 day");
 
-        validUntil = tzValidUntil + RateOffsetFromMarket;
+        fixedUntil = tzValidUntil + RateOffsetFromMarket;
 
         // Last check: validUntil must be at least some distance in the future
         // This is an expected case in the first checks on a closed trading day
@@ -208,21 +226,12 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
         // and will not skip todays values until 15 mins into the day.  For the first
         // calculations, we don't assume the market is closed, and so just delay
         // for the minimum time
-        while (validUntil < (now + RateOffsetFromMarket))
-            validUntil = validUntil + CoinUpdateInterval;
+        while (fixedUntil < (now + RateOffsetFromMarket))
+            fixedUntil = fixedUntil + CoinUpdateInterval;
 
-        console.log('Update Validity until: ' + tzus(validUntil, "%F %R:%S", "America/New_York"));
+        console.log('Update Validity until: ' + tzus(fixedUntil, "%F %R:%S", "America/New_York"));
     }
-
-    let lastEntry = data[lastkey];
-    let low = parseFloat(lastEntry["3. low"]) / 1000;
-    let high = parseFloat(lastEntry["2. high"]) / 1000;
-    let newRecord = new ExchangeRate(low, high, validFrom, validUntil);
-
-    InsertRate('Coin', newRecord.ValidUntil, newRecord);
-    SetMostRecentRate('Coin', newRecord);
-    latest = newRecord;
-    return latest;
+    return fixedUntil
 }
 
 async function QueryExchange(args) {
@@ -313,40 +322,56 @@ async function EnsureLatestFXRate(currencyCode, now) {
     return latest
 }
 
+async function DoUpdates(resolve, reject, now) {
+
+    try {
+
+        let coinWait = EnsureLatestCoinRate(now);
+        let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
+            if (value != "Coin")
+                accum.push(EnsureLatestFXRate(value, now));
+            return accum;
+        }, []);
+
+        let latestCoin = await coinWait;
+        for (let i = 0; i < currencyWaits.length; i++) {
+            let latestFX = await currencyWaits[i];
+            if (latestFX.ValidUntil < now) {
+                console.error("Invalid timestamp: " + latestFX.ValidUntil);
+                resolve(false);
+                return;
+            }
+        }
+        if (latestCoin != null && latestCoin.ValidUntil > now)
+            resolve(latestCoin.ValidUntil);
+        else
+            resolve(false);
+    }
+    catch (err) {
+        console.error(err);
+        reject("Update failed");
+    }
+}
+
+function Sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function GetMsTillSecsPast(seconds, nowDate) {
+    let nowMs = nowDate.getMilliseconds() + nowDate.getSeconds() * 1000;
+    return Math.max((seconds * 1000) - nowMs, 0);
+}
 
 module.exports = {
     UpdateRates: function () {
-        let now = new Date().getTime();
-
         return new Promise(async (resolve, reject) => {
-            try {
-
-                let waitCoin = EnsureLatestCoinRate(now);
-
-                let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
-                    if (value != "Coin")
-                        accum.push(EnsureLatestFXRate(value, now));
-                    return accum;
-                }, []);
-
-                let latestCoin = await waitCoin;
-                for (let i = 0; i < currencyWaits.length; i++) {
-                    let latestFX = await currencyWaits[i];
-                    if (latestFX.ValidUntil < now) {
-                        console.error("Invalid timestamp: " + latestFX.ValidUntil);
-                        resolve(false);
-                        return;
-                    }
-                }
-                if (latestCoin != null && latestCoin.ValidUntil > now)
-                    resolve(latestCoin.ValidUntil);
-                else
-                    resolve(false);
-            }
-            catch (err) {
-                console.error(err);
-                reject("Update failed");
-            }
+            // Wait at until at least 2 seconds past the mark
+            // to ensure that our data provider is ready with
+            // the latest deets.
+            let pauseMs = GetMsTillSecsPast(2, new Date());
+            await Sleep(pauseMs);
+            let now = new Date().getTime();
+            DoUpdates(resolve, reject, now);
         });
     },
 
@@ -384,4 +409,10 @@ module.exports = {
             });
         })
     }
+}
+
+if (process.env.NODE_ENV === 'test') {
+    module.exports.GetMsTillSecsPast = GetMsTillSecsPast;
+    module.exports.FixCoinValidUntil = FixCoinValidUntil;
+    module.exports.GetLatestCoinRate = GetLatestCoinRate;
 }

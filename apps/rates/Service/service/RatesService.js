@@ -17,11 +17,11 @@ exports.getConversion = function (currencyCode, timestamp) {
     Promise.all([coinWait, fxWait])
       .then(([coinRates, fxRates]) => {
         let result = {
-          "Buy": coinRates.Buy,
-          "Sell": coinRates.Sell,
-          "FxRate": fxRates.Rate,
-          "ValidTill": coinRates.ValidUntil,
-          "ValidFrom": coinRates.ValidFrom,
+          "buy": coinRates.Buy,
+          "sell": coinRates.Sell,
+          "fxRate": fxRates.Rate,
+          "validTill": coinRates.ValidUntil,
+          "validFrom": coinRates.ValidFrom,
           "target": currencyCode
         };
         resolve(result);
