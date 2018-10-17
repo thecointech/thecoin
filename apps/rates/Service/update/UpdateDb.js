@@ -163,7 +163,7 @@ async function GetLatestCoinRate(now, latestValidUntil) {
 
     // Get the time this entry would be valid from
     let validFrom = (lastTime + (60 * 1000)) + RateOffsetFromMarket;
-    let validUntil = validFrom + CoinUpdateInterval;
+    let validUntil = FixCoinValidUntil(lastTime, now); //validFrom + CoinUpdateInterval;
 
     // If our validFrom is less than our latest valid until,
     // it means that the market has not yet updated.  In these
@@ -174,13 +174,13 @@ async function GetLatestCoinRate(now, latestValidUntil) {
             // previous validity should always extend until the new data is valid
             console.error(`Mismatched intervals: previous Until: ${latestValidUntil}, current from: ${validFrom}`);
         }
-        else {
-            // This path occurs if the value we retrieve 
-            // happens in the past - in this case we want
-            // our new validity interval simply extend
-            // past the last one
-            validUntil = latestValidUntil + CoinUpdateInterval;
-        }
+        // else {
+        //     // This path occurs if the value we retrieve 
+        //     // happens in the past - in this case we want
+        //     // our new validity interval simply extend
+        //     // past the last one
+        //     validUntil = latestValidUntil + CoinUpdateInterval;
+        // }
         validFrom = latestValidUntil;
     }
 
@@ -191,7 +191,7 @@ async function GetLatestCoinRate(now, latestValidUntil) {
         // We need to know this is happening, but cannot fix it in code (I think).
     }
 
-    validUntil = FixCoinValidUntil(validUntil, lastTime, now);
+    //validUntil = FixCoinValidUntil(validUntil, lastTime, now);
 
     let lastEntry = data[lastkey];
     let low = parseFloat(lastEntry["3. low"]) / 1000;
@@ -199,8 +199,8 @@ async function GetLatestCoinRate(now, latestValidUntil) {
     return new ExchangeRate(low, high, validFrom, validUntil);
 }
 
-function FixCoinValidUntil(validUntil, lastTime, now) {
-    let fixedUntil = validUntil;
+function FixCoinValidUntil(lastTime, now) {
+    let fixedUntil = now
     // If EOD, add enough time so the market is open again
     if (tzus(lastTime, "%-HH%MM", "America/New_York") == "16H00M") {
         // Last time is 4:00 pm.  Offset this time till market open tomorrow morning
@@ -229,8 +229,11 @@ function FixCoinValidUntil(validUntil, lastTime, now) {
         while (fixedUntil < (now + RateOffsetFromMarket))
             fixedUntil = fixedUntil + CoinUpdateInterval;
 
-        console.log('Update Validity until: ' + tzus(fixedUntil, "%F %R:%S", "America/New_York"));
     }
+    else {
+        fixedUntil = AlignToNextBoundary(now, CoinUpdateInterval);
+    }
+    console.log('Update Validity until: ' + tzus(fixedUntil, "%F %R:%S", "America/New_York"));
     return fixedUntil
 }
 
@@ -253,7 +256,39 @@ async function QueryCoinRates() {
     return dataJs;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function AlignToNextBoundary(timestamp, updateInterval)
+{
+    let hours = tzus(timestamp, "%H", "America/New_York");
+    let minutes = tzus(timestamp, "%M", "America/New_York");
+    let seconds = tzus(timestamp, "%S", "America/New_York");
+    // TODO: Is this a safe assumption?
+    let ms = timestamp % 1000; 
+
+    // We simply discard ms
+    timestamp -= ms;
+
+    // TODO: un-hard-coded start time
+    // Set to the start of the (NY) day
+    let lastBoundary = tz(timestamp, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
+
+    // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
+    // In this case we simply offset it backwards 
+    if (lastBoundary > timestamp)
+        lastBoundary -= updateInterval;
+    else {
+        // Search forward in boundary points and keep the last
+        // boundary that occured before timestamp.
+        let minBoundaryInterval = timestamp + RateOffsetFromMarket;
+        for (let t = lastBoundary; t <= minBoundaryInterval; t += updateInterval)
+            lastBoundary = t;
+    }
+
+
+    // and set this price to be valid until the next boundary
+    return lastBoundary + updateInterval
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,31 +325,36 @@ async function EnsureLatestFXRate(currencyCode, now) {
         // we've had issues and failed a prior update
         // If our last interval expired prematurely, there isn't much we can do
         // However, we want to ensure that our valid until is set to about FXUpdateInterval
-        // in the future, as we assume thats the next time we update.  
+        // in the future, as we assume thats the next time we update. 
 
-        let hours = tzus(now, "%H", "America/New_York");
-        let minutes = tzus(now, "%M", "America/New_York");
-        let seconds = tzus(now, "%S", "America/New_York");
-
-        let lastBoundary = tz(now, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
-        let intervalTime = FXUpdateInterval;
-        // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
-        // In this case we simply offset it backwards 
-        if (lastBoundary > now)
-            lastBoundary -= intervalTime;
-        else {
-            // Search forward in boundary points and keep the last
-            // boundary that occured before now.
-            let minBoundaryInterval = now + RateOffsetFromMarket;
-            for (let t = lastBoundary; t <= minBoundaryInterval; t += intervalTime)
-                lastBoundary = t;
-        }
-
-        // We reset validFrom to be now (as we can't
+        // We reset validFrom to be timestamp (as we can't
         // set a price in the past)
         validFrom = now;
-        // and set this price to be valid until the next boundary
-        validUntil = lastBoundary + FXUpdateInterval
+        validUntil = AlignToNextBoundary(now, FXUpdateInterval)
+
+        // let hours = tzus(now, "%H", "America/New_York");
+        // let minutes = tzus(now, "%M", "America/New_York");
+        // let seconds = tzus(now, "%S", "America/New_York");
+
+        // let lastBoundary = tz(now, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
+        // let intervalTime = FXUpdateInterval;
+        // // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
+        // // In this case we simply offset it backwards 
+        // if (lastBoundary > now)
+        //     lastBoundary -= intervalTime;
+        // else {
+        //     // Search forward in boundary points and keep the last
+        //     // boundary that occured before now.
+        //     let minBoundaryInterval = now + RateOffsetFromMarket;
+        //     for (let t = lastBoundary; t <= minBoundaryInterval; t += intervalTime)
+        //         lastBoundary = t;
+        // }
+
+        // // We reset validFrom to be now (as we can't
+        // // set a price in the past)
+        // validFrom = now;
+        // // and set this price to be valid until the next boundary
+        // validUntil = lastBoundary + FXUpdateInterval
     }
     latest = new FXRate(rate, validFrom, validUntil);
     InsertRate(currencyCode, validUntil, latest);
@@ -415,4 +455,7 @@ if (process.env.NODE_ENV === 'test') {
     module.exports.GetMsTillSecsPast = GetMsTillSecsPast;
     module.exports.FixCoinValidUntil = FixCoinValidUntil;
     module.exports.GetLatestCoinRate = GetLatestCoinRate;
+    module.exports.AlignToNextBoundary = AlignToNextBoundary;
+    module.exports.FXUpdateInterval = FXUpdateInterval;
+    module.exports.CoinUpdateInterval = CoinUpdateInterval;
 }
