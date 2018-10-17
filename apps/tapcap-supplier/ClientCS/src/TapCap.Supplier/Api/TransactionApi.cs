@@ -13,10 +13,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RestSharp.Portable;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapManager.Supplier.Client;
+using TapCapManager.Supplier.Model;
 
-namespace TapCap.Supplier.Api
+namespace TapCapManager.Supplier.Api
 {
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
@@ -30,7 +30,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>ContestResponse</returns>
         ContestResponse ContestTapCap (SignedTapcapContest signedTapcapContest);
@@ -41,7 +41,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>ApiResponse of ContestResponse</returns>
         ApiResponse<ContestResponse> ContestTapCapWithHttpInfo (SignedTapcapContest signedTapcapContest);
@@ -51,7 +51,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>StaticResponses</returns>
         StaticResponses GetStatic (SignedMessage signedMessage);
@@ -62,7 +62,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>ApiResponse of StaticResponses</returns>
         ApiResponse<StaticResponses> GetStaticWithHttpInfo (SignedMessage signedMessage);
@@ -72,7 +72,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>SignedMessage</returns>
         SignedMessage RequestTapCap (SignedMessage signedMessage);
@@ -83,7 +83,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>ApiResponse of SignedMessage</returns>
         ApiResponse<SignedMessage> RequestTapCapWithHttpInfo (SignedMessage signedMessage);
@@ -95,7 +95,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>Task of ContestResponse</returns>
         System.Threading.Tasks.Task<ContestResponse> ContestTapCapAsync (SignedTapcapContest signedTapcapContest);
@@ -106,7 +106,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (ContestResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<ContestResponse>> ContestTapCapAsyncWithHttpInfo (SignedTapcapContest signedTapcapContest);
@@ -116,7 +116,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of StaticResponses</returns>
         System.Threading.Tasks.Task<StaticResponses> GetStaticAsync (SignedMessage signedMessage);
@@ -127,7 +127,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
         System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage);
@@ -137,7 +137,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>Task of SignedMessage</returns>
         System.Threading.Tasks.Task<SignedMessage> RequestTapCapAsync (SignedMessage signedMessage);
@@ -148,7 +148,7 @@ namespace TapCap.Supplier.Api
         /// <remarks>
         /// This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </remarks>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (SignedMessage)</returns>
         System.Threading.Tasks.Task<ApiResponse<SignedMessage>> RequestTapCapAsyncWithHttpInfo (SignedMessage signedMessage);
@@ -160,7 +160,7 @@ namespace TapCap.Supplier.Api
     /// </summary>
     public partial class TransactionApi : ITransactionApi
     {
-        private TapCap.Supplier.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
+        private TapCapManager.Supplier.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionApi"/> class.
@@ -168,9 +168,9 @@ namespace TapCap.Supplier.Api
         /// <returns></returns>
         public TransactionApi(String basePath)
         {
-            this.Configuration = new TapCap.Supplier.Client.Configuration { BasePath = basePath };
+            this.Configuration = new TapCapManager.Supplier.Client.Configuration { BasePath = basePath };
 
-            ExceptionFactory = TapCap.Supplier.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = TapCapManager.Supplier.Client.Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -179,14 +179,14 @@ namespace TapCap.Supplier.Api
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public TransactionApi(TapCap.Supplier.Client.Configuration configuration = null)
+        public TransactionApi(TapCapManager.Supplier.Client.Configuration configuration = null)
         {
             if (configuration == null) // use the default one in Configuration
-                this.Configuration = TapCap.Supplier.Client.Configuration.Default;
+                this.Configuration = TapCapManager.Supplier.Client.Configuration.Default;
             else
                 this.Configuration = configuration;
 
-            ExceptionFactory = TapCap.Supplier.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = TapCapManager.Supplier.Client.Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -212,12 +212,12 @@ namespace TapCap.Supplier.Api
         /// Gets or sets the configuration object
         /// </summary>
         /// <value>An instance of the Configuration</value>
-        public TapCap.Supplier.Client.Configuration Configuration {get; set;}
+        public TapCapManager.Supplier.Client.Configuration Configuration {get; set;}
 
         /// <summary>
         /// Provides a factory method hook for the creation of exceptions.
         /// </summary>
-        public TapCap.Supplier.Client.ExceptionFactory ExceptionFactory
+        public TapCapManager.Supplier.Client.ExceptionFactory ExceptionFactory
         {
             get
             {
@@ -255,7 +255,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Notify of a contested transaction Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>ContestResponse</returns>
         public ContestResponse ContestTapCap (SignedTapcapContest signedTapcapContest)
@@ -267,7 +267,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Notify of a contested transaction Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>ApiResponse of ContestResponse</returns>
         public ApiResponse< ContestResponse > ContestTapCapWithHttpInfo (SignedTapcapContest signedTapcapContest)
@@ -329,7 +329,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Notify of a contested transaction Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>Task of ContestResponse</returns>
         public async System.Threading.Tasks.Task<ContestResponse> ContestTapCapAsync (SignedTapcapContest signedTapcapContest)
@@ -342,7 +342,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Notify of a contested transaction Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedTapcapContest">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (ContestResponse)</returns>
         public async System.Threading.Tasks.Task<ApiResponse<ContestResponse>> ContestTapCapAsyncWithHttpInfo (SignedTapcapContest signedTapcapContest)
@@ -404,7 +404,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>StaticResponses</returns>
         public StaticResponses GetStatic (SignedMessage signedMessage)
@@ -416,7 +416,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>ApiResponse of StaticResponses</returns>
         public ApiResponse< StaticResponses > GetStaticWithHttpInfo (SignedMessage signedMessage)
@@ -478,7 +478,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of StaticResponses</returns>
         public async System.Threading.Tasks.Task<StaticResponses> GetStaticAsync (SignedMessage signedMessage)
@@ -491,7 +491,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Get the list of static responses to cache for terminal queries 
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
         public async System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage)
@@ -553,7 +553,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>SignedMessage</returns>
         public SignedMessage RequestTapCap (SignedMessage signedMessage)
@@ -565,7 +565,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>ApiResponse of SignedMessage</returns>
         public ApiResponse< SignedMessage > RequestTapCapWithHttpInfo (SignedMessage signedMessage)
@@ -627,7 +627,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>Task of SignedMessage</returns>
         public async System.Threading.Tasks.Task<SignedMessage> RequestTapCapAsync (SignedMessage signedMessage)
@@ -640,7 +640,7 @@ namespace TapCap.Supplier.Api
         /// <summary>
         /// Request TapCap transaction This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
         /// </summary>
-        /// <exception cref="TapCap.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="TapCapManager.Supplier.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="signedMessage">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (SignedMessage)</returns>
         public async System.Threading.Tasks.Task<ApiResponse<SignedMessage>> RequestTapCapAsyncWithHttpInfo (SignedMessage signedMessage)

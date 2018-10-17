@@ -12,7 +12,7 @@
 using System;
 using RestSharp.Portable;
 
-namespace TapCap.Supplier.Client
+namespace TapCapManager.Supplier.Client
 {
     /// <summary>
     /// A delegate to ExceptionFactory method

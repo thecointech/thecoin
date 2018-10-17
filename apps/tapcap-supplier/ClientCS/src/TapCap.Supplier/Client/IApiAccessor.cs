@@ -15,7 +15,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using RestSharp.Portable;
 
-namespace TapCap.Supplier.Client
+namespace TapCapManager.Supplier.Client
 {
     /// <summary>
     /// Represents configuration aspects required to interact with the API endpoints.

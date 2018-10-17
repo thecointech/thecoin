@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace TapCap.Supplier.Client
+namespace TapCapManager.Supplier.Client
 {
     /// <summary>
     /// Represents a set of configuration settings

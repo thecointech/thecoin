@@ -10,7 +10,7 @@
 
 using System;
 
-namespace TapCap.Supplier.Client
+namespace TapCapManager.Supplier.Client
 {
     /// <summary>
     /// API Exception

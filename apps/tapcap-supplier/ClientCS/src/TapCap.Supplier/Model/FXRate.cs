@@ -18,9 +18,9 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using OpenAPIDateConverter = TapCap.Supplier.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = TapCapManager.Supplier.Client.OpenAPIDateConverter;
 
-namespace TapCap.Supplier.Model
+namespace TapCapManager.Supplier.Model
 {
     /// <summary>
     /// FXRate
