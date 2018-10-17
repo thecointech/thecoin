@@ -25,72 +25,74 @@ using TapCapSupplier.Server.Filters;
 using TapCapSupplier.Server.Card;
 using ThePricing.Api;
 using TapCapSupplier.Server.TapCap;
+using Nethereum.Web3.Accounts;
 
 namespace TapCapSupplier.Server
 {
-    /// <summary>
-    /// Startup
-    /// </summary>
-    public class Startup
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+	/// <summary>
+	/// Startup
+	/// </summary>
+	public class Startup
+	{
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="configuration"></param>
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-        /// <summary>
-            /// The application configuration.
-        /// </summary>
-        public IConfiguration Configuration { get; }
+		/// <summary>
+		/// The application configuration.
+		/// </summary>
+		public IConfiguration Configuration { get; }
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to add services to the container.
-        /// </summary>
-        /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            services
-                .AddMvc()
-                .SetCompatibilityVersion                (CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(opts =>
-                {
-                    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    opts.SerializerSettings.Converters.Add(new StringEnumConverter
-                    {
-                        CamelCaseText = true
-                    });
-                });
+		/// <summary>
+		/// This method gets called by the runtime. Use this method to add services to the container.
+		/// </summary>
+		/// <param name="services"></param>
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Add framework services.
+			services
+				.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddJsonOptions(opts =>
+				{
+					opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+					opts.SerializerSettings.Converters.Add(new StringEnumConverter
+					{
+						CamelCaseText = true
+					});
+				});
 
-            services
-                .AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("0.1.0", new Info
-                    {
-                        Version = "0.1.0",
-                        Title = "THE TapCap supply",
-                        Description = "THE TapCap supply (ASP.NET Core 2.0)",
-                        Contact = new Contact()
-                        {
-                           Name = "OpenAPI-Generator Contributors",
-                           Url = "https://github.com/openapitools/openapi-generator",
-                           Email = "stephen.taylor.dev@gmail.com"
-                        },
-                        TermsOfService = ""
-                    });
-                    c.CustomSchemaIds(type => type.FriendlyId(true));
-                    c.DescribeAllEnumsAsStrings();
-                    c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{Assembly.GetEntryAssembly().GetName().Name}.xml");
+			services
+				.AddSwaggerGen(c =>
+				{
+					c.SwaggerDoc("0.1.0", new Info
+					{
+						Version = "0.1.0",
+						Title = "THE TapCap supply",
+						Description = "THE TapCap supply (ASP.NET Core 2.0)",
+						Contact = new Contact()
+						{
+							Name = "OpenAPI-Generator Contributors",
+							Url = "https://github.com/openapitools/openapi-generator",
+							Email = "stephen.taylor.dev@gmail.com"
+						},
+						TermsOfService = ""
+					});
+					c.CustomSchemaIds(type => type.FriendlyId(true));
+					c.DescribeAllEnumsAsStrings();
+					c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{Assembly.GetEntryAssembly().GetName().Name}.xml");
 
-                    // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
-                    // Use [ValidateModelState] on Actions to actually validate it in C# as well!
-                    c.OperationFilter<GeneratePathParamsValidationFilter>();
-                });
+					// Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
+					// Use [ValidateModelState] on Actions to actually validate it in C# as well!
+					c.OperationFilter<GeneratePathParamsValidationFilter>();
+				});
 
+			services.AddSingleton<Account>(AccountFactory.Load);
 			services.AddSingleton<IEmvCard, EmvCard>();
 			services.AddSingleton<TapCap.HandleTx>();
 			services.AddTransient<IRatesApi, RatesApi>();
@@ -103,34 +105,34 @@ namespace TapCapSupplier.Server
 		/// <param name="app"></param>
 		/// <param name="env"></param>
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+		{
 			//TODO!
-            //app.UseHttpsRedirection();
-            app
-                .UseMvc()
-                .UseDefaultFiles()
-                .UseStaticFiles()
-                .UseSwagger(c =>
-                {
-                    c.RouteTemplate = "swagger/{documentName}/openapi.json";
-                })
-                .UseSwaggerUI(c =>
-                {
-                    //TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
-                    c.SwaggerEndpoint("/swagger/0.1.0/openapi.json", "THE TapCap supply");
+			//app.UseHttpsRedirection();
+			app
+				.UseMvc()
+				.UseDefaultFiles()
+				.UseStaticFiles()
+				.UseSwagger(c =>
+				{
+					c.RouteTemplate = "swagger/{documentName}/openapi.json";
+				})
+				.UseSwaggerUI(c =>
+				{
+					//TODO: Either use the SwaggerGen generated Swagger contract (generated from C# classes)
+					c.SwaggerEndpoint("/swagger/0.1.0/openapi.json", "THE TapCap supply");
 
-                    //TODO: Or alternatively use the original Swagger contract that's included in the static files
-                    // c.SwaggerEndpoint("/openapi-original.json", "THE TapCap supply Original");
-                });
+					//TODO: Or alternatively use the original Swagger contract that's included in the static files
+					// c.SwaggerEndpoint("/openapi-original.json", "THE TapCap supply Original");
+				});
 
-if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-        }
-    }
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+			else
+			{
+				app.UseHsts();
+			}
+		}
+	}
 }

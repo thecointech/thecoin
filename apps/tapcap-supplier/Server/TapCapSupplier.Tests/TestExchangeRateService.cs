@@ -16,7 +16,6 @@ namespace TapCapSupplier.Tests
 	public class TestExchangeRateService
 	{
 		private readonly XunitLogger<ExchangeRateService> logger;
-		const int TestPurchaseAmt = 1347;
 
 		public TestExchangeRateService(ITestOutputHelper output)
 		{

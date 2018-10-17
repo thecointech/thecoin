@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ThePricing.Api;
 using ThePricing.Model;
+using TheUtils;
 
 namespace TapCapSupplier.Server.TapCap
 {
@@ -49,7 +50,10 @@ namespace TapCapSupplier.Server.TapCap
 					// should keep NextCoinRate fresh for us.
 					if (EnsureNextRate(now) && NextFxRate.ValidTill.Value > now)
 					{
-						_logger.LogTrace("Updating Current at: {0} - from {1} to {2}", now, NextFxRate.ValidFrom, NextFxRate.ValidTill);
+						_logger.LogTrace("Updating Current at: {0} - from {1} to {2}",
+							TheCoinTime.ToLocal(now),
+							TheCoinTime.ToLocal(NextFxRate.ValidFrom.Value).ToString("HH:MM"),
+							TheCoinTime.ToLocal(NextFxRate.ValidTill.Value).ToString("HH:MM"));
 						PrevFxRate = FxRate;
 						FxRate = NextFxRate;
 					}
@@ -79,7 +83,7 @@ namespace TapCapSupplier.Server.TapCap
 					// Double check in case rate was updated while acquiring lock
 					if (NextFxRate == null || NextFxRate.ValidTill.Value <= timestamp)
 					{
-						_logger.LogTrace("Fetching rate for: {0}", timestamp);
+						_logger.LogTrace("Fetching rate for: {0}", TheCoinTime.ToLocal(timestamp));
 						// Sync fetch because cannot do async inside lock
 						NextFxRate = RatesApi.GetConversion(127, timestamp);
 						if (NextFxRate == null || NextFxRate.ValidTill == null)
@@ -87,7 +91,7 @@ namespace TapCapSupplier.Server.TapCap
 							_logger.LogError("Could not fetch next FX rate");
 							return false;
 						}
-						_logger.LogTrace("Fetched rate valid until: {0}", NextFxRate.ValidTill);
+						_logger.LogTrace("Fetched rate valid until: {0}", TheCoinTime.ToLocal(NextFxRate.ValidTill.Value));
 					}
 				}
 			}

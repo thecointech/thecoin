@@ -1,5 +1,6 @@
 ﻿using Nethereum.Web3.Accounts;
 using System.Threading.Tasks;
+using TapCapManager.Client.Api;
 using TapCapSupplier.Server.Card;
 using TapCapSupplier.Server.Models;
 using TheUtils;
@@ -13,7 +14,7 @@ namespace TapCapSupplier.Server.TapCap
 	{
 		private readonly ExchangeRateService FxRates;
 		private readonly IEmvCard Card;
-		private readonly TapCapManager.Client.Api.TransactionsApi TapCapManager;
+		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
 
 		/// <summary>
@@ -23,7 +24,7 @@ namespace TapCapSupplier.Server.TapCap
 		/// <param name="card"></param>
 		/// <param name="account"></param>
 		/// <param name="manager"></param>
-		HandleTx(ExchangeRateService fxRates, IEmvCard card, Account account, TapCapManager.Client.Api.TransactionsApi manager)
+		HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account)
 		{
 			FxRates = fxRates;
 			Card = card;
