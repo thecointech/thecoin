@@ -23,4 +23,9 @@
     <ProjectReference Include="..\..\..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
     <ProjectReference Include="..\..\..\..\the-utilities\TheUtils\TheUtils.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

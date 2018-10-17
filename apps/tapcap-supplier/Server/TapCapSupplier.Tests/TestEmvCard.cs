@@ -1,4 +1,5 @@
-using NLog;
+using Microsoft.Extensions.Logging;
+
 using System;
 using TapCapSupplier.Server.Card;
 using TapCapSupplier.Server.Models;
@@ -10,20 +11,17 @@ namespace TapCapSupplier.Tests
 {
 	public class TestEmvCard
 	{
-		private readonly ITestOutputHelper _output;
+		private readonly XunitLogger<EmvCard> logger;
+		const int TestPurchaseAmt = 1347;
 
 		public TestEmvCard(ITestOutputHelper output)
 		{
-			_output = output;
-			//XUnitTarget.RegisterOutput(output);
-			//_logCapture = LoggingHelper.Capture(outputHelper);
+			logger = new XunitLogger<EmvCard>(output);
 		}
 
 		[Fact]
 		public void TestStatic()
 		{
-			//var logger
-			var logger = (Microsoft.Extensions.Logging.ILogger < EmvCard >)Logging.XUnitLogger(_output);
 			EmvCard card = new EmvCard(logger);
 
 			var responses = card.CardStaticResponses();
@@ -32,17 +30,22 @@ namespace TapCapSupplier.Tests
 			Assert.True(responses.Responses.Count > 3, "Did not store sufficient responses");
 		}
 
+		//[Fact]
+		//public void TestCard()
+		//{
+		//	var messenger = new EmvCardMessager(logger);
+		//	Testing.SendTestTransaction(TestPurchaseAmt, messenger);
+		//}
+
 		[Fact]
 		public void TestGenCrypto()
 		{
-			var logger = (Microsoft.Extensions.Logging.ILogger<EmvCard>)Logging.XUnitLogger(_output);
 			EmvCard card = new EmvCard(logger);
 
 			var responses = card.CardStaticResponses();
 			var gpoData = responses.GpoPdol;
 			var cryptData = responses.CryptoPdol;
 
-			const int TestPurchaseAmt = 1000;
 			// Normally this would get sent back to the client to be filled by the terminal
 			var gpoParsed = PDOL.ParsePDOLItems(gpoData);
 			PDOL.FillWithDummyData(gpoParsed, TestPurchaseAmt);
@@ -56,10 +59,12 @@ namespace TapCapSupplier.Tests
 				FiatAmount = TestPurchaseAmt,
 				Timestamp = 0,
 				GpoData = PDOL.GeneratePDOL(gpoParsed),
-				CryptoData = PDOL.GenerateCDOL(gpoParsed),
+				CryptoData = PDOL.GenerateCDOL(cryptParsed),
 			};
 
 			var response = card.GenerateCrypto(request);
+
+			Assert.True(response != null && response.Length > 10, "Failed to generate purchase certificate");
 
 			//TheUtils.Testing.SendTestTransaction(10, card);
 

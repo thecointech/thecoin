@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
-using NLog;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ThePricing.Api;
@@ -20,12 +18,18 @@ namespace TapCapSupplier.Server.TapCap
 		FXRate NextFxRate;
 		object __fxLock = new object();
 
-		private Logger logger = LogManager.GetCurrentClassLogger();
+		private readonly ILogger _logger;
 
 		IRatesApi RatesApi;
 
-		ExchangeRateService(IRatesApi rateApi)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="logger"></param>
+		/// <param name="rateApi"></param>
+		public ExchangeRateService(ILogger<ExchangeRateService> logger, IRatesApi rateApi)
 		{
+			_logger = logger;
 			RatesApi = rateApi;
 			var now = TheUtils.TheCoinTime.Now();
 		}
@@ -37,14 +41,18 @@ namespace TapCapSupplier.Server.TapCap
 		/// <returns></returns>
 		public FXRate GetCurrentFxRate(long now)
 		{
-			if (FxRate == null || FxRate.ValidTill.Value < now)
+			if (FxRate == null || FxRate.ValidTill.Value <= now)
 			{
-				// The ensure should never actually block, as the system
-				// should keep NextCoinRate fresh for us.
-				if (EnsureNextRate(now) && NextFxRate.ValidTill.Value > now)
+				using (_logger.BeginScope("Updating Current"))
 				{
-					PrevFxRate = FxRate;
-					FxRate = NextFxRate;
+					// The ensure should never actually block, as the system
+					// should keep NextCoinRate fresh for us.
+					if (EnsureNextRate(now) && NextFxRate.ValidTill.Value > now)
+					{
+						_logger.LogTrace("Updating Current at: {0} - from {1} to {2}", now, NextFxRate.ValidFrom, NextFxRate.ValidTill);
+						PrevFxRate = FxRate;
+						FxRate = NextFxRate;
+					}
 				}
 			}
 			return FxRate;
@@ -69,17 +77,17 @@ namespace TapCapSupplier.Server.TapCap
 				lock (__fxLock)
 				{
 					// Double check in case rate was updated while acquiring lock
-					if (NextFxRate == null || NextFxRate.ValidTill.Value < timestamp)
+					if (NextFxRate == null || NextFxRate.ValidTill.Value <= timestamp)
 					{
-						logger.Trace("Updating FxRate at: {0}", timestamp);
+						_logger.LogTrace("Fetching rate for: {0}", timestamp);
 						// Sync fetch because cannot do async inside lock
 						NextFxRate = RatesApi.GetConversion(127, timestamp);
 						if (NextFxRate == null || NextFxRate.ValidTill == null)
 						{
-							logger.Error("Could not fetch next FX rate");
+							_logger.LogError("Could not fetch next FX rate");
 							return false;
 						}
-						logger.Trace("New Rate Exp at: {0}", NextFxRate.ValidTill);
+						_logger.LogTrace("Fetched rate valid until: {0}", NextFxRate.ValidTill);
 					}
 				}
 			}
@@ -118,10 +126,13 @@ namespace TapCapSupplier.Server.TapCap
 
 		private void EnsureRates(object state)
 		{
-			var expTime = NextFxRate?.ValidTill.Value ?? 0;
-			expTime = Math.Max(expTime, TheUtils.TheCoinTime.Now());
-			EnsureNextRate(expTime);
-			ScheduleNextUpdate();
+			using (_logger.BeginScope("Ensuring Next"))
+			{
+				var expTime = NextFxRate?.ValidTill.Value ?? 0;
+				expTime = Math.Max(expTime, TheUtils.TheCoinTime.Now());
+				EnsureNextRate(expTime);
+				ScheduleNextUpdate();
+			}
 		}
 
 		void IDisposable.Dispose()

@@ -1,62 +1,90 @@
 ﻿using System;
 using System.IO;
 using Xunit.Abstractions;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
+using Microsoft.Extensions.Logging;
 
 namespace TapCapSupplier.Tests
 {
-	internal static class Logging
+	public class XunitLogger<T> : ILogger<T>, IDisposable
 	{
-		public static ILogger DefaultLogger()
+		private ITestOutputHelper _output;
+
+		public XunitLogger(ITestOutputHelper output)
 		{
-			return NullLogger();
+			_output = output;
+		}
+		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+		{
+			_output.WriteLine(state.ToString());
 		}
 
-		public static ILogger NullLogger()
+		public bool IsEnabled(LogLevel logLevel)
 		{
-			return null; // Substitute.For<ILogger>();
+			return true;
 		}
 
-		public static ILogger XUnitLogger(ITestOutputHelper testOutputHelper)
+		public IDisposable BeginScope<TState>(TState state)
 		{
-			// Step 1. Create configuration object 
-			var config = new LoggingConfiguration();
+			return this;
+		}
 
-			// Step 2. Create targets and add them to the configuration 
-			var consoleTarget = new XUnitTarget(testOutputHelper);
-			config.AddTarget("xunit", consoleTarget);
-
-			// Step 3. Set target properties 
-			consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
-
-			// Step 4. Define rules
-			var rule1 = new LoggingRule("*", LogLevel.Trace, consoleTarget);
-			config.LoggingRules.Add(rule1);
-
-			// Step 5. Activate the configuration
-			LogManager.Configuration = config;
-
-			return LogManager.GetLogger("");
+		public void Dispose()
+		{
 		}
 	}
 
-	[Target("XUnit")]
-	public sealed class XUnitTarget : TargetWithLayout
-	{
-		private readonly ITestOutputHelper _output;
+	//internal static class Logging
+	//{
 
-		public XUnitTarget(ITestOutputHelper testOutputHelper)
-		{
-			_output = testOutputHelper;
-		}
+	//	public static ILogger DefaultLogger()
+	//	{
+	//		return NullLogger();
+	//	}
 
-		protected override void Write(LogEventInfo logEvent)
-		{
-			string logMessage = this.Layout.Render(logEvent);
+	//	public static ILogger NullLogger()
+	//	{
+	//		return null; // Substitute.For<ILogger>();
+	//	}
 
-			_output.WriteLine(logMessage);
-		}
-	}
+	//	public static ILogger XUnitLogger(ITestOutputHelper testOutputHelper, ILoggerFactory loggerFactory)
+	//	{
+	//		// Step 1. Create configuration object 
+	//		var config = new LoggingConfiguration();
+
+	//		// Step 2. Create targets and add them to the configuration 
+	//		var consoleTarget = new XUnitTarget(testOutputHelper);
+	//		config.AddTarget("xunit", consoleTarget);
+
+	//		// Step 3. Set target properties 
+	//		consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
+
+	//		// Step 4. Define rules
+	//		var rule1 = new LoggingRule("*", LogLevel.Trace, consoleTarget);
+	//		config.LoggingRules.Add(rule1);
+
+	//		// Step 5. Activate the configuration
+	//		LogManager.Configuration = config;
+
+	//		loggerFactory.AddProvider(LogManager.LogFactory);
+	//		return LogManager.GetLogger("");
+	//	}
+	//}
+
+	//[Target("XUnit")]
+	//public sealed class XUnitTarget : TargetWithLayout
+	//{
+	//	private readonly ITestOutputHelper _output;
+
+	//	public XUnitTarget(ITestOutputHelper testOutputHelper)
+	//	{
+	//		_output = testOutputHelper;
+	//	}
+
+	//	protected override void Write(LogEventInfo logEvent)
+	//	{
+	//		string logMessage = this.Layout.Render(logEvent);
+
+	//		_output.WriteLine(logMessage);
+	//	}
+	//}
 }
