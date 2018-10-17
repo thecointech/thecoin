@@ -39,11 +39,11 @@ class FXRate {
      * Only for internal use.
      */
     static initialize(obj, buy, sell, fxRate, validFrom, validTill) { 
-        obj['Buy'] = buy;
-        obj['Sell'] = sell;
-        obj['FxRate'] = fxRate;
-        obj['ValidFrom'] = validFrom;
-        obj['ValidTill'] = validTill;
+        obj['buy'] = buy;
+        obj['sell'] = sell;
+        obj['fxRate'] = fxRate;
+        obj['validFrom'] = validFrom;
+        obj['validTill'] = validTill;
     }
 
     /**
@@ -60,20 +60,20 @@ class FXRate {
             if (data.hasOwnProperty('target')) {
                 obj['target'] = ApiClient.convertToType(data['target'], 'Number');
             }
-            if (data.hasOwnProperty('Buy')) {
-                obj['Buy'] = ApiClient.convertToType(data['Buy'], 'Number');
+            if (data.hasOwnProperty('buy')) {
+                obj['buy'] = ApiClient.convertToType(data['buy'], 'Number');
             }
-            if (data.hasOwnProperty('Sell')) {
-                obj['Sell'] = ApiClient.convertToType(data['Sell'], 'Number');
+            if (data.hasOwnProperty('sell')) {
+                obj['sell'] = ApiClient.convertToType(data['sell'], 'Number');
             }
-            if (data.hasOwnProperty('FxRate')) {
-                obj['FxRate'] = ApiClient.convertToType(data['FxRate'], 'Number');
+            if (data.hasOwnProperty('fxRate')) {
+                obj['fxRate'] = ApiClient.convertToType(data['fxRate'], 'Number');
             }
-            if (data.hasOwnProperty('ValidFrom')) {
-                obj['ValidFrom'] = ApiClient.convertToType(data['ValidFrom'], 'Number');
+            if (data.hasOwnProperty('validFrom')) {
+                obj['validFrom'] = ApiClient.convertToType(data['validFrom'], 'Number');
             }
-            if (data.hasOwnProperty('ValidTill')) {
-                obj['ValidTill'] = ApiClient.convertToType(data['ValidTill'], 'Number');
+            if (data.hasOwnProperty('validTill')) {
+                obj['validTill'] = ApiClient.convertToType(data['validTill'], 'Number');
             }
         }
         return obj;
@@ -88,29 +88,29 @@ class FXRate {
 FXRate.prototype['target'] = undefined;
 
 /**
- * @member {Number} Buy
+ * @member {Number} buy
  */
-FXRate.prototype['Buy'] = undefined;
+FXRate.prototype['buy'] = undefined;
 
 /**
- * @member {Number} Sell
+ * @member {Number} sell
  */
-FXRate.prototype['Sell'] = undefined;
+FXRate.prototype['sell'] = undefined;
 
 /**
- * @member {Number} FxRate
+ * @member {Number} fxRate
  */
-FXRate.prototype['FxRate'] = undefined;
+FXRate.prototype['fxRate'] = undefined;
 
 /**
- * @member {Number} ValidFrom
+ * @member {Number} validFrom
  */
-FXRate.prototype['ValidFrom'] = undefined;
+FXRate.prototype['validFrom'] = undefined;
 
 /**
- * @member {Number} ValidTill
+ * @member {Number} validTill
  */
-FXRate.prototype['ValidTill'] = undefined;
+FXRate.prototype['validTill'] = undefined;
 
 
 

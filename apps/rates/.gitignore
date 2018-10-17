@@ -62,3 +62,4 @@ typings/
 Service/.vscode/
 Service/update/ApiKey.js
 ClientJS/.vs/
+Service/.vs/

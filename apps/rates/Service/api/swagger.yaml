@@ -38,8 +38,8 @@ paths:
         in: "query"
         description: "The timestamp we are requesting valid values for"
         required: true
-        type: "number"
-        format: "double"
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "TheCoin exchange multiplier to the listed currency"
@@ -51,33 +51,33 @@ paths:
 definitions:
   FXRate:
     required:
-    - "Buy"
-    - "FxRate"
-    - "Sell"
-    - "ValidFrom"
-    - "ValidTill"
+    - "buy"
+    - "fxRate"
+    - "sell"
+    - "validFrom"
+    - "validTill"
     properties:
       target:
         type: "integer"
-      Buy:
+      buy:
         type: "number"
         format: "double"
-      Sell:
+      sell:
         type: "number"
         format: "double"
-      FxRate:
+      fxRate:
         type: "number"
         format: "double"
-      ValidFrom:
+      validFrom:
         type: "integer"
         format: "int64"
-      ValidTill:
+      validTill:
         type: "integer"
         format: "int64"
     example:
-      Sell: 1.46581298050294517310021547018550336360931396484375
-      Buy: 6.02745618307040320615897144307382404804229736328125
-      FxRate: 5.962133916683182377482808078639209270477294921875
-      ValidTill: 2
-      ValidFrom: 5
+      fxRate: 5.962133916683182377482808078639209270477294921875
+      validTill: 2
+      buy: 6.02745618307040320615897144307382404804229736328125
+      sell: 1.46581298050294517310021547018550336360931396484375
+      validFrom: 5
       target: 0

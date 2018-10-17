@@ -101,31 +101,31 @@ namespace ThePricing.Model
         /// <summary>
         /// Gets or Sets Buy
         /// </summary>
-        [DataMember(Name="Buy", EmitDefaultValue=false)]
+        [DataMember(Name="buy", EmitDefaultValue=false)]
         public double? Buy { get; set; }
 
         /// <summary>
         /// Gets or Sets Sell
         /// </summary>
-        [DataMember(Name="Sell", EmitDefaultValue=false)]
+        [DataMember(Name="sell", EmitDefaultValue=false)]
         public double? Sell { get; set; }
 
         /// <summary>
         /// Gets or Sets _FxRate
         /// </summary>
-        [DataMember(Name="FxRate", EmitDefaultValue=false)]
+        [DataMember(Name="fxRate", EmitDefaultValue=false)]
         public double? _FxRate { get; set; }
 
         /// <summary>
         /// Gets or Sets ValidFrom
         /// </summary>
-        [DataMember(Name="ValidFrom", EmitDefaultValue=false)]
+        [DataMember(Name="validFrom", EmitDefaultValue=false)]
         public long? ValidFrom { get; set; }
 
         /// <summary>
         /// Gets or Sets ValidTill
         /// </summary>
-        [DataMember(Name="ValidTill", EmitDefaultValue=false)]
+        [DataMember(Name="validTill", EmitDefaultValue=false)]
         public long? ValidTill { get; set; }
 
         /// <summary>
