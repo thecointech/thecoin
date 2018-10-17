@@ -87,9 +87,9 @@ namespace TapCapSupplier.Server.TapCap
 			// We assume the purchase completed successfully
 			if (purchaseComplete)
 			{
-				var mgrSignedMessage = PackageInterop.ConvertTo<TapCapManager.Client.Model.SignedMessage>(signedPurchase);
+				var mgrSignedMessage = new TapCapManager.Client.Model.SignedMessage();
+				PackageInterop.ConvertTo(signedPurchase, mgrSignedMessage);
 				var result = await TapCapManager.TapCapBrokerAsync(mgrSignedMessage);
-
 			}
 		}
 

@@ -1,7 +1,7 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using PCSC;
 using PCSC.Iso7816;
 using TheUtils;
@@ -13,7 +13,7 @@ namespace TapCapSupplier.Server.Card
 	/// </summary>
 	public class EmvCardMessager : ICardMessager
 	{
-		private Logger logger = LogManager.GetCurrentClassLogger();
+		private ILogger _logger;
 		private ISCardContext Context;
 		private IsoReader _reader;
 
@@ -47,17 +47,20 @@ namespace TapCapSupplier.Server.Card
 						protocol: SCardProtocol.Any,
 						releaseContextOnDispose: false);
 
-					logger.Trace("Transaction Started: on {0} ", _reader.ReaderName);
+					_logger.LogTrace("Transaction Started: on {0} ", _reader.ReaderName);
 				}
 				return _reader;
 			}
 		}
 
+		SCardProtocol ICardMessager.Protocol => Reader.ActiveProtocol;
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public EmvCardMessager()
+		public EmvCardMessager(ILogger logger)
 		{
+			_logger = logger;
 		}
 
 		/// <summary>
@@ -67,7 +70,7 @@ namespace TapCapSupplier.Server.Card
 		{
 			if (_reader != null)
 			{
-				logger.Trace("Disposing Reader");
+				_logger.LogTrace("Disposing Reader");
 				_reader?.Dispose();
 			}
 		}
@@ -80,22 +83,22 @@ namespace TapCapSupplier.Server.Card
 		/// <returns></returns>
 		public Response SendCommand(CommandApdu apdu, String command)
 		{
-			logger.Trace("Sending Command {0}: {1}", command, BitConverter.ToString(apdu.ToArray()));
+			_logger.LogTrace("Sending Command {0}: {1}", command, BitConverter.ToString(apdu.ToArray()));
 
 			var response = Reader.Transmit(apdu);
 
-			logger.Trace("SW1 SW2 = {0:X2} {1:X2}", response.SW1, response.SW2);
+			_logger.LogTrace("SW1 SW2 = {0:X2} {1:X2}", response.SW1, response.SW2);
 
 			if (!response.HasData)
 			{
-				logger.Error("No data. (Card does not understand \"{0}\")", command);
+				_logger.LogError("No data. (Card does not understand \"{0}\")", command);
 				return null;
 			}
 			else
 			{
 				var resp = response.GetData();
 				var chars = System.Text.Encoding.UTF8.GetString(resp);
-				logger.Trace("Response: \n  {0}", BitConverter.ToString(resp));
+				_logger.LogTrace("Response: \n  {0}", BitConverter.ToString(resp));
 			}
 			return response;
 		}
@@ -152,7 +155,7 @@ namespace TapCapSupplier.Server.Card
 				dataLen = newArray.Length;
 			if (!newArray.SequenceEqual(data.Take(dataLen)))
 			{
-				logger.Error("Reconstructing APDU Failed! \n  Orig={0}\n  Recon={1}", BitConverter.ToString(data), BitConverter.ToString(newArray));
+				_logger.LogError("Reconstructing APDU Failed! \n  Orig={0}\n  Recon={1}", BitConverter.ToString(data), BitConverter.ToString(newArray));
 				// TODO: return some sort of error message
 			}
 			return SendCommand(apdu, origin);

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheUtils", "..\..\the-utili
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapCapManager.Client", "..\..\tapcap-manager\ClientCS\src\TapCapManager.Client\TapCapManager.Client.csproj", "{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapCapSupplier.Tests", "TapCapSupplier.Tests\TapCapSupplier.Tests.csproj", "{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,9 @@
-﻿using BerTlv;
-using PCSC.Iso7816;
+﻿using PCSC.Iso7816;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TapCapSupplier.Server.Models;
 using TheUtils;
+using Microsoft.Extensions.Logging;
 
 namespace TapCapSupplier.Server.Card
 {
@@ -14,14 +12,17 @@ namespace TapCapSupplier.Server.Card
 	/// </summary>
 	public class EmvCard : IEmvCard, IDisposable
 	{
+		private readonly ILogger _logger;
+
 		/// <summary>
 		/// Implementation to handle talking directly to local payment card
 		/// </summary>
-		public EmvCard()
+		public EmvCard(ILogger<EmvCard> logger)
 		{
-			lock(__CardLock)
+			_logger = logger;
+			lock (__CardLock)
 			{
-				card = new EmvCardMessager();
+				card = new EmvCardMessager(_logger);
 				QueryStaticResponses();
 			}
 		}
@@ -48,12 +49,22 @@ namespace TapCapSupplier.Server.Card
 
 				var gpoQuery = Processing.BuildGPOQuery(card, request.GpoData);
 				// Set GPO data (response is ignored)
-				card.SendCommand(gpoQuery, "Set Gpo");
+				var gpoData = card.SendCommand(gpoQuery, "Set Gpo");
+
+				//var fileList = Processing.ParseAddresses(gpoData);
+				//foreach (var file in fileList)
+				//{
+				//	for (byte recordNum = file.FromRecord; recordNum <= file.ToRecord; recordNum++)
+				//	{
+				//		var recordQuery = Processing.BuildReadRecordApdu(file, recordNum, card);
+				//		var recordData = card.SendCommand(recordQuery, "Query Record: " + recordNum);
+				//	}
+				//}
 
 				// Generate crypto
 				var cryptoQuery = Processing.BuildCryptSigQuery(card, request.CryptoData);
 				var cryptoSig = card.SendCommand(cryptoQuery, "Gen CryptoSig");
-				return cryptoSig.GetData();
+				return cryptoSig?.GetData();
 			}
 		}
 
