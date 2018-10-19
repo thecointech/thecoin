@@ -7,16 +7,17 @@ using ThePricing.Api;
 using ThePricing.Model;
 using TheUtils;
 
+
 namespace TapCapSupplier.Server.TapCap
 {
 	/// <summary>
 	/// Gets and caches the current exchange rates.
 	/// </summary>
-	public class ExchangeRateService : IHostedService, IDisposable
+	public class ExchangeRateService
 	{
 		FXRate FxRate;
-		FXRate PrevFxRate;
-		FXRate NextFxRate;
+		internal FXRate PrevFxRate { get; private set; }
+		internal FXRate NextFxRate { get; private set; }
 		object __fxLock = new object();
 
 		private readonly ILogger _logger;
@@ -32,7 +33,7 @@ namespace TapCapSupplier.Server.TapCap
 		{
 			_logger = logger;
 			RatesApi = rateApi;
-			var now = TheUtils.TheCoinTime.Now();
+			var now = TheCoinTime.Now();
 		}
 
 		/// <summary>
@@ -74,7 +75,7 @@ namespace TapCapSupplier.Server.TapCap
 		//	return FiatRate;
 		//}
 
-		bool EnsureNextRate(long timestamp)
+		internal bool EnsureNextRate(long timestamp)
 		{
 			if (NextFxRate == null || NextFxRate.ValidTill.Value <= timestamp)
 			{
@@ -98,8 +99,21 @@ namespace TapCapSupplier.Server.TapCap
 			return true;
 		}
 
+	}
+
+	/// <summary>
+	/// Ervice taht 
+	/// </summary>
+	public class ExchangeRateUpdateService : IHostedService, IDisposable
+	{
 		CancellationToken __cancel;
 		private Timer _timer;
+		ExchangeRateService cache;
+
+		public ExchangeRateUpdateService(ExchangeRateService fxRateService)
+		{
+			cache = fxRateService;
+		}
 
 		Task IHostedService.StartAsync(CancellationToken cancellationToken)
 		{
@@ -118,7 +132,7 @@ namespace TapCapSupplier.Server.TapCap
 		private void ScheduleNextUpdate()
 		{
 			var now = TheUtils.TheCoinTime.Now();
-			var currentExpTime = NextFxRate.ValidTill;
+			var currentExpTime = cache.NextFxRate.ValidTill;
 			var msTillExp = currentExpTime.Value - now;
 			// Shift our update back 10 seconds before exp, so that
 			// we are updating -before- the current rate expires
@@ -130,13 +144,10 @@ namespace TapCapSupplier.Server.TapCap
 
 		private void EnsureRates(object state)
 		{
-			using (_logger.BeginScope("Ensuring Next"))
-			{
-				var expTime = NextFxRate?.ValidTill.Value ?? 0;
-				expTime = Math.Max(expTime, TheUtils.TheCoinTime.Now());
-				EnsureNextRate(expTime);
-				ScheduleNextUpdate();
-			}
+			var expTime = cache.NextFxRate?.ValidTill.Value ?? 0;
+			expTime = Math.Max(expTime, TheUtils.TheCoinTime.Now());
+			cache.EnsureNextRate(expTime);
+			ScheduleNextUpdate();
 		}
 
 		void IDisposable.Dispose()

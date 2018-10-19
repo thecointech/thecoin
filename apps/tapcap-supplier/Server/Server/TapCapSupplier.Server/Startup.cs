@@ -26,6 +26,7 @@ using TapCapSupplier.Server.Card;
 using ThePricing.Api;
 using TapCapSupplier.Server.TapCap;
 using Nethereum.Web3.Accounts;
+using TapCapManager.Client.Api;
 
 namespace TapCapSupplier.Server
 {
@@ -92,11 +93,14 @@ namespace TapCapSupplier.Server
 					c.OperationFilter<GeneratePathParamsValidationFilter>();
 				});
 
-			services.AddSingleton<Account>(AccountFactory.Load);
+			services.AddSingleton(AccountFactory.Load);
 			services.AddSingleton<IEmvCard, EmvCard>();
-			services.AddSingleton<TapCap.HandleTx>();
 			services.AddTransient<IRatesApi, RatesApi>();
-			services.AddHostedService<ExchangeRateService>();
+			services.AddTransient<ITransactionsApi, TransactionsApi>();
+
+			services.AddSingleton<HandleTx>();
+			services.AddSingleton<ExchangeRateService>();
+			services.AddHostedService<ExchangeRateUpdateService>();
 		}
 
 		/// <summary>

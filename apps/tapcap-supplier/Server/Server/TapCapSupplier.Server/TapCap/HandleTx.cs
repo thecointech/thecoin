@@ -24,7 +24,7 @@ namespace TapCapSupplier.Server.TapCap
 		/// <param name="card"></param>
 		/// <param name="account"></param>
 		/// <param name="manager"></param>
-		HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account)
+		public HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account)
 		{
 			FxRates = fxRates;
 			Card = card;
@@ -71,7 +71,7 @@ namespace TapCapSupplier.Server.TapCap
 				CryptoCertificate = certificate
 			};
 
-			var signedTx = Signing.MakeSignedMessage<SignedMessage>(tx, TheAccount);
+			var signedTx = Signing.SignMessage(tx, TheAccount, new SignedMessage());
 
 			Task.Run(async () => await ValidateAndFinalizeTx(tx, signedTx));
 			return signedTx;

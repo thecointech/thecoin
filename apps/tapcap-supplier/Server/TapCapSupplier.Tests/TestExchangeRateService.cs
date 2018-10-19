@@ -28,7 +28,7 @@ namespace TapCapSupplier.Tests
 		{
 			var rates = new MockRates();
 			var service = new ExchangeRateService(logger, rates);
-			Microsoft.Extensions.Hosting.IHostedService hosted = service;
+			Microsoft.Extensions.Hosting.IHostedService hosted = new ExchangeRateUpdateService(service);
 
 			// Start caching service
 			CancellationToken token = new CancellationToken();
