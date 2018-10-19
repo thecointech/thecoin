@@ -156,6 +156,7 @@
         }
       },
       "FXRate" : {
+        "required" : [ "buy", "fxRate", "sell", "validFrom", "validTill" ],
         "type" : "object",
         "properties" : {
           "target" : {

@@ -18,9 +18,9 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using OpenAPIDateConverter = TapCapManager.Supplier.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = TapCapSupplier.Client.Client.OpenAPIDateConverter;
 
-namespace TapCapManager.Supplier.Model
+namespace TapCapSupplier.Client.Model
 {
     /// <summary>
     /// FXRate
@@ -31,20 +31,65 @@ namespace TapCapManager.Supplier.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="FXRate" /> class.
         /// </summary>
+        [JsonConstructorAttribute]
+        protected FXRate() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FXRate" /> class.
+        /// </summary>
         /// <param name="target">target.</param>
-        /// <param name="buy">buy.</param>
-        /// <param name="sell">sell.</param>
-        /// <param name="fxRate">fxRate.</param>
-        /// <param name="validFrom">validFrom.</param>
-        /// <param name="validTill">validTill.</param>
+        /// <param name="buy">buy (required).</param>
+        /// <param name="sell">sell (required).</param>
+        /// <param name="fxRate">fxRate (required).</param>
+        /// <param name="validFrom">validFrom (required).</param>
+        /// <param name="validTill">validTill (required).</param>
         public FXRate(int? target = default(int?), double? buy = default(double?), double? sell = default(double?), double? fxRate = default(double?), long? validFrom = default(long?), long? validTill = default(long?))
         {
+            // to ensure "buy" is required (not null)
+            if (buy == null)
+            {
+                throw new InvalidDataException("buy is a required property for FXRate and cannot be null");
+            }
+            else
+            {
+                this.Buy = buy;
+            }
+            // to ensure "sell" is required (not null)
+            if (sell == null)
+            {
+                throw new InvalidDataException("sell is a required property for FXRate and cannot be null");
+            }
+            else
+            {
+                this.Sell = sell;
+            }
+            // to ensure "fxRate" is required (not null)
+            if (fxRate == null)
+            {
+                throw new InvalidDataException("fxRate is a required property for FXRate and cannot be null");
+            }
+            else
+            {
+                this._FxRate = fxRate;
+            }
+            // to ensure "validFrom" is required (not null)
+            if (validFrom == null)
+            {
+                throw new InvalidDataException("validFrom is a required property for FXRate and cannot be null");
+            }
+            else
+            {
+                this.ValidFrom = validFrom;
+            }
+            // to ensure "validTill" is required (not null)
+            if (validTill == null)
+            {
+                throw new InvalidDataException("validTill is a required property for FXRate and cannot be null");
+            }
+            else
+            {
+                this.ValidTill = validTill;
+            }
             this.Target = target;
-            this.Buy = buy;
-            this.Sell = sell;
-            this._FxRate = fxRate;
-            this.ValidFrom = validFrom;
-            this.ValidTill = validTill;
         }
         
         /// <summary>

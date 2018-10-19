@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.SignedTapcapContest
+# TapCapSupplier.Client.Model.SignedTapcapContest
 ## Properties
 
 Name | Type | Description | Notes

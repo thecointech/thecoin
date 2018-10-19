@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.ErrorMessage
+# TapCapSupplier.Client.Model.ErrorMessage
 ## Properties
 
 Name | Type | Description | Notes

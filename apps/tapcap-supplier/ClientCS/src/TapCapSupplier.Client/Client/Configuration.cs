@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace TapCapManager.Supplier.Client
+namespace TapCapSupplier.Client.Client
 {
     /// <summary>
     /// Represents a set of configuration settings
@@ -412,7 +412,7 @@ namespace TapCapManager.Supplier.Client
         /// </summary>
         public static String ToDebugReport()
         {
-            String report = "C# SDK (TapCap.Supplier) Debug Report:\n";
+            String report = "C# SDK (TapCapSupplier.Client) Debug Report:\n";
             report += "    OS: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription + "\n";
             report += "    Version of the API: 0.1.0\n";
             report += "    SDK Package Version: 1.0.0\n";

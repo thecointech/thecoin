@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <AssemblyName>TapCap.Supplier</AssemblyName>
-    <PackageId>TapCap.Supplier</PackageId>
+    <AssemblyName>TapCapSupplier.Client</AssemblyName>
+    <PackageId>TapCapSupplier.Client</PackageId>
     <OutputType>Library</OutputType>
     <Authors>OpenAPI</Authors>
     <Company>OpenAPI</Company>
@@ -13,7 +13,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <RootNamespace>TapCap.Supplier</RootNamespace>
+    <RootNamespace>TapCapSupplier.Client</RootNamespace>
     <Version>1.0.0</Version>
   </PropertyGroup>
 

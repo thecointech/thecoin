@@ -33,30 +33,35 @@ namespace TapCapSupplier.Server.Models
         /// <summary>
         /// Gets or Sets Buy
         /// </summary>
+        [Required]
         [DataMember(Name="buy")]
         public double? Buy { get; set; }
 
         /// <summary>
         /// Gets or Sets Sell
         /// </summary>
+        [Required]
         [DataMember(Name="sell")]
         public double? Sell { get; set; }
 
         /// <summary>
         /// Gets or Sets _FxRate
         /// </summary>
+        [Required]
         [DataMember(Name="fxRate")]
         public double? _FxRate { get; set; }
 
         /// <summary>
         /// Gets or Sets ValidFrom
         /// </summary>
+        [Required]
         [DataMember(Name="validFrom")]
         public long? ValidFrom { get; set; }
 
         /// <summary>
         /// Gets or Sets ValidTill
         /// </summary>
+        [Required]
         [DataMember(Name="validTill")]
         public long? ValidTill { get; set; }
 

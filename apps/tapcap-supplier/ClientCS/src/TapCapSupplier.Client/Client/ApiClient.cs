@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 using RestSharp.Portable;
 using RestSharp.Portable.HttpClient;
 
-namespace TapCapManager.Supplier.Client
+namespace TapCapSupplier.Client.Client
 {
     /// <summary>
     /// API client is mainly responsible for making the HTTP call to the API backend.
@@ -52,7 +52,7 @@ namespace TapCapManager.Supplier.Client
         /// </summary>
         public ApiClient()
         {
-            Configuration = TapCapManager.Supplier.Client.Configuration.Default;
+            Configuration = TapCapSupplier.Client.Client.Configuration.Default;
             RestClient = new RestClient("http://localhost:8070");
             RestClient.IgnoreResponseStatusCode = true;
         }
@@ -64,7 +64,7 @@ namespace TapCapManager.Supplier.Client
         /// <param name="config">An instance of Configuration.</param>
         public ApiClient(Configuration config)
         {
-            Configuration = config ?? TapCapManager.Supplier.Client.Configuration.Default;
+            Configuration = config ?? TapCapSupplier.Client.Client.Configuration.Default;
 
             RestClient = new RestClient(Configuration.BasePath);
             RestClient.IgnoreResponseStatusCode = true;

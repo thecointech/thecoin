@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.SignedMessage
+# TapCapSupplier.Client.Model.SignedMessage
 ## Properties
 
 Name | Type | Description | Notes

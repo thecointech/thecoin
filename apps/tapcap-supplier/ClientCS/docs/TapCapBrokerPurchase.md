@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.TapCapBrokerPurchase
+# TapCapSupplier.Client.Model.TapCapBrokerPurchase
 ## Properties
 
 Name | Type | Description | Notes

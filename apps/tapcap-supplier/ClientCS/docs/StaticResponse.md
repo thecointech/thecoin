@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.StaticResponse
+# TapCapSupplier.Client.Model.StaticResponse
 ## Properties
 
 Name | Type | Description | Notes

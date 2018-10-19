@@ -1,4 +1,4 @@
-# TapCap.Supplier - the C# library for the THE TapCap supply
+# TapCapSupplier.Client - the C# library for the THE TapCap supply
 
 The interace for TapCap between buyers & sellers.
 
@@ -27,9 +27,9 @@ Generate the DLL using your preferred tool
 
 Then include the DLL (under the `bin` folder) in the C# project, and use the namespaces:
 ```csharp
-using TapCap.Supplier.Api;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
 ```
 <a name="getting-started"></a>
 ## Getting Started
@@ -37,9 +37,9 @@ using TapCap.Supplier.Model;
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Supplier.Api;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
 
 namespace Example
 {

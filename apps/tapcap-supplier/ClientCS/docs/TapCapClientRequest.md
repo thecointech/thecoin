@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.TapCapClientRequest
+# TapCapSupplier.Client.Model.TapCapClientRequest
 ## Properties
 
 Name | Type | Description | Notes

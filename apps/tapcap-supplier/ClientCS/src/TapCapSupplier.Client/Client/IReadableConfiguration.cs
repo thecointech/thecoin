@@ -11,7 +11,7 @@
 
 using System.Collections.Generic;
 
-namespace TapCapManager.Supplier.Client
+namespace TapCapSupplier.Client.Client
 {
     /// <summary>
     /// Represents a readable-only configuration contract.

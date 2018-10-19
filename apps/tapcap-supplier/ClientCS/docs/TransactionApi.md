@@ -1,4 +1,4 @@
-# TapCap.Supplier.Api.TransactionApi
+# TapCapSupplier.Client.Api.TransactionApi
 
 All URIs are relative to *http://localhost:8070*
 
@@ -21,9 +21,9 @@ Notify supplier that the client will contest the passed transaction.  This is no
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Supplier.Api;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
 
 namespace Example
 {
@@ -80,9 +80,9 @@ Get the list of static responses to cache for terminal queries
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Supplier.Api;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
 
 namespace Example
 {
@@ -141,9 +141,9 @@ This is sent in response to a terminal request.  The supplier is expected to ret
 ```csharp
 using System;
 using System.Diagnostics;
-using TapCap.Supplier.Api;
-using TapCap.Supplier.Client;
-using TapCap.Supplier.Model;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
 
 namespace Example
 {

@@ -18,9 +18,9 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using OpenAPIDateConverter = TapCapManager.Supplier.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = TapCapSupplier.Client.Client.OpenAPIDateConverter;
 
-namespace TapCapManager.Supplier.Model
+namespace TapCapSupplier.Client.Model
 {
     /// <summary>
     /// TapCapToken

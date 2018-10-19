@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TapCapManager.Supplier.Client
+namespace TapCapSupplier.Client.Client
 {
     /// <summary>
     /// API Response

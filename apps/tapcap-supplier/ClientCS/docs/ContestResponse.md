@@ -1,4 +1,4 @@
-# TapCap.Supplier.Model.ContestResponse
+# TapCapSupplier.Client.Model.ContestResponse
 ## Properties
 
 Name | Type | Description | Notes
