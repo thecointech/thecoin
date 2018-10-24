@@ -14,6 +14,8 @@
 .gitignore
 .swagger-codegen-ignore
 .swagger-codegen/
+.vs/
+.vscode/
 
 # Node.js dependencies:
 node_modules/

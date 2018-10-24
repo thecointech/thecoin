@@ -405,7 +405,7 @@ module.exports = {
             let now = new Date().getTime();
             const success = await DoUpdates(now);
             if (success)
-                resolve(result);
+                resolve(success);
             else
                 reject("Update Failed");
         });
