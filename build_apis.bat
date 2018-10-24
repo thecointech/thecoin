@@ -13,11 +13,11 @@ REM
 REM NOTE: We are forced to use the older version of swagger-codegemn
 set JAVA_OPTS=-Dfile.encoding=UTF-8
 java -jar .\swagger-codegen-cli.jar generate 	-i the-pricing\the-pricing.yaml -l nodejs-server 	-o the-pricing\Service
-java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -l javascript 		-o the-pricing\ClientJS -c the-pricing\client-js-spec.json 
-java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -l csharp 			-o the-pricing\ClientCS -c the-pricing\client-cs-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -g javascript 		-o the-pricing\ClientJS -c the-pricing\client-js-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i the-pricing\the-pricing.yaml -g csharp 			-o the-pricing\ClientCS -c the-pricing\client-cs-spec.json 
 
 java -jar .\swagger-codegen-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\Service  -l nodejs-server 
-java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientCS -l csharp 		-c tapcap-manager\client-cs-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientCS -g csharp 		-c tapcap-manager\client-cs-spec.json
 java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientJS -g javascript 	-c tapcap-manager\client-js-spec.json
 
 java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 	-o broker-cad\Service

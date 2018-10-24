@@ -61,8 +61,6 @@ definitions:
   TapCapClientRequest:
     required:
       - timestamp
-      - fiatAmount
-      - currencyCode
       - gpoData
       - cryptoData
       - token
@@ -70,11 +68,6 @@ definitions:
       timestamp:
         type: integer
         format: int64
-      fiatAmount:
-        type: number
-        format: double
-      currencyCode:
-        type: integer
       gpoData:
         type: string
         format: byte
@@ -85,8 +78,7 @@ definitions:
         $ref: "#/definitions/SignedMessage" # sign(Token)
 
   # A broker figures out how much to charge for a tx,
-  # then signs this message, sends to manager & returns
-  # to client
+  # then signs this message & returns to client
   TapCapBrokerPurchase:
     required:
       - signedRequest
@@ -105,16 +97,37 @@ definitions:
         type: string
         format: byte
 
+  # Once a Tx is complete & verified
+  # the broker signs this object and submits to 
+  # to the manager.  This then becomes the official
+  # record of the transaction.
+  TapCapBrokerComplete:
+    required:
+      - signedRequest
+      - FxRate
+      - coinCharge
+      - merchantId
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage" # sign(TapCapClientRequest)
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: integer
+        format: int64
+      merchantId:
+        type: string
+
   # Exchange rate info for the given country code
   # When queried, Valid from <= timestamp < ValidTill
   FXRate:
     required:
-      - CountryCode
-      - Buy
-      - Sell
-      - FxRate
-      - ValidFrom
-      - ValidTill
+      - countryCode
+      - buy
+      - sell
+      - fxRate
+      - validFrom
+      - validTill
     properties:
       target:
         type: integer
