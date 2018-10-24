@@ -3,12 +3,13 @@
 
 namespace TheUtils
 {
-    public interface ICardMessager
-    {
+	public interface ICardMessager
+	{
 		CommandApdu InitApdu(bool hasData);
 
 		Response SendCommand(CommandApdu apdu, string debugName);
 		Response SendCommand(byte[] data, string debugName);
 
+		PCSC.SCardProtocol Protocol { get; }
 	}
 }

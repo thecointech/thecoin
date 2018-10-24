@@ -8,8 +8,8 @@ using System.Text;
 
 namespace TheUtils
 {
-    public static class Signing
-    {
+	public static class Signing
+	{
 		//public static byte[] ToBytes(CurrencyTransaction request)
 		//{
 		//    // Convert transaction to binary
@@ -49,13 +49,27 @@ namespace TheUtils
 			return (address, result);
 		}
 
-		public static TSigned MakeSignedMessage<TSigned>(object obj, Account account) where TSigned : new()
+		public static (string message, string signature) GetMessageAndSignature(object obj, Account account)
 		{
-			var message = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+			string message = JsonConvert.SerializeObject(obj);
 			var signer = new EthereumMessageSigner();
 			var signature = signer.EncodeUTF8AndSign(message, new EthECKey(account.PrivateKey));
-			TSigned instance = (TSigned)Activator.CreateInstance(typeof(TSigned), message, signature);
-			return instance;
+			return (message, signature);
+		}
+
+		public static TSigned SignMessage<TSigned>(object obj, Account account) where TSigned : new()
+		{
+			var (message, signature) = GetMessageAndSignature(obj, account);
+			var signedMessage = new TSigned();
+			Type signedType = signedMessage.GetType();
+
+			var signatureProp = signedType.GetProperty("Signature");
+			signatureProp.SetValue(signedMessage, signature, null);
+
+			var messageProp = signedType.GetProperty("Message");
+			messageProp.SetValue(signedMessage, message, null);
+
+			return signedMessage;
 		}
 	}
 }

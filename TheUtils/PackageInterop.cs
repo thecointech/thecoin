@@ -16,9 +16,8 @@ namespace TheUtils
 		/// </summary>
 		/// <param name="source">The source.</param>
 		/// <returns>A copy of the source in format TDestType</returns>
-		public static TDestType ConvertTo<TDestType>(object source) where TDestType : new()
+		public static bool ConvertTo(object source, object destination) 
 		{
-			TDestType destination = new TDestType();
 			// If any this null throw an exception
 			if (source == null || destination == null)
 				throw new Exception("Source or/and Destination Objects are null");
@@ -26,20 +25,37 @@ namespace TheUtils
 			Type typeDest = destination.GetType();
 			Type typeSrc = source.GetType();
 			// Collect all the valid properties to map
-			var results = from srcProp in typeSrc.GetProperties()
-						  let targetProperty = typeDest.GetProperty(srcProp.Name)
-						  where srcProp.CanRead
-						  && targetProperty != null
-						  && (targetProperty.GetSetMethod(true) != null && !targetProperty.GetSetMethod(true).IsPrivate)
-						  && (targetProperty.GetSetMethod().Attributes & MethodAttributes.Static) == 0
-						  && targetProperty.PropertyType.IsAssignableFrom(srcProp.PropertyType)
-						  select new { sourceProperty = srcProp, targetProperty = targetProperty };
-			//map the properties
-			foreach (var props in results)
+			// TODO: Enforce identical properties
+			var sourceProperties = typeSrc.GetProperties();
+			var destProperties = typeDest.GetProperties();
+
+			if (sourceProperties.Length != typeDest.GetProperties().Length)
 			{
-				props.targetProperty.SetValue(destination, props.sourceProperty.GetValue(source, null), null);
+				string message = $"Cannot cast from: {typeSrc.Name} to {typeDest.Name}: Different array lengths";
+				throw new InvalidCastException(message);
 			}
-			return destination;
+
+			foreach (var srcProp in sourceProperties)
+			{
+				if (srcProp.CanRead)
+				{
+					var destProp = typeDest.GetProperty(srcProp.Name);
+					destProp.SetValue(destination, srcProp.GetValue(source, null), null);
+				}
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Slightly less verbose version of the above function
+		/// </summary>
+		/// <typeparam name="TDestType">The type to conver source to</typeparam>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public static TDestType ConvertTo<TDestType>(object source)
+		{
+			var json = Newtonsoft.Json.JsonConvert.SerializeObject(source);
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<TDestType>(json);
 		}
 	}
 }

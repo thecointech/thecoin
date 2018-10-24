@@ -84,6 +84,19 @@ namespace TheUtils
             return items;
         }
 
+		private static void ParsePDOLData(IEnumerator<byte> dataEnum, List<PDOLItem> items)
+		{
+			foreach (var pdol in items)
+			{
+				for (var i = 0; i < pdol.DataLength; i++)
+				{
+					if (!dataEnum.MoveNext())
+						throw new ArgumentException("Insufficient data for PDOL List");
+					pdol.Data[i] = dataEnum.Current;
+				}
+			}
+		}
+
         // Parse the given data into the PDOL list
         public static void ParsePDOLData(IEnumerable<byte> data, List<PDOLItem> items)
         {
@@ -94,19 +107,18 @@ namespace TheUtils
             dataEnum.MoveNext();
             dataEnum.MoveNext();
 
-            foreach (var pdol in items)
-            {
-                for (var i = 0; i < pdol.DataLength; i++)
-                {
-                    if (!dataEnum.MoveNext())
-                        throw new ArgumentException("Insufficient data for PDOL List");
-                    pdol.Data[i] = dataEnum.Current;
-                }
-            }
-        }
+			ParsePDOLData(dataEnum, items);
+		}
 
-        // Given PDOL list, return currency amount in cents
-        public static ulong GetAmount(List<PDOLItem> pdolItems)
+		// Parse the given data into the PDOL list
+		public static void ParseCDOLData(IEnumerable<byte> data, List<PDOLItem> items)
+		{
+			var dataEnum = data.GetEnumerator();
+			ParsePDOLData(dataEnum, items);
+		}
+
+		// Given PDOL list, return currency amount in cents
+		public static ulong GetAmount(List<PDOLItem> pdolItems)
         {
             foreach (var item in pdolItems)
             {

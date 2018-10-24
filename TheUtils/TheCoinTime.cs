@@ -22,17 +22,24 @@ namespace TheUtils
             return ToTimestamp(DateTime.UtcNow);
         }
 
-        public static DateTime ToUTC(double timestamp)
+        public static DateTime ToUTC(long timestamp)
         {
             return UnixEpoch + TimeSpan.FromMilliseconds(timestamp);
         }
 
-        public static long ToTimestamp(DateTime dt)
+		public static DateTime ToLocal(long timestamp)
+		{
+			return ToUTC(timestamp).ToLocalTime();
+		}
+
+		public static long ToTimestamp(DateTime dt)
         {
             // Round our timestamp to the nearest millisecond
             // however leave type as double as that is the unit
             // used by the rest of the system
             return (long)(dt - UnixEpoch).TotalMilliseconds;
         }
+
+		
     }
 }

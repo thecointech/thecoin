@@ -53,12 +53,22 @@ namespace TheUtils
 
 		public static CommandApdu BuildCryptSigQuery(ICardMessager card, byte[] cryptData)
 		{
+			var GenerateCrypto = new CommandApdu(IsoCase.Case4Short, card.Protocol)
+			{
+				CLA = 0x80,
+				Instruction = (InstructionCode)0xAE,
+				P1 = 0x80,
+				Data = cryptData
+			};
+
+			//var fuckinAye = card.SendCommand(GenerateCrypto, "Crypt");
+
 			CommandApdu command = card.InitApdu(true);
 			command.CLA = 0x80;
 			command.Instruction = (InstructionCode)0xAE;
 			command.P1 = 0x80;
 			command.Data = cryptData;
-			return command;
+			return GenerateCrypto;
 		}
 
 		public static List<RecordAddress> ParseAddresses(byte[] data)

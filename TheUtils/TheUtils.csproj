@@ -3,20 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Testing.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="PDOL.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ApplicationDefinition Include="Processing.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Testing.cs" />
   </ItemGroup>
 
   <ItemGroup>
