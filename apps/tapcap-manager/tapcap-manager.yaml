@@ -39,7 +39,7 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerPurchase )
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerComplete )
       responses:
         405:
           description: Invalid input
@@ -223,6 +223,8 @@ definitions:
     $ref: '../common.yaml#/definitions/TapCapClientRequest'
   TapCapBrokerPurchase:
     $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+  TapCapBrokerComplete:
+    $ref: '../common.yaml#/definitions/TapCapBrokerComplete'
   FXRate:
     $ref: '../common.yaml#/definitions/FXRate'
 

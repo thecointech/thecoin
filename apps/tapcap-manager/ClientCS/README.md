@@ -87,6 +87,7 @@ Class | Method | HTTP request | Description
  - [Model.ErrorMessage](docs/ErrorMessage.md)
  - [Model.FXRate](docs/FXRate.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
+ - [Model.TapCapBrokerComplete](docs/TapCapBrokerComplete.md)
  - [Model.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
  - [Model.TapCapClientRequest](docs/TapCapClientRequest.md)
  - [Model.TapCapCompletedTransaction](docs/TapCapCompletedTransaction.md)

@@ -1,14 +1,12 @@
-# TapCapManager.Client.Model.FXRate
+# TapCapManager.Client.Model.TapCapBrokerComplete
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Target** | **int?** |  | [optional] 
-**Buy** | **double?** |  | 
-**Sell** | **double?** |  | 
-**_FxRate** | **double?** |  | 
-**ValidFrom** | **long?** |  | 
-**ValidTill** | **long?** |  | 
+**SignedRequest** | [**SignedMessage**](SignedMessage.md) |  | 
+**FxRate** | [**FXRate**](FXRate.md) |  | 
+**CoinCharge** | **long?** |  | 
+**MerchantId** | **string** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
