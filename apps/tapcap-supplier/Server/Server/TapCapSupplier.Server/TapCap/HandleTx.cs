@@ -54,11 +54,10 @@ namespace TapCapSupplier.Server.TapCap
 			var timestamp = TheCoinTime.Now();
 			var fxRate = FxRates.GetCurrentFxRate(timestamp);
 
-			var items = new List<PDOL.PDOLItem>();
-			PDOL.ParsePDOLData(request.GpoData, items);
+			
+			var items = PDOL.ParsePDOLItems(Card.CardStaticResponses().CryptoPdol);
+			PDOL.ParseCDOLData(request.CryptoData, items);
 			var txCents = PDOL.GetAmount(items);
-
-			var txFiat = request.FiatAmount;
 			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
 
 			// TODO: Return "insufficient funds"
