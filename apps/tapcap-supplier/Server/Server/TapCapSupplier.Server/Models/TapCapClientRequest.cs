@@ -32,20 +32,6 @@ namespace TapCapSupplier.Server.Models
         public long? Timestamp { get; set; }
 
         /// <summary>
-        /// Gets or Sets FiatAmount
-        /// </summary>
-        [Required]
-        [DataMember(Name="fiatAmount")]
-        public double? FiatAmount { get; set; }
-
-        /// <summary>
-        /// Gets or Sets CurrencyCode
-        /// </summary>
-        [Required]
-        [DataMember(Name="currencyCode")]
-        public int? CurrencyCode { get; set; }
-
-        /// <summary>
         /// Gets or Sets GpoData
         /// </summary>
         [Required]
@@ -75,8 +61,6 @@ namespace TapCapSupplier.Server.Models
             var sb = new StringBuilder();
             sb.Append("class TapCapClientRequest {\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
-            sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
-            sb.Append("  CurrencyCode: ").Append(CurrencyCode).Append("\n");
             sb.Append("  GpoData: ").Append(GpoData).Append("\n");
             sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
@@ -122,16 +106,6 @@ namespace TapCapSupplier.Server.Models
                     Timestamp.Equals(other.Timestamp)
                 ) && 
                 (
-                    FiatAmount == other.FiatAmount ||
-                    FiatAmount != null &&
-                    FiatAmount.Equals(other.FiatAmount)
-                ) && 
-                (
-                    CurrencyCode == other.CurrencyCode ||
-                    CurrencyCode != null &&
-                    CurrencyCode.Equals(other.CurrencyCode)
-                ) && 
-                (
                     GpoData == other.GpoData ||
                     GpoData != null &&
                     GpoData.Equals(other.GpoData)
@@ -160,10 +134,6 @@ namespace TapCapSupplier.Server.Models
                 // Suitable nullity checks etc, of course :)
                     if (Timestamp != null)
                     hashCode = hashCode * 59 + Timestamp.GetHashCode();
-                    if (FiatAmount != null)
-                    hashCode = hashCode * 59 + FiatAmount.GetHashCode();
-                    if (CurrencyCode != null)
-                    hashCode = hashCode * 59 + CurrencyCode.GetHashCode();
                     if (GpoData != null)
                     hashCode = hashCode * 59 + GpoData.GetHashCode();
                     if (CryptoData != null)
