@@ -55,7 +55,7 @@ namespace TapCapSupplier.Tests
 
 			TapCapClientRequest request = new TapCapClientRequest()
 			{
-				CurrencyCode = 127,
+				CurrencyCode = 124,
 				FiatAmount = TestPurchaseAmt,
 				Timestamp = 0,
 				GpoData = PDOL.GeneratePDOL(gpoParsed),

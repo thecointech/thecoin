@@ -1,4 +1,5 @@
 ﻿using Nethereum.Web3.Accounts;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
 using TapCapSupplier.Server.Card;
@@ -53,8 +54,12 @@ namespace TapCapSupplier.Server.TapCap
 			var timestamp = TheCoinTime.Now();
 			var fxRate = FxRates.GetCurrentFxRate(timestamp);
 
+			var items = new List<PDOL.PDOLItem>();
+			PDOL.ParsePDOLData(request.GpoData, items);
+			var txCents = PDOL.GetAmount(items);
+
 			var txFiat = request.FiatAmount;
-			var txCoin = TheContract.ToCoin(txFiat.Value / (fxRate.Sell.Value * fxRate._FxRate.Value));
+			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
 
 			// TODO: Return "insufficient funds"
 			if (txCoin > token.AvailableBalance)
@@ -71,31 +76,32 @@ namespace TapCapSupplier.Server.TapCap
 				CryptoCertificate = certificate
 			};
 
-			var signedTx = Signing.SignMessage(tx, TheAccount, new SignedMessage());
-
-			Task.Run(async () => await ValidateAndFinalizeTx(tx, signedTx));
+			var signedTx = Signing.SignMessage<SignedMessage>(tx, TheAccount);
+			Task.Run(async () => await ValidateAndFinalizeTx(tx));
 			return signedTx;
 		}
 
-		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase, SignedMessage signedPurchase)
+		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase)
 		{
 			// First, we have to validate that the Tx went through
-			bool purchaseComplete = await ValidateTx(purchase);
-
-			// We assume the purchase completed successfully
-			if (purchaseComplete)
+			var validation = await ValidateTx(purchase);
+			if (validation != null)
 			{
-				var mgrSignedMessage = new TapCapManager.Client.Model.SignedMessage();
-				PackageInterop.ConvertTo(signedPurchase, mgrSignedMessage);
-				var result = await TapCapManager.TapCapBrokerAsync(mgrSignedMessage);
+				// Sign validation and submit to manager.
+				var (message, signature) = Signing.GetMessageAndSignature(validation, TheAccount);
+				var signedValidation = new TapCapManager.Client.Model.SignedMessage(message, signature);
+				var result = await TapCapManager.TapCapBrokerAsync(signedValidation);
 			}
 		}
 
-		async Task<bool> ValidateTx(TapCapBrokerPurchase purchase)
+		async Task<TapCapManager.Client.Model.TapCapBrokerComplete> ValidateTx(TapCapBrokerPurchase purchase)
 		{
 			// TODO: The last major feature for this system!!!!
-			await Task.Delay(1000);
-			return true;
+			await Task.Delay(3000);
+			// We assume the purchase completed successfully
+			var cp = PackageInterop.ConvertTo<TapCapManager.Client.Model.TapCapBrokerPurchase>(purchase);
+			var validation = new TapCapManager.Client.Model.TapCapBrokerComplete(cp.SignedRequest, cp.FxRate, cp.CoinCharge, "TODO");
+			return validation;
 		}
 	}
 }

@@ -55,6 +55,8 @@ namespace TapCapSupplier.Server
 		/// <param name="services"></param>
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors();
+
 			// Add framework services.
 			services
 				.AddMvc()
@@ -110,6 +112,14 @@ namespace TapCapSupplier.Server
 		/// <param name="env"></param>
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
+			// TODO: Least-priveldges for headers etc
+			app.UseCors(builder =>
+				builder
+					.AllowAnyOrigin()
+					.AllowAnyMethod()
+					.AllowAnyHeader()
+			);
+
 			//TODO!
 			//app.UseHttpsRedirection();
 			app

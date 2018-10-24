@@ -28,7 +28,7 @@
         "requestBody" : {
           "description" : "Static data request",
           "content" : {
-            "application/yaml" : {
+            "application/json" : {
               "schema" : {
                 "$ref" : "#/components/schemas/SignedMessage"
               }
@@ -40,7 +40,7 @@
           "200" : {
             "description" : "Static response cache",
             "content" : {
-              "application/yaml" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/StaticResponses"
                 }
@@ -50,7 +50,7 @@
           "405" : {
             "description" : "Invalid input",
             "content" : {
-              "application/yaml" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/ErrorMessage"
                 }
@@ -69,7 +69,7 @@
         "requestBody" : {
           "description" : "TapCap exchange request",
           "content" : {
-            "application/yaml" : {
+            "application/json" : {
               "schema" : {
                 "$ref" : "#/components/schemas/SignedMessage"
               }
@@ -81,7 +81,7 @@
           "200" : {
             "description" : "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal",
             "content" : {
-              "application/yaml" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/SignedMessage"
                 }
@@ -91,7 +91,7 @@
           "405" : {
             "description" : "Invalid input",
             "content" : {
-              "application/yaml" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/ErrorMessage"
                 }
@@ -110,7 +110,7 @@
         "requestBody" : {
           "description" : "TapCap exchange request",
           "content" : {
-            "application/yaml" : {
+            "application/json" : {
               "schema" : {
                 "$ref" : "#/components/schemas/SignedTapcapContest"
               }
@@ -122,7 +122,7 @@
           "200" : {
             "description" : "Server status",
             "content" : {
-              "application/yaml" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/ContestResponse"
                 }
@@ -153,6 +153,10 @@
             "type" : "string",
             "format" : "byte"
           }
+        },
+        "example" : {
+          "response" : "response",
+          "query" : "query"
         }
       },
       "FXRate" : {
@@ -278,6 +282,16 @@
           "signature" : {
             "type" : "string"
           }
+        },
+        "example" : {
+          "pdol" : "pdol",
+          "signature" : "signature",
+          "fiatAmount" : 6.02745618307040320615897144307382404804229736328125,
+          "timestamp" : 0,
+          "token" : {
+            "signature" : "signature",
+            "message" : "message"
+          }
         }
       },
       "SignedMessage" : {
@@ -290,6 +304,10 @@
           "signature" : {
             "type" : "string"
           }
+        },
+        "example" : {
+          "signature" : "signature",
+          "message" : "message"
         }
       },
       "ContestResponse" : {
@@ -299,6 +317,9 @@
             "type" : "integer",
             "format" : "int32"
           }
+        },
+        "example" : {
+          "code" : 0
         }
       },
       "StaticResponses" : {
@@ -321,6 +342,17 @@
               "$ref" : "#/components/schemas/StaticResponse"
             }
           }
+        },
+        "example" : {
+          "gpoPdol" : "gpoPdol",
+          "responses" : [ {
+            "response" : "response",
+            "query" : "query"
+          }, {
+            "response" : "response",
+            "query" : "query"
+          } ],
+          "cryptoPdol" : "cryptoPdol"
         }
       },
       "ErrorMessage" : {

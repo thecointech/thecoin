@@ -13,9 +13,9 @@ tags:
 - name: "TapCap"
   description: "Facilitate a 3-way TapCap transaction"
 consumes:
-- "application/yaml"
+- "application/json"
 produces:
-- "application/yaml"
+- "application/json"
 schemes:
 - "http"
 tags:

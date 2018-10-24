@@ -86,7 +86,7 @@ namespace TapCapSupplier.Server.TapCap
 					{
 						_logger.LogTrace("Fetching rate for: {0}", TheCoinTime.ToLocal(timestamp));
 						// Sync fetch because cannot do async inside lock
-						NextFxRate = RatesApi.GetConversion(127, timestamp);
+						NextFxRate = RatesApi.GetConversion(124, timestamp);
 						if (NextFxRate == null || NextFxRate.ValidTill == null)
 						{
 							_logger.LogError("Could not fetch next FX rate");
