@@ -1,7 +1,9 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
+using System.Threading.Tasks;
+using TapCapManager.Client.Api;
+using TheApp.Tap;
 using ThePricing.Api;
-using TapCap.Client.Api;
 using TheUtils;
 
 namespace TheApp.ViewModels
@@ -63,11 +65,12 @@ namespace TheApp.ViewModels
         private TheContract TheContract;
 
         private IRatesApi Rates;
-        private IStatusApi TapCapStatus;
+		private TransactionProcessor Transaction;
 
-        public DelegateCommand ConnectCommand { get; set; }
+		public DelegateCommand TestPurchaseCommand { get; set; }
+		public DelegateCommand ConnectCommand { get; set; }
 
-        public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount, IStatusApi tapCapStatus)
+        public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount, TransactionProcessor transactions)
             : base(navigationService)
         {
             Title = "Main Page";
@@ -75,11 +78,12 @@ namespace TheApp.ViewModels
 
             TheContract = theContract;
             Rates = ratesApi;
-            TapCapStatus = tapCapStatus;
             UserAccount = userAccount;
+			Transaction = transactions;
 
-            ConnectCommand = new DelegateCommand(BeginConnect);
-        }
+			TestPurchaseCommand = new DelegateCommand(TestPurchase);
+			ConnectCommand = new DelegateCommand(BeginConnect);
+		}
 
         private void BeginConnect()
         {
@@ -88,28 +92,30 @@ namespace TheApp.ViewModels
 
         private void TestPurchase()
         {
-
-        }
+			Task.Run(async () =>
+			{
+				bool res = await Transaction.TryTestTx();
+				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+				{
+					Logs = "Test completed successfully: " + res;
+				});
+			});
+		}
 
         public override async void OnNavigatedTo(NavigationParameters parameters)
         {
+			await UserAccount.MakeReady();
+
             if (UserAccount.TheAccount != null)
             {
                 var now = TheCoinTime.Now();
-                var FXRate = await Rates.GetConversionAsync(127, now);
+                var FXRate = await Rates.GetConversionAsync(124, now);
                 CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
+				MainBalance = await TheContract.CoinBalance();
+				TapCapBalance = UserAccount.TapCapBalance;
 
-                MainBalance = await TheContract.CoinBalance();
-
-                // Create a signed TapCapQueryRequest
-                var timestamp = TheCoinTime.Now();
-                var req = new TapCap.Client.Model.TapCapQueryRequest(timestamp);
-                var signedReq = UserAccount.MakeSignedMessage(req);
-                var response = await TapCapStatus.TapCapStatusAsync(signedReq);
-
-                TapCapBalance = (ulong)response.Balance.GetValueOrDefault(0);
-                UserAccount.Token = response.Token;
-            }
-        }
+				await Transaction.MakeReady();
+			}
+		}
     }
 }

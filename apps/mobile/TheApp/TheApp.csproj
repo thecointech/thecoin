@@ -29,10 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\tapcap-manager\ClientCS\src\TapCap.Client\TapCap.Client.csproj" />
-    <ProjectReference Include="..\..\tapcap-supplier\ClientCS\src\TapCap.Supplier\TapCap.Supplier.csproj" />
+    <ProjectReference Include="..\..\tapcap-manager\ClientCS\src\TapCapManager.Client\TapCapManager.Client.csproj" />
+    <ProjectReference Include="..\..\tapcap-supplier\ClientCS\src\TapCapSupplier.Client\TapCapSupplier.Client.csproj" />
     <ProjectReference Include="..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
-    <ProjectReference Include="..\..\TheUtils\TheUtils.csproj" />
+    <ProjectReference Include="..\..\the-utilities\TheUtils\TheUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

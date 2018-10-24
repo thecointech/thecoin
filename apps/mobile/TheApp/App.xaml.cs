@@ -6,12 +6,11 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.DryIoc;
 using System.Reflection;
-using System.IO;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TheApp
 {
-    public partial class App : PrismApplication
+	public partial class App : PrismApplication
     {
         /* 
          * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
@@ -37,10 +36,11 @@ namespace TheApp
             containerRegistry.RegisterInstance(new TheUtils.TheContract(theContractJson));
             // Register a single RatesApi object
             containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
-            containerRegistry.RegisterInstance<TapCap.Client.Api.IStatusApi>(new TapCap.Client.Api.StatusApi("http://localhost:8091"));
-            containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
+            containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi("http://localhost:8091"));
+			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://localhost:8070"));
 
-			containerRegistry.RegisterInstance(new Tap.Supplier("http://localhost:8070"));
+			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
+			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
 
 			containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();

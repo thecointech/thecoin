@@ -1,15 +1,12 @@
 ﻿using Nethereum.Web3.Accounts;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using TapCap.Client.Model;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Model;
+using TheUtils;
 using Xamarin.Essentials;
 
-using Nethereum.ABI.Encoders;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Util;
-using Nethereum.Signer;
 
 namespace TheApp.TheCoin
 {
@@ -18,26 +15,21 @@ namespace TheApp.TheCoin
         static readonly string AccountFile = "TheCoin.TheApp.account";
         static readonly string AccountKey = "TheCoin.TheApp.passwd";
 
-        private Account _TheAccount;
+		private Logger logger = LogManager.GetCurrentClassLogger();
+
+		private Account _TheAccount;
         public Account TheAccount
         {
-            get {
-                // Wait till the initialization has finished
-                if (InitTask != null)
-                {
-                    InitTask.GetAwaiter().GetResult();
-                    InitTask = null;
-                }
-                return _TheAccount;
-            }
+            get => _TheAccount;
             private set
             {
                 _TheAccount = value;
                 TheContract.Connect(value);
-            }
+			}
         }
 
-        public object Token { get; internal set; }
+        public SignedMessage Token { get; internal set; }
+		public ulong TapCapBalance;
 
 		public string Address
 		{
@@ -55,16 +47,18 @@ namespace TheApp.TheCoin
 		}
 
         private string EncryptedAccount = null;
-        private TheUtils.TheContract TheContract;
-        private Task InitTask;
+        private TheContract TheContract;
+        private Task __initTask;
+		private IStatusApi TapCapStatus;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="theContract"></param>
-        public UserAccount(TheUtils.TheContract theContract) {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="theContract"></param>
+		public UserAccount(TheContract theContract, IStatusApi tapCapStatus) {
             TheContract = theContract;
-            InitTask = Task.Run(TryInit);
+            __initTask = TryInit();
+			TapCapStatus = tapCapStatus;
         }
 
         private async Task TryInit()
@@ -76,13 +70,19 @@ namespace TheApp.TheCoin
                 if (account != null && key != null)
                 {
                     TheAccount = Account.LoadFromKeyStore(account, key);
-                }
-            }
+					await UpdateToken();
+				}
+			}
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
                 /* No worries, just no account */
             }
         }
+
+		internal Task MakeReady()
+		{
+			return __initTask;
+		}
 
         public bool NeedsDecrypting()
         {
@@ -112,19 +112,27 @@ namespace TheApp.TheCoin
             return true;
         }
 
-        private static string CreateStringSignature(EthECDSASignature signature)
-        {
-            return "0x" + signature.R.ToHex().PadLeft(64, '0') +
-                   signature.S.ToHex().PadLeft(64, '0') +
-                   signature.V.ToHex();
-        }
+		public async Task UpdateToken()
+		{
+			if (_TheAccount == null)
+				return;
 
-        public SignedMessage MakeSignedMessage(object obj)
-        {
-            var message = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-            var signer = new EthereumMessageSigner();
-            var signature = signer.EncodeUTF8AndSign(message, new EthECKey(TheAccount.PrivateKey));
-            return new SignedMessage(message, signature);
-        }
-    }
+			try
+			{
+				// Create a signed TapCapQueryRequest
+				var timestamp = TheCoinTime.Now();
+				var req = new TapCapQueryRequest(timestamp);
+				var (m, s) = Signing.GetMessageAndSignature(req, _TheAccount);
+				var signedReq = new SignedMessage(m, s);
+				var response = await TapCapStatus.TapCapStatusAsync(signedReq);
+
+				TapCapBalance = (ulong)response.Balance.GetValueOrDefault(0);
+				Token = response.Token;
+			}
+			catch (Exception e)
+			{
+				logger.Error(e, "Could you fuck this up any more?");
+			}
+		}
+	}
 }

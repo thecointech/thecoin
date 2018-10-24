@@ -75,8 +75,7 @@ namespace TheApp.ViewModels
 
         public override void OnNavigatedTo(NavigationParameters parameters) 
         {
-            if (UserAccount.TheAccount != null)
-                Address = UserAccount.TheAccount.Address;
+			Address = UserAccount.Address;
         }
     }
 }
