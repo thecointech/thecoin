@@ -37,12 +37,10 @@ namespace TapCapManager.Client.Model
         /// Initializes a new instance of the <see cref="TapCapClientRequest" /> class.
         /// </summary>
         /// <param name="timestamp">timestamp (required).</param>
-        /// <param name="fiatAmount">fiatAmount (required).</param>
-        /// <param name="currencyCode">currencyCode (required).</param>
         /// <param name="gpoData">gpoData (required).</param>
         /// <param name="cryptoData">cryptoData (required).</param>
         /// <param name="token">token (required).</param>
-        public TapCapClientRequest(long? timestamp = default(long?), double? fiatAmount = default(double?), int? currencyCode = default(int?), byte[] gpoData = default(byte[]), byte[] cryptoData = default(byte[]), SignedMessage token = default(SignedMessage))
+        public TapCapClientRequest(long? timestamp = default(long?), byte[] gpoData = default(byte[]), byte[] cryptoData = default(byte[]), SignedMessage token = default(SignedMessage))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -52,24 +50,6 @@ namespace TapCapManager.Client.Model
             else
             {
                 this.Timestamp = timestamp;
-            }
-            // to ensure "fiatAmount" is required (not null)
-            if (fiatAmount == null)
-            {
-                throw new InvalidDataException("fiatAmount is a required property for TapCapClientRequest and cannot be null");
-            }
-            else
-            {
-                this.FiatAmount = fiatAmount;
-            }
-            // to ensure "currencyCode" is required (not null)
-            if (currencyCode == null)
-            {
-                throw new InvalidDataException("currencyCode is a required property for TapCapClientRequest and cannot be null");
-            }
-            else
-            {
-                this.CurrencyCode = currencyCode;
             }
             // to ensure "gpoData" is required (not null)
             if (gpoData == null)
@@ -107,18 +87,6 @@ namespace TapCapManager.Client.Model
         public long? Timestamp { get; set; }
 
         /// <summary>
-        /// Gets or Sets FiatAmount
-        /// </summary>
-        [DataMember(Name="fiatAmount", EmitDefaultValue=false)]
-        public double? FiatAmount { get; set; }
-
-        /// <summary>
-        /// Gets or Sets CurrencyCode
-        /// </summary>
-        [DataMember(Name="currencyCode", EmitDefaultValue=false)]
-        public int? CurrencyCode { get; set; }
-
-        /// <summary>
         /// Gets or Sets GpoData
         /// </summary>
         [DataMember(Name="gpoData", EmitDefaultValue=false)]
@@ -145,8 +113,6 @@ namespace TapCapManager.Client.Model
             var sb = new StringBuilder();
             sb.Append("class TapCapClientRequest {\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
-            sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
-            sb.Append("  CurrencyCode: ").Append(CurrencyCode).Append("\n");
             sb.Append("  GpoData: ").Append(GpoData).Append("\n");
             sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
@@ -190,16 +156,6 @@ namespace TapCapManager.Client.Model
                     this.Timestamp.Equals(input.Timestamp))
                 ) && 
                 (
-                    this.FiatAmount == input.FiatAmount ||
-                    (this.FiatAmount != null &&
-                    this.FiatAmount.Equals(input.FiatAmount))
-                ) && 
-                (
-                    this.CurrencyCode == input.CurrencyCode ||
-                    (this.CurrencyCode != null &&
-                    this.CurrencyCode.Equals(input.CurrencyCode))
-                ) && 
-                (
                     this.GpoData == input.GpoData ||
                     (this.GpoData != null &&
                     this.GpoData.Equals(input.GpoData))
@@ -227,10 +183,6 @@ namespace TapCapManager.Client.Model
                 int hashCode = 41;
                 if (this.Timestamp != null)
                     hashCode = hashCode * 59 + this.Timestamp.GetHashCode();
-                if (this.FiatAmount != null)
-                    hashCode = hashCode * 59 + this.FiatAmount.GetHashCode();
-                if (this.CurrencyCode != null)
-                    hashCode = hashCode * 59 + this.CurrencyCode.GetHashCode();
                 if (this.GpoData != null)
                     hashCode = hashCode * 59 + this.GpoData.GetHashCode();
                 if (this.CryptoData != null)

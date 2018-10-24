@@ -4,8 +4,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Timestamp** | **long?** |  | 
-**FiatAmount** | **double?** |  | 
-**CurrencyCode** | **int?** |  | 
 **GpoData** | **byte[]** |  | 
 **CryptoData** | **byte[]** |  | 
 **Token** | [**SignedMessage**](SignedMessage.md) |  | 
