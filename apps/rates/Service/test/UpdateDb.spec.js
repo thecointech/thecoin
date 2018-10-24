@@ -40,6 +40,12 @@ describe('UpdateDb', function () {
 			let fixedUntil = Update.FixCoinValidUntil(lastTime, lastTime + 2000);
 			let newUntil = tzus(fixedUntil, "%F %R:%S", "America/New_York")
 			assert(newUntil == "2018-10-17 09:31:30")
+
+			lastTime = 1540323090000;
+			fixedUntil = Update.FixCoinValidUntil(lastTime, lastTime);
+			newUntil = tzus(fixedUntil, "%F %R:%S", "America/New_York")
+			assert(newUntil == "2018-10-23 18:31:30")
+
 			done();
 		});
 	})

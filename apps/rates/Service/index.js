@@ -13,6 +13,14 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 const PORT = process.env.PORT || 8080;
 
+var memwatch = require('memwatch-next');
+memwatch.on('leak', function(info) { 
+  console.warn(info);
+});
+memwatch.on('stats', function(stats) { 
+  console.log(stats);
+});
+
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),

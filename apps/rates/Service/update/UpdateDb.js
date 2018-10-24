@@ -47,14 +47,14 @@ const datastore = Datastore({
 // All the supported exchanges
 //
 let Exchanges = {
-    Coin: {
+    0: {
         Name: 'Coin',
-        LatestKey: datastore.key(['Coin', 'Latest']),
+        LatestKey: datastore.key([0, 'Latest']),
         LatestRate: null
     },
-    127: {
+    124: {
         Name: 'CAD',
-        LatestKey: datastore.key([127, 'Latest']),
+        LatestKey: datastore.key([124, 'Latest']),
         LatestRate: null
     }
 }
@@ -111,7 +111,7 @@ function InsertRate(code, ts, newRecord) {
 // rate is still valid (ie - if it decides the market is closed)
 //
 async function EnsureLatestCoinRate(now) {
-    let latest = await GetLatestExchangeRate('Coin');
+    let latest = await GetLatestExchangeRate(0);
     const validUntil = latest ? latest.ValidUntil : 0;
 
     // Quick exit if we are updating again too quickly
@@ -126,8 +126,8 @@ async function EnsureLatestCoinRate(now) {
 
 async function UpdateLatestCoinRate(now, latestValidUntil) {
     let newRecord = await GetLatestCoinRate(now, latestValidUntil);
-    InsertRate('Coin', newRecord.ValidUntil, newRecord);
-    SetMostRecentRate('Coin', newRecord);
+    InsertRate(0, newRecord.ValidUntil, newRecord);
+    SetMostRecentRate(0, newRecord);
     latest = newRecord;
     return latest;
 }
@@ -331,30 +331,6 @@ async function EnsureLatestFXRate(currencyCode, now) {
         // set a price in the past)
         validFrom = now;
         validUntil = AlignToNextBoundary(now, FXUpdateInterval)
-
-        // let hours = tzus(now, "%H", "America/New_York");
-        // let minutes = tzus(now, "%M", "America/New_York");
-        // let seconds = tzus(now, "%S", "America/New_York");
-
-        // let lastBoundary = tz(now, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
-        // let intervalTime = FXUpdateInterval;
-        // // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
-        // // In this case we simply offset it backwards 
-        // if (lastBoundary > now)
-        //     lastBoundary -= intervalTime;
-        // else {
-        //     // Search forward in boundary points and keep the last
-        //     // boundary that occured before now.
-        //     let minBoundaryInterval = now + RateOffsetFromMarket;
-        //     for (let t = lastBoundary; t <= minBoundaryInterval; t += intervalTime)
-        //         lastBoundary = t;
-        // }
-
-        // // We reset validFrom to be now (as we can't
-        // // set a price in the past)
-        // validFrom = now;
-        // // and set this price to be valid until the next boundary
-        // validUntil = lastBoundary + FXUpdateInterval
     }
     latest = new FXRate(rate, validFrom, validUntil);
     InsertRate(currencyCode, validUntil, latest);
@@ -362,35 +338,36 @@ async function EnsureLatestFXRate(currencyCode, now) {
     return latest
 }
 
-async function DoUpdates(resolve, reject, now) {
+function EnsureLatestRate(code, timestamp) 
+{
+    if (code == 0)
+        return EnsureLatestCoinRate(timestamp);
+    return EnsureLatestFXRate(code, timestamp);
+}
+
+async function DoUpdates(now) {
 
     try {
-
-        let coinWait = EnsureLatestCoinRate(now);
         let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
-            if (value != "Coin")
-                accum.push(EnsureLatestFXRate(value, now));
+            accum.push(EnsureLatestRate(value, now));
             return accum;
         }, []);
 
-        let latestCoin = await coinWait;
+        let validUntil = Number.MAX_SAFE_INTEGER;
         for (let i = 0; i < currencyWaits.length; i++) {
             let latestFX = await currencyWaits[i];
             if (latestFX.ValidUntil < now) {
                 console.error("Invalid timestamp: " + latestFX.ValidUntil);
-                resolve(false);
-                return;
+                return false;
             }
+            validUntil = Math.min(validUntil, latestFX.ValidUntil);
         }
-        if (latestCoin != null && latestCoin.ValidUntil > now)
-            resolve(latestCoin.ValidUntil);
-        else
-            resolve(false);
+        return validUntil;
     }
     catch (err) {
         console.error(err);
-        reject("Update failed");
     }
+    return false;
 }
 
 function Sleep(ms) {
@@ -402,6 +379,21 @@ function GetMsTillSecsPast(seconds, nowDate) {
     return Math.max((seconds * 1000) - nowMs, 0);
 }
 
+function ForceLatestRate(resolve, reject, code, timestamp)
+{
+    EnsureLatestRate(code, timestamp)
+    .then((rates) => {
+        if (rates.ValidUntil > timestamp)
+            resolve(rates)
+        else 
+            reject();
+    })
+    .catch((err) => {
+        console.error(err);
+        reject("Could not retrieve rates");
+    })
+}
+
 module.exports = {
     UpdateRates: function () {
         return new Promise(async (resolve, reject) => {
@@ -411,7 +403,11 @@ module.exports = {
             let pauseMs = GetMsTillSecsPast(2, new Date());
             await Sleep(pauseMs);
             let now = new Date().getTime();
-            DoUpdates(resolve, reject, now);
+            const success = await DoUpdates(now);
+            if (success)
+                resolve(result);
+            else
+                reject("Update Failed");
         });
     },
 
@@ -422,6 +418,15 @@ module.exports = {
     GetRatesFor: function (currencyCode, timestamp) {
 
         return new Promise((resolve, reject) => {
+            // Double check this is not for the future
+            let now = new Date().getTime() + RateOffsetFromMarket;
+            if (timestamp > now)
+            {
+                console.error("Request for future rates (%s) rejected", tzus(timestamp, "%F %R:%S", "America/New_York"));
+                reject("Could not retrieve rates");
+                return;
+            }
+
             let query = datastore
                 .createQuery(currencyCode)
                 .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
@@ -429,22 +434,28 @@ module.exports = {
                 .limit(10)
 
             datastore.runQuery(query, function (err, entities) {
-                if (err == null) {
-                    if (entities.length == 0)
-                        reject("No value registered for: " + currencyCode + " at: " + (new Date(timestamp)))
-                    else {
-                        // entities = An array of records.
-                        // Access the Key object for an entity.
-                        const rates = entities[0];
-                        if (rates.ValidFrom > timestamp || rates.ValidUntil <= timestamp) {
-                            reject("Returned rates " + JSON.stringify(rates) + " did not match match timestamp: " + timestamp);
-                            return;
-                        }
-                        resolve(rates)
-                    }
+                if (err != null)
+                {
+                    console.error(err);
+                    reject("Could not retrieve rates");
+                }
+                else if (entities.length == 0)
+                {
+                    console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
+                    ForceLatestRate(resolve, reject, currencyCode, timestamp);
+                }
+                else if (entities[0].ValidUntil < timestamp)
+                {
+                    console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(rates.ValidUntil, "%F %R:%S", "America/New_York"));
+                    ForceLatestRate(resolve, reject, currencyCode, timestamp);
+                }
+                else if (entities[0].ValidFrom > timestamp)
+                {
+                    console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(rates.ValidFrom, "%F %R:%S", "America/New_York"));
+                    reject("Could not retrieve rates");
                 }
                 else {
-                    reject(err);
+                    resolve(entities[0]);
                 }
             });
         })
