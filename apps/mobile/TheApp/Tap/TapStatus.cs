@@ -19,6 +19,7 @@ namespace TheApp.Tap
 			SignedBy = address;
 		}
 
+		public SignedMessage SignedToken => _response.Token;
 		public ulong Balance => (ulong)_response.Balance.GetValueOrDefault(0);
 		public TapCapToken Token;
 		public string SignedBy;

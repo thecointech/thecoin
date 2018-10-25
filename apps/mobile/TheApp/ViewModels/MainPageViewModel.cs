@@ -135,7 +135,7 @@ namespace TheApp.ViewModels
 						{
 							CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
 							MainBalance = balance;
-							TapCapBalance = UserAccount.TapCapBalance;
+							TapCapBalance = UserAccount.TapStatus.Balance;
 						});
 
 						await Transaction.MakeReady();

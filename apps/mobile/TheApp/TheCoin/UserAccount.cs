@@ -36,7 +36,7 @@ namespace TheApp.TheCoin
 			private set
 			{
 				_status = value;
-				EventSystem.Publish(new Events.StatusUpdated(value));
+				Events.EventSystem.Publish(new Events.StatusUpdated(value));
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace TheApp.TheCoin
 
 			__initTask = Task.Run(AsyncInit);
 
-			EventSystem.Subscribe<Events.TxCompleted>(OnTxComplete);
+			Events.EventSystem.Subscribe<Events.TxCompleted>(OnTxComplete);
 		}
 
 		private async Task AsyncInit()

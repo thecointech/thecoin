@@ -1,7 +1,7 @@
 ﻿using System;
 using Prism.Events;
 
-namespace TheApp
+namespace TheApp.Events
 {
 	/// <summary>
 	/// Static EventAggregator

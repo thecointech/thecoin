@@ -30,7 +30,7 @@ namespace TheApp.Tap
 		internal async Task AsyncInit()
 		{
 			await UserAccount.MakeReady();
-			var (m, s) = Signing.GetMessageAndSignature(UserAccount.Token, UserAccount.TheAccount);
+			var (m, s) = Signing.GetMessageAndSignature(UserAccount.TapStatus.SignedToken, UserAccount.TheAccount);
 			var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
 			StaticResponses = supplierResponses;
 		}
@@ -69,7 +69,8 @@ namespace TheApp.Tap
 				PDOL.FillWithDummyData(cryptParsed);
 
 				var timestamp = TheCoinTime.Now();
-				var token = new SignedMessage(UserAccount.Token.Message, UserAccount.Token.Signature);
+				var mtoken = UserAccount.TapStatus.SignedToken;
+				var token = new SignedMessage(mtoken.Message, mtoken.Signature);
 				TapCapClientRequest request = new TapCapClientRequest(timestamp, PDOL.GeneratePDOL(gpoParsed), PDOL.GenerateCDOL(cryptParsed), token);
 
 				var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
@@ -80,7 +81,7 @@ namespace TheApp.Tap
 
 				if (tapCap != null)
 				{
-					EventSystem.Publish(new Events.TxCompleted()
+					Events.EventSystem.Publish(new Events.TxCompleted()
 					{
 						SignedResponse = tapCap
 					});
