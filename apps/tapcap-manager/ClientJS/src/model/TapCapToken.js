@@ -24,11 +24,12 @@ class TapCapToken {
      * @alias module:model/TapCapToken
      * @param clientAccount {String} 
      * @param availableBalance {Number} 
+     * @param nonce {Number} 
      * @param timestamp {Number} 
      */
-    constructor(clientAccount, availableBalance, timestamp) { 
+    constructor(clientAccount, availableBalance, nonce, timestamp) { 
         
-        TapCapToken.initialize(this, clientAccount, availableBalance, timestamp);
+        TapCapToken.initialize(this, clientAccount, availableBalance, nonce, timestamp);
     }
 
     /**
@@ -36,9 +37,10 @@ class TapCapToken {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, clientAccount, availableBalance, timestamp) { 
+    static initialize(obj, clientAccount, availableBalance, nonce, timestamp) { 
         obj['clientAccount'] = clientAccount;
         obj['availableBalance'] = availableBalance;
+        obj['nonce'] = nonce;
         obj['timestamp'] = timestamp;
     }
 
@@ -59,8 +61,8 @@ class TapCapToken {
             if (data.hasOwnProperty('availableBalance')) {
                 obj['availableBalance'] = ApiClient.convertToType(data['availableBalance'], 'Number');
             }
-            if (data.hasOwnProperty('transactionId')) {
-                obj['transactionId'] = ApiClient.convertToType(data['transactionId'], 'Number');
+            if (data.hasOwnProperty('nonce')) {
+                obj['nonce'] = ApiClient.convertToType(data['nonce'], 'Number');
             }
             if (data.hasOwnProperty('timestamp')) {
                 obj['timestamp'] = ApiClient.convertToType(data['timestamp'], 'Number');
@@ -83,9 +85,9 @@ TapCapToken.prototype['clientAccount'] = undefined;
 TapCapToken.prototype['availableBalance'] = undefined;
 
 /**
- * @member {Number} transactionId
+ * @member {Number} nonce
  */
-TapCapToken.prototype['transactionId'] = undefined;
+TapCapToken.prototype['nonce'] = undefined;
 
 /**
  * @member {Number} timestamp

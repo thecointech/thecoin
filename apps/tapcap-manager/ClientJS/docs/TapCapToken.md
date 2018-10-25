@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **clientAccount** | **String** |  | 
 **availableBalance** | **Number** |  | 
-**transactionId** | **Number** |  | [optional] 
+**nonce** | **Number** |  | 
 **timestamp** | **Number** |  | 
 
 

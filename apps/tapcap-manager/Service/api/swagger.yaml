@@ -229,6 +229,7 @@ definitions:
     required:
     - "availableBalance"
     - "clientAccount"
+    - "nonce"
     - "timestamp"
     properties:
       clientAccount:
@@ -236,7 +237,7 @@ definitions:
       availableBalance:
         type: "integer"
         format: "int64"
-      transactionId:
+      nonce:
         type: "integer"
       timestamp:
         type: "integer"
@@ -352,6 +353,7 @@ definitions:
     required:
     - "availableBalance"
     - "clientAccount"
+    - "nonce"
     - "timestamp"
     properties:
       clientAccount:
@@ -359,7 +361,7 @@ definitions:
       availableBalance:
         type: "integer"
         format: "int64"
-      transactionId:
+      nonce:
         type: "integer"
       timestamp:
         type: "integer"
