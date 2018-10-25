@@ -57,20 +57,21 @@ namespace TheApp.TheCoin
 		/// <param name="theContract"></param>
 		public UserAccount(TheContract theContract, IStatusApi tapCapStatus) {
             TheContract = theContract;
-            __initTask = TryInit();
 			TapCapStatus = tapCapStatus;
-        }
 
-        private async Task TryInit()
+			__initTask = Task.Run(AsyncInit);
+		}
+
+		private async Task AsyncInit()
         {
             try
             {
-                string account = await SecureStorage.GetAsync(AccountFile);
-                string key = await SecureStorage.GetAsync(AccountKey);
+                string account = await SecureStorage.GetAsync(AccountFile).ConfigureAwait(false);
+                string key = await SecureStorage.GetAsync(AccountKey).ConfigureAwait(false);
                 if (account != null && key != null)
                 {
                     TheAccount = Account.LoadFromKeyStore(account, key);
-					await UpdateToken();
+					await UpdateToken().ConfigureAwait(false);
 				}
 			}
             catch (Exception e) {

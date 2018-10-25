@@ -24,10 +24,10 @@ namespace TheApp.Tap
 		{
 			UserAccount = userAccount;
 			TapSupplier = supplier;
-			__initializeTask = InitializeStaticResponses();
+			__initializeTask = Task.Run(AsyncInit);
 		}
 
-		internal async Task InitializeStaticResponses()
+		internal async Task AsyncInit()
 		{
 			await UserAccount.MakeReady();
 			var (m, s) = Signing.GetMessageAndSignature(UserAccount.Token, UserAccount.TheAccount);
@@ -74,10 +74,9 @@ namespace TheApp.Tap
 
 				var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
 				var signedMessage = new SignedMessage(m, s);
-				//var tapCap = TapSupplier.RequestTapCap(signedMessage);
-				var nothing = await TapSupplier.GetStaticAsync(token);
-
-				logger.Info("Results {0}", nothing);
+				var tapCap = await TapSupplier.RequestTapCapAsync(signedMessage);
+				
+				logger.Info("Results {0}", tapCap);
 				return true;
 			}
 			catch (Exception e)
