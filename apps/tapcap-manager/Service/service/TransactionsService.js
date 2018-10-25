@@ -1,6 +1,6 @@
 'use strict';
 
-
+const TapCapBroker = require('../tapcap/TapCapBroker').TapCapBroker;
 /**
  * Broker: Register new TapCap transaction
  *
@@ -8,16 +8,15 @@
  * returns inline_response_200
  **/
 exports.tapCapBroker = function(request) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "errorCode" : 0.80082819046101150206595775671303272247314453125
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+  return new Promise(function (resolve, reject) {
+    TapCapBroker(request)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject('{"error": "Tx Not Registered!"}');
+      });
   });
 }
 

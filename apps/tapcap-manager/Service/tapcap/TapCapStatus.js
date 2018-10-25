@@ -1,8 +1,6 @@
 'use strict';
 
-const Ethers = require('ethers')
-
-const { TheContract } = require('./TheContract');
+const { ParseSignedMessage } = require('./TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 
@@ -19,16 +17,12 @@ async function GetLatest(address) {
     };
 }
 
-function getAccount(data, signature) {
-    return Ethers.utils.verifyMessage(data, signature);
-}
 
 exports.TapCapStatus = async (request) => {
 	const signature = request.signature;
 	const asString = request.message;
 
-	const address = getAccount(asString, signature);
-	const tcQueryRequest = JSON.parse(asString);
+	const [address, tcQueryRequest] = ParseSignedMessage(request);
 	const timestamp = tcQueryRequest.timestamp;
 
 	const latest = await GetLatest(address);
@@ -41,7 +35,7 @@ exports.TapCapStatus = async (request) => {
 	const tapCapTokenData = {
 		clientAccount: address,
 		availableBalance: Math.floor(latest.balance / 2),
-		transactionId: latest.nonce,
+		nonce: latest.nonce,
 		timestamp: Date.now()
 	}
 	const dataStr = JSON.stringify(tapCapTokenData);
@@ -56,20 +50,4 @@ exports.TapCapStatus = async (request) => {
 		token: TapCapToken
 	}
 	return response;
-
-	// return new Promise(function(resolve, reject) {
-	// 	var examples = {};
-	// 	examples['application/json'] = {
-	//   "balance" : 0.80082819046101150206595775671303272247314453125,
-	//   "weeklyTopup" : 6.02745618307040320615897144307382404804229736328125,
-	//   "token" : {
-	// 	"signature" : "signature"
-	//   }
-	// };
-	// 	if (Object.keys(examples).length > 0) {
-	// 	  resolve(examples[Object.keys(examples)[0]]);
-	// 	} else {
-	// 	  resolve();
-	// 	}
-	//   });
 }
