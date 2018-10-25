@@ -35,7 +35,7 @@ exports.TapCapStatus = async (request) => {
 	const tapCapTokenData = {
 		clientAccount: address,
 		availableBalance: Math.floor(latest.balance / 2),
-		nonce: latest.nonce,
+		nonce: latest.nonce + 1,
 		timestamp: Date.now()
 	}
 	const dataStr = JSON.stringify(tapCapTokenData);

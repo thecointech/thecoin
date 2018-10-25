@@ -19,11 +19,11 @@ exports.TapCapBroker = async (request) => {
 	const txBrokerKey = datastore.key(["User", clientAddress, "tx", token.nonce, "as", "broker"]);
     const latestKey = GetLatestKey(clientAddress);
 
-	const txtimestamp = new Date().getTime();
+	const txtimestamp = tcClientRequest.timestamp;
 	const transaction = datastore.transaction();
     transaction
         .run()
-        .then(() => Promise.all([transaction.get(txKey), transaction.get(latestKey), transaction.get(txBrokerKey)]))
+        .then(() => Promise.all([transaction.get(txKey), transaction.get(txBrokerKey), transaction.get(latestKey)]))
         .then((results) => {
 			let [tx, txBroker, latest] = results.map(result => result[0]);
 			if (!latest) {
@@ -42,11 +42,19 @@ exports.TapCapBroker = async (request) => {
 
 			// The balance may be updated by the client, possibly
 			// even before this fn is called.  If so, we do not want
-			// to re-apply it.
-			let txbalance = tx.balance;
-			if (tx && tx.balance != undefined) {
+			// to re-apply it.  Only modify balance if it has not been
+			// done so already
+			let txbalance = tx && tx.balance;
+			if (txbalance == undefined) {
 				balance = balance - change;
 				txbalance = balance;
+			}
+			else {
+				// Verify basic info is identical
+				if (tx.change != change)
+					throw("Tx change non-similar to existing record");
+				if (tx.timestamp != txtimestamp)
+					throw("Tx timestamp non-similar to existing record");
 			}
 
 			// TODO: AvailExceeded handling
