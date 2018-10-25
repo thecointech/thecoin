@@ -49,7 +49,7 @@ No authorization required
 
 <a name="tapCapClient"></a>
 # **tapCapClient**
-> SignedMessage tapCapClient(signedMessage)
+> TapCapQueryResponse tapCapClient(signedMessage)
 
 Client: Confirm new TapCap transaction
 
@@ -75,7 +75,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SignedMessage**](SignedMessage.md)
+[**TapCapQueryResponse**](TapCapQueryResponse.md)
 
 ### Authorization
 

@@ -69,7 +69,7 @@ No authorization required
 
 <a name="tapcapclient"></a>
 # **TapCapClient**
-> SignedMessage TapCapClient (SignedMessage signedMessage)
+> TapCapQueryResponse TapCapClient (SignedMessage signedMessage)
 
 Client: Confirm new TapCap transaction
 
@@ -93,7 +93,7 @@ namespace Example
             try
             {
                 // Client: Confirm new TapCap transaction
-                SignedMessage result = apiInstance.TapCapClient(signedMessage);
+                TapCapQueryResponse result = apiInstance.TapCapClient(signedMessage);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -113,7 +113,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SignedMessage**](SignedMessage.md)
+[**TapCapQueryResponse**](TapCapQueryResponse.md)
 
 ### Authorization
 

@@ -15,6 +15,7 @@
 import ApiClient from "../ApiClient";
 import ErrorMessage from '../model/ErrorMessage';
 import SignedMessage from '../model/SignedMessage';
+import TapCapQueryResponse from '../model/TapCapQueryResponse';
 
 /**
 * Transactions service.
@@ -87,7 +88,7 @@ export default class TransactionsApi {
     /**
      * Client: Confirm new TapCap transaction
      * @param {module:model/SignedMessage} signedMessage TapCap status request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SignedMessage} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TapCapQueryResponse} and HTTP response
      */
     tapCapClientWithHttpInfo(signedMessage) {
       let postBody = signedMessage;
@@ -110,7 +111,7 @@ export default class TransactionsApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = SignedMessage;
+      let returnType = TapCapQueryResponse;
 
       return this.apiClient.callApi(
         '/tap/client', 'POST',
@@ -122,7 +123,7 @@ export default class TransactionsApi {
     /**
      * Client: Confirm new TapCap transaction
      * @param {module:model/SignedMessage} signedMessage TapCap status request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SignedMessage}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TapCapQueryResponse}
      */
     tapCapClient(signedMessage) {
       return this.tapCapClientWithHttpInfo(signedMessage)

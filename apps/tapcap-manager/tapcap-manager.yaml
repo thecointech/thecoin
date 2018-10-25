@@ -71,7 +71,7 @@ paths:
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapToken )
+            $ref: "#/definitions/TapCapQueryResponse"
 
   /status/summary:
     post:
