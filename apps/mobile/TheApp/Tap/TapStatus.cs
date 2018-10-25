@@ -6,12 +6,11 @@ using TheUtils;
 
 namespace TheApp.Tap
 {
-    internal class TapStatus
+    public class TapStatus
 	{
 		private TapCapQueryResponse _response;
 
-
-		internal TapStatus(TapCapQueryResponse response)
+		public TapStatus(TapCapQueryResponse response)
 		{
 			_response = response;
 			var (address, token) = Signing.GetSignerAndMessage<TapCapToken>(_response.Token);

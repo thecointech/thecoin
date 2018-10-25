@@ -30,7 +30,7 @@ namespace TheApp.TheCoin
         }
 
 		private TapStatus _status;
-		internal TapStatus TapStatus
+		public TapStatus TapStatus
 		{
 			get => _status;
 			private set

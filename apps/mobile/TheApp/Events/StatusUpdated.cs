@@ -7,7 +7,7 @@ namespace TheApp.Events
 	{
 		internal TapStatus Status;
 		public StatusUpdated() { }
-		internal StatusUpdated(TapStatus status)
+		public StatusUpdated(TapStatus status)
 		{
 			Status = status;
 		}
