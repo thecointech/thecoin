@@ -38,7 +38,7 @@ namespace TapCapManager.Client.Model
         /// </summary>
         /// <param name="clientAccount">clientAccount (required).</param>
         /// <param name="availableBalance">availableBalance (required).</param>
-        /// <param name="transactionId">transactionId (required).</param>
+        /// <param name="transactionId">transactionId.</param>
         /// <param name="timestamp">timestamp (required).</param>
         public TapCapToken(string clientAccount = default(string), long? availableBalance = default(long?), int? transactionId = default(int?), long? timestamp = default(long?))
         {
@@ -60,15 +60,6 @@ namespace TapCapManager.Client.Model
             {
                 this.AvailableBalance = availableBalance;
             }
-            // to ensure "transactionId" is required (not null)
-            if (transactionId == null)
-            {
-                throw new InvalidDataException("transactionId is a required property for TapCapToken and cannot be null");
-            }
-            else
-            {
-                this.TransactionId = transactionId;
-            }
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
             {
@@ -78,6 +69,7 @@ namespace TapCapManager.Client.Model
             {
                 this.Timestamp = timestamp;
             }
+            this.TransactionId = transactionId;
         }
         
         /// <summary>

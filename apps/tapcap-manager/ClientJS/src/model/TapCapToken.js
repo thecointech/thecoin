@@ -24,12 +24,11 @@ class TapCapToken {
      * @alias module:model/TapCapToken
      * @param clientAccount {String} 
      * @param availableBalance {Number} 
-     * @param transactionId {Number} 
      * @param timestamp {Number} 
      */
-    constructor(clientAccount, availableBalance, transactionId, timestamp) { 
+    constructor(clientAccount, availableBalance, timestamp) { 
         
-        TapCapToken.initialize(this, clientAccount, availableBalance, transactionId, timestamp);
+        TapCapToken.initialize(this, clientAccount, availableBalance, timestamp);
     }
 
     /**
@@ -37,10 +36,9 @@ class TapCapToken {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, clientAccount, availableBalance, transactionId, timestamp) { 
+    static initialize(obj, clientAccount, availableBalance, timestamp) { 
         obj['clientAccount'] = clientAccount;
         obj['availableBalance'] = availableBalance;
-        obj['transactionId'] = transactionId;
         obj['timestamp'] = timestamp;
     }
 

@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapPurchaseBroker();
+    instance = new TapcapManager.ErrorMessage();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,28 +47,28 @@
       object[property] = value;
   }
 
-  describe('TapCapPurchaseBroker', function() {
-    it('should create an instance of TapCapPurchaseBroker', function() {
-      // uncomment below and update the code to test TapCapPurchaseBroker
-      //var instane = new TapcapManager.TapCapPurchaseBroker();
-      //expect(instance).to.be.a(TapcapManager.TapCapPurchaseBroker);
+  describe('ErrorMessage', function() {
+    it('should create an instance of ErrorMessage', function() {
+      // uncomment below and update the code to test ErrorMessage
+      //var instane = new TapcapManager.ErrorMessage();
+      //expect(instance).to.be.a(TapcapManager.ErrorMessage);
     });
 
-    it('should have the property clientRequest (base name: "clientRequest")', function() {
-      // uncomment below and update the code to test the property clientRequest
-      //var instane = new TapcapManager.TapCapPurchaseBroker();
+    it('should have the property code (base name: "code")', function() {
+      // uncomment below and update the code to test the property code
+      //var instane = new TapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 
-    it('should have the property coin (base name: "coin")', function() {
-      // uncomment below and update the code to test the property coin
-      //var instane = new TapcapManager.TapCapPurchaseBroker();
+    it('should have the property id (base name: "id")', function() {
+      // uncomment below and update the code to test the property id
+      //var instane = new TapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 
-    it('should have the property cert (base name: "cert")', function() {
-      // uncomment below and update the code to test the property cert
-      //var instane = new TapcapManager.TapCapPurchaseBroker();
+    it('should have the property message (base name: "message")', function() {
+      // uncomment below and update the code to test the property message
+      //var instane = new TapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 

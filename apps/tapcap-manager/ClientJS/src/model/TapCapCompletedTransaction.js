@@ -14,14 +14,14 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The TapCapTransaction model module.
- * @module model/TapCapTransaction
+ * The TapCapCompletedTransaction model module.
+ * @module model/TapCapCompletedTransaction
  * @version 0.0.1
  */
-class TapCapTransaction {
+class TapCapCompletedTransaction {
     /**
-     * Constructs a new <code>TapCapTransaction</code>.
-     * @alias module:model/TapCapTransaction
+     * Constructs a new <code>TapCapCompletedTransaction</code>.
+     * @alias module:model/TapCapCompletedTransaction
      * @param timestamp {Number} 
      * @param fiatAmount {Number} 
      * @param coinAmount {Number} 
@@ -30,7 +30,7 @@ class TapCapTransaction {
      */
     constructor(timestamp, fiatAmount, coinAmount, coinBalance, merchantId) { 
         
-        TapCapTransaction.initialize(this, timestamp, fiatAmount, coinAmount, coinBalance, merchantId);
+        TapCapCompletedTransaction.initialize(this, timestamp, fiatAmount, coinAmount, coinBalance, merchantId);
     }
 
     /**
@@ -47,15 +47,15 @@ class TapCapTransaction {
     }
 
     /**
-     * Constructs a <code>TapCapTransaction</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>TapCapCompletedTransaction</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/TapCapTransaction} obj Optional instance to populate.
-     * @return {module:model/TapCapTransaction} The populated <code>TapCapTransaction</code> instance.
+     * @param {module:model/TapCapCompletedTransaction} obj Optional instance to populate.
+     * @return {module:model/TapCapCompletedTransaction} The populated <code>TapCapCompletedTransaction</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new TapCapTransaction();
+            obj = obj || new TapCapCompletedTransaction();
 
             if (data.hasOwnProperty('timestamp')) {
                 obj['timestamp'] = ApiClient.convertToType(data['timestamp'], 'Number');
@@ -82,32 +82,32 @@ class TapCapTransaction {
 /**
  * @member {Number} timestamp
  */
-TapCapTransaction.prototype['timestamp'] = undefined;
+TapCapCompletedTransaction.prototype['timestamp'] = undefined;
 
 /**
  * @member {Number} fiatAmount
  */
-TapCapTransaction.prototype['fiatAmount'] = undefined;
+TapCapCompletedTransaction.prototype['fiatAmount'] = undefined;
 
 /**
  * @member {Number} coinAmount
  */
-TapCapTransaction.prototype['coinAmount'] = undefined;
+TapCapCompletedTransaction.prototype['coinAmount'] = undefined;
 
 /**
  * @member {Number} coinBalance
  */
-TapCapTransaction.prototype['coinBalance'] = undefined;
+TapCapCompletedTransaction.prototype['coinBalance'] = undefined;
 
 /**
  * @member {String} merchantId
  */
-TapCapTransaction.prototype['merchantId'] = undefined;
+TapCapCompletedTransaction.prototype['merchantId'] = undefined;
 
 
 
 
 
 
-export default TapCapTransaction;
+export default TapCapCompletedTransaction;
 

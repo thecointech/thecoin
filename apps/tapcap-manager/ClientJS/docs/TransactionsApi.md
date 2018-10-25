@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="tapCapBroker"></a>
 # **tapCapBroker**
-> Object tapCapBroker(signedMessage)
+> ErrorMessage tapCapBroker(signedMessage)
 
 Broker: Register new TapCap transaction
 
@@ -36,7 +36,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**ErrorMessage**](ErrorMessage.md)
 
 ### Authorization
 

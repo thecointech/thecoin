@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="unlock"></a>
 # **unlock**
-> String unlock(xRequestKey)
+> ErrorMessage unlock(xRequestKey)
 
 
 
@@ -35,7 +35,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**String**
+[**ErrorMessage**](ErrorMessage.md)
 
 ### Authorization
 

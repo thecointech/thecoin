@@ -13,6 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
+import ErrorMessage from '../model/ErrorMessage';
 import SignedMessage from '../model/SignedMessage';
 import TapCapHistoryResponse from '../model/TapCapHistoryResponse';
 import TapCapQueryResponse from '../model/TapCapQueryResponse';

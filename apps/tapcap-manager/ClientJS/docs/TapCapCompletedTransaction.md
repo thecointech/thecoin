@@ -1,4 +1,4 @@
-# TapcapManager.TapCapTransaction
+# TapcapManager.TapCapCompletedTransaction
 
 ## Properties
 Name | Type | Description | Notes

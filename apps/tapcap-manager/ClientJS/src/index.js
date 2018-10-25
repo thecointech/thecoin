@@ -13,15 +13,18 @@
 
 
 import ApiClient from './ApiClient';
+import ErrorMessage from './model/ErrorMessage';
+import FXRate from './model/FXRate';
 import SignedMessage from './model/SignedMessage';
+import TapCapBrokerComplete from './model/TapCapBrokerComplete';
+import TapCapBrokerPurchase from './model/TapCapBrokerPurchase';
+import TapCapClientRequest from './model/TapCapClientRequest';
+import TapCapCompletedTransaction from './model/TapCapCompletedTransaction';
 import TapCapHistoryRequest from './model/TapCapHistoryRequest';
 import TapCapHistoryResponse from './model/TapCapHistoryResponse';
-import TapCapPurchase from './model/TapCapPurchase';
-import TapCapPurchaseBroker from './model/TapCapPurchaseBroker';
 import TapCapQueryRequest from './model/TapCapQueryRequest';
 import TapCapQueryResponse from './model/TapCapQueryResponse';
 import TapCapToken from './model/TapCapToken';
-import TapCapTransaction from './model/TapCapTransaction';
 import StatusApi from './api/StatusApi';
 import TransactionsApi from './api/TransactionsApi';
 import UnlockApi from './api/UnlockApi';
@@ -66,10 +69,46 @@ export {
     ApiClient,
 
     /**
+     * The ErrorMessage model constructor.
+     * @property {module:model/ErrorMessage}
+     */
+    ErrorMessage,
+
+    /**
+     * The FXRate model constructor.
+     * @property {module:model/FXRate}
+     */
+    FXRate,
+
+    /**
      * The SignedMessage model constructor.
      * @property {module:model/SignedMessage}
      */
     SignedMessage,
+
+    /**
+     * The TapCapBrokerComplete model constructor.
+     * @property {module:model/TapCapBrokerComplete}
+     */
+    TapCapBrokerComplete,
+
+    /**
+     * The TapCapBrokerPurchase model constructor.
+     * @property {module:model/TapCapBrokerPurchase}
+     */
+    TapCapBrokerPurchase,
+
+    /**
+     * The TapCapClientRequest model constructor.
+     * @property {module:model/TapCapClientRequest}
+     */
+    TapCapClientRequest,
+
+    /**
+     * The TapCapCompletedTransaction model constructor.
+     * @property {module:model/TapCapCompletedTransaction}
+     */
+    TapCapCompletedTransaction,
 
     /**
      * The TapCapHistoryRequest model constructor.
@@ -82,18 +121,6 @@ export {
      * @property {module:model/TapCapHistoryResponse}
      */
     TapCapHistoryResponse,
-
-    /**
-     * The TapCapPurchase model constructor.
-     * @property {module:model/TapCapPurchase}
-     */
-    TapCapPurchase,
-
-    /**
-     * The TapCapPurchaseBroker model constructor.
-     * @property {module:model/TapCapPurchaseBroker}
-     */
-    TapCapPurchaseBroker,
 
     /**
      * The TapCapQueryRequest model constructor.
@@ -112,12 +139,6 @@ export {
      * @property {module:model/TapCapToken}
      */
     TapCapToken,
-
-    /**
-     * The TapCapTransaction model constructor.
-     * @property {module:model/TapCapTransaction}
-     */
-    TapCapTransaction,
 
     /**
     * The StatusApi service constructor.

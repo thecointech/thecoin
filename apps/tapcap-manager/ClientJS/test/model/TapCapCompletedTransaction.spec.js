@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapTransaction();
+    instance = new TapcapManager.TapCapCompletedTransaction();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,40 +47,40 @@
       object[property] = value;
   }
 
-  describe('TapCapTransaction', function() {
-    it('should create an instance of TapCapTransaction', function() {
-      // uncomment below and update the code to test TapCapTransaction
-      //var instane = new TapcapManager.TapCapTransaction();
-      //expect(instance).to.be.a(TapcapManager.TapCapTransaction);
+  describe('TapCapCompletedTransaction', function() {
+    it('should create an instance of TapCapCompletedTransaction', function() {
+      // uncomment below and update the code to test TapCapCompletedTransaction
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
+      //expect(instance).to.be.a(TapcapManager.TapCapCompletedTransaction);
     });
 
     it('should have the property timestamp (base name: "timestamp")', function() {
       // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapTransaction();
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
       //expect(instance).to.be();
     });
 
     it('should have the property fiatAmount (base name: "fiatAmount")', function() {
       // uncomment below and update the code to test the property fiatAmount
-      //var instane = new TapcapManager.TapCapTransaction();
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
       //expect(instance).to.be();
     });
 
     it('should have the property coinAmount (base name: "coinAmount")', function() {
       // uncomment below and update the code to test the property coinAmount
-      //var instane = new TapcapManager.TapCapTransaction();
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
       //expect(instance).to.be();
     });
 
     it('should have the property coinBalance (base name: "coinBalance")', function() {
       // uncomment below and update the code to test the property coinBalance
-      //var instane = new TapcapManager.TapCapTransaction();
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
       //expect(instance).to.be();
     });
 
     it('should have the property merchantId (base name: "merchantId")', function() {
       // uncomment below and update the code to test the property merchantId
-      //var instane = new TapcapManager.TapCapTransaction();
+      //var instane = new TapcapManager.TapCapCompletedTransaction();
       //expect(instance).to.be();
     });
 

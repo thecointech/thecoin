@@ -13,6 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
+import ErrorMessage from '../model/ErrorMessage';
 
 /**
 * Unlock service.
@@ -36,7 +37,7 @@ export default class UnlockApi {
 
     /**
      * @param {String} xRequestKey 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link String} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ErrorMessage} and HTTP response
      */
     unlockWithHttpInfo(xRequestKey) {
       let postBody = null;
@@ -60,7 +61,7 @@ export default class UnlockApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = 'String';
+      let returnType = ErrorMessage;
 
       return this.apiClient.callApi(
         '/unlock', 'POST',
@@ -71,7 +72,7 @@ export default class UnlockApi {
 
     /**
      * @param {String} xRequestKey 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link String}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ErrorMessage}
      */
     unlock(xRequestKey) {
       return this.unlockWithHttpInfo(xRequestKey)

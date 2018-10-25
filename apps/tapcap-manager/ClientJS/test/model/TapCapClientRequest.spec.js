@@ -1,6 +1,6 @@
 /**
- * TheCoin Broker
- * TheCoin TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
+ * The TapCap Manager
+ * The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases
  *
  * OpenAPI spec version: 0.0.1
  * Contact: stephen.taylor.dev@gmail.com
@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapPurchase();
+    instance = new TapcapManager.TapCapClientRequest();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,46 +47,34 @@
       object[property] = value;
   }
 
-  describe('TapCapPurchase', function() {
-    it('should create an instance of TapCapPurchase', function() {
-      // uncomment below and update the code to test TapCapPurchase
-      //var instane = new TapcapManager.TapCapPurchase();
-      //expect(instance).to.be.a(TapcapManager.TapCapPurchase);
-    });
-
-    it('should have the property fiat (base name: "fiat")', function() {
-      // uncomment below and update the code to test the property fiat
-      //var instane = new TapcapManager.TapCapPurchase();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property currencyCode (base name: "currencyCode")', function() {
-      // uncomment below and update the code to test the property currencyCode
-      //var instane = new TapcapManager.TapCapPurchase();
-      //expect(instance).to.be();
+  describe('TapCapClientRequest', function() {
+    it('should create an instance of TapCapClientRequest', function() {
+      // uncomment below and update the code to test TapCapClientRequest
+      //var instane = new TapcapManager.TapCapClientRequest();
+      //expect(instance).to.be.a(TapcapManager.TapCapClientRequest);
     });
 
     it('should have the property timestamp (base name: "timestamp")', function() {
       // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapPurchase();
+      //var instane = new TapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property gpoData (base name: "gpoData")', function() {
       // uncomment below and update the code to test the property gpoData
-      //var instane = new TapcapManager.TapCapPurchase();
+      //var instane = new TapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
-    it('should have the property certificateRequest (base name: "certificateRequest")', function() {
-      // uncomment below and update the code to test the property certificateRequest
-      //var instane = new TapcapManager.TapCapPurchase();
+    it('should have the property cryptoData (base name: "cryptoData")', function() {
+      // uncomment below and update the code to test the property cryptoData
+      //var instane = new TapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property token (base name: "token")', function() {
       // uncomment below and update the code to test the property token
-      //var instane = new TapcapManager.TapCapPurchase();
+      //var instane = new TapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 

@@ -230,7 +230,6 @@ definitions:
     - "availableBalance"
     - "clientAccount"
     - "timestamp"
-    - "transactionId"
     properties:
       clientAccount:
         type: "string"
@@ -245,8 +244,6 @@ definitions:
   TapCapClientRequest:
     required:
     - "cryptoData"
-    - "currencyCode"
-    - "fiatAmount"
     - "gpoData"
     - "timestamp"
     - "token"
@@ -254,11 +251,6 @@ definitions:
       timestamp:
         type: "integer"
         format: "int64"
-      fiatAmount:
-        type: "number"
-        format: "double"
-      currencyCode:
-        type: "integer"
       gpoData:
         type: "string"
         format: "byte"
@@ -287,7 +279,29 @@ definitions:
         type: "string"
         format: "byte"
         pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+  TapCapBrokerComplete:
+    required:
+    - "FxRate"
+    - "coinCharge"
+    - "merchantId"
+    - "signedRequest"
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage"
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: "integer"
+        format: "int64"
+      merchantId:
+        type: "string"
   FXRate:
+    required:
+    - "buy"
+    - "fxRate"
+    - "sell"
+    - "validFrom"
+    - "validTill"
     properties:
       target:
         type: "integer"
@@ -339,7 +353,6 @@ definitions:
     - "availableBalance"
     - "clientAccount"
     - "timestamp"
-    - "transactionId"
     properties:
       clientAccount:
         type: "string"
@@ -354,8 +367,6 @@ definitions:
   TapCapClientRequest_2:
     required:
     - "cryptoData"
-    - "currencyCode"
-    - "fiatAmount"
     - "gpoData"
     - "timestamp"
     - "token"
@@ -363,11 +374,6 @@ definitions:
       timestamp:
         type: "integer"
         format: "int64"
-      fiatAmount:
-        type: "number"
-        format: "double"
-      currencyCode:
-        type: "integer"
       gpoData:
         type: "string"
         format: "byte"
@@ -397,6 +403,12 @@ definitions:
         format: "byte"
         pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
   FXRate_2:
+    required:
+    - "buy"
+    - "fxRate"
+    - "sell"
+    - "validFrom"
+    - "validTill"
     properties:
       target:
         type: "integer"
@@ -415,6 +427,22 @@ definitions:
       validTill:
         type: "integer"
         format: "int64"
+  TapCapBrokerComplete_2:
+    required:
+    - "FxRate"
+    - "coinCharge"
+    - "merchantId"
+    - "signedRequest"
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage"
+      FxRate:
+        $ref: "#/definitions/FXRate"
+      coinCharge:
+        type: "integer"
+        format: "int64"
+      merchantId:
+        type: "string"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

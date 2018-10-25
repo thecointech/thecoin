@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import TapCapTransaction from './TapCapTransaction';
+import TapCapCompletedTransaction from './TapCapCompletedTransaction';
 
 /**
  * The TapCapHistoryResponse model module.
@@ -23,7 +23,7 @@ class TapCapHistoryResponse {
     /**
      * Constructs a new <code>TapCapHistoryResponse</code>.
      * @alias module:model/TapCapHistoryResponse
-     * @param history {Array.<module:model/TapCapTransaction>} 
+     * @param history {Array.<module:model/TapCapCompletedTransaction>} 
      */
     constructor(history) { 
         
@@ -51,7 +51,7 @@ class TapCapHistoryResponse {
             obj = obj || new TapCapHistoryResponse();
 
             if (data.hasOwnProperty('history')) {
-                obj['history'] = ApiClient.convertToType(data['history'], [TapCapTransaction]);
+                obj['history'] = ApiClient.convertToType(data['history'], [TapCapCompletedTransaction]);
             }
         }
         return obj;
@@ -61,7 +61,7 @@ class TapCapHistoryResponse {
 }
 
 /**
- * @member {Array.<module:model/TapCapTransaction>} history
+ * @member {Array.<module:model/TapCapCompletedTransaction>} history
  */
 TapCapHistoryResponse.prototype['history'] = undefined;
 

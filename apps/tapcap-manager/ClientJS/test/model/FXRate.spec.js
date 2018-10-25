@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapToken();
+    instance = new TapcapManager.FXRate();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,34 +47,46 @@
       object[property] = value;
   }
 
-  describe('TapCapToken', function() {
-    it('should create an instance of TapCapToken', function() {
-      // uncomment below and update the code to test TapCapToken
-      //var instane = new TapcapManager.TapCapToken();
-      //expect(instance).to.be.a(TapcapManager.TapCapToken);
+  describe('FXRate', function() {
+    it('should create an instance of FXRate', function() {
+      // uncomment below and update the code to test FXRate
+      //var instane = new TapcapManager.FXRate();
+      //expect(instance).to.be.a(TapcapManager.FXRate);
     });
 
-    it('should have the property clientAccount (base name: "clientAccount")', function() {
-      // uncomment below and update the code to test the property clientAccount
-      //var instane = new TapcapManager.TapCapToken();
+    it('should have the property target (base name: "target")', function() {
+      // uncomment below and update the code to test the property target
+      //var instane = new TapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
-    it('should have the property availableBalance (base name: "availableBalance")', function() {
-      // uncomment below and update the code to test the property availableBalance
-      //var instane = new TapcapManager.TapCapToken();
+    it('should have the property buy (base name: "buy")', function() {
+      // uncomment below and update the code to test the property buy
+      //var instane = new TapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
-    it('should have the property transactionId (base name: "transactionId")', function() {
-      // uncomment below and update the code to test the property transactionId
-      //var instane = new TapcapManager.TapCapToken();
+    it('should have the property sell (base name: "sell")', function() {
+      // uncomment below and update the code to test the property sell
+      //var instane = new TapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
-    it('should have the property timestamp (base name: "timestamp")', function() {
-      // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapToken();
+    it('should have the property fxRate (base name: "fxRate")', function() {
+      // uncomment below and update the code to test the property fxRate
+      //var instane = new TapcapManager.FXRate();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property validFrom (base name: "validFrom")', function() {
+      // uncomment below and update the code to test the property validFrom
+      //var instane = new TapcapManager.FXRate();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property validTill (base name: "validTill")', function() {
+      // uncomment below and update the code to test the property validTill
+      //var instane = new TapcapManager.FXRate();
       //expect(instance).to.be();
     });
 

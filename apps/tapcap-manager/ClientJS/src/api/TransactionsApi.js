@@ -13,6 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
+import ErrorMessage from '../model/ErrorMessage';
 import SignedMessage from '../model/SignedMessage';
 
 /**
@@ -38,7 +39,7 @@ export default class TransactionsApi {
     /**
      * Broker: Register new TapCap transaction
      * @param {module:model/SignedMessage} signedMessage TapCap exchange request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ErrorMessage} and HTTP response
      */
     tapCapBrokerWithHttpInfo(signedMessage) {
       let postBody = signedMessage;
@@ -61,7 +62,7 @@ export default class TransactionsApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = ErrorMessage;
 
       return this.apiClient.callApi(
         '/tap/broker', 'POST',
@@ -73,7 +74,7 @@ export default class TransactionsApi {
     /**
      * Broker: Register new TapCap transaction
      * @param {module:model/SignedMessage} signedMessage TapCap exchange request
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ErrorMessage}
      */
     tapCapBroker(signedMessage) {
       return this.tapCapBrokerWithHttpInfo(signedMessage)

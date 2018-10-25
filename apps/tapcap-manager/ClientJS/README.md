@@ -97,15 +97,18 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [TapcapManager.ErrorMessage](docs/ErrorMessage.md)
+ - [TapcapManager.FXRate](docs/FXRate.md)
  - [TapcapManager.SignedMessage](docs/SignedMessage.md)
+ - [TapcapManager.TapCapBrokerComplete](docs/TapCapBrokerComplete.md)
+ - [TapcapManager.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
+ - [TapcapManager.TapCapClientRequest](docs/TapCapClientRequest.md)
+ - [TapcapManager.TapCapCompletedTransaction](docs/TapCapCompletedTransaction.md)
  - [TapcapManager.TapCapHistoryRequest](docs/TapCapHistoryRequest.md)
  - [TapcapManager.TapCapHistoryResponse](docs/TapCapHistoryResponse.md)
- - [TapcapManager.TapCapPurchase](docs/TapCapPurchase.md)
- - [TapcapManager.TapCapPurchaseBroker](docs/TapCapPurchaseBroker.md)
  - [TapcapManager.TapCapQueryRequest](docs/TapCapQueryRequest.md)
  - [TapcapManager.TapCapQueryResponse](docs/TapCapQueryResponse.md)
  - [TapcapManager.TapCapToken](docs/TapCapToken.md)
- - [TapcapManager.TapCapTransaction](docs/TapCapTransaction.md)
 
 
 ## Documentation for Authorization

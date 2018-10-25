@@ -1,13 +1,11 @@
-# TapcapManager.TapCapPurchase
+# TapcapManager.TapCapClientRequest
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fiat** | **Number** |  | 
-**currencyCode** | **Number** |  | 
 **timestamp** | **Number** |  | 
 **gpoData** | **Blob** |  | 
-**certificateRequest** | **Blob** |  | 
+**cryptoData** | **Blob** |  | 
 **token** | [**SignedMessage**](SignedMessage.md) |  | 
 
 
