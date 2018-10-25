@@ -58,15 +58,16 @@ namespace TheApp.Tap
 		{
 			try
 			{
+				const ulong amt = 123;
 				var gpoData = StaticResponses.GpoPdol;
 				var cryptData = StaticResponses.CryptoPdol;
 
 				// Normally this would get sent back to the client to be filled by the terminal
 				var gpoParsed = PDOL.ParsePDOLItems(gpoData);
-				PDOL.FillWithDummyData(gpoParsed);
+				PDOL.FillWithDummyData(gpoParsed, amt);
 
 				var cryptParsed = PDOL.ParsePDOLItems(cryptData);
-				PDOL.FillWithDummyData(cryptParsed);
+				PDOL.FillWithDummyData(cryptParsed, amt);
 
 				var timestamp = TheCoinTime.Now();
 				var mtoken = UserAccount.TapStatus.SignedToken;

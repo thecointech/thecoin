@@ -153,7 +153,6 @@ namespace TheApp.TheCoin
 		{
 			Task.Run(async () =>
 			{
-
 				// We simply sign this tx to verify we accepted it
 				// and now we send it on to the manager
 				//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);

@@ -87,6 +87,13 @@ namespace TheApp.ViewModels
 
 			TestPurchaseCommand = new DelegateCommand(TestPurchase);
 			ConnectCommand = new DelegateCommand(BeginConnect);
+
+			Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, Prism.Events.ThreadOption.UIThread);
+		}
+
+		private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
+		{
+			TapCapBalance = newStatus.Status.Balance;
 		}
 
 		private void BeginConnect()

@@ -36,8 +36,10 @@ namespace TheApp
             containerRegistry.RegisterInstance(new TheUtils.TheContract(theContractJson));
             // Register a single RatesApi object
             containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
-            containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi("http://localhost:8091"));
+			containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi("http://localhost:8091"));
+			containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi("http://localhost:8091"));
 			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://localhost:8070"));
+
 
 			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
 			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
