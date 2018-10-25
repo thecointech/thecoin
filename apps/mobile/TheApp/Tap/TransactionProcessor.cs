@@ -77,6 +77,14 @@ namespace TheApp.Tap
 				var tapCap = await TapSupplier.RequestTapCapAsync(signedMessage);
 				
 				logger.Info("Results {0}", tapCap);
+
+				if (tapCap != null)
+				{
+					EventSystem.Publish(new Events.TxCompleted()
+					{
+						SignedResponse = tapCap
+					});
+				}
 				return true;
 			}
 			catch (Exception e)

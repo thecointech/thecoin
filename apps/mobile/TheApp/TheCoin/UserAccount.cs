@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
 using TapCapManager.Client.Model;
+using TheApp.Tap;
 using TheUtils;
 using Xamarin.Essentials;
 
@@ -28,8 +29,16 @@ namespace TheApp.TheCoin
 			}
         }
 
-        public SignedMessage Token { get; internal set; }
-		public ulong TapCapBalance;
+		private TapStatus _status;
+		internal TapStatus TapStatus
+		{
+			get => _status;
+			private set
+			{
+				_status = value;
+				EventSystem.Publish(new Events.StatusUpdated(value));
+			}
+		}
 
 		public string Address
 		{
@@ -49,17 +58,22 @@ namespace TheApp.TheCoin
         private string EncryptedAccount = null;
         private TheContract TheContract;
         private Task __initTask;
-		private IStatusApi TapCapStatus;
+		private IStatusApi StatusApi;
+		private ITransactionsApi TransactionsApi;
 
+		////////////////////////////////////////////////////////////////////////////
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="theContract"></param>
-		public UserAccount(TheContract theContract, IStatusApi tapCapStatus) {
+		public UserAccount(TheContract theContract, IStatusApi tapCapStatus, ITransactionsApi transactions) {
             TheContract = theContract;
-			TapCapStatus = tapCapStatus;
+			StatusApi = tapCapStatus;
+			TransactionsApi = transactions;
 
 			__initTask = Task.Run(AsyncInit);
+
+			EventSystem.Subscribe<Events.TxCompleted>(OnTxComplete);
 		}
 
 		private async Task AsyncInit()
@@ -125,15 +139,32 @@ namespace TheApp.TheCoin
 				var req = new TapCapQueryRequest(timestamp);
 				var (m, s) = Signing.GetMessageAndSignature(req, _TheAccount);
 				var signedReq = new SignedMessage(m, s);
-				var response = await TapCapStatus.TapCapStatusAsync(signedReq);
+				var response = await StatusApi.TapCapStatusAsync(signedReq);
 
-				TapCapBalance = (ulong)response.Balance.GetValueOrDefault(0);
-				Token = response.Token;
+				TapStatus = new TapStatus(response);
 			}
 			catch (Exception e)
 			{
 				logger.Error(e, "Could you fuck this up any more?");
 			}
+		}
+
+		public void OnTxComplete(Events.TxCompleted tx)
+		{
+			Task.Run(async () =>
+			{
+
+				// We simply sign this tx to verify we accepted it
+				// and now we send it on to the manager
+				//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);
+
+				var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, _TheAccount);
+				var signedReq = new SignedMessage(m, s);
+
+				var response = await TransactionsApi.TapCapClientAsync(signedReq);
+				// TODO: Verify that we have 
+				TapStatus = new TapStatus(response);
+			});
 		}
 	}
 }
