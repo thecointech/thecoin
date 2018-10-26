@@ -1,6 +1,7 @@
 'use strict';
 
-const TapCapBroker = require('../tapcap/TapCapBroker').TapCapBroker;
+const TapTxBroker = require('../tapcap/TapTxBroker').TapTxBroker;
+const TapTxClient = require('../tapcap/TapTxClient').TapTxClient;
 /**
  * Broker: Register new TapCap transaction
  *
@@ -9,9 +10,13 @@ const TapCapBroker = require('../tapcap/TapCapBroker').TapCapBroker;
  **/
 exports.tapCapBroker = function(request) {
   return new Promise(function (resolve, reject) {
-    TapCapBroker(request)
+    TapTxBroker(request)
       .then((result) => {
-        resolve(result);
+        resolve({
+          code: 0,
+          id: 0,
+          message: "Tx Succesfully registered"
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -28,17 +33,15 @@ exports.tapCapBroker = function(request) {
  * returns SignedMessage
  **/
 exports.tapCapClient = function(request) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "signature" : "signature",
-  "message" : "message"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+  return new Promise(function (resolve, reject) {
+    TapTxClient(request)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject('{"error": "Tx Not Registered!"}');
+      });
   });
 }
 

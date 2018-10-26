@@ -17,20 +17,12 @@ async function GetLatest(address) {
     };
 }
 
-
-exports.TapCapStatus = async (request) => {
-	const signature = request.signature;
-	const asString = request.message;
-
-	const [address, tcQueryRequest] = ParseSignedMessage(request);
-	const timestamp = tcQueryRequest.timestamp;
-
+exports.GetStatus = async (address, timestamp) => {
 	const latest = await GetLatest(address);
 	// TODO: Verify timestamp (sensibly)
 	if (timestamp <= latest.timestamp)
 		throw("Invalid Request");
 
-	
 	// TODO: Only build the token if identity is verified
 	const tapCapTokenData = {
 		clientAccount: address,
@@ -50,4 +42,14 @@ exports.TapCapStatus = async (request) => {
 		token: TapCapToken
 	}
 	return response;
+};
+
+exports.TapCapStatus = async (request) => {
+	const signature = request.signature;
+	const asString = request.message;
+
+	const [address, tcQueryRequest] = ParseSignedMessage(request);
+	const timestamp = tcQueryRequest.timestamp;
+
+	return exports.GetStatus(address, timestamp);
 }
