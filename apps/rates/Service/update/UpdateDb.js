@@ -446,12 +446,12 @@ module.exports = {
                 }
                 else if (entities[0].ValidUntil < timestamp)
                 {
-                    console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(rates.ValidUntil, "%F %R:%S", "America/New_York"));
+                    console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidUntil, "%F %R:%S", "America/New_York"));
                     ForceLatestRate(resolve, reject, currencyCode, timestamp);
                 }
                 else if (entities[0].ValidFrom > timestamp)
                 {
-                    console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(rates.ValidFrom, "%F %R:%S", "America/New_York"));
+                    console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidFrom, "%F %R:%S", "America/New_York"));
                     reject("Could not retrieve rates");
                 }
                 else {
