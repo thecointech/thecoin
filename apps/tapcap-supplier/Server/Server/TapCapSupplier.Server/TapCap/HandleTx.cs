@@ -1,4 +1,5 @@
 ﻿using Nethereum.Web3.Accounts;
+using NLog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
@@ -17,6 +18,8 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly IEmvCard Card;
 		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
+
+		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// 
@@ -54,7 +57,6 @@ namespace TapCapSupplier.Server.TapCap
 			var timestamp = TheCoinTime.Now();
 			var fxRate = FxRates.GetCurrentFxRate(timestamp);
 
-			
 			var items = PDOL.ParsePDOLItems(Card.CardStaticResponses().CryptoPdol);
 			PDOL.ParseCDOLData(request.CryptoData, items);
 			var txCents = PDOL.GetAmount(items);
@@ -90,6 +92,11 @@ namespace TapCapSupplier.Server.TapCap
 				var (message, signature) = Signing.GetMessageAndSignature(validation, TheAccount);
 				var signedValidation = new TapCapManager.Client.Model.SignedMessage(message, signature);
 				var result = await TapCapManager.TapCapBrokerAsync(signedValidation);
+
+				var fxRate = purchase.FxRate;
+				var fiat = TheContract.ToHuman((ulong)(purchase.CoinCharge * fxRate.Sell.Value * fxRate._FxRate));
+				var coin = TheContract.ToHuman((ulong)purchase.CoinCharge.Value);
+				logger.Info("Completed tx: ${0} -> c{1}: {2}", fiat, coin, result.ToString());
 			}
 		}
 
