@@ -38,7 +38,7 @@ namespace TheUtils
 		//    return signer.EcRecover(asHash, request.RequestorSig);
 		//}
 
-		public static (string address, TMessage message) GetSignerAndMessage<TMessage>(dynamic signedMessage) where TMessage : new()
+		public static (string address, TMessage message) GetSignerAndMessage<TMessage>(dynamic signedMessage)
 		{
 			string signature = signedMessage.Signature;
 			string messageStr = signedMessage.Message;
