@@ -5,18 +5,22 @@ using TheApp.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.DryIoc;
+using DryIoc;
+using NLog;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TheApp
 {
 	public partial class App : PrismApplication
     {
-        /* 
+		private static Logger logger = LogManager.GetCurrentClassLogger();
+
+		/* 
          * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
          * This imposes a limitation in which the App class must have a default constructor. 
          * App(IPlatformInitializer initializer = null) cannot be handled by the Activator.
          */
-        public App() : this(null) { }
+		public App() : this(null) { }
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
 
@@ -29,22 +33,43 @@ namespace TheApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
-            containerRegistry.RegisterInstance(new TheCoin.TheContract());
-            // Register a single RatesApi object
-            containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
-			containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi("http://localhost:8091"));
-			containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi("http://localhost:8091"));
-			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://localhost:8070"));
-
-
-			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
-			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
+ 			containerRegistry.RegisterSingleton<TheCoin.Balances>();
 
 			containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<Connect>();
             containerRegistry.RegisterForNavigation<Scanner>();
-        }
+
+			RegisterBackgroundServices(containerRegistry);
+		}
+
+		public static void RegisterBackgroundServices(IContainerRegistry containerRegistry)
+		{
+			// Register services you need in the Background Service
+			containerRegistry.RegisterInstance(new TheCoin.TheContract());
+			containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
+			containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi());
+			containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi());
+			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://localhost:8070"));
+
+			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
+			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
+		}
+
+		/// <summary>
+		/// Used by 
+		/// </summary>
+		/// <returns></returns>
+		public static IContainerProvider GetContainer()
+		{
+			App sthis = ((App)Application.Current);
+			if (sthis.Container != null)
+				return sthis.Container;
+
+			logger.Trace("Constructing new container");
+			var container = new DryIocContainerExtension(new Container());
+			RegisterBackgroundServices(container);
+			return container;
+		}
     }
 }

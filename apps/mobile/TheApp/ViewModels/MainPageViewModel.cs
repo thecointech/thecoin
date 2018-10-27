@@ -4,10 +4,8 @@ using Prism.Navigation;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TapCapManager.Client.Api;
 using TheApp.Tap;
-using ThePricing.Api;
-using TheUtils;
+using TheApp.TheCoin;
 
 namespace TheApp.ViewModels
 {
@@ -20,75 +18,35 @@ namespace TheApp.ViewModels
 			set { SetProperty(ref this._Logs, value); }
 		}
 
-		private ulong _MainBalance;
-		public ulong MainBalance
-		{
-			get { return this._MainBalance; }
-			set
-			{
-				SetProperty(ref this._MainBalance, value);
-				RaisePropertyChanged("TotalBalance");
-				RaisePropertyChanged("CadBalance");
-			}
-		}
+		private Balances balances;
 
-		private ulong _TapCapBalance;
-		public ulong TapCapBalance
-		{
-			get { return this._TapCapBalance; }
-			set
-			{
-				SetProperty(ref this._TapCapBalance, value);
-				RaisePropertyChanged("TotalBalance");
-				RaisePropertyChanged("CadBalance");
-			}
-		}
+		public ulong MainBalance => balances.MainBalance;
+		public ulong TapCapBalance => balances.TapCapBalance;
+		public double CadExchangeRate => balances.FiatBalance;
+		public ulong TotalBalance => balances.TotalBalance;
+		public double CadBalance => balances.FiatBalance;
 
-		private double _CadExchangeRate = 1;
-		public double CadExchangeRate
-		{
-			get { return this._CadExchangeRate; }
-			set
-			{
-				SetProperty(ref this._CadExchangeRate, value);
-				RaisePropertyChanged("CadBalance");
-			}
-		}
+		public bool CanConnect { get => true; }
 
-		public ulong TotalBalance
-		{
-			get { return MainBalance + TapCapBalance; }
-		}
-
-		public double CadBalance
-		{
-			get { return TheContract.ToHuman((ulong)(TotalBalance * CadExchangeRate)); }
-		}
-
-		public bool CanConnect { get => UserAccount.NeedsDecrypting(); }
-
-		private TheCoin.UserAccount UserAccount;
-		private TheContract TheContract;
-
-		private IRatesApi Rates;
 		private TransactionProcessor Transaction;
 
 		public DelegateCommand TestPurchaseCommand { get; set; }
 		public DelegateCommand ConnectCommand { get; set; }
 
-		public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TransactionProcessor transactions)
+		public MainPageViewModel(INavigationService navigationService, Balances balances, TransactionProcessor transactions)
 			: base(navigationService)
 		{
 			Title = "Main Page";
-			Logs = "Your Logs Here";
+			Logs = "-- Loading Account --";
 
-			TheContract = theContract;
-			Rates = ratesApi;
-			//UserAccount = userAccount;
 			Transaction = transactions;
+			this.balances = balances;
 
 			TestPurchaseCommand = new DelegateCommand(TestPurchase);
 			ConnectCommand = new DelegateCommand(BeginConnect);
+
+			Events.EventSystem.Subscribe<Events.BalancesUpdated>((u) => UpdateBalances(u.Update));
+			Events.EventSystem.Subscribe<Events.SetActiveAccount>((u) => { Logs = "Loaded"; }, ThreadOption.UIThread);
 		}
 
 		private void BeginConnect()
@@ -109,59 +67,26 @@ namespace TheApp.ViewModels
 		}
 
 		CancellationTokenSource source = new CancellationTokenSource();
-		private SubscriptionToken _statusUpdateSub;
-		private SubscriptionToken _newAccountSub;
+
 
 		public override void OnNavigatedFrom(INavigationParameters parameters)
 		{
-			Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdateSub);
-			Events.EventSystem.Unsubscribe<Events.SetActiveAccount>(_newAccountSub);
 		}
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			_statusUpdateSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, ThreadOption.UIThread);
-			_newAccountSub = Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount, ThreadOption.UIThread);
+			//Logs = "Account Init: " + UserAccount.Address;
+			UpdateBalances(balances);
 
-			Logs = "Account Init: " + UserAccount.Address;
-			Task.Run(UpdateBalances);
 		}
 
-		private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
+		void UpdateBalances(Balances update)
 		{
-			TapCapBalance = newStatus.Status.Balance;
+			balances = update;
+			RaisePropertyChanged("TapCapBalance");
+			RaisePropertyChanged("TotalBalance");
+			RaisePropertyChanged("CadBalance");
 		}
 
-		private void OnSetActiveAccount(Events.SetActiveAccount setActive)
-		{
-			UserAccount = setActive.Account;
-			Task.Run(UpdateBalances);
-		}
-
-		private async Task UpdateBalances()
-		{
-			if (UserAccount.TheAccount == null)
-				return;
-
-			try
-			{
-				var now = TheCoinTime.Now();
-				var FXRateWait = Rates.GetConversionAsync(124, now).ConfigureAwait(false);
-				var balanceWait = TheContract.CoinBalance().ConfigureAwait(false);
-
-				var FXRate = await FXRateWait;
-				var balance = await balanceWait;
-				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-				{
-					CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
-					MainBalance = balance;
-					TapCapBalance = UserAccount.Status.Balance;
-				});
-			}
-			catch (System.Exception e)
-			{
-				Logs = "Oh No! " + e.Message;
-			}
-		}
 	}
 }

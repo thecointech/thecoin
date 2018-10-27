@@ -1,4 +1,5 @@
 ﻿using NLog;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,31 +14,36 @@ namespace TheApp.Tap
 {
 	public class TransactionProcessor
 	{
+		private Logger logger = LogManager.GetCurrentClassLogger();
+
 		private ITransactionApi TapSupplier;
 		private StaticResponses StaticResponses;
 		private UserAccount UserAccount;
 
-		private Logger logger = LogManager.GetCurrentClassLogger();
+		private SubscriptionToken _statusUpdatedSub;
 
 		public TransactionProcessor(UserAccount userAccount, ITransactionApi supplier)
 		{
 			UserAccount = userAccount;
 			TapSupplier = supplier;
 
-			Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount);
+			_statusUpdatedSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnStatusUpdated);
+			Task.Run(FetchStaticResponses);
 		}
 
-		internal void OnSetActiveAccount(Events.SetActiveAccount activeAccount)
+		internal void OnStatusUpdated(Events.StatusUpdated update)
 		{
-			var account = activeAccount.Account;
-			if (account != null)
+			Task.Run(FetchStaticResponses);
+		}
+
+		async Task FetchStaticResponses()
+		{
+			if (StaticResponses == null && UserAccount != null && UserAccount.Status != null)
 			{
-				Task.Run(async () =>
-				{
-					var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
-					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
-					StaticResponses = supplierResponses;
-				});
+				var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
+				var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
+				StaticResponses = supplierResponses;
+				Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
 			}
 		}
 

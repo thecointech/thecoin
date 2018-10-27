@@ -92,6 +92,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\the-utilities\TheUtils\TheUtils.csproj">
+      <Project>{4FBCCF53-202D-4661-827F-C5F023B15397}</Project>
+      <Name>TheUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TheApp\TheApp.csproj">
       <Project>{A682884C-CB44-4A89-B752-27BB634E0ABE}</Project>
       <Name>TheApp</Name>

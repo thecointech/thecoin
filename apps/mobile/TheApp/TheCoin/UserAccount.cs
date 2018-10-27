@@ -99,7 +99,7 @@ namespace TheApp.TheCoin
             try
             {
                 // First, verify the account pwd
-                var TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
+                TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
 				// If we are here, then success
 				Events.EventSystem.Publish(new Events.SetActiveAccount(this));
 				// Always get a new token on new account.

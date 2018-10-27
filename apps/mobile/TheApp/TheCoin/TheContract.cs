@@ -5,11 +5,11 @@ using System.Text;
 
 namespace TheApp.TheCoin
 {
-    internal class TheContract
+    public class TheContract
     {
 		public TheUtils.TheContract Contract;
 
-		internal TheContract()
+		public TheContract()
 		{
 			// Register the contract
 			var assembly = typeof(App).GetTypeInfo().Assembly;
