@@ -2,3 +2,4 @@ Service/node_modules/
 Service/.vscode/
 ClientJS/node_modules/
 Service/.vs/
+Service/tapcap/secret.json

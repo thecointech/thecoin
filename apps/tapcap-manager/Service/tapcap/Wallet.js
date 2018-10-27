@@ -2,6 +2,7 @@
 
 const Ethers = require('ethers');
 const encrypted = require('./TapCapManagerWallet');
+let key = require('./secret.json').key;
 
 let TCWallet = null;
 
@@ -10,8 +11,9 @@ async function DecryptWallet(key) {
 	return TCWallet;
 }
 
-if (process.env.TC_WALLET_KEY) {
-	DecryptWallet(process.env.TC_WALLET_KEY);
+if (key != null) {
+	DecryptWallet(key);
+	key = undefined;
 }
 
 exports.GetWallet = () => TCWallet;
