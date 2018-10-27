@@ -1,7 +1,7 @@
 'use strict';
 
 const Ethers = require('ethers');
-const TheCoinSpec = require('the-contract/build/contracts/TheCoin');
+const TheCoinSpec = require('@the-coin/contract/build/contracts/TheCoin');
 
 const { abi } = TheCoinSpec;
 const { address } = TheCoinSpec.networks[3];

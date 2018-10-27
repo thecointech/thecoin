@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8091"
+host: "tapcap-dot-thecoincore-212314.appspot.com" # "localhost:8091"
 tags:
 - name: "Transactions"
   description: "The: TapCap manager is responsible for resolving TapCap transactions, transfering the appropriate coin from seller to buyer weekly"
@@ -23,8 +23,8 @@ consumes:
   - application/json
 produces:
   - application/json
-#schemes:
-#- "https"
+schemes:
+- "https"
 
 paths:
   /tap/broker:

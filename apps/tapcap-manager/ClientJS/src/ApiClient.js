@@ -32,9 +32,9 @@ class ApiClient {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost:8091
+         * @default https://tapcap-dot-thecoincore-212314.appspot.com
          */
-        this.basePath = 'http://localhost:8091'.replace(/\/+$/, '');
+        this.basePath = 'https://tapcap-dot-thecoincore-212314.appspot.com'.replace(/\/+$/, '');
 
         /**
          * The authentication methods to be included for all API calls.

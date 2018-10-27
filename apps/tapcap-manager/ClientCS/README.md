@@ -70,7 +70,7 @@ namespace Example
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8091*
+All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

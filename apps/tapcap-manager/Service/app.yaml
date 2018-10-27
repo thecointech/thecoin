@@ -13,12 +13,8 @@
 
 # [START app_yaml]
 runtime: nodejs8
+instance_class: F2
 
 service: tapcap
-
-handlers:
-- url: /.*
-  http_headers:
-    Access-Control-Allow-Origin: "*"
 
 # [END app_yaml]

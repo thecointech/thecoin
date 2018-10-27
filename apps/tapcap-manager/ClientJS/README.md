@@ -84,7 +84,7 @@ api.tapCapHistory(signedMessage).then(function(data) {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8091*
+All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

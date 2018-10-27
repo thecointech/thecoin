@@ -10,7 +10,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8091"
+host: "tapcap-dot-thecoincore-212314.appspot.com"
 tags:
 - name: "Transactions"
   description: "The: TapCap manager is responsible for resolving TapCap transactions,\
@@ -20,6 +20,8 @@ tags:
 - name: "Unlock"
   description: "Temp method for unlocking account till we find something better (NOT\
     \ FOR PUBLIC USE)"
+schemes:
+- "https"
 consumes:
 - "application/json"
 produces:

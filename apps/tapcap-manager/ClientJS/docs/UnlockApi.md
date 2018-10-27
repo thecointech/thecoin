@@ -1,6 +1,6 @@
 # TapcapManager.UnlockApi
 
-All URIs are relative to *http://localhost:8091*
+All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

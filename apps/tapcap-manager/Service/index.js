@@ -11,7 +11,7 @@ var cors = require('cors')
 
 var watcher = require('./tapcap/DepositWatcher');
 
-var serverPort = 8091;
+const PORT = process.env.PORT || 8091;
 
 // swaggerRouter configuration
 var options = {
@@ -43,9 +43,9 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Start the server
-  http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+  http.createServer(app).listen(PORT, function () {
+    console.log('Your server is listening on port %d (http://localhost:%d)', PORT, PORT);
+    console.log('Swagger-ui is available on http://localhost:%d/docs', PORT);
   });
 
 });

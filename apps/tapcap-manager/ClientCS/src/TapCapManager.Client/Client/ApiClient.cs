@@ -53,13 +53,13 @@ namespace TapCapManager.Client.Client
         public ApiClient()
         {
             Configuration = TapCapManager.Client.Client.Configuration.Default;
-            RestClient = new RestClient("http://localhost:8091");
+            RestClient = new RestClient("https://tapcap-dot-thecoincore-212314.appspot.com");
             RestClient.IgnoreResponseStatusCode = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default base path (http://localhost:8091).
+        /// with default base path (https://tapcap-dot-thecoincore-212314.appspot.com).
         /// </summary>
         /// <param name="config">An instance of Configuration.</param>
         public ApiClient(Configuration config)
@@ -75,7 +75,7 @@ namespace TapCapManager.Client.Client
         /// with default configuration.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath = "http://localhost:8091")
+        public ApiClient(String basePath = "https://tapcap-dot-thecoincore-212314.appspot.com")
         {
            if (String.IsNullOrEmpty(basePath))
                 throw new ArgumentException("basePath cannot be empty");
