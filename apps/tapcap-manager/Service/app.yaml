@@ -17,7 +17,8 @@ runtime: nodejs8
 service: tapcap
 
 handlers:
-- url: *
+- url: /.*
   http_headers:
-    Access-Control-Allow-Origin: http://tapcap.thecoincore-212314.appspot.com
+    Access-Control-Allow-Origin: "*"
+
 # [END app_yaml]

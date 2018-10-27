@@ -9,6 +9,7 @@ const TapCapStatus = require('../tapcap/TapCapStatus').TapCapStatus;
  * returns TapCapHistoryResponse
  **/
 exports.tapCapHistory = function(request) {
+  // TODO: This!
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
