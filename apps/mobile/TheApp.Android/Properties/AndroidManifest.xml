@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.appname">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.TheCoinTech.TheWallet" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="27" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="TheApp.Android" android:icon="@mipmap/ic_launcher"></application>
+	<uses-permission android:name="android.permission.NFC" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-feature android:name="FEATURE_NFC_HOST_CARD_EMULATION" android:required="true" />
+	<application android:label="The Coin" android:icon="@mipmap/ic_launcher">
+		<service android:name=".CloudHostCardService" android:exported="true" android:permission="android.permission.BIND_NFC_SERVICE">
+			<intent-filter>
+				<action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+			</intent-filter>
+			<meta-data android:name="android.nfc.cardemulation.host_apdu_service" android:resource="@xml/apduservice" />
+		</service>
+	</application>
 </manifest>

@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Hello World, Click Me!</string>
-	<string name="app_name">TheApp.Droid</string>
+	<string name="app_name">The Coin</string>
+
+	<string name="aid_ppse">325041592e5359532e4444463031</string>
+	<string name="aid_interac">A0000002771010</string>
+	<string name="aid_visa">A0000000031010</string>
+
+	<string name="servicedesc">TheCoin</string>
+	<string name="aiddescription">TheCoin Tap</string>
 </resources>

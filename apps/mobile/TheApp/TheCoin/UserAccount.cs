@@ -18,19 +18,10 @@ namespace TheApp.TheCoin
 
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
-		private Account _TheAccount;
-        public Account TheAccount
-        {
-            get => _TheAccount;
-            private set
-            {
-                _TheAccount = value;
-                TheContract.Connect(value);
-			}
-        }
+		public Account TheAccount { get; private set; }
 
 		private TapStatus _status;
-		public TapStatus TapStatus
+		public TapStatus Status
 		{
 			get => _status;
 			private set
@@ -56,8 +47,6 @@ namespace TheApp.TheCoin
 		}
 
         private string EncryptedAccount = null;
-        private TheContract TheContract;
-        private Task __initTask;
 		private IStatusApi StatusApi;
 		private ITransactionsApi TransactionsApi;
 
@@ -66,26 +55,26 @@ namespace TheApp.TheCoin
 		/// 
 		/// </summary>
 		/// <param name="theContract"></param>
-		public UserAccount(TheContract theContract, IStatusApi tapCapStatus, ITransactionsApi transactions) {
-            TheContract = theContract;
+		public UserAccount(IStatusApi tapCapStatus, ITransactionsApi transactions) {
 			StatusApi = tapCapStatus;
 			TransactionsApi = transactions;
 
-			__initTask = Task.Run(AsyncInit);
+			Task.Run(AsyncInit);
 
 			Events.EventSystem.Subscribe<Events.TxCompleted>(OnTxComplete);
 		}
+
+		public static implicit operator Account(UserAccount v) => v.TheAccount;
 
 		private async Task AsyncInit()
         {
             try
             {
-                string account = await SecureStorage.GetAsync(AccountFile).ConfigureAwait(false);
+				EncryptedAccount = await SecureStorage.GetAsync(AccountFile).ConfigureAwait(false);
                 string key = await SecureStorage.GetAsync(AccountKey).ConfigureAwait(false);
-                if (account != null && key != null)
+                if (EncryptedAccount != null && key != null)
                 {
-                    TheAccount = Account.LoadFromKeyStore(account, key);
-					await UpdateToken().ConfigureAwait(false);
+					bool success = await TryDecrypt(key).ConfigureAwait(false);
 				}
 			}
             catch (Exception e) {
@@ -93,11 +82,6 @@ namespace TheApp.TheCoin
                 /* No worries, just no account */
             }
         }
-
-		internal Task MakeReady()
-		{
-			return __initTask;
-		}
 
         public bool NeedsDecrypting()
         {
@@ -116,8 +100,11 @@ namespace TheApp.TheCoin
             {
                 // First, verify the account pwd
                 var TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
-                // If we are here, then success
-                await SecureStorage.SetAsync(AccountKey, key);
+				// If we are here, then success
+				Events.EventSystem.Publish(new Events.SetActiveAccount(this));
+				// Always get a new token on new account.
+				await UpdateToken().ConfigureAwait(false);
+				await SecureStorage.SetAsync(AccountKey, key).ConfigureAwait(false);
 				EncryptedAccount = null;
 			}
             catch (Exception)
@@ -129,7 +116,7 @@ namespace TheApp.TheCoin
 
 		public async Task UpdateToken()
 		{
-			if (_TheAccount == null)
+			if (TheAccount == null)
 				return;
 
 			try
@@ -137,11 +124,11 @@ namespace TheApp.TheCoin
 				// Create a signed TapCapQueryRequest
 				var timestamp = TheCoinTime.Now();
 				var req = new TapCapQueryRequest(timestamp);
-				var (m, s) = Signing.GetMessageAndSignature(req, _TheAccount);
+				var (m, s) = Signing.GetMessageAndSignature(req, TheAccount);
 				var signedReq = new SignedMessage(m, s);
 				var response = await StatusApi.TapCapStatusAsync(signedReq);
 
-				TapStatus = new TapStatus(response);
+				Status = new TapStatus(response);
 			}
 			catch (Exception e)
 			{
@@ -157,12 +144,12 @@ namespace TheApp.TheCoin
 				// and now we send it on to the manager
 				//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);
 
-				var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, _TheAccount);
+				var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, TheAccount);
 				var signedReq = new SignedMessage(m, s);
 
 				var response = await TransactionsApi.TapCapClientAsync(signedReq);
 				// TODO: Verify that we have 
-				TapStatus = new TapStatus(response);
+				Status = new TapStatus(response);
 			});
 		}
 	}

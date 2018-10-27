@@ -1,5 +1,7 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
@@ -74,7 +76,7 @@ namespace TheApp.ViewModels
 		public DelegateCommand TestPurchaseCommand { get; set; }
 		public DelegateCommand ConnectCommand { get; set; }
 
-		public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TheCoin.UserAccount userAccount, TransactionProcessor transactions)
+		public MainPageViewModel(INavigationService navigationService, TheContract theContract, IRatesApi ratesApi, TransactionProcessor transactions)
 			: base(navigationService)
 		{
 			Title = "Main Page";
@@ -82,18 +84,11 @@ namespace TheApp.ViewModels
 
 			TheContract = theContract;
 			Rates = ratesApi;
-			UserAccount = userAccount;
+			//UserAccount = userAccount;
 			Transaction = transactions;
 
 			TestPurchaseCommand = new DelegateCommand(TestPurchase);
 			ConnectCommand = new DelegateCommand(BeginConnect);
-
-			Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, Prism.Events.ThreadOption.UIThread);
-		}
-
-		private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
-		{
-			TapCapBalance = newStatus.Status.Balance;
 		}
 
 		private void BeginConnect()
@@ -105,7 +100,7 @@ namespace TheApp.ViewModels
 		{
 			Task.Run(async () =>
 			{
-				bool res = await Transaction.TryTestTx();
+				bool res = await Transaction.TryTestTx().ConfigureAwait(false);
 				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
 				{
 					Logs = "Test completed successfully: " + res;
@@ -114,45 +109,58 @@ namespace TheApp.ViewModels
 		}
 
 		CancellationTokenSource source = new CancellationTokenSource();
+		private SubscriptionToken _statusUpdateSub;
+		private SubscriptionToken _newAccountSub;
 
-		public override void OnNavigatedFrom(NavigationParameters parameters)
+		public override void OnNavigatedFrom(INavigationParameters parameters)
 		{
+			Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdateSub);
+			Events.EventSystem.Unsubscribe<Events.SetActiveAccount>(_newAccountSub);
 		}
 
-		public override void OnNavigatedTo(NavigationParameters parameters)
+		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			// Force UserAccount to finish
-			UserAccount.MakeReady().GetAwaiter().GetResult();
+			_statusUpdateSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, ThreadOption.UIThread);
+			_newAccountSub = Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount, ThreadOption.UIThread);
+
 			Logs = "Account Init: " + UserAccount.Address;
+			Task.Run(UpdateBalances);
+		}
 
+		private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
+		{
+			TapCapBalance = newStatus.Status.Balance;
+		}
 
-			if (UserAccount.TheAccount != null)
+		private void OnSetActiveAccount(Events.SetActiveAccount setActive)
+		{
+			UserAccount = setActive.Account;
+			Task.Run(UpdateBalances);
+		}
+
+		private async Task UpdateBalances()
+		{
+			if (UserAccount.TheAccount == null)
+				return;
+
+			try
 			{
-				Task.Run(async () =>
+				var now = TheCoinTime.Now();
+				var FXRateWait = Rates.GetConversionAsync(124, now).ConfigureAwait(false);
+				var balanceWait = TheContract.CoinBalance().ConfigureAwait(false);
+
+				var FXRate = await FXRateWait;
+				var balance = await balanceWait;
+				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
 				{
-					try
-					{
-						var now = TheCoinTime.Now();
-						var FXRateWait = Rates.GetConversionAsync(124, now);
-						var balanceWait = TheContract.CoinBalance();
-
-						var FXRate = await FXRateWait;
-						var balance = await balanceWait;
-						Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-						{
-							CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
-							MainBalance = balance;
-							TapCapBalance = UserAccount.TapStatus.Balance;
-						});
-
-						await Transaction.MakeReady();
-					}
-					catch (System.Exception e)
-					{
-						Logs = "Oh No! " + e.Message;
-					}
-
+					CadExchangeRate = FXRate.Buy.GetValueOrDefault(1) * FXRate._FxRate.GetValueOrDefault(1);
+					MainBalance = balance;
+					TapCapBalance = UserAccount.Status.Balance;
 				});
+			}
+			catch (System.Exception e)
+			{
+				Logs = "Oh No! " + e.Message;
 			}
 		}
 	}
