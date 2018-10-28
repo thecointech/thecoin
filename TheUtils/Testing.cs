@@ -14,7 +14,7 @@ namespace TheUtils
             // For now - hard-coded queries, ignore responses
             byte[] SEL_FILE = new byte[] { 0x00, 0xA4, 0x04, 0x00, 0x0E, 0x32, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31, 0x00 };
             var selResponse = card.SendCommand(SEL_FILE, "SelFile");
-            var tlvSelResponse = Tlv.ParseTlv(selResponse.GetData());
+            var tlvSelResponse = Tlv.ParseTlv(selResponse);
 
             var paymentApp = tlvSelResponse;
             var SelApp = new CommandApdu(IsoCase.Case4Short, card.Protocol)
@@ -26,7 +26,7 @@ namespace TheUtils
             var appResponse = card.SendCommand(SelApp, "SelApp");
 
             // Extract the PDOL
-            var appTlv = Tlv.ParseTlv(appResponse.GetData());
+            var appTlv = Tlv.ParseTlv(appResponse);
             var pdolData = Processing.FindValue(appTlv, new string[] { "6F", "A5", "9F38" });
             var pdolParsed = PDOL.ParsePDOLItems(pdolData);
 
@@ -51,7 +51,7 @@ namespace TheUtils
                     var rr = Processing.BuildReadRecordApdu(file, recordNum, card);
                     var record = card.SendCommand(rr, "RR");
 
-                    var rrtlv = Tlv.ParseTlv(record.GetData());
+                    var rrtlv = Tlv.ParseTlv(record);
                     if (cdol == null)
                         cdol = Processing.FindValue(rrtlv, new string[] { "70", "8C" });
                 }

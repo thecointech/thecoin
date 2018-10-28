@@ -7,8 +7,8 @@ namespace TheUtils
 	{
 		CommandApdu InitApdu(bool hasData);
 
-		Response SendCommand(CommandApdu apdu, string debugName);
-		Response SendCommand(byte[] data, string debugName);
+		byte[] SendCommand(CommandApdu apdu, string debugName);
+		byte[] SendCommand(byte[] data, string debugName);
 
 		PCSC.SCardProtocol Protocol { get; }
 	}

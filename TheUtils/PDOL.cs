@@ -84,21 +84,22 @@ namespace TheUtils
             return items;
         }
 
-		private static void ParsePDOLData(IEnumerator<byte> dataEnum, List<PDOLItem> items)
+		private static bool ParsePDOLData(IEnumerator<byte> dataEnum, List<PDOLItem> items)
 		{
 			foreach (var pdol in items)
 			{
 				for (var i = 0; i < pdol.DataLength; i++)
 				{
 					if (!dataEnum.MoveNext())
-						throw new ArgumentException("Insufficient data for PDOL List");
+						return false;
 					pdol.Data[i] = dataEnum.Current;
 				}
 			}
+			return true;
 		}
 
         // Parse the given data into the PDOL list
-        public static void ParsePDOLData(IEnumerable<byte> data, List<PDOLItem> items)
+        public static bool ParseIntoGpoPDOL(IEnumerable<byte> data, List<PDOLItem> items)
         {
             var dataEnum = data.GetEnumerator();
 
@@ -107,14 +108,14 @@ namespace TheUtils
             dataEnum.MoveNext();
             dataEnum.MoveNext();
 
-			ParsePDOLData(dataEnum, items);
+			return ParsePDOLData(dataEnum, items);
 		}
 
 		// Parse the given data into the PDOL list
-		public static void ParseCDOLData(IEnumerable<byte> data, List<PDOLItem> items)
+		public static bool ParseIntoCryptoPDOL(IEnumerable<byte> data, List<PDOLItem> items)
 		{
 			var dataEnum = data.GetEnumerator();
-			ParsePDOLData(dataEnum, items);
+			return ParsePDOLData(dataEnum, items);
 		}
 
 		// Given PDOL list, return currency amount in cents

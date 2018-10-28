@@ -3,6 +3,7 @@ using PCSC.Iso7816;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static TheUtils.PDOL;
 
 namespace TheUtils
 {
@@ -28,9 +29,9 @@ namespace TheUtils
 			return init;
 
 		}
-		public static CommandApdu BuildSelectApp(Response fileResponse, ICardMessager card)
+		public static CommandApdu BuildSelectApp(byte[] fileResponse, ICardMessager card)
 		{
-			var tlvFileResponse = Tlv.ParseTlv(fileResponse.GetData());
+			var tlvFileResponse = Tlv.ParseTlv(fileResponse);
 
 			var selectApp = card.InitApdu(true);
 			selectApp.Instruction = InstructionCode.SelectFile;
@@ -38,6 +39,16 @@ namespace TheUtils
 			selectApp.Data = FindValue(tlvFileResponse, new string[] { "6F", "A5", "BF0C", "61", "4F" });
 
 			return selectApp;
+		}
+
+		public static List<PDOLItem> FindGpoPDOL(byte[] data)
+		{
+			var appTlv = Tlv.ParseTlv(data);
+			var pdolData = Processing.FindValue(appTlv, "6F/A5/9F38");
+			var PDOLDescription = pdolData.ToArray();
+
+			// TODO: If the data is not comprehensible, revert to straight pass-through mode
+			return ParsePDOLItems(pdolData);
 		}
 
 		public static CommandApdu BuildGPOQuery(ICardMessager card, byte[] data)
@@ -72,28 +83,24 @@ namespace TheUtils
 		}
 
 		public static List<RecordAddress> ParseAddresses(byte[] data)
-        {
-            List<RecordAddress> results = new List<RecordAddress>();
-            for (int idx = 0; idx < data.Length; idx += 4)
+		{
+			var gpoTlv = Tlv.ParseTlv(data);
+			var fileData = Processing.FindValue(gpoTlv, new string[] { "77", "94" });
+
+			List<RecordAddress> results = new List<RecordAddress>();
+            for (int idx = 0; idx < fileData.Length; idx += 4)
             {
                 var newAddress = new RecordAddress()
                 {
-                    SFI = data[idx + 0] >> 3,
-                    FromRecord = data[idx + 1],
-                    ToRecord = data[idx + 2],
-                    OfflineAddress = data[idx + 3],
+                    SFI = fileData[idx + 0] >> 3,
+                    FromRecord = fileData[idx + 1],
+                    ToRecord = fileData[idx + 2],
+                    OfflineAddress = fileData[idx + 3],
                 };
                 results.Add(newAddress);
             }
             return results;
         }
-
-		public static List<RecordAddress> ParseAddresses(Response gpoResponse)
-		{
-			var gpoTlv = Tlv.ParseTlv(gpoResponse.GetData());
-			var fileData = FindValue(gpoTlv, new string[] { "77", "94" });
-			return ParseAddresses(fileData);
-		}
 
 		public static CommandApdu BuildReadRecordApdu(RecordAddress address, byte idx, ICardMessager card)
         {
