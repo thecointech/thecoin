@@ -81,7 +81,7 @@ namespace TapCapSupplier.Server.Card
 		/// <param name="apdu"></param>
 		/// <param name="command"></param>
 		/// <returns></returns>
-		public Response SendCommand(CommandApdu apdu, String command)
+		public byte[] SendCommand(CommandApdu apdu, String command)
 		{
 			_logger.LogTrace("Sending Command {0}: {1}", command, BitConverter.ToString(apdu.ToArray()));
 
@@ -94,13 +94,11 @@ namespace TapCapSupplier.Server.Card
 				_logger.LogError("No data. (Card does not understand \"{0}\")", command);
 				return null;
 			}
-			else
-			{
-				var resp = response.GetData();
-				var chars = System.Text.Encoding.UTF8.GetString(resp);
-				_logger.LogTrace("Response: \n  {0}", BitConverter.ToString(resp));
-			}
-			return response;
+
+			var resp = response.GetData();
+			var chars = System.Text.Encoding.UTF8.GetString(resp);
+			_logger.LogTrace("Response: \n  {0}", BitConverter.ToString(resp));
+			return resp;
 		}
 
 		/// <summary>
@@ -121,7 +119,7 @@ namespace TapCapSupplier.Server.Card
 		/// <param name="data">command to sendx</param>
 		/// <param name="origin">debugging string to enable tracing calls</param>
 		/// <returns></returns>
-		public Response SendCommand(byte[] data, String origin)
+		public byte[] SendCommand(byte[] data, String origin)
 		{
 			// We could simply pass the data directly through by 
 			// using the lower-level API, but it appears that the

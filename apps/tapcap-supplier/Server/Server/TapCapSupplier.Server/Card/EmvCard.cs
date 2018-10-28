@@ -62,9 +62,9 @@ namespace TapCapSupplier.Server.Card
 				//}
 
 				// Generate crypto
-				var cryptoQuery = Processing.BuildCryptSigQuery(card, request.CryptoData);
+				var cryptoQuery = request.CryptoData; // Processing.BuildCryptSigQuery(card, request.CryptoData);
 				var cryptoSig = card.SendCommand(cryptoQuery, "Gen CryptoSig");
-				return cryptoSig?.GetData();
+				return cryptoSig;
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace TapCapSupplier.Server.Card
 			var selectApp = Processing.BuildSelectApp(fileData, card);
 			var appData = QueryAndStore(selectApp, "Select App");
 
-			staticResponses.GpoPdol = Processing.FindValue(appData.GetData(), new string[] { "6F", "A5", "9F38" });
+			staticResponses.GpoPdol = Processing.FindValue(appData, new string[] { "6F", "A5", "9F38" });
 			var dummyData = PDOL.GenerateDummyData(staticResponses.GpoPdol);
 			var gpoQuery = Processing.BuildGPOQuery(card, dummyData);
 			var gpoData = QueryAndStore(gpoQuery, "Query GPO");
@@ -97,26 +97,25 @@ namespace TapCapSupplier.Server.Card
 					var recordData = QueryAndStore(recordQuery, "Query Record: " + recordNum);
 
 					if (staticResponses.CryptoPdol == null)
-						staticResponses.CryptoPdol = Processing.FindValue(recordData.GetData(), new string[] { "70", "8C" });
+						staticResponses.CryptoPdol = Processing.FindValue(recordData, new string[] { "70", "8C" });
 				}
 			}
 		}
 
-		private Response QueryAndStore(CommandApdu query, string name)
+		private byte[] QueryAndStore(CommandApdu query, string name)
 		{
-			Response queryResponse = card.SendCommand(query, name);
-			byte[] data = queryResponse.GetData();
+			byte[] response = card.SendCommand(query, name);
 
 			staticResponses.Responses.Add(new StaticResponse()
 			{
-				Query = query.Data,
-				Response = data
+				Query = query.ToArray(),
+				Response = response
 			});
-			return queryResponse;
+			return response;
 		}
 
 		// Return the command we warmed up to
-		private Response DoStaticInit()
+		private byte[] DoStaticInit()
 		{
 			var cmdInitialize = Processing.BuildInitialize(card);
 			var fileData = card.SendCommand(cmdInitialize, "Init Tx");

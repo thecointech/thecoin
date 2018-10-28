@@ -19,6 +19,8 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
 
+		private List<PDOL.PDOLItem> GpoPDOL;
+
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
@@ -34,6 +36,8 @@ namespace TapCapSupplier.Server.TapCap
 			Card = card;
 			TapCapManager = manager;
 			TheAccount = account;
+
+			GpoPDOL = PDOL.ParsePDOLItems(Card.CardStaticResponses().GpoPdol);
 		}
 
 		/// <summary>
@@ -48,7 +52,10 @@ namespace TapCapSupplier.Server.TapCap
 
 			// Verify the token supplied is for the requesting client.
 			if (clientAddress != token.ClientAccount)
+			{
+				logger.Warn("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
 				return null;
+			}
 
 			// TODO: Verify manager address is valid.
 			// if (managerAdress != ManagerAddress)
@@ -57,14 +64,24 @@ namespace TapCapSupplier.Server.TapCap
 			var timestamp = TheCoinTime.Now();
 			var fxRate = FxRates.GetCurrentFxRate(timestamp);
 
-			var items = PDOL.ParsePDOLItems(Card.CardStaticResponses().CryptoPdol);
-			PDOL.ParseCDOLData(request.CryptoData, items);
-			var txCents = PDOL.GetAmount(items);
+			// TODO! Reference the Crypto PDOL, so we are not relying
+			// on the security in the card to ensure the numbers match.
+			// (and we don't generate a cyrpto sig for a different value than here)
+			if (!PDOL.ParseIntoGpoPDOL(request.GpoData, GpoPDOL))
+			{
+				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(request.GpoData));
+				return null;
+			}
+
+			var txCents = PDOL.GetAmount(GpoPDOL);
 			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
 
 			// TODO: Return "insufficient funds"
 			if (txCoin > token.AvailableBalance)
+			{
+				logger.Warn("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
 				return null;
+			}
 
 			// Everything checks out - build the certificate
 			var certificate = Card.GenerateCrypto(request);
@@ -77,6 +94,7 @@ namespace TapCapSupplier.Server.TapCap
 				CryptoCertificate = certificate
 			};
 
+			logger.Trace("returning tx");
 			var signedTx = Signing.SignMessage<SignedMessage>(tx, TheAccount);
 			Task.Run(async () => await ValidateAndFinalizeTx(tx));
 			return signedTx;
