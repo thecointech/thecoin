@@ -39,6 +39,10 @@ namespace TheApp.Droid
 		{
 			processor.Terminated();
 
+			// TODO: The below totally shouldn't be here, but requires
+			// android code.  Try moving it into an interface or something
+			// so the responsibility for notifies all lives in the same place
+
 			Android.Media.Stream amStream = Android.Media.Stream.Music;
 			int iTonGeneratorVolume = 100;
 

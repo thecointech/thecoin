@@ -56,9 +56,10 @@ namespace TheApp.ViewModels
 
 		private void TestPurchase()
 		{
-			Task.Run(async () =>
+			Task.Run(() =>
 			{
-				bool res = await Transaction.TryTestTx().ConfigureAwait(false);
+				var testing = new TapTesting(Transaction);
+				bool res = testing.TestFull();
 				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
 				{
 					Logs = "Test completed successfully: " + res;
