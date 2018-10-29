@@ -22,7 +22,10 @@ namespace TheApp.ViewModels
 		public bool TestEnabled
 		{
 			get { return this._TestEnabled; }
-			set { SetProperty(ref this._TestEnabled, value); }
+			set {
+				SetProperty(ref this._TestEnabled, value);
+				TestPurchaseCommand.RaiseCanExecuteChanged();
+			}
 		}
 
 
@@ -50,7 +53,7 @@ namespace TheApp.ViewModels
 			Transaction = transactions;
 			this.balances = balances;
 
-			TestPurchaseCommand = new DelegateCommand(TestPurchase);
+			TestPurchaseCommand = new DelegateCommand(TestPurchase, () => TestEnabled);
 			ConnectCommand = new DelegateCommand(BeginConnect);
 
 			Events.EventSystem.Subscribe<Events.BalancesUpdated>((u) => UpdateBalances(u.Update));
