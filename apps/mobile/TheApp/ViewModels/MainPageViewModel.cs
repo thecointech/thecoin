@@ -18,6 +18,14 @@ namespace TheApp.ViewModels
 			set { SetProperty(ref this._Logs, value); }
 		}
 
+		private bool _TestEnabled = false;
+		public bool TestEnabled
+		{
+			get { return this._TestEnabled; }
+			set { SetProperty(ref this._TestEnabled, value); }
+		}
+
+
 		private Balances balances;
 
 		public ulong MainBalance => balances.MainBalance;
@@ -47,6 +55,7 @@ namespace TheApp.ViewModels
 
 			Events.EventSystem.Subscribe<Events.BalancesUpdated>((u) => UpdateBalances(u.Update));
 			Events.EventSystem.Subscribe<Events.SetActiveAccount>((u) => { Logs = "Loaded"; }, ThreadOption.UIThread);
+			Events.EventSystem.Subscribe<Events.TxStatus>(UpdateTxStatus, ThreadOption.UIThread);
 		}
 
 		private void BeginConnect()
@@ -56,14 +65,11 @@ namespace TheApp.ViewModels
 
 		private void TestPurchase()
 		{
+			Logs = "Running Text Tx";
 			Task.Run(() =>
 			{
 				var testing = new TapTesting(Transaction);
 				bool res = testing.TestFull();
-				Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-				{
-					Logs = "Test completed successfully: " + res;
-				});
 			});
 		}
 
@@ -76,9 +82,23 @@ namespace TheApp.ViewModels
 
 		public override void OnNavigatedTo(INavigationParameters parameters)
 		{
-			//Logs = "Account Init: " + UserAccount.Address;
 			UpdateBalances(balances);
+		}
 
+		void UpdateTxStatus(Events.TxStatus status)
+		{
+			if (status.SignedResponse != null)
+			{
+				Logs = "Tx Completed";
+			}
+			else if (status.Step > 0)
+			{
+				Logs = "Tx Step: " + status.Step;
+			}
+			else
+			{
+				TestEnabled = true;
+			}
 		}
 
 		void UpdateBalances(Balances update)

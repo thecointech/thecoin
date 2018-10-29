@@ -3,6 +3,7 @@ using NLog;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,9 +31,11 @@ namespace TheApp.Tap
 		private bool FirstTxMessage => FileCounter < 0;
 		private int MessageCounter = 0;
 
-		private System.Diagnostics.Stopwatch stopwatch;
+		private Stopwatch stopwatch;
 
 		private SubscriptionToken _statusUpdatedSub;
+		private long ticksAtCompletion;
+		private SignedMessage cachedTapResponse;
 
 		public TransactionProcessor(UserAccount userAccount, ITransactionApi supplier)
 		{
@@ -63,6 +66,7 @@ namespace TheApp.Tap
 
 					StaticTypes = StaticResponses.Responses.Select((response) => ReadApduType(response.Query)).ToArray();
 					ResetTransaction();
+					Events.EventSystem.Publish(new Events.TxStatus(0));
 				}
 				catch(Exception e)
 				{
@@ -77,31 +81,43 @@ namespace TheApp.Tap
 			{
 				OnStartTx();
 			}
+
+			Events.EventSystem.Publish(new Events.TxStatus(MessageCounter));
+
 			var type = ReadApduType(query);
+			logger.Trace("Recieved: {0} - {1}", type.ToString(), BitConverter.ToString(query));
 			if (type != ApduType.CyrptoSig)
-				return GetCachedResponse(query, type);
+			{
+				var response = GetCachedResponse(query, type);
+				logger.Trace("Cached Response: {0}", BitConverter.ToString(response));
+				return response;
+			}
 
 			// TODO: This would be faster if we just sent the whole data struct
 			//var cryptoPdol = Processing.FindValue(query, new string[] { "70", "8C" });
 			// Else, if this is a purchase PDOL, then query server
-			return GetSupplierTap(query);
+			var purchaseCert = GetSupplierTap(query);
+			logger.Trace("Fetched Response: {0}", BitConverter.ToString(purchaseCert));
+			ticksAtCompletion = stopwatch.ElapsedTicks;
+			return purchaseCert;
+
 		}
 
 		public void Terminated()
 		{
 			// See OnDeactivated for notification beep.
-
-			logger.Info("Deactivated: after {1}ms", stopwatch?.ElapsedMilliseconds);
+			ValidateTx();
 			ResetTransaction();
 		}
 
 		private void OnStartTx()
 		{
-			stopwatch = System.Diagnostics.Stopwatch.StartNew();
+			logger.Trace("--- Start New Tx ---");
+			stopwatch = Stopwatch.StartNew();
 			try
 			{
 				// Or use specified time
-				var duration = TimeSpan.FromSeconds(1);
+				var duration = TimeSpan.FromMilliseconds(150);
 				Vibration.Vibrate(duration);
 			}
 			catch (FeatureNotSupportedException /*ex*/)
@@ -142,29 +158,34 @@ namespace TheApp.Tap
 
 			var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
 			var signedMessage = new SignedMessage(m, s);
-			var signedTap = TapSupplier.RequestTapCap(signedMessage);
+			cachedTapResponse = TapSupplier.RequestTapCap(signedMessage);
 
-			logger.Info("Results {0}", signedTap);
+			logger.Info("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
 
 			// Do not decode the signing address of this, instead just extract the relevant info
-			var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(signedTap.Message);
-			
-			// TODO: Speed this whole shebang up!!!
-			ConfirmTx(signedTap);
-
+			var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
 			return purchase.CryptoCertificate;
 		}
 
-		private async Task ConfirmTx(SignedMessage purchase)
+		private void ValidateTx()
 		{
-			// Wait so many seconds, then publish
-			await Task.Delay(300);
-
 			// Now check that the whatsit all went swimmingly.
 			//ParsePDOLData(GPOData, GPOItems);
+			if (cachedTapResponse == null)
+			{
+				logger.Debug("Premature Exit at " + stopwatch.ElapsedMilliseconds);
+				return;
+			}
 
-			// Check that our disconnection was as expected.
-			Events.EventSystem.Publish(new Events.TxCompleted() { SignedResponse = purchase });
+			var sinceComplete = (stopwatch.ElapsedTicks - ticksAtCompletion) / (Stopwatch.Frequency / 1000.0);
+			var dbgMessage = String.Format("Deactivated: sinceComplete: {0}, total {1}ms", sinceComplete, stopwatch.ElapsedMilliseconds);
+			logger.Info(dbgMessage);
+
+			if (sinceComplete >= 0)
+			{
+				// Check that our disconnection was as expected.
+				Events.EventSystem.Publish(new Events.TxStatus() { SignedResponse = cachedTapResponse });
+			}
 		}
 
 		private void CachePDOLData(byte[] commandApdu)
@@ -179,6 +200,8 @@ namespace TheApp.Tap
 		{
 			MessageCounter = 0;
 			FileCounter = 0;
+			cachedTapResponse = null;
+			ticksAtCompletion = 0;
 		}
 
 		private ApduType ReadApduType(byte[] commandApdu)

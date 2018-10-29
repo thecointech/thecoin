@@ -14,8 +14,6 @@ namespace TheApp.Droid
     [Activity(Label = "TheApp", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-		Logger logger = LogManager.GetCurrentClassLogger();
-
 		protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -45,8 +43,6 @@ namespace TheApp.Droid
 		protected override void OnResume()
 		{
 			var wasSet = GetEmulation().SetPreferredService(this, ServiceName);
-			logger.Trace("On Resume: Set Default payment service {0}", wasSet);
-
 			base.OnResume();
 		}
 
@@ -64,8 +60,6 @@ namespace TheApp.Droid
 			var logfile = new FileTarget() { FileName = externalFolder + "/afile.log", Name = "logfile" };
 			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, logfile));
 			LogManager.Configuration = config;
-
-			logger.Trace("Logger Started");
 		}
 
 		private ComponentName ServiceName => new ComponentName(this, Java.Lang.Class.FromType(typeof(CloudHostCardService)).Name);

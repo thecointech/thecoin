@@ -15,7 +15,6 @@ namespace TheApp.Droid
 	[MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/apduservice")]
 	class CloudHostCardService : HostApduService
 	{
-		private Logger logger = LogManager.GetCurrentClassLogger();
 		private App _app => (App)Xamarin.Forms.Application.Current;
 		private Tap.TransactionProcessor processor;
 
@@ -31,7 +30,6 @@ namespace TheApp.Droid
 
 		public CloudHostCardService()
 		{
-			logger.Trace("Start Service");
 			processor = Container.Resolve<Tap.TransactionProcessor>();
 		}
 
@@ -53,8 +51,6 @@ namespace TheApp.Droid
 		// When our service is started up, we ensure we have a communications channel open
 		public override void OnCreate()
 		{
-			logger.Info("OnCreate");
-
 			// Allow networking on this thread
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
 			StrictMode.SetThreadPolicy(policy);
@@ -66,17 +62,11 @@ namespace TheApp.Droid
 		public override byte[] ProcessCommandApdu(byte[] commandApdu, Bundle extras)
 		{
 			// Log all messages passing here (from a terminal)
-			logger.Debug("Received APDU");
-			logger.Trace(BitConverter.ToString(commandApdu));
-			var response = processor.ProcessCommand(commandApdu);
-			logger.Debug("Response");
-			logger.Trace(BitConverter.ToString(response));
-			return response;
+			return processor.ProcessCommand(commandApdu);
 		}
 
 		public override void OnDestroy()
 		{
-			logger.Trace("OnDestroy");
 		}
 	}
 }

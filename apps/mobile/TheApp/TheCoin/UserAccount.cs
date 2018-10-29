@@ -61,7 +61,7 @@ namespace TheApp.TheCoin
 
 			Task.Run(AsyncInit);
 
-			Events.EventSystem.Subscribe<Events.TxCompleted>(OnTxComplete);
+			Events.EventSystem.Subscribe<Events.TxStatus>(OnTxStatus);
 		}
 
 		public static implicit operator Account(UserAccount v) => v.TheAccount;
@@ -136,21 +136,24 @@ namespace TheApp.TheCoin
 			}
 		}
 
-		public void OnTxComplete(Events.TxCompleted tx)
+		public void OnTxStatus(Events.TxStatus tx)
 		{
-			Task.Run(async () =>
+			if (tx.SignedResponse != null)
 			{
-				// We simply sign this tx to verify we accepted it
-				// and now we send it on to the manager
-				//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);
+				Task.Run(async () =>
+				{
+					// We simply sign this tx to verify we accepted it
+					// and now we send it on to the manager
+					//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);
 
-				var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, TheAccount);
-				var signedReq = new SignedMessage(m, s);
+					var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, TheAccount);
+					var signedReq = new SignedMessage(m, s);
 
-				var response = await TransactionsApi.TapCapClientAsync(signedReq);
-				// TODO: Verify that we have 
-				Status = new TapStatus(response);
-			});
+					var response = await TransactionsApi.TapCapClientAsync(signedReq);
+					// TODO: Verify that we have 
+					Status = new TapStatus(response);
+				});
+			}
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace TheApp
 			containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
 			containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi());
 			containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi());
-			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://localhost:8070"));
+			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://thecoincad.tplinkdns.com:9361"));
 
 			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
 			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
@@ -66,7 +66,7 @@ namespace TheApp
 			if (sthis.Container != null)
 				return sthis.Container;
 
-			logger.Trace("Constructing new container");
+			logger.Info("Constructing new container");
 			var container = new DryIocContainerExtension(new Container());
 			RegisterBackgroundServices(container);
 			return container;
