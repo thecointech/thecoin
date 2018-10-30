@@ -20,6 +20,7 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly Account TheAccount;
 
 		private List<PDOL.PDOLItem> GpoPDOL;
+		private List<PDOL.PDOLItem> CryptoPDOL;
 
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -37,7 +38,8 @@ namespace TapCapSupplier.Server.TapCap
 			TapCapManager = manager;
 			TheAccount = account;
 
-			GpoPDOL = PDOL.ParsePDOLItems(Card.CardStaticResponses().GpoPdol);
+			GpoPDOL = PDOL.ParsePDOLItems(Card.GpoPDOL);
+			CryptoPDOL = PDOL.ParsePDOLItems(Card.CryptoPDOL);
 		}
 
 		/// <summary>
@@ -67,7 +69,7 @@ namespace TapCapSupplier.Server.TapCap
 			// TODO! Reference the Crypto PDOL, so we are not relying
 			// on the security in the card to ensure the numbers match.
 			// (and we don't generate a cyrpto sig for a different value than here)
-			if (!PDOL.ParseIntoGpoPDOL(request.GpoData, GpoPDOL))
+			if (!PDOL.ParseIntoCryptoPDOL(request.CryptoData, GpoPDOL))
 			{
 				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(request.GpoData));
 				return null;

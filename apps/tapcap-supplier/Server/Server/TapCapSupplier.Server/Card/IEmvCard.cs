@@ -12,10 +12,29 @@ namespace TapCapSupplier.Server.Card
 	public interface IEmvCard
 	{
 		/// <summary>
-		/// Get the data set of constant messages
+		/// 
+		/// </summary>
+		byte[] GpoPDOL { get; }
+		/// <summary>
+		///
+		/// </summary>
+		byte[] CryptoPDOL { get; }
+		/// <summary>
+		/// TODO
+		/// </summary>
+		string Name { get; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		StaticResponses StaticResponses { get; }
+
+		/// <summary>
+		/// 
 		/// </summary>
 		/// <returns></returns>
-		StaticResponses CardStaticResponses();
+		byte[] GetSingleResponse(List<StaticResponse> staticResponse);
+
 
 		/// <summary>
 		/// Called by the system to generate a crypto signature

@@ -110,6 +110,10 @@ namespace TapCapSupplier.Server.TapCap
 		private Timer _timer;
 		ExchangeRateService cache;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fxRateService"></param>
 		public ExchangeRateUpdateService(ExchangeRateService fxRateService)
 		{
 			cache = fxRateService;
@@ -126,13 +130,16 @@ namespace TapCapSupplier.Server.TapCap
 
 		Task IHostedService.StopAsync(CancellationToken cancellationToken)
 		{
+			_timer.Dispose();
+			//__cancel.
 			// TODO:
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+			return Task.CompletedTask;
 		}
 
 		private void ScheduleNextUpdate()
 		{
-			var now = TheUtils.TheCoinTime.Now();
+			var now = TheCoinTime.Now();
 			var currentExpTime = cache.NextFxRate.ValidTill;
 			var msTillExp = currentExpTime.Value - now;
 			// Shift our update back 10 seconds before exp, so that
@@ -146,7 +153,7 @@ namespace TapCapSupplier.Server.TapCap
 		private void EnsureRates(object state)
 		{
 			var expTime = cache.NextFxRate?.ValidTill.Value ?? 0;
-			expTime = Math.Max(expTime, TheUtils.TheCoinTime.Now());
+			expTime = Math.Max(expTime, TheCoinTime.Now());
 			cache.EnsureNextRate(expTime);
 			ScheduleNextUpdate();
 		}

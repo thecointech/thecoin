@@ -28,17 +28,17 @@ namespace TapCapSupplier.Server.Controllers
     public class TransactionApiController : ControllerBase
     {
 
-		private readonly IEmvCard EmvCard;
+		private readonly IEmvCard Card;
 		private readonly HandleTx Handler;
 
 		/// <summary>
 		/// Initialize ApiController
 		/// </summary>
-		/// <param name="emvCard">Interface to local payment card</param>
+		/// <param name="card">Interface to local payment card</param>
 		/// <param name="tap">Interface to tx handler</param>
-		public TransactionApiController(IEmvCard emvCard, HandleTx tap)
+		public TransactionApiController(IEmvCard card, HandleTx tap)
 		{
-			EmvCard = emvCard;
+			Card = card;
 			Handler = tap;
 		}
 
@@ -88,7 +88,7 @@ namespace TapCapSupplier.Server.Controllers
         {
 			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
 			// TODO: Verify source from signed message (should be a token)
-			return StatusCode(200, EmvCard.CardStaticResponses());
+			return StatusCode(200, Card.StaticResponses);
         }
 
 		/// <summary>
@@ -105,6 +105,8 @@ namespace TapCapSupplier.Server.Controllers
 		[SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
 		public virtual IActionResult GetStaticSingle([FromBody]List<StaticResponse> staticResponse)
 		{
+
+			return StatusCode(200, Card.GetSingleResponse(staticResponse));
 			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
 			// return StatusCode(200, default(StaticResponse));
 

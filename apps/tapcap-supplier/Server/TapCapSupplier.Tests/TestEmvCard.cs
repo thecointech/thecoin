@@ -22,12 +22,32 @@ namespace TapCapSupplier.Tests
 		[Fact]
 		public void TestStatic()
 		{
-			EmvCard card = new EmvCard(logger);
+			IEmvCard card = new EmvCard(logger);
 
-			var responses = card.CardStaticResponses();
+			var responses = card.StaticResponses;
 			Assert.True(responses.GpoPdol.Length > 0, "Did not generate Gpo");
 			Assert.True(responses.CryptoPdol.Length > 0, "Did not generate Crypto");
 			Assert.True(responses.Responses.Count > 3, "Did not store sufficient responses");
+
+			//var cmdInitialize = Processing.BuildInitialize(messager);
+			//var fileData = (cmdInitialize);
+
+			//var selectApp = Processing.BuildSelectApp(fileData, messager);
+			//var appData = QueryAndStore(selectApp);
+
+			//var dummyData = PDOL.GenerateDummyData(GpoPDOL);
+			//var gpoQuery = Processing.BuildGPOQuery(messager,dummyData);
+			//var gpoData = QueryAndStore(gpoQuery);
+
+			//var fileList = Processing.ParseAddresses(gpoData);
+			//foreach (var file in fileList)
+			//{
+			//	for (byte recordNum = file.FromRecord; recordNum <= file.ToRecord; recordNum++)
+			//	{
+			//		var recordQuery = Processing.BuildReadRecordApdu(file, recordNum, messager);
+			//		var recordData = QueryAndStore(recordQuery);
+			//	}
+			//}
 		}
 
 		//[Fact]
@@ -40,9 +60,9 @@ namespace TapCapSupplier.Tests
 		[Fact]
 		public void TestGenCrypto()
 		{
-			EmvCard card = new EmvCard(logger);
+			IEmvCard card = new EmvCard(logger);
 
-			var responses = card.CardStaticResponses();
+			var responses = card.StaticResponses;
 			var gpoData = responses.GpoPdol;
 			var cryptData = responses.CryptoPdol;
 
@@ -63,11 +83,6 @@ namespace TapCapSupplier.Tests
 			var response = card.GenerateCrypto(request);
 
 			Assert.True(response != null && response.Length > 10, "Failed to generate purchase certificate");
-
-			//TheUtils.Testing.SendTestTransaction(10, card);
-
-
-			//Assert.True(response.Length > 3, "Did not generate crypto");
 		}
 	}
 }

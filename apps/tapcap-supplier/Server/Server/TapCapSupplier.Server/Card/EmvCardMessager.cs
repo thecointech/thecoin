@@ -79,11 +79,10 @@ namespace TapCapSupplier.Server.Card
 		/// Send command to card, return response
 		/// </summary>
 		/// <param name="apdu"></param>
-		/// <param name="command"></param>
 		/// <returns></returns>
-		public byte[] SendCommand(CommandApdu apdu, String command)
+		public byte[] SendCommand(CommandApdu apdu)
 		{
-			_logger.LogTrace("Sending Command {0}: {1}", command, BitConverter.ToString(apdu.ToArray()));
+			_logger.LogTrace("Sending: {0}", BitConverter.ToString(apdu.ToArray()));
 
 			var response = Reader.Transmit(apdu);
 
@@ -92,7 +91,7 @@ namespace TapCapSupplier.Server.Card
 			// TODO: Test SW instead of HasData
 			if (!response.HasData)
 			{
-				_logger.LogError("No data. (Card does not understand \"{0}\")", command);
+				_logger.LogError("No data. (Card does not understand)");
 				return null;
 			}
 
@@ -122,9 +121,8 @@ namespace TapCapSupplier.Server.Card
 		/// Sends a command to the connected emv card and returns the response
 		/// </summary>
 		/// <param name="data">command to sendx</param>
-		/// <param name="origin">debugging string to enable tracing calls</param>
 		/// <returns></returns>
-		public byte[] SendCommand(byte[] data, String origin)
+		public byte[] SendCommand(byte[] data)
 		{
 			// We could simply pass the data directly through by 
 			// using the lower-level API, but it appears that the
@@ -161,7 +159,7 @@ namespace TapCapSupplier.Server.Card
 				_logger.LogError("Reconstructing APDU Failed! \n  Orig={0}\n  Recon={1}", BitConverter.ToString(data), BitConverter.ToString(newArray));
 				// TODO: return some sort of error message
 			}
-			return SendCommand(apdu, origin);
+			return SendCommand(apdu);
 		}
 
 		// Later, we might support multiple cards
