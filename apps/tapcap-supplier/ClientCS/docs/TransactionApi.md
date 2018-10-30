@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ContestTapCap**](TransactionApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
 [**GetStatic**](TransactionApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
+[**GetStaticSingle**](TransactionApi.md#getstaticsingle) | **POST** /static/single | Query the server for a single message if it is unknown
 [**RequestTapCap**](TransactionApi.md#requesttapcap) | **POST** /tap | Request TapCap transaction
 
 
@@ -117,6 +118,65 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**StaticResponses**](StaticResponses.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getstaticsingle"></a>
+# **GetStaticSingle**
+> StaticResponse GetStaticSingle (List<StaticResponse> staticResponse)
+
+Query the server for a single message if it is unknown
+
+### Example
+```csharp
+using System;
+using System.Diagnostics;
+using TapCapSupplier.Client.Api;
+using TapCapSupplier.Client.Client;
+using TapCapSupplier.Client.Model;
+
+namespace Example
+{
+    public class GetStaticSingleExample
+    {
+        public void main()
+        {
+            var apiInstance = new TransactionApi();
+            var staticResponse = new List<StaticResponse>(); // List<StaticResponse> | Static data request
+
+            try
+            {
+                // Query the server for a single message if it is unknown
+                StaticResponse result = apiInstance.GetStaticSingle(staticResponse);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling TransactionApi.GetStaticSingle: " + e.Message );
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **staticResponse** | [**List&lt;StaticResponse&gt;**](List.md)| Static data request | 
+
+### Return type
+
+[**StaticResponse**](StaticResponse.md)
 
 ### Authorization
 

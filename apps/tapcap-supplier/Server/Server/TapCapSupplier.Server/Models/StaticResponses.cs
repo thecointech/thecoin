@@ -38,11 +38,17 @@ namespace TapCapSupplier.Server.Models
         public byte[] CryptoPdol { get; set; }
 
         /// <summary>
+        /// Gets or Sets ResponseParentIndex
+        /// </summary>
+        [DataMember(Name="responseParentIndex")]
+        public List<int?> ResponseParentIndex { get; set; }
+
+        /// <summary>
         /// Gets or Sets Responses
         /// </summary>
         [Required]
         [DataMember(Name="responses")]
-        public List<StaticResponse> Responses { get; set; }
+        public StaticResponseArray Responses { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -54,6 +60,7 @@ namespace TapCapSupplier.Server.Models
             sb.Append("class StaticResponses {\n");
             sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
             sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("  ResponseParentIndex: ").Append(ResponseParentIndex).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -102,9 +109,14 @@ namespace TapCapSupplier.Server.Models
                     CryptoPdol.Equals(other.CryptoPdol)
                 ) && 
                 (
+                    ResponseParentIndex == other.ResponseParentIndex ||
+                    ResponseParentIndex != null &&
+                    ResponseParentIndex.SequenceEqual(other.ResponseParentIndex)
+                ) && 
+                (
                     Responses == other.Responses ||
                     Responses != null &&
-                    Responses.SequenceEqual(other.Responses)
+                    Responses.Equals(other.Responses)
                 );
         }
 
@@ -122,6 +134,8 @@ namespace TapCapSupplier.Server.Models
                     hashCode = hashCode * 59 + GpoPdol.GetHashCode();
                     if (CryptoPdol != null)
                     hashCode = hashCode * 59 + CryptoPdol.GetHashCode();
+                    if (ResponseParentIndex != null)
+                    hashCode = hashCode * 59 + ResponseParentIndex.GetHashCode();
                     if (Responses != null)
                     hashCode = hashCode * 59 + Responses.GetHashCode();
                 return hashCode;

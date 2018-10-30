@@ -46,6 +46,29 @@ paths:
           schema:
             $ref: "#/definitions/StaticResponses"
 
+  /static/single:
+    post:
+      tags:
+        - Transaction
+      summary: "Query the server for a single message if it is unknown"
+      operationId: "getStaticSingle"
+      parameters:
+        - in: body
+          name: request
+          description: "Static data request"
+          required: true
+          schema:
+            $ref: "#/definitions/StaticResponseArray"
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Static response cache
+          schema:
+            $ref: "#/definitions/StaticResponse"
+
   /tap:
     post:
       tags:
@@ -128,6 +151,11 @@ definitions:
         type: string
         format: byte
 
+  StaticResponseArray:
+    type: array
+    items:
+      $ref: "#/definitions/StaticResponse"
+
   StaticResponses:
     required:
       - gpoPdol
@@ -140,10 +168,18 @@ definitions:
       cryptoPdol:
         type: string
         format: byte
-      responses:
+      # The space of potential responses
+      # is a tree structure.  Each time the
+      # terminal sends a message, it is
+      # choosing a path in the tree.  Each
+      # responses marks it's parent item in 
+      # the below array.
+      responseParentIndex:
         type: array
-        items:
-          $ref: "#/definitions/StaticResponse"
+        items: 
+          type: integer
+      responses:
+        $ref: "#/definitions/StaticResponseArray"
 
   ContestResponse:
     properties:

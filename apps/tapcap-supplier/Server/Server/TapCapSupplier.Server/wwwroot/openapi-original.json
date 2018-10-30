@@ -60,6 +60,46 @@
         }
       }
     },
+    "/static/single" : {
+      "post" : {
+        "tags" : [ "Transaction" ],
+        "summary" : "Query the server for a single message if it is unknown",
+        "operationId" : "getStaticSingle",
+        "requestBody" : {
+          "description" : "Static data request",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StaticResponseArray"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Static response cache",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StaticResponse"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Invalid input",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tap" : {
       "post" : {
         "tags" : [ "Transaction" ],
@@ -157,6 +197,12 @@
         "example" : {
           "response" : "response",
           "query" : "query"
+        }
+      },
+      "StaticResponseArray" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/StaticResponse"
         }
       },
       "FXRate" : {
@@ -329,22 +375,19 @@
             "type" : "string",
             "format" : "byte"
           },
-          "responses" : {
+          "responseParentIndex" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/StaticResponse"
+              "type" : "integer"
             }
+          },
+          "responses" : {
+            "$ref" : "#/components/schemas/StaticResponseArray"
           }
         },
         "example" : {
+          "responseParentIndex" : [ 0, 0 ],
           "gpoPdol" : "gpoPdol",
-          "responses" : [ {
-            "response" : "response",
-            "query" : "query"
-          }, {
-            "response" : "response",
-            "query" : "query"
-          } ],
           "cryptoPdol" : "cryptoPdol"
         }
       },

@@ -76,6 +76,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *TransactionApi* | [**ContestTapCap**](docs/TransactionApi.md#contesttapcap) | **POST** /contest | Notify of a contested transaction
 *TransactionApi* | [**GetStatic**](docs/TransactionApi.md#getstatic) | **POST** /static | Get the list of static responses to cache for terminal queries
+*TransactionApi* | [**GetStaticSingle**](docs/TransactionApi.md#getstaticsingle) | **POST** /static/single | Query the server for a single message if it is unknown
 *TransactionApi* | [**RequestTapCap**](docs/TransactionApi.md#requesttapcap) | **POST** /tap | Request TapCap transaction
 
 
@@ -88,6 +89,7 @@ Class | Method | HTTP request | Description
  - [Model.SignedMessage](docs/SignedMessage.md)
  - [Model.SignedTapcapContest](docs/SignedTapcapContest.md)
  - [Model.StaticResponse](docs/StaticResponse.md)
+ - [Model.StaticResponseArray](docs/StaticResponseArray.md)
  - [Model.StaticResponses](docs/StaticResponses.md)
  - [Model.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
  - [Model.TapCapClientRequest](docs/TapCapClientRequest.md)

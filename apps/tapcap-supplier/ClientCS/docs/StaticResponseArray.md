@@ -1,12 +1,8 @@
-# TapCapSupplier.Client.Model.StaticResponses
+# TapCapSupplier.Client.Model.StaticResponseArray
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GpoPdol** | **byte[]** |  | 
-**CryptoPdol** | **byte[]** |  | [optional] 
-**ResponseParentIndex** | **List&lt;int?&gt;** |  | [optional] 
-**Responses** | [**StaticResponseArray**](StaticResponseArray.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

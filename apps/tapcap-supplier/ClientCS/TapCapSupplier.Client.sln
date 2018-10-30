@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapCapSupplier.Client", "src\TapCapSupplier.Client\TapCapSupplier.Client.csproj", "{04468AE5-30A0-4FD6-B582-C176F596BAF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapCapSupplier.Client", "src\TapCapSupplier.Client\TapCapSupplier.Client.csproj", "{79F67A01-313E-4A7F-BE85-F9AF996556D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,10 +10,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{04468AE5-30A0-4FD6-B582-C176F596BAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04468AE5-30A0-4FD6-B582-C176F596BAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04468AE5-30A0-4FD6-B582-C176F596BAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04468AE5-30A0-4FD6-B582-C176F596BAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79F67A01-313E-4A7F-BE85-F9AF996556D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79F67A01-313E-4A7F-BE85-F9AF996556D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79F67A01-313E-4A7F-BE85-F9AF996556D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79F67A01-313E-4A7F-BE85-F9AF996556D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19F1DEBC-DE5E-4517-8062-F000CD499087}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -38,8 +38,9 @@ namespace TapCapSupplier.Client.Model
         /// </summary>
         /// <param name="gpoPdol">gpoPdol (required).</param>
         /// <param name="cryptoPdol">cryptoPdol.</param>
+        /// <param name="responseParentIndex">responseParentIndex.</param>
         /// <param name="responses">responses (required).</param>
-        public StaticResponses(byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<StaticResponse> responses = default(List<StaticResponse>))
+        public StaticResponses(byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<int?> responseParentIndex = default(List<int?>), StaticResponseArray responses = default(StaticResponseArray))
         {
             // to ensure "gpoPdol" is required (not null)
             if (gpoPdol == null)
@@ -60,6 +61,7 @@ namespace TapCapSupplier.Client.Model
                 this.Responses = responses;
             }
             this.CryptoPdol = cryptoPdol;
+            this.ResponseParentIndex = responseParentIndex;
         }
         
         /// <summary>
@@ -75,10 +77,16 @@ namespace TapCapSupplier.Client.Model
         public byte[] CryptoPdol { get; set; }
 
         /// <summary>
+        /// Gets or Sets ResponseParentIndex
+        /// </summary>
+        [DataMember(Name="responseParentIndex", EmitDefaultValue=false)]
+        public List<int?> ResponseParentIndex { get; set; }
+
+        /// <summary>
         /// Gets or Sets Responses
         /// </summary>
         [DataMember(Name="responses", EmitDefaultValue=false)]
-        public List<StaticResponse> Responses { get; set; }
+        public StaticResponseArray Responses { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -90,6 +98,7 @@ namespace TapCapSupplier.Client.Model
             sb.Append("class StaticResponses {\n");
             sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
             sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("  ResponseParentIndex: ").Append(ResponseParentIndex).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -136,9 +145,14 @@ namespace TapCapSupplier.Client.Model
                     this.CryptoPdol.Equals(input.CryptoPdol))
                 ) && 
                 (
+                    this.ResponseParentIndex == input.ResponseParentIndex ||
+                    this.ResponseParentIndex != null &&
+                    this.ResponseParentIndex.SequenceEqual(input.ResponseParentIndex)
+                ) && 
+                (
                     this.Responses == input.Responses ||
-                    this.Responses != null &&
-                    this.Responses.SequenceEqual(input.Responses)
+                    (this.Responses != null &&
+                    this.Responses.Equals(input.Responses))
                 );
         }
 
@@ -155,6 +169,8 @@ namespace TapCapSupplier.Client.Model
                     hashCode = hashCode * 59 + this.GpoPdol.GetHashCode();
                 if (this.CryptoPdol != null)
                     hashCode = hashCode * 59 + this.CryptoPdol.GetHashCode();
+                if (this.ResponseParentIndex != null)
+                    hashCode = hashCode * 59 + this.ResponseParentIndex.GetHashCode();
                 if (this.Responses != null)
                     hashCode = hashCode * 59 + this.Responses.GetHashCode();
                 return hashCode;

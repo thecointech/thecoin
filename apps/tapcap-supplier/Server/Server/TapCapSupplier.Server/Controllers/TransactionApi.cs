@@ -91,14 +91,44 @@ namespace TapCapSupplier.Server.Controllers
 			return StatusCode(200, EmvCard.CardStaticResponses());
         }
 
-        /// <summary>
-        /// Request TapCap transaction
-        /// </summary>
-        /// <remarks>This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal</remarks>
-        /// <param name="signedMessage">TapCap exchange request</param>
-        /// <response code="200">Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal</response>
-        /// <response code="405">Invalid input</response>
-        [HttpPost]
+		/// <summary>
+		/// Query the server for a single message if it is unknown
+		/// </summary>
+		/// <param name="staticResponse">Static data request</param>
+		/// <response code="200">Static response cache</response>
+		/// <response code="405">Invalid input</response>
+		[HttpPost]
+		[Route("/static/single")]
+		[ValidateModelState]
+		[SwaggerOperation("GetStaticSingle")]
+		[SwaggerResponse(statusCode: 200, type: typeof(StaticResponse), description: "Static response cache")]
+		[SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
+		public virtual IActionResult GetStaticSingle([FromBody]List<StaticResponse> staticResponse)
+		{
+			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+			// return StatusCode(200, default(StaticResponse));
+
+			//TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+			// return StatusCode(405, default(ErrorMessage));
+
+			string exampleJson = null;
+			exampleJson = "{\r\n  \"response\" : \"response\",\r\n  \"query\" : \"query\"\r\n}";
+
+			var example = exampleJson != null
+			? JsonConvert.DeserializeObject<StaticResponse>(exampleJson)
+			: default(StaticResponse);
+			//TODO: Change the data returned
+			return new ObjectResult(example);
+		}
+
+		/// <summary>
+		/// Request TapCap transaction
+		/// </summary>
+		/// <remarks>This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal</remarks>
+		/// <param name="signedMessage">TapCap exchange request</param>
+		/// <response code="200">Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal</response>
+		/// <response code="405">Invalid input</response>
+		[HttpPost]
         [Route("/tap")]
         [ValidateModelState]
         [SwaggerOperation("RequestTapCap")]

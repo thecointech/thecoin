@@ -67,6 +67,27 @@ namespace TapCapSupplier.Client.Api
         /// <returns>ApiResponse of StaticResponses</returns>
         ApiResponse<StaticResponses> GetStaticWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
+        /// Query the server for a single message if it is unknown
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>StaticResponse</returns>
+        StaticResponse GetStaticSingle (List<StaticResponse> staticResponse);
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>ApiResponse of StaticResponse</returns>
+        ApiResponse<StaticResponse> GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse);
+        /// <summary>
         /// Request TapCap transaction
         /// </summary>
         /// <remarks>
@@ -131,6 +152,27 @@ namespace TapCapSupplier.Client.Api
         /// <param name="signedMessage">Static data request</param>
         /// <returns>Task of ApiResponse (StaticResponses)</returns>
         System.Threading.Tasks.Task<ApiResponse<StaticResponses>> GetStaticAsyncWithHttpInfo (SignedMessage signedMessage);
+        /// <summary>
+        /// Query the server for a single message if it is unknown
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>Task of StaticResponse</returns>
+        System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (List<StaticResponse> staticResponse);
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>Task of ApiResponse (StaticResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse);
         /// <summary>
         /// Request TapCap transaction
         /// </summary>
@@ -548,6 +590,155 @@ namespace TapCapSupplier.Client.Api
             return new ApiResponse<StaticResponses>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
                 (StaticResponses) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponses)));
+        }
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown 
+        /// </summary>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>StaticResponse</returns>
+        public StaticResponse GetStaticSingle (List<StaticResponse> staticResponse)
+        {
+             ApiResponse<StaticResponse> localVarResponse = GetStaticSingleWithHttpInfo(staticResponse);
+             return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown 
+        /// </summary>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>ApiResponse of StaticResponse</returns>
+        public ApiResponse< StaticResponse > GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse)
+        {
+            // verify the required parameter 'staticResponse' is set
+            if (staticResponse == null)
+                throw new ApiException(400, "Missing required parameter 'staticResponse' when calling TransactionApi->GetStaticSingle");
+
+            var localVarPath = "./static/single";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new List<KeyValuePair<String, String>>();
+            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            var localVarFileParams = new Dictionary<String, FileParameter>();
+            Object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            String[] localVarHttpContentTypes = new String[] {
+                "application/json"
+            };
+            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            String[] localVarHttpHeaderAccepts = new String[] {
+                "application/json"
+            };
+            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (staticResponse != null && staticResponse.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(staticResponse); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = staticResponse; // byte array
+            }
+
+
+            // make the HTTP request
+            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            int localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("GetStaticSingle", localVarResponse);
+                if (exception != null) throw exception;
+            }
+
+            return new ApiResponse<StaticResponse>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
+                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
+        }
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown 
+        /// </summary>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>Task of StaticResponse</returns>
+        public async System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (List<StaticResponse> staticResponse)
+        {
+             ApiResponse<StaticResponse> localVarResponse = await GetStaticSingleAsyncWithHttpInfo(staticResponse);
+             return localVarResponse.Data;
+
+        }
+
+        /// <summary>
+        /// Query the server for a single message if it is unknown 
+        /// </summary>
+        /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="staticResponse">Static data request</param>
+        /// <returns>Task of ApiResponse (StaticResponse)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse)
+        {
+            // verify the required parameter 'staticResponse' is set
+            if (staticResponse == null)
+                throw new ApiException(400, "Missing required parameter 'staticResponse' when calling TransactionApi->GetStaticSingle");
+
+            var localVarPath = "./static/single";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new List<KeyValuePair<String, String>>();
+            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            var localVarFileParams = new Dictionary<String, FileParameter>();
+            Object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            String[] localVarHttpContentTypes = new String[] {
+                "application/json"
+            };
+            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            String[] localVarHttpHeaderAccepts = new String[] {
+                "application/json"
+            };
+            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (staticResponse != null && staticResponse.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(staticResponse); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = staticResponse; // byte array
+            }
+
+
+            // make the HTTP request
+            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            int localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("GetStaticSingle", localVarResponse);
+                if (exception != null) throw exception;
+            }
+
+            return new ApiResponse<StaticResponse>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
+                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
         }
 
         /// <summary>
