@@ -38,9 +38,9 @@ namespace TapCapSupplier.Client.Model
         /// </summary>
         /// <param name="clientAccount">clientAccount (required).</param>
         /// <param name="availableBalance">availableBalance (required).</param>
-        /// <param name="transactionId">transactionId (required).</param>
+        /// <param name="nonce">nonce (required).</param>
         /// <param name="timestamp">timestamp (required).</param>
-        public TapCapToken(string clientAccount = default(string), long? availableBalance = default(long?), int? transactionId = default(int?), long? timestamp = default(long?))
+        public TapCapToken(string clientAccount = default(string), long? availableBalance = default(long?), int? nonce = default(int?), long? timestamp = default(long?))
         {
             // to ensure "clientAccount" is required (not null)
             if (clientAccount == null)
@@ -60,14 +60,14 @@ namespace TapCapSupplier.Client.Model
             {
                 this.AvailableBalance = availableBalance;
             }
-            // to ensure "transactionId" is required (not null)
-            if (transactionId == null)
+            // to ensure "nonce" is required (not null)
+            if (nonce == null)
             {
-                throw new InvalidDataException("transactionId is a required property for TapCapToken and cannot be null");
+                throw new InvalidDataException("nonce is a required property for TapCapToken and cannot be null");
             }
             else
             {
-                this.TransactionId = transactionId;
+                this.Nonce = nonce;
             }
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -93,10 +93,10 @@ namespace TapCapSupplier.Client.Model
         public long? AvailableBalance { get; set; }
 
         /// <summary>
-        /// Gets or Sets TransactionId
+        /// Gets or Sets Nonce
         /// </summary>
-        [DataMember(Name="transactionId", EmitDefaultValue=false)]
-        public int? TransactionId { get; set; }
+        [DataMember(Name="nonce", EmitDefaultValue=false)]
+        public int? Nonce { get; set; }
 
         /// <summary>
         /// Gets or Sets Timestamp
@@ -114,7 +114,7 @@ namespace TapCapSupplier.Client.Model
             sb.Append("class TapCapToken {\n");
             sb.Append("  ClientAccount: ").Append(ClientAccount).Append("\n");
             sb.Append("  AvailableBalance: ").Append(AvailableBalance).Append("\n");
-            sb.Append("  TransactionId: ").Append(TransactionId).Append("\n");
+            sb.Append("  Nonce: ").Append(Nonce).Append("\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -161,9 +161,9 @@ namespace TapCapSupplier.Client.Model
                     this.AvailableBalance.Equals(input.AvailableBalance))
                 ) && 
                 (
-                    this.TransactionId == input.TransactionId ||
-                    (this.TransactionId != null &&
-                    this.TransactionId.Equals(input.TransactionId))
+                    this.Nonce == input.Nonce ||
+                    (this.Nonce != null &&
+                    this.Nonce.Equals(input.Nonce))
                 ) && 
                 (
                     this.Timestamp == input.Timestamp ||
@@ -185,8 +185,8 @@ namespace TapCapSupplier.Client.Model
                     hashCode = hashCode * 59 + this.ClientAccount.GetHashCode();
                 if (this.AvailableBalance != null)
                     hashCode = hashCode * 59 + this.AvailableBalance.GetHashCode();
-                if (this.TransactionId != null)
-                    hashCode = hashCode * 59 + this.TransactionId.GetHashCode();
+                if (this.Nonce != null)
+                    hashCode = hashCode * 59 + this.Nonce.GetHashCode();
                 if (this.Timestamp != null)
                     hashCode = hashCode * 59 + this.Timestamp.GetHashCode();
                 return hashCode;

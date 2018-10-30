@@ -39,11 +39,11 @@ namespace TapCapSupplier.Server.Models
         public long? AvailableBalance { get; set; }
 
         /// <summary>
-        /// Gets or Sets TransactionId
+        /// Gets or Sets Nonce
         /// </summary>
         [Required]
-        [DataMember(Name="transactionId")]
-        public int? TransactionId { get; set; }
+        [DataMember(Name="nonce")]
+        public int? Nonce { get; set; }
 
         /// <summary>
         /// Gets or Sets Timestamp
@@ -62,7 +62,7 @@ namespace TapCapSupplier.Server.Models
             sb.Append("class TapCapToken {\n");
             sb.Append("  ClientAccount: ").Append(ClientAccount).Append("\n");
             sb.Append("  AvailableBalance: ").Append(AvailableBalance).Append("\n");
-            sb.Append("  TransactionId: ").Append(TransactionId).Append("\n");
+            sb.Append("  Nonce: ").Append(Nonce).Append("\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -111,9 +111,9 @@ namespace TapCapSupplier.Server.Models
                     AvailableBalance.Equals(other.AvailableBalance)
                 ) && 
                 (
-                    TransactionId == other.TransactionId ||
-                    TransactionId != null &&
-                    TransactionId.Equals(other.TransactionId)
+                    Nonce == other.Nonce ||
+                    Nonce != null &&
+                    Nonce.Equals(other.Nonce)
                 ) && 
                 (
                     Timestamp == other.Timestamp ||
@@ -136,8 +136,8 @@ namespace TapCapSupplier.Server.Models
                     hashCode = hashCode * 59 + ClientAccount.GetHashCode();
                     if (AvailableBalance != null)
                     hashCode = hashCode * 59 + AvailableBalance.GetHashCode();
-                    if (TransactionId != null)
-                    hashCode = hashCode * 59 + TransactionId.GetHashCode();
+                    if (Nonce != null)
+                    hashCode = hashCode * 59 + Nonce.GetHashCode();
                     if (Timestamp != null)
                     hashCode = hashCode * 59 + Timestamp.GetHashCode();
                 return hashCode;

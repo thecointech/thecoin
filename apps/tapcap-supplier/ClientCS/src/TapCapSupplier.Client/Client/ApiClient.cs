@@ -53,13 +53,13 @@ namespace TapCapSupplier.Client.Client
         public ApiClient()
         {
             Configuration = TapCapSupplier.Client.Client.Configuration.Default;
-            RestClient = new RestClient("http://localhost:8070");
+            RestClient = new RestClient("https://thecoincad.tplinkdns.com:9361");
             RestClient.IgnoreResponseStatusCode = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default base path (http://localhost:8070).
+        /// with default base path (https://thecoincad.tplinkdns.com:9361).
         /// </summary>
         /// <param name="config">An instance of Configuration.</param>
         public ApiClient(Configuration config)
@@ -75,7 +75,7 @@ namespace TapCapSupplier.Client.Client
         /// with default configuration.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath = "http://localhost:8070")
+        public ApiClient(String basePath = "https://thecoincad.tplinkdns.com:9361")
         {
            if (String.IsNullOrEmpty(basePath))
                 throw new ArgumentException("basePath cannot be empty");

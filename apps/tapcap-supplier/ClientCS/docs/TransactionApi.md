@@ -1,6 +1,6 @@
 # TapCapSupplier.Client.Api.TransactionApi
 
-All URIs are relative to *http://localhost:8070*
+All URIs are relative to *https://thecoincad.tplinkdns.com:9361*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

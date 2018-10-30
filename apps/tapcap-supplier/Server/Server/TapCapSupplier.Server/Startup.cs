@@ -120,7 +120,6 @@ namespace TapCapSupplier.Server
 					.AllowAnyHeader()
 			);
 
-			//TODO!
 			//app.UseHttpsRedirection();
 			app
 				.UseMvc()

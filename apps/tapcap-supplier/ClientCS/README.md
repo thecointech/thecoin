@@ -70,7 +70,7 @@ namespace Example
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8070*
+All URIs are relative to *https://thecoincad.tplinkdns.com:9361*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

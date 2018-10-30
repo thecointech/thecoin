@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8070"
+host: "thecoincad.tplinkdns.com:9361" #localhost:8070"
 tags:
 - name: "TapCap"
   description: "Facilitate a 3-way TapCap transaction"
@@ -17,7 +17,7 @@ consumes:
 produces:
 - "application/json"
 schemes:
-- "http"
+- "https"
 tags:
 - name: "Transaction"
   description: "These API's can be called by a client to affect a TapCap purchase transaction, exchanging THE with the supplier to complete fiat tap transactions"

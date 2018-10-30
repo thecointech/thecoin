@@ -21,7 +21,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
-      "applicationUrl": "https://localhost:8071;http://localhost:8070",
+      "applicationUrl": "http://thecoincad.tplinkdns.com:9361",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

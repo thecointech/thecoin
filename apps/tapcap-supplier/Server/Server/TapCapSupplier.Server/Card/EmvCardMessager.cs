@@ -89,16 +89,21 @@ namespace TapCapSupplier.Server.Card
 
 			_logger.LogTrace("SW1 SW2 = {0:X2} {1:X2}", response.SW1, response.SW2);
 
+			// TODO: Test SW instead of HasData
 			if (!response.HasData)
 			{
 				_logger.LogError("No data. (Card does not understand \"{0}\")", command);
 				return null;
 			}
 
-			var resp = response.GetData();
-			var chars = System.Text.Encoding.UTF8.GetString(resp);
-			_logger.LogTrace("Response: \n  {0}", BitConverter.ToString(resp));
-			return resp;
+			var respData = response.GetData();
+
+			// Append response verification bytes
+			byte[] swbytes = { response.SW1, response.SW2 };
+			var fullresponse = respData.Concat(swbytes).ToArray();
+
+			_logger.LogTrace("Response: \n  {0}", BitConverter.ToString(fullresponse));
+			return fullresponse;
 		}
 
 		/// <summary>

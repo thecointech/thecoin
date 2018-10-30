@@ -126,6 +126,7 @@ namespace TapCapSupplier.Server.TapCap
 
 		Task IHostedService.StopAsync(CancellationToken cancellationToken)
 		{
+			// TODO:
 			throw new NotImplementedException();
 		}
 
