@@ -26,8 +26,6 @@ namespace TheApp.Tap
 		private byte[] GpoData;
 
 		private QueryWithHistory queryHistory;
-		private List<byte[]> TxQueries = new List<byte[]>();
-		private List<byte[]> TxResponses = new List<byte[]>();
 
 		private Stopwatch stopwatch;
 
@@ -75,12 +73,12 @@ namespace TheApp.Tap
 
 		public byte[] ProcessCommand(byte[] query)
 		{
-			if (TxQueries.Count == 0)
+			if (queryHistory.Queries.Count == 0)
 			{
 				OnStartTx();
 			}
 
-			Events.EventSystem.Publish(new Events.TxStatus(TxQueries.Count));
+			Events.EventSystem.Publish(new Events.TxStatus(queryHistory.Queries.Count));
 
 			queryHistory.Query = query;
 
@@ -96,7 +94,9 @@ namespace TheApp.Tap
 			// TODO: This would be faster if we just sent the whole data struct
 			//var cryptoPdol = Processing.FindValue(query, new string[] { "70", "8C" });
 			// Else, if this is a purchase PDOL, then query server
-			var purchaseCert = GetSupplierTap(query);
+
+			var cryptoData = Processing.ExtractDataFromApdu(query);
+			var purchaseCert = GetSupplierTap(cryptoData.ToArray());
 			logger.Trace("Fetched Response: {0}", BitConverter.ToString(purchaseCert));
 			ticksAtCompletion = stopwatch.ElapsedTicks;
 			return purchaseCert;
@@ -142,9 +142,8 @@ namespace TheApp.Tap
 
 			if (response == null)
 			{
-				response = TapSupplier.GetStaticSingle(queryHistory);
-				var str = Encoding.UTF8.GetString(response, 0, response.Length);
-				response = Convert.FromBase64String(str);
+				var supplierResponse = TapSupplier.GetStaticSingle(queryHistory);
+				response = supplierResponse.Response;
 				Cache.AddNewStaticResponse(query, response);
 			}
 			// Keep running track of this tx
@@ -163,8 +162,8 @@ namespace TheApp.Tap
 
 			var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
 			var signedMessage = new SignedMessage(m, s);
-			cachedTapResponse = TapSupplier.RequestTapCap(signedMessage);
 
+			cachedTapResponse = TapSupplier.RequestTapCap(signedMessage);
 			if (cachedTapResponse != null)
 			{
 				//logger.Trace("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
