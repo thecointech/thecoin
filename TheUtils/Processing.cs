@@ -17,6 +17,46 @@ namespace TheUtils
 
     public static class Processing
     {
+		public enum ApduType
+		{
+			ErrorType = 0,
+			Select1 = 1,
+			Select2 = 2,
+			GPO = 3,
+			GetData = 4,
+			CyrptoSig = 9,
+		}
+
+		public static ApduType ReadApduType(byte[] commandApdu)
+		{
+			if (commandApdu.Length < 5)
+				return ApduType.ErrorType;
+
+			// Select command?
+			else if (commandApdu[0] == 0x00 && commandApdu[1] == 0xA4 && commandApdu[2] == 0x04 && commandApdu[3] == 0x00)
+			{
+				if (commandApdu[4] == 0x0E && commandApdu[5] == 0x32 && commandApdu[6] == 0x50)
+					return ApduType.Select1;
+				else
+					return ApduType.Select2;
+			}
+			// Check if requesting GPO
+			else if (commandApdu[0] == 0x80 && commandApdu[1] == 0xA8 && commandApdu[2] == 0x00 && commandApdu[3] == 0x00)
+			{
+				return ApduType.GPO;
+			}
+			// Else most likely ReadRequest
+			else if (commandApdu[0] == 0x00 && commandApdu[1] == 0xB2)
+			{
+				return ApduType.GetData;
+			}
+			// Else it might be a crypto request
+			else if (commandApdu[0] == 0x80 && commandApdu[1] == 0xAE)
+				return ApduType.CyrptoSig;
+
+			// If unknown we mark it as an error.
+			return ApduType.ErrorType;
+		}
 
 		public static CommandApdu BuildInitialize(ICardMessager card)
 		{
@@ -60,6 +100,13 @@ namespace TheUtils
 			// GPO data supplied by terminal
 			gpo.Data = data;
 			return gpo;
+		}
+
+		public static IEnumerable<byte> ExtractDataFromApdu(byte[] query)
+		{
+			var cryptoLen = query[4];
+			var cryptoData = query.Skip(5).Take(cryptoLen);
+			return cryptoData;
 		}
 
 		public static CommandApdu BuildCryptSigQuery(ICardMessager card, byte[] cryptData)

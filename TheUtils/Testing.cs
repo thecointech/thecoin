@@ -13,7 +13,7 @@ namespace TheUtils
             // We perform initial, constant interactions in this phase
             // For now - hard-coded queries, ignore responses
             byte[] SEL_FILE = new byte[] { 0x00, 0xA4, 0x04, 0x00, 0x0E, 0x32, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31, 0x00 };
-            var selResponse = card.SendCommand(SEL_FILE, "SelFile");
+            var selResponse = card.SendCommand(SEL_FILE);
             var tlvSelResponse = Tlv.ParseTlv(selResponse);
 
             var paymentApp = tlvSelResponse;
@@ -23,7 +23,7 @@ namespace TheUtils
                 P1 = 0x04, // read the first file (I think?)
                 Data = Processing.FindValue(tlvSelResponse, new string[] { "6F", "A5", "BF0C", "61", "4F" })
             };
-            var appResponse = card.SendCommand(SelApp, "SelApp");
+            var appResponse = card.SendCommand(SelApp);
 
             // Extract the PDOL
             var appTlv = Tlv.ParseTlv(appResponse);
@@ -39,7 +39,7 @@ namespace TheUtils
                 Instruction = (InstructionCode)0xA8,
                 Data = PDOL.GeneratePDOL(pdolParsed)
             };
-            var gpoResponse = card.SendCommand(gpo, "SetGPO");
+            var gpoResponse = card.SendCommand(gpo);
 
             var fileList = Processing.ParseAddresses(gpoResponse);
             byte[] cdol = null;
@@ -49,7 +49,7 @@ namespace TheUtils
                 {
                     //var rr = new CommandApdu(IsoCase.Case2Short, card.Protocol);
                     var rr = Processing.BuildReadRecordApdu(file, recordNum, card);
-                    var record = card.SendCommand(rr, "RR");
+                    var record = card.SendCommand(rr);
 
                     var rrtlv = Tlv.ParseTlv(record);
                     if (cdol == null)
@@ -71,7 +71,7 @@ namespace TheUtils
                     Data = PDOL.GenerateCDOL(cdolParsed)
                 };
 
-                var fuckinAye = card.SendCommand(GenerateCrypto, "Crypt");
+                var fuckinAye = card.SendCommand(GenerateCrypto);
                 var faBytes = fuckinAye;
 
                 return true;
