@@ -20,16 +20,14 @@ namespace TheApp.Tap
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		private ITransactionApi TapSupplier;
-		private StaticResponses StaticResponses;
-		private ApduType[] StaticTypes;
+		private AppResponseCache Cache;
 		private UserAccount UserAccount;
 		private List<PDOL.PDOLItem> GpoPDOL;
 		private byte[] GpoData;
 
-		// Count how many files have been read by the system
-		private int FileCounter = 0;
-		private bool FirstTxMessage => FileCounter < 0;
-		private int MessageCounter = 0;
+		private QueryWithHistory queryHistory;
+		private List<byte[]> TxQueries = new List<byte[]>();
+		private List<byte[]> TxResponses = new List<byte[]>();
 
 		private Stopwatch stopwatch;
 
@@ -53,18 +51,18 @@ namespace TheApp.Tap
 
 		async Task FetchStaticResponses()
 		{
-			if (StaticResponses == null && UserAccount != null && UserAccount.Status != null)
+			if (Cache == null && UserAccount != null && UserAccount.Status != null)
 			{ 
 				try
 				{
 					var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
 					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
-					StaticResponses = supplierResponses;
+					Cache = new AppResponseCache(supplierResponses);
 					Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
 
-					GpoPDOL = PDOL.ParsePDOLItems(StaticResponses.GpoPdol);
+					GpoPDOL = PDOL.ParsePDOLItems(supplierResponses.GpoPdol);
 
-					StaticTypes = StaticResponses.Responses.Select((response) => ReadApduType(response.Query)).ToArray();
+					//StaticTypes = StaticResponses.Responses.Select((response) => ReadApduType(response.Query)).ToArray();
 					ResetTransaction();
 					Events.EventSystem.Publish(new Events.TxStatus(0));
 				}
@@ -77,16 +75,18 @@ namespace TheApp.Tap
 
 		public byte[] ProcessCommand(byte[] query)
 		{
-			if (MessageCounter++ == 0)
+			if (TxQueries.Count == 0)
 			{
 				OnStartTx();
 			}
 
-			Events.EventSystem.Publish(new Events.TxStatus(MessageCounter));
+			Events.EventSystem.Publish(new Events.TxStatus(TxQueries.Count));
 
-			var type = ReadApduType(query);
+			queryHistory.Query = query;
+
+			var type = Processing.ReadApduType(query);
 			logger.Trace("Recieved: {0} - {1}", type.ToString(), BitConverter.ToString(query));
-			if (type != ApduType.CyrptoSig)
+			if (type != Processing.ApduType.CyrptoSig)
 			{
 				var response = GetCachedResponse(query, type);
 				logger.Trace("Cached Response: {0}", BitConverter.ToString(response));
@@ -132,21 +132,26 @@ namespace TheApp.Tap
 			}
 		}
 
-		private byte[] GetCachedResponse(byte[] query, ApduType type)
+		private byte[] GetCachedResponse(byte[] query, Processing.ApduType type)
 		{
-			if (type == ApduType.GetPdo)
+			if (type == Processing.ApduType.GPO)
 			{
 				CachePDOLData(query);
 			}
+			var response = Cache.GetResponse(query);
 
-			for (int i = 0; i < StaticTypes.Length; i++)
+			if (response == null)
 			{
-				if (StaticTypes[i] == type)
-					return StaticResponses.Responses[i].Response;
+				response = TapSupplier.GetStaticSingle(queryHistory);
+				var str = Encoding.UTF8.GetString(response, 0, response.Length);
+				response = Convert.FromBase64String(str);
+				Cache.AddNewStaticResponse(query, response);
 			}
+			// Keep running track of this tx
+			queryHistory.Queries.Add(query);
+			queryHistory.Responses.Add(response);
 
-			logger.Error("Could not get response for type{0}, command: {1}", type.ToString(), BitConverter.ToString(query));
-			return null;
+			return response;
 		}
 
 		private byte[] GetSupplierTap(byte[] cryptoData)
@@ -160,11 +165,16 @@ namespace TheApp.Tap
 			var signedMessage = new SignedMessage(m, s);
 			cachedTapResponse = TapSupplier.RequestTapCap(signedMessage);
 
-			logger.Info("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
+			if (cachedTapResponse != null)
+			{
+				//logger.Trace("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
 
-			// Do not decode the signing address of this, instead just extract the relevant info
-			var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
-			return purchase.CryptoCertificate;
+				// Do not decode the signing address of this, instead just extract the relevant info
+				var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
+				return purchase.CryptoCertificate;
+			}
+			logger.Error("Did not recieve response to crypto request");
+			return null;
 		}
 
 		private void ValidateTx()
@@ -198,55 +208,10 @@ namespace TheApp.Tap
 		// We assume files are always 
 		public void ResetTransaction()
 		{
-			MessageCounter = 0;
-			FileCounter = 0;
+			Cache.ResetTx();
+			queryHistory = new QueryWithHistory(new byte[0], new List<byte[]>(), new List<byte[]>());
 			cachedTapResponse = null;
 			ticksAtCompletion = 0;
-		}
-
-		private ApduType ReadApduType(byte[] commandApdu)
-		{
-			if (commandApdu.Length < 5)
-				return ApduType.ErrorType;
-
-			// Select command?
-			else if (commandApdu[0] == 0x00 && commandApdu[1] == 0xA4 && commandApdu[2] == 0x04 && commandApdu[3] == 0x00)
-			{
-				if (commandApdu[4] == 0x0E && commandApdu[5] == 0x32 && commandApdu[6] == 0x50)
-					return ApduType.Select1;
-				else
-					return ApduType.Select2;
-			}
-			// Check if requesting GPO
-			else if (commandApdu[0] == 0x80 && commandApdu[1] == 0xA8 && commandApdu[2] == 0x00 && commandApdu[3] == 0x00)
-			{
-				return ApduType.GetPdo;
-			}
-			// Else most likely ReadRequest
-			else if (commandApdu[0] == 0x00 && commandApdu[1] == 0xB2)
-			{
-				return ApduType.ReadFile1 + FileCounter++;
-			}
-			// Else it might be a crypto request
-			else if (commandApdu[0] == 0x80 && commandApdu[1] == 0xAE)
-				return ApduType.CyrptoSig;
-
-			// If unknown we mark it as an error.
-			return ApduType.ErrorType;
-		}
-
-		private enum ApduType
-		{
-			ErrorType = 0,
-			Select1 = 1,
-			Select2 = 2,
-			GetPdo = 3,
-			ReadFile1 = 4,
-			ReadFile2 = 5,
-			ReadFile3 = 6,
-			ReadFile4 = 7,
-			ReadFile5 = 8,
-			CyrptoSig = 9,
 		}
 	}
 }

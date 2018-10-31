@@ -76,12 +76,12 @@ namespace TheApp.Tap
 			return new CommandApdu(hasData ? IsoCase.Case4Short : IsoCase.Case2Short, Protocol);
 		}
 
-		public byte[] SendCommand(CommandApdu apdu, string debugName)
+		public byte[] SendCommand(CommandApdu apdu)
 		{
 			return processor.ProcessCommand(apdu.ToArray());
 		}
 
-		public byte[] SendCommand(byte[] data, string debugName)
+		public byte[] SendCommand(byte[] data)
 		{
 			return processor.ProcessCommand(data);
 		}
