@@ -67,8 +67,7 @@ paths:
         200:
           description: Static response cache
           schema:
-            type: string
-            format: byte
+            $ref: "#/definitions/StaticResponse"
 
   /tap:
     post:
@@ -159,6 +158,14 @@ definitions:
         items: 
           type: string
           format: byte
+
+  StaticResponse:
+    required:
+      - response
+    properties:
+      response:
+        type: string
+        format: byte
 
   StaticResponses:
     required:

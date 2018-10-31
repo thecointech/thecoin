@@ -1,6 +1,7 @@
 ﻿using Nethereum.Web3.Accounts;
 using NLog;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
 using TapCapSupplier.Server.Card;
@@ -19,8 +20,19 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
 
-		private List<PDOL.PDOLItem> GpoPDOL;
-		private List<PDOL.PDOLItem> CryptoPDOL;
+
+		//private List<PDOL.PDOLItem> GpoPDOL;
+
+		private List<PDOL.PDOLItem> _CryptoPDOL;
+		private List<PDOL.PDOLItem> CryptoPDOL
+		{
+			get
+			{
+				if (_CryptoPDOL == null)
+					_CryptoPDOL = PDOL.ParsePDOLItems(Card.CryptoPDOL);
+				return _CryptoPDOL;
+			}
+		}
 
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -38,8 +50,6 @@ namespace TapCapSupplier.Server.TapCap
 			TapCapManager = manager;
 			TheAccount = account;
 
-			GpoPDOL = PDOL.ParsePDOLItems(Card.GpoPDOL);
-			CryptoPDOL = PDOL.ParsePDOLItems(Card.CryptoPDOL);
 		}
 
 		/// <summary>
@@ -69,13 +79,19 @@ namespace TapCapSupplier.Server.TapCap
 			// TODO! Reference the Crypto PDOL, so we are not relying
 			// on the security in the card to ensure the numbers match.
 			// (and we don't generate a cyrpto sig for a different value than here)
-			if (!PDOL.ParseIntoCryptoPDOL(request.CryptoData, GpoPDOL))
+			if (!PDOL.ParseIntoCryptoPDOL(request.CryptoData, CryptoPDOL))
 			{
 				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(request.GpoData));
 				return null;
 			}
 
-			var txCents = PDOL.GetAmount(GpoPDOL);
+			var txCents = PDOL.GetAmount(CryptoPDOL);
+			if (txCents == 0)
+			{
+				logger.Warn("Invalid tx cents amount");
+				return null;
+			}
+
 			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
 
 			// TODO: Return "insufficient funds"

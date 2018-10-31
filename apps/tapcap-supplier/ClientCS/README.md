@@ -89,6 +89,7 @@ Class | Method | HTTP request | Description
  - [Model.QueryWithHistory](docs/QueryWithHistory.md)
  - [Model.SignedMessage](docs/SignedMessage.md)
  - [Model.SignedTapcapContest](docs/SignedTapcapContest.md)
+ - [Model.StaticResponse](docs/StaticResponse.md)
  - [Model.StaticResponses](docs/StaticResponses.md)
  - [Model.TapCapBrokerPurchase](docs/TapCapBrokerPurchase.md)
  - [Model.TapCapClientRequest](docs/TapCapClientRequest.md)

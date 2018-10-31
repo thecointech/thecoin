@@ -74,8 +74,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>byte[]</returns>
-        byte[] GetStaticSingle (QueryWithHistory queryWithHistory);
+        /// <returns>StaticResponse</returns>
+        StaticResponse GetStaticSingle (QueryWithHistory queryWithHistory);
 
         /// <summary>
         /// Query the server for a single message if it is unknown
@@ -85,8 +85,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>ApiResponse of byte[]</returns>
-        ApiResponse<byte[]> GetStaticSingleWithHttpInfo (QueryWithHistory queryWithHistory);
+        /// <returns>ApiResponse of StaticResponse</returns>
+        ApiResponse<StaticResponse> GetStaticSingleWithHttpInfo (QueryWithHistory queryWithHistory);
         /// <summary>
         /// Request TapCap transaction
         /// </summary>
@@ -160,8 +160,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>Task of byte[]</returns>
-        System.Threading.Tasks.Task<byte[]> GetStaticSingleAsync (QueryWithHistory queryWithHistory);
+        /// <returns>Task of StaticResponse</returns>
+        System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (QueryWithHistory queryWithHistory);
 
         /// <summary>
         /// Query the server for a single message if it is unknown
@@ -171,8 +171,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>Task of ApiResponse (byte[])</returns>
-        System.Threading.Tasks.Task<ApiResponse<byte[]>> GetStaticSingleAsyncWithHttpInfo (QueryWithHistory queryWithHistory);
+        /// <returns>Task of ApiResponse (StaticResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (QueryWithHistory queryWithHistory);
         /// <summary>
         /// Request TapCap transaction
         /// </summary>
@@ -597,10 +597,10 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>byte[]</returns>
-        public byte[] GetStaticSingle (QueryWithHistory queryWithHistory)
+        /// <returns>StaticResponse</returns>
+        public StaticResponse GetStaticSingle (QueryWithHistory queryWithHistory)
         {
-             ApiResponse<byte[]> localVarResponse = GetStaticSingleWithHttpInfo(queryWithHistory);
+             ApiResponse<StaticResponse> localVarResponse = GetStaticSingleWithHttpInfo(queryWithHistory);
              return localVarResponse.Data;
         }
 
@@ -609,8 +609,8 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>ApiResponse of byte[]</returns>
-        public ApiResponse< byte[] > GetStaticSingleWithHttpInfo (QueryWithHistory queryWithHistory)
+        /// <returns>ApiResponse of StaticResponse</returns>
+        public ApiResponse< StaticResponse > GetStaticSingleWithHttpInfo (QueryWithHistory queryWithHistory)
         {
             // verify the required parameter 'queryWithHistory' is set
             if (queryWithHistory == null)
@@ -661,9 +661,9 @@ namespace TapCapSupplier.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<byte[]>(localVarStatusCode,
+            return new ApiResponse<StaticResponse>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (byte[]) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(byte[])));
+                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
         }
 
         /// <summary>
@@ -671,10 +671,10 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>Task of byte[]</returns>
-        public async System.Threading.Tasks.Task<byte[]> GetStaticSingleAsync (QueryWithHistory queryWithHistory)
+        /// <returns>Task of StaticResponse</returns>
+        public async System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (QueryWithHistory queryWithHistory)
         {
-             ApiResponse<byte[]> localVarResponse = await GetStaticSingleAsyncWithHttpInfo(queryWithHistory);
+             ApiResponse<StaticResponse> localVarResponse = await GetStaticSingleAsyncWithHttpInfo(queryWithHistory);
              return localVarResponse.Data;
 
         }
@@ -684,8 +684,8 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="queryWithHistory">Static data request</param>
-        /// <returns>Task of ApiResponse (byte[])</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<byte[]>> GetStaticSingleAsyncWithHttpInfo (QueryWithHistory queryWithHistory)
+        /// <returns>Task of ApiResponse (StaticResponse)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (QueryWithHistory queryWithHistory)
         {
             // verify the required parameter 'queryWithHistory' is set
             if (queryWithHistory == null)
@@ -736,9 +736,9 @@ namespace TapCapSupplier.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<byte[]>(localVarStatusCode,
+            return new ApiResponse<StaticResponse>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (byte[]) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(byte[])));
+                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
         }
 
         /// <summary>

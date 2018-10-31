@@ -101,12 +101,23 @@ namespace TapCapSupplier.Server.Controllers
 		[Route("/static/single")]
 		[ValidateModelState]
 		[SwaggerOperation("GetStaticSingle")]
-		[SwaggerResponse(statusCode: 200, type: typeof(byte[]), description: "Static response cache")]
+		[SwaggerResponse(statusCode: 200, type: typeof(StaticResponse), description: "Static response cache")]
 		[SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
 		public virtual IActionResult GetStaticSingle([FromBody]QueryWithHistory queryWithHistory)
 		{
-
-			return StatusCode(200, Card.GetSingleResponse(queryWithHistory));
+			var response = Card.GetSingleResponse(queryWithHistory);
+			if (response != null)
+			{
+				return StatusCode(200, new StaticResponse()
+				{
+					Response = response
+				});
+			}
+			return StatusCode(405, new ErrorMessage()
+			{
+				Code = 0x0FECC0FF,
+				Message = "Stop touching me!"
+			});
 		}
 
 		/// <summary>

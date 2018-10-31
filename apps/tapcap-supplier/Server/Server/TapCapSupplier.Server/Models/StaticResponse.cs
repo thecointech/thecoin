@@ -25,15 +25,9 @@ namespace TapCapSupplier.Server.Models
     public partial class StaticResponse : IEquatable<StaticResponse>
     { 
         /// <summary>
-        /// Gets or Sets Query
-        /// </summary>
-        [Required]
-        [DataMember(Name="query")]
-        public byte[] Query { get; set; }
-
-        /// <summary>
         /// Gets or Sets Response
         /// </summary>
+        [Required]
         [DataMember(Name="response")]
         public byte[] Response { get; set; }
 
@@ -45,7 +39,6 @@ namespace TapCapSupplier.Server.Models
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponse {\n");
-            sb.Append("  Query: ").Append(Query).Append("\n");
             sb.Append("  Response: ").Append(Response).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -84,11 +77,6 @@ namespace TapCapSupplier.Server.Models
 
             return 
                 (
-                    Query == other.Query ||
-                    Query != null &&
-                    Query.Equals(other.Query)
-                ) && 
-                (
                     Response == other.Response ||
                     Response != null &&
                     Response.Equals(other.Response)
@@ -105,8 +93,6 @@ namespace TapCapSupplier.Server.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Query != null)
-                    hashCode = hashCode * 59 + Query.GetHashCode();
                     if (Response != null)
                     hashCode = hashCode * 59 + Response.GetHashCode();
                 return hashCode;

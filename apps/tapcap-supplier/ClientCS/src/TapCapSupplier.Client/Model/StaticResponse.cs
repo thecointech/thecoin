@@ -36,28 +36,20 @@ namespace TapCapSupplier.Client.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticResponse" /> class.
         /// </summary>
-        /// <param name="query">query (required).</param>
-        /// <param name="response">response.</param>
-        public StaticResponse(byte[] query = default(byte[]), byte[] response = default(byte[]))
+        /// <param name="response">response (required).</param>
+        public StaticResponse(byte[] response = default(byte[]))
         {
-            // to ensure "query" is required (not null)
-            if (query == null)
+            // to ensure "response" is required (not null)
+            if (response == null)
             {
-                throw new InvalidDataException("query is a required property for StaticResponse and cannot be null");
+                throw new InvalidDataException("response is a required property for StaticResponse and cannot be null");
             }
             else
             {
-                this.Query = query;
+                this.Response = response;
             }
-            this.Response = response;
         }
         
-        /// <summary>
-        /// Gets or Sets Query
-        /// </summary>
-        [DataMember(Name="query", EmitDefaultValue=false)]
-        public byte[] Query { get; set; }
-
         /// <summary>
         /// Gets or Sets Response
         /// </summary>
@@ -72,7 +64,6 @@ namespace TapCapSupplier.Client.Model
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponse {\n");
-            sb.Append("  Query: ").Append(Query).Append("\n");
             sb.Append("  Response: ").Append(Response).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -109,11 +100,6 @@ namespace TapCapSupplier.Client.Model
 
             return 
                 (
-                    this.Query == input.Query ||
-                    (this.Query != null &&
-                    this.Query.Equals(input.Query))
-                ) && 
-                (
                     this.Response == input.Response ||
                     (this.Response != null &&
                     this.Response.Equals(input.Response))
@@ -129,8 +115,6 @@ namespace TapCapSupplier.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.Query != null)
-                    hashCode = hashCode * 59 + this.Query.GetHashCode();
                 if (this.Response != null)
                     hashCode = hashCode * 59 + this.Response.GetHashCode();
                 return hashCode;

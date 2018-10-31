@@ -132,7 +132,7 @@ No authorization required
 
 <a name="getstaticsingle"></a>
 # **GetStaticSingle**
-> byte[] GetStaticSingle (QueryWithHistory queryWithHistory)
+> StaticResponse GetStaticSingle (QueryWithHistory queryWithHistory)
 
 Query the server for a single message if it is unknown
 
@@ -156,7 +156,7 @@ namespace Example
             try
             {
                 // Query the server for a single message if it is unknown
-                byte[] result = apiInstance.GetStaticSingle(queryWithHistory);
+                StaticResponse result = apiInstance.GetStaticSingle(queryWithHistory);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -176,7 +176,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**byte[]**
+[**StaticResponse**](StaticResponse.md)
 
 ### Authorization
 
