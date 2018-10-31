@@ -34,7 +34,6 @@ namespace TapCapSupplier.Server.Models
         /// <summary>
         /// Gets or Sets Response
         /// </summary>
-        [Required]
         [DataMember(Name="response")]
         public byte[] Response { get; set; }
 

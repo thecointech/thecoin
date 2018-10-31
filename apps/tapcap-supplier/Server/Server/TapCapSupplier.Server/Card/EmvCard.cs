@@ -5,6 +5,7 @@ using TapCapSupplier.Server.Models;
 using TheUtils;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 
 namespace TapCapSupplier.Server.Card
 {
@@ -18,7 +19,7 @@ namespace TapCapSupplier.Server.Card
 		// Only one tx may occur at a time
 		private static object __CardLock = new object();
 		private EmvCardMessager card;
-		internal StaticResponseCache Cache;
+		internal ServerResponseCache Cache;
 
 
 		public StaticResponses StaticResponses => Cache.CardStaticResponses();
@@ -29,55 +30,67 @@ namespace TapCapSupplier.Server.Card
 		/// <summary>
 		/// Implementation to handle talking directly to local payment card
 		/// </summary>
-		public EmvCard(ILogger<EmvCard> logger)
+		public EmvCard(ILogger<EmvCard> logger, IHostingEnvironment appEnv)
 		{
 			_logger = logger;
 			lock (__CardLock)
 			{
 				card = new EmvCardMessager(_logger);
-				Cache = new StaticResponseCache();
+				Cache = new ServerResponseCache(appEnv?.ContentRootPath);
 				//QueryStaticResponses();
 			}
 		}
 
-		byte[] IEmvCard.GetSingleResponse(List<StaticResponse> staticResponse)
+		byte[] IEmvCard.GetSingleResponse(QueryWithHistory queryWithHistory)
 		{
-			Cache.ResetTx();
-			byte[] cardResponse = null;
-			for (int i = 0; i < staticResponse.Count; i++)
+			if (queryWithHistory.Responses.Count != queryWithHistory.Responses.Count)
 			{
-				var pair = staticResponse[i];
-				// Get both cached response and live (from card) response
-				var cacheResponse = Cache.GetResponse(pair.Query);
-				cardResponse = card.SendCommand(pair.Query);
-
-				if (cacheResponse == null)
-				{
-					// This is a novel message, cache the result
-					Cache.AddNewStaticResponse(pair.Query, cardResponse);
-				}
-
-				// The client may not have a response if that message is non-cacheable
-				if (pair.Response != null)
-				{
-					// Ensure that response matches what our card would generate
-					if (!cardResponse.SequenceEqual(cacheResponse))
-					{
-						_logger.LogError("Mismatched response from cache/card: \n{0}\n{1}", BitConverter.ToString(cacheResponse), BitConverter.ToString(cardResponse));
-						throw new Exception("Aaarrrghghg");
-					}
-
-					// Also check that the response matches what the client expected
-					var expectedResponse = pair.Response;
-					if (!expectedResponse.SequenceEqual(cacheResponse))
-					{
-						_logger.LogError("Cached response did not match local/client: \n{0}\n{1}", BitConverter.ToString(cacheResponse), BitConverter.ToString(expectedResponse));
-						throw new Exception("Aaarrrghghg");
-					}
-				}
+				_logger.LogError("Mismatched arrays");
+				return null;
+			}
+			Cache.ResetTx();
+			for (int i = 0; i < queryWithHistory.Queries.Count; i++)
+			{
+				var query = queryWithHistory.Queries[i];
+				var clientResponse = queryWithHistory.Responses[i];
+				CheckCachedResponse(query, clientResponse);
 			}
 
 			// TODO: Filter requests we don't permit
+			return CheckCachedResponse(queryWithHistory.Query, null); ;
+		}
+
+		byte[] CheckCachedResponse(byte[] query, byte[] clientResponse)
+		{
+			// Get both cached response and live (from card) response
+			var cacheResponse = Cache.GetResponse(query);
+			var cardResponse = card.SendCommand(query);
+
+			if (cacheResponse == null)
+			{
+				// This is a novel message, cache the result
+				Cache.AddNewStaticResponse(query, cardResponse);
+			}
+			else
+			{
+				// Ensure that response matches what our card would generate
+				if (!cardResponse.SequenceEqual(cacheResponse))
+				{
+					_logger.LogError("Mismatched response from cache/card: \n{0}\n{1}", BitConverter.ToString(cacheResponse), BitConverter.ToString(cardResponse));
+					throw new Exception("Aaarrrghghg");
+				}
+			}
+			// The client may not have a response if that message is non-cacheable
+			if (clientResponse != null)
+			{
+				// Also check that the response matches what the client expected
+				if (!clientResponse.SequenceEqual(cacheResponse))
+				{
+					_logger.LogError("Cached response did not match local/client: \n{0}\n{1}", BitConverter.ToString(cacheResponse), BitConverter.ToString(clientResponse));
+					throw new Exception("Aaarrrghghg");
+				}
+			}
+
 			return cardResponse;
 		}
 

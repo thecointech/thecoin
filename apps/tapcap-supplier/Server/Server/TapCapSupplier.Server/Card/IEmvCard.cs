@@ -33,7 +33,7 @@ namespace TapCapSupplier.Server.Card
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		byte[] GetSingleResponse(List<StaticResponse> staticResponse);
+		byte[] GetSingleResponse(QueryWithHistory staticResponse);
 
 
 		/// <summary>

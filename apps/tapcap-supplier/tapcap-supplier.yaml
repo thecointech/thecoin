@@ -58,7 +58,7 @@ paths:
           description: "Static data request"
           required: true
           schema:
-            $ref: "#/definitions/StaticResponseArray"
+            $ref: "#/definitions/QueryWithHistory"
       responses:
         405:
           description: Invalid input
@@ -67,7 +67,8 @@ paths:
         200:
           description: Static response cache
           schema:
-            $ref: "#/definitions/StaticResponse"
+            type: string
+            format: byte
 
   /tap:
     post:
@@ -139,28 +140,33 @@ definitions:
       signature:
         type: string # sign ( pdol )
 
-  StaticResponse:
+  QueryWithHistory:
     required:
       - query
-      - response
+      - queries
+      - responses
     properties:
       query:
         type: string
         format: byte
-      response:
-        type: string
-        format: byte
-
-  StaticResponseArray:
-    type: array
-    items:
-      $ref: "#/definitions/StaticResponse"
+      queries:
+        type: array
+        items: 
+          type: string
+          format: byte
+      responses:
+        type: array
+        items: 
+          type: string
+          format: byte
 
   StaticResponses:
     required:
       - gpoPdol
       - cryptPdol
+      - queries
       - responses
+      - responseParentIndex
     properties:
       gpoPdol:
         type: string
@@ -168,6 +174,16 @@ definitions:
       cryptoPdol:
         type: string
         format: byte
+      queries:
+        type: array
+        items: 
+          type: string
+          format: byte
+      responses:
+        type: array
+        items: 
+          type: string
+          format: byte
       # The space of potential responses
       # is a tree structure.  Each time the
       # terminal sends a message, it is
@@ -178,8 +194,7 @@ definitions:
         type: array
         items: 
           type: integer
-      responses:
-        $ref: "#/definitions/StaticResponseArray"
+
 
   ContestResponse:
     properties:

@@ -94,33 +94,19 @@ namespace TapCapSupplier.Server.Controllers
 		/// <summary>
 		/// Query the server for a single message if it is unknown
 		/// </summary>
-		/// <param name="staticResponse">Static data request</param>
+		/// <param name="queryWithHistory">Static data request</param>
 		/// <response code="200">Static response cache</response>
 		/// <response code="405">Invalid input</response>
 		[HttpPost]
 		[Route("/static/single")]
 		[ValidateModelState]
 		[SwaggerOperation("GetStaticSingle")]
-		[SwaggerResponse(statusCode: 200, type: typeof(StaticResponse), description: "Static response cache")]
+		[SwaggerResponse(statusCode: 200, type: typeof(byte[]), description: "Static response cache")]
 		[SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
-		public virtual IActionResult GetStaticSingle([FromBody]List<StaticResponse> staticResponse)
+		public virtual IActionResult GetStaticSingle([FromBody]QueryWithHistory queryWithHistory)
 		{
 
-			return StatusCode(200, Card.GetSingleResponse(staticResponse));
-			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			// return StatusCode(200, default(StaticResponse));
-
-			//TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			// return StatusCode(405, default(ErrorMessage));
-
-			string exampleJson = null;
-			exampleJson = "{\r\n  \"response\" : \"response\",\r\n  \"query\" : \"query\"\r\n}";
-
-			var example = exampleJson != null
-			? JsonConvert.DeserializeObject<StaticResponse>(exampleJson)
-			: default(StaticResponse);
-			//TODO: Change the data returned
-			return new ObjectResult(example);
+			return StatusCode(200, Card.GetSingleResponse(queryWithHistory));
 		}
 
 		/// <summary>

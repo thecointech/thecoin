@@ -74,8 +74,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>StaticResponse</returns>
-        StaticResponse GetStaticSingle (List<StaticResponse> staticResponse);
+        /// <returns>byte[]</returns>
+        byte[] GetStaticSingle (List<StaticResponse> staticResponse);
 
         /// <summary>
         /// Query the server for a single message if it is unknown
@@ -85,8 +85,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>ApiResponse of StaticResponse</returns>
-        ApiResponse<StaticResponse> GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse);
+        /// <returns>ApiResponse of byte[]</returns>
+        ApiResponse<byte[]> GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse);
         /// <summary>
         /// Request TapCap transaction
         /// </summary>
@@ -160,8 +160,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>Task of StaticResponse</returns>
-        System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (List<StaticResponse> staticResponse);
+        /// <returns>Task of byte[]</returns>
+        System.Threading.Tasks.Task<byte[]> GetStaticSingleAsync (List<StaticResponse> staticResponse);
 
         /// <summary>
         /// Query the server for a single message if it is unknown
@@ -171,8 +171,8 @@ namespace TapCapSupplier.Client.Api
         /// </remarks>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>Task of ApiResponse (StaticResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse);
+        /// <returns>Task of ApiResponse (byte[])</returns>
+        System.Threading.Tasks.Task<ApiResponse<byte[]>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse);
         /// <summary>
         /// Request TapCap transaction
         /// </summary>
@@ -597,10 +597,10 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>StaticResponse</returns>
-        public StaticResponse GetStaticSingle (List<StaticResponse> staticResponse)
+        /// <returns>byte[]</returns>
+        public byte[] GetStaticSingle (List<StaticResponse> staticResponse)
         {
-             ApiResponse<StaticResponse> localVarResponse = GetStaticSingleWithHttpInfo(staticResponse);
+             ApiResponse<byte[]> localVarResponse = GetStaticSingleWithHttpInfo(staticResponse);
              return localVarResponse.Data;
         }
 
@@ -609,8 +609,8 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>ApiResponse of StaticResponse</returns>
-        public ApiResponse< StaticResponse > GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse)
+        /// <returns>ApiResponse of byte[]</returns>
+        public ApiResponse< byte[] > GetStaticSingleWithHttpInfo (List<StaticResponse> staticResponse)
         {
             // verify the required parameter 'staticResponse' is set
             if (staticResponse == null)
@@ -661,9 +661,9 @@ namespace TapCapSupplier.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<StaticResponse>(localVarStatusCode,
+            return new ApiResponse<byte[]>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
+                (byte[]) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(byte[])));
         }
 
         /// <summary>
@@ -671,10 +671,10 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>Task of StaticResponse</returns>
-        public async System.Threading.Tasks.Task<StaticResponse> GetStaticSingleAsync (List<StaticResponse> staticResponse)
+        /// <returns>Task of byte[]</returns>
+        public async System.Threading.Tasks.Task<byte[]> GetStaticSingleAsync (List<StaticResponse> staticResponse)
         {
-             ApiResponse<StaticResponse> localVarResponse = await GetStaticSingleAsyncWithHttpInfo(staticResponse);
+             ApiResponse<byte[]> localVarResponse = await GetStaticSingleAsyncWithHttpInfo(staticResponse);
              return localVarResponse.Data;
 
         }
@@ -684,8 +684,8 @@ namespace TapCapSupplier.Client.Api
         /// </summary>
         /// <exception cref="TapCapSupplier.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="staticResponse">Static data request</param>
-        /// <returns>Task of ApiResponse (StaticResponse)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<StaticResponse>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse)
+        /// <returns>Task of ApiResponse (byte[])</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<byte[]>> GetStaticSingleAsyncWithHttpInfo (List<StaticResponse> staticResponse)
         {
             // verify the required parameter 'staticResponse' is set
             if (staticResponse == null)
@@ -736,9 +736,9 @@ namespace TapCapSupplier.Client.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<StaticResponse>(localVarStatusCode,
+            return new ApiResponse<byte[]>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-                (StaticResponse) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(StaticResponse)));
+                (byte[]) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(byte[])));
         }
 
         /// <summary>

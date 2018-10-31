@@ -37,7 +37,7 @@ namespace TapCapSupplier.Client.Model
         /// Initializes a new instance of the <see cref="StaticResponse" /> class.
         /// </summary>
         /// <param name="query">query (required).</param>
-        /// <param name="response">response (required).</param>
+        /// <param name="response">response.</param>
         public StaticResponse(byte[] query = default(byte[]), byte[] response = default(byte[]))
         {
             // to ensure "query" is required (not null)
@@ -49,15 +49,7 @@ namespace TapCapSupplier.Client.Model
             {
                 this.Query = query;
             }
-            // to ensure "response" is required (not null)
-            if (response == null)
-            {
-                throw new InvalidDataException("response is a required property for StaticResponse and cannot be null");
-            }
-            else
-            {
-                this.Response = response;
-            }
+            this.Response = response;
         }
         
         /// <summary>

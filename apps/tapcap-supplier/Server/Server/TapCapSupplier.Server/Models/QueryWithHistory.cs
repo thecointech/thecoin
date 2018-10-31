@@ -22,20 +22,14 @@ namespace TapCapSupplier.Server.Models
     /// 
     /// </summary>
     [DataContract]
-    public partial class StaticResponses : IEquatable<StaticResponses>
+    public partial class QueryWithHistory : IEquatable<QueryWithHistory>
     { 
         /// <summary>
-        /// Gets or Sets GpoPdol
+        /// Gets or Sets Query
         /// </summary>
         [Required]
-        [DataMember(Name="gpoPdol")]
-        public byte[] GpoPdol { get; set; }
-
-        /// <summary>
-        /// Gets or Sets CryptoPdol
-        /// </summary>
-        [DataMember(Name="cryptoPdol")]
-        public byte[] CryptoPdol { get; set; }
+        [DataMember(Name="query")]
+        public byte[] Query { get; set; }
 
         /// <summary>
         /// Gets or Sets Queries
@@ -52,25 +46,16 @@ namespace TapCapSupplier.Server.Models
         public List<byte[]> Responses { get; set; }
 
         /// <summary>
-        /// Gets or Sets ResponseParentIndex
-        /// </summary>
-        [Required]
-        [DataMember(Name="responseParentIndex")]
-        public List<int?> ResponseParentIndex { get; set; }
-
-        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class StaticResponses {\n");
-            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
-            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("class QueryWithHistory {\n");
+            sb.Append("  Query: ").Append(Query).Append("\n");
             sb.Append("  Queries: ").Append(Queries).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
-            sb.Append("  ResponseParentIndex: ").Append(ResponseParentIndex).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -93,29 +78,24 @@ namespace TapCapSupplier.Server.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((StaticResponses)obj);
+            return obj.GetType() == GetType() && Equals((QueryWithHistory)obj);
         }
 
         /// <summary>
-        /// Returns true if StaticResponses instances are equal
+        /// Returns true if QueryWithHistory instances are equal
         /// </summary>
-        /// <param name="other">Instance of StaticResponses to be compared</param>
+        /// <param name="other">Instance of QueryWithHistory to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(StaticResponses other)
+        public bool Equals(QueryWithHistory other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    GpoPdol == other.GpoPdol ||
-                    GpoPdol != null &&
-                    GpoPdol.Equals(other.GpoPdol)
-                ) && 
-                (
-                    CryptoPdol == other.CryptoPdol ||
-                    CryptoPdol != null &&
-                    CryptoPdol.Equals(other.CryptoPdol)
+                    Query == other.Query ||
+                    Query != null &&
+                    Query.Equals(other.Query)
                 ) && 
                 (
                     Queries == other.Queries ||
@@ -126,11 +106,6 @@ namespace TapCapSupplier.Server.Models
                     Responses == other.Responses ||
                     Responses != null &&
                     Responses.SequenceEqual(other.Responses)
-                ) && 
-                (
-                    ResponseParentIndex == other.ResponseParentIndex ||
-                    ResponseParentIndex != null &&
-                    ResponseParentIndex.SequenceEqual(other.ResponseParentIndex)
                 );
         }
 
@@ -144,16 +119,12 @@ namespace TapCapSupplier.Server.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (GpoPdol != null)
-                    hashCode = hashCode * 59 + GpoPdol.GetHashCode();
-                    if (CryptoPdol != null)
-                    hashCode = hashCode * 59 + CryptoPdol.GetHashCode();
+                    if (Query != null)
+                    hashCode = hashCode * 59 + Query.GetHashCode();
                     if (Queries != null)
                     hashCode = hashCode * 59 + Queries.GetHashCode();
                     if (Responses != null)
                     hashCode = hashCode * 59 + Responses.GetHashCode();
-                    if (ResponseParentIndex != null)
-                    hashCode = hashCode * 59 + ResponseParentIndex.GetHashCode();
                 return hashCode;
             }
         }
@@ -161,12 +132,12 @@ namespace TapCapSupplier.Server.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(StaticResponses left, StaticResponses right)
+        public static bool operator ==(QueryWithHistory left, QueryWithHistory right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(StaticResponses left, StaticResponses right)
+        public static bool operator !=(QueryWithHistory left, QueryWithHistory right)
         {
             return !Equals(left, right);
         }
