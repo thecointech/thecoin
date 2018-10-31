@@ -69,7 +69,12 @@ namespace TapCapSupplier.Server.Card
 			if (cacheResponse == null)
 			{
 				// This is a novel message, cache the result
-				Cache.AddNewStaticResponse(query, cardResponse);
+				int idx = Cache.AddNewStaticResponse(query, cardResponse);
+				if (idx >= 0)
+				{
+					var responses = Cache.CardStaticResponses();
+					_logger.LogInformation("Caching: [{0}] {1} => {2}", responses.ResponseParentIndex[idx], BitConverter.ToString(responses.Queries[idx]), BitConverter.ToString(responses.Responses[idx]));
+				}
 			}
 			else
 			{
