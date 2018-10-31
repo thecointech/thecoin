@@ -23,39 +23,37 @@ using OpenAPIDateConverter = TapCapSupplier.Client.Client.OpenAPIDateConverter;
 namespace TapCapSupplier.Client.Model
 {
     /// <summary>
-    /// StaticResponses
+    /// QueryWithHistory
     /// </summary>
     [DataContract]
-    public partial class StaticResponses :  IEquatable<StaticResponses>
+    public partial class QueryWithHistory :  IEquatable<QueryWithHistory>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticResponses" /> class.
+        /// Initializes a new instance of the <see cref="QueryWithHistory" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected StaticResponses() { }
+        protected QueryWithHistory() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticResponses" /> class.
+        /// Initializes a new instance of the <see cref="QueryWithHistory" /> class.
         /// </summary>
-        /// <param name="gpoPdol">gpoPdol (required).</param>
-        /// <param name="cryptoPdol">cryptoPdol.</param>
+        /// <param name="query">query (required).</param>
         /// <param name="queries">queries (required).</param>
         /// <param name="responses">responses (required).</param>
-        /// <param name="responseParentIndex">responseParentIndex (required).</param>
-        public StaticResponses(byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<byte[]> queries = default(List<byte[]>), List<byte[]> responses = default(List<byte[]>), List<int?> responseParentIndex = default(List<int?>))
+        public QueryWithHistory(byte[] query = default(byte[]), List<byte[]> queries = default(List<byte[]>), List<byte[]> responses = default(List<byte[]>))
         {
-            // to ensure "gpoPdol" is required (not null)
-            if (gpoPdol == null)
+            // to ensure "query" is required (not null)
+            if (query == null)
             {
-                throw new InvalidDataException("gpoPdol is a required property for StaticResponses and cannot be null");
+                throw new InvalidDataException("query is a required property for QueryWithHistory and cannot be null");
             }
             else
             {
-                this.GpoPdol = gpoPdol;
+                this.Query = query;
             }
             // to ensure "queries" is required (not null)
             if (queries == null)
             {
-                throw new InvalidDataException("queries is a required property for StaticResponses and cannot be null");
+                throw new InvalidDataException("queries is a required property for QueryWithHistory and cannot be null");
             }
             else
             {
@@ -64,35 +62,19 @@ namespace TapCapSupplier.Client.Model
             // to ensure "responses" is required (not null)
             if (responses == null)
             {
-                throw new InvalidDataException("responses is a required property for StaticResponses and cannot be null");
+                throw new InvalidDataException("responses is a required property for QueryWithHistory and cannot be null");
             }
             else
             {
                 this.Responses = responses;
             }
-            // to ensure "responseParentIndex" is required (not null)
-            if (responseParentIndex == null)
-            {
-                throw new InvalidDataException("responseParentIndex is a required property for StaticResponses and cannot be null");
-            }
-            else
-            {
-                this.ResponseParentIndex = responseParentIndex;
-            }
-            this.CryptoPdol = cryptoPdol;
         }
         
         /// <summary>
-        /// Gets or Sets GpoPdol
+        /// Gets or Sets Query
         /// </summary>
-        [DataMember(Name="gpoPdol", EmitDefaultValue=false)]
-        public byte[] GpoPdol { get; set; }
-
-        /// <summary>
-        /// Gets or Sets CryptoPdol
-        /// </summary>
-        [DataMember(Name="cryptoPdol", EmitDefaultValue=false)]
-        public byte[] CryptoPdol { get; set; }
+        [DataMember(Name="query", EmitDefaultValue=false)]
+        public byte[] Query { get; set; }
 
         /// <summary>
         /// Gets or Sets Queries
@@ -107,24 +89,16 @@ namespace TapCapSupplier.Client.Model
         public List<byte[]> Responses { get; set; }
 
         /// <summary>
-        /// Gets or Sets ResponseParentIndex
-        /// </summary>
-        [DataMember(Name="responseParentIndex", EmitDefaultValue=false)]
-        public List<int?> ResponseParentIndex { get; set; }
-
-        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class StaticResponses {\n");
-            sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
-            sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
+            sb.Append("class QueryWithHistory {\n");
+            sb.Append("  Query: ").Append(Query).Append("\n");
             sb.Append("  Queries: ").Append(Queries).Append("\n");
             sb.Append("  Responses: ").Append(Responses).Append("\n");
-            sb.Append("  ResponseParentIndex: ").Append(ResponseParentIndex).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -145,29 +119,24 @@ namespace TapCapSupplier.Client.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as StaticResponses);
+            return this.Equals(input as QueryWithHistory);
         }
 
         /// <summary>
-        /// Returns true if StaticResponses instances are equal
+        /// Returns true if QueryWithHistory instances are equal
         /// </summary>
-        /// <param name="input">Instance of StaticResponses to be compared</param>
+        /// <param name="input">Instance of QueryWithHistory to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(StaticResponses input)
+        public bool Equals(QueryWithHistory input)
         {
             if (input == null)
                 return false;
 
             return 
                 (
-                    this.GpoPdol == input.GpoPdol ||
-                    (this.GpoPdol != null &&
-                    this.GpoPdol.Equals(input.GpoPdol))
-                ) && 
-                (
-                    this.CryptoPdol == input.CryptoPdol ||
-                    (this.CryptoPdol != null &&
-                    this.CryptoPdol.Equals(input.CryptoPdol))
+                    this.Query == input.Query ||
+                    (this.Query != null &&
+                    this.Query.Equals(input.Query))
                 ) && 
                 (
                     this.Queries == input.Queries ||
@@ -178,11 +147,6 @@ namespace TapCapSupplier.Client.Model
                     this.Responses == input.Responses ||
                     this.Responses != null &&
                     this.Responses.SequenceEqual(input.Responses)
-                ) && 
-                (
-                    this.ResponseParentIndex == input.ResponseParentIndex ||
-                    this.ResponseParentIndex != null &&
-                    this.ResponseParentIndex.SequenceEqual(input.ResponseParentIndex)
                 );
         }
 
@@ -195,16 +159,12 @@ namespace TapCapSupplier.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.GpoPdol != null)
-                    hashCode = hashCode * 59 + this.GpoPdol.GetHashCode();
-                if (this.CryptoPdol != null)
-                    hashCode = hashCode * 59 + this.CryptoPdol.GetHashCode();
+                if (this.Query != null)
+                    hashCode = hashCode * 59 + this.Query.GetHashCode();
                 if (this.Queries != null)
                     hashCode = hashCode * 59 + this.Queries.GetHashCode();
                 if (this.Responses != null)
                     hashCode = hashCode * 59 + this.Responses.GetHashCode();
-                if (this.ResponseParentIndex != null)
-                    hashCode = hashCode * 59 + this.ResponseParentIndex.GetHashCode();
                 return hashCode;
             }
         }

@@ -132,7 +132,7 @@ No authorization required
 
 <a name="getstaticsingle"></a>
 # **GetStaticSingle**
-> byte[] GetStaticSingle (List<StaticResponse> staticResponse)
+> byte[] GetStaticSingle (QueryWithHistory queryWithHistory)
 
 Query the server for a single message if it is unknown
 
@@ -151,12 +151,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new TransactionApi();
-            var staticResponse = new List<StaticResponse>(); // List<StaticResponse> | Static data request
+            var queryWithHistory = new QueryWithHistory(); // QueryWithHistory | Static data request
 
             try
             {
                 // Query the server for a single message if it is unknown
-                byte[] result = apiInstance.GetStaticSingle(staticResponse);
+                byte[] result = apiInstance.GetStaticSingle(queryWithHistory);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -172,7 +172,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **staticResponse** | [**List&lt;StaticResponse&gt;**](List.md)| Static data request | 
+ **queryWithHistory** | [**QueryWithHistory**](QueryWithHistory.md)| Static data request | 
 
 ### Return type
 
