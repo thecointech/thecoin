@@ -33,6 +33,29 @@ namespace TapCapSupplier.Tests
 
 		}
 
+		[Fact]
+		public void TestCacheTrimming()
+		{
+			StaticResponseCache cache = new StaticResponseCache();
+
+			var query1 = ByteConvert.FromString("00-A4-04-00-07-A0-00-00-02-77-10-10");
+			var query2 = ByteConvert.FromString("00-A4-04-00-07-A0-00-00-02-77-10-10-00");
+			var response = ByteConvert.FromString("6F-36-84-07-A0-00-00-02-77-10-10-A5-2B-50-07-49-6E-74-65-72-61-63-87-01-01-5F-2D-04-65-6E-66-72-9F-38-15-9F-59-03-9F-5A-01-9F-02-06-9F-1A-02-5F-2A-02-9F-37-04-9F-58-01-90-00");
+
+			var asStr = System.Text.Encoding.UTF8.GetString(response, 0, response.Length);
+
+			int idx1 = cache.AddNewStaticResponse(query1, response);
+			cache.ResetTx();
+			int idx2 = cache.AddNewStaticResponse(query2, response);
+
+			Assert.Equal(idx1, idx2);
+
+			var resp1 = cache.GetResponse(query1);
+			cache.ResetTx();
+			var resp2 = cache.GetResponse(query2);
+			Assert.Equal(resp1, resp2);
+		}
+
 		private void RunTestTx(IEmvCard card, int maxCount)
 		{
 			var messenger = new EmvCardMessager(logger);

@@ -11,10 +11,12 @@ namespace TapCapSupplier.Server.Card
 	internal class ServerResponseCache : TheUtils.StaticResponseCache
 	{
 		private string BasePath;
-		private string CachePath => string.Format("{0}/{1}.json", BasePath, "TODO");
+		private string CardName;
+		private string CachePath => string.Format("{0}/{1}.json", BasePath, CardName);
 
-		internal ServerResponseCache(string appFolder)
+		internal ServerResponseCache(string appFolder, string cardName)
 		{
+			CardName = cardName;
 			if (appFolder != null)
 			{
 				BasePath = appFolder + "/cache";

@@ -6,6 +6,7 @@ using TheUtils;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
 
 namespace TapCapSupplier.Server.Card
 {
@@ -25,7 +26,9 @@ namespace TapCapSupplier.Server.Card
 		public StaticResponses StaticResponses => Cache.CardStaticResponses();
 		public byte[] GpoPDOL => StaticResponses.GpoPdol;
 		public byte[] CryptoPDOL => StaticResponses.CryptoPdol;
-		public string Name => "TODO";
+		public string Name => ReadCardName();
+
+		public byte[] AppData;
 
 		/// <summary>
 		/// Implementation to handle talking directly to local payment card
@@ -33,31 +36,37 @@ namespace TapCapSupplier.Server.Card
 		public EmvCard(ILogger<EmvCard> logger, IHostingEnvironment appEnv)
 		{
 			_logger = logger;
-			lock (__CardLock)
-			{
-				card = new EmvCardMessager(_logger);
-				Cache = new ServerResponseCache(appEnv?.ContentRootPath);
-				//QueryStaticResponses();
-			}
+			
+			card = new EmvCardMessager(_logger);
+			Cache = new ServerResponseCache(appEnv?.ContentRootPath, Name);
+			//QueryStaticResponses();
+
+			AppData = DoStaticInit();
 		}
 
 		byte[] IEmvCard.GetSingleResponse(QueryWithHistory queryWithHistory)
 		{
-			if (queryWithHistory.Responses.Count != queryWithHistory.Responses.Count)
+			lock(__CardLock)
 			{
-				_logger.LogError("Mismatched arrays");
-				return null;
-			}
-			Cache.ResetTx();
-			for (int i = 0; i < queryWithHistory.Queries.Count; i++)
-			{
-				var query = queryWithHistory.Queries[i];
-				var clientResponse = queryWithHistory.Responses[i];
-				CheckCachedResponse(query, clientResponse);
-			}
+				if (queryWithHistory.Responses.Count != queryWithHistory.Responses.Count)
+				{
+					_logger.LogError("Mismatched arrays");
+					return null;
+				}
+				Cache.ResetTx();
+				for (int i = 0; i < queryWithHistory.Queries.Count; i++)
+				{
+					var query = queryWithHistory.Queries[i];
+					var clientResponse = queryWithHistory.Responses[i];
+					CheckCachedResponse(query, clientResponse);
+				}
 
-			// TODO: Filter requests we don't permit
-			return CheckCachedResponse(queryWithHistory.Query, null); ;
+				// Always leave the card initialized
+				Task.Run(() => DoStaticInit());
+
+				// TODO: Filter requests we don't permit
+				return CheckCachedResponse(queryWithHistory.Query, null);
+			}
 		}
 
 		byte[] CheckCachedResponse(byte[] query, byte[] clientResponse)
@@ -109,8 +118,6 @@ namespace TapCapSupplier.Server.Card
 		{
 			lock(__CardLock)
 			{
-				var appData = DoStaticInit();
-
 				var gpoQuery = Processing.BuildGPOQuery(card, request.GpoData);
 				// Set GPO data (response is ignored)
 				var gpoData = card.SendCommand(gpoQuery);
@@ -128,6 +135,7 @@ namespace TapCapSupplier.Server.Card
 				// Generate crypto
 				var cryptoQuery = Processing.BuildCryptSigQuery(card, request.CryptoData);
 				var cryptoSig = card.SendCommand(cryptoQuery);
+				Task.Run(() => DoStaticInit());
 				return cryptoSig;
 			}
 		}
@@ -169,11 +177,22 @@ namespace TapCapSupplier.Server.Card
 		// Return the command we warmed up to
 		private byte[] DoStaticInit()
 		{
-			_logger.LogDebug("Static Init: Tx");
-			var cmdInitialize = Processing.BuildInitialize(card);
-			var fileData = card.SendCommand(cmdInitialize);
-			var selectApp = Processing.BuildSelectApp(fileData, card);
-			return card.SendCommand(selectApp);
+			lock (__CardLock)
+			{
+				_logger.LogDebug("Static Init: Tx");
+				var cmdInitialize = Processing.BuildInitialize(card);
+				var fileData = card.SendCommand(cmdInitialize);
+				var selectApp = Processing.BuildSelectApp(fileData, card);
+				return card.SendCommand(selectApp);
+			}
+		}
+
+
+		private string ReadCardName()
+		{
+			byte[] cmd = { 0xFF, 0xCA, 0, 0, 0 };
+			var response = card.SendCommand(cmd);
+			return BitConverter.ToString(response);
 		}
 
 
