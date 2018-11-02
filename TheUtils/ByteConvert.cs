@@ -8,14 +8,16 @@ namespace TheUtils
     {
         public static byte[] FromString(String hex)
         {
-            if (hex.Length % 2 == 1)
+			string lhex = hex.Replace("-", "");
+
+			if (lhex.Length % 2 == 1)
                 throw new Exception("The binary key cannot have an odd number of digits");
 
-            byte[] arr = new byte[hex.Length / 2];
+            byte[] arr = new byte[lhex.Length / 2];
 
-            for (int i = 0; i < hex.Length / 2; ++i)
+            for (int i = 0; i < lhex.Length / 2; ++i)
             {
-                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+                arr[i] = (byte)((GetHexVal(lhex[i << 1]) << 4) + (GetHexVal(lhex[(i << 1) + 1])));
             }
             return arr;
         }
