@@ -8,6 +8,7 @@ using NLog;
 using NLog.Targets;
 using Prism;
 using Prism.Ioc;
+using System;
 
 namespace TheApp.Droid
 {
@@ -57,7 +58,9 @@ namespace TheApp.Droid
 			var externalFolder = GetExternalFilesDir(null);
 			var config = new NLog.Config.LoggingConfiguration();
 
-			var logfile = new FileTarget() { FileName = externalFolder + "/afile.log", Name = "logfile" };
+			var filename = String.Format("{0}/{1}.log", externalFolder, DateTime.Now.ToString("yyyy-MM-dd H-mm"));
+			var layout = "${time}|${threadid}|${message}";
+			var logfile = new FileTarget() { FileName = filename, Name = "logfile", Layout=layout };
 			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, logfile));
 			LogManager.Configuration = config;
 		}

@@ -8,10 +8,10 @@ namespace TheApp.Events
 	public class TxStatus : EventBase
 	{
 		public TapCapSupplier.Client.Model.SignedMessage SignedResponse;
-		public int Step;
+		public string Status;
 
 		public TxStatus() { }
-		public TxStatus(int step) { Step = step; }
+		public TxStatus(string status) { Status = status; }
 		public TxStatus(TapCapSupplier.Client.Model.SignedMessage message) { SignedResponse = message; }
 	}
 }

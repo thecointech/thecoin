@@ -11,6 +11,7 @@ namespace TheApp.Tap
     {
 		TransactionProcessor processor;
 
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 		public SCardProtocol Protocol => SCardProtocol.T0;
 
 		public TapTesting(TransactionProcessor processor)
@@ -66,9 +67,15 @@ namespace TheApp.Tap
 
 		public bool TestFull()
 		{
-			bool result = Testing.SendTestTransaction(123, this);
-			processor.Terminated();
-			return result;
+			ulong amt = (ulong)TheCoinTime.Now() % 100 + 20;
+			//using (var logBlock = NLog.LogManager.DisableLogging())
+			{
+				logger.Info("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ TESTING TX ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+				bool result = Testing.SendTestTransaction(amt, this);
+				processor.Terminated("Testing Tx");
+				logger.Info("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ TESTING TX ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑");
+				return result;
+			}
 		}
 
 		public CommandApdu InitApdu(bool hasData)

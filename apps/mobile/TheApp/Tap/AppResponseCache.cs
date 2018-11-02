@@ -40,5 +40,7 @@ namespace TheApp.Tap
 				CryptoPdol = this.CryptoPdol
 			};
 		}
+
+		internal int ParentIndex => base.LastIndex;
 	}
 }

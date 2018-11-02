@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using NLog;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
 using System;
@@ -11,6 +12,8 @@ namespace TheApp.ViewModels
 {
 	public class MainPageViewModel : ViewModelBase
 	{
+		private Logger logger = LogManager.GetCurrentClassLogger();
+
 		private string _Logs;
 		public string Logs
 		{
@@ -50,13 +53,15 @@ namespace TheApp.ViewModels
 			Title = "Main Page";
 			Logs = "-- Loading Account --";
 
+			logger.Trace("Main Page Loaded on thread {0}", Environment.CurrentManagedThreadId);
+
 			Transaction = transactions;
 			this.balances = balances;
 
 			TestPurchaseCommand = new DelegateCommand(TestPurchase, () => TestEnabled);
 			ConnectCommand = new DelegateCommand(BeginConnect);
 
-			Events.EventSystem.Subscribe<Events.BalancesUpdated>((u) => UpdateBalances(u.Update));
+			Events.EventSystem.Subscribe<Events.BalancesUpdated>((u) => UpdateBalances(u.Update), ThreadOption.UIThread);
 			Events.EventSystem.Subscribe<Events.SetActiveAccount>((u) => { Logs = "Loaded"; }, ThreadOption.UIThread);
 			Events.EventSystem.Subscribe<Events.TxStatus>(UpdateTxStatus, ThreadOption.UIThread);
 		}
@@ -94,14 +99,11 @@ namespace TheApp.ViewModels
 			{
 				Logs = "Tx Completed";
 			}
-			else if (status.Step > 0)
+			else if (status.Status != null)
 			{
-				Logs = "Tx Step: " + status.Step;
+				Logs = status.Status;
 			}
-			else
-			{
-				TestEnabled = true;
-			}
+			TestEnabled = true;
 		}
 
 		void UpdateBalances(Balances update)

@@ -18,6 +18,8 @@ namespace TheApp.Droid
 		private App _app => (App)Xamarin.Forms.Application.Current;
 		private Tap.TransactionProcessor processor;
 
+		private Logger logger = LogManager.GetCurrentClassLogger();
+
 		IContainerProvider _container;
 		IContainerProvider Container
 		{
@@ -35,12 +37,11 @@ namespace TheApp.Droid
 
 		public override void OnDeactivated(DeactivationReason reason)
 		{
-			processor.Terminated();
+			processor.Terminated(reason.ToString());
 
 			// TODO: The below totally shouldn't be here, but requires
 			// android code.  Try moving it into an interface or something
 			// so the responsibility for notifies all lives in the same place
-
 			Android.Media.Stream amStream = Android.Media.Stream.Music;
 			int iTonGeneratorVolume = 100;
 
@@ -61,7 +62,6 @@ namespace TheApp.Droid
 		// Entry point for Android API
 		public override byte[] ProcessCommandApdu(byte[] commandApdu, Bundle extras)
 		{
-			// Log all messages passing here (from a terminal)
 			return processor.ProcessCommand(commandApdu);
 		}
 

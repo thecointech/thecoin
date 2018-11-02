@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NLog;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace TheApp.Tap
 {
 	public class TransactionProcessor
 	{
-		private Logger logger = LogManager.GetCurrentClassLogger();
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
 		private ITransactionApi TapSupplier;
 		private AppResponseCache Cache;
@@ -50,19 +49,19 @@ namespace TheApp.Tap
 		async Task FetchStaticResponses()
 		{
 			if (Cache == null && UserAccount != null && UserAccount.Status != null)
-			{ 
+			{
+				Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
 				try
 				{
 					var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
 					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
 					Cache = new AppResponseCache(supplierResponses);
-					Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
+					logger.Info("Loaded Cache: {0}", supplierResponses.ToJson());
 
 					GpoPDOL = PDOL.ParsePDOLItems(supplierResponses.GpoPdol);
 
-					//StaticTypes = StaticResponses.Responses.Select((response) => ReadApduType(response.Query)).ToArray();
 					ResetTransaction();
-					Events.EventSystem.Publish(new Events.TxStatus(0));
+					Events.EventSystem.Publish(new Events.TxStatus("--Ready--"));
 				}
 				catch(Exception e)
 				{
@@ -73,49 +72,73 @@ namespace TheApp.Tap
 
 		public byte[] ProcessCommand(byte[] query)
 		{
-			if (queryHistory.Queries.Count == 0)
+			var type = Processing.ReadApduType(query);
+			// Select1 is basically ATR
+			if (type == Processing.ApduType.Select1)
 			{
+				ResetTransaction();
 				OnStartTx();
 			}
 
-			Events.EventSystem.Publish(new Events.TxStatus(queryHistory.Queries.Count));
-
-			queryHistory.Query = query;
-
-			var type = Processing.ReadApduType(query);
-			logger.Trace("Recieved: {0} - {1}", type.ToString(), BitConverter.ToString(query));
-			if (type != Processing.ApduType.CyrptoSig)
+			byte[] response = null;
+			try
 			{
-				var response = GetCachedResponse(query, type);
-				logger.Trace("Cached Response: {0}", BitConverter.ToString(response));
-				return response;
+				logger.Trace("{0}  {1}", type.ToString(), BitConverter.ToString(query));
+
+				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count));
+				queryHistory.Query = query;
+
+				// For all non-crypto-sig requests, we rely on the cache
+				if (type != Processing.ApduType.CyrptoSig)
+				{
+					response = GetCachedResponse(query, type);
+				}
+				else
+				{
+					var cryptoData = Processing.ExtractDataFromApdu(query);
+					response = GetSupplierTap(cryptoData.ToArray());
+					ticksAtCompletion = stopwatch.ElapsedTicks;
+				}
+
+				logger.Trace("Response: {0}", BitConverter.ToString(response));
+
 			}
-
-			// TODO: This would be faster if we just sent the whole data struct
-			//var cryptoPdol = Processing.FindValue(query, new string[] { "70", "8C" });
-			// Else, if this is a purchase PDOL, then query server
-
-			var cryptoData = Processing.ExtractDataFromApdu(query);
-			var purchaseCert = GetSupplierTap(cryptoData.ToArray());
-			logger.Trace("Fetched Response: {0}", BitConverter.ToString(purchaseCert));
-			ticksAtCompletion = stopwatch.ElapsedTicks;
-			return purchaseCert;
+			catch (Exception e)
+			{
+				logger.Error(e, "Fix this now!");
+			}
+			return response;
 
 		}
 
-		public void Terminated()
+		public void Terminated(string reason)
 		{
-			// See OnDeactivated for notification beep.
-			ValidateTx();
-			ResetTransaction();
+			
+			logger.Trace("--- Deactivated : {0} ---", reason);
+			try
+			{
+				System.Threading.Thread.EndThreadAffinity();
+
+				// See OnDeactivated for notification beep.
+				ValidateTx(cachedTapResponse, ticksAtCompletion, stopwatch);
+				//ResetTransaction();
+			}
+			catch (Exception e)
+			{
+				logger.Error(e, "Exception on terminated!");
+			}
+
 		}
 
 		private void OnStartTx()
 		{
+			
 			logger.Trace("--- Start New Tx ---");
-			stopwatch = Stopwatch.StartNew();
 			try
 			{
+				System.Threading.Thread.BeginThreadAffinity();
+				stopwatch = Stopwatch.StartNew();
+
 				// Or use specified time
 				var duration = TimeSpan.FromMilliseconds(150);
 				Vibration.Vibrate(duration);
@@ -132,18 +155,42 @@ namespace TheApp.Tap
 			}
 		}
 
+		private void WaitFetch(Task fetchTask, string msg)
+		{
+			for (var i = 0; i < 20; i++)
+			{
+				if (fetchTask.IsCompleted)
+				{
+					Events.EventSystem.Publish(new Events.TxStatus("Fetch Success"));
+					break;
+				}
+
+				Task[] taskArray = { fetchTask, Task.Delay(200) };
+				Task.WaitAny(taskArray);
+				var logMsg = String.Format("Step: {0} - {1} ({2}ms)", queryHistory.Queries.Count, msg, i * 200);
+				Events.EventSystem.Publish(new Events.TxStatus(logMsg));
+				logger.Trace(logMsg);
+			}
+		}
 		private byte[] GetCachedResponse(byte[] query, Processing.ApduType type)
 		{
 			if (type == Processing.ApduType.GPO)
 			{
 				CachePDOLData(query);
 			}
+
+			logger.Trace("Searching from last: " + Cache.ParentIndex);
 			var response = Cache.GetResponse(query);
 
 			if (response == null)
 			{
-				var supplierResponse = TapSupplier.GetStaticSingle(queryHistory);
-				response = supplierResponse.Response;
+				logger.Trace("Not found in cache - Fetching remote response");
+				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch"));
+				var responseTask = TapSupplier.GetStaticSingleAsync(queryHistory);
+				WaitFetch(responseTask, "Doing remote fetch");
+				var serverResponse = responseTask.GetAwaiter().GetResult();
+				logger.Trace("Fetch Success: " + (serverResponse != null));
+				response = serverResponse.Response;
 				Cache.AddNewStaticResponse(query, response);
 			}
 			// Keep running track of this tx
@@ -163,37 +210,49 @@ namespace TheApp.Tap
 			var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
 			var signedMessage = new SignedMessage(m, s);
 
-			cachedTapResponse = TapSupplier.RequestTapCap(signedMessage);
+			logger.Trace("Fetching purchase cert");
+			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert"));
+			var responseTask = TapSupplier.RequestTapCapAsync(signedMessage);
+			WaitFetch(responseTask, "Fetching Cert");
+			cachedTapResponse = responseTask.GetAwaiter().GetResult();
+			logger.Trace("Fetch Success: " + (cachedTapResponse != null));
 			if (cachedTapResponse != null)
 			{
-				//logger.Trace("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
+				logger.Trace("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
 
 				// Do not decode the signing address of this, instead just extract the relevant info
 				var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
 				return purchase.CryptoCertificate;
 			}
-			logger.Error("Did not recieve response to crypto request");
+			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - ERROR (fetch failed)"));
+			logger.Error("Did not receive response to crypto request");
 			return null;
 		}
 
-		private void ValidateTx()
+		/// <summary>
+		///  We make this function static to ensure that it does not reference data from the
+		///  class, which -could- be overwritten by a new incoming tx
+		/// </summary>
+		/// <param name="tapResponse"></param>
+		/// <param name="ticksAtCompletion"></param>
+		private static void ValidateTx(SignedMessage tapResponse, long ticksAtCompletion, Stopwatch stopwatch)
 		{
 			// Now check that the whatsit all went swimmingly.
 			//ParsePDOLData(GPOData, GPOItems);
-			if (cachedTapResponse == null)
+			if (tapResponse == null)
 			{
+				Events.EventSystem.Publish(new Events.TxStatus("Premature Exit at " + stopwatch.ElapsedMilliseconds));
 				logger.Debug("Premature Exit at " + stopwatch.ElapsedMilliseconds);
 				return;
 			}
 
 			var sinceComplete = (stopwatch.ElapsedTicks - ticksAtCompletion) / (Stopwatch.Frequency / 1000.0);
-			var dbgMessage = String.Format("Deactivated: sinceComplete: {0}, total {1}ms", sinceComplete, stopwatch.ElapsedMilliseconds);
-			logger.Info(dbgMessage);
+			logger.Info("Validating: sinceComplete: {0}ms, total {1}ms", sinceComplete, stopwatch.ElapsedMilliseconds);
 
 			if (sinceComplete >= 0)
 			{
 				// Check that our disconnection was as expected.
-				Events.EventSystem.Publish(new Events.TxStatus() { SignedResponse = cachedTapResponse });
+				Events.EventSystem.Publish(new Events.TxStatus() { SignedResponse = tapResponse });
 			}
 		}
 
