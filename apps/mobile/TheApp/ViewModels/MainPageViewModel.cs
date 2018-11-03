@@ -74,11 +74,9 @@ namespace TheApp.ViewModels
 		private void TestPurchase()
 		{
 			Logs = "Running Text Tx";
-			Task.Run(() =>
-			{
-				var testing = new TapTesting(Transaction);
-				bool res = testing.TestFull();
-			});
+
+			var testing = new TapTesting(Transaction);
+			bool res = testing.TestFull();
 		}
 
 		CancellationTokenSource source = new CancellationTokenSource();

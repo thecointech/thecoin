@@ -3,7 +3,9 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TapCapSupplier.Client.Api;
@@ -132,7 +134,6 @@ namespace TheApp.Tap
 
 		private void OnStartTx()
 		{
-			
 			logger.Trace("--- Start New Tx ---");
 			try
 			{
@@ -186,7 +187,7 @@ namespace TheApp.Tap
 			{
 				logger.Trace("Not found in cache - Fetching remote response");
 				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch"));
-				var responseTask = TapSupplier.GetStaticSingleAsync(queryHistory);
+				var responseTask = Task.Run(() => TapSupplier.GetStaticSingle(queryHistory));
 				WaitFetch(responseTask, "Doing remote fetch");
 				var serverResponse = responseTask.GetAwaiter().GetResult();
 				logger.Trace("Fetch Success: " + (serverResponse != null));
@@ -212,7 +213,8 @@ namespace TheApp.Tap
 
 			logger.Trace("Fetching purchase cert");
 			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert"));
-			var responseTask = TapSupplier.RequestTapCapAsync(signedMessage);
+
+			var responseTask = Task.Run(() => TapSupplier.RequestTapCap(signedMessage));
 			WaitFetch(responseTask, "Fetching Cert");
 			cachedTapResponse = responseTask.GetAwaiter().GetResult();
 			logger.Trace("Fetch Success: " + (cachedTapResponse != null));
