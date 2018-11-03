@@ -121,13 +121,7 @@ namespace TapCapSupplier.Server.TapCap
 				CryptoCertificate = certificate
 			};
 
-			var signedTx = new SignedMessage()
-			{
-				Message = tx.ToJson(),
-				Signature = "TODO"
-			};
-
-			//	= Signing.SignMessage<SignedMessage>(tx, TheAccount);
+			var signedTx = Signing.SignMessage<SignedMessage>(tx, TheAccount);
 			Task.Run(async () => await ValidateAndFinalizeTx(tx));
 
 			logger.Trace(" !-!-!returning tx in: {0}ms !-!-!", stopwatch.ElapsedMilliseconds);
