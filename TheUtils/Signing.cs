@@ -38,13 +38,18 @@ namespace TheUtils
 		//    return signer.EcRecover(asHash, request.RequestorSig);
 		//}
 
+		public static string GetSigner(string message, string signature)
+		{
+			var signer = new EthereumMessageSigner();
+			return signer.EncodeUTF8AndEcRecover(message, signature);
+		}
+
 		public static (string address, TMessage message) GetSignerAndMessage<TMessage>(dynamic signedMessage)
 		{
 			string signature = signedMessage.Signature;
 			string messageStr = signedMessage.Message;
 
-			var signer = new EthereumMessageSigner();
-			var address = signer.EncodeUTF8AndEcRecover(messageStr, signature);
+			var address = GetSigner(messageStr, signature);
 			var result = JsonConvert.DeserializeObject<TMessage>(messageStr);
 			return (address, result);
 		}
@@ -71,5 +76,8 @@ namespace TheUtils
 
 			return signedMessage;
 		}
+
+
+
 	}
 }
