@@ -21,13 +21,16 @@ java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager
 java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientJS -g javascript 	-c tapcap-manager\client-js-spec.json
 
 java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 	-o broker-cad\Service
-java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -l javascript 	-o broker-cad\ClientJS -c broker-cad\client-js-spec.json 
+java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -l javascript 	-o broker-cad\ClientJS -c broker-cad\client-js-spec.json
 
-java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientCS -g csharp 	 	-c tapcap-supplier\client-cs-spec.json
-java -jar .\openapi-generator-cli.jar generate 		 -i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\Server 	 -g aspnetcore 	-c tapcap-supplier\server-cs-spec.json
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientCS -g csharp 	 	-c tapcap-supplier\client-cs-spec.json
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\Server 	-g aspnetcore 	-c tapcap-supplier\server-cs-spec.json
+java -jar .\openapi-generator-cli.jar generate 	-i tapcap-supplier\tapcap-supplier.yaml -o tapcap-supplier\ClientJS -g javascript 	-c tapcap-supplier\client-js-spec.json
 
 REM java -jar .\swagger-codegen-cli.jar generate -i TapCapManager\TapCapManager.yaml -l aspnetcore -c TheCoinBrokerServerSpec.json -o TheCoinBroker\ClientASP
 REM java -jar .\APIs\swagger-codegen-cli.jar generate -i APIs\TheCoinBroker.yaml -l javascript -c APIs\TheCoinBrokerClientSpec.json -o TheCoinBroker/Client
 REM java -jar .\APIs\openapi-generator-cli-3.0.0.jar generate -i APIs\e-Transfer_Public_API_selfreg_v2.0.yaml -l csharp -c APIs\InteracClientSpec.json -o InteracClient
 
 REM dotnet run -p CoreServerASP\src\IO.Swagger\IO.Swagger.csproj --launch-profile web
+
+id0ntknowwhatTheproblemis

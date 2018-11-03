@@ -38,7 +38,7 @@ definitions:
     required:
       - clientAccount
       - availableBalance
-      - transactionId
+      - nonce
       - timestamp
     properties:
       clientAccount:
@@ -46,7 +46,7 @@ definitions:
       availableBalance:
         type: integer
         format: int64
-      transactionId:
+      nonce:
         type: integer
       # The timestamp of issue.  A broker
       # may ignore a token if the timestamp is too old
@@ -75,10 +75,11 @@ definitions:
         type: string
         format: byte
       token:
-        $ref: "#/definitions/SignedMessage" # sign(Token)
+        $ref: "#/definitions/SignedMessage" # sign(TapCapToken)
 
   # A broker figures out how much to charge for a tx,
   # then signs this message & returns to client
+  # TODO: Rename to "Supplier", to reflect the differing roles from brokers
   TapCapBrokerPurchase:
     required:
       - signedRequest
