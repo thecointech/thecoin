@@ -1,12 +1,12 @@
 {
-  "name": "the-contract",
+  "name": "@the-coin/contract",
   "version": "1.0.0",
   "description": "Central contract for THE coin management",
   "main": "index.js",
   "scripts": {
     "test": "test"
   },
-  "author": "Stephen Taylor",
+  "author": "Frozen Kiwi",
   "license": "MIT",
   "dependencies": {
     "openzeppelin-zos": "^1.9.4",
