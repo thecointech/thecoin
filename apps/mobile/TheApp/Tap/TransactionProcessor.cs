@@ -78,7 +78,6 @@ namespace TheApp.Tap
 			// Select1 is basically ATR
 			if (type == Processing.ApduType.Select1)
 			{
-				ResetTransaction();
 				OnStartTx();
 			}
 
@@ -87,6 +86,7 @@ namespace TheApp.Tap
 			{
 				logger.Trace("{0}  {1}", type.ToString(), BitConverter.ToString(query));
 
+				//ViewModels.MainPageViewModel.SetStatus("Step: " + queryHistory.Queries.Count);
 				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count));
 				queryHistory.Query = query;
 
@@ -123,7 +123,7 @@ namespace TheApp.Tap
 
 				// See OnDeactivated for notification beep.
 				ValidateTx(cachedTapResponse, ticksAtCompletion, stopwatch);
-				//ResetTransaction();
+				ResetTransaction();
 			}
 			catch (Exception e)
 			{
@@ -134,6 +134,9 @@ namespace TheApp.Tap
 
 		private void OnStartTx()
 		{
+			if (queryHistory.Queries.Count > 0)
+				ResetTransaction();
+
 			logger.Trace("--- Start New Tx ---");
 			try
 			{
