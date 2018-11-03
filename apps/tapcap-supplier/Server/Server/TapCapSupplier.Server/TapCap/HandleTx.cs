@@ -60,60 +60,67 @@ namespace TapCapSupplier.Server.TapCap
 		/// <returns></returns>
 		public SignedMessage RequestTransaction(SignedMessage signedRequest)
 		{
-			//var (clientAddress, request) = Signing.GetSignerAndMessage<TapCapClientRequest>(signedRequest);
-			//var (managerAddress, token) = Signing.GetSignerAndMessage<TapCapToken>(request.Token);
+			var stopwatch = new System.Diagnostics.Stopwatch();
+			stopwatch.Start();
 
-			//// Verify the token supplied is for the requesting client.
-			//if (clientAddress != token.ClientAccount)
-			//{
-			//	logger.Warn("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
-			//	return null;
-			//}
+			var clientRequest = JsonConvert.DeserializeObject<TapCapClientRequest>(signedRequest.Message);
 
-			//// TODO: Verify manager address is valid.
-			//// if (managerAdress != ManagerAddress)
+			var clientAddressTask = Task.Run(() => Signing.GetSigner(signedRequest.Message, signedRequest.Signature));
+			var managerTokenTask = Task.Run(() => Signing.GetSignerAndMessage<TapCapToken>(clientRequest.Token));
+			var cryptoCertTask = Task.Run(() => Card.GenerateCrypto(clientRequest));
 
-			//// TODO: Do we want to use my timestamp, or client timestamp?
+			var clientAddress = clientAddressTask.GetAwaiter().GetResult();
+			var (managerAddress, token) = managerTokenTask.GetAwaiter().GetResult();
+
+			// Verify the token supplied is for the requesting client.
+			if (clientAddress != token.ClientAccount)
+			{
+				logger.Warn("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
+				return null;
+			}
+
+			// TODO: Verify manager address is valid.
+			// if (managerAdress != ManagerAddress)
+
+			// TODO: Do we want to use my timestamp, or client timestamp?
 			var timestamp = TheCoinTime.Now();
 			var fxRate = FxRates.GetCurrentFxRate(timestamp);
 
-			//// TODO! Reference the Crypto PDOL, so we are not relying
-			//// on the security in the card to ensure the numbers match.
-			//// (and we don't generate a cyrpto sig for a different value than here)
-			//if (!PDOL.ParseIntoCryptoPDOL(request.CryptoData, CryptoPDOL))
-			//{
-			//	logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(request.GpoData));
-			//	return null;
-			//}
+			// TODO! Reference the Crypto PDOL, so we are not relying
+			// on the security in the card to ensure the numbers match.
+			// (and we don't generate a cyrpto sig for a different value than here)
+			if (!PDOL.ParseIntoCryptoPDOL(clientRequest.CryptoData, CryptoPDOL))
+			{
+				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(clientRequest.GpoData));
+				return null;
+			}
 
-			//var txCents = PDOL.GetAmount(CryptoPDOL);
-			//if (txCents == 0)
-			//{
-			//	logger.Warn("Invalid tx cents amount");
-			//	return null;
-			//}
+			var txCents = PDOL.GetAmount(CryptoPDOL);
+			if (txCents == 0)
+			{
+				logger.Warn("Invalid tx cents amount");
+				return null;
+			}
 
-			//var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
+			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
 
-			//// TODO: Return "insufficient funds"
-			//if (txCoin > token.AvailableBalance)
-			//{
-			//	logger.Warn("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
-			//	return null;
-			//}
-			var request = JsonConvert.DeserializeObject<TapCapClientRequest>(signedRequest.Message);
+			// TODO: Return "insufficient funds"
+			if (txCoin > token.AvailableBalance)
+			{
+				logger.Warn("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
+				return null;
+			}
 			// Everything checks out - build the certificate
-			var certificate = Card.GenerateCrypto(request);
+			var certificate = cryptoCertTask.GetAwaiter().GetResult();
 
 			var tx = new TapCapBrokerPurchase()
 			{
 				SignedRequest = signedRequest,
 				FxRate = PackageInterop.ConvertTo<FXRate>(fxRate),
-				CoinCharge = 1,
+				CoinCharge = txCoin,
 				CryptoCertificate = certificate
 			};
 
-			logger.Trace("returning tx");
 			var signedTx = new SignedMessage()
 			{
 				Message = tx.ToJson(),
@@ -122,6 +129,9 @@ namespace TapCapSupplier.Server.TapCap
 
 			//	= Signing.SignMessage<SignedMessage>(tx, TheAccount);
 			Task.Run(async () => await ValidateAndFinalizeTx(tx));
+
+			logger.Trace(" !-!-!returning tx in: {0}ms !-!-!", stopwatch.ElapsedMilliseconds);
+
 			return signedTx;
 		}
 
