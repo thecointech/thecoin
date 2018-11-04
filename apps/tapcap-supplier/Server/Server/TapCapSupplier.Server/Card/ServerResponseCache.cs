@@ -20,7 +20,6 @@ namespace TapCapSupplier.Server.Card
 			if (appFolder != null)
 			{
 				BasePath = appFolder + "/cache";
-				LoadStaticResponses();
 			}
 		}
 
@@ -36,33 +35,45 @@ namespace TapCapSupplier.Server.Card
 			};
 		}
 
-		private void LoadStaticResponses()
+		public void LoadStaticResponses()
 		{
-			if (File.Exists(CachePath))
+			try
 			{
-				using (StreamReader sr = new StreamReader(CachePath))
+				if (File.Exists(CachePath))
 				{
-					dynamic saveInfo = Newtonsoft.Json.Linq.JObject.Parse(sr.ReadToEnd());
-					//dynamic saveInfo = JsonConvert.DeserializeObject();
-
-					IList<string> squeries = saveInfo.Queries.ToObject<IList<string>>();
-					IList<string> sresponses = saveInfo.Responses.ToObject<IList<string>>();
-					IList<int?> indices = saveInfo.ParentIndices.ToObject<IList<int?>>();
-					if (squeries.Count != indices.Count ||
-						sresponses.Count != squeries.Count)
+					using (StreamReader sr = new StreamReader(CachePath))
 					{
-						//logger.Error("Static Cache: Mismatched cache array lengths");
-						return;
+						dynamic saveInfo = Newtonsoft.Json.Linq.JObject.Parse(sr.ReadToEnd());
+						//dynamic saveInfo = JsonConvert.DeserializeObject();
+
+						IList<string> squeries = saveInfo.Queries.ToObject<IList<string>>();
+						IList<string> sresponses = saveInfo.Responses.ToObject<IList<string>>();
+						IList<int?> indices = saveInfo.ParentIndices.ToObject<IList<int?>>();
+						if (squeries.Count != indices.Count ||
+							sresponses.Count != squeries.Count)
+						{
+							//logger.Error("Static Cache: Mismatched cache array lengths");
+							return;
+						}
+
+						queries = squeries.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
+						responses = sresponses.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
+						parentIndices = indices.ToList();
+						if (saveInfo.Gpo != null)
+							GpoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Gpo);
+						if (saveInfo.Crypto != null)
+							CryptoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Crypto);
 					}
-					
-					queries = squeries.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
-					responses = sresponses.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
-					parentIndices = indices.ToList();
-					if (saveInfo.Gpo != null)
-						GpoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Gpo);
-					if (saveInfo.Crypto != null)
-						CryptoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Crypto);
 				}
+			}
+			catch (Exception e)
+			{
+				queries = new List<byte[]>();
+				responses = new List<byte[]>();
+				parentIndices = new List<int?>();
+				GpoPdol = null;
+				CryptoPdol = null;
+				throw;
 			}
 		}
 

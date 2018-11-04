@@ -136,7 +136,7 @@ namespace TapCapSupplier.Server.Controllers
         public virtual IActionResult RequestTapCap([FromBody]SignedMessage signedMessage)
         {
 			var tx = Handler.RequestTransaction(signedMessage);
-			if (tx != null)
+			if (tx != null && tx.Signature.Length > 0)
 			{
 				// TODO: Sign this
 				return StatusCode(200, tx);
@@ -145,7 +145,7 @@ namespace TapCapSupplier.Server.Controllers
 			return StatusCode(405, new ErrorMessage() {
 				Code = 0,
 				Id = "TODO",
-				Message = "TODO"
+				Message = tx.Message
 			});
         }
     }

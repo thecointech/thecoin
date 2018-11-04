@@ -75,8 +75,14 @@ namespace TapCapSupplier.Server.TapCap
 			// Verify the token supplied is for the requesting client.
 			if (clientAddress != token.ClientAccount)
 			{
-				logger.Warn("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
-				return null;
+				var message = string.Format("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
+				logger.Warn(message);
+
+				return new SignedMessage()
+				{
+					Message = message,
+					Signature = ""
+				};
 			}
 
 			// TODO: Verify manager address is valid.
@@ -92,14 +98,22 @@ namespace TapCapSupplier.Server.TapCap
 			if (!PDOL.ParseIntoCryptoPDOL(clientRequest.CryptoData, CryptoPDOL))
 			{
 				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(clientRequest.GpoData));
-				return null;
+				return new SignedMessage()
+				{
+					Message = "Error parsing CPO CDOL:",
+					Signature = ""
+				};
 			}
 
 			var txCents = PDOL.GetAmount(CryptoPDOL);
 			if (txCents == 0)
 			{
 				logger.Warn("Invalid tx cents amount");
-				return null;
+				return new SignedMessage()
+				{
+					Message = "Invalid tx cents amount",
+					Signature = ""
+				};
 			}
 
 			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell.Value * fxRate._FxRate.Value));
@@ -107,8 +121,14 @@ namespace TapCapSupplier.Server.TapCap
 			// TODO: Return "insufficient funds"
 			if (txCoin > token.AvailableBalance)
 			{
-				logger.Warn("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
-				return null;
+				var message = string.Format("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
+				logger.Info(message);
+
+				return new SignedMessage()
+				{
+					Message = message,
+					Signature = ""
+				};
 			}
 			// Everything checks out - build the certificate
 			var certificate = cryptoCertTask.GetAwaiter().GetResult();

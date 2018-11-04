@@ -28,8 +28,6 @@ namespace TapCapSupplier.Server.Card
 		public byte[] CryptoPDOL => StaticResponses.CryptoPdol;
 		public string Name => ReadCardName();
 
-		public byte[] AppData;
-
 		/// <summary>
 		/// Implementation to handle talking directly to local payment card
 		/// </summary>
@@ -39,9 +37,16 @@ namespace TapCapSupplier.Server.Card
 			
 			card = new EmvCardMessager(_logger);
 			Cache = new ServerResponseCache(appEnv?.ContentRootPath, Name);
-			//QueryStaticResponses();
+			try
+			{
+				Cache.LoadStaticResponses();
+			}
+			catch (Exception e)
+			{
+				_logger.LogError("Error loading cache: {0}", e.Message);
+			}
 
-			AppData = DoStaticInit();
+			DoStaticInit();
 		}
 
 		byte[] IEmvCard.GetSingleResponse(QueryWithHistory queryWithHistory)
