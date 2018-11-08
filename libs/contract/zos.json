@@ -1,11 +1,8 @@
 {
-  "name": "TheCoinContract",
+  "zosversion": "2",
+  "name": "the-contract",
   "version": "0.1.0",
   "contracts": {
     "TheCoin": "TheCoin"
-  },
-  "stdlib": {
-    "name": "openzeppelin-zos",
-    "version": "^1.9.4"
   }
 }

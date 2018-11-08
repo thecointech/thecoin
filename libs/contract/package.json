@@ -1,15 +1,16 @@
 {
   "name": "@the-coin/contract",
   "version": "1.0.0",
-  "description": "Central contract for THE coin management",
+  "description": "Contract for THE Universal Currency",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Frozen Kiwi",
+  "author": "Stephen Taylor",
   "license": "MIT",
   "dependencies": {
-    "openzeppelin-zos": "^1.9.4",
-    "zos-lib": "^1.4.1"
+    "openzeppelin-eth": "^2.0.2",
+    "truffle": "^4.1.14",
+    "zos-lib": "^2.0.1"
   }
 }

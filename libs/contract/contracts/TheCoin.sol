@@ -1,10 +1,11 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
-import 'openzeppelin-zos/contracts/token/ERC20/DetailedERC20.sol';
-import 'openzeppelin-zos/contracts/token/ERC20/StandardToken.sol';
-import 'openzeppelin-zos/contracts/ownership/Ownable.sol';
-import "zos-lib/contracts/migrations/Migratable.sol";
+import './ERC20Local.sol';
+import 'openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol';
+import 'openzeppelin-eth/contracts/ownership/Ownable.sol';
+import 'zos-lib/contracts/Initializable.sol';
 
+import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
 // ----------------------------------------------------------------------------
 // SpyCoin - A crypto-currency pegged to the SPX (SPY actually)
 //
@@ -24,7 +25,7 @@ import "zos-lib/contracts/migrations/Migratable.sol";
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
+contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
 
     // An account may be subject to a timeout, during which
     // period it is forbidden from transferring its value
@@ -58,18 +59,14 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     // ------------------------------------------------------------------------
     // Events
     // ------------------------------------------------------------------------
-    event CoinsMinted(uint amount);
-    event CoinsMelted(uint amount);
-    event CoinsPurchased(address targetAddress, uint amount, uint newBalance, uint timestamp);
-    event CoinsRedeemed(address sourceAddress, uint amount, uint newBalance, uint timestamp);
 
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
     function initialize(address _sender) public
-        isInitializer("THECoin", "0") 
+        initializer() 
     {
-        DetailedERC20.initialize("THE Coin", "THE", 6);
+        ERC20Detailed.initialize("THE: Coin", "THE", 6);
         Ownable.initialize(_sender);
         
         // Lets just double-check this contract has not
@@ -87,7 +84,8 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
 
     function getRoles() public view returns(address,address,address,address,address)
     {
-        return (owner, role_TapCapManager, role_Minter, role_TheReserves, role_Police);
+        address theOwner = owner();
+        return (theOwner, role_TapCapManager, role_Minter, role_TheReserves, role_Police);
     }
 
     // ------------------------------------------------------------------------
@@ -99,30 +97,39 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     function mintCoins(uint amount) public
         onlyMinter
     {
-        totalSupply_ = totalSupply_.add(amount);
-        balances[role_TheReserves] = balances[role_TheReserves].add(amount);
-        emit CoinsMinted(amount);
+        _mint(role_TheReserves, amount);
     }
 
     // Remove coins
     function meltCoins(uint amount) public
         onlyMinter
     {
-        totalSupply_ = totalSupply_.sub(amount);
-        balances[role_TheReserves] = balances[role_TheReserves].add(amount);
-        emit CoinsMelted(amount);
+        _burn(role_TheReserves, amount);
     }
 
     // Coins currently owned by clients (not TheCoin)
     function coinsCirculating() public view returns(uint)
     {
-        return totalSupply_.sub(balances[role_TheReserves]);
+        return totalSupply().sub(balanceOf(role_TheReserves));
     }
 
     // Coins available for sale to the public 
     function reservedCoins() public view returns (uint balance) 
     {
-        return balances[role_TheReserves];
+        return balanceOf(role_TheReserves);
+    }
+
+    // ------------------------------------------------------------------------
+    // Override standard functions to limit by account freezing
+    // ------------------------------------------------------------------------
+    function transfer(address to, uint256 value) public isTransferable(value) returns (bool) {
+        return super.transfer(to, value);
+    }
+    function approve(address spender, uint256 value) public isTransferable(value) returns (bool) {
+        return super.approve(spender, value);
+    }
+    function increaseAllowance(address spender, uint256 addedValue) public isTransferable(addedValue) returns (bool) {
+        return super.increaseAllowance(spender, addedValue);
     }
 
     // ------------------------------------------------------------------------
@@ -135,10 +142,8 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     onlyTheCoin
     balanceAvailable(amount)
     {
-        balances[role_TheReserves] = balances[role_TheReserves].sub(amount);
-        balances[purchaser] = balances[purchaser].add(amount);
+        _transfer(role_TheReserves, purchaser, amount);
         freezeUntil[purchaser] = timeout;
-        emit CoinsPurchased(purchaser, amount, balances[purchaser], now);
     }
 
     // A user returns their coins to us (this will trigger disbursement externally)
@@ -146,11 +151,7 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     isTransferable(amount)
     {
         // first, we recover the coins back to our own account
-        balances[msg.sender] = balances[msg.sender].sub(amount);
-        balances[role_TheReserves] = balances[role_TheReserves].add(amount);
-        // Notify (trigger the back-end to transfer fiat 
-        // in the way the recipient requested)
-        emit CoinsRedeemed(msg.sender, amount, balances[msg.sender], now);        
+        _transfer(msg.sender, role_TheReserves, amount);
     }
 
     // ------------------------------------------------------------------------
@@ -160,8 +161,6 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     function setAccountFreezeTime(address account, uint time) public
     onlyPolice
     {
-        // NOTE!  This is currently ineffectual until
-        // we port the freeze code into the base ERC20 contract
         freezeUntil[account] = time;
     }
 
@@ -182,8 +181,8 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     // in offline transactions
     // ------------------------------------------------------------------------
 
-    // TODO: Spending balances are amounts that
-    // are transfered from the balances into
+    // TODO: Spending _balances are amounts that
+    // are transfered from the _balances into
     // escrow accounts.  These escrow accounts can then
     // be spent against and tracked with local databases
     // and are synced back to the main chain once per week (or so)
@@ -211,7 +210,7 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
     balanceAvailable(topup)
     {
         TapCapData storage userAccount = tapCaps[msg.sender];
-        balances[msg.sender] = balances[msg.sender].sub(topup);
+        _balances[msg.sender] = _balances[msg.sender].sub(topup);
         userAccount.TapCapEscrow = userAccount.TapCapEscrow.add(topup);
         emit TapCapTopUp(msg.sender, topup);
     }
@@ -260,7 +259,7 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
                 uint pdelta = uint(delta);
                 // Add directly to the users regular account.  We may not
                 // have permission to interact with the users TapCap
-                balances[user].add(pdelta);
+                _balances[user].add(pdelta);
 
                 // Update total.  Can't use safe-math for this, as
                 // newTotal is a signed int to allow it to go negative.
@@ -277,11 +276,11 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
                 if (userAccount.TapCapEscrow < userAccount.TapCapRefill)
                 {
                     uint topup = userAccount.TapCapRefill.sub(userAccount.TapCapEscrow);
-                    if (topup > balances[user])
+                    if (topup > _balances[user])
                     {
-                        topup = balances[user];
+                        topup = _balances[user];
                     }
-                    balances[user] = balances[user].sub(topup);
+                    _balances[user] = _balances[user].sub(topup);
                     userAccount.TapCapEscrow = userAccount.TapCapEscrow.add(topup);
                     emit TapCapUserUpdated(user, delta, topup);
                 }
@@ -354,20 +353,21 @@ contract TheCoin is Migratable, DetailedERC20, StandardToken, Ownable {
         new_Police = 0;
     }
     // ------------------------------------------------------------------------
-    // Owner can transfer out any accidentally sent ERC20 tokens
+    // Owner can transfer out any ERC20 tokens accidentally assigned to this contracts address
     // ------------------------------------------------------------------------
-    function transferAnyERC20Token(address tokenAddress, uint tokens) public onlyOwner returns (bool success) {
-        return ERC20Basic(tokenAddress).transfer(owner, tokens);
+    function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyOwner returns (bool success) {
+        IERC20 tokenContract = IERC20(tokenAddress);
+        return tokenContract.transfer(owner(), tokens);
     }
 
     ///////////////////////////////
     modifier balanceAvailable(uint amount) {
-        require(balances[msg.sender] >= amount, "Caller has insufficient balance");
+        require(_balances[msg.sender] >= amount, "Caller has insufficient balance");
         _;
     }
 
     modifier isTransferable(uint amount) {
-        require(balances[msg.sender] >= amount, "Caller has insufficient balance");
+        require(_balances[msg.sender] >= amount, "Caller has insufficient balance");
         require(freezeUntil[msg.sender] < now, "Caller's account is currently frozen");
         _;
     }
