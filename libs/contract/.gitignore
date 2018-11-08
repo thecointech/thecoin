@@ -1,3 +1,4 @@
 node_modules/
 config/development/password
 config/testnet/password
+.zos.session
