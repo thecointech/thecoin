@@ -273,7 +273,15 @@
     }
   },
   "solidityLibs": {},
-  "proxies": {},
+  "proxies": {
+    "the-contract/TheCoin": [
+      {
+        "address": "0x47f174d0c0676ec6bf0a660856910ede8deff20e",
+        "version": "0.1.0",
+        "implementation": "0xbecfb0ebc7f26de2411c49b85e98ee9e423635e3"
+      }
+    ]
+  },
   "zosversion": "2",
   "version": "0.1.0"
 }
