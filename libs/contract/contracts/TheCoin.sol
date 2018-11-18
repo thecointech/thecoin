@@ -1,11 +1,15 @@
 pragma solidity ^0.4.24;
 
 import './ERC20Local.sol';
+import './LibCertTransfer.sol';
+
 import 'openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol';
-import 'openzeppelin-eth/contracts/ownership/Ownable.sol';
 import 'zos-lib/contracts/Initializable.sol';
 
 import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
+import 'openzeppelin-eth/contracts/cryptography/ECDSA.sol';
+
+
 // ----------------------------------------------------------------------------
 // SpyCoin - A crypto-currency pegged to the SPX (SPY actually)
 //
@@ -25,11 +29,20 @@ import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
+contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
 
     // An account may be subject to a timeout, during which
     // period it is forbidden from transferring its value
     mapping(address => uint) freezeUntil;
+
+    // A stored list of timestamps that are used to uniquely
+    // specify transactions running through paidTransaction.
+    // Each tx comes with a timestamp that must be higher than
+    // the last tx timestamp, and (more or less) be in the 
+    // same time as the block being mined.  This ensures
+    // tx authentications are unique, and expire 
+    // relatively shortly after issue
+    mapping(address => uint) lastTxTimestamp;
 
     // The following addresses have different roles
 
@@ -43,7 +56,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
     // THE Coin reserve address.  This is the address
     // directly managed by the THE Coin Inc.  Users
     // interact with this address when purchase/redeem coins
-    address role_TheReserves;
+    address role_TheCoin;
     // The Police have very limited powers, they may
     // freeze accounts but nothing else
     address role_Police;
@@ -53,7 +66,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
     // the roles to an invalid address
     address new_TapCapManager;
     address new_Minter;
-    address new_TheReservist;
+    address new_TheCoin;
     address new_Police;
 
     // ------------------------------------------------------------------------
@@ -67,7 +80,6 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
         initializer() 
     {
         ERC20Detailed.initialize("THE: Coin", "THE", 6);
-        Ownable.initialize(_sender);
         
         // Lets just double-check this contract has not
         // yet been initialized.
@@ -78,14 +90,13 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
         // these roles to others
         role_TapCapManager = _sender;
         role_Minter = _sender;
-        role_TheReserves = _sender;
+        role_TheCoin = _sender;
         role_Police = _sender;
     }
 
-    function getRoles() public view returns(address,address,address,address,address)
+    function getRoles() public view returns(address,address,address,address)
     {
-        address theOwner = owner();
-        return (theOwner, role_TapCapManager, role_Minter, role_TheReserves, role_Police);
+        return (role_TapCapManager, role_Minter, role_TheCoin, role_Police);
     }
 
     // ------------------------------------------------------------------------
@@ -97,39 +108,68 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
     function mintCoins(uint amount) public
         onlyMinter
     {
-        _mint(role_TheReserves, amount);
+        _mint(role_TheCoin, amount);
     }
 
     // Remove coins
     function meltCoins(uint amount) public
         onlyMinter
     {
-        _burn(role_TheReserves, amount);
+        _burn(role_TheCoin, amount);
     }
 
     // Coins currently owned by clients (not TheCoin)
     function coinsCirculating() public view returns(uint)
     {
-        return totalSupply().sub(balanceOf(role_TheReserves));
+        return totalSupply().sub(balanceOf(role_TheCoin));
     }
 
     // Coins available for sale to the public 
     function reservedCoins() public view returns (uint balance) 
     {
-        return balanceOf(role_TheReserves);
+        return balanceOf(role_TheCoin);
     }
 
     // ------------------------------------------------------------------------
     // Override standard functions to limit by account freezing
     // ------------------------------------------------------------------------
-    function transfer(address to, uint256 value) public isTransferable(value) returns (bool) {
+    function transfer(address to, uint256 value) public 
+    isTransferable(msg.sender, value) 
+    returns (bool) 
+    {
         return super.transfer(to, value);
     }
-    function approve(address spender, uint256 value) public isTransferable(value) returns (bool) {
+    function approve(address spender, uint256 value) public 
+    isTransferable(msg.sender, value) 
+    returns (bool) 
+    {
         return super.approve(spender, value);
     }
-    function increaseAllowance(address spender, uint256 addedValue) public isTransferable(addedValue) returns (bool) {
+    function increaseAllowance(address spender, uint256 addedValue) public 
+    isTransferable(msg.sender, addedValue) 
+    returns (bool) 
+    {
         return super.increaseAllowance(spender, addedValue);
+    }
+
+    // ------------------------------------------------------------------------
+    // Additional paid-transfer functions allows a client to sign a request
+    // and for the request to be paid by someone else (likely us)
+    // ------------------------------------------------------------------------
+
+    function certifiedTransfer(address from, address to, uint256 value, uint32 fee, uint256 timestamp, bytes signature)
+    public 
+    timestampIncreases(from, timestamp) 
+    isTransferable(from, value + fee)
+    returns (bool)
+    {
+        address signer = recoverSigner(from, to, value, fee, timestamp, signature);
+        require(signer == from, "Invalid signature for address");
+
+        _transfer(from, to, value);
+        _transfer(from, msg.sender, fee);
+
+        lastTxTimestamp[from] = timestamp;
     }
 
     // ------------------------------------------------------------------------
@@ -142,16 +182,16 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
     onlyTheCoin
     balanceAvailable(amount)
     {
-        _transfer(role_TheReserves, purchaser, amount);
+        _transfer(role_TheCoin, purchaser, amount);
         freezeUntil[purchaser] = timeout;
     }
 
     // A user returns their coins to us (this will trigger disbursement externally)
     function coinRedeem(uint amount) public
-    isTransferable(amount)
+    isTransferable(msg.sender, amount)
     {
         // first, we recover the coins back to our own account
-        _transfer(msg.sender, role_TheReserves, amount);
+        _transfer(msg.sender, role_TheCoin, amount);
     }
 
     // ------------------------------------------------------------------------
@@ -329,16 +369,16 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
         new_Minter = 0;
     }
 
-    function setTheReserves(address newReservist) public 
+    function setTheCoin(address newCoinManager) public 
     onlyTheCoin
     {
-        new_TheReservist = newReservist;
+        new_TheCoin = newCoinManager;
     }
-    function acceptReservist() public 
+    function acceptTheCoin() public 
     {
-        require(msg.sender == new_TheReservist, "Permission Denied");
-        role_TheReserves = new_TheReservist;
-        new_TheReservist = 0;
+        require(msg.sender == new_TheCoin, "Permission Denied");
+        role_TheCoin = new_TheCoin;
+        new_TheCoin = 0;
     }
 
     function setPolice(address newPolice) public 
@@ -355,9 +395,9 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
     // ------------------------------------------------------------------------
     // Owner can transfer out any ERC20 tokens accidentally assigned to this contracts address
     // ------------------------------------------------------------------------
-    function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyOwner returns (bool success) {
+    function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyTheCoin returns (bool success) {
         IERC20 tokenContract = IERC20(tokenAddress);
-        return tokenContract.transfer(owner(), tokens);
+        return tokenContract.transfer(role_TheCoin, tokens);
     }
 
     ///////////////////////////////
@@ -366,9 +406,9 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
         _;
     }
 
-    modifier isTransferable(uint amount) {
-        require(_balances[msg.sender] >= amount, "Caller has insufficient balance");
-        require(freezeUntil[msg.sender] < now, "Caller's account is currently frozen");
+    modifier isTransferable(address from, uint amount) {
+        require(_balances[from] >= amount, "Caller has insufficient balance");
+        require(freezeUntil[from] < now, "Caller's account is currently frozen");
         _;
     }
 
@@ -386,13 +426,19 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, Ownable {
 
     modifier onlyTheCoin()
     {
-        require(msg.sender == role_TheReserves, "Invalid sender");
+        require(msg.sender == role_TheCoin, "Invalid sender");
         _;
     }
 
     modifier onlyPolice()
     {
         require(msg.sender == role_Police, "Invalid sender");
+        _;
+    }
+
+    modifier timestampIncreases(address from, uint256 timestamp) 
+    {
+        require(timestamp > lastTxTimestamp[from], "Provided timestamp is lower than recorded timestamp");
         _;
     }
 }

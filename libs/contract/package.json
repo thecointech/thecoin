@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/contract",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Contract for THE Universal Currency",
   "main": "index.js",
   "scripts": {

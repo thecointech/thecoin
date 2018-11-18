@@ -1,3 +1,0 @@
-start "Testnet" geth --testnet --password=config/testnet/password --port=30303 --rpc --rpcport=8555 --rpcaddr=localhost --rpccorsdomain=http://localhost:8000 --ws --wsport=8556 --wsaddr=localhost --wsorigins=http://localhost:8000,http://localhost:8080 --maxpeers=25 --shh --rpcapi=eth,web3,net,debug,shh --wsapi=eth,web3,net,shh,debug --unlock=0774b5abaa87e33e47b336a88b337e2711c27ca2
-
-truffle console --network=ropsten
