@@ -1,14 +1,18 @@
 {
-  "name": "the-utilities",
-  "version": "0.1.0",
+  "name": "@the-coin/utilities",
+  "version": "0.1.2",
   "description": "Utilities to share amongst TheCoin projects",
-  "main": "Conversion.js",
+  "main": "index.js",
   "scripts": {
     "test": "test"
   },
   "keywords": [
     "TheCoin"
   ],
-  "author": "stephen.taylor.dev@gmail.com",
-  "license": "ISC"
+  "author": "Stephen Taylor",
+  "license": "MIT",
+  "dependencies": {
+    "@the-coin/contract": "^1.0.4",
+    "ethers": "^4.0.12"
+  }
 }
