@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "index.js",
   "scripts": {
