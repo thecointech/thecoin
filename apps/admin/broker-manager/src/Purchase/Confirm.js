@@ -1,8 +1,7 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from "react-redux"
-import * as TheCadBroker from 'the-broker-cad'; // eslint-disable-line import/no-extraneous-dependencies
-
+import * as TheCadBroker from '@the-coin/broker-cad';
 
 class Confirm extends React.PureComponent {
 	state = {

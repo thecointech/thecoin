@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { withRR4, Nav, NavText } from 'react-sidenav';
+import { withRR4 } from 'react-sidenav/withRR4';
+import { Nav, NavText } from 'react-sidenav';
 import { connect } from 'react-redux';
 
 const SideNav = withRR4();

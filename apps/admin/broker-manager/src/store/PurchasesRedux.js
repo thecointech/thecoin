@@ -1,5 +1,4 @@
-import * as TheCadBroker from 'the-broker-cad'; // eslint-disable-line import/no-extraneous-dependencies
-
+import * as TheCadBroker from '@the-coin/broker-cad';
 
 const SET_IDS = 'PUR_SET';
 const SET_STATE = 'PUR_STT';

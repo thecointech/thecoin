@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux"
-import * as TheCadBroker from 'the-broker-cad'; // eslint-disable-line import/no-extraneous-dependencies
+import * as TheCadBroker from '@the-coin/broker-cad';
 
 import Request from './Request'
 import Confirm from './Confirm'

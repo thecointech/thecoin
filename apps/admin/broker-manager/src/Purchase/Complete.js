@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Datetime from 'react-datetime';
 
-import * as TheCadBroker from 'the-broker-cad'; // eslint-disable-line import/no-extraneous-dependencies
-import * as TheCoinCore from 'the-coin-core'; // eslint-disable-line import/no-extraneous-dependencies
-import { Convert } from 'the-coin-utils'; // eslint-disable-line import/no-extraneous-dependencies
-
-const convert = new Convert();
+import * as TheCadBroker from '@the-coin/broker-cad';
+import * as Pricing from '@the-coin/pricing';
+import { toHuman, toCoin } from '@the-coin/utilities';
 
 class Complete extends React.Component {
 
@@ -63,7 +61,7 @@ class Complete extends React.Component {
     updateExchange = async () => {
         const currencyCode = 127; // {Number} The integer code for the countries currency
         const { timestamp } = this.state; // {Number} The timestamp we are requesting valid values for
-        const api = new TheCoinCore.RatesApi();
+        const api = new Pricing.RatesApi();
         const data = await api.getConversion(currencyCode, timestamp)
         this.setState({
             coinBuyRate: data.Buy,
@@ -92,7 +90,7 @@ class Complete extends React.Component {
         const { deposit, coinSellRate, FXRate, timestamp, availableCoin } = this.state;
         const xchangeRate = coinSellRate * FXRate;
 
-        const coinsXfer = convert.toCoin(deposit / xchangeRate);
+        const coinsXfer = toCoin(deposit / xchangeRate);
         if (coinsXfer > availableCoin) {
             window.alert("Not enough coin!");
             this.setState({ submitEnabled: true });
@@ -149,7 +147,7 @@ class Complete extends React.Component {
         const disabled = !submitEnabled || !account || Boolean(order.complete);
 
         const defaultDatetime = order.complete ? order.complete.timestamp : timestamp;
-        const reserves = convert.toHuman(availableCoin);
+        const reserves = toHuman(availableCoin);
         const xchangeRate = coinSellRate * FXRate;
 
         // Generate the right sub-content depending on which page we're in.
