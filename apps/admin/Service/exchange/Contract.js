@@ -1,4 +1,7 @@
-import GetContract from '@the-coin/utilities/TheContract';
+'use strict';
+
+const GetContract = require('@the-coin/utilities/TheContract').default;
+//import GetContract from '@the-coin/utilities/TheContract';
 
 function ProcessRedemption(sourceAddress, amount, newBalance, timestamp) {
     this.getBlock()
@@ -29,10 +32,10 @@ function ProcessPurchase(targetAddress, amount, newBalance, timestamp) {
 
 exports.StartListening = function() {
     // TODO!!! Process sales (requires watching)
-    theContract = GetContract();
+    let tc = GetContract();
 
-    theContract.CoinsPurchased = ProcessPurchase,
-    theContract.CoinsRedeemed = ProcessRedemption
+    tc.CoinsPurchased = ProcessPurchase,
+    tc.CoinsRedeemed = ProcessRedemption
 }
 
 exports.getAccount = function(data, signature) {

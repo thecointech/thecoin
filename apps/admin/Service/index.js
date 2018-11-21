@@ -1,5 +1,7 @@
 'use strict';
 
+require = require("esm")(module/*, options*/)
+
 var fs = require('fs'),
     path = require('path'),
     http = require('http');
