@@ -37,7 +37,3 @@ exports.StartListening = function() {
     tc.CoinsPurchased = ProcessPurchase,
     tc.CoinsRedeemed = ProcessRedemption
 }
-
-exports.getAccount = function(data, signature) {
-    return Ethers.Wallet.verifyMessage(data, signature);
-}

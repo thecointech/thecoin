@@ -5,7 +5,7 @@
   "dependencies": {
     "@the-coin/broker-cad": "^0.1.0",
     "@the-coin/pricing": "^0.1.0",
-    "@the-coin/utilities": "^0.1.2",
+    "@the-coin/utilities": "^0.1.4",
     "ethers": "^4.0.12",
     "moment": "^2.22.2",
     "react": "^16.6.3",

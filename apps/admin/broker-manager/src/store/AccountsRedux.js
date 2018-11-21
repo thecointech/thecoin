@@ -1,24 +1,18 @@
-import {getDefaultProvider, Contract } from 'ethers';
-import TheCoinSpec from './contracts/TheCoin';
+import GetContract, { ConnectWallet } from '@the-coin/utilities/TheContract';
 
 const SET_ACCOUNT = 'ACT_SET';
 
-const abi = TheCoinSpec.abi;
-const address = TheCoinSpec.networks[3].address;
-const ropsten = getDefaultProvider('ropsten');
-
 export default (state = {
 	account: null,
-	contract: new Contract(address, abi, ropsten)
+	contract: GetContract()
 }, action) => {
 	switch (action.type) {
 		case SET_ACCOUNT:
-			let account = action.payload;
-			account = account.connect(ropsten);
+			const newContract = ConnectWallet(action.payload)
 			return { 
 				...state, 
-				account: account,
-				contract: state.contract.connect(account)
+				account: newContract.signer,
+				contract: newContract
 			}
 		default:
 			return state;

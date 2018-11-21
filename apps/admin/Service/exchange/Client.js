@@ -1,13 +1,12 @@
 'use strict';
 
-const Ethers = require('ethers')
+const ethers = require('ethers')
 const ds = require('./Datastore').datastore
-const getAccount = require('./Contract').getAccount
 
 exports.InitiatePurchase = function (signedPR) {
     return new Promise((resolve, reject) => {
         const signedMessage = signedPR.cadAmount + signedPR.email + signedPR.timestamp
-        const account = getAccount(signedMessage, signedPR.signature);
+        const account = ethers.utils.verifyMessage(signedMessage, signedPR.signature);
 
         // Our purchase is registered as a request, to be completed
         const baseKey = ds.key(['User', account, 'Purchase']);

@@ -818,9 +818,9 @@
     babel-cli "^6.26.0"
     superagent "3.7.0"
 
-"@the-coin/utilities@^0.1.2":
-  version "0.1.2"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/utilities/-/utilities-0.1.2.tgz#b6165f37e46122aabea85c6391c0beb61b9d29c4"
+"@the-coin/utilities@^0.1.4":
+  version "0.1.4"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/utilities/-/utilities-0.1.4.tgz#4d460e7d1062d4b468b17791e6da2a0126124bd9"
   dependencies:
     "@the-coin/contract" "^1.0.4"
     ethers "^4.0.12"
