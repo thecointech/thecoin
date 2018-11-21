@@ -4,8 +4,8 @@
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js"
+    "prestart": "npm install",
+    "start": "node --experimental-modules index.js"
   },
   "keywords": [
     "swagger"
@@ -13,11 +13,12 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@google-cloud/datastore": "^1.4.2",
-    "cors": "^2.8.4",
-    "ethers": "^3.0.27",
+    "@google-cloud/datastore": "^2.0.0",
+    "@the-coin/utilities": "^0.1.4",
+    "cors": "^2.8.5",
+    "ethers": "^4.0.12",
     "express": "^4.16.3",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.1"
+    "swagger-tools": "0.10.4"
   }
 }

@@ -1,15 +1,4 @@
-'use strict';
-
-
-const Ethers = require('ethers')
-const TheCoinSpec = require('the-contract/build/contracts/TheCoin')
-
-const abi = TheCoinSpec.abi;
-const address = TheCoinSpec.networks[3].address;
-const ropsten = Ethers.providers.getDefaultProvider('ropsten');
-
-let theContract = undefined;
-
+import GetContract from '@the-coin/utilities/TheContract';
 
 function ProcessRedemption(sourceAddress, amount, newBalance, timestamp) {
     this.getBlock()
@@ -40,7 +29,7 @@ function ProcessPurchase(targetAddress, amount, newBalance, timestamp) {
 
 exports.StartListening = function() {
     // TODO!!! Process sales (requires watching)
-    theContract = new Ethers.Contract(address, abi, ropsten);
+    theContract = GetContract();
 
     theContract.CoinsPurchased = ProcessPurchase,
     theContract.CoinsRedeemed = ProcessRedemption
