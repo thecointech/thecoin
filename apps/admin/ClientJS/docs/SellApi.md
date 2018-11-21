@@ -1,4 +1,4 @@
-# TheBrokerCad.SellApi
+# @TheCoinBrokerCad.SellApi
 
 All URIs are relative to *http://localhost:8080*
 
@@ -18,12 +18,12 @@ Called by the client to exchange coin for CAD
 
 ### Example
 ```javascript
-import TheBrokerCad from 'the-broker-cad';
+import @TheCoinBrokerCad from '@the-coin/broker-cad';
 
-let apiInstance = new TheBrokerCad.SellApi();
+let apiInstance = new @TheCoinBrokerCad.SellApi();
 let user = "user_example"; // String | User address
 let id = 56; // Number | Id of purchase order to return
-let signedMessage = new TheBrokerCad.SignedMessage(); // SignedMessage | Signed sell order request
+let signedMessage = new @TheCoinBrokerCad.SignedMessage(); // SignedMessage | Signed sell order request
 apiInstance.completeCoinSale(user, id, signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
@@ -63,10 +63,10 @@ Called by the client to exchange coin for CAD
 
 ### Example
 ```javascript
-import TheBrokerCad from 'the-broker-cad';
+import @TheCoinBrokerCad from '@the-coin/broker-cad';
 
-let apiInstance = new TheBrokerCad.SellApi();
-let signedMessage = new TheBrokerCad.SignedMessage(); // SignedMessage | Signed sell order request
+let apiInstance = new @TheCoinBrokerCad.SellApi();
+let signedMessage = new @TheCoinBrokerCad.SignedMessage(); // SignedMessage | Signed sell order request
 apiInstance.requestCoinSale(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {

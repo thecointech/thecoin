@@ -14,6 +14,8 @@ tags:
   description: "The Coin exchange service.  This API allows clients to request purchase THESE"
 - name: "Sell"
   description: "The Coin exchange service.  This API allows clients to exchange THESE for CAD"
+- name: "Transfer"
+  description: "Request the broker to make a transfer on the clients behalf"
 consumes:
 - "application/json"
 produces:
@@ -38,13 +40,11 @@ definitions:
       - signature
     properties:
       timestamp:
-        type: number
-        format: integer
+        type: integer
       email:
         type: string
       cadAmount:
         type: number
-        format: integer
       # Signature is included in purchase request so it
       # can be stored along with the 
       signature:
@@ -62,8 +62,7 @@ definitions:
       - signature # Signature is sig(timestamp + orderId)
     properties:
       timestamp:
-        type: number
-        format: integer
+        type: integer
       signature:
         type: string
 
@@ -80,14 +79,11 @@ definitions:
       - txHash
     properties:
       timestamp:
-        type: number
-        format: integer
+        type: integer
       cadAmount:
         type: number
-        format: integer
       coinAmount:
-        type: number
-        format: integer
+        type: integer
       coinRate:
         type: number
       cadRate:
@@ -148,14 +144,11 @@ definitions:
       - cadAmount
     properties:
       timestamp:
-        type: number
-        format: integer
+        type: integer
       cadAmount:
         type: number
-        format: integer
       coinAmount:
-        type: number
-        format: integer
+        type: integer
       coinRate:
         type: number
       cadRate:
@@ -181,6 +174,50 @@ definitions:
       message:
         type: string
       signature:
+        type: string
+
+  CertifiedTransferRequest:
+    required:
+      - from
+      - to
+      - value
+      - fee
+      - timestamp
+      - signature
+    properties:
+       # The address we transfer from
+      from:
+        type: string
+      # the address we transfer to
+      to:
+        type: string
+      # the amount THESE to transfer
+      value:
+        type: integer
+      # the fee (in THESE) to be kept as part of the transfer
+      fee:
+        type: integer
+      # the timestamp this message was signed at
+      timestamp:
+        type: integer
+      # The signature is the following signed by {from}:
+      # {from}->{to}\nval{value}\nfee{fee}\nts{timestamp}
+      signature:
+        type: string
+
+  CertifiedTransferResponse:
+    required:
+      - message
+      - txHash
+    properties:
+      # Some sort of message passed back(?)
+      message:
+        type: string
+      # if the tx was submitted to the blockchain, this
+      # parameter will contain the ID of the transaction
+      # NOTE: This is returned before the tx is completed
+      # so the user may well need to wait on the result
+      txHash:
         type: string
 
 paths:
@@ -379,3 +416,25 @@ paths:
           required: true
           schema: 
             $ref: "#/definitions/SignedMessage"
+
+  /certifiedTransfer:
+    post:
+      tags:
+        - Transfer
+      summary: "Request Transfer from->to"
+      description: "A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether"
+      operationId: "makeCertifiedTransfer"
+      parameters:
+        - in: body
+          name: request
+          description: "A request appropriately filled out and signed as described in the comments"
+          required: true
+          schema: 
+            $ref: "#/definitions/CertifiedTransferRequest"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: The response confirms to the user the order transfer is valid and has been initiated
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"

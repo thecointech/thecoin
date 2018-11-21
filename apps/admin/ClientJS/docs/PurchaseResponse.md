@@ -1,4 +1,4 @@
-# TheBrokerCad.PurchaseResponse
+# @TheCoinBrokerCad.PurchaseResponse
 
 ## Properties
 Name | Type | Description | Notes

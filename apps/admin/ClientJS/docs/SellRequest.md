@@ -1,4 +1,4 @@
-# TheBrokerCad.SellRequest
+# @TheCoinBrokerCad.SellRequest
 
 ## Properties
 Name | Type | Description | Notes

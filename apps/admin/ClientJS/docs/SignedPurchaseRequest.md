@@ -1,4 +1,4 @@
-# TheBrokerCad.SignedPurchaseRequest
+# @TheCoinBrokerCad.SignedPurchaseRequest
 
 ## Properties
 Name | Type | Description | Notes

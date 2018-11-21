@@ -13,6 +13,8 @@
 
 
 import ApiClient from './ApiClient';
+import CertifiedTransferRequest from './model/CertifiedTransferRequest';
+import CertifiedTransferResponse from './model/CertifiedTransferResponse';
 import PurchaseComplete from './model/PurchaseComplete';
 import PurchaseIds from './model/PurchaseIds';
 import PurchaseResponse from './model/PurchaseResponse';
@@ -25,6 +27,7 @@ import SignedPurchaseConfirm from './model/SignedPurchaseConfirm';
 import SignedPurchaseRequest from './model/SignedPurchaseRequest';
 import PurchaseApi from './api/PurchaseApi';
 import SellApi from './api/SellApi';
+import TransferApi from './api/TransferApi';
 
 
 /**
@@ -33,9 +36,9 @@ import SellApi from './api/SellApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var TheBrokerCad = require('index'); // See note below*.
-* var xxxSvc = new TheBrokerCad.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new TheBrokerCad.Yyy(); // Construct a model instance.
+* var @TheCoinBrokerCad = require('index'); // See note below*.
+* var xxxSvc = new @TheCoinBrokerCad.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new @TheCoinBrokerCad.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -47,8 +50,8 @@ import SellApi from './api/SellApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new TheBrokerCad.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new TheBrokerCad.Yyy(); // Construct a model instance.
+* var xxxSvc = new @TheCoinBrokerCad.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new @TheCoinBrokerCad.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -64,6 +67,18 @@ export {
      * @property {module:ApiClient}
      */
     ApiClient,
+
+    /**
+     * The CertifiedTransferRequest model constructor.
+     * @property {module:model/CertifiedTransferRequest}
+     */
+    CertifiedTransferRequest,
+
+    /**
+     * The CertifiedTransferResponse model constructor.
+     * @property {module:model/CertifiedTransferResponse}
+     */
+    CertifiedTransferResponse,
 
     /**
      * The PurchaseComplete model constructor.
@@ -135,5 +150,11 @@ export {
     * The SellApi service constructor.
     * @property {module:api/SellApi}
     */
-    SellApi
+    SellApi,
+
+    /**
+    * The TransferApi service constructor.
+    * @property {module:api/TransferApi}
+    */
+    TransferApi
 };

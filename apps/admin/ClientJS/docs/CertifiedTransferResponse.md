@@ -1,9 +1,9 @@
-# @TheCoinBrokerCad.SignedMessage
+# @TheCoinBrokerCad.CertifiedTransferResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **String** |  | 
-**signature** | **String** |  | 
+**txHash** | **String** |  | 
 
 

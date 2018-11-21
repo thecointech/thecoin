@@ -1,4 +1,4 @@
-# TheBrokerCad.PurchaseState
+# @TheCoinBrokerCad.PurchaseState
 
 ## Properties
 Name | Type | Description | Notes
