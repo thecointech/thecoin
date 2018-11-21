@@ -19,6 +19,8 @@ tags:
 - name: "Sell"
   description: "The Coin exchange service.  This API allows clients to exchange THESE\
     \ for CAD"
+- name: "Transfer"
+  description: "Request the broker to make a transfer on the clients behalf"
 schemes:
 - "http"
 consumes:
@@ -221,6 +223,33 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Sell"
+  /certifiedTransfer:
+    post:
+      tags:
+      - "Transfer"
+      summary: "Request Transfer from->to"
+      description: "A client may request that the Broker initiate a transfer from\
+        \ their account to another.  The transfer includes a fee paid to the broker\
+        \ to cover the cost of the transfer.  This allows a user to operate on the\
+        \ Ethereum blockchain without requiring their own ether"
+      operationId: "makeCertifiedTransfer"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "A request appropriately filled out and signed as described in\
+          \ the comments"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedTransferRequest"
+      responses:
+        200:
+          description: "The response confirms to the user the order transfer is valid\
+            \ and has been initiated"
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Transfer"
 definitions:
   SignedPurchaseRequest:
     required:
@@ -230,33 +259,30 @@ definitions:
     - "timestamp"
     properties:
       timestamp:
-        type: "number"
-        format: "integer"
+        type: "integer"
       email:
         type: "string"
       cadAmount:
         type: "number"
-        format: "integer"
       signature:
         type: "string"
     example:
       signature: "signature"
       cadAmount: 6.02745618307040320615897144307382404804229736328125
       email: "email"
-      timestamp: 0.80082819046101150206595775671303272247314453125
+      timestamp: 0
   SignedPurchaseConfirm:
     required:
     - "signature"
     - "timestamp"
     properties:
       timestamp:
-        type: "number"
-        format: "integer"
+        type: "integer"
       signature:
         type: "string"
     example:
       signature: "signature"
-      timestamp: 0.80082819046101150206595775671303272247314453125
+      timestamp: 0
   PurchaseComplete:
     required:
     - "cadAmount"
@@ -267,14 +293,11 @@ definitions:
     - "txHash"
     properties:
       timestamp:
-        type: "number"
-        format: "integer"
+        type: "integer"
       cadAmount:
         type: "number"
-        format: "integer"
       coinAmount:
-        type: "number"
-        format: "integer"
+        type: "integer"
       coinRate:
         type: "number"
       cadRate:
@@ -283,11 +306,11 @@ definitions:
         type: "string"
     example:
       cadRate: 5.63737665663332876420099637471139430999755859375
-      coinAmount: 1.46581298050294517310021547018550336360931396484375
+      coinAmount: 1
       coinRate: 5.962133916683182377482808078639209270477294921875
       cadAmount: 6.02745618307040320615897144307382404804229736328125
       txHash: "txHash"
-      timestamp: 0.80082819046101150206595775671303272247314453125
+      timestamp: 0
   PurchaseResponse:
     required:
     - "orderId"
@@ -311,19 +334,19 @@ definitions:
     example:
       confirm:
         signature: "signature"
-        timestamp: 0.80082819046101150206595775671303272247314453125
+        timestamp: 0
       request:
         signature: "signature"
         cadAmount: 6.02745618307040320615897144307382404804229736328125
         email: "email"
-        timestamp: 0.80082819046101150206595775671303272247314453125
+        timestamp: 0
       complete:
         cadRate: 5.63737665663332876420099637471139430999755859375
-        coinAmount: 1.46581298050294517310021547018550336360931396484375
+        coinAmount: 1
         coinRate: 5.962133916683182377482808078639209270477294921875
         cadAmount: 6.02745618307040320615897144307382404804229736328125
         txHash: "txHash"
-        timestamp: 0.80082819046101150206595775671303272247314453125
+        timestamp: 0
   SellRequest:
     required:
     - "email"
@@ -344,14 +367,11 @@ definitions:
     - "timestamp"
     properties:
       timestamp:
-        type: "number"
-        format: "integer"
+        type: "integer"
       cadAmount:
         type: "number"
-        format: "integer"
       coinAmount:
-        type: "number"
-        format: "integer"
+        type: "integer"
       coinRate:
         type: "number"
       cadRate:
@@ -376,3 +396,43 @@ definitions:
     example:
       signature: "signature"
       message: "message"
+  CertifiedTransferRequest:
+    required:
+    - "fee"
+    - "from"
+    - "signature"
+    - "timestamp"
+    - "to"
+    - "value"
+    properties:
+      from:
+        type: "string"
+      to:
+        type: "string"
+      value:
+        type: "integer"
+      fee:
+        type: "integer"
+      timestamp:
+        type: "integer"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      fee: 6
+      from: "from"
+      to: "to"
+      value: 0
+      timestamp: 1
+  CertifiedTransferResponse:
+    required:
+    - "message"
+    - "txHash"
+    properties:
+      message:
+        type: "string"
+      txHash:
+        type: "string"
+    example:
+      message: "message"
+      txHash: "txHash"
