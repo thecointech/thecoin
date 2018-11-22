@@ -48,6 +48,7 @@ namespace TheApp.ViewModels
 
 		public DelegateCommand TestPurchaseCommand { get; set; }
 		public DelegateCommand ConnectCommand { get; set; }
+		public DelegateCommand ShowHistoryCommand { get; set; }
 
 		public MainPageViewModel(INavigationService navigationService, Balances balances, TransactionProcessor transactions)
 			: base(navigationService)
@@ -60,6 +61,7 @@ namespace TheApp.ViewModels
 			Transaction = transactions;
 			this.balances = balances;
 
+			ShowHistoryCommand = new DelegateCommand(ShowHistory);
 			TestPurchaseCommand = new DelegateCommand(TestPurchase, () => TestEnabled);
 			ConnectCommand = new DelegateCommand(BeginConnect);
 
@@ -68,6 +70,10 @@ namespace TheApp.ViewModels
 			Events.EventSystem.Subscribe<Events.TxStatus>(UpdateTxStatus, ThreadOption.UIThread);
 		}
 
+		private void ShowHistory()
+		{
+			NavigationService.NavigateAsync("History");
+		}
 		private void BeginConnect()
 		{
 			NavigationService.NavigateAsync("Connect");

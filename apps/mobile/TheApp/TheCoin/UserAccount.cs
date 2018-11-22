@@ -151,9 +151,9 @@ namespace TheApp.TheCoin
 					var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, TheAccount);
 					var signedReq = new SignedMessage(m, s);
 
-					var response = await TransactionsApi.TapCapClientAsync(signedReq);
+					//var response = await TransactionsApi.TapCapClientAsync(signedReq);
 					// TODO: Verify that we have 
-					Status = new TapStatus(response);
+					//Status = new TapStatus(response);
 				});
 			}
 		}

@@ -39,6 +39,7 @@ namespace TheApp
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<Connect>();
             containerRegistry.RegisterForNavigation<Scanner>();
+			containerRegistry.RegisterForNavigation<History>();
 
 			RegisterBackgroundServices(containerRegistry);
 		}

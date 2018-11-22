@@ -30,6 +30,7 @@
         </Grid>
 
 		<Button IsEnabled="False" Text="Test Purchase" Command="{Binding TestPurchaseCommand}" />
+		<Button IsEnabled="False" Text="History" Command="{Binding ShowHistoryCommand}" />
 
     </StackLayout>
 

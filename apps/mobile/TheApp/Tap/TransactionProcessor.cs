@@ -258,7 +258,6 @@ namespace TheApp.Tap
 		private static void ValidateTx(SignedMessage tapResponse, long ticksAtCompletion, Stopwatch stopwatch)
 		{
 			// Now check that the whatsit all went swimmingly.
-			//ParsePDOLData(GPOData, GPOItems);
 			if (tapResponse == null)
 			{
 				//Events.EventSystem.Publish(new Events.TxStatus("Premature Exit at " + stopwatch.ElapsedMilliseconds));
