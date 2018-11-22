@@ -5,14 +5,16 @@ const ds = require('./Datastore').datastore
 
 exports.InitiatePurchase = function (signedPR) {
     return new Promise((resolve, reject) => {
+        console.log(`Initiating purchase for ${signedPR.cadAmount}`)
         const signedMessage = signedPR.cadAmount + signedPR.email + signedPR.timestamp
         const account = ethers.utils.verifyMessage(signedMessage, signedPR.signature);
 
         // Our purchase is registered as a request, to be completed
         const baseKey = ds.key(['User', account, 'Purchase']);
         ds.allocateIds(baseKey, 1, function (err, keys) {
-            if (err)
+            if (err) {
                 reject(err);
+            }
             else {
                 const purchaseKey = keys[0];
                 const purchaseData = {

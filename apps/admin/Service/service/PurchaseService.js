@@ -20,6 +20,7 @@ exports.completeCoinPurchase = function (user, id, request) {
       })
       .catch((err) => {
         // TODO
+        console.error(err);
         reject(err);
       })
   });
@@ -66,6 +67,7 @@ exports.queryCoinPurchase = function (user, id, state) {
         resolve(state);
       })
       .catch((error) => {
+        console.error(err);
         reject(error);
       });
   });
@@ -88,6 +90,7 @@ exports.queryCoinPurchasesIds = function (state) {
       })
       .catch((err) => {
         // TODO
+        console.error(err);
         reject(err);
       })
   });
@@ -110,6 +113,7 @@ exports.requestCoinPurchase = function (request) {
         });
       })
       .catch((err) => {
+        console.error(err);
         reject({
           Error: "Transaction not accepted, please contact support"
         })
