@@ -14,11 +14,9 @@
 # [START app_yaml]
 runtime: nodejs8
 
-service: brokerCAD
-
-handlers:
-- url: *
-  http_headers:
-    Access-Control-Allow-Origin: https://brokerCAD.thecoincore-212314.appspot.com
+#handlers:
+#- url: *
+#  http_headers:
+#    Access-Control-Allow-Origin: https://brokerCAD.thecoincore-212314.appspot.com
 # TODO: Require secure connection always
 # [END app_yaml]

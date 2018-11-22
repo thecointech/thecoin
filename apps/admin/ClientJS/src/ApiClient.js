@@ -32,9 +32,9 @@ class ApiClient {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost:8080
+         * @default https://the-broker-cad.appspot.com
          */
-        this.basePath = 'http://localhost:8080'.replace(/\/+$/, '');
+        this.basePath = 'https://the-broker-cad.appspot.com'.replace(/\/+$/, '');
 
         /**
          * The authentication methods to be included for all API calls.

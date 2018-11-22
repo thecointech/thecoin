@@ -11,7 +11,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8080"
+host: "the-broker-cad.appspot.com"
 tags:
 - name: "Purchase"
   description: "The Coin exchange service.  This API allows clients to request purchase\
@@ -22,7 +22,7 @@ tags:
 - name: "Transfer"
   description: "Request the broker to make a transfer on the clients behalf"
 schemes:
-- "http"
+- "https"
 consumes:
 - "application/json"
 produces:
