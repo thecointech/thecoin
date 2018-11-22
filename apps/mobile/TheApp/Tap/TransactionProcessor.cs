@@ -63,7 +63,7 @@ namespace TheApp.Tap
 					GpoPDOL = PDOL.ParsePDOLItems(supplierResponses.GpoPdol);
 
 					ResetTransaction();
-					Events.EventSystem.Publish(new Events.TxStatus("--Ready--"));
+					Events.EventSystem.Publish(new Events.TxStatus());
 				}
 				catch(Exception e)
 				{
@@ -72,7 +72,7 @@ namespace TheApp.Tap
 			}
 		}
 
-		public byte[] ProcessCommand(byte[] query)
+		public async Task<byte[]> ProcessCommand(byte[] query)
 		{
 			var type = Processing.ReadApduType(query);
 			// Select1 is basically ATR
@@ -86,28 +86,43 @@ namespace TheApp.Tap
 			{
 				logger.Trace("{0}  {1}", type.ToString(), BitConverter.ToString(query));
 
-				//ViewModels.MainPageViewModel.SetStatus("Step: " + queryHistory.Queries.Count);
 				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count));
 				queryHistory.Query = query;
 
 				// For all non-crypto-sig requests, we rely on the cache
 				if (type != Processing.ApduType.CyrptoSig)
 				{
-					response = GetCachedResponse(query, type);
+					response = await GetCachedResponse(query, type);
 				}
 				else
 				{
 					var cryptoData = Processing.ExtractDataFromApdu(query);
-					response = GetSupplierTap(cryptoData.ToArray());
+					response = await GetSupplierTap(cryptoData.ToArray());
 					ticksAtCompletion = stopwatch.ElapsedTicks;
 				}
 
 				logger.Trace("Response: {0}", BitConverter.ToString(response));
 
 			}
+			catch (TapCapSupplier.Client.Client.ApiException e)
+			{
+				if (e.ErrorCode == 405)
+				{
+					logger.Error("Supplier Error: {0}", e.Message);
+					ErrorMessage error = JsonConvert.DeserializeObject<ErrorMessage>(e.ErrorContent);
+					Events.EventSystem.Publish(new Events.TxStatus("ERROR: " + error.Message));
+
+					var _ = Task.Run(async () =>
+					{
+						await Task.Delay(15000);
+						Events.EventSystem.Publish(new Events.TxStatus());
+					});
+				}
+			}
 			catch (Exception e)
 			{
-				logger.Error(e, "Fix this now!");
+				logger.Error("Fix this now!, {0}", e.Message);
+				Events.EventSystem.Publish(new Events.TxStatus("ERROR: " + e.Message));
 			}
 			return response;
 
@@ -176,7 +191,7 @@ namespace TheApp.Tap
 				logger.Trace(logMsg);
 			}
 		}
-		private byte[] GetCachedResponse(byte[] query, Processing.ApduType type)
+		private async Task<byte[]> GetCachedResponse(byte[] query, Processing.ApduType type)
 		{
 			if (type == Processing.ApduType.GPO)
 			{
@@ -190,9 +205,9 @@ namespace TheApp.Tap
 			{
 				logger.Trace("Not found in cache - Fetching remote response");
 				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch"));
-				var responseTask = Task.Run(() => TapSupplier.GetStaticSingle(queryHistory));
+				var responseTask = TapSupplier.GetStaticSingleAsync(queryHistory);
 				WaitFetch(responseTask, "Doing remote fetch");
-				var serverResponse = responseTask.GetAwaiter().GetResult();
+				var serverResponse = await responseTask;
 				logger.Trace("Fetch Success: " + (serverResponse != null));
 				response = serverResponse.Response;
 				Cache.AddNewStaticResponse(query, response);
@@ -204,7 +219,7 @@ namespace TheApp.Tap
 			return response;
 		}
 
-		private byte[] GetSupplierTap(byte[] cryptoData)
+		private async Task<byte[]> GetSupplierTap(byte[] cryptoData)
 		{
 			var timestamp = TheCoinTime.Now();
 			var mtoken = UserAccount.Status.SignedToken;
@@ -217,9 +232,9 @@ namespace TheApp.Tap
 			logger.Trace("Fetching purchase cert");
 			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert"));
 
-			var responseTask = Task.Run(() => TapSupplier.RequestTapCap(signedMessage));
+			var responseTask = TapSupplier.RequestTapCapAsync(signedMessage);
 			WaitFetch(responseTask, "Fetching Cert");
-			cachedTapResponse = responseTask.GetAwaiter().GetResult();
+			cachedTapResponse = await responseTask;
 			logger.Trace("Fetch Success: " + (cachedTapResponse != null));
 			if (cachedTapResponse != null)
 			{
@@ -246,7 +261,7 @@ namespace TheApp.Tap
 			//ParsePDOLData(GPOData, GPOItems);
 			if (tapResponse == null)
 			{
-				Events.EventSystem.Publish(new Events.TxStatus("Premature Exit at " + stopwatch.ElapsedMilliseconds));
+				//Events.EventSystem.Publish(new Events.TxStatus("Premature Exit at " + stopwatch.ElapsedMilliseconds));
 				logger.Debug("Premature Exit at " + stopwatch.ElapsedMilliseconds);
 				return;
 			}

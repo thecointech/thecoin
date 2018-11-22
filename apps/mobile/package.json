@@ -1,0 +1,12 @@
+{
+  "name": "the-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-app",
+  "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@the-coin/contract": "^1.0.4"
+  }
+}

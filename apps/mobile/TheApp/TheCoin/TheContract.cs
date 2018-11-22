@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Threading.Tasks;
 
 namespace TheApp.TheCoin
 {
@@ -12,9 +9,11 @@ namespace TheApp.TheCoin
 		public TheContract()
 		{
 			// Register the contract
-			var assembly = typeof(App).GetTypeInfo().Assembly;
-			var theContractJson = LoadResource.Load(assembly, "TheCoin.json");
-			Contract = new TheUtils.TheContract(theContractJson);
+			Task.Run(async () =>
+			{
+				var theContractJson = await LoadResource.Load("TheCoin.json");
+				Contract = new TheUtils.TheContract(theContractJson);
+			});
 
 			Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount);
 		}

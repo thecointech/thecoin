@@ -3,6 +3,7 @@ using PCSC.Iso7816;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TheUtils;
 
 namespace TheApp.Tap
@@ -65,16 +66,19 @@ namespace TheApp.Tap
 			//return false;
 		}
 
-		public bool TestFull()
+		public void TestFull()
 		{
-			ulong amt = (ulong)TheCoinTime.Now() % 100 + 20;
+			ulong amt = (ulong)TheCoinTime.Now() % 100 + 5000;
 			//using (var logBlock = NLog.LogManager.DisableLogging())
 			{
-				logger.Info("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ TESTING TX ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
-				bool result = Testing.SendTestTransaction(amt, this);
-				processor.Terminated("Testing Tx");
-				logger.Info("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ TESTING TX ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑");
-				return result;
+				Task.Run(() =>
+				{
+					logger.Info("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ TESTING TX ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+					bool result = Testing.SendTestTransaction(amt, this);
+					processor.Terminated("Testing Tx");
+					logger.Info("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ TESTING TX ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑");
+					return result;
+				});
 			}
 		}
 
@@ -85,12 +89,12 @@ namespace TheApp.Tap
 
 		public byte[] SendCommand(CommandApdu apdu)
 		{
-			return processor.ProcessCommand(apdu.ToArray());
+			return processor.ProcessCommand(apdu.ToArray()).GetAwaiter().GetResult();
 		}
 
 		public byte[] SendCommand(byte[] data)
 		{
-			return processor.ProcessCommand(data);
+			return processor.ProcessCommand(data).GetAwaiter().GetResult();
 		}
 	}
 }

@@ -1,28 +1,34 @@
-﻿using System;
-using Xamarin.Forms;
-using System.Reflection;
-using System.IO;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System.IO;
+using Xamarin.Essentials;
+using System.Threading.Tasks;
 
 namespace TheApp.TheCoin
 {
-    class LoadResource
+	class LoadResource
     {
-        public static string Load(Assembly assembly, string filename)
+        public static async Task<string> Load(string filename)
         {
-            #region How to load an txt file embedded resource
+			#region How to load an txt file embedded resource
 
-            // NOTE: use for debugging, not in released app code!
-            foreach (var res in assembly.GetManifestResourceNames()) 
-            	System.Diagnostics.Debug.WriteLine("found resource: " + res);
+			using (var stream = await FileSystem.OpenAppPackageFileAsync(filename))
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					var fileContents = await reader.ReadToEndAsync();
+					return fileContents;
+				}
+			}
 
-            Stream stream = assembly.GetManifestResourceStream("TheApp.TheCoin." + filename);
+			//// NOTE: use for debugging, not in released app code!
+			//foreach (var res in assembly.GetManifestResourceNames()) 
+   //         	System.Diagnostics.Debug.WriteLine("found resource: " + res);
 
-            using (var reader = new System.IO.StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+   //         Stream stream = assembly.GetManifestResourceStream("TheApp.TheCoin." + filename);
+
+   //         using (var reader = new System.IO.StreamReader(stream))
+   //         {
+   //             return reader.ReadToEnd();
+   //         }
             #endregion
         }
     }

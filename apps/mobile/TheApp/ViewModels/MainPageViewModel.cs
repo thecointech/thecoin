@@ -26,6 +26,8 @@ namespace TheApp.ViewModels
 		{
 			get { return this._TestEnabled; }
 			set {
+				if (value == _TestEnabled)
+					return;
 				SetProperty(ref this._TestEnabled, value);
 				TestPurchaseCommand.RaiseCanExecuteChanged();
 			}
@@ -76,7 +78,7 @@ namespace TheApp.ViewModels
 			Logs = "Running Text Tx";
 
 			var testing = new TapTesting(Transaction);
-			bool res = testing.TestFull();
+			testing.TestFull();
 		}
 
 		CancellationTokenSource source = new CancellationTokenSource();
@@ -96,12 +98,18 @@ namespace TheApp.ViewModels
 			if (status.SignedResponse != null)
 			{
 				Logs = "Tx Completed";
+				TestEnabled = true;
 			}
 			else if (status.Status != null)
 			{
 				Logs = status.Status;
+				TestEnabled = false;
 			}
-			TestEnabled = true;
+			else
+			{
+				Logs = "--Ready--";
+				TestEnabled = true;
+			}
 		}
 
 		void UpdateBalances(Balances update)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Nfc.CardEmulators;
@@ -62,7 +63,14 @@ namespace TheApp.Droid
 		// Entry point for Android API
 		public override byte[] ProcessCommandApdu(byte[] commandApdu, Bundle extras)
 		{
-			return processor.ProcessCommand(commandApdu);
+			// Fire and forget
+			Task.Run(async () =>
+			{
+				var response = await processor.ProcessCommand(commandApdu);
+				this.SendResponseApdu(response);
+			});
+
+			return null;
 		}
 
 		public override void OnDestroy()

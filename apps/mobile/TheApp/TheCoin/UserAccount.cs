@@ -39,8 +39,10 @@ namespace TheApp.TheCoin
 					return TheAccount.Address;
 				if (EncryptedAccount != null)
 				{
-					dynamic fromEncrypted = Newtonsoft.Json.JsonConvert.DeserializeObject(EncryptedAccount);
-					return fromEncrypted.Address;
+					var json = Newtonsoft.Json.Linq.JObject.Parse(EncryptedAccount);
+					//var addr = fromEncrypted.address;
+					//var data = fromEncrypted.
+					return json["address"].ToString();
 				}
 				return "----";
 			}
