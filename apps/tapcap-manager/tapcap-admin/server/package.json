@@ -1,0 +1,16 @@
+{
+  "name": "tapcap-admin-server",
+  "version": "0.1.0",
+  "description": "The backend for TapCap admin",
+  "main": "server.js",
+  "author": "Stephen Taylor",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/datastore": "^2.0.0"
+  },
+  "scripts": {
+    "start": "node ./src/server.js",
+    "debug": "nodemon --inspect ./src/server.js"
+  }
+}
