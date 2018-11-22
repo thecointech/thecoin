@@ -2,7 +2,7 @@
 
 const Ethers = require('ethers')
 
-const { ParseSignedMessage } = require('./TheContract');
+const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
 const { TapTx } = require('./TapTx');
 const { GetStatus } = require('./TapCapStatus');
 

@@ -1,5 +1,5 @@
 {
     "usePromises" : true,
     "useES6": true,
-    "projectName": "tapcap-manager"
+    "projectName": "@the-coin/tapcap-manager"
 }

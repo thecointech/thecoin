@@ -9,4 +9,4 @@ const ds = Datastore({
 
 // Instantiate a datastore client
 exports.datastore = ds;
-exports.GetLatestKey = (address) => ds.key(["User", address, "tx", "latest"]);
+exports.GetLatestKey = (address) => ds.key(["User", address, "bookmark", "latest"]);

@@ -1,6 +1,6 @@
 'use strict';
 
-const { ParseSignedMessage } = require('./TheContract');
+const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 
@@ -13,7 +13,7 @@ async function GetLatest(address) {
     return {
         nonce: 0,
         balance: 0,
-        timestamp: timestamp
+        timestamp: 0
     };
 }
 

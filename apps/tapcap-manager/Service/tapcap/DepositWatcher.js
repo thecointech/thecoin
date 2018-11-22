@@ -1,6 +1,6 @@
 'use strict';
 
-const TheContract = require('./TheContract').TheContract;
+const GetContract = require('@the-coin/utilities/TheContract').default;
 const datastore = require('./Datastore');
 
 const ds = datastore.datastore;
@@ -8,92 +8,114 @@ const GetLatestKey = datastore.GetLatestKey;
 
 const LastProcessedKey = ds.key(["Settings", "tapcap"]);
 
+const contractInitBlock = 4456169; // for ROPSTEN.  TODO: UPDATE ON DEPLOY
 let lastProcessedBlock = 0;
+
+// Get the most recently processed block
 async function GetProcessedBlockNumber() {
     if (lastProcessedBlock == 0) {
-        lastProcessedBlock = await ds.get(LastProcessedKey)[0] || 0;
+        lastProcessedBlock = contractInitBlock;
+        const settings = await ds.get(LastProcessedKey);
+        if (settings != null && settings.length > 0) {
+            lastProcessedBlock = settings[0].lastBlock;
+        }
     }
     return lastProcessedBlock;
 }
 
-async function GetLatest(address) {
-    const key = ds.key(["User", address, "tx", "latest"]);
-    const results = await ds.get(key);
-    const timestamp = Date.now();
-    if (results[0])
-        return results[0];
-    return {
-        nonce: 0,
-        balance: 0,
-        timestamp: timestamp
-    };
+let TCTopUpList = [];
+let _currentlyProcessing = null;
+
+function ProcessList()
+{
+    if (!_currentlyProcessing && TCTopUpList.length) {
+        _currentlyProcessing = TCTopUpList.pop()
+        _currentlyProcessing();
+    }
 }
-
-async function SetLatest(address, latest) {
-    const entity = {
-        key: GetLatestKey(address),
-        data: latest,
-    };
-
-    await datastore.upsert(entity);
-    return true;
-}
-
 async function TapCapTopUp(address, topup, event) {
+    TCTopUpList.push(() => doTapCapTopUp(address, topup, event));
+    ProcessList();
+}
 
-    const lastProcessed = await GetProcessedBlockNumber();
+async function doTapCapTopUp(address, topup, event) {
+
+    //const lastProcessed = await GetProcessedBlockNumber();
     const amount = topup.toNumber();
     const block = await event.getBlock();
     const tx = await event.getTransaction();
     const timestamp = block.timestamp * 1000;
 
-    console.log(tx.hash);
+    console.log("Processing deposit tx: " + tx.hash);
 
-    // Double check we do not miss events, or double-process them
-    if (lastProcessed > block.number) {
-        throw("Re-processing block: " + block.number + " for tx: " + event.transactionHash);
-    }
+    // // Double check we do not miss events, or double-process them
+    // if (lastProcessed >= block.number) {
+    //     throw("Re-processing block: " + block.number + " for tx: " + event.transactionHash);
+    // }
 
-    const txKey = ds.key(["User", address, "tx", event.transactionHash]);
+    // We store a separate record of the data 
+    const depositKey = ds.key(["User", address, "deposit", tx.hash]);
     const latestKey = GetLatestKey(address);
     const transaction = ds.transaction();
     transaction
         .run()
-        .then(() => transaction.get(latestKey))
-        .then((latest) => {
-            let lastBalance = 0;
-            let lastNonce = 0;
-            const latestRec = latest[0]
-            if (latestRec) {
-                lastBalance = latestRec.balance;
-                lastNonce = latestRec.nonce;
+        .then(() => Promise.all([transaction.get(latestKey), transaction.get(depositKey)]))
+        .then((results) => {
+            if (results[1][0] != null) {
+                console.error("Re-processing tx, already registered: " + tx.hash);
             }
-            const balance = lastBalance + amount;
-            const nonce = lastNonce + 1;
-            transaction.save([
-                {
-                    key: txKey,
-                    data: {
-                        change: -amount,
-                        blockNumber: event.blockNumber,
-                        timestamp: timestamp,
-                        balance: balance
-                    },
-                },
-                {
-                    key: latestKey,
-                    data: {
-                        nonce: nonce,
-                        timestamp: timestamp,
-                        balance: balance
-                    },
-                },
-                {
-                    key: LastProcessedKey,
-                    data: block.number
+            else {
+                let lastBalance = 0;
+                let lastNonce = 0;
+                const latestRec = results[0][0]
+                if (latestRec) {
+                    lastBalance = latestRec.balance;
+                    lastNonce = latestRec.nonce;
                 }
-            ]);
+                const balance = lastBalance + amount;
+                const nonce = lastNonce + 1;
+
+                const txKey = ds.key(["User", address, "tx", nonce]);
+        
+                transaction.save([
+                    {
+                        key: depositKey,
+                        data: {
+                            blockNumber: block.number,
+                            amount: amount
+                        }
+                    },
+                    {
+                        key: txKey,
+                        data: {
+                            change: -amount,
+                            timestamp: timestamp,
+                            balance: balance,
+                            data: depositKey
+                        },
+                    },
+                    {
+                        key: latestKey,
+                        data: {
+                            nonce: nonce,
+                            timestamp: timestamp,
+                            balance: balance
+                        },
+                    },
+                    {
+                        key: LastProcessedKey,
+                        data: {
+                            lastBlock: block.number
+                        }
+                    }
+                ]);                               
+            }
             return transaction.commit();
+        })
+        .then(() => {
+            // Trigger the next item in the list
+            _currentlyProcessing = null;
+            ProcessList();
         })
         .catch((err) => {
             // TODO: Add retry logic
@@ -106,7 +128,14 @@ function TapCapUserUpdated(user, delta, topup) {
     // todo
 }
 
-exports.WatchTapCapDeposits = () => {
-    TheContract.on("TapCapTopUp", TapCapTopUp);
-    TheContract.on("TapCapUserUpdated", TapCapUserUpdated);
+exports.WatchTapCapDeposits = async () => {
+    const theContract = GetContract();
+
+    // Lets process all events from the last processed block until now
+    const lastProcessedBlock = await GetProcessedBlockNumber();
+    theContract.provider.resetEventsBlock(lastProcessedBlock + 1); // + 1 because we skip the last processed block.
+
+
+    theContract.on("TapCapTopUp", TapCapTopUp);
+    theContract.on("TapCapUserUpdated", TapCapUserUpdated);
 }

@@ -1,5 +1,5 @@
 {
-  "name": "tapcap-manager",
+  "name": "@the-coin/tapcap-manager",
   "version": "0.0.1",
   "description": "The_TapCap_resolution___This_service_is_the_trusted_3rd_party_that_weekly_settles_TapCap_purchases",
   "license": "Apache 2.0",

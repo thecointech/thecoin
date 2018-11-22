@@ -1,13 +1,14 @@
 'use strict';
-
-const Ethers = require('ethers');
+const ConnectWallet = require('@the-coin/utilities/TheContract').ConnectWallet;
+const ethers = require('ethers');
 const encrypted = require('./TapCapManagerWallet');
 let key = require('./secret.json').key;
 
 let TCWallet = null;
 
 async function DecryptWallet(key) {
-	TCWallet = await Ethers.Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
+	TCWallet = await ethers.Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
+	ConnectWallet(TCWallet);
 	return TCWallet;
 }
 

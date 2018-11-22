@@ -2,7 +2,7 @@
 
 const Ethers = require('ethers')
 
-const { ParseSignedMessage } = require('./TheContract');
+const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 
@@ -20,7 +20,9 @@ exports.TapTx = function(request, signedRecord, storeName) {
 		if (myAddress != GetWallet().address)
 			throw("Invalid token signature.  Please contact support");
 	
+		// The root of the tx, all valid data is stored under this key
 		const txKey = datastore.key(["User", clientAddress, "tx", token.nonce]);
+		// We also store the record of who is making the update (user or supplier)
 		const txStoreKey = datastore.key(["User", clientAddress, "tx", token.nonce, "as", storeName]);
 		const latestKey = GetLatestKey(clientAddress);
 	
