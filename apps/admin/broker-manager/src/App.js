@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import "./App.css"
 import "./datetime.css"
 
@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
 
-      <Grid>
+      <Container>
         <Row>
           <Header />
         </Row>
@@ -23,7 +23,7 @@ class App extends Component {
             <Router />
           </Col>
         </Row>
-      </Grid>
+      </Container>
     )
   }
 }

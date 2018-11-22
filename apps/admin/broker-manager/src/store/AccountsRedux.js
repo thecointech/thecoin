@@ -8,7 +8,8 @@ export default (state = {
 }, action) => {
 	switch (action.type) {
 		case SET_ACCOUNT:
-			const newContract = ConnectWallet(action.payload)
+			ConnectWallet(action.payload);
+			const newContract = GetContract();
 			return { 
 				...state, 
 				account: newContract.signer,

@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from "react-redux"
 
-import { setPurchaseIds, setState } from '../store/PurchasesRedux'
+import { setPurchaseIds, setExchangeStep } from '../store/PurchasesRedux'
 import { Dropdown } from 'react-bootstrap';
 
 class Loader extends React.PureComponent {
 
     setPurchaseState = (eventKey, event) => {
-        this.props.setState(eventKey);
+        this.props.setExchangeStep(eventKey);
     }
 
 
@@ -53,7 +53,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
     setIds: (ids) => dispatch(setPurchaseIds(ids)),
-    setState: (state) => dispatch(setState(state)),
+    setExchangeStep: (state) => dispatch(setExchangeStep(state)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Loader)

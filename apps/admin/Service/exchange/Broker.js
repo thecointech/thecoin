@@ -1,7 +1,7 @@
 'use strict';
 
 const ds = require('./Datastore').datastore
-const getAccount = require('./Contract').getAccount
+const ethers = require('ethers')
 
 exports.QueryPurchasesIds = function (state) {
     return new Promise((resolve, reject) => {
@@ -84,44 +84,18 @@ function UpdatePurchase(user, id, state, step, data) {
 exports.ConfirmPurchaseOrder = function (user, id, confirm) {
     return new Promise((resolve, reject) => {
         const message = confirm.timestamp.toString() + id.toString();
-        const account = getAccount(message, confirm.signature);
+        const account = ethers.utils.verifyMessage(message, confirm.signature);
 
         // TODO: Verify that account here is a legitimate brokers account(?)
 
         return UpdatePurchase(user, id, 1, 'confirm', confirm);
-
-        // // Our purchase is registered as a request, to be completed
-        // const key = ds.key(['User', user, 'Purchase', Number(id), "Step", "confirm"])
-        // const entity = {
-        //     key: key,
-        //     data: confirm
-        // }
-        // const update = {
-        //     key: ds.key(['User', user, 'Purchase', Number(id)]),
-        //     data: {
-        //         state: 1
-        //     }
-        // };
-
-        // // For each target, blend to it's output by the calculated weight.
-        // const transaction = ds.transaction();
-
-        // return transaction
-        //     .run()
-        //     .then(() => Promise.all([ds.insert(entity), ds.update(update)]))
-        //     .then(results => {
-        //         // Update/Insert was successful.
-        //         resolve(id);
-        //         return transaction.commit();
-        //     })
-        //     .catch(() => transaction.rollback());
     });
 }
 
 exports.CompletePurchaseOrder = function(user, id, signedComplete) {
     return new Promise((resolve, reject) => {
         
-        const account = getAccount(signedComplete.message, signedComplete.signature);
+        //const account = getAccount(signedComplete.message, signedComplete.signature);
         const complete = JSON.parse(signedComplete.message)
         
         // TODO: Verify that we can regenerate the message from the JSON

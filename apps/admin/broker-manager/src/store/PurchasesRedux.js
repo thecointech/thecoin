@@ -28,7 +28,7 @@ export const setPurchaseIds = (ids) => (dispatch) => {
     });
 };
 
-export const setState = (state) => (dispatch) => {
+export const setExchangeStep = (state) => (dispatch) => {
     if (state !== __lastState) {
         __lastState = state;
 

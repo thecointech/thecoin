@@ -59,14 +59,14 @@ class Complete extends React.Component {
     }
 
     updateExchange = async () => {
-        const currencyCode = 127; // {Number} The integer code for the countries currency
+        const currencyCode = 124; // {Number} The integer code for the countries currency
         const { timestamp } = this.state; // {Number} The timestamp we are requesting valid values for
         const api = new Pricing.RatesApi();
         const data = await api.getConversion(currencyCode, timestamp)
         this.setState({
-            coinBuyRate: data.Buy,
-            coinSellRate: data.Sell,
-            FXRate: data.FxRate,
+            coinBuyRate: data.buy,
+            coinSellRate: data.sell,
+            FXRate: data.fxRate,
         });
     }
 
@@ -117,6 +117,8 @@ class Complete extends React.Component {
             window.alert("Transaction Completed");
         }
         catch (err) {
+            console.error(err);
+            window.alert('Tx Failed: ' + err);
             this.setState({ submitEnabled: true });
         }
         this.setState({ currentAction: "Submit" });

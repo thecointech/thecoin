@@ -43,6 +43,7 @@ exports.confirmCoinPurchase = function (user, id, request) {
       })
       .catch((err) => {
         // TODO
+        console.error(err);
         reject(err);
       })
   });
