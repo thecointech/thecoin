@@ -19,7 +19,7 @@
     },
     "WebApplication1": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "api/values",
       "applicationUrl": "http://thecoincad.tplinkdns.com:9361",
       "environmentVariables": {
