@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/broker-cad",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TheCoin_simple_broker_services___This_sample_API_is_an_example_of_how_to_setup_the_simplest_low_volume_exchange_when_combined_with_the_included_server_code_without_external_dependencies",
   "license": "Apache 2.0",
   "main": "src/index.js",
