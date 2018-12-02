@@ -39,8 +39,9 @@ namespace TapCapSupplier.Client.Model
         /// <param name="timestamp">timestamp (required).</param>
         /// <param name="gpoData">gpoData (required).</param>
         /// <param name="cryptoData">cryptoData (required).</param>
+        /// <param name="supplierAddress">supplierAddress (required).</param>
         /// <param name="token">token (required).</param>
-        public TapCapClientRequest(long? timestamp = default(long?), byte[] gpoData = default(byte[]), byte[] cryptoData = default(byte[]), SignedMessage token = default(SignedMessage))
+        public TapCapClientRequest(long? timestamp = default(long?), byte[] gpoData = default(byte[]), byte[] cryptoData = default(byte[]), string supplierAddress = default(string), SignedMessage token = default(SignedMessage))
         {
             // to ensure "timestamp" is required (not null)
             if (timestamp == null)
@@ -68,6 +69,15 @@ namespace TapCapSupplier.Client.Model
             else
             {
                 this.CryptoData = cryptoData;
+            }
+            // to ensure "supplierAddress" is required (not null)
+            if (supplierAddress == null)
+            {
+                throw new InvalidDataException("supplierAddress is a required property for TapCapClientRequest and cannot be null");
+            }
+            else
+            {
+                this.SupplierAddress = supplierAddress;
             }
             // to ensure "token" is required (not null)
             if (token == null)
@@ -99,6 +109,12 @@ namespace TapCapSupplier.Client.Model
         public byte[] CryptoData { get; set; }
 
         /// <summary>
+        /// Gets or Sets SupplierAddress
+        /// </summary>
+        [DataMember(Name="supplierAddress", EmitDefaultValue=false)]
+        public string SupplierAddress { get; set; }
+
+        /// <summary>
         /// Gets or Sets Token
         /// </summary>
         [DataMember(Name="token", EmitDefaultValue=false)]
@@ -115,6 +131,7 @@ namespace TapCapSupplier.Client.Model
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  GpoData: ").Append(GpoData).Append("\n");
             sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
+            sb.Append("  SupplierAddress: ").Append(SupplierAddress).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -166,6 +183,11 @@ namespace TapCapSupplier.Client.Model
                     this.CryptoData.Equals(input.CryptoData))
                 ) && 
                 (
+                    this.SupplierAddress == input.SupplierAddress ||
+                    (this.SupplierAddress != null &&
+                    this.SupplierAddress.Equals(input.SupplierAddress))
+                ) && 
+                (
                     this.Token == input.Token ||
                     (this.Token != null &&
                     this.Token.Equals(input.Token))
@@ -187,6 +209,8 @@ namespace TapCapSupplier.Client.Model
                     hashCode = hashCode * 59 + this.GpoData.GetHashCode();
                 if (this.CryptoData != null)
                     hashCode = hashCode * 59 + this.CryptoData.GetHashCode();
+                if (this.SupplierAddress != null)
+                    hashCode = hashCode * 59 + this.SupplierAddress.GetHashCode();
                 if (this.Token != null)
                     hashCode = hashCode * 59 + this.Token.GetHashCode();
                 return hashCode;

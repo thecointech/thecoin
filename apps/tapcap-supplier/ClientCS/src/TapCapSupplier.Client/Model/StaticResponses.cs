@@ -36,13 +36,23 @@ namespace TapCapSupplier.Client.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticResponses" /> class.
         /// </summary>
+        /// <param name="address">address (required).</param>
         /// <param name="gpoPdol">gpoPdol (required).</param>
         /// <param name="cryptoPdol">cryptoPdol.</param>
         /// <param name="queries">queries (required).</param>
         /// <param name="responses">responses (required).</param>
         /// <param name="responseParentIndex">responseParentIndex (required).</param>
-        public StaticResponses(byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<byte[]> queries = default(List<byte[]>), List<byte[]> responses = default(List<byte[]>), List<int?> responseParentIndex = default(List<int?>))
+        public StaticResponses(string address = default(string), byte[] gpoPdol = default(byte[]), byte[] cryptoPdol = default(byte[]), List<byte[]> queries = default(List<byte[]>), List<byte[]> responses = default(List<byte[]>), List<int?> responseParentIndex = default(List<int?>))
         {
+            // to ensure "address" is required (not null)
+            if (address == null)
+            {
+                throw new InvalidDataException("address is a required property for StaticResponses and cannot be null");
+            }
+            else
+            {
+                this.Address = address;
+            }
             // to ensure "gpoPdol" is required (not null)
             if (gpoPdol == null)
             {
@@ -83,6 +93,12 @@ namespace TapCapSupplier.Client.Model
         }
         
         /// <summary>
+        /// Gets or Sets Address
+        /// </summary>
+        [DataMember(Name="address", EmitDefaultValue=false)]
+        public string Address { get; set; }
+
+        /// <summary>
         /// Gets or Sets GpoPdol
         /// </summary>
         [DataMember(Name="gpoPdol", EmitDefaultValue=false)]
@@ -120,6 +136,7 @@ namespace TapCapSupplier.Client.Model
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponses {\n");
+            sb.Append("  Address: ").Append(Address).Append("\n");
             sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
             sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
             sb.Append("  Queries: ").Append(Queries).Append("\n");
@@ -160,6 +177,11 @@ namespace TapCapSupplier.Client.Model
 
             return 
                 (
+                    this.Address == input.Address ||
+                    (this.Address != null &&
+                    this.Address.Equals(input.Address))
+                ) && 
+                (
                     this.GpoPdol == input.GpoPdol ||
                     (this.GpoPdol != null &&
                     this.GpoPdol.Equals(input.GpoPdol))
@@ -195,6 +217,8 @@ namespace TapCapSupplier.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                if (this.Address != null)
+                    hashCode = hashCode * 59 + this.Address.GetHashCode();
                 if (this.GpoPdol != null)
                     hashCode = hashCode * 59 + this.GpoPdol.GetHashCode();
                 if (this.CryptoPdol != null)

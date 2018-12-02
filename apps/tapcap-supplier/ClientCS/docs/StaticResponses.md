@@ -3,6 +3,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Address** | **string** |  | 
 **GpoPdol** | **byte[]** |  | 
 **CryptoPdol** | **byte[]** |  | [optional] 
 **Queries** | **List&lt;byte[]&gt;** |  | 
