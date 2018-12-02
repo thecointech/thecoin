@@ -55,6 +55,7 @@ namespace TheApp
 
 			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
 			containerRegistry.RegisterSingleton<Tap.TransactionProcessor>();
+			containerRegistry.RegisterInstance(new DB.Records());
 		}
 
 		/// <summary>

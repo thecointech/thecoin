@@ -144,16 +144,16 @@ namespace TheApp.TheCoin
 			{
 				Task.Run(async () =>
 				{
-					// We simply sign this tx to verify we accepted it
+					// We simply sign this tx to verify we received it
 					// and now we send it on to the manager
 					//var (supplierAddress, purchase) = Signing.GetSignerAndMessage<TapCapSupplier.Client.Model.TapCapBrokerPurchase>(tx.SignedResponse);
 
 					var (m, s) = Signing.GetMessageAndSignature(tx.SignedResponse, TheAccount);
 					var signedReq = new SignedMessage(m, s);
 
-					//var response = await TransactionsApi.TapCapClientAsync(signedReq);
+					var response = await TransactionsApi.TapCapClientAsync(signedReq);
 					// TODO: Verify that we have 
-					//Status = new TapStatus(response);
+					Status = new TapStatus(response);
 				});
 			}
 		}

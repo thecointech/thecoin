@@ -25,6 +25,7 @@ namespace TheApp.Tap
 		private UserAccount UserAccount;
 		private List<PDOL.PDOLItem> GpoPDOL;
 		private byte[] GpoData;
+		private double FiatRequested;
 
 		private QueryWithHistory queryHistory;
 
@@ -48,6 +49,11 @@ namespace TheApp.Tap
 			Task.Run(FetchStaticResponses);
 		}
 
+		internal void PublishStatus(string message)
+		{
+			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count, FiatRequested));
+		}
+
 		async Task FetchStaticResponses()
 		{
 			if (Cache == null && UserAccount != null && UserAccount.Status != null)
@@ -60,6 +66,7 @@ namespace TheApp.Tap
 					Cache = new AppResponseCache(supplierResponses);
 					logger.Info("Loaded Cache: {0}", supplierResponses.ToJson());
 
+					// Cache the Gpo PDOL structure
 					GpoPDOL = PDOL.ParsePDOLItems(supplierResponses.GpoPdol);
 
 					ResetTransaction();
@@ -86,7 +93,7 @@ namespace TheApp.Tap
 			{
 				logger.Trace("{0}  {1}", type.ToString(), BitConverter.ToString(query));
 
-				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count));
+				PublishStatus("Step: " + queryHistory.Queries.Count);
 				queryHistory.Query = query;
 
 				// For all non-crypto-sig requests, we rely on the cache
@@ -110,7 +117,7 @@ namespace TheApp.Tap
 				{
 					logger.Error("Supplier Error: {0}", e.Message);
 					ErrorMessage error = JsonConvert.DeserializeObject<ErrorMessage>(e.ErrorContent);
-					Events.EventSystem.Publish(new Events.TxStatus("ERROR: " + error.Message));
+					PublishStatus("ERROR: " + error.Message);
 
 					var _ = Task.Run(async () =>
 					{
@@ -137,7 +144,7 @@ namespace TheApp.Tap
 				System.Threading.Thread.EndThreadAffinity();
 
 				// See OnDeactivated for notification beep.
-				ValidateTx(cachedTapResponse, ticksAtCompletion, stopwatch);
+				ValidateTx(cachedTapResponse, FiatRequested, ticksAtCompletion, stopwatch);
 				ResetTransaction();
 			}
 			catch (Exception e)
@@ -180,14 +187,14 @@ namespace TheApp.Tap
 			{
 				if (fetchTask.IsCompleted)
 				{
-					Events.EventSystem.Publish(new Events.TxStatus("Fetch Success"));
+					PublishStatus("Fetch Success");
 					break;
 				}
 
 				Task[] taskArray = { fetchTask, Task.Delay(200) };
 				Task.WaitAny(taskArray);
 				var logMsg = String.Format("Step: {0} - {1} ({2}ms)", queryHistory.Queries.Count, msg, i * 200);
-				Events.EventSystem.Publish(new Events.TxStatus(logMsg));
+				PublishStatus(logMsg);
 				logger.Trace(logMsg);
 			}
 		}
@@ -204,7 +211,7 @@ namespace TheApp.Tap
 			if (response == null)
 			{
 				logger.Trace("Not found in cache - Fetching remote response");
-				Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch"));
+				PublishStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch");
 				var responseTask = TapSupplier.GetStaticSingleAsync(queryHistory);
 				WaitFetch(responseTask, "Doing remote fetch");
 				var serverResponse = await responseTask;
@@ -230,7 +237,7 @@ namespace TheApp.Tap
 			var signedMessage = new SignedMessage(m, s);
 
 			logger.Trace("Fetching purchase cert");
-			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert"));
+			PublishStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert");
 
 			var responseTask = TapSupplier.RequestTapCapAsync(signedMessage);
 			WaitFetch(responseTask, "Fetching Cert");
@@ -244,7 +251,7 @@ namespace TheApp.Tap
 				var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
 				return purchase.CryptoCertificate;
 			}
-			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count + " - ERROR (fetch failed)"));
+			PublishStatus("Step: " + queryHistory.Queries.Count + " - ERROR (fetch failed)");
 			logger.Error("Did not receive response to crypto request");
 			return null;
 		}
@@ -255,7 +262,7 @@ namespace TheApp.Tap
 		/// </summary>
 		/// <param name="tapResponse"></param>
 		/// <param name="ticksAtCompletion"></param>
-		private static void ValidateTx(SignedMessage tapResponse, long ticksAtCompletion, Stopwatch stopwatch)
+		private static void ValidateTx(SignedMessage tapResponse, double fiatRequested, long ticksAtCompletion, Stopwatch stopwatch)
 		{
 			// Now check that the whatsit all went swimmingly.
 			if (tapResponse == null)
@@ -271,7 +278,7 @@ namespace TheApp.Tap
 			if (sinceComplete >= 0)
 			{
 				// Check that our disconnection was as expected.
-				Events.EventSystem.Publish(new Events.TxStatus() { SignedResponse = tapResponse });
+				Events.EventSystem.Publish(new Events.TxStatus(tapResponse, fiatRequested));
 			}
 		}
 
@@ -280,11 +287,18 @@ namespace TheApp.Tap
 			// Assuming this is a 
 			var gpoLen = commandApdu[4];
 			GpoData = commandApdu.Skip(5).Take(gpoLen).ToArray();
+
+			// Extract the amount being requested from this PDOL
+			if (PDOL.ParseIntoGpoPDOL(GpoData, GpoPDOL))
+			{
+				FiatRequested = PDOL.GetAmount(GpoPDOL) / 100.0f;
+			}
 		}
 
 		// We assume files are always 
 		public void ResetTransaction()
 		{
+			FiatRequested = -1;
 			Cache.ResetTx();
 			queryHistory = new QueryWithHistory(new byte[0], new List<byte[]>(), new List<byte[]>());
 			cachedTapResponse = null;

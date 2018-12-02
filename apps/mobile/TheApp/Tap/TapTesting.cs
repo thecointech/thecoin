@@ -68,7 +68,7 @@ namespace TheApp.Tap
 
 		public void TestFull()
 		{
-			ulong amt = (ulong)TheCoinTime.Now() % 100 + 5000;
+			ulong amt = (ulong)TheCoinTime.Now() % 100 + 100;
 			//using (var logBlock = NLog.LogManager.DisableLogging())
 			{
 				Task.Run(() =>

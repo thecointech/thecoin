@@ -5,7 +5,7 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="TheApp.Views.History"
 			 Title="History">
-	<ListView x:Name="EmployeeView">
+	<ListView x:Name="transactionView">
 		<ListView.ItemTemplate>
 			<DataTemplate>
 				<TextCell Text="{Binding DisplayName}" />

@@ -11,6 +11,8 @@ namespace TheApp.ViewModels
         public HistoryViewModel()
         {
 
-        }
+			//ObservableCollection<DB.CompletedTx> employees = new ObservableCollection<Employee>();
+
+		}
 	}
 }

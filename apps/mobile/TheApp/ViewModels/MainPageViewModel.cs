@@ -108,7 +108,8 @@ namespace TheApp.ViewModels
 			}
 			else if (status.Status != null)
 			{
-				Logs = status.Status;
+				string res = String.Format("Paying ${0}: {1}", status.Amount, status.Status);
+				Logs = res;
 				TestEnabled = false;
 			}
 			else
