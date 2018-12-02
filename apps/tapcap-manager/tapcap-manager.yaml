@@ -14,8 +14,6 @@ tags:
   description: "The: TapCap manager is responsible for resolving TapCap transactions, transfering the appropriate coin from seller to buyer weekly"
 - name: "Status"
   description: "Users may query their account status"
-- name: "Unlock"
-  description: "Temp method for unlocking account till we find something better (NOT FOR PUBLIC USE)"
 
 # ---------------------------------------------------------------- #
 

@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapQueryResponse();
+    instance = new @TheCoinTapcapManager.TapCapQueryResponse();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,19 +50,19 @@
   describe('TapCapQueryResponse', function() {
     it('should create an instance of TapCapQueryResponse', function() {
       // uncomment below and update the code to test TapCapQueryResponse
-      //var instane = new TapcapManager.TapCapQueryResponse();
-      //expect(instance).to.be.a(TapcapManager.TapCapQueryResponse);
+      //var instane = new @TheCoinTapcapManager.TapCapQueryResponse();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapQueryResponse);
     });
 
     it('should have the property balance (base name: "balance")', function() {
       // uncomment below and update the code to test the property balance
-      //var instane = new TapcapManager.TapCapQueryResponse();
+      //var instane = new @TheCoinTapcapManager.TapCapQueryResponse();
       //expect(instance).to.be();
     });
 
     it('should have the property token (base name: "token")', function() {
       // uncomment below and update the code to test the property token
-      //var instane = new TapcapManager.TapCapQueryResponse();
+      //var instane = new @TheCoinTapcapManager.TapCapQueryResponse();
       //expect(instance).to.be();
     });
 

@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.StatusApi();
+    instance = new @TheCoinTapcapManager.StatusApi();
   });
 
   var getProperty = function(object, getter, property) {

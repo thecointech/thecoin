@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapToken();
+    instance = new @TheCoinTapcapManager.TapCapToken();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,31 +50,31 @@
   describe('TapCapToken', function() {
     it('should create an instance of TapCapToken', function() {
       // uncomment below and update the code to test TapCapToken
-      //var instane = new TapcapManager.TapCapToken();
-      //expect(instance).to.be.a(TapcapManager.TapCapToken);
+      //var instane = new @TheCoinTapcapManager.TapCapToken();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapToken);
     });
 
     it('should have the property clientAccount (base name: "clientAccount")', function() {
       // uncomment below and update the code to test the property clientAccount
-      //var instane = new TapcapManager.TapCapToken();
+      //var instane = new @TheCoinTapcapManager.TapCapToken();
       //expect(instance).to.be();
     });
 
     it('should have the property availableBalance (base name: "availableBalance")', function() {
       // uncomment below and update the code to test the property availableBalance
-      //var instane = new TapcapManager.TapCapToken();
+      //var instane = new @TheCoinTapcapManager.TapCapToken();
       //expect(instance).to.be();
     });
 
-    it('should have the property transactionId (base name: "transactionId")', function() {
-      // uncomment below and update the code to test the property transactionId
-      //var instane = new TapcapManager.TapCapToken();
+    it('should have the property nonce (base name: "nonce")', function() {
+      // uncomment below and update the code to test the property nonce
+      //var instane = new @TheCoinTapcapManager.TapCapToken();
       //expect(instance).to.be();
     });
 
     it('should have the property timestamp (base name: "timestamp")', function() {
       // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapToken();
+      //var instane = new @TheCoinTapcapManager.TapCapToken();
       //expect(instance).to.be();
     });
 

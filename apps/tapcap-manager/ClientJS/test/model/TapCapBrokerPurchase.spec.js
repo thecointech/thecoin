@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapBrokerPurchase();
+    instance = new @TheCoinTapcapManager.TapCapBrokerPurchase();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,31 +50,31 @@
   describe('TapCapBrokerPurchase', function() {
     it('should create an instance of TapCapBrokerPurchase', function() {
       // uncomment below and update the code to test TapCapBrokerPurchase
-      //var instane = new TapcapManager.TapCapBrokerPurchase();
-      //expect(instance).to.be.a(TapcapManager.TapCapBrokerPurchase);
+      //var instane = new @TheCoinTapcapManager.TapCapBrokerPurchase();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapBrokerPurchase);
     });
 
     it('should have the property signedRequest (base name: "signedRequest")', function() {
       // uncomment below and update the code to test the property signedRequest
-      //var instane = new TapcapManager.TapCapBrokerPurchase();
+      //var instane = new @TheCoinTapcapManager.TapCapBrokerPurchase();
       //expect(instance).to.be();
     });
 
     it('should have the property fxRate (base name: "FxRate")', function() {
       // uncomment below and update the code to test the property fxRate
-      //var instane = new TapcapManager.TapCapBrokerPurchase();
+      //var instane = new @TheCoinTapcapManager.TapCapBrokerPurchase();
       //expect(instance).to.be();
     });
 
     it('should have the property coinCharge (base name: "coinCharge")', function() {
       // uncomment below and update the code to test the property coinCharge
-      //var instane = new TapcapManager.TapCapBrokerPurchase();
+      //var instane = new @TheCoinTapcapManager.TapCapBrokerPurchase();
       //expect(instance).to.be();
     });
 
     it('should have the property cryptoCertificate (base name: "cryptoCertificate")', function() {
       // uncomment below and update the code to test the property cryptoCertificate
-      //var instane = new TapcapManager.TapCapBrokerPurchase();
+      //var instane = new @TheCoinTapcapManager.TapCapBrokerPurchase();
       //expect(instance).to.be();
     });
 

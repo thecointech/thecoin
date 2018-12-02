@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TransactionsApi();
+    instance = new @TheCoinTapcapManager.TransactionsApi();
   });
 
   var getProperty = function(object, getter, property) {
@@ -48,6 +48,16 @@
   }
 
   describe('TransactionsApi', function() {
+    describe('deleteBroker', function() {
+      it('should call deleteBroker successfully', function(done) {
+        //uncomment below and update the code to test deleteBroker
+        //instance.deleteBroker(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('tapCapBroker', function() {
       it('should call tapCapBroker successfully', function(done) {
         //uncomment below and update the code to test tapCapBroker

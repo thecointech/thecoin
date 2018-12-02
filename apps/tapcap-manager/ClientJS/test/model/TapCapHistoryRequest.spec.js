@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapHistoryRequest();
+    instance = new @TheCoinTapcapManager.TapCapHistoryRequest();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,25 +50,25 @@
   describe('TapCapHistoryRequest', function() {
     it('should create an instance of TapCapHistoryRequest', function() {
       // uncomment below and update the code to test TapCapHistoryRequest
-      //var instane = new TapcapManager.TapCapHistoryRequest();
-      //expect(instance).to.be.a(TapcapManager.TapCapHistoryRequest);
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryRequest();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapHistoryRequest);
     });
 
     it('should have the property fromTimestamp (base name: "fromTimestamp")', function() {
       // uncomment below and update the code to test the property fromTimestamp
-      //var instane = new TapcapManager.TapCapHistoryRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property untilTimestamp (base name: "untilTimestamp")', function() {
       // uncomment below and update the code to test the property untilTimestamp
-      //var instane = new TapcapManager.TapCapHistoryRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property msgTimestamp (base name: "msgTimestamp")', function() {
       // uncomment below and update the code to test the property msgTimestamp
-      //var instane = new TapcapManager.TapCapHistoryRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryRequest();
       //expect(instance).to.be();
     });
 

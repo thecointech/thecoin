@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.SignedMessage();
+    instance = new @TheCoinTapcapManager.SignedMessage();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,19 +50,19 @@
   describe('SignedMessage', function() {
     it('should create an instance of SignedMessage', function() {
       // uncomment below and update the code to test SignedMessage
-      //var instane = new TapcapManager.SignedMessage();
-      //expect(instance).to.be.a(TapcapManager.SignedMessage);
+      //var instane = new @TheCoinTapcapManager.SignedMessage();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.SignedMessage);
     });
 
     it('should have the property message (base name: "message")', function() {
       // uncomment below and update the code to test the property message
-      //var instane = new TapcapManager.SignedMessage();
+      //var instane = new @TheCoinTapcapManager.SignedMessage();
       //expect(instance).to.be();
     });
 
     it('should have the property signature (base name: "signature")', function() {
       // uncomment below and update the code to test the property signature
-      //var instane = new TapcapManager.SignedMessage();
+      //var instane = new @TheCoinTapcapManager.SignedMessage();
       //expect(instance).to.be();
     });
 

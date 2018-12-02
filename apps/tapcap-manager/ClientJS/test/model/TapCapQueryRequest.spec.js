@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapQueryRequest();
+    instance = new @TheCoinTapcapManager.TapCapQueryRequest();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,13 +50,13 @@
   describe('TapCapQueryRequest', function() {
     it('should create an instance of TapCapQueryRequest', function() {
       // uncomment below and update the code to test TapCapQueryRequest
-      //var instane = new TapcapManager.TapCapQueryRequest();
-      //expect(instance).to.be.a(TapcapManager.TapCapQueryRequest);
+      //var instane = new @TheCoinTapcapManager.TapCapQueryRequest();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapQueryRequest);
     });
 
     it('should have the property timestamp (base name: "timestamp")', function() {
       // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapQueryRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapQueryRequest();
       //expect(instance).to.be();
     });
 

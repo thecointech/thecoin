@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.FXRate();
+    instance = new @TheCoinTapcapManager.FXRate();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,43 +50,43 @@
   describe('FXRate', function() {
     it('should create an instance of FXRate', function() {
       // uncomment below and update the code to test FXRate
-      //var instane = new TapcapManager.FXRate();
-      //expect(instance).to.be.a(TapcapManager.FXRate);
+      //var instane = new @TheCoinTapcapManager.FXRate();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.FXRate);
     });
 
     it('should have the property target (base name: "target")', function() {
       // uncomment below and update the code to test the property target
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property buy (base name: "buy")', function() {
       // uncomment below and update the code to test the property buy
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property sell (base name: "sell")', function() {
       // uncomment below and update the code to test the property sell
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property fxRate (base name: "fxRate")', function() {
       // uncomment below and update the code to test the property fxRate
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property validFrom (base name: "validFrom")', function() {
       // uncomment below and update the code to test the property validFrom
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 
     it('should have the property validTill (base name: "validTill")', function() {
       // uncomment below and update the code to test the property validTill
-      //var instane = new TapcapManager.FXRate();
+      //var instane = new @TheCoinTapcapManager.FXRate();
       //expect(instance).to.be();
     });
 

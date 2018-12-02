@@ -3,6 +3,17 @@
 var utils = require('../utils/writer.js');
 var Transactions = require('../service/TransactionsService');
 
+module.exports.deleteBroker = function deleteBroker (req, res, next) {
+  var request = req.swagger.params['request'].value;
+  Transactions.deleteBroker(request)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.tapCapBroker = function tapCapBroker (req, res, next) {
   var request = req.swagger.params['request'].value;
   Transactions.tapCapBroker(request)

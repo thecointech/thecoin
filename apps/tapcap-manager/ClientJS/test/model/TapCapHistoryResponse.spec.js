@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapHistoryResponse();
+    instance = new @TheCoinTapcapManager.TapCapHistoryResponse();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,13 +50,13 @@
   describe('TapCapHistoryResponse', function() {
     it('should create an instance of TapCapHistoryResponse', function() {
       // uncomment below and update the code to test TapCapHistoryResponse
-      //var instane = new TapcapManager.TapCapHistoryResponse();
-      //expect(instance).to.be.a(TapcapManager.TapCapHistoryResponse);
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryResponse();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapHistoryResponse);
     });
 
     it('should have the property history (base name: "history")', function() {
       // uncomment below and update the code to test the property history
-      //var instane = new TapcapManager.TapCapHistoryResponse();
+      //var instane = new @TheCoinTapcapManager.TapCapHistoryResponse();
       //expect(instance).to.be();
     });
 

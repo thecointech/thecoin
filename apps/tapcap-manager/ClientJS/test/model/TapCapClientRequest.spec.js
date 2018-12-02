@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.TapCapClientRequest();
+    instance = new @TheCoinTapcapManager.TapCapClientRequest();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,31 +50,37 @@
   describe('TapCapClientRequest', function() {
     it('should create an instance of TapCapClientRequest', function() {
       // uncomment below and update the code to test TapCapClientRequest
-      //var instane = new TapcapManager.TapCapClientRequest();
-      //expect(instance).to.be.a(TapcapManager.TapCapClientRequest);
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.TapCapClientRequest);
     });
 
     it('should have the property timestamp (base name: "timestamp")', function() {
       // uncomment below and update the code to test the property timestamp
-      //var instane = new TapcapManager.TapCapClientRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property gpoData (base name: "gpoData")', function() {
       // uncomment below and update the code to test the property gpoData
-      //var instane = new TapcapManager.TapCapClientRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property cryptoData (base name: "cryptoData")', function() {
       // uncomment below and update the code to test the property cryptoData
-      //var instane = new TapcapManager.TapCapClientRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property supplierAddress (base name: "supplierAddress")', function() {
+      // uncomment below and update the code to test the property supplierAddress
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 
     it('should have the property token (base name: "token")', function() {
       // uncomment below and update the code to test the property token
-      //var instane = new TapcapManager.TapCapClientRequest();
+      //var instane = new @TheCoinTapcapManager.TapCapClientRequest();
       //expect(instance).to.be();
     });
 

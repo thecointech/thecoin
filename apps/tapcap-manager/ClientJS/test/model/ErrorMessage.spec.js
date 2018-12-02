@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.TapcapManager);
+    factory(root.expect, root.@TheCoinTapcapManager);
   }
-}(this, function(expect, TapcapManager) {
+}(this, function(expect, @TheCoinTapcapManager) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new TapcapManager.ErrorMessage();
+    instance = new @TheCoinTapcapManager.ErrorMessage();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,25 +50,25 @@
   describe('ErrorMessage', function() {
     it('should create an instance of ErrorMessage', function() {
       // uncomment below and update the code to test ErrorMessage
-      //var instane = new TapcapManager.ErrorMessage();
-      //expect(instance).to.be.a(TapcapManager.ErrorMessage);
+      //var instane = new @TheCoinTapcapManager.ErrorMessage();
+      //expect(instance).to.be.a(@TheCoinTapcapManager.ErrorMessage);
     });
 
     it('should have the property code (base name: "code")', function() {
       // uncomment below and update the code to test the property code
-      //var instane = new TapcapManager.ErrorMessage();
+      //var instane = new @TheCoinTapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 
     it('should have the property id (base name: "id")', function() {
       // uncomment below and update the code to test the property id
-      //var instane = new TapcapManager.ErrorMessage();
+      //var instane = new @TheCoinTapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 
     it('should have the property message (base name: "message")', function() {
       // uncomment below and update the code to test the property message
-      //var instane = new TapcapManager.ErrorMessage();
+      //var instane = new @TheCoinTapcapManager.ErrorMessage();
       //expect(instance).to.be();
     });
 
