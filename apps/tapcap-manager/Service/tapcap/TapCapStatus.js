@@ -26,7 +26,7 @@ exports.GetStatus = async (address, timestamp) => {
 	// TODO: Only build the token if identity is verified
 	const tapCapTokenData = {
 		clientAccount: address,
-		availableBalance: Math.floor(latest.balance / 2),
+		availableBalance: Math.floor(latest.balance),
 		nonce: latest.nonce + 1,
 		timestamp: Date.now()
 	}
@@ -37,6 +37,8 @@ exports.GetStatus = async (address, timestamp) => {
 		signature: tokenSig
 	};
 
+	// TODO: As we return the complete
+	// balance, there is no need to have a separate return here
 	const response = {
 		balance: latest.balance,
 		token: TapCapToken

@@ -16,7 +16,7 @@ async function GetProcessedBlockNumber() {
     if (lastProcessedBlock == 0) {
         lastProcessedBlock = contractInitBlock;
         const settings = await ds.get(LastProcessedKey);
-        if (settings != null && settings.length > 0) {
+        if (settings != null && settings.length > 0 && settings[0] != undefined) {
             lastProcessedBlock = settings[0].lastBlock;
         }
     }
@@ -40,13 +40,14 @@ async function TapCapTopUp(address, topup, event) {
 
 async function doTapCapTopUp(address, topup, event) {
 
-    //const lastProcessed = await GetProcessedBlockNumber();
     const amount = topup.toNumber();
     const block = await event.getBlock();
     const tx = await event.getTransaction();
     const timestamp = block.timestamp * 1000;
 
     console.log("Processing deposit tx: " + tx.hash);
+
+    lastProcessedBlock = Math.max(lastProcessedBlock, block.number);
 
     // // Double check we do not miss events, or double-process them
     // if (lastProcessed >= block.number) {
@@ -74,6 +75,7 @@ async function doTapCapTopUp(address, topup, event) {
                 }
                 const balance = lastBalance + amount;
                 const nonce = lastNonce + 1;
+                const latestBlock = Math.max()
 
                 const txKey = ds.key(["User", address, "tx", nonce]);
         
@@ -105,7 +107,7 @@ async function doTapCapTopUp(address, topup, event) {
                     {
                         key: LastProcessedKey,
                         data: {
-                            lastBlock: block.number
+                            lastBlock: lastProcessedBlock
                         }
                     }
                 ]);                               
@@ -115,6 +117,7 @@ async function doTapCapTopUp(address, topup, event) {
         .then(() => {
             // Trigger the next item in the list
             _currentlyProcessing = null;
+            console.log('Tx successfully inserted');
             ProcessList();
         })
         .catch((err) => {
