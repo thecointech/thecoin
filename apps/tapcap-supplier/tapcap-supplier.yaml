@@ -169,12 +169,15 @@ definitions:
 
   StaticResponses:
     required:
+      - address
       - gpoPdol
       - cryptPdol
       - queries
       - responses
       - responseParentIndex
     properties:
+      address:
+        type: string # The address of the this supplier
       gpoPdol:
         type: string
         format: byte

@@ -97,11 +97,13 @@ namespace TapCapSupplier.Server
 
 			services.AddSingleton(AccountFactory.Load);
 			services.AddSingleton<IEmvCard, EmvCard>();
+			services.AddSingleton<IEmvCard, EmvCard>();
 			services.AddTransient<IRatesApi, RatesApi>();
 			services.AddTransient<ITransactionsApi, TransactionsApi>();
 
 			services.AddSingleton<HandleTx>();
 			services.AddSingleton<ExchangeRateService>();
+			services.AddSingleton<DB.Records>();
 			services.AddHostedService<ExchangeRateUpdateService>();
 		}
 

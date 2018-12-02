@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheUtils", "..\..\the-utili
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapCapManager.Client", "..\..\tapcap-manager\ClientCS\src\TapCapManager.Client\TapCapManager.Client.csproj", "{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapCapSupplier.Tests", "TapCapSupplier.Tests\TapCapSupplier.Tests.csproj", "{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapCapSupplier.Tests", "TapCapSupplier.Tests\TapCapSupplier.Tests.csproj", "{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheBankAPI", "..\..\the-utilities\TheBankAPI\TheBankAPI\TheBankAPI.csproj", "{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5637833-58F2-4201-9AFC-A0EC1F6E78DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{408E6EDE-FE70-4120-9549-13DB061C44E0} = {DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}
 		{76E10CBF-A2B8-47A0-B86D-6B373F420600} = {DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}
 		{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085} = {DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}
+		{7D3E3A42-3D48-43B3-8294-166CF2B7D91A} = {DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2659689C-128B-464C-9D10-E922A545BECB}

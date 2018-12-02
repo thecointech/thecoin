@@ -20,9 +20,13 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly IEmvCard Card;
 		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
+		private readonly DB.Records records;
+		private readonly TheBankAPI.ITransactionVerifier verifier;
 
-
-		//private List<PDOL.PDOLItem> GpoPDOL;
+		// TODO: Trivial validation of client nonces
+		// Validate known clients, and fetch validation
+		// for unknown clients (once we have unknown clients)
+		private Dictionary<string, uint> ClientNonces = new Dictionary<string, uint>();
 
 		private List<PDOL.PDOLItem> _CryptoPDOL;
 		private List<PDOL.PDOLItem> CryptoPDOL
@@ -42,15 +46,17 @@ namespace TapCapSupplier.Server.TapCap
 		/// </summary>
 		/// <param name="fxRates"></param>
 		/// <param name="card"></param>
-		/// <param name="account"></param>
 		/// <param name="manager"></param>
-		public HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account)
+		/// <param name="account"></param>
+		/// <param name="records"></param>
+		public HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account, DB.Records records, TheBankAPI.ITransactionVerifier verifier)
 		{
 			FxRates = fxRates;
 			Card = card;
 			TapCapManager = manager;
 			TheAccount = account;
-
+			this.records = records;
+			this.verifier = verifier;
 		}
 
 		/// <summary>
@@ -142,39 +148,54 @@ namespace TapCapSupplier.Server.TapCap
 			};
 
 			var signedTx = Signing.SignMessage<SignedMessage>(tx, TheAccount);
-			Task.Run(async () => await ValidateAndFinalizeTx(tx));
+			Task.Run(async () => await ValidateAndFinalizeTx(tx, txCents, clientAddress));
 
 			logger.Trace(" !-!-!returning tx in: {0}ms !-!-!", stopwatch.ElapsedMilliseconds);
 
 			return signedTx;
 		}
 
-		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase)
+		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase, ulong txCents, string clientAddress)
 		{
 			// First, we have to validate that the Tx went through
-			var validation = await ValidateTx(purchase);
-			if (validation != null)
+			var matchedTx = await verifier.MatchTx(txCents);
+			if (matchedTx == null)
 			{
-				// Sign validation and submit to manager.
-				var (message, signature) = Signing.GetMessageAndSignature(validation, TheAccount);
-				var signedValidation = new TapCapManager.Client.Model.SignedMessage(message, signature);
-				var result = await TapCapManager.TapCapBrokerAsync(signedValidation);
+				records.AddUnCompleted();
+				await SubmitRollbackToManager();
+			}
+			else
+			{
+				var cp = PackageInterop.ConvertTo<TapCapManager.Client.Model.TapCapBrokerPurchase>(purchase);
+				var validation = new TapCapManager.Client.Model.TapCapBrokerComplete(cp.SignedRequest, cp.FxRate, cp.CoinCharge, "TODO");
+				records.AddCompleted(validation, clientAddress, txCents / 100.0);
 
-				var fxRate = purchase.FxRate;
-				var fiat = TheContract.ToHuman((ulong)(purchase.CoinCharge * fxRate.Sell.Value * fxRate._FxRate));
-				var coin = TheContract.ToHuman((ulong)purchase.CoinCharge.Value);
-				logger.Info("Completed tx: ${0} -> c{1}: {2}", fiat, coin, result.ToString());
+				await SubmitToManager(validation);
+				LogTx(txCents, (ulong)purchase.CoinCharge.Value);
 			}
 		}
 
-		async Task<TapCapManager.Client.Model.TapCapBrokerComplete> ValidateTx(TapCapBrokerPurchase purchase)
+		async Task SubmitRollbackToManager()
 		{
-			// TODO: The last major feature for this system!!!!
-			await Task.Delay(3000);
-			// We assume the purchase completed successfully
-			var cp = PackageInterop.ConvertTo<TapCapManager.Client.Model.TapCapBrokerPurchase>(purchase);
-			var validation = new TapCapManager.Client.Model.TapCapBrokerComplete(cp.SignedRequest, cp.FxRate, cp.CoinCharge, "TODO");
-			return validation;
+			//TapCapManager
+		}
+
+		async Task SubmitToManager(TapCapManager.Client.Model.TapCapBrokerComplete purchase)
+		{
+			// Sign validation and submit to manager.
+			var (message, signature) = Signing.GetMessageAndSignature(purchase, TheAccount);
+			var signedValidation = new TapCapManager.Client.Model.SignedMessage(message, signature);
+			var result = await TapCapManager.TapCapBrokerAsync(signedValidation);
+			if (result.Code.Value != 0)
+				logger.Error("OnTx: {0}", result.Message);
+			// What to do about this?
+		}
+
+		void LogTx(ulong txCents, ulong txCoin)
+		{
+			var fiat = txCents / 100.0;
+			var coin = TheContract.ToHuman(txCoin);
+			logger.Info("Completed tx: ${0} -> c{1}", fiat, coin);
 		}
 	}
 }

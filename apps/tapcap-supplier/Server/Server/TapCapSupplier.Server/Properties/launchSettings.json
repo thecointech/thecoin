@@ -1,13 +1,13 @@
-﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:61788",
       "sslPort": 44301
     }
   },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
@@ -19,12 +19,11 @@
     },
     "WebApplication1": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "api/values",
-      "applicationUrl": "http://thecoincad.tplinkdns.com:9361",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://thecoincad.tplinkdns.com:9361"
     }
   }
 }
