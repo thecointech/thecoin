@@ -38,6 +38,54 @@ export default class TransactionsApi {
 
 
     /**
+     * Broker: Notify of an incomplete or failed transaction
+     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ErrorMessage} and HTTP response
+     */
+    deleteBrokerWithHttpInfo(signedMessage) {
+      let postBody = signedMessage;
+
+      // verify the required parameter 'signedMessage' is set
+      if (signedMessage === undefined || signedMessage === null) {
+        throw new Error("Missing the required parameter 'signedMessage' when calling deleteBroker");
+      }
+
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = ErrorMessage;
+
+      return this.apiClient.callApi(
+        '/tap/broker', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * Broker: Notify of an incomplete or failed transaction
+     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ErrorMessage}
+     */
+    deleteBroker(signedMessage) {
+      return this.deleteBrokerWithHttpInfo(signedMessage)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
      * Broker: Register new TapCap transaction
      * @param {module:model/SignedMessage} signedMessage TapCap exchange request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ErrorMessage} and HTTP response

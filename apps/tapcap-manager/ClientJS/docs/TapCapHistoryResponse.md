@@ -1,4 +1,4 @@
-# TapcapManager.TapCapHistoryResponse
+# @TheCoinTapcapManager.TapCapHistoryResponse
 
 ## Properties
 Name | Type | Description | Notes

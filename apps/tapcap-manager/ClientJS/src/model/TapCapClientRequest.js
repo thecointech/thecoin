@@ -26,11 +26,12 @@ class TapCapClientRequest {
      * @param timestamp {Number} 
      * @param gpoData {Blob} 
      * @param cryptoData {Blob} 
+     * @param supplierAddress {String} 
      * @param token {module:model/SignedMessage} 
      */
-    constructor(timestamp, gpoData, cryptoData, token) { 
+    constructor(timestamp, gpoData, cryptoData, supplierAddress, token) { 
         
-        TapCapClientRequest.initialize(this, timestamp, gpoData, cryptoData, token);
+        TapCapClientRequest.initialize(this, timestamp, gpoData, cryptoData, supplierAddress, token);
     }
 
     /**
@@ -38,10 +39,11 @@ class TapCapClientRequest {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, timestamp, gpoData, cryptoData, token) { 
+    static initialize(obj, timestamp, gpoData, cryptoData, supplierAddress, token) { 
         obj['timestamp'] = timestamp;
         obj['gpoData'] = gpoData;
         obj['cryptoData'] = cryptoData;
+        obj['supplierAddress'] = supplierAddress;
         obj['token'] = token;
     }
 
@@ -64,6 +66,9 @@ class TapCapClientRequest {
             }
             if (data.hasOwnProperty('cryptoData')) {
                 obj['cryptoData'] = ApiClient.convertToType(data['cryptoData'], 'Blob');
+            }
+            if (data.hasOwnProperty('supplierAddress')) {
+                obj['supplierAddress'] = ApiClient.convertToType(data['supplierAddress'], 'String');
             }
             if (data.hasOwnProperty('token')) {
                 obj['token'] = SignedMessage.constructFromObject(data['token']);
@@ -89,6 +94,11 @@ TapCapClientRequest.prototype['gpoData'] = undefined;
  * @member {Blob} cryptoData
  */
 TapCapClientRequest.prototype['cryptoData'] = undefined;
+
+/**
+ * @member {String} supplierAddress
+ */
+TapCapClientRequest.prototype['supplierAddress'] = undefined;
 
 /**
  * @member {module:model/SignedMessage} token

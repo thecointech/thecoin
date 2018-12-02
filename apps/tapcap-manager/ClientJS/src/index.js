@@ -25,9 +25,9 @@ import TapCapHistoryResponse from './model/TapCapHistoryResponse';
 import TapCapQueryRequest from './model/TapCapQueryRequest';
 import TapCapQueryResponse from './model/TapCapQueryResponse';
 import TapCapToken from './model/TapCapToken';
+import TapCapUnCompleted from './model/TapCapUnCompleted';
 import StatusApi from './api/StatusApi';
 import TransactionsApi from './api/TransactionsApi';
-import UnlockApi from './api/UnlockApi';
 
 
 /**
@@ -36,9 +36,9 @@ import UnlockApi from './api/UnlockApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var TapcapManager = require('index'); // See note below*.
-* var xxxSvc = new TapcapManager.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new TapcapManager.Yyy(); // Construct a model instance.
+* var @TheCoinTapcapManager = require('index'); // See note below*.
+* var xxxSvc = new @TheCoinTapcapManager.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new @TheCoinTapcapManager.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -50,8 +50,8 @@ import UnlockApi from './api/UnlockApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new TapcapManager.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new TapcapManager.Yyy(); // Construct a model instance.
+* var xxxSvc = new @TheCoinTapcapManager.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new @TheCoinTapcapManager.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -141,6 +141,12 @@ export {
     TapCapToken,
 
     /**
+     * The TapCapUnCompleted model constructor.
+     * @property {module:model/TapCapUnCompleted}
+     */
+    TapCapUnCompleted,
+
+    /**
     * The StatusApi service constructor.
     * @property {module:api/StatusApi}
     */
@@ -150,11 +156,5 @@ export {
     * The TransactionsApi service constructor.
     * @property {module:api/TransactionsApi}
     */
-    TransactionsApi,
-
-    /**
-    * The UnlockApi service constructor.
-    * @property {module:api/UnlockApi}
-    */
-    UnlockApi
+    TransactionsApi
 };

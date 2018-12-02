@@ -1,4 +1,4 @@
-# TapcapManager.FXRate
+# @TheCoinTapcapManager.FXRate
 
 ## Properties
 Name | Type | Description | Notes

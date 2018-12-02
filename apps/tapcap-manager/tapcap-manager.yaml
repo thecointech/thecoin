@@ -50,6 +50,28 @@ paths:
           schema:
             $ref: "../common.yaml#/definitions/ErrorMessage"
 
+    delete:
+      tags:
+        - Transactions
+      summary: "Broker: Notify of an incomplete or failed transaction"
+      operationId: "deleteBroker"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapUnCompleted )
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Transaction Result
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+
   /tap/client:
     post:
       tags:
@@ -121,27 +143,7 @@ paths:
           schema:
             $ref: "#/definitions/TapCapHistoryResponse"
 
-  # a simple endpoint to unlock the wallet included with this thingys
-  # TODO: Find a better - or more automated way - of getting this on the server
-  /unlock:
-    post:
-      tags:
-        - Unlock
-      operationId: "unlock"
-      parameters:
-        - in: header
-          name: X-Request-Key
-          required: true
-          type: string
-      responses:
-        405:
-          description: "Invalid input"
-          schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
-        200:
-          description: OK
-          schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+
 
 definitions:
   # Query the Manager for a clients TapCap balance
@@ -225,6 +227,8 @@ definitions:
     $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
   TapCapBrokerComplete:
     $ref: '../common.yaml#/definitions/TapCapBrokerComplete'
+  TapCapUnCompleted:
+    $ref: '../common.yaml#/definitions/TapCapUnCompleted'
   FXRate:
     $ref: '../common.yaml#/definitions/FXRate'
 

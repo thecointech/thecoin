@@ -1,4 +1,4 @@
-# TapcapManager.UnlockApi
+# @TheCoinTapcapManager.UnlockApi
 
 All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
@@ -15,9 +15,9 @@ Method | HTTP request | Description
 
 ### Example
 ```javascript
-import TapcapManager from 'tapcap-manager';
+import @TheCoinTapcapManager from '@the-coin/tapcap-manager';
 
-let apiInstance = new TapcapManager.UnlockApi();
+let apiInstance = new @TheCoinTapcapManager.UnlockApi();
 let xRequestKey = "xRequestKey_example"; // String | 
 apiInstance.unlock(xRequestKey).then((data) => {
   console.log('API called successfully. Returned data: ' + data);

@@ -25,6 +25,27 @@ namespace TapCapManager.Client.Api
     {
         #region Synchronous Operations
         /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>ErrorMessage</returns>
+        ErrorMessage DeleteBroker (SignedMessage signedMessage);
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        ApiResponse<ErrorMessage> DeleteBrokerWithHttpInfo (SignedMessage signedMessage);
+        /// <summary>
         /// Broker: Register new TapCap transaction
         /// </summary>
         /// <remarks>
@@ -68,6 +89,27 @@ namespace TapCapManager.Client.Api
         ApiResponse<TapCapQueryResponse> TapCapClientWithHttpInfo (SignedMessage signedMessage);
         #endregion Synchronous Operations
         #region Asynchronous Operations
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>Task of ErrorMessage</returns>
+        System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (SignedMessage signedMessage);
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (SignedMessage signedMessage);
         /// <summary>
         /// Broker: Register new TapCap transaction
         /// </summary>
@@ -208,6 +250,155 @@ namespace TapCapManager.Client.Api
         public void AddDefaultHeader(string key, string value)
         {
             this.Configuration.AddDefaultHeader(key, value);
+        }
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction 
+        /// </summary>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>ErrorMessage</returns>
+        public ErrorMessage DeleteBroker (SignedMessage signedMessage)
+        {
+             ApiResponse<ErrorMessage> localVarResponse = DeleteBrokerWithHttpInfo(signedMessage);
+             return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction 
+        /// </summary>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>ApiResponse of ErrorMessage</returns>
+        public ApiResponse< ErrorMessage > DeleteBrokerWithHttpInfo (SignedMessage signedMessage)
+        {
+            // verify the required parameter 'signedMessage' is set
+            if (signedMessage == null)
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionsApi->DeleteBroker");
+
+            var localVarPath = "./tap/broker";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new List<KeyValuePair<String, String>>();
+            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            var localVarFileParams = new Dictionary<String, FileParameter>();
+            Object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            String[] localVarHttpContentTypes = new String[] {
+                "application/json"
+            };
+            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            String[] localVarHttpHeaderAccepts = new String[] {
+                "application/json"
+            };
+            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = signedMessage; // byte array
+            }
+
+
+            // make the HTTP request
+            IRestResponse localVarResponse = (IRestResponse) this.Configuration.ApiClient.CallApi(localVarPath,
+                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            int localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("DeleteBroker", localVarResponse);
+                if (exception != null) throw exception;
+            }
+
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
+        }
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction 
+        /// </summary>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>Task of ErrorMessage</returns>
+        public async System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (SignedMessage signedMessage)
+        {
+             ApiResponse<ErrorMessage> localVarResponse = await DeleteBrokerAsyncWithHttpInfo(signedMessage);
+             return localVarResponse.Data;
+
+        }
+
+        /// <summary>
+        /// Broker: Notify of an incomplete or failed transaction 
+        /// </summary>
+        /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <returns>Task of ApiResponse (ErrorMessage)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (SignedMessage signedMessage)
+        {
+            // verify the required parameter 'signedMessage' is set
+            if (signedMessage == null)
+                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionsApi->DeleteBroker");
+
+            var localVarPath = "./tap/broker";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new List<KeyValuePair<String, String>>();
+            var localVarHeaderParams = new Dictionary<String, String>(this.Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            var localVarFileParams = new Dictionary<String, FileParameter>();
+            Object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            String[] localVarHttpContentTypes = new String[] {
+                "application/json"
+            };
+            String localVarHttpContentType = this.Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            String[] localVarHttpHeaderAccepts = new String[] {
+                "application/json"
+            };
+            String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            {
+                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+            }
+            else
+            {
+                localVarPostBody = signedMessage; // byte array
+            }
+
+
+            // make the HTTP request
+            IRestResponse localVarResponse = (IRestResponse) await this.Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            int localVarStatusCode = (int) localVarResponse.StatusCode;
+
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("DeleteBroker", localVarResponse);
+                if (exception != null) throw exception;
+            }
+
+            return new ApiResponse<ErrorMessage>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
+                (ErrorMessage) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ErrorMessage)));
         }
 
         /// <summary>

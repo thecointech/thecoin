@@ -1,4 +1,4 @@
-# TapcapManager.TapCapCompletedTransaction
+# @TheCoinTapcapManager.TapCapCompletedTransaction
 
 ## Properties
 Name | Type | Description | Notes

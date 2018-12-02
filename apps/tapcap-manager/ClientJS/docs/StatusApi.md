@@ -1,4 +1,4 @@
-# TapcapManager.StatusApi
+# @TheCoinTapcapManager.StatusApi
 
 All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
@@ -18,10 +18,10 @@ User TapCap history in the ranges provided
 
 ### Example
 ```javascript
-import TapcapManager from 'tapcap-manager';
+import @TheCoinTapcapManager from '@the-coin/tapcap-manager';
 
-let apiInstance = new TapcapManager.StatusApi();
-let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | Purchase Request info
+let apiInstance = new @TheCoinTapcapManager.StatusApi();
+let signedMessage = new @TheCoinTapcapManager.SignedMessage(); // SignedMessage | Purchase Request info
 apiInstance.tapCapHistory(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
@@ -59,10 +59,10 @@ User TapCap status
 
 ### Example
 ```javascript
-import TapcapManager from 'tapcap-manager';
+import @TheCoinTapcapManager from '@the-coin/tapcap-manager';
 
-let apiInstance = new TapcapManager.StatusApi();
-let signedMessage = new TapcapManager.SignedMessage(); // SignedMessage | TapCap status request
+let apiInstance = new @TheCoinTapcapManager.StatusApi();
+let signedMessage = new @TheCoinTapcapManager.SignedMessage(); // SignedMessage | TapCap status request
 apiInstance.tapCapStatus(signedMessage).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {

@@ -4,9 +4,69 @@ All URIs are relative to *https://tapcap-dot-thecoincore-212314.appspot.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**DeleteBroker**](TransactionsApi.md#deletebroker) | **DELETE** /tap/broker | Broker: Notify of an incomplete or failed transaction
 [**TapCapBroker**](TransactionsApi.md#tapcapbroker) | **POST** /tap/broker | Broker: Register new TapCap transaction
 [**TapCapClient**](TransactionsApi.md#tapcapclient) | **POST** /tap/client | Client: Confirm new TapCap transaction
 
+
+<a name="deletebroker"></a>
+# **DeleteBroker**
+> ErrorMessage DeleteBroker (SignedMessage signedMessage)
+
+Broker: Notify of an incomplete or failed transaction
+
+### Example
+```csharp
+using System;
+using System.Diagnostics;
+using TapCapManager.Client.Api;
+using TapCapManager.Client.Client;
+using TapCapManager.Client.Model;
+
+namespace Example
+{
+    public class DeleteBrokerExample
+    {
+        public void main()
+        {
+            var apiInstance = new TransactionsApi();
+            var signedMessage = new SignedMessage(); // SignedMessage | TapCap exchange request
+
+            try
+            {
+                // Broker: Notify of an incomplete or failed transaction
+                ErrorMessage result = apiInstance.DeleteBroker(signedMessage);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling TransactionsApi.DeleteBroker: " + e.Message );
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
+
+### Return type
+
+[**ErrorMessage**](ErrorMessage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="tapcapbroker"></a>
 # **TapCapBroker**

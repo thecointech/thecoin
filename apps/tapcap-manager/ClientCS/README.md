@@ -76,9 +76,9 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *StatusApi* | [**TapCapHistory**](docs/StatusApi.md#tapcaphistory) | **POST** /status/history | TapCap history
 *StatusApi* | [**TapCapStatus**](docs/StatusApi.md#tapcapstatus) | **POST** /status/summary | TapCap current status
+*TransactionsApi* | [**DeleteBroker**](docs/TransactionsApi.md#deletebroker) | **DELETE** /tap/broker | Broker: Notify of an incomplete or failed transaction
 *TransactionsApi* | [**TapCapBroker**](docs/TransactionsApi.md#tapcapbroker) | **POST** /tap/broker | Broker: Register new TapCap transaction
 *TransactionsApi* | [**TapCapClient**](docs/TransactionsApi.md#tapcapclient) | **POST** /tap/client | Client: Confirm new TapCap transaction
-*UnlockApi* | [**Unlock**](docs/UnlockApi.md#unlock) | **POST** /unlock | 
 
 
 <a name="documentation-for-models"></a>
@@ -96,6 +96,7 @@ Class | Method | HTTP request | Description
  - [Model.TapCapQueryRequest](docs/TapCapQueryRequest.md)
  - [Model.TapCapQueryResponse](docs/TapCapQueryResponse.md)
  - [Model.TapCapToken](docs/TapCapToken.md)
+ - [Model.TapCapUnCompleted](docs/TapCapUnCompleted.md)
 
 
 <a name="documentation-for-authorization"></a>

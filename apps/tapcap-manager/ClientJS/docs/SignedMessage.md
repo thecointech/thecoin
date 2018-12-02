@@ -1,4 +1,4 @@
-# TapcapManager.SignedMessage
+# @TheCoinTapcapManager.SignedMessage
 
 ## Properties
 Name | Type | Description | Notes

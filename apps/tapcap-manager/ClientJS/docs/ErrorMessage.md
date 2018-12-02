@@ -1,4 +1,4 @@
-# TapcapManager.ErrorMessage
+# @TheCoinTapcapManager.ErrorMessage
 
 ## Properties
 Name | Type | Description | Notes

@@ -1,4 +1,4 @@
-# TapcapManager.TapCapBrokerComplete
+# @TheCoinTapcapManager.TapCapBrokerComplete
 
 ## Properties
 Name | Type | Description | Notes

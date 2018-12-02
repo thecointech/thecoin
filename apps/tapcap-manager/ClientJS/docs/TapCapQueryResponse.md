@@ -1,4 +1,4 @@
-# TapcapManager.TapCapQueryResponse
+# @TheCoinTapcapManager.TapCapQueryResponse
 
 ## Properties
 Name | Type | Description | Notes

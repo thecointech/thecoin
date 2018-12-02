@@ -1,4 +1,4 @@
-# TapcapManager.TapCapToken
+# @TheCoinTapcapManager.TapCapToken
 
 ## Properties
 Name | Type | Description | Notes
