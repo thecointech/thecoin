@@ -23,6 +23,8 @@ async function GetProcessedBlockNumber() {
     return lastProcessedBlock;
 }
 
+const MAX_ATTEMPTS = 5;
+const ATTEMPT_FAILED_BACKOFF = 1500; // backoff 1.5 seconds
 let TCTopUpList = [];
 let _currentlyProcessing = null;
 
@@ -30,40 +32,50 @@ function ProcessList()
 {
     if (!_currentlyProcessing && TCTopUpList.length) {
         _currentlyProcessing = TCTopUpList.pop()
+        // Currently processing itself will call processlist to make this loop
         _currentlyProcessing();
     }
 }
 async function TapCapTopUp(address, topup, event) {
-    TCTopUpList.push(() => doTapCapTopUp(address, topup, event));
+    let topUp = () => makeTapCapTopUp(address, topup, event);
+    topUp.attempts = 0;
+    TCTopUpList.push(topUp);
     ProcessList();
 }
 
-async function doTapCapTopUp(address, topup, event) {
+async function makeTapCapTopUp(address, topup, event) {
 
     const amount = topup.toNumber();
     const block = await event.getBlock();
     const tx = await event.getTransaction();
+    const hash = tx.hash;
+    const blockNumber = block.number;
     const timestamp = block.timestamp * 1000;
 
-    console.log("Processing deposit tx: " + tx.hash);
+    return await doTapCapTopUp(address, amount, hash, blockNumber, timestamp);
+}
 
-    lastProcessedBlock = Math.max(lastProcessedBlock, block.number);
+async function doTapCapTopUp(address, amount, hash, blockNumber, timestamp)
+{
+    console.log("Processing deposit tx: " + hash);
+
+    lastProcessedBlock = Math.max(lastProcessedBlock, blockNumber);
 
     // // Double check we do not miss events, or double-process them
-    // if (lastProcessed >= block.number) {
-    //     throw("Re-processing block: " + block.number + " for tx: " + event.transactionHash);
+    // if (lastProcessed >= blockNumber) {
+    //     throw("Re-processing block: " + blockNumber + " for tx: " + event.transactionHash);
     // }
 
     // We store a separate record of the data 
-    const depositKey = ds.key(["User", address, "deposit", tx.hash]);
+    const depositKey = ds.key(["User", address, "deposit", hash]);
     const latestKey = GetLatestKey(address);
     const transaction = ds.transaction();
-    transaction
+    return transaction
         .run()
         .then(() => Promise.all([transaction.get(latestKey), transaction.get(depositKey)]))
         .then((results) => {
             if (results[1][0] != null) {
-                console.error("Re-processing tx, already registered: " + tx.hash);
+                console.error("Re-processing tx, already registered: " + hash);
             }
             else {
                 let lastBalance = 0;
@@ -83,7 +95,7 @@ async function doTapCapTopUp(address, topup, event) {
                     {
                         key: depositKey,
                         data: {
-                            blockNumber: block.number,
+                            blockNumber: blockNumber,
                             amount: amount
                         }
                     },
@@ -121,9 +133,13 @@ async function doTapCapTopUp(address, topup, event) {
             ProcessList();
         })
         .catch((err) => {
-            // TODO: Add retry logic
             transaction.rollback()
             console.error("Oh No!: " + err);
+            if (_currentlyProcessing.attempts < MAX_ATTEMPTS)
+            {
+                TCTopUpList.push(_currentlyProcessing);
+                setTimeout(ProcessList, ATTEMPT_FAILED_BACKOFF * _currentlyProcessing.attempts);
+            }
         });
 }
 
@@ -141,4 +157,8 @@ exports.WatchTapCapDeposits = async () => {
 
     theContract.on("TapCapTopUp", TapCapTopUp);
     theContract.on("TapCapUserUpdated", TapCapUserUpdated);
+}
+
+if (process.env.NODE_ENV === 'test') {
+    exports.doTapCapTopUp = doTapCapTopUp;
 }

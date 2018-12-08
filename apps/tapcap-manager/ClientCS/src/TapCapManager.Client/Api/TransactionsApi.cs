@@ -31,9 +31,9 @@ namespace TapCapManager.Client.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>ErrorMessage</returns>
-        ErrorMessage DeleteBroker (SignedMessage signedMessage);
+        ErrorMessage DeleteBroker (TapCapUnCompleted tapCapUnCompleted);
 
         /// <summary>
         /// Broker: Notify of an incomplete or failed transaction
@@ -42,9 +42,9 @@ namespace TapCapManager.Client.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>ApiResponse of ErrorMessage</returns>
-        ApiResponse<ErrorMessage> DeleteBrokerWithHttpInfo (SignedMessage signedMessage);
+        ApiResponse<ErrorMessage> DeleteBrokerWithHttpInfo (TapCapUnCompleted tapCapUnCompleted);
         /// <summary>
         /// Broker: Register new TapCap transaction
         /// </summary>
@@ -96,9 +96,9 @@ namespace TapCapManager.Client.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>Task of ErrorMessage</returns>
-        System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (SignedMessage signedMessage);
+        System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (TapCapUnCompleted tapCapUnCompleted);
 
         /// <summary>
         /// Broker: Notify of an incomplete or failed transaction
@@ -107,9 +107,9 @@ namespace TapCapManager.Client.Api
         /// 
         /// </remarks>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (ErrorMessage)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (SignedMessage signedMessage);
+        System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (TapCapUnCompleted tapCapUnCompleted);
         /// <summary>
         /// Broker: Register new TapCap transaction
         /// </summary>
@@ -256,11 +256,11 @@ namespace TapCapManager.Client.Api
         /// Broker: Notify of an incomplete or failed transaction 
         /// </summary>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>ErrorMessage</returns>
-        public ErrorMessage DeleteBroker (SignedMessage signedMessage)
+        public ErrorMessage DeleteBroker (TapCapUnCompleted tapCapUnCompleted)
         {
-             ApiResponse<ErrorMessage> localVarResponse = DeleteBrokerWithHttpInfo(signedMessage);
+             ApiResponse<ErrorMessage> localVarResponse = DeleteBrokerWithHttpInfo(tapCapUnCompleted);
              return localVarResponse.Data;
         }
 
@@ -268,13 +268,13 @@ namespace TapCapManager.Client.Api
         /// Broker: Notify of an incomplete or failed transaction 
         /// </summary>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>ApiResponse of ErrorMessage</returns>
-        public ApiResponse< ErrorMessage > DeleteBrokerWithHttpInfo (SignedMessage signedMessage)
+        public ApiResponse< ErrorMessage > DeleteBrokerWithHttpInfo (TapCapUnCompleted tapCapUnCompleted)
         {
-            // verify the required parameter 'signedMessage' is set
-            if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionsApi->DeleteBroker");
+            // verify the required parameter 'tapCapUnCompleted' is set
+            if (tapCapUnCompleted == null)
+                throw new ApiException(400, "Missing required parameter 'tapCapUnCompleted' when calling TransactionsApi->DeleteBroker");
 
             var localVarPath = "./tap/broker";
             var localVarPathParams = new Dictionary<String, String>();
@@ -298,13 +298,13 @@ namespace TapCapManager.Client.Api
             if (localVarHttpHeaderAccept != null)
                 localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
 
-            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            if (tapCapUnCompleted != null && tapCapUnCompleted.GetType() != typeof(byte[]))
             {
-                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+                localVarPostBody = this.Configuration.ApiClient.Serialize(tapCapUnCompleted); // http body (model) parameter
             }
             else
             {
-                localVarPostBody = signedMessage; // byte array
+                localVarPostBody = tapCapUnCompleted; // byte array
             }
 
 
@@ -330,11 +330,11 @@ namespace TapCapManager.Client.Api
         /// Broker: Notify of an incomplete or failed transaction 
         /// </summary>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>Task of ErrorMessage</returns>
-        public async System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (SignedMessage signedMessage)
+        public async System.Threading.Tasks.Task<ErrorMessage> DeleteBrokerAsync (TapCapUnCompleted tapCapUnCompleted)
         {
-             ApiResponse<ErrorMessage> localVarResponse = await DeleteBrokerAsyncWithHttpInfo(signedMessage);
+             ApiResponse<ErrorMessage> localVarResponse = await DeleteBrokerAsyncWithHttpInfo(tapCapUnCompleted);
              return localVarResponse.Data;
 
         }
@@ -343,13 +343,13 @@ namespace TapCapManager.Client.Api
         /// Broker: Notify of an incomplete or failed transaction 
         /// </summary>
         /// <exception cref="TapCapManager.Client.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <param name="tapCapUnCompleted">TapCap exchange request</param>
         /// <returns>Task of ApiResponse (ErrorMessage)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (SignedMessage signedMessage)
+        public async System.Threading.Tasks.Task<ApiResponse<ErrorMessage>> DeleteBrokerAsyncWithHttpInfo (TapCapUnCompleted tapCapUnCompleted)
         {
-            // verify the required parameter 'signedMessage' is set
-            if (signedMessage == null)
-                throw new ApiException(400, "Missing required parameter 'signedMessage' when calling TransactionsApi->DeleteBroker");
+            // verify the required parameter 'tapCapUnCompleted' is set
+            if (tapCapUnCompleted == null)
+                throw new ApiException(400, "Missing required parameter 'tapCapUnCompleted' when calling TransactionsApi->DeleteBroker");
 
             var localVarPath = "./tap/broker";
             var localVarPathParams = new Dictionary<String, String>();
@@ -373,13 +373,13 @@ namespace TapCapManager.Client.Api
             if (localVarHttpHeaderAccept != null)
                 localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
 
-            if (signedMessage != null && signedMessage.GetType() != typeof(byte[]))
+            if (tapCapUnCompleted != null && tapCapUnCompleted.GetType() != typeof(byte[]))
             {
-                localVarPostBody = this.Configuration.ApiClient.Serialize(signedMessage); // http body (model) parameter
+                localVarPostBody = this.Configuration.ApiClient.Serialize(tapCapUnCompleted); // http body (model) parameter
             }
             else
             {
-                localVarPostBody = signedMessage; // byte array
+                localVarPostBody = tapCapUnCompleted; // byte array
             }
 
 

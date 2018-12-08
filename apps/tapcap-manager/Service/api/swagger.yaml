@@ -17,9 +17,6 @@ tags:
     \ transfering the appropriate coin from seller to buyer weekly"
 - name: "Status"
   description: "Users may query their account status"
-- name: "Unlock"
-  description: "Temp method for unlocking account till we find something better (NOT\
-    \ FOR PUBLIC USE)"
 schemes:
 - "https"
 consumes:
@@ -61,7 +58,7 @@ paths:
         description: "TapCap exchange request"
         required: true
         schema:
-          $ref: "#/definitions/SignedMessage"
+          $ref: "#/definitions/TapCapUnCompleted"
       responses:
         200:
           description: "Transaction Result"
@@ -303,14 +300,6 @@ definitions:
         format: "int64"
       merchantId:
         type: "string"
-  TapCapUnCompleted:
-    required:
-    - "signedRequest"
-    properties:
-      signedRequest:
-        $ref: "#/definitions/SignedMessage"
-      signature:
-        type: "string"
   FXRate:
     required:
     - "buy"
@@ -364,6 +353,19 @@ definitions:
       code: 0
       id: "id"
       message: "message"
+  TapCapUnCompleted:
+    required:
+    - "signedRequest"
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      signedRequest:
+        signature: "signature"
+        message: "message"
   TapCapToken_2:
     required:
     - "availableBalance"
@@ -462,14 +464,6 @@ definitions:
         type: "integer"
         format: "int64"
       merchantId:
-        type: "string"
-  TapCapUnCompleted_2:
-    required:
-    - "signedRequest"
-    properties:
-      signedRequest:
-        $ref: "#/definitions/SignedMessage"
-      signature:
         type: "string"
 externalDocs:
   description: "Find out more about Swagger"

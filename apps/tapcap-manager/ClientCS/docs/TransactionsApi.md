@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 <a name="deletebroker"></a>
 # **DeleteBroker**
-> ErrorMessage DeleteBroker (SignedMessage signedMessage)
+> ErrorMessage DeleteBroker (TapCapUnCompleted tapCapUnCompleted)
 
 Broker: Notify of an incomplete or failed transaction
 
@@ -30,12 +30,12 @@ namespace Example
         public void main()
         {
             var apiInstance = new TransactionsApi();
-            var signedMessage = new SignedMessage(); // SignedMessage | TapCap exchange request
+            var tapCapUnCompleted = new TapCapUnCompleted(); // TapCapUnCompleted | TapCap exchange request
 
             try
             {
                 // Broker: Notify of an incomplete or failed transaction
-                ErrorMessage result = apiInstance.DeleteBroker(signedMessage);
+                ErrorMessage result = apiInstance.DeleteBroker(tapCapUnCompleted);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -51,7 +51,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
+ **tapCapUnCompleted** | [**TapCapUnCompleted**](TapCapUnCompleted.md)| TapCap exchange request | 
 
 ### Return type
 

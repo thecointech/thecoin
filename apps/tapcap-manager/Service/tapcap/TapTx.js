@@ -82,7 +82,7 @@ exports.TapTx = function(request, signedRecord, storeName) {
 				}
 				else {
 					// Verify basic info is identical
-					if (tx.change != change)
+					if (tx.change != change && tx.change != 0)
 						throw(`${storeName} Tx change different to existing record`);
 					if (tx.timestamp != txtimestamp)
 						throw(`${storeName} Tx timestamp different to existing record`);
