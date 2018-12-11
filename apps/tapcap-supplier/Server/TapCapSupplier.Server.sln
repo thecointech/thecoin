@@ -15,7 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapCapSupplier.Tests", "Tap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{DDB15673-BA4D-4B20-9D1E-B5D1AD4DD05E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheBankAPI", "..\..\the-utilities\TheBankAPI\TheBankAPI\TheBankAPI.csproj", "{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBankAPI", "..\..\the-utilities\TheBankAPI\TheBankAPI\TheBankAPI.csproj", "{7D3E3A42-3D48-43B3-8294-166CF2B7D91A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{922FA9B2-46B1-4793-8CCA-9DAFF9CF4085} = {922FA9B2-46B1-4793-8CCA-9DAFF9CF4085}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

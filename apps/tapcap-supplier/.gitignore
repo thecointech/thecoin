@@ -2,3 +2,4 @@ Server/.vs/
 Server/TapCapSupplier.Tests/bin/
 Server/TapCapSupplier.Tests/obj/
 Server/Server/TapCapSupplier.Server/cache/
+Server/Server/TapCapSupplier.Server/data/

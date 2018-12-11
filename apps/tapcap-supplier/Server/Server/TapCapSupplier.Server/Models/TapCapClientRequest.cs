@@ -46,6 +46,13 @@ namespace TapCapSupplier.Server.Models
         public byte[] CryptoData { get; set; }
 
         /// <summary>
+        /// Gets or Sets SupplierAddress
+        /// </summary>
+        [Required]
+        [DataMember(Name="supplierAddress")]
+        public string SupplierAddress { get; set; }
+
+        /// <summary>
         /// Gets or Sets Token
         /// </summary>
         [Required]
@@ -63,6 +70,7 @@ namespace TapCapSupplier.Server.Models
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  GpoData: ").Append(GpoData).Append("\n");
             sb.Append("  CryptoData: ").Append(CryptoData).Append("\n");
+            sb.Append("  SupplierAddress: ").Append(SupplierAddress).Append("\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -116,6 +124,11 @@ namespace TapCapSupplier.Server.Models
                     CryptoData.Equals(other.CryptoData)
                 ) && 
                 (
+                    SupplierAddress == other.SupplierAddress ||
+                    SupplierAddress != null &&
+                    SupplierAddress.Equals(other.SupplierAddress)
+                ) && 
+                (
                     Token == other.Token ||
                     Token != null &&
                     Token.Equals(other.Token)
@@ -138,6 +151,8 @@ namespace TapCapSupplier.Server.Models
                     hashCode = hashCode * 59 + GpoData.GetHashCode();
                     if (CryptoData != null)
                     hashCode = hashCode * 59 + CryptoData.GetHashCode();
+                    if (SupplierAddress != null)
+                    hashCode = hashCode * 59 + SupplierAddress.GetHashCode();
                     if (Token != null)
                     hashCode = hashCode * 59 + Token.GetHashCode();
                 return hashCode;

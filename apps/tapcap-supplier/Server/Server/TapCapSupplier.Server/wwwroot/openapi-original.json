@@ -243,7 +243,7 @@
         }
       },
       "TapCapClientRequest" : {
-        "required" : [ "cryptoData", "gpoData", "timestamp", "token" ],
+        "required" : [ "cryptoData", "gpoData", "supplierAddress", "timestamp", "token" ],
         "type" : "object",
         "properties" : {
           "timestamp" : {
@@ -259,6 +259,9 @@
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
             "type" : "string",
             "format" : "byte"
+          },
+          "supplierAddress" : {
+            "type" : "string"
           },
           "token" : {
             "$ref" : "#/components/schemas/SignedMessage"
@@ -382,9 +385,12 @@
         }
       },
       "StaticResponses" : {
-        "required" : [ "gpoPdol", "queries", "responseParentIndex", "responses" ],
+        "required" : [ "address", "gpoPdol", "queries", "responseParentIndex", "responses" ],
         "type" : "object",
         "properties" : {
+          "address" : {
+            "type" : "string"
+          },
           "gpoPdol" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
             "type" : "string",
@@ -419,6 +425,7 @@
           }
         },
         "example" : {
+          "address" : "address",
           "responseParentIndex" : [ 0, 0 ],
           "gpoPdol" : "gpoPdol",
           "responses" : [ "responses", "responses" ],

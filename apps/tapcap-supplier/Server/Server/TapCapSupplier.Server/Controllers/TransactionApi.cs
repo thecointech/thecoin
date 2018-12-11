@@ -19,6 +19,7 @@ using TapCapSupplier.Server.Attributes;
 using TapCapSupplier.Server.Models;
 using TapCapSupplier.Server.Card;
 using TapCapSupplier.Server.TapCap;
+using NLog;
 
 namespace TapCapSupplier.Server.Controllers
 {
@@ -30,16 +31,21 @@ namespace TapCapSupplier.Server.Controllers
 
 		private readonly IEmvCard Card;
 		private readonly HandleTx Handler;
+		private string Address;
+
+		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Initialize ApiController
 		/// </summary>
 		/// <param name="card">Interface to local payment card</param>
 		/// <param name="tap">Interface to tx handler</param>
-		public TransactionApiController(IEmvCard card, HandleTx tap)
+		/// <param name="account"></param>
+		public TransactionApiController(IEmvCard card, HandleTx tap, Nethereum.Web3.Accounts.Account account)
 		{
 			Card = card;
 			Handler = tap;
+			Address = account.Address;
 		}
 
         /// <summary>
@@ -86,9 +92,11 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
         public virtual IActionResult GetStatic([FromBody]SignedMessage signedMessage)
         {
+			var responses = Card.StaticResponses;
+			responses.Address = Address;
 			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
 			// TODO: Verify source from signed message (should be a token)
-			return StatusCode(200, Card.StaticResponses);
+			return StatusCode(200, responses);
         }
 
 		/// <summary>
@@ -135,6 +143,7 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
         public virtual IActionResult RequestTapCap([FromBody]SignedMessage signedMessage)
         {
+			logger.Info("Received TC Request");
 			var tx = Handler.RequestTransaction(signedMessage);
 			if (tx != null && tx.Signature.Length > 0)
 			{
@@ -143,9 +152,9 @@ namespace TapCapSupplier.Server.Controllers
 			}
 
 			return StatusCode(405, new ErrorMessage() {
-				Code = 0,
-				Id = "TODO",
-				Message = tx.Message
+				Code = 1,
+				Id = "Payment Failed - please retry",
+				Message = tx?.Message
 			});
         }
     }

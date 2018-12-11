@@ -130,7 +130,7 @@ namespace TapCapSupplier.Server.TapCap
 
 		Task IHostedService.StopAsync(CancellationToken cancellationToken)
 		{
-			_timer.Dispose();
+			_timer?.Dispose();
 			//__cancel.
 			// TODO:
 			//throw new NotImplementedException();

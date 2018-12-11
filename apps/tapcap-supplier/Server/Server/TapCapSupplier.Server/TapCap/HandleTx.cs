@@ -1,8 +1,8 @@
 ﻿using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
 using NLog;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TapCapManager.Client.Api;
 using TapCapSupplier.Server.Card;
@@ -20,7 +20,6 @@ namespace TapCapSupplier.Server.TapCap
 		private readonly IEmvCard Card;
 		private readonly ITransactionsApi TapCapManager;
 		private readonly Account TheAccount;
-		private readonly DB.Records records;
 		private readonly TheBankAPI.ITransactionVerifier verifier;
 
 		// TODO: Trivial validation of client nonces
@@ -48,14 +47,13 @@ namespace TapCapSupplier.Server.TapCap
 		/// <param name="card"></param>
 		/// <param name="manager"></param>
 		/// <param name="account"></param>
-		/// <param name="records"></param>
-		public HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account, DB.Records records, TheBankAPI.ITransactionVerifier verifier)
+		/// <param name="verifier"></param>
+		public HandleTx(ExchangeRateService fxRates, IEmvCard card, ITransactionsApi manager, Account account, TheBankAPI.ITransactionVerifier verifier)
 		{
 			FxRates = fxRates;
 			Card = card;
 			TapCapManager = manager;
 			TheAccount = account;
-			this.records = records;
 			this.verifier = verifier;
 		}
 
@@ -91,6 +89,18 @@ namespace TapCapSupplier.Server.TapCap
 				};
 			}
 
+			if (clientRequest.SupplierAddress != TheAccount.Address)
+			{
+				var message = string.Format("Invalid input: Passed supplier address -{0}- not for this supplier {1}", clientRequest.SupplierAddress, TheAccount.Address);
+				logger.Warn(message);
+
+				return new SignedMessage()
+				{
+					Message = message,
+					Signature = ""
+				};
+			}
+
 			// TODO: Verify manager address is valid.
 			// if (managerAdress != ManagerAddress)
 
@@ -111,7 +121,7 @@ namespace TapCapSupplier.Server.TapCap
 				};
 			}
 
-			var txCents = PDOL.GetAmount(CryptoPDOL);
+			long txCents = (long)PDOL.GetAmount(CryptoPDOL);
 			if (txCents == 0)
 			{
 				logger.Warn("Invalid tx cents amount");
@@ -128,7 +138,7 @@ namespace TapCapSupplier.Server.TapCap
 			if (txCoin > token.AvailableBalance)
 			{
 				var message = string.Format("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
-				logger.Info(message);
+				logger.Debug(message);
 
 				return new SignedMessage()
 				{
@@ -138,6 +148,8 @@ namespace TapCapSupplier.Server.TapCap
 			}
 			// Everything checks out - build the certificate
 			var certificate = cryptoCertTask.GetAwaiter().GetResult();
+			if (certificate == null)
+				return null;
 
 			var tx = new TapCapBrokerPurchase()
 			{
@@ -150,51 +162,65 @@ namespace TapCapSupplier.Server.TapCap
 			var signedTx = Signing.SignMessage<SignedMessage>(tx, TheAccount);
 			Task.Run(async () => await ValidateAndFinalizeTx(tx, txCents, clientAddress));
 
-			logger.Trace(" !-!-!returning tx in: {0}ms !-!-!", stopwatch.ElapsedMilliseconds);
+			logger.Info(" !-!-!returning tx for ${0} in: {1}ms !-!-!", txCents / 100.0, stopwatch.ElapsedMilliseconds);
 
 			return signedTx;
 		}
 
-		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase, ulong txCents, string clientAddress)
+		async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase, long txCents, string clientAddress)
 		{
-			// First, we have to validate that the Tx went through
-			var matchedTx = await verifier.MatchTx(txCents);
-			if (matchedTx == null)
+			try
 			{
-				records.AddUnCompleted();
-				await SubmitRollbackToManager();
-			}
-			else
-			{
+				// First, we have to validate that the Tx went through
 				var cp = PackageInterop.ConvertTo<TapCapManager.Client.Model.TapCapBrokerPurchase>(purchase);
-				var validation = new TapCapManager.Client.Model.TapCapBrokerComplete(cp.SignedRequest, cp.FxRate, cp.CoinCharge, "TODO");
-				records.AddCompleted(validation, clientAddress, txCents / 100.0);
+				var matchedTx = await verifier.MatchTx(cp, (int)txCents);
+				if (matchedTx == null)
+				{
 
-				await SubmitToManager(validation);
-				LogTx(txCents, (ulong)purchase.CoinCharge.Value);
+					await SubmitRollbackToManager(cp.SignedRequest, txCents);
+				}
+				else
+				{
+					var validation = new TapCapManager.Client.Model.TapCapBrokerComplete(cp.SignedRequest, cp.FxRate, cp.CoinCharge, matchedTx.Description);
+					await SubmitToManager(validation, txCents, purchase.CoinCharge.Value);
+				}
+			}
+			catch (Exception err)
+			{
+				logger.Error(err, "Did not validate or finalize tx\n\t{0}\n", err.Message, err.StackTrace);
 			}
 		}
 
-		async Task SubmitRollbackToManager()
+		async Task SubmitRollbackToManager(TapCapManager.Client.Model.SignedMessage signedRequest, long txCents)
 		{
-			//TapCapManager
+			logger.Info("Rolling back purchase: {0}", txCents);
+			var supplierSig = Signing.GetSignature(signedRequest.Message, TheAccount);
+			var uncompleted = new TapCapManager.Client.Model.TapCapUnCompleted(signedRequest, supplierSig);
+			var result = await TapCapManager.DeleteBrokerAsync(uncompleted);
+			if (result.Code.GetValueOrDefault(-1) != 0)
+				logger.Error("DeleteBroker failed: {0}", result.Message);
 		}
 
-		async Task SubmitToManager(TapCapManager.Client.Model.TapCapBrokerComplete purchase)
+		async Task SubmitToManager(TapCapManager.Client.Model.TapCapBrokerComplete purchase, long txCents, long txCoin)
 		{
+			logger.Info("Submitting complete purchase");
 			// Sign validation and submit to manager.
 			var (message, signature) = Signing.GetMessageAndSignature(purchase, TheAccount);
 			var signedValidation = new TapCapManager.Client.Model.SignedMessage(message, signature);
 			var result = await TapCapManager.TapCapBrokerAsync(signedValidation);
-			if (result.Code.Value != 0)
-				logger.Error("OnTx: {0}", result.Message);
-			// What to do about this?
-		}
+			if (result.Code.GetValueOrDefault(-1) != 0)
+				logger.Error("TapCapBroker failed: {0}", result.Message);
+			else
+			{
+				LogTx(txCents, txCoin);
+			}
+				// What to do about this?
+			}
 
-		void LogTx(ulong txCents, ulong txCoin)
+		void LogTx(long txCents, long txCoin)
 		{
 			var fiat = txCents / 100.0;
-			var coin = TheContract.ToHuman(txCoin);
+			var coin = TheContract.ToHuman((ulong)txCoin);
 			logger.Info("Completed tx: ${0} -> c{1}", fiat, coin);
 		}
 	}

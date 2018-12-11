@@ -27,6 +27,8 @@ using ThePricing.Api;
 using TapCapSupplier.Server.TapCap;
 using Nethereum.Web3.Accounts;
 using TapCapManager.Client.Api;
+using TheBankAPI;
+using Microsoft.Extensions.Logging;
 
 namespace TapCapSupplier.Server
 {
@@ -97,13 +99,18 @@ namespace TapCapSupplier.Server
 
 			services.AddSingleton(AccountFactory.Load);
 			services.AddSingleton<IEmvCard, EmvCard>();
-			services.AddSingleton<IEmvCard, EmvCard>();
 			services.AddTransient<IRatesApi, RatesApi>();
-			services.AddTransient<ITransactionsApi, TransactionsApi>();
+			services.AddTransient<ITransactionsApi, TransactionsApi>(sp => new TransactionsApi("http://localhost:8091"));
+
+			services.AddSingleton<ITransactionVerifier, TransactionVerifier>(sp =>
+				new TransactionVerifier(
+					sp.GetService<ILogger<ITransactionVerifier>>(),
+					Utils.Utils.GetDataPath(sp.GetService<IHostingEnvironment>())
+				)
+			);
 
 			services.AddSingleton<HandleTx>();
 			services.AddSingleton<ExchangeRateService>();
-			services.AddSingleton<DB.Records>();
 			services.AddHostedService<ExchangeRateUpdateService>();
 		}
 
@@ -114,7 +121,7 @@ namespace TapCapSupplier.Server
 		/// <param name="env"></param>
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			// TODO: Least-priveldges for headers etc
+			// TODO: Least-privileges for headers etc
 			app.UseCors(builder =>
 				builder
 					.AllowAnyOrigin()
@@ -148,6 +155,10 @@ namespace TapCapSupplier.Server
 			{
 				app.UseHsts();
 			}
+
+			// Warm up some necessary services
+			app.ApplicationServices.GetService<ITransactionVerifier>();
+			app.ApplicationServices.GetService<Account>();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,38 +36,44 @@ namespace TapCapSupplier.Server.Card
 			};
 		}
 
+		private byte[] MaybeGetVal(JObject cacheJson, string query)
+		{
+			if (cacheJson.ContainsKey(query))
+			{
+				var gpo = cacheJson.GetValue(query).ToString();
+				return TheUtils.ByteConvert.FromString(gpo);
+			}
+			return null;
+		}
+
 		public void LoadStaticResponses()
 		{
 			try
 			{
 				if (File.Exists(CachePath))
 				{
-					using (StreamReader sr = new StreamReader(CachePath))
+					var rawJson = File.ReadAllText(CachePath);
+					JObject cacheJson = JObject.Parse(rawJson);
+
+					IList<string> squeries = cacheJson.GetValue("Queries").ToObject<IList<string>>();
+					IList<string> sresponses = cacheJson.GetValue("Responses").ToObject<IList<string>>();
+					IList<int?> indices = cacheJson.GetValue("ParentIndices").ToObject<IList<int?>>();
+					if (squeries.Count != indices.Count ||
+						sresponses.Count != squeries.Count)
 					{
-						dynamic saveInfo = Newtonsoft.Json.Linq.JObject.Parse(sr.ReadToEnd());
-						//dynamic saveInfo = JsonConvert.DeserializeObject();
-
-						IList<string> squeries = saveInfo.Queries.ToObject<IList<string>>();
-						IList<string> sresponses = saveInfo.Responses.ToObject<IList<string>>();
-						IList<int?> indices = saveInfo.ParentIndices.ToObject<IList<int?>>();
-						if (squeries.Count != indices.Count ||
-							sresponses.Count != squeries.Count)
-						{
-							//logger.Error("Static Cache: Mismatched cache array lengths");
-							return;
-						}
-
-						queries = squeries.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
-						responses = sresponses.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
-						parentIndices = indices.ToList();
-						if (saveInfo.Gpo != null)
-							GpoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Gpo);
-						if (saveInfo.Crypto != null)
-							CryptoPdol = TheUtils.ByteConvert.FromString((string)saveInfo.Crypto);
+						//logger.Error("Static Cache: Mismatched cache array lengths");
+						return;
 					}
+
+					queries = squeries.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
+					responses = sresponses.Select((s) => TheUtils.ByteConvert.FromString(s)).ToList();
+					parentIndices = indices.ToList();
+
+					GpoPdol = MaybeGetVal(cacheJson,"Gpo");
+					CryptoPdol = MaybeGetVal(cacheJson, "Crypto");
 				}
 			}
-			catch (Exception e)
+			catch (Exception /*e*/)
 			{
 				queries = new List<byte[]>();
 				responses = new List<byte[]>();

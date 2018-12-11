@@ -49,7 +49,7 @@ namespace TapCapSupplier.Server
 				.ConfigureLogging(logging =>
 				{
 					logging.ClearProviders();
-					logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+					//logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 				})
 				.UseNLog()  // NLog: setup NLog for Dependency injection
                 .UseUrls("http://0.0.0.0:9361/");

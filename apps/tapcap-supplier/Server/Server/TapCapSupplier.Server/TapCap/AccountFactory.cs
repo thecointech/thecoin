@@ -13,7 +13,7 @@ namespace TapCapSupplier.Server.TapCap
 		{
 			var env = services.GetService<IHostingEnvironment>();
 			var config = services.GetService<IConfiguration>();
-			var accountPath = Path.Combine(env.ContentRootPath, "data", "account.json");
+			var accountPath = Utils.Utils.GetDataPath(env, "account.json");
 			var key = config["AccountKey"];
 
 			using (StreamReader reader = File.OpenText(accountPath))

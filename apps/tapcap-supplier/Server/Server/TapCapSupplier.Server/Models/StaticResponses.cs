@@ -25,6 +25,13 @@ namespace TapCapSupplier.Server.Models
     public partial class StaticResponses : IEquatable<StaticResponses>
     { 
         /// <summary>
+        /// Gets or Sets Address
+        /// </summary>
+        [Required]
+        [DataMember(Name="address")]
+        public string Address { get; set; }
+
+        /// <summary>
         /// Gets or Sets GpoPdol
         /// </summary>
         [Required]
@@ -66,6 +73,7 @@ namespace TapCapSupplier.Server.Models
         {
             var sb = new StringBuilder();
             sb.Append("class StaticResponses {\n");
+            sb.Append("  Address: ").Append(Address).Append("\n");
             sb.Append("  GpoPdol: ").Append(GpoPdol).Append("\n");
             sb.Append("  CryptoPdol: ").Append(CryptoPdol).Append("\n");
             sb.Append("  Queries: ").Append(Queries).Append("\n");
@@ -108,6 +116,11 @@ namespace TapCapSupplier.Server.Models
 
             return 
                 (
+                    Address == other.Address ||
+                    Address != null &&
+                    Address.Equals(other.Address)
+                ) && 
+                (
                     GpoPdol == other.GpoPdol ||
                     GpoPdol != null &&
                     GpoPdol.Equals(other.GpoPdol)
@@ -144,6 +157,8 @@ namespace TapCapSupplier.Server.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
+                    if (Address != null)
+                    hashCode = hashCode * 59 + Address.GetHashCode();
                     if (GpoPdol != null)
                     hashCode = hashCode * 59 + GpoPdol.GetHashCode();
                     if (CryptoPdol != null)

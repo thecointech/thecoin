@@ -17,16 +17,18 @@ namespace TapCapSupplier.Server.Card
 	{
 		private readonly ILogger _logger;
 
+		private IEmvCard AsBase => this as IEmvCard;
+
 		// Only one tx may occur at a time
 		private static object __CardLock = new object();
 		private EmvCardMessager card;
 		internal ServerResponseCache Cache;
 
 
-		public StaticResponses StaticResponses => Cache.CardStaticResponses();
-		public byte[] GpoPDOL => StaticResponses.GpoPdol;
-		public byte[] CryptoPDOL => StaticResponses.CryptoPdol;
-		public string Name => ReadCardName();
+		StaticResponses IEmvCard.StaticResponses => Cache.CardStaticResponses();
+		byte[] IEmvCard.GpoPDOL => AsBase.StaticResponses.GpoPdol;
+		byte[] IEmvCard.CryptoPDOL => AsBase.StaticResponses.CryptoPdol;
+		string IEmvCard.Name => ReadCardName();
 
 		/// <summary>
 		/// Implementation to handle talking directly to local payment card
@@ -36,7 +38,7 @@ namespace TapCapSupplier.Server.Card
 			_logger = logger;
 			
 			card = new EmvCardMessager(_logger);
-			Cache = new ServerResponseCache(appEnv?.ContentRootPath, Name);
+			Cache = new ServerResponseCache(Utils.Utils.GetDataPath(appEnv), AsBase.Name);
 			try
 			{
 				Cache.LoadStaticResponses();
@@ -157,7 +159,7 @@ namespace TapCapSupplier.Server.Card
 			var selectApp = Processing.BuildSelectApp(fileData, card);
 			var appData = QueryAndStore(selectApp);
 
-			var dummyData = PDOL.GenerateDummyData(GpoPDOL);
+			var dummyData = PDOL.GenerateDummyData(AsBase.GpoPDOL);
 			var gpoQuery = Processing.BuildGPOQuery(card, dummyData);
 			var gpoData = QueryAndStore(gpoQuery);
 
