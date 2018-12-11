@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace TheBankAPI
 {
 	public interface ITransactionVerifier
 	{
-		Task InitializeTask();
-
-		Task<Transaction> MatchTx(ulong amount);
-
-		Transaction GetLatestTx();
+		Task<Data.Transaction> MatchTx(TapCapManager.Client.Model.TapCapBrokerPurchase clientRequest, int fiatRequested);
 	}
 }

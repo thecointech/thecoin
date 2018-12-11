@@ -54,11 +54,16 @@ namespace TheUtils
 			return (address, result);
 		}
 
+		public static string GetSignature(string message, Account account)
+		{
+			var signer = new EthereumMessageSigner();
+			return signer.EncodeUTF8AndSign(message, new EthECKey(account.PrivateKey));
+		}
+
 		public static (string message, string signature) GetMessageAndSignature(object obj, Account account)
 		{
 			string message = JsonConvert.SerializeObject(obj);
-			var signer = new EthereumMessageSigner();
-			var signature = signer.EncodeUTF8AndSign(message, new EthECKey(account.PrivateKey));
+			string signature = GetSignature(message, account);
 			return (message, signature);
 		}
 

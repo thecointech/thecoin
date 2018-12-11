@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TheBankAPI
 {
-	public class BalanceAPI
+	public class BalanceAPI : IDisposable
 	{
 		ILogger logger;
 		private Browser browser;
@@ -19,10 +19,12 @@ namespace TheBankAPI
 		private Newtonsoft.Json.Linq.JArray commands;
 		private dynamic txPageData;
 
-		public BalanceAPI(string appdir)
+		public BalanceAPI(ILogger logger, string appFolder)
 		{
-			initTask = Initialize(appdir);
+			this.logger = logger;
+			initTask = Initialize(appFolder);
 		}
+
 
 		/// <summary>
 		///  Returns an awaitable task callers may
@@ -38,39 +40,67 @@ namespace TheBankAPI
 		/// Gets a list of the 10 most recent transactions
 		/// </summary>
 		/// <returns></returns>
-		public async Task<Transaction[]> GetLatestTransactions()
+		public async Task<List<Data.Transaction>> GetLatestTransactions()
 		{
-			await EnsurePageLoaded();
+			bool pageLoaded = await EnsurePageLoaded();
+			if (!pageLoaded)
+				return new List<Data.Transaction>();
 
-			string txTarget = txPageData.Target;
+			string txTarget = txPageData["Target"].ToString();
 			var selector = await GetSelector(txTarget);
 			await page.WaitForSelectorAsync(selector);
-			var rawResults = await GetRawTransactions();
-			return await ConvertToPublicTransactions(rawResults);
+			var rawResults = await GetRawTransactions(selector);
+			return ConvertToPublicTransactions(rawResults);
 		}
 
-		async Task EnsurePageLoaded()
+		async Task<bool> EnsurePageLoaded()
 		{
-			if (page == null)
+			await initTask;
+
+			for (int i = 0; i < 5; i++)
 			{
-				await ReInitializePage();
-			}
-			else
-			{
-				// If we have a valid page, then
-				// we can simply reload it and hope that
-				// we are still logged in.  We test
-				// login state via 
-				await page.ReloadAsync();
-				// Check to see if the refreshed page is the
-				// one we are looking for
-				bool isValid = await VerifyStatementPage();
-				// If not, then lets reload the page from scratch
-				if (!isValid)
+				try
 				{
-					await ReInitializePage();
+					logger.LogTrace("Attempting page load: " + i);
+					if (page == null || page.Url == "about:blank")
+					{
+						logger.LogTrace("First-time load");
+						if (await ReInitializePage())
+						{
+							logger.LogTrace("load successful");
+							return true;
+						}
+					}
+					else
+					{
+						// If we have a valid page, then
+						// we can simply reload it and hope that
+						// we are still logged in.  We test
+						// login state via 
+						var response = await page.ReloadAsync();
+						// Check to see if the refreshed page is the
+						// one we are looking for
+						if (response != null && response.Ok && await VerifyStatementPage())
+						{
+							logger.LogTrace("Page refreshed successfully");
+							return true;
+						}
+
+						// If not, then lets reload the page from scratch
+						if (await ReInitializePage())
+						{
+							logger.LogTrace("Page Logged in successfully");
+							return true;
+						}
+						logger.LogError("Could not fetch new items");
+					}
+				}
+				catch (Exception err)
+				{
+					logger.LogError("Error loading page: {0}", err.Message);
 				}
 			}
+			return false;
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,54 +111,68 @@ namespace TheBankAPI
 		/// <returns></returns>
 		async Task<bool> VerifyStatementPage()
 		{
-			string target = txPageData.Target;
+			string target = txPageData["Target"].ToString();
 			string selector = await GetSelector(target);
 			var results = await page.QuerySelectorAllAsync(selector);
 			return results.Length > 0;
 		}
 
-		async Task ReInitializePage()
+		async Task<bool> ReInitializePage()
 		{
 			var counter = 0;
-			foreach (dynamic command in commands)
+			try
 			{
-				string action = command.Command;
-				string target = command.Target;
-				Console.WriteLine("Processing {0} - {1}", action, target);
-
-				switch (action)
+				foreach (dynamic command in commands)
 				{
-					case "open":
-						{
-							await page.GoToAsync(target);
-							break;
-						}
-					case "clickAndWait":
-						{
-							string selector = await GetSelector(target);
-							await page.ClickAsync(selector);
-							break;
-						}
-					case "type":
-						{
-							string value = command.Value;
-							await EnterText(target, value);
-							break;
-						}
-					case "click":
-						{
-							string selector = await GetSelector(target);
-							await page.ClickAsync(selector);
-							if (selector.EndsWith("button"))
+					string action = command["Command"].ToString();
+					string target = command["Target"].ToString();
+					logger.LogDebug("Processing {0} - {1}", action, target);
+
+					switch (action)
+					{
+						case "open":
 							{
-								await page.WaitForNavigationAsync();
+								await page.GoToAsync(target);
+								break;
 							}
-							break;
-						}
+						case "clickAndWait":
+							{
+								var navigateWait = page.WaitForNavigationAsync();
+								string selector = await GetSelector(target);
+								await page.ClickAsync(selector);
+								await navigateWait;
+								break;
+							}
+						case "type":
+							{
+								string value = command["Value"].ToString();
+								await EnterText(target, value);
+								break;
+							}
+						case "click":
+							{
+								string selector = await GetSelector(target);
+								Task navigateWait = (selector.EndsWith("button")) ?
+									navigateWait = page.WaitForNavigationAsync() :
+									Task.CompletedTask;
+
+								await page.ClickAsync(selector);
+								await navigateWait;
+								break;
+							}
+					}
+					counter++;
+					logger.LogTrace("Completed action {0}", counter);
+					await Task.Delay(250);
+					await page.ScreenshotAsync($@"c:\temp\screenshot{counter}.png");
 				}
-				counter++;
-				await page.ScreenshotAsync($@"c:\temp\screenshot{counter}.png");
+				return true;
 			}
+			catch(Exception err)
+			{
+				logger.LogError("Exception: " + err.ToString());
+			}
+			return false;
 		}
 
 		async Task<string> GetSelector(string target)
@@ -236,6 +280,8 @@ _item.value = ""{value}""
 }}
 ";
 			var rawResults = await page.EvaluateFunctionAsync<OutputTransaction[]>(jsCmd);
+
+			logger.LogDebug("BalanceAPI fetched {0} results, w/ balance {1}", rawResults.Length, (rawResults.Length > 0) ? rawResults[0].Balance : "none");
 			return rawResults;
 		}
 
@@ -244,26 +290,26 @@ _item.value = ""{value}""
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		uint ParseMoney(string input)
+		int ParseMoney(string input)
 		{
 			if (input.Length > 0)
 			{
-				return (uint)(100 * Convert.ToDecimal(input));
+				return (int)(100 * Convert.ToDecimal(input));
 			}
 			return 0;
 		}
 
-		List<Transaction> ConvertToPublicTransactions(OutputTransaction[] rawResults)
+		List<Data.Transaction> ConvertToPublicTransactions(OutputTransaction[] rawResults)
 		{
-			List<Transaction> results = new List<Transaction>();
-			const uint InvalidVal = uint.MaxValue;
-			uint balance = InvalidVal;
+			List<Data.Transaction> results = new List<Data.Transaction>();
+			const int InvalidVal = int.MinValue;
+			int balance = InvalidVal;
 			foreach (var result in rawResults)
 			{
 				DateTime date = DateTime.Parse(result.Date);
-				uint withdrawal = ParseMoney(result.Withdrawal);
-				uint deposit = ParseMoney(result.Deposit);
-				uint newBalance = ParseMoney(result.Balance);
+				int withdrawal = ParseMoney(result.Withdrawal);
+				int deposit = ParseMoney(result.Deposit);
+				int newBalance = ParseMoney(result.Balance);
 
 				if (newBalance != 0)
 				{
@@ -277,15 +323,13 @@ _item.value = ""{value}""
 					}
 				}
 
-				var tx = new Transaction()
+				var tx = new Data.Transaction()
 				{
 					Date = date,
-					Desc = result.Desc,
-					Withdrawal = withdrawal,
-					Deposit = deposit,
-					Balance = balance
+					Description = result.Desc,
+					FiatChange = deposit - withdrawal,
+					FiatBalance = balance
 				};
-				Console.WriteLine(tx);
 				results.Add(tx);
 
 				// Remember we are going back in time with each entry
@@ -302,32 +346,47 @@ _item.value = ""{value}""
 		/// </summary>
 		/// <param name="appdir"></param>
 		/// <returns></returns>
-		async Task Initialize(string appdir)
+		async Task Initialize(string baseFolder)
 		{
-			LoadCommands(appdir);
-			var browserpath = await DownloadChromium();
+			LoadCommands(baseFolder);
+			var browserpath = await DownloadChromium(baseFolder);
 
-			var options = new LaunchOptions { Headless = true };
+			var options = new LaunchOptions {
+				Headless = true,
+				ExecutablePath = browserpath
+			};
 			browser = await Puppeteer.LaunchAsync(options);
 			page = await browser.NewPageAsync();
+
+			page.FrameNavigated += Page_FrameNavigated;
+		}
+
+		private void Page_FrameNavigated(object sender, FrameEventArgs e)
+		{
+			if (e.Frame.ParentFrame == null)
+				logger.LogTrace("Navigated to: {0}", e.Frame.Url);
 		}
 
 		private void LoadCommands(string appdir)
 		{
-			logger.LogInformation("Processing action script");
-			var userInput = System.IO.File.ReadAllText(appdir + "LoginRBC.json");
+			logger.LogTrace("Processing action script");
+			var userInput = System.IO.File.ReadAllText(appdir + @"\LoginRBC.json");
 
 			dynamic json = JsonConvert.DeserializeObject(userInput);
-			commands = json.Commands;
+			commands = json["Commands"];
 			txPageData = commands[commands.Count - 1];
 			commands.Remove(txPageData);
 
 		}
 
-		private async Task<string> DownloadChromium()
+		private async Task<string> DownloadChromium(string basePath)
 		{
+			string cachePath = System.IO.Path.Combine(basePath, "ChromiumCache");
 			logger.LogInformation("Downloading chromium");
-			var browserFetcher = Puppeteer.CreateBrowserFetcher(new BrowserFetcherOptions());
+			var browserFetcher = Puppeteer.CreateBrowserFetcher(new BrowserFetcherOptions()
+			{
+				Path = cachePath
+			});
 			browserFetcher.DownloadProgressChanged += PrintDownloadProgress;
 			await browserFetcher.DownloadAsync(BrowserFetcher.DefaultRevision);
 			return browserFetcher.GetExecutablePath(BrowserFetcher.DefaultRevision);
@@ -340,7 +399,7 @@ _item.value = ""{value}""
 			if (e.BytesReceived > bytesDownloaded)
 			{
 				string progress = String.Format("Progress: {0}%", e.BytesReceived);
-				logger.LogDebug(progress);
+				logger.LogTrace(progress);
 				bytesDownloaded = e.BytesReceived + bytesInterval;
 			}
 		}
@@ -354,5 +413,42 @@ _item.value = ""{value}""
 			public string Balance { get; set; }
 			public override string ToString() => $"Date: {Date} \nDesc: {Desc}";
 		}
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposedValue)
+			{
+				if (disposing)
+				{
+					page.Dispose();
+					browser.Dispose();
+				}
+
+				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+				// TODO: set large fields to null.
+
+				disposedValue = true;
+			}
+		}
+
+		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+		// ~BalanceAPI() {
+		//   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+		//   Dispose(false);
+		// }
+
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+			// TODO: uncomment the following line if the finalizer is overridden above.
+			// GC.SuppressFinalize(this);
+		}
+		#endregion
 	}
 }
