@@ -12,10 +12,10 @@ async function DecryptWallet(key) {
 	return TCWallet;
 }
 
-if (key != null) {
-	DecryptWallet(key);
-	key = undefined;
+exports.DecryptWallet = async () => {
+	if (key != null) {
+		await DecryptWallet(key);
+		key = undefined;
+	}
 }
-
 exports.GetWallet = () => TCWallet;
-exports.DecryptWallet = DecryptWallet;

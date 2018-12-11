@@ -103,7 +103,7 @@ exports.TapTx = function(request, signedRecord, storeName) {
 			.catch((err) => {
 				// TODO: Add retry logic
 				transaction.rollback()
-				console.error("Oh No!: " + err);
+				console.error(new Date(), "Oh No!: " + err);
 				reject();
 			});
 	});

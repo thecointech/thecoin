@@ -18,7 +18,7 @@
 
 "@google-cloud/datastore@^2.0.0":
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/datastore/-/datastore-2.0.0.tgz#09ac425155d9a44701f84136ca9351150cbd7541"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@google-cloud/datastore/-/datastore-2.0.0.tgz#09ac425155d9a44701f84136ca9351150cbd7541"
   dependencies:
     "@google-cloud/projectify" "^0.3.0"
     "@google-cloud/promisify" "^0.3.0"

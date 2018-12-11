@@ -79,9 +79,13 @@ function BuildUpdates(allTxs, latest)
 //	Accidental:
 //		Is it possible for the nonce-chain to be broken - contesting future nonce?
 exports.DeleteTx = async function(uncompleted, storeName) {
+	console.log("Reverting tx");
 	const [clientAddress, clientRequest] = ParseSignedMessage(uncompleted.signedRequest);
-	const supplierAddress = ethers.utils.verifyMessage(uncompleted.signedRequest.message, uncompleted.supplierSignature);
+	const supplierAddress = ethers.utils.verifyMessage(uncompleted.signedRequest.message, uncompleted.signature);
+	console.log("Supplier Address: ", supplierAddress);
 	const [myAddress, token] = ParseSignedMessage(clientRequest.token);
+
+	console.log("Tx Nonce: %d at time %s", token.nonce, new Date());
 
 	// Verify the token is legitimate
 	if (myAddress != GetWallet().address)
@@ -124,15 +128,19 @@ exports.DeleteTx = async function(uncompleted, storeName) {
 				console.error("Resetting tx that was previously confirmed: ", txKey)
 			}
 			
-			let firstId = (allTxs.length > 1 && parseInt(allTxs[0][datastore.KEY].id)) || -1;
+			let firstId = -1;
+			if (allTxs.length >= 1)
+				firstId = parseInt(allTxs[0][datastore.KEY].id);
 			// check if the first tx logged is actually the tx being referenced here
 			let updates = [];
 			if (firstId == token.nonce) {
+				console.log("Revert: Updating from nonce %d, %d items", token.nonce, allTxs.length)
 				updates = BuildUpdates(allTxs, latest)
 			}
 			else {
 				// This tx has not been registered yet.  In this case, just store the cancel struct 
 				// in case someone tries to register this tx later.
+				console.log("Revert: Building new tx for nonce %d, (with %d items)", token.nonce, allTxs.length)
 				updates = BuildBlankTx(txKey, supplierAddress, latest, token.nonce, clientRequest.timestamp);
 			}
 			// Save all to disk, along with the delete cmd.

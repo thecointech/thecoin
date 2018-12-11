@@ -13,7 +13,7 @@ const DeleteTxBroker = require('../tapcap/DeleteTxBroker').DeleteTx;
  **/
 exports.deleteBroker = function(request) {
   return new Promise(function (resolve, reject) {
-    DeleteTxBroker(request)
+    DeleteTxBroker(request, "Broker")
       .then((result) => {
         resolve({
           code: 0,

@@ -12,6 +12,7 @@ var jsyaml = require('js-yaml');
 var cors = require('cors')
 
 var watcher = require('./tapcap/DepositWatcher');
+const { DecryptWallet } = require('./tapcap/Wallet');
 
 const PORT = process.env.PORT || 8091;
 
@@ -47,11 +48,13 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Start the server
-  http.createServer(app).listen(PORT, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', PORT, PORT);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', PORT);
-  });
-
+  DecryptWallet()
+    .then(() => {
+      http.createServer(app).listen(PORT, function () {
+        console.log('Your server is listening on port %d (http://localhost:%d)', PORT, PORT);
+        console.log('Swagger-ui is available on http://localhost:%d/docs', PORT);
+      });    
+    })
 });
 
 // Start watching for ethereum events

@@ -7,6 +7,7 @@ const { TapTx } = require('../tapcap/TapTx');
 const { GetStatus } = require('../tapcap/TapCapStatus')
 const { doTapCapTopUp } = require('../tapcap/DepositWatcher');
 const { DeleteTx } = require('../tapcap/DeleteTxBroker.js');
+const { DecryptWallet } = require('../tapcap/Wallet')
 
 const ethers = require('ethers');
 let SupplierWallet = null;
@@ -47,20 +48,15 @@ async function RollbackTx(tx)
 {
 	let supplierCancel = {
 		signedRequest: tx,
-		supplierSignature: await SupplierWallet.signMessage(tx.message)
+		signature: await SupplierWallet.signMessage(tx.message)
 	}
 	await DeleteTx(supplierCancel, "Supplier");
 }
 
-before(() => {
-	return new Promise(async (resolve) => {
-		const supplierEncrypted = require('./TestSupplierWallet.json');
-		const clientEncrypted = require('./TestClientWallet.json');
-
-		SupplierWallet = await ethers.Wallet.createRandom();
-		ClientWallet = await ethers.Wallet.createRandom();
-		resolve();
-	}, 200);
+before(async () => {
+	await DecryptWallet();
+	SupplierWallet = await ethers.Wallet.createRandom();
+	ClientWallet = await ethers.Wallet.createRandom();
 });
 
 describe('DeleteTxBroker', function () {
@@ -69,7 +65,7 @@ describe('DeleteTxBroker', function () {
 			// Disable timeout
 			this.timeout(0);
 
-			let balance = 1000000;
+			let balance = 0;
 			let status = null;
 			let CheckBalance = async () => {
 				let ts = new Date().getTime();
@@ -84,8 +80,10 @@ describe('DeleteTxBroker', function () {
 				await CheckBalance();
 				return signedRequest;
 			}
+			await CheckBalance();
 			// Init account
 			let ts = new Date().getTime();
+			balance = 1000000;
 			await doTapCapTopUp(ClientWallet.address, balance, "123456", 123456, ts);
 			// Ensure we are good to go
 			await CheckBalance();
