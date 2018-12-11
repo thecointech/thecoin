@@ -3,10 +3,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using TapCapSupplier.Client.Api;
 using TapCapSupplier.Client.Model;
@@ -26,6 +23,7 @@ namespace TheApp.Tap
 		private List<PDOL.PDOLItem> GpoPDOL;
 		private byte[] GpoData;
 		private double FiatRequested;
+		private string SupplierAddress;
 
 		private QueryWithHistory queryHistory;
 
@@ -41,12 +39,12 @@ namespace TheApp.Tap
 			TapSupplier = supplier;
 
 			_statusUpdatedSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnStatusUpdated);
-			Task.Run(FetchStaticResponses);
+			FetchStaticResponses();
 		}
 
 		internal void OnStatusUpdated(Events.StatusUpdated update)
 		{
-			Task.Run(FetchStaticResponses);
+			FetchStaticResponses();
 		}
 
 		internal void PublishStatus(string message)
@@ -54,16 +52,20 @@ namespace TheApp.Tap
 			Events.EventSystem.Publish(new Events.TxStatus("Step: " + queryHistory.Queries.Count, FiatRequested));
 		}
 
-		async Task FetchStaticResponses()
+		async void FetchStaticResponses()
 		{
-			if (Cache == null && UserAccount != null && UserAccount.Status != null)
+			try
 			{
-				Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
-				try
+				logger.Info("Maybe fetching");
+				if (Cache == null && UserAccount != null && UserAccount.Status != null)
 				{
+					logger.Info("Probably fetching");
+					Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
+
 					var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
-					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s));
+					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s)).ConfigureAwait(false);
 					Cache = new AppResponseCache(supplierResponses);
+					SupplierAddress = supplierResponses.Address;
 					logger.Info("Loaded Cache: {0}", supplierResponses.ToJson());
 
 					// Cache the Gpo PDOL structure
@@ -72,10 +74,10 @@ namespace TheApp.Tap
 					ResetTransaction();
 					Events.EventSystem.Publish(new Events.TxStatus());
 				}
-				catch(Exception e)
-				{
-					logger.Error(e, "Could not initialize TxProcessor");
-				}
+			}
+			catch (Exception e)
+			{
+				logger.Error(e, "Could not initialize TxProcessor");
 			}
 		}
 
@@ -231,7 +233,7 @@ namespace TheApp.Tap
 			var timestamp = TheCoinTime.Now();
 			var mtoken = UserAccount.Status.SignedToken;
 			var token = new SignedMessage(mtoken.Message, mtoken.Signature);
-			TapCapClientRequest request = new TapCapClientRequest(timestamp, GpoData, cryptoData, token);
+			TapCapClientRequest request = new TapCapClientRequest(timestamp, GpoData, cryptoData, SupplierAddress, token);
 
 			var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
 			var signedMessage = new SignedMessage(m, s);

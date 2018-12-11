@@ -54,7 +54,7 @@ namespace TheApp.ViewModels
 			: base(navigationService)
 		{
 			Title = "Main Page";
-			Logs = "-- Loading Account --";
+			Logs = "-- No Account Detected --";
 
 			logger.Trace("Main Page Loaded on thread {0}", Environment.CurrentManagedThreadId);
 

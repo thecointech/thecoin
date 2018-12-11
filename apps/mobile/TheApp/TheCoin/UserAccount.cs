@@ -27,6 +27,7 @@ namespace TheApp.TheCoin
 			private set
 			{
 				_status = value;
+				logger.Info("TapStatus Updated");
 				Events.EventSystem.Publish(new Events.StatusUpdated(value));
 			}
 		}
@@ -76,6 +77,7 @@ namespace TheApp.TheCoin
                 string key = await SecureStorage.GetAsync(AccountKey).ConfigureAwait(false);
                 if (EncryptedAccount != null && key != null)
                 {
+					Events.EventSystem.Publish(new Events.TxStatus("-- Attempting Load --"));
 					bool success = await TryDecrypt(key).ConfigureAwait(false);
 				}
 			}
@@ -100,8 +102,11 @@ namespace TheApp.TheCoin
         {
             try
             {
-                // First, verify the account pwd
-                TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
+				logger.Info("Attemping Decrypt");
+				// First, verify the account pwd
+				TheAccount = Account.LoadFromKeyStore(EncryptedAccount, key);
+
+				logger.Info("Decrypt Successfuly");
 				// If we are here, then success
 				Events.EventSystem.Publish(new Events.SetActiveAccount(this));
 				// Always get a new token on new account.
