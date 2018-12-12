@@ -250,7 +250,8 @@ namespace TapCapSupplier.Tests
 			}
 
 			Task.WaitAll(tasks);
-			Assert.True(!success.Contains(false), "Failed to generate purchase certificate on run");
+			var numFailed = success.Where(v => !v).Count();
+			Assert.True(numFailed == 0, "Failed to generate " + numFailed + " purchase certificate(s)");
 
 		}
 	}

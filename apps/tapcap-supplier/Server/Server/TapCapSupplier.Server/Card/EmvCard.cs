@@ -57,7 +57,7 @@ namespace TapCapSupplier.Server.Card
 			if (Cache.CardStaticResponses().Responses.Count == 0)
 				QueryStaticResponses();
 
-			DoStaticInit();
+			DoStaticInit(1);
 		}
 
 		byte[] AcquireLockAndDo(Func<byte[]> func)
@@ -67,7 +67,7 @@ namespace TapCapSupplier.Server.Card
 			{
 				int wasInitialized = Interlocked.CompareExchange(ref __IsReady, 0, 1);
 				if (wasInitialized == 0)
-					DoStaticInit();
+					DoStaticInit(wasInitialized);
 
 				res = func();
 
@@ -75,7 +75,7 @@ namespace TapCapSupplier.Server.Card
 				if (res == null)
 				{
 					_logger.LogInformation("Last tx failed tx: attempting retry");
-					DoStaticInit();
+					DoStaticInit(wasInitialized);
 					res = func();
 					if (res == null)
 						_logger.LogError("Regenerating failed: please check the logs");
@@ -86,11 +86,13 @@ namespace TapCapSupplier.Server.Card
 					// (regardless of whether or not it is necessary)
 					wasInitialized = 1;
 				}
+				// Set is-ready to not-ready
+				//Interlocked.Exchange(ref __IsReady, 0);
 
 				// We assume we should leave this in the same state we found it.
 				if (wasInitialized != 0)
 				{
-					Task.Run(() => DoStaticInit());
+					Task.Run(() => DoStaticInit(wasInitialized));
 				}
 			}
 			return res;
@@ -214,7 +216,7 @@ namespace TapCapSupplier.Server.Card
 		}
 
 		// Return the command we warmed up to
-		private void DoStaticInit()
+		private void DoStaticInit(int saveInitStatus)
 		{
 			// Manually increment the lock to prevent
 			// other threads from jumping in in front of
@@ -229,7 +231,7 @@ namespace TapCapSupplier.Server.Card
 					var selectApp = Processing.BuildSelectApp(fileData, card);
 					card.SendCommand(selectApp);
 					// Set is-ready to be, actually, ready.
-					Interlocked.Exchange(ref __IsReady, 1);
+					Interlocked.Exchange(ref __IsReady, saveInitStatus);
 				}
 				catch(Exception err)
 				{
@@ -246,7 +248,7 @@ namespace TapCapSupplier.Server.Card
 				byte[] cmd = { 0xFF, 0xCA, 0, 0, 0 };
 				var response = card.SendCommand(cmd);
 				// Assume it is necessary to reset the card
-				Task.Run(() => DoStaticInit());
+				Task.Run(() => DoStaticInit(1));
 				return BitConverter.ToString(response);
 			}
 		}
