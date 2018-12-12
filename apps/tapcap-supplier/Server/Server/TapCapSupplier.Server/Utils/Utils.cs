@@ -15,7 +15,9 @@ namespace TapCapSupplier.Server.Utils
 		/// <returns></returns>
 		public static string GetDataPath(IHostingEnvironment hosting)
 		{
-			return Path.Combine(hosting.ContentRootPath, "data");
+			if (hosting != null)
+				return Path.Combine(hosting.ContentRootPath, "data");
+			return null;
 		}
 
 		/// <summary>

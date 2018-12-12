@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using TapCapSupplier.Server.Card;
 using TapCapSupplier.Server.Models;
 using TheUtils;
@@ -32,6 +34,9 @@ namespace TapCapSupplier.Tests
 			Assert.True(responses.Responses.Count > 3, "Did not store sufficient responses");
 
 		}
+
+
+
 
 		[Fact]
 		public void TestCacheTrimming()
@@ -132,20 +137,20 @@ namespace TapCapSupplier.Tests
 			Assert.True(fuckinAye != null, "Built Crypto from single message successfully");
 		}
 
-		[Fact]
-		public void TestGetSingle()
-		{
-			IEmvCard card = new EmvCard(logger, null);
+		//[Fact]
+		//public void TestGetSingle()
+		//{
+		//	IEmvCard card = new EmvCard(logger, null);
 
-			Assert.True(card.GpoPDOL == null, "Should start with empty history");
-			Assert.True(card.CryptoPDOL == null, "Should start with empty history");
+		//	Assert.True(card.GpoPDOL == null, "Should start with empty history");
+		//	Assert.True(card.CryptoPDOL == null, "Should start with empty history");
 
-			RunTestTx(card, 100000);
+		//	RunTestTx(card, 100000);
 
-			int currentCount = card.StaticResponses.Responses.Count;
+		//	int currentCount = card.StaticResponses.Responses.Count;
 
-			RunTestTx(card, currentCount);
-		}
+		//	RunTestTx(card, currentCount);
+		//}
 
 		[Fact]
 		public void TestSaveLoad()
@@ -184,8 +189,8 @@ namespace TapCapSupplier.Tests
 			var cryptData = responses.CryptoPdol;
 
 
-			Assert.True(card.GpoPDOL == null, "Should start with empty history");
-			Assert.True(card.CryptoPDOL == null, "Should start with empty history");
+			//Assert.True(card.GpoPDOL == null, "Should start with empty history");
+			//Assert.True(card.CryptoPDOL == null, "Should start with empty history");
 			// Normally this would get sent back to the client to be filled by the terminal
 			var gpoParsed = PDOL.ParsePDOLItems(gpoData);
 			PDOL.FillWithDummyData(gpoParsed, TestPurchaseAmt);
@@ -203,6 +208,50 @@ namespace TapCapSupplier.Tests
 			var response = card.GenerateCrypto(request);
 
 			Assert.True(response != null && response.Length > 10, "Failed to generate purchase certificate");
+		}
+
+		[Fact]
+		public void TestMultipleSimultaneous()
+		{
+			IEmvCard card = new EmvCard(logger, null); // TODO
+
+			var responses = card.StaticResponses;
+			var gpoData = responses.GpoPdol;
+			var cryptData = responses.CryptoPdol;
+
+
+			// Normally this would get sent back to the client to be filled by the terminal
+			var gpoParsed = PDOL.ParsePDOLItems(gpoData);
+			PDOL.FillWithDummyData(gpoParsed, TestPurchaseAmt);
+
+			var cryptParsed = PDOL.ParsePDOLItems(cryptData);
+			PDOL.FillWithDummyData(cryptParsed, TestPurchaseAmt);
+
+			TapCapClientRequest request = new TapCapClientRequest()
+			{
+				Timestamp = 0,
+				GpoData = PDOL.GeneratePDOL(gpoParsed),
+				CryptoData = PDOL.GenerateCDOL(cryptParsed),
+			};
+
+			const int numSimultaneous = 20;
+			Task[] tasks = new Task[numSimultaneous];
+			bool[] success = new bool[numSimultaneous];
+			for (int i = 0; i < numSimultaneous; i++)
+			{
+				var taskIdx = i;
+				tasks[taskIdx] = Task.Run(() =>
+				{
+					logger.Log(LogLevel.Information, "Beginning item {0}", taskIdx);
+					var response = card.GenerateCrypto(request);
+					logger.Log(LogLevel.Information, "Gen success {0}, {1}", taskIdx, response != null);
+					success[taskIdx] = response != null;
+				});
+			}
+
+			Task.WaitAll(tasks);
+			Assert.True(!success.Contains(false), "Failed to generate purchase certificate on run");
+
 		}
 	}
 }

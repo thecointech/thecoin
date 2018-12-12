@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace TapCapSupplier.Server.Card
 {
@@ -19,8 +20,12 @@ namespace TapCapSupplier.Server.Card
 
 		private IEmvCard AsBase => this as IEmvCard;
 
-		// Only one tx may occur at a time
+		// Our card lock needs to be preserved between
+		// thread switches, so we use a combo
+		// counter to ensure threads are finished,
+		// and lock to make queued threads wait
 		private static object __CardLock = new object();
+		private static int __IsReady = 0;
 		private EmvCardMessager card;
 		internal ServerResponseCache Cache;
 
@@ -48,18 +53,59 @@ namespace TapCapSupplier.Server.Card
 				_logger.LogError("Error loading cache: {0}", e.Message);
 			}
 
+			// If no cache present, ensure we init new cache
+			if (Cache.CardStaticResponses().Responses.Count == 0)
+				QueryStaticResponses();
+
 			DoStaticInit();
+		}
+
+		byte[] AcquireLockAndDo(Func<byte[]> func)
+		{
+			byte[] res = null;
+			lock (__CardLock)
+			{
+				int wasInitialized = Interlocked.CompareExchange(ref __IsReady, 0, 1);
+				if (wasInitialized == 0)
+					DoStaticInit();
+
+				res = func();
+
+				// We do a single fall-back on failure
+				if (res == null)
+				{
+					_logger.LogInformation("Last tx failed tx: attempting retry");
+					DoStaticInit();
+					res = func();
+					if (res == null)
+						_logger.LogError("Regenerating failed: please check the logs");
+					else
+						_logger.LogInformation("Regeneration successful, be on your way good sirs");
+
+					// If we have to regenerate, we make sure we do a static init after this run
+					// (regardless of whether or not it is necessary)
+					wasInitialized = 1;
+				}
+
+				// We assume we should leave this in the same state we found it.
+				if (wasInitialized != 0)
+				{
+					Task.Run(() => DoStaticInit());
+				}
+			}
+			return res;
 		}
 
 		byte[] IEmvCard.GetSingleResponse(QueryWithHistory queryWithHistory)
 		{
-			lock(__CardLock)
+			if (queryWithHistory.Responses.Count != queryWithHistory.Responses.Count)
 			{
-				if (queryWithHistory.Responses.Count != queryWithHistory.Responses.Count)
-				{
-					_logger.LogError("Mismatched arrays");
-					return null;
-				}
+				_logger.LogError("Mismatched arrays");
+				return null;
+			}
+
+			return AcquireLockAndDo(() =>
+			{
 				Cache.ResetTx();
 				for (int i = 0; i < queryWithHistory.Queries.Count; i++)
 				{
@@ -68,12 +114,9 @@ namespace TapCapSupplier.Server.Card
 					CheckCachedResponse(query, clientResponse);
 				}
 
-				// Always leave the card initialized
-				Task.Run(() => DoStaticInit());
-
 				// TODO: Filter requests we don't permit
 				return CheckCachedResponse(queryWithHistory.Query, null);
-			}
+			});
 		}
 
 		byte[] CheckCachedResponse(byte[] query, byte[] clientResponse)
@@ -123,28 +166,17 @@ namespace TapCapSupplier.Server.Card
 		/// <returns></returns>
 		byte[] IEmvCard.GenerateCrypto(TapCapClientRequest request)
 		{
-			lock(__CardLock)
+			var gpoQuery = Processing.BuildGPOQuery(card, request.GpoData);
+
+			return AcquireLockAndDo(() =>
 			{
-				var gpoQuery = Processing.BuildGPOQuery(card, request.GpoData);
 				// Set GPO data (response is ignored)
 				var gpoData = card.SendCommand(gpoQuery);
 
-				//var fileList = Processing.ParseAddresses(gpoData);
-				//foreach (var file in fileList)
-				//{
-				//	for (byte recordNum = file.FromRecord; recordNum <= file.ToRecord; recordNum++)
-				//	{
-				//		var recordQuery = Processing.BuildReadRecordApdu(file, recordNum, card);
-				//		var recordData = card.SendCommand(recordQuery, "Query Record: " + recordNum);
-				//	}
-				//}
-
 				// Generate crypto
 				var cryptoQuery = Processing.BuildCryptSigQuery(card, request.CryptoData);
-				var cryptoSig = card.SendCommand(cryptoQuery);
-				Task.Run(() => DoStaticInit());
-				return cryptoSig;
-			}
+				return card.SendCommand(cryptoQuery);
+			});
 		}
 
 		///
@@ -182,24 +214,41 @@ namespace TapCapSupplier.Server.Card
 		}
 
 		// Return the command we warmed up to
-		private byte[] DoStaticInit()
+		private void DoStaticInit()
 		{
-			lock (__CardLock)
+			// Manually increment the lock to prevent
+			// other threads from jumping in in front of
+			// us in the queue
+			lock(__CardLock)
 			{
-				_logger.LogDebug("Static Init: Tx");
-				var cmdInitialize = Processing.BuildInitialize(card);
-				var fileData = card.SendCommand(cmdInitialize);
-				var selectApp = Processing.BuildSelectApp(fileData, card);
-				return card.SendCommand(selectApp);
+				try
+				{
+					_logger.LogDebug("Static Init: Tx");
+					var cmdInitialize = Processing.BuildInitialize(card);
+					var fileData = card.SendCommand(cmdInitialize);
+					var selectApp = Processing.BuildSelectApp(fileData, card);
+					card.SendCommand(selectApp);
+					// Set is-ready to be, actually, ready.
+					Interlocked.Exchange(ref __IsReady, 1);
+				}
+				catch(Exception err)
+				{
+					_logger.LogError("Error in StaticInit: {0}", err.ToString());
+				}
 			}
 		}
 
 
 		private string ReadCardName()
 		{
-			byte[] cmd = { 0xFF, 0xCA, 0, 0, 0 };
-			var response = card.SendCommand(cmd);
-			return BitConverter.ToString(response);
+			lock (__CardLock)
+			{
+				byte[] cmd = { 0xFF, 0xCA, 0, 0, 0 };
+				var response = card.SendCommand(cmd);
+				// Assume it is necessary to reset the card
+				Task.Run(() => DoStaticInit());
+				return BitConverter.ToString(response);
+			}
 		}
 
 
