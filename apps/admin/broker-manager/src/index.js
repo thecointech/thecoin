@@ -7,6 +7,8 @@ import "./index.css"
 import App from "./App"
 import configureStore from "./store/configureStore"
 
+So convert the database to the-broker-cad before running this
+
 const store = configureStore()
 
 ReactDOM.render(
