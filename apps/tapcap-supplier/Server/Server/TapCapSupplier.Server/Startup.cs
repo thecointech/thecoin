@@ -100,7 +100,7 @@ namespace TapCapSupplier.Server
 			services.AddSingleton(AccountFactory.Load);
 			services.AddSingleton<IEmvCard, EmvCard>();
 			services.AddTransient<IRatesApi, RatesApi>();
-			services.AddTransient<ITransactionsApi, TransactionsApi>(sp => new TransactionsApi("http://localhost:8091"));
+			services.AddTransient<ITransactionsApi, TransactionsApi>(); // sp => new TransactionsApi("http://localhost:8091"));
 
 			services.AddSingleton<ITransactionVerifier, TransactionVerifier>(sp =>
 				new TransactionVerifier(

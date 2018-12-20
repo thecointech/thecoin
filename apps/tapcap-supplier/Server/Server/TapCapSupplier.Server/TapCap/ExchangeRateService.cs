@@ -144,7 +144,8 @@ namespace TapCapSupplier.Server.TapCap
 			var msTillExp = currentExpTime.Value - now;
 			// Shift our update back 10 seconds before exp, so that
 			// we are updating -before- the current rate expires
-			msTillExp = Math.Max(1, msTillExp - 10000);
+			// However, don't update too quickly
+			msTillExp = Math.Max(1000, msTillExp - 10000);
 
 			if (!__cancel.IsCancellationRequested)
 				_timer.Change(TimeSpan.FromMilliseconds(msTillExp), TimeSpan.Zero);
