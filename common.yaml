@@ -64,6 +64,7 @@ definitions:
       - gpoData
       - cryptoData
       - token
+      - supplierAddress
     properties:
       timestamp:
         type: integer
@@ -74,6 +75,8 @@ definitions:
       cryptoData:
         type: string
         format: byte
+      supplierAddress:
+        type: string  # The address of the supplier we are requesting from
       token:
         $ref: "#/definitions/SignedMessage" # sign(TapCapToken)
 
@@ -118,6 +121,16 @@ definitions:
         format: int64
       merchantId:
         type: string
+
+  TapCapUnCompleted:
+    required:
+      - signedRequest
+      - supplierSignature
+    properties:
+      signedRequest:
+        $ref: "#/definitions/SignedMessage" # sign(TapCapClientRequest)
+      signature:
+        type: string # The broker also signs the request message to ensure it's the one who sent the message
 
   # Exchange rate info for the given country code
   # When queried, Valid from <= timestamp < ValidTill

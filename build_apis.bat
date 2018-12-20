@@ -32,5 +32,3 @@ REM java -jar .\APIs\swagger-codegen-cli.jar generate -i APIs\TheCoinBroker.yaml
 REM java -jar .\APIs\openapi-generator-cli-3.0.0.jar generate -i APIs\e-Transfer_Public_API_selfreg_v2.0.yaml -l csharp -c APIs\InteracClientSpec.json -o InteracClient
 
 REM dotnet run -p CoreServerASP\src\IO.Swagger\IO.Swagger.csproj --launch-profile web
-
-id0ntknowwhatTheproblemis
