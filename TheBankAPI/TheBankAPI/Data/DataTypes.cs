@@ -117,11 +117,14 @@ namespace TheBankAPI.Data
 
 		bool FuzzyMatches(DateTime justDate, DateTime dateAndTime)
 		{
-			// justDate will be offset forwards on weekends
-			if (dateAndTime.DayOfWeek == DayOfWeek.Saturday)
-				return (justDate - dateAndTime) < TimeSpan.FromDays(2);
-			if (dateAndTime.DayOfWeek == DayOfWeek.Sunday)
-				return (justDate - dateAndTime) < TimeSpan.FromDays(1);
+			// At certain times (when the bank is closed) the tx date will
+			// be posted as a future date.  All these dates match
+			if (justDate > DateTime.Now)
+				return true;
+			//if (dateAndTime.DayOfWeek == DayOfWeek.Saturday)
+			//	return (justDate - dateAndTime) < TimeSpan.FromDays(2);
+			//if (dateAndTime.DayOfWeek == DayOfWeek.Sunday)
+			//	return (justDate - dateAndTime) < TimeSpan.FromDays(1);
 
 			return justDate == dateAndTime.Date || justDate == (dateAndTime + TimeSpan.FromSeconds(30)).Date;
 		}

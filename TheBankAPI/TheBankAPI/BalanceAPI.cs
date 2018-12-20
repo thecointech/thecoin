@@ -152,18 +152,37 @@ namespace TheBankAPI
 						case "click":
 							{
 								string selector = await GetSelector(target);
-								Task navigateWait = (selector.EndsWith("button")) ?
-									navigateWait = page.WaitForNavigationAsync() :
-									Task.CompletedTask;
+								if (selector.EndsWith("button"))
+								{
+									// We must wait till we've navigated, and wait till
+									// we've stopped navigating
+									var navigateWait = page.WaitForNavigationAsync();
+									var trafficWait = page.WaitForNavigationAsync(
+										new NavigationOptions()
+										{
+											WaitUntil = new WaitUntilNavigation[]{
+												WaitUntilNavigation.Networkidle0
+											}
+										});
+									var clickAsync = page.ClickAsync(selector);
+									Task.WaitAll(clickAsync, navigateWait, trafficWait);
 
-								await page.ClickAsync(selector);
-								await navigateWait;
+									//var redirects = responseAsync.Result.Request.RedirectChain;
+								}
+								else
+									await page.ClickAsync(selector);
+
+								break;
+							}
+						case "select":
+							{
+								string selector = await GetSelector(target);
+								await page.WaitForSelectorAsync(selector);
 								break;
 							}
 					}
 					counter++;
 					logger.LogTrace("Completed action {0}", counter);
-					await Task.Delay(250);
 					await page.ScreenshotAsync($@"c:\temp\screenshot{counter}.png");
 				}
 				return true;
