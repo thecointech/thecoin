@@ -1,0 +1,21 @@
+.headerImage {
+    width: 100%;
+    position: relative;
+    margin-bottom: 1px;
+    z-index: 1;
+  }
+  
+  .headerLogo {
+    margin: 1.5% 0px 0px 5%;
+    width: 15%;
+    position: absolute;
+    z-index: 3;
+  }
+  
+  .headerText {
+    margin-left: 40%;
+    width: 50%;
+    position: absolute;
+    z-index: 2;
+  }
+  

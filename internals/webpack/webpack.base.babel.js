@@ -44,7 +44,17 @@ module.exports = options => ({
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          'style-loader',
+          {
+            loader: 'typings-for-css-modules-loader',
+            options: {
+              modules: true,
+              namedExport: true,
+              camelCase: true,
+            },
+          },
+        ],
       },
       {
         // Preprocess 3rd party .css files located in node_modules
@@ -127,6 +137,7 @@ module.exports = options => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
+    new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
   ]),
   resolve: {
     modules: ['node_modules', 'app'],
