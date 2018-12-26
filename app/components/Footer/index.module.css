@@ -1,0 +1,14 @@
+.footerItems {
+    background-color: #3D2D2D;
+    color: rgb(154, 161, 155) !important;
+    text-align: left;
+    width: 100%;
+    z-index: 2;
+    padding: 30px;
+}
+
+.footerItems > li {
+    margin-left: 15px;
+    display: inline-block !important;
+    margin: 10px;
+}

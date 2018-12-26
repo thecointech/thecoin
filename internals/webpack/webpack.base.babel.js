@@ -137,7 +137,6 @@ module.exports = options => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-    new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
   ]),
   resolve: {
     modules: ['node_modules', 'app'],

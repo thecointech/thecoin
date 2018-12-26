@@ -1,6 +1,6 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import * as styles from './index.module.css';
+import styles from './index.module.css';
 import Banner from './headerSmall_static.svg';
 import Logo from './logo.svg';
 import messages from './messages';
