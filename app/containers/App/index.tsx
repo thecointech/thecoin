@@ -13,7 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from 'components/Header/index';
 import MainNavigation from 'containers/MainNavigation/index'
 import Footer from 'components/Footer/index';
-import { PageSidebar } from 'containers/PageSidebar/index';
+import PageSidebar from 'containers/PageSidebar/index';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 

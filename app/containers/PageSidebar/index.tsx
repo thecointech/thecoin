@@ -7,11 +7,23 @@ import {
   MenuItem,
   Segment,
 } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { ApplicationRootState } from 'types';
+import { makeSelectLocation } from 'containers/App/selectors';
+import { createStructuredSelector } from 'reselect';
+import { Location } from 'history'
 
-interface PageSidebarProps extends React.Props<SidebarProps> {}
+interface OwnProps {}
+interface StateProps {
+  route: Location
+}
+type Props = OwnProps & StateProps & SidebarProps;
 
-export class PageSidebar extends React.PureComponent<PageSidebarProps> {
+class PageSidebar extends React.PureComponent<Props, {}, null> {
   render() {
+    const { route } = this.props;
+    const visible = route.pathname !== '/';
+    
     return (
       <Sidebar.Pushable as={Segment}>
         <Sidebar
@@ -21,7 +33,7 @@ export class PageSidebar extends React.PureComponent<PageSidebarProps> {
           icon="labeled"
           inverted
           vertical
-          visible
+          visible={visible}
           width="thin"
         >
           <MenuItem as="a">
@@ -44,3 +56,11 @@ export class PageSidebar extends React.PureComponent<PageSidebarProps> {
     );
   }
 }
+
+// Map RootState to your StateProps
+const mapStateToProps = createStructuredSelector<ApplicationRootState, StateProps>({
+  // All the keys and values are type-safe
+  route: makeSelectLocation()
+});
+
+export default connect(mapStateToProps)(PageSidebar);
