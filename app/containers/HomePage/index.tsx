@@ -10,15 +10,51 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { Grid, Container } from 'semantic-ui-react';
+import IconWithText from 'components/IconWithText/index';
+import * as Icons from 'utils/icons';
 import messages from './messages';
+import ButtonLink from 'components/ButtonLink/index'
 
 export default class HomePage extends React.PureComponent {
   public render() {
     return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
+      <Container>
+        <Grid columns={3} stackable divided centered>
+          <Grid.Row>
+            <Grid.Column>
+              <IconWithText
+                icon={Icons.ChartLine}
+                message={messages.blurbGrow}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <IconWithText
+                icon={Icons.ShoppingBasket}
+                message={messages.blurbSpend}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <IconWithText icon={Icons.Lock} message={messages.blurbFees} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Container textAlign="center">
+          <ButtonLink
+            to="/howItWorks"
+            size="massive"
+          >
+            LEARN MORE
+          </ButtonLink>
+          <br />
+          <ButtonLink
+            size="massive"
+            to="/accounts"
+          >
+            GO TO ACCOUNTS
+          </ButtonLink>
+        </Container>
+      </Container>
     );
   }
 }

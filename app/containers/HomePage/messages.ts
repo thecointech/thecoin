@@ -12,4 +12,19 @@ export default defineMessages({
     id: `${scope}.header`,
     defaultMessage: 'This is the HomePage container!',
   },
+  blurbGrow: {
+    id: `${scope}.blurbGrow`,
+    defaultMessage:
+      'Grow your wealth alongside Wall Street without taking away access to your finances.',
+  },
+  blurbSpend: {
+    id: `${scope}.blurbSpend`,
+    defaultMessage:
+      'Spend your money at the supermarket or your favorite restaurant.',
+  },
+  blurbFees: {
+    id: `${scope}.blurbFees`,
+    defaultMessage:
+      "All the while paying no fees whatsoever, and enjoying the world's most secure accounts.",
+  },
 });
