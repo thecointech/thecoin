@@ -1,31 +1,29 @@
 import React from 'react';
+import { Menu, Container } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
-// import * as styles from './index.module.css';
-const styles = require('./index.module.css');
+import styles from './index.module.css';
 
 class Navigation extends React.Component {
   render() {
     return (
-      <nav>
-        <div className={styles.navContainer}>
-          <ul className={styles.mainNav}>
-            <li>
-              <HeaderLink to="/" exact>
-                WELCOME
-              </HeaderLink>
-            </li>
-            <li>
-              <HeaderLink to="/accounts">ACCOUNTS</HeaderLink>
-            </li>
-            <li>
-              <HeaderLink to="/howItWorks">HOW IT WORKS</HeaderLink>
-            </li>
-            <li>
-              <HeaderLink to="/contact">CONTACT</HeaderLink>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div className={styles.navContainer}>
+        <Container>
+          <Menu borderless>
+            <HeaderLink to="/" exact>
+              HOME
+            </HeaderLink>
+            <HeaderLink to="/accounts" exact>
+              ACCOUNTS
+            </HeaderLink>
+            <HeaderLink to="/howItWorks" exact>
+              HOW IT WORKS
+            </HeaderLink>
+            <HeaderLink to="/FAQ" exact>
+              FAQ
+            </HeaderLink>
+          </Menu>
+        </Container>
+      </div>
     );
   }
 }

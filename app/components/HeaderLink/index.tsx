@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import * as styles from './index.module.css';
+import { Menu } from 'semantic-ui-react';
+import cx from 'classnames';
+import styles from './index.module.css';
 
 interface HeaderLinkProps {
   to: string;
@@ -9,11 +11,13 @@ interface HeaderLinkProps {
 }
 
 export default (props: HeaderLinkProps) => (
-  <NavLink
+  <Menu.Item
+    as={NavLink}
     to={props.to}
     exact={props.exact}
-    activeClassName={styles.activeNavLink}
+    className={cx(styles.ui, styles.menu, styles.link, styles.item)}
+    activeClassName={cx(styles.ui, styles.menu, styles.link, styles.activeItem)}
   >
     {props.children}
-  </NavLink>
+  </Menu.Item>
 );
