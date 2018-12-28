@@ -2,7 +2,9 @@ import React from 'react';
 import Measure from 'react-measure';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import injectReducer from 'utils/injectReducer';
 import { setContentHeight } from './actions';
+import reducer from './reducer';
 
 import styles from './index.module.css';
 
@@ -26,7 +28,7 @@ class Measurable extends React.PureComponent<Props> {
   }
 
   onContentSized(bounds) {
-    console.log(`Measuring: ${bounds.bounds.height}`);
+    // console.log(`Measuring: ${bounds.bounds.height}`);
     this.props.onMeasureHeight(bounds.bounds.height, this.timestamp);
   }
 
@@ -50,7 +52,14 @@ export function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   };
 }
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(Measurable);
+const withReducer = injectReducer<OwnProps>({
+  key: 'content',
+  reducer,
+});
+
+export default withReducer(
+  connect(
+    null,
+    mapDispatchToProps,
+  )(Measurable),
+);

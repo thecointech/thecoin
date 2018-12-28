@@ -6,7 +6,7 @@ export const initialState: ContainerState = {
   height: 250,
 };
 
-let lastTimeStamp = 0;
+// const lastTimeStamp = 0;
 
 // Take this container's state (as a slice of root state), this container's actions and return new state
 function measureReducer(
@@ -15,8 +15,8 @@ function measureReducer(
 ): ContainerState {
   switch (action.type) {
     case ActionTypes.SET_HEIGHT:
-      if (action.payload.timestamp <= lastTimeStamp) return state;
-      lastTimeStamp = action.payload.timestamp;
+      // if (action.payload.timestamp <= lastTimeStamp) return state;
+      // lastTimeStamp = action.payload.timestamp;
       return {
         ...state,
         height: action.payload.height,
