@@ -16,6 +16,7 @@ import Footer from 'components/Footer/index';
 import PageSidebar from 'containers/PageSidebar/index';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import ContentHeightMeasure from 'containers/ContentHeightMeasure/index'
 
 import GlobalStyle from '../../global-styles';
 import { Container } from 'semantic-ui-react';
@@ -26,12 +27,14 @@ export default function App() {
       <Header />
       <MainNavigation />
       <Container>
+        <ContentHeightMeasure>
         <PageSidebar>
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route component={NotFoundPage} />
             </Switch>
         </PageSidebar>
+        </ContentHeightMeasure>
       </Container>
       <GlobalStyle />
       <Footer />
