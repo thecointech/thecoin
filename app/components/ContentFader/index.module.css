@@ -1,3 +1,5 @@
+@value TransitionDuration from "styles/constants.css";
+
 .fadeEnter {
   opacity: 0;
   z-index: 1;
@@ -6,7 +8,7 @@
 .fadeEnterActive {
   position: absolute;
   opacity: 1;
-  transition: opacity 250ms ease-in;
+  transition: opacity TransitionDuration ease-in;
 }
 .fadeEnterDone {
   position: absolute;
@@ -15,5 +17,5 @@
 .fadeExitActive {
   position: absolute;
   opacity: 0;
-  transition: opacity 250ms ease-in;
+  transition: opacity TransitionDuration ease-in;
 }

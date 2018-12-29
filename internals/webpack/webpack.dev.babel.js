@@ -65,6 +65,27 @@ module.exports = require('./webpack.base.babel')({
     },
   ],
 
+  styleLoaders: [
+    'style-loader',
+    {
+      loader: 'typings-for-css-modules-loader',
+      options: {
+        modules: true,
+        sourceMap: true,
+        namedExport: true,
+        camelCase: true,
+        importLoaders: 1,
+        localIdentName: '[local]-[hash:base64:8]',
+      },
+    },
+    {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: 'inline',
+      },
+    },
+  ],
+
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool
   devtool: 'eval-source-map',

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Location } from 'history';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { TransitionDuration } from 'styles/constants';
 import styles from './index.module.css';
 
 interface OwnProps {
@@ -23,7 +24,7 @@ class ContentFader extends React.PureComponent<Props, {}, null> {
         <CSSTransition
           key={location.key}
           classNames={classStyles}
-          timeout={250}
+          timeout={TransitionDuration}
         >
           {this.props.children}
         </CSSTransition>

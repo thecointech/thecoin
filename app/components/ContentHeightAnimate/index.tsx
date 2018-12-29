@@ -5,19 +5,21 @@ import { createStructuredSelector } from 'reselect';
 import { ApplicationRootState } from 'types';
 import { connect } from 'react-redux';
 import { makeSelectContentHeight } from '../ContentHeightMeasure/selector';
+import { TransitionDuration } from 'styles/constants';
 
 interface StateProps {
   contentHeight: number;
 }
 
 type Props = StateProps;
+
 class ContentHeightAnimate extends React.PureComponent<Props> {
   render() {
     const { contentHeight } = this.props;
     const mainHeightDivStyle = { height: contentHeight };
 
     return (
-      <AnimateHeight duration={250} height={contentHeight}>
+      <AnimateHeight duration={TransitionDuration} height={contentHeight}>
         <div className={styles.mainHeightDivStyle} style={mainHeightDivStyle}>
           {this.props.children}
         </div>

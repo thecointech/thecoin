@@ -44,17 +44,7 @@ module.exports = options => ({
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
         exclude: /node_modules/,
-        use: [
-          'style-loader',
-          {
-            loader: 'typings-for-css-modules-loader',
-            options: {
-              modules: true,
-              namedExport: true,
-              camelCase: true,
-            },
-          },
-        ],
+        use: options.styleLoaders,
       },
       {
         // Preprocess 3rd party .css files located in node_modules

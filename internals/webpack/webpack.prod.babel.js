@@ -22,6 +22,24 @@ module.exports = require('./webpack.base.babel')({
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
 
+  // Added from: https://github.com/react-boilerplate/react-boilerplate/issues/2142
+  styleLoaders: [
+    'style-loader',
+    {
+      loader: 'typings-for-css-modules-loader',
+      options: {
+        modules: true,
+        namedExport: true,
+        camelCase: true,
+        importLoaders: 1,
+        localIdentName: '[hash:base64:8]',
+      },
+    },
+    {
+      loader: 'postcss-loader',
+    },
+  ],
+
   tsLoaders: [
     {
       loader: 'awesome-typescript-loader',
