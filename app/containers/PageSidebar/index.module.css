@@ -1,8 +1,4 @@
-.ui.segment.contentRoot {
-  display: 'flex';
-}
-
-.ui.segment.contentRoot > div {
-  height: inherit;
-  width: inherit;
+.mainPageContent {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }

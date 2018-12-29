@@ -3,6 +3,7 @@
   padding: 15px 20px;
   font-size: 18px;
   font-weight: bolder;
+  border-bottom-left-radius: 0;
 }
 
 .ui.menu.link.item:hover {

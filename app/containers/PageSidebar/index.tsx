@@ -12,6 +12,7 @@ import { ApplicationRootState } from 'types';
 import { makeSelectLocation } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { Location } from 'history'
+import styles from "./index.module.css"
 
 interface OwnProps {}
 interface StateProps {
@@ -25,7 +26,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
     const visible = route.pathname !== '/';
     
     return (
-      <Sidebar.Pushable as={Segment}>
+      <Sidebar.Pushable as={Segment} className={styles.mainPageContent}>
         <Sidebar
           as={Menu}
           animation="push"

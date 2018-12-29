@@ -8,7 +8,7 @@ class Navigation extends React.Component {
     return (
       <div className={styles.navContainer}>
         <Container>
-          <Menu borderless>
+          <Menu borderless className={styles.mainMenu}>
             <HeaderLink to="/" exact>
               HOME
             </HeaderLink>
