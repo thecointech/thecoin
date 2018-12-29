@@ -19,7 +19,7 @@ import ButtonLink from 'components/ButtonLink/index'
 export default class HomePage extends React.PureComponent {
   public render() {
     return (
-      <Container>
+      <React.Fragment>
         <Grid columns={3} stackable divided centered>
           <Grid.Row>
             <Grid.Column>
@@ -54,7 +54,7 @@ export default class HomePage extends React.PureComponent {
             GO TO ACCOUNTS
           </ButtonLink>
         </Container>
-      </Container>
+      </React.Fragment>
     );
   }
 }

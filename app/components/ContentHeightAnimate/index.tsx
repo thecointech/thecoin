@@ -4,7 +4,7 @@ import styles from './index.module.css';
 import { createStructuredSelector } from 'reselect';
 import { ApplicationRootState } from 'types';
 import { connect } from 'react-redux';
-import { makeSelectContentHeight } from 'containers/ContentHeightMeasure/selector';
+import { makeSelectContentHeight } from '../ContentHeightMeasure/selector';
 
 interface StateProps {
   contentHeight: number;
@@ -17,7 +17,7 @@ class ContentHeightAnimate extends React.PureComponent<Props> {
     const mainHeightDivStyle = { height: contentHeight };
 
     return (
-      <AnimateHeight duration={300} height={contentHeight}>
+      <AnimateHeight duration={250} height={contentHeight}>
         <div className={styles.mainHeightDivStyle} style={mainHeightDivStyle}>
           {this.props.children}
         </div>

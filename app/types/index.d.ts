@@ -1,7 +1,7 @@
 import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
-import { ContainerState as ContentHeightState } from 'containers/ContentHeightMeasure/types';
+import { ContainerState as ContentHeightState } from 'components/ContentHeightMeasure/types';
 
 export interface LifeStore extends Store<{}> {
   injectedReducers?: any;

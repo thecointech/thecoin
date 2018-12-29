@@ -23,7 +23,7 @@ class ContentFader extends React.PureComponent<Props, {}, null> {
         <CSSTransition
           key={location.key}
           classNames={classStyles}
-          timeout={2500}
+          timeout={250}
         >
           {this.props.children}
         </CSSTransition>

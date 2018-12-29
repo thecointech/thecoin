@@ -6,7 +6,7 @@
 .fadeEnterActive {
   position: absolute;
   opacity: 1;
-  transition: opacity 2500ms ease-in;
+  transition: opacity 250ms ease-in;
 }
 .fadeEnterDone {
   position: absolute;
@@ -15,5 +15,5 @@
 .fadeExitActive {
   position: absolute;
   opacity: 0;
-  transition: opacity 2500ms ease-in;
+  transition: opacity 250ms ease-in;
 }

@@ -34,7 +34,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
           inverted
           vertical
           visible={visible}
-          width="thin"
+          width="wide"
         >
           <MenuItem as="a">
             <Icon name="home" />

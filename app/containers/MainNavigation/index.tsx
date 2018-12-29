@@ -12,15 +12,9 @@ class Navigation extends React.Component {
             <HeaderLink to="/" exact>
               HOME
             </HeaderLink>
-            <HeaderLink to="/accounts" exact>
-              ACCOUNTS
-            </HeaderLink>
-            <HeaderLink to="/howItWorks" exact>
-              HOW IT WORKS
-            </HeaderLink>
-            <HeaderLink to="/FAQ" exact>
-              FAQ
-            </HeaderLink>
+            <HeaderLink to="/accounts">ACCOUNTS</HeaderLink>
+            <HeaderLink to="/howItWorks">HOW IT WORKS</HeaderLink>
+            <HeaderLink to="/FAQ">FAQ</HeaderLink>
           </Menu>
         </Container>
       </div>
