@@ -15,7 +15,7 @@ function measureReducer(
 ): ContainerState {
   switch (action.type) {
     case ActionTypes.SET_HEIGHT:
-      // if (action.payload.timestamp <= lastTimeStamp) return state;
+      // if (action.payload.timestamp < lastTimeStamp) return state;
       // lastTimeStamp = action.payload.timestamp;
       return {
         ...state,

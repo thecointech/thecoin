@@ -8,19 +8,14 @@
  */
 
 import * as React from 'react';
-import { Switch, Route } from 'react-router-dom';
 
 import Header from 'components/Header/index';
-import MainNavigation from 'containers/MainNavigation/index'
+import MainNavigation from 'containers/MainNavigation/index';
 import Footer from 'components/Footer/index';
-import PageSidebar from 'containers/PageSidebar/index';
-import HomePage from 'containers/HomePage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import ContentHeightMeasure from 'containers/ContentHeightMeasure/index'
-import ContentHeightAnimate from 'containers/ContentHeightAnimate/index'
+import MainPageContent from 'containers/MainPageContent/index';
 
-import GlobalStyle from '../../global-styles';
 import { Container } from 'semantic-ui-react';
+import GlobalStyle from '../../global-styles';
 
 export default function App() {
   return (
@@ -28,16 +23,7 @@ export default function App() {
       <Header />
       <MainNavigation />
       <Container>
-        <ContentHeightAnimate>
-          <ContentHeightMeasure>
-            <PageSidebar>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route component={NotFoundPage} />
-              </Switch>
-            </PageSidebar>
-          </ContentHeightMeasure>
-        </ContentHeightAnimate>
+         <MainPageContent />
       </Container>
       <GlobalStyle />
       <Footer />
