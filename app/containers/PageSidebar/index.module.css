@@ -1,0 +1,8 @@
+.ui.segment.contentRoot {
+  display: 'flex';
+}
+
+.ui.segment.contentRoot > div {
+  height: inherit;
+  width: inherit;
+}

@@ -2,4 +2,10 @@
   width: 100%;
   padding: 0px;
   min-height: 250px;
+  display: flex;
+}
+
+.pageMainInner > div {
+  width: inherit;
+  height: inherit;
 }
