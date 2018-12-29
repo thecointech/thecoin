@@ -16,6 +16,7 @@ import MainPageContent from 'containers/MainPageContent/index';
 
 import { Container } from 'semantic-ui-react';
 import GlobalStyle from '../../global-styles';
+import PageSidebar from 'containers/PageSidebar';
 
 export default function App() {
   return (
@@ -23,7 +24,9 @@ export default function App() {
       <Header />
       <MainNavigation />
       <Container>
-         <MainPageContent />
+        <PageSidebar>
+        <MainPageContent />
+        </PageSidebar>
       </Container>
       <GlobalStyle />
       <Footer />
