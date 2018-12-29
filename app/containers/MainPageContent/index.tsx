@@ -6,9 +6,9 @@ import { createStructuredSelector } from 'reselect';
 import { Location } from 'history'
 
 import MainRouter from 'containers/MainRouter/index'
-import ContentHeightMeasure from 'containers/ContentHeightMeasure';
-import ContentFader from 'containers/ContentFader';
-import ContentHeightAnimate from 'containers/ContentHeightAnimate';
+import ContentHeightMeasure from 'components/ContentHeightMeasure';
+import ContentFader from 'components/ContentFader';
+import ContentHeightAnimate from 'components/ContentHeightAnimate';
 
 interface OwnProps { }
 interface StateProps {
