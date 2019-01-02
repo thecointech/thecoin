@@ -46,6 +46,10 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
     const { location, items } = this.props;
     const visible = location.pathname !== '/';
     const menuItems = this.buildMenuArray(items);
+    const sideMenuWidth = 225;
+    const pushed = visible ? sideMenuWidth : 0;
+    const push = `translate3d(${pushed}px,0,0)`
+    const pushedMarginRight = `${pushed}px`;
 
     return (
       <Sidebar.Pushable as={Segment} className={styles.mainPageContent}>
@@ -54,14 +58,13 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
           animation="push"
           direction="left"
           icon="labeled"
-          inverted
           vertical
           visible={visible}
-          width="wide"
+          style={{width: sideMenuWidth}}
         >
           {menuItems}
         </Sidebar>
-        <Sidebar.Pusher>
+        <Sidebar.Pusher style={{transform: push, marginRight: pushedMarginRight}}>
           <Segment basic>{this.props.children}</Segment>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
