@@ -8,24 +8,32 @@
  */
 
 import * as React from 'react';
+import { Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
-import MainPageContent from 'containers/MainPageContent';
-
-import { Container } from 'semantic-ui-react';
-import GlobalStyle from '../../global-styles';
 import PageSidebar from 'containers/PageSidebar';
+import MainPageTransition from 'containers/MainPageTransition';
+import MainRouter from 'containers/MainRouter'
+import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'
 
-export default function App() {
+import GlobalStyle from '../../global-styles';
+import styles from './index.module.css';
+
+function App(props: LocationStoreState) {
   return (
     <React.Fragment> 
       <Header />
       <MainNavigation />
       <Container>
         <PageSidebar>
-          <MainPageContent />
+          <MainPageTransition location={props.location}>
+          <section className={styles.pageMainInner}>
+          <MainRouter location={props.location} />
+          </section>
+          </MainPageTransition>
         </PageSidebar>
       </Container>
       <GlobalStyle />
@@ -33,3 +41,5 @@ export default function App() {
     </React.Fragment>
   );
 }
+
+export default connect(mapLocationStateToProps)(App);

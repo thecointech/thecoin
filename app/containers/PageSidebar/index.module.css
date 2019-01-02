@@ -15,5 +15,4 @@
 
 .mainPagePusherOut {
   transform: translate3d(SidebarWidth, 0, 0) !important;
-  margin-right: SidebarWidth;
 }

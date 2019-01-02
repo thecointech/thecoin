@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { DispatchProps, mapDispatchToProps } from './actions';
 import { buildReducer } from './reducer';
 
-import styles from './index.module.css';
-
 interface OwnProps {}
 
 type Props = OwnProps & DispatchProps;
@@ -25,11 +23,7 @@ class Measurable extends React.PureComponent<Props> {
   render() {
     return (
       <Measure bounds onResize={this.onContentSized}>
-        {({ measureRef }) => (
-          <section ref={measureRef} className={styles.pageMainInner}>
-            {this.props.children}
-          </section>
-        )}
+        {({ measureRef }) => <div ref={measureRef}>{this.props.children}</div>}
       </Measure>
     );
   }

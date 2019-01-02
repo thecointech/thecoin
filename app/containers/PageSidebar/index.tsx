@@ -46,10 +46,6 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
     const { location, items } = this.props;
     const visible = location.pathname !== '/';
     const menuItems = this.buildMenuArray(items);
-    //const sideMenuWidth = 225;
-    //const pushed = visible ? sideMenuWidth : 0;
-    //const push = `translate3d(${pushed}px,0,0)`
-    //const pushedMarginRight = `${pushed}px`;
 
     const pusherClass = visible ? styles.mainPagePusherOut : undefined;
 
