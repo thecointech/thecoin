@@ -1,9 +1,9 @@
 import { createActionCreators } from 'immer-reducer';
 import { Dispatch, bindActionCreators } from 'redux';
-import { HeightMeasureReducer } from './reducer';
+import { SidebarItemsReducer } from './reducer';
 import { IActions } from './types';
 
-const Actions = createActionCreators(HeightMeasureReducer);
+const Actions = createActionCreators(SidebarItemsReducer);
 
 // Map Disptach to your DispatchProps
 export type DispatchProps = IActions;

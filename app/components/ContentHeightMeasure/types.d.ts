@@ -1,20 +1,17 @@
-import { ActionType } from 'typesafe-actions';
-import { ApplicationRootState } from 'types';
 import * as actions from './actions';
 
 /* --- STATE --- */
-
-interface HomeState {
+interface ContentState {
   readonly height: number;
 }
 
 /* --- ACTIONS --- */
-type AppActions = ActionType<typeof actions>;
+interface IActions {
+  setHeight(newHeight: number): void;
+}
 
 /* --- EXPORTS --- */
 
-type RootState = ApplicationRootState;
-type ContainerState = HomeState;
-type ContainerActions = AppActions;
+type ContainerState = ContentState;
 
-export { RootState, ContainerState, ContainerActions };
+export { IActions, ContainerState };

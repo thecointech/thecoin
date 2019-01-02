@@ -1,25 +1,25 @@
 import React from 'react';
 import AnimateHeight from 'react-animate-height';
-import styles from './index.module.css';
-import { createStructuredSelector } from 'reselect';
-import { ApplicationRootState } from 'types';
 import { connect } from 'react-redux';
-import { makeSelectContentHeight } from '../ContentHeightMeasure/selector';
 import { TransitionDuration } from 'styles/constants';
+import styles from './index.module.css';
 
-interface StateProps {
-  contentHeight: number;
-}
+import {
+  ContainerState as MeasureState,
+  mapStateToProps,
+} from '../ContentHeightMeasure/selector';
 
-type Props = StateProps;
+interface OwnProps {}
+
+type Props = OwnProps & MeasureState;
 
 class ContentHeightAnimate extends React.PureComponent<Props> {
   render() {
-    const { contentHeight } = this.props;
-    const mainHeightDivStyle = { height: contentHeight };
+    const { height } = this.props;
+    const mainHeightDivStyle = { height };
 
     return (
-      <AnimateHeight duration={TransitionDuration} height={contentHeight}>
+      <AnimateHeight duration={TransitionDuration} height={height}>
         <div className={styles.mainHeightDivStyle} style={mainHeightDivStyle}>
           {this.props.children}
         </div>
@@ -27,11 +27,5 @@ class ContentHeightAnimate extends React.PureComponent<Props> {
     );
   }
 }
-
-// Map RootState to your StateProps
-const mapStateToProps = createStructuredSelector<ApplicationRootState, StateProps>({
-  // All the keys and values are type-safe
-  contentHeight: makeSelectContentHeight()
-});
 
 export default connect(mapStateToProps)(ContentHeightAnimate);

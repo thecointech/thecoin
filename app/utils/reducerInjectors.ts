@@ -3,14 +3,17 @@ import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 
-
-import checkStore from './checkStore';
-import createReducer from '../reducers';
 import { LifeStore } from 'types';
-import { Reducer } from 'redux';
+import { ImmerReducerClass, createReducerFunction } from 'immer-reducer';
+import createReducer from '../reducers';
+import checkStore from './checkStore';
 
 export function injectReducerFactory(store: LifeStore, isValid: boolean) {
-  return function injectReducer(key: string, reducer: Reducer<object>) {
+  return function injectReducer(
+    key: string,
+    reducer: ImmerReducerClass,
+    initialState: object,
+  ) {
     if (!isValid) {
       checkStore(store);
     }
@@ -22,14 +25,11 @@ export function injectReducerFactory(store: LifeStore, isValid: boolean) {
 
     // tslint:disable-next-line:max-line-length
     // Check `store.injectedReducers[key] === reducer` for hot reloading when a key is the same but a reducer is different
-    if (
-      Reflect.has(store.injectedReducers, key) &&
-      store.injectedReducers[key] === reducer
-    ) {
+    if (Reflect.has(store.injectedReducers, key)) {
       return;
     }
 
-    store.injectedReducers[key] = reducer; // eslint-disable-line no-param-reassign
+    store.injectedReducers[key] = createReducerFunction(reducer, initialState);
     store.replaceReducer(createReducer(store.injectedReducers));
   };
 }

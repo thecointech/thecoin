@@ -1,29 +1,24 @@
-import ActionTypes from './constants';
-import { ContainerState, ContainerActions } from './types';
+import { ImmerReducer } from 'immer-reducer';
+import injectReducer from 'utils/injectReducer';
+import { ContainerState } from './types';
+import { IActions } from './types';
 
 // The initial state of the App
 export const initialState: ContainerState = {
   height: 250,
 };
 
-// const lastTimeStamp = 0;
-
-// Take this container's state (as a slice of root state), this container's actions and return new state
-function measureReducer(
-  state: ContainerState = initialState,
-  action: ContainerActions,
-): ContainerState {
-  switch (action.type) {
-    case ActionTypes.SET_HEIGHT:
-      // if (action.payload.timestamp < lastTimeStamp) return state;
-      // lastTimeStamp = action.payload.timestamp;
-      return {
-        ...state,
-        height: action.payload.height,
-      };
-    default:
-      return state;
+export class HeightMeasureReducer extends ImmerReducer<ContainerState>
+  implements IActions {
+  setHeight(newHeight: number) {
+    this.draftState.height = newHeight;
   }
 }
 
-export default measureReducer;
+export function buildReducer<T>() {
+  return injectReducer<T>({
+    key: 'content',
+    reducer: HeightMeasureReducer,
+    initialState,
+  });
+}

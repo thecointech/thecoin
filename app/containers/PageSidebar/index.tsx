@@ -2,29 +2,51 @@ import * as React from 'react';
 import {
   Sidebar,
   Menu,
-  Icon,
-  SidebarProps,
   MenuItem,
   Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ApplicationRootState } from 'types';
-import { makeSelectLocation } from 'containers/App/selectors';
-import { createStructuredSelector } from 'reselect';
-import { Location } from 'history'
+import { ContainerState, SidebarMenuItem } from './types';
+import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors';
+import { mapSidebarStateToProps } from './selector';
 import styles from "./index.module.css"
+import { ApplicationRootState } from 'types';
+import {buildReducer} from './reducer'
 
-interface OwnProps {}
-interface StateProps {
-  route: Location
-}
-type Props = OwnProps & StateProps & SidebarProps;
+
+interface OwnProps { }
+type Props = OwnProps & LocationStoreState & ContainerState;
 
 class PageSidebar extends React.PureComponent<Props, {}, null> {
+
+  // Utility function builds a list of menu items
+  // from the props set to this components store state
+  buildMenuArray(items: SidebarMenuItem[]): React.ReactChild[] {
+    return items.map(item => {
+      return (
+        <React.Fragment key={`Fragment${item.link.to}`}>
+        <MenuItem as="a" key={item.link.to} to={item.link.to}>
+          {item.link.name}
+        </MenuItem>
+        {this.buildSubMenuArray(item)}
+        </React.Fragment>
+      )
+    });
+  }
+
+  buildSubMenuArray(item: SidebarMenuItem) {
+    return item.subItems ?
+      <Menu.Menu>
+        {this.buildMenuArray(item.subItems)}
+      </Menu.Menu> :
+      undefined;
+  }
+
   render() {
-    const { route } = this.props;
-    const visible = route.pathname !== '/';
-    
+    const { location, items } = this.props;
+    const visible = location.pathname !== '/';
+    const menuItems = this.buildMenuArray(items);
+
     return (
       <Sidebar.Pushable as={Segment} className={styles.mainPageContent}>
         <Sidebar
@@ -37,18 +59,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
           visible={visible}
           width="wide"
         >
-          <MenuItem as="a">
-            <Icon name="home" />
-            Home
-          </MenuItem>
-          <MenuItem as="a">
-            <Icon name="gamepad" />
-            Games
-          </MenuItem>
-          <MenuItem as="a">
-            <Icon name="camera" />
-            Channels
-          </MenuItem>
+          {menuItems}
         </Sidebar>
         <Sidebar.Pusher>
           <Segment basic>{this.props.children}</Segment>
@@ -58,10 +69,10 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
   }
 }
 
-// Map RootState to your StateProps
-const mapStateToProps = createStructuredSelector<ApplicationRootState, StateProps>({
-  // All the keys and values are type-safe
-  route: makeSelectLocation()
-});
-
-export default connect(mapStateToProps)(PageSidebar);
+export default buildReducer<OwnProps>()(
+  connect((state: ApplicationRootState) => (
+  {
+    ...mapLocationStateToProps(state),
+    ...mapSidebarStateToProps(state)
+  }
+))(PageSidebar));
