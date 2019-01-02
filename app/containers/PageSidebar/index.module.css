@@ -1,10 +1,19 @@
-@value TransitionDuration from "styles/constants.css";
+@value TransitionDuration, SidebarWidth from "styles/constants.css";
 
-.mainPageContent {
+.mainPageContainer {
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
 }
 
-.mainPageContent > div {
+.mainPageContainer > div {
   transition-duration: TransitionDuration !important;
+}
+
+.mainPageSidebar {
+  width: SidebarWidth !important;
+}
+
+.mainPagePusherOut {
+  transform: translate3d(SidebarWidth, 0, 0) !important;
+  margin-right: SidebarWidth;
 }

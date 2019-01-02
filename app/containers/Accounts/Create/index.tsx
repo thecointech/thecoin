@@ -12,10 +12,7 @@ import {
   Label,
   Input,
 } from 'semantic-ui-react';
-// import styles from './index.module.css';
-import { PlusCircle } from 'utils/icons'
 import * as Accounts from '../actions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Hack to fix InputPassword
 // TODO: Consider taking over this project
@@ -116,8 +113,7 @@ class Create extends React.PureComponent<Props, State> {
       <React.Fragment>
         <Form>
           <Header as="h1">
-            <FontAwesomeIcon icon={PlusCircle} />
-            <Header.Content> &nbsp;&nbsp;Create a New Account</Header.Content>
+            <Header.Content>Create a New Account</Header.Content>
             <Header.Subheader>
               Name your account anything you like, and give it a valid password.
             </Header.Subheader>

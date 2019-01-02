@@ -8,10 +8,13 @@ export const initialState: ContainerState = {
   height: 250,
 };
 
+let lastTimestamp = 0;
 export class HeightMeasureReducer extends ImmerReducer<ContainerState>
   implements IActions {
-  setHeight(newHeight: number) {
+  setHeight(newHeight: number, timestamp: number) {
+    if (timestamp < lastTimestamp) return;
     this.draftState.height = newHeight;
+    lastTimestamp = timestamp;
   }
 }
 

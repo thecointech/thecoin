@@ -25,7 +25,7 @@ export default function App() {
       <MainNavigation />
       <Container>
         <PageSidebar>
-        <MainPageContent />
+          <MainPageContent />
         </PageSidebar>
       </Container>
       <GlobalStyle />

@@ -7,7 +7,7 @@ interface ContentState {
 
 /* --- ACTIONS --- */
 interface IActions {
-  setHeight(newHeight: number): void;
+  setHeight(newHeight: number, timestamp: number): void;
 }
 
 /* --- EXPORTS --- */

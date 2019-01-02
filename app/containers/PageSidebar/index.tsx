@@ -6,12 +6,12 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ContainerState, SidebarMenuItem } from './types';
 import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors';
-import { mapSidebarStateToProps } from './selector';
-import styles from "./index.module.css"
 import { ApplicationRootState } from 'types';
+import { ContainerState, SidebarMenuItem } from './types';
+import { mapSidebarStateToProps } from './selector';
 import {buildReducer} from './reducer'
+import styles from "./index.module.css"
 
 
 interface OwnProps { }
@@ -46,25 +46,26 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
     const { location, items } = this.props;
     const visible = location.pathname !== '/';
     const menuItems = this.buildMenuArray(items);
-    const sideMenuWidth = 225;
-    const pushed = visible ? sideMenuWidth : 0;
-    const push = `translate3d(${pushed}px,0,0)`
-    const pushedMarginRight = `${pushed}px`;
+    //const sideMenuWidth = 225;
+    //const pushed = visible ? sideMenuWidth : 0;
+    //const push = `translate3d(${pushed}px,0,0)`
+    //const pushedMarginRight = `${pushed}px`;
+
+    const pusherClass = visible ? styles.mainPagePusherOut : undefined;
 
     return (
-      <Sidebar.Pushable as={Segment} className={styles.mainPageContent}>
+      <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
         <Sidebar
           as={Menu}
           animation="push"
           direction="left"
-          icon="labeled"
           vertical
           visible={visible}
-          style={{width: sideMenuWidth}}
+          className={styles.mainPageSidebar}
         >
           {menuItems}
         </Sidebar>
-        <Sidebar.Pusher style={{transform: push, marginRight: pushedMarginRight}}>
+        <Sidebar.Pusher className={pusherClass}>
           <Segment basic>{this.props.children}</Segment>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
