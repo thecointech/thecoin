@@ -43,13 +43,13 @@ module.exports = options => ({
         // This is the place to add your own loaders (e.g. sass/less etc.)
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
-        exclude: /node_modules/,
+        exclude: [/semantic/, /node_modules/],
         use: options.styleLoaders,
       },
       {
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
-        include: /node_modules/,
+        include: [/node_modules/, /semantic/],
         use: ['style-loader', 'css-loader'],
       },
       {

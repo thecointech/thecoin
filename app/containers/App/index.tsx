@@ -19,7 +19,7 @@ import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter'
 import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'
 
-import GlobalStyle from '../../global-styles';
+import 'styles/semantic/semantic.css';
 import styles from './index.module.css';
 
 function App(props: LocationStoreState) {
@@ -36,7 +36,6 @@ function App(props: LocationStoreState) {
           </MainPageTransition>
         </PageSidebar>
       </Container>
-      <GlobalStyle />
       <Footer />
     </React.Fragment>
   );
