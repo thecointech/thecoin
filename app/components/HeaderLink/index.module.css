@@ -1,19 +1,6 @@
 .ui.menu.link.item {
-  color: #4f44b1;
   padding: 15px 20px;
-  font-size: 18px;
-  font-weight: bolder;
-  border-bottom-left-radius: 0;
-}
-
-.ui.menu.link.item:hover {
-  background-color: #afb144;
-}
-
-.ui.menu.link.activeItem {
-  background-color: orange;
-}
-
-.ui.menu.link.activeItem:hover {
-  background-color: darkgreen;
+  font-size: 1.2em;
+  font-weight: bold !important;
+  border-bottom-left-radius: 0 !important;
 }

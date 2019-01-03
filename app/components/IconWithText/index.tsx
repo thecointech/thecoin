@@ -13,7 +13,7 @@ interface BlurbProps {
 }
 export default (props: BlurbProps) => (
   <Container textAlign="center">
-    <FontAwesomeIcon size="9x" className={styles.blurbIcon} icon={props.icon} />
+    <FontAwesomeIcon size="8x" className={styles.blurbIcon} icon={props.icon} />
     <FormattedMessage {...props.message}>
       {(...content) => <div className={styles.blurbText}>{content}</div>}
     </FormattedMessage>

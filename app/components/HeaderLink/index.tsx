@@ -16,7 +16,7 @@ export default (props: HeaderLinkProps) => (
     to={props.to}
     exact={props.exact}
     className={cx(styles.ui, styles.menu, styles.link, styles.item)}
-    activeClassName={cx(styles.ui, styles.menu, styles.link, styles.activeItem)}
+    activeClassName="active"
   >
     {props.children}
   </Menu.Item>

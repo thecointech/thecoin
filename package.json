@@ -14,7 +14,7 @@
   "license": "MIT",
   "scripts": {
     "build-semantic": "cd semantic && gulp build-css build-assets",
-    "watch-semantic": "cd semantic && yarn run build-semantic && gulp watch",
+    "watch-semantic": "cd semantic && npm run build-semantic && gulp watch",
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
