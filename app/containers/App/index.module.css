@@ -1,5 +1,12 @@
+@value SidebarWidth from "styles/constants.css";
+
 .pageMainInner {
   min-height: 250px;
+  padding: 3em;
+}
+
+.pageMainInner.WithSidebar {
+  margin-right: SidebarWidth;
 }
 
 .pageMainInner > div {

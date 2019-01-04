@@ -18,21 +18,25 @@ import PageSidebar from 'containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter'
 import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'
+import cx from 'classnames';
 
 import 'styles/semantic/semantic.css';
 import styles from './index.module.css';
 
 function App(props: LocationStoreState) {
+  const sidebarVisible = props.location.pathname !== "/";
+  const pageMainInner = cx(styles.pageMainInner, sidebarVisible ? styles.withSidebar : undefined);
+
   return (
-    <React.Fragment> 
+    <React.Fragment>
       <Header />
       <MainNavigation />
-      <Container>
-        <PageSidebar>
+      <Container style={{ backgroundColor: "#f3f3f3" }}>
+        <PageSidebar visible={sidebarVisible}>
           <MainPageTransition location={props.location}>
-          <section className={styles.pageMainInner}>
-          <MainRouter location={props.location} />
-          </section>
+            <section className={pageMainInner}>
+              <MainRouter location={props.location} />
+            </section>
           </MainPageTransition>
         </PageSidebar>
       </Container>

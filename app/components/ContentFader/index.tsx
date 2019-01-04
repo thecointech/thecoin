@@ -12,15 +12,15 @@ type Props = OwnProps;
 const classStyles = {
   enter: styles.fadeEnter,
   enterActive: styles.fadeEnterActive,
-  enterDone: styles.fadeEnterDone,
   exitActive: styles.fadeExitActive,
 };
 
 class ContentFader extends React.PureComponent<Props, {}, null> {
   render() {
     const { location } = this.props;
+
     return (
-      <TransitionGroup>
+      <TransitionGroup className={styles.fadeBase}>
         <CSSTransition
           key={location.key}
           classNames={classStyles}

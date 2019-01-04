@@ -6,16 +6,16 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors';
-import { ApplicationRootState } from 'types';
 import { ContainerState, SidebarMenuItem } from './types';
 import { mapSidebarStateToProps } from './selector';
 import {buildReducer} from './reducer'
 import styles from "./index.module.css"
 
 
-interface OwnProps { }
-type Props = OwnProps & LocationStoreState & ContainerState;
+interface OwnProps {
+  visible: boolean;
+ }
+type Props = OwnProps & ContainerState;
 
 class PageSidebar extends React.PureComponent<Props, {}, null> {
 
@@ -43,8 +43,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
   }
 
   render() {
-    const { location, items } = this.props;
-    const visible = location.pathname !== '/';
+    const { visible, items } = this.props;
     const menuItems = this.buildMenuArray(items);
 
     const pusherClass = visible ? styles.mainPagePusherOut : undefined;
@@ -62,7 +61,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
           {menuItems}
         </Sidebar>
         <Sidebar.Pusher className={pusherClass}>
-          <Segment basic>{this.props.children}</Segment>
+          {this.props.children}
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );
@@ -70,9 +69,4 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
 }
 
 export default buildReducer<OwnProps>()(
-  connect((state: ApplicationRootState) => (
-  {
-    ...mapLocationStateToProps(state),
-    ...mapSidebarStateToProps(state)
-  }
-))(PageSidebar));
+  connect(mapSidebarStateToProps)(PageSidebar));
