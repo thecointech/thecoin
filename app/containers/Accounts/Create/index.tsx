@@ -130,7 +130,7 @@ class Create extends React.PureComponent<Props, State> {
             </Header.Subheader>
           </Header>
           <Form.Field>
-            <Label><FormattedMessage {...messages.} /></Label>
+            <Label><FormattedMessage {...messages.labelName} /></Label>
             <Input
               onChange={this.handleNameChange}
               value={this.state.accountName}
@@ -138,14 +138,12 @@ class Create extends React.PureComponent<Props, State> {
             />
           </Form.Field>
           <Form.Field>
-            <Label>Password</Label>
+            <Label><FormattedMessage {...messages.labelPassword} /></Label>
             <UxPassword
               onChange={this.handlePasswordChange}
-              //value={this.state.accountPwd}
-              //placeholder="Password"
             />
           </Form.Field>
-          <Button onClick={this.generateNewWallet}>CREATE ACCOUNT</Button>
+          <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
         </Form>
         <Modal open={this.state.isCreating} basic size="small">
           <Header icon="browser" content="Cookies policy" />

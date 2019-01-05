@@ -3,7 +3,7 @@
  *
  * This contains all the text for the HomePage container.
  */
-import { defineMessages, Messages } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 export const scope = 'app.containers.Account.Create';
 
@@ -17,9 +17,17 @@ export default defineMessages({
     defaultMessage:
       'Name your account anything you like, and give it a valid password.',
   },
-  accountName: {
-    id: `${scope}.accountName`,
-    defaultMessage: 'Account Name.',
+  labelName: {
+    id: `${scope}.labelName`,
+    defaultMessage: 'Account Name',
+  },
+  labelPassword: {
+    id: `${scope}.labelPassword`,
+    defaultMessage: 'Password',
+  },
+  buttonCreate: {
+    id: `${scope}.buttonCreate`,
+    defaultMessage: 'CREATE ACCOUNT',
   },
 });
 
