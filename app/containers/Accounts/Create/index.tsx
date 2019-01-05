@@ -2,7 +2,6 @@ import React from 'react';
 import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-
 import {
   Button,
   Modal,
@@ -13,22 +12,19 @@ import {
   Input,
 } from 'semantic-ui-react';
 import * as Accounts from '../actions';
-
-// Hack to fix InputPassword
-// TODO: Consider taking over this project
-// React.PropTypes = require('prop-types');
-// React.createClass = require('create-react-class');
-// var InputPassword = require('react-ux-password-field');
+import { UxPassword } from 'components/UxPassword';
+import messages from './messages'
+import { FormattedMessage } from 'react-intl';
 
 const initialState = {
   accountPwd: '',
   accountName: '',
   redirect: false,
   isCreating: false,
+  isValid: false,
 };
 
 type State = Readonly<typeof initialState>;
-type StateKeys = keyof State;
 type Props = Accounts.DispatchProps;
 
 class Create extends React.PureComponent<Props, State> {
@@ -36,7 +32,9 @@ class Create extends React.PureComponent<Props, State> {
 
   constructor(props) {
     super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    //this.handleInputChange = this.handleInputChange.bind(this);
     this.generateNewWallet = this.generateNewWallet.bind(this);
     this.cancelGenerate = this.cancelGenerate.bind(this);
   }
@@ -53,10 +51,7 @@ class Create extends React.PureComponent<Props, State> {
     // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
     const pwd = this.state.accountPwd;
     const name = this.state.accountName;
-    // if (pwd.length < 7) {
-    //     alert("You need a longer password");
-    //     return;
-    // }
+
     // Generate new account
     this.setState({ isCreating: true });
 
@@ -94,13 +89,27 @@ class Create extends React.PureComponent<Props, State> {
       });
   }
 
-  handleInputChange(event: React.FormEvent<HTMLInputElement>, name: StateKeys) {
-    const target = event.currentTarget;
-    const value = target.value;
+  // handleInputChange(event: React.FormEvent<HTMLInputElement>, name: StateKeys) {
+  //   const target = event.currentTarget;
+  //   const value = target.value;
 
-    this.setState(({
-      [name]: value,
-    } as any) as Pick<State, keyof State>);
+  //   this.setState(({
+  //     [name]: value,
+  //   } as any) as Pick<State, keyof State>);
+  // }
+
+  handleNameChange(event: React.FormEvent<HTMLInputElement>) {
+    const { value } = event.currentTarget;
+    this.setState({
+      accountName: value,
+    });
+  }
+
+  handlePasswordChange(newPassword: string, isValid: boolean) {
+    this.setState({
+      accountPwd: newPassword,
+      isValid: isValid,
+    });
   }
 
   render() {
@@ -113,26 +122,27 @@ class Create extends React.PureComponent<Props, State> {
       <React.Fragment>
         <Form>
           <Header as="h1">
-            <Header.Content>Create a New Account</Header.Content>
+            <Header.Content>
+              <FormattedMessage {...messages.header} />
+            </Header.Content>
             <Header.Subheader>
-              Name your account anything you like, and give it a valid password.
+              <FormattedMessage {...messages.subHeader} />
             </Header.Subheader>
           </Header>
           <Form.Field>
-            <Label>Account Name</Label>
+            <Label><FormattedMessage {...messages.} /></Label>
             <Input
-              onChange={e => this.handleInputChange(e, 'accountName')}
+              onChange={this.handleNameChange}
               value={this.state.accountName}
               placeholder="Account Name"
             />
           </Form.Field>
           <Form.Field>
             <Label>Password</Label>
-            <Input
-              onChange={e => this.handleInputChange(e, 'accountPwd')}
-              value={this.state.accountPwd}
-              placeholder="Password"
-              type="password"
+            <UxPassword
+              onChange={this.handlePasswordChange}
+              //value={this.state.accountPwd}
+              //placeholder="Password"
             />
           </Form.Field>
           <Button onClick={this.generateNewWallet}>CREATE ACCOUNT</Button>

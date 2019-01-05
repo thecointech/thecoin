@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import * as styles from './index.module.css';
+import styles from './index.module.css';
 
 interface BlurbProps {
   icon: IconProp;
