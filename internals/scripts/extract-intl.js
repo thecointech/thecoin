@@ -26,7 +26,7 @@ plugins.push('react-intl');
 plugins = plugins.filter(p => p !== 'styled-components');
 
 // Glob to match all js files except test files
-const FILES_TO_PARSE = 'app/**/!(*.test).js';
+const FILES_TO_PARSE = 'app/**/messages.ts';
 
 const newLine = () => process.stdout.write('\n');
 
