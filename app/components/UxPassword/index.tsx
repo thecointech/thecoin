@@ -1,59 +1,52 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { Container } from 'semantic-ui-react';
-// import { FormattedMessage } from 'react-intl';
-// import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { Input, InputOnChangeData } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Lock } from 'utils/icons';
 import { Color } from 'csstype';
 
 import styles from './index.module.css';
-import messages from './messages';
-import {ZXCVBNResult} from 'zxcvbn';
-
-type OnChangeCB = (value: string, isValid: boolean) => void
-
-interface OwnProps {
-  onChange: OnChangeCB;
-  infoBar: true;
-  statusColor: Color;
-  statusInactiveColor: Color;
-  minScore: number;
-  minLength: number;
-  unMaskTime: number,
-  id: string,
-  as: React.ReactChild
-}
+import messages, { scope as MessageScope } from './messages';
+import { ZXCVBNResult } from 'zxcvbn';
+import { UxInput } from 'components/UxInput';
+import { ValidationResult } from 'components/UxInput/types';
 
 const initialState = {
-  value: '',
-  stats: null as ZXCVBNResult|null,
-  isPassword: true,
+  message: undefined as FormattedMessage.MessageDescriptor | undefined,
+  stats: null as ZXCVBNResult | null,
+  isPassword: false,
   isValid: false,
   maskPassword: null,
   selectionStart: 0,
   selectionEnd: 0
 }
-
 type State = Readonly<typeof initialState>;
 
-export class UxPassword extends React.PureComponent<OwnProps, State> {
+type ChangeCB = (value: string, score: number) => boolean;
 
-  static defaultProps = {
-    infoBar: true,
-    statusColor: "#5CE592",
-    statusInactiveColor: "#FC6F6F",
-    minScore: 2,
-    minLength: 0,
-    unMaskTime: 1400,
-    id: "input",
-    as: Input
-  };
+const defaultProps = {
+  infoBar: true,
+  statusColor: "#5CE592",
+  statusInactiveColor: "#FC6F6F",
+  unMaskTime: 1400,
+  as: Input,
+  forceValidate: false
+};
+type DefaultProps = Readonly<typeof defaultProps>
 
+interface RequiredProps {
+  intlLabel: FormattedMessage.MessageDescriptor;
+  uxChange: ChangeCB;
+}
+type Props = RequiredProps & DefaultProps;
+
+const UnMasked = "text";
+const Masked = "password";
+
+export class UxPassword extends React.PureComponent<Props, State> {
+
+  static defaultProps = defaultProps;
   state = initialState;
 
   // This is the link to the zxcvbn function that
@@ -61,12 +54,12 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
   static zxcvbn: Function | null = null;
   maskPassword: Function & Cancelable;
 
-  constructor(props: OwnProps) {
+  constructor(props: Props) {
     super(props);
 
     // set debouncer for password
     this.maskPassword = debounce(this.addPasswordType, props.unMaskTime);
-    this.handleChange = this.handleChange.bind(this);
+    this.uxChange = this.uxChange.bind(this);
     this.ensureZxcvbn();
   }
 
@@ -91,14 +84,13 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
 
   /*==========  STYLES  ==========*/
 
-  getMeterStyle() {
-    const { value, isValid, stats } = this.state;
-    const { statusColor, statusInactiveColor } = this.props;
-    var width = (value && stats) ? 24 * stats.score + 4 : 0;
+  getMeterStyle(validColor: Color, invalidColor: Color) {
+    const { isValid, stats } = this.state;
+    var width = (stats) ? 24 * stats.score + 4 : 0;
     return {
       width: width + '%',
       opacity: UxPassword.zxcvbn ? width * .01 + .5 : 0,
-      background: isValid ? statusColor : statusInactiveColor,
+      background: isValid ? validColor : invalidColor,
     }
   }
 
@@ -112,38 +104,55 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
 
   /*==========  HANDLERS  ==========*/
 
-  handleInputType() {
+  onToggleInputType() {
     this.setState({
       isPassword: !this.state.isPassword
     });
   }
 
-  handleChange(e: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) {
-    e.preventDefault();
+  uxChange(value: string): ValidationResult {
 
-    const { value, selectionStart, selectionEnd } = e.currentTarget;
-    const { onChange } = this.props;
+    this.toggleMask();
 
+    const stats = this.getScore(value);
+    const isValid = this.props.uxChange(value, stats ? stats.score : -1);
+
+    // call uxChange prop passed from parent
     this.setState({
-      value: value,
-      selectionStart: selectionStart || 0,
-      selectionEnd: selectionEnd || 0,
+      isValid: isValid,
+      //      selectionStart: selectionStart || 0,
+      //      selectionEnd: selectionEnd || 0,
     });
 
-    this.handleToggleMask();
-    const isValid = this.handleValidity(value);
-
-    // call onChange prop passed from parent
-    if (onChange != undefined) {
-      onChange(value, isValid);
+    const returnValue: ValidationResult = {
+      isValid: isValid,
+      message: undefined,
+      tooltip: undefined
     }
+    if (stats != null) {
+      if (value.length == 0) {
+        returnValue.message = messages.PasswordRequired;
+      }
+      else if (stats.feedback.warning.length > 0) {
+        returnValue.message = {
+          id: `${MessageScope}.Warning`,
+          defaultMessage: stats.feedback.warning
+        }
+      }    
+      if (stats.feedback.suggestions.length > 0) {
+        returnValue.tooltip = {
+          id: `${MessageScope}.Tooltip`,
+          defaultMessage: stats.feedback.suggestions[0]
+        }
+      }
+    }
+    return returnValue;
   }
 
   //
   //////////////////////////////////////////////////////////////////////////////
-  handleToggleMask() {
-    if (this.props.unMaskTime > 0)
-    {
+  toggleMask() {
+    if (this.props.unMaskTime > 0) {
       // display password, then
       this.setState({
         isPassword: false
@@ -154,32 +163,16 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
     }
   }
 
-  handleValidity(val: string): boolean {
-    const { minLength, minScore} = this.props;
-    let isValid = val.length >= minLength;
-
+  getScore(val: string): zxcvbn.ZXCVBNResult | null {
     const zxcvbn = UxPassword.zxcvbn;
     if (!zxcvbn) {
-      return isValid;
+      return null;
     }
-
     const stats = zxcvbn(val) as zxcvbn.ZXCVBNResult;
-    const { score } = stats;
-    isValid = isValid && minScore <= score;
-
     this.setState({
-      isValid: isValid,
       stats: stats
     });
-    return isValid;
-  }
-
-  handleMinLength(len: number) {
-    if (len <= this.props.minLength) {
-      this.setState({
-        isValid: false
-      })
-    }
+    return stats;
   }
 
   componentWillUnmount() {
@@ -192,12 +185,22 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
 
   render() {
     let infoBarComponent;
-    const { infoBar } = this.props;
-    const { stats } = this.state;
+    const {
+      intlLabel,
+      uxChange,
+      infoBar,
+      statusColor,
+      statusInactiveColor,
+      unMaskTime,
+      as,
+      ...inputProps
+    } = this.props;
+
+    const { isPassword, stats } = this.state;
 
     if (infoBar) {
       const messageId = stats !== null ? stats.score : "default";
-      const meterStyles = this.getMeterStyle()
+      const meterStyles = this.getMeterStyle(statusColor, statusInactiveColor)
       infoBarComponent = (
         <div className={styles.infoStyle}>
           <FontAwesomeIcon className={styles.iconStyle} icon={Lock} size='xs' />
@@ -208,32 +211,14 @@ export class UxPassword extends React.PureComponent<OwnProps, State> {
         </div>);
     }
 
-    // allow onChange to be passed from parent and not override default prop
-
-    // overcome problem with firefox resetting the input selection point
-    // TODO
-    // var that = this;
-    // if (typeof navigator !== 'undefined') {
-    //   setTimeout(function () {
-    //     if (!/Firefox/.test(navigator.userAgent)) return;
-    //     var elem = that.refs[that.props.id].gte;
-    //     elem.selectionStart = that.state.selectionStart;
-    //     elem.selectionEnd = that.state.selectionEnd;
-    //   }, 1);
-    // }
-
     return (
-      <React.Fragment>
-        <Input
-          ref={this.props.id}
-          type={this.state.isPassword ? 'password' : 'text'}
-          value={this.state.value}
-          className={this.state.isPassword ? undefined : styles.unMaskStyle}
-          onChange={this.handleChange}
-          placeholder="Account Password"
+      <UxInput
+        type={isPassword ? Masked : UnMasked}
+        intlLabel={intlLabel}
+        uxChange={this.uxChange}
+        footer={infoBarComponent}
+        {...inputProps} 
         />
-        {infoBarComponent}
-      </React.Fragment>
-    );
+    )
   }
 }

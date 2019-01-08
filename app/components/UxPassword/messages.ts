@@ -10,7 +10,7 @@ export const scope = 'app.components.UxPassword';
 export default defineMessages({
   default: {
     id: `${scope}.default`,
-    defaultMessage: 'Strength', // TODO: Do we want an initial message
+    defaultMessage: 'strength', // TODO: Do we want an initial message
   },
   0: {
     id: `${scope}.score0`,
@@ -30,6 +30,10 @@ export default defineMessages({
   },
   4: {
     id: `${scope}.score4`,
-    defaultMessage: 'strong',
+    defaultMessage: 'moderate',
+  },
+  PasswordRequired: {
+    id: `${scope}.PasswordRequired`,
+    defaultMessage: "Please enter a password of at least 'moderate' strength",
   },
 });

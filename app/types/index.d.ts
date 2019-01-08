@@ -7,6 +7,10 @@ import { ContainerState as AccountsState } from 'containers/Accounts/types';
 
 import { ImmerReducerClass } from 'immer-reducer';
 
+export interface AnyProps {
+  [key: string]: any;
+}
+
 export interface LifeStore extends Store<{}> {
   injectedReducers?: any;
   injectedSagas?: any;

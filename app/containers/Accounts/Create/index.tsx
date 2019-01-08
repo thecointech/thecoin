@@ -8,40 +8,44 @@ import {
   Header,
   Icon,
   Form,
-  Label,
-  Input,
+  Loader,
 } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
 import * as Accounts from '../actions';
 import { UxPassword } from 'components/UxPassword';
+import { UxInput } from 'components/UxInput';
 import messages from './messages'
-import { FormattedMessage } from 'react-intl';
+
 
 const initialState = {
   accountPwd: '',
   accountName: '',
+  validPwd: undefined as boolean | undefined,
+  validName: undefined as boolean | undefined,
+  forceValidate: false,
   redirect: false,
   isCreating: false,
-  isValid: false,
+  cancelCreating: false,
+  percentComplete: 0,
 };
 
 type State = Readonly<typeof initialState>;
 type Props = Accounts.DispatchProps;
 
-class Create extends React.PureComponent<Props, State> {
+class Create extends React.PureComponent<Props, State, any> {
   readonly state = initialState;
 
   constructor(props) {
     super(props);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    //this.handleInputChange = this.handleInputChange.bind(this);
+    this.onPasswordChange = this.onPasswordChange.bind(this);
+    this.onNameChange = this.onNameChange.bind(this);
     this.generateNewWallet = this.generateNewWallet.bind(this);
     this.cancelGenerate = this.cancelGenerate.bind(this);
   }
 
   cancelGenerate(e: React.MouseEvent<HTMLElement>) {
     this.setState({
-      isCreating: false,
+      cancelCreating: true,
     });
   }
 
@@ -49,26 +53,31 @@ class Create extends React.PureComponent<Props, State> {
     if (e) e.preventDefault();
 
     // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-    const pwd = this.state.accountPwd;
-    const name = this.state.accountName;
+    const { accountPwd, accountName, validPwd, validName } = this.state;
+
+    if (!(validPwd && validName)) {
+      this.setState({
+        forceValidate: true
+      });
+      return;
+    }
 
     // Generate new account
     this.setState({ isCreating: true });
 
     const newAccount = Wallet.createRandom();
 
-    // const content = <div>Generating</div>;
-    // this.props.showModalDialog(content);
-
     newAccount
-      .encrypt(pwd, percent => {
-        if (this.state.isCreating == false) {
+      .encrypt(accountPwd, percent => {
+        if (this.state.cancelCreating) {
+          this.setState({
+            isCreating: false,
+            cancelCreating: false,
+          })
           throw 'User Cancelled';
         }
         const per = Math.round(percent * 100);
-        // content = <span>Progress: {per}%</span>;
-        // this.props.setProgressPercent(per);
-        console.log(per);
+        this.setState({ percentComplete: per });
       })
       .then(asStr => {
         // If cancelled, do not store generated account
@@ -79,44 +88,45 @@ class Create extends React.PureComponent<Props, State> {
         // the user to decrypt the account (to protect against misspelled
         // passwords)
         const asJson = JSON.parse(asStr);
+        this.props.setSingleAccount(accountName, asJson);
 
-        // Save to localStorage
-        this.props.setSingleAccount(name, asJson);
-        // this.props.closeModalDialog();
         // Switch to this newly created account
         // this.setState({ redirect: name });
         this.setState({ isCreating: false });
       });
   }
 
-  // handleInputChange(event: React.FormEvent<HTMLInputElement>, name: StateKeys) {
-  //   const target = event.currentTarget;
-  //   const value = target.value;
-
-  //   this.setState(({
-  //     [name]: value,
-  //   } as any) as Pick<State, keyof State>);
-  // }
-
-  handleNameChange(event: React.FormEvent<HTMLInputElement>) {
-    const { value } = event.currentTarget;
+  // Validate our inputs
+  onNameChange(value: string) {
+    const isValid = value.length >= 1;
     this.setState({
       accountName: value,
+      validName: isValid,
     });
-  }
-
-  handlePasswordChange(newPassword: string, isValid: boolean) {
-    this.setState({
-      accountPwd: newPassword,
+    return {
       isValid: isValid,
-    });
+      message: isValid ? undefined : messages.errorNameTooShort,
+      tooltip: undefined
+    }
   }
 
+  onPasswordChange(value: string, score: number): boolean {
+    const isValid = score > 2;
+    this.setState({
+      accountPwd: value,
+      validPwd: isValid
+    })
+    return isValid;
+  }
+
+  /////////////////////////////////////////////////////////////
+  // Render
   render() {
     if (this.state.redirect) {
       const addr = `/accounts/${this.state.redirect}`;
       return <Redirect to={addr} />;
     }
+
 
     return (
       <React.Fragment>
@@ -129,31 +139,37 @@ class Create extends React.PureComponent<Props, State> {
               <FormattedMessage {...messages.subHeader} />
             </Header.Subheader>
           </Header>
-          <Form.Field>
-            <Label><FormattedMessage {...messages.labelName} /></Label>
-            <Input
-              onChange={this.handleNameChange}
-              value={this.state.accountName}
-              placeholder="Account Name"
-            />
-          </Form.Field>
-          <Form.Field>
-            <Label><FormattedMessage {...messages.labelPassword} /></Label>
-            <UxPassword
-              onChange={this.handlePasswordChange}
-            />
-          </Form.Field>
+          <UxInput
+            uxChange={this.onNameChange}
+            intlLabel={messages.labelName}
+            forceValidate={this.state.forceValidate}
+            placeholder="Account Name"
+          />
+          <UxPassword
+            uxChange={this.onPasswordChange}
+            intlLabel={messages.labelPassword}
+            forceValidate={this.state.forceValidate}
+          //placeholder="Account Password"
+          />
+
           <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
         </Form>
         <Modal open={this.state.isCreating} basic size="small">
-          <Header icon="browser" content="Cookies policy" />
+          <Modal.Header>
+            <FormattedMessage {...messages.whileCreatingHeader} />
+          </Modal.Header>
           <Modal.Content>
-            <h3>
-              This website uses cookies to ensure the best user experience.
-            </h3>
+            <Loader>
+              <h3>
+                <FormattedMessage {...messages.whileCreatingMessage} 
+                  values={{
+                    percentComplete: this.state.percentComplete
+                  }}/>
+              </h3>
+            </Loader>
           </Modal.Content>
           <Modal.Actions>
-            <Button color="green" onClick={this.cancelGenerate} inverted>
+            <Button color="red" onClick={this.cancelGenerate} inverted>
               <Icon name="cancel" /> Cancel
             </Button>
           </Modal.Actions>
@@ -162,14 +178,6 @@ class Create extends React.PureComponent<Props, State> {
     );
   }
 }
-
-// const mapDispatchToProps = dispatch => ({
-//   setAccount: (name, account) => dispatch(setAccount(name, account)),
-//   setActive: account => dispatch(setActive(account)),
-//   showModalDialog: contents => dispatch(showDialog(contents)),
-//   closeModalDialog: () => dispatch(closeDialog()),
-//   setProgressPercent: per => dispatch(setPercentage(per)),
-// });
 
 const mapDispatchToProps = {
   ...Accounts.mapDispatchToProps,

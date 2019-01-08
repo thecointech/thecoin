@@ -29,6 +29,21 @@ export default defineMessages({
     id: `${scope}.buttonCreate`,
     defaultMessage: 'CREATE ACCOUNT',
   },
+  whileCreatingHeader: {
+    id: `${scope}.whileCreatingHeader`,
+    defaultMessage: 'Creating Account...',
+  },
+
+  whileCreatingMessage: {
+    id: `${scope}.whileCreatingMessage`,
+    defaultMessage:
+      'We are {percentComplete}% done cooking your brand-new account.',
+  },
+
+  errorNameTooShort: {
+    id: `${scope}.errorNameTooShort`,
+    defaultMessage: 'An account must have a name.',
+  },
 });
 
 // });

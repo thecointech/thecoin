@@ -21,6 +21,8 @@ import { LocationStoreState, mapLocationStateToProps } from 'containers/Location
 import cx from 'classnames';
 
 import 'styles/semantic/semantic.css';
+import 'styles/semantic/tweaks.css';
+
 import styles from './index.module.css';
 
 function App(props: LocationStoreState) {
