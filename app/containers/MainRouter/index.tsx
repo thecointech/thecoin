@@ -9,7 +9,7 @@ import Accounts from 'containers/Accounts';
 export default (props: { location: Location }) => (
   <Switch location={props.location}>
     <Route exact path="/" component={HomePage} />
-    <Route exact path="/accounts" component={Accounts} />
+    <Route path="/accounts" component={Accounts} />
     <Route component={NotFoundPage} />
   </Switch>
 );

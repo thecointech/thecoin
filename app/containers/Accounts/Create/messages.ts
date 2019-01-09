@@ -44,6 +44,10 @@ export default defineMessages({
     id: `${scope}.errorNameTooShort`,
     defaultMessage: 'An account must have a name.',
   },
+  errorNameDuplicate: {
+    id: `${scope}.errorNameDuplicate`,
+    defaultMessage: 'An account with this name already exists here.',
+  },
 });
 
 // });

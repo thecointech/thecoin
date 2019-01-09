@@ -12,7 +12,7 @@ function Strip(name: string | null): string {
 function Pad(name: string): string {
   return PREFIX + name;
 }
-function GetStored(name): Wallet | null {
+function GetStored(name: string): Wallet | null {
   const storedItem = localStorage.getItem(Pad(name));
   if (storedItem !== null) {
     const wallet = JSON.parse(storedItem) as Wallet;
@@ -31,37 +31,45 @@ export function ReadAllAccounts(): ContainerState {
   const allAccounts = new Map<string, Wallet>();
   for (let i = 0; i <= localStorage.length - 1; i++) {
     const name = Strip(localStorage.key(i));
-    if (name != null) {
-      allAccounts[name] = GetStored(name);
+    const wallet = GetStored(name);
+    if (wallet != null) {
+      allAccounts.set(name, wallet);
     }
   }
-  return allAccounts;
+  return {
+    accounts: allAccounts,
+  };
 }
 
 //
 //  Store a single account, assumes this account has not yet
 //  been decrypted
 export function StoreSingleAccount(name: string, account: Wallet) {
-  // Do not store decrypted account
-  if (account.privateKey) {
-    const storedItem = GetStored(name);
-    if (
-      storedItem == null ||
-      storedItem.address.toLowerCase() != account.address.toLowerCase()
-    ) {
+  // Check it's ok to store this account.  This is all checked UI-side already, should
+  // we allow overwrites here?
+  const storedItem = GetStored(name);
+  if (storedItem != null) {
+    // Are we overwriting an existing account?
+    if (storedItem.address.toLowerCase() != account.address.toLowerCase()) {
       throw "Unable to store named account: It's name clashes with existing account";
     }
-    return false;
+    // The account being stored already matches what is stored here.
+    return true;
   }
 
+  // Do not store decrypted account
+  if (account.privateKey) {
+    throw 'Attempting to store a decrypted account';
+  }
   SetStored(name, account);
   return true;
 }
 
 //
 //  Replace all existing accounts with ones in this list.
-export function StoreAllAccounts(accounts: ContainerState) {
+export function StoreAllAccounts(state: ContainerState) {
   // First, delete any extra accounts that are not stored
+  const { accounts } = state;
   for (let i = 0; i <= localStorage.length - 1; i++) {
     const key = localStorage.key(i);
     if (key != null && key.startsWith(PREFIX)) {

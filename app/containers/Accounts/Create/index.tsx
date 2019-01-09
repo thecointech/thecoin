@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import * as Accounts from '../actions';
+import { mapStateToProps as MapAccounts, ContainerState as AccountsProps } from '../selectors';
 import { UxPassword } from 'components/UxPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
@@ -23,14 +24,14 @@ const initialState = {
   validPwd: undefined as boolean | undefined,
   validName: undefined as boolean | undefined,
   forceValidate: false,
-  redirect: false,
+  redirect: false as false|string,
   isCreating: false,
   cancelCreating: false,
   percentComplete: 0,
 };
 
 type State = Readonly<typeof initialState>;
-type Props = Accounts.DispatchProps;
+type Props = Accounts.DispatchProps & AccountsProps;
 
 class Create extends React.PureComponent<Props, State, any> {
   readonly state = initialState;
@@ -91,23 +92,38 @@ class Create extends React.PureComponent<Props, State, any> {
         this.props.setSingleAccount(accountName, asJson);
 
         // Switch to this newly created account
-        // this.setState({ redirect: name });
-        this.setState({ isCreating: false });
+        this.setState({ 
+          redirect: accountName,
+          isCreating: false,
+          cancelCreating: false
+        });
       });
   }
 
   // Validate our inputs
   onNameChange(value: string) {
-    const isValid = value.length >= 1;
+    const validation = (value.length == 0) ? 
+    {
+      isValid: false,
+      message: messages.errorNameTooShort,
+      tooltip: undefined
+    } : this.props.accounts.has(value) ? 
+    {
+      isValid: false,
+      message: messages.errorNameDuplicate,
+      tooltip: undefined
+    } :
+    {
+      isValid: true,
+      message: undefined,
+      tooltip: undefined
+    };
+
     this.setState({
       accountName: value,
-      validName: isValid,
+      validName: validation.isValid,
     });
-    return {
-      isValid: isValid,
-      message: isValid ? undefined : messages.errorNameTooShort,
-      tooltip: undefined
-    }
+    return validation;
   }
 
   onPasswordChange(value: string, score: number): boolean {
@@ -126,7 +142,6 @@ class Create extends React.PureComponent<Props, State, any> {
       const addr = `/accounts/${this.state.redirect}`;
       return <Redirect to={addr} />;
     }
-
 
     return (
       <React.Fragment>
@@ -179,11 +194,7 @@ class Create extends React.PureComponent<Props, State, any> {
   }
 }
 
-const mapDispatchToProps = {
-  ...Accounts.mapDispatchToProps,
-};
-
 export default connect(
-  null,
-  mapDispatchToProps,
+  MapAccounts,
+  Accounts.mapDispatchToProps,
 )(Create);

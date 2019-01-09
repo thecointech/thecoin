@@ -2,7 +2,9 @@ import { Wallet } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 
 /* --- STATE --- */
-type ContainerState = Map<string, Wallet>;
+type ContainerState = {
+  accounts: Map<string, Wallet>;
+};
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {

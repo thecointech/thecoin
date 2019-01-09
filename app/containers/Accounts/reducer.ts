@@ -11,17 +11,17 @@ export class AccountsReducer extends ImmerReducer<ContainerState>
   implements IActions {
   setAllAccounts(newState: ContainerState) {
     sync.StoreAllAccounts(newState);
-    this.draftState.values = newState.values;
+    this.draftState.accounts = newState.accounts;
   }
 
   setSingleAccount(name: string, account: Wallet) {
     sync.StoreSingleAccount(name, account);
-    this.draftState.set(name, account);
+    this.draftState.accounts.set(name, account);
   }
 
   deleteAccount(name: string) {
     sync.DeleteAccount(name);
-    this.draftState.delete(name);
+    this.draftState.accounts.delete(name);
   }
 }
 
