@@ -3,7 +3,7 @@ import { ImmerReducer } from 'immer-reducer';
 /* --- STATE --- */
 export interface SidebarMenuLink {
   readonly name: string;
-  readonly to: string;
+  readonly to: string | false;
 }
 
 export interface SidebarMenuItem {
@@ -11,13 +11,14 @@ export interface SidebarMenuItem {
   readonly subItems?: SidebarMenuItem[];
 }
 
+export type SidebarMenuElement = SidebarMenuItem;
 interface ContainerState {
-  readonly items: SidebarMenuItem[];
+  readonly items: SidebarMenuElement[];
 }
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {
-  setItems(newItems: SidebarMenuItem[]): void;
+  setItems(newItems: SidebarMenuElement[]): void;
   setSubItems(parent: SidebarMenuItem, subItems: SidebarMenuItem[]): void;
 }
 

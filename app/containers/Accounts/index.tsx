@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { SidebarMenuItem } from 'containers/PageSidebar/types';
+import {
+  SidebarMenuElement,
+  SidebarMenuItem,
+} from 'containers/PageSidebar/types';
 import * as Sidebar from 'containers/PageSidebar/actions';
 import AccountCreate from './Create';
-import Account from './Account';
+import { Account } from './Account';
 import { buildReducer } from './reducer';
 import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
@@ -15,41 +18,82 @@ type Props = OwnProps &
   RouteComponentProps &
   Sidebar.DispatchProps;
 
-const ConstantSidebarItems: SidebarMenuItem[] = [
+const ConstantSidebarItems: SidebarMenuElement[] = [
   {
     link: {
-      to: 'create',
+      to: '',
       name: 'New Account',
     },
     subItems: [
       {
         link: {
-          to: 'create',
+          to: '',
           name: 'Create Account',
         },
       },
       {
         link: {
-          to: 'upload',
+          to: '?upload',
           name: 'Upload Account',
         },
       },
     ],
   },
+  {
+    link: {
+      to: false,
+      name: 'Load',
+    },
+  },
 ];
 
+const stripTrailingSlash = (str: string) : string => {
+  return str.endsWith('/') ?
+      str.slice(0, -1) :
+      str;
+};
+
 class Accounts extends React.PureComponent<Props, {}, null> {
+  MappedConstantItems: SidebarMenuElement[];
+
+  constructor(props) {
+    super(props);
+
+    const { url } = this.props.match;
+    this.MappedConstantItems = this.mapMenuItems(ConstantSidebarItems, stripTrailingSlash(url));
+  }
+
+  mapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
+    return item.map(element => {
+      if (element.link.to !== false) {
+        const mapped: SidebarMenuItem = {
+          link: {
+            ...element.link,
+            to: `${url}/${element.link.to}`,
+          },
+          subItems: element.subItems
+            ? this.mapMenuItems(element.subItems, url)
+            : undefined,
+        };
+        return mapped;
+      }
+      return element;
+    });
+  }
+
   componentDidMount() {
-    const accountLinks: SidebarMenuItem[] = [];
+    const url = stripTrailingSlash(this.props.match.url);
+    const accountLinks: SidebarMenuElement[] = [];
     this.props.accounts.forEach((account, name) => {
       accountLinks.push({
         link: {
-          to: `/account/${name}`,
+          to: `${url}/${name}`,
           name,
         },
       });
     });
-    this.props.setItems(ConstantSidebarItems.concat(accountLinks));
+
+    this.props.setItems(this.MappedConstantItems.concat(accountLinks));
   }
 
   render() {
@@ -57,6 +101,7 @@ class Accounts extends React.PureComponent<Props, {}, null> {
     return (
       <Switch>
         <Route path={`${url}/:accountName`} component={Account} />
+        <Route path={`${url}/?upload`} component={AccountCreate} />
         <Route component={AccountCreate} />
       </Switch>
     );

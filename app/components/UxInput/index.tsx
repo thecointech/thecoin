@@ -7,12 +7,12 @@ import styles from './index.module.css';
 const initialState = {
   value: '',
   showState: false,
-  isValid: false,
+  isValid: false as undefined | boolean,
   message: undefined as undefined | FormattedMessage.MessageDescriptor,
   tooltip: undefined as undefined | FormattedMessage.MessageDescriptor,
 };
 export type ValidationResult = {
-  isValid: boolean;
+  isValid: boolean | undefined;
   message: FormattedMessage.MessageDescriptor | undefined;
   tooltip: FormattedMessage.MessageDescriptor | undefined;
 };
@@ -46,12 +46,18 @@ class UxInputClass extends React.Component<Props, State> {
     this.onBlur = this.onBlur.bind(this);
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    if (nextProps.forceValidate && !this.props.forceValidate) {
-      const results = this.props.uxChange(nextState.value);
-      Object.assign(nextState, results);
+  //
+  // Ensure that if we recieve the forceValidate prop, we validate
+  // our current value and show the result (regardless of state)
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.forceValidate && !prevState.showState) {
+      const results = nextProps.uxChange(prevState.value);
+      return {
+        ...results,
+        showState: true,
+      };
     }
-    return true;
+    return null;
   }
 
   onBlur(event: React.FocusEvent<HTMLInputElement>) {
@@ -66,9 +72,10 @@ class UxInputClass extends React.Component<Props, State> {
     const results = this.props.uxChange(value);
     this.setState({
       value,
-      ...results,
+      isValid: results.isValid,
+      message: results.message,
+      tooltip: results.tooltip,
     });
-    event.currentTarget.focus();
   }
 
   render() {
@@ -82,9 +89,11 @@ class UxInputClass extends React.Component<Props, State> {
       ...inputProps
     } = this.props;
 
-    const show = showState || forceValidate;
-    const errorTag = show && !isValid;
-    const successTag = show && isValid;
+    if (message) console.log(`${message.defaultMessage}`);
+
+    const show = isValid !== undefined && (showState || forceValidate);
+    const errorTag = show && isValid === false;
+    const successTag = show && isValid === true;
     const formClassName = successTag ? 'success' : undefined;
 
     const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
@@ -114,20 +123,6 @@ class UxInputClass extends React.Component<Props, State> {
         {message ? <FormattedMessage {...message} /> : undefined}
       </Message>
     );
-
-    // const tooltipElement = tooltip ? (
-    //   <div
-    //     className="ui"
-    //     data-tooltip="Add users to your feed"
-    //     data-position="top center"
-    //   >
-    //     <FormattedMessage {...tooltip} />
-    //   </div>
-    // ) : (
-    //   // <Popup basic on="hover" key={intlLabel.id} size="small" hidd>
-    //   // </Popup>
-    //   undefined
-    // );
 
     return (
       <Form.Field className={formClassName} error={errorTag}>

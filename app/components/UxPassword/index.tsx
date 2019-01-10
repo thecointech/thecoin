@@ -16,14 +16,14 @@ const initialState = {
   message: undefined as FormattedMessage.MessageDescriptor | undefined,
   stats: null as ZXCVBNResult | null,
   isPassword: false,
-  isValid: false,
+  isValid: false as boolean|undefined,
   maskPassword: null,
   selectionStart: 0,
   selectionEnd: 0
 }
 type State = Readonly<typeof initialState>;
 
-type ChangeCB = (value: string, score: number) => boolean;
+type ChangeCB = (value: string, score: number) => ValidationResult;
 
 const defaultProps = {
   infoBar: true,
@@ -31,7 +31,8 @@ const defaultProps = {
   statusInactiveColor: "#FC6F6F",
   unMaskTime: 1400,
   as: Input,
-  forceValidate: false
+  forceValidate: false,
+  doNotScore: false,
 };
 type DefaultProps = Readonly<typeof defaultProps>
 
@@ -60,7 +61,9 @@ export class UxPassword extends React.PureComponent<Props, State> {
     // set debouncer for password
     this.maskPassword = debounce(this.addPasswordType, props.unMaskTime);
     this.uxChange = this.uxChange.bind(this);
-    this.ensureZxcvbn();
+    if (!props.doNotScore) {
+      this.ensureZxcvbn();
+    }
   }
 
   async ensureZxcvbn() {
@@ -114,12 +117,12 @@ export class UxPassword extends React.PureComponent<Props, State> {
 
     this.toggleMask();
 
-    const stats = this.getScore(value);
-    const isValid = this.props.uxChange(value, stats ? stats.score : -1);
+    const stats = this.props.doNotScore ? null : this.getScore(value);
+    const returnValue = this.props.uxChange(value, stats ? stats.score : -1);
 
     // call uxChange prop passed from parent
     this.setState({
-      isValid: isValid,
+      isValid: returnValue.isValid,
       //      selectionStart: selectionStart || 0,
       //      selectionEnd: selectionEnd || 0,
     });
@@ -130,20 +133,19 @@ export class UxPassword extends React.PureComponent<Props, State> {
       tooltip: undefined
     }
     if (stats != null) {
-      if (value.length == 0) {
-        returnValue.message = messages.PasswordRequired;
-      }
-      else if (stats.feedback.warning.length > 0) {
+      const hasWarning = stats.feedback.warning.length > 0;
+      if (hasWarning) {
         returnValue.message = {
           id: `${MessageScope}.Warning`,
           defaultMessage: stats.feedback.warning
         }
-      }    
-      if (stats.feedback.suggestions.length > 0) {
-        returnValue.tooltip = {
-          id: `${MessageScope}.Tooltip`,
-          defaultMessage: stats.feedback.suggestions[0]
-        }
+      }
+      else if (!isValid) {
+        returnValue.message = messages.PasswordRequired;
+      }
+      returnValue.tooltip = {
+        id: `${MessageScope}.Tooltip`,
+        defaultMessage: "This password could be cracked in:" + stats.crack_times_display.offline_slow_hashing_1e4_per_second
       }
     }
     return returnValue;
@@ -193,6 +195,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
       statusInactiveColor,
       unMaskTime,
       as,
+      doNotScore,
       ...inputProps
     } = this.props;
 
@@ -217,8 +220,8 @@ export class UxPassword extends React.PureComponent<Props, State> {
         intlLabel={intlLabel}
         uxChange={this.uxChange}
         footer={infoBarComponent}
-        {...inputProps} 
-        />
+        {...inputProps}
+      />
     )
   }
 }

@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
   Button,
-  Modal,
   Header,
-  Icon,
   Form,
-  Loader,
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import * as Accounts from '../actions';
@@ -16,6 +13,7 @@ import { mapStateToProps as MapAccounts, ContainerState as AccountsProps } from 
 import { UxPassword } from 'components/UxPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
+import { CancellableOperationModal } from 'containers/CancellableOperationModal';
 
 
 const initialState = {
@@ -41,10 +39,10 @@ class Create extends React.PureComponent<Props, State, any> {
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.onNameChange = this.onNameChange.bind(this);
     this.generateNewWallet = this.generateNewWallet.bind(this);
-    this.cancelGenerate = this.cancelGenerate.bind(this);
+    this.onCancelGenerate = this.onCancelGenerate.bind(this);
   }
 
-  cancelGenerate(e: React.MouseEvent<HTMLElement>) {
+  onCancelGenerate() {
     this.setState({
       cancelCreating: true,
     });
@@ -169,26 +167,7 @@ class Create extends React.PureComponent<Props, State, any> {
 
           <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
         </Form>
-        <Modal open={this.state.isCreating} basic size="small">
-          <Modal.Header>
-            <FormattedMessage {...messages.whileCreatingHeader} />
-          </Modal.Header>
-          <Modal.Content>
-            <Loader>
-              <h3>
-                <FormattedMessage {...messages.whileCreatingMessage} 
-                  values={{
-                    percentComplete: this.state.percentComplete
-                  }}/>
-              </h3>
-            </Loader>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button color="red" onClick={this.cancelGenerate} inverted>
-              <Icon name="cancel" /> Cancel
-            </Button>
-          </Modal.Actions>
-        </Modal>
+        <CancellableOperationModal cancelCallback={this.onCancelGenerate} isOpen={this.state.isCreating} header={messages.whileCreatingHeader} progressPercent={this.state.percentComplete} progressMessage={messages.whileCreatingMessage} />
       </React.Fragment>
     );
   }

@@ -9,7 +9,7 @@ export enum ErrorState {
 }
 
 export type ValidationResult = {
-  isValid: boolean;
+  isValid: boolean | undefined;
   message: FormattedMessage.MessageDescriptor | undefined;
   tooltip: FormattedMessage.MessageDescriptor | undefined;
 };

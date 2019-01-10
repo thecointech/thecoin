@@ -15,11 +15,13 @@ export class SidebarItemsReducer extends ImmerReducer<ContainerState>
 
   setSubItems(parent: SidebarMenuItem, subItems: SidebarMenuItem[]) {
     const items = this.draftState.items;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].link == parent.link) {
-        items[i].subItems = subItems;
+    items.find(element => {
+      if (element.link.to == parent.link.to) {
+        element.subItems = subItems;
+        return true;
       }
-    }
+      return false;
+    });
   }
 }
 

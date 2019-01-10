@@ -1,20 +1,38 @@
 import * as React from 'react';
 import { Switch, Route, RouteComponentProps } from 'react-router-dom';
-import Login from './Login';
-import Balance from './Balance'
+import {
+  mapStateToProps,
+  ContainerState as AccountsState,
+} from 'containers/Accounts/selectors';
+import { connect } from 'react-redux';
+import NotFoundPage from 'containers/NotFoundPage';
+import { Login } from './Login';
+import Balance from './Balance';
 
-type Props = RouteComponentProps;
+type Props = RouteComponentProps & AccountsState;
 
-class Accounts extends React.PureComponent<Props, {}, null> {
+class AccountClass extends React.PureComponent<Props, {}, null> {
   render() {
     const { url } = this.props.match;
-    return (
+    // @ts-ignore
+    const accountName = this.props.match.params["accountName"];
+    const account = this.props.accounts.get(accountName);
+    return account === undefined ? (
+      <NotFoundPage />
+    ) : (
       <Switch>
-        <Route path={`${url}/balance`} component={Balance} />
-        <Route component={Login} />
+        <Route
+          path={`${url}/balance`}
+          render={props => <Balance {...props} />}
+        />
+        <Route
+          render={props => (
+            <Login {...props} accountName={accountName} account={account} />
+          )}
+        />
       </Switch>
     );
   }
 }
 
-export default Accounts;
+export const Account = connect(mapStateToProps)(AccountClass);
