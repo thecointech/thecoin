@@ -8,6 +8,7 @@ import { Wallet } from 'ethers';
 import { mapDispatchToProps, DispatchProps } from 'containers/Accounts/actions';
 import { UxPassword } from 'components/UxPassword';
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
+import { ValidationResult } from 'components/UxInput/types';
 
 interface OwnProps {
   accountName: string,
@@ -37,11 +38,11 @@ class LoginClass extends React.PureComponent<Props, State, null> {
     this.onCancelLogin = this.onCancelLogin.bind(this);
   }
 
-  onPasswordChange(value: string, score: number): boolean|undefined {
+  onPasswordChange(value: string): ValidationResult {
     this.setState({
       password: value,
     });
-    return undefined;
+    return {};
   }
 
   decryptAccountCallback(percent: number): boolean {
@@ -66,6 +67,7 @@ class LoginClass extends React.PureComponent<Props, State, null> {
     else if (percent == 100) {
       this.setState({
         isDecrypting: false,
+        cancelDecrypting: false,
         intlResult: messages.decryptSuccess
       })
     }
@@ -120,9 +122,7 @@ class LoginClass extends React.PureComponent<Props, State, null> {
           <UxPassword
             uxChange={this.onPasswordChange}
             intlLabel={messages.labelPassword}
-            infoBar={false}
-            doNotScore
-          // placeholder="Account Password"
+            //placeholder="Account Password"
           />
           <Button onClick={this.decryptAccount}>
             <FormattedMessage {...messages.buttonLogin} />

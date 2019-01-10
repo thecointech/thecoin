@@ -1,18 +1,19 @@
 import { FormattedMessage } from 'react-intl';
 import { Color } from 'csstype';
+import { ChangeCB, ValidationResult } from 'components/UxInput/types';
+import { ReactNode } from 'react';
 
-export type ChangeCB = (value: string, score: number) => boolean;
+export type ChangeCB = ChangeCB;
+export type ValidationResult = ValidationResult;
 
-interface Props {
-  intlLabel: FormattedMessage.MessageDescriptor;
-  onChange: ChangeCB;
-  forceValidate?: boolean;
-
-  infoBar: true;
-  statusColor: Color;
-  statusInactiveColor: Color;
-  minScore: number;
-  minLength: number;
+interface OptionalProps {
   unMaskTime: number;
-  as: React.ReactChild;
+  as: React.ReactNode;
+  forceValidate: boolean;
+  footer?: ReactNode;
+}
+
+interface RequiredProps {
+  intlLabel: FormattedMessage.MessageDescriptor;
+  uxChange: ChangeCB;
 }

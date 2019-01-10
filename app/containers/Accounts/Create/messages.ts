@@ -33,7 +33,6 @@ export default defineMessages({
     id: `${scope}.whileCreatingHeader`,
     defaultMessage: 'Creating Account...',
   },
-
   whileCreatingMessage: {
     id: `${scope}.whileCreatingMessage`,
     defaultMessage:
@@ -47,6 +46,10 @@ export default defineMessages({
   errorNameDuplicate: {
     id: `${scope}.errorNameDuplicate`,
     defaultMessage: 'An account with this name already exists here.',
+  },
+  errorPasswordRequired: {
+    id: `${scope}.errorPasswordRequired`,
+    defaultMessage: "Please enter a password of at least 'moderate' strength",
   },
 });
 

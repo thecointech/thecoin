@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Form, Label, Input, Message, InputProps } from 'semantic-ui-react';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import cx from 'classnames';
 import styles from './index.module.css';
+import { RequiredProps, OptionalProps } from './types';
 
 const initialState = {
   value: '',
@@ -11,33 +12,19 @@ const initialState = {
   message: undefined as undefined | FormattedMessage.MessageDescriptor,
   tooltip: undefined as undefined | FormattedMessage.MessageDescriptor,
 };
-export type ValidationResult = {
-  isValid: boolean | undefined;
-  message: FormattedMessage.MessageDescriptor | undefined;
-  tooltip: FormattedMessage.MessageDescriptor | undefined;
-};
-export type ChangeCB = (value: string) => ValidationResult;
-
-export interface RequiredProps {
-  readonly intlLabel: FormattedMessage.MessageDescriptor;
-  readonly uxChange: ChangeCB;
-  readonly footer?: ReactNode;
-}
-
-const optionalProps = {
-  forceValidate: false,
-};
-
 type State = Readonly<typeof initialState>;
+
 type Props = RequiredProps &
-  Readonly<typeof optionalProps> &
+  OptionalProps &
   Partial<InputProps> &
   InjectedIntlProps;
 
 class UxInputClass extends React.Component<Props, State> {
   state = initialState;
 
-  static defaultProps = optionalProps;
+  static defaultProps: OptionalProps = {
+    forceValidate: false,
+  };
 
   constructor(props: Props) {
     super(props);
@@ -88,8 +75,6 @@ class UxInputClass extends React.Component<Props, State> {
       uxChange,
       ...inputProps
     } = this.props;
-
-    if (message) console.log(`${message.defaultMessage}`);
 
     const show = isValid !== undefined && (showState || forceValidate);
     const errorTag = show && isValid === false;

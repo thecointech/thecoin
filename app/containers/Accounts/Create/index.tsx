@@ -10,10 +10,11 @@ import {
 import { FormattedMessage } from 'react-intl';
 import * as Accounts from '../actions';
 import { mapStateToProps as MapAccounts, ContainerState as AccountsProps } from '../selectors';
-import { UxPassword } from 'components/UxPassword';
+import { UxScoredPassword } from 'components/UxScoredPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
+import { ValidationResult } from 'components/UxPassword/types';
 
 
 const initialState = {
@@ -124,13 +125,18 @@ class Create extends React.PureComponent<Props, State, any> {
     return validation;
   }
 
-  onPasswordChange(value: string, score: number): boolean {
+  onPasswordChange(value: string, score: number): ValidationResult {
     const isValid = score > 2;
     this.setState({
       accountPwd: value,
       validPwd: isValid
     })
-    return isValid;
+
+    const errorMessage = isValid ? undefined : messages.errorPasswordRequired;
+    return {
+      isValid,
+      message: errorMessage
+    };
   }
 
   /////////////////////////////////////////////////////////////
@@ -158,7 +164,7 @@ class Create extends React.PureComponent<Props, State, any> {
             forceValidate={this.state.forceValidate}
             placeholder="Account Name"
           />
-          <UxPassword
+          <UxScoredPassword
             uxChange={this.onPasswordChange}
             intlLabel={messages.labelPassword}
             forceValidate={this.state.forceValidate}

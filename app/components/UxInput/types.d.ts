@@ -9,16 +9,19 @@ export enum ErrorState {
 }
 
 export type ValidationResult = {
-  isValid: boolean | undefined;
-  message: FormattedMessage.MessageDescriptor | undefined;
-  tooltip: FormattedMessage.MessageDescriptor | undefined;
+  isValid?: boolean;
+  message?: FormattedMessage.MessageDescriptor;
+  tooltip?: FormattedMessage.MessageDescriptor;
 };
-// export type ValidationCB = (value: string) => ValidationResult;
+
 export type ChangeCB = (value: string) => ValidationResult;
 
-export interface Props {
-  intlLabel: FormattedMessage.MessageDescriptor;
-  footer?: ReactNode;
-  onChange: ChangeCB;
-  forceValidate?: boolean;
+export interface RequiredProps {
+  readonly intlLabel: FormattedMessage.MessageDescriptor;
+  readonly uxChange: ChangeCB;
+  readonly footer?: ReactNode;
+}
+
+export interface OptionalProps {
+  forceValidate: boolean;
 }
