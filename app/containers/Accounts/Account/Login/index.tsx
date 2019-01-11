@@ -16,12 +16,19 @@ interface OwnProps {
 }
 type Props = OwnProps & DispatchProps;
 
+enum LoginState {
+  Entry,
+  Decrypting,
+  Failed,
+  Cancelled,
+  Complete
+}
+
 const initialState = {
   password: '',
   percentComplete: 0,
-  isDecrypting: false,
   cancelDecrypting: false,
-  intlResult: null as null | FormattedMessage.MessageDescriptor
+  state: LoginState.Entry,
 };
 
 type State = Readonly<typeof initialState>;
@@ -39,18 +46,36 @@ class LoginClass extends React.PureComponent<Props, State, null> {
   }
 
   onPasswordChange(value: string): ValidationResult {
+    
     this.setState({
       password: value,
     });
-    return {};
+
+    let returnValue: ValidationResult = {
+    }
+    const {state} = this.state;
+    switch(state) 
+    {
+      case LoginState.Decrypting:
+        returnValue.message = messages.decryptInProgress;
+        break;
+      case LoginState.Cancelled:
+        returnValue.isValid = false;
+        returnValue.message = messages.decryptCancelled;
+        break;
+      case LoginState.Failed:
+        returnValue.isValid = false;
+        returnValue.message = messages.decryptIncorrectPwd;
+        break;
+      }
+    return returnValue;
   }
 
   decryptAccountCallback(percent: number): boolean {
-    console.log(percent);
     if (this.state.cancelDecrypting) {
       this.setState({
-        isDecrypting: false,
-        intlResult: messages.decryptCancelled
+        state: LoginState.Cancelled,
+        cancelDecrypting: false
       })
       return false;
     }
@@ -58,23 +83,20 @@ class LoginClass extends React.PureComponent<Props, State, null> {
       // Invalid password?
       if (!this.state.cancelDecrypting) {
         this.setState({
-          isDecrypting: false,
-          intlResult: messages.decryptIncorrectPwd
+          state: LoginState.Failed
         })
       }
       return false;
     }
     else if (percent == 100) {
       this.setState({
-        isDecrypting: false,
+        state: LoginState.Complete,
         cancelDecrypting: false,
-        intlResult: messages.decryptSuccess
       })
     }
     else {
       this.setState({
         percentComplete: percent,
-        intlResult: messages.decryptInProgress
       })
     }
     return true;
@@ -97,19 +119,22 @@ class LoginClass extends React.PureComponent<Props, State, null> {
     }
 
     this.setState({
-      isDecrypting: true
+      state: LoginState.Decrypting
     })
 
     this.props.decryptAccount(accountName, password, this.decryptAccountCallback);
   }
 
   render() {
+    const {state} = this.state;
+    const isDecrypting = state == LoginState.Decrypting;
+    const showState = state == LoginState.Decrypting || state == LoginState.Cancelled || state == LoginState.Failed;
     return (
       <React.Fragment>
         <Form>
           <Header as="h1">
             <Header.Content>
-              <FormattedMessage {...messages.header} 
+              <FormattedMessage {...messages.header}
                 values={{
                   accountName: this.props.accountName
                 }}
@@ -123,12 +148,13 @@ class LoginClass extends React.PureComponent<Props, State, null> {
             uxChange={this.onPasswordChange}
             intlLabel={messages.labelPassword}
             //placeholder="Account Password"
+            forceValidate={showState}
           />
           <Button onClick={this.decryptAccount}>
             <FormattedMessage {...messages.buttonLogin} />
           </Button>
         </Form>
-        <CancellableOperationModal cancelCallback={this.onCancelLogin} isOpen={this.state.isDecrypting} header={messages.decryptHeader} progressMessage={messages.decryptInProgress} progressPercent={this.state.percentComplete} />
+        <CancellableOperationModal cancelCallback={this.onCancelLogin} isOpen={isDecrypting} header={messages.decryptHeader} progressMessage={messages.decryptInProgress} progressPercent={this.state.percentComplete} />
       </React.Fragment>
     );
   }

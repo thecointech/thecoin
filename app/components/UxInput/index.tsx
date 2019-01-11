@@ -66,7 +66,7 @@ class UxInputClass extends React.Component<Props, State> {
   }
 
   render() {
-    const { showState, isValid, value, message, tooltip } = this.state;
+    const { isValid, value, message, tooltip } = this.state;
     const {
       intl,
       intlLabel,
@@ -76,9 +76,9 @@ class UxInputClass extends React.Component<Props, State> {
       ...inputProps
     } = this.props;
 
-    const show = isValid !== undefined && (showState || forceValidate);
-    const errorTag = show && isValid === false;
-    const successTag = show && isValid === true;
+    const show = message !== undefined;
+    const errorTag = isValid === false;
+    const successTag = isValid === true;
     const formClassName = successTag ? 'success' : undefined;
 
     const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
@@ -95,7 +95,7 @@ class UxInputClass extends React.Component<Props, State> {
       <Message
         success={successTag}
         error={errorTag}
-        hidden={errorTag != true}
+        hidden={!show}
         attached="bottom"
         className={cx(
           styles.ui,

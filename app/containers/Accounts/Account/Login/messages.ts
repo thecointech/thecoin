@@ -44,6 +44,6 @@ export default defineMessages({
   },
   buttonLogin: {
     id: `${scope}.buttonLogin`,
-    defaultMessage: 'Open Account',
+    defaultMessage: 'Login',
   },
 });
