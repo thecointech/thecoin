@@ -25,3 +25,6 @@
 [submodule "the-core-admin"]
 	path = the-core-admin
 	url = https://tnadevelopment@dev.azure.com/tnadevelopment/TheCoin/_git/the-core-admin
+[submodule "the-website-ts"]
+	path = the-website-ts
+	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website-ts
