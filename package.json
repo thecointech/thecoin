@@ -10,7 +10,7 @@
     "npm": ">=5",
     "node": ">=8.10.0"
   },
-  "author": "Max Stoiber",
+  "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
     "build-semantic": "cd semantic && gulp build-css build-assets",
@@ -178,6 +178,8 @@
     "imports-loader": "0.8.0",
     "jest-cli": "23.6.0",
     "jest-styled-components": "6.2.2",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "lint-staged": "7.3.0",
     "ngrok": "3.1.0",
     "node-plop": "0.16.0",
@@ -192,6 +194,7 @@
     "react-test-renderer": "16.6.0",
     "rimraf": "2.6.2",
     "semantic-ui": "^2.4.2",
+    "semantic-ui-less": "^2.4.1",
     "shelljs": "^0.8.2",
     "style-loader": "0.23.1",
     "stylelint": "9.6.0",

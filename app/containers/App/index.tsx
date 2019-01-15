@@ -20,8 +20,9 @@ import MainRouter from 'containers/MainRouter'
 import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'
 import cx from 'classnames';
 
-import 'styles/semantic/semantic.css';
-import 'styles/semantic/tweaks.css';
+//import 'styles/semantic/src/semantic.less';
+//import 'styles/semantic/tweaks.css';
+import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
 

@@ -53,6 +53,27 @@ module.exports = options => ({
         use: ['style-loader', 'css-loader'],
       },
       {
+        // Explicitly process Semantics LESS files
+        test: /semantic\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
         use: 'file-loader',
       },
@@ -132,6 +153,10 @@ module.exports = options => ({
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
+    alias: {
+      '../../theme.config$':
+        '/src/TheCoin/the-website-ts/app/styles/semantic/theme.config',
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
