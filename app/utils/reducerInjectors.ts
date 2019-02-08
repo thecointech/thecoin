@@ -4,14 +4,14 @@ import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 
 import { LifeStore } from 'types';
-import { ImmerReducerClass, createReducerFunction } from 'immer-reducer';
+//import { createReducerFunction } from 'immer-reducer';
 import createReducer from '../reducers';
 import checkStore from './checkStore';
 
 export function injectReducerFactory(store: LifeStore, isValid: boolean) {
-  return function injectReducer(
+  return function injectReducer<T>(
     key: string,
-    reducer: ImmerReducerClass,
+    reducer: T,
     initialState: object,
   ) {
     if (!isValid) {
@@ -25,11 +25,11 @@ export function injectReducerFactory(store: LifeStore, isValid: boolean) {
 
     // tslint:disable-next-line:max-line-length
     // Check `store.injectedReducers[key] === reducer` for hot reloading when a key is the same but a reducer is different
-    if (Reflect.has(store.injectedReducers, key)) {
+    if (Reflect.has(store.injectedReducers, key) && store.injectedReducers[key] === reducer) {
       return;
     }
 
-    store.injectedReducers[key] = createReducerFunction(reducer, initialState);
+    store.injectedReducers[key] = reducer; //createReducerFunction(reducer, initialState);
     store.replaceReducer(createReducer(store.injectedReducers));
   };
 }

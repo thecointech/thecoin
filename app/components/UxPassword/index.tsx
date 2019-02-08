@@ -1,10 +1,9 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
-import { Input } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { UxInput } from 'components/UxInput';
-import { RequiredProps, OptionalProps, ValidationResult } from './types';
+import { Props } from './types';
 
 const initialState = {
   message: undefined as FormattedMessage.MessageDescriptor | undefined,
@@ -15,18 +14,14 @@ const initialState = {
 }
 type State = Readonly<typeof initialState>;
 
-type Props = Readonly<RequiredProps & OptionalProps>;
-
 const UnMasked = "text";
 const Masked = "password";
 
 export class UxPassword extends React.PureComponent<Props, State> {
 
   // Set default
-  static defaultProps: OptionalProps = {
-    unMaskTime: 1400,
-    as: Input,
-    forceValidate: false,
+  static defaultProps = {
+    unMaskTime: 1400
   };
   state = initialState;
 
@@ -43,7 +38,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { unMaskTime } = this.props;
-    if (unMaskTime > 0) {
+    if (unMaskTime! > 0) {
       this.maskPassword = debounce(this.addPasswordType, unMaskTime);
     }
   }
@@ -64,18 +59,17 @@ export class UxPassword extends React.PureComponent<Props, State> {
     });
   }
 
-  uxChange(value: string): ValidationResult {
-
+  uxChange(value: string): void {
     this.toggleMask();
     const returnValue = this.props.uxChange(value);
-
     return returnValue;
   }
 
   //
   //////////////////////////////////////////////////////////////////////////////
   toggleMask() {
-    if (this.props.unMaskTime > 0) {
+    const { unMaskTime } = this.props;
+    if (unMaskTime! > 0) {
       // display password, then
       this.setState({
         isPassword: false
@@ -98,7 +92,6 @@ export class UxPassword extends React.PureComponent<Props, State> {
     const {
       uxChange,
       unMaskTime,
-      as,
       ...inputProps
     } = this.props;
 

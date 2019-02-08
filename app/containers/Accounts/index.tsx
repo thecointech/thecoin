@@ -8,7 +8,7 @@ import {
 import * as Sidebar from 'containers/PageSidebar/actions';
 import AccountCreate from './Create';
 import { Account } from './Account';
-import { buildReducer } from './reducer';
+import { buildReducer } from './actions';
 import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
 

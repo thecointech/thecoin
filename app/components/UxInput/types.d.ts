@@ -1,5 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 import { ReactNode } from 'react';
+import { InputProps } from 'semantic-ui-react';
 
 export enum ErrorState {
   Initial,
@@ -8,20 +9,18 @@ export enum ErrorState {
   Warning,
 }
 
-export type ValidationResult = {
+export type ChangeCB = (value: string) => void;
+
+export interface Props {
+  intlLabel: FormattedMessage.MessageDescriptor;
+  uxChange: ChangeCB;
+  footer?: ReactNode;
   isValid?: boolean;
   message?: FormattedMessage.MessageDescriptor;
   tooltip?: FormattedMessage.MessageDescriptor;
-};
 
-export type ChangeCB = (value: string) => ValidationResult;
+  forceValidate?: boolean;
 
-export interface RequiredProps {
-  readonly intlLabel: FormattedMessage.MessageDescriptor;
-  readonly uxChange: ChangeCB;
-  readonly footer?: ReactNode;
-}
-
-export interface OptionalProps {
-  forceValidate: boolean;
+  // pass through additional props to underlying type
+  [id: string]: any;
 }

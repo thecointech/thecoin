@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import NotFoundPage from 'containers/NotFoundPage';
 import { Login } from './Login';
 import Balance from './Balance';
+import { Purchase } from './Purchase';
 
 type Props = RouteComponentProps & AccountsState;
 
@@ -17,19 +18,22 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     // @ts-ignore
     const accountName = this.props.match.params["accountName"];
     const account = this.props.accounts.get(accountName);
-    return account === undefined ? (
-      <NotFoundPage />
-    ) : (
+    if (account === undefined) {
+      return <NotFoundPage />;
+    }
+    else if (!account.privateKey) {
+      return <Login accountName={accountName} account={account} />
+    }
+    return (
       <Switch>
         <Route
-          path={`${url}/balance`}
-          render={props => <Balance {...props} />}
+          path={`${url}/purchase`}
+          render={props => <Purchase {...props} account={account!} />}
         />
         <Route
-          render={props => (
-            <Login {...props} accountName={accountName} account={account} />
-          )}
+          render={props => <Balance {...props} account={account!} />}
         />
+        <Route component={NotFoundPage} />
       </Switch>
     );
   }

@@ -14,14 +14,17 @@ import { UxScoredPassword } from 'components/UxScoredPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
-import { ValidationResult } from 'components/UxPassword/types';
 
 
 const initialState = {
   accountPwd: '',
   accountName: '',
-  validPwd: undefined as boolean | undefined,
-  validName: undefined as boolean | undefined,
+  pwdValid: undefined as boolean | undefined,
+  pwdMessage: undefined as FormattedMessage.MessageDescriptor|undefined,
+
+  nameValid: undefined as boolean | undefined,
+  nameMessage: undefined as FormattedMessage.MessageDescriptor|undefined,
+
   forceValidate: false,
   redirect: false as false|string,
   isCreating: false,
@@ -53,9 +56,9 @@ class Create extends React.PureComponent<Props, State, any> {
     if (e) e.preventDefault();
 
     // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-    const { accountPwd, accountName, validPwd, validName } = this.state;
-
-    if (!(validPwd && validName)) {
+    const { accountPwd, accountName, pwdValid, nameValid } = this.state;
+    
+    if (!(pwdValid && nameValid)) {
       this.setState({
         forceValidate: true
       });
@@ -103,40 +106,31 @@ class Create extends React.PureComponent<Props, State, any> {
   onNameChange(value: string) {
     const validation = (value.length == 0) ? 
     {
-      isValid: false,
-      message: messages.errorNameTooShort,
-      tooltip: undefined
+      nameValid: false,
+      nameMessage: messages.errorNameTooShort,
     } : this.props.accounts.has(value) ? 
     {
-      isValid: false,
-      message: messages.errorNameDuplicate,
-      tooltip: undefined
+      nameValid: false,
+      nameMessage: messages.errorNameDuplicate,
     } :
     {
-      isValid: true,
-      message: undefined,
-      tooltip: undefined
+      nameValid: true,
+      nameMessage: undefined,
     };
 
     this.setState({
       accountName: value,
-      validName: validation.isValid,
+      ...validation,
     });
-    return validation;
   }
 
-  onPasswordChange(value: string, score: number): ValidationResult {
+  onPasswordChange(value: string, score: number): boolean {
     const isValid = score > 2;
     this.setState({
       accountPwd: value,
-      validPwd: isValid
+      pwdValid: isValid
     })
-
-    const errorMessage = isValid ? undefined : messages.errorPasswordRequired;
-    return {
-      isValid,
-      message: errorMessage
-    };
+    return isValid;
   }
 
   /////////////////////////////////////////////////////////////
@@ -146,7 +140,8 @@ class Create extends React.PureComponent<Props, State, any> {
       const addr = `/accounts/${this.state.redirect}`;
       return <Redirect to={addr} />;
     }
-
+    const { forceValidate, pwdValid, pwdMessage, nameValid, nameMessage } = this.state;
+      
     return (
       <React.Fragment>
         <Form>
@@ -161,14 +156,18 @@ class Create extends React.PureComponent<Props, State, any> {
           <UxInput
             uxChange={this.onNameChange}
             intlLabel={messages.labelName}
-            forceValidate={this.state.forceValidate}
+            forceValidate={forceValidate}
+            isValid={nameValid}
+            message={nameMessage}
             placeholder="Account Name"
           />
           <UxScoredPassword
             uxChange={this.onPasswordChange}
             intlLabel={messages.labelPassword}
-            forceValidate={this.state.forceValidate}
-          //placeholder="Account Password"
+            forceValidate={forceValidate}
+            isValid={pwdValid}
+            message={pwdMessage}
+            placeholder="Account Password"
           />
 
           <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>

@@ -30,7 +30,7 @@ export default defineMessages({
   },
   4: {
     id: `${scope}.score4`,
-    defaultMessage: 'moderate',
+    defaultMessage: 'strong',
   },
   PasswordRequired: {
     id: `${scope}.PasswordRequired`,

@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { Wallet } from 'ethers';
 
-type Props = {};
+type Props = {
+  account: Wallet
+};
 
 class Balance extends React.PureComponent<Props, {}, null> {
   render() {

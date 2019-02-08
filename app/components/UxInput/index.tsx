@@ -1,29 +1,23 @@
 import React from 'react';
-import { Form, Label, Input, Message, InputProps } from 'semantic-ui-react';
+import { Form, Label, Input, Message } from 'semantic-ui-react';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import cx from 'classnames';
 import styles from './index.module.css';
-import { RequiredProps, OptionalProps } from './types';
+import { Props as MyProps } from './types';
 
 const initialState = {
   value: '',
   showState: false,
-  isValid: false as undefined | boolean,
-  message: undefined as undefined | FormattedMessage.MessageDescriptor,
-  tooltip: undefined as undefined | FormattedMessage.MessageDescriptor,
 };
-type State = Readonly<typeof initialState>;
 
-type Props = RequiredProps &
-  OptionalProps &
-  Partial<InputProps> &
-  InjectedIntlProps;
+type State = Readonly<typeof initialState>;
+type Props = Readonly<MyProps & InjectedIntlProps>;
 
 class UxInputClass extends React.Component<Props, State> {
   state = initialState;
 
-  static defaultProps: OptionalProps = {
-    forceValidate: false,
+  static defaultProps = {
+    forceValidate: false
   };
 
   constructor(props: Props) {
@@ -38,9 +32,8 @@ class UxInputClass extends React.Component<Props, State> {
   // our current value and show the result (regardless of state)
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.forceValidate && !prevState.showState) {
-      const results = nextProps.uxChange(prevState.value);
+      nextProps.uxChange(prevState.value);
       return {
-        ...results,
         showState: true,
       };
     }
@@ -56,30 +49,30 @@ class UxInputClass extends React.Component<Props, State> {
 
   onChange(event: React.FormEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
-    const results = this.props.uxChange(value);
+    this.props.uxChange(value);
     this.setState({
       value,
-      isValid: results.isValid,
-      message: results.message,
-      tooltip: results.tooltip,
     });
   }
 
   render() {
-    const { isValid, value, message, tooltip } = this.state;
+    const { value, showState } = this.state;
     const {
       intl,
       intlLabel,
+      uxChange,
       forceValidate,
       footer,
-      uxChange,
+      isValid, 
+      message,
+      tooltip,
       ...inputProps
     } = this.props;
 
-    const show = message !== undefined;
-    const errorTag = isValid === false;
-    const successTag = isValid === true;
+    const errorTag = showState && (isValid === false);
+    const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
+    const showMessage = showState && (message != undefined);
 
     const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
     const inputElement = (
@@ -95,7 +88,7 @@ class UxInputClass extends React.Component<Props, State> {
       <Message
         success={successTag}
         error={errorTag}
-        hidden={!show}
+        hidden={!showMessage}
         attached="bottom"
         className={cx(
           styles.ui,

@@ -38,9 +38,14 @@ export function ReadAllAccounts(): ContainerState {
   }
   return {
     accounts: allAccounts,
+    activeAccount: null
   };
 }
 
+function AddressMatches(addr1: string, addr2: string) {
+  // ignore inconsequential differ
+  return addr1.slice(-40).toLowerCase() === addr2.slice(-40).toLowerCase();
+}
 //
 //  Store a single account, assumes this account has not yet
 //  been decrypted
@@ -50,7 +55,7 @@ export function StoreSingleAccount(name: string, account: Wallet) {
   const storedItem = GetStored(name);
   if (storedItem != null) {
     // Are we overwriting an existing account?
-    if (storedItem.address.toLowerCase() != account.address.toLowerCase()) {
+    if (!AddressMatches(storedItem.address, account.address)) {
       throw "Unable to store named account: It's name clashes with existing account";
     }
     // The account being stored already matches what is stored here.

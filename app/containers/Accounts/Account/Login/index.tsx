@@ -8,7 +8,8 @@ import { Wallet } from 'ethers';
 import { mapDispatchToProps, DispatchProps } from 'containers/Accounts/actions';
 import { UxPassword } from 'components/UxPassword';
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
-import { ValidationResult } from 'components/UxInput/types';
+import { compose } from 'redux';
+import { Redirect } from 'react-router';
 
 interface OwnProps {
   accountName: string,
@@ -45,30 +46,17 @@ class LoginClass extends React.PureComponent<Props, State, null> {
     this.onCancelLogin = this.onCancelLogin.bind(this);
   }
 
-  onPasswordChange(value: string): ValidationResult {
-    
+  onPasswordChange(value: string): void {
     this.setState({
       password: value,
     });
-
-    let returnValue: ValidationResult = {
+    // If we are in a failed state, reset state with new keystroke
+    const { state } = this.state;
+    if (state == LoginState.Cancelled || state == LoginState.Failed) {
+      this.setState({
+        state: LoginState.Entry
+      })
     }
-    const {state} = this.state;
-    switch(state) 
-    {
-      case LoginState.Decrypting:
-        returnValue.message = messages.decryptInProgress;
-        break;
-      case LoginState.Cancelled:
-        returnValue.isValid = false;
-        returnValue.message = messages.decryptCancelled;
-        break;
-      case LoginState.Failed:
-        returnValue.isValid = false;
-        returnValue.message = messages.decryptIncorrectPwd;
-        break;
-      }
-    return returnValue;
   }
 
   decryptAccountCallback(percent: number): boolean {
@@ -83,7 +71,7 @@ class LoginClass extends React.PureComponent<Props, State, null> {
       // Invalid password?
       if (!this.state.cancelDecrypting) {
         this.setState({
-          state: LoginState.Failed
+          state: LoginState.Failed,
         })
       }
       return false;
@@ -125,10 +113,31 @@ class LoginClass extends React.PureComponent<Props, State, null> {
     this.props.decryptAccount(accountName, password, this.decryptAccountCallback);
   }
 
+  getMessage(state: LoginState)
+  {
+    switch(state) 
+    {
+      case LoginState.Cancelled:
+        return messages.decryptCancelled
+      case LoginState.Failed:
+        return messages.decryptIncorrectPwd
+    }
+    return undefined;
+  }
+
   render() {
+
+    const { account, accountName } = this.props;
+    if (account && account.privateKey) {
+        return <Redirect to={`/accounts/${accountName}`} />;
+    }
     const {state} = this.state;
+
     const isDecrypting = state == LoginState.Decrypting;
     const showState = state == LoginState.Decrypting || state == LoginState.Cancelled || state == LoginState.Failed;
+    const isValid = !(state == LoginState.Cancelled || state == LoginState.Failed);
+    const message = this.getMessage(state);
+
     return (
       <React.Fragment>
         <Form>
@@ -147,7 +156,9 @@ class LoginClass extends React.PureComponent<Props, State, null> {
           <UxPassword
             uxChange={this.onPasswordChange}
             intlLabel={messages.labelPassword}
-            //placeholder="Account Password"
+            placeholder="Account Password"
+            message={message}
+            isValid={isValid}
             forceValidate={showState}
           />
           <Button onClick={this.decryptAccount}>
@@ -160,7 +171,12 @@ class LoginClass extends React.PureComponent<Props, State, null> {
   }
 }
 
-export const Login = connect(
+const withConnect = connect(
   null,
   mapDispatchToProps
+)
+
+
+export const Login = compose(
+  withConnect
 )(LoginClass);

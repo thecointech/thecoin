@@ -16,10 +16,14 @@ const makeSelectAccount = (name: string) =>
 const makeSelectAllAccounts = () =>
   createSelector(selectAccounts, substate => substate.accounts);
 
+const makeSelectActiveAccount = () => 
+  createSelector(selectAccounts, substate => substate.activeAccount);
+
   // Map RootState to your StateProps
 const mapStateToProps = createStructuredSelector<ApplicationRootState, ContainerState>({
   // All the keys and values are type-safe
-  accounts: makeSelectAllAccounts()
+  accounts: makeSelectAllAccounts(),
+  activeAccount: makeSelectActiveAccount(),
 });
 
 export { selectAccounts, makeSelectAccount, ContainerState, mapStateToProps };

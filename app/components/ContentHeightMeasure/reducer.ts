@@ -1,4 +1,4 @@
-import { ImmerReducer } from 'immer-reducer';
+import { ImmerReducer, createReducerFunction } from 'immer-reducer';
 import injectReducer from 'utils/injectReducer';
 import { ContainerState } from './types';
 import { IActions } from './types';
@@ -18,10 +18,12 @@ export class HeightMeasureReducer extends ImmerReducer<ContainerState>
   }
 }
 
+const reducer = createReducerFunction(HeightMeasureReducer, initialState);
+
 export function buildReducer<T>() {
   return injectReducer<T>({
     key: 'content',
-    reducer: HeightMeasureReducer,
+    reducer: reducer,
     initialState,
   });
 }

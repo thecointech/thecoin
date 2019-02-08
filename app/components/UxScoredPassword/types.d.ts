@@ -1,33 +1,20 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Color } from 'csstype';
-import { ValidationResult } from 'components/UxPassword/types';
+import { Props as BaseProps } from 'components/UxPassword/types';
+import { InputProps } from 'semantic-ui-react';
 
-export type ChangeCB = (value: string, score: number) => ValidationResult;
+export type ChangeCB = (value: string, score: number) => boolean;
 
-interface OptionalProps {
-  infoBar: true;
-  statusColor: '#5CE592';
-  statusInactiveColor: '#FC6F6F';
-  as: React.ReactNode;
-  forceValidate: boolean;
+// Unfortunately we can't inherit our base props as 
+// we are overriding the base uxChange props
+export type MyProps = {
+  infoBar?: boolean,
+  statusColor?: string,
+  statusInactiveColor?: string,
+  uxChange: ChangeCB,
 }
 
-interface RequiredProps {
-  intlLabel: FormattedMessage.MessageDescriptor;
-  uxChange: ChangeCB;
-}
-
-interface Props {
-  intlLabel: FormattedMessage.MessageDescriptor;
-  onChange: ChangeCB;
-  forceValidate?: boolean;
-
-  infoBar: true;
-  statusColor: Color;
-  statusInactiveColor: Color;
-  minScore: number;
-  minLength: number;
-  unMaskTime: number;
-  as: React.ReactChild;
-}
+type Without<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type BasePropsR = Without<BaseProps, "uxChange">
+export type Props = MyProps & BasePropsR;

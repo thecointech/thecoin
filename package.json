@@ -210,7 +210,7 @@
     "tslint": "^5.11.0",
     "tslint-loader": "^3.4.3",
     "tslint-react": "^2.3.0",
-    "typescript": "^3.1.4",
+    "typescript": "^3.3.0-dev.20190116",
     "typescript-plugin-styled-components": "^1.0.0",
     "typings-for-css-modules-loader": "^1.7.0",
     "url-loader": "1.1.2",

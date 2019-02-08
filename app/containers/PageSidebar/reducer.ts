@@ -1,4 +1,4 @@
-import { ImmerReducer } from 'immer-reducer';
+import { ImmerReducer, createReducerFunction } from 'immer-reducer';
 import injectReducer from 'utils/injectReducer';
 import { ContainerState, SidebarMenuItem, IActions } from './types';
 
@@ -25,10 +25,12 @@ export class SidebarItemsReducer extends ImmerReducer<ContainerState>
   }
 }
 
+const reducer = createReducerFunction(SidebarItemsReducer, initialState);
+
 export function buildReducer<T>() {
   return injectReducer<T>({
     key: 'sidebar',
-    reducer: SidebarItemsReducer,
+    reducer: reducer,
     initialState,
   });
 }

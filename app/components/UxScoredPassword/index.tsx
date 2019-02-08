@@ -1,5 +1,4 @@
 import React from 'react';
-import { Input } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Lock } from 'utils/icons';
@@ -8,27 +7,26 @@ import { Color } from 'csstype';
 import styles from './index.module.css';
 import messages, { scope as MessageScope } from './messages';
 import { ZXCVBNResult } from 'zxcvbn';
-import { ValidationResult } from 'components/UxInput/types';
-import { OptionalProps, RequiredProps } from './types';
+import { Props as MyProps } from './types';
 import { UxPassword } from 'components/UxPassword';
 
 const initialState = {
   message: undefined as FormattedMessage.MessageDescriptor | undefined,
+  tooltip: undefined as FormattedMessage.MessageDescriptor | undefined,
   stats: null as ZXCVBNResult | null,
-  isValid: false as boolean|undefined,
 }
 
+const defaultProps = {
+  infoBar: true,
+  statusColor: "#5CE592",
+  statusInactiveColor: "#FC6F6F",
+};
+
 type State = Readonly<typeof initialState>;
-type Props = Readonly<RequiredProps & OptionalProps>;
+type Props = Readonly<MyProps>;
 export class UxScoredPassword extends React.PureComponent<Props, State> {
 
-  static defaultProps: OptionalProps = {
-    infoBar: true,
-    statusColor: "#5CE592",
-    statusInactiveColor: "#FC6F6F",
-    as: Input,
-    forceValidate: false,
-  };
+  static defaultProps = defaultProps;
   state = initialState;
 
   // This is the link to the zxcvbn function that
@@ -58,7 +56,8 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
   /*==========  STYLES  ==========*/
 
   getMeterStyle(validColor: Color, invalidColor: Color) {
-    const { isValid, stats } = this.state;
+    const { stats } = this.state;
+    const { isValid } = this.props;
     var width = (stats) ? 24 * stats.score + 4 : 0;
     return {
       width: width + '%',
@@ -69,30 +68,33 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
   /*==========  HANDLERS  ==========*/
 
-  uxChange(value: string): ValidationResult {
+  uxChange(value: string): void {
 
     const stats = this.getScore(value);
-    const returnValue = this.props.uxChange(value, stats ? stats.score : -1);
-
-    // Validity required to set color property
-    this.setState({
-      isValid: returnValue.isValid,
-    });
+    const isValid = this.props.uxChange(value, stats ? stats.score : -1);
 
     if (stats != null) {
       const hasWarning = stats.feedback.warning.length > 0;
+      let newState = {
+        tooltip: {
+          id: `${MessageScope}.Tooltip`,
+          defaultMessage: `This password requires ${stats.crack_times_display.offline_slow_hashing_1e4_per_second} to crack`
+        }
+      };
       if (hasWarning) {
-        returnValue.message = {
+        newState["message"] = {
           id: `${MessageScope}.Warning`,
           defaultMessage: stats.feedback.warning
         }
       }
-      returnValue.tooltip = {
-        id: `${MessageScope}.Tooltip`,
-        defaultMessage: "This password could be cracked in:" + stats.crack_times_display.offline_slow_hashing_1e4_per_second
+      else {
+        newState["message"] = isValid ?
+          undefined : 
+          messages.PasswordRequired;
       }
+
+      this.setState(newState);
     }
-    return returnValue;
   }
 
   //
@@ -112,20 +114,20 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
 
   render() {
-    let infoBarComponent;
+    let infoBarComponent: React.ReactNode|undefined = undefined;
     const {
+      intlLabel,
       uxChange,
       infoBar,
       statusColor,
       statusInactiveColor,
       ...inputProps
     } = this.props;
-
-    const { stats } = this.state;
+    const { stats, ...restState } = this.state;
 
     if (infoBar) {
       const messageId = stats !== null ? stats.score : "default";
-      const meterStyles = this.getMeterStyle(statusColor, statusInactiveColor)
+      const meterStyles = this.getMeterStyle(statusColor!, statusInactiveColor!)
       infoBarComponent = (
         <div className={styles.infoStyle}>
           <FontAwesomeIcon className={styles.iconStyle} icon={Lock} size='xs' />
@@ -138,9 +140,11 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
     return (
       <UxPassword
+        intlLabel={intlLabel}
         uxChange={this.uxChange}
         footer={infoBarComponent}
         {...inputProps}
+        {...restState}
       />
     )
   }
