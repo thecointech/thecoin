@@ -2,9 +2,11 @@
   "name": "@the-coin/utilities",
   "version": "0.1.4",
   "description": "Utilities to share amongst TheCoin projects",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types" : "dist/index.d.ts",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "tsc"
   },
   "keywords": [
     "TheCoin"
@@ -14,5 +16,8 @@
   "dependencies": {
     "@the-coin/contract": "^1.0.4",
     "ethers": "^4.0.12"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.3"
   }
 }
