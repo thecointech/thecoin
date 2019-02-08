@@ -31,9 +31,9 @@ elliptic@6.3.3:
     hash.js "^1.0.0"
     inherits "^2.0.1"
 
-ethers@^4.0.12:
-  version "4.0.12"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ethers/-/ethers-4.0.12.tgz#290f4a5a9711feb4c573edbd991ceb6bc5cec39b"
+ethers@^4.0.23:
+  version "4.0.23"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ethers/-/ethers-4.0.23.tgz#930c7b1585241f61b29c262ffd8f21e82721ba30"
   dependencies:
     "@types/node" "^10.3.2"
     aes-js "3.0.0"

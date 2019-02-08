@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "dist/index.js",
-  "types" : "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "test",
     "build": "tsc"
@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/contract": "^1.0.4",
-    "ethers": "^4.0.12"
+    "ethers": "^4.0.23"
   },
   "devDependencies": {
     "typescript": "^3.3.3"
