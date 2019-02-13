@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,5 +24,8 @@
   },
   "peerDependencies": {
     "ethers": "^4.0.25"
-  }
+  },
+  "files": [
+    "./dist/**/*"
+  ]
 }
