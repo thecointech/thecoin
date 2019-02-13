@@ -2,8 +2,8 @@
   "name": "@the-coin/utilities",
   "version": "0.1.7",
   "description": "Utilities to share amongst TheCoin projects",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "./node_modules/.bin/tsc"
@@ -26,6 +26,6 @@
     "ethers": "^4.0.25"
   },
   "files": [
-    "./dist/**/*"
+    "dist/**/*"
   ]
 }

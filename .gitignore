@@ -5,3 +5,4 @@ TheBankAPI/TheBankAPI/bin/
 TheBankAPI/TheBankAPI/obj/
 ts/node_modules/
 ts/dist/
+ts/lib/
