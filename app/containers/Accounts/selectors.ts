@@ -10,20 +10,20 @@ import { ContainerState } from './types';
 const selectAccounts = (state: ApplicationRootState) =>
   state.accounts ? state.accounts : initialState;
 
-const makeSelectAccount = (name: string) =>
-  createSelector(selectAccounts, substate => substate.accounts[name]);
+const selectActiveAccount = (state: ApplicationRootState) =>
+   state.accounts ? state.accounts.activeAccount : initialState.activeAccount;
 
 const makeSelectAllAccounts = () =>
   createSelector(selectAccounts, substate => substate.accounts);
 
-const makeSelectActiveAccount = () => 
+const makeSelectActiveAccount = () =>
   createSelector(selectAccounts, substate => substate.activeAccount);
 
   // Map RootState to your StateProps
 const mapStateToProps = createStructuredSelector<ApplicationRootState, ContainerState>({
   // All the keys and values are type-safe
   accounts: makeSelectAllAccounts(),
-  activeAccount: makeSelectActiveAccount(),
+  activeAccount: makeSelectActiveAccount()
 });
 
-export { selectAccounts, makeSelectAccount, ContainerState, mapStateToProps };
+export { selectAccounts, selectActiveAccount, makeSelectActiveAccount, ContainerState, mapStateToProps };

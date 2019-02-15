@@ -5,7 +5,7 @@ import messages from './messages';
 import { connect } from 'react-redux';
 import { Wallet } from 'ethers';
 
-import { mapDispatchToProps, DispatchProps } from 'containers/Accounts/actions';
+import { mapDispatchToProps, DispatchProps } from '../actions';
 import { UxPassword } from 'components/UxPassword';
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
 import { compose } from 'redux';
@@ -110,7 +110,7 @@ class LoginClass extends React.PureComponent<Props, State, null> {
       state: LoginState.Decrypting
     })
 
-    this.props.decryptAccount(accountName, password, this.decryptAccountCallback);
+    this.props.decrypt(password, this.decryptAccountCallback);
   }
 
   getMessage(state: LoginState)

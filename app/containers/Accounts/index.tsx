@@ -7,10 +7,10 @@ import {
 } from 'containers/PageSidebar/types';
 import * as Sidebar from 'containers/PageSidebar/actions';
 import AccountCreate from './Create';
-import { Account } from './Account';
 import { buildReducer } from './actions';
 import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
+import { AccountSelector } from './AccountSelector';
 
 interface OwnProps {}
 type Props = OwnProps &
@@ -53,7 +53,7 @@ const stripTrailingSlash = (str: string) : string => {
       str;
 };
 
-class Accounts extends React.PureComponent<Props, {}, null> {
+class AccountsClass extends React.PureComponent<Props, {}, null> {
   MappedConstantItems: SidebarMenuElement[];
 
   constructor(props) {
@@ -100,7 +100,7 @@ class Accounts extends React.PureComponent<Props, {}, null> {
     const { url } = this.props.match;
     return (
       <Switch>
-        <Route path={`${url}/:accountName`} component={Account} />
+        <Route path={`${url}/:accountName`} component={AccountSelector} />
         <Route path={`${url}/?upload`} component={AccountCreate} />
         <Route component={AccountCreate} />
       </Switch>
@@ -108,9 +108,9 @@ class Accounts extends React.PureComponent<Props, {}, null> {
   }
 }
 
-export default buildReducer<OwnProps>()(
+export const Accounts = buildReducer<OwnProps>()(
   connect(
     mapStateToProps,
     Sidebar.mapDispatchToProps,
-  )(Accounts),
+  )(AccountsClass),
 );

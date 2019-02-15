@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Wallet } from 'ethers';
+import { Wallet, Contract } from 'ethers';
 
 type Props = {
   account: Wallet
+  contract: Contract
 };
 
 class Balance extends React.PureComponent<Props, {}, null> {
@@ -11,4 +12,4 @@ class Balance extends React.PureComponent<Props, {}, null> {
   }
 }
 
-export default Balance;
+export { Balance };

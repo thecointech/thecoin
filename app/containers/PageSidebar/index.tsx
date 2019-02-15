@@ -20,7 +20,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
   getAsItem(item: SidebarMenuItem) {
     return (
       <React.Fragment key={`Fragment${item.link.to}`}>
-        <MenuItem as={NavLink} key={item.link.to as string} to={item.link.to}>
+        <MenuItem as={NavLink} exact={true} key={item.link.to as string} to={item.link.to}>
           {item.link.name}
         </MenuItem>
         {this.buildSubMenuArray(item)}

@@ -4,6 +4,7 @@ import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { ContainerState as ContentHeightState } from 'components/ContentHeightMeasure/types';
 import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/types';
 import { ContainerState as AccountsState } from 'containers/Accounts/types';
+import { ContainerState as AccountState } from 'containers/Accounts/Account/types';
 
 import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
 
@@ -53,6 +54,7 @@ export interface ApplicationRootState {
   readonly content: ContentHeightState;
   readonly sidebar: SidebarContentsState;
   readonly accounts: AccountsState;
+  readonly activeAccount: AccountState;
   // for testing purposes
   readonly test: any;
 }
