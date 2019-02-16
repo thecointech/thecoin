@@ -91,7 +91,7 @@ class Create extends React.PureComponent<Props, State, any> {
         // the user to decrypt the account (to protect against misspelled
         // passwords)
         const asJson = JSON.parse(asStr);
-        this.props.setSingleAccount(accountName, asJson);
+        this.props.setSingleWallet(accountName, asJson);
 
         // Switch to this newly created account
         this.setState({ 
@@ -108,7 +108,7 @@ class Create extends React.PureComponent<Props, State, any> {
     {
       nameValid: false,
       nameMessage: messages.errorNameTooShort,
-    } : this.props.accounts.has(value) ? 
+    } : this.props.wallets.has(value) ? 
     {
       nameValid: false,
       nameMessage: messages.errorNameDuplicate,

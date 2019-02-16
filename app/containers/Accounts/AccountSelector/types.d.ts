@@ -1,18 +1,17 @@
 import { Wallet, Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-import { ContainerState as AccountType } from './Account/types'
+import { ContainerState as Account } from '../Account/types'
 
 /* --- STATE --- */
 
 type ContainerState = {
-  wallets: Map<string, Wallet>;
+  accounts: Map<string, Account>;
+  activeAccount: Account|null;
 };
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {
-  setState(newState: ContainerState): void;
-  setSingleWallet(name: string, wallet: Wallet): void;
-  deleteWallet(name: string): void;
+  setActiveAccount(name: string, wallet: Wallet);
 }
 /* --- EXPORTS --- */
 export { IActions, ContainerState };

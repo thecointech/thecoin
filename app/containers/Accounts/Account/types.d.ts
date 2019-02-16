@@ -14,10 +14,16 @@ type Transaction = {
 }
 
 type ContainerState = {
-  name: string;
-  wallet: Wallet;
-  contract: Contract;
-  balance: number;
+	name: string; // Convenience storage of name
+	// Possibly encrypted raw ethers wallet
+	wallet: Wallet;
+	// Contract connected to this wallet as a signer
+	contract: Contract|null;
+	// The timestamp of the last update to balance/history
+	lastUpdate: number;
+	// Current balance in Coin
+	balance: number;
+	// Transaction history
   history: Transaction[];
 };
 

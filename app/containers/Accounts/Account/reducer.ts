@@ -5,6 +5,8 @@ import { GetConnected } from '@the-coin/utilities/lib/TheContract';
 
 import { ContainerState, IActions, DecryptCallback } from './types';
 
+let updateWithDecryptedTypeString = "";
+
 class AccountReducer extends ImmerReducer<ContainerState>
   implements IActions {
 
@@ -55,7 +57,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
         callback(1);
       }
       yield put({
-        type: reducerActions.updateWithDecrypted.type,
+        type: updateWithDecryptedTypeString,
         payload: [decrypted]
       });
     }
@@ -68,5 +70,6 @@ class AccountReducer extends ImmerReducer<ContainerState>
 }
 
 const reducerActions = createActionCreators(AccountReducer);
+updateWithDecryptedTypeString = reducerActions.updateWithDecrypted.type;
 
 export { AccountReducer, reducerActions as actions }

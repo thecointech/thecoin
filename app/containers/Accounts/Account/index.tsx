@@ -7,7 +7,7 @@ import { Login } from './Login';
 import { Balance } from './Balance';
 import { Purchase } from './Purchase';
 import { ContainerState as AccountState } from './types'
-import { selectActiveAccount } from '../selectors';
+import { selectActiveAccount } from '../AccountSelector/selectors';
 import { ApplicationRootState } from 'types';
 
 type OwnProps = {

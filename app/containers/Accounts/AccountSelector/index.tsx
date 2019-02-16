@@ -1,23 +1,30 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Wallet } from 'ethers';
 
-import { DispatchProps, mapDispatchToProps } from '../actions';
 import { Account } from '../Account';
+import { DispatchProps, mapDispatchToProps } from './actions';
+import { buildReducer } from './reducer';
 
-type OwnProps = {} 
+type OwnProps = {
+  wallets: Map<string, Wallet>
+} 
 
-type Props = RouteComponentProps & OwnProps & DispatchProps;
+type Props = OwnProps & RouteComponentProps & DispatchProps;
 
 class AccountSelectorClass extends React.PureComponent<Props, {}, null> {
 
+  // Fixes `AccountSelectorClass` uses `getDerivedStateFromProps` but its initial state is undefined.
   state = {};
-  StateType = typeof this.state;
 
   static getDerivedStateFromProps(props : Props, state) {
-    const { params } = props.match;
-    const accountName = params["accountName"];
-    props.setActiveAccount(accountName);
+    const { match, wallets } = props;
+    const accountName = match.params["accountName"];
+    const wallet = wallets.get(accountName);
+    if (wallet) {
+      props.setActiveAccount(accountName, wallet);
+    }
     return state;
   }
 
@@ -29,4 +36,6 @@ class AccountSelectorClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
-export const AccountSelector = connect(null, mapDispatchToProps)(AccountSelectorClass)
+export const AccountSelector = buildReducer<OwnProps>()(
+  connect(null, mapDispatchToProps)(AccountSelectorClass)
+);

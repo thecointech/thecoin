@@ -7,7 +7,7 @@ import {
 } from 'containers/PageSidebar/types';
 import * as Sidebar from 'containers/PageSidebar/actions';
 import AccountCreate from './Create';
-import { buildReducer } from './actions';
+import { buildReducer } from './reducer';
 import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
 import { AccountSelector } from './AccountSelector';
@@ -84,7 +84,7 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
   componentDidMount() {
     const url = stripTrailingSlash(this.props.match.url);
     const accountLinks: SidebarMenuElement[] = [];
-    this.props.accounts.forEach((account, name) => {
+    this.props.wallets.forEach((account, name) => {
       accountLinks.push({
         link: {
           to: `${url}/${name}`,
@@ -98,9 +98,12 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
 
   render() {
     const { url } = this.props.match;
+    const { wallets } = this.props;
     return (
       <Switch>
-        <Route path={`${url}/:accountName`} component={AccountSelector} />
+        <Route path={`${url}/:accountName`} render={
+          (props) => <AccountSelector {...props} wallets={wallets} /> 
+        } />
         <Route path={`${url}/?upload`} component={AccountCreate} />
         <Route component={AccountCreate} />
       </Switch>

@@ -25,6 +25,16 @@ function SetStored(name: string, account: Wallet) {
   localStorage[Pad(name)] = JSON.stringify(account);
 }
 
+// function LockedAccount(name: string, wallet: Wallet) : AccountType {
+//   return {
+//     name,
+//     wallet,
+//     contract: null,
+//     lastUpdate: 0,
+//     balance: 0,
+//     history: [],
+//   };
+// }
 //
 // Read all accounts from local storage, return in array
 export function ReadAllAccounts(): ContainerState {
@@ -37,8 +47,7 @@ export function ReadAllAccounts(): ContainerState {
     }
   }
   return {
-    accounts: allAccounts,
-    activeAccount: null
+    wallets: allAccounts
   };
 }
 
@@ -49,7 +58,7 @@ function AddressMatches(addr1: string, addr2: string) {
 //
 //  Store a single account, assumes this account has not yet
 //  been decrypted
-export function StoreSingleAccount(name: string, account: Wallet) {
+export function StoreSingleWallet(name: string, account: Wallet) {
   // Check it's ok to store this account.  This is all checked UI-side already, should
   // we allow overwrites here?
   const storedItem = GetStored(name);
@@ -74,22 +83,22 @@ export function StoreSingleAccount(name: string, account: Wallet) {
 //  Replace all existing accounts with ones in this list.
 export function StoreAllAccounts(state: ContainerState) {
   // First, delete any extra accounts that are not stored
-  const { accounts } = state;
+  const { wallets } = state;
   for (let i = 0; i <= localStorage.length - 1; i++) {
     const key = localStorage.key(i);
     if (key != null && key.startsWith(PREFIX)) {
       const name = Strip(key);
-      if (!(name in accounts)) {
+      if (!(name in wallets)) {
       }
     }
   }
-  accounts.forEach((account, name) => {
-    StoreSingleAccount(name, account);
+  wallets.forEach((wallet, name) => {
+    StoreSingleWallet(name, wallet);
   });
 }
 
 //
 // Delete the named account from localstorage (not tested)
-export function DeleteAccount(name: string) {
+export function DeleteWallet(name: string) {
   localStorage.removeItem(Pad(name));
 }
