@@ -25,10 +25,10 @@
     "pretty": true,
     "removeComments": true,
     "sourceMap": true,
-    "rootDir": "./lib",
-    "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./lib",
   },
   "include": [
-    "./lib/**/*"
+    "./src/**/*"
   ]
 }
