@@ -6,6 +6,7 @@ import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/t
 import { ContainerState as WalletsState } from 'containers/Accounts/types';
 import { ContainerState as AccountsState } from 'containers/Accounts/AccountSelector/types';
 import { ContainerState as AccountState } from 'containers/Accounts/Account/types';
+import { ContainerState as FxRateState } from 'containers/FxRate/types';
 
 import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
 
@@ -57,6 +58,7 @@ export interface ApplicationRootState {
   readonly wallets: WalletsState;
   readonly accounts: AccountsState;
   readonly activeAccount: AccountState;
+  readonly fxRates: FxRateState;
   // for testing purposes
   readonly test: any;
 }

@@ -12,6 +12,8 @@ import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
 import { AccountSelector } from './AccountSelector';
 
+import { buildReducer as buildFxRateReducer } from 'containers/FxRate/reducer';
+
 interface OwnProps {}
 type Props = OwnProps &
   ContainerState &
@@ -112,8 +114,10 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
 }
 
 export const Accounts = buildReducer<OwnProps>()(
-  connect(
-    mapStateToProps,
-    Sidebar.mapDispatchToProps,
-  )(AccountsClass),
+  buildFxRateReducer<OwnProps>()(
+    connect(
+      mapStateToProps,
+      Sidebar.mapDispatchToProps,
+    )(AccountsClass),  
+  )
 );

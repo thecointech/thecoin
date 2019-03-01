@@ -1,7 +1,7 @@
 import { Wallet, Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 
-
+import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes'
 /* --- CALLBACKS ---*/
 type DecryptCallback = (percent: number) => boolean;
 
@@ -24,18 +24,18 @@ type ContainerState = {
 	// Current balance in Coin
 	balance: number;
 	// Transaction history
-  history: Transaction[];
+	history: Transaction[];
+	// The currency to display your account value in
+	displayCurrency: CurrencyCodes;
 };
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {
 
 	// Get the balance of the account in Coin
-	updateBalance() : void;
+	updateBalance(newBalance?: number) : void;
   updateHistory(from: Date, until: Date) : void;
-  updateWithDecrypted(wallet: Wallet): void;
 
-	
 	decrypt(
 		password: string,
 		callback: DecryptCallback | undefined,

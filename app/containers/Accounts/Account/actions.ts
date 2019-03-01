@@ -7,18 +7,22 @@ type AccountSelector = (state:any) => ContainerState|null;
 
 function buildSagas(selectActiveAccount: AccountSelector ) {
 
-  function* sagaDecrypt(action: any) {
-    const state = yield select(selectActiveAccount);
-    const reducerImp = new AccountReducer(state, state);
-    const fn = reducerImp.decrypt.bind(reducerImp);
-    const [name, password, callback] = action.payload;
-    return yield call(fn, name, password, callback);
+  function buildSaga(fnName:string) {
+    function* saga(action: any) {
+      const state = yield select(selectActiveAccount);
+      const reducerImp = new AccountReducer(state, state);
+      const fn = reducerImp[fnName].bind(reducerImp);
+      const [name, password, callback] = action.payload;
+      return yield call(fn, name, password, callback);
+    }
+    return saga;
   }
-  
+
   // Root saga
   function* rootSaga() {
     // if necessary, start multiple sagas at once with `all`
-    yield takeLatest(actions.decrypt.type, sagaDecrypt);
+    yield takeLatest(actions.decrypt.type, buildSaga("decrypt"));
+    yield takeLatest(actions.updateBalance.type, buildSaga("updateBalance"))
   }
 
   return rootSaga;

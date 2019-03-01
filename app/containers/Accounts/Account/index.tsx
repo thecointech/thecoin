@@ -19,12 +19,13 @@ type Props = OwnProps & AccountState;
 class AccountClass extends React.PureComponent<Props, {}, null> {
 
   render() {
-    const { wallet, name, contract, url } = this.props;
+    const { url, ...account } = this.props;
+    const { wallet } = account;
     if (wallet === null) {
       return <NotFoundPage />;
     }
     else if (!wallet.privateKey) {
-      return <Login account={wallet} accountName={name}/>
+      return <Login account={wallet} accountName={account.name}/>
     }
     return (
       <Switch>
@@ -33,7 +34,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
           render={props => <Purchase {...props} account={wallet!} />}
         />
         <Route
-          render={props => <Balance {...props} account={wallet!} contract={contract!}/>}
+          render={props => <Balance {...props} {...account} />}
         />
         <Route component={NotFoundPage} />
       </Switch>

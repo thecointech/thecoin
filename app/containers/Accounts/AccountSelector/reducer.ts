@@ -9,6 +9,7 @@ import injectSaga from 'utils/injectSaga';
 import { buildSagas } from '../Account/actions';
 import { compose } from 'redux';
 import { selectActiveAccount } from './selectors';
+import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
 
 // The initial state of the App
 const initialState: ContainerState = {
@@ -37,7 +38,8 @@ class AccountSelectorReducer extends ImmerReducer<ContainerState>
         contract: GetConnected(wallet),
         lastUpdate: 0,
         balance: 0,
-        history: []
+        history: [],
+        displayCurrency: CurrencyCodes.CAD // For now assume we are canadian
       };
       this.draftState.accounts.set(name, account);
     }

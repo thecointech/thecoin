@@ -2,17 +2,35 @@ import { ImmerReducer, createActionCreators } from 'immer-reducer';
 import { Wallet } from 'ethers';
 import { call, put } from 'redux-saga/effects'
 import { GetConnected } from '@the-coin/utilities/lib/TheContract';
-
 import { ContainerState, IActions, DecryptCallback } from './types';
-
-let updateWithDecryptedTypeString = "";
 
 class AccountReducer extends ImmerReducer<ContainerState>
   implements IActions {
 
-  // Get the balance of the account in Coin
-  updateBalance() {
+  static actions: any; //ActionCreators<typeof AccountReducer>;
 
+  updateWithValues(newState: ContainerState) {
+    Object.assign(this.draftState, newState);
+  }
+
+  // Get the balance of the account in Coin
+  *updateBalance() {
+    const { wallet, contract } = this.state;
+    if (contract == null) {
+      return;
+    }
+    try {
+      const balance = yield call(contract.balanceOf, wallet.address);
+      yield put({
+        type: AccountReducer.actions.updateWithValues.type,
+        payload: [{
+          balance: 5000000 + balance.toNumber()
+        }],
+      });
+      
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   updateHistory(from: Date, until: Date) {
@@ -57,7 +75,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
         callback(1);
       }
       yield put({
-        type: updateWithDecryptedTypeString,
+        type: AccountReducer.actions.updateWithDecrypted.type,
         payload: [decrypted]
       });
     }
@@ -70,6 +88,6 @@ class AccountReducer extends ImmerReducer<ContainerState>
 }
 
 const reducerActions = createActionCreators(AccountReducer);
-updateWithDecryptedTypeString = reducerActions.updateWithDecrypted.type;
+AccountReducer.actions = reducerActions;
 
 export { AccountReducer, reducerActions as actions }
