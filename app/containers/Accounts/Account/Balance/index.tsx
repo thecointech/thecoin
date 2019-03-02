@@ -49,7 +49,9 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
             </Header.Content>
           </Header>
         <Button onClick={this.doUpdateBalance}>UPDATE BALANCE</Button>
-				<TransactionHistory transactions={history} dateSetCallback={updateHistory} />
+        <div>
+				  <TransactionHistory transactions={history} onRangeChange={updateHistory} />
+        </div>
       </React.Fragment>
 		);
   }

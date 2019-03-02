@@ -20,9 +20,9 @@ function buildSagas(selectActiveAccount: AccountSelector ) {
 
   // Root saga
   function* rootSaga() {
-    // if necessary, start multiple sagas at once with `all`
     yield takeLatest(actions.decrypt.type, buildSaga("decrypt"));
     yield takeLatest(actions.updateBalance.type, buildSaga("updateBalance"))
+    yield takeLatest(actions.updateHistory.type, buildSaga("updateHistory"))
   }
 
   return rootSaga;

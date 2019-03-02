@@ -13,12 +13,14 @@ type Transaction = {
 	logEntry: string;
 }
 
+// An account state holds all relevant info
+// for an account, including loaded transactions etc
 type ContainerState = {
 	name: string; // Convenience storage of name
 	// Possibly encrypted raw ethers wallet
 	wallet: Wallet;
 	// Contract connected to this wallet as a signer
-	contract: Contract|null;
+	contract: Contract | null;
 	// The timestamp of the last update to balance/history
 	lastUpdate: number;
 	// Current balance in Coin
@@ -27,19 +29,23 @@ type ContainerState = {
 	history: Transaction[];
 	// The currency to display your account value in
 	displayCurrency: CurrencyCodes;
+
+	// cache values to remember the date range we
+	// have stored, and corresponding block numbers
+	historyStart?: Date;
+	historyStartBlock?: number;
+	historyEnd?: Date;
+	historyEndBlock?: number;
 };
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {
 
 	// Get the balance of the account in Coin
-	updateBalance(newBalance?: number) : void;
-  updateHistory(from: Date, until: Date) : void;
+	updateBalance(newBalance?: number) : Iterator<any>;
+	updateHistory(from: Date, until: Date) : Iterator<any>;
 
-	decrypt(
-		password: string,
-		callback: DecryptCallback | undefined,
-	  ): Iterator<any>;
+	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
 /* --- EXPORTS --- */
 export { IActions, ContainerState, Transaction, DecryptCallback };
