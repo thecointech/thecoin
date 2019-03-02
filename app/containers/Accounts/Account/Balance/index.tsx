@@ -32,7 +32,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
 
   // On load, update balance
 	componentDidMount() {
-		this.props.updateBalance();
+    this.props.updateBalance();
   }
 
   render() {

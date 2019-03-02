@@ -1,15 +1,13 @@
-import { ImmerReducer, createReducerFunction, ActionCreators, createActionCreators } from 'immer-reducer';
-import { delay } from 'redux-saga';
-import { compose } from 'redux';
-import { call, put, select, take, fork } from 'redux-saga/effects'
-import { RatesApi, FXRate } from '@the-coin/pricing';
+import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
-import { selectFxRate } from './selectors';
+import { ActionCreators, createActionCreators, createReducerFunction, ImmerReducer } from 'immer-reducer';
+import { compose } from 'redux';
+import { delay } from 'redux-saga';
+import { call, fork, put, select, take } from 'redux-saga/effects';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
+import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
-
-
 
 // The initial state of the App
 const initialState: ContainerState = {
@@ -24,13 +22,11 @@ const initialState: ContainerState = {
 class FxRateReducer extends ImmerReducer<ContainerState>
 	implements IActions {
 
-	static actions: ActionCreators<typeof FxRateReducer>;
-
 	*beginUpdateFxRate() {
 		try {
 			const cc = CurrencyCodes.CAD;
 			const now = Date.now();
-			console.log("fetching fx rate: %d at time %s", cc, new Date(now).toDateString());
+			console.log("fetching fx rate: %d at time %s", cc, new Date(now).toLocaleTimeString());
 			const api = new RatesApi();
 			// TODO: Support arbitrary currency codes
 			const getConversion = api.getConversion.bind(api);
@@ -49,6 +45,8 @@ class FxRateReducer extends ImmerReducer<ContainerState>
 	updateFxRate(newRate: FXRate): void {
 		Object.assign(this.draftState, newRate);
 	}
+
+	static actions: ActionCreators<typeof FxRateReducer>;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -103,4 +101,5 @@ function buildReducer<T>() {
   )
 }
 
-export { buildReducer, actions }
+export { buildReducer, actions };
+
