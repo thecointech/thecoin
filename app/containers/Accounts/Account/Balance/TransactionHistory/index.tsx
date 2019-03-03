@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Transaction } from '../../types'
 import { DateRangeSelect, OnChangeCallback } from 'components/DateRangeSelect';
-import { Table, Menu, Icon } from 'semantic-ui-react';
+import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
 
 type MyProps = {
   transactions: Transaction[],
   onRangeChange: OnChangeCallback;
+  transactionLoading?: boolean;
 }
 
 type MyState = {
@@ -41,23 +42,24 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
   }
   // On load, update balance
   render() {
-    const { transactions } = this.props;
+    const { transactions, transactionLoading } = this.props;
     const { fromDate, untilDate } = this.state;
     const transactionRows = transactions
       .filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
       .map((tx) => (
-          <Table.Row>
-            <Table.Cell>{tx.date.toDateString()}</Table.Cell>
-            <Table.Cell>{tx.logEntry}</Table.Cell>
-            <Table.Cell>{toHuman(tx.change)}</Table.Cell>
-            <Table.Cell>TODO</Table.Cell>
-          </Table.Row>
-        ));
+        <Table.Row key={tx.date.valueOf()}>
+          <Table.Cell>{tx.date.toDateString()}</Table.Cell>
+          <Table.Cell>{tx.logEntry}</Table.Cell>
+          <Table.Cell>{toHuman(tx.change)}</Table.Cell>
+          <Table.Cell>TODO</Table.Cell>
+        </Table.Row>
+      ));
 
     return (
       <React.Fragment>
         <DateRangeSelect onDateRangeChange={this.onDateRangeChange} />
-        <Table celled>
+
+        <Dimmer.Dimmable as={Table} celled striped>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Date</Table.HeaderCell>
@@ -67,6 +69,9 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row>
+              <Dimmer active={transactionLoading}>Loading...</Dimmer>
+            </Table.Row>
             {...transactionRows}
           </Table.Body>
           <Table.Footer>
@@ -87,7 +92,7 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-        </Table>
+        </Dimmer.Dimmable>
       </React.Fragment>
     );
   }

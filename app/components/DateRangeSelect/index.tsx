@@ -73,7 +73,7 @@ class DateRangeSelect extends React.PureComponent<PropsType, {}, StateType> {
           focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
           onFocusChange={this.onFocusChange} // PropTypes.func.isRequired,
           isOutsideRange={this.isInvalidDate}
-          keepOpenOnDateSelect={true}
+          //keepOpenOnDateSelect={true}
           appendToBody={true}
 
         />

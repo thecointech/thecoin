@@ -56,12 +56,12 @@ class AccountReducer extends ImmerReducer<ContainerState>
     }
   }
 
-  static async readAndMergeTransfers(account: string, to: boolean, contract: Contract, history: Transaction[])
+  static async readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: Contract, history: Transaction[])
   {
     // construct filter to get tx either from or to
     const args = to ? [account, null] : [null, account];
     let filter: any = contract.filters.Transfer(...args);
-    filter.fromBlock = 0;
+    filter.fromBlock = fromBlock || 0;
     // Retrieve logs
     const txLogs = await contract.provider.getLogs(filter)
     // Convert logs to our transactions
@@ -74,11 +74,11 @@ class AccountReducer extends ImmerReducer<ContainerState>
     return AccountReducer.mergeTransactions(history, txs);
   }
 
-  static async loadAndMergeHistory(address: string, contract: Contract, history: Transaction[])
+  static async loadAndMergeHistory(address: string, fromBlock: number, contract: Contract, history: Transaction[])
   {
     try {
-      history = await AccountReducer.readAndMergeTransfers(address, true, contract, history);
-      history = await AccountReducer.readAndMergeTransfers(address, false, contract, history);
+      history = await AccountReducer.readAndMergeTransfers(address, true, fromBlock, contract, history);
+      history = await AccountReducer.readAndMergeTransfers(address, false, fromBlock, contract, history);
     }
     catch(err) {
       console.error(err);
@@ -87,23 +87,44 @@ class AccountReducer extends ImmerReducer<ContainerState>
   }
 
   *updateHistory(from: Date, until: Date) {
-    console.log(`Updating from ${from} -> ${until}`);
     const { wallet, contract } = this.state;
     if (contract == null || wallet == null)
       return;
-      
+    if (this.state.historyStart && this.state.historyEnd)
+    {
+      if (from >= this.state.historyStart && until <= this.state.historyEnd)
+        return;
+    }
+    
+    yield put({
+      type: AccountReducer.actions.updateWithValues.type,
+      payload: [{
+        historyLoading: true
+      }]
+    })
+
+    // Lets not push ahead too quickly with this saga,
+    // allow a 500 ms delay so we don't update too quickly
+    //yield delay(250);
+    console.log(`Updating from ${from} -> ${until}`);
+
     const address = "0x8B40D01D2bcFFef5CF3441a8197cD33e9eD6e836";
     const origHistory = this.state.history;
-    const newHistory = yield call(AccountReducer.loadAndMergeHistory, address, contract, origHistory)
-    if (newHistory != origHistory) {
-      newHistory.forEach(console.log);
-      yield put({
-        type: AccountReducer.actions.updateWithValues.type,
-        payload: [{
-          history: newHistory
-        }]
-      });  
-    }
+    const fromBlock = this.state.historyEndBlock;
+    const newHistory = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory)
+    const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
+
+    yield put({
+      type: AccountReducer.actions.updateWithValues.type,
+      payload: [{
+        history: newHistory,
+        historyLoading: false,
+        historyStart: new Date(0),
+        historyStartBlock: 0,
+        historyEnd: new Date(),
+        historyEndBlock: currentBlock
+      }]
+    });  
   }
 
   ///////////////////////////////////////////////////////////////////////////////////

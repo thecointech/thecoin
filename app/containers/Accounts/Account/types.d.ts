@@ -32,6 +32,7 @@ type ContainerState = {
 
 	// cache values to remember the date range we
 	// have stored, and corresponding block numbers
+	historyLoading?: boolean;
 	historyStart?: Date;
 	historyStartBlock?: number;
 	historyEnd?: Date;

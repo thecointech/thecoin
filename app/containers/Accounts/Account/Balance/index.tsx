@@ -36,9 +36,9 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
   }
 
   render() {
-    const { balance, history, updateHistory, buy, fxRate } = this.props;
+    const { balance, history, historyLoading, updateHistory, buy, fxRate } = this.props;
     const cadBalance = toHuman(buy * balance * fxRate);
-		return (
+    return (
       <React.Fragment>
         <Header as='h1'>
           <Header.Content>
@@ -50,7 +50,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
           </Header>
         <Button onClick={this.doUpdateBalance}>UPDATE BALANCE</Button>
         <div>
-				  <TransactionHistory transactions={history} onRangeChange={updateHistory} />
+				  <TransactionHistory transactions={history} transactionLoading={historyLoading} onRangeChange={updateHistory} />
         </div>
       </React.Fragment>
 		);
