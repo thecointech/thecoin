@@ -13,15 +13,21 @@ export class SidebarItemsReducer extends ImmerReducer<ContainerState>
     this.draftState.items = newItems;
   }
 
-  setSubItems(parent: SidebarMenuItem, subItems: SidebarMenuItem[]) {
-    const items = this.draftState.items;
-    items.find(element => {
-      if (element.link.to == parent.link.to) {
-        element.subItems = subItems;
-        return true;
-      }
-      return false;
-    });
+  setSubItems(parent: string, subItems: SidebarMenuItem[]) {
+    //const parentIdx = this.state.items.findIndex(element => element.link.name == parent);
+    //if(parentIdx > 0)
+    //  this.draftState.items[parentIdx].subItems = subItems;
+    // const newItems = this.state.items.map(item => {
+    //   if (item.link.name == parent) {
+    //     return {
+    //       ...item,
+    //       subItems: subItems
+    //     }
+    //   }
+    //   return item;
+    // })
+    this.draftState.subParentName = parent;
+    this.draftState.subItems = subItems;
   }
 }
 

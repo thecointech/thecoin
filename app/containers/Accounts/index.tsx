@@ -1,18 +1,15 @@
-import * as React from 'react';
-import { Switch, Route, RouteComponentProps } from 'react-router-dom';
-import { connect } from 'react-redux';
-import {
-  SidebarMenuElement,
-  SidebarMenuItem,
-} from 'containers/PageSidebar/types';
+import { buildReducer as buildFxRateReducer } from 'containers/FxRate/reducer';
 import * as Sidebar from 'containers/PageSidebar/actions';
+import { SidebarMenuElement, SidebarMenuItem } from 'containers/PageSidebar/types';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { AccountSelector } from './AccountSelector';
 import AccountCreate from './Create';
 import { buildReducer } from './reducer';
-import { ContainerState } from './types';
 import { mapStateToProps } from './selectors';
-import { AccountSelector } from './AccountSelector';
+import { ContainerState } from './types';
 
-import { buildReducer as buildFxRateReducer } from 'containers/FxRate/reducer';
 
 interface OwnProps {}
 type Props = OwnProps &
@@ -73,9 +70,9 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
             ...element.link,
             to: `${url}/${element.link.to}`,
           },
-          subItems: element.subItems
-            ? this.mapMenuItems(element.subItems, url)
-            : undefined,
+          // subItems: element.subItems
+          //   ? this.mapMenuItems(element.subItems, url)
+          //   : undefined
         };
         return mapped;
       }
@@ -86,12 +83,12 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
   componentDidMount() {
     const url = stripTrailingSlash(this.props.match.url);
     const accountLinks: SidebarMenuElement[] = [];
-    this.props.wallets.forEach((account, name) => {
+    this.props.wallets.forEach((wallet, name) => {
       accountLinks.push({
         link: {
           to: `${url}/${name}`,
-          name,
-        },
+          name
+        }
       });
     });
 

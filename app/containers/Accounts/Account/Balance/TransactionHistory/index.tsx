@@ -3,6 +3,7 @@ import { Transaction } from '../../types'
 import { DateRangeSelect, OnChangeCallback } from 'components/DateRangeSelect';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
+import { Range } from 'immutable';
 
 type MyProps = {
   transactions: Transaction[],
@@ -40,13 +41,44 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
 
     this.props.onRangeChange(from, until)
   }
+
+  buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
+  {
+    const pageCount = Math.ceil(transactions.length / maxRowCount);
+    currentPage = Math.min(currentPage, pageCount - 1);
+    if (pageCount > 1) {
+      console.log('WARNING: Not Tested');
+      const startRow = currentPage * maxRowCount;
+      transactions = transactions.slice(startRow, startRow + maxRowCount);
+      
+      return [transactions, (<Table.Footer>
+        <Table.Row>
+          <Table.HeaderCell colSpan='4'>
+            <Menu floated='right' pagination>
+              <Menu.Item as='a' icon>
+                <Icon name='chevron left' />
+              </Menu.Item>
+                {Range(1, pageCount).map((value) => <Menu.Item as='a'>{value}</Menu.Item>)}
+              <Menu.Item as='a' icon>
+                <Icon name='chevron right' />
+              </Menu.Item>
+            </Menu>
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Footer>)]  
+    }
+
+    return [transactions, undefined]
+  }
   // On load, update balance
   render() {
+    const maxRowCount = 50;
     const { transactions, transactionLoading } = this.props;
     const { fromDate, untilDate } = this.state;
-    const transactionRows = transactions
-      .filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
-      .map((tx) => (
+
+    let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
+    let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
+    let txJsxRows = txOutput.map((tx) => (
         <Table.Row key={tx.date.valueOf()}>
           <Table.Cell>{tx.date.toDateString()}</Table.Cell>
           <Table.Cell>{tx.logEntry}</Table.Cell>
@@ -70,28 +102,16 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Dimmer active={transactionLoading}>Loading...</Dimmer>
+              <Table.Cell>
+                <Dimmer active={transactionLoading}>Loading...</Dimmer>
+              </Table.Cell>
+              <Table.Cell></Table.Cell>
+              <Table.Cell></Table.Cell>
+              <Table.Cell></Table.Cell>
             </Table.Row>
-            {...transactionRows}
+            {...txJsxRows}
           </Table.Body>
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan='4'>
-                <Menu floated='right' pagination>
-                  <Menu.Item as='a' icon>
-                    <Icon name='chevron left' />
-                  </Menu.Item>
-                  <Menu.Item as='a'>1</Menu.Item>
-                  <Menu.Item as='a'>2</Menu.Item>
-                  <Menu.Item as='a'>3</Menu.Item>
-                  <Menu.Item as='a'>4</Menu.Item>
-                  <Menu.Item as='a' icon>
-                    <Icon name='chevron right' />
-                  </Menu.Item>
-                </Menu>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
+          {jsxFooter}
         </Dimmer.Dimmable>
       </React.Fragment>
     );

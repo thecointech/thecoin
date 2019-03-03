@@ -7,7 +7,7 @@ import {
   SidebarMenuItem,
   SidebarMenuElement,
 } from './types';
-import { mapSidebarStateToProps } from './selector';
+import { mapStateToProps } from './selector';
 import { buildReducer } from './reducer';
 import styles from './index.module.css';
 
@@ -42,16 +42,15 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
   }
 
   buildSubMenuArray(item: SidebarMenuItem) {
-    return item.subItems ? (
-      <Menu.Menu>{this.buildMenuArray(item.subItems)}</Menu.Menu>
-    ) : (
-      undefined
-    );
+    const { subItems, subParentName } = this.props;
+    return (subItems && item.link.name == subParentName) ? (
+        <Menu.Menu>{this.buildMenuArray(subItems)}</Menu.Menu>
+      ) : undefined;
   }
 
   render() {
     const { visible, items } = this.props;
-    const menuItems = this.buildMenuArray(items);
+    const menuItems = this.buildMenuArray(items)
 
     const pusherClass = visible ? styles.mainPagePusherOut : undefined;
 
@@ -76,5 +75,5 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
 }
 
 export default buildReducer<OwnProps>()(
-  connect(mapSidebarStateToProps)(PageSidebar),
+  connect(mapStateToProps)(PageSidebar),
 );

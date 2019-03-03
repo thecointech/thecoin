@@ -1,6 +1,6 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
-import { ActionCreators, createActionCreators, createReducerFunction, ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction, ImmerReducer } from 'immer-reducer';
 import { compose } from 'redux';
 import { delay } from 'redux-saga';
 import { call, fork, put, select, take } from 'redux-saga/effects';
@@ -26,13 +26,15 @@ class FxRateReducer extends ImmerReducer<ContainerState>
 		try {
 			const cc = CurrencyCodes.CAD;
 			const now = Date.now();
+			if (now < this.state.validTill)
+				return;
 			console.log("fetching fx rate: %d at time %s", cc, new Date(now).toLocaleTimeString());
 			const api = new RatesApi();
 			// TODO: Support arbitrary currency codes
 			const getConversion = api.getConversion.bind(api);
 			const newFxRate = yield call(getConversion, cc, now);
 			yield put({
-				type: FxRateReducer.actions.updateFxRate.type,
+				type: actions.updateFxRate.type,
 				payload: [newFxRate],
 				args: true
 			})	
@@ -45,15 +47,11 @@ class FxRateReducer extends ImmerReducer<ContainerState>
 	updateFxRate(newRate: FXRate): void {
 		Object.assign(this.draftState, newRate);
 	}
-
-	static actions: ActionCreators<typeof FxRateReducer>;
 }
 
 //////////////////////////////////////////////////////////////////////////
-
 const reducer = createReducerFunction(FxRateReducer, initialState);
 const actions = createActionCreators(FxRateReducer);
-FxRateReducer.actions = actions;
 
 function* sagaUpdateFxRate() {
   const state = yield select(selectFxRate);
@@ -65,7 +63,7 @@ function* sagaUpdateFxRate() {
 function* loopFxUpdates() {
 	let endPolling = false;
 	while (!endPolling) {
-		const rateAction = yield take(FxRateReducer.actions.updateFxRate.type);
+		const rateAction = yield take(actions.updateFxRate.type);
     const [newRate] = rateAction.payload as [FXRate];
     const now = Date.now();
     // wait at least 5 seconds till update
