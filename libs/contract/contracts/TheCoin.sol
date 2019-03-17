@@ -1,13 +1,13 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
-import './ERC20Local.sol';
-import './LibCertTransfer.sol';
+import "./ERC20Local.sol";
+import "./LibCertTransfer.sol";
 
-import 'openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol';
-import 'zos-lib/contracts/Initializable.sol';
+import "openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol";
+import "zos-lib/contracts/Initializable.sol";
 
 import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
-import 'openzeppelin-eth/contracts/cryptography/ECDSA.sol';
+import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
 
 
 // ----------------------------------------------------------------------------
@@ -69,6 +69,11 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     address new_TheCoin;
     address new_Police;
 
+    // Two special-case events include extra information (balance & timestamp)
+    // for tracking & tax record reasons
+    event Purchase(address purchaser, uint amount, uint balance, uint timestamp);
+    event Redeem(address purchaser, uint amount, uint balance, uint timestamp);
+
     // ------------------------------------------------------------------------
     // Events
     // ------------------------------------------------------------------------
@@ -83,7 +88,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
         
         // Lets just double-check this contract has not
         // yet been initialized.
-        require(role_TapCapManager == 0 && role_Minter == 0, "System compromised.  Freeze Everything");
+        require(role_TapCapManager == address(0) && role_Minter == address(0), "System compromised.  Freeze Everything");
 
         // We initialize all roles to owner.
         // It is expected that Owner will distribute
@@ -157,7 +162,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // and for the request to be paid by someone else (likely us)
     // ------------------------------------------------------------------------
 
-    function certifiedTransfer(address from, address to, uint256 value, uint32 fee, uint256 timestamp, bytes signature)
+    function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
     public 
     timestampIncreases(from, timestamp) 
     isTransferable(from, value + fee)
@@ -165,7 +170,6 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     {
         address signer = recoverSigner(from, to, value, fee, timestamp, signature);
         require(signer == from, "Invalid signature for address");
-
         _transfer(from, to, value);
         _transfer(from, msg.sender, fee);
 
@@ -176,22 +180,27 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // Client interactions with TheCoin
     // ------------------------------------------------------------------------
 
-    // Users purchase coin from us.  A script on our
-    // site will trigger this call
-    function coinPurchase(address purchaser, uint amount, uint timeout) public
+    // Users purchase coin from us. 
+    // We record the precise timestamp to ensure we can reconstruct the price
+    // of this transaction later
+    function coinPurchase(address purchaser, uint amount, uint timeout, uint timestamp) public
     onlyTheCoin
     balanceAvailable(amount)
     {
         _transfer(role_TheCoin, purchaser, amount);
         freezeUntil[purchaser] = timeout;
+        emit Purchase(purchaser, amount, balanceOf(purchaser), timestamp);
     }
 
     // A user returns their coins to us (this will trigger disbursement externally)
-    function coinRedeem(uint amount) public
+    // We record the precise timestamp to ensure we can reconstruct the price
+    // of this transaction later
+    function coinRedeem(uint amount, uint timestamp) public
     isTransferable(msg.sender, amount)
     {
         // first, we recover the coins back to our own account
         _transfer(msg.sender, role_TheCoin, amount);
+        emit Redeem(msg.sender, amount, balanceOf(msg.sender), timestamp);
     }
 
     // ------------------------------------------------------------------------
@@ -280,7 +289,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     //
     // The big puppy.  Update all accounts with changes from spending
     //
-    function processSpending(address[] users, int[] amountChange) public
+    function processSpending(address[] memory users, int[] memory amountChange) public
     onlyTapCapManager()
     {
         uint numChanges = users.length; 
@@ -338,7 +347,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // ------------------------------------------------------------------------
     // Don't accept ETH
     // ------------------------------------------------------------------------
-    function () public payable {
+    function () external payable {
         revert("This contract does not run on Ether");
     }
 
@@ -354,7 +363,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     {
         require(msg.sender == new_TapCapManager, "Permission Denied");
         role_TapCapManager = new_TapCapManager;
-        new_TapCapManager = 0;
+        new_TapCapManager = address(0);
     }
 
     function setMinter(address newMinter) public 
@@ -366,7 +375,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     {
         require(msg.sender == new_Minter, "Permission Denied");
         role_Minter = new_Minter;
-        new_Minter = 0;
+        new_Minter = address(0);
     }
 
     function setTheCoin(address newCoinManager) public 
@@ -378,7 +387,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     {
         require(msg.sender == new_TheCoin, "Permission Denied");
         role_TheCoin = new_TheCoin;
-        new_TheCoin = 0;
+        new_TheCoin = address(0);
     }
 
     function setPolice(address newPolice) public 
@@ -390,7 +399,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     {
         require(msg.sender == new_Police, "Permission Denied");
         role_Police = new_Police;
-        new_Police = 0;
+        new_Police = address(0);
     }
     // ------------------------------------------------------------------------
     // Owner can transfer out any ERC20 tokens accidentally assigned to this contracts address

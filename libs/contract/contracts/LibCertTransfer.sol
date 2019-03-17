@@ -1,120 +1,115 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
+//import "./Seriality/Seriality.sol";
 
 contract LibCertTransfer {
 
-    function uint2str(uint i) public pure returns (string){
-        if (i == 0) return "0";
-        uint j = i;
-        uint length;
-        while (j != 0){
-            length++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(length);
-        uint k = length - 1;
-        while (i != 0){
-            bstr[k--] = byte(48 + i % 10);
-            i /= 10;
-        }
-        return string(bstr);
-    }
+	// function uint2str(uint i) 
+	// public pure returns (string memory)
+	// {
+	// 	if (i == 0) return "0";
+	// 	uint j = i;
+	// 	uint length;
+	// 	while (j != 0){
+	// 		length++;
+	// 		j /= 10;
+	// 	}
+	// 	bytes memory bstr = new bytes(length);
+	// 	uint k = length - 1;
+	// 	while (i != 0){
+	// 		bstr[k--] = byte(uint8(48 + i % 10));
+	// 		i /= 10;
+	// 	}
+	// 	return string(bstr);
+	// }
 
-    function address2str(address _addr) public pure returns(string) {
-        bytes32 value = bytes32(uint256(_addr));
-        bytes memory alphabet = "0123456789abcdef";
-    
-        bytes memory str = new bytes(40);
-        uint8 charIdx = 0;
-        for (uint i = 12; i < 32; i++) {
-            byte char = value[i];
-            str[charIdx++] = alphabet[uint(char >> 4)];
-            str[charIdx++] = alphabet[uint(char & 0x0f)];
-        }
-        return string(str);
-    }
+	// // function address2str(address _addr) 
+	// // public pure returns(string memory) 
+	// // {
+	// // 	bytes32 value = bytes32(uint256(_addr));
+	// // 	bytes memory alphabet = "0123456789abcdef";
+
+	// // 	bytes memory str = new bytes(40);
+	// // 	uint8 charIdx = 0;
+	// // 	for (uint i = 12; i < 32; i++) {
+	// // 		byte char = value[i];
+	// // 		str[charIdx++] = alphabet[uint(char >> 4)];
+	// // 		str[charIdx++] = alphabet[uint(char & 0x0f)];
+	// // 	}
+	// // 	return string(str);
+	// // }
 
 
-    function buildMessage(address from, address to, uint256 value, uint32 fee, uint256 timestamp) 
-    public pure returns(string)
-    {
-        string memory fstr = address2str(from);
-        string memory tostr = address2str(to);
-        string memory vstr = uint2str(value);
-        string memory feestr = uint2str(fee);
-        string memory tstr = uint2str(timestamp);
-        
-        string memory message = string(abi.encodePacked(fstr, "->", tostr, "\nval", vstr, "\nfee", feestr, "\nts", tstr));
-        
-        return message;
-    }
-    
-    function hashMessage(bytes message)
-    internal pure returns (bytes32)
-    {
-        string memory len = uint2str(message.length);
-        return keccak256(
-          abi.encodePacked("\x19Ethereum Signed Message:\n", len, message)
-        );
-    }
-    
-    function recoverSigner(address from, address to, uint256 value, uint32 fee, uint256 timestamp, bytes signature)
-	internal pure returns (address)
+	// function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp) 
+	// public pure returns(bytes memory)
+	// {
+	// 	// from, "->", to, "\nval", vstr, "\nfee", feestr, "\nts", tstr
+	// 	uint256 offset = 20 + 20 + 32 + 32 + 32;
+	// 	bytes memory buffer = new bytes(offset);
+
+	// 	addressToBytes(offset, from, buffer);
+	// 	offset -= sizeOfAddress();
+
+	// 	addressToBytes(offset, to, buffer);
+	// 	offset -= sizeOfAddress();
+
+	// 	uintToBytes(offset, value, buffer);
+	// 	offset -= sizeOfUint(256);
+
+	// 	uintToBytes(offset, fee, buffer);
+	// 	offset -= sizeOfUint(256);
+
+	// 	uintToBytes(offset, timestamp, buffer);
+	// 	offset -= sizeOfUint(256);
+
+	// 	// We can remove this require after testing.
+	// 	require(offset == 0);
+	// 	return buffer;
+
+	// 	// string memory fstr = address2str(from);
+	// 	// string memory tostr = address2str(to);
+	// 	// string memory vstr = uint2str(value);
+	// 	// string memory feestr = uint2str(fee);
+	// 	// string memory tstr = uint2str(timestamp);
+		
+	// 	// string memory message = string(abi.encodePacked(fstr, "->", tostr, "\nval", vstr, "\nfee", feestr, "\nts", tstr));
+		
+	// }
+
+	// function hashMessage(bytes memory message)
+	// internal pure returns (bytes32)
+	// {
+	// 	string memory len = uint2str(message.length);
+	// 	return keccak256(
+	// 		abi.encodePacked("\x19Ethereum Signed Message:\n", len, message)
+	// 	);
+	// }
+
+	// function recover(bytes memory message, bytes memory signature)
+	// internal pure returns (address)
+	// {
+	// 	bytes32 hash = hashMessage(message);
+	// 	return ECDSA.recover(hash, signature);
+	// }
+
+	function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp)
+	public pure returns (bytes32)
 	{
-		string memory message = buildMessage(from, to, value, fee, timestamp);
-        address signer = recover(message, signature);
-        return signer;
+		bytes memory packed = abi.encodePacked(from, to, value, fee, timestamp);
+		return keccak256(packed);
 	}
 
-	function recover(string message, bytes signature)
-    internal pure returns (address)
-    {
-        bytes32 hash = hashMessage(bytes(message));
-        return recover(hash, signature);
-    }
+	function recoverSigner(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
+	public pure returns (address)
+	{
+		// This recreates the message that was signed on the client.
+    	bytes32 message = buildMessage(from, to, value, fee, timestamp);
+		bytes32 signedMessage = ECDSA.toEthSignedMessageHash(message);
+		return ECDSA.recover(signedMessage, signature);
 
-  /**
-   * Taken from Zeppelin/ECDSA.sol.  Mostly cause I can't figure out how to link a library fn in
-   * @dev Recover signer address from a message by using their signature
-   * @param hash bytes32 message, the hash is the signed message. What is recovered is the signer address.
-   * @param signature bytes signature, the signature is generated using web3.eth.sign()
-   */
-  function recover(bytes32 hash, bytes signature)
-    internal
-    pure
-    returns (address)
-  {
-    bytes32 r;
-    bytes32 s;
-    uint8 v;
-
-    // Check the signature length
-    if (signature.length != 65) {
-      return (address(0));
-    }
-
-    // Divide the signature in r, s and v variables
-    // ecrecover takes the signature parameters, and the only way to get them
-    // currently is to use assembly.
-    // solium-disable-next-line security/no-inline-assembly
-    assembly {
-      r := mload(add(signature, 32))
-      s := mload(add(signature, 64))
-      v := byte(0, mload(add(signature, 96)))
-    }
-
-    // Version of signature should be 27 or 28, but 0 and 1 are also possible versions
-    if (v < 27) {
-      v += 27;
-    }
-
-    // If the version is correct return the signer address
-    if (v != 27 && v != 28) {
-      return (address(0));
-    } else {
-      // solium-disable-next-line arg-overflow
-      return ecrecover(hash, v, r, s);
-    }
-  }
+		// bytes memory message = buildMessage(from, to, value, fee, timestamp);
+		// address signer = recover(message, signature);
+		//return signer;
+	}
 }
