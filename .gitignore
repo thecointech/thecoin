@@ -6,3 +6,5 @@ TheBankAPI/TheBankAPI/obj/
 ts/node_modules/
 ts/dist/
 ts/lib/
+ts/.nyc_output/
+ts/coverage/

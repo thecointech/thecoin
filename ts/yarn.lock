@@ -16,17 +16,17 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@the-coin/contract@^1.0.4":
-  version "1.0.4"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.4.tgz#763f614ac286a1c5b34035208380eb5ba006375d"
+"@the-coin/contract@^1.0.6":
+  version "1.0.6"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.6.tgz#6bd07604ab152a9eb30b2c480490bb2c4388c25a"
 
 "@types/jest@^24.0.3":
   version "24.0.3"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/jest/-/jest-24.0.3.tgz#df8dc56565bd2d27fcbd099434f04f9891e16ab7"
 
 "@types/node@^10.3.2":
-  version "10.12.26"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/node/-/node-10.12.26.tgz#2dec19f1f7981c95cb54bab8f618ecb5dc983d0e"
+  version "10.14.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/node/-/node-10.14.1.tgz#8701cd760acc20beba5ffe0b7a1b879f39cb8c41"
 
 abab@^2.0.0:
   version "2.0.0"
@@ -764,9 +764,9 @@ esutils@^2.0.2:
   version "2.0.2"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
 
-ethers@^4.0.25:
-  version "4.0.25"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ethers/-/ethers-4.0.25.tgz#d2d9ee78fbf5896e793b91959503ef245f6ad5dc"
+ethers@^4.0.27:
+  version "4.0.27"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ethers/-/ethers-4.0.27.tgz#e570b0da9d805ad65c83d81919abe02b2264c6bf"
   dependencies:
     "@types/node" "^10.3.2"
     aes-js "3.0.0"
