@@ -281,16 +281,19 @@
       {
         "address": "0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530",
         "version": "0.1.0",
-        "implementation": "0x946591aff32d91ffcab180c366a72402086ba7d5"
+        "implementation": "0xa7B071F90497442e6eF71c5b5c66D2809Baf9686"
       }
     ]
   },
-  "zosversion": "2",
+  "zosversion": "2.2",
   "version": "0.1.0",
   "dependencies": {
     "openzeppelin-eth": {
       "package": "0x2a9e7b63514438906a83a1e320dbbd814d417002",
       "version": "2.1.3"
     }
+  },
+  "proxyAdmin": {
+    "address": "0x35a5600F587e98a5FEB2202C39bCa1fFC80dE787"
   }
 }
