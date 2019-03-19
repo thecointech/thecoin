@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,16 +14,17 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "dependencies": {
-    "@the-coin/contract": "^1.0.4"
+    "@the-coin/contract": "^1.0.6"
   },
   "devDependencies": {
     "@types/jest": "^24.0.3",
+    "ethers": "^4.0.27",
     "jest": "<24.0.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.3.3"
   },
   "peerDependencies": {
-    "ethers": "^4.0.25"
+    "ethers": "^4.0.27"
   },
   "files": [
     "lib/**/*"
