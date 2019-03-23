@@ -1,15 +1,16 @@
 {
   "name": "@the-coin/types",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
   "scripts": {
     "buildBrokerCAD": "swagger-to-ts ../broker-cad/broker-cad.yaml --namespace BrokerCAD --output src/brokerCAD.ts",
-    "build": "yarn run buildBrokerCAD && tsc"
+    "build": "node buildall.js && tsc"
   },
   "devDependencies": {
     "@manifoldco/swagger-to-ts": "^1.1.1",
+    "js-yaml": "^3.13.0",
     "typescript": "^3.3.4000"
   },
   "files": [
