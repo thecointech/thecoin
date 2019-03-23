@@ -1,4 +1,4 @@
-import { SignVerifiedXfer, VerifySignedXfer, GetContract } from './TheContract'
+import { SignVerifiedXfer, VerifySignedXfer, GetContract, BuildVerifiedSale, GetSaleSigner } from './TheContract'
 import { Wallet } from 'ethers';
 
 const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
@@ -45,5 +45,40 @@ test('Verified signature matches', async () => {
 
 	const signer2 = VerifySignedXfer(wallet.address, brokerCAD, value, fee, timestamp, signature)
 	expect(signer2 == wallet.address);
+})
+
+test('Can build verified sale', async () => {
+
+	const contract = GetContract();
+	expect(contract.address).toBeDefined();
+
+	const email = "address@email.com";
+	const wallet = Wallet.createRandom();
+	const value = 100000;
+	const fee = 2000;
+	const sale = await BuildVerifiedSale(email, wallet, brokerCAD, value, fee);
+	
+	// verify that the transfer is avlid
+	const { transfer } = sale;
+	var xferSigner = await contract.recoverSigner(transfer.from, transfer.to, transfer.value, transfer.fee, transfer.timestamp, transfer.signature);
+	expect(xferSigner).toMatch(wallet.address);
+
+	// verify that our email signature is valid
+	const signer = GetSaleSigner(sale);
+	expect(signer).toMatch(wallet.address);
+})
+
+test('Catches bad timestamp', async () => {
+
+	const contract = GetContract();
+	expect(contract.address).toBeDefined();
+
+	const email = "address@email.com";
+	const wallet = Wallet.createRandom();
+	const value = 100000;
+	const fee = 2000;
+	const timestamp = Date.now();
+	const buildFn = async () => await BuildVerifiedSale(email, wallet, brokerCAD, value, fee, timestamp);
+	await expect(buildFn()).rejects.toThrow(TypeError);
 })
   
