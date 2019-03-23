@@ -40,6 +40,28 @@ exports.InitiatePurchase = function (signedPR) {
     })
 }
 
+exports.CertifiedSale = function(certifiedSale) {
+    let { transfer, clientEmail, signature } = certifiedSale;
+
+    // First, check that the request is valid
+    ethers.
+
+    return new Promise((resolve, reject) => {
+        console.log(`${transfer.from} Initiating sale for ${transfer.value}`)
+        const signedMessage = signedPR.cadAmount + signedPR.email + signedPR.timestamp
+        const account = ethers.utils.verifyMessage(signedMessage, signedPR.signature);
+
+        // Our purchase is registered as a request, to be completed
+        const baseKey = ds.key(['User', account, 'Purchase']);
+        ds.allocateIds(baseKey, 1, function (err, keys) {
+            if (err) {
+                reject(err);
+            }
+
+    return new Primi
+
+}
+
 exports.ConfirmSale = function (signedSell) {
 
 }

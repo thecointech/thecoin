@@ -1,5 +1,35 @@
 'use strict';
 
+const { SendMail } = require('./AutoMailer');
+
+/**
+ * Request coin sale
+ * Called by the client to exchange coin for CAD using a certified transfer
+ *
+ * request CertifiedSale Signed certified transfer to this brokers address
+ * returns SellResponse
+ **/
+exports.certifiedCoinSale = function(request) {
+  return new Promise(function (resolve, reject) {
+    const xferId = BrokerActions.DoCertifiedSale(request)
+      .then((results) => {
+        SendMail("Certified Coin Sale: " + results, JSON.stringify(request));
+        console.log('Queried ids: ' + results);
+        resolve({
+          "orderId": xferId
+        });
+      })
+      .catch((err) => {
+        // TODO
+        SendMail("Certified Coin Sale: ERROR", JSON.stringify(request));
+        console.error(err);
+        reject({
+          "orderId": -1
+        });
+      })
+  });
+}
+
 
 /**
  * Mark coin sale complete

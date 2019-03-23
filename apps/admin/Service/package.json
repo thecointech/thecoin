@@ -14,12 +14,15 @@
   "private": true,
   "dependencies": {
     "@google-cloud/datastore": "^2.0.0",
-    "@the-coin/utilities": "^0.1.4",
+    "@the-coin/utilities": "^0.1.18",
     "cors": "^2.8.5",
     "esm": "^3.0.84",
-    "ethers": "^4.0.12",
+    "ethers": "^4.0.27",
     "express": "^4.16.3",
+    "jest": "^24.5.0",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.4"
+    "node-mailjet": "^3.3.1",
+    "swagger-tools": "0.10.4",
+    "ts-jest": "^24.0.0"
   }
 }

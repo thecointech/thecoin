@@ -28,6 +28,22 @@ consumes:
 produces:
 - "application/json"
 paths:
+  /status:
+    get:
+      tags:
+      - "Status"
+      summary: "Gets the operating status of the broker"
+      description: "Returns info like brokers address, available balance, etc (?)"
+      operationId: "status"
+      parameters: []
+      responses:
+        200:
+          description: "Server status"
+          schema:
+            $ref: "#/definitions/BrokerStatus"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Status"
   /exchange/buy/initiate:
     post:
       tags:
@@ -186,6 +202,29 @@ paths:
       responses:
         200:
           description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /exchange/sell/certified:
+    post:
+      tags:
+      - "Sell"
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD using a certified\
+        \ transfer"
+      operationId: "certifiedCoinSale"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedSale"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
           schema:
             $ref: "#/definitions/SellResponse"
         405:
@@ -436,3 +475,33 @@ definitions:
     example:
       message: "message"
       txHash: "txHash"
+  CertifiedSale:
+    required:
+    - "clientEmail"
+    - "transfer"
+    properties:
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      clientEmail:
+        type: "string"
+    example:
+      transfer:
+        signature: "signature"
+        fee: 6
+        from: "from"
+        to: "to"
+        value: 0
+        timestamp: 1
+      clientEmail: "clientEmail"
+  BrokerStatus:
+    required:
+    - "address"
+    - "certifiedFee"
+    properties:
+      address:
+        type: "string"
+      certifiedFee:
+        type: "integer"
+    example:
+      address: "address"
+      certifiedFee: 0

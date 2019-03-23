@@ -220,7 +220,60 @@ definitions:
       txHash:
         type: string
 
+  # Do sale via certified request.  Sale includes token to
+  # process transfer, and the email address the proceeds
+  # are to be returned to.
+  CertifiedSale:
+    required:
+      - transfer
+      - clientEmail
+      - signature
+    properties:
+      # Signed transfer request sending coin to the broker
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      # We send the results via interac e-Transfer
+      clientEmail:
+        type:
+          string
+      # Client must sign email + transfer.signature
+      signature:
+        type:
+          string
+    
+  #
+  # Any general purpose info on the broker can be stored here.
+  BrokerStatus:
+    required:
+      - address
+      - certifiedFee
+    properties:
+      address:
+        type: string
+      # The broker must publicise it's fee for performing
+      # certified transactions on behalf of the client
+      certifiedFee:
+        type: integer
+
+
+################################################################################
+
 paths:
+  /status:
+    get:
+      tags:
+        - Status
+      summary: "Gets the operating status of the broker"
+      description: "Returns info like brokers address, available balance, etc (?)"
+      operationId: "status"
+      responses:
+        405:
+          description: "Server Error"
+        200:
+          description: Server status
+          schema:
+            $ref: "#/definitions/BrokerStatus"
+            
   /exchange/buy/initiate:
     post:
       tags: 
@@ -360,7 +413,7 @@ paths:
           description: Numerical state identifier.  If not present, all states will be returned
           type: string
 
-
+  #############################################################
   # This query is open to anyone
   /exchange/sell/initiate:
     post:
@@ -417,6 +470,29 @@ paths:
           schema: 
             $ref: "#/definitions/SignedMessage"
 
+  /exchange/sell/certified:
+    post:
+      tags: 
+        - Sell
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD using a certified transfer"
+      operationId: "certifiedCoinSale"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: The response confirms to the user the order has been processed
+          schema:
+            $ref: "#/definitions/SellResponse"
+      parameters:
+        - in: body
+          name: request
+          description: "Signed certified transfer to this brokers address"
+          required: true
+          schema: 
+            $ref: "#/definitions/CertifiedSale"
+
+  #############################################################
   /certifiedTransfer:
     post:
       tags:
