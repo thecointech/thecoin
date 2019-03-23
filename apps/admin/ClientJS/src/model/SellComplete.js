@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The SellComplete model module.
  * @module model/SellComplete
- * @version 0.1.0
+ * @version 0.1.2
  */
 class SellComplete {
     /**

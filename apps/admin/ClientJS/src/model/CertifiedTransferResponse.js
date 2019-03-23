@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The CertifiedTransferResponse model module.
  * @module model/CertifiedTransferResponse
- * @version 0.1.0
+ * @version 0.1.2
  */
 class CertifiedTransferResponse {
     /**

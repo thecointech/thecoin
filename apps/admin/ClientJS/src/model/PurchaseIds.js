@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The PurchaseIds model module.
  * @module model/PurchaseIds
- * @version 0.1.0
+ * @version 0.1.2
  */
 class PurchaseIds extends Array {
     /**

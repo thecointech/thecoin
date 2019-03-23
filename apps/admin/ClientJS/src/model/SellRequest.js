@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The SellRequest model module.
  * @module model/SellRequest
- * @version 0.1.0
+ * @version 0.1.2
  */
 class SellRequest {
     /**

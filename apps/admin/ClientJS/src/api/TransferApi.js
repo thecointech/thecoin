@@ -19,7 +19,7 @@ import CertifiedTransferResponse from '../model/CertifiedTransferResponse';
 /**
 * Transfer service.
 * @module api/TransferApi
-* @version 0.1.0
+* @version 0.1.2
 */
 export default class TransferApi {
 

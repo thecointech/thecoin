@@ -13,13 +13,14 @@
 
 
 import ApiClient from "../ApiClient";
+import CertifiedSale from '../model/CertifiedSale';
 import SellResponse from '../model/SellResponse';
 import SignedMessage from '../model/SignedMessage';
 
 /**
 * Sell service.
 * @module api/SellApi
-* @version 0.1.0
+* @version 0.1.2
 */
 export default class SellApi {
 
@@ -34,6 +35,56 @@ export default class SellApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+
+    /**
+     * Request coin sale
+     * Called by the client to exchange coin for CAD using a certified transfer
+     * @param {module:model/CertifiedSale} certifiedSale Signed certified transfer to this brokers address
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SellResponse} and HTTP response
+     */
+    certifiedCoinSaleWithHttpInfo(certifiedSale) {
+      let postBody = certifiedSale;
+
+      // verify the required parameter 'certifiedSale' is set
+      if (certifiedSale === undefined || certifiedSale === null) {
+        throw new Error("Missing the required parameter 'certifiedSale' when calling certifiedCoinSale");
+      }
+
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = SellResponse;
+
+      return this.apiClient.callApi(
+        '/exchange/sell/certified', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * Request coin sale
+     * Called by the client to exchange coin for CAD using a certified transfer
+     * @param {module:model/CertifiedSale} certifiedSale Signed certified transfer to this brokers address
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SellResponse}
+     */
+    certifiedCoinSale(certifiedSale) {
+      return this.certifiedCoinSaleWithHttpInfo(certifiedSale)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
 
 
     /**

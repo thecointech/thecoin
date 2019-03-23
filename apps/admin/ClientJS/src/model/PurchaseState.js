@@ -19,7 +19,7 @@ import SignedPurchaseRequest from './SignedPurchaseRequest';
 /**
  * The PurchaseState model module.
  * @module model/PurchaseState
- * @version 0.1.0
+ * @version 0.1.2
  */
 class PurchaseState {
     /**

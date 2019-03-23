@@ -13,6 +13,8 @@
 
 
 import ApiClient from './ApiClient';
+import BrokerStatus from './model/BrokerStatus';
+import CertifiedSale from './model/CertifiedSale';
 import CertifiedTransferRequest from './model/CertifiedTransferRequest';
 import CertifiedTransferResponse from './model/CertifiedTransferResponse';
 import PurchaseComplete from './model/PurchaseComplete';
@@ -27,6 +29,7 @@ import SignedPurchaseConfirm from './model/SignedPurchaseConfirm';
 import SignedPurchaseRequest from './model/SignedPurchaseRequest';
 import PurchaseApi from './api/PurchaseApi';
 import SellApi from './api/SellApi';
+import StatusApi from './api/StatusApi';
 import TransferApi from './api/TransferApi';
 
 
@@ -59,7 +62,7 @@ import TransferApi from './api/TransferApi';
 * </pre>
 * </p>
 * @module index
-* @version 0.1.0
+* @version 0.1.2
 */
 export {
     /**
@@ -67,6 +70,18 @@ export {
      * @property {module:ApiClient}
      */
     ApiClient,
+
+    /**
+     * The BrokerStatus model constructor.
+     * @property {module:model/BrokerStatus}
+     */
+    BrokerStatus,
+
+    /**
+     * The CertifiedSale model constructor.
+     * @property {module:model/CertifiedSale}
+     */
+    CertifiedSale,
 
     /**
      * The CertifiedTransferRequest model constructor.
@@ -151,6 +166,12 @@ export {
     * @property {module:api/SellApi}
     */
     SellApi,
+
+    /**
+    * The StatusApi service constructor.
+    * @property {module:api/StatusApi}
+    */
+    StatusApi,
 
     /**
     * The TransferApi service constructor.

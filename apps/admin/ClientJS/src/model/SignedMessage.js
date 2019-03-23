@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The SignedMessage model module.
  * @module model/SignedMessage
- * @version 0.1.0
+ * @version 0.1.2
  */
 class SignedMessage {
     /**

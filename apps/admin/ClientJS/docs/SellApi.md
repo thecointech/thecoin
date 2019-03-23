@@ -4,9 +4,51 @@ All URIs are relative to *https://the-broker-cad.appspot.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**certifiedCoinSale**](SellApi.md#certifiedCoinSale) | **POST** /exchange/sell/certified | Request coin sale
 [**completeCoinSale**](SellApi.md#completeCoinSale) | **POST** /exchange/sell/{user}/{id}/complete | Mark coin sale complete
 [**requestCoinSale**](SellApi.md#requestCoinSale) | **POST** /exchange/sell/initiate | Request coin sale
 
+
+<a name="certifiedCoinSale"></a>
+# **certifiedCoinSale**
+> SellResponse certifiedCoinSale(certifiedSale)
+
+Request coin sale
+
+Called by the client to exchange coin for CAD using a certified transfer
+
+### Example
+```javascript
+import @TheCoinBrokerCad from '@the-coin/broker-cad';
+
+let apiInstance = new @TheCoinBrokerCad.SellApi();
+let certifiedSale = new @TheCoinBrokerCad.CertifiedSale(); // CertifiedSale | Signed certified transfer to this brokers address
+apiInstance.certifiedCoinSale(certifiedSale).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **certifiedSale** | [**CertifiedSale**](CertifiedSale.md)| Signed certified transfer to this brokers address | 
+
+### Return type
+
+[**SellResponse**](SellResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="completeCoinSale"></a>
 # **completeCoinSale**

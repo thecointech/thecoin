@@ -1,3 +1,8 @@
 ClientJS/node_modules/
 Service/node_modules/
 broker-manager/.vs/
+Service/coverage/
+Service/exchange/secret.json
+Service/exchange/BrokerCADWallet.json
+Service/exchange/AutoMailer.secret.js
+Service/.nyc_output/

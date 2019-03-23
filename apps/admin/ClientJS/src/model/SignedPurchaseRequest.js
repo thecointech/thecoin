@@ -16,7 +16,7 @@ import ApiClient from '../ApiClient';
 /**
  * The SignedPurchaseRequest model module.
  * @module model/SignedPurchaseRequest
- * @version 0.1.0
+ * @version 0.1.2
  */
 class SignedPurchaseRequest {
     /**
