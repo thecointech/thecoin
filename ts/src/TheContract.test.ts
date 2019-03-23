@@ -1,4 +1,4 @@
-import { SignVerifiedXfer, VerifySignedXfer, GetContract, BuildVerifiedSale, GetSaleSigner } from './TheContract'
+import { SignVerifiedXfer, GetTransferSigner, GetContract, BuildVerifiedSale, GetSaleSigner } from './TheContract'
 import { Wallet } from 'ethers';
 
 const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
@@ -43,7 +43,14 @@ test('Verified signature matches', async () => {
 	var signer = await contract.recoverSigner(wallet.address, brokerCAD, value, fee, timestamp, signature);
 	expect(signer == wallet.address);
 
-	const signer2 = VerifySignedXfer(wallet.address, brokerCAD, value, fee, timestamp, signature)
+	const signer2 = GetTransferSigner({
+		from: wallet.address,
+		to: brokerCAD,
+		value, 
+		fee,
+		timestamp, 
+		signature
+	});
 	expect(signer2 == wallet.address);
 })
 

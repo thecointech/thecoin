@@ -43,7 +43,8 @@ export async function SignVerifiedXfer(from: Wallet, to: string, value: number, 
 	return await from.signMessage(hash);
 }
 
-export function VerifySignedXfer(from: string, to: string, value: number, fee: number, timestamp: number, signature: string) {
+export function GetTransferSigner(transfer: BrokerCAD.CertifiedTransferRequest) {
+	const { from, to, value, fee, timestamp, signature } = transfer;
 	const hash = GetHash(from, to, value, fee, timestamp);
 	return ethers.utils.verifyMessage(hash, signature);
 }
