@@ -1,0 +1,10 @@
+{
+  "name": "@the-coin/types",
+  "version": "0.1.11",
+  "main": "lib/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "buildBrokerCAD": "npx @manifoldco/swagger-to-ts ../broker-cad/broker-cad.yaml --output lib/brokerCAD.ts",
+    "build": "yarn run buildBrokerCAD"
+  }
+}
