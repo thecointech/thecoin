@@ -117,7 +117,7 @@ exports.CompletePurchaseOrder = function(user, id, signedComplete) {
 const BuildSellKey = (user, id) => ds.key(['User', user, 'Sell', Number(id)])
 exports.BuildSellKey = BuildSellKey;
 
-function StoreRequest(sale)
+function StoreRequest(sale, hash)
 {
     // Store the verified xfer
     const user = sale.transfer.from;
@@ -137,7 +137,8 @@ function StoreRequest(sale)
                         data: {
                             userSellData: sale,
                             processedTimestamp: Date.now(), 
-                            hash: "",
+                            hash: hash,
+                            confirmed: false,
                             fiatDisbursed: 0
                         }
                     }
@@ -154,6 +155,24 @@ function StoreRequest(sale)
     });
 }
 
+async function ConfirmSale(user, xferId, tx)
+{
+    // Why do we wait for tow confirmations?  I don't know...
+    // https://docs.ethers.io/ethers.js/html/cookbook-contracts.html?highlight=transaction
+    const res = await tx.wait(2);
+    console.log(`Tx ${tx.hash} mined ${res}`);
+
+    const key = BuildSellKey(user, xferId);
+    current = await ds.get(key);
+    current.confirmed = res.status;
+
+    await ds.update({
+        key: key,
+        data: current
+    });
+    console.log(`Tx Confirmed: ${res.status}`);
+}
+
 const FeeValid = (transfer) => transfer.fee == status.certifiedFee;
 const AvailableBalance= async (transfer) => {
     const userBalance = await tc.balanceOf(transfer.from)
@@ -166,6 +185,7 @@ const ValidSale = (sale) => {
 }
 
 exports.DoCertifiedSale = async function(sale) {
+
     const { transfer, clientEmail, signature } = sale;
     if (!transfer || !clientEmail || !signature) 
         return "Invalid arguments";
@@ -186,9 +206,23 @@ exports.DoCertifiedSale = async function(sale) {
     if (!ValidSale(sale))
         return "Invalid email";
 
+    const {from, to, value, fee, timestamp, signature} = transfer;
+    const gasAmount = await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, signature)
+        .estimateGas({gas:5000000, from:eclient})
+    console.log(`Tx ${from} -> ${tp}: Gas Amount ${gasAmount}`);
+
+    let tx = tc.certifiedTransfer(from, to, value, fee, timestamp, signature).send({gas: 200000})
+
     // Next, create an initial record of the transaction
-    const xferId = await StoreRequest(sale);
-    return xferId;
+    const xferId = await StoreRequest(sale, tx.hash);
+    console.log(`Valid Cert Xfer: id: ${xferId}`);
+        
+    // Wait for a second, then validate this transaction
+    setTimeout(() => ConfirmSale(tx, xferId), 1000);
+
+    // But for now, we just return the hash
+    const hash = tx.hash;
+    return hash;
 
     // For now - we will do all actual transactions manually.
 

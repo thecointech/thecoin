@@ -6,3 +6,4 @@ Service/exchange/secret.json
 Service/exchange/BrokerCADWallet.json
 Service/exchange/AutoMailer.secret.js
 Service/.nyc_output/
+ClientTS/dist/
