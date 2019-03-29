@@ -6,6 +6,8 @@ import path from 'path';
 import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
 export default {
   externals: [...Object.keys(dependencies || {})],
 
@@ -37,7 +39,8 @@ export default {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.json']
+    extensions: ['.js', '.ts', '.tsx', '.json'],
+    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })]
   },
 
   plugins: [

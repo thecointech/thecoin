@@ -249,6 +249,7 @@
     "testcafe-live": "^0.1.4",
     "testcafe-react-selectors": "^3.0.2",
     "ts-loader": "^5.3.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.2.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.3",
