@@ -60,7 +60,7 @@ export default merge.smart(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.global\.css$/,
+        test: /^((?!\.module).)*\.css$/,
         use: [
           {
             loader: 'style-loader'
@@ -74,7 +74,7 @@ export default merge.smart(baseConfig, {
         ]
       },
       {
-        test: /^((?!\.global).)*\.css$/,
+        test: /^\.module\.css$/,
         use: [
           {
             loader: 'style-loader'
