@@ -2,10 +2,12 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
-import { configureStore, history } from './store/configureStore';
+import { configureStore } from './store/configureStore';
+import history from 'utils/history';
 import './app.global.css';
 
-const store = configureStore();
+const initialState = {};
+const store = configureStore(initialState, history);
 
 render(
   <AppContainer>
