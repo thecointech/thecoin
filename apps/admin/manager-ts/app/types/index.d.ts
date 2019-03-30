@@ -23,7 +23,6 @@ export interface LifeStore extends Store<{}> {
 export interface InjectReducerParams {
   key: keyof ApplicationRootState;
   reducer: any;
-  initialState: object;
 }
 
 export interface InjectSagaParams {

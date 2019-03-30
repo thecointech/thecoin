@@ -14,7 +14,7 @@ const initialState: ContainerState = {
   ],
 };
 
-export class SidebarItemsReducer extends ImmerReducer<ContainerState>
+class SidebarItemsReducer extends ImmerReducer<ContainerState>
   implements IActions {
   setItems(newItems: SidebarMenuItem[]) {
     this.draftState.items = newItems;
@@ -40,10 +40,11 @@ export class SidebarItemsReducer extends ImmerReducer<ContainerState>
 
 const reducer = createReducerFunction(SidebarItemsReducer, initialState);
 
-export function buildReducer<T>() {
+function buildReducer<T>() {
   return injectReducer<T>({
     key: 'sidebar',
-    reducer: reducer,
-    initialState,
+    reducer: reducer
   });
 }
+
+export {buildReducer, SidebarItemsReducer, initialState}

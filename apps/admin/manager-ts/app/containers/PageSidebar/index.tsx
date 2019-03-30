@@ -60,6 +60,7 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
           direction="left"
           vertical
           visible={visible}
+          inverted
         >
           {menuItems}
         </Sidebar>
@@ -75,6 +76,3 @@ const ConnectedPageSidebar =  buildReducer<OwnProps>()(
   connect(mapStateToProps)(PageSidebar)
 );
 export { ConnectedPageSidebar as PageSidebar }
-// export default buildReducer<OwnProps>()(
-//   connect(mapStateToProps)(PageSidebar),
-// );

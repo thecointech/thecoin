@@ -1,9 +1,8 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { InjectReducerParams } from 'types';
 import getInjectors from './reducerInjectors';
-
+import { ReactReduxContext } from 'react-redux'
 /**
  * Dynamically injects a reducer
  *
@@ -14,8 +13,7 @@ import getInjectors from './reducerInjectors';
 
 export default function hocWithReducer<P>({
   key,
-  reducer,
-  initialState,
+  reducer
 }: InjectReducerParams) {
   function wrap(
     WrappedComponent: React.ComponentType<P>,
@@ -23,28 +21,24 @@ export default function hocWithReducer<P>({
     // dont wanna give access to HOC. Child only
     class ReducerInjector extends React.Component<P> {
       public static WrappedComponent = WrappedComponent;
-
-      public static contextTypes = {
-        store: PropTypes.object.isRequired,
-      };
-
+      public static contextType = ReactReduxContext;
       public static displayName = `withReducer(${WrappedComponent.displayName ||
         WrappedComponent.name ||
         'Component'})`;
 
+      public injectors = getInjectors(this.context.store);
+
       public componentWillMount() {
         const { injectReducer } = this.injectors;
-
-        injectReducer(key, reducer, initialState);
+        injectReducer(key, reducer);
       }
-
-      public injectors = getInjectors(this.context.store);
 
       public render() {
         return <WrappedComponent {...this.props} />;
       }
     }
 
+    // @ts-ignore
     return hoistNonReactStatics(ReducerInjector, WrappedComponent) as any;
   }
   return wrap;

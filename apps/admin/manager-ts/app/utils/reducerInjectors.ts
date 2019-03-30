@@ -4,15 +4,13 @@ import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 
 import { LifeStore } from 'types';
-//import { createReducerFunction } from 'immer-reducer';
 import {createReducer} from '../reducers';
 import checkStore from './checkStore';
 
 export function injectReducerFactory(store: LifeStore, isValid: boolean) {
   return function injectReducer<T>(
     key: string,
-    reducer: T,
-    initialState: object,
+    reducer: T
   ) {
     if (!isValid) {
       checkStore(store);
@@ -29,7 +27,7 @@ export function injectReducerFactory(store: LifeStore, isValid: boolean) {
       return;
     }
 
-    store.injectedReducers[key] = reducer; //createReducerFunction(reducer, initialState);
+    store.injectedReducers[key] = reducer;
     store.replaceReducer(createReducer(store.injectedReducers));
   };
 }
