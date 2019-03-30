@@ -215,7 +215,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
       }
       yield put({
         type: AccountReducer.actions.updateWithDecrypted.type,
-        payload: [decrypted]
+        payload: decrypted
       });
     }
     catch (error) {

@@ -10,7 +10,7 @@ export const scope = 'app.containers.Accounts.Login';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Log into {accountName}',
+    defaultMessage: 'Log into {walletName}',
   },
   subHeader: {
     id: `${scope}.subHeader`,

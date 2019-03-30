@@ -58,6 +58,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 
   componentDidMount() {
+    this.props.setName(AccountClass.AccountName);
     // const { url, name, wallet } = this.props;
 
     // if (wallet.privateKey) {
