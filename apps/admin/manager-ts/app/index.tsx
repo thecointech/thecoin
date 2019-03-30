@@ -7,6 +7,15 @@ import { App } from './containers/App';
 import { configureStore } from './store/configureStore';
 import history from 'utils/history';
 
+// Import Language Provider
+import LanguageProvider from 'containers/LanguageProvider';
+// Import i18n messages
+//import { translationMessages } from './translations/index.js';
+const translationMessages = {
+  "en": {
+  }
+}
+
 import './app.global.css';
 
 const initialState = {};
@@ -16,9 +25,11 @@ const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
+    <LanguageProvider messages={translationMessages}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </LanguageProvider>
   </Provider>,
   MOUNT_NODE
 );

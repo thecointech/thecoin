@@ -14,7 +14,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.[jt]sx?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
           {
@@ -25,6 +25,16 @@ export default {
           },
           'ts-loader'
         ]
+      },
+      {
+        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          }
+        }
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,

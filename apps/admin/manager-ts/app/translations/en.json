@@ -1,0 +1,20 @@
+{
+  "app.components.Header.BannerAlt": "Which direction to you choose?",
+  "app.components.Header.LogoAlt": "The Coin Website",
+  "app.components.UxPassword.default": "Strength",
+  "app.components.UxPassword.score0": "ineffectual",
+  "app.components.UxPassword.score1": "vulnerable",
+  "app.components.UxPassword.score2": "weak",
+  "app.components.UxPassword.score3": "moderate",
+  "app.components.UxPassword.score4": "strong",
+  "app.containers.Account.Create.buttonCreate": "CREATE ACCOUNT",
+  "app.containers.Account.Create.header": "Create a New Account",
+  "app.containers.Account.Create.labelName": "Account Name",
+  "app.containers.Account.Create.labelPassword": "Password",
+  "app.containers.Account.Create.subHeader": "Name your account anything you like, and give it a valid password.",
+  "app.containers.HomePage.blurbFees": "All the while paying no fees whatsoever, and enjoying the world's most secure accounts.",
+  "app.containers.HomePage.blurbGrow": "Grow your wealth alongside Wall Street without taking away access to your finances.",
+  "app.containers.HomePage.blurbSpend": "Spend your money at the supermarket or your favorite restaurant.",
+  "app.containers.HomePage.header": "This is the HomePage container!",
+  "app.containers.NotFoundPage.header": "This is the NotFoundPage container!"
+}
