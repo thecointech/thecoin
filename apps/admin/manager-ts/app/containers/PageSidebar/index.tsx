@@ -56,15 +56,13 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
       <Sidebar.Pushable as={Segment}>
         <Sidebar
           as={Menu}
-          animation="push"
-          direction="left"
           vertical
           visible={visible}
           inverted
         >
           {menuItems}
         </Sidebar>
-        <Sidebar.Pusher>
+        <Sidebar.Pusher style={{width: "max-content"}}>
           {this.props.children}
         </Sidebar.Pusher>
       </Sidebar.Pushable>

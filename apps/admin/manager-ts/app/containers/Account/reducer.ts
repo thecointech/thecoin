@@ -12,6 +12,7 @@ import { buildSagas } from './actions';
 import { createAccountSelector } from './selector';
 import { compose } from 'redux';
 
+import { GetStored, SetStored } from  './storageSync'
 
 const initialState: ContainerState = {
   name: "",
@@ -25,6 +26,17 @@ const initialState: ContainerState = {
 
 class AccountReducer extends ImmerReducer<ContainerState>
   implements IActions {
+
+  setName(name: string) : void {
+    this.draftState.name = name;
+    // TODO: Renaming (once re-synced with website)
+    this.draftState.wallet = GetStored(name);
+  }
+
+  setWallet(wallet: Wallet) {
+    this.draftState.wallet = wallet;
+    SetStored(this.state.name, wallet);
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////
   updateWithValues(newState: ContainerState) {

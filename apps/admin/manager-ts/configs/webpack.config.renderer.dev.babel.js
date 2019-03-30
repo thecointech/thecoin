@@ -74,18 +74,13 @@ export default merge.smart(baseConfig, {
         ]
       },
       {
-        test: /^\.module\.css$/,
+        test: /\.module\.css$/,
         use: [
-          {
-            loader: 'style-loader'
-          },
+          'css-modules-typescript-loader',
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
+              modules: true
             }
           }
         ]

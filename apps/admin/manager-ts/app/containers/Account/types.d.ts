@@ -42,6 +42,9 @@ type ContainerState = {
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<ContainerState> {
 
+	setName(name: string) : void;
+	setWallet(wallet: Wallet): void;
+
 	// Get the balance of the account in Coin
 	updateBalance(newBalance?: number) : Iterator<any>;
 	updateHistory(from: Date, until: Date) : Iterator<any>;

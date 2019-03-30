@@ -17,6 +17,7 @@ const translationMessages = {
 }
 
 import './app.global.css';
+import 'semantic-ui-css/semantic.min.css'
 
 const initialState = {};
 const store = configureStore(initialState, history);

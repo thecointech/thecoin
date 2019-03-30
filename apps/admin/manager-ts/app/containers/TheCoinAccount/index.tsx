@@ -15,6 +15,7 @@ import { NotFoundPage } from 'containers/NotFoundPage'
 import { buildReducer } from 'containers/Account/reducer'
 import { createAccountSelector } from 'containers/Account/selector';
 import * as Account from 'containers/Account/actions';
+import { UploadWallet } from 'containers/UploadWallet';
 
 type OwnProps = {
   url: string
@@ -34,6 +35,13 @@ const AccountMap: RouterPath[] = [
 
 class AccountClass extends React.PureComponent<Props, {}, null> {
 
+  static AccountName = "TheCoin";
+
+  constructor(props) {
+    super(props);
+    this.onFileUpload = this.onFileUpload.bind(this);
+  }
+
   buildLink(url: string, item: RouterPath) {
     return url.endsWith('/') ?
       `${url}${item[1]}` :
@@ -41,30 +49,38 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
 
   }
 
-  componentDidMount() {
-    const { url, name, wallet } = this.props;
-
-    if (wallet.privateKey) {
-      const accountLinks = AccountMap.map((item) => {
-        return {
-          link: {
-            name: item[0],
-            to: this.buildLink(url, item)
-          }
-        }
-      })
-      this.props.setSubItems(name, accountLinks)
-    }
+  onFileUpload(jsonObject) {
+    if (jsonObject.address && jsonObject.Crypto)
+      this.props.setWallet(jsonObject);
     else {
-      this.props.setSubItems("", []);
+      alert("Bad Wallet");
     }
+  }
+
+  componentDidMount() {
+    // const { url, name, wallet } = this.props;
+
+    // if (wallet.privateKey) {
+    //   const accountLinks = AccountMap.map((item) => {
+    //     return {
+    //       link: {
+    //         name: item[0],
+    //         to: this.buildLink(url, item)
+    //       }
+    //     }
+    //   })
+    //   this.props.setSubItems(name, accountLinks)
+    // }
+    // else {
+    //   this.props.setSubItems("", []);
+    // }
   }
 
   render() {
     const { url, ...account } = this.props;
     const { wallet, name } = account;
     if (wallet === null) {
-      return <NotFoundPage />;
+      return <UploadWallet onSelect={this.onFileUpload} />;
     }
     else if (!wallet.privateKey) {
       return <Login wallet={wallet} walletName={name} decrypt={this.props.decrypt} />
