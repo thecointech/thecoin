@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'reducers';
 import { History } from 'history';
+import { LifeStore } from 'types';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -39,12 +40,18 @@ const configureStore = (initialState = {}, history: History<any>) => {
   const store = createStore(
     createReducer(), 
     initialState,
-    composeEnhancers(...enhancers));
+    composeEnhancers(...enhancers)
+  ) as LifeStore;
+
+  // Extensions
+  store.runSaga = sagaMiddleware.run;
+  store.injectedReducers = {}; // Reducer registry
+  store.injectedSagas = {}; // Saga registry
 
   if ((module as any).hot) {
     (module as any).hot.accept(
       '../reducers', // eslint-disable-next-line global-require
-      () => store.replaceReducer(require('../reducers').default)
+      () => store.replaceReducer(createReducer(store.injectedReducers))
     );
   }
 
