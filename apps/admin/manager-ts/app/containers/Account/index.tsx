@@ -12,14 +12,20 @@ import * as Account from 'containers/Account/actions';
 import { UploadWallet } from 'containers/UploadWallet';
 import { ApplicationRootState } from 'types';
 
-type RouterPath = [string, string, (props: AccountState) => (props: any) => React.ReactNode, boolean?]
+interface AccountProps {
+  account: AccountState;
+  dispatch: Account.DispatchProps;
+}
+type RouterPath = [string, string, (props: AccountProps) => (props: any) => React.ReactNode, boolean?]
+
 interface OwnProps {
   url: string;
   accountName: keyof ApplicationRootState;
   accountMap: RouterPath[];
   addressMatch?: (address: string) => boolean;
 }
-type Props = OwnProps & AccountState & Sidebar.DispatchProps & Account.DispatchProps;
+
+type Props = OwnProps & AccountProps & Sidebar.DispatchProps;
 
 
 class AccountClass extends React.PureComponent<Props, {}, null> {
@@ -38,7 +44,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 
   // TODO: move to utilities
-  IsValidAddress = (address: string) => address.match(/^[a-g0-9]40$/i) != null
+  IsValidAddress = (address: string) => address.match(/^(0x)?[a-g0-9]{40}$/i) != null
 
   async onFileUpload(jsonObject) {
     const { address } = jsonObject;
@@ -48,16 +54,17 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
       this.IsValidAddress(address);
 
     if (isValid)
-      this.props.setWallet(jsonObject);
+      this.props.dispatch.setWallet(jsonObject);
     else {
       alert("Bad Wallet");
     }
   }
 
   componentDidMount() {
-    const { wallet, accountName, accountMap } = this.props;
+    const { account, dispatch, accountName, accountMap } = this.props;
+    const { wallet } = account;
 
-    if (wallet && wallet.privateKey) {
+    if (wallet) {
       const accountLinks = accountMap.map((item) => {
         return {
           link: {
@@ -69,22 +76,27 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
       this.props.setSubItems(accountName, accountLinks)
     }
     else {
-      this.props.setName(accountName);
+      dispatch.setName(accountName);
       this.props.setSubItems("", []);
     }
   }
 
   render() {
-    const { url, accountName, accountMap, addressMatch, ...account } = this.props;
+    const { accountMap, account, dispatch } = this.props;
     const { wallet, name } = account;
     if (wallet === null) {
       return <UploadWallet onSelect={this.onFileUpload} />;
     }
     else if (!wallet.privateKey) {
-      return <Login wallet={wallet} walletName={name} decrypt={this.props.decrypt} />
+      return <Login wallet={wallet} walletName={name} decrypt={dispatch.decrypt} />
+    }
+
+    const accountArgs = {
+      account,
+      dispatch
     }
     const routes = accountMap.map((item) => {
-      const component = item[2](account);
+      const component = item[2](accountArgs);
       const targetUrl = this.buildLink(item);
       return <Route path={ targetUrl } key={ targetUrl } render = { component } exact = { item[3]} />
     })
@@ -109,13 +121,18 @@ function NamedAccount(props: OwnProps) {
     const accountDispatch = Account.buildMapDispatchToProps(accountName);
     const mapDispatchToProps = function(dispatch) {
       return {
-        ...accountDispatch(dispatch),
+        dispatch: accountDispatch(dispatch),
         ...Sidebar.mapDispatchToProps(dispatch)
       };
     }
+    const mapPropsToState = function (dispatch) {
+      return {
+        account: createAccountSelector(accountName)(dispatch)
+      }
+    }
 
     __AccountMap[accountName] = buildReducer<OwnProps>(accountName)(
-      connect(createAccountSelector(props.accountName), mapDispatchToProps)(AccountClass)
+      connect(mapPropsToState, mapDispatchToProps)(AccountClass)
     );
   }
   return React.createElement(__AccountMap[accountName], props);

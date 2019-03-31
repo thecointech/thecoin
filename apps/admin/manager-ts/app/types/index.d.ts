@@ -34,8 +34,8 @@ export interface ApplicationRootState {
   readonly language: ILanguageProviderProps;
   readonly sidebar: SidebarContentsState;
 
-  readonly coinAccount: AccountState;
-  readonly brokerCadAccount: AccountState;
+  readonly TheCoin: AccountState;
+  readonly BrokerCAD: AccountState;
   readonly fxRates: FxRateState;
   // for testing purposes
   readonly test: any;

@@ -11,7 +11,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const AccountMap: RouterPath[] = [
-  ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
+  ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
@@ -21,7 +21,7 @@ const AccountMap: RouterPath[] = [
 
 class BrokerCAD extends React.PureComponent<Props, {}, null> {
 
-  static AccountName: keyof ApplicationRootState = "brokerCadAccount";
+  static AccountName: keyof ApplicationRootState = "BrokerCAD";
 
   render() {
     const { pathname } = this.props.location;

@@ -115,7 +115,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
-const accountDispatch = Account.buildMapDispatchToProps("coinAccount");
+const accountDispatch = Account.buildMapDispatchToProps("TheCoin");
 const mapDispatchToProps = function(dispatch) {
   return {
     dispatch: accountDispatch(dispatch),
@@ -125,7 +125,7 @@ const mapDispatchToProps = function(dispatch) {
 
 const mapPropsToState = (dispatch) => {
   return {
-    account: createAccountSelector("coinAccount")(dispatch)
+    account: createAccountSelector("TheCoin")(dispatch)
   }
 }
 // function mapDispatchToProps(dispatch) {
@@ -134,7 +134,7 @@ const mapPropsToState = (dispatch) => {
 //     ...Sidebar.mapDispatchToProps(dispatch)
 //   };
 // }
-const ConnectedTheCoinAccount =  buildReducer<OwnProps>("coinAccount")(
+const ConnectedTheCoinAccount =  buildReducer<OwnProps>("TheCoin")(
   connect(mapPropsToState, mapDispatchToProps)(AccountClass)
 );
 export { ConnectedTheCoinAccount as TheCoinAccount }
