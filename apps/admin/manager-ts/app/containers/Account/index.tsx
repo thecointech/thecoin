@@ -2,15 +2,16 @@ import * as Sidebar from 'containers/PageSidebar/actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-
-import { Login } from 'Containers/Login';
-import { ContainerState as AccountState } from 'Containers/Account/types';
+import { Login } from './Login';
+import { UploadWallet } from './UploadWallet';
 import { NotFoundPage } from 'containers/NotFoundPage'
-import { buildReducer } from 'containers/Account/reducer'
-import { createAccountSelector } from 'containers/Account/selector';
-import * as Account from 'containers/Account/actions';
-import { UploadWallet } from 'containers/UploadWallet';
 import { ApplicationRootState } from 'types';
+
+import { ContainerState as AccountState } from './types';
+import { buildReducer } from './reducer'
+import { createAccountSelector } from './selector';
+import * as Account from './actions';
+
 
 interface AccountProps {
   account: AccountState;
