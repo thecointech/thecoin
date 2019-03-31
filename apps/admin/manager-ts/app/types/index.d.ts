@@ -35,6 +35,7 @@ export interface ApplicationRootState {
   readonly sidebar: SidebarContentsState;
 
   readonly coinAccount: AccountState;
+  readonly brokerCadAccount: AccountState;
   readonly fxRates: FxRateState;
   // for testing purposes
   readonly test: any;

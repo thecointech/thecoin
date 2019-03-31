@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Header, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
@@ -12,31 +11,35 @@ import * as AccountActions from 'containers/Account/actions';
 import messages from './messages'
 import { TransactionHistory } from './TransactionHistory';
 
-type DispatchProps = AccountActions.DispatchProps & FxActions.DispatchProps;
-type Props = ContainerState & DispatchProps & FxRate;
+interface  MyProps {
+  dispatch: AccountActions.DispatchProps
+  account: ContainerState
+}
+
+type Props = MyProps & FxActions.DispatchProps & FxRate;
 
 class BalanceClass extends React.PureComponent<Props, {}, null> {
 
   constructor(props)
   {
     super(props)
-
     this.doUpdateBalance = this.doUpdateBalance.bind(this);
   }
 
   doUpdateBalance(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
-    this.props.updateBalance();
+    this.props.dispatch.updateBalance();
     this.props.beginUpdateFxRate();
   }
 
   // On load, update balance
 	componentDidMount() {
-    this.props.updateBalance();
+    this.props.dispatch.updateBalance();
   }
 
   render() {
-    const { balance, history, historyLoading, updateHistory, buy, fxRate } = this.props;
+    const { account, dispatch, buy, fxRate } = this.props;
+    const { balance, history, historyLoading } = account;
     const cadBalance = toHuman(buy * balance * fxRate);
     return (
       <React.Fragment>
@@ -50,18 +53,11 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
           </Header>
         <Button onClick={this.doUpdateBalance}>UPDATE BALANCE</Button>
         <div>
-				  <TransactionHistory transactions={history} transactionLoading={historyLoading} onRangeChange={updateHistory} />
+				  <TransactionHistory transactions={history} transactionLoading={historyLoading} onRangeChange={dispatch.updateHistory} />
         </div>
       </React.Fragment>
 		);
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch) : DispatchProps {
-  return {
-    ...FxActions.mapDispatchToProps(dispatch),
-    ...AccountActions.mapDispatchToProps(dispatch)
-  } as DispatchProps
-}
-
-export const Balance = connect(selectFxRate, mapDispatchToProps)(BalanceClass);
+export const Balance = connect(selectFxRate, FxActions.mapDispatchToProps)(BalanceClass);

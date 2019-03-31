@@ -14,7 +14,7 @@ const initialState: ContainerState = {
     {
       link: {
         name: "BrokerCAD",
-        to: "/brokercad"
+        to: "/brokerCadAccount"
       }
     }
   ],

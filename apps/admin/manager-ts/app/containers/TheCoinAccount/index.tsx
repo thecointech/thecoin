@@ -18,12 +18,17 @@ import { Mint } from './Mint';
 interface OwnProps {
   location: Location;
 }
-type Props = OwnProps & AccountState & Sidebar.DispatchProps & Account.DispatchProps;
 
-type RouterPath = [string, string, (props: AccountState) => (props: any) => React.ReactNode, boolean?]
+interface AccountProps {
+  account: AccountState;
+  dispatch: Account.DispatchProps;
+}
+type Props = OwnProps & AccountProps & Sidebar.DispatchProps;
+
+type RouterPath = [string, string, (props: AccountProps) => (props: any) => React.ReactNode, boolean?]
 const AccountMap: RouterPath[] = [
-  ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
-  ["Minting",       "/mint",    (account) => ((props) => <Mint {...props} {...account} /> ), true]
+  ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
+  ["Minting",       "/mint",    (routerProps) => ((props) => <Mint {...props} {...routerProps.account} /> ), true]
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
@@ -56,14 +61,14 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   async onFileUpload(jsonObject) {
     const address = await this.readOwner();
     if (jsonObject.address == address)
-      this.props.setWallet(jsonObject);
+      this.props.dispatch.setWallet(jsonObject);
     else {
       alert("Bad Wallet");
     }
   }
 
   componentDidMount() {
-    const { wallet } = this.props;
+    const { wallet } = this.props.account;
 
     if (wallet && wallet.privateKey) {
       const accountLinks = AccountMap.map((item) => {
@@ -77,22 +82,26 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
       this.props.setSubItems(AccountClass.AccountName, accountLinks)
     }
     else {
-      this.props.setName(AccountClass.AccountName);
+      this.props.dispatch.setName(AccountClass.AccountName);
       this.props.setSubItems("", []);
     }
   }
 
   render() {
-    const { location, ...account } = this.props;
+    const { account, dispatch } = this.props;
     const { wallet, name } = account;
     if (wallet === null) {
       return <UploadWallet onSelect={this.onFileUpload} />;
     }
     else if (!wallet.privateKey) {
-      return <Login wallet={wallet} walletName={name} decrypt={this.props.decrypt} />
+      return <Login wallet={wallet} walletName={name} decrypt={this.props.dispatch.decrypt} />
+    }
+    const accountArgs = {
+      account,
+      dispatch
     }
     const routes = AccountMap.map((item) => {
-      const component = item[2](account);
+      const component = item[2](accountArgs);
       const targetUrl = this.buildLink(item);
       return <Route path={ targetUrl } key={ targetUrl } render = { component } exact = { item[3]} />
     })
@@ -106,13 +115,26 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+const accountDispatch = Account.buildMapDispatchToProps("coinAccount");
+const mapDispatchToProps = function(dispatch) {
   return {
-    ...Account.mapDispatchToProps(dispatch),
+    dispatch: accountDispatch(dispatch),
     ...Sidebar.mapDispatchToProps(dispatch)
   };
 }
+
+const mapPropsToState = (dispatch) => {
+  return {
+    account: createAccountSelector("coinAccount")(dispatch)
+  }
+}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     ...Account.mapDispatchToProps(dispatch),
+//     ...Sidebar.mapDispatchToProps(dispatch)
+//   };
+// }
 const ConnectedTheCoinAccount =  buildReducer<OwnProps>("coinAccount")(
-  connect(createAccountSelector("coinAccount"), mapDispatchToProps)(AccountClass)
+  connect(mapPropsToState, mapDispatchToProps)(AccountClass)
 );
 export { ConnectedTheCoinAccount as TheCoinAccount }
