@@ -43,6 +43,13 @@ class AccountReducer extends ImmerReducer<ContainerState>
     Object.assign(this.draftState, newState);
   }
 
+  sendValues(command, values) {
+    return put({
+      type: command.type,
+      payload: values
+    });
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
   *updateBalance() {
@@ -54,9 +61,9 @@ class AccountReducer extends ImmerReducer<ContainerState>
       const balance = yield call(contract.balanceOf, wallet.address);
       yield put({
         type: AccountReducer.actions.updateWithValues.type,
-        payload: [{
-          balance: 5000000 + balance.toNumber()
-        }],
+        payload: {
+          balance: balance.toNumber()
+        },
       });
       
     } catch (err) {
@@ -86,7 +93,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
   // Load account history and merge with local
   static mergeTransactions(history: Transaction[], moreHistory: Transaction[])
   {
-    const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.date != tx.date))
+    const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.date == tx.date))
     if (uniqueItems.length) {
       history = history.concat(uniqueItems);
       history.sort((tx1, tx2) => tx1.date.valueOf() - tx2.date.valueOf())  
@@ -99,7 +106,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     const block = await contract.provider.getBlock(ethersLog.blockNumber!);
     return {
       date: new Date(block.timestamp * 1000),
-      change: to ? res.values[2].toNumber() : -res.values[2].toNumber(),
+      change: to ? -res.values[2].toNumber() : res.values[2].toNumber(),
       logEntry: `Transfer: ${to ? res.values[1] : res.values[0]}`
     }
   }
@@ -146,9 +153,9 @@ class AccountReducer extends ImmerReducer<ContainerState>
     
     yield put({
       type: AccountReducer.actions.updateWithValues.type,
-      payload: [{
+      payload: {
         historyLoading: true
-      }]
+      }
     })
 
     // Lets not push ahead too quickly with this saga,
@@ -162,17 +169,26 @@ class AccountReducer extends ImmerReducer<ContainerState>
     const newHistory = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory)
     const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 
-    yield put({
-      type: AccountReducer.actions.updateWithValues.type,
-      payload: [{
-        history: newHistory,
-        historyLoading: false,
-        historyStart: new Date(0),
-        historyStartBlock: 0,
-        historyEnd: new Date(),
-        historyEndBlock: currentBlock
-      }]
-    });  
+    yield this.sendValues(AccountReducer.actions.updateWithValues, {
+      history: newHistory,
+      historyLoading: false,
+      historyStart: new Date(0),
+      historyStartBlock: 0,
+      historyEnd: new Date(),
+      historyEndBlock: currentBlock
+    });
+
+    // yield put({
+    //   type: AccountReducer.actions.updateWithValues.type,
+    //   payload: {
+    //     history: newHistory,
+    //     historyLoading: false,
+    //     historyStart: new Date(0),
+    //     historyStartBlock: 0,
+    //     historyEnd: new Date(),
+    //     historyEndBlock: currentBlock
+    //   }
+    // });  
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -224,6 +240,8 @@ class AccountReducer extends ImmerReducer<ContainerState>
         callback(-1);
     }
   }
+
+
 
   static actions: any; //ActionCreators<typeof AccountReducer>;
 }

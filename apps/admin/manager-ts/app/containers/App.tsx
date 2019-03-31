@@ -2,7 +2,8 @@ import * as React from 'react';
 import { PageSidebar } from './PageSidebar';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
-
+import { Container } from 'semantic-ui-react';
+import { buildReducer } from 'containers/FxRate/reducer'
 
 class App extends React.Component {
 
@@ -10,12 +11,14 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <PageSidebar visible={true}>
-          <Routes />
+          <Container>
+            <Routes />
+          </Container>
         </PageSidebar>
       </React.Fragment>
     );
   }
 }
 
-const HotApp = hot(App);
+const HotApp = buildReducer<{}>()(hot(App));
 export { HotApp as App }

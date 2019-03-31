@@ -7,8 +7,14 @@ const initialState: ContainerState = {
   items: [
     {
       link: {
-        name: "Testing",
-        to: "Some Location"
+        name: "TheCoin",
+        to: "/thecoin"
+      }
+    },
+    {
+      link: {
+        name: "BrokerCAD",
+        to: "/brokercad"
       }
     }
   ],
@@ -47,4 +53,4 @@ function buildReducer<T>() {
   });
 }
 
-export {buildReducer, SidebarItemsReducer, initialState}
+export { buildReducer, SidebarItemsReducer, initialState }

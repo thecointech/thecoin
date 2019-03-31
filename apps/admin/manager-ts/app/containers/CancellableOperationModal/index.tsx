@@ -5,9 +5,9 @@ import { FormattedMessage } from "react-intl";
 interface OwnProps {
   isOpen: boolean;
   header: FormattedMessage.MessageDescriptor;
-  progressPercent: number;
+  progressPercent?: number;
   progressMessage: FormattedMessage.MessageDescriptor;
-  cancelCallback: () => void;
+  cancelCallback?: () => void;
 }
 
 type Props = OwnProps;
@@ -26,7 +26,16 @@ export class CancellableOperationModal extends React.PureComponent<Props, {}, nu
   }
 
   render() {
-    const {isOpen, header, progressMessage, progressPercent } = this.props;
+    const {isOpen, header, progressMessage, progressPercent, cancelCallback } = this.props;
+
+    const actions = cancelCallback ? (
+      <Modal.Actions>
+        <Button color="red" onClick={this.cancelOperation} inverted>
+          <Icon name="cancel" /> Cancel
+        </Button>
+      </Modal.Actions>
+    ) : undefined;
+
     return (
       <Modal open={isOpen} basic size="small">
       <Modal.Header>
@@ -42,11 +51,7 @@ export class CancellableOperationModal extends React.PureComponent<Props, {}, nu
           </h3>
         </Loader>
       </Modal.Content>
-      <Modal.Actions>
-        <Button color="red" onClick={this.cancelOperation} inverted>
-          <Icon name="cancel" /> Cancel
-        </Button>
-      </Modal.Actions>
+      {actions}
     </Modal>
     );
   }

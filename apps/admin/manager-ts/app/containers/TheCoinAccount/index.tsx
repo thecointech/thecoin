@@ -2,30 +2,28 @@ import * as Sidebar from 'containers/PageSidebar/actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-//import { ApplicationRootState } from 'types';
-//import { selectActiveAccount } from '../AccountSelector/selectors';
-//import { Balance } from './Balance';
+import { TheContract } from '@the-coin/utilities';
+import { Location } from 'history';
+
 import { Login } from 'Containers/Login';
-//import { Purchase } from './Purchase';
-//import { Redeem } from './Redeem';
-//import { Transfer } from './Transfer';
-//import { Settings } from './Settings';
+import { Balance } from 'Containers/Balance';
 import { ContainerState as AccountState } from 'Containers/Account/types';
 import { NotFoundPage } from 'containers/NotFoundPage'
 import { buildReducer } from 'containers/Account/reducer'
 import { createAccountSelector } from 'containers/Account/selector';
 import * as Account from 'containers/Account/actions';
 import { UploadWallet } from 'containers/UploadWallet';
+import { Mint } from './Mint';
 
-type OwnProps = {
-  url: string
+interface OwnProps {
+  location: Location;
 }
-
 type Props = OwnProps & AccountState & Sidebar.DispatchProps & Account.DispatchProps;
 
 type RouterPath = [string, string, (props: AccountState) => (props: any) => React.ReactNode, boolean?]
 const AccountMap: RouterPath[] = [
-  // ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
+  ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
+  ["Minting",       "/mint",    (account) => ((props) => <Mint {...props} {...account} /> ), true]
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
@@ -42,15 +40,22 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     this.onFileUpload = this.onFileUpload.bind(this);
   }
 
-  buildLink(url: string, item: RouterPath) {
+  buildLink(item: RouterPath) {
+    const url = this.props.location.pathname;
     return url.endsWith('/') ?
       `${url}${item[1]}` :
       `${url}/${item[1]}`
 
   }
+  
+  async readOwner() {
+    const roles = await TheContract.GetContract().getRoles();
+    return roles[2];
+  }
 
-  onFileUpload(jsonObject) {
-    if (jsonObject.address && jsonObject.Crypto)
+  async onFileUpload(jsonObject) {
+    const address = await this.readOwner();
+    if (jsonObject.address == address)
       this.props.setWallet(jsonObject);
     else {
       alert("Bad Wallet");
@@ -58,27 +63,27 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 
   componentDidMount() {
-    this.props.setName(AccountClass.AccountName);
-    // const { url, name, wallet } = this.props;
+    const { wallet } = this.props;
 
-    // if (wallet.privateKey) {
-    //   const accountLinks = AccountMap.map((item) => {
-    //     return {
-    //       link: {
-    //         name: item[0],
-    //         to: this.buildLink(url, item)
-    //       }
-    //     }
-    //   })
-    //   this.props.setSubItems(name, accountLinks)
-    // }
-    // else {
-    //   this.props.setSubItems("", []);
-    // }
+    if (wallet && wallet.privateKey) {
+      const accountLinks = AccountMap.map((item) => {
+        return {
+          link: {
+            name: item[0],
+            to: this.buildLink(item)
+          }
+        }
+      })
+      this.props.setSubItems(AccountClass.AccountName, accountLinks)
+    }
+    else {
+      this.props.setName(AccountClass.AccountName);
+      this.props.setSubItems("", []);
+    }
   }
 
   render() {
-    const { url, ...account } = this.props;
+    const { location, ...account } = this.props;
     const { wallet, name } = account;
     if (wallet === null) {
       return <UploadWallet onSelect={this.onFileUpload} />;
@@ -88,8 +93,8 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     }
     const routes = AccountMap.map((item) => {
       const component = item[2](account);
-      const targetUrl = this.buildLink(url, item);
-      return <Route path={ targetUrl } render = { component } exact = { item[3]} />
+      const targetUrl = this.buildLink(item);
+      return <Route path={ targetUrl } key={ targetUrl } render = { component } exact = { item[3]} />
     })
 
     return (
@@ -101,7 +106,13 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    ...Account.mapDispatchToProps(dispatch),
+    ...Sidebar.mapDispatchToProps(dispatch)
+  };
+}
 const ConnectedTheCoinAccount =  buildReducer<OwnProps>("coinAccount")(
-  connect(createAccountSelector("coinAccount"), Account.mapDispatchToProps)(AccountClass)
+  connect(createAccountSelector("coinAccount"), mapDispatchToProps)(AccountClass)
 );
 export { ConnectedTheCoinAccount as TheCoinAccount }

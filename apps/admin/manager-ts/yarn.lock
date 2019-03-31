@@ -1317,6 +1317,13 @@
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.6.tgz#6bd07604ab152a9eb30b2c480490bb2c4388c25a"
   integrity sha1-a9B2BKsVKp6zCyxIBJC7LEOIwlo=
 
+"@the-coin/pricing@^0.1.1":
+  version "0.1.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/pricing/-/pricing-0.1.1.tgz#f454938ee07b7ab51747a9d6624ad7543e7412bf"
+  integrity sha1-9FSTjuB7erUXR6nWYkrXVD50Er8=
+  dependencies:
+    portable-fetch "^3.0.0"
+
 "@the-coin/types@^0.1.3":
   version "0.1.3"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/types/-/types-0.1.3.tgz#0aff399517692764234cc3976a0b5012799cf17e"
@@ -1402,6 +1409,14 @@
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.8.tgz#8ae4e0ea205fe95c3901a5a1df7f66495e3a56ce"
   integrity sha512-3AQoUxQcQtLHsK25wtTWIoIpgYjH3vSDroZOUr7PpCHw/jLY1RB9z9E8dBT/OSmwStVgkRNvdh+ZHNiomRieaw==
+
+"@types/react-dates@^17.1.5":
+  version "17.1.5"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/react-dates/-/react-dates-17.1.5.tgz#3b293c7334372f15f04beaac02df0041316be2fc"
+  integrity sha1-Oyk8czQ3LxXwS+qsAt8AQTFr4vw=
+  dependencies:
+    "@types/react" "*"
+    moment ">=2.17.1"
 
 "@types/react-dom@^16.0.11":
   version "16.0.11"
@@ -1701,6 +1716,22 @@ aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
   integrity sha1-4h3xCtbCBTKVvLuNq0Cwnb6ofk0=
+
+airbnb-prop-types@^2.10.0, airbnb-prop-types@^2.12.0, airbnb-prop-types@^2.8.1:
+  version "2.12.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/airbnb-prop-types/-/airbnb-prop-types-2.12.0.tgz#67b30a5ba4dda9b9e70a480f85150a2ccd7fa132"
+  integrity sha1-Z7MKW6TdqbnnCkgPhRUKLM1/oTI=
+  dependencies:
+    array.prototype.find "^2.0.4"
+    function.prototype.name "^1.1.0"
+    has "^1.0.3"
+    is-regex "^1.0.4"
+    object-is "^1.0.1"
+    object.assign "^4.1.0"
+    object.entries "^1.1.0"
+    prop-types "^15.6.2"
+    prop-types-exact "^1.2.0"
+    react-is "^16.8.1"
 
 ajv-errors@^1.0.0:
   version "1.0.0"
@@ -2021,6 +2052,14 @@ array-unique@^0.3.2:
   version "0.3.2"
   resolved "https://registry.npmjs.org/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
 
+array.prototype.find@^2.0.4:
+  version "2.0.4"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/array.prototype.find/-/array.prototype.find-2.0.4.tgz#556a5c5362c08648323ddaeb9de9d14bc1864c90"
+  integrity sha1-VWpcU2LAhkgyPdrrnenRS8GGTJA=
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.7.0"
+
 array.prototype.flat@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/array.prototype.flat/-/array.prototype.flat-1.2.1.tgz#812db8f02cad24d3fab65dd67eabe3b8903494a4"
@@ -2032,6 +2071,11 @@ array.prototype.flat@^1.2.1:
 arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
+
+asap@~2.0.3:
+  version "2.0.6"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
+  integrity sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=
 
 asn1.js@^4.0.0:
   version "4.10.1"
@@ -2999,6 +3043,11 @@ braces@^2.3.0, braces@^2.3.1:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
+brcast@^2.0.2:
+  version "2.0.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/brcast/-/brcast-2.0.2.tgz#2db16de44140e418dc37fab10beec0369e78dcef"
+  integrity sha1-LbFt5EFA5BjcN/qxC+7ANp543O8=
+
 brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.npmjs.org/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
@@ -3763,6 +3812,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
+"consolidated-events@^1.1.1 || ^2.0.0":
+  version "2.0.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/consolidated-events/-/consolidated-events-2.0.2.tgz#da8d8f8c2b232831413d9e190dc11669c79f4a91"
+  integrity sha1-2o2PjCsjKDFBPZ4ZDcEWacefSpE=
+
 constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
@@ -4297,6 +4351,11 @@ deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.npmjs.org/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
 
+deepmerge@^1.5.1, deepmerge@^1.5.2:
+  version "1.5.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/deepmerge/-/deepmerge-1.5.2.tgz#10499d868844cdad4fee0842df8c7f6f0c95a753"
+  integrity sha1-EEmdhohEza1P7ghC34x/bwyVp1M=
+
 deepmerge@^2.0.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
@@ -4441,6 +4500,11 @@ dir-glob@^2.2.1:
   dependencies:
     path-type "^3.0.0"
 
+direction@^1.0.1:
+  version "1.0.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/direction/-/direction-1.0.2.tgz#ac49c4699edf1283fd82f34e701ca668ea4883b9"
+  integrity sha1-rEnEaZ7fEoP9gvNOcBymaOpIg7k=
+
 discontinuous-range@1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/discontinuous-range/-/discontinuous-range-1.0.0.tgz#e38331f0844bba49b9a9cb71c771585aab1bc65a"
@@ -4495,6 +4559,13 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
+
+document.contains@^1.0.0:
+  version "1.0.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/document.contains/-/document.contains-1.0.1.tgz#a18339ec8e74f407fa34709b65f45605b38a3e1f"
+  integrity sha512-A1KqlZq1w605bwiiLqVZehWE9S9UYlUXPoduFWi64pNVNQ9vy6wwH/7BS+iEfSlF1YyZgcg5PZw5HqDi7FCrUw==
+  dependencies:
+    define-properties "^1.1.3"
 
 dom-serializer@0, dom-serializer@~0.1.0:
   version "0.1.0"
@@ -4790,6 +4861,13 @@ emojis-list@^2.0.0:
 encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
+
+encoding@^0.1.11:
+  version "0.1.12"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
+  integrity sha1-U4tm8+5izRq1HsMjgp0flIDHS+s=
+  dependencies:
+    iconv-lite "~0.4.13"
 
 end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   version "1.4.1"
@@ -5523,6 +5601,19 @@ fbjs-scripts@^1.0.1:
     semver "^5.1.0"
     through2 "^2.0.0"
 
+fbjs@^0.8.4:
+  version "0.8.17"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
+  integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
+  dependencies:
+    core-js "^1.0.0"
+    isomorphic-fetch "^2.1.1"
+    loose-envify "^1.0.0"
+    object-assign "^4.1.0"
+    promise "^7.1.1"
+    setimmediate "^1.0.5"
+    ua-parser-js "^0.7.18"
+
 fd-slicer@~1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.0.1.tgz#8b5bcbd9ec327c5041bf9ab023fd6750f1177e65"
@@ -5966,6 +6057,14 @@ glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, gl
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
+global-cache@^1.2.1:
+  version "1.2.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/global-cache/-/global-cache-1.2.1.tgz#39ca020d3dd7b3f0934c52b75363f8d53312c16d"
+  integrity sha1-OcoCDT3Xs/CTTFK3U2P41TMSwW0=
+  dependencies:
+    define-properties "^1.1.2"
+    is-symbol "^1.0.1"
+
 global-dirs@^0.1.0:
   version "0.1.1"
   resolved "https://registry.npmjs.org/global-dirs/-/global-dirs-0.1.1.tgz#b319c0dd4607f353f3be9cca4c72fc148c49f445"
@@ -6284,7 +6383,7 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.5:
+hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.5:
   version "2.5.5"
   resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
 
@@ -6463,7 +6562,7 @@ iconv-lite@0.4.23:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4:
+iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
   resolved "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   dependencies:
@@ -7035,7 +7134,7 @@ is-retry-allowed@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/is-retry-allowed/-/is-retry-allowed-1.1.0.tgz#11a060568b67339444033d0125a61a20d564fb34"
 
-is-stream@^1.0.0, is-stream@^1.1.0:
+is-stream@^1.0.0, is-stream@^1.0.1, is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
 
@@ -7057,11 +7156,16 @@ is-svg@^3.0.0:
   dependencies:
     html-comment-regex "^1.1.0"
 
-is-symbol@^1.0.2:
+is-symbol@^1.0.1, is-symbol@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/is-symbol/-/is-symbol-1.0.2.tgz#a055f6ae57192caee329e7a860118b497a950f38"
   dependencies:
     has-symbols "^1.0.0"
+
+is-touch-device@^1.0.1:
+  version "1.0.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/is-touch-device/-/is-touch-device-1.0.1.tgz#9a2fd59f689e9a9bf6ae9a86924c4ba805a42eab"
+  integrity sha1-mi/Vn2iempv2rpqGkkxLqAWkLqs=
 
 is-typedarray@~1.0.0:
   version "1.0.0"
@@ -7119,6 +7223,14 @@ isobject@^2.0.0:
 isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
+
+isomorphic-fetch@^2.1.1:
+  version "2.2.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
+  integrity sha1-YRrhrPFPXoH3KVB0coGf6XM1WKk=
+  dependencies:
+    node-fetch "^1.0.1"
+    whatwg-fetch ">=0.10.0"
 
 isstream@~0.1.2:
   version "0.1.2"
@@ -7959,7 +8071,7 @@ lodash@4.17.10:
   version "4.17.10"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
-"lodash@4.6.1 || ^4.16.1", lodash@^4.0.0, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.10:
+"lodash@4.6.1 || ^4.16.1", lodash@^4.0.0, lodash@^4.1.1, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.10:
   version "4.17.11"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
@@ -8401,6 +8513,11 @@ moment-duration-format-commonjs@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/moment-duration-format-commonjs/-/moment-duration-format-commonjs-1.0.0.tgz#dc5de612e6d6ff41f774d03772a139a363563bc3"
 
+moment@>=1.6.0, moment@>=2.17.1, moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
+
 moment@^2.10.3, moment@^2.14.1:
   version "2.22.2"
   resolved "https://registry.npmjs.org/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
@@ -8519,6 +8636,14 @@ nise@^1.4.10:
     just-extend "^4.0.2"
     lolex "^2.3.2"
     path-to-regexp "^1.7.0"
+
+node-fetch@^1.0.1:
+  version "1.7.3"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/node-fetch/-/node-fetch-1.7.3.tgz#980f6f72d85211a5347c6b2bc18c5b84c3eb47ef"
+  integrity sha1-mA9vcthSEaU0fGsrwYxbhMPrR+8=
+  dependencies:
+    encoding "^0.1.11"
+    is-stream "^1.0.1"
 
 node-forge@0.7.5:
   version "0.7.5"
@@ -8842,6 +8967,16 @@ object.entries@^1.0.4:
     es-abstract "^1.6.1"
     function-bind "^1.1.0"
     has "^1.0.1"
+
+object.entries@^1.1.0:
+  version "1.1.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/object.entries/-/object.entries-1.1.0.tgz#2024fc6d6ba246aee38bdb0ffd5cfbcf371b7519"
+  integrity sha1-ICT8bWuiRq7ji9sP/Vz7zzcbdRk=
+  dependencies:
+    define-properties "^1.1.3"
+    es-abstract "^1.12.0"
+    function-bind "^1.1.1"
+    has "^1.0.3"
 
 object.fromentries@^2.0.0:
   version "2.0.0"
@@ -9361,6 +9496,14 @@ pngjs@^3.3.1:
   version "3.3.3"
   resolved "https://registry.npmjs.org/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
 
+portable-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/portable-fetch/-/portable-fetch-3.0.0.tgz#3cbf4aa6dbc5a5734b41c0419c9273313bfd9ad8"
+  integrity sha1-PL9KptvFpXNLQcBBnJJzMTv9mtg=
+  dependencies:
+    node-fetch "^1.0.1"
+    whatwg-fetch ">=0.10.0"
+
 portfinder@^1.0.9:
   version "1.0.19"
   resolved "https://registry.npmjs.org/portfinder/-/portfinder-1.0.19.tgz#07e87914a55242dcda5b833d42f018d6875b595f"
@@ -9804,6 +9947,13 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
+promise@^7.1.1:
+  version "7.3.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
+  integrity sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==
+  dependencies:
+    asap "~2.0.3"
+
 promisify-event@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/promisify-event/-/promisify-event-1.0.0.tgz#bd7523ea06b70162f370979016b53a686c60e90f"
@@ -9817,21 +9967,30 @@ prompts@^0.1.9:
     kleur "^2.0.1"
     sisteransi "^0.1.1"
 
+prop-types-exact@^1.2.0:
+  version "1.2.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/prop-types-exact/-/prop-types-exact-1.2.0.tgz#825d6be46094663848237e3925a98c6e944e9869"
+  integrity sha1-gl1r5GCUZjhII345JamMbpROmGk=
+  dependencies:
+    has "^1.0.3"
+    object.assign "^4.1.0"
+    reflect.ownkeys "^0.2.0"
+
+prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.7.2:
+  version "15.7.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.8.1"
+
 prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
-
-prop-types@^15.7.2:
-  version "15.7.2"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
-  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
-  dependencies:
-    loose-envify "^1.4.0"
-    object-assign "^4.1.1"
-    react-is "^16.8.1"
 
 proxy-addr@~2.0.4:
   version "2.0.4"
@@ -9999,6 +10158,34 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.1, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-addons-shallow-compare@^15.6.2:
+  version "15.6.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz#198a00b91fc37623db64a28fd17b596ba362702f"
+  integrity sha1-GYoAuR/DdiPbZKKP0XtZa6NicC8=
+  dependencies:
+    fbjs "^0.8.4"
+    object-assign "^4.1.0"
+
+react-dates@^20.1.0:
+  version "20.1.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-dates/-/react-dates-20.1.0.tgz#bc2bb04ec8af4ee124c588c1494f82e711f2af53"
+  integrity sha512-GHUb7UHzsomYLUWxafVgMBnwHPzkP6dcPk0u84ODf1USiU819eLqFu7HMRCFQsvSBSSl41dTRT8dIUs+zC4Q6Q==
+  dependencies:
+    airbnb-prop-types "^2.10.0"
+    consolidated-events "^1.1.1 || ^2.0.0"
+    is-touch-device "^1.0.1"
+    lodash "^4.1.1"
+    object.assign "^4.1.0"
+    object.values "^1.0.4"
+    prop-types "^15.6.1"
+    react-addons-shallow-compare "^15.6.2"
+    react-moment-proptypes "^1.6.0"
+    react-outside-click-handler "^1.2.0"
+    react-portal "^4.1.5"
+    react-with-direction "^1.3.0"
+    react-with-styles "^3.2.0"
+    react-with-styles-interface-css "^4.0.2"
+
 react-dom@^16.7.0:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
@@ -10047,6 +10234,31 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.2, react-is@^16.8.4, react-is
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+
+react-moment-proptypes@^1.6.0:
+  version "1.6.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-moment-proptypes/-/react-moment-proptypes-1.6.0.tgz#8ec266ee392a08ba3412d2df2eebf833ab1046df"
+  integrity sha1-jsJm7jkqCLo0EtLfLuv4M6sQRt8=
+  dependencies:
+    moment ">=1.6.0"
+
+react-outside-click-handler@^1.2.0:
+  version "1.2.3"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-outside-click-handler/-/react-outside-click-handler-1.2.3.tgz#911a8b91ca947882156d2483450d8638324f3399"
+  integrity sha512-4orkx59ais0mM/j1Ekc5ewyRu5xNLX4a6pMs7RT8U7JkbPOlRsucE+190kXzYUUHsGfZvyAmsdQkL7lpqzMGBg==
+  dependencies:
+    airbnb-prop-types "^2.12.0"
+    consolidated-events "^1.1.1 || ^2.0.0"
+    document.contains "^1.0.0"
+    object.values "^1.1.0"
+    prop-types "^15.7.2"
+
+react-portal@^4.1.5:
+  version "4.2.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-portal/-/react-portal-4.2.0.tgz#5400831cdb0ae64dccb8128121cf076089ab1afd"
+  integrity sha1-VACDHNsK5k3MuBKBIc8HYImrGv0=
+  dependencies:
+    prop-types "^15.5.8"
 
 react-redux@^6.0.1:
   version "6.0.1"
@@ -10101,6 +10313,38 @@ react-test-renderer@^16.7.0:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.13.6"
+
+react-with-direction@^1.3.0:
+  version "1.3.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-with-direction/-/react-with-direction-1.3.0.tgz#9885f5941aa986be753db95a41e8f3d8f8de97ff"
+  integrity sha1-mIX1lBqphr51PblaQejz2Pjel/8=
+  dependencies:
+    airbnb-prop-types "^2.8.1"
+    brcast "^2.0.2"
+    deepmerge "^1.5.1"
+    direction "^1.0.1"
+    hoist-non-react-statics "^2.3.1"
+    object.assign "^4.1.0"
+    object.values "^1.0.4"
+    prop-types "^15.6.0"
+
+react-with-styles-interface-css@^4.0.2:
+  version "4.0.3"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-with-styles-interface-css/-/react-with-styles-interface-css-4.0.3.tgz#c4a61277b2b8e4126b2cd25eca3ac4097bd2af09"
+  integrity sha1-xKYSd7K45BJrLNJeyjrECXvSrwk=
+  dependencies:
+    array.prototype.flat "^1.2.1"
+    global-cache "^1.2.1"
+
+react-with-styles@^3.2.0:
+  version "3.2.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/react-with-styles/-/react-with-styles-3.2.1.tgz#57a313ae3dcd0b347193a5538d5061d3bb96bab4"
+  integrity sha1-V6MTrj3NCzRxk6VTjVBh07uWurQ=
+  dependencies:
+    deepmerge "^1.5.2"
+    hoist-non-react-statics "^2.5.0"
+    prop-types "^15.6.1"
+    react-with-direction "^1.3.0"
 
 react@^16.7.0:
   version "16.8.6"
@@ -10281,6 +10525,11 @@ redux@^3.6.0:
     lodash-es "^4.2.1"
     loose-envify "^1.1.0"
     symbol-observable "^1.0.3"
+
+reflect.ownkeys@^0.2.0:
+  version "0.2.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/reflect.ownkeys/-/reflect.ownkeys-0.2.0.tgz#749aceec7f3fdf8b63f927a04809e90c5c0b3460"
+  integrity sha1-dJrO7H8/34tj+SegSAnpDFwLNGA=
 
 regenerate-unicode-properties@^7.0.0:
   version "7.0.0"
@@ -10941,7 +11190,7 @@ setimmediate@1.0.4:
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.4.tgz#20e81de622d4a02588ce0c8da8973cbcf1d3138f"
   integrity sha1-IOgd5iLUoCWIzgyNqJc8vPHTE48=
 
-setimmediate@^1.0.4:
+setimmediate@^1.0.4, setimmediate@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
 
@@ -12231,6 +12480,11 @@ typescript@^3.4.1:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/typescript/-/typescript-3.4.1.tgz#b6691be11a881ffa9a05765a205cb7383f3b63c6"
   integrity sha1-tmkb4RqIH/qaBXZaIFy3OD87Y8Y=
 
+ua-parser-js@^0.7.18:
+  version "0.7.19"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
+  integrity sha1-lBUb5MCn+x0AGvcCL9rKRkJlnks=
+
 uglify-js@^3.1.4:
   version "3.4.9"
   resolved "https://registry.npmjs.org/uglify-js/-/uglify-js-3.4.9.tgz#af02f180c1207d76432e473ed24a28f4a782bae3"
@@ -12785,6 +13039,11 @@ whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
   resolved "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-1.0.5.tgz#5abacf777c32166a51d085d6b4f3e7d27113ddb0"
   dependencies:
     iconv-lite "0.4.24"
+
+whatwg-fetch@>=0.10.0:
+  version "3.0.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
+  integrity sha1-/IBORYzEYACbGiuWa8iBfSV4rvs=
 
 whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0:
   version "2.2.0"

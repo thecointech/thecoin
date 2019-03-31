@@ -1,12 +1,9 @@
 import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
-// import { ContainerState as ContentHeightState } from 'components/ContentHeightMeasure/types';
 import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/types';
-// import { ContainerState as WalletsState } from 'containers/Accounts/types';
-// import { ContainerState as AccountsState } from 'containers/Accounts/AccountSelector/types';
 import { ContainerState as AccountState } from 'containers/Account/types';
-// import { ContainerState as FxRateState } from 'containers/FxRate/types';
+import { ContainerState as FxRateState } from 'containers/FxRate/types';
 
 import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
 
@@ -35,14 +32,10 @@ export interface InjectSagaParams {
 export interface ApplicationRootState {
   readonly router: RouterState;
   readonly language: ILanguageProviderProps;
-  // readonly content: ContentHeightState;
   readonly sidebar: SidebarContentsState;
 
   readonly coinAccount: AccountState;
-  // readonly wallets: WalletsState;
-  // readonly accounts: AccountsState;
-  // readonly activeAccount: AccountState;
-  // readonly fxRates: FxRateState;
+  readonly fxRates: FxRateState;
   // for testing purposes
   readonly test: any;
 }

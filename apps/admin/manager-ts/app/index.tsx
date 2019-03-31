@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import 'react-dates/initialize';
 
 import { App } from './containers/App';
 import { configureStore } from './store/configureStore';
