@@ -27,7 +27,6 @@ interface OwnProps {
 
 type Props = OwnProps & AccountProps & Sidebar.DispatchProps;
 
-
 class AccountClass extends React.PureComponent<Props, {}, null> {
 
   constructor(props) {
@@ -43,7 +42,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
 
   }
 
-  // TODO: move to utilities
+  // TODO: remove once utilities updated
   IsValidAddress = (address: string) => address.match(/^(0x)?[a-g0-9]{40}$/i) != null
 
   async onFileUpload(jsonObject) {
