@@ -264,10 +264,12 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.6.3",
+    "@google-cloud/datastore": "^3.1.2",
     "@the-coin/pricing": "^0.1.1",
     "@the-coin/utilities": "^0.1.18",
     "@types/classnames": "^2.2.7",
     "@types/react-intl": "^2.3.17",
+    "base32": "^0.0.6",
     "css-modules-typescript-loader": "^1.1.1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",

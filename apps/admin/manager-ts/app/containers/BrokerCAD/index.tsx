@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Account, RouterPath } from 'containers/Account';
-import { Location } from 'history';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { Balance } from 'Containers/Balance';
 import { ApplicationRootState } from 'types';
+import { VerifyAccount } from './VerifyAccount';
 
 interface OwnProps {
-  location: Location;
 }
-type Props = OwnProps;
+type Props = OwnProps & RouteComponentProps;
 
 const AccountMap: RouterPath[] = [
   ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
+  ["Verify",       "verify",    (routerProps) => ((props) => <VerifyAccount {...props} wallet={routerProps.account.wallet} /> )],
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
@@ -24,8 +25,8 @@ class BrokerCAD extends React.PureComponent<Props, {}, null> {
   static AccountName: keyof ApplicationRootState = "BrokerCAD";
 
   render() {
-    const { pathname } = this.props.location;
-    return <Account accountName={BrokerCAD.AccountName} accountMap={AccountMap} url={pathname} />
+    const { url } = this.props.match;
+    return <Account accountName={BrokerCAD.AccountName} accountMap={AccountMap} url={url} />
   }
 }
 
