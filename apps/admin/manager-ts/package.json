@@ -260,7 +260,8 @@
     "webpack-cli": "^3.2.0",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1",
-    "yarn": "^1.12.3"
+    "yarn": "^1.12.3",
+    "css-modules-typescript-loader": "^1.1.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.6.3",
@@ -270,7 +271,6 @@
     "@types/classnames": "^2.2.7",
     "@types/react-intl": "^2.3.17",
     "base32": "^0.0.6",
-    "css-modules-typescript-loader": "^1.1.1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
