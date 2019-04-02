@@ -51,7 +51,7 @@ class FxRateReducer extends ImmerReducer<ContainerState>
 
 //////////////////////////////////////////////////////////////////////////
 const reducer = createReducerFunction(FxRateReducer, initialState);
-const actions = createActionCreators(FxRateReducer);
+const actions: any = createActionCreators(FxRateReducer);
 
 function* sagaUpdateFxRate() {
   const state = yield select(selectFxRate);

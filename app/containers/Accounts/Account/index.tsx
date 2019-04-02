@@ -8,6 +8,9 @@ import { selectActiveAccount } from '../AccountSelector/selectors';
 import { Balance } from './Balance';
 import { Login } from './Login';
 import { Purchase } from './Purchase';
+import { Redeem } from './Redeem';
+import { Transfer } from './Transfer';
+import { Settings } from './Settings';
 import { ContainerState as AccountState } from './types';
 
 type OwnProps = {
@@ -19,11 +22,13 @@ type Props = OwnProps & AccountState & Sidebar.DispatchProps;
 type RouterPath = [string, string, (props: AccountState) => (props: any) => React.ReactNode, boolean?]
 const AccountMap : RouterPath[] = [
   ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
-  ["Transfer In",   "purchase", (account) => ((props) => <Purchase />)],
-  ["Transfer Out",  "redeem",   (account) => ((props) => <Purchase />)],
-  ["Transfer To",   "transfer", (account) => ((props) => <Purchase />)],
-  ["Pay Bills",     "billPay",  (account) => ((props) => <Purchase />)],
+  ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
+  ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
+  ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
+  ["Pay Bills",     "billPay",  (account) => ((props) => <Transfer {...props} />)],
+  ["Settings",     "settings",  (account) => ((props) => <Settings {...props} account={account} />)],
 ]
+
 //const p : RouterPath = AccountMap[0];
 class AccountClass extends React.PureComponent<Props, {}, null> {
 

@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Form, Header, Button } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { connect } from 'react-redux';
-import { Wallet } from 'ethers';
-
-import { mapDispatchToProps, DispatchProps } from '../actions';
 import { UxPassword } from 'components/UxPassword';
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
-import { compose } from 'redux';
+import { Wallet } from 'ethers';
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { compose } from 'redux';
+import { Button, Form, Header } from 'semantic-ui-react';
+import { DispatchProps, mapDispatchToProps } from '../actions';
+import messages from './messages';
+
 
 interface OwnProps {
   accountName: string,

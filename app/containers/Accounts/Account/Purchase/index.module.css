@@ -1,0 +1,18 @@
+
+.HeaderContainer {
+	display: flex;
+	align-items: center;
+}
+
+.LogoImage {
+	margin-left: auto;
+}
+
+
+.PaymentMethod {
+	margin: 10px;
+}
+
+.Clear {
+	clear: both;
+}

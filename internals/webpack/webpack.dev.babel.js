@@ -57,15 +57,11 @@ module.exports = require('./webpack.base.babel')({
 
   styleLoaders: [
     'style-loader',
+    'css-modules-typescript-loader',
     {
-      loader: 'typings-for-css-modules-loader',
+      loader: 'css-loader',
       options: {
         modules: true,
-        sourceMap: true,
-        namedExport: true,
-        camelCase: true,
-        importLoaders: 1,
-        localIdentName: '[local]-[hash:base64:8]',
       },
     },
     {

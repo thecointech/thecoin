@@ -1,0 +1,12 @@
+.LogoContainer {
+	width: 200px;
+	float: right;
+}
+
+.PaymentMethod {
+	margin: 10px;
+}
+
+.Clear {
+	clear: both;
+}

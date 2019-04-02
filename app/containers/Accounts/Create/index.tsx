@@ -14,19 +14,26 @@ import { UxScoredPassword } from 'components/UxScoredPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
+import { ReferrersApi } from '@the-coin/broker-cad';
+import { IsValidReferrerId } from '@the-coin/utilities';
 
 
 const initialState = {
   accountPwd: '',
   accountName: '',
+  accountReferrer: '',
+
   pwdValid: undefined as boolean | undefined,
-  pwdMessage: undefined as FormattedMessage.MessageDescriptor|undefined,
+  pwdMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
 
   nameValid: undefined as boolean | undefined,
-  nameMessage: undefined as FormattedMessage.MessageDescriptor|undefined,
+  nameMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+
+  referrerValid: undefined as boolean | undefined,
+  referrerMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
 
   forceValidate: false,
-  redirect: false as false|string,
+  redirect: false as false | string,
   isCreating: false,
   cancelCreating: false,
   percentComplete: 0,
@@ -44,6 +51,7 @@ class Create extends React.PureComponent<Props, State, any> {
     this.onNameChange = this.onNameChange.bind(this);
     this.generateNewWallet = this.generateNewWallet.bind(this);
     this.onCancelGenerate = this.onCancelGenerate.bind(this);
+    this.onReferrerChange = this.onReferrerChange.bind(this);
   }
 
   onCancelGenerate() {
@@ -52,13 +60,13 @@ class Create extends React.PureComponent<Props, State, any> {
     });
   }
 
-  generateNewWallet(e: React.MouseEvent<HTMLElement>) {
+  async generateNewWallet(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
 
     // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-    const { accountPwd, accountName, pwdValid, nameValid } = this.state;
-    
-    if (!(pwdValid && nameValid)) {
+    const { accountPwd, accountName, pwdValid, nameValid, accountReferrer, referrerValid } = this.state;
+
+    if (!(pwdValid && nameValid && referrerValid)) {
       this.setState({
         forceValidate: true
       });
@@ -70,112 +78,162 @@ class Create extends React.PureComponent<Props, State, any> {
 
     const newAccount = Wallet.createRandom();
 
-    newAccount
-      .encrypt(accountPwd, percent => {
-        if (this.state.cancelCreating) {
-          this.setState({
-            isCreating: false,
-            cancelCreating: false,
-          })
-          throw 'User Cancelled';
-        }
-        const per = Math.round(percent * 100);
-        this.setState({ percentComplete: per });
-      })
-      .then(asStr => {
-        // If cancelled, do not store generated account
-        if (this.state.isCreating == false) return;
-
-        // Add to wallet, this makes it available to user on this site
-        // We set the wallet in encrypted format, as we wish to force
-        // the user to decrypt the account (to protect against misspelled
-        // passwords)
-        const asJson = JSON.parse(asStr);
-        this.props.setSingleWallet(accountName, asJson);
-
-        // Switch to this newly created account
-        this.setState({ 
-          redirect: accountName,
+    var asStr = await newAccount.encrypt(accountPwd, percent => {
+      if (this.state.cancelCreating) {
+        this.setState({
           isCreating: false,
-          cancelCreating: false
-        });
-      });
-  }
+          cancelCreating: false,
+        })
+        throw 'User Cancelled';
+      }
+      const per = Math.round(percent * 100);
+      this.setState({ percentComplete: per });
+    });
 
-  // Validate our inputs
-  onNameChange(value: string) {
-    const validation = (value.length == 0) ? 
-    {
-      nameValid: false,
-      nameMessage: messages.errorNameTooShort,
-    } : this.props.wallets.has(value) ? 
-    {
-      nameValid: false,
-      nameMessage: messages.errorNameDuplicate,
-    } :
-    {
-      nameValid: true,
-      nameMessage: undefined,
-    };
+    // If cancelled, do not store generated account
+    if (this.state.isCreating == false) return;
 
+    // Register this account on the server
+    const api = new ReferrersApi();
+    // Weird typescript hack
+    var isRegistered: any = await api.referralCreate({
+      newAccount: newAccount.address,
+      referrerId: accountReferrer
+    });
+
+    if (!isRegistered.success) {
+      alert("Registering this account failed. Please contact support@thecoin.io");
+      return;
+    }
+
+    // Add to wallet, this makes it available to user on this site
+    // We set the wallet in encrypted format, as we wish to force
+    // the user to decrypt the account (to protect against misspelled
+    // passwords)
+    const asJson = JSON.parse(asStr);
+    this.props.setSingleWallet(accountName, asJson);
+
+    // Switch to this newly created account
     this.setState({
-      accountName: value,
-      ...validation,
+      redirect: accountName,
+      isCreating: false,
+      cancelCreating: false
     });
   }
 
-  onPasswordChange(value: string, score: number): boolean {
-    const isValid = score > 2;
-    this.setState({
-      accountPwd: value,
-      pwdValid: isValid
-    })
-    return isValid;
-  }
+// Validate our inputs
+onNameChange(value: string) {
+  const validation = (value.length == 0) ?
+    {
+      nameValid: false,
+      nameMessage: messages.errorNameTooShort,
+    } : this.props.wallets.has(value) ?
+      {
+        nameValid: false,
+        nameMessage: messages.errorNameDuplicate,
+      } :
+      {
+        nameValid: true,
+        nameMessage: undefined,
+      };
 
-  /////////////////////////////////////////////////////////////
-  // Render
-  render() {
-    if (this.state.redirect) {
-      const addr = `/accounts/${this.state.redirect}`;
-      return <Redirect to={addr} />;
-    }
-    const { forceValidate, pwdValid, pwdMessage, nameValid, nameMessage } = this.state;
-      
-    return (
-      <React.Fragment>
-        <Form>
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage {...messages.header} />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
-          </Header>
-          <UxInput
-            uxChange={this.onNameChange}
-            intlLabel={messages.labelName}
-            forceValidate={forceValidate}
-            isValid={nameValid}
-            message={nameMessage}
-            placeholder="Account Name"
-          />
-          <UxScoredPassword
-            uxChange={this.onPasswordChange}
-            intlLabel={messages.labelPassword}
-            forceValidate={forceValidate}
-            isValid={pwdValid}
-            message={pwdMessage}
-            placeholder="Account Password"
-          />
+  this.setState({
+    accountName: value,
+    ...validation,
+  });
+}
 
-          <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
-        </Form>
-        <CancellableOperationModal cancelCallback={this.onCancelGenerate} isOpen={this.state.isCreating} header={messages.whileCreatingHeader} progressPercent={this.state.percentComplete} progressMessage={messages.whileCreatingMessage} />
-      </React.Fragment>
-    );
+onPasswordChange(value: string, score: number): boolean {
+  const isValid = score > 2;
+  this.setState({
+    accountPwd: value,
+    pwdValid: isValid
+  })
+  return isValid;
+}
+
+async IsLegalReferrer(id: string) {
+  const api = new ReferrersApi();
+  // Weird issue: typescript not recognizing the return type
+  const isValid: any = await api.referrerValid(id);
+  return isValid.success;
+}
+
+async onReferrerChange(value: string) {
+  const validation = (value.length != 6) ?
+    {
+      referrerValid: false,
+      referrerMessage: messages.errorReferrerNumChars,
+    } : !IsValidReferrerId(value) ?
+    {
+      referrerValid: false,
+      referrerMessage: messages.errorReferrerInvalidCharacters,
+    } : !(await this.IsLegalReferrer(value)) ?
+    {
+      referrerValid: false,
+      referrerMessage: messages.errorReferrerUnknown
+    } :
+    {
+      referrerValid: true,
+      referrerMessage: undefined,
+    };
+  this.setState({
+    accountReferrer: value,
+    ...validation,
+  });
+}
+
+/////////////////////////////////////////////////////////////
+// Render
+render() {
+  if (this.state.redirect) {
+    const addr = `/accounts/${this.state.redirect}`;
+    return <Redirect to={addr} />;
   }
+  const { forceValidate, pwdValid, pwdMessage, nameValid, nameMessage, referrerValid, referrerMessage } = this.state;
+
+  return (
+    <React.Fragment>
+      <Form>
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...messages.header} />
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...messages.subHeader} />
+          </Header.Subheader>
+        </Header>
+        <UxInput
+          uxChange={this.onNameChange}
+          intlLabel={messages.labelName}
+          forceValidate={forceValidate}
+          isValid={nameValid}
+          message={nameMessage}
+          placeholder="Account Name"
+        />
+        <UxScoredPassword
+          uxChange={this.onPasswordChange}
+          intlLabel={messages.labelPassword}
+          forceValidate={forceValidate}
+          isValid={pwdValid}
+          message={pwdMessage}
+          placeholder="Account Password"
+        />
+        <UxInput
+          uxChange={this.onReferrerChange}
+          intlLabel={messages.labelReferrer}
+          forceValidate={forceValidate}
+          isValid={referrerValid}
+          message={referrerMessage}
+          placeholder="Referrer"
+        />
+
+        <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
+      </Form>
+      <CancellableOperationModal cancelCallback={this.onCancelGenerate} isOpen={this.state.isCreating} header={messages.whileCreatingHeader} progressPercent={this.state.percentComplete} progressMessage={messages.whileCreatingMessage} />
+    </React.Fragment>
+  );
+}
 }
 
 export default connect(

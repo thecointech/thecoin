@@ -12,7 +12,7 @@ function Strip(name: string | null): string {
 function Pad(name: string): string {
   return PREFIX + name;
 }
-function GetStored(name: string): Wallet | null {
+export function GetStored(name: string): Wallet | null {
   const storedItem = localStorage.getItem(Pad(name));
   if (storedItem !== null) {
     const wallet = JSON.parse(storedItem) as Wallet;

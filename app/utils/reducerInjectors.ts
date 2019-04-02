@@ -5,7 +5,7 @@ import isString from 'lodash/isString';
 
 import { LifeStore } from 'types';
 //import { createReducerFunction } from 'immer-reducer';
-import createReducer from '../reducers';
+import {createReducer} from '../reducers';
 import checkStore from './checkStore';
 
 export function injectReducerFactory(store: LifeStore, isValid: boolean) {

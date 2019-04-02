@@ -46,6 +46,8 @@ interface IActions extends ImmerReducer<ContainerState> {
 	updateBalance(newBalance?: number) : Iterator<any>;
 	updateHistory(from: Date, until: Date) : Iterator<any>;
 
+	registerTransferOut(email: string, brokerAddress: string, value: number, fee: number, timestamp: number);
+
 	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
 /* --- EXPORTS --- */

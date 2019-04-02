@@ -25,6 +25,10 @@ export default defineMessages({
     id: `${scope}.labelPassword`,
     defaultMessage: 'Password',
   },
+  labelReferrer: {
+    id: `${scope}.labelReferrer`,
+    defaultMessage: 'Referrer',
+  },
   buttonCreate: {
     id: `${scope}.buttonCreate`,
     defaultMessage: 'CREATE ACCOUNT',
@@ -50,6 +54,19 @@ export default defineMessages({
   errorPasswordRequired: {
     id: `${scope}.errorPasswordRequired`,
     defaultMessage: "Please enter a password of at least 'moderate' strength",
+  },
+
+  errorReferrerNumChars: {
+    id: `${scope}.errorReferrerNumChars`,
+    defaultMessage: 'A referrer ID should be 6 characters long.',
+  },
+  errorReferrerInvalidCharacters: {
+    id: `${scope}.errorReferrerInvalidCharacters`,
+    defaultMessage: 'A referrer ID should only contain alpha-numeric characters.',
+  },
+  errorReferrerUnknown: {
+    id: `${scope}.errorReferrerUnknown`,
+    defaultMessage: "The entered referrer ID is not recognized",
   },
 });
 

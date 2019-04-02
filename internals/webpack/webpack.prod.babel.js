@@ -25,14 +25,11 @@ module.exports = require('./webpack.base.babel')({
   // Added from: https://github.com/react-boilerplate/react-boilerplate/issues/2142
   styleLoaders: [
     'style-loader',
+    'css-modules-typescript-loader',
     {
-      loader: 'typings-for-css-modules-loader',
+      loader: 'css-loader',
       options: {
         modules: true,
-        namedExport: true,
-        camelCase: true,
-        importLoaders: 1,
-        localIdentName: '[hash:base64:8]',
       },
     },
     {
