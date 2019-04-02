@@ -44,6 +44,47 @@ paths:
         405:
           description: "Server Error"
       x-swagger-router-controller: "Status"
+  /referrers:
+    get:
+      tags:
+      - "Referrers"
+      summary: "Gets the validity of the passed referrer"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referrerValid"
+      parameters:
+      - name: "referrer"
+        in: "query"
+        description: "Referrers ID.  This ID must have been previously registered\
+          \ with the system"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Server status"
+          schema:
+            type: "boolean"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Referrers"
+    post:
+      tags:
+      - "Referrers"
+      summary: "Register the referral of new account"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referralCreate"
+      parameters:
+      - in: "body"
+        name: "referral"
+        description: "Set referal for new account"
+        required: true
+        schema:
+          $ref: "#/definitions/NewAccountReferal"
+      responses:
+        200:
+          description: "Referral Success"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Referrers"
   /exchange/buy/initiate:
     post:
       tags:
@@ -207,29 +248,6 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Sell"
-  /exchange/sell/certified:
-    post:
-      tags:
-      - "Sell"
-      summary: "Request coin sale"
-      description: "Called by the client to exchange coin for CAD using a certified\
-        \ transfer"
-      operationId: "certifiedCoinSale"
-      parameters:
-      - in: "body"
-        name: "request"
-        description: "Signed certified transfer to this brokers address"
-        required: true
-        schema:
-          $ref: "#/definitions/CertifiedSale"
-      responses:
-        200:
-          description: "The response confirms to the user the order has been processed"
-          schema:
-            $ref: "#/definitions/SellResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Sell"
   /exchange/sell/{user}/{id}/complete:
     post:
       tags:
@@ -257,6 +275,29 @@ paths:
       responses:
         200:
           description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /exchange/sell/certified:
+    post:
+      tags:
+      - "Sell"
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD using a certified\
+        \ transfer"
+      operationId: "certifiedCoinSale"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedSale"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
           schema:
             $ref: "#/definitions/SellResponse"
         405:
@@ -478,11 +519,14 @@ definitions:
   CertifiedSale:
     required:
     - "clientEmail"
+    - "signature"
     - "transfer"
     properties:
       transfer:
         $ref: "#/definitions/CertifiedTransferRequest"
       clientEmail:
+        type: "string"
+      signature:
         type: "string"
     example:
       transfer:
@@ -493,6 +537,7 @@ definitions:
         value: 0
         timestamp: 1
       clientEmail: "clientEmail"
+      signature: "signature"
   BrokerStatus:
     required:
     - "address"
@@ -505,3 +550,15 @@ definitions:
     example:
       address: "address"
       certifiedFee: 0
+  NewAccountReferal:
+    required:
+    - "newAccount"
+    - "referrerId"
+    properties:
+      referrerId:
+        type: "string"
+      newAccount:
+        type: "string"
+    example:
+      referrerId: "referrerId"
+      newAccount: "newAccount"

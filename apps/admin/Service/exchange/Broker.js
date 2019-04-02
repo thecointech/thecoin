@@ -206,12 +206,12 @@ exports.DoCertifiedSale = async function(sale) {
     if (!ValidSale(sale))
         return "Invalid email";
 
-    const {from, to, value, fee, timestamp, signature} = transfer;
-    const gasAmount = await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, signature)
+    const {from, to, value, fee, timestamp } = transfer;
+    const gasAmount = await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, transfer.signature)
         .estimateGas({gas:5000000, from:eclient})
     console.log(`Tx ${from} -> ${tp}: Gas Amount ${gasAmount}`);
 
-    let tx = tc.certifiedTransfer(from, to, value, fee, timestamp, signature).send({gas: 200000})
+    let tx = tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature).send({gas: 200000})
 
     // Next, create an initial record of the transaction
     const xferId = await StoreRequest(sale, tx.hash);

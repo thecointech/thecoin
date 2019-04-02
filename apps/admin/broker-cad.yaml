@@ -255,6 +255,17 @@ definitions:
       certifiedFee:
         type: integer
 
+  NewAccountReferal:
+    required:
+      - referrerId
+      - newAccount
+    properties:
+      referrerId:
+        type: string
+      newAccount:
+        type: string
+
+
 
 ################################################################################
 
@@ -273,6 +284,49 @@ paths:
           description: Server status
           schema:
             $ref: "#/definitions/BrokerStatus"
+
+
+  /referrers:
+    get:
+      tags:
+        - Referrers
+      summary: "Gets the validity of the passed referrer"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referrerValid"
+      parameters:
+        - name: referrer
+          in: query
+          required: true
+          description: Referrers ID.  This ID must have been previously registered with the system
+          type: string
+      responses:
+        405:
+          description: "Server Error"
+        200:
+          description: Server status
+          schema:
+            type: boolean
+
+    post:
+      tags:
+        - Referrers
+      summary: "Register the referral of new account"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referralCreate"
+      parameters:
+        - in: body
+          name: referral
+          description: "Set referal for new account"
+          required: true
+          schema: 
+            $ref: "#/definitions/NewAccountReferal"
+      responses:
+        405:
+          description: "Server Error"
+        200:
+          description: Referral Success
+
+  ################################################################################
             
   /exchange/buy/initiate:
     post:

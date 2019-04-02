@@ -60,7 +60,7 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 		const normSig = signature[1] == 'x' ? signature.slice(2) : signature;
 		const buffer = Buffer.from(normSig, 'hex');
 		const s2: string = base32.encode(buffer);
-		return s2.slice(-6);
+		return s2.slice(-6).toLowerCase();
 	}
 
 	async setReferrer(signature: string, address: string) {
