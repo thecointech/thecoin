@@ -265,6 +265,12 @@ definitions:
       newAccount:
         type: string
 
+  BoolResponse:
+        title: A bool that to be returned indicating success/failure
+        type: boolean
+        properties:
+          success:
+            type: boolean
 
 
 ################################################################################
@@ -303,9 +309,9 @@ paths:
         405:
           description: "Server Error"
         200:
-          description: Server status
+          description: Id Valid
           schema:
-            type: boolean
+            $ref: "#/definitions/BoolResponse"
 
     post:
       tags:
@@ -324,7 +330,9 @@ paths:
         405:
           description: "Server Error"
         200:
-          description: Referral Success
+          description: Referral success
+          schema:
+            $ref: "#/definitions/BoolResponse"
 
   ################################################################################
             

@@ -1,9 +1,9 @@
 'use strict';
 
-const { datastore, GetReferrerKey } = require('./Datastore')
+const { datastore, GetReferrerKey, GetUserKey } = require('./Datastore')
 const {IsValidAddress, IsValidReferrerId} = require('@the-coin/utilities');
 
-exports.GetReferrerAddress = async (referrerId) => {
+async function GetReferrerAddress(referrerId) {
 	// Get referrers address
 	const referrerKey = GetReferrerKey(referrerId);
 	const [entity] = await datastore.get(referrerKey);
@@ -12,7 +12,7 @@ exports.GetReferrerAddress = async (referrerId) => {
 	return null ;
 }
 
-exports.Create = async (referral) => {
+async function Create(referral) {
 	const { referrerId, newAccount } = referral;
 
 	if (!IsValidReferrerId(referrerId))
@@ -26,8 +26,7 @@ exports.Create = async (referral) => {
 		return false;
 
 	// Create new referral link
-	newUserKey = datastore.key(['User', newAccount])
-
+	const newUserKey = GetUserKey(newAccount);
 	const [existing] = await datastore.get(newUserKey);
 	if (existing)
 		return false;
@@ -44,3 +43,5 @@ exports.Create = async (referral) => {
 	  console.log(`Create user: ${newAccount} from ${referrer}: ${result}`);
 	  return true;
 }
+
+module.exports = { GetReferrerAddress, Create }

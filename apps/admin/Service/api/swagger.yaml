@@ -60,9 +60,9 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Server status"
+          description: "Id Valid"
           schema:
-            type: "boolean"
+            $ref: "#/definitions/BoolResponse"
         405:
           description: "Server Error"
       x-swagger-router-controller: "Referrers"
@@ -81,7 +81,9 @@ paths:
           $ref: "#/definitions/NewAccountReferal"
       responses:
         200:
-          description: "Referral Success"
+          description: "Referral success"
+          schema:
+            $ref: "#/definitions/BoolResponse"
         405:
           description: "Server Error"
       x-swagger-router-controller: "Referrers"
@@ -562,3 +564,11 @@ definitions:
     example:
       referrerId: "referrerId"
       newAccount: "newAccount"
+  BoolResponse:
+    type: "boolean"
+    properties:
+      success:
+        type: "boolean"
+    title: "A bool that to be returned indicating success/failure"
+    example:
+      success: true

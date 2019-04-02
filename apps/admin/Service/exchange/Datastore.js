@@ -1,6 +1,7 @@
 'use strict'
 
 const Datastore = require('@google-cloud/datastore');
+const {NormalizeAddress} = require('@the-coin/utilities');
 
 // Instantiate a datastore client
 const datastore = Datastore({
@@ -11,4 +12,6 @@ const datastore = Datastore({
 exports.datastore = datastore;
 
 const GetReferrerKey = (referrerId) => datastore.key(['Referrer', referrerId.toLowerCase()])
-exports.GetReferrerKey = GetReferrerKey;
+const GetUserKey = (address) => datastore.key(['User', NormalizeAddress(address)])
+
+module.exports = {datastore, GetUserKey, GetReferrerKey }
