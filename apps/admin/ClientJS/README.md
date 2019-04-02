@@ -95,6 +95,8 @@ Class | Method | HTTP request | Description
 *@TheCoinBrokerCad.PurchaseApi* | [**queryCoinPurchase**](docs/PurchaseApi.md#queryCoinPurchase) | **GET** /exchange/buy/{user}/{id} | Query open buy orders
 *@TheCoinBrokerCad.PurchaseApi* | [**queryCoinPurchasesIds**](docs/PurchaseApi.md#queryCoinPurchasesIds) | **GET** /exchange/buy/ | Query buy order id&#39;s
 *@TheCoinBrokerCad.PurchaseApi* | [**requestCoinPurchase**](docs/PurchaseApi.md#requestCoinPurchase) | **POST** /exchange/buy/initiate | Request to buy Coin
+*@TheCoinBrokerCad.ReferrersApi* | [**referralCreate**](docs/ReferrersApi.md#referralCreate) | **POST** /referrers | Register the referral of new account
+*@TheCoinBrokerCad.ReferrersApi* | [**referrerValid**](docs/ReferrersApi.md#referrerValid) | **GET** /referrers | Gets the validity of the passed referrer
 *@TheCoinBrokerCad.SellApi* | [**certifiedCoinSale**](docs/SellApi.md#certifiedCoinSale) | **POST** /exchange/sell/certified | Request coin sale
 *@TheCoinBrokerCad.SellApi* | [**completeCoinSale**](docs/SellApi.md#completeCoinSale) | **POST** /exchange/sell/{user}/{id}/complete | Mark coin sale complete
 *@TheCoinBrokerCad.SellApi* | [**requestCoinSale**](docs/SellApi.md#requestCoinSale) | **POST** /exchange/sell/initiate | Request coin sale
@@ -108,6 +110,7 @@ Class | Method | HTTP request | Description
  - [@TheCoinBrokerCad.CertifiedSale](docs/CertifiedSale.md)
  - [@TheCoinBrokerCad.CertifiedTransferRequest](docs/CertifiedTransferRequest.md)
  - [@TheCoinBrokerCad.CertifiedTransferResponse](docs/CertifiedTransferResponse.md)
+ - [@TheCoinBrokerCad.NewAccountReferal](docs/NewAccountReferal.md)
  - [@TheCoinBrokerCad.PurchaseComplete](docs/PurchaseComplete.md)
  - [@TheCoinBrokerCad.PurchaseIds](docs/PurchaseIds.md)
  - [@TheCoinBrokerCad.PurchaseResponse](docs/PurchaseResponse.md)

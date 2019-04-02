@@ -17,6 +17,7 @@ import BrokerStatus from './model/BrokerStatus';
 import CertifiedSale from './model/CertifiedSale';
 import CertifiedTransferRequest from './model/CertifiedTransferRequest';
 import CertifiedTransferResponse from './model/CertifiedTransferResponse';
+import NewAccountReferal from './model/NewAccountReferal';
 import PurchaseComplete from './model/PurchaseComplete';
 import PurchaseIds from './model/PurchaseIds';
 import PurchaseResponse from './model/PurchaseResponse';
@@ -28,6 +29,7 @@ import SignedMessage from './model/SignedMessage';
 import SignedPurchaseConfirm from './model/SignedPurchaseConfirm';
 import SignedPurchaseRequest from './model/SignedPurchaseRequest';
 import PurchaseApi from './api/PurchaseApi';
+import ReferrersApi from './api/ReferrersApi';
 import SellApi from './api/SellApi';
 import StatusApi from './api/StatusApi';
 import TransferApi from './api/TransferApi';
@@ -96,6 +98,12 @@ export {
     CertifiedTransferResponse,
 
     /**
+     * The NewAccountReferal model constructor.
+     * @property {module:model/NewAccountReferal}
+     */
+    NewAccountReferal,
+
+    /**
      * The PurchaseComplete model constructor.
      * @property {module:model/PurchaseComplete}
      */
@@ -160,6 +168,12 @@ export {
     * @property {module:api/PurchaseApi}
     */
     PurchaseApi,
+
+    /**
+    * The ReferrersApi service constructor.
+    * @property {module:api/ReferrersApi}
+    */
+    ReferrersApi,
 
     /**
     * The SellApi service constructor.

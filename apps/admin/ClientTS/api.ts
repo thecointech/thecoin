@@ -191,6 +191,26 @@ export interface CertifiedTransferResponse {
 /**
  * 
  * @export
+ * @interface NewAccountReferal
+ */
+export interface NewAccountReferal {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAccountReferal
+     */
+    referrerId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAccountReferal
+     */
+    newAccount: string;
+}
+
+/**
+ * 
+ * @export
  * @interface PurchaseComplete
  */
 export interface PurchaseComplete {
@@ -898,6 +918,196 @@ export class PurchaseApi extends BaseAPI {
      */
     public requestCoinPurchase(signedPurchaseRequest: SignedPurchaseRequest, options?: any) {
         return PurchaseApiFp(this.configuration).requestCoinPurchase(signedPurchaseRequest, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * ReferrersApi - fetch parameter creator
+ * @export
+ */
+export const ReferrersApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Register the referral of new account
+         * @param {NewAccountReferal} newAccountReferal Set referal for new account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referralCreate(newAccountReferal: NewAccountReferal, options: any = {}): FetchArgs {
+            // verify required parameter 'newAccountReferal' is not null or undefined
+            if (newAccountReferal === null || newAccountReferal === undefined) {
+                throw new RequiredError('newAccountReferal','Required parameter newAccountReferal was null or undefined when calling referralCreate.');
+            }
+            const localVarPath = `/referrers`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"NewAccountReferal" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(newAccountReferal || {}) : (newAccountReferal || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Gets the validity of the passed referrer
+         * @param {string} referrer Referrers ID.  This ID must have been previously registered with the system
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referrerValid(referrer: string, options: any = {}): FetchArgs {
+            // verify required parameter 'referrer' is not null or undefined
+            if (referrer === null || referrer === undefined) {
+                throw new RequiredError('referrer','Required parameter referrer was null or undefined when calling referrerValid.');
+            }
+            const localVarPath = `/referrers`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (referrer !== undefined) {
+                localVarQueryParameter['referrer'] = referrer;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ReferrersApi - functional programming interface
+ * @export
+ */
+export const ReferrersApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Register the referral of new account
+         * @param {NewAccountReferal} newAccountReferal Set referal for new account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referralCreate(newAccountReferal: NewAccountReferal, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = ReferrersApiFetchParamCreator(configuration).referralCreate(newAccountReferal, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Gets the validity of the passed referrer
+         * @param {string} referrer Referrers ID.  This ID must have been previously registered with the system
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referrerValid(referrer: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = ReferrersApiFetchParamCreator(configuration).referrerValid(referrer, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * ReferrersApi - factory interface
+ * @export
+ */
+export const ReferrersApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Register the referral of new account
+         * @param {NewAccountReferal} newAccountReferal Set referal for new account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referralCreate(newAccountReferal: NewAccountReferal, options?: any) {
+            return ReferrersApiFp(configuration).referralCreate(newAccountReferal, options)(fetch, basePath);
+        },
+        /**
+         * Returns a boolean indicating whether the passed referrer is valid
+         * @summary Gets the validity of the passed referrer
+         * @param {string} referrer Referrers ID.  This ID must have been previously registered with the system
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        referrerValid(referrer: string, options?: any) {
+            return ReferrersApiFp(configuration).referrerValid(referrer, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * ReferrersApi - object-oriented interface
+ * @export
+ * @class ReferrersApi
+ * @extends {BaseAPI}
+ */
+export class ReferrersApi extends BaseAPI {
+    /**
+     * Returns a boolean indicating whether the passed referrer is valid
+     * @summary Register the referral of new account
+     * @param {NewAccountReferal} newAccountReferal Set referal for new account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReferrersApi
+     */
+    public referralCreate(newAccountReferal: NewAccountReferal, options?: any) {
+        return ReferrersApiFp(this.configuration).referralCreate(newAccountReferal, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Returns a boolean indicating whether the passed referrer is valid
+     * @summary Gets the validity of the passed referrer
+     * @param {string} referrer Referrers ID.  This ID must have been previously registered with the system
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReferrersApi
+     */
+    public referrerValid(referrer: string, options?: any) {
+        return ReferrersApiFp(this.configuration).referrerValid(referrer, options)(this.fetch, this.basePath);
     }
 
 }
