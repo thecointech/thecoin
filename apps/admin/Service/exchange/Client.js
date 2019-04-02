@@ -44,7 +44,6 @@ exports.CertifiedSale = function(certifiedSale) {
     let { transfer, clientEmail, signature } = certifiedSale;
 
     // First, check that the request is valid
-    ethers.
 
     return new Promise((resolve, reject) => {
         console.log(`${transfer.from} Initiating sale for ${transfer.value}`)
@@ -58,7 +57,8 @@ exports.CertifiedSale = function(certifiedSale) {
                 reject(err);
             }
 
-    return new Primi
+        })
+    });
 
 }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const { SendMail } = require('./AutoMailer');
+const { SendMail } = require('../exchange/AutoMailer');
 
 /**
  * Request coin sale

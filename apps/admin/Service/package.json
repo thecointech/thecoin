@@ -4,7 +4,7 @@
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
+    "prestart": "yarn",
     "start": "node index.js"
   },
   "keywords": [

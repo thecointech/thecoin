@@ -13,6 +13,7 @@ var jsyaml = require('js-yaml');
 var serverPort = 8080;
 
 var ContractListener = require('./exchange/Contract')
+var DecryptWallet = require('./exchange/Wallet').DecryptWallet;
 
 // swaggerRouter configuration
 var options = {
