@@ -25,7 +25,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
       yield put({
         type: AccountReducer.actions.updateWithValues.type,
         payload: [{
-          balance: 5000000 + balance.toNumber()
+          balance: balance.toNumber()
         }],
       });
       

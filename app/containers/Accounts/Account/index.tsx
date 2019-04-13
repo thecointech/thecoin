@@ -1,4 +1,5 @@
 import NotFoundPage from 'containers/NotFoundPage';
+import { UnderConstruction } from 'containers/UnderConstruction';
 import * as Sidebar from 'containers/PageSidebar/actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -9,7 +10,7 @@ import { Balance } from './Balance';
 import { Login } from './Login';
 import { Purchase } from './Purchase';
 import { Redeem } from './Redeem';
-import { Transfer } from './Transfer';
+//import { Transfer } from './Transfer';
 import { Settings } from './Settings';
 import { ContainerState as AccountState } from './types';
 
@@ -24,8 +25,8 @@ const AccountMap : RouterPath[] = [
   ["Balance",       "",         (account) => ((props) => <Balance {...props} {...account} /> ), true],
   ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
-  ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
-  ["Pay Bills",     "billPay",  (account) => ((props) => <Transfer {...props} />)],
+  ["Transfer To",   "transfer", (account) => ((props) => <UnderConstruction />)], // <Transfer {...props} />
+  ["Pay Bills",     "billPay",  (account) => ((props) => <UnderConstruction />)],
   ["Settings",     "settings",  (account) => ((props) => <Settings {...props} account={account} />)],
 ]
 
@@ -42,23 +43,17 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
 
   componentDidMount()
   {
-    const { url, name, wallet } = this.props;
+    const { url, name } = this.props;
 
-    if (wallet.privateKey)
-    {
-      const accountLinks = AccountMap.map((item) => {
-        return {
-          link: {
-            name: item[0],
-            to: this.buildLink(url, item)
-          }
+    const accountLinks = AccountMap.map((item) => {
+      return {
+        link: {
+          name: item[0],
+          to: this.buildLink(url, item)
         }
-      })
-      this.props.setSubItems(name, accountLinks)  
-    }
-    else {
-      this.props.setSubItems("", []);
-    }
+      }
+    })
+    this.props.setSubItems(name, accountLinks)  
   }
 
   render() {
@@ -73,7 +68,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     const routes = AccountMap.map((item) => {
       const component = item[2](account);
       const targetUrl = this.buildLink(url, item);
-      return <Route path={targetUrl} render={component} exact={item[3]} />
+      return <Route key={targetUrl} path={targetUrl} render={component} exact={item[3]} />
     })
 
     return (

@@ -8,6 +8,7 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
+import { DAEMON } from 'utils/constants';
 
 // The initial state of the App
 const initialState: ContainerState = {
@@ -90,7 +91,8 @@ function buildReducer<T>() {
 
 	const withSaga = injectSaga<T>({
     key: 'fxRates',
-    saga: rootSaga
+		saga: rootSaga,
+		mode: DAEMON	// TODO: Consider making this a less-permanent version
   });
 
   return compose(
