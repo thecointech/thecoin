@@ -1,14 +1,15 @@
-import { ImmerReducer } from 'immer-reducer';
+import { ImmerReducerClass } from 'immer-reducer';
 import { FXRate } from '@the-coin/pricing'
 
 /* --- STATE --- */
-interface ContainerState extends FXRate {
+type ContainerState = {
+  rates: FXRate[];
 }
 
 /* --- ACTIONS --- */
-interface IActions extends ImmerReducer<ContainerState> {
-  beginUpdateFxRate() : Iterator<any>;
-  updateFxRate(newRate: FXRate): void;
+interface IActions {
+  fetchRateAtDate(date: Date) : Iterator<any>;
+  addFxRate(rates: FXRate): void;
 }
 
 /* --- EXPORTS --- */

@@ -52,6 +52,7 @@ class Mint extends React.PureComponent<MyProps> {
 		const { toMint } = this.state;
 		const { contract } = this.props;
 		try {
+			
 			const tx = await contract.mintCoins(toMint);
 			this.setState({ txHash: tx.hash })
 			await tx.wait();
@@ -59,6 +60,7 @@ class Mint extends React.PureComponent<MyProps> {
 		} catch (e) {
 			alert(e);
 		}
+		this.setState({isProcessing: false})
 	}
 
 	MeltCoins() {

@@ -14,6 +14,9 @@ import { compose } from 'redux';
 
 import { GetStored, SetStored } from './storageSync'
 
+import { actions as FxActions } from 'containers/FxRate/reducer';
+
+
 const initialState: ContainerState = {
   name: "",
   wallet: null,
@@ -105,7 +108,8 @@ class AccountReducer extends ImmerReducer<ContainerState>
     return {
       date: new Date(block.timestamp * 1000),
       change: to ? -res.values[2].toNumber() : res.values[2].toNumber(),
-      logEntry: `Transfer: ${to ? res.values[1] : res.values[0]}`
+      logEntry: `Transfer: ${to ? res.values[1] : res.values[0]}`,
+      balance: -1
     }
   }
 
@@ -137,6 +141,23 @@ class AccountReducer extends ImmerReducer<ContainerState>
     return history;
   }
 
+  static updateBalances(currentBalance: number, history: Transaction[]) {
+    var lastBalance = currentBalance;
+    history.reverse().forEach(tx => {
+      if (tx.balance >= 0) {
+        if (lastBalance + tx.change)
+          console.error('Invalid balance detected: ', lastBalance, history, tx);
+        lastBalance = tx.balance;
+      }
+      else {
+        // tx balance records the balance after the action
+        // is finished (so the last action records current balance)
+        tx.balance = lastBalance;
+      }
+      lastBalance = lastBalance -= tx.change;
+    });
+  }
+
   *updateHistory(from: Date, until: Date) {
     const { wallet, contract } = this.state;
     if (contract == null || wallet == null)
@@ -146,12 +167,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
         return;
     }
 
-    yield put({
-      type: this.actions.updateWithValues.type,
-      payload: {
-        historyLoading: true
-      }
-    })
+    yield this.sendValues(this.actions.updateWithValues, { historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
     // allow a 500 ms delay so we don't update too quickly
@@ -161,7 +177,11 @@ class AccountReducer extends ImmerReducer<ContainerState>
     const address = wallet.address;
     const origHistory = this.state.history;
     const fromBlock = this.state.historyEndBlock;
-    const newHistory = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory)
+    // Retrieve transactions for all time
+    const newHistory: Transaction[] = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory);
+    // Take current balance and use it plus Tx to reconstruct historical balances.
+    AccountReducer.updateBalances(this.state.balance, newHistory);
+    // Get the current block (save it so we know where we were up to in the future.)
     const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 
     yield this.sendValues(this.actions.updateWithValues, {
@@ -173,17 +193,11 @@ class AccountReducer extends ImmerReducer<ContainerState>
       historyEndBlock: currentBlock
     });
 
-    // yield put({
-    //   type: this.actions.updateWithValues.type,
-    //   payload: {
-    //     history: newHistory,
-    //     historyLoading: false,
-    //     historyStart: new Date(0),
-    //     historyStartBlock: 0,
-    //     historyEnd: new Date(),
-    //     historyEndBlock: currentBlock
-    //   }
-    // });  
+    // Ensure we have fx value for each tx in this list
+    for (var i = 0; i < newHistory.length; i++)
+    {
+      yield this.sendValues(FxActions.fetchRateAtDate, {date: newHistory[i].date})
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////

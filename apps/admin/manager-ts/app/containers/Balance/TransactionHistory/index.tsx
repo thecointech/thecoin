@@ -4,9 +4,12 @@ import { DateRangeSelect, OnChangeCallback } from 'components/DateRangeSelect';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
 import { Range } from 'immutable';
+import { getFxRate } from 'containers/FxRate/selectors';
+import { FXRate } from '@the-coin/pricing';
 
 type MyProps = {
-  transactions: Transaction[],
+  transactions: Transaction[];
+  rates: FXRate[];
   onRangeChange: OnChangeCallback;
   transactionLoading?: boolean;
 }
@@ -69,19 +72,23 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
   // On load, update balance
   render() {
     const maxRowCount = 50;
-    const { transactions, transactionLoading } = this.props;
+    const { transactions, transactionLoading, rates } = this.props;
     const { fromDate, untilDate } = this.state;
 
     let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
     let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
-    let txJsxRows = txOutput.map((tx) => (
+    let txJsxRows = txOutput.map((tx) => {
+      const rate = getFxRate(rates, tx.date.getTime());
+      const changeCad = toHuman(rate.buy * rate.fxRate * tx.change, true);
+      const balanceCad = toHuman(rate.buy * rate.fxRate * tx.balance, true);
+      return (
         <Table.Row key={tx.date.valueOf()}>
           <Table.Cell>{tx.date.toDateString()}</Table.Cell>
           <Table.Cell>{tx.logEntry}</Table.Cell>
-          <Table.Cell>{toHuman(tx.change)}</Table.Cell>
-          <Table.Cell>TODO</Table.Cell>
+          <Table.Cell>${changeCad}</Table.Cell>
+          <Table.Cell>${balanceCad}</Table.Cell>
         </Table.Row>
-      ));
+    )});
 
     return (
       <React.Fragment>

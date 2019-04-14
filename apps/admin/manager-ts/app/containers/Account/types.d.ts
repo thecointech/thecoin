@@ -11,6 +11,7 @@ type Transaction = {
 	date: Date;
 	change: number;
 	logEntry: string;
+	balance: number;
 }
 
 // An account state holds all relevant info

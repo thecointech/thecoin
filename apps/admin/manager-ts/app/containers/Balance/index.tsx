@@ -4,7 +4,7 @@ import { Header, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { toHuman } from '@the-coin/utilities'
-import { selectFxRate, ContainerState as FxRate } from 'containers/FxRate/selectors';
+import { selectFxRate, getFxRate, ContainerState as FxRates } from 'containers/FxRate/selectors';
 import { ContainerState } from 'containers/Account/types';
 import * as FxActions from 'containers/FxRate/actions';
 import * as AccountActions from 'containers/Account/actions';
@@ -16,7 +16,7 @@ interface  MyProps {
   account: ContainerState
 }
 
-type Props = MyProps & FxActions.DispatchProps & FxRate;
+type Props = MyProps & FxActions.DispatchProps & FxRates;
 
 class BalanceClass extends React.PureComponent<Props, {}, null> {
 
@@ -29,7 +29,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
   doUpdateBalance(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
     this.props.dispatch.updateBalance();
-    this.props.beginUpdateFxRate();
+    //this.props.beginUpdateFxRate();
   }
 
   // On load, update balance
@@ -38,7 +38,8 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
   }
 
   render() {
-    const { account, dispatch, buy, fxRate } = this.props;
+    const { account, dispatch, rates } = this.props;
+    const { buy, fxRate } = getFxRate(rates, Date.now());
     const { balance, history, historyLoading } = account;
     const cadBalance = toHuman(buy * balance * fxRate);
     return (
@@ -53,7 +54,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
           </Header>
         <Button onClick={this.doUpdateBalance}>UPDATE BALANCE</Button>
         <div>
-				  <TransactionHistory transactions={history} transactionLoading={historyLoading} onRangeChange={dispatch.updateHistory} />
+				  <TransactionHistory transactions={history} rates={rates} transactionLoading={historyLoading} onRangeChange={dispatch.updateHistory} />
         </div>
       </React.Fragment>
 		);

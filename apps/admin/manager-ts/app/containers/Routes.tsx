@@ -6,10 +6,11 @@ import { NotFoundPage } from './NotFoundPage';
 
 export function Routes() {
 	const brokerCad = `/${BrokerCAD.AccountName}`;
+	const theCoin = `/${TheCoin.AccountName}`;
 	return (
 		<Switch>
 			<Route path={brokerCad} key={brokerCad} component={BrokerCAD} />
-			<Route component={TheCoin} />
+			<Route path={theCoin} key={theCoin} component={TheCoin} />
 			<Route key="default" component={NotFoundPage} />
 		</Switch>
 	)

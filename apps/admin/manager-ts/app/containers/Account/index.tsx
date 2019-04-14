@@ -64,20 +64,17 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     const { account, dispatch, accountName, accountMap } = this.props;
     const { wallet } = account;
 
-    if (wallet) {
-      const accountLinks = accountMap.map((item) => {
-        return {
-          link: {
-            name: item[0],
-            to: this.buildLink(item)
-          }
+    const accountLinks = accountMap.map((item) => {
+      return {
+        link: {
+          name: item[0],
+          to: this.buildLink(item)
         }
-      })
-      this.props.setSubItems(accountName, accountLinks)
-    }
-    else {
+      }
+    })
+    this.props.setSubItems(accountName, accountLinks)
+    if(!wallet) {
       dispatch.setName(accountName);
-      this.props.setSubItems("", []);
     }
   }
 
