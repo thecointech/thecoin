@@ -27,7 +27,7 @@ import 'semantic-ui-less/semantic.less';
 import styles from './index.module.css';
 
 function App(props: LocationStoreState) {
-  const sidebarVisible = props.location.pathname !== "/";
+  const sidebarVisible = props.location.pathname.startsWith("/accounts");
   const pageMainInner = cx(styles.pageMainInner, sidebarVisible ? styles.withSidebar : undefined);
 
   return (
