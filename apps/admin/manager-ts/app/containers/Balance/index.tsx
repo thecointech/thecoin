@@ -41,7 +41,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
     const { account, dispatch, rates } = this.props;
     const { buy, fxRate } = getFxRate(rates, Date.now());
     const { balance, history, historyLoading } = account;
-    const cadBalance = toHuman(buy * balance * fxRate);
+    const cadBalance = toHuman(buy * balance * fxRate, true);
     return (
       <React.Fragment>
         <Header as='h1'>

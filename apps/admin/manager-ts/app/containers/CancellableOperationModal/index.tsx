@@ -7,6 +7,7 @@ interface OwnProps {
   header: FormattedMessage.MessageDescriptor;
   progressPercent?: number;
   progressMessage: FormattedMessage.MessageDescriptor;
+  messageValues?: any;
   cancelCallback?: () => void;
 }
 
@@ -26,7 +27,7 @@ export class CancellableOperationModal extends React.PureComponent<Props, {}, nu
   }
 
   render() {
-    const {isOpen, header, progressMessage, progressPercent, cancelCallback } = this.props;
+    const {isOpen, header, progressMessage, progressPercent, cancelCallback, messageValues } = this.props;
 
     const actions = cancelCallback ? (
       <Modal.Actions>
@@ -46,7 +47,8 @@ export class CancellableOperationModal extends React.PureComponent<Props, {}, nu
           <h3>
             <FormattedMessage {...progressMessage} 
               values={{
-                percentComplete: progressPercent
+                percentComplete: progressPercent,
+                ...(messageValues || {})
               }}/>
           </h3>
         </Loader>

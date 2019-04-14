@@ -1,22 +1,25 @@
 import * as React from 'react';
 //import styles from './index.module.css'
 import { ContainerState as AccountState } from 'containers/Account/types'
-import { toCoin, toHuman } from '@the-coin/utilities';
+import { DispatchProps  } from 'containers/Account/actions'
 import { CancellableOperationModal } from 'containers/CancellableOperationModal';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import messages from './messages';
+import { DualFxInput } from 'components/DualFxInput';
+import { selectFxRate, getFxRate, ContainerState as FxRates } from 'containers/FxRate/selectors';
+import { connect } from 'react-redux';
+import { toHuman } from '@the-coin/utilities';
 
-type MyProps = AccountState
+type MyProps = AccountState & {
+	updateBalance: Function
+}
+type Props = MyProps & FxRates & DispatchProps;
 
-class Mint extends React.PureComponent<MyProps> {
+class MintClass extends React.PureComponent<Props> {
 
 	state = {
 		toMint: 0,
-		toBurn: 0,
-		amount: 0,
-		toAddress: '',
 
-		coinsAvailable: 0,
 		txHash: '',
 		isProcessing: false,
 
@@ -26,95 +29,63 @@ class Mint extends React.PureComponent<MyProps> {
 	constructor(props) {
 		super(props);
 
-		this.MintCoins = this.MintCoins.bind(this);
-		this.MeltCoins = this.MeltCoins.bind(this);
-		//this.SendPurchase = this.SendPurchase.bind(this);
+		this.confirmOpen = this.confirmOpen.bind(this);
+		this.confirmClose = this.confirmClose.bind(this);
+		this.handleConfirm = this.handleConfirm.bind(this);
 	}
 
-	handleCoinChange = (e, { name, value }) => this.setState({ [name]: toCoin(value) })
+	handleCoinChange = (value: number) => this.setState({ toMint: value })
 
-	SetAmount(e) {
-		this.setState({ amount: toCoin(e.target.value) });
-	}
+	// async UpdateAvailableCoins() {
+	// 	const { contract } = this.props;
+	// 	const available = await contract.reservedCoins();
+	// 	this.setState({ coinsAvailable: available.toNumber() })
+	// }
 
-	SetToAddress(e) {
-		this.setState({ toAddress: e.target.value });
-	}
-
-
-	async UpdateAvailableCoins() {
-		const { contract } = this.props;
-		const available = await contract.reservedCoins();
-		this.setState({ coinsAvailable: available.toNumber() })
-	}
-
-	async MintCoins() {
+	async mintCoins() {
 		const { toMint } = this.state;
 		const { contract } = this.props;
 		try {
-			
+			this.setState({isProcessing: true});
 			const tx = await contract.mintCoins(toMint);
 			this.setState({ txHash: tx.hash })
 			await tx.wait();
-			await this.UpdateAvailableCoins();
+			//await this.UpdateAvailableCoins();
+			this.props.updateBalance();
+			this.setState({isProcessing: false});
 		} catch (e) {
 			alert(e);
 		}
 		this.setState({isProcessing: false})
 	}
 
-	MeltCoins() {
-
-	}
-
-	// SendPurchase() {
-	// 	const { account, toAddress, amount } = this.state;
-
-	// 	if (account.sign == null) {
-	// 		console.error('Invalid account: sign in first');
-	// 		return;
-	// 	}
-	// 	this.setState({
-	// 		sendingState: <p>Initiate Transfer</p>
-	// 	});
-	// 	GetContract().coinPurchase(toAddress, amount, 15)
-	// 		.then((transaction) => {
-	// 			console.log(transaction);
-	// 			this.setState({
-	// 				sendingState: <p>Transfer Complete</p>
-	// 			});
-	// 			return this.UpdateAvailableCoins();
-	// 		})
-	// 		.catch(console.error.bind(console));
-	// }
-
 	confirmOpen = () => this.setState({ doConfirm: true })
 	confirmClose = () => this.setState({ doConfirm: false })
 	handleConfirm = () => {
 		this.setState({ doConfirm: false })
+		this.mintCoins()
 	}
 
 	render() {
-		const { toMint, toBurn, coinsAvailable, isProcessing } = this.state
+		const { toMint, isProcessing, txHash } = this.state
+		const { rates, balance } = this.props;
+		const rate = getFxRate(rates, new Date().getTime());
+		const fxRate= rate.sell * rate.fxRate;
+
 		return (
 			<React.Fragment>
-				<Header>Mint/Burn Coin</Header>
-				<p>Current Balance: {coinsAvailable} </p>
+				<Header>Mint Coin</Header>
+				<p>Current Balance: {toHuman(balance, true)} </p>
 				<Form>
-					<Form.Field>
-						<label>Mint Coins</label>
-						<Form.Input placeholder='Coins to Mint' name='toMint' value={toHuman(toMint)} onChange={this.handleCoinChange} />
-					</Form.Field>
-					<Form.Field>
-						<label>Burn Coins</label>
-						<Form.Input placeholder='Coins to Burn' name='toMint' value={toHuman(toBurn)} onChange={this.handleCoinChange} />
-					</Form.Field>
+					<DualFxInput onChange={this.handleCoinChange} asCoin={true} value={toMint} fxRate={fxRate} />
+					<Form.Button onClick={this.confirmOpen}>MINT</Form.Button>
 				</Form>
-				<Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.confirmClose} />
-				<CancellableOperationModal isOpen={isProcessing} header={messages.decryptHeader} progressMessage={messages.decryptInProgress} />
+				<Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.handleConfirm} />
+				<CancellableOperationModal isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{txHash}}/>
 			</React.Fragment>
 		);
 	}
 }
 
-export { Mint }
+export const Mint = connect(selectFxRate)(MintClass);
+

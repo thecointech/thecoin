@@ -62,13 +62,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     }
     try {
       const balance = yield call(contract.balanceOf, wallet.address);
-      yield put({
-        type: this.actions.updateWithValues.type,
-        payload: {
-          balance: balance.toNumber()
-        },
-      });
-
+      yield this.sendValues(this.actions.updateWithValues, { balance: balance.toNumber() });
     } catch (err) {
       console.error(err);
     }
@@ -141,7 +135,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     return history;
   }
 
-  static updateBalances(currentBalance: number, history: Transaction[]) {
+  static calculateTxBalances(currentBalance: number, history: Transaction[]) {
     var lastBalance = currentBalance;
     history.reverse().forEach(tx => {
       if (tx.balance >= 0) {
@@ -167,7 +161,10 @@ class AccountReducer extends ImmerReducer<ContainerState>
         return;
     }
 
-    yield this.sendValues(this.actions.updateWithValues, { historyLoading: true });
+    // First, fetch the account balance toasty-fresh
+    const balance = yield call(contract.balanceOf, wallet.address);
+
+    yield this.sendValues(this.actions.updateWithValues, { balance, historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
     // allow a 500 ms delay so we don't update too quickly
@@ -180,7 +177,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     // Retrieve transactions for all time
     const newHistory: Transaction[] = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory);
     // Take current balance and use it plus Tx to reconstruct historical balances.
-    AccountReducer.updateBalances(this.state.balance, newHistory);
+    AccountReducer.calculateTxBalances(balance, newHistory);
     // Get the current block (save it so we know where we were up to in the future.)
     const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 

@@ -11,7 +11,7 @@ type Props = OwnProps & RouteComponentProps;
 
 const AccountMap: RouterPath[] = [
   ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
-  ["Minting",       "mint",    (routerProps) => ((props) => <Mint {...props} {...routerProps.account} /> )],
+  ["Minting",       "mint",    (routerProps) => ((props) => <Mint {...props} updateBalance={routerProps.dispatch.updateBalance} {...routerProps.account} /> )],
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
