@@ -15,6 +15,7 @@ import { compose } from 'redux';
 import { GetStored, SetStored } from './storageSync'
 
 import { actions as FxActions } from 'containers/FxRate/reducer';
+import { toHuman } from '@the-coin/utilities';
 
 
 const initialState: ContainerState = {
@@ -88,7 +89,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
   ///////////////////////////////////////////////////////////////////////////////////
   // Load account history and merge with local
   static mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
-    const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.date == tx.date))
+    const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.txHash === tx.txHash))
     if (uniqueItems.length) {
       history = history.concat(uniqueItems);
       history.sort((tx1, tx2) => tx1.date.valueOf() - tx2.date.valueOf())
@@ -96,36 +97,99 @@ class AccountReducer extends ImmerReducer<ContainerState>
     return history;
   }
 
-  static async toTransaction(to: boolean, ethersLog: Log, contract: Contract): Promise<Transaction> {
+  static async addAdditionalInfo(transaction: Transaction, toWallet: boolean, contract: Contract) {
+    // Parse out additional purchase/redeem info
+    const txReceipt = await contract.provider.getTransactionReceipt(transaction.txHash);
+    for (let i = 0; i < txReceipt.logs.length; i++) {
+      const extra = contract.interface.parseLog(txReceipt.logs[i]);
+      if (extra.name == "Purchase") {
+        const {balance, timestamp} = extra.values;
+        transaction.date = new Date(timestamp.toNumber() * 1000);
+        const change = toHuman(transaction.change, true);
+        if (toWallet) {
+          transaction.balance = balance.toNumber();
+          transaction.logEntry = `Purchase: ${change}`
+        }
+        else {
+          transaction.logEntry = `Sell: ${change}`
+        }
+        return true;
+      }
+    }
+  }
+
+  static async transferToTransaction(toWallet: boolean, ethersLog: Log, contract: Contract): Promise<Transaction> {
     const res = contract.interface.parseLog(ethersLog);
-    const block = await contract.provider.getBlock(ethersLog.blockNumber!);
-    return {
-      date: new Date(block.timestamp * 1000),
-      change: to ? -res.values[2].toNumber() : res.values[2].toNumber(),
-      logEntry: `Transfer: ${to ? res.values[1] : res.values[0]}`,
+    const {from, to, value} = res.values;
+    var r = {
+      txHash: ethersLog.transactionHash,
+      date: new Date(),
+      change: toWallet ? value.toNumber() : -value.toNumber(),
+      logEntry: "---",
       balance: -1
     }
+
+    if (!await AccountReducer.addAdditionalInfo(r, toWallet, contract))
+    {
+      const block = await contract.provider.getBlock(ethersLog.blockNumber!);
+      r.date = new Date(block.timestamp * 1000)
+      r.logEntry = `Transfer: ${toWallet ? from : to}`
+    }
+    return r;
   }
 
   static async readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: Contract, history: Transaction[]) {
     // construct filter to get tx either from or to
-    const args = to ? [account, null] : [null, account];
+    const args = to ? [null, account] : [account, null];
     let filter: any = contract.filters.Transfer(...args);
     filter.fromBlock = fromBlock || 0;
+
     // Retrieve logs
     const txLogs = await contract.provider.getLogs(filter)
     // Convert logs to our transactions
     let txs: Transaction[] = [];
     for (let i = 0; i < txLogs.length; i++) {
-      const tx = await AccountReducer.toTransaction(to, txLogs[i], contract);
+      const tx = await AccountReducer.transferToTransaction(to, txLogs[i], contract);
       txs.push(tx);
     }
     // merge and remove duplicates for complete array
     return AccountReducer.mergeTransactions(history, txs);
   }
 
+  // static async purchaseToTransaction(account: string, ethersLog: Log, contract: Contract): Promise<Transaction> {
+  //   const res = contract.interface.parseLog(ethersLog);
+  //   const {purchaser, amount, balance, timestamp} = res.values;
+  //   if (account != purchaser)
+  //     return null;
+  //   return {
+  //     txHash: ethersLog.transactionHash,
+  //     date: new Date(timestamp.toNumber() * 1000),
+  //     change: amount.toNumber(),
+  //     logEntry: `Purchase: ${amount.toNumber()}`,
+  //     balance: balance.toNumber()
+  //   }
+  // }
+
+  // static async readAndMergePurchases(account: string, fromBlock: number, contract: Contract, history: Transaction[]) {
+  //   // construct filter to get tx either from or to
+  //   let filter: any = contract.filters.Purchase();
+  //   filter.fromBlock = fromBlock || 0;
+  //   // Retrieve logs
+  //   const txLogs = await contract.provider.getLogs(filter)
+  //   // Convert logs to our transactions
+  //   let txs: Transaction[] = [];
+  //   for (let i = 0; i < txLogs.length; i++) {
+  //     const tx = await AccountReducer.purchaseToTransaction(account, txLogs[i], contract);
+  //     if (tx)
+  //       txs.push(tx);
+  //   }
+  //   // merge and remove duplicates for complete array
+  //   return AccountReducer.mergeTransactions(history, txs);
+  // }
+
   static async loadAndMergeHistory(address: string, fromBlock: number, contract: Contract, history: Transaction[]) {
     try {
+      //history = await AccountReducer.readAndMergePurchases(address, fromBlock, contract, history);
       history = await AccountReducer.readAndMergeTransfers(address, true, fromBlock, contract, history);
       history = await AccountReducer.readAndMergeTransfers(address, false, fromBlock, contract, history);
     }
@@ -139,7 +203,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     var lastBalance = currentBalance;
     history.reverse().forEach(tx => {
       if (tx.balance >= 0) {
-        if (lastBalance + tx.change)
+        if (lastBalance != tx.balance)
           console.error('Invalid balance detected: ', lastBalance, history, tx);
         lastBalance = tx.balance;
       }

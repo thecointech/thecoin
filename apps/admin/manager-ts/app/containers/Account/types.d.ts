@@ -8,6 +8,7 @@ type DecryptCallback = (percent: number) => boolean;
 
 /* --- STATE --- */
 type Transaction = {
+	txHash: string;
 	date: Date;
 	change: number;
 	logEntry: string;
