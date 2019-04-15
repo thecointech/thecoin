@@ -76,6 +76,7 @@
       "type": "function"
     }
   ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"},{\"name\":\"fee\",\"type\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\"},{\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"recoverSigner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"},{\"name\":\"fee\",\"type\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"buildMessage\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/src/TheCoin/the-contract/contracts/LibCertTransfer.sol\":\"LibCertTransfer\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/src/TheCoin/the-contract/contracts/LibCertTransfer.sol\":{\"keccak256\":\"0x3fecf53e589bd832073a206dd1f0ce5b074b6abee2864e96d756f578ed28d6e3\",\"urls\":[\"bzzr://9c433dc42fbe1622a865f3dddd5a21e0d3d98b8ca5bd5fdd544ad0f5a5511455\"]},\"openzeppelin-eth/contracts/cryptography/ECDSA.sol\":{\"keccak256\":\"0xb48974d92a87053dc1d6c5389f3d1b2ad522dec23afcb508eaa935d98dfdc0b6\",\"urls\":[\"bzzr://e665a84309432c27a26e622665dd97ff29d4d6ad7ad655d6e2c50226a5e99b56\"]}},\"version\":1}",
   "bytecode": "0x608060405234801561001057600080fd5b506104c9806100206000396000f3fe60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da91fcd14610051578063fbc67b23146101b7575b600080fd5b34801561005d57600080fd5b50610175600480360360c081101561007457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291908035906020019092919080359060200190929190803590602001906401000000008111156100ef57600080fd5b82018360208201111561010157600080fd5b8035906020019184600183028401116401000000008311171561012357600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f82011690508083019250505050505050919291929050505061025a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101c357600080fd5b50610244600480360360a08110156101da57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291908035906020019092919080359060200190929190505050610291565b6040518082815260200191505060405180910390f35b60008061026a8888888888610291565b9050600061027782610361565b905061028381856103b9565b925050509695505050505050565b600060608686868686604051602001808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c010000000000000000000000000281526014018573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401848152602001838152602001828152602001955050505050506040516020818303038152906040529050808051906020012091505095945050505050565b60008160405160200180807f19457468657265756d205369676e6564204d6573736167653a0a333200000000815250601c01828152602001915050604051602081830303815290604052805190602001209050919050565b600080600080604185511415156103d65760009350505050610497565b6020850151925060408501519150606085015160001a9050601b8160ff16101561040157601b810190505b601b8160ff16141580156104195750601c8160ff1614155b1561042a5760009350505050610497565b60018682858560405160008152602001604052604051808581526020018460ff1660ff1681526020018381526020018281526020019450505050506020604051602081039080840390855afa158015610487573d6000803e3d6000fd5b5050506020604051035193505050505b9291505056fea165627a7a7230582022488c41bb91c54f4d1896ad2160c5a0404d28245603500a297cb807be6cc8830029",
   "deployedBytecode": "0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da91fcd14610051578063fbc67b23146101b7575b600080fd5b34801561005d57600080fd5b50610175600480360360c081101561007457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291908035906020019092919080359060200190929190803590602001906401000000008111156100ef57600080fd5b82018360208201111561010157600080fd5b8035906020019184600183028401116401000000008311171561012357600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f82011690508083019250505050505050919291929050505061025a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101c357600080fd5b50610244600480360360a08110156101da57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001909291908035906020019092919080359060200190929190505050610291565b6040518082815260200191505060405180910390f35b60008061026a8888888888610291565b9050600061027782610361565b905061028381856103b9565b925050509695505050505050565b600060608686868686604051602001808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c010000000000000000000000000281526014018573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401848152602001838152602001828152602001955050505050506040516020818303038152906040529050808051906020012091505095945050505050565b60008160405160200180807f19457468657265756d205369676e6564204d6573736167653a0a333200000000815250601c01828152602001915050604051602081830303815290604052805190602001209050919050565b600080600080604185511415156103d65760009350505050610497565b6020850151925060408501519150606085015160001a9050601b8160ff16101561040157601b810190505b601b8160ff16141580156104195750601c8160ff1614155b1561042a5760009350505050610497565b60018682858560405160008152602001604052604051808581526020018460ff1660ff1681526020018381526020018281526020019450505050506020604051602081039080840390855afa158015610487573d6000803e3d6000fd5b5050506020604051035193505050505b9291505056fea165627a7a7230582022488c41bb91c54f4d1896ad2160c5a0404d28245603500a297cb807be6cc8830029",
   "sourceMap": "124:3306:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;124:3306:1;;;;;;;",
@@ -109,7 +110,7 @@
         "id": 441,
         "nodeType": "ImportDirective",
         "scope": 515,
-        "sourceUnit": 1622,
+        "sourceUnit": 1619,
         "src": "25:59:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -264,7 +265,7 @@
                         "name": "abi",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1943,
+                        "referencedDeclaration": 1940,
                         "src": "2794:3:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_abi",
@@ -331,7 +332,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1950,
+                      "referencedDeclaration": 1947,
                       "src": "2854:9:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -766,10 +767,10 @@
                         "name": "ECDSA",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1621,
+                        "referencedDeclaration": 1618,
                         "src": "3191:5:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1621_$",
+                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1618_$",
                           "typeString": "type(library ECDSA)"
                         }
                       },
@@ -780,7 +781,7 @@
                       "lValueRequested": false,
                       "memberName": "toEthSignedMessageHash",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1620,
+                      "referencedDeclaration": 1617,
                       "src": "3191:28:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes32_$returns$_t_bytes32_$",
@@ -852,10 +853,10 @@
                         "name": "ECDSA",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1621,
+                        "referencedDeclaration": 1618,
                         "src": "3239:5:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1621_$",
+                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1618_$",
                           "typeString": "type(library ECDSA)"
                         }
                       },
@@ -866,7 +867,7 @@
                       "lValueRequested": false,
                       "memberName": "recover",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1604,
+                      "referencedDeclaration": 1601,
                       "src": "3239:13:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes32_$_t_bytes_memory_ptr_$returns$_t_address_$",
@@ -1140,7 +1141,7 @@
         "id": 441,
         "nodeType": "ImportDirective",
         "scope": 515,
-        "sourceUnit": 1622,
+        "sourceUnit": 1619,
         "src": "25:59:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1295,7 +1296,7 @@
                         "name": "abi",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1943,
+                        "referencedDeclaration": 1940,
                         "src": "2794:3:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_abi",
@@ -1362,7 +1363,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1950,
+                      "referencedDeclaration": 1947,
                       "src": "2854:9:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -1797,10 +1798,10 @@
                         "name": "ECDSA",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1621,
+                        "referencedDeclaration": 1618,
                         "src": "3191:5:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1621_$",
+                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1618_$",
                           "typeString": "type(library ECDSA)"
                         }
                       },
@@ -1811,7 +1812,7 @@
                       "lValueRequested": false,
                       "memberName": "toEthSignedMessageHash",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1620,
+                      "referencedDeclaration": 1617,
                       "src": "3191:28:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes32_$returns$_t_bytes32_$",
@@ -1883,10 +1884,10 @@
                         "name": "ECDSA",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1621,
+                        "referencedDeclaration": 1618,
                         "src": "3239:5:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1621_$",
+                          "typeIdentifier": "t_type$_t_contract$_ECDSA_$1618_$",
                           "typeString": "type(library ECDSA)"
                         }
                       },
@@ -1897,7 +1898,7 @@
                       "lValueRequested": false,
                       "memberName": "recover",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1604,
+                      "referencedDeclaration": 1601,
                       "src": "3239:13:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes32_$_t_bytes_memory_ptr_$returns$_t_address_$",
@@ -2149,8 +2150,8 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.3",
-  "updatedAt": "2019-03-17T18:44:27.566Z",
+  "schemaVersion": "3.0.6",
+  "updatedAt": "2019-04-15T01:11:28.071Z",
   "devdoc": {
     "methods": {}
   },

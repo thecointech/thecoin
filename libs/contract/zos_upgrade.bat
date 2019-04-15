@@ -1,2 +1,1 @@
-zos push
-zos update TheCoin
+yarn zosupgrade

@@ -180,26 +180,25 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // Client interactions with TheCoin
     // ------------------------------------------------------------------------
 
-    // Users purchase coin from us. 
-    // We record the precise timestamp to ensure we can reconstruct the price
+    // Users purchase coin from brokers.  This function is used to declare
+    // a transfer with a precise timestamp to ensure we can reconstruct the fx price
     // of this transaction later
     function coinPurchase(address purchaser, uint amount, uint timeout, uint timestamp) public
-    onlyTheCoin
-    balanceAvailable(amount)
+    isTransferable(msg.sender, amount)
     {
-        _transfer(role_TheCoin, purchaser, amount);
-        freezeUntil[purchaser] = timeout;
+        _transfer(msg.sender, purchaser, amount);
+        //freezeUntil[purchaser] = timeout;
         emit Purchase(purchaser, amount, balanceOf(purchaser), timestamp);
     }
 
     // A user returns their coins to us (this will trigger disbursement externally)
     // We record the precise timestamp to ensure we can reconstruct the price
     // of this transaction later
-    function coinRedeem(uint amount, uint timestamp) public
+    function coinRedeem(uint amount, address redeemer, uint timestamp) public
     isTransferable(msg.sender, amount)
     {
         // first, we recover the coins back to our own account
-        _transfer(msg.sender, role_TheCoin, amount);
+        _transfer(msg.sender, redeemer, amount);
         emit Redeem(msg.sender, amount, balanceOf(msg.sender), timestamp);
     }
 

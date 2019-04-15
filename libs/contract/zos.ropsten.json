@@ -1,11 +1,11 @@
 {
   "contracts": {
     "TheCoin": {
-      "address": "0xa7B071F90497442e6eF71c5b5c66D2809Baf9686",
-      "constructorCode": "608060405234801561001057600080fd5b5061536d806100206000396000f3fe",
-      "bodyBytecodeHash": "e652dfdbe065344b105cc541f37fa89f7f684a98c1a925313c1fdfeedfb92457",
-      "localBytecodeHash": "69e000175038eaffd2d72791b968f4aa4ee1b9022da6fc9ec16a40c836757fc7",
-      "deployedBytecodeHash": "69e000175038eaffd2d72791b968f4aa4ee1b9022da6fc9ec16a40c836757fc7",
+      "address": "0xb9E12D18Af107530739a158fdada6a0D66014B3C",
+      "constructorCode": "608060405234801561001057600080fd5b5061531f806100206000396000f3fe",
+      "bodyBytecodeHash": "55c893bd416d110286e38f1507bd327cae91602d2efe066542886ec37081f31a",
+      "localBytecodeHash": "362fad1ac0bc027c2dc37668858d2f768427283806f20a44180989aaa774f243",
+      "deployedBytecodeHash": "362fad1ac0bc027c2dc37668858d2f768427283806f20a44180989aaa774f243",
       "types": {
         "t_bool": {
           "id": "t_bool",
@@ -52,21 +52,21 @@
           "members": [
             {
               "label": "TransactionId",
-              "astId": 916,
+              "astId": 913,
               "type": "t_uint256",
-              "src": "9433:18:2"
+              "src": "9485:18:2"
             },
             {
               "label": "TapCapEscrow",
-              "astId": 918,
+              "astId": 915,
               "type": "t_uint256",
-              "src": "9495:17:2"
+              "src": "9547:17:2"
             },
             {
               "label": "TapCapRefill",
-              "astId": 920,
+              "astId": 917,
               "type": "t_uint256",
-              "src": "9564:17:2"
+              "src": "9616:17:2"
             }
           ]
         },
@@ -82,7 +82,7 @@
           "contract": "Initializable",
           "path": "zos-lib\\contracts\\Initializable.sol",
           "label": "initialized",
-          "astId": 1889,
+          "astId": 1886,
           "type": "t_bool",
           "src": "757:24:7"
         },
@@ -90,7 +90,7 @@
           "contract": "Initializable",
           "path": "zos-lib\\contracts\\Initializable.sol",
           "label": "initializing",
-          "astId": 1891,
+          "astId": 1888,
           "type": "t_bool",
           "src": "876:25:7"
         },
@@ -98,7 +98,7 @@
           "contract": "Initializable",
           "path": "zos-lib\\contracts\\Initializable.sol",
           "label": "______gap",
-          "astId": 1940,
+          "astId": 1937,
           "type": "t_array:50<t_uint256>",
           "src": "1891:29:7"
         },
@@ -106,7 +106,7 @@
           "contract": "ERC20Detailed",
           "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
           "label": "_name",
-          "astId": 1759,
+          "astId": 1756,
           "type": "t_string",
           "src": "382:20:5"
         },
@@ -114,7 +114,7 @@
           "contract": "ERC20Detailed",
           "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
           "label": "_symbol",
-          "astId": 1761,
+          "astId": 1758,
           "type": "t_string",
           "src": "408:22:5"
         },
@@ -122,7 +122,7 @@
           "contract": "ERC20Detailed",
           "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
           "label": "_decimals",
-          "astId": 1763,
+          "astId": 1760,
           "type": "t_uint8",
           "src": "436:23:5"
         },
@@ -130,7 +130,7 @@
           "contract": "ERC20Detailed",
           "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
           "label": "______gap",
-          "astId": 1815,
+          "astId": 1812,
           "type": "t_array:50<t_uint256>",
           "src": "1097:29:5"
         },
@@ -250,9 +250,9 @@
           "contract": "TheCoin",
           "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
           "label": "tapCaps",
-          "astId": 925,
+          "astId": 922,
           "type": "t_mapping<t_struct<TheCoin.TapCapData>>",
-          "src": "9640:38:2"
+          "src": "9692:38:2"
         }
       ],
       "warnings": {
@@ -266,9 +266,9 @@
             "contract": "TheCoin",
             "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
             "label": "tapCaps",
-            "astId": 925,
+            "astId": 922,
             "type": "t_mapping<t_struct<TheCoin.TapCapData>>",
-            "src": "9640:38:2"
+            "src": "9692:38:2"
           }
         ],
         "storageDiff": []
@@ -281,7 +281,7 @@
       {
         "address": "0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530",
         "version": "0.1.0",
-        "implementation": "0xa7B071F90497442e6eF71c5b5c66D2809Baf9686"
+        "implementation": "0xb9E12D18Af107530739a158fdada6a0D66014B3C"
       }
     ]
   },
