@@ -113,7 +113,7 @@ function buildSagas(name: keyof ApplicationRootState) {
 			const reducerImp = new reducerClass(state, state);
 			const fn = reducerImp[fnName].bind(reducerImp);
 			//const [name, password, callback] = action.payload;
-			return yield call(fn, action.payload.date);
+			return yield call(fn, action.payload);
 		}
 		return saga;
 	}

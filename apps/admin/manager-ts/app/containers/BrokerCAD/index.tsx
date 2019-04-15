@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Balance } from 'Containers/Balance';
 import { ApplicationRootState } from 'types';
 import { VerifyAccount } from './VerifyAccount';
+import { Purchase } from 'containers/Purchase';
 
 interface OwnProps {
 }
@@ -13,6 +14,7 @@ type Props = OwnProps & RouteComponentProps;
 const AccountMap: RouterPath[] = [
   ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
   ["Verify",       "verify",    (routerProps) => ((props) => <VerifyAccount {...props} wallet={routerProps.account.wallet} /> )],
+  ["Complete Purchase",   "purchase", (routerProps) => ((props) => <Purchase {...props} {...routerProps.account} />)],
   // ["Transfer In",   "purchase", (account) => ((props) => <Purchase {...props} address={account.wallet.address} />)],
   // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
   // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],

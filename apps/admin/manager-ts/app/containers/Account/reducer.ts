@@ -193,7 +193,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     // Ensure we have fx value for each tx in this list
     for (var i = 0; i < newHistory.length; i++)
     {
-      yield this.sendValues(FxActions.fetchRateAtDate, {date: newHistory[i].date})
+      yield this.sendValues(FxActions.fetchRateAtDate, newHistory[i].date);
     }
   }
 

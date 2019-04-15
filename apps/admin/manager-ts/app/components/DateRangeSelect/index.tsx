@@ -1,10 +1,15 @@
 import React from 'react';
 import moment, { Moment } from 'moment'
 
-require('react-dates/initialize');
-import 'react-dates/lib/css/_datepicker.css';
-
+//import DateInit from 'react-dates/lib/utils/registerCSSInterfaceWithDefaultTheme';
+//DateInit('default');
+//import 'react-dates/initialize'
+//import 'react-dates/lib/css/_datepicker.css';
 //import { DateRangePicker } from 'react-dates';
+
+//require('react-dates/lib/initialize');
+//require('react-dates/lib/css/_datepicker.css');
+//const { DateRangePicker } = require('react-dates');
 
 type OnChangeCallback = (startTime: Date, endTime: Date) => void;
 
