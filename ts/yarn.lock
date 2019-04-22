@@ -18,12 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@the-coin/contract@^1.0.6":
-  version "1.0.7"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.7.tgz#825fcc2063ff6cd038b18ebd969b9a8ea7f588f8"
-  integrity sha1-gl/MIGP/bNA4sY69lpuajqf1iPg=
-  dependencies:
-    truffle "^5.0.12"
+"@the-coin/contract@^1.0.8":
+  version "1.0.8"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.8.tgz#69b419195a1d62ece8152feda88054b645e534f0"
+  integrity sha1-abQZGVodYuzoFS/tqIBUtkXlNPA=
 
 "@the-coin/types@^0.1.3":
   version "0.1.3"
@@ -129,11 +127,6 @@ anymatch@^2.0.0:
   dependencies:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
-
-app-module-path@^2.2.0:
-  version "2.2.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/app-module-path/-/app-module-path-2.2.0.tgz#641aa55dfb7d6a6f0a8141c4b9c0aa50b6c24dd5"
-  integrity sha1-ZBqlXft9am8KgUHEucCqULbCTdU=
 
 append-transform@^0.4.0:
   version "0.4.0"
@@ -444,13 +437,6 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bindings@^1.2.1:
-  version "1.5.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
-  integrity sha1-EDU8npRTNLwFEabZCzj7x8nFBN8=
-  dependencies:
-    file-uri-to-path "1.0.0"
-
 bn.js@^4.4.0:
   version "4.11.8"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
@@ -505,11 +491,6 @@ browser-resolve@^1.11.3:
   integrity sha1-m3y7PQ9RDky4a9vXlhJNKLWJCvY=
   dependencies:
     resolve "1.1.7"
-
-browser-stdout@1.3.0:
-  version "1.3.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/browser-stdout/-/browser-stdout-1.3.0.tgz#f351d32969d32fa5d7a5567154263d928ae3bd1f"
-  integrity sha1-81HTKWnTL6XXpVZxVCY9korjvR8=
 
 bs-logger@0.x:
   version "0.2.6"
@@ -653,11 +634,6 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@2.11.0:
-  version "2.11.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
-  integrity sha1-FXFS/R56bI2YpbcVzzdt+SgARWM=
-
 commander@~2.20.0:
   version "2.20.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
@@ -736,13 +712,6 @@ data-urls@^1.0.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
-
-debug@3.1.0:
-  version "3.1.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha1-W7WgZyYotkFJVmuhaBnmFRjGcmE=
-  dependencies:
-    ms "2.0.0"
 
 debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
@@ -848,11 +817,6 @@ detect-newline@^2.1.0:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
   integrity sha1-9B8cEL5LAOh7XxPaaAdZ8sW/0+I=
 
-diff@3.3.1:
-  version "3.3.1"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/diff/-/diff-3.3.1.tgz#aa8567a6eed03c531fc89d3f711cd0e5259dec75"
-  integrity sha1-qoVnpu7QPFMfyJ0/cRzQ5SWd7HU=
-
 diff@^3.2.0:
   version "3.5.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
@@ -911,7 +875,7 @@ es-to-primitive@^1.2.0:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
+escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
@@ -1101,11 +1065,6 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-file-uri-to-path@1.0.0:
-  version "1.0.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
-  integrity sha1-VTp7hEb/b2hDWcRF8eN6BdrMM90=
-
 filename-regex@^2.0.0:
   version "2.0.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
@@ -1188,17 +1147,6 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-fs-extra@^0.30.0:
-  version "0.30.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/fs-extra/-/fs-extra-0.30.0.tgz#f233ffcc08d4da7d432daa449776989db1df93f0"
-  integrity sha1-8jP/zAjU2n1DLapEl3aYnbHfk/A=
-  dependencies:
-    graceful-fs "^4.1.2"
-    jsonfile "^2.1.0"
-    klaw "^1.0.0"
-    path-is-absolute "^1.0.0"
-    rimraf "^2.2.8"
-
 fs-minipass@^1.2.5:
   version "1.2.5"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/fs-minipass/-/fs-minipass-1.2.5.tgz#06c277218454ec288df77ada54a03b8702aacb9d"
@@ -1275,18 +1223,6 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-glob@7.1.2:
-  version "7.1.2"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
-  integrity sha1-wZyd+aAocC1nhhI4SmVSQExjbRU=
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.4"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
 glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3:
   version "7.1.3"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
@@ -1304,15 +1240,10 @@ globals@^9.18.0:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
   integrity sha1-qjiWs+abSH8X4x7SFD1pqOMMLYo=
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9:
+graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "4.1.15"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha1-/7cD4QZuig7qpMi4C6klPu77+wA=
-
-growl@1.10.3:
-  version "1.10.3"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/growl/-/growl-1.10.3.tgz#1926ba90cf3edfe2adb4927f5880bc22c66c790f"
-  integrity sha1-GSa6kM8+3+KttJJ/WIC8IsZseQ8=
 
 growly@^1.3.0:
   version "1.3.0"
@@ -1354,11 +1285,6 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
   integrity sha1-nZ55MWXOAXoA8AQYxD+UKnsdEfo=
-
-has-flag@^2.0.0:
-  version "2.0.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
-  integrity sha1-6CB68cx7MNRGzHC3NLXovhj4jVE=
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -1428,11 +1354,6 @@ hash.js@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
-
-he@1.1.1:
-  version "1.1.1"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
-  integrity sha1-k0EP0hsAlzUVH4howvJx80J+I/0=
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -2234,13 +2155,6 @@ json5@^0.5.1:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
   integrity sha1-Hq3nrMASA0rYTiOWdn6tn6VJWCE=
 
-jsonfile@^2.1.0:
-  version "2.4.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/jsonfile/-/jsonfile-2.4.0.tgz#3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
-  integrity sha1-NzaitCi4e72gzIO1P6PWM6NcKug=
-  optionalDependencies:
-    graceful-fs "^4.1.6"
-
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -2250,16 +2164,6 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
-
-keccak@^1.0.2:
-  version "1.4.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
-  integrity sha1-Vy+Kbb7o57OqQhVQ+eZAjKIYb4A=
-  dependencies:
-    bindings "^1.2.1"
-    inherits "^2.0.3"
-    nan "^2.2.1"
-    safe-buffer "^5.1.0"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -2284,13 +2188,6 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
-
-klaw@^1.0.0:
-  version "1.3.1"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/klaw/-/klaw-1.3.1.tgz#4088433b46b3b1ba259d78785d8e96f73ba02439"
-  integrity sha1-QIhDO0azsbolnXh4XY6W9zugJDk=
-  optionalDependencies:
-    graceful-fs "^4.1.9"
 
 kleur@^2.0.1:
   version "2.0.2"
@@ -2401,11 +2298,6 @@ mem@^1.1.0:
   integrity sha1-Xt1StIXKHZAP5kiVUFOZoN+kX3Y=
   dependencies:
     mimic-fn "^1.0.0"
-
-memorystream@^0.3.1:
-  version "0.3.1"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/memorystream/-/memorystream-0.3.1.tgz#86d7090b30ce455d63fbae12dda51a47ddcaf9b2"
-  integrity sha1-htcJCzDORV1j+64S3aUaR93K+bI=
 
 merge-stream@^1.0.1:
   version "1.0.1"
@@ -2524,28 +2416,12 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@0.5.1, mkdirp@0.x, mkdirp@^0.5.0, mkdirp@^0.5.1:
+mkdirp@0.x, mkdirp@^0.5.0, mkdirp@^0.5.1:
   version "0.5.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   dependencies:
     minimist "0.0.8"
-
-mocha@^4.1.0:
-  version "4.1.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/mocha/-/mocha-4.1.0.tgz#7d86cfbcf35cb829e2754c32e17355ec05338794"
-  integrity sha1-fYbPvPNcuCnidUwy4XNV7AUzh5Q=
-  dependencies:
-    browser-stdout "1.3.0"
-    commander "2.11.0"
-    debug "3.1.0"
-    diff "3.3.1"
-    escape-string-regexp "1.0.5"
-    glob "7.1.2"
-    growl "1.10.3"
-    he "1.1.1"
-    mkdirp "0.5.1"
-    supports-color "4.4.0"
 
 ms@2.0.0:
   version "2.0.0"
@@ -2557,7 +2433,7 @@ ms@^2.1.1:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha1-MKWGTrPrsKZvLr5tcnrwagnYbgo=
 
-nan@^2.2.1, nan@^2.9.2:
+nan@^2.9.2:
   version "2.13.2"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/nan/-/nan-2.13.2.tgz#f51dc7ae66ba7d5d55e1e6d4d8092e802c9aefe7"
   integrity sha1-9R3Hrma6fV1V4ebU2AkugCya7+c=
@@ -2775,11 +2651,6 @@ optionator@^0.8.1:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
     wordwrap "~1.0.0"
-
-original-require@1.0.1:
-  version "1.0.1"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/original-require/-/original-require-1.0.1.tgz#0f130471584cd33511c5ec38c8d59213f9ac5e20"
-  integrity sha1-DxMEcVhM0zURxew4yNWSE/msXiA=
 
 os-homedir@^1.0.0:
   version "1.0.2"
@@ -3140,11 +3011,6 @@ require-directory@^2.1.1:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
 
-require-from-string@^2.0.0:
-  version "2.0.2"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
-  integrity sha1-iaf92TgmEmcxjq/hT5wy5ZjDaQk=
-
 require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
@@ -3184,7 +3050,7 @@ ret@~0.1.10:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-rimraf@^2.2.8, rimraf@^2.5.4, rimraf@^2.6.1:
+rimraf@^2.5.4, rimraf@^2.6.1:
   version "2.6.3"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
   integrity sha1-stEE/g2Psnz54KHNqCYt04M8bKs=
@@ -3196,7 +3062,7 @@ rsvp@^3.3.3:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/rsvp/-/rsvp-3.6.2.tgz#2e96491599a96cde1b515d5674a8f7a91452926a"
   integrity sha512-OfWGQTb9vnwRjwtA2QwpG2ICclHC3pgXZO5xt8H2EfgDquO0qVdSb5T88L4qJVAEugbS56pAuV4XZM58UX8ulw==
 
-safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
+safe-buffer@^5.0.1, safe-buffer@^5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
@@ -3335,18 +3201,6 @@ snapdragon@^0.8.1:
     source-map "^0.5.6"
     source-map-resolve "^0.5.0"
     use "^3.1.0"
-
-solc@0.5.0:
-  version "0.5.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/solc/-/solc-0.5.0.tgz#2deb2ae992acac3afb909f85c38d00f01dcb335e"
-  integrity sha1-Lesq6ZKsrDr7kJ+Fw40A8B3LM14=
-  dependencies:
-    fs-extra "^0.30.0"
-    keccak "^1.0.2"
-    memorystream "^0.3.1"
-    require-from-string "^2.0.0"
-    semver "^5.5.0"
-    yargs "^11.0.0"
 
 source-map-resolve@^0.5.0:
   version "0.5.2"
@@ -3528,13 +3382,6 @@ strip-json-comments@~2.0.1:
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
-supports-color@4.4.0:
-  version "4.4.0"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/supports-color/-/supports-color-4.4.0.tgz#883f7ddabc165142b2a61427f3352ded195d1a3e"
-  integrity sha1-iD992rwWUUKyphQn8zUt7RldGj4=
-  dependencies:
-    has-flag "^2.0.0"
-
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
@@ -3650,16 +3497,6 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
-
-truffle@^5.0.12:
-  version "5.0.12"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/truffle/-/truffle-5.0.12.tgz#05ab7d2561a3ee4fd5e026dcc4b91b8f3c6e3795"
-  integrity sha1-Bat9JWGj7k/V4CbcxLkbjzxuN5U=
-  dependencies:
-    app-module-path "^2.2.0"
-    mocha "^4.1.0"
-    original-require "1.0.1"
-    solc "0.5.0"
 
 ts-jest@^23.10.5:
   version "23.10.5"
