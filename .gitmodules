@@ -28,3 +28,6 @@
 [submodule "the-website-ts"]
 	path = the-website-ts
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website-ts
+[submodule "the-react-components"]
+	path = the-react-components
+	url = https://tnadevelopment@dev.azure.com/tnadevelopment/TheCoin/_git/the-react-components
