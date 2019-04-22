@@ -1,5 +1,5 @@
 import { UxPassword } from 'components/UxPassword';
-import { CancellableOperationModal } from 'containers/CancellableOperationModal';
+import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
 import { Wallet } from 'ethers';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -165,7 +165,7 @@ class Login extends React.PureComponent<Props, State, null> {
             <FormattedMessage {...messages.buttonLogin} />
           </Button>
         </Form>
-        <CancellableOperationModal cancelCallback={this.onCancelLogin} isOpen={isDecrypting} header={messages.decryptHeader} progressMessage={messages.decryptInProgress} progressPercent={this.state.percentComplete} />
+        <ModalOperation cancelCallback={this.onCancelLogin} isOpen={isDecrypting} header={messages.decryptHeader} progressMessage={messages.decryptInProgress} progressPercent={this.state.percentComplete} />
       </React.Fragment>
     );
   }

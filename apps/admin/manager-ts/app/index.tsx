@@ -17,6 +17,7 @@ const translationMessages = {
   }
 }
 
+import "@babel/polyfill";
 import './app.global.css';
 import 'semantic-ui-css/semantic.min.css'
 

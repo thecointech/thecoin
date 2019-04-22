@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Transaction } from 'containers/Account/types'
-import { DateRangeSelect, OnChangeCallback } from 'components/DateRangeSelect';
+import { DateRangeSelect, OnChangeCallback } from '@the-coin/react-components/lib/components/DateRangeSelect';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
 import { Range } from 'immutable';

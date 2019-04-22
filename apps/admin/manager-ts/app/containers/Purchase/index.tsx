@@ -1,7 +1,6 @@
 import * as React from 'react';
 //import styles from './index.module.css'
 import { ContainerState as AccountState } from 'containers/Account/types'
-import { CancellableOperationModal } from 'containers/CancellableOperationModal';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import messages from './messages';
 import { DualFxInput } from 'components/DualFxInput';
@@ -15,6 +14,7 @@ import { ds } from 'containers/Datastore';
 
 import "react-datetime/css/react-datetime.css"
 import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
+import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
 import { UxInput } from 'components/UxInput';
 import { google } from '@google-cloud/datastore/build/proto/datastore';
 import { entity } from '@google-cloud/datastore/build/src/entity';
@@ -224,7 +224,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 					<Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
 				</Form>
 				<Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.handleConfirm} />
-				<CancellableOperationModal isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{step}}/>
+				<ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{step}}/>
 			</React.Fragment>
 		);
 	}
