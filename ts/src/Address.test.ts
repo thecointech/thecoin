@@ -10,9 +10,13 @@ test('basic', () => {
 	expect(IsValidAddress('0xffe3cbf59a777e8f4be4e712945ffefc6612d46f')).toBe(true);
 	// invalid char
 	expect(IsValidAddress('0xffe3xbf59a777e8f4be4e712945ffefc6612d46f')).toBe(false);
+	// Ethers refuses addresses with uppercase X
+	expect(IsValidAddress('0XCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4')).toBe(false);
 
-	const normAddress = NormalizeAddress('2fe3cbf59a777e8f4be4e712945ffefc6612d46f');
-	expect(/^0x[A-G0-9]{40}$/i.test(normAddress)).toBe(true);
+	const normAddressShort = NormalizeAddress('2fe3cbf59a777e8f4be4e712945ffefc6612d46f');
+	expect(/^0x[A-G0-9]{40}$/.test(normAddressShort)).toBe(true);
+	const normAddressLong = NormalizeAddress('0x2fe3cbf59a777e8f4be4e712945ffefc6612d46f');
+	expect(/^0x[A-G0-9]{40}$/.test(normAddressLong)).toBe(true);
 
 	expect(IsValidReferrerId('7k5y8w')).toBe(true);
 	expect(IsValidReferrerId('7K5y8W')).toBe(true);
