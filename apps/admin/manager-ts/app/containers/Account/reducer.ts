@@ -1,21 +1,20 @@
 import { GetConnected } from '@the-coin/utilities/lib/TheContract';
 import { Wallet, Contract } from 'ethers';
-import { createActionCreators, ImmerReducer, createReducerFunction } from 'immer-reducer';
 import { call, put } from 'redux-saga/effects';
 import { ContainerState, DecryptCallback, IActions, Transaction } from './types';
 import { Log } from 'ethers/providers';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
-import { ApplicationRootState } from 'types';
 import { buildSagas } from './actions';
 //import { createAccountSelector } from './selector';
 import { compose } from 'redux';
 
 import { GetStored, SetStored } from './storageSync'
 
-import { actions as FxActions } from 'containers/FxRate/reducer';
+import { actions as FxActions } from '@the-coin/react-components/lib/containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
+import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from 'utils/immerReducer';
 
 
 const initialState: ContainerState = {
@@ -28,7 +27,7 @@ const initialState: ContainerState = {
   displayCurrency: CurrencyCodes.CAD
 }
 
-class AccountReducer extends ImmerReducer<ContainerState>
+class AccountReducer extends TheCoinReducer<ContainerState>
   implements IActions {
 
   setName(name: string): void {
@@ -47,13 +46,6 @@ class AccountReducer extends ImmerReducer<ContainerState>
     Object.assign(this.draftState, newState);
   }
 
-  sendValues(command, values) {
-    return put({
-      type: command.type,
-      payload: values
-    });
-  }
-
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
   *updateBalance() {
@@ -63,7 +55,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     }
     try {
       const balance = yield call(contract.balanceOf, wallet.address);
-      yield this.sendValues(this.actions.updateWithValues, { balance: balance.toNumber() });
+      yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber() });
     } catch (err) {
       console.error(err);
     }
@@ -228,7 +220,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     // First, fetch the account balance toasty-fresh
     const balance = yield call(contract.balanceOf, wallet.address);
 
-    yield this.sendValues(this.actions.updateWithValues, { balance, historyLoading: true });
+    yield this.sendValues(this.actions().updateWithValues, { balance, historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
     // allow a 500 ms delay so we don't update too quickly
@@ -245,7 +237,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
     // Get the current block (save it so we know where we were up to in the future.)
     const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 
-    yield this.sendValues(this.actions.updateWithValues, {
+    yield this.sendValues(this.actions().updateWithValues, {
       history: newHistory,
       historyLoading: false,
       historyStart: new Date(0),
@@ -300,7 +292,7 @@ class AccountReducer extends ImmerReducer<ContainerState>
         callback(1);
       }
       yield put({
-        type: this.actions.updateWithDecrypted.type,
+        type: this.actions().updateWithDecrypted.type,
         payload: decrypted
       });
     }
@@ -310,43 +302,19 @@ class AccountReducer extends ImmerReducer<ContainerState>
         callback(-1);
     }
   }
-
-  public actions: any; //ActionCreators<typeof AccountReducer>;
 }
 
-var reducerCache = {};
-function GetNamedReducer(key: keyof ApplicationRootState) {
-  if (!reducerCache[key]) {
-    var actionCreators = undefined;
-    class ExtendedReducer extends AccountReducer {
-      constructor(a1, a2) {
-        super(a1, a2);
-        // Jury rig up the actions entity so we can still call ourselves
-        this.actions = actionCreators;
-      }
-    };
-    ExtendedReducer.customName = key;
-    ExtendedReducer.prototype = AccountReducer.prototype;
-    const reducer = createReducerFunction(ExtendedReducer, initialState);
-    actionCreators = createActionCreators(ExtendedReducer);
-    reducerCache[key] = [reducer, actionCreators, ExtendedReducer];
-  }
-  return reducerCache[key]
-}
-//this.actions = reducerActions;
+function buildReducer<T>(key: string) {
 
-// Optional reducer may be used to fill in any number of reducers
-// TODO: Read up about splitting reducer into sub-components.
-
-function buildReducer<T>(key: keyof ApplicationRootState) {
-
-  const [reducer] = GetNamedReducer(key);
+  // Create the reducer
+  GetNamedReducer(AccountReducer, key, initialState, "accounts");
 
   const withReducer = injectReducer<T>({
-    key: key,
-    reducer: reducer
+    key: "accounts",
+    reducer: buildNamedDictionaryReducer("accounts")
   });
 
+  // Note, our saga requires us 
   const withSaga = injectSaga<T>({
     key: key,
     saga: buildSagas(key)
@@ -358,5 +326,5 @@ function buildReducer<T>(key: keyof ApplicationRootState) {
   )
 }
 
-export { buildReducer, AccountReducer, GetNamedReducer, initialState };
+export { buildReducer, AccountReducer, initialState };
 

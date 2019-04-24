@@ -4,7 +4,7 @@ import { DateRangeSelect, OnChangeCallback } from '@the-coin/react-components/li
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
 import { Range } from 'immutable';
-import { getFxRate } from 'containers/FxRate/selectors';
+import { getFxRate } from '@the-coin/react-components/lib/containers/FxRate/reducer';
 import { FXRate } from '@the-coin/pricing';
 
 type MyProps = {

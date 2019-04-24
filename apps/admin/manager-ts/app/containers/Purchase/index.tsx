@@ -1,28 +1,32 @@
 import * as React from 'react';
-//import styles from './index.module.css'
-import { ContainerState as AccountState } from 'containers/Account/types'
-import { Form, Header, Confirm } from 'semantic-ui-react';
-import messages from './messages';
-import { DualFxInput } from 'components/DualFxInput';
-import { selectFxRate, getFxRate, ContainerState as FxRates } from 'containers/FxRate/selectors';
-import { DispatchProps, mapDispatchToProps } from 'containers/FxRate/actions';
 import { connect } from 'react-redux';
-import { toHuman } from '@the-coin/utilities';
+import { Form, Header, Confirm } from 'semantic-ui-react';
 import * as Datetime from 'react-datetime';
 import { Moment } from 'moment';
+import { google } from '@google-cloud/datastore/build/proto/datastore';
+import { entity } from '@google-cloud/datastore/build/src/entity';
+
+//import styles from './index.module.css'
+import * as FxSelect from '@the-coin/react-components/lib/containers/FxRate/selectors';
+import * as FxAction from '@the-coin/react-components/lib/containers/FxRate/actions';
+import { getFxRate } from '@the-coin/react-components/lib/containers/FxRate/reducer';
+import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
+import { toHuman } from '@the-coin/utilities';
+
+import { ContainerState as AccountState } from 'containers/Account/types'
+import { DualFxInput } from 'components/DualFxInput';
+import messages from './messages';
+
 import { ds } from 'containers/Datastore';
 
 import "react-datetime/css/react-datetime.css"
 import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
-import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
 import { UxInput } from 'components/UxInput';
-import { google } from '@google-cloud/datastore/build/proto/datastore';
-import { entity } from '@google-cloud/datastore/build/src/entity';
 
 type MyProps = AccountState & {
 	updateBalance: Function
 }
-type Props = MyProps & FxRates & DispatchProps;
+type Props = MyProps & FxSelect.ContainerState & FxAction.DispatchProps;
 
 class PurchaseClass extends React.PureComponent<Props> {
 
@@ -230,5 +234,5 @@ class PurchaseClass extends React.PureComponent<Props> {
 	}
 }
 
-export const Purchase = connect(selectFxRate, mapDispatchToProps)(PurchaseClass);
+export const Purchase = connect(FxSelect.selectFxRate, FxAction.mapDispatchToProps)(PurchaseClass);
 

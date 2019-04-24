@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ApplicationRootState } from 'types';
 import { Account, RouterPath } from 'containers/Account';
 import { Balance } from 'Containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
+
+//import { Balance } from 
 
 interface OwnProps {
 }
@@ -21,7 +22,7 @@ const AccountMap: RouterPath[] = [
 ]
 class TheCoin extends React.PureComponent<Props, {}, null> {
 
-  static AccountName: keyof ApplicationRootState = "TheCoin";
+  static AccountName = "TheCoin";
 
   render() {
     const { url } = this.props.match;

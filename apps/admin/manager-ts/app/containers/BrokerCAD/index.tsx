@@ -3,7 +3,6 @@ import { Account, RouterPath } from 'containers/Account';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { Balance } from 'Containers/Balance';
-import { ApplicationRootState } from 'types';
 import { VerifyAccount } from './VerifyAccount';
 import { Purchase } from 'containers/Purchase';
 
@@ -24,7 +23,7 @@ const AccountMap: RouterPath[] = [
 
 class BrokerCAD extends React.PureComponent<Props, {}, null> {
 
-  static AccountName: keyof ApplicationRootState = "BrokerCAD";
+  static AccountName = "BrokerCAD";
 
   render() {
     const { url } = this.props.match;

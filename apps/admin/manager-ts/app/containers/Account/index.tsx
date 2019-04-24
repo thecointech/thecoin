@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Login } from './Login';
 import { UploadWallet } from './UploadWallet';
 import { NotFoundPage } from 'containers/NotFoundPage'
-import { ApplicationRootState } from 'types';
 
 import { ContainerState as AccountState } from './types';
 import { buildReducer } from './reducer'
@@ -21,7 +20,7 @@ type RouterPath = [string, string, (props: AccountProps) => (props: any) => Reac
 
 interface OwnProps {
   url: string;
-  accountName: keyof ApplicationRootState;
+  accountName: string;
   accountMap: RouterPath[];
   addressMatch?: (address: string) => boolean;
 }
@@ -122,9 +121,9 @@ function NamedAccount(props: OwnProps) {
         ...Sidebar.mapDispatchToProps(dispatch)
       };
     }
-    const mapPropsToState = function (dispatch) {
+    const mapPropsToState = function (state) {
       return {
-        account: createAccountSelector(accountName)(dispatch)
+        account: createAccountSelector(accountName)(state)
       }
     }
 

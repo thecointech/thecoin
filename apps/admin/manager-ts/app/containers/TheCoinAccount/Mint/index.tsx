@@ -1,14 +1,15 @@
 import * as React from 'react';
 //import styles from './index.module.css'
-import { ContainerState as AccountState } from 'containers/Account/types'
-import { DispatchProps  } from 'containers/Account/actions'
-import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
 import { Form, Header, Confirm } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import messages from './messages';
 import { DualFxInput } from 'components/DualFxInput';
-import { selectFxRate, getFxRate, ContainerState as FxRates } from 'containers/FxRate/selectors';
-import { connect } from 'react-redux';
+import { ModalOperation } from '@the-coin/react-components/lib/containers/ModalOperation';
+import { selectFxRate, ContainerState as FxRates } from '@the-coin/react-components/lib/containers/FxRate/selectors';
+import { getFxRate } from '@the-coin/react-components/lib/containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
+import { ContainerState as AccountState } from 'containers/Account/types'
+import { DispatchProps  } from 'containers/Account/actions'
 
 type MyProps = AccountState & {
 	updateBalance: Function

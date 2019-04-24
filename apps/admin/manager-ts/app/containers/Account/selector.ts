@@ -2,9 +2,9 @@ import { ApplicationRootState } from "types";
 import { initialState } from "./reducer";
 import { ContainerState } from "./types";
 
-function createAccountSelector(accountName: keyof ApplicationRootState) {
+function createAccountSelector(accountName: string) {
 	return (state: ApplicationRootState) : ContainerState =>
-		state[accountName] || initialState;
+		state.accounts ? state.accounts[accountName] || initialState : initialState;
 }
 
 

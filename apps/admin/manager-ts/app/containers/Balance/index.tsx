@@ -4,9 +4,10 @@ import { Header, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { toHuman } from '@the-coin/utilities'
-import { selectFxRate, getFxRate, ContainerState as FxRates } from 'containers/FxRate/selectors';
+import { getFxRate } from '@the-coin/react-components/lib/containers/FxRate/reducer';
+import * as FxSelect from '@the-coin/react-components/lib/containers/FxRate/selectors';
+import * as FxActions from '@the-coin/react-components/lib/containers/FxRate/actions';
 import { ContainerState } from 'containers/Account/types';
-import * as FxActions from 'containers/FxRate/actions';
 import * as AccountActions from 'containers/Account/actions';
 import messages from './messages'
 import { TransactionHistory } from './TransactionHistory';
@@ -16,7 +17,7 @@ interface  MyProps {
   account: ContainerState
 }
 
-type Props = MyProps & FxActions.DispatchProps & FxRates;
+type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
 class BalanceClass extends React.PureComponent<Props, {}, null> {
 
@@ -29,7 +30,6 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
   doUpdateBalance(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
     this.props.dispatch.updateBalance();
-    //this.props.beginUpdateFxRate();
   }
 
   // On load, update balance
@@ -61,4 +61,4 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
-export const Balance = connect(selectFxRate, FxActions.mapDispatchToProps)(BalanceClass);
+export const Balance = connect(FxSelect.selectFxRate, FxActions.mapDispatchToProps)(BalanceClass);
