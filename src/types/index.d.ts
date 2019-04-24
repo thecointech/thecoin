@@ -1,11 +1,12 @@
 import { Reducer, Store } from 'redux';
 //import { RouterState } from 'connected-react-router';
 //import { ILanguageProviderProps } from 'containers/LanguageProvider';
-//import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/types';
-//import { ContainerState as AccountState } from 'containers/Account/types';
+import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/types';
+import { ContainerState as AccountState } from 'containers/Account/types';
 import { ContainerState as FxRateState } from '../containers/FxRate/types';
 
 import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
+import { Dictionary } from 'lodash';
 
 export interface LifeStore extends Store<{}> {
   injectedReducers?: any;
@@ -22,18 +23,16 @@ export interface InjectReducerParams {
 }
 
 export interface InjectSagaParams {
-  key: keyof ApplicationRootState;
+  key: string;
   saga: () => IterableIterator<any>;
   mode?: string | undefined;
 }
-
 // Your root reducer type, which is your redux state types also
 export interface ApplicationRootState {
   // readonly router: RouterState;
   // readonly language: ILanguageProviderProps;
-  // readonly sidebar: SidebarContentsState;
+  readonly sidebar: SidebarContentsState;
 
-  // readonly TheCoin: AccountState;
-  // readonly BrokerCAD: AccountState;
+  readonly accounts: Dictionary<AccountState>;
   readonly fxRates: FxRateState;
 }
