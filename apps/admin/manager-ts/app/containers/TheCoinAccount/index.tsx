@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Account, RouterPath } from 'containers/Account';
-import { Balance } from 'Containers/Balance';
+import { Account, RouterPath } from '@the-coin/components/lib/containers/Account';
+import { Balance } from '@the-coin/components/lib/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';

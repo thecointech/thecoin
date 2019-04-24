@@ -266,6 +266,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.6.3",
     "@google-cloud/datastore": "^3.1.2",
+    "@the-coin/components": "^0.1.2",
     "@the-coin/pricing": "^0.1.1",
     "@the-coin/utilities": "^0.1.18",
     "@types/classnames": "^2.2.7",

@@ -4,7 +4,7 @@ import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'reducers';
 import { History } from 'history';
-import { LifeStore } from 'types';
+import { LifeStore } from '@the-coin/components/lib/types';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -47,6 +47,7 @@ const configureStore = (initialState = {}, history: History<any>) => {
   store.runSaga = sagaMiddleware.run;
   store.injectedReducers = {}; // Reducer registry
   store.injectedSagas = {}; // Saga registry
+  store.createReducer = createReducer;
 
   if ((module as any).hot) {
     (module as any).hot.accept(
