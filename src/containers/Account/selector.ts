@@ -1,4 +1,4 @@
-import { ApplicationRootState } from "types";
+import { ApplicationRootState } from "../../types";
 import { initialState } from "./reducer";
 import { ContainerState } from "./types";
 

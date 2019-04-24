@@ -3,8 +3,8 @@ import { Wallet, Contract } from 'ethers';
 import { call, put } from 'redux-saga/effects';
 import { ContainerState, DecryptCallback, IActions, Transaction } from './types';
 import { Log } from 'ethers/providers';
-import injectReducer from 'utils/injectReducer';
-import injectSaga from 'utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import injectSaga from '../../utils/injectSaga';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
 import { buildSagas } from './actions';
 //import { createAccountSelector } from './selector';
@@ -12,9 +12,9 @@ import { compose } from 'redux';
 
 import { GetStored, SetStored } from './storageSync'
 
-import { actions as FxActions } from 'containers/FxRate/reducer';
+import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
-import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from 'utils/immerReducer';
+import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
 
 
 const initialState: ContainerState = {

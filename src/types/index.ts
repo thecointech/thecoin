@@ -1,11 +1,10 @@
-import { Reducer, Store } from 'redux';
+import { Store } from 'redux';
 //import { RouterState } from 'connected-react-router';
 //import { ILanguageProviderProps } from 'containers/LanguageProvider';
-import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/types';
-import { ContainerState as AccountState } from 'containers/Account/types';
+import { ContainerState as SidebarContentsState } from '../containers/PageSidebar/types';
+import { ContainerState as AccountState } from '../containers/Account/types';
 import { ContainerState as FxRateState } from '../containers/FxRate/types';
 
-import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
 import { Dictionary } from 'lodash';
 
 export interface LifeStore extends Store<{}> {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/lib/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { Transaction } from 'containers/Account/types'
-import { DateRangeSelect, OnChangeCallback } from 'components/DateRangeSelect';
-import { getFxRate } from 'containers/FxRate/reducer';
+import { Transaction } from '../../containers/Account/types'
+import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
+import { getFxRate } from '../../containers/FxRate/reducer';
 
 type MyProps = {
   transactions: Transaction[];

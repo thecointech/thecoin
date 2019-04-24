@@ -2,7 +2,7 @@ import React from 'react';
 import { debounce, Cancelable } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
-import { UxInput } from 'components/UxInput';
+import { UxInput } from '../../components/UxInput';
 import { Props } from './types';
 
 const initialState = {

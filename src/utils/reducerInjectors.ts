@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 
-import { LifeStore } from 'types';
+import { LifeStore } from '../types';
 import checkStore from './checkStore';
 
 export function injectReducerFactory(store: LifeStore, isValid: boolean) {

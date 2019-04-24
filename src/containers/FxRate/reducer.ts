@@ -2,12 +2,12 @@ import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
 import { compose } from 'redux';
 import { call, fork, put, select, take, delay, takeEvery } from 'redux-saga/effects';
-import injectReducer from 'utils/injectReducer';
-import injectSaga from 'utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import injectSaga from '../../utils/injectSaga';
+import { ApplicationRootState } from '../../types';
+import { TheCoinReducer, GetNamedReducer }  from '../../utils/immerReducer';
 import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
-import { ApplicationRootState } from 'types';
-import { TheCoinReducer, GetNamedReducer }  from 'utils/immerReducer';
 
 // The initial state of the App
 const initialState: ContainerState = {
@@ -70,7 +70,7 @@ const { actions, reducer, reducerClass } = GetNamedReducer(FxRateReducer, "fxRat
 
 function* sagaUpdateFxRate() {
   const state = yield select(selectFxRate);
-  const reducerImp = new FxRateReducer(state, state);
+  const reducerImp = new reducerClass(state, state);
   const fn = reducerImp.fetchRateAtDate.bind(reducerImp);
   return yield call(fn, new Date());
 }

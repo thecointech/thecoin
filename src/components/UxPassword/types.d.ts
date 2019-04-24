@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 import { Color } from 'csstype';
-import { ChangeCB, Props as BaseProps } from 'components/UxInput/types';
+import { ChangeCB, Props as BaseProps } from '../../components/UxInput/types';
 import { ReactNode } from 'react';
 
 export type ChangeCB = ChangeCB;

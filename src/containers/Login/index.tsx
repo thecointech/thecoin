@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router';
 import { Button, Form, Header } from 'semantic-ui-react';
 
-import { UxPassword } from 'components/UxPassword';
-import { ModalOperation } from 'containers/ModalOperation';
+import { UxPassword } from '../../components/UxPassword';
+import { ModalOperation } from '../../containers/ModalOperation';
 import messages from './messages';
 
 type decryptCallback = (percent: number) => boolean;

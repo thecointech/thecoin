@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { Login } from 'containers/Login';
-import { UploadWallet } from 'containers/UploadWallet';
-import { NotFoundPage } from 'containers/NotFoundPage'
-import * as Sidebar from 'containers/PageSidebar/actions';
+import { Login } from '../../containers/Login';
+import { UploadWallet } from '../../containers/UploadWallet';
+import { NotFoundPage } from '../../containers/NotFoundPage'
+import * as Sidebar from '../../containers/PageSidebar/actions';
 
-import { ApplicationRootState } from 'types';
+import { ApplicationRootState } from '../../types';
 
 import { ContainerState as AccountState } from './types';
 import { buildReducer } from './reducer'
@@ -25,7 +25,7 @@ type RouterPath = [string, string, (props: AccountProps) => (props: any) => Reac
 
 interface OwnProps {
   url: string;
-  accountName: keyof ApplicationRootState;
+  accountName: string;
   accountMap: RouterPath[];
   addressMatch?: (address: string) => boolean;
 }

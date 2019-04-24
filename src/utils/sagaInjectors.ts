@@ -6,7 +6,7 @@ import isString from 'lodash/isString';
 
 import checkStore from './checkStore';
 import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from './constants';
-import { LifeStore } from 'types';
+import { LifeStore } from '../types';
 
 const allowedModes = [RESTART_ON_REMOUNT, DAEMON, ONCE_TILL_UNMOUNT];
 

@@ -2,7 +2,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import { IActions } from './types';
 import { call, select, takeLatest } from 'redux-saga/effects'
 import { createAccountSelector } from './selector';
-import { GetNamedReducer } from 'utils/immerReducer';
+import { GetNamedReducer } from '../../utils/immerReducer';
 import { AccountReducer, initialState } from './reducer';
 
 //type AccountSelector = (state:any) => ContainerState|null;

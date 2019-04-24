@@ -4,11 +4,11 @@ import { Header, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { toHuman } from '@the-coin/utilities'
-import { getFxRate } from 'containers/FxRate/reducer';
-import * as FxSelect from 'containers/FxRate/selectors';
-import * as FxActions from 'containers/FxRate/actions';
-import { ContainerState } from 'containers/Account/types';
-import * as AccountActions from 'containers/Account/actions';
+import { getFxRate } from '../../containers/FxRate/reducer';
+import * as FxSelect from '../../containers/FxRate/selectors';
+import * as FxActions from '../../containers/FxRate/actions';
+import { ContainerState } from '../../containers/Account/types';
+import * as AccountActions from '../../containers/Account/actions';
 import messages from './messages'
 import { TransactionHistory } from '../TransactionHistory';
 

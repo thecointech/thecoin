@@ -18,10 +18,8 @@
     "noUnusedLocals": true,
     "strict": true,
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "sourceMap": true,
-    "baseUrl": "src",
-    "rootDir": "src",
     "outDir": "lib",
 
     "jsx": "react", // process JSX
@@ -31,8 +29,7 @@
     "node_modules"
   ],
   "include": [
-    "./src/**/*.tsx",
-    "./src/**/*.ts"
+    "./src/**/*"
   ],
 
 }
