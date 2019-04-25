@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@the-coin/contract@^1.0.8":
-  version "1.0.8"
-  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.8.tgz#69b419195a1d62ece8152feda88054b645e534f0"
-  integrity sha1-abQZGVodYuzoFS/tqIBUtkXlNPA=
+"@the-coin/contract@^1.0.9":
+  version "1.0.9"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@the-coin/contract/-/contract-1.0.9.tgz#65614e381116f5a1824899b4caadd04e90808754"
+  integrity sha1-ZWFOOBEW9aGCSJm0yq3QTpCAh1Q=
 
 "@the-coin/types@^0.1.3":
   version "0.1.3"

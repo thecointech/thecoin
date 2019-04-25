@@ -14,7 +14,7 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "dependencies": {
-    "@the-coin/contract": "^1.0.8",
+    "@the-coin/contract": "^1.0.9",
     "@the-coin/types": "^0.1.3"
   },
   "devDependencies": {
