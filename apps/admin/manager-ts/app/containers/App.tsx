@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PageSidebar } from './PageSidebar';
+import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
