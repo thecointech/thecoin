@@ -4,7 +4,9 @@ import { ContainerState } from "./types";
 
 function createAccountSelector(accountName: string) {
 	return (state: ApplicationRootState) : ContainerState =>
-		state.accounts[accountName] || initialState;
+		state.accounts ? 
+			state.accounts[accountName] || initialState :
+			initialState
 }
 
 

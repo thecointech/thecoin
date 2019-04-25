@@ -101,7 +101,7 @@ class AccountReducer extends TheCoinReducer<ContainerState>
 
     for (let i = 0; i < txReceipt.logs.length; i++) {
       const extra = contract.interface.parseLog(txReceipt.logs[i]);
-      if (extra.name == "Purchase") {
+      if (extra && extra.name == "Purchase") {
         const {balance, timestamp} = extra.values;
         transaction.date = new Date(timestamp.toNumber() * 1000);
         const change = toHuman(transaction.change, true);
@@ -228,7 +228,7 @@ class AccountReducer extends TheCoinReducer<ContainerState>
     // First, fetch the account balance toasty-fresh
     const balance = yield call(contract.balanceOf, wallet.address);
 
-    yield this.sendValues(this.actions().updateWithValues, { balance, historyLoading: true });
+    yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber(), historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
     // allow a 500 ms delay so we don't update too quickly

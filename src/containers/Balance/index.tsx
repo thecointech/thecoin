@@ -32,11 +32,6 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
     this.props.dispatch.updateBalance();
   }
 
-  // On load, update balance
-	componentDidMount() {
-    this.props.dispatch.updateBalance();
-  }
-
   render() {
     const { account, dispatch, rates } = this.props;
     const { buy, fxRate } = getFxRate(rates, Date.now());
