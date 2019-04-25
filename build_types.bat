@@ -1,0 +1,1 @@
+npx @manifoldco/swagger-to-ts broker-cad/broker-cad.yaml --namespace BrokerCAD --output types/brokerCAD.ts

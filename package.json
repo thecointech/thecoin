@@ -1,0 +1,7 @@
+{
+  "license": "MIT",
+  "dependencies": {
+    "@the-coin/utilities": "./the-utilities/ts",
+    "ethers": "^4.0.27"
+  }
+}
