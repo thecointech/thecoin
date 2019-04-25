@@ -1,12 +1,14 @@
 import { ethers, Wallet } from 'ethers';
 import TheCoinSpec from '@the-coin/contract/build/contracts/TheCoin.json';
 
+import RopstenDeployment from '@the-coin/contract/zos.ropsten.json';
+
 import { BrokerCAD } from "@the-coin/types/lib/brokerCAD";
 
 const { abi } = TheCoinSpec;
 // NOTE: When changing from Ropsten to Mainnet, update
 // address, provider, and InitialCoinBlock below.
-const { address } = TheCoinSpec.networks[3];
+const { address } = RopstenDeployment.proxies["the-contract/TheCoin"][0];
 const ropsten = ethers.getDefaultProvider('ropsten');
 
 const theContract = new ethers.Contract(address, abi, ropsten);
