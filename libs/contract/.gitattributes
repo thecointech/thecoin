@@ -27,7 +27,7 @@
 *.inc           text
 *.ini           text
 *.js            text
-*.json          text diff=astextplain
+*.json          text
 *.jsx           text
 *.less          text
 *.ls            text
