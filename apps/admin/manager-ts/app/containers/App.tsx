@@ -3,7 +3,7 @@ import { PageSidebar } from './PageSidebar';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
-import { buildReducer } from '@the-coin/components/lib/containers/FxRate/reducer'
+import { buildReducer } from '@the-coin/components/containers/FxRate/reducer'
 
 class App extends React.Component {
 

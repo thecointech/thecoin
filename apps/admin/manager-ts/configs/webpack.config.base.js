@@ -50,7 +50,13 @@ export default {
    */
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.json'],
-    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })]
+    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
+    alias: {
+      '@the-coin/components': path.resolve(
+        __dirname,
+        '../../../the-react-components/src'
+      )
+    }
   },
 
   plugins: [

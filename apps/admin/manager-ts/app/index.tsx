@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import { App } from './containers/App';
 import { configureStore } from './store/configureStore';
-import history from '@the-coin/components/lib/utils/history';
+import history from '@the-coin/components/utils/history';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';

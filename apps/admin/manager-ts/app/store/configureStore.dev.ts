@@ -4,7 +4,7 @@ import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'reducers';
 import { History } from 'history';
-import { LifeStore } from '@the-coin/components/lib/types';
+import { LifeStore } from '@the-coin/components/types';
 
 const sagaMiddleware = createSagaMiddleware();
 

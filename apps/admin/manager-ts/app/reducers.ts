@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-import history from '@the-coin/components/lib/utils/history';
+import history from '@the-coin/components/utils/history';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers

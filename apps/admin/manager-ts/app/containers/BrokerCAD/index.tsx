@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { Account, RouterPath } from '@the-coin/components/lib/containers/Account';
-import { Balance } from '@the-coin/components/lib';
+import { Account, RouterPath } from '@the-coin/components/containers/Account';
+import { Balance } from '@the-coin/components/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { Purchase } from 'containers/Purchase';
 

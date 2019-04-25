@@ -5,7 +5,7 @@ import { ContainerState as SidebarContentsState } from 'containers/PageSidebar/t
 
 import { ImmerReducerClass, ImmerReducerState, ActionCreators } from 'immer-reducer';
 import { Dictionary } from 'lodash';
-import { ApplicationRootState as BaseState } from '@the-coin/components/lib/types'
+import { ApplicationRootState as BaseState } from '@the-coin/components/types'
 
 
 // Your root reducer type, which is your redux state types also

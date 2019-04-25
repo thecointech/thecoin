@@ -2,6 +2,10 @@
   "compilerOptions": {
     "target": "es5",
     "baseUrl": "./app/",
+    "rootDirs": ["./app/", "../../the-react-components/src"],
+    "paths": {
+      "@the-coin/components/*": ["../../../the-react-components/src/*"]
+    },
     "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",

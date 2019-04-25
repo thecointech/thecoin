@@ -1,5 +1,5 @@
 import { ImmerReducer, createReducerFunction } from 'immer-reducer';
-import injectReducer from '@the-coin/components/lib/utils/injectReducer';
+import injectReducer from '@the-coin/components/utils/injectReducer';
 import { ContainerState, SidebarMenuItem, IActions } from './types';
 
 // The initial state of the App

@@ -7,13 +7,13 @@ import { google } from '@google-cloud/datastore/build/proto/datastore';
 import { entity } from '@google-cloud/datastore/build/src/entity';
 
 //import styles from './index.module.css'
-import * as FxSelect from '@the-coin/components/lib/containers/FxRate/selectors';
-import * as FxAction from '@the-coin/components/lib/containers/FxRate/actions';
-import { getFxRate } from '@the-coin/components/lib/containers/FxRate/reducer';
-import { ModalOperation } from '@the-coin/components/lib/containers/ModalOperation';
+import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
+import * as FxAction from '@the-coin/components/containers/FxRate/actions';
+import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
+import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { toHuman } from '@the-coin/utilities';
 
-import { ContainerState as AccountState } from '@the-coin/components/lib/containers/Account/types';
+import { ContainerState as AccountState } from '@the-coin/components/containers/Account/types';
 import { DualFxInput } from 'components/DualFxInput';
 import messages from './messages';
 

@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import {createReducer} from 'reducers';
 import createSagaMiddleware from 'redux-saga';
-import history from '@the-coin/components/lib/utils/history'
+import history from '@the-coin/components/utils/history'
 
 const rootReducer = createReducer();
 const router = routerMiddleware(history);
