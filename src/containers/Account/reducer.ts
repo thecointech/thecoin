@@ -62,23 +62,6 @@ class AccountReducer extends TheCoinReducer<ContainerState>
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  // Register a transfer out (even though it might not yet be on the public blockchain)
-  registerTransferOut(email: string, brokerAddress: string, value: number, fee: number, timestamp: number) {
-    // const newTxs : Transaction[] = [
-    //   {
-    //     change: -value,
-    //     date: new Date(timestamp),
-    //     logEntry: email
-    //   },
-    //   {
-    //     change: -fee,
-    //     date: new Date(timestamp),
-    //     logEntry: brokerAddress
-    //   }  
-    // ]
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////
   // Load account history and merge with local
   static mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
     const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.txHash === tx.txHash))
