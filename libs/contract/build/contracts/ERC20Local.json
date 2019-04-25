@@ -12036,7 +12036,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-04-15T01:11:28.110Z",
+  "updatedAt": "2019-04-25T14:37:59.872Z",
   "devdoc": {
     "details": "Implementation of the basic standard token. This implementation is copied from openzeppelin-eth However we require access to it's internal balance for TapCap, so we copy it here and just change that parameter * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md Originally based on code by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol * This implementation emits additional Approval events, allowing applications to reconstruct the allowance status for all accounts just by listening to said events. Note that this isn't required by the specification, and other compliant implementations may not do it.",
     "methods": {
