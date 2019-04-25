@@ -2,6 +2,23 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/utilities": "./the-utilities/ts",
-    "ethers": "^4.0.27"
+    "ethers": "^4.0.27",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-intl": "^2.8.0",
+    "react-redux": "^7.0.2",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.2",
+    "semantic-ui-react": "^0.86.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.14",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-intl": "^2.3.17",
+    "@types/react-redux": "^7.0.8",
+    "@types/react-router-dom": "^4.3.2"
   }
 }
