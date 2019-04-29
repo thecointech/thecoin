@@ -2,9 +2,9 @@
  * Homepage selectors
  */
 
-import { ApplicationRootState } from '../../types';
+import { ApplicationBaseState } from '../../types';
 import { ContainerState } from './types';
 
-const selectFxRate = (state: ApplicationRootState) =>  state.fxRates;
+const selectFxRate = (state: ApplicationBaseState) =>  state.fxRates;
 
 export { selectFxRate, ContainerState };

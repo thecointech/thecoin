@@ -1,13 +1,18 @@
-import { ApplicationRootState } from "../../types";
-import { initialState } from "./reducer";
-import { ContainerState } from "./types";
+import { ApplicationBaseState } from "../../types";
+import { AccountState, AccountMap, DefaultAccount } from "./types";
+import { ReadAllAccounts } from "./storageSync";
+
+function selectAccounts(state: ApplicationBaseState) : AccountMap {
+	return state.accounts || ReadAllAccounts();
+}
 
 function createAccountSelector(accountName: string) {
-	return (state: ApplicationRootState) : ContainerState =>
-		state.accounts ? 
-			state.accounts[accountName] || initialState :
-			initialState
+	return (state: ApplicationBaseState) : AccountState => 
+		selectAccounts(state).get(accountName) || {
+			...DefaultAccount,
+			name: accountName
+		}
 }
 
 
-export { createAccountSelector }
+export { selectAccounts, createAccountSelector }

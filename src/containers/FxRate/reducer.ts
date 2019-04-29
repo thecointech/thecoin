@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { call, fork, put, select, take, delay, takeEvery } from 'redux-saga/effects';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
-import { ApplicationRootState } from '../../types';
+import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer }  from '../../utils/immerReducer';
 import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
@@ -95,11 +95,11 @@ function* loopFxUpdates() {
 	}	
 }
 
-function createRootEntitySelector<T>(rootKey: keyof ApplicationRootState, initialState: T) {
-	return (state: ApplicationRootState) : T => state[rootKey] as any || initialState;
+function createRootEntitySelector<T>(rootKey: keyof ApplicationBaseState, initialState: T) {
+	return (state: ApplicationBaseState) : T => state[rootKey] as any || initialState;
 }
 
-function buildSagas(name: keyof ApplicationRootState) {
+function buildSagas(name: keyof ApplicationBaseState) {
   
   const selectAccount = createRootEntitySelector(name, initialState);
 

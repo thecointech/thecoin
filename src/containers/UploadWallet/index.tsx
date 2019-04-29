@@ -1,31 +1,55 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { Wallet } from 'ethers';
 //import styles from './index.module.css'
 import { Label, Container, Icon } from 'semantic-ui-react';
-import fs from 'fs';
+import { IsValidAddress } from '@the-coin/utilities';
+import { GetNamedReducer } from '../../utils/immerReducer';
+import { AccountReducer } from '../Account/reducer';
+import { DefaultAccount } from '../Account/types';
 
-interface ActionProps {
-	onSelect: (file: any) => void;
+interface MyProps {
+	readFile: (path: File) => Promise<string>;
+	addressMatch?: (address: string) => boolean;
 }
-class UploadWallet extends React.PureComponent<ActionProps> {
+interface InjectedProps {
+	setWallet: (name: string, wallet: Wallet) => void;
+}
+type Props = MyProps & InjectedProps;
+class UploadWalletClass extends React.PureComponent<Props> {
 
 	private id: string = "upload" + Math.random();
 
-	constructor(props: ActionProps) {
+	constructor(props: Props) {
 		super(props);
 		this.onChangeFile = this.onChangeFile.bind(this);
 	}
 
-	private onChangeFile() {
-		const fileButton: any = document.getElementById(this.id);
-		const file = fileButton ? fileButton.files[0] : null;
-		if (this.props.onSelect) {
-			fs.readFile(file.path, 'utf8', (err, data) => {
-				if (err) throw err;
-				const obj = JSON.parse(data.trim());
-				this.props.onSelect(obj);
-			});
-		}
+	private async onChangeFile(e: any) {
+		const files: FileList = e.target.files;
+		if (!files)
+			throw("Empty or Missing FileList");
+
+		const file = files[0];
+		const data = await this.props.readFile(file)
+		const obj = JSON.parse(data.trim());
+		this.onFileUpload(file.name, obj);
 	}
+
+	async onFileUpload(name: string, jsonWallet: any) {
+		const { address } = jsonWallet;
+		const { addressMatch } = this.props;
+		const isValid = addressMatch ? 
+		  addressMatch(address) :
+		  IsValidAddress(address);
+	
+		if (isValid)
+		  this.props.setWallet(name, jsonWallet);
+		else {
+		  alert("Bad Wallet");
+		}
+	  }
 
 	render() {
 		return (
@@ -40,4 +64,16 @@ class UploadWallet extends React.PureComponent<ActionProps> {
 	}
 }
 
+function mapDispatchToProps(dispatch: Dispatch): InjectedProps {
+	return {
+		setWallet: (name: string, wallet: Wallet) => {
+			const { actions } = GetNamedReducer(AccountReducer, name, DefaultAccount);
+			dispatch({
+				type: actions.setWallet.type, 
+				payload: wallet
+			});
+		}
+	}
+}
+const UploadWallet = connect(null, mapDispatchToProps)(UploadWalletClass)
 export { UploadWallet }

@@ -37,29 +37,43 @@ type CacheEntry  = {
 };
 let reducerCache: Dictionary<CacheEntry> = {};
 
+function CreateNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T)
+{
+  class NamedReducer extends immerReducerClass {
+    static customName = name
+  };
+  // We use Object.Assign to clone the prototype as we 
+  // need to change the actions() function below and
+  // need to ensure that change is local to the NamedReducer class
+  Object.getOwnPropertyNames(immerReducerClass.prototype).forEach(function (key) {
+    if (key === "constructor") {
+        return;
+    }
+    var method = immerReducerClass.prototype[key];
+    if (typeof method !== "function") {
+        return;
+    }
+    NamedReducer.prototype[key] = method;
+  });
+  return NamedReducer
+}
+
 function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name: string, initialState: any, dictionaryName?: string) 
   : { reducer: any; actions: ActionCreators<T>; reducerClass: T }
 {
   if (!reducerCache[name]) {
-    // Build an extended
-    class NamedReducer extends immerReducerClass {
-      static customName = name
-    };
-    // We use Object.Assign to clone the prototype as we 
-    // need to change the actions() function below and
-    // need to ensure that change is local to the NamedReducer class
-    Object.assign(NamedReducer.prototype, immerReducerClass.prototype);
 
-    const reducer = createReducerFunction(NamedReducer, initialState);
-    const actionCreators = createActionCreators(NamedReducer);
+    let namedReducer = CreateNamedReducer(immerReducerClass);
+    const reducer = createReducerFunction(namedReducer, initialState);
+    const actionCreators = createActionCreators(namedReducer);
 
     // Redirect actions function to return appropriate data
-    NamedReducer.prototype.actions = () => actionCreators;
+    namedReducer.prototype.actions = () => actionCreators;
 
     reducerCache[name] = {
       reducer, 
       actions: actionCreators,
-      reducerClass: NamedReducer
+      reducerClass: namedReducer
     };
   }
 

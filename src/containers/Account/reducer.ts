@@ -1,11 +1,10 @@
 import { GetConnected, InitialCoinBlock } from '@the-coin/utilities/lib/TheContract';
 import { Wallet, Contract } from 'ethers';
 import { call, put } from 'redux-saga/effects';
-import { ContainerState, DecryptCallback, IActions, Transaction } from './types';
+import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount } from './types';
 import { Log } from 'ethers/providers';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
-import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
 import { buildSagas } from './actions';
 //import { createAccountSelector } from './selector';
 import { compose } from 'redux';
@@ -17,17 +16,7 @@ import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
 
 
-const initialState: ContainerState = {
-  name: "",
-  wallet: null,
-  contract: null,
-  lastUpdate: 0,
-  balance: -1,
-  history: [],
-  displayCurrency: CurrencyCodes.CAD
-}
-
-class AccountReducer extends TheCoinReducer<ContainerState>
+class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
 
   setName(name: string): void {
@@ -41,8 +30,10 @@ class AccountReducer extends TheCoinReducer<ContainerState>
     SetStored(this.state.name, wallet);
   }
 
+  //deleteWallet(wallet: Wallet)
+
   ///////////////////////////////////////////////////////////////////////////////////
-  updateWithValues(newState: ContainerState) {
+  updateWithValues(newState: AccountState) {
     Object.assign(this.draftState, newState);
   }
 
@@ -298,7 +289,7 @@ class AccountReducer extends TheCoinReducer<ContainerState>
 function buildReducer<T>(key: string) {
 
   // Create the reducer
-  GetNamedReducer(AccountReducer, key, initialState, "accounts");
+  GetNamedReducer(AccountReducer, key, DefaultAccount, "accounts");
 
   const withReducer = injectReducer<T>({
     key: "accounts",
@@ -317,5 +308,5 @@ function buildReducer<T>(key: string) {
   )
 }
 
-export { buildReducer, AccountReducer, initialState };
+export { buildReducer, AccountReducer };
 

@@ -7,14 +7,14 @@ import { toHuman } from '@the-coin/utilities'
 import { getFxRate } from '../../containers/FxRate/reducer';
 import * as FxSelect from '../../containers/FxRate/selectors';
 import * as FxActions from '../../containers/FxRate/actions';
-import { ContainerState } from '../../containers/Account/types';
+import { AccountState } from '../../containers/Account/types';
 import * as AccountActions from '../../containers/Account/actions';
 import messages from './messages'
 import { TransactionHistory } from '../TransactionHistory';
 
 interface  MyProps {
   dispatch: AccountActions.DispatchProps
-  account: ContainerState
+  account: AccountState
 }
 
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;

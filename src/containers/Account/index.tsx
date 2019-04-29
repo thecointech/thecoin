@@ -2,13 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Login } from '../../containers/Login';
-import { UploadWallet } from '../../containers/UploadWallet';
+//import { UploadWallet } from '../../containers/UploadWallet';
 import { NotFoundPage } from '../../containers/NotFoundPage'
 import * as Sidebar from '../../containers/PageSidebar/actions';
 
-import { ApplicationRootState } from '../../types';
+import { ApplicationBaseState } from '../../types';
 
-import { ContainerState as AccountState } from './types';
+import { AccountState } from './types';
 import { buildReducer } from './reducer'
 import { createAccountSelector } from './selector';
 import * as Account from './actions';
@@ -83,7 +83,8 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     const { accountMap, account, dispatch } = this.props;
     const { wallet, name } = account;
     if (wallet === null) {
-      return <UploadWallet onSelect={this.onFileUpload} />;
+      //return <UploadWallet onSelect={this.onFileUpload} />;
+      return <div>FixMe</div>;
     }
     else if (!wallet.privateKey) {
       return <Login wallet={wallet} walletName={name} decrypt={dispatch.decrypt} />
@@ -108,8 +109,6 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   }
 }
 
-
-
 // Fancy-pants mapper returns the component with the appropriate reducer applied
 
 var __AccountMap : { [name: string]: React.ComponentType<OwnProps> }= {};
@@ -124,7 +123,7 @@ function NamedAccount(props: OwnProps) {
         ...Sidebar.mapDispatchToProps(dispatch)
       };
     }
-    const mapPropsToState = function (state: ApplicationRootState) {
+    const mapPropsToState = function (state: ApplicationBaseState) {
       return {
         account: createAccountSelector(accountName)(state)
       }

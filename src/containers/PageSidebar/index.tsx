@@ -9,9 +9,11 @@ import {
 } from './types';
 import { mapStateToProps } from './selector';
 import { buildReducer } from './reducer';
+import styles from './index.module.css';
 
 interface OwnProps {
   visible: boolean;
+  inverted?: boolean;
 }
 type Props = OwnProps & ContainerState;
 
@@ -48,21 +50,25 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
   }
 
   render() {
-    const { visible, items } = this.props;
+    const { visible, items, inverted } = this.props;
     const menuItems = this.buildMenuArray(items)
 
+    const pusherClass = visible ? styles.mainPagePusherOut : undefined;
 
     return (
-      <Sidebar.Pushable as={Segment}>
+      <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
         <Sidebar
           as={Menu}
+          animation="push"
+          direction="left"
           vertical
           visible={visible}
-          inverted
+          className={styles.mainPageSidebar}
+          inverted={inverted}
         >
           {menuItems}
         </Sidebar>
-        <Sidebar.Pusher style={{width: "max-content"}}>
+        <Sidebar.Pusher className={pusherClass}>
           {this.props.children}
         </Sidebar.Pusher>
       </Sidebar.Pushable>

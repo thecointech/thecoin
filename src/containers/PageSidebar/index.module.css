@@ -1,0 +1,21 @@
+/* -at-value TransitionDuration, SidebarWidth from "styles/constants.css"; 
+  TODO: Fix global variables
+  They have (for now) been dereferenced into this file
+*/
+.mainPageContainer {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.mainPageContainer > div {
+  transition-duration: 300ms !important;
+}
+
+.mainPageSidebar {
+  width: 230px !important;
+}
+
+.mainPagePusherOut {
+  transform: translate3d(230px, 0, 0) !important;
+  width: "max-content";
+}

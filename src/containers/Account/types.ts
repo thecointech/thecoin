@@ -17,7 +17,7 @@ type Transaction = {
 
 // An account state holds all relevant info
 // for an account, including loaded transactions etc
-type ContainerState = {
+type AccountState = {
 	name: string; // Convenience storage of name
 	// Possibly encrypted raw ethers wallet
 	wallet: Wallet | null;
@@ -41,8 +41,20 @@ type ContainerState = {
 	historyEndBlock?: number;
 };
 
+const DefaultAccount: AccountState = {
+	name: "",
+	wallet: null,
+	contract: null,
+	lastUpdate: 0,
+	balance: -1,
+	history: [],
+	displayCurrency: CurrencyCodes.CAD
+  }
+
+type AccountMap = Map<string, AccountState>;
+
 /* --- ACTIONS --- */
-interface IActions extends ImmerReducer<ContainerState> {
+interface IActions extends ImmerReducer<AccountState> {
 
 	setName(name: string) : void;
 	setWallet(wallet: Wallet): void;
@@ -54,4 +66,4 @@ interface IActions extends ImmerReducer<ContainerState> {
 	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
 /* --- EXPORTS --- */
-export { IActions, ContainerState, Transaction, DecryptCallback };
+export { IActions, AccountState, AccountMap, DefaultAccount, Transaction, DecryptCallback };
