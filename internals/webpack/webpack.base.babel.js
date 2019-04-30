@@ -156,6 +156,10 @@ module.exports = options => ({
     alias: {
       '../../theme.config$':
         '/src/TheCoin/the-website-ts/app/styles/semantic/theme.config',
+        '@the-coin/components': path.resolve(
+          __dirname,
+          '../../../the-react-components/src'
+        )
     },
   },
   devtool: options.devtool,

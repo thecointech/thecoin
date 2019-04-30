@@ -1,21 +1,25 @@
-import { buildReducer as buildFxRateReducer } from 'containers/FxRate/reducer';
-import * as Sidebar from 'containers/PageSidebar/actions';
-import { SidebarMenuElement, SidebarMenuItem } from 'containers/PageSidebar/types';
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { AccountSelector } from './AccountSelector';
-import AccountCreate from './Create';
-import { buildReducer } from './reducer';
-import { mapStateToProps } from './selectors';
-import { ContainerState } from './types';
+import { connect } from 'react-redux';
+
+import { buildReducer as buildFxRateReducer } from '@the-coin/components/containers/FxRate/reducer';
+import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
+import { SidebarMenuElement, SidebarMenuItem } from '@the-coin/components/containers/PageSidebar/types';
+
+import { Account, RouterPath } from '@the-coin/components/containers/Account';
+import { AccountMap } from '@the-coin/components/containers/Account/types';
+import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
+
+import { Balance } from '@the-coin/components/containers/Balance';
+import { NewAccount } from './New';
 
 
 interface OwnProps {}
-type Props = OwnProps &
-  ContainerState &
-  RouteComponentProps &
-  Sidebar.DispatchProps;
+type Props = OwnProps & 
+{
+  Sidebar: Sidebar.DispatchProps,
+  accounts: AccountMap,
+}  & RouteComponentProps;
 
 const ConstantSidebarItems: SidebarMenuElement[] = [
   {
@@ -26,13 +30,13 @@ const ConstantSidebarItems: SidebarMenuElement[] = [
     subItems: [
       {
         link: {
-          to: '',
+          to: 'create',
           name: 'Create Account',
         },
       },
       {
         link: {
-          to: '?upload',
+          to: 'upload',
           name: 'Upload Account',
         },
       },
@@ -52,6 +56,15 @@ const stripTrailingSlash = (str: string) : string => {
       str;
 };
 
+const AccountRoutes: RouterPath[] = [
+  ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
+  ["Transfer In",   "transferIn", (routerProps) => ((props) => <Balance {...props} {...routerProps.account} />)],
+  //["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
+  // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
+  // ["Pay Bills",     "billPay",  (account) => ((props) => <Transfer {...props} />)],
+  // ["Settings",     "settings",  (account) => ((props) => <Settings {...props} account={account} />)],
+]
+
 class AccountsClass extends React.PureComponent<Props, {}, null> {
   MappedConstantItems: SidebarMenuElement[];
 
@@ -70,9 +83,9 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
             ...element.link,
             to: `${url}/${element.link.to}`,
           },
-          // subItems: element.subItems
-          //   ? this.mapMenuItems(element.subItems, url)
-          //   : undefined
+          subItems: element.subItems
+            ? this.mapMenuItems(element.subItems, url)
+            : undefined
         };
         return mapped;
       }
@@ -81,40 +94,49 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
   }
 
   componentDidMount() {
-    const url = stripTrailingSlash(this.props.match.url);
+    const {match, accounts, Sidebar} = this.props;
+    const url = stripTrailingSlash(match.url);
     const accountLinks: SidebarMenuElement[] = [];
-    this.props.wallets.forEach((wallet, name) => {
+    Object.entries(accounts).forEach(([name, _]) => {
       accountLinks.push({
         link: {
-          to: `${url}/${name}`,
+          to: `${url}/e/${name}`,
           name
         }
       });
     });
 
-    this.props.setItems(this.MappedConstantItems.concat(accountLinks));
+    Sidebar.setItems(this.MappedConstantItems.concat(accountLinks));
   }
 
+
   render() {
-    const { url } = this.props.match;
-    const { wallets } = this.props;
+    const { match, accounts } = this.props;
+    const { url } = match;
+    const createLink = this.MappedConstantItems[0];
+
+    let accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
+      const accountUrl = `${url}/e/${key}`;
+      return <Route key={key} path={accountUrl} render={(state) => <Account accountName={key} accountMap={AccountRoutes} url={accountUrl} /> } />
+    });
     return (
       <Switch>
-        <Route path={`${url}/:accountName`} render={
-          (props) => <AccountSelector {...props} wallets={wallets} /> 
-        } />
-        <Route path={`${url}/?upload`} component={AccountCreate} />
-        <Route component={AccountCreate} />
+        {accountRoutes}
+        <Route render={(state) => <NewAccount createLink={createLink} url={url} /> } />
       </Switch>
     );
   }
 }
 
-export const Accounts = buildReducer<OwnProps>()(
-  buildFxRateReducer<OwnProps>()(
-    connect(
-      mapStateToProps,
-      Sidebar.mapDispatchToProps,
-    )(AccountsClass),  
-  )
+function mapDispathToProps(dispatch) {
+  return {
+    Sidebar: Sidebar.mapDispatchToProps(dispatch),
+  }
+}
+
+export const Accounts = buildFxRateReducer<OwnProps>()(
+  connect(
+    structuredSelectAccounts,
+    mapDispathToProps,
+  )(AccountsClass),  
 );

@@ -1,4 +1,5 @@
 import * as actions from './actions';
+import { ApplicationRootState } from 'types';
 
 /* --- STATE --- */
 interface ContentState {

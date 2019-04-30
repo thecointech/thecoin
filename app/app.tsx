@@ -13,10 +13,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import history from 'utils/history';
+import history from '@the-coin/components/utils/history';
 import 'sanitize.css/sanitize.css';
-
-import 'react-dates/initialize';
 
 // Import root app
 import App from 'containers/App';

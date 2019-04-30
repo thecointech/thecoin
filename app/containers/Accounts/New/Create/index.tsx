@@ -8,12 +8,16 @@ import {
   Form,
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import * as Accounts from '../actions';
-import { mapStateToProps as MapAccounts, ContainerState as AccountsProps } from '../selectors';
+//import * as Accounts from '../actions';
+//import { mapStateToProps as MapAccounts } from '@the-coin/components/containers/Account/selector';
+import { buildReducer } from '@the-coin/components/containers/Account/reducer';
+import { AccountMap } from '@the-coin/components/containers/Account/types';
+import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
+import { DispatchProps, buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
 import { UxScoredPassword } from 'components/UxScoredPassword';
 import { UxInput } from 'components/UxInput';
 import messages from './messages'
-import { CancellableOperationModal } from 'containers/CancellableOperationModal';
+import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { ReferrersApi } from '@the-coin/broker-cad';
 import { IsValidReferrerId } from '@the-coin/utilities';
 
@@ -40,7 +44,9 @@ const initialState = {
 };
 
 type State = Readonly<typeof initialState>;
-type Props = Accounts.DispatchProps & AccountsProps;
+type Props = {
+  accounts: AccountMap 
+}  & DispatchProps;
 
 class Create extends React.PureComponent<Props, State, any> {
   readonly state = initialState;
@@ -111,7 +117,7 @@ class Create extends React.PureComponent<Props, State, any> {
     // the user to decrypt the account (to protect against misspelled
     // passwords)
     const asJson = JSON.parse(asStr);
-    this.props.setSingleWallet(accountName, asJson);
+    this.props.setWallet(accountName, asJson);
 
     // Switch to this newly created account
     this.setState({
@@ -127,7 +133,7 @@ onNameChange(value: string) {
     {
       nameValid: false,
       nameMessage: messages.errorNameTooShort,
-    } : this.props.wallets.has(value) ?
+    } : this.props.accounts[value] ?
       {
         nameValid: false,
         nameMessage: messages.errorNameDuplicate,
@@ -230,13 +236,15 @@ render() {
 
         <Button onClick={this.generateNewWallet}><FormattedMessage {...messages.buttonCreate} /></Button>
       </Form>
-      <CancellableOperationModal cancelCallback={this.onCancelGenerate} isOpen={this.state.isCreating} header={messages.whileCreatingHeader} progressPercent={this.state.percentComplete} progressMessage={messages.whileCreatingMessage} />
+      <ModalOperation cancelCallback={this.onCancelGenerate} isOpen={this.state.isCreating} header={messages.whileCreatingHeader} progressPercent={this.state.percentComplete} progressMessage={messages.whileCreatingMessage} />
     </React.Fragment>
   );
 }
 }
+const key = "__@create|ee25b960";
 
-export default connect(
-  MapAccounts,
-  Accounts.mapDispatchToProps,
-)(Create);
+export default buildReducer<{}>(key)(
+  connect(
+    structuredSelectAccounts,
+    buildMapDispatchToProps(key),
+)(Create));

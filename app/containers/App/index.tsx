@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
-import PageSidebar from 'containers/PageSidebar';
+import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter'
 import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'

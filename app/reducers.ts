@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-import history from 'utils/history';
+import history from '@the-coin/components/utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 
 /**
@@ -14,10 +14,12 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 export function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
     language: languageProviderReducer,
+    router: connectRouter(history),
     ...injectedReducers,
   });
 
   // Wrap the root reducer and return a new root reducer with router state
-  const mergeWithRouterState = connectRouter(history);
-  return mergeWithRouterState(rootReducer);
+  // const mergeWithRouterState = connectRouter(history);
+  // return mergeWithRouterState(rootReducer);
+  return rootReducer
 }

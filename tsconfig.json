@@ -7,6 +7,10 @@
     "preserveConstEnums": true,
     "typeRoots": ["node_modules/@types"],
     "baseUrl": "./app",
+    "rootDirs": ["./app", "../the-react-components/src"],
+    "paths": {
+      "@the-coin/components/*": ["../../the-react-components/src/*"]
+    },
     "jsx": "react", // process JSX
     "lib": ["dom", "es5", "es6", "es7", "es2017"],
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop

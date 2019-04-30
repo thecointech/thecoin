@@ -1,15 +1,18 @@
-import { ImmerReducer, createReducerFunction } from 'immer-reducer';
-import injectReducer from 'utils/injectReducer';
-import { ContainerState } from './types';
-import { IActions } from './types';
+
+import injectReducer from '@the-coin/components/utils/injectReducer';
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/components/utils/immerReducer'
+import { ContainerState, IActions } from './types';
+import { ApplicationRootState } from 'types';
+
+const CONTENT_KEY : keyof ApplicationRootState = "content";
 
 // The initial state of the App
-export const initialState: ContainerState = {
+const initialState: ContainerState = {
   height: 250,
 };
 
 let lastTimestamp = 0;
-export class HeightMeasureReducer extends ImmerReducer<ContainerState>
+class HeightMeasureReducer extends TheCoinReducer<ContainerState>
   implements IActions {
   setHeight(newHeight: number, timestamp: number) {
     if (timestamp < lastTimestamp) return;
@@ -18,12 +21,13 @@ export class HeightMeasureReducer extends ImmerReducer<ContainerState>
   }
 }
 
-const reducer = createReducerFunction(HeightMeasureReducer, initialState);
+const { reducer, actions } = GetNamedReducer(HeightMeasureReducer, CONTENT_KEY, initialState);
 
-export function buildReducer<T>() {
+function buildReducer<T>() {
   return injectReducer<T>({
-    key: 'content',
-    reducer: reducer,
-    initialState,
+    key: CONTENT_KEY,
+    reducer: reducer
   });
 }
+
+export { actions, buildReducer, HeightMeasureReducer, CONTENT_KEY, initialState }
