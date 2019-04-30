@@ -8,8 +8,7 @@ import {
   Form,
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-//import * as Accounts from '../actions';
-//import { mapStateToProps as MapAccounts } from '@the-coin/components/containers/Account/selector';
+
 import { buildReducer } from '@the-coin/components/containers/Account/reducer';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
@@ -243,6 +242,8 @@ render() {
 }
 const key = "__@create|ee25b960";
 
+// We need to ensure we have the Accounts reducer live
+// so we add the reducer here.
 export default buildReducer<{}>(key)(
   connect(
     structuredSelectAccounts,
