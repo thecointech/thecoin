@@ -1,17 +1,19 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+
 import { Login } from '../../containers/Login';
 import { NotFoundPage } from '../../containers/NotFoundPage'
-import * as Sidebar from '../../containers/PageSidebar/actions';
 
 import { ApplicationBaseState } from '../../types';
+import * as Sidebar from '../PageSidebar/actions';
+import { SidebarMenuItem, FindItem } from '../PageSidebar/types';
 
 import { AccountState } from './types';
 import { buildReducer } from './reducer'
 import { createAccountSelector } from './selector';
 import * as Account from './actions';
-import { Dispatch } from 'redux';
 
 
 interface AccountProps {
@@ -31,30 +33,45 @@ type Props = OwnProps & AccountProps & Sidebar.DispatchProps;
 
 class AccountClass extends React.PureComponent<Props, {}, null> {
 
+  constructor(props: Props) {
+    super(props);
+
+    this.generateSubItems = this.generateSubItems.bind(this);
+  }
+
   buildLink(item: RouterPath) {
     const {url} = this.props;
     return url.endsWith('/') ?
       `${url}${item[1]}` :
       `${url}/${item[1]}`
+  }
 
+  generateSubItems(items: SidebarMenuItem[], state: ApplicationBaseState): SidebarMenuItem[] {
+    const { accountMap, accountName, account } = this.props;
+    if (account.wallet) // Not default:
+    {
+      const item = FindItem(items, accountName);
+      if (item) 
+      {
+        item.subItems = Array.from(accountMap.map((item) => {
+          return {
+            link: {
+              name: item[0],
+              to: this.buildLink(item)
+            }
+          }
+        }))
+      }
+    }
+    return items;
   }
 
   componentDidMount() {
-    const { account, dispatch, accountName, accountMap } = this.props;
-    const { wallet } = account;
+    this.props.addGenerator(this.props.accountName, this.generateSubItems)
+  }
 
-    const accountLinks = accountMap.map((item) => {
-      return {
-        link: {
-          name: item[0],
-          to: this.buildLink(item)
-        }
-      }
-    })
-    this.props.setSubItems(accountName, accountLinks)
-    if(!wallet) {
-      dispatch.setName(accountName);
-    }
+  componentWillUnmount() {
+    this.props.removeGenerator(this.props.accountName)
   }
 
   render() {

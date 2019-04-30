@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 //import { RouterState } from 'connected-react-router';
 //import { ILanguageProviderProps } from 'containers/LanguageProvider';
-import { ContainerState as SidebarContentsState } from '../containers/PageSidebar/types';
+import { SidebarGenerators } from '../containers/PageSidebar/types';
 import { AccountMap } from '../containers/Account/types';
 import { ContainerState as FxRateState } from '../containers/FxRate/types';
 
@@ -28,7 +28,7 @@ export interface InjectSagaParams {
 export interface ApplicationBaseState {
   // readonly router: RouterState;
   // readonly language: ILanguageProviderProps;
-  readonly sidebar: SidebarContentsState;
+  readonly sidebar: SidebarGenerators;
 
   readonly accounts: AccountMap;
   readonly fxRates: FxRateState;
