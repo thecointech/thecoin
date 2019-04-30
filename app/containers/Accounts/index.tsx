@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 
 import { buildReducer as buildFxRateReducer } from '@the-coin/components/containers/FxRate/reducer';
 import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuElement, SidebarMenuItem } from '@the-coin/components/containers/PageSidebar/types';
+import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 
 import { Account, RouterPath } from '@the-coin/components/containers/Account';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 
 import { Balance } from '@the-coin/components/containers/Balance';
-import { NewAccount } from './New';
+import { NewAccount, NewAccountName } from './New';
+import { ApplicationRootState } from 'types';
 
 
 interface OwnProps {}
@@ -21,40 +22,20 @@ type Props = OwnProps &
   accounts: AccountMap,
 }  & RouteComponentProps;
 
-const ConstantSidebarItems: SidebarMenuElement[] = [
+const ConstantSidebarItems: SidebarMenuItem[] = [
   {
     link: {
       to: '',
-      name: 'New Account',
+      name: NewAccountName,
     },
-    subItems: [
-      {
-        link: {
-          to: 'create',
-          name: 'Create Account',
-        },
-      },
-      {
-        link: {
-          to: 'upload',
-          name: 'Upload Account',
-        },
-      },
-    ],
   },
   {
     link: {
       to: false,
-      name: 'Load',
+      name: 'Divider',
     },
   },
 ];
-
-const stripTrailingSlash = (str: string) : string => {
-  return str.endsWith('/') ?
-      str.slice(0, -1) :
-      str;
-};
 
 const AccountRoutes: RouterPath[] = [
   ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
@@ -66,55 +47,45 @@ const AccountRoutes: RouterPath[] = [
 ]
 
 class AccountsClass extends React.PureComponent<Props, {}, null> {
-  MappedConstantItems: SidebarMenuElement[];
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
-    const { url } = this.props.match;
-    this.MappedConstantItems = this.mapMenuItems(ConstantSidebarItems, stripTrailingSlash(url));
+    this.generateSidebarItems = this.generateSidebarItems.bind(this);
   }
 
-  mapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
-    return item.map(element => {
-      if (element.link.to !== false) {
-        const mapped: SidebarMenuItem = {
-          link: {
-            ...element.link,
-            to: `${url}/${element.link.to}`,
-          },
-          subItems: element.subItems
-            ? this.mapMenuItems(element.subItems, url)
-            : undefined
-        };
-        return mapped;
-      }
-      return element;
-    });
-  }
-
-  componentDidMount() {
-    const {match, accounts, Sidebar} = this.props;
-    const url = stripTrailingSlash(match.url);
-    const accountLinks: SidebarMenuElement[] = [];
+  generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
+    // Pull accounts directly from State.  This is because
+    // we may be called mid-change on the state, and our local
+    // state will not yet be updated (but the incoming state will be)
+    const { accounts } = state;
+    const { match } = this.props;
+    const accountLinks: SidebarMenuItem[] = [];
     Object.entries(accounts).forEach(([name, _]) => {
       accountLinks.push({
         link: {
-          to: `${url}/e/${name}`,
+          to: `e/${name}`,
           name
         }
       });
     });
+    return MapMenuItems(ConstantSidebarItems.concat(accountLinks), match.url);
+  } 
 
-    Sidebar.setItems(this.MappedConstantItems.concat(accountLinks));
+  componentDidMount() {
+    const { Sidebar} = this.props;
+    Sidebar.setRootGenerator(this.generateSidebarItems);
   }
 
+  componentWillUnmount() {
+    const { Sidebar} = this.props;
+    Sidebar.setRootGenerator(null);
+  }
 
   render() {
     const { match, accounts } = this.props;
     const { url } = match;
-    const createLink = this.MappedConstantItems[0];
-
+    
     let accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
       const accountUrl = `${url}/e/${key}`;
       return <Route key={key} path={accountUrl} render={(state) => <Account accountName={key} accountMap={AccountRoutes} url={accountUrl} /> } />
@@ -122,7 +93,7 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
     return (
       <Switch>
         {accountRoutes}
-        <Route render={(state) => <NewAccount createLink={createLink} url={url} /> } />
+        <Route render={(state) => <NewAccount url={url} /> } />
       </Switch>
     );
   }

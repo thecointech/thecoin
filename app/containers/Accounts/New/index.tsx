@@ -1,22 +1,56 @@
 import * as React from 'react';
-
-import { Switch, Route } from 'react-router-dom';
-import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuElement } from '@the-coin/components/containers/PageSidebar/types';
 import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 
+import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
+import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
+import { ApplicationBaseState } from '@the-coin/components/types';
 import AccountCreate from './Create/index';
 
 type MyProps = {
-  url: string;
-  createLink: SidebarMenuElement;
+  url: string
 };
 type Props = MyProps & Sidebar.DispatchProps;
+
+const NewAccountName = "New Account";
+
+const ConstantSidebarItems: SidebarMenuItem[] = [
+  {
+    link: {
+      to: 'create',
+      name: 'Create Account',
+    },
+  },
+  {
+    link: {
+      to: 'upload',
+      name: 'Upload Account',
+    },
+  },
+];
+
 class NewAccountClass extends React.PureComponent<Props, {}, null> {
+
+  constructor(props: Props) {
+    super(props);
+
+    this.generateSubItems = this.generateSubItems.bind(this);
+  }
+
+  generateSubItems(items: SidebarMenuItem[], state: ApplicationBaseState): SidebarMenuItem[] {
+    const {url} = this.props;
+    const item = FindItem(items, NewAccountName);
+    if (item)
+      item.subItems = MapMenuItems(ConstantSidebarItems, url);
+    return items;
+  }
+  
   componentDidMount() {
-    const { createLink } = this.props;
-    this.props.setSubItems(createLink.link.name, createLink.subItems!);
+    this.props.addGenerator(NewAccountName, this.generateSubItems);
+  }
+  componentWillUnmount() {
+    this.props.removeGenerator(NewAccountName);
   }
 
   readFile(file: File): Promise<string> {
@@ -47,4 +81,4 @@ class NewAccountClass extends React.PureComponent<Props, {}, null> {
 
 const NewAccount = connect(null, Sidebar.mapDispatchToProps)(NewAccountClass);
 
-export { NewAccount };
+export { NewAccount, NewAccountName };
