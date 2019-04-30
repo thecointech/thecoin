@@ -64,6 +64,7 @@ export function ReadAllAccounts() : AccountMap {
     if (wallet != null) {
       allAccounts[name] = {
         ...DefaultAccount,
+        name,
         wallet
       };
     }

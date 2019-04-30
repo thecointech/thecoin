@@ -121,9 +121,12 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: any
             // we manually pass through to the appropriate account
             let account = state[name];
             let newAccount = reducer(account, action);
+            // Handle name change - remove original name and add under dictIndex
+            let dictIndex = newAccount.name || name;
+            const { [name]: _, ...omitted } = state;
             newState = {
-              ...state,
-              [name]: newAccount
+              ...omitted,
+              [dictIndex]: newAccount
             }
           }
         }

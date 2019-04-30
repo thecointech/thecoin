@@ -20,8 +20,10 @@ class AccountReducer extends TheCoinReducer<AccountState>
 
   setName(name: string): void {
     this.draftState.name = name;
-    // TODO: Renaming (once re-synced with website)
-    this.draftState.wallet = GetStored(name);
+    // If we don't yet have a wallet,
+    // try and load under the new name
+    if (!this.state.wallet)
+      this.draftState.wallet = GetStored(name);
   }
 
   setWallet(name:string, wallet: Wallet) {
@@ -29,8 +31,6 @@ class AccountReducer extends TheCoinReducer<AccountState>
     this.draftState.wallet = wallet;
     SetStored(name, wallet);
   }
-
-  //deleteWallet(wallet: Wallet)
 
   ///////////////////////////////////////////////////////////////////////////////////
   updateWithValues(newState: AccountState) {
