@@ -1,5 +1,5 @@
 import { Wallet } from 'ethers';
-import { AccountMap, AccountState, DefaultAccount } from './types';
+import { AccountMap, DefaultAccount } from './types';
 
 const PREFIX = 'lcl_wal_';
 const PREFIX_LEN = PREFIX.length;
@@ -55,20 +55,20 @@ export function StoreSingleWallet(name: string, wallet: Wallet) {
 }
 
 // Utility function for fetching all stored accounts
-export function ReadAllAccounts(): AccountMap {
-  const allAccounts = new Map<string, AccountState>();
+export function ReadAllAccounts() : AccountMap {
+  const allAccounts = new AccountMap();
   for (let i = 0; i <= localStorage.length - 1; i++) {
     const name = Strip(localStorage.key(i));
     const wallet = GetStored(name);
 
     if (wallet != null) {
-      allAccounts.set(name, {
+      allAccounts[name] = {
         ...DefaultAccount,
         wallet
-      });
+      };
     }
   }
-  return allAccounts;
+  return allAccounts
 }
 
 //
@@ -83,9 +83,9 @@ export function StoreAllAccounts(accounts: AccountMap) {
       }
     }
   }
-  accounts.forEach((account, name) => {
+  Object.entries(accounts).forEach(([name, account]) => {
 	  if (account.wallet)
-		StoreSingleWallet(name, account.wallet);
+		  StoreSingleWallet(name, account.wallet);
   });
 }
 

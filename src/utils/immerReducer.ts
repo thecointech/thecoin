@@ -94,7 +94,7 @@ function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name
 //  This special-purpose reducer handles the case when there
 //  is a named reducer for each entry in a dictionary of values
 let dictionaryReducers: Dictionary<any> = {}
-function buildNamedDictionaryReducer(dictionaryFilter: string) 
+function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: any) 
 {
   // Don't recreate a new reducer for an existing dictionary.
   // Doing this can lose our existing state as the current
@@ -129,7 +129,7 @@ function buildNamedDictionaryReducer(dictionaryFilter: string)
         }
       );
       // Default state for a dictionary is always an empty dictionary
-      return newState || {};
+      return newState || initialState;
     }
     dictionaryReducers[dictionaryFilter] = existing;
   }

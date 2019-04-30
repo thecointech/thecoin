@@ -1,22 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { Wallet } from 'ethers';
 //import styles from './index.module.css'
 import { Label, Container, Icon } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
-import { GetNamedReducer } from '../../utils/immerReducer';
-import { AccountReducer } from '../Account/reducer';
-import { DefaultAccount } from '../Account/types';
+import { buildReducer } from '../Account/reducer';
+import { buildMapDispatchToProps, DispatchProps } from '../Account/actions';
 
 interface MyProps {
 	readFile: (path: File) => Promise<string>;
 	addressMatch?: (address: string) => boolean;
 }
-interface InjectedProps {
-	setWallet: (name: string, wallet: Wallet) => void;
-}
-type Props = MyProps & InjectedProps;
+type Props = MyProps & DispatchProps;
 class UploadWalletClass extends React.PureComponent<Props> {
 
 	private id: string = "upload" + Math.random();
@@ -34,7 +28,8 @@ class UploadWalletClass extends React.PureComponent<Props> {
 		const file = files[0];
 		const data = await this.props.readFile(file)
 		const obj = JSON.parse(data.trim());
-		this.onFileUpload(file.name, obj);
+		const name = file.name.split(".")[0];
+		this.onFileUpload(name, obj);
 	}
 
 	async onFileUpload(name: string, jsonWallet: any) {
@@ -44,8 +39,9 @@ class UploadWalletClass extends React.PureComponent<Props> {
 		  addressMatch(address) :
 		  IsValidAddress(address);
 	
-		if (isValid)
-		  this.props.setWallet(name, jsonWallet);
+		if (isValid) {
+			this.props.setWallet(name, jsonWallet);
+		}
 		else {
 		  alert("Bad Wallet");
 		}
@@ -64,16 +60,9 @@ class UploadWalletClass extends React.PureComponent<Props> {
 	}
 }
 
-function mapDispatchToProps(dispatch: Dispatch): InjectedProps {
-	return {
-		setWallet: (name: string, wallet: Wallet) => {
-			const { actions } = GetNamedReducer(AccountReducer, name, DefaultAccount);
-			dispatch({
-				type: actions.setWallet.type, 
-				payload: wallet
-			});
-		}
-	}
-}
-const UploadWallet = connect(null, mapDispatchToProps)(UploadWalletClass)
-export { UploadWallet }
+const uploadAnonKey = "__@anonf5c95d2b"
+const mapDispatchToProps = buildMapDispatchToProps(uploadAnonKey)
+
+export const UploadWallet = buildReducer<MyProps>(uploadAnonKey)(
+	connect(null, mapDispatchToProps)(UploadWalletClass)
+)

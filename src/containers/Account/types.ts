@@ -2,6 +2,8 @@ import { Wallet, Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes'
+import { ApplicationBaseState } from '@the-coin/components/types';
+
 /* --- CALLBACKS ---*/
 type DecryptCallback = (percent: number) => boolean;
 
@@ -51,13 +53,18 @@ const DefaultAccount: AccountState = {
 	displayCurrency: CurrencyCodes.CAD
   }
 
-type AccountMap = Map<string, AccountState>;
+class AccountMap {
+	[index: string]: AccountState;
+};
+
+const ACCOUNTS_KEY: keyof ApplicationBaseState = "accounts";
+
 
 /* --- ACTIONS --- */
 interface IActions extends ImmerReducer<AccountState> {
 
 	setName(name: string) : void;
-	setWallet(wallet: Wallet): void;
+	setWallet(name: string, wallet: Wallet): void;
 
 	// Get the balance of the account in Coin
 	updateBalance(newBalance?: number) : Iterator<any>;
@@ -66,4 +73,4 @@ interface IActions extends ImmerReducer<AccountState> {
 	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
 /* --- EXPORTS --- */
-export { IActions, AccountState, AccountMap, DefaultAccount, Transaction, DecryptCallback };
+export { IActions, AccountState, AccountMap, DefaultAccount, Transaction, DecryptCallback, ACCOUNTS_KEY };

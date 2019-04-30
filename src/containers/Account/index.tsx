@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Login } from '../../containers/Login';
-//import { UploadWallet } from '../../containers/UploadWallet';
 import { NotFoundPage } from '../../containers/NotFoundPage'
 import * as Sidebar from '../../containers/PageSidebar/actions';
 
@@ -12,8 +11,6 @@ import { AccountState } from './types';
 import { buildReducer } from './reducer'
 import { createAccountSelector } from './selector';
 import * as Account from './actions';
-import { Wallet } from 'ethers';
-import { IsValidAddress } from '@the-coin/utilities';
 import { Dispatch } from 'redux';
 
 
@@ -34,31 +31,12 @@ type Props = OwnProps & AccountProps & Sidebar.DispatchProps;
 
 class AccountClass extends React.PureComponent<Props, {}, null> {
 
-  constructor(props: Props) {
-    super(props);
-    this.onFileUpload = this.onFileUpload.bind(this);
-  }
-
   buildLink(item: RouterPath) {
     const {url} = this.props;
     return url.endsWith('/') ?
       `${url}${item[1]}` :
       `${url}/${item[1]}`
 
-  }
-
-  async onFileUpload(jsonWallet: Wallet) {
-    const { address } = jsonWallet;
-    const { addressMatch } = this.props;
-    const isValid = addressMatch ? 
-      addressMatch(address) :
-      IsValidAddress(address);
-
-    if (isValid)
-      this.props.dispatch.setWallet(jsonWallet);
-    else {
-      alert("Bad Wallet");
-    }
   }
 
   componentDidMount() {

@@ -6,13 +6,19 @@ function selectAccounts(state: ApplicationBaseState) : AccountMap {
 	return state.accounts || ReadAllAccounts();
 }
 
+function structuredSelectAccounts(state: ApplicationBaseState) {
+	return {
+		accounts: selectAccounts(state)
+	}
+}
+
 function createAccountSelector(accountName: string) {
 	return (state: ApplicationBaseState) : AccountState => 
-		selectAccounts(state).get(accountName) || {
+		selectAccounts(state)[accountName] || {
 			...DefaultAccount,
 			name: accountName
 		}
 }
 
 
-export { selectAccounts, createAccountSelector }
+export { selectAccounts, structuredSelectAccounts, createAccountSelector }

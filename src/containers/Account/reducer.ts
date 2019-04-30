@@ -1,7 +1,7 @@
 import { GetConnected, InitialCoinBlock } from '@the-coin/utilities/lib/TheContract';
 import { Wallet, Contract } from 'ethers';
 import { call, put } from 'redux-saga/effects';
-import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount } from './types';
+import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
@@ -9,12 +9,11 @@ import { buildSagas } from './actions';
 //import { createAccountSelector } from './selector';
 import { compose } from 'redux';
 
-import { GetStored, SetStored } from './storageSync'
+import { GetStored, SetStored, ReadAllAccounts } from './storageSync'
 
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
-
 
 class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
@@ -25,9 +24,10 @@ class AccountReducer extends TheCoinReducer<AccountState>
     this.draftState.wallet = GetStored(name);
   }
 
-  setWallet(wallet: Wallet) {
+  setWallet(name:string, wallet: Wallet) {
+    this.draftState.name = name;
     this.draftState.wallet = wallet;
-    SetStored(this.state.name, wallet);
+    SetStored(name, wallet);
   }
 
   //deleteWallet(wallet: Wallet)
@@ -289,11 +289,11 @@ class AccountReducer extends TheCoinReducer<AccountState>
 function buildReducer<T>(key: string) {
 
   // Create the reducer
-  GetNamedReducer(AccountReducer, key, DefaultAccount, "accounts");
+  GetNamedReducer(AccountReducer, key, DefaultAccount, ACCOUNTS_KEY);
 
   const withReducer = injectReducer<T>({
-    key: "accounts",
-    reducer: buildNamedDictionaryReducer("accounts")
+    key: ACCOUNTS_KEY,
+    reducer: buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
   });
 
   // Note, our saga requires us 
@@ -308,5 +308,5 @@ function buildReducer<T>(key: string) {
   )
 }
 
-export { buildReducer, AccountReducer };
+export { buildReducer, AccountReducer, ACCOUNTS_KEY };
 
