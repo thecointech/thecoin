@@ -13,7 +13,7 @@ import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { toHuman } from '@the-coin/utilities';
 
-import { ContainerState as AccountState } from '@the-coin/components/containers/Account/types';
+import { AccountState } from '@the-coin/components/containers/Account/types';
 import { DualFxInput } from 'components/DualFxInput';
 import messages from './messages';
 

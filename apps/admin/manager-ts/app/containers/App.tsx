@@ -10,7 +10,7 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <PageSidebar visible={true}>
+        <PageSidebar visible={true} inverted>
           <Container>
             <Routes />
           </Container>

@@ -6,9 +6,9 @@ import messages from './messages';
 import { DualFxInput } from 'components/DualFxInput';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { selectFxRate, ContainerState as FxRates } from '@the-coin/components/containers/FxRate/selectors';
-import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
+import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
-import { ContainerState as AccountState } from '@the-coin/components/containers/Account/types'
+import { AccountState } from '@the-coin/components/containers/Account/types'
 import { DispatchProps } from '@the-coin/components/containers/Account/actions'
 
 type MyProps = AccountState & {
@@ -70,9 +70,7 @@ class MintClass extends React.PureComponent<Props> {
 	render() {
 		const { toMint, isProcessing, txHash } = this.state
 		const { rates, balance } = this.props;
-		const rate = getFxRate(rates, new Date().getTime());
-		const fxRate= rate.sell * rate.fxRate;
-
+		const fxRate = weSellAt(rates);
 		return (
 			<React.Fragment>
 				<Header>Mint Coin</Header>
