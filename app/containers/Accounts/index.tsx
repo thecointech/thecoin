@@ -10,9 +10,13 @@ import { Account, RouterPath } from '@the-coin/components/containers/Account';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 
+import { ApplicationRootState } from 'types';
 import { Balance } from '@the-coin/components/containers/Balance';
 import { NewAccount, NewAccountName } from './New';
-import { ApplicationRootState } from 'types';
+import { Redeem } from './Redeem';
+import { Transfer } from './Transfer';
+import { Settings } from './Settings';
+import { Purchase } from './Purchase';
 
 
 interface OwnProps {}
@@ -39,11 +43,11 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
 
 const AccountRoutes: RouterPath[] = [
   ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
-  ["Transfer In",   "transferIn", (routerProps) => ((props) => <Balance {...props} {...routerProps.account} />)],
-  //["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
-  // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
-  // ["Pay Bills",     "billPay",  (account) => ((props) => <Transfer {...props} />)],
-  // ["Settings",     "settings",  (account) => ((props) => <Settings {...props} account={account} />)],
+  ["Transfer In",   "transferIn", (routerProps) => ((props) => <Purchase {...props} account={routerProps.account} />)],
+  ["Transfer Out",  "redeem",   (routerProps) => ((props) => <Redeem {...props} account={routerProps.account} />)],
+  ["Transfer To",   "transfer", (routerProps) => ((props) => <Transfer {...props} />)],
+  ["Pay Bills",     "billPay",  (routerProps) => ((props) => <Transfer {...props} />)],
+  ["Settings",     "settings",  (routerProps) => ((props) => <Settings {...props} account={routerProps.account} />)],
 ]
 
 class AccountsClass extends React.PureComponent<Props, {}, null> {
