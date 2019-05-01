@@ -24,7 +24,7 @@ class Settings extends React.PureComponent<MyProps> {
 		const wallet = GetStored(name);
 		const walletStr = JSON.stringify(wallet);
 		const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
-		FileSaver.saveAs(blob, name + "Wallet.json");
+		FileSaver.saveAs(blob, name + ".wallet.json");
 	}
 
 	render() 
