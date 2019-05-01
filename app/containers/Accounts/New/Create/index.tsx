@@ -14,7 +14,7 @@ import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { DispatchProps, buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
 import { UxScoredPassword } from 'components/UxScoredPassword';
-import { UxInput } from 'components/UxInput';
+import { UxInput } from '@the-coin/components/components/UxInput';
 import messages from './messages'
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { ReferrersApi } from '@the-coin/broker-cad';

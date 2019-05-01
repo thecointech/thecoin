@@ -8,7 +8,7 @@ import styles from './index.module.css';
 import messages, { scope as MessageScope } from './messages';
 import { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
-import { UxPassword } from 'components/UxPassword';
+import { UxPassword } from '@the-coin/components/components/UxPassword';
 
 const initialState = {
   message: undefined as FormattedMessage.MessageDescriptor | undefined,
