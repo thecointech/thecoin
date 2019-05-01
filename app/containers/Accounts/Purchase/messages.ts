@@ -14,6 +14,6 @@ export default defineMessages({
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: "Transfer in using Interac's online purchase.",
+    defaultMessage: "Transfer funds into your account.",
   }
 });
