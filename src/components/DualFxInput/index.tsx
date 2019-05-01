@@ -71,8 +71,8 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 
 		return (
 			<React.Fragment>
-				<Form.Input id="xCAD" placeholder="testing" label='CAD $' step="any" value={roundPlaces(vCAD)} type="number" onChange={this.onChange} />
-				<Form.Input id="xTHE" placeholder="testing" label='THE $' step="any" value={roundPlaces(vTHE)} type="number" onChange={this.onChange} />
+				<Form.Input id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={roundPlaces(vCAD)} type="number" onChange={this.onChange} />
+				<Form.Input id="xTHE" placeholder="value in THE" label='THE ₡' step="any" value={roundPlaces(vTHE)} type="number" onChange={this.onChange} />
 			</React.Fragment>
 		)
 	}
