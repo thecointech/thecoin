@@ -24,8 +24,20 @@ const EmptyRate: FXRate = {
 };
 
 // Always returns an object
-function getFxRate(rates: FXRate[], ts: number) {
+function getFxRate(rates: FXRate[], ts: number) : FXRate {
 	return rates.find((rate: FXRate) => rate.validFrom <= ts && rate.validTill > ts) || EmptyRate
+}
+
+const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date ? date.getTime() : Date.now());
+
+function weBuyAt(rates: FXRate[], date?: Date) {
+	const { buy, fxRate } = getRate(rates, date);
+	return buy * fxRate;
+}
+
+function weSellAt(rates: FXRate[], date?: Date) {
+	const {sell, fxRate} = getRate(rates, date);
+	return sell * fxRate;
 }
 
 class FxRateReducer extends TheCoinReducer<ContainerState>
@@ -143,4 +155,4 @@ function buildReducer<T>() {
   )
 }
 
-export { buildReducer, actions, getFxRate };
+export { buildReducer, actions, getFxRate, weBuyAt, weSellAt };

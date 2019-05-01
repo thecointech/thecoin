@@ -4,7 +4,7 @@ import { toHuman } from '@the-coin/utilities/lib/Conversion'
 import { FXRate } from '@the-coin/pricing';
 import { Transaction } from '../../containers/Account/types'
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
-import { getFxRate } from '../../containers/FxRate/reducer';
+import { weBuyAt } from '../../containers/FxRate/reducer';
 
 type MyProps = {
   transactions: Transaction[];
@@ -77,9 +77,9 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
     let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
     let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
     let txJsxRows = txOutput.map((tx) => {
-      const rate = getFxRate(rates, tx.date.getTime());
-      const changeCad = toHuman(rate.buy * rate.fxRate * tx.change, true);
-      const balanceCad = toHuman(rate.buy * rate.fxRate * tx.balance, true);
+      const rate = weBuyAt(rates, tx.date);
+      const changeCad = toHuman(rate * tx.change, true);
+      const balanceCad = toHuman(rate * tx.balance, true);
       return (
         <Table.Row key={tx.date.valueOf()}>
           <Table.Cell>{tx.date.toDateString()}</Table.Cell>
