@@ -1,11 +1,12 @@
 import React from 'react';
-import { UxInput } from 'components/UxInput';
 import { Wallet } from 'ethers';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button } from 'semantic-ui-react';
 import { ds } from 'containers/Datastore';
 import base32 from 'base32';
+import { UxAddress } from '@the-coin/components/components/UxAddress';
 import messages from './messages'
+import { NormalizeAddress } from '@the-coin/utilities';
 
 interface OwnProps {
 	wallet: Wallet,
@@ -16,10 +17,6 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 
 	state = {
 		account: '',
-
-		accountValid: undefined as boolean | undefined,
-		accountMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
-
 		forceValidate: false
 	};
 
@@ -29,15 +26,10 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 		this.verifyAccount = this.verifyAccount.bind(this);
 	}
 
-	// TODO: remove once utilities updated
-	IsValidAddress = (address: string) => /^(0x)?[a-g0-9]{40}$/i.test(address);
-	NormalizeAddress = (address: string) => address.length == 40 ? `0x${address.toUpperCase()}` : address.toUpperCase()
-
 	// Validate our inputs
 	onAccountValue(value: string) {
 		this.setState({
 			account: value,
-			accountValid: this.IsValidAddress(value)
 		});
 	}
 
@@ -79,12 +71,12 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 		if (e) e.preventDefault();
 
 		const { wallet } = this.props;
-		const { account, accountValid } = this.state;
-		if (!accountValid)
+		const { account } = this.state;
+		if (!account)
 			return;
 
 		// We sign this account to show we approve of it
-		const address = this.NormalizeAddress(account);
+		const address = NormalizeAddress(account);
 		const signature = await wallet.signMessage(address)
 
 		await this.setUserVerified(signature, address);
@@ -93,7 +85,7 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 	}
 
 	render() {
-		const { forceValidate, accountValid, accountMessage } = this.state;
+		const { forceValidate } = this.state;
      
 		return (
 			<React.Fragment>
@@ -106,13 +98,9 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 							<FormattedMessage {...messages.subHeader} />
 						</Header.Subheader>
 					</Header>
-					<UxInput
+					<UxAddress
 						uxChange={this.onAccountValue}
-						intlLabel={messages.labelAccount}
 						forceValidate={forceValidate}
-						isValid={accountValid}
-						message={accountMessage}
-						placeholder="Account Name"
 					/>
 					<Button onClick={this.verifyAccount}>
 						<FormattedMessage {...messages.buttonVerify} />

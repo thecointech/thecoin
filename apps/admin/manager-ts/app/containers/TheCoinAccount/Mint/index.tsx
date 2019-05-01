@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import messages from './messages';
-import { DualFxInput } from 'components/DualFxInput';
+import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { selectFxRate, ContainerState as FxRates } from '@the-coin/components/containers/FxRate/selectors';
 import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';

@@ -11,17 +11,16 @@ import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
 import * as FxAction from '@the-coin/components/containers/FxRate/actions';
 import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { toHuman } from '@the-coin/utilities';
-
-import { AccountState } from '@the-coin/components/containers/Account/types';
-import { DualFxInput } from 'components/DualFxInput';
-import messages from './messages';
-
+import { toHuman, NormalizeAddress } from '@the-coin/utilities';
+import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
 import { ds } from 'containers/Datastore';
 
+import { AccountState } from '@the-coin/components/containers/Account/types';
+import { DualFxInput } from '@the-coin/components/components/DualFxInput';
+import { UxAddress } from '@the-coin/components/components/UxAddress';
+
+import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
-import { UxInput } from 'components/UxInput';
 
 type MyProps = AccountState & {
 	updateBalance: Function
@@ -33,7 +32,6 @@ class PurchaseClass extends React.PureComponent<Props> {
 	state = {
 		coin: 0,
 		account: "",
-		accountValid: false,
 		date: new Date(),
 
 		txHash: '',
@@ -53,15 +51,10 @@ class PurchaseClass extends React.PureComponent<Props> {
 		this.handleConfirm = this.handleConfirm.bind(this);
 	}
 
-	// TODO: remove once utilities updated
-	IsValidAddress = (address: string) => /^(0x)?[a-gA-G0-9]{40}$/.test(address);
-	NormalizeAddress = (address: string) => address.length == 40 ? `0x${address.toUpperCase()}` : `0x${address.slice(2).toUpperCase()}`
-
 	// Validate our inputs
 	onAccountValue(value: string) {
 		this.setState({
 			account: value,
-			accountValid: this.IsValidAddress(value)
 		});
 	}
 
@@ -124,7 +117,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 
 	async recordTxOpen() {
 		const { account } = this.state;
-		let normalized = this.NormalizeAddress(account);
+		let normalized = NormalizeAddress(account);
 		const userKey = ds.key(['User', normalized, "Purchase"])
 		const entry = this.buildPurchaseEntry();
 		try {
@@ -204,7 +197,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 	}
 
 	render() {
-		const { coin, date, isProcessing, step, accountValid } = this.state
+		const { coin, date, isProcessing, step } = this.state
 		const { balance } = this.props;
 		const fxRate = this.getSelectedFxRate()
 
@@ -217,11 +210,10 @@ class PurchaseClass extends React.PureComponent<Props> {
 				<Form>
 					<Datetime value={date} onChange={this.onSetDate} />
 					<p>FxRate: {roundPlaces(fxRate)} </p>
-					<UxInput
+					<UxAddress
 						uxChange={this.onAccountValue}
 						intlLabel={messages.labelAccount}
 						forceValidate={forceValidate}
-						isValid={accountValid}
 						placeholder="Purchaser Account"
 					/>
 					<DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={fxRate} />

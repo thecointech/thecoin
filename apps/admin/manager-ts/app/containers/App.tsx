@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
+import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import { buildReducer } from '@the-coin/components/containers/FxRate/reducer'
 
-class App extends React.Component {
+class App extends React.PureComponent {
 
   render() {
     return (
