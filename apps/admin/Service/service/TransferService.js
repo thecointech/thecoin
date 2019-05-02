@@ -12,6 +12,7 @@ const BrokerActions = require('../exchange/Broker')
 exports.makeCertifiedTransfer = function(request) {
   return new Promise(async function(resolve, reject) {
     var result = await BrokerActions.DoCertifiedTransfer(request);
+    
     if (result.txHash) 
       resolve(result)
     else {

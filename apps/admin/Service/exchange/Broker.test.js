@@ -5,7 +5,7 @@ const ethers = require('ethers');
 
 const { GetContract, GetWallet } = require('./Wallet')
 const { toHuman, TheContract } = require('@the-coin/utilities');
-const { BuildVerifiedSale } = TheContract;
+const { BuildVerifiedSale, BuildVerifiedXfer } = TheContract;
 
 const status = Broker.ServerStatus();
 
@@ -40,30 +40,65 @@ async function GetStoredSale(user, id) {
 	return entity
 }
 
-test("Certified sale completes sale properly", async () => {
+test("Transfer completes sale properly", async () => {
+	return;
+	jest.setTimeout(30000);
+
 	const wallet = await GetWallet();
 	expect(wallet).toBeDefined();
 
 	// TODO!  Create a testing account to handle this stuff!
 	const status = Broker.ServerStatus();
 	const tc = await GetContract();
-	const myBalance = await tc.balanceOf(status.address)
+	const myBalance = await tc.balanceOf(wallet.address)
+	expect(myBalance.toNumber()).toBeGreaterThan(0);
+
+	const fee = status.certifiedFee;
+	const transfer = 100;
+	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, fee);
+	const tx = await Broker.DoCertifiedTransfer(certTransfer);
+
+	expect(tx.txHash).toBeTruthy();
+	expect(tx.message).toBe("Success");
+})
+
+test("Certified sale completes sale properly", async () => {
+	jest.setTimeout(300000);
+	const wallet = await GetWallet();
+	expect(wallet).toBeDefined();
+
+	// TODO!  Create a testing account to handle this stuff!
+	const status = Broker.ServerStatus();
+	const tc = await GetContract();
+	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
 	const email = "test@random.com";
 	const fee = status.certifiedFee;
-	const sellAmount = Math.min(10000, myBalance.toNumber() - fee);
-	const certSale = await BuildVerifiedSale(email, wallet, status.address, sellAmount, status.certifiedFee);
-
-	return
-	//const txhash = await Broker.DoCertifiedSale(certSale);
+	const sellAmount = 100;
+	const certSale = await BuildVerifiedSale(email, wallet, status.address, sellAmount, fee);
+	const tx = await Broker.DoCertifiedSale(certSale);
 	
+	expect(tx.txHash).toBeTruthy();
+	expect(tx.message).toBe("Success");
 
-	// const stored = await GetStoredSale(wallet.address, saleId);
-	// expect(stored.userSellData).toBeDefined()
-	// expect(stored.userSellData).toMatchObject(certSale);
-	// expect(stored.hash).toMatch("");
-	// expect(stored.fiatDisbursed).toEqual(0);
+	// Wait on the given hash
+	const receipt = await tc.provider.getTransactionReceipt(tx.txHash);
+	console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`)
+
+	// Verify money was subtracted
+	const newBalance = await tc.balanceOf(wallet.address)
+	expect(newBalance.toNumber()).toBe(myBalance.toNumber() - sellAmount);
+
+	// Wait for the tx to be mined
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	for (let i = 0; i < 10; i++) {
+		await sleep(2000);
+		// TODO: Test for 
+	}
 })
 
 // const { SendMail } = require('./AutoMailer');

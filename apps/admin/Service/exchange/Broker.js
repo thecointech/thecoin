@@ -7,7 +7,7 @@ const Wallet = require('./Wallet')
 const status = require('./status')
 
 status.certifiedFee = parseInt(status.certifiedFee);
-status.address = utilities.NormalizeAddress(status.address);
+//status.address = utilities.NormalizeAddress(status.address);
 
 // exports.QueryPurchasesIds = function (state) {
 //     return new Promise((resolve, reject) => {
@@ -134,7 +134,7 @@ const AvailableBalance= async (transfer) => {
 }
 const ValidXfer = (transfer) => TheContract.GetTransferSigner(transfer) == transfer.from;
 
-async function DoCertifiedTransfer(transfer) {
+async function DoCertifiedTransferWaitable(transfer) {
 
     // First check: is this the right sized fee?
     if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
@@ -148,14 +148,12 @@ async function DoCertifiedTransfer(transfer) {
     if (!await AvailableBalance(transfer))
         return failure("Insufficient funds");
 
-
     const {from, to, value, fee, timestamp } = transfer;
     const tc = await Wallet.GetContract();
-    const gasAmount = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
-        .estimateGas({gas:5000000})
-    console.log(`Tx ${from} -> ${tp}: Gas Amount ${gasAmount}`);
-
-    let tx = tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature).send({gas: 200000})
+    const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
+    console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
+    let tx = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+    console.log(`TxHash: ${tx.hash}`);
     // Return the full tx
     return tx;
 }
@@ -164,57 +162,44 @@ async function DoCertifiedTransfer(transfer) {
 
 const BuildSellKey = (user, id) => ds.key(['User', user, 'Sell', Number(id)])
 
-function StoreRequest(sale, hash)
+// Store the xfer info
+async function StoreRequest(sale, hash)
 {
-    // Store the verified xfer
     const user = sale.transfer.from;
+    const baseKey = ds.key(['User', user, 'Sell']);
+    const [keys] = await ds.allocateIds(baseKey, 1);
 
-    return new Promise((resolve, reject) => {
-        const baseKey = ds.key(['User', user, 'Sell']);
-        ds.allocateIds(baseKey, 1, function (err, keys) {
-            if (err) {
-                reject(err);
+    const saleId = keys[0];
+    const saleKey = BuildSellKey(user, saleId.id);
+    const entities = [
+        {
+            key: saleKey,
+            data: {
+                ...sale,
+                processedTimestamp: Date.now(), 
+                hash: hash,
+                confirmed: false,
+                fiatDisbursed: 0
             }
-            else {
-                const saleId = keys[0];
-                const saleKey = BuildSellKey(user, saleId.id);
-                const entities = [
-                    {
-                        key: saleKey,
-                        data: {
-                            userSellData: sale,
-                            processedTimestamp: Date.now(), 
-                            hash: hash,
-                            confirmed: false,
-                            fiatDisbursed: 0
-                        }
-                    }
-                ];
-                ds.insert(entities).then(() => {
-                    // Task inserted successfully.
-                    resolve(saleId.id);
-                })
-                .catch((err) => {
-                    reject(err);
-                })
-            }
-        });
-    });
+        }
+    ];
+    await ds.insert(entities)
+    return saleKey;
 }
 
-async function ConfirmSale(user, xferId, tx)
+async function ConfirmSale(tx, saleKey)
 {
-    // Why do we wait for two confirmations?  I don't know...
+    // Wait for two confirmations.  This makes it more
+    // difficult for an external actor to feed us false info
     // https://docs.ethers.io/ethers.js/html/cookbook-contracts.html?highlight=transaction
     const res = await tx.wait(2);
-    console.log(`Tx ${tx.hash} mined ${res}`);
+    console.log(`Tx ${tx.hash} mined ${res.blockNumber}`);
 
-    const key = BuildSellKey(user, xferId);
-    current = await ds.get(key);
+    let [current] = await ds.get(saleKey);
     current.confirmed = res.status;
 
     await ds.update({
-        key: key,
+        key: saleKey,
         data: current
     });
     console.log(`Tx Confirmed: ${res.status}`);
@@ -226,14 +211,14 @@ const ValidSale = (sale) => {
     return (saleSigner == sale.transfer.from)
 }
 const ValidDestination = (transfer) => 
-    utilities.NormalizeAddress(transfer.to) == status.address;
+    transfer.to == status.address;
 
 async function  DoCertifiedSale(sale) {
     const { transfer, clientEmail, signature } = sale;
     if (!transfer || !clientEmail || !signature) 
         return failure("Invalid arguments");
     
-    console.log(`Cert Sale from ${signature}`);
+    console.log(`Cert Sale from ${clientEmail}`);
     
     // First, verify the email address
     if (!ValidSale(sale))
@@ -244,17 +229,17 @@ async function  DoCertifiedSale(sale) {
         return failure("Invalid Destination");
 
     // Do the CertTransfer, this should transfer Coin to our account
-    const res = await DoCertifiedTransfer(transfer);
+    const res = await DoCertifiedTransferWaitable(transfer);
     // If we have no hash, it's probably an error message
     if (!res.hash)
         return res;
 
     // Next, create an initial record of the transaction
-    const xferId = await StoreRequest(sale, res.hash);
-    console.log(`Valid Cert Xfer: id: ${xferId}`);
+    const saleKey = await StoreRequest(sale, res.hash);
+    console.log(`Valid Cert Xfer: id: ${saleKey.id}`);
         
     // Fire & Forget callback waits for res to be mined & updates DB
-    ConfirmSale(res, xferId);
+    ConfirmSale(res, saleKey);
 
     // We just return the hash
     return success(res.hash);
@@ -262,6 +247,9 @@ async function  DoCertifiedSale(sale) {
 
 // ------------------------------------------------------------------------
 exports.BuildSellKey = BuildSellKey;
-exports.DoCertifiedTransfer = DoCertifiedTransfer,
+exports.DoCertifiedTransfer = async (transfer) => {
+    const res = await DoCertifiedTransferWaitable(transfer);
+    return (res.hash) ? success(res.hash) : res;
+}
 exports.DoCertifiedSale = DoCertifiedSale,
 exports.ServerStatus = () => status
