@@ -76,12 +76,12 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
 
     let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
     let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
-    let txJsxRows = txOutput.map((tx) => {
+    let txJsxRows = txOutput.map((tx, index) => {
       const rate = weBuyAt(rates, tx.date);
       const changeCad = toHuman(rate * tx.change, true);
       const balanceCad = toHuman(rate * tx.balance, true);
       return (
-        <Table.Row key={tx.date.valueOf()}>
+        <Table.Row key={index}>
           <Table.Cell>{tx.date.toDateString()}</Table.Cell>
           <Table.Cell>{tx.logEntry}</Table.Cell>
           <Table.Cell>${changeCad}</Table.Cell>
