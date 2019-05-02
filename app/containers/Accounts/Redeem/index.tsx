@@ -46,7 +46,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     const statusApi = new StatusApi();
     var status = await statusApi.status();
 
-    this.setState({percentComplete: 0.3});
+    this.setState({percentComplete: 0.2});
     if (this.state.doCancel)
       return;
 
@@ -64,9 +64,11 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       return;
 
     // Send the command to the server
-    this.setState({percentComplete: 0.7});
+    this.setState({percentComplete: 0.4});
     const response = await sellApi.certifiedCoinSale(sellCommand);
-    this.setState({percentComplete: 0.9});
+    this.setState({percentComplete: 0.8});
+
+    // TX hash is what?
 
     alert(response);
   }

@@ -192,7 +192,7 @@ async onReferrerChange(value: string) {
 // Render
 render() {
   if (this.state.redirect) {
-    const addr = `/accounts/${this.state.redirect}`;
+    const addr = `/accounts/e/${this.state.redirect}`;
     return <Redirect to={addr} />;
   }
   const { forceValidate, pwdValid, pwdMessage, nameValid, nameMessage, referrerValid, referrerMessage } = this.state;
