@@ -1254,7 +1254,7 @@ export const SellApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        certifiedCoinSale(certifiedSale: CertifiedSale, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SellResponse> {
+        certifiedCoinSale(certifiedSale: CertifiedSale, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
             const localVarFetchArgs = SellApiFetchParamCreator(configuration).certifiedCoinSale(certifiedSale, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

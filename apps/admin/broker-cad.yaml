@@ -532,6 +532,8 @@ paths:
           schema: 
             $ref: "#/definitions/SignedMessage"
 
+  #############################################################
+
   /exchange/sell/certified:
     post:
       tags: 
@@ -545,7 +547,7 @@ paths:
         200:
           description: The response confirms to the user the order has been processed
           schema:
-            $ref: "#/definitions/SellResponse"
+            $ref: "#/definitions/CertifiedTransferResponse"
       parameters:
         - in: body
           name: request
@@ -554,7 +556,6 @@ paths:
           schema: 
             $ref: "#/definitions/CertifiedSale"
 
-  #############################################################
   /certifiedTransfer:
     post:
       tags:

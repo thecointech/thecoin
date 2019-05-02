@@ -301,7 +301,7 @@ paths:
         200:
           description: "The response confirms to the user the order has been processed"
           schema:
-            $ref: "#/definitions/SellResponse"
+            $ref: "#/definitions/CertifiedTransferResponse"
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Sell"
