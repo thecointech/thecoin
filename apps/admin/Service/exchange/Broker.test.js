@@ -3,11 +3,9 @@ const Broker = require('./Broker');
 const ds = require('./Datastore').datastore
 const ethers = require('ethers');
 
-const { DecryptWallet, GetWallet } = require('./Wallet')
-const { key } = require('./secret.json');
-
+const { GetContract, GetWallet } = require('./Wallet')
 const { toHuman, TheContract } = require('@the-coin/utilities');
-const { BuildVerifiedSale, GetContract } = TheContract;
+const { BuildVerifiedSale } = TheContract;
 
 const status = Broker.ServerStatus();
 
@@ -31,7 +29,8 @@ test("Certified sale checks balance", async () => {
 	var sale = await BuildVerifiedSale(email, wallet, status.address, 10000, status.certifiedFee);
 	const results = await Broker.DoCertifiedSale(sale);
 
-	expect(results).toMatch("Insufficient funds");
+	expect(results.txHash).toBeFalsy();
+	expect(results.message).toMatch("Insufficient funds");
 })
 
 async function GetStoredSale(user, id) {
@@ -42,13 +41,12 @@ async function GetStoredSale(user, id) {
 }
 
 test("Certified sale completes sale properly", async () => {
-	await DecryptWallet();
-	const wallet = GetWallet();
+	const wallet = await GetWallet();
 	expect(wallet).toBeDefined();
 
 	// TODO!  Create a testing account to handle this stuff!
 	const status = Broker.ServerStatus();
-	const tc = GetContract();
+	const tc = await GetContract();
 	const myBalance = await tc.balanceOf(status.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
@@ -57,8 +55,9 @@ test("Certified sale completes sale properly", async () => {
 	const sellAmount = Math.min(10000, myBalance.toNumber() - fee);
 	const certSale = await BuildVerifiedSale(email, wallet, status.address, sellAmount, status.certifiedFee);
 
-	// const saleId = await Broker.DoCertifiedSale(certSale);
-	// expect(() => parseInt(saleId)).not.toThrow();
+	return
+	//const txhash = await Broker.DoCertifiedSale(certSale);
+	
 
 	// const stored = await GetStoredSale(wallet.address, saleId);
 	// expect(stored.userSellData).toBeDefined()

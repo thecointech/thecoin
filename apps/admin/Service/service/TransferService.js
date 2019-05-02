@@ -1,5 +1,6 @@
 'use strict';
 
+const BrokerActions = require('../exchange/Broker')
 
 /**
  * Request Transfer from->to
@@ -9,16 +10,13 @@
  * returns CertifiedTransferResponse
  **/
 exports.makeCertifiedTransfer = function(request) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "message" : "message",
-  "txHash" : "txHash"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function(resolve, reject) {
+    var result = await BrokerActions.DoCertifiedTransfer(request);
+    if (result.txHash) 
+      resolve(result)
+    else {
+      console.error(JSON.stringify(result));
+      reject(result);
     }
   });
 }
