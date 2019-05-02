@@ -20,7 +20,7 @@ type MyProps = {
 type Props = MyProps & FxState;
 
 const initialState = {
-  coinToSell: undefined as number | undefined,
+  coinToSell: null as number | null,
   email: "",
   transferInProgress: false,
   percentComplete: 0,
@@ -53,7 +53,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     // Get our variables
     const {coinToSell, email} = this.state;
     const { wallet } = this.props.account;
-    if (coinToSell === undefined || !wallet)
+    if (coinToSell === null || !wallet)
       return
 
     // To redeem, we construct & sign a message that 

@@ -21,7 +21,7 @@ type MyProps = {
 type Props = MyProps & FxState;
 
 const initialState = {
-  coinTransfer: undefined as number | undefined,
+  coinTransfer: null as number | null,
   toAddress: "",
   forceValidate: false,
 
@@ -60,7 +60,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     // Get our variables
     const { coinTransfer, toAddress } = this.state;
     const { wallet, contract } = this.props.account;
-    if ( coinTransfer === undefined || !wallet || !contract)
+    if ( coinTransfer === null || !wallet || !contract)
       return false;
 
     // To transfer, we construct & sign a message that 

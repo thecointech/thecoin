@@ -19,7 +19,7 @@ type MyProps = {
 }
 
 const initialState = {
-  cadPurchase: undefined as number | undefined,
+  cadPurchase: null as number | null,
   activeAccordion: -1
 }
 
