@@ -6,19 +6,19 @@ type OnChangeCallback = (value: number) => void;
 type Props = {
 	onChange: OnChangeCallback,
 	fxRate: number,
-	value?: number,
+	value: number|null,
 	asCoin?: boolean, 	// Whether to store the value as currency or coin?
 	maxValue?: number
 }
 
 const initialState = {
-	value: undefined as (number | undefined)
+	value: null as (number | null)
 };
 
 type State = Readonly<typeof initialState>;
 
-function roundPlaces(value?: number, places?: number) {
-	if (!value) return undefined;
+function roundPlaces(value: number|null, places?: number) {
+	if (value === null) return null;
 	const sf = places ? Math.pow(10, places) : 100;
 	return Math.round(value * sf) / sf;
 }
@@ -33,9 +33,9 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 	}
 
 	// Returns [THE, CAD]
-	getValues(val: number|undefined, isCoin: boolean) {
-		if (val === undefined)
-			return [undefined, undefined];
+	getValues(val: number|null, isCoin: boolean) {
+		if (val === null)
+			return [null, null];
 		if (!val)
 			return [0, 0];
 			 
@@ -56,7 +56,7 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 
 		const [vTHE, vCAD] = this.getValues(value, valIsCoin);
 		let newValue = asCoin ? vTHE : vCAD;
-		if (newValue === undefined)
+		if (newValue === null)
 		 	return;
 		if (newValue && maxValue)
 			newValue = Math.min(newValue, maxValue);
@@ -66,13 +66,16 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 	render() {
 		const { value, asCoin } = this.props;
 		let [vTHE, vCAD] = this.getValues(value, !!asCoin);
+
 		if (vTHE)
 			vTHE = toHuman(vTHE);
 
+		let viCAD = (vCAD == null) ? "" : roundPlaces(vCAD);
+		let viTHE = (vTHE == null) ? "" : roundPlaces(vTHE);
 		return (
 			<React.Fragment>
-				<Form.Input id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={roundPlaces(vCAD)} type="number" onChange={this.onChange} />
-				<Form.Input id="xTHE" placeholder="value in THE" label='THE ₡' step="any" value={roundPlaces(vTHE)} type="number" onChange={this.onChange} />
+				<Form.Input id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={viCAD} type="number" onChange={this.onChange} />
+				<Form.Input id="xTHE" placeholder="value in THE" label='THE ₡' step="any" value={viTHE} type="number" onChange={this.onChange} />
 			</React.Fragment>
 		)
 	}
