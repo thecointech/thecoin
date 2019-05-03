@@ -23,6 +23,8 @@ const initialState = {
   coinToSell: null as number | null,
   email: "",
   transferInProgress: false,
+  transferMessage: messages.transferOutProgress,
+  transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false
 }
@@ -41,7 +43,10 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     
   }
 
-  async doSale() {
+  async doSale()
+  {
+    // Init messages
+    this.setState({transferMessage: messages.step1, percentComplete: 0.0});
 
     // First, get the brokers fee
     const statusApi = new StatusApi();
@@ -50,7 +55,6 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     if (!status.certifiedFee)
       return false;
 
-    this.setState({percentComplete: 0.2});
     if (this.state.doCancel)
       return false;
 
@@ -68,24 +72,42 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       return false;
 
     // Send the command to the server
-    this.setState({percentComplete: 0.4});
+    this.setState({transferMessage: messages.step2, percentComplete: 0.25});
     const response = await sellApi.certifiedCoinSale(sellCommand);
-    this.setState({percentComplete: 0.8});
+
     console.log(`Response: ${response.message}`);
-    return response.txHash ? response.message : false;
+    if (!response.txHash)
+    {
+      alert(response.message);
+      return false;
+    }
+    
+    // Wait on the given hash
+    const transferValues = {
+      link: <a  target="_blank" href={`https://ropsten.etherscan.io/tx/${response.txHash}`}>here</a>
+    }
+    this.setState({transferMessage: messages.step3, percentComplete: 0.5, transferValues});
+    const tx = await contract.provider.getTransaction(response.txHash);
+    // Wait at least 2 confirmations
+    tx.wait(2);
+    const receipt = await contract.provider.getTransactionReceipt(response.txHash);
+    console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`)
+    this.setState({percentComplete: 1 });
+    return true;
   }
 
   async onSubmit(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
+    this.setState({doCancel: false, transferValues: undefined, transferInProgress: true});
     try {
-      this.setState({doCancel: false, transferInProgress: true});
       const results = await this.doSale();  
       if (!results) {
-        alert('We have encountered an error.\nDon\'t worry, your money is safe, but please still contact support');
+        alert('We have encountered an error.\nDon\'t worry, your money is safe, but please still contact support@thecoin.io');
       }
-      else alert('Order received.\nYou should receive the e-Transfer in 1-2 business days.');
+      else alert('Order recieved.\nYou should receive the e-Transfer in 1-2 business days.');
     }
     catch(e) {
+      console.error(e);
       alert(e);
     }
     this.setState({doCancel: false, transferInProgress: false});
@@ -111,7 +133,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   render() {
     const { account, rates } = this.props;
     const rate = weBuyAt(rates);
-    const { coinToSell, transferInProgress } = this.state;
+    const { coinToSell, transferInProgress, transferValues, transferMessage, percentComplete } = this.state;
     return (
       <React.Fragment>
 
@@ -129,7 +151,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
         <Form.Input label="Your Email" onChange={this.onEmailChange} placeholder="An email to recieve the e-Transfer" />
         <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
       </Form>
-      <ModalOperation cancelCallback={this.onCancelTransfer} isOpen={transferInProgress} header={messages.transferOutHeader} progressMessage={messages.transferOutProgress} progressPercent={this.state.percentComplete} />
+      <ModalOperation cancelCallback={this.onCancelTransfer} isOpen={transferInProgress} header={messages.transferOutHeader} progressMessage={transferMessage} progressPercent={percentComplete} messageValues={transferValues} />
       </React.Fragment>
     )
   }
