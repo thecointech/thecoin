@@ -75,17 +75,16 @@ test('Can build verified sale', async () => {
 	expect(signer).toMatch(wallet.address);
 })
 
-test('Catches bad timestamp', async () => {
+// test('Catches bad timestamp', async () => {
 
-	const contract = GetContract();
-	expect(contract.address).toBeDefined();
+// 	const contract = GetContract();
+// 	expect(contract.address).toBeDefined();
 
-	const email = "address@email.com";
-	const wallet = Wallet.createRandom();
-	const value = 100000;
-	const fee = 2000;
-	const timestamp = Date.now();
-	const buildFn = async () => await BuildVerifiedSale(email, wallet, brokerCAD, value, fee, timestamp);
-	await expect(buildFn()).rejects.toThrow(TypeError);
-})
-  
+// 	const email = "address@email.com";
+// 	const wallet = Wallet.createRandom();
+// 	const value = 100000;
+// 	const fee = 2000;
+// 	const timestamp = Date.now();
+// 	const buildFn = async () => await BuildVerifiedSale(email, wallet, brokerCAD, value, fee);
+// 	await expect(buildFn()).rejects.toThrow(TypeError);
+// })

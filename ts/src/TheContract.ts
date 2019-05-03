@@ -53,7 +53,8 @@ export function GetTransferSigner(transfer: BrokerCAD.CertifiedTransferRequest) 
 
 /// Build the structure to be passed to the coin servers
 /// Build the CertifiedTransferRequest
-export async function BuildVerifiedXfer(from: Wallet, to: string, value: number, fee: number, timestamp: number) {
+export async function BuildVerifiedXfer(from: Wallet, to: string, value: number, fee: number) {
+	const timestamp = Date.now();
 	const signature = await SignVerifiedXfer(from, to, value, fee, timestamp);
 	const r: BrokerCAD.CertifiedTransferRequest = {
 		from: from.address,
@@ -73,14 +74,12 @@ function GetSaleHash(toEmail: string, transfer: BrokerCAD.CertifiedTransferReque
 	);
 }
 
-export async function BuildVerifiedSale(toEmail: string, from: Wallet, to: string, value: number, fee: number, timestamp?: number) {
-	const now = Math.floor(Date.now() / 1000)
-	// Check that the timestamp being passed not massively invalid
-	if (timestamp && Math.abs(timestamp - now) > 86400)
-		throw new TypeError("Invalid timestamp - this value should be within one day and marked in seconds")
-
-	const ts = timestamp || now;
-	const xfer = await BuildVerifiedXfer(from, to, value, fee, ts);
+export async function BuildVerifiedSale(toEmail: string, from: Wallet, to: string, value: number, fee: number) {
+	//const now = Date.now()
+	// // Check that the timestamp being passed not massively invalid
+	// if (timestamp && Math.abs(timestamp - now) > 86400)
+	// 	throw new TypeError("Invalid timestamp - this value should be within one day and marked in seconds")
+	const xfer = await BuildVerifiedXfer(from, to, value, fee);
 
 	const saleHash = GetSaleHash(toEmail, xfer);
 	const saleSig = await from.signMessage(saleHash);
