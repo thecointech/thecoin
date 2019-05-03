@@ -46,7 +46,7 @@ const AccountRoutes: RouterPath[] = [
   ["Transfer In",   "transferIn", (routerProps) => ((props) => <Purchase {...props} address={routerProps.account.wallet!.address} />)],
   ["Transfer Out",  "redeem",   (routerProps) => ((props) => <Redeem {...props} account={routerProps.account} />)],
   ["Transfer To",   "transfer", (routerProps) => ((props) => <Transfer {...props} account={routerProps.account} />)],
-  ["Pay Bills",     "billPay",  (routerProps) => ((props) => <Transfer {...props} />)],
+  //["Pay Bills",     "billPay",  (routerProps) => ((props) => <Transfer {...props} />)],
   ["Settings",     "settings",  (routerProps) => ((props) => <Settings {...props} account={routerProps.account} />)],
 ]
 

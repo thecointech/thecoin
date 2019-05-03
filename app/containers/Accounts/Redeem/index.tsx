@@ -37,46 +37,71 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+    this.onEmailChange = this.onEmailChange.bind(this);
+    
   }
 
-  async onSubmit(e: React.MouseEvent<HTMLElement>) {
-    if (e) e.preventDefault();
-    this.setState({doCancel: false, transferInProgress: true});
+  async doSale() {
+
     // First, get the brokers fee
     const statusApi = new StatusApi();
     var status = await statusApi.status();
+    // Check out if we have the right values
+    if (!status.certifiedFee)
+      return false;
 
     this.setState({percentComplete: 0.2});
     if (this.state.doCancel)
-      return;
+      return false;
 
     // Get our variables
     const {coinToSell, email} = this.state;
-    const { wallet } = this.props.account;
-    if (coinToSell === null || !wallet)
-      return
+    const { wallet, contract } = this.props.account;
+    if (coinToSell === null || !wallet || !contract)
+      return false;
 
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
     const sellCommand = await TheContract.BuildVerifiedSale(email, wallet, status.address, coinToSell, status.certifiedFee);
     const sellApi = new SellApi();
     if (this.state.doCancel)
-      return;
+      return false;
 
     // Send the command to the server
     this.setState({percentComplete: 0.4});
     const response = await sellApi.certifiedCoinSale(sellCommand);
     this.setState({percentComplete: 0.8});
+    console.log(`Response: ${response.message}`);
+    return response.txHash ? response.message : false;
+  }
 
-    // TX hash is what?
-
-    alert(response);
+  async onSubmit(e: React.MouseEvent<HTMLElement>) {
+    if (e) e.preventDefault();
+    try {
+      this.setState({doCancel: false, transferInProgress: true});
+      const results = await this.doSale();  
+      if (!results) {
+        alert('We have encountered an error.\nDon\'t worry, your money is safe, but please still contact support');
+      }
+      else alert('Order received.\nYou should receive the e-Transfer in 1-2 business days.');
+    }
+    catch(e) {
+      alert(e);
+    }
+    this.setState({doCancel: false, transferInProgress: false});
   }
 
   onValueChange(value: number) {
     this.setState({
       coinToSell: value
     })
+  }
+
+  onEmailChange(event: React.FormEvent<HTMLInputElement>) {
+    const { value } = event.currentTarget;
+    this.setState({
+      email: value,
+    });
   }
 
   onCancelTransfer() {
@@ -101,7 +126,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
         </Header>
 
         <DualFxInput onChange={this.onValueChange} asCoin={true} maxValue={account.balance} value={coinToSell} fxRate={rate} />
-        <Form.Input label="Your Email" placeholder="An email to recieve the e-Transfer" />
+        <Form.Input label="Your Email" onChange={this.onEmailChange} placeholder="An email to recieve the e-Transfer" />
         <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
       </Form>
       <ModalOperation cancelCallback={this.onCancelTransfer} isOpen={transferInProgress} header={messages.transferOutHeader} progressMessage={messages.transferOutProgress} progressPercent={this.state.percentComplete} />

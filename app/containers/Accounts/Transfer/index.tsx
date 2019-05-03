@@ -47,7 +47,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
   async doTransfer()
   {
 	// First, get the brokers fee
-	const statusApi = new StatusApi(undefined, "http://localhost:8080");
+	const statusApi = new StatusApi(); //undefined, "http://localhost:8080"
 	var status = await statusApi.status();
 	// Check out if we have the right values
 	if (!status.certifiedFee)
@@ -65,8 +65,8 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
     // To transfer, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to another address
-    const transferCommand = await TheContract.BuildVerifiedXfer(wallet, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee, Date.now());
-    const transferApi = new TransferApi(undefined, "http://localhost:8080")
+    const transferCommand = await TheContract.BuildVerifiedXfer(wallet, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee);
+    const transferApi = new TransferApi()
 
 	if (this.state.doCancel)
        return false;
