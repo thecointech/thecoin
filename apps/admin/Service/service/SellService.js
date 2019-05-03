@@ -14,8 +14,10 @@ exports.certifiedCoinSale = function(request) {
   return new Promise(function (resolve, reject) {
     BrokerActions.DoCertifiedSale(request)
       .then((results) => {
-        SendMail("Certified Coin Sale: ",  JSON.stringify(results) + "\n---\n" + JSON.stringify(request));
-        console.log('Did Coin Sale' + JSON.stringify(results))
+        console.log(`Sale Result: ${results.message}`);
+        if (results.txHash) {
+          SendMail("Certified Coin Sale: ",  JSON.stringify(results) + "\n---\n" + JSON.stringify(request));
+        }
         resolve(results);
       })
       .catch((err) => {

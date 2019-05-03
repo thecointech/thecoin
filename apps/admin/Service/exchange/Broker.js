@@ -2,7 +2,7 @@
 
 const ds = require('./Datastore').datastore
 const utilities = require('@the-coin/utilities');
-const TheContract = utilities.TheContract;
+const { TheContract, NormalizeAddress } = utilities;
 const Wallet = require('./Wallet')
 const status = require('./status')
 
@@ -208,10 +208,10 @@ async function ConfirmSale(tx, saleKey)
 
 const ValidSale = (sale) => {
     var saleSigner = TheContract.GetSaleSigner(sale);
-    return (saleSigner == sale.transfer.from)
+    return (NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
 }
 const ValidDestination = (transfer) => 
-    transfer.to == status.address;
+    NormalizeAddress(transfer.to) == NormalizeAddress(status.address);
 
 async function  DoCertifiedSale(sale) {
     const { transfer, clientEmail, signature } = sale;
