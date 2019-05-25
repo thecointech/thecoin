@@ -417,6 +417,11 @@
   version "10.12.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
 
+"@types/node@^12.0.2":
+  version "12.0.2"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/node/-/node-12.0.2.tgz#3452a24edf9fea138b48fad4a0a028a683da1e40"
+  integrity sha1-NFKiTt+f6hOLSPrUoKAopoPaHkA=
+
 "@types/node@^8.0.7":
   version "8.10.45"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/node/-/node-8.10.45.tgz#4c49ba34106bc7dced77ff6bae8eb6543cde8351"
@@ -539,6 +544,11 @@ are-we-there-yet@~1.1.2:
   dependencies:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
+
+arg@^4.1.0:
+  version "4.1.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/arg/-/arg-4.1.0.tgz#583c518199419e0037abb74062c37f8519e575f0"
+  integrity sha1-WDxRgZlBngA3q7dAYsN/hRnldfA=
 
 argparse@^1.0.7:
   version "1.0.10"
@@ -1199,6 +1209,11 @@ diff-match-patch@^1.0.0:
 diff-sequences@^24.3.0:
   version "24.3.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/diff-sequences/-/diff-sequences-24.3.0.tgz#0f20e8a1df1abddaf4d9c226680952e64118b975"
+
+diff@^4.0.1:
+  version "4.0.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/diff/-/diff-4.0.1.tgz#0c667cb467ebbb5cea7f14f135cc2dba7780a8ff"
+  integrity sha1-DGZ8tGfru1zqfxTxNcwtuneAqP8=
 
 dir-glob@^2.0.0:
   version "2.0.0"
@@ -2992,7 +3007,7 @@ make-dir@^1.3.0:
   dependencies:
     pify "^3.0.0"
 
-make-error@1.x:
+make-error@1.x, make-error@^1.1.1:
   version "1.3.5"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/make-error/-/make-error-1.3.5.tgz#efe4e81f6db28cadd605c70f29c831b58ef776c8"
 
@@ -4536,6 +4551,17 @@ ts-jest@^24.0.0:
     semver "^5.5"
     yargs-parser "10.x"
 
+ts-node@^8.1.1:
+  version "8.1.1"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/ts-node/-/ts-node-8.1.1.tgz#2b9621934a0471f0e13c1b75be54ee0f46c31479"
+  integrity sha1-K5Yhk0oEcfDhPBt1vlTuD0bDFHk=
+  dependencies:
+    arg "^4.1.0"
+    diff "^4.0.1"
+    make-error "^1.1.1"
+    source-map-support "^0.5.6"
+    yn "^3.0.0"
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
@@ -4566,6 +4592,11 @@ type-name@^2.0.1:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typescript@^3.4.5:
+  version "3.4.5"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
+  integrity sha1-LSYY0Qu1ZlcrjXqtUYDYQlfXCpk=
 
 uglify-js@^3.1.4:
   version "3.5.1"
@@ -4836,6 +4867,11 @@ yargs@^3.10.0:
     string-width "^1.0.1"
     window-size "^0.1.4"
     y18n "^3.2.0"
+
+yn@^3.0.0:
+  version "3.1.0"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/yn/-/yn-3.1.0.tgz#fcbe2db63610361afcc5eb9e0ac91e976d046114"
+  integrity sha1-/L4ttjYQNhr8xeueCskel20EYRQ=
 
 z-schema@^3.15.4:
   version "3.24.1"

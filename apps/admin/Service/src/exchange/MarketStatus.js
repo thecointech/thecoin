@@ -12,7 +12,7 @@ async function GetCalendar(date) {
   if (exists)
     return exists;
 
-  options = {
+  const options = {
     headers: {
       Authorization: AccessToken,
       Accept: 'application/json'
