@@ -45,6 +45,10 @@ export namespace BrokerCAD {
     cadRate: number;
     txHash: string;
   }
+  export interface NewAccountReferal {
+    referrerId: string;
+    newAccount: string;
+  }
   export interface CertifiedTransferResponse {
     message: string;
     txHash: string;
@@ -62,8 +66,22 @@ export namespace BrokerCAD {
     clientEmail: string;
     signature: string;
   }
+  export interface CertifiedBillPayment {
+    transfer: CertifiedTransferRequest;
+    encryptedPayee: string;
+    version: number;
+    name?: string;
+    signature: string;
+  }
   export interface BrokerStatus {
     address: string;
     certifiedFee: number;
+  }
+  export interface BoolResponse {
+    success?: boolean;
+  }
+  export interface BillPayeePacket {
+    payee: string;
+    accountNumber: string;
   }
 }

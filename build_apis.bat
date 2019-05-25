@@ -21,7 +21,7 @@ java -jar .\swagger-codegen-cli.jar generate 	-i tapcap-manager\tapcap-manager.y
 java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientCS -g csharp 		-c tapcap-manager\client-cs-spec.json
 java -jar .\openapi-generator-cli.jar generate 	-i tapcap-manager\tapcap-manager.yaml -o tapcap-manager\ClientJS -g javascript 	-c tapcap-manager\client-js-spec.json
 
-java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 		-o broker-cad\Service
+java -jar .\swagger-codegen-cli.jar generate 	-i broker-cad\broker-cad.yaml -l nodejs-server 		-o broker-cad\Service\Generated
 java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -g javascript 		-o broker-cad\ClientJS -c broker-cad\client-js-spec.json
 java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -g typescript-fetch 	-o broker-cad\ClientTS -c broker-cad\client-ts-spec.json 
 

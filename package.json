@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "dependencies": {
-    "@the-coin/utilities": "./the-utilities/ts",
+    "@the-coin/utilities": "^0.1.24",
     "ethers": "^4.0.27",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
