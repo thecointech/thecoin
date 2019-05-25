@@ -1,8 +1,7 @@
 import { ethers, Wallet } from 'ethers';
+
 import TheCoinSpec from '@the-coin/contract/build/contracts/TheCoin.json';
-
 import RopstenDeployment from '@the-coin/contract/zos.ropsten.json';
-
 import { BrokerCAD } from "@the-coin/types/lib/brokerCAD";
 
 const { abi } = TheCoinSpec;
@@ -67,6 +66,8 @@ export async function BuildVerifiedXfer(from: Wallet, to: string, value: number,
 	return r;
 }
 
+// ---------------------------------------------------------\\
+
 function GetSaleHash(toEmail: string, transfer: BrokerCAD.CertifiedTransferRequest) {
 	return ethers.utils.solidityKeccak256(
 		["string", "string"],
@@ -96,6 +97,30 @@ export function GetSaleSigner(sale: BrokerCAD.CertifiedSale) {
 	const { transfer, clientEmail, signature } = sale;
 	const hash = GetSaleHash(clientEmail, transfer);
 	return ethers.utils.verifyMessage(hash, signature);
+}
+
+// ---------------------------------------------------------\\
+// Get/Restore bill payment info.
+
+function GetBillHash(payee: BrokerCAD.BillPayeePacket, transfer: BrokerCAD.CertifiedTransferRequest) {
+	return ethers.utils.solidityKeccak256(
+		["string", "string", "string", "string"],
+		[transfer.signature, payee.payee, payee, name]
+	);
+}
+
+export async function BuildVerifiedBillPayment(payee: BrokerCAD.BillPayeePacket, from: Wallet, to: string, value: number, fee: number) {
+
+	const xfer = await BuildVerifiedXfer(from, to, value, fee);
+	const billHash = GetBillHash(payee, xfer);
+	const billSig = await from.signMessage(billHash);
+
+	const r: BrokerCAD.CertifiedBillPayment = {
+		transfer: xfer,
+		payee: payee,
+		signature: billSig
+	}
+	return r;
 }
 
 export const InitialCoinBlock = 4456169;
