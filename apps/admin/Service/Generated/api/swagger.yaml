@@ -1,0 +1,640 @@
+---
+swagger: "2.0"
+info:
+  description: "TheCoin simple broker services.  This sample API is an example of\
+    \ how to setup the simplest low-volume exchange, when combined with the included\
+    \ server code, without external dependencies"
+  version: "0.1.0"
+  title: "THE Coin Broker Sample"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "the-broker-cad.appspot.com"
+tags:
+- name: "Purchase"
+  description: "The Coin exchange service.  This API allows clients to request purchase\
+    \ THESE"
+- name: "Sell"
+  description: "The Coin exchange service.  This API allows clients to exchange THESE\
+    \ for CAD"
+- name: "Transfer"
+  description: "Request the broker to make a transfer on the clients behalf"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /status:
+    get:
+      tags:
+      - "Status"
+      summary: "Gets the operating status of the broker"
+      description: "Returns info like brokers address, available balance, etc (?)"
+      operationId: "status"
+      parameters: []
+      responses:
+        200:
+          description: "Server status"
+          schema:
+            $ref: "#/definitions/BrokerStatus"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Status"
+  /referrers:
+    get:
+      tags:
+      - "Referrers"
+      summary: "Gets the validity of the passed referrer"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referrerValid"
+      parameters:
+      - name: "referrer"
+        in: "query"
+        description: "Referrers ID.  This ID must have been previously registered\
+          \ with the system"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Id Valid"
+          schema:
+            $ref: "#/definitions/BoolResponse"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Referrers"
+    post:
+      tags:
+      - "Referrers"
+      summary: "Register the referral of new account"
+      description: "Returns a boolean indicating whether the passed referrer is valid"
+      operationId: "referralCreate"
+      parameters:
+      - in: "body"
+        name: "referral"
+        description: "Set referal for new account"
+        required: true
+        schema:
+          $ref: "#/definitions/NewAccountReferal"
+      responses:
+        200:
+          description: "Referral success"
+          schema:
+            $ref: "#/definitions/BoolResponse"
+        405:
+          description: "Server Error"
+      x-swagger-router-controller: "Referrers"
+  /exchange/buy/initiate:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Request to buy Coin"
+      description: "Called by the client to exchange CAD for coin"
+      operationId: "requestCoinPurchase"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed buy order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedPurchaseRequest"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}/confirm:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Confirm order opened"
+      description: "Called by the Broker once e-transfer initiated"
+      operationId: "confirmCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed buy order confirm"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedPurchaseConfirm"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}/complete:
+    post:
+      tags:
+      - "Purchase"
+      summary: "Mark buy order complete"
+      description: "Called by the broker to confirm CAD was deposited and coin disbursed"
+      operationId: "completeCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to complete"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed PurchaseComplete"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the purchase is completed"
+          schema:
+            $ref: "#/definitions/PurchaseResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/:
+    get:
+      tags:
+      - "Purchase"
+      summary: "Query buy order id's"
+      description: "Called by the broker to retrieve all buy orders ID's in the passed\
+        \ state."
+      operationId: "queryCoinPurchasesIds"
+      parameters:
+      - name: "state"
+        in: "query"
+        description: "Numerical state identifier.  Returned array will be all of type\
+          \ state"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "A list of all currently open purchases"
+          schema:
+            $ref: "#/definitions/PurchaseIds"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/buy/{user}/{id}:
+    get:
+      tags:
+      - "Purchase"
+      summary: "Query open buy orders"
+      description: "Called by the broker to retrieve all open buy orders."
+      operationId: "queryCoinPurchase"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - name: "state"
+        in: "query"
+        description: "Numerical state identifier.  If not present, all states will\
+          \ be returned"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "A list of all currently open purchases"
+          schema:
+            $ref: "#/definitions/PurchaseState"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Purchase"
+  /exchange/sell/initiate:
+    post:
+      tags:
+      - "Sell"
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD"
+      operationId: "requestCoinSale"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed sell order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /exchange/sell/{user}/{id}/complete:
+    post:
+      tags:
+      - "Sell"
+      summary: "Mark coin sale complete"
+      description: "Called by the client to exchange coin for CAD"
+      operationId: "completeCoinSale"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Id of purchase order to return"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "request"
+        description: "Signed sell order request"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the order was accepted"
+          schema:
+            $ref: "#/definitions/SellResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /exchange/sell/certified:
+    post:
+      tags:
+      - "Sell"
+      summary: "Request coin sale"
+      description: "Called by the client to exchange coin for CAD using a certified\
+        \ transfer"
+      operationId: "certifiedCoinSale"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedSale"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Sell"
+  /bills/{user}:
+    post:
+      tags:
+      - "Bill Payments"
+      summary: "Trigger a Bill Payment"
+      description: "Called by the client to pay a bill in CAD with coin via a certified\
+        \ transfer"
+      operationId: "certifiedBillPayment"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedBillPayment"
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "BillPayments"
+  /certifiedTransfer:
+    post:
+      tags:
+      - "Transfer"
+      summary: "Request Transfer from->to"
+      description: "A client may request that the Broker initiate a transfer from\
+        \ their account to another.  The transfer includes a fee paid to the broker\
+        \ to cover the cost of the transfer.  This allows a user to operate on the\
+        \ Ethereum blockchain without requiring their own ether"
+      operationId: "makeCertifiedTransfer"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "A request appropriately filled out and signed as described in\
+          \ the comments"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedTransferRequest"
+      responses:
+        200:
+          description: "The response confirms to the user the order transfer is valid\
+            \ and has been initiated"
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Transfer"
+definitions:
+  SignedPurchaseRequest:
+    required:
+    - "cadAmount"
+    - "email"
+    - "signature"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+      email:
+        type: "string"
+      cadAmount:
+        type: "number"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      cadAmount: 6.02745618307040320615897144307382404804229736328125
+      email: "email"
+      timestamp: 0
+  SignedPurchaseConfirm:
+    required:
+    - "signature"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      timestamp: 0
+  PurchaseComplete:
+    required:
+    - "cadAmount"
+    - "cadRate"
+    - "coinAmount"
+    - "coinRate"
+    - "timestamp"
+    - "txHash"
+    properties:
+      timestamp:
+        type: "integer"
+      cadAmount:
+        type: "number"
+      coinAmount:
+        type: "integer"
+      coinRate:
+        type: "number"
+      cadRate:
+        type: "number"
+      txHash:
+        type: "string"
+    example:
+      cadRate: 5.63737665663332876420099637471139430999755859375
+      coinAmount: 1
+      coinRate: 5.962133916683182377482808078639209270477294921875
+      cadAmount: 6.02745618307040320615897144307382404804229736328125
+      txHash: "txHash"
+      timestamp: 0
+  PurchaseResponse:
+    required:
+    - "orderId"
+    properties:
+      orderId:
+        type: "string"
+    example:
+      orderId: "orderId"
+  PurchaseIds:
+    type: "array"
+    items:
+      type: "string"
+  PurchaseState:
+    properties:
+      request:
+        $ref: "#/definitions/SignedPurchaseRequest"
+      confirm:
+        $ref: "#/definitions/SignedPurchaseConfirm"
+      complete:
+        $ref: "#/definitions/PurchaseComplete"
+    example:
+      confirm:
+        signature: "signature"
+        timestamp: 0
+      request:
+        signature: "signature"
+        cadAmount: 6.02745618307040320615897144307382404804229736328125
+        email: "email"
+        timestamp: 0
+      complete:
+        cadRate: 5.63737665663332876420099637471139430999755859375
+        coinAmount: 1
+        coinRate: 5.962133916683182377482808078639209270477294921875
+        cadAmount: 6.02745618307040320615897144307382404804229736328125
+        txHash: "txHash"
+        timestamp: 0
+  SellRequest:
+    required:
+    - "email"
+    - "txHash"
+    properties:
+      email:
+        type: "string"
+      txHash:
+        type: "string"
+      blockNumber:
+        type: "integer"
+  SellComplete:
+    required:
+    - "cadAmount"
+    - "cadRate"
+    - "coinAmount"
+    - "coinRate"
+    - "timestamp"
+    properties:
+      timestamp:
+        type: "integer"
+      cadAmount:
+        type: "number"
+      coinAmount:
+        type: "integer"
+      coinRate:
+        type: "number"
+      cadRate:
+        type: "number"
+  SellResponse:
+    required:
+    - "orderId"
+    properties:
+      orderId:
+        type: "string"
+    example:
+      orderId: "orderId"
+  SignedMessage:
+    required:
+    - "message"
+    - "signature"
+    properties:
+      message:
+        type: "string"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      message: "message"
+  CertifiedTransferRequest:
+    required:
+    - "fee"
+    - "from"
+    - "signature"
+    - "timestamp"
+    - "to"
+    - "value"
+    properties:
+      from:
+        type: "string"
+      to:
+        type: "string"
+      value:
+        type: "integer"
+      fee:
+        type: "integer"
+      timestamp:
+        type: "integer"
+      signature:
+        type: "string"
+    example:
+      signature: "signature"
+      fee: 6
+      from: "from"
+      to: "to"
+      value: 0
+      timestamp: 1
+  CertifiedTransferResponse:
+    required:
+    - "message"
+    - "txHash"
+    properties:
+      message:
+        type: "string"
+      txHash:
+        type: "string"
+    example:
+      message: "message"
+      txHash: "txHash"
+  CertifiedSale:
+    required:
+    - "clientEmail"
+    - "signature"
+    - "transfer"
+    properties:
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      clientEmail:
+        type: "string"
+      signature:
+        type: "string"
+    example:
+      transfer:
+        signature: "signature"
+        fee: 6
+        from: "from"
+        to: "to"
+        value: 0
+        timestamp: 1
+      clientEmail: "clientEmail"
+      signature: "signature"
+  BillPayeePacket:
+    required:
+    - "accountNumber"
+    - "payee"
+    properties:
+      payee:
+        type: "string"
+      accountNumber:
+        type: "string"
+  CertifiedBillPayment:
+    required:
+    - "encryptedPayee"
+    - "signature"
+    - "transfer"
+    - "version"
+    properties:
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      encryptedPayee:
+        type: "string"
+      version:
+        type: "integer"
+      name:
+        type: "string"
+      signature:
+        type: "string"
+    example:
+      encryptedPayee: "encryptedPayee"
+      transfer:
+        signature: "signature"
+        fee: 6
+        from: "from"
+        to: "to"
+        value: 0
+        timestamp: 1
+      signature: "signature"
+      name: "name"
+      version: 0
+  BrokerStatus:
+    required:
+    - "address"
+    - "certifiedFee"
+    properties:
+      address:
+        type: "string"
+      certifiedFee:
+        type: "integer"
+    example:
+      address: "address"
+      certifiedFee: 0
+  NewAccountReferal:
+    required:
+    - "newAccount"
+    - "referrerId"
+    properties:
+      referrerId:
+        type: "string"
+      newAccount:
+        type: "string"
+    example:
+      referrerId: "referrerId"
+      newAccount: "newAccount"
+  BoolResponse:
+    type: "boolean"
+    properties:
+      success:
+        type: "boolean"
+    title: "A bool that to be returned indicating success/failure"
+    example:
+      success: true

@@ -220,6 +220,8 @@ definitions:
       txHash:
         type: string
 
+  ############################################################
+
   # Do sale via certified request.  Sale includes token to
   # process transfer, and the email address the proceeds
   # are to be returned to.
@@ -241,6 +243,41 @@ definitions:
         type:
           string
     
+  ############################################################
+
+  BillPayeePacket:
+    required: 
+      - payee
+      - accountNumber
+    properties:
+      payee:
+        type: string
+      accountNumber:
+        type: string
+
+  CertifiedBillPayment:
+    required:
+      - transfer
+      - encryptedPayee
+      - version
+      - signature
+    properties: 
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      encryptedPayee:
+        # encrypted(BillPayeePacket + version)|null (if previously named)
+        type: string
+      version:
+        # We don't really need a seed in an asymetric encryption, this
+        # is more in case we (in the future) change encryption schemes
+        type: integer
+      name:
+        # (Optional) name to store this payee for future use
+        type: string
+        # signed(transfer.sig + encrypted + version + name)
+      signature: 
+        type: string
+
   #
   # Any general purpose info on the broker can be stored here.
   BrokerStatus:
@@ -555,6 +592,37 @@ paths:
           required: true
           schema: 
             $ref: "#/definitions/CertifiedSale"
+
+  #############################################################
+
+  /bills/{user}:
+    post:
+      tags: 
+        - Bill Payments
+      summary: "Trigger a Bill Payment"
+      description: "Called by the client to pay a bill in CAD with coin via a certified transfer"
+      operationId: "certifiedBillPayment"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: The response confirms to the user the order has been processed
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+      parameters:
+        - in: body
+          name: request
+          description: "Signed certified transfer to this brokers address"
+          required: true
+          schema: 
+            $ref: "#/definitions/CertifiedBillPayment"
+        - name: user
+          in: path
+          required: true
+          description: User address
+          type: string
+            
+  #############################################################
 
   /certifiedTransfer:
     post:
