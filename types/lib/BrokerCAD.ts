@@ -68,9 +68,7 @@ export namespace BrokerCAD {
   }
   export interface CertifiedBillPayment {
     transfer: CertifiedTransferRequest;
-    encryptedPayee: string;
-    version: number;
-    name?: string;
+    payee: BillPayeePacket;
     signature: string;
   }
   export interface BrokerStatus {
@@ -81,7 +79,8 @@ export namespace BrokerCAD {
     success?: boolean;
   }
   export interface BillPayeePacket {
-    payee: string;
-    accountNumber: string;
+    payee?: string;
+    accountNumber?: string;
+    name: string;
   }
 }
