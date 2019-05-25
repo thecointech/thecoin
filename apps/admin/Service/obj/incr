@@ -109,6 +109,12 @@
         "version": "63b66918290d794f73832a6d0325be5026236674fe8c0cb0b68d162000d7bbe8",
         "signature": "63b66918290d794f73832a6d0325be5026236674fe8c0cb0b68d162000d7bbe8"
       },
+      "c:/src/thecoin/broker-cad/service/src/index.js": {
+        "version": "08a3aed4c79b027af0b3b9c181223c89cc29c6f2b2e3941083a0ce315a8ba304"
+      },
+      "c:/src/thecoin/broker-cad/service/src/utils/writer.js": {
+        "version": "bebba945b03878351720b85f9f070e11471b2ba256a8438ad1ed1d851789a86a"
+      },
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/conversion.d.ts": {
         "version": "be539737140023c2efbb6642d6530ac6158fa6f2636e70944669d4be5cafb7f8",
         "signature": "be539737140023c2efbb6642d6530ac6158fa6f2636e70944669d4be5cafb7f8"
@@ -312,15 +318,6 @@
         "version": "3ccc779d9e30851b92722cb7b25095d75ccb7485357f9411186f8a4a2724127d",
         "signature": "3ccc779d9e30851b92722cb7b25095d75ccb7485357f9411186f8a4a2724127d"
       },
-      "c:/src/thecoin/broker-cad/service/src/exchange/contract.js": {
-        "version": "0c6e1e2252dbf770fd018049c1b02365c1659815590132132090cd3eea245335"
-      },
-      "c:/src/thecoin/broker-cad/service/src/index.js": {
-        "version": "0f0653eb3225ccc644476daa35d40484a7a9be1ce3a250d3d71122429a50cf00"
-      },
-      "c:/src/thecoin/broker-cad/service/src/utils/writer.js": {
-        "version": "bebba945b03878351720b85f9f070e11471b2ba256a8438ad1ed1d851789a86a"
-      },
       "c:/src/thecoin/broker-cad/service/src/exchange/datastore.js": {
         "version": "5b718c4c74e52849e7642b0dc1fdd96de14662461e2699688ca9b790cd19ae00"
       },
@@ -375,11 +372,12 @@
       "c:/src/thecoin/broker-cad/service/src/controllers/transfer.js": {
         "version": "905d253c885a3585ccab28cd28f1b28d5918148835a864844dc58f105a876ae9"
       },
-      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.js": {
-        "version": "0ee57063c2c538dd5c2311542f81400259c98d73b5043a2c30d2c24e54fcc7f5"
+      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.ts": {
+        "version": "0ee57063c2c538dd5c2311542f81400259c98d73b5043a2c30d2c24e54fcc7f5",
+        "signature": "25379b6a0eb87e7825871aa920cc34954d278968c3a05308156104783a7e6fa2"
       },
       "c:/src/thecoin/broker-cad/service/src/exchange/marketstatus.js": {
-        "version": "d817dd0eadbc5106b4efd4df61d864ebaea2dc17eec8b238f66fd119a7099d06"
+        "version": "49183959b4cbfad7da36cfb6d00ef71875264f69e0a23fdf7038c3b7f9011625"
       },
       "c:/src/thecoin/broker-cad/service/node_modules/@babel/types/lib/index.d.ts": {
         "version": "9eac0dd4de5669db2b8321dffa400b997f7b21181118efc7a2c1743d93d4be57",
@@ -853,6 +851,17 @@
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "c:/src/thecoin/broker-cad/service/src/index.js": [
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/fs.d.ts",
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/path.d.ts",
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/http.d.ts",
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "c:/src/thecoin/broker-cad/service/src/utils/writer.js": [
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
+        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/conversion.d.ts": [
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
@@ -1178,23 +1187,6 @@
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "c:/src/thecoin/broker-cad/service/src/exchange/contract.js": [
-        "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/index.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "c:/src/thecoin/broker-cad/service/src/index.js": [
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/fs.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/path.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/http.d.ts",
-        "c:/src/thecoin/broker-cad/service/src/exchange/contract.js",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "c:/src/thecoin/broker-cad/service/src/utils/writer.js": [
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
-        "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "c:/src/thecoin/broker-cad/service/src/exchange/datastore.js": [
         "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/index.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
@@ -1296,7 +1288,7 @@
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.js": [
+      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.ts": [
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/util.d.ts",
         "c:/src/thecoin/broker-cad/service/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -3008,6 +3000,8 @@
       "c:/src/thecoin/broker-cad/service/node_modules/typescript/lib/lib.es2018.regexp.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/typescript/lib/lib.esnext.bigint.d.ts",
+      "c:/src/thecoin/broker-cad/service/src/index.js",
+      "c:/src/thecoin/broker-cad/service/src/utils/writer.js",
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/conversion.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/ethers/utils/bytes.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/ethers/utils/bignumber.d.ts",
@@ -3059,9 +3053,6 @@
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/currencycodes.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/address.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/@the-coin/utilities/lib/index.d.ts",
-      "c:/src/thecoin/broker-cad/service/src/exchange/contract.js",
-      "c:/src/thecoin/broker-cad/service/src/index.js",
-      "c:/src/thecoin/broker-cad/service/src/utils/writer.js",
       "c:/src/thecoin/broker-cad/service/src/exchange/datastore.js",
       "c:/src/thecoin/broker-cad/service/src/exchange/secret.json",
       [
@@ -3188,28 +3179,8 @@
       "c:/src/thecoin/broker-cad/service/src/controllers/status.js",
       "c:/src/thecoin/broker-cad/service/src/service/transferservice.js",
       "c:/src/thecoin/broker-cad/service/src/controllers/transfer.js",
-      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.js",
-      [
-        "c:/src/thecoin/broker-cad/service/src/exchange/marketstatus.js",
-        [
-          {
-            "file": "c:/src/thecoin/broker-cad/service/src/exchange/marketstatus.js",
-            "start": 416,
-            "length": 7,
-            "messageText": "Cannot find name 'options'.",
-            "category": 1,
-            "code": 2304
-          },
-          {
-            "file": "c:/src/thecoin/broker-cad/service/src/exchange/marketstatus.js",
-            "start": 640,
-            "length": 7,
-            "messageText": "Cannot find name 'options'.",
-            "category": 1,
-            "code": 2304
-          }
-        ]
-      ],
+      "c:/src/thecoin/broker-cad/service/src/exchange/billpayments.ts",
+      "c:/src/thecoin/broker-cad/service/src/exchange/marketstatus.js",
       "c:/src/thecoin/broker-cad/service/node_modules/@babel/types/lib/index.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/@types/babel__generator/index.d.ts",
       "c:/src/thecoin/broker-cad/service/node_modules/@types/babel__traverse/index.d.ts",

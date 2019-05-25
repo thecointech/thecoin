@@ -12,8 +12,6 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;
 
-var ContractListener = require('./exchange/Contract')
-
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),
@@ -42,8 +40,6 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
-
-  ContractListener.StartListening();
 
   // Start the server
   http.createServer(app).listen(serverPort, function () {

@@ -4,9 +4,10 @@ const ds = require('./Datastore').datastore
 const utilities = require('@the-coin/utilities');
 const { TheContract, NormalizeAddress } = utilities;
 const Wallet = require('./Wallet')
-const status = require('./status')
+const status = require('./status.json')
 
-status.certifiedFee = parseInt(status.certifiedFee);
+//const CertifiedFee = parseInt(status.certifiedFee);
+
 //status.address = utilities.NormalizeAddress(status.address);
 
 // exports.QueryPurchasesIds = function (state) {

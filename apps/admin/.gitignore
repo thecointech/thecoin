@@ -9,3 +9,4 @@ Service/.nyc_output/
 ClientTS/dist/
 Service/src/exchange/secret.json
 Service/src/exchange/AutoMailer.secret.js
+Service/build/
