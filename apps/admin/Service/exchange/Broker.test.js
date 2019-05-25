@@ -8,6 +8,8 @@ const { toHuman, TheContract } = require('@the-coin/utilities');
 const { BuildVerifiedSale, BuildVerifiedXfer } = TheContract;
 
 const status = Broker.ServerStatus();
+const host = process.env.DATASTORE_EMULATOR_HOST;
+const RunningLocal = host == "localhost:8081"
 
 test("Status is valid", () => {
 	expect(status.address);
@@ -16,11 +18,6 @@ test("Status is valid", () => {
 
 	const fee = toHuman(status.certifiedFee);
 	expect(fee).toBe(0.02);
-})
-
-test("We should be connecting to the local datastore", () => {
-	const host = process.env.DATASTORE_EMULATOR_HOST;
-	expect(host).toMatch("localhost:8081");
 })
 
 test("Certified sale checks balance", async () => {
@@ -41,7 +38,9 @@ async function GetStoredSale(user, id) {
 }
 
 test("Transfer completes sale properly", async () => {
-	return;
+	if (!RunningLocal)
+		return;
+	
 	jest.setTimeout(30000);
 
 	const wallet = await GetWallet();
@@ -100,12 +99,3 @@ test("Certified sale completes sale properly", async () => {
 		// TODO: Test for 
 	}
 })
-
-// const { SendMail } = require('./AutoMailer');
-
-// test("Can send email", async () => {
-// 	const [result, body] = await SendMail("Sale Registered", "Can you see this too?");
-
-// 	expect(result).toBeDefined();
-	
-// })
