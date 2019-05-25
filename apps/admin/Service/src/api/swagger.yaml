@@ -305,6 +305,34 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Sell"
+  /bills/{user}:
+    post:
+      tags:
+      - "Bill Payments"
+      summary: "Trigger a Bill Payment"
+      description: "Called by the client to pay a bill in CAD with coin via a certified\
+        \ transfer"
+      operationId: "certifiedBillPayment"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/CertifiedBillPayment"
+      - name: "user"
+        in: "path"
+        description: "User address"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
+          schema:
+            $ref: "#/definitions/CertifiedTransferResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "BillPayments"
   /certifiedTransfer:
     post:
       tags:
@@ -540,6 +568,44 @@ definitions:
         timestamp: 1
       clientEmail: "clientEmail"
       signature: "signature"
+  BillPayeePacket:
+    required:
+    - "accountNumber"
+    - "payee"
+    properties:
+      payee:
+        type: "string"
+      accountNumber:
+        type: "string"
+  CertifiedBillPayment:
+    required:
+    - "encryptedPayee"
+    - "signature"
+    - "transfer"
+    - "version"
+    properties:
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      encryptedPayee:
+        type: "string"
+      version:
+        type: "integer"
+      name:
+        type: "string"
+      signature:
+        type: "string"
+    example:
+      encryptedPayee: "encryptedPayee"
+      transfer:
+        signature: "signature"
+        fee: 6
+        from: "from"
+        to: "to"
+        value: 0
+        timestamp: 1
+      signature: "signature"
+      name: "name"
+      version: 0
   BrokerStatus:
     required:
     - "address"
