@@ -1,5 +1,4 @@
-import { SignVerifiedXfer, GetTransferSigner, GetContract, BuildVerifiedSale, GetSaleSigner } from './TheContract'
-import { Wallet } from 'ethers';
+import { GetContract } from './TheContract'
 
 const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
 
@@ -28,63 +27,3 @@ test('Has Contract', async () => {
 	expect(balanceCAD.toNumber()).toBeGreaterThanOrEqual(0);
 });
 
-test('Verified signature matches', async () => {
-
-	const contract = GetContract();
-	expect(contract.address).toBeDefined();
-
-	const wallet = Wallet.createRandom();
-	const timestamp = Date.now();
-	const value = 100000;
-	const fee = 2000;
-	const signature = await SignVerifiedXfer(wallet, brokerCAD, value, fee, timestamp);
-	
-	// verify that this signature matches what the contract expects
-	var signer = await contract.recoverSigner(wallet.address, brokerCAD, value, fee, timestamp, signature);
-	expect(signer == wallet.address);
-
-	const signer2 = GetTransferSigner({
-		from: wallet.address,
-		to: brokerCAD,
-		value, 
-		fee,
-		timestamp, 
-		signature
-	});
-	expect(signer2 == wallet.address);
-})
-
-test('Can build verified sale', async () => {
-
-	const contract = GetContract();
-	expect(contract.address).toBeDefined();
-
-	const email = "address@email.com";
-	const wallet = Wallet.createRandom();
-	const value = 100000;
-	const fee = 2000;
-	const sale = await BuildVerifiedSale(email, wallet, brokerCAD, value, fee);
-	
-	// verify that the transfer is avlid
-	const { transfer } = sale;
-	var xferSigner = await contract.recoverSigner(transfer.from, transfer.to, transfer.value, transfer.fee, transfer.timestamp, transfer.signature);
-	expect(xferSigner).toMatch(wallet.address);
-
-	// verify that our email signature is valid
-	const signer = GetSaleSigner(sale);
-	expect(signer).toMatch(wallet.address);
-})
-
-// test('Catches bad timestamp', async () => {
-
-// 	const contract = GetContract();
-// 	expect(contract.address).toBeDefined();
-
-// 	const email = "address@email.com";
-// 	const wallet = Wallet.createRandom();
-// 	const value = 100000;
-// 	const fee = 2000;
-// 	const timestamp = Date.now();
-// 	const buildFn = async () => await BuildVerifiedSale(email, wallet, brokerCAD, value, fee);
-// 	await expect(buildFn()).rejects.toThrow(TypeError);
-// })

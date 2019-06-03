@@ -29,98 +29,10 @@ export function ParseSignedMessage(signedMessage: BrokerCAD.SignedMessage) {
 	];
 }
 
-// ---------------------------------------------------------\\
-
-function GetHash(from: string, to: string, value: number, fee: number, timestamp: number) {
-	const ethersHash = ethers.utils.solidityKeccak256(
-		["address", "address", "uint256", "uint256", "uint256"],
-		[from, to, value, fee, timestamp]
-	);
-	return ethers.utils.arrayify(ethersHash)
-}
-
-export async function SignVerifiedXfer(from: Wallet, to: string, value: number, fee: number, timestamp: number) {
-	const hash = GetHash(from.address, to, value, fee, timestamp);
-	return await from.signMessage(hash);
-}
-
-export function GetTransferSigner(transfer: BrokerCAD.CertifiedTransferRequest) {
-	const { from, to, value, fee, timestamp, signature } = transfer;
-	const hash = GetHash(from, to, value, fee, timestamp);
-	return ethers.utils.verifyMessage(hash, signature);
-}
-
-/// Build the structure to be passed to the coin servers
-/// Build the CertifiedTransferRequest
-export async function BuildVerifiedXfer(from: Wallet, to: string, value: number, fee: number) {
-	const timestamp = Date.now();
-	const signature = await SignVerifiedXfer(from, to, value, fee, timestamp);
-	const r: BrokerCAD.CertifiedTransferRequest = {
-		from: from.address,
-		to: to,
-		value: value,
-		fee: fee,
-		timestamp: timestamp,
-		signature: signature
-	}
-	return r;
-}
-
-// ---------------------------------------------------------\\
-
-function GetSaleHash(toEmail: string, transfer: BrokerCAD.CertifiedTransferRequest) {
-	return ethers.utils.solidityKeccak256(
-		["string", "string"],
-		[transfer.signature, toEmail]
-	);
-}
-
-export async function BuildVerifiedSale(toEmail: string, from: Wallet, to: string, value: number, fee: number) {
-	//const now = Date.now()
-	// // Check that the timestamp being passed not massively invalid
-	// if (timestamp && Math.abs(timestamp - now) > 86400)
-	// 	throw new TypeError("Invalid timestamp - this value should be within one day and marked in seconds")
-	const xfer = await BuildVerifiedXfer(from, to, value, fee);
-
-	const saleHash = GetSaleHash(toEmail, xfer);
-	const saleSig = await from.signMessage(saleHash);
-
-	const r: BrokerCAD.CertifiedSale = {
-		transfer: xfer,
-		clientEmail: toEmail,
-		signature: saleSig
-	}
-	return r;
-}
-
-export function GetSaleSigner(sale: BrokerCAD.CertifiedSale) {
-	const { transfer, clientEmail, signature } = sale;
-	const hash = GetSaleHash(clientEmail, transfer);
-	return ethers.utils.verifyMessage(hash, signature);
-}
 
 // ---------------------------------------------------------\\
 // Get/Restore bill payment info.
 
-function GetBillHash(payee: BrokerCAD.BillPayeePacket, transfer: BrokerCAD.CertifiedTransferRequest) {
-	return ethers.utils.solidityKeccak256(
-		["string", "string", "string", "string"],
-		[transfer.signature, payee.payee, payee, name]
-	);
-}
 
-export async function BuildVerifiedBillPayment(payee: BrokerCAD.BillPayeePacket, from: Wallet, to: string, value: number, fee: number) {
-
-	const xfer = await BuildVerifiedXfer(from, to, value, fee);
-	const billHash = GetBillHash(payee, xfer);
-	const billSig = await from.signMessage(billHash);
-
-	const r: BrokerCAD.CertifiedBillPayment = {
-		transfer: xfer,
-		payee: payee,
-		signature: billSig
-	}
-	return r;
-}
 
 export const InitialCoinBlock = 4456169;
