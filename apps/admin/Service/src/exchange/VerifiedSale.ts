@@ -1,10 +1,7 @@
-'use strict';
-
-const ds = require('./Datastore').datastore
-const utilities = require('@the-coin/utilities');
-const { TheContract, NormalizeAddress } = utilities;
-const Wallet = require('./Wallet')
-const status = require('./status.json')
+import {datastore} from './Datastore'
+import { TheContract, NormalizeAddress } from '@the-coin/utilities';
+import Wallet from './Wallet';
+import status from './status.json';
 
 //const CertifiedFee = parseInt(status.certifiedFee);
 
@@ -12,18 +9,18 @@ const status = require('./status.json')
 
 // exports.QueryPurchasesIds = function (state) {
 //     return new Promise((resolve, reject) => {
-//         const query = ds
+//         const query = datastore
 //             .createQuery('Purchase')
 //             .select('__key__')
 
 //         if (typeof state === 'number')
 //             query.filter('state', '=', state);
 
-//         ds.runQuery(query)
+//         datastore.runQuery(query)
 //             .then(results => {
 //                 var entities = results[0];
 //                 var keys = entities.map((entity) => {
-//                     const key = entity[ds.KEY];
+//                     const key = entity[datastore.KEY];
 //                     return key.path.join('/');
 //                 });
 //                 resolve(keys);
@@ -37,17 +34,17 @@ const status = require('./status.json')
 
 // exports.QueryPurchaseState = function (user, id, state) {
 //     return new Promise((resolve, reject) => {
-//         const ancestorKey = ds.key(['User', user, "Purchase", id]);
-//         const query = ds
+//         const ancestorKey = datastore.key(['User', user, "Purchase", id]);
+//         const query = datastore
 //             .createQuery("Step")
 //             .hasAncestor(ancestorKey)
 
-//         ds.runQuery(query)
+//         datastore.runQuery(query)
 //             .then(results => {
 //                 var entities = results[0];
 //                 var json = {};
 //                 entities.forEach((entity) => {
-//                     const key = entity[ds.KEY];
+//                     const key = entity[datastore.KEY];
 //                     if (state === undefined || key.name === state)
 //                         json[key.name] = entity;
 //                 })
@@ -62,24 +59,24 @@ const status = require('./status.json')
 
 // function UpdatePurchase(user, id, state, step, data) {
 //     // Our purchase is registered as a request, to be completed
-//     const key = ds.key(['User', user, 'Purchase', id, "Step", step])
+//     const key = datastore.key(['User', user, 'Purchase', id, "Step", step])
 //     const entity = {
 //         key: key,
 //         data: data
 //     }
 //     const update = {
-//         key: ds.key(['User', user, 'Purchase', id]),
+//         key: datastore.key(['User', user, 'Purchase', id]),
 //         data: {
 //             state: state
 //         }
 //     };
 
 //     // For each target, blend to it's output by the calculated weight.
-//     const transaction = ds.transaction();
+//     const transaction = datastore.transaction();
 
 //     return transaction
 //         .run()
-//         .then(() => Promise.all([ds.insert(entity), ds.update(update)]))
+//         .then(() => Promise.all([datastore.insert(entity), datastore.update(update)]))
 //         .then(results => {
 //             // Update/Insert was successful.
 //             resolve(id);
@@ -115,60 +112,17 @@ const status = require('./status.json')
 // }
 // ------------------------------------------------------------------------
 
-const success = (val) => {
-    return {
-        message : "Success",
-        txHash: val
-    }
-}
-const failure = (val) => {
-    return {
-        message : val,
-        txHash: false
-    }
-}
-
-const FeeValid = (transfer) => transfer.fee == status.certifiedFee;
-const AvailableBalance= async (transfer) => {
-    const userBalance = await TheContract.GetContract().balanceOf(transfer.from)
-    return (userBalance.toNumber() >= (transfer.fee + transfer.value))
-}
-const ValidXfer = (transfer) => TheContract.GetTransferSigner(transfer) == transfer.from;
-
-async function DoCertifiedTransferWaitable(transfer) {
-
-    // First check: is this the right sized fee?
-    if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
-        return failure("Invalid fee present")
-
-    // Next, verify the xfer request
-    if (!ValidXfer(transfer))
-        return failure("Invalid xfer");
-
-    // Next, check that user have available balance
-    if (!await AvailableBalance(transfer))
-        return failure("Insufficient funds");
-
-    const {from, to, value, fee, timestamp } = transfer;
-    const tc = await Wallet.GetContract();
-    const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
-    console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
-    let tx = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
-    console.log(`TxHash: ${tx.hash}`);
-    // Return the full tx
-    return tx;
-}
 
 // ------------------------------------------------------------------------
 
-const BuildSellKey = (user, id) => ds.key(['User', user, 'Sell', Number(id)])
+function BuildSellKey(user: String, id: string) { return datastore.key(['User', user, 'Sell', Number(id)]) }
 
 // Store the xfer info
 async function StoreRequest(sale, hash)
 {
     const user = sale.transfer.from;
-    const baseKey = ds.key(['User', user, 'Sell']);
-    const [keys] = await ds.allocateIds(baseKey, 1);
+    const baseKey = datastore.key(['User', user, 'Sell']);
+    const [keys] = await datastore.allocateIds(baseKey, 1);
 
     const saleId = keys[0];
     const saleKey = BuildSellKey(user, saleId.id);
@@ -184,7 +138,7 @@ async function StoreRequest(sale, hash)
             }
         }
     ];
-    await ds.insert(entities)
+    await datastore.insert(entities)
     return saleKey;
 }
 
@@ -196,10 +150,10 @@ async function ConfirmSale(tx, saleKey)
     const res = await tx.wait(2);
     console.log(`Tx ${tx.hash} mined ${res.blockNumber}`);
 
-    let [current] = await ds.get(saleKey);
+    let [current] = await datastore.get(saleKey);
     current.confirmed = res.status;
 
-    await ds.update({
+    await datastore.update({
         key: saleKey,
         data: current
     });

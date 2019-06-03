@@ -1,11 +1,11 @@
 
-const Broker = require('./Broker');
-const ds = require('./Datastore').datastore
-const ethers = require('ethers');
+import {DoCertifiedSale, ServerStatus} from './VerifiedSale'
+import {datastore} from './Datastore'
+import ethers from 'ethers';
 
-const { GetContract, GetWallet } = require('./Wallet')
-const { toHuman, TheContract } = require('@the-coin/utilities');
-const { BuildVerifiedSale, BuildVerifiedXfer } = TheContract;
+import { GetContract, GetWallet } from './Wallet'
+import { toHuman, TheContract } from '@the-coin/utilities'
+//import { BuildVerifiedSale, BuildVerifiedXfer } = TheContract;
 
 const status = Broker.ServerStatus();
 const host = process.env.DATASTORE_EMULATOR_HOST;
