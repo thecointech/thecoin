@@ -246,36 +246,37 @@ definitions:
   ############################################################
 
   BillPayeePacket:
-    required: 
-      - payee
-      - accountNumber
     properties:
       payee:
         type: string
       accountNumber:
+        type: string
+      name:
+        type: string
+
+  EncryptedPacket:
+    required:
+      - encryptedPacket
+      - version
+    properties:
+      encryptedPacket:
+        type: string
+        # encrypted $ref: "#/definitions/BillPayeePacket"
+      version:
         type: string
 
   CertifiedBillPayment:
     required:
       - transfer
       - encryptedPayee
-      - version
       - signature
     properties: 
       transfer:
         $ref: "#/definitions/CertifiedTransferRequest"
       encryptedPayee:
-        # encrypted(BillPayeePacket + version)|null (if previously named)
-        type: string
-      version:
-        # We don't really need a seed in an asymetric encryption, this
-        # is more in case we (in the future) change encryption schemes
-        type: integer
-      name:
-        # (Optional) name to store this payee for future use
-        type: string
-        # signed(transfer.sig + encrypted + version + name)
+        $ref: "#/definitions/EncryptedPacket"
       signature: 
+        # signed(transfer.sig + encryptedPayee.encryptedPacket + encryptedPayee.version)
         type: string
 
   #

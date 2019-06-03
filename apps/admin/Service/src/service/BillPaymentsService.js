@@ -1,6 +1,6 @@
 'use strict';
 
-
+const { Payment } = require('../billing/Payments')
 /**
  * Trigger a Bill Payment
  * Called by the client to pay a bill in CAD with coin via a certified transfer
@@ -11,6 +11,8 @@
  **/
 exports.certifiedBillPayment = function(request,user) {
   return new Promise(function(resolve, reject) {
+
+    var result = await 
     var examples = {};
     examples['application/json'] = {
   "message" : "message",

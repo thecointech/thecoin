@@ -17,7 +17,6 @@
   "private": true,
   "dependencies": {
     "@google-cloud/datastore": "^2.0.0",
-    "@the-coin/utilities": "^0.1.24",
     "cors": "^2.8.5",
     "esm": "^3.0.84",
     "ethers": "^4.0.27",
