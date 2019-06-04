@@ -4,9 +4,8 @@ import { Wallet } from "ethers";
 import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
-import {DoCertifiedSale, ServerStatus, BuildSellKey} from './VerifiedSale'
-
-const status = ServerStatus();
+import { DoCertifiedSale } from './VerifiedSale'
+import status from './status.json';
 
 test("Status is valid", () => {
 	expect(status.address);

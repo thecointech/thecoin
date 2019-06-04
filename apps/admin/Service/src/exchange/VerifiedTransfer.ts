@@ -41,23 +41,24 @@ function ValidXfer(transfer : BrokerCAD.CertifiedTransferRequest) {
 async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransferRequest) {
 	// First check: is this the right sized fee?
 	if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
-			return failure("Invalid fee present")
+			throw "Invalid fee present";
 
 	// Next, verify the xfer request
 	if (!ValidXfer(transfer))
-			return failure("Invalid xfer");
+			throw "Invalid xfer";
 
 	// Next, check that user have available balance
 	if (!await AvailableBalance(transfer))
-			return failure("Insufficient funds");
+			throw "Insufficient funds";
 
 	const {from, to, value, fee, timestamp } = transfer;
 	const tc = await GetContract();
 	const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
 	console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
-	let tx : TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+	const tx : TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+
+	console.assert(tx.hash, "ERROR: Tx Hash returned null", JSON.stringify(tx));
 	console.log(`TxHash: ${tx.hash}`);
-	// Return the full tx
 	return tx;
 }
 

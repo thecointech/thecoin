@@ -1,24 +1,36 @@
 import { GetWallet } from "./Wallet";
-import { ServerStatus } from "./VerifiedSale";
 import { GetContract } from "@the-coin/utilities/lib/TheContract";
 import { BuildVerifiedXfer } from "@the-coin/utilities/lib/VerifiedTransfer";
 import { DoCertifiedTransfer } from "./VerifiedTransfer";
+import { Contract } from "ethers";
+import status from './status.json';
 
 const host = process.env.DATASTORE_EMULATOR_HOST;
 const RunningLocal = host == "localhost:8081"
+
+// async function GetTxAwaiter() {
+// 	const wallet = await GetWallet();
+// 	const tc = await GetContract();
+
+// 	return new Promise((resolve, reject) => {
+// 		let filterFromMe = tc.filters.Transfer(wallet.address);
+// 		tc.on(filterFromMe, (fromAddress, toAddress, value, event) => {
+// 			resolve()
+// 		});
+// 	})
+// }
 
 test("Transfer completes sale properly", async () => {
 	if (!RunningLocal)
 		return;
 	
-	jest.setTimeout(30000);
+	jest.setTimeout(180000);
 
 	const wallet = await GetWallet();
+	const tc = await GetContract();
 	expect(wallet).toBeDefined();
 
 	// TODO!  Create a testing account to handle this stuff!
-	const status = ServerStatus();
-	const tc = await GetContract();
 	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
@@ -30,5 +42,12 @@ test("Transfer completes sale properly", async () => {
 	expect(tx.txHash).toBeTruthy();
 	expect(tx.message).toBe("Success");
 
-	// TODO, Wait on hash to check it successfully xfer'ed
+	// Wait on hash to check it successfully xfer'ed
+	const response = await tc.provider.getTransaction(tx.txHash);
+	const receipt = await response.wait();
+	
+	expect(receipt).toBeTruthy();
+
+	//await awaiter;
+	console.log("finished");
 })
