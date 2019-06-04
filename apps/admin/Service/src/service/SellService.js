@@ -1,7 +1,7 @@
 'use strict';
 
 const { SendMail } = require('../exchange/AutoMailer');
-const BrokerActions = require('../exchange/Broker')
+const BrokerActions = require('../exchange/VerifiedSale')
 
 /**
  * Request coin sale
@@ -21,7 +21,7 @@ exports.certifiedCoinSale = function(request) {
         resolve(results);
       })
       .catch((err) => {
-        SendMail("Certified Coin Sale: ERROR", JSON.stringify(results) + "\n---\n" + JSON.stringify(request));
+        SendMail("Certified Coin Sale: ERROR", JSON.stringify(err) + "\n---\n" + JSON.stringify(request));
         console.error(err);
         reject(err);
       })

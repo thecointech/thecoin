@@ -1,16 +1,26 @@
-import Wallet from './Wallet';
+import { GetContract } from './Wallet';
 import status from './status.json';
 import { TheContract } from '@the-coin/utilities';
 import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer';
 import { BrokerCAD } from '@the-coin/types';
+import { TransactionResponse } from 'ethers/providers';
 
-function success(val: string) : BrokerCAD.CertifiedTransferResponse{
+function success(val: string|undefined) : BrokerCAD.CertifiedTransferResponse{
+	if (!val) {
+		console.error("Success hash undefined");
+		return {
+			message : "TxHash was undefined",
+			txHash: "Undefined"
+		}
+	}
 	return {
 			message : "Success",
 			txHash: val
 	}
 }
+
 function failure(val: string) : BrokerCAD.CertifiedTransferResponse {
+	console.log("Tx Failure, ", val);
 	return {
 			message : val,
 			txHash: ""
@@ -42,18 +52,21 @@ async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransfer
 			return failure("Insufficient funds");
 
 	const {from, to, value, fee, timestamp } = transfer;
-	const tc = await Wallet.GetContract();
+	const tc = await GetContract();
 	const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
 	console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
-	let tx = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+	let tx : TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
 	console.log(`TxHash: ${tx.hash}`);
 	// Return the full tx
 	return tx;
 }
 
+function isTx(tx:  BrokerCAD.CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
+	return (<TransactionResponse>tx).hash !== undefined;
+}
 async function DoCertifiedTransfer(transfer: BrokerCAD.CertifiedTransferRequest) {
 	const res = await DoCertifiedTransferWaitable(transfer);
-	return (res.hash) ? success(res.hash) : res;
+	return (isTx(res)) ? success(res.hash) : res;
 }
 
-export { success, failure, DoCertifiedTransfer, DoCertifiedTransferWaitable };
+export { success, failure, isTx, DoCertifiedTransfer, DoCertifiedTransferWaitable };

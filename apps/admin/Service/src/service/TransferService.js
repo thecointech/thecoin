@@ -1,6 +1,6 @@
 'use strict';
 
-const BrokerActions = require('../exchange/Broker')
+const VerifiedTransfer = require('../exchange/VerifiedTransfer')
 
 /**
  * Request Transfer from->to
@@ -11,7 +11,7 @@ const BrokerActions = require('../exchange/Broker')
  **/
 exports.makeCertifiedTransfer = function(request) {
   return new Promise(async function(resolve, reject) {
-    var result = await BrokerActions.DoCertifiedTransfer(request);
+    var result = await VerifiedTransfer.DoCertifiedTransfer(request);
     
     if (result.txHash) 
       resolve(result)

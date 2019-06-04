@@ -1,28 +1,30 @@
-'use strict';
-const ethers = require('ethers');
-const encrypted = require('./BrokerTransferAssistantWallet');
-let key = require('./secret.json').key;
-const utilities = require('@the-coin/utilities');
-const TheContract = utilities.TheContract;
+import { Wallet, Contract } from 'ethers';
+import encrypted from './BrokerTransferAssistantWallet.json';
+import { key } from './secret.json';
+import {TheContract} from '@the-coin/utilities';
 
-let TCWallet = null;
-let ConnectedContract = null;
+let TCWallet: Wallet|null = null;
+let ConnectedContract: Contract|null = null;
 
-const GetWallet = async () => {
-	if (key != null && !TCWallet) {
-		TCWallet = await ethers.Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
-		key = undefined;
+async function GetWallet() : Promise<Wallet> {
+	if (!TCWallet) {
+		TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
+		if (!TCWallet)
+		{
+			throw "Cannot load wallet for some reason";
+		}
 	}
 	return TCWallet;
 }
 
-const GetContract = async () => {
+async function GetContract() : Promise<Contract> {
 	if (!ConnectedContract) {
 		let wallet = await GetWallet();
 		ConnectedContract = TheContract.GetConnected(wallet);
+		if (!ConnectedContract)
+			throw "Could not connect to Contract";
 	}
 	return ConnectedContract;
 }
 
-exports.GetWallet = GetWallet;
-exports.GetContract = GetContract;
+export { GetWallet, GetContract }

@@ -1,6 +1,6 @@
 'use strict';
 
-const BrokerActions = require('../exchange/Broker')
+const BrokerActions = require('../exchange/VerifiedSale')
 /**
  * Gets the operating status of the broker
  * Returns info like brokers address, available balance, etc (?)

@@ -396,6 +396,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/google-cloud__datastore@^1.3.3":
+  version "1.3.3"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/google-cloud__datastore/-/google-cloud__datastore-1.3.3.tgz#188f6484768e262349d4f5dffea96ef95dd36b97"
+  integrity sha1-GI9khHaOJiNJ1PXf/qlu+V3Ta5c=
+  dependencies:
+    "@types/node" "*"
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -435,6 +442,11 @@
 "@types/long@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.0.tgz#719551d2352d301ac8b81db732acb6bdc28dbdef"
+
+"@types/node@*":
+  version "12.0.4"
+  resolved "https://tnadevelopment.pkgs.visualstudio.com/_packaging/the-coin/npm/registry/@types/node/-/node-12.0.4.tgz#46832183115c904410c275e34cf9403992999c32"
+  integrity sha1-RoMhgxFckEQQwnXjTPlAOZKZnDI=
 
 "@types/node@^10.1.0", "@types/node@^10.3.2":
   version "10.12.9"

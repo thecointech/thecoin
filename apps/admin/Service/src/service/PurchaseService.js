@@ -1,6 +1,6 @@
 'use strict';
 
-const BrokerActions = require('../exchange/Broker')
+const BrokerActions = require('../exchange/VerifiedSale')
 const ClientActions = require('../exchange/Client')
 
 /**

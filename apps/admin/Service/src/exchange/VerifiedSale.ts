@@ -1,150 +1,48 @@
 import {datastore} from './Datastore'
-import { TheContract, NormalizeAddress } from '@the-coin/utilities';
+import { BrokerCAD } from '@the-coin/types';
+import { NormalizeAddress } from '@the-coin/utilities';
 import { GetSaleSigner } from '@the-coin/utilities/lib/VerifiedSale';
-import Wallet from './Wallet';
 import status from './status.json';
-import { failure, DoCertifiedTransferWaitable, success } from './VerifiedTransfer';
+import { failure, DoCertifiedTransferWaitable, success, isTx } from './VerifiedTransfer';
+import { DatastoreKey } from '@google-cloud/datastore/entity';
+import { TransactionResponse } from 'ethers/providers';
 
-//const CertifiedFee = parseInt(status.certifiedFee);
+function BuildSellKey(user: string, id: string) { return datastore.key(['User', user, 'Sell', Number(id)]) }
 
-//status.address = utilities.NormalizeAddress(status.address);
-
-// exports.QueryPurchasesIds = function (state) {
-//     return new Promise((resolve, reject) => {
-//         const query = datastore
-//             .createQuery('Purchase')
-//             .select('__key__')
-
-//         if (typeof state === 'number')
-//             query.filter('state', '=', state);
-
-//         datastore.runQuery(query)
-//             .then(results => {
-//                 var entities = results[0];
-//                 var keys = entities.map((entity) => {
-//                     const key = entity[datastore.KEY];
-//                     return key.path.join('/');
-//                 });
-//                 resolve(keys);
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 reject(error);
-//             });
-//     });
-// }
-
-// exports.QueryPurchaseState = function (user, id, state) {
-//     return new Promise((resolve, reject) => {
-//         const ancestorKey = datastore.key(['User', user, "Purchase", id]);
-//         const query = datastore
-//             .createQuery("Step")
-//             .hasAncestor(ancestorKey)
-
-//         datastore.runQuery(query)
-//             .then(results => {
-//                 var entities = results[0];
-//                 var json = {};
-//                 entities.forEach((entity) => {
-//                     const key = entity[datastore.KEY];
-//                     if (state === undefined || key.name === state)
-//                         json[key.name] = entity;
-//                 })
-//                 resolve(json);
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 reject(error);
-//             });
-//     });
-// }
-
-// function UpdatePurchase(user, id, state, step, data) {
-//     // Our purchase is registered as a request, to be completed
-//     const key = datastore.key(['User', user, 'Purchase', id, "Step", step])
-//     const entity = {
-//         key: key,
-//         data: data
-//     }
-//     const update = {
-//         key: datastore.key(['User', user, 'Purchase', id]),
-//         data: {
-//             state: state
-//         }
-//     };
-
-//     // For each target, blend to it's output by the calculated weight.
-//     const transaction = datastore.transaction();
-
-//     return transaction
-//         .run()
-//         .then(() => Promise.all([datastore.insert(entity), datastore.update(update)]))
-//         .then(results => {
-//             // Update/Insert was successful.
-//             resolve(id);
-//             return transaction.commit();
-//         })
-//         .catch(() => transaction.rollback());
-// }
-
-// exports.ConfirmPurchaseOrder = function (user, id, confirm) {
-//     return new Promise((resolve, reject) => {
-//         const message = confirm.timestamp.toString() + id.toString();
-//         const account = ethers.utils.verifyMessage(message, confirm.signature);
-
-//         // TODO: Verify that account here is a legitimate brokers account(?)
-
-//         return UpdatePurchase(user, id, 1, 'confirm', confirm);
-//     });
-// }
-
-// exports.CompletePurchaseOrder = function(user, id, signedComplete) {
-//     return new Promise((resolve, reject) => {
-        
-//         //const account = getAccount(signedComplete.message, signedComplete.signature);
-//         const complete = JSON.parse(signedComplete.message)
-        
-//         // TODO: Verify that we can regenerate the message from the JSON
-//         complete.signature = signedComplete.signature;
-
-//         // TODO: Verify that account here is a legitimate brokers account(?)
-
-//         return UpdatePurchase(user, id, 2, 'complete', complete);
-//     });
-// }
-// ------------------------------------------------------------------------
-
-
-// ------------------------------------------------------------------------
-
-function BuildSellKey(user: String, id: string) { return datastore.key(['User', user, 'Sell', Number(id)]) }
+interface SaleRecord extends BrokerCAD.CertifiedSale {
+    processedTimestamp: number,
+    hash: string,
+    confirmed: boolean,
+    fiatDisbursed: number
+}
 
 // Store the xfer info
-async function StoreRequest(sale, hash)
+async function StoreRequest(sale: BrokerCAD.CertifiedSale, hash: string)
 {
     const user = sale.transfer.from;
     const baseKey = datastore.key(['User', user, 'Sell']);
     const [keys] = await datastore.allocateIds(baseKey, 1);
 
     const saleId = keys[0];
-    const saleKey = BuildSellKey(user, saleId.id);
+    const saleKey = BuildSellKey(user, saleId.id!);
+    const data: SaleRecord = {
+        ...sale,
+        processedTimestamp: Date.now(), 
+        hash: hash,
+        confirmed: false,
+        fiatDisbursed: 0
+    }
     const entities = [
         {
             key: saleKey,
-            data: {
-                ...sale,
-                processedTimestamp: Date.now(), 
-                hash: hash,
-                confirmed: false,
-                fiatDisbursed: 0
-            }
+            data
         }
     ];
     await datastore.insert(entities)
     return saleKey;
 }
 
-async function ConfirmSale(tx, saleKey)
+async function ConfirmSale(tx: TransactionResponse, saleKey: DatastoreKey)
 {
     // Wait for two confirmations.  This makes it more
     // difficult for an external actor to feed us false info
@@ -152,8 +50,13 @@ async function ConfirmSale(tx, saleKey)
     const res = await tx.wait(2);
     console.log(`Tx ${tx.hash} mined ${res.blockNumber}`);
 
-    let [current] = await datastore.get(saleKey);
-    current.confirmed = res.status;
+    let [current]= await datastore.get(saleKey);
+    if (!current) {
+        console.error("Could not load datastore entity: " + JSON.stringify(saleKey));
+        return;
+    }
+    let record = current as SaleRecord;
+    record.confirmed = !!res.status;
 
     await datastore.update({
         key: saleKey,
@@ -163,14 +66,14 @@ async function ConfirmSale(tx, saleKey)
 }
 
 
-const ValidSale = (sale) => {
+const ValidSale = (sale: BrokerCAD.CertifiedSale) => {
     var saleSigner = GetSaleSigner(sale);
     return (NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
 }
-const ValidDestination = (transfer) => 
+const ValidDestination = (transfer: BrokerCAD.CertifiedTransferRequest) => 
     NormalizeAddress(transfer.to) == NormalizeAddress(status.address);
 
-async function  DoCertifiedSale(sale) {
+async function  DoCertifiedSale(sale: BrokerCAD.CertifiedSale) : Promise<BrokerCAD.CertifiedTransferResponse> {
     const { transfer, clientEmail, signature } = sale;
     if (!transfer || !clientEmail || !signature) 
         return failure("Invalid arguments");
@@ -188,11 +91,11 @@ async function  DoCertifiedSale(sale) {
     // Do the CertTransfer, this should transfer Coin to our account
     const res = await DoCertifiedTransferWaitable(transfer);
     // If we have no hash, it's probably an error message
-    if (!res.hash)
+    if (!isTx(res))
         return res;
 
     // Next, create an initial record of the transaction
-    const saleKey = await StoreRequest(sale, res.hash);
+    const saleKey = await StoreRequest(sale, res.hash!);
     console.log(`Valid Cert Xfer: id: ${saleKey.id}`);
         
     // Fire & Forget callback waits for res to be mined & updates DB
@@ -202,8 +105,8 @@ async function  DoCertifiedSale(sale) {
     return success(res.hash);
 }
 
-// ------------------------------------------------------------------------
-exports.BuildSellKey = BuildSellKey;
+function ServerStatus() {
+    return status;
+}
 
-exports.DoCertifiedSale = DoCertifiedSale,
-exports.ServerStatus = () => status
+export { BuildSellKey, DoCertifiedSale, ServerStatus}

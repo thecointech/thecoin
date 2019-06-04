@@ -66,6 +66,7 @@
     "./src/**/*"
   ],
   "exclude": [
-    "./src/**/*.test.js"
+    "./src/**/*.test.js",
+    "./src/**/*.test.ts"
   ]
 }

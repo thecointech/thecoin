@@ -2,7 +2,7 @@ import Datastore from '@google-cloud/datastore';
 import {NormalizeAddress} from '@the-coin/utilities';
 
 // Instantiate a datastore client
-const datastore = Datastore({
+const datastore = new Datastore({
     projectId: "the-broker-cad",
     namespace: 'brokerCAD'
 });
