@@ -1,7 +1,9 @@
 import {datastore} from './Datastore'
 import { TheContract, NormalizeAddress } from '@the-coin/utilities';
+import { GetSaleSigner } from '@the-coin/utilities/lib/VerifiedSale';
 import Wallet from './Wallet';
 import status from './status.json';
+import { failure, DoCertifiedTransferWaitable, success } from './VerifiedTransfer';
 
 //const CertifiedFee = parseInt(status.certifiedFee);
 
@@ -162,7 +164,7 @@ async function ConfirmSale(tx, saleKey)
 
 
 const ValidSale = (sale) => {
-    var saleSigner = TheContract.GetSaleSigner(sale);
+    var saleSigner = GetSaleSigner(sale);
     return (NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
 }
 const ValidDestination = (transfer) => 
@@ -202,9 +204,6 @@ async function  DoCertifiedSale(sale) {
 
 // ------------------------------------------------------------------------
 exports.BuildSellKey = BuildSellKey;
-exports.DoCertifiedTransfer = async (transfer) => {
-    const res = await DoCertifiedTransferWaitable(transfer);
-    return (res.hash) ? success(res.hash) : res;
-}
+
 exports.DoCertifiedSale = DoCertifiedSale,
 exports.ServerStatus = () => status

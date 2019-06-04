@@ -29,27 +29,31 @@ function ValidXfer(transfer : BrokerCAD.CertifiedTransferRequest) {
 }
 
 async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransferRequest) {
+	// First check: is this the right sized fee?
+	if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
+			return failure("Invalid fee present")
 
-    // First check: is this the right sized fee?
-    if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
-        return failure("Invalid fee present")
+	// Next, verify the xfer request
+	if (!ValidXfer(transfer))
+			return failure("Invalid xfer");
 
-    // Next, verify the xfer request
-    if (!ValidXfer(transfer))
-        return failure("Invalid xfer");
+	// Next, check that user have available balance
+	if (!await AvailableBalance(transfer))
+			return failure("Insufficient funds");
 
-    // Next, check that user have available balance
-    if (!await AvailableBalance(transfer))
-        return failure("Insufficient funds");
-
-    const {from, to, value, fee, timestamp } = transfer;
-    const tc = await Wallet.GetContract();
-    const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
-    console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
-    let tx = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
-    console.log(`TxHash: ${tx.hash}`);
-    // Return the full tx
-    return tx;
+	const {from, to, value, fee, timestamp } = transfer;
+	const tc = await Wallet.GetContract();
+	const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature)
+	console.log(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
+	let tx = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+	console.log(`TxHash: ${tx.hash}`);
+	// Return the full tx
+	return tx;
 }
 
-export { DoCertifiedTransferWaitable };
+async function DoCertifiedTransfer(transfer: BrokerCAD.CertifiedTransferRequest) {
+	const res = await DoCertifiedTransferWaitable(transfer);
+	return (res.hash) ? success(res.hash) : res;
+}
+
+export { success, failure, DoCertifiedTransfer, DoCertifiedTransferWaitable };
