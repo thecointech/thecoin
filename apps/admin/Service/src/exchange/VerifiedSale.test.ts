@@ -5,12 +5,8 @@ import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
 import {DoCertifiedSale, ServerStatus, BuildSellKey} from './VerifiedSale'
-import { BuildVerifiedXfer } from '@the-coin/utilities/lib/VerifiedTransfer';
-import { DoCertifiedTransfer } from './VerifiedTransfer';
 
 const status = ServerStatus();
-const host = process.env.DATASTORE_EMULATOR_HOST;
-const RunningLocal = host == "localhost:8081"
 
 test("Status is valid", () => {
 	expect(status.address);
@@ -37,30 +33,6 @@ async function GetStoredSale(user: string, id: string) {
 	const [entity] = results;
 	return entity
 }
-
-test("Transfer completes sale properly", async () => {
-	if (!RunningLocal)
-		return;
-	
-	jest.setTimeout(30000);
-
-	const wallet = await GetWallet();
-	expect(wallet).toBeDefined();
-
-	// TODO!  Create a testing account to handle this stuff!
-	const status = ServerStatus();
-	const tc = await GetContract();
-	const myBalance = await tc.balanceOf(wallet.address)
-	expect(myBalance.toNumber()).toBeGreaterThan(0);
-
-	const fee = status.certifiedFee;
-	const transfer = 100;
-	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, fee);
-	const tx = await DoCertifiedTransfer(certTransfer);
-
-	expect(tx.txHash).toBeTruthy();
-	expect(tx.message).toBe("Success");
-})
 
 test("Certified sale completes sale properly", async () => {
 	jest.setTimeout(300000);
