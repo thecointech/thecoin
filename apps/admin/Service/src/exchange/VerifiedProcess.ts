@@ -20,6 +20,11 @@ interface ConfirmedRecord extends CertifiedAction {
     fiatDisbursed: number
 }
 
+interface VerifiedActionResult {
+	key: DatastoreKey,
+	hash: string
+}
+
 // Store the xfer info
 async function StoreActionRequest(actionData: CertifiedAction, actionType: string, hash: string)
 {
@@ -69,7 +74,7 @@ async function ConfirmAction(tx: TransactionResponse, saleKey: DatastoreKey)
     console.log(`Tx Confirmed: ${res.status}`);
 }
 
-async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: string) {
+async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: string): Promise<VerifiedActionResult> {
     const { transfer } = actionData;
     
     // Do the CertTransfer, this should transfer Coin to our account
@@ -83,7 +88,10 @@ async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: 
     ConfirmAction(res, saleKey);
 
     // We just return the hash.  This guaranteed to be valid by DoCertTransferWaitable
-    return res.hash!;
+    return {
+			key: saleKey,
+			hash: res.hash!
+		}
 }
 
-export { BuildActionKey, ProcessCertifiedAction }
+export { BuildActionKey, ProcessCertifiedAction, ConfirmedRecord }

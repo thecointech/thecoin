@@ -2,23 +2,25 @@ import { GetWallet } from "./Wallet";
 import { GetContract } from "@the-coin/utilities/lib/TheContract";
 import { BuildVerifiedXfer } from "@the-coin/utilities/lib/VerifiedTransfer";
 import { DoCertifiedTransfer } from "./VerifiedTransfer";
-import { Contract } from "ethers";
+import { Contract, Wallet } from "ethers";
 import status from './status.json';
 
 const host = process.env.DATASTORE_EMULATOR_HOST;
 const RunningLocal = host == "localhost:8081"
 
-// async function GetTxAwaiter() {
-// 	const wallet = await GetWallet();
-// 	const tc = await GetContract();
+test("Transfer checks balance", async () => {
+	const wallet = Wallet.createRandom();
+	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, 100, status.certifiedFee);
+	await expect(DoCertifiedTransfer(certTransfer)).rejects.toThrow("Insufficient funds");
+})
 
-// 	return new Promise((resolve, reject) => {
-// 		let filterFromMe = tc.filters.Transfer(wallet.address);
-// 		tc.on(filterFromMe, (fromAddress, toAddress, value, event) => {
-// 			resolve()
-// 		});
-// 	})
-// }
+
+test("Transfer checks fee", async () => {
+	const wallet = Wallet.createRandom();
+	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, 100, 0);
+	await expect(DoCertifiedTransfer(certTransfer)).rejects.toThrow("Invalid fee present");
+})
+
 
 test("Transfer completes sale properly", async () => {
 	if (!RunningLocal)
@@ -34,9 +36,8 @@ test("Transfer completes sale properly", async () => {
 	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
-	const fee = status.certifiedFee;
 	const transfer = 100;
-	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, fee);
+	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, status.certifiedFee);
 	const tx = await DoCertifiedTransfer(certTransfer);
 
 	expect(tx.txHash).toBeTruthy();

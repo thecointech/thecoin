@@ -41,15 +41,15 @@ function ValidXfer(transfer : BrokerCAD.CertifiedTransferRequest) {
 async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransferRequest) {
 	// First check: is this the right sized fee?
 	if (!FeeValid(transfer)) // TODO: Is that even remotely the right size?
-			throw "Invalid fee present";
+			throw new Error("Invalid fee present");
 
 	// Next, verify the xfer request
 	if (!ValidXfer(transfer))
-			throw "Invalid xfer";
+			throw new Error("Invalid xfer");
 
 	// Next, check that user have available balance
 	if (!await AvailableBalance(transfer))
-			throw "Insufficient funds";
+			throw new Error("Insufficient funds");
 
 	const {from, to, value, fee, timestamp } = transfer;
 	const tc = await GetContract();

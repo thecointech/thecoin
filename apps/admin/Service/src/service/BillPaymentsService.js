@@ -1,6 +1,6 @@
 'use strict';
 
-const { Payment } = require('../billing/Payments')
+const { Payment } = require('../exchange/Payments')
 /**
  * Trigger a Bill Payment
  * Called by the client to pay a bill in CAD with coin via a certified transfer

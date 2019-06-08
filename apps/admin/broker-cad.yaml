@@ -251,8 +251,6 @@ definitions:
         type: string
       accountNumber:
         type: string
-      name:
-        type: string
 
   EncryptedPacket:
     required:
@@ -262,6 +260,8 @@ definitions:
       encryptedPacket:
         type: string
         # encrypted $ref: "#/definitions/BillPayeePacket"
+      name:
+        type: string
       version:
         type: string
 

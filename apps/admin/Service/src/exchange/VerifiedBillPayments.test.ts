@@ -18,7 +18,7 @@ test("Status is valid", () => {
 	expect(fee).toBe(0.02);
 })
 
-test("Certified sale completes sale properly", async () => {
+test("Verified bill payments complete properly", async () => {
 
 	if (!RunningLocal)
 		return;

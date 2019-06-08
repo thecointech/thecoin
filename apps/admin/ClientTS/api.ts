@@ -81,6 +81,26 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface BillPayeePacket
+ */
+export interface BillPayeePacket {
+    /**
+     * 
+     * @type {string}
+     * @memberof BillPayeePacket
+     */
+    payee?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BillPayeePacket
+     */
+    accountNumber?: string;
+}
+
+/**
+ * 
+ * @export
  * @interface BrokerStatus
  */
 export interface BrokerStatus {
@@ -96,6 +116,32 @@ export interface BrokerStatus {
      * @memberof BrokerStatus
      */
     certifiedFee: number;
+}
+
+/**
+ * 
+ * @export
+ * @interface CertifiedBillPayment
+ */
+export interface CertifiedBillPayment {
+    /**
+     * 
+     * @type {CertifiedTransferRequest}
+     * @memberof CertifiedBillPayment
+     */
+    transfer: CertifiedTransferRequest;
+    /**
+     * 
+     * @type {EncryptedPacket}
+     * @memberof CertifiedBillPayment
+     */
+    encryptedPayee: EncryptedPacket;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertifiedBillPayment
+     */
+    signature: string;
 }
 
 /**
@@ -186,6 +232,32 @@ export interface CertifiedTransferResponse {
      * @memberof CertifiedTransferResponse
      */
     txHash: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface EncryptedPacket
+ */
+export interface EncryptedPacket {
+    /**
+     * 
+     * @type {string}
+     * @memberof EncryptedPacket
+     */
+    encryptedPacket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EncryptedPacket
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EncryptedPacket
+     */
+    version: string;
 }
 
 /**
@@ -450,6 +522,128 @@ export interface SignedPurchaseRequest {
     signature: string;
 }
 
+
+/**
+ * BillPaymentsApi - fetch parameter creator
+ * @export
+ */
+export const BillPaymentsApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Called by the client to pay a bill in CAD with coin via a certified transfer
+         * @summary Trigger a Bill Payment
+         * @param {string} user User address
+         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options: any = {}): FetchArgs {
+            // verify required parameter 'user' is not null or undefined
+            if (user === null || user === undefined) {
+                throw new RequiredError('user','Required parameter user was null or undefined when calling certifiedBillPayment.');
+            }
+            // verify required parameter 'certifiedBillPayment' is not null or undefined
+            if (certifiedBillPayment === null || certifiedBillPayment === undefined) {
+                throw new RequiredError('certifiedBillPayment','Required parameter certifiedBillPayment was null or undefined when calling certifiedBillPayment.');
+            }
+            const localVarPath = `/bills/{user}`
+                .replace(`{${"user"}}`, encodeURIComponent(String(user)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CertifiedBillPayment" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(certifiedBillPayment || {}) : (certifiedBillPayment || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BillPaymentsApi - functional programming interface
+ * @export
+ */
+export const BillPaymentsApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Called by the client to pay a bill in CAD with coin via a certified transfer
+         * @summary Trigger a Bill Payment
+         * @param {string} user User address
+         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
+            const localVarFetchArgs = BillPaymentsApiFetchParamCreator(configuration).certifiedBillPayment(user, certifiedBillPayment, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * BillPaymentsApi - factory interface
+ * @export
+ */
+export const BillPaymentsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Called by the client to pay a bill in CAD with coin via a certified transfer
+         * @summary Trigger a Bill Payment
+         * @param {string} user User address
+         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any) {
+            return BillPaymentsApiFp(configuration).certifiedBillPayment(user, certifiedBillPayment, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * BillPaymentsApi - object-oriented interface
+ * @export
+ * @class BillPaymentsApi
+ * @extends {BaseAPI}
+ */
+export class BillPaymentsApi extends BaseAPI {
+    /**
+     * Called by the client to pay a bill in CAD with coin via a certified transfer
+     * @summary Trigger a Bill Payment
+     * @param {string} user User address
+     * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BillPaymentsApi
+     */
+    public certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any) {
+        return BillPaymentsApiFp(this.configuration).certifiedBillPayment(user, certifiedBillPayment, options)(this.fetch, this.basePath);
+    }
+
+}
 
 /**
  * PurchaseApi - fetch parameter creator

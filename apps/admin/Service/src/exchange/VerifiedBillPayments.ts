@@ -24,11 +24,11 @@ export async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment
 {
 	// First, check that bill payment & the transfer are signed by the same person
 	if (!ValidSignatures(payment))
-		throw "Mismatching Signatures";
+		throw new Error("Mismatching Signatures");
 
 	// verify that the transfer recipient is the Broker CAD
 	if (!ValidDestination(payment))
-		throw "Invalid Destination";
+		throw new Error("Invalid Destination");
 				
 	// Do the CertTransfer, this should transfer Coin to our account
 	return await ProcessCertifiedAction(payment, "Bill");
