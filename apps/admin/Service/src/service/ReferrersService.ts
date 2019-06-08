@@ -1,5 +1,5 @@
-'use strict';
-const Referrers = require('../exchange/Referrers')
+import { BrokerCAD } from "@the-coin/types";
+import { Create, GetReferrerAddress } from '../exchange/Referrers';
 
 /**
  * Register the referral of new account
@@ -8,18 +8,16 @@ const Referrers = require('../exchange/Referrers')
  * referral NewAccountReferal Set referal for new account
  * returns BoolResponse
  **/
-exports.referralCreate = function(referral) {
-  return new Promise(async function(resolve, reject) {
-    try {
-      const created = await Referrers.Create(referral);
-      resolve({
-        success: created
-      });
-    } catch(err) {
-      console.error(err);
-      reject('Server Error');
-    }
-  });
+export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Promise<BrokerCAD.BoolResponse> {
+  try {
+    const created = await Create(referral);
+    return {
+      success: created
+    };
+  } catch(err) {
+    console.error(err);
+    throw new Error('Server Error');
+  }
 }
 
 
@@ -30,18 +28,16 @@ exports.referralCreate = function(referral) {
  * referrer String Referrers ID.  This ID must have been previously registered with the system
  * returns BoolResponse
  **/
-exports.referrerValid = function(referrerId) {
-  return new Promise(async function(resolve, reject) {
-    try {
-      const address = await Referrers.GetReferrerAddress(referrerId);
-      resolve({
-        success: !!address
-      });
-    }
-    catch(err) {
-      console.error(err);
-      reject('Server Error');
-    }
-  });
+export async function referrerValid(referrerId: string): Promise<BrokerCAD.BoolResponse> {
+  try {
+    const address = await GetReferrerAddress(referrerId);
+    return {
+      success: !!address
+    };
+  }
+  catch(err) {
+    console.error(err);
+    throw new Error('Server Error');
+  }
 }
 
