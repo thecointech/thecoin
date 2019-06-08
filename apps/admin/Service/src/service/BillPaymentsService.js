@@ -1,6 +1,5 @@
-'use strict';
+const { ProcessBillPayment } = require('../exchange/VerifiedBillPayments');
 
-const { Payment } = require('../exchange/Payments')
 /**
  * Trigger a Bill Payment
  * Called by the client to pay a bill in CAD with coin via a certified transfer
@@ -9,20 +8,18 @@ const { Payment } = require('../exchange/Payments')
  * user String User address
  * returns CertifiedTransferResponse
  **/
-exports.certifiedBillPayment = function(request,user) {
-  return new Promise(function(resolve, reject) {
+export async function certifiedBillPayment(request,user) {
 
-    var result = await 
-    var examples = {};
-    examples['application/json'] = {
-  "message" : "message",
-  "txHash" : "txHash"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  console.log("Bill payment from " + user);
+  try {
+    return await ProcessBillPayment(request)
+  }
+  catch (e) {
+    console.error(JSON.stringify(e));
+    return {
+      message: e.message,
+      txHash: ""
     }
-  });
+  }
 }
 

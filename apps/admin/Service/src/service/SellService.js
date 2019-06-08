@@ -1,7 +1,7 @@
 'use strict';
 
-const { SendMail } = require('../exchange/AutoMailer');
-const BrokerActions = require('../exchange/VerifiedSale')
+import { SendMail } from '../exchange/AutoMailer';
+import { DoCertifiedSale } from '../exchange/VerifiedSale';
 
 /**
  * Request coin sale
@@ -10,22 +10,19 @@ const BrokerActions = require('../exchange/VerifiedSale')
  * request CertifiedSale Signed certified transfer to this brokers address
  * returns SellResponse
  **/
-exports.certifiedCoinSale = function(request) {
-  return new Promise(function (resolve, reject) {
-    BrokerActions.DoCertifiedSale(request)
-      .then((results) => {
-        console.log(`Sale Result: ${results.message}`);
-        if (results.txHash) {
-          SendMail("Certified Coin Sale: ",  JSON.stringify(results) + "\n---\n" + JSON.stringify(request));
-        }
-        resolve(results);
-      })
-      .catch((err) => {
-        SendMail("Certified Coin Sale: ERROR", JSON.stringify(err) + "\n---\n" + JSON.stringify(request));
-        console.error(err);
-        reject(err);
-      })
-  });
+export async function certifiedCoinSale(request) {
+  try {
+    const results = await DoCertifiedSale(request);
+    console.log(`Sale Result: ${JSON.stringify(results)}`);
+    SendMail("Certified Coin Sale: ",  JSON.stringify(results) + "\n---\n" + JSON.stringify(request));
+    return results;
+  }
+  catch(err)
+  {
+    console.error(err);
+    SendMail("Certified Coin Sale: ERROR", JSON.stringify(err) + "\n---\n" + JSON.stringify(request));
+    throw(err)
+  };
 }
 
 

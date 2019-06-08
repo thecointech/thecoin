@@ -29,7 +29,7 @@ export async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment
 	// verify that the transfer recipient is the Broker CAD
 	if (!ValidDestination(payment))
 		throw new Error("Invalid Destination");
-				
+
 	// Do the CertTransfer, this should transfer Coin to our account
 	return await ProcessCertifiedAction(payment, "Bill");
 }
