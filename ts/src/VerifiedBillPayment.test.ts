@@ -16,14 +16,13 @@ async function VerifyTransfer(xfer: BrokerCAD.CertifiedTransferRequest)
 }
 
 test('Can build full verified billpayment', async () => {
-
+	const name = "My Visa";
 	const payee : BrokerCAD.BillPayeePacket = {
 		payee: "TD Visa or some such",
 		accountNumber: "123456789123456789",
-		name: "My Visa"
 	};
 
-	const sale = await BuildVerifiedBillPayment(payee, wallet, wallet.address, value, fee);
+	const sale = await BuildVerifiedBillPayment(payee, name, wallet, wallet.address, value, fee);
 	VerifyTransfer(sale.transfer);
 
 	// verify that our email signature is valid
@@ -32,11 +31,11 @@ test('Can build full verified billpayment', async () => {
 })
 
 test('Can build partial verified billpayment', async () => {
+	const name = "My Visa"
 	const payee : BrokerCAD.BillPayeePacket = {
-		name: "My Visa"
 	};
 
-	const sale = await BuildVerifiedBillPayment(payee, wallet, wallet.address, value, fee);
+	const sale = await BuildVerifiedBillPayment(payee, name, wallet, wallet.address, value, fee);
 	VerifyTransfer(sale.transfer);
 
 	// verify that our email signature is valid
@@ -50,10 +49,9 @@ test('Passes if missing name', async () => {
 	const invalidPayee : BrokerCAD.BillPayeePacket = {
 		payee: "TD Visa or some such",
 		accountNumber: "123456789123456789",
-		name: ""
 	};
 
-	const sale = await BuildVerifiedBillPayment(invalidPayee, wallet, wallet.address, value, fee);
+	const sale = await BuildVerifiedBillPayment(invalidPayee, "", wallet, wallet.address, value, fee);
 	// verify that our email signature is valid
 	const signer = GetBillPaymentSigner(sale);
 	expect(signer).toMatch(wallet.address);
@@ -63,9 +61,25 @@ test('Fails if missing name & other', async () => {
 
 	const invalidPayee : BrokerCAD.BillPayeePacket = {
 		payee: "TD Visa or some such",
-		name: ""
 	};
 
-	const fn = async () => await BuildVerifiedBillPayment(invalidPayee, wallet, wallet.address, value, fee);
+	const fn = async () => await BuildVerifiedBillPayment(invalidPayee, "", wallet, wallet.address, value, fee);
 	expect(fn()).rejects.toEqual(new Error("Invalid data supplied to GetHash"))
+})
+
+test('Fails if XOR accountName/payee', async () => {
+	const name = "something";
+	const missingAccountNumber : BrokerCAD.BillPayeePacket = {
+		payee: "TD Visa or some such",
+	};
+
+	const fn1 = async () => await BuildVerifiedBillPayment(missingAccountNumber, name, wallet, wallet.address, value, fee);
+	expect(fn1()).rejects.toEqual(new Error("Invalid data supplied to GetHash"))
+
+	const missingPayee : BrokerCAD.BillPayeePacket = {
+		accountNumber: "123456789123456789"
+	};
+
+	const fn2 = async () => await BuildVerifiedBillPayment(missingPayee, name, wallet, wallet.address, value, fee);
+	expect(fn2()).rejects.toEqual(new Error("Invalid data supplied to GetHash"))
 })

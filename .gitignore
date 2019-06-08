@@ -8,3 +8,7 @@ ts/dist/
 ts/lib/
 ts/.nyc_output/
 ts/coverage/
+cs/Conversion.cs/bin/
+TheUtils/.vs/
+ts/yarn-error.log
+ts.DotSettings.user
