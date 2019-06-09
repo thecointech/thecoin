@@ -1,5 +1,5 @@
 import { BrokerCAD } from "@the-coin/types";
-import { Create, GetReferrerAddress } from '../exchange/Referrers';
+import { Create, GetReferrerById } from '../exchange/Referrers';
 
 /**
  * Register the referral of new account
@@ -30,7 +30,7 @@ export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Pro
  **/
 export async function referrerValid(referrerId: string): Promise<BrokerCAD.BoolResponse> {
   try {
-    const address = await GetReferrerAddress(referrerId);
+    const address = await GetReferrerById(referrerId);
     return {
       success: !!address
     };

@@ -1,5 +1,5 @@
-const { GetReferrerAddress, Create } = require('./Referrers')
-const { datastore, GetReferrerKey, GetUserKey } = require('./Datastore')
+import { GetReferrerById, GetReferrerByKey, Create, ReferralData, VerifiedReferrer } from './Referrers';
+import { datastore, GetReferrerKey, GetUserKey } from './Datastore';
 
 
 test("Referrals work as expected", async () => {
@@ -12,27 +12,28 @@ test("Referrals work as expected", async () => {
 	{
 		// Setup dummy key
 		const referrerKey = GetReferrerKey(validId)
+		const data: VerifiedReferrer = {
+			address: validAddress,
+			signature: "dummytest"			
+		}
 		await datastore.upsert({
 			key: referrerKey,
-			data: {
-				address: validAddress,
-				signature: "dummytest"
-			}
+			data
 		})
 	}
 	const validIdUC = '7k5y8w'.toUpperCase();
 
 	// First, do we get valid referrer address for valid referrer ID
-	const verifyValid = await GetReferrerAddress(validId);
+	const verifyValid = await GetReferrerById(validId);
 	expect(verifyValid).toEqual(validAddress);
 
 	// verify it's case insensitive
-	const verifyUC = await GetReferrerAddress(validIdUC);
+	const verifyUC = await GetReferrerById(validIdUC);
 	expect(verifyUC).toEqual(validAddress);
 
 	// verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
 	const junk = '123456';
-	const verifyJunk = await GetReferrerAddress(junk);
+	const verifyJunk = await GetReferrerById(junk);
 	expect(verifyJunk).toBeNull();
 
 	if (host) // Running on emulator
@@ -56,9 +57,8 @@ test("Referrals work as expected", async () => {
 		expect(success).toBe(true);
 
 		// test data store properly
-		const [userData] = await datastore.get(newUserKey);
-		expect(userData).not.toBeNull();
-		expect(userData.referrer).toBe(validAddress);
+		const referrer = await GetReferrerByKey(newUserKey);
+		expect(referrer).toBe(validAddress);
 
 		// Test re-create fails
 		const dup = await Create(referral);
