@@ -49,6 +49,11 @@ export namespace BrokerCAD {
     referrerId: string;
     newAccount: string;
   }
+  export interface EncryptedPacket {
+    encryptedPacket: string;
+    name?: string;
+    version: string;
+  }
   export interface CertifiedTransferResponse {
     message: string;
     txHash: string;
@@ -68,7 +73,7 @@ export namespace BrokerCAD {
   }
   export interface CertifiedBillPayment {
     transfer: CertifiedTransferRequest;
-    payee: BillPayeePacket;
+    encryptedPayee: EncryptedPacket;
     signature: string;
   }
   export interface BrokerStatus {
@@ -81,6 +86,5 @@ export namespace BrokerCAD {
   export interface BillPayeePacket {
     payee?: string;
     accountNumber?: string;
-    name: string;
   }
 }
