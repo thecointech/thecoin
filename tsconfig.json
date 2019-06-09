@@ -33,7 +33,10 @@
     "strictFunctionTypes": false,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+
+    "incremental": true,                      /* Enable incremental compilation */
+    "tsBuildInfoFile": "./obj/incr",          /* Specify file to store incremental compilation information */
   },
   "exclude": ["node_modules"]
 }

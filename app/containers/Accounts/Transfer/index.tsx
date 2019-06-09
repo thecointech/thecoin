@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TheContract, NormalizeAddress } from '@the-coin/utilities';
+import { NormalizeAddress } from '@the-coin/utilities';
+import { BuildVerifiedXfer } from '@the-coin/utilities/lib/VerifiedTransfer';
 import { StatusApi, TransferApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { UxAddress } from '@the-coin/components/components/UxAddress';
@@ -69,7 +70,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
     // To transfer, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to another address
-    const transferCommand = await TheContract.BuildVerifiedXfer(wallet, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee);
+    const transferCommand = await BuildVerifiedXfer(wallet, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee);
     const transferApi = new TransferApi()
 
 	if (this.state.doCancel)

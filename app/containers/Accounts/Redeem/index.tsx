@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import { TheContract } from '@the-coin/utilities';
+import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
 import { StatusApi, SellApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types'
@@ -66,7 +66,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
-    const sellCommand = await TheContract.BuildVerifiedSale(email, wallet, status.address, coinToSell, status.certifiedFee);
+    const sellCommand = await BuildVerifiedSale(email, wallet, status.address, coinToSell, status.certifiedFee);
     const sellApi = new SellApi();
     if (this.state.doCancel)
       return false;

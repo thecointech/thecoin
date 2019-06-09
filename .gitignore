@@ -11,3 +11,4 @@ npm-debug.log
 .awcache
 *.css.d.ts
 app/styles/semantic/
+.firebase/
