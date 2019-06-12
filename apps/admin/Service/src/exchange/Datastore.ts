@@ -1,5 +1,5 @@
 import Datastore from '@google-cloud/datastore';
-import {NormalizeAddress} from '@the-coin/utilities';
+import {NormalizeAddress, IsValidAddress, IsValidReferrerId} from '@the-coin/utilities';
 
 // Instantiate a datastore client
 const datastore = new Datastore({
@@ -7,7 +7,20 @@ const datastore = new Datastore({
     namespace: 'brokerCAD'
 });
 
-const GetReferrerKey = (referrerId: string) => datastore.key(['Referrer', referrerId.toLowerCase()])
-const GetUserKey = (address: string) => datastore.key(['User', NormalizeAddress(address)])
+function GetReferrerKey(referrerId: string) {
+    if (!IsValidReferrerId(referrerId)) {
+        console.error(`${referrerId} is not a valid address`);
+        throw new Error("Invalid Referrer");
+    }
+    return datastore.key(['Referrer', referrerId.toLowerCase()])
+}
+function GetUserKey(address: string) {
+    if (!IsValidAddress(address))
+    {
+        console.error(`${address} is not a valid address`);
+        throw new Error("Invalid address");
+    }
+    return datastore.key(['User', NormalizeAddress(address)])
+}
 
 export {datastore, GetUserKey, GetReferrerKey }

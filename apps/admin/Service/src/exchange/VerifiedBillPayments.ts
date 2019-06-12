@@ -5,17 +5,38 @@ import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
 import status from './status.json';
 import { ProcessCertifiedAction } from './VerifiedProcess';
 import { NormalizeAddress } from '@the-coin/utilities';
+import { datastore, GetUserKey } from './Datastore';
 
 function ValidSignatures(payment: BrokerCAD.CertifiedBillPayment) {
 	const paymentSigner = GetBillPaymentSigner(payment);
 	const xferSigner = GetTransferSigner(payment.transfer);
-	return (paymentSigner != xferSigner);
+	return (paymentSigner == xferSigner);
 }
 
 function ValidDestination(payment: BrokerCAD.CertifiedBillPayment) {
 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
 }
 
+export function PayeeKey(user: string, payeeName: string) {
+	const payeeKey = datastore.key(["Payee", payeeName]);
+	payeeKey.parent = GetUserKey(user);
+	return payeeKey;
+}
+async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
+{
+	if (!payee.name)
+		return;
+
+	var res = await datastore.upsert({
+		data: {
+			payee: payee.encryptedPacket,
+			version: payee.version
+		},
+		key: PayeeKey(user, payee.name)
+	})
+
+	console.log("Upserted encrypted payee: " + res);
+}
 
 // Billpayment works by:
 //  User Creates Billpayment which is just VeriXFer 
@@ -31,5 +52,13 @@ export async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment
 		throw new Error("Invalid Destination");
 
 	// Do the CertTransfer, this should transfer Coin to our account
-	return await ProcessCertifiedAction(payment, "Bill");
+	const res = await ProcessCertifiedAction(payment, "Bill");
+
+	if (res.hash)
+	{
+		// If the user has named this bill payment, store that info in here.
+		const user = GetBillPaymentSigner(payment);
+		await StoreNamedPayee(user, payment.encryptedPayee);
+	}
+	return res;
 }
