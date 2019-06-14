@@ -1,0 +1,1 @@
+require('dotenv').config({ path: '/src/TheCoin/firestore_vars.env' })

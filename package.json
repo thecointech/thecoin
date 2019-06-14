@@ -6,6 +6,7 @@
     "@the-coin/utilities": "^0.1.29",
     "@types/lodash": "^4.14.134",
     "connected-react-router": "^6.4.0",
+    "dotenv": "^8.0.0",
     "ethers": "^4.0.29",
     "hoist-non-react-statics": "^3.3.0",
     "immer-reducer": "^0.7.0",
