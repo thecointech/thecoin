@@ -6,8 +6,3 @@ export function IsValidAddress(address: string) {
 export function NormalizeAddress(address: string) {
 	return address.length == 40 ? `0x${address.toUpperCase()}` : `0x${address.slice(2).toUpperCase()}`
 }
-
-// Valid ID's exclude IOUL
-export function IsValidReferrerId(id) {
-	return /^[a-hj-km-np-tv-z0-9]{6}$/i.test(id)
-}
