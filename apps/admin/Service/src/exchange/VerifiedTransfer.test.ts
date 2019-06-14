@@ -2,8 +2,8 @@ import { GetWallet } from "./Wallet";
 import { GetContract } from "@the-coin/utilities/lib/TheContract";
 import { BuildVerifiedXfer } from "@the-coin/utilities/lib/VerifiedTransfer";
 import { DoCertifiedTransfer } from "./VerifiedTransfer";
-import { Contract, Wallet } from "ethers";
-import status from './status.json';
+import { Wallet } from "ethers";
+import status from './Status';
 
 const host = process.env.DATASTORE_EMULATOR_HOST;
 const RunningLocal = host == "localhost:8081"

@@ -1,33 +1,11 @@
 'use strict';
 
-import { datastore, GetReferrerKey, GetUserKey } from './Datastore'
 import {IsValidAddress, IsValidReferrerId} from '@the-coin/utilities'
 import { BrokerCAD } from '@the-coin/types';
-import { DatastoreKey } from '@google-cloud/datastore/entity';
+import { GetReferrerDoc, GetUserDoc } from './Firestore';
+import { Timestamp } from '@google-cloud/firestore';
 
-// Duplicated in Manager-ts
-export interface VerifiedReferrer {
-	address: string,
-	signature: string
-}
 
-export interface ReferralData {
-	created: Date,
-	referrer: string
-}
-
-export async function GetReferrerByKey(referrerKey: DatastoreKey)
-{
-	const [entity] = await datastore.get(referrerKey);
-	if (entity)
-		return (entity as VerifiedReferrer).address
-	return null ;
-}
-export async function GetReferrerById(referrerId: string) {
-	// Get referrers address
-	const referrerKey = GetReferrerKey(referrerId);
-	return await GetReferrerByKey(referrerKey);
-}
 
 export async function Create(referral: BrokerCAD.NewAccountReferal) {
 	const { referrerId, newAccount } = referral;
@@ -38,26 +16,22 @@ export async function Create(referral: BrokerCAD.NewAccountReferal) {
 	if (!IsValidAddress(newAccount))
 		return false;
 
-	const referrer = await GetReferrerById(referrerId);
-	if (!referrer)
+	const referrerDoc = GetReferrerDoc(referrerId);
+	const referrer = await referrerDoc.get()
+	if (!referrer.exists)
 		return false;
 
 	// Create new referral link
-	const newUserKey = GetUserKey(newAccount);
-	const [existing] = await datastore.get(newUserKey);
-	if (existing)
+	const newUserKey = GetUserDoc(newAccount);
+	const existing = await newUserKey.get();
+	if (!existing.exists)
 		return false;
 
 	const data: ReferralData = {
-		referrer: referrer,
-		created: new Date()
+		referrer: referrer.get('address'),
+		created: Timestamp.now()
 	}
-	const entity = {
-		key: newUserKey,
-		data
-	};
-	  
-	var result = await datastore.insert(entity);
-	console.log(`Create user: ${newAccount} from ${referrer}: ${result}`);
+	const result = await newUserKey.set(data);
+	console.log(`Create user: ${newAccount} from ${referrer} ${result.writeTime}`);
 	return true;
 }

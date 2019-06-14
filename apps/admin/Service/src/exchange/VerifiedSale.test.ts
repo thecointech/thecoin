@@ -1,5 +1,4 @@
 
-import {datastore} from './Datastore'
 import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';

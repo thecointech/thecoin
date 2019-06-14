@@ -5,7 +5,7 @@ import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
 import status from './status.json';
 import { ProcessCertifiedAction } from './VerifiedProcess';
 import { NormalizeAddress } from '@the-coin/utilities';
-import { datastore, GetUserKey } from './Datastore';
+import { GetUserDoc } from './Firestore.js';
 
 function ValidSignatures(payment: BrokerCAD.CertifiedBillPayment) {
 	const paymentSigner = GetBillPaymentSigner(payment);
@@ -17,22 +17,19 @@ function ValidDestination(payment: BrokerCAD.CertifiedBillPayment) {
 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
 }
 
-export function PayeeKey(user: string, payeeName: string) {
-	const payeeKey = datastore.key(["Payee", payeeName]);
-	payeeKey.parent = GetUserKey(user);
-	return payeeKey;
+export function GetPayee(user: string, payeeName: string) {
+	const userDoc = GetUserDoc(user);
+	return userDoc.collection("Payees").doc(payeeName);
 }
 async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
 {
 	if (!payee.name)
 		return;
 
-	var res = await datastore.upsert({
-		data: {
-			payee: payee.encryptedPacket,
-			version: payee.version
-		},
-		key: PayeeKey(user, payee.name)
+	const payeeDoc = GetPayee(user, payee.name);
+	const res = payeeDoc.update({
+		payee: payee.encryptedPacket,
+		version: payee.version
 	})
 
 	console.log("Upserted encrypted payee: " + res);
