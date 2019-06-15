@@ -1,67 +1,62 @@
-import { GetReferrerById, GetReferrerByKey, Create, ReferralData, VerifiedReferrer } from './Referrers';
-import { datastore, GetReferrerKey, GetUserKey } from './Datastore';
-
+import {
+  GetReferrerData,
+  CreateReferrer,
+  CreateReferree,
+  GetUsersReferrer
+} from "./Referrals";
+import { GetUserDoc } from "./Firestore";
+import { BrokerCAD } from "@the-coin/types";
 
 test("Referrals work as expected", async () => {
+  jest.setTimeout(30000);
+  const validAddress = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
 
-	const validId = '7k5y8w';
-	const validAddress = '0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4';
+  // Create a referrer
+  const referralId = await CreateReferrer(validAddress, validAddress);
 
-	const host = process.env.DATASTORE_EMULATOR_HOST;
-	if (host) // Running on emulator
-	{
-		// Setup dummy key
-		const referrerKey = GetReferrerKey(validId)
-		const data: VerifiedReferrer = {
-			address: validAddress,
-			signature: "dummytest"			
-		}
-		await datastore.upsert({
-			key: referrerKey,
-			data
-		})
-	}
-	const validIdUC = '7k5y8w'.toUpperCase();
+  // First, do we get valid referrer address for valid referrer ID
+  let referrerData = await GetReferrerData(referralId);
+  expect(referrerData).not.toBeNull();
+  referrerData = referrerData!;
+  expect(referrerData.address).toMatch(validAddress);
+  //expect(referrerData.signature).st.toMatch(validAddress);
 
-	// First, do we get valid referrer address for valid referrer ID
-	const verifyValid = await GetReferrerById(validId);
-	expect(verifyValid).toEqual(validAddress);
+  // verify it's case insensitive
+  const validIdUC = ("" + referralId).toUpperCase();
+  const verifyUC = await GetReferrerData(validIdUC);
+  expect(verifyUC!.address).toEqual(validAddress);
 
-	// verify it's case insensitive
-	const verifyUC = await GetReferrerById(validIdUC);
-	expect(verifyUC).toEqual(validAddress);
+  // verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
+  const junk = "123456";
+  const verifyJunk = await GetReferrerData(junk);
+  expect(verifyJunk).toBeNull();
 
-	// verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
-	const junk = '123456';
-	const verifyJunk = await GetReferrerById(junk);
-	expect(verifyJunk).toBeNull();
+  // Running on emulator
+  // Create new account referral
+  const newAccount = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; // BrokerCAD wallet
+  const newUserDoc = GetUserDoc(newAccount);
 
-	if (host) // Running on emulator
-	{
-		// Create new account referral
-		const newAccount = '2fe3cbf59a777e8f4be4e712945ffefc6612d46f' // BrokerCAD wallet
-		const newUserKey = GetUserKey(newAccount);
+  // Clear it if it exists already
+  try {
+    await newUserDoc.delete();
+  } catch (e) {}
 
-		const referral = { 
-			referrerId: validId,
-			newAccount: newAccount
-		}
-		try {
-			// If this already exists, delete it
-			await datastore.delete(newUserKey);
-		}
-		catch(err) {/* eat errors */}
+  // Create new referral
+  const referral: BrokerCAD.NewAccountReferal = {
+    referrerId: junk,
+    newAccount: newAccount
+  };
+  // bad referrer id
+  expect(CreateReferree(referral)).rejects.toThrow("Referrer doesnt exist");
+  // Non-throw is success
+  referral.referrerId = referralId;
+  await CreateReferree(referral);
 
-		// Test can create
-		const success = await Create(referral);
-		expect(success).toBe(true);
+  // test data store properly
+  const referrer = await GetUsersReferrer(newAccount);
+  expect(referrer).toBeTruthy();
+  expect(referrer!.referrer).toMatch(validAddress);
 
-		// test data store properly
-		const referrer = await GetReferrerByKey(newUserKey);
-		expect(referrer).toBe(validAddress);
-
-		// Test re-create fails
-		const dup = await Create(referral);
-		expect(dup).toBe(false);
-	}
-})
+  // Test re-create fails
+  expect(CreateReferree(referral)).rejects.toThrow();
+});
