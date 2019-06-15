@@ -4,34 +4,34 @@
   "version": "0.17.1",
   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "scripts": {
-    "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
+    "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
-    "build-e2e": "cross-env E2E_BUILD=true yarn build",
+    "build-e2e": "cross-env E2E_BUILD=true npm run build",
     "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
-    "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
+    "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 npm run start-renderer-dev",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
-    "lint-fix": "yarn --silent lint --fix; exit 0",
+    "lint-fix": "npm run --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
-    "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
-    "package": "yarn build && electron-builder build --publish never",
-    "package-all": "yarn build && electron-builder build -mwl",
-    "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
-    "package-linux": "yarn build && electron-builder build --linux",
-    "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && opencollective-postinstall",
+    "lint-styles-fix": "npm run --silent lint-styles --fix; exit 0",
+    "package": "npm run build && electron-builder build --publish never",
+    "package-all": "npm run build && electron-builder build -mwl",
+    "package-ci": "npm run postinstall && npm run build && electron-builder --publish always",
+    "package-linux": "npm run build && electron-builder build --linux",
+    "package-win": "npm run build && electron-builder build --win --x64",
+    "postinstall": "electron-builder install-app-deps package.json && npm run build-dll && opencollective-postinstall",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "precommit": "lint-staged",
-    "prestart": "yarn build",
+    "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron ./app/main.dev.babel.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
-    "test-all": "yarn lint && yarn build && yarn test && yarn build-e2e && yarn test-e2e",
+    "test-all": "npm run lint && npm run build && npm run test && npm run build-e2e && npm run test-e2e",
     "test-e2e": "node -r @babel/register ./internals/scripts/CheckBuiltsExist.js && cross-env NODE_ENV=test testcafe electron:./ ./test/e2e/HomePage.e2e.ts",
     "test-e2e-live": "node -r @babel/register ./internals/scripts/CheckBuiltsExist.js && cross-env NODE_ENV=test testcafe-live electron:./ ./test/e2e/HomePage.e2e.ts",
-    "test-watch": "yarn test --watch"
+    "test-watch": "npm run test --watch"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -158,7 +158,8 @@
     },
     "testRegex": "test/.*(spec|test).(ts|tsx|js)$",
     "setupFiles": [
-      "./internals/scripts/CheckBuiltsExist.js"
+      "./internals/scripts/CheckBuiltsExist.js",
+      "../../firestore_jest.js"
     ]
   },
   "devDependencies": {
@@ -253,17 +254,11 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.2.0",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1",
-    "yarn": "^1.12.3"
+    "webpack-merge": "^4.2.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.6.3",
-    "@google-cloud/datastore": "^3.1.2",
-    "@the-coin/pricing": "^0.1.1",
-    "@the-coin/utilities": "^0.1.23",
     "@types/classnames": "^2.2.7",
-    "@types/react-intl": "^2.3.17",
-    "base32": "^0.0.6",
     "core-js": "2",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
@@ -277,8 +272,7 @@
   },
   "devEngines": {
     "node": ">=7.x",
-    "npm": ">=4.x",
-    "yarn": ">=0.21.3"
+    "npm": ">=4.x"
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
