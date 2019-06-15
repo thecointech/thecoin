@@ -1,12 +1,12 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.29",
+  "version": "0.1.32",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "./node_modules/.bin/tsc"
+    "build": "..\\..\\node_modules\\.bin\\tsc.cmd"
   },
   "keywords": [
     "TheCoin"
