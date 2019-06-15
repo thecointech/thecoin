@@ -58,5 +58,5 @@ test("Referrals work as expected", async () => {
   expect(referrer!.referrer).toMatch(validAddress);
 
   // Test re-create fails
-  expect(CreateReferree(referral)).rejects.toThrow();
+  expect(CreateReferree(referral)).rejects.toThrow("User already exists");
 });
