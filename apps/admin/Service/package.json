@@ -16,28 +16,19 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@google-cloud/firestore": "^2.2.0",
     "cors": "^2.8.5",
-    "cross-env": "^5.2.0",
-    "esm": "^3.0.84",
-    "ethers": "^4.0.29",
     "express": "^4.16.3",
     "grpc": "^1.20.3",
     "jest": "^24.8.0",
     "js-yaml": "^3.3.0",
     "node-mailjet": "^3.3.1",
     "swagger-tools": "0.10.4",
-    "ts-jest": "^24.0.2"
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.2",
     "ts-node": "^8.1.1",
-    "typescript": "^3.4.5"
-  },
-  "jest": {
-    "setupFiles": [
-      "../../firestore_jest.js"
-    ]
+    "ts-jest": "^24.0.2"
   }
 }

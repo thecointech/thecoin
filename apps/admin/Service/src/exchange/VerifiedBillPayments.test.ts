@@ -1,18 +1,13 @@
 
 //import {datastore} from './Datastore'
-import { GetUser } from './Firestore'
 
 import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/lib/VerifiedBillPayment';
-import { ProcessBillPayment, GetPayee } from './VerifiedBillPayments'
-import status from './status.json';
+import { ProcessBillPayment, GetNamedPayee, BillPaymentDocument } from './VerifiedBillPayments'
 import { BrokerCAD } from '@the-coin/types';
-import { ConfirmedRecord } from './VerifiedProcess';
+import status from './Status';
 
 test("Verified bill payments complete properly", async () => {
-
-	//throw "not ready";
-	return;
 
 	jest.setTimeout(900000);
 	const wallet = await GetWallet();
@@ -35,18 +30,17 @@ test("Verified bill payments complete properly", async () => {
 	
 	expect(tx).toBeTruthy();
 	expect(tx.hash).toBeDefined()
-	expect(tx.key).toBeDefined()
+	expect(tx.doc).toBeDefined()
 
 	// Wait one more second to make sure the datastore has been updated;
-	// // Check that the datastore now has the right values
-	// const r = await datastore.get(tx.key);
-	// const record = r[0] as ConfirmedRecord;
-	// expect(record.hash).toEqual(tx.hash);
-	// expect(record.fiatDisbursed).toEqual(0);
+	// Check that the datastore now has the right values
+	const r = (await tx.doc.get()).data() as BillPaymentDocument;
+	expect(r.hash).toEqual(tx.hash);
+	expect(r.fiatDisbursed).toEqual(0);
+	expect(r.encryptedPayee.name).toMatch(name);
 
-	// // Now check that we have saved the payee info
-	// const fetchPayee = await datastore.get(PayeeKey(wallet.address, name))
-	// const savedPayee = fetchPayee[0] as any;
-	// expect(savedPayee.payee).toEqual(billPayment.encryptedPayee.encryptedPacket);
-	// expect(savedPayee.version).toEqual(billPayment.encryptedPayee.version);
+	// Now check that we have saved the payee info
+	const savedPayee = (await GetNamedPayee(wallet.address, name))!;
+	expect(savedPayee.payee).toEqual(billPayment.encryptedPayee.encryptedPacket);
+	expect(savedPayee.version).toEqual(billPayment.encryptedPayee.version);
 })

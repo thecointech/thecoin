@@ -1,11 +1,19 @@
 
 import { BrokerCAD } from '@the-coin/types'
+import { NormalizeAddress } from '@the-coin/utilities';
 import { GetBillPaymentSigner } from '@the-coin/utilities/lib/VerifiedBillPayment'
 import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
+import { GetUserDoc } from '@the-coin/utilities/lib/User';
+
+import { ProcessCertifiedAction, ConfirmedRecord } from './VerifiedProcess';
 import status from './status.json';
-import { ProcessCertifiedAction } from './VerifiedProcess';
-import { NormalizeAddress } from '@the-coin/utilities';
-import { GetUserDoc } from './Firestore.js';
+
+type PayeeDocument = {
+	payee: string,	// encrypted JSON doc
+	version: string // version payee was encrypted with
+}
+
+type BillPaymentDocument = BrokerCAD.CertifiedBillPayment&ConfirmedRecord
 
 function ValidSignatures(payment: BrokerCAD.CertifiedBillPayment) {
 	const paymentSigner = GetBillPaymentSigner(payment);
@@ -17,7 +25,7 @@ function ValidDestination(payment: BrokerCAD.CertifiedBillPayment) {
 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
 }
 
-export function GetPayee(user: string, payeeName: string) {
+function GetPayeeDoc(user: string, payeeName: string) {
 	const userDoc = GetUserDoc(user);
 	return userDoc.collection("Payees").doc(payeeName);
 }
@@ -26,19 +34,27 @@ async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
 	if (!payee.name)
 		return;
 
-	const payeeDoc = GetPayee(user, payee.name);
-	const res = payeeDoc.update({
+	const payeeDoc = GetPayeeDoc(user, payee.name);
+	const data: PayeeDocument = {
 		payee: payee.encryptedPacket,
 		version: payee.version
-	})
+	}
+	const res = await payeeDoc.set(data);
+	console.log(`${user} Set encrypted payee ${payee.name} @ ${res.writeTime}`);
+}
 
-	console.log("Upserted encrypted payee: " + res);
+async function GetNamedPayee(user: string, payeeName: string)
+{
+	const payee = await GetPayeeDoc(user, payeeName).get();
+	return payee.exists ? 
+		payee.data() as PayeeDocument :
+		null
 }
 
 // Billpayment works by:
 //  User Creates Billpayment which is just VeriXFer 
 //	User adds bill payment
-export async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment)
+async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment)
 {
 	// First, check that bill payment & the transfer are signed by the same person
 	if (!ValidSignatures(payment))
@@ -59,3 +75,5 @@ export async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment
 	}
 	return res;
 }
+
+export { ProcessBillPayment, GetNamedPayee, StoreNamedPayee, BillPaymentDocument }

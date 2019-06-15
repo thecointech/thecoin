@@ -1,8 +1,8 @@
 import { BrokerCAD } from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
-import { GetUserDoc } from "./Firestore";
-import { DocumentReference, FieldValue } from "@google-cloud/firestore";
+import { DocumentReference, Timestamp } from "@google-cloud/firestore";
+import { GetUserDoc } from "@the-coin/utilities/lib/User";
 
 function GetActionDoc(user: string, action: string, hash: string) { 
     const userDoc = GetUserDoc(user);
@@ -14,7 +14,7 @@ interface CertifiedAction {
 }
 
 interface ConfirmedRecord extends CertifiedAction { 
-    processedTimestamp: FieldValue,
+    processedTimestamp: Timestamp,
     hash: string,
     confirmed: boolean,
     fiatDisbursed: number
@@ -33,7 +33,7 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: strin
     const actionDoc = GetActionDoc(user, actionType, hash);
     const data: ConfirmedRecord = {
         ...actionData,
-        processedTimestamp: FieldValue.serverTimestamp(), 
+        processedTimestamp: Timestamp.now(), 
         hash: hash,
         confirmed: false,
         fiatDisbursed: 0

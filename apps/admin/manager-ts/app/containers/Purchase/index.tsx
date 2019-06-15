@@ -3,62 +3,55 @@ import { connect } from 'react-redux';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import * as Datetime from 'react-datetime';
 import { Moment } from 'moment';
-import { google } from '@google-cloud/datastore/build/proto/datastore';
-import { entity } from '@google-cloud/datastore/build/src/entity';
 
-//import styles from './index.module.css'
+import { toHuman } from '@the-coin/utilities';
+import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
+
 import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
 import * as FxAction from '@the-coin/components/containers/FxRate/actions';
 import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { toHuman, NormalizeAddress } from '@the-coin/utilities';
-import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
-import { ds } from 'containers/Datastore';
-
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { UxAddress } from '@the-coin/components/components/UxAddress';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
+import { GetUserDoc } from '@the-coin/utilities/lib/User';
+import { NextOpenTimestamp } from '@the-coin/utilities/lib/MarketStatus';
+import { Timestamp, DocumentReference } from '@google-cloud/firestore';
+
+interface PurchaseRecord {
+	coin: number,
+	fiat: number,
+	created: Timestamp,
+	txHash: string,
+	emailHash: string,
+	complete: boolean
+}
 
 type MyProps = AccountState & {
 	updateBalance: Function
 }
 type Props = MyProps & FxSelect.ContainerState & FxAction.DispatchProps;
 
+const initialState = {
+	coin: 0,
+	account: "",
+	date: new Date(),
+
+	email: "",
+
+	txHash: '',
+	step: "",
+	isProcessing: false,
+
+	doConfirm: false
+}
+
 class PurchaseClass extends React.PureComponent<Props> {
 
-	state = {
-		coin: 0,
-		account: "",
-		date: new Date(),
-
-		txHash: '',
-		step: "",
-		isProcessing: false,
-
-		doConfirm: false
-	};
-
-	constructor(props) {
-		super(props);
-
-		this.onAccountValue = this.onAccountValue.bind(this);
-		
-		this.confirmOpen = this.confirmOpen.bind(this);
-		this.confirmClose = this.confirmClose.bind(this);
-		this.handleConfirm = this.handleConfirm.bind(this);
-	}
-
-	// Validate our inputs
-	onAccountValue(value: string) {
-		this.setState({
-			account: value,
-		});
-	}
-
-	handleCoinChange = (value: number) => this.setState({ coin: value })
+	state = initialState;
 
 	async sendPurchase() {
 		const { coin, account, date } = this.state;
@@ -75,18 +68,23 @@ class PurchaseClass extends React.PureComponent<Props> {
 			alert("Invalid Coin")
 			return;
 		}
+		if (date.getTime() > Date.now()) 
+		{
+			alert("This set for a future date.\nIt is not possible to complete a purchase in the future.")
+			return;
+		}
 		try {
 			this.setState({isProcessing: true, step: "Initializing Transaction"});
 			const ts = Math.round(date.getTime() / 1000);
 
 			// First record our intent to send this tx
-			var key = await this.recordTxOpen();
+			var doc = await this.recordTxOpen();
 			// Send the purchase request
 			this.setState({isProcessing: true, step: "Sending Transaction"});
 
 			const tx = await contract.coinPurchase(account, coin, 0, ts);
 			// Update the DB with tx hash
-			await this.recordTxHash(key, tx.hash);
+			await this.recordTxHash(doc, tx.hash);
 
 			// Wait for TX to complete on blockchain
 			this.setState({ txHash: tx.hash, step: `Waiting on ${tx.hash}`} );
@@ -94,7 +92,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 
 			// Record successful tx
 			this.setState({ step: `Finalizing`} );
-			await this.recordTxComplete(key, tx.hash);
+			await this.recordTxComplete(doc);
 			this.setState({isProcessing: false});
 			alert("Purchase Success")
 		} catch (e) {
@@ -103,80 +101,87 @@ class PurchaseClass extends React.PureComponent<Props> {
 		this.setState({isProcessing: false})
 	}
 
-	buildPurchaseEntry() {
-		const { coin, date } = this.state;
+	async buildPurchaseEntry() {
+		const { coin, date, email } = this.state;
+		const { wallet } = this.props;
 		const fxRate = this.getSelectedFxRate();
+		const emailHash = await wallet.signMessage(email.toLocaleLowerCase());
 		return {
 			coin,
 			fiat: toHuman(coin * fxRate, true),
-			date,
+			created: Timestamp.fromDate(date),
 			txHash: '---',
+			emailHash,
 			complete: false
-		}
+		};
 	}
 
 	async recordTxOpen() {
-		const { account } = this.state;
-		let normalized = NormalizeAddress(account);
-		const userKey = ds.key(['User', normalized, "Purchase"])
-		const entry = this.buildPurchaseEntry();
+		const { account, date } = this.state;
+		const userDoc = GetUserDoc(account);
+		// We use the timestamp as ID to ensure we have
+		// a chance of catching duplicate purchases
+		const purchaseId = date.getTime().toString();
+		const purchaseDoc = userDoc.collection("Purchase").doc(purchaseId);
+
 		try {
-			// Here we cast to any because the type implies
-			// that ra is an ICommitResult but it's really an array
-			const ra: any = await ds.insert({
-				key: userKey,
-				data: entry
-			})
-			const response:google.datastore.v1.ICommitResponse = ra[0];
-			const id = response.mutationResults[0].key.path[1].id;
-			return ds.key(['User', normalized, "Purchase", parseInt("" + id)])
+			const purchaseData = await purchaseDoc.get()
+			if (purchaseData.exists) {
+				throw new Error(`Purchase ${purchaseId} already exists: check tx ${JSON.stringify(purchaseData.data())}`)
+			}
+
+			const entry = await this.buildPurchaseEntry();
+			purchaseDoc.set(entry);
+			return purchaseDoc;
 		}
 		catch (err) {
 			console.error(err);
 			alert(err);
+			throw err;
 		}
 	}
 
-	async recordTxHash(key: entity.Key, txHash: string) {
-		const entry = this.buildPurchaseEntry();
+	async recordTxHash(purchaseDoc: DocumentReference, txHash: string) {
 		try {
-			await ds.update({
-				key: key,
-				data: {
-					...entry,
-					txHash: txHash
-				}
-			})
+			const data: Partial<PurchaseRecord> = {
+				txHash
+			}
+			await purchaseDoc.update(data);
 		}
 		catch (err) {
 			console.error(err);
 			alert(err);
+			throw(err)
 		}
 	}
 
-	async recordTxComplete(key: entity.Key, txHash: string) {
-		const entry = this.buildPurchaseEntry();
+	async recordTxComplete(purchaseDoc: DocumentReference) {
 		try {
-			await ds.update({
-				key: key,
-				data: {
-					...entry,
-					txHash: txHash,
-					complete: true
-				}
-			})
+			const data: Partial<PurchaseRecord> = {
+				complete: true
+			}
+			await purchaseDoc.update(data);
 		}
 		catch (err) {
 			console.error(err);
 			alert(err);
+			throw(err);
 		}
 	}
 
-	onSetDate = (value: string | Moment) => {
+	async getValidDate(moment: Moment) {
+		const asDate = moment.toDate();
+		const nextTs = await NextOpenTimestamp(asDate);
+		if (nextTs)
+			return new Date(nextTs);
+		return asDate;
+	}
+
+	onSetDate = async (value: string | Moment) => {
 		const asm = value as Moment
 		if (asm.toDate != undefined)
 		{
-			const asDate = asm.toDate();
+			const asDate = await this.getValidDate(asm);
 			this.setState({date: asDate});
 			this.props.fetchRateAtDate(asDate);
 		}
@@ -189,11 +194,23 @@ class PurchaseClass extends React.PureComponent<Props> {
 		return rate.sell * rate.fxRate;
 	}
 
+	resetInputs() {
+		this.setState(initialState)
+	}
+
+	// Validate our inputs
+	onAccountValue = (value: string) => {
+		this.setState({
+			account: value,
+		});
+	}
+	handleCoinChange = (value: number) => this.setState({ coin: value })
 	confirmOpen = () => this.setState({ doConfirm: true })
 	confirmClose = () => this.setState({ doConfirm: false })
 	handleConfirm = () => {
 		this.setState({ doConfirm: false })
 		this.sendPurchase()
+		this.resetInputs();
 	}
 
 	render() {

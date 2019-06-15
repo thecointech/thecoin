@@ -15,4 +15,5 @@ module.exports = {
     "json",
     "node"
   ],
+  setupFiles: ["<rootDir>/../../firestore_env.js"]
 }
