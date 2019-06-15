@@ -4,8 +4,18 @@ import {
   CreateReferree,
   GetUsersReferrer
 } from "./Referrals";
-import { GetUserDoc } from "./Firestore";
+import { GetUserDoc } from "./User";
 import { BrokerCAD } from "@the-coin/types";
+
+async function ClearExistingUser(address: string) {
+  // Clear it if it exists already
+  try {
+    const newUserDoc = GetUserDoc(address);
+    await newUserDoc.delete();
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 test("Referrals work as expected", async () => {
   jest.setTimeout(30000);
@@ -33,18 +43,14 @@ test("Referrals work as expected", async () => {
 
   // Running on emulator
   // Create new account referral
-  const newAccount = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; // BrokerCAD wallet
-  const newUserDoc = GetUserDoc(newAccount);
-
-  // Clear it if it exists already
-  try {
-    await newUserDoc.delete();
-  } catch (e) {}
+  const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; // BrokerCAD wallet
+  // Allow any existing to be removed
+  await ClearExistingUser(newAddress);
 
   // Create new referral
   const referral: BrokerCAD.NewAccountReferal = {
     referrerId: junk,
-    newAccount: newAccount
+    newAccount: newAddress
   };
   // bad referrer id
   expect(CreateReferree(referral)).rejects.toThrow("Referrer doesnt exist");
@@ -53,7 +59,7 @@ test("Referrals work as expected", async () => {
   await CreateReferree(referral);
 
   // test data store properly
-  const referrer = await GetUsersReferrer(newAccount);
+  const referrer = await GetUsersReferrer(newAddress);
   expect(referrer).toBeTruthy();
   expect(referrer!.referrer).toMatch(validAddress);
 

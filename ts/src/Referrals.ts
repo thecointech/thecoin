@@ -1,8 +1,9 @@
 import { Timestamp } from "@google-cloud/firestore";
-import { firestore, GetUserDoc } from "./Firestore";
+import { firestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { BrokerCAD } from "@the-coin/types";
 import base32 from "base32";
+import { GetUserDoc } from "./User";
 
 function GetReferrersCollection() {
   return firestore.collection("Referrers");
@@ -51,9 +52,16 @@ function GetReferrerCode(signature: string) {
   return s2.slice(-6).toLowerCase();
 }
 
+//
+//  Add a referral code for an account
+//  TODO: Only verified accounts can have referral codes?
+//  TODO: Re-consider naming (eg consistent use of word 'code')
+//  TODO: Move the signature creation inside this function
+//
 export async function CreateReferrer(signature: string, address: string) {
   const code = GetReferrerCode(signature);
   const referrerDoc = GetReferrerDoc(code);
+
   const data: VerifiedReferrer = {
     address,
     signature
@@ -62,6 +70,11 @@ export async function CreateReferrer(signature: string, address: string) {
   return code;
 }
 
+// 
+// Create a new account with the given referral code.  Not
+// every account requires a referral code, but it should not
+// be possible to assign codes to existing accounts
+//
 export async function CreateReferree(referral: BrokerCAD.NewAccountReferal) {
   const { referrerId, newAccount } = referral;
 
