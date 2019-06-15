@@ -24,6 +24,8 @@ import 'semantic-ui-css/semantic.min.css'
 const initialState = {};
 const store = configureStore(initialState, history);
 
+export declare type First<Tuple extends any[], Default = never> = Tuple extends [any, ...any[]] ? Tuple[0] : Default;
+
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(

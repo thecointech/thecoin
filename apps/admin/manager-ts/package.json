@@ -5,10 +5,11 @@
   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
+    "build-prod": "cross-env NODE_ENV=production && concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
     "build-e2e": "cross-env E2E_BUILD=true npm run build",
-    "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
-    "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
+    "build-main": "webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
+    "build-renderer": "webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 npm run start-renderer-dev",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-fix": "npm run --silent lint --fix; exit 0",
@@ -269,7 +270,7 @@
     "source-map-support": "^0.5.9"
   },
   "devEngines": {
-    "node": ">=7.x",
+    "node": ">=10.x",
     "npm": ">=4.x"
   },
   "collective": {

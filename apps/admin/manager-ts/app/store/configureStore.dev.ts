@@ -8,7 +8,7 @@ import { LifeStore } from '@the-coin/components/types';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const configureStore = (initialState = {}, history: History<any>) => {
+const configureStore = (initialState: any, history: History<any>) => {
   // Redux Configuration
   const middleware = [sagaMiddleware, routerMiddleware(history)];
   const enhancers = [];

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Account, RouterPath } from '@the-coin/components/containers/Account';
+import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
 import { Balance } from '@the-coin/components/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
@@ -12,14 +12,24 @@ interface OwnProps {
 type Props = OwnProps & RouteComponentProps;
 
 const AccountMap: RouterPath[] = [
-  ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
-  ["Minting",       "mint",    (routerProps) => ((props) => <Mint {...props} updateBalance={routerProps.dispatch.updateBalance} {...routerProps.account} /> )],
-  ["Complete Purchase",   "purchase", (routerProps) => ((props) => <Purchase {...props} {...routerProps.account} />)],
-  // ["Transfer Out",  "redeem",   (account) => ((props) => <Redeem {...props} account={account}/>)],
-  // ["Transfer To",   "transfer", (account) => ((props) => <Transfer {...props} />)],
-  // ["Pay Bills",     "billPay",  (account) => ((props) => <Transfer {...props} />)],
-  // ["Settings",     "settings",  (account) => ((props) => <Settings {...props} account={account} />)],
-]
+  {
+    name: "Balance",
+    urlFragment: "",
+    creator: (routerProps: AccountProps) => ((props: any) => <Balance {...props} {...routerProps} /> ), 
+    exact: true
+  },
+  {
+    name: "Minting",
+    urlFragment: "mint",
+    creator: (routerProps: AccountProps) => ((props: any) => <Mint {...props} updateBalance={routerProps.dispatch.updateBalance} {...routerProps.account} /> ), 
+  },
+  {
+    name: "Complete Purchase",
+    urlFragment: "purchase",
+    creator: (routerProps: AccountProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />), 
+  }
+];
+
 class TheCoin extends React.PureComponent<Props, {}, null> {
 
   static AccountName = "TheCoin";
