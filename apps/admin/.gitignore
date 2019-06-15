@@ -12,3 +12,4 @@ Service/src/exchange/AutoMailer.secret.js
 Service/build/
 Service/obj/incr
 firestore-db-service-account.json
+Service/src/exchange/AutoMailer.secret.ts
