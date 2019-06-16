@@ -62,12 +62,12 @@ async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransfer
 	return tx;
 }
 
-function isTx(tx:  BrokerCAD.CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
-	return (<TransactionResponse>tx).hash !== undefined;
-}
-async function DoCertifiedTransfer(transfer: BrokerCAD.CertifiedTransferRequest) {
-	const res = await DoCertifiedTransferWaitable(transfer);
-	return (isTx(res)) ? success(res.hash) : res;
-}
+// function isTx(tx:  BrokerCAD.CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
+// 	return (<TransactionResponse>tx).hash !== undefined;
+// }
+// async function DoCertifiedTransfer(transfer: BrokerCAD.CertifiedTransferRequest) {
+// 	const res = await DoCertifiedTransferWaitable(transfer);
+// 	return res;
+// }
 
-export { success, failure, isTx, DoCertifiedTransfer, DoCertifiedTransferWaitable };
+export { success, failure, DoCertifiedTransferWaitable };

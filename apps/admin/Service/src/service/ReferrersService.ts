@@ -1,5 +1,5 @@
 import { BrokerCAD } from "@the-coin/types";
-import { Create, GetReferrerById } from '../exchange/Referrers';
+import { CreateReferree, GetReferrerData } from '@the-coin/utilities/lib/Referrals'
 
 /**
  * Register the referral of new account
@@ -10,9 +10,9 @@ import { Create, GetReferrerById } from '../exchange/Referrers';
  **/
 export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Promise<BrokerCAD.BoolResponse> {
   try {
-    const created = await Create(referral);
+    await CreateReferree(referral);
     return {
-      success: created
+      success: true
     };
   } catch(err) {
     console.error(err);
@@ -30,9 +30,9 @@ export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Pro
  **/
 export async function referrerValid(referrerId: string): Promise<BrokerCAD.BoolResponse> {
   try {
-    const address = await GetReferrerById(referrerId);
+    const referrer = await GetReferrerData(referrerId);
     return {
-      success: !!address
+      success: !!referrer
     };
   }
   catch(err) {
