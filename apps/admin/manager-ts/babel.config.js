@@ -25,7 +25,7 @@ module.exports = api => {
         {
           targets: { electron: require('electron/package.json').version },
           useBuiltIns: 'entry',
-          corejs: 2
+          corejs: 3
         }
       ],
       require('@babel/preset-typescript'),
@@ -61,6 +61,8 @@ module.exports = api => {
       require('@babel/plugin-syntax-import-meta'),
       [require('@babel/plugin-proposal-class-properties'), { loose: true }],
       require('@babel/plugin-proposal-json-strings'),
+
+      '@babel/proposal-object-rest-spread',
 
       ...(development ? developmentPlugins : productionPlugins)
     ]
