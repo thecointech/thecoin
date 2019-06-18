@@ -5,8 +5,10 @@ import { GetBillPaymentSigner } from '@the-coin/utilities/lib/VerifiedBillPaymen
 import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
 import { GetUserDoc } from '@the-coin/utilities/lib/User';
 
-import { ProcessCertifiedAction, ConfirmedRecord } from './VerifiedProcess';
+import { ProcessCertifiedAction, ConfirmedRecord, VerifiedActionResult } from './VerifiedProcess';
 import status from './status.json';
+
+const BILL_PAYMENT_TYPE = "Bill"
 
 type PayeeDocument = {
 	payee: string,	// encrypted JSON doc
@@ -65,9 +67,9 @@ async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment)
 		throw new Error("Invalid Destination");
 
 	// Do the CertTransfer, this should transfer Coin to our account
-	const res = await ProcessCertifiedAction(payment, "Bill");
+	const res = await ProcessCertifiedAction(payment, BILL_PAYMENT_TYPE);
 
-	if (res.hash)
+	if (payment.encryptedPayee.name)
 	{
 		// If the user has named this bill payment, store that info in here.
 		const user = GetBillPaymentSigner(payment);

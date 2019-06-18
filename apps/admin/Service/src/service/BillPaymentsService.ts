@@ -1,4 +1,6 @@
-const { ProcessBillPayment } = require('../exchange/VerifiedBillPayments');
+import { success, failure } from "../exchange/VerifiedTransfer";
+import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
+import { BrokerCAD } from "@the-coin/types";
 
 /**
  * Trigger a Bill Payment
@@ -8,18 +10,16 @@ const { ProcessBillPayment } = require('../exchange/VerifiedBillPayments');
  * user String User address
  * returns CertifiedTransferResponse
  **/
-export async function certifiedBillPayment(request,user) {
+export async function certifiedBillPayment(request: BrokerCAD.CertifiedBillPayment, user: string) {
 
   console.log("Bill payment from " + user);
   try {
-    return await ProcessBillPayment(request)
+    const results = await ProcessBillPayment(request);
+    return success(results.hash);
   }
   catch (e) {
     console.error(JSON.stringify(e));
-    return {
-      message: e.message,
-      txHash: ""
-    }
+    return failure(e.message)
   }
 }
 

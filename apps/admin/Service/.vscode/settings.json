@@ -1,0 +1,14 @@
+{
+	"files.exclude": {
+		".nyc_output": true,
+		".swagger-codegen": true,
+		"build": true,
+		"coverage": true,
+		"Generated": true,
+		"obj": true
+	},
+	"files.watcherExclude": {
+		"build": true,
+		"obj": true
+	}
+}

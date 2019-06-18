@@ -38,10 +38,6 @@ test("Certified sale completes sale properly", async () => {
 	let receipt = await tc.provider.getTransactionReceipt(tx.hash);
 	console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`);
 
-	// Verify money was subtracted
-	const newBalance = await tc.balanceOf(wallet.address)
-	expect(newBalance.toNumber()).toBe(myBalance.toNumber() - sellAmount);
-	
 	// We await 2 confirmations internally
 	const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
 	while (!receipt.confirmations || receipt.confirmations < 2)
@@ -53,6 +49,11 @@ test("Certified sale completes sale properly", async () => {
 	// Wait one more second to make sure the datastore has been updated;
 	// Check that the datastore now has the right values
 	await delay(1000);
+
+	// Verify money was subtracted
+	const newBalance = await tc.balanceOf(wallet.address)
+	expect(newBalance.toNumber()).toBe(myBalance.toNumber() - sellAmount);
+	
 	const r = await tx.doc.get();
 	const record = r.data() as VerifiedSaleRecord;
 	expect(record.hash).toEqual(tx.hash);

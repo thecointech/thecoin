@@ -569,33 +569,43 @@ definitions:
       clientEmail: "clientEmail"
       signature: "signature"
   BillPayeePacket:
-    required:
-    - "accountNumber"
-    - "payee"
     properties:
       payee:
         type: "string"
       accountNumber:
         type: "string"
+  EncryptedPacket:
+    required:
+    - "encryptedPacket"
+    - "version"
+    properties:
+      encryptedPacket:
+        type: "string"
+      name:
+        type: "string"
+      version:
+        type: "string"
+    example:
+      name: "name"
+      encryptedPacket: "encryptedPacket"
+      version: "version"
   CertifiedBillPayment:
     required:
     - "encryptedPayee"
     - "signature"
     - "transfer"
-    - "version"
     properties:
       transfer:
         $ref: "#/definitions/CertifiedTransferRequest"
       encryptedPayee:
-        type: "string"
-      version:
-        type: "integer"
-      name:
-        type: "string"
+        $ref: "#/definitions/EncryptedPacket"
       signature:
         type: "string"
     example:
-      encryptedPayee: "encryptedPayee"
+      encryptedPayee:
+        name: "name"
+        encryptedPacket: "encryptedPacket"
+        version: "version"
       transfer:
         signature: "signature"
         fee: 6
@@ -604,8 +614,6 @@ definitions:
         value: 0
         timestamp: 1
       signature: "signature"
-      name: "name"
-      version: 0
   BrokerStatus:
     required:
     - "address"

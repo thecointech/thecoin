@@ -3,6 +3,7 @@ import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { DocumentReference, Timestamp } from "@google-cloud/firestore";
 import { GetUserDoc } from "@the-coin/utilities/lib/User";
+import { firestore } from "@the-coin/utilities/lib/Firestore";
 
 function GetActionDoc(user: string, action: string, hash: string) { 
     const userDoc = GetUserDoc(user);
@@ -42,6 +43,16 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: strin
     return actionDoc;
 }
 
+// We store an additional link to the new action
+// in a separate collection.  This is essentially
+// the pool of un-completed actions
+function StoreActionLink(path: string, actionType: string, hash: string)
+{
+    const doc = firestore.collection(actionType).doc(hash);
+	return doc.set({
+		ref: path
+	})
+}
 async function ConfirmAction(tx: TransactionResponse, actionDoc: DocumentReference)
 {
     // Wait for two confirmations.  This makes it more
@@ -61,19 +72,26 @@ async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: 
     
     // Do the CertTransfer, this should transfer Coin to our account
     const res = await DoCertifiedTransferWaitable(transfer);
+    if (!res.hash)
+    {
+        console.error("Tx missing hash: " + JSON.stringify(res));
+        throw new Error("Unknown problem with returned value from DoCertTransfer")
+    }
 
-		// Next, create an initial record of the transaction
-    const actionDoc = await StoreActionRequest(actionData, actionType, res.hash!);
+	// Next, create an initial record of the transaction
+    const actionDoc = await StoreActionRequest(actionData, actionType, res.hash);
     console.log(`Valid Cert Xfer: id: ${actionDoc.id}`);
+
+    await StoreActionLink(actionDoc.path, actionType, res.hash);
         
     // Fire & Forget callback waits for res to be mined & updates DB
     ConfirmAction(res, actionDoc);
 
     // We just return the hash.  This guaranteed to be valid by DoCertTransferWaitable
     return {
-			doc: actionDoc,
-			hash: res.hash!
-		}
+        doc: actionDoc,
+        hash: res.hash
+	}
 }
 
-export { ProcessCertifiedAction, ConfirmedRecord }
+export { ProcessCertifiedAction, ConfirmedRecord, VerifiedActionResult }
