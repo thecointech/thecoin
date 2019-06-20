@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.32",
+  "version": "0.1.36",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,9 +16,11 @@
   "dependencies": {
     "@google-cloud/firestore": "^2.2.0",
     "@the-coin/contract": "^1.0.9",
-    "base32": "0.0.6"
+    "base32": "0.0.6",
+    "dotenv": "^8.0.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.3",
     "jest": "<24.0.0",
     "ts-jest": "^23.10.5"

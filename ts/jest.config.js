@@ -5,6 +5,5 @@ module.exports = {
   },
   testEnvironment: "node",
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  setupFiles: ["<rootDir>/../../firestore_env.js"]
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"]
 };

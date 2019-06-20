@@ -1,5 +1,5 @@
 import { IsValidAddress, NormalizeAddress } from ".";
-import {firestore} from './Firestore';
+import { GetFirestore } from './Firestore';
 import { Timestamp } from "@google-cloud/firestore";
 import { ReferralData } from "./Referrals";
 
@@ -14,17 +14,18 @@ type AllUserData = Partial<UserVerifiedInfo> & Partial<ReferralData>
 //
 // Get user document
 //
-function GetUserDoc(address: string) {
+async function GetUserDoc(address: string) {
   if (!IsValidAddress(address)) {
     console.error(`${address} is not a valid address`);
     throw new Error("Invalid address");
   }
-  return firestore.collection("User").doc(NormalizeAddress(address));
+  return (await GetFirestore()).collection("User").doc(NormalizeAddress(address));
 }
 
 // Get data associated with user.
 async function GetUserData(address: string) {
-	const userData = await GetUserDoc(address).get();
+	const userDoc = await GetUserDoc(address)
+	const userData = await userDoc.get();
 	return userData.exists ? 
 		userData.data() as AllUserData :
 		null;
@@ -35,7 +36,7 @@ async function GetUserData(address: string) {
 // is a valid, unique person on authority of signature owner
 //
 async function SetUserVerified(signature: string, address: string) {
-	const userDoc = GetUserDoc(address)
+	const userDoc = await GetUserDoc(address)
 	const data: UserVerifiedInfo = {
 		verified: signature,
 		verifiedTimestamp: Timestamp.now()

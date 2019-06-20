@@ -10,7 +10,7 @@ import { BrokerCAD } from "@the-coin/types";
 async function ClearExistingUser(address: string) {
   // Clear it if it exists already
   try {
-    const newUserDoc = GetUserDoc(address);
+    const newUserDoc = await GetUserDoc(address);
     await newUserDoc.delete();
   } catch (e) {
     console.log(e);

@@ -1,12 +1,12 @@
 import { Timestamp } from "@google-cloud/firestore";
-import { firestore } from "./Firestore";
+import { GetFirestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { BrokerCAD } from "@the-coin/types";
 import base32 from "base32";
-import { GetUserDoc } from "./User";
+import { GetUserDoc, GetUserData } from "./User";
 
-function GetReferrersCollection() {
-  return firestore.collection("Referrers");
+export async function GetReferrersCollection() {
+  return (await GetFirestore()).collection("Referrers");
 }
 
 // Document stored as /Referrer/{id}/
@@ -24,23 +24,24 @@ export interface ReferralData {
 }
 
 // GetReferrer
-export function GetReferrerDoc(referrerId: string) {
+export async function GetReferrerDoc(referrerId: string) {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
     throw new Error("Invalid Referrer");
   }
-  return GetReferrersCollection().doc(referrerId.toLowerCase());
+  return (await GetReferrersCollection()).doc(referrerId.toLowerCase());
 }
 
 export async function GetReferrerData(referrerId: string) {
-  const referrer = await GetReferrerDoc(referrerId).get();
+  const doc = await GetReferrerDoc(referrerId);
+  const referrer = await doc.get();
   return referrer.exists ? (referrer.data() as VerifiedReferrer) : null;
 }
 
 export async function GetUsersReferrer(address: string) {
-  const user = await GetUserDoc(address).get();
-  if (user.exists && user.get("referrer")) {
-    return user.data() as ReferralData;
+  const user = await GetUserData(address);
+  if (user && user.referrer && user.created) {
+    return user as ReferralData;
   }
   return null;
 }
@@ -60,7 +61,7 @@ function GetReferrerCode(signature: string) {
 //
 export async function CreateReferrer(signature: string, address: string) {
   const code = GetReferrerCode(signature);
-  const referrerDoc = GetReferrerDoc(code);
+  const referrerDoc = await GetReferrerDoc(code);
 
   const data: VerifiedReferrer = {
     address,
@@ -81,12 +82,12 @@ export async function CreateReferree(referral: BrokerCAD.NewAccountReferal) {
   if (!IsValidReferrerId(referrerId)) throw new Error("Invalid Referrer");
   if (!IsValidAddress(newAccount)) throw new Error("Invalid Address");
 
-  const referrerDoc = GetReferrerDoc(referrerId);
+  const referrerDoc = await GetReferrerDoc(referrerId);
   const referrer = await referrerDoc.get();
   if (!referrer.exists) throw new Error("Referrer doesnt exist");
 
   // Create new referral link
-  const newUserKey = GetUserDoc(newAccount);
+  const newUserKey = await GetUserDoc(newAccount);
   const user = await newUserKey.get();
   if (user.exists) throw new Error("User already exists");
 
