@@ -218,7 +218,7 @@ export default merge.smart(baseConfig, {
   ],
 
   node: {
-    __dirname: false,
+    __dirname: true,
     __filename: false
   },
 

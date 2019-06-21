@@ -28,6 +28,7 @@ class MintClass extends React.PureComponent<Props> {
 	};
 
 	constructor(props) {
+		// TODO: This constructor is irrelevant
 		super(props);
 
 		this.confirmOpen = this.confirmOpen.bind(this);

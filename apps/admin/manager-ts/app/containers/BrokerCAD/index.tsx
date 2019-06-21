@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
 import { Balance } from '@the-coin/components/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
+import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 
 interface OwnProps {
@@ -19,14 +20,19 @@ const AccountMap: RouterPath[] = [
     exact: true
   },
   {
-    name: "Verify",
-    urlFragment: "verify",
-    creator: (routerProps: AccountProps) => ((props: any) => <VerifyAccount {...props} wallet={routerProps.account.wallet} /> )
-  },
-  {
     name: "Complete Purchase",
     urlFragment: "purchase",
     creator: (routerProps: AccountProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />)
+  },
+  {
+    name: "Bill Payments",
+    urlFragment: "billing",
+    creator: (routerProps: AccountProps) => ((props: any) => <BillPayments {...props} {...routerProps.account} />)
+  },
+  {
+    name: "Verify",
+    urlFragment: "verify",
+    creator: (routerProps: AccountProps) => ((props: any) => <VerifyAccount {...props} wallet={routerProps.account.wallet} /> )
   }
 ]
 

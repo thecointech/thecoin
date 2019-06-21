@@ -33,8 +33,6 @@ if (
   process.env.DEBUG_PROD === 'true'
 ) {
   require('electron-debug')();
-  // Ensure we are setup for firestore connection
-  require('../../../firestore_env')
 }
 
 const installExtensions = async () => {

@@ -118,7 +118,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 
 	async recordTxOpen() {
 		const { account, date } = this.state;
-		const userDoc = GetUserDoc(account);
+		const userDoc = await GetUserDoc(account);
 		// We use the timestamp as ID to ensure we have
 		// a chance of catching duplicate purchases
 		const purchaseId = date.getTime().toString();
@@ -222,7 +222,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 
 		return (
 			<React.Fragment>
-				<Header>Mint Coin</Header>
+				<Header>Purchase</Header>
 				<p>Current Balance: {toHuman(balance, true)} </p>
 				<Form>
 					<Datetime value={date} onChange={this.onSetDate} />

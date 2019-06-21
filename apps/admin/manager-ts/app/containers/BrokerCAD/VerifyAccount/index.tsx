@@ -1,11 +1,11 @@
 import React from 'react';
 import { Wallet } from 'ethers';
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, Button } from 'semantic-ui-react';
+import { Form, Header, Button, List } from 'semantic-ui-react';
 import { UxAddress } from '@the-coin/components/components/UxAddress';
 import messages from './messages'
 import { NormalizeAddress } from '@the-coin/utilities';
-import { CreateReferrer } from '@the-coin/utilities/lib/Referrals';
+import { CreateReferrer, VerifiedReferrer, GetReferrersCollection } from '@the-coin/utilities/lib/Referrals';
 import { SetUserVerified } from '@the-coin/utilities/lib/User';
 
 interface OwnProps {
@@ -13,28 +13,43 @@ interface OwnProps {
 }
 type Props = OwnProps;
 
-class VerifyAccount extends React.PureComponent<Props, {}, null> {
+const initialState = {
+	account: '',
+	forceValidate: false,
+	verifiedAccounts: [] as VerifiedReferrer[]
+}
 
-	state = {
-		account: '',
-		forceValidate: false
-	};
+//
+// 
+class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 
-	constructor(props) {
-		super(props);
-		this.onAccountValue = this.onAccountValue.bind(this);
-		this.verifyAccount = this.verifyAccount.bind(this);
+	state = initialState;
+
+	componentWillMount() {
+		this.fetchExistingAccounts();
 	}
 
-	// Validate our inputs
-	onAccountValue(value: string) {
+	onAccountValue = (value: string) => {
 		this.setState({
 			account: value,
 		});
 	}
+	onVerifyAccount = async (e: React.MouseEvent<HTMLElement>) => {
+		e.preventDefault();
+		await this.verifyAccount(e);
+		this.setState(initialState);
+		await this.fetchExistingAccounts();
+	}
+
+	async fetchExistingAccounts() {
+		const billCollection = await GetReferrersCollection();
+		const allDocs = await billCollection.get();
+		this.setState({
+			verifiedAccounts: allDocs.docs.map(d => d.data() as VerifiedReferrer)
+		})
+	}
 
 	async verifyAccount(e: React.MouseEvent<HTMLElement>) {
-		if (e) e.preventDefault();
 
 		const { wallet } = this.props;
 		const { account } = this.state;
@@ -50,9 +65,23 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 		alert('Done');
 	}
 
+	renderVerifiedAccounts()
+	{
+		const { verifiedAccounts } = this.state;
+		const verifiedList = verifiedAccounts.map(account => (
+			<List.Item>
+				<List.Content>
+					<List.Header>{account.signature.substr(2, 6)}</List.Header>
+					{account.address}
+				</List.Content>
+			</List.Item>
+		));
+		return <List divided relaxed>{verifiedList}</List>
+	}
+
 	render() {
 		const { forceValidate } = this.state;
-     
+		const verifiedAccounts = this.renderVerifiedAccounts();
 		return (
 			<React.Fragment>
 				<Form>
@@ -68,10 +97,11 @@ class VerifyAccount extends React.PureComponent<Props, {}, null> {
 						uxChange={this.onAccountValue}
 						forceValidate={forceValidate}
 					/>
-					<Button onClick={this.verifyAccount}>
+					<Button onClick={this.onVerifyAccount}>
 						<FormattedMessage {...messages.buttonVerify} />
 					</Button>
 				</Form>
+				{verifiedAccounts}
 			</React.Fragment>
 		);
 	}
