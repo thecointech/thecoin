@@ -1,3 +1,4 @@
+
 async function BuildFirestore() {
   // Verify that in production, we have connection credentials
   if (process.env.NODE_ENV == "production") {
@@ -6,20 +7,21 @@ async function BuildFirestore() {
       throw new Error("Firestore Connect: No Service Account enabled");
     }
   } else {
-    console.log("\n!-- Setting up Firestore Debug environment --!");
-    const dotenv = await import('dotenv')
-    const path = process.env.FIRESTORE_ENV || __dirname + '/Firestore.env';
-    dotenv.config({ path })
-
-    // Assume development environment
-    if (!process.env.FIRESTORE_EMULATOR_HOST) {
-      throw new Error("Firestore Connect: Local Connection not specified");
-    }
+    // If we are development environment, then we should not have release credentials
     if (!!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
       throw new Error(
         "Firestore Connect: Credentials supplied in development environment"
       );
     }
+
+    // Set default firestore path
+    process.env['FIRESTORE_EMULATOR_HOST'] = '[::1]:8377';
+    if (process.env.FIRESTORE_ENV)
+    {
+      const dotenv = await import('dotenv')
+      dotenv.config({ path: process.env.FIRESTORE_ENV })
+    }
+    console.log(`\n!-- Connecting to Firestore Debug environment on ${process.env.FIRESTORE_EMULATOR_HOST} --!`);
   }
 
   // We delay importing until here, mostly in case it's not used,
