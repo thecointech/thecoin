@@ -27,8 +27,8 @@ function ValidDestination(payment: BrokerCAD.CertifiedBillPayment) {
 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
 }
 
-function GetPayeeDoc(user: string, payeeName: string) {
-	const userDoc = GetUserDoc(user);
+async function GetPayeeDoc(user: string, payeeName: string) {
+	const userDoc = await GetUserDoc(user);
 	return userDoc.collection("Payees").doc(payeeName);
 }
 async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
@@ -36,18 +36,19 @@ async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
 	if (!payee.name)
 		return;
 
-	const payeeDoc = GetPayeeDoc(user, payee.name);
 	const data: PayeeDocument = {
 		payee: payee.encryptedPacket,
 		version: payee.version
 	}
+	const payeeDoc = await GetPayeeDoc(user, payee.name);
 	const res = await payeeDoc.set(data);
 	console.log(`${user} Set encrypted payee ${payee.name} @ ${res.writeTime}`);
 }
 
 async function GetNamedPayee(user: string, payeeName: string)
 {
-	const payee = await GetPayeeDoc(user, payeeName).get();
+	const payeeDoc = await GetPayeeDoc(user, payeeName);
+	const payee = await payeeDoc.get();
 	return payee.exists ? 
 		payee.data() as PayeeDocument :
 		null

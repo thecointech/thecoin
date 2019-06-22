@@ -12,7 +12,6 @@
             "name": "Debug Server",
             "program": "${workspaceFolder}/src/index.js",
             "outFiles": [ "${workspaceFolder}/build/**/*.js"],
-            "envFile": "${workspaceFolder}/../../firestore_vars.env",
             "env": {
                 "NODE_ENV": "development"
             }
@@ -23,7 +22,6 @@
             "name": "vscode-jest-tests",
             "request": "launch",
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-            "envFile": "${workspaceFolder}/../../firestore_vars.env",
             "args": [
                 "--runInBand"
             ],

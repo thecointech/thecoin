@@ -3,23 +3,17 @@ import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { DocumentReference, Timestamp } from "@google-cloud/firestore";
 import { GetUserDoc } from "@the-coin/utilities/lib/User";
-import { firestore } from "@the-coin/utilities/lib/Firestore";
+import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
 
-function GetActionDoc(user: string, action: string, hash: string) { 
-    const userDoc = GetUserDoc(user);
+async function GetActionDoc(user: string, action: string, hash: string) { 
+    const userDoc = await GetUserDoc(user);
     return userDoc.collection(action).doc(hash);
 }
 
 interface CertifiedAction {
 	transfer: BrokerCAD.CertifiedTransferRequest
 }
-
-interface ConfirmedRecord extends CertifiedAction { 
-    processedTimestamp: Timestamp,
-    hash: string,
-    confirmed: boolean,
-    fiatDisbursed: number
-}
+type ConfirmedRecord = CertifiedAction & ProcessRecord;
 
 interface VerifiedActionResult {
 	doc: DocumentReference,
@@ -31,10 +25,10 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: strin
 {
     const user = actionData.transfer.from;
 
-    const actionDoc = GetActionDoc(user, actionType, hash);
+    const actionDoc = await GetActionDoc(user, actionType, hash);
     const data: ConfirmedRecord = {
         ...actionData,
-        processedTimestamp: Timestamp.now(), 
+        recievedTimestamp: Timestamp.now(), 
         hash: hash,
         confirmed: false,
         fiatDisbursed: 0
@@ -46,8 +40,9 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: strin
 // We store an additional link to the new action
 // in a separate collection.  This is essentially
 // the pool of un-completed actions
-function StoreActionLink(path: string, actionType: string, hash: string)
+async function StoreActionLink(path: string, actionType: string, hash: string)
 {
+    const firestore = await GetFirestore();
     const doc = firestore.collection(actionType).doc(hash);
 	return doc.set({
 		ref: path
