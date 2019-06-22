@@ -22,6 +22,12 @@ test("Returns now if the market is currently open", async () => {
 test("Gives valid offset time", async () => {
 	const nts = await NextOpenTimestamp(jan1st2019);
 	const ndate = new Date(nts);
+	expect(ndate.toString()).toMatch("Wed Jan 02 2019 09:32:00 GMT-0500 (Eastern Standard Time)");
+});
+
+test("Gives valid future time without offset", async () => {
+	const nts = await NextOpenTimestamp(jan1st2019, 0);
+	const ndate = new Date(nts);
 	expect(ndate.toString()).toMatch("Wed Jan 02 2019 09:30:00 GMT-0500 (Eastern Standard Time)");
 });
 
@@ -31,5 +37,5 @@ test("Getting next date when month ends on weekend", async () => {
 	expect(testMonthIncr.getDay() == 4); // Check is saturday
 	const nts = await NextOpenTimestamp(testMonthIncr);
 	const ndate = new Date(nts);
-	expect(ndate.toUTCString()).toMatch("Mon, 01 Apr 2019 13:30:00 GMT");
+	expect(ndate.toUTCString()).toMatch("Mon, 01 Apr 2019 13:32:00 GMT");
 });

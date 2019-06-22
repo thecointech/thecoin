@@ -1,3 +1,4 @@
+import { Timestamp } from '@google-cloud/firestore';
 
 async function BuildFirestore() {
   // Verify that in production, we have connection credentials
@@ -42,4 +43,12 @@ async function GetFirestore()
     __firestore = await BuildFirestore();
 }
 
-export { GetFirestore };
+interface ProcessRecord { 
+  recievedTimestamp: Timestamp,
+  processedTimestamp?: Timestamp,
+  hash: string,
+  confirmed: boolean,
+  fiatDisbursed: number
+}
+
+export { GetFirestore, ProcessRecord };

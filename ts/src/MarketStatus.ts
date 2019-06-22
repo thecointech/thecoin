@@ -47,8 +47,10 @@ function addDay(date: Date) {
 }
 
 // Returns either 0 for currently open, or timestamp of when it will be open
+// If the market is not open on date, offset will be applied to allow us to 
+// move the time well into the market open period (as we can't get instant data)
 // TODO: Support timezones
-async function NextOpenTimestamp(date: Date) {
+async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
 
   // Only search 100 days.  If the market hasn't opened in
   // 100 days, then it's most likely due to the zombie apocalypse
@@ -63,7 +65,7 @@ async function NextOpenTimestamp(date: Date) {
     {
       const ots = getAsTS(data, 'start')
       if (ots > ts)
-        return ots;
+        return offset ? offset + ots : ots;
       else {
         // This condition should only be true
         // on the first iteration, when start is

@@ -50,4 +50,12 @@ async function GetUserVerified(address: string) {
 	return userData && !!userData.verified;
 }
 
-export { GetUserDoc, GetUserData, SetUserVerified, GetUserVerified }
+//
+// Helper functions for accessing stuff
+//
+async function GetActionDoc(user: string, action: string, hash: string) { 
+	const userDoc = await GetUserDoc(user);
+	return userDoc.collection(action).doc(hash);
+}
+
+export { GetUserDoc, GetUserData, SetUserVerified, GetUserVerified, GetActionDoc }

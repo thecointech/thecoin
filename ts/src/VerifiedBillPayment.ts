@@ -37,6 +37,14 @@ function EncryptPayee(name: string, payee: BrokerCAD.BillPayeePacket) {
   return r;
 }
 
+export function DecryptPayee(privateKey: string, encrypted: BrokerCAD.EncryptedPacket)
+{
+  const buffer = Buffer.from(encrypted.encryptedPacket, "base64");
+  const output = Crypto.privateDecrypt(privateKey, buffer);
+  const asString = output.toString();
+  return JSON.parse(asString) as BrokerCAD.BillPayeePacket;
+}
+
 function GetHash(
   encryptedPayee: BrokerCAD.EncryptedPacket,
   transfer: BrokerCAD.CertifiedTransferRequest
