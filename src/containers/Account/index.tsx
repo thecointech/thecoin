@@ -20,7 +20,13 @@ interface AccountProps {
   account: AccountState;
   dispatch: Account.DispatchProps;
 }
-type RouterPath = [string, string, (props: AccountProps) => (props: any) => React.ReactNode, boolean?]
+type PageCreator = (props: AccountProps) => (props: any) => React.ReactNode;
+type RouterPath = {
+  name: string,
+  urlFragment: string,
+  creator: PageCreator,
+  exact?: boolean
+}
 
 interface OwnProps {
   url: string;
@@ -42,8 +48,8 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   buildLink(item: RouterPath) {
     const {url} = this.props;
     return url.endsWith('/') ?
-      `${url}${item[1]}` :
-      `${url}/${item[1]}`
+      `${url}${item.urlFragment}` :
+      `${url}/${item.urlFragment}`
   }
 
   generateSubItems(items: SidebarMenuItem[], state: ApplicationBaseState): SidebarMenuItem[] {
@@ -56,7 +62,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
         item.subItems = Array.from(accountMap.map((item) => {
           return {
             link: {
-              name: item[0],
+              name: item.name,
               to: this.buildLink(item)
             }
           }
@@ -90,9 +96,9 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
       dispatch
     }
     const routes = accountMap.map((item) => {
-      const component = item[2](accountArgs);
+      const component = item.creator(accountArgs);
       const targetUrl = this.buildLink(item);
-      return <Route path={ targetUrl } key={ targetUrl } render = { component } exact = { item[3]} />
+      return <Route path={ targetUrl } key={ targetUrl } render = { component } exact = { item.exact } />
     })
 
     return (
@@ -131,4 +137,4 @@ function NamedAccount(props: OwnProps) {
   return React.createElement(__AccountMap[accountName], props);
 }  
 
-export { NamedAccount as Account, RouterPath }
+export { NamedAccount as Account, RouterPath, PageCreator, AccountProps }
