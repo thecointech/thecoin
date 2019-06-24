@@ -6,7 +6,7 @@ import { buildReducer as buildFxRateReducer } from '@the-coin/components/contain
 import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
 import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 
-import { Account, RouterPath } from '@the-coin/components/containers/Account';
+import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 
@@ -43,12 +43,37 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
 ];
 
 const AccountRoutes: RouterPath[] = [
-  ["Balance",       "",         (routerProps) => ((props) => <Balance {...props} {...routerProps} /> ), true],
-  ["Transfer In",   "transferIn", (routerProps) => ((props) => <Purchase {...props} address={routerProps.account.wallet!.address} />)],
-  ["Transfer Out",  "redeem",   (routerProps) => ((props) => <Redeem {...props} account={routerProps.account} />)],
-  ["Transfer To",   "transfer", (routerProps) => ((props) => <Transfer {...props} account={routerProps.account} />)],
-  ["Pay Bills",     "billPay",  (routerProps) => ((props) => <BillPayments {...props} account={routerProps.account} />)],
-  ["Settings",     "settings",  (routerProps) => ((props) => <Settings {...props} account={routerProps.account} />)],
+  {
+    name: "Balance",
+    urlFragment: "",
+    creator: (routerProps: AccountProps) => ((props) => <Balance {...props} {...routerProps} /> ),
+    exact: true
+  },
+  {
+    name: "Transfer In",
+    urlFragment: "transferIn",
+    creator: (routerProps: AccountProps) => ((props) => <Purchase {...props} address={routerProps.account.wallet!.address} />),
+  },
+  {
+    name: "Transfer Out",
+    urlFragment: "redeem",
+    creator: (routerProps: AccountProps) => ((props) => <Redeem {...props} account={routerProps.account} />),
+  },
+  {
+    name: "Transfer To",
+    urlFragment: "transfer",
+    creator: (routerProps: AccountProps) => ((props) => <Transfer {...props} account={routerProps.account} />),
+  },
+  {
+    name: "Pay Bills",
+    urlFragment: "billPay",
+    creator: (routerProps: AccountProps) => ((props) => <BillPayments {...props} account={routerProps.account} />),
+  },
+  {
+    name: "Settings",
+    urlFragment: "settings",
+    creator: (routerProps: AccountProps) => ((props) => <Settings {...props} account={routerProps.account} />),
+  }
 ]
 
 class AccountsClass extends React.PureComponent<Props, {}, null> {

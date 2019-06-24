@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Form, Header, Dropdown, DropdownProps, InputOnChangeData } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedBillPayment } from "@the-coin/utilities/lib/VerifiedBillPayment";
-import { StatusApi, BillPaymentsApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types'
 import { weBuyAt } from '@the-coin/components/containers/FxRate/reducer';
@@ -11,10 +10,11 @@ import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors'
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import messages from './messages';
-import { payees } from './payees'
-import { BrokerCAD } from '@the-coin/types/lib/brokerCAD';
+import { payees, validate } from './payees'
+import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { GetStatusApi, GetBillPaymentsApi } from 'containers/Services/BrokerCAD';
+import { UxInput } from '@the-coin/components/components/UxInput';
 
-const SERVER_ADDRESS = (process.env.NODE_ENV === 'development') ? "http://localhost:8080" :  undefined;
 
 type MyProps = {
   account: AccountState
@@ -30,6 +30,9 @@ const initialState = {
   accountNumber: "",
   payeeName: "",
 
+  accountNumberValid: false,
+  forceValidate: false,
+
   transferInProgress: false,
   paymentMessage: messages.transferOutProgress,
   transferValues: undefined as any,
@@ -43,21 +46,25 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
 
   state = initialState;
 
-  onPayeeSelect = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => this.setState({payee: data.text || ""})
-  onAccountNumber = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => this.setState({accountNumber: data.value})
+  onPayeeSelect = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => this.setState({payee: data.value as string || ""})
   onNameChange = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => this.setState({payeeName: data.value})
   onValueChange = (value: number) => this.setState({coinToSell: value})
   onCancelTransfer = () => this.setState({doCancel: true});
   onSubmit = async (e: React.MouseEvent<HTMLElement>) => { e.preventDefault(); this.doSubmit(); }
-  
+  onAccountNumber = (value: string) => {
+    const isValid = validate(this.state.payee, value);
+    this.setState({
+      accountNumberValid: isValid,
+      accountNumber: value
+    })
+  }
   async doBillPayment()
   {
     // Init messages
     this.setState({paymentMessage: messages.step1, percentComplete: 0.0});
 
     // First, get the brokers fee
-    const serverAddress = SERVER_ADDRESS;
-    const statusApi = new StatusApi(undefined, serverAddress);
+    const statusApi = GetStatusApi();
     var status = await statusApi.status();
     // Check out if we have the right values
     if (!status.certifiedFee)
@@ -69,7 +76,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     // Get our variables
     const {coinToSell, payeeName, payee, accountNumber } = this.state;
     const { wallet, contract } = this.props.account;
-    if (coinToSell === null || !wallet || !contract)
+    if (coinToSell === null || !wallet || !contract || !payee)
       return false;
 
     const packet: BrokerCAD.BillPayeePacket = {
@@ -79,7 +86,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
     const billPayCommand = await BuildVerifiedBillPayment(packet, payeeName, wallet, status.address, coinToSell, status.certifiedFee);
-    const billPayApi = new BillPaymentsApi(undefined, SERVER_ADDRESS);
+    const billPayApi = GetBillPaymentsApi();
     if (this.state.doCancel)
       return false;
 
@@ -90,7 +97,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     console.log(`Response: ${response.message}`);
     if (!response.txHash)
     {
-      alert(response.message);
+      alert(JSON.stringify(response));
       return false;
     }
     
@@ -110,19 +117,28 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
 
   async doSubmit()
   {
-    this.setState({doCancel: false, transferValues: undefined, transferInProgress: true});
+    this.setState({doCancel: false, transferValues: undefined, transferInProgress: true, forceValidate: true});
+
+    // Validate inputs
+    const {coinToSell, payee, accountNumber, accountNumberValid } = this.state;
+    if (!coinToSell || !payee || !accountNumber || !accountNumberValid)
+      return;
+
     try {
       const results = await this.doBillPayment();  
       if (!results) {
         alert('We have encountered an error.\nDon\'t worry, your money is safe, but please contact support@thecoin.io and describe whats happened');
       }
-      else alert('Order recieved.\nYou bill payment will be processed in the next 1-2 business days.\nPlease note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time.');
+      else alert('Order recieved.\nYour bill payment will be processed in the next 1-2 business days.\nPlease note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time.');
+
+      // Reset back to default state
+      this.setState(initialState);
     }
     catch(e) {
       console.error(e);
       alert(e);
     }
-    this.setState({doCancel: false, transferInProgress: false});
+    this.setState(initialState);
   }
 
 
@@ -130,8 +146,9 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
   render() {
     const { account, rates } = this.props;
     const rate = weBuyAt(rates);
-    const { coinToSell, transferInProgress, transferValues, paymentMessage, percentComplete } = this.state;
-
+    const { coinToSell, transferInProgress, transferValues, paymentMessage, percentComplete, accountNumberValid, forceValidate } = this.state;
+    const accountMessage = accountNumberValid ? undefined: messages.invalidAccountNumer;
+    const canSubmit = accountNumberValid && coinToSell;
     return (
       <React.Fragment>
 
@@ -145,18 +162,26 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
           </Header.Subheader>
         </Header>
 
-		<Dropdown
-			placeholder='Select Payee'
-			fluid
-			search
-			selection
-			options={payees}
-			onChange={this.onPayeeSelect}
-			/>
-        <Form.Input label="Account Number" onChange={this.onAccountNumber} placeholder="Your account number with payee" />
-		    <Form.Input label="Bill Name" onChange={this.onNameChange} placeholder="An optional name to remember this payee by" />
+        <Dropdown
+          placeholder='Select Payee'
+          fluid
+          search
+          selection
+          allowAdditions
+          options={payees}
+          onChange={this.onPayeeSelect}
+          />
+        <UxInput 
+          intlLabel={messages.accountNumer }
+          uxChange={this.onAccountNumber} 
+          isValid={accountNumberValid} 
+          forceValidate={forceValidate}
+          message={accountMessage} 
+          placeholder="Payee account number"
+          />
+		    {/*<Form.Input label="Bill Name" onChange={this.onNameChange} placeholder="An optional name to remember this payee by" /> */ }
         <DualFxInput onChange={this.onValueChange} asCoin={true} maxValue={account.balance} value={coinToSell} fxRate={rate} />
-        <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
+        <Form.Button onClick={this.onSubmit} disabled={!canSubmit}>SEND</Form.Button>
       </Form>
       <ModalOperation cancelCallback={this.onCancelTransfer} isOpen={transferInProgress} header={messages.transferOutHeader} progressMessage={paymentMessage} progressPercent={percentComplete} messageValues={transferValues} />
       </React.Fragment>

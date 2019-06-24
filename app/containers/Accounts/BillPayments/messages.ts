@@ -36,4 +36,13 @@ export default defineMessages({
     id: `${scope}.billPaymentProgress`,
     defaultMessage: "Please wait, we are sending your order to our servers...",
   },
+
+  accountNumer: {
+    id: `${scope}.accountNumer`,
+    defaultMessage: "Payee Account Number"
+  },
+  invalidAccountNumer: {
+    id: `${scope}.invalidAccountNumer`,
+    defaultMessage: "Invalid account number"
+  }
 });
