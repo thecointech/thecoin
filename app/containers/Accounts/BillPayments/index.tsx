@@ -75,8 +75,8 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
 
     // Get our variables
     const {coinToSell, payeeName, payee, accountNumber } = this.state;
-    const { wallet, contract } = this.props.account;
-    if (coinToSell === null || !wallet || !contract || !payee)
+    const { signer, contract } = this.props.account;
+    if (coinToSell === null || !signer || !contract || !payee)
       return false;
 
     const packet: BrokerCAD.BillPayeePacket = {
@@ -85,14 +85,15 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     }
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
-    const billPayCommand = await BuildVerifiedBillPayment(packet, payeeName, wallet, status.address, coinToSell, status.certifiedFee);
+    const billPayCommand = await BuildVerifiedBillPayment(packet, payeeName, signer, status.address, coinToSell, status.certifiedFee);
     const billPayApi = GetBillPaymentsApi();
     if (this.state.doCancel)
       return false;
 
     // Send the command to the server
     this.setState({paymentMessage: messages.step2, percentComplete: 0.25});
-    const response = await billPayApi.certifiedBillPayment(wallet.address, billPayCommand);
+    const address = await signer.getAddress();
+    const response = await billPayApi.certifiedBillPayment(address, billPayCommand);
 
     console.log(`Response: ${response.message}`);
     if (!response.txHash)

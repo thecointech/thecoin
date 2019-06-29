@@ -64,13 +64,13 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
     // Get our variables
     const { coinTransfer, toAddress } = this.state;
-    const { wallet, contract } = this.props.account;
-    if ( coinTransfer === null || !wallet || !contract)
+    const { signer, contract } = this.props.account;
+    if ( coinTransfer === null || !signer || !contract)
       return false;
 
     // To transfer, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to another address
-    const transferCommand = await BuildVerifiedXfer(wallet, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee);
+    const transferCommand = await BuildVerifiedXfer(signer, NormalizeAddress(toAddress), coinTransfer, status.certifiedFee);
     const transferApi = new TransferApi()
 
 	if (this.state.doCancel)

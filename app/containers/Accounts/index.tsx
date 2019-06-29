@@ -52,7 +52,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: "Transfer In",
     urlFragment: "transferIn",
-    creator: (routerProps: AccountProps) => ((props) => <Purchase {...props} address={routerProps.account.wallet!.address} />),
+    creator: (routerProps: AccountProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
   },
   {
     name: "Transfer Out",
@@ -89,6 +89,9 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
     // we may be called mid-change on the state, and our local
     // state will not yet be updated (but the incoming state will be)
     const { accounts } = state;
+    if (!accounts)
+      return [];
+      
     const { match } = this.props;
     const accountLinks: SidebarMenuItem[] = [];
     Object.entries(accounts).forEach(([name, _]) => {

@@ -6,7 +6,8 @@ import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
 import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
-import AccountCreate from './Create/index';
+import { Create } from './Create';
+import { Connect } from './Connect';
 
 type MyProps = {
   url: string
@@ -28,9 +29,15 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
       name: 'Upload Account',
     },
   },
+  {
+    link: {
+      to: 'connect',
+      name: 'Connect to Web3',
+    },
+  },
 ];
 
-class NewAccountClass extends React.PureComponent<Props, {}, null> {
+class NewAccountClass extends React.PureComponent<Props> {
 
   constructor(props: Props) {
     super(props);
@@ -71,9 +78,10 @@ class NewAccountClass extends React.PureComponent<Props, {}, null> {
       <Switch>
         <Route
           path={`${url}/upload`}
-          render={state => <UploadWallet readFile={this.readFile} />}
+          render={_ => <UploadWallet readFile={this.readFile} />}
         />
-        <Route component={AccountCreate} />
+        <Route path={`${url}/connect`} component={Connect} />
+        <Route component={Create} />
       </Switch>
     );
   }

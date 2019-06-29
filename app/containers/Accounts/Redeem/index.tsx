@@ -60,13 +60,13 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
     // Get our variables
     const {coinToSell, email} = this.state;
-    const { wallet, contract } = this.props.account;
-    if (coinToSell === null || !wallet || !contract)
+    const { signer, contract } = this.props.account;
+    if (coinToSell === null || !signer || !contract)
       return false;
 
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
-    const sellCommand = await BuildVerifiedSale(email, wallet, status.address, coinToSell, status.certifiedFee);
+    const sellCommand = await BuildVerifiedSale(email, signer, status.address, coinToSell, status.certifiedFee);
     const sellApi = new SellApi();
     if (this.state.doCancel)
       return false;
