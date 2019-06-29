@@ -1,8 +1,9 @@
 import { Timestamp } from '@google-cloud/firestore';
+import { IsDebug } from './IsDebug'
 
 async function BuildFirestore() {
   // Verify that in production, we have connection credentials
-  if (process.env.NODE_ENV == "production") {
+  if (!IsDebug) {
     // We should either be running on GAE or have a service account
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GAE_ENV) {
       throw new Error("Firestore Connect: No Service Account enabled");

@@ -1,25 +1,57 @@
-import { ethers, Wallet } from 'ethers';
-
-import TheCoinSpec from '@the-coin/contract/build/contracts/TheCoin.json';
-import RopstenDeployment from '@the-coin/contract/zos.ropsten.json';
+import { Wallet, Signer, Contract, ethers } from 'ethers';
 import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { IsDebug } from './IsDebug'
 
-const { abi } = TheCoinSpec;
-// NOTE: When changing from Ropsten to Mainnet, update
-// address, provider, and InitialCoinBlock below.
-const { address } = RopstenDeployment.proxies["the-contract/TheCoin"][0];
-const ropsten = ethers.getDefaultProvider('ropsten');
+type Network = "ropsten"|"mainnet";
+async function BuildContract(network: Network) {
+	const deploy = await import(`@the-coin/contract/zos.${network}.json`);
+	const TheCoinSpec = await import('@the-coin/contract/build/contracts/TheCoin.json');
+	if (!deploy || !TheCoinSpec)
+		throw new Error('Cannot create contract: missing deployment');
 
-const theContract = new ethers.Contract(address, abi, ropsten);
+	const { address } = deploy.proxies["the-contract/TheCoin"][0];
+	const { abi } = TheCoinSpec;
+	const provider = ethers.getDefaultProvider(network);
+	return new ethers.Contract(address, abi, provider);
+}
 
-export function GetContract() { return theContract; };
+if (!IsDebug)
+	throw new Error("Fix this!");
+export const InitialCoinBlock = 4456169;
 
-export function GetConnected(wallet: Wallet) {
-	if (wallet.connect == null)
-		return null;
-	const provider = theContract.provider;
-	const connectedWallet = wallet.connect(provider);
-	return theContract.connect(connectedWallet);
+let _contract: Contract|undefined = undefined;
+export async function GetContract() : Promise<Contract> { 
+
+	if (!_contract)
+	{
+		const network = IsDebug ? 'ropsten' : 'mainnet';
+		_contract = await BuildContract(network);
+	}
+	return _contract;
+};
+
+export async function ConnectWallet(wallet: Wallet) {
+	const contract = await GetContract();
+	return wallet.connect(contract.provider);
+}
+
+export async function ConnectContract(signer: Signer) {
+	// First fetch contract
+	const contract = await GetContract();
+	// Ensure wallet is connected to the appropriate signer
+	if ((<Wallet>signer).connect != null) {
+		signer = await ConnectWallet(signer as Wallet);
+	}
+	else {
+		// Validate that signer and contract can function together
+		if (!signer.provider)
+			throw new Error("Unsupported: cannot have signer without a network")
+		const signerNetwork = await signer.provider.getNetwork()
+		const contractNetwork = await contract.provider.getNetwork();
+		if (signerNetwork.ensAddress != contractNetwork.ensAddress)
+			throw new Error(`Contract network ${contractNetwork.name} does not match signer network ${signerNetwork.name}`)
+	}
+	return contract.connect(signer);
 }
 
 export function ParseSignedMessage(signedMessage: BrokerCAD.SignedMessage) {
@@ -35,4 +67,4 @@ export function ParseSignedMessage(signedMessage: BrokerCAD.SignedMessage) {
 
 
 
-export const InitialCoinBlock = 4456169;
+

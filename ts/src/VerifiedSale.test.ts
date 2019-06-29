@@ -4,7 +4,7 @@ import { BuildVerifiedSale, GetSaleSigner } from "./VerifiedSale";
 
 test('Can build verified sale', async () => {
 
-	const contract = GetContract();
+	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 
 	const email = "address@email.com";

@@ -11,3 +11,8 @@ export function IsValidReferrerId(id) {
 export function NormalizeAddress(address: string) {
 	return address.length == 40 ? `0x${address.toUpperCase()}` : `0x${address.slice(2).toUpperCase()}`
 }
+
+export function AddressMatches(addr1: string, addr2: string) {
+  // ignore inconsequential differ
+  return NormalizeAddress(addr1) === NormalizeAddress(addr2);
+}

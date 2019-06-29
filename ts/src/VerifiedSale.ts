@@ -1,5 +1,5 @@
 import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
-import { ethers, Wallet } from "ethers";
+import { ethers, Signer } from "ethers";
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 
 // ---------------------------------------------------------\\
@@ -16,7 +16,7 @@ function GetSaleHash(
 
 export async function BuildVerifiedSale(
   toEmail: string,
-  from: Wallet,
+  from: Signer,
   to: string,
   value: number,
   fee: number

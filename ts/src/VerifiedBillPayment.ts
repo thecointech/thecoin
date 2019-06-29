@@ -1,7 +1,9 @@
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
-import { ethers, Wallet } from "ethers";
+import { ethers, Signer } from "ethers";
 import Crypto from "crypto";
+//import ecKeyUtils from 'eckey-utils';
+//import EthCrypto from 'eth-crypto';
 
 const publicCert = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6GirjYahDl+YBGtCqMx0
@@ -15,9 +17,21 @@ LM6N3WvacmDnzLjHp2vsTzC2A8gO5xVqwY+pFH8YOX185uA5pWiR0/JTWSvwkS4D
 
 const certVersion = "1.0.0";
 
+// function buildPemKey(wallet: Signer) {
+//   const curveName = 'secp256k1';
+//   const ecdh = Crypto.createECDH(curveName);
+//   ecdh.setPrivateKey(wallet.privateKey.substr(2), "hex");
+  
+//   return ecKeyUtils.generatePem({
+//     curveName,
+//     privateKey: ecdh.getPrivateKey(),
+//     publicKey: ecdh.getPublicKey()
+//   });
+// }
 // We encrypt the payee info on-device.  This is to ensure
 // that even if someone does gain access to the server
-function EncryptPayee(name: string, payee: BrokerCAD.BillPayeePacket) {
+export async function EncryptPayee(wallet: Signer, name: string, payee: BrokerCAD.BillPayeePacket)
+{
   if (
     !(payee.payee ? payee.accountNumber : !payee.accountNumber) || // XOR payee details
     (name ? false : !payee.payee)
@@ -26,22 +40,49 @@ function EncryptPayee(name: string, payee: BrokerCAD.BillPayeePacket) {
     throw "Invalid data supplied";
   }
 
+//   // create identitiy with key-pairs and address
+//   const alice = EthCrypto.createIdentity();
+//   const secretMessage = 'My name is Satoshi Buterin';
+//   const encrypted = await EthCrypto.encryptWithPublicKey(
+//       alice.publicKey, // encrypt with alice's publicKey
+//       secretMessage
+//   );
+
+//   const publicKey = EthCrypto.publicKeyByPrivateKey(
+//     wallet.privateKey
+// );
+//   const encrypted2 = await EthCrypto.encryptWithPublicKey(
+//     publicKey, // encrypt with alice's publicKey
+//     name
+//   );
+
+
   const toEncrypt = JSON.stringify(payee);
-  const buffer = Buffer.from(toEncrypt);
-  const encrypted = Crypto.publicEncrypt(publicCert, buffer);
+  const bufferPayee = Buffer.from(toEncrypt);
+  const encryptedPayee = Crypto.publicEncrypt(publicCert, bufferPayee);
+
   const r: BrokerCAD.EncryptedPacket = {
-    encryptedPacket: encrypted.toString("base64"),
-    name: name,
+    encryptedPacket: encryptedPayee.toString("base64"),
+    name,
     version: certVersion
   };
   return r;
 }
 
+function decrypt(privateKey: string, value: string)
+{
+  const buffer = Buffer.from(value, "base64");
+  const output = Crypto.privateDecrypt(privateKey, buffer);
+  return output.toString();
+}
+
+// export function DecryptName(wallet: Signer, encryptedName: string)
+// {
+//   return decrypt(wallet.privateKey, encryptedName);
+// }
 export function DecryptPayee(privateKey: string, encrypted: BrokerCAD.EncryptedPacket)
 {
-  const buffer = Buffer.from(encrypted.encryptedPacket, "base64");
-  const output = Crypto.privateDecrypt(privateKey, buffer);
-  const asString = output.toString();
+  const asString = decrypt(privateKey, encrypted.encryptedPacket);
   return JSON.parse(asString) as BrokerCAD.BillPayeePacket;
 }
 
@@ -65,13 +106,13 @@ function GetHash(
 export async function BuildVerifiedBillPayment(
   payee: BrokerCAD.BillPayeePacket,
   name: string,
-  from: Wallet,
+  from: Signer,
   to: string,
   value: number,
   fee: number
 ) {
   const xfer = await BuildVerifiedXfer(from, to, value, fee);
-  const encryptedPayee = EncryptPayee(name, payee);
+  const encryptedPayee = await EncryptPayee(from, name, payee);
   const billHash = GetHash(encryptedPayee, xfer);
   const billSig = await from.signMessage(billHash);
 

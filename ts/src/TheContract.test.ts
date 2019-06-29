@@ -4,7 +4,7 @@ const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
 
 test('Has Contract', async () => {
 
-	const contract = GetContract();
+	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 
 	const minted = await contract.totalSupply();

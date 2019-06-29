@@ -1,4 +1,4 @@
-import {IsValidAddress, NormalizeAddress, IsValidReferrerId } from './Address';
+import {IsValidAddress, NormalizeAddress, IsValidReferrerId, AddressMatches } from './Address';
 
 test('basic', () => {
 
@@ -29,5 +29,10 @@ test('basic', () => {
 	expect(IsValidReferrerId('7i5y8W')).toBe(false);	// O
 	expect(IsValidReferrerId('7o3y8W')).toBe(false);	// U
 	expect(IsValidReferrerId('7l3y8W')).toBe(false);	// L
+
+	const uc = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
+	const lc = uc.toLowerCase();
+	expect(AddressMatches(uc, lc)).toBeTruthy();
+	expect(AddressMatches(uc, '0xffe3cbf59a777e8f4be4e712945ffefc6612d46f')).toBeFalsy();
   });
   

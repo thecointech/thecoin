@@ -2,17 +2,31 @@ import { GetContract } from "./TheContract";
 import { Wallet } from "ethers";
 import {
   BuildVerifiedBillPayment,
-  GetBillPaymentSigner
+  GetBillPaymentSigner,
+  // EncryptPayee,
+  // DecryptName
 } from "./VerifiedBillPayment";
 import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
 
 const wallet = Wallet.createRandom();
 const value = 100000;
 const fee = 2000;
-const contract = GetContract();
+
+// test("Can encrypt/decrypt payment name", async () => {
+//   const name = "My Visa";
+//   const payee: BrokerCAD.BillPayeePacket = {
+//     payee: "TD Visa or some such",
+//     accountNumber: "123456789123456789"
+//   };
+
+//   const encrypted = await EncryptPayee(wallet, name, payee);
+//   const decryptName = DecryptName(wallet, encrypted.name!);
+//   expect(decryptName).toMatch(name);
+// });
 
 // Helper to verify that the transfer is avlid
 async function VerifyTransfer(xfer: BrokerCAD.CertifiedTransferRequest) {
+  const contract = await GetContract();
   var xferSigner = await contract.recoverSigner(
     xfer.from,
     xfer.to,

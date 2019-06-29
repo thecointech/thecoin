@@ -3,7 +3,7 @@ import { Wallet } from "ethers";
 import { BuildVerifiedXfer, GetTransferSigner } from "./VerifiedTransfer";
 
 test("Verified signature matches", async () => {
-  const contract = GetContract();
+  const contract = await GetContract();
   expect(contract.address).toBeDefined();
 
   const wallet = Wallet.createRandom();
