@@ -1,5 +1,7 @@
 @echo off
 cd the-utilities\ts
+setlocal
+
 echo Building Package
 call npm run build
 IF %ERRORLEVEL% NEQ 0 (
@@ -14,3 +16,8 @@ call npm publish
 
 cd ..\..
 call npm install @the-coin/utilities
+
+echo Complete
+TIMEOUT /T 5
+
+endlocal
