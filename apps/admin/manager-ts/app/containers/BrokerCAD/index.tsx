@@ -32,7 +32,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Verify",
     urlFragment: "verify",
-    creator: (routerProps: AccountProps) => ((props: any) => <VerifyAccount {...props} wallet={routerProps.account.wallet} /> )
+    creator: (routerProps: AccountProps) => ((props: any) => <VerifyAccount {...props} signer={routerProps.account.signer} /> )
   }
 ]
 

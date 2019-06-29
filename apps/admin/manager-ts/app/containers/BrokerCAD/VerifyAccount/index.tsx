@@ -1,15 +1,15 @@
 import React from 'react';
-import { Wallet } from 'ethers';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List } from 'semantic-ui-react';
 import { UxAddress } from '@the-coin/components/components/UxAddress';
 import messages from './messages'
 import { NormalizeAddress } from '@the-coin/utilities';
-import { CreateReferrer, VerifiedReferrer, GetReferrersCollection } from '@the-coin/utilities/lib/Referrals';
+import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/lib/Referrals';
 import { SetUserVerified } from '@the-coin/utilities/lib/User';
+import { TheSigner } from '@the-coin/components/SignerIdent';
 
 interface OwnProps {
-	wallet: Wallet,
+	signer: TheSigner,
 }
 type Props = OwnProps;
 
@@ -51,14 +51,14 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 
 	async verifyAccount(e: React.MouseEvent<HTMLElement>) {
 
-		const { wallet } = this.props;
+		const { signer } = this.props;
 		const { account } = this.state;
 		if (!account)
 			return;
 
 		// We sign this account to show we approve of it
 		const address = NormalizeAddress(account);
-		const signature = await wallet.signMessage(address)
+		const signature = await signer.signMessage(address)
 
 		await SetUserVerified(signature, address);
 		await CreateReferrer(signature, address);
@@ -68,14 +68,15 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 	renderVerifiedAccounts()
 	{
 		const { verifiedAccounts } = this.state;
-		const verifiedList = verifiedAccounts.map(account => (
-			<List.Item>
+		const verifiedList = verifiedAccounts.map(account => {
+			const code = GetReferrerCode(account.signature);
+			return <List.Item key={account.address}>
 				<List.Content>
-					<List.Header>{account.signature.substr(2, 6)}</List.Header>
+					<List.Header>{code}</List.Header>
 					{account.address}
 				</List.Content>
 			</List.Item>
-		));
+		});
 		return <List divided relaxed>{verifiedList}</List>
 	}
 
