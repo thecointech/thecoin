@@ -13,9 +13,10 @@ import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-Online.png';
 import styles from './index.module.css';
+import { TheSigner } from '@the-coin/components/SignerIdent';
 
 type MyProps = {
-  address: string
+  signer: TheSigner
 }
 
 const initialState = {
@@ -56,7 +57,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
   }
 
   render() {
-    const { rates, address } = this.props;
+    const { rates, signer } = this.props;
     const rate = weSellAt(rates);
 
     const { activeAccordion } = this.state;
@@ -69,7 +70,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
           <List divided relaxed>
             <List.Item>Sign into your finacial institution</List.Item>
             <List.Item>Navigate to where you can send an Interac Email Transfer</List.Item>
-            <List.Item>Create a new recipient with your personal address: <a href={`mailto:${address}@thecoin.io`} >{address}@thecoin.io</a></List.Item>
+            <List.Item>Create a new recipient with your personal address: <a href={`mailto:${signer.address}@thecoin.io`} >{signer.address}@thecoin.io</a></List.Item>
             <List.Item>You may set the recipients question to be anything you like, but the answer must be "TheCoin" (without quotes).</List.Item>
             <List.Item>Send the amount you wish to deposit.  It will be credited to your account once processed.</List.Item>
           </List>

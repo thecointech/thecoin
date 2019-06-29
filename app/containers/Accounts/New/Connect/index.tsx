@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, Form, Header } from 'semantic-ui-react';
-import { ethers } from 'ethers';
 
 import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
-import { TheSigner } from '@the-coin/components/SignerIdent';
 import { buildReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
+import { ConnectWeb3 } from '@the-coin/components/containers/Account/Web3';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -20,8 +19,6 @@ class ConnectClass extends NewBaseClass<BaseState> {
   };
 
   async tryConnect() {
-    const win: any = window;
-    const { ethereum, web3 } = win;
     const {
       nameValid,
       accountName,
@@ -30,39 +27,22 @@ class ConnectClass extends NewBaseClass<BaseState> {
     } = this.state;
     if (!nameValid || !referrerValid) return false;
 
-    if (ethereum) {
-      try {
-        // Request account access if needed
-        await ethereum.enable();
-        var provider = new ethers.providers.Web3Provider(web3.currentProvider);
-        var signer = provider.getSigner();
-        // Our local/stored version remembers it's address
-        var address = await signer.getAddress();
-        const theSigner: TheSigner = Object.assign(signer, { address });
-        this.props.setSigner(accountName, theSigner);
-
-        if (!this.registerReferral(address, accountReferrer)) return false;
-        this.TriggerRedirect();
-      } catch (error) {
-        // User denied account access...
-        //this.setState({userMessage: "Cannot connect: user cancelled"});
+    const theSigner = await ConnectWeb3();
+    if (theSigner) {
+      // Ensure this account is appropriately referred
+      if (!this.registerReferral(theSigner.address, accountReferrer))
         return false;
-      }
+      this.props.setSigner(accountName, theSigner);
+			this.TriggerRedirect();
+			return true;
     }
-    // Legacy dapp browsers...
-    else if (web3) {
-      //win.web3 = new Web3(web3.currentProvider);
-      // Acccounts always exposed
-      //	web3.eth.sendTransaction({/* ... */});
-    }
-    // Non-dapp browsers...
-    else {
-      return false;
-    }
-    return true;
+    return false;
   }
 
   render() {
+		if (this.ShouldRedirect())
+			return this.RenderRedirect();
+			
     const win: any = window;
     const { web3 } = win;
     return web3 ? (

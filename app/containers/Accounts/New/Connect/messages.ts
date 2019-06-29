@@ -15,6 +15,6 @@ export default defineMessages({
   subHeader: {
     id: `${scope}.subHeader`,
     defaultMessage:
-      'To connect your account to this site, enter in your refferrer and any name you like',
+      'To connect your account to this site, enter in your referrer and any name you like',
 	}
 })
