@@ -103,9 +103,9 @@ class PurchaseClass extends React.PureComponent<Props> {
 
 	async buildPurchaseEntry() {
 		const { coin, date, email } = this.state;
-		const { wallet } = this.props;
+		const { signer } = this.props;
 		const fxRate = this.getSelectedFxRate();
-		const emailHash = await wallet.signMessage(email.toLocaleLowerCase());
+		const emailHash = await signer.signMessage(email.toLocaleLowerCase());
 		return {
 			coin,
 			fiat: toHuman(coin * fxRate, true),
