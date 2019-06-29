@@ -1,6 +1,6 @@
-import { GetConnected, InitialCoinBlock } from '@the-coin/utilities/lib/TheContract';
+import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/lib/TheContract';
 import { Wallet, Contract } from 'ethers';
-import { call, put } from 'redux-saga/effects';
+import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
 import injectReducer from '../../utils/injectReducer';
@@ -9,11 +9,12 @@ import { buildSagas } from './actions';
 //import { createAccountSelector } from './selector';
 import { compose } from 'redux';
 
-import { GetStored, SetStored, ReadAllAccounts } from './storageSync'
+import { GetStored, ReadAllAccounts, AsWallet, StoreWallet, StoreSigner } from './storageSync'
 
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
+import { TheSigner } from '@the-coin/components/SignerIdent';
 
 class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
@@ -22,14 +23,23 @@ class AccountReducer extends TheCoinReducer<AccountState>
     this.draftState.name = name;
     // If we don't yet have a wallet,
     // try and load under the new name
-    if (!this.state.wallet)
-      this.draftState.wallet = GetStored(name);
+    if (!this.state.signer)
+      this.draftState.signer = GetStored(name);
   }
 
   setWallet(name:string, wallet: Wallet) {
     this.draftState.name = name;
-    this.draftState.wallet = wallet;
-    SetStored(name, wallet);
+    this.draftState.signer = wallet;
+    StoreWallet(name, wallet);
+  }
+
+  setSigner(name: string, signer: TheSigner)
+  {
+    if (AsWallet(signer))
+      throw('Cannot set wallet as signer');
+    this.draftState.name = name;
+    this.draftState.signer = signer;
+    StoreSigner(name, signer);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -40,12 +50,13 @@ class AccountReducer extends TheCoinReducer<AccountState>
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
   *updateBalance() {
-    const { wallet, contract } = this.state;
-    if (!contract || !wallet) {
+    const { signer, contract } = this.state;
+    if (!contract || !signer) {
       return;
     }
     try {
-      const balance = yield call(contract.balanceOf, wallet.address);
+      const { address }= signer;
+      const balance = yield call(contract.balanceOf, address);
       yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber() });
     } catch (err) {
       console.error(err);
@@ -191,8 +202,8 @@ class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   *updateHistory(from: Date, until: Date) {
-    const { wallet, contract } = this.state;
-    if (contract == null || wallet == null)
+    const { signer, contract } = this.state;
+    if (contract == null || signer == null)
       return;
     if (this.state.historyStart && this.state.historyEnd) {
       if (from >= this.state.historyStart && until <= this.state.historyEnd)
@@ -200,7 +211,8 @@ class AccountReducer extends TheCoinReducer<AccountState>
     }
 
     // First, fetch the account balance toasty-fresh
-    const balance = yield call(contract.balanceOf, wallet.address);
+    const address = yield call(signer.getAddress.bind(signer));
+    const balance = yield call(contract.balanceOf, address);
 
     yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber(), historyLoading: true });
 
@@ -209,7 +221,6 @@ class AccountReducer extends TheCoinReducer<AccountState>
     //yield delay(250);
     console.log(`Updating from ${from} -> ${until}`);
 
-    const address = wallet.address;
     const origHistory = this.state.history;
     const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
     // Retrieve transactions for all time
@@ -236,26 +247,28 @@ class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  updateWithDecrypted(wallet: Wallet) {
+  *updateWithDecrypted(wallet: Wallet) {
     if (!wallet.privateKey) {
       throw ("Giant Hoohoo - encrypted wallet passed to updateWithDecrypted");
     }
-    this.draftState.wallet = wallet;
-    const contract = GetConnected(wallet);
-    if (contract) {
-      this.draftState.contract = contract;
-    }
+    const contract = yield call(ConnectContract, wallet);
+    yield this.sendValues(this.actions().updateWithValues, {signer: wallet, contract});
+    // By default, update balance whenever decrypted
+    yield this.sendValues(this.actions().updateBalance, []);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   *decrypt(password: string, callback: DecryptCallback | undefined) {
-    const { wallet } = this.state;
-    if (!wallet) {
+    const { signer } = this.state;
+    if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
-    if (wallet.privateKey) {
-      console.error(`Attempting decryption of already-decrypted wallet: ${name}`);
-      return;
+    const asWallet = AsWallet(signer);
+    if (!asWallet) {
+      throw new Error(`Attempting to decrypt a non-wallet signer: ${name}`)
+    }
+    if (asWallet.privateKey) {
+      throw new Error(`Attempting decryption of already-decrypted wallet: ${name}`);
     }
 
     try {
@@ -267,16 +280,13 @@ class AccountReducer extends TheCoinReducer<AccountState>
             throw ("Operation cancelled");
           }
         }
-      const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(wallet), password, cb);
+      const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(asWallet), password, cb);
       // Ensure callback is called with 100% result so caller knows we are done
       console.log("Account decrypted successfully");
       if (callback) {
         callback(1);
       }
-      yield put({
-        type: this.actions().updateWithDecrypted.type,
-        payload: decrypted
-      });
+      yield this.sendValues(this.actions().updateWithDecrypted, [decrypted])
     }
     catch (error) {
       console.error(error);

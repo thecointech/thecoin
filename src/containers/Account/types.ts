@@ -3,10 +3,10 @@ import { ImmerReducer } from 'immer-reducer';
 
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes'
 import { ApplicationBaseState } from '@the-coin/components/types';
+import { TheSigner } from '../../SignerIdent'
 
 /* --- CALLBACKS ---*/
 type DecryptCallback = (percent: number) => boolean;
-
 
 /* --- STATE --- */
 type Transaction = {
@@ -22,7 +22,7 @@ type Transaction = {
 type AccountState = {
 	name: string; // Convenience storage of name
 	// Possibly encrypted raw ethers wallet
-	wallet: Wallet | null;
+	signer: TheSigner | Wallet | null;
 	// Contract connected to this wallet as a signer
 	contract: Contract | null;
 	// The timestamp of the last update to balance/history
@@ -45,7 +45,7 @@ type AccountState = {
 
 const DefaultAccount: AccountState = {
 	name: "",
-	wallet: null,
+	signer: null,
 	contract: null,
 	lastUpdate: 0,
 	balance: -1,
@@ -65,6 +65,7 @@ interface IActions extends ImmerReducer<AccountState> {
 
 	setName(name: string) : void;
 	setWallet(name: string, wallet: Wallet): void;
+	setSigner(name: string, signer: TheSigner): Iterator<any>;
 
 	// Get the balance of the account in Coin
 	updateBalance(newBalance?: number) : Iterator<any>;

@@ -16,8 +16,8 @@ function buildSagas(name: string) {
       const reducerImp = new reducerClass(state, state);
       //@ts-ignore
       const fn = reducerImp[fnName].bind(reducerImp);
-      const [name, password, callback] = action.payload;
-      return yield call(fn, name, password, callback);
+      //const [name, password, callback] = action.payload;
+      return yield call(fn, ...action.payload);
     }
     return saga;
   }
@@ -27,6 +27,7 @@ function buildSagas(name: string) {
     yield takeLatest(actions.decrypt.type, buildSaga("decrypt"));
     yield takeLatest(actions.updateBalance.type, buildSaga("updateBalance"))
     yield takeLatest(actions.updateHistory.type, buildSaga("updateHistory"))
+    yield takeLatest(actions.updateWithDecrypted.type, buildSaga("updateWithDecrypted"))
   }
 
   return rootSaga;
