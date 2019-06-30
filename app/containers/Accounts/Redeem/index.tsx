@@ -4,7 +4,6 @@ import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
-import { StatusApi, SellApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types'
 import { weBuyAt } from '@the-coin/components/containers/FxRate/reducer';
@@ -12,6 +11,7 @@ import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors'
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import messages from './messages';
+import { GetStatusApi, GetSellApi } from 'containers/Services/BrokerCAD';
 
 type MyProps = {
   account: AccountState
@@ -49,7 +49,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.setState({transferMessage: messages.step1, percentComplete: 0.0});
 
     // First, get the brokers fee
-    const statusApi = new StatusApi();
+    const statusApi = GetStatusApi();
     var status = await statusApi.status();
     // Check out if we have the right values
     if (!status.certifiedFee)
@@ -67,7 +67,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     // To redeem, we construct & sign a message that 
     // that allows the broker to transfer TheCoin to itself
     const sellCommand = await BuildVerifiedSale(email, signer, status.address, coinToSell, status.certifiedFee);
-    const sellApi = new SellApi();
+    const sellApi = GetSellApi();
     if (this.state.doCancel)
       return false;
 

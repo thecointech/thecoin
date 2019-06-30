@@ -90,7 +90,7 @@ class CreateClass extends NewBaseClass<State> {
     // the user to decrypt the account (to protect against misspelled
     // passwords)
     const asJson = JSON.parse(asStr);
-    this.props.setWallet(accountName, asJson);
+    this.props.setSigner(accountName, asJson);
 
     // Switch to this newly created account
     this.setState({
