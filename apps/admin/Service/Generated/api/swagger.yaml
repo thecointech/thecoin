@@ -21,6 +21,8 @@ tags:
     \ for CAD"
 - name: "Transfer"
   description: "Request the broker to make a transfer on the clients behalf"
+- name: "Secure"
+  description: "Functions to help secure an account"
 schemes:
 - "https"
 consumes:
@@ -360,6 +362,22 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Transfer"
+  /secure/google:
+    post:
+      tags:
+      - "Secure"
+      summary: "Store on  google drive"
+      operationId: "googleStore"
+      parameters:
+      - in: "body"
+        name: "account"
+        required: true
+      responses:
+        200:
+          description: "Account successfully stored"
+        405:
+          description: "Permission Denied"
+      x-swagger-router-controller: "Secure"
 definitions:
   SignedPurchaseRequest:
     required:

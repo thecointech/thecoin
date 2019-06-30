@@ -16,6 +16,8 @@ tags:
   description: "The Coin exchange service.  This API allows clients to exchange THESE for CAD"
 - name: "Transfer"
   description: "Request the broker to make a transfer on the clients behalf"
+- name: "Secure"
+  description: "Functions to help secure an account"
 consumes:
 - "application/json"
 produces:
@@ -646,3 +648,24 @@ paths:
           description: The response confirms to the user the order transfer is valid and has been initiated
           schema:
             $ref: "#/definitions/CertifiedTransferResponse"
+
+  #############################################################
+
+  /secure/google:
+    post:
+      tags:
+        - Secure
+      summary: "Store on  google drive"
+      operationId: "googleStore"
+      parameters:
+        - in: body
+          name: account
+          required: true
+          type: string
+      responses:
+        405:
+          description: "Permission Denied"
+        200:
+          description: Account successfully stored
+
+
