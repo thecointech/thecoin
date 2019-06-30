@@ -20,7 +20,7 @@ async function GetWallet() : Promise<Wallet> {
 async function GetContract() : Promise<Contract> {
 	if (!ConnectedContract) {
 		let wallet = await GetWallet();
-		ConnectedContract = TheContract.GetConnected(wallet);
+		ConnectedContract = await TheContract.ConnectContract(wallet);
 		if (!ConnectedContract)
 			throw "Could not connect to Contract";
 	}
