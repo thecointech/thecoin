@@ -1,7 +1,7 @@
 import React from "react";
 import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
 import { AccountState } from "../Account/types";
-import { Timestamp } from "@google-cloud/firestore";
+import { Timestamp, DocumentSnapshot } from "@google-cloud/firestore";
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
@@ -59,8 +59,6 @@ class RedeemClass extends React.PureComponent<Props, State> {
 		})
 	}
 
-
-
 	async processTimestamp(ts: Timestamp)
 	{
 		const recievedAt = ts.toDate();
@@ -71,30 +69,13 @@ class RedeemClass extends React.PureComponent<Props, State> {
 		return Timestamp.fromMillis(nextOpen);
 	}
 
-	async processRawSale(sale: any, index: number)
+	async processRawSale(doc: DocumentSnapshot)
 	{
-		const rawData = sale as VerifiedSaleRecord;
-		let {processedTimestamp, recievedTimestamp } = rawData;
-		// ** Temp testing hack, deal with renamed items **
-		if (!recievedTimestamp) {
-			recievedTimestamp = processedTimestamp;
+		const sale = doc.data() as VerifiedSaleRecord;
+		if (!sale.processedTimestamp) {
+			sale.processedTimestamp = await this.processTimestamp(sale.recievedTimestamp);
 		}
-		if (!processedTimestamp) {
-			processedTimestamp = await this.processTimestamp(recievedTimestamp);
-		}
-		return {
-			...sale,
-			recievedTimestamp,
-			processedTimestamp,
-		} as VerifiedSaleRecord
-	}
-
-	async processAllRawSales() {
-		const { unsettledSales } = this.state;
-
-		const salesPromised = unsettledSales.map((sale, index) => this.processRawSale(sale, index));
-		const processedSales = await Promise.all(salesPromised);
-		this.setState({unsettledSales: processedSales});
+		return sale;
 	}
 
 	//
@@ -108,14 +89,13 @@ class RedeemClass extends React.PureComponent<Props, State> {
 			const path = d.get('ref');
 			const saleDoc = firestore.doc(path);
 			const rawData = await saleDoc.get();
-			return rawData.data() as VerifiedSaleRecord
+			return await this.processRawSale(rawData);
 		});
 		const allSales = await Promise.all(fetchAllSales)
 		this.setState({unsettledSales: allSales });
-		// Delay processing to allow setState to complete
-		setTimeout(() => this.processAllRawSales(), 100);
 	}
 
+	//
 	// Update DB with completion
 	async markSaleComplete(sale: VerifiedSaleRecord) {
 		const { processedTimestamp } = sale;
