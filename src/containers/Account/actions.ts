@@ -27,7 +27,7 @@ function buildSagas(name: string) {
     yield takeLatest(actions.decrypt.type, buildSaga("decrypt"));
     yield takeLatest(actions.updateBalance.type, buildSaga("updateBalance"))
     yield takeLatest(actions.updateHistory.type, buildSaga("updateHistory"))
-    yield takeLatest(actions.updateWithDecrypted.type, buildSaga("updateWithDecrypted"))
+    yield takeLatest(actions.setSigner.type, buildSaga("setSigner"))
   }
 
   return rootSaga;

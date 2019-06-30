@@ -27,19 +27,30 @@ class AccountReducer extends TheCoinReducer<AccountState>
       this.draftState.signer = GetStored(name);
   }
 
-  setWallet(name:string, wallet: Wallet) {
-    this.draftState.name = name;
-    this.draftState.signer = wallet;
-    StoreWallet(name, wallet);
-  }
-
-  setSigner(name: string, signer: TheSigner)
-  {
-    if (AsWallet(signer))
-      throw('Cannot set wallet as signer');
-    this.draftState.name = name;
-    this.draftState.signer = signer;
-    StoreSigner(name, signer);
+  *setSigner(name:string, signer: TheSigner) {
+    // We persist any signers passed here
+    const asWallet = AsWallet(signer);
+    let liveWallet = false;
+    if (asWallet)
+    {
+      if(!asWallet.privateKey)
+        StoreWallet(name, asWallet);
+      else
+        liveWallet = true
+    }
+    else 
+    {
+      StoreSigner(name, signer);
+      liveWallet = !!signer.provider;
+    }
+    // Now the specifics are out of the way, 
+    if (liveWallet)
+    {
+      const contract = yield call(ConnectContract, signer);
+      yield this.sendValues(this.actions().updateWithValues, {name, signer, contract});
+      // By default, update balance whenever we get a live account
+      yield this.sendValues(this.actions().updateBalance, []);
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -247,19 +258,8 @@ class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  *updateWithDecrypted(wallet: Wallet) {
-    if (!wallet.privateKey) {
-      throw ("Giant Hoohoo - encrypted wallet passed to updateWithDecrypted");
-    }
-    const contract = yield call(ConnectContract, wallet);
-    yield this.sendValues(this.actions().updateWithValues, {signer: wallet, contract});
-    // By default, update balance whenever decrypted
-    yield this.sendValues(this.actions().updateBalance, []);
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////
   *decrypt(password: string, callback: DecryptCallback | undefined) {
-    const { signer } = this.state;
+    const { signer, name } = this.state;
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
@@ -286,7 +286,7 @@ class AccountReducer extends TheCoinReducer<AccountState>
       if (callback) {
         callback(1);
       }
-      yield this.sendValues(this.actions().updateWithDecrypted, [decrypted])
+      yield this.sendValues(this.actions().setSigner, [name, decrypted])
     }
     catch (error) {
       console.error(error);

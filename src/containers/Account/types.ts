@@ -64,7 +64,6 @@ const ACCOUNTS_KEY: keyof ApplicationBaseState = "accounts";
 interface IActions extends ImmerReducer<AccountState> {
 
 	setName(name: string) : void;
-	setWallet(name: string, wallet: Wallet): void;
 	setSigner(name: string, signer: TheSigner): Iterator<any>;
 
 	// Get the balance of the account in Coin

@@ -36,7 +36,7 @@ class UploadWalletClass extends React.PureComponent<Props> {
     const isValid = addressMatch ? addressMatch(address) : IsValidAddress(address);
 
     if (isValid) {
-      this.props.setWallet(name, jsonWallet);
+      this.props.setSigner(name, jsonWallet);
     } else {
       alert('Bad Wallet');
     }

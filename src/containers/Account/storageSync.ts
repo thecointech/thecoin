@@ -1,6 +1,5 @@
 import { Wallet } from 'ethers';
 import { AccountMap, DefaultAccount } from './types';
-import { AddressMatches } from '@the-coin/utilities';
 import { TheSigner, SignerIdent } from '@the-coin/components/SignerIdent';
 
 // NOTE: These prefixes must be all equal length
@@ -60,26 +59,26 @@ export function StoreSigner(name: string, signer: TheSigner) {
 //
 //  Store a single account, assumes this account has not yet
 //  been decrypted
-export function StoreSingle<T extends SignerIdent>(name: string, signer: T, prefix:Prefix) {
-  // Check it's ok to store this wallet.  This is all checked UI-side already, should
-  // we allow overwrites here?
-  const storedItem = GetStored(name);
-  if (storedItem != null) {
-    // Are we overwriting an existing wallet?
-    if (!AddressMatches(storedItem.address, signer.address)) {
-      throw "Unable to store named wallet: It's name clashes with existing wallet";
-    }
-    // The account being stored already matches what is stored here.
-    return true;
-  }
+// export function StoreSingle<T extends SignerIdent>(name: string, signer: T, prefix:Prefix) {
+//   // Check it's ok to store this wallet.  This is all checked UI-side already, should
+//   // we allow overwrites here?
+//   const storedItem = GetStored(name);
+//   if (storedItem != null) {
+//     // Are we overwriting an existing wallet?
+//     if (!AddressMatches(storedItem.address, signer.address)) {
+//       throw "Unable to store named wallet: It's name clashes with existing wallet";
+//     }
+//     // The account being stored already matches what is stored here.
+//     return true;
+//   }
 
-  ThrowIfNotValid(signer)
-  localStorage[Pad(name, prefix)] = JSON.stringify(signer);
+//   ThrowIfNotValid(signer)
+//   localStorage[Pad(name, prefix)] = JSON.stringify(signer);
 
-  return true;
-}
-export const Store = (name: string, signer: TheSigner) =>
-  StoreSingle(name, signer, (AsWallet(signer) ? Prefix.WALLET : Prefix.SIGNER))
+//   return true;
+// }
+// export const Store = (name: string, signer: TheSigner) =>
+//   StoreSingle(name, signer, (AsWallet(signer) ? Prefix.WALLET : Prefix.SIGNER))
 
 
 // Utility function for fetching all stored accounts
