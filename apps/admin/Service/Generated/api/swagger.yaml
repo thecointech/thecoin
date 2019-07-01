@@ -366,45 +366,72 @@ paths:
     get:
       tags:
       - "Secure"
-      summary: "Retrieve from google drive"
-      operationId: "googleRetrieve"
-      parameters:
-      - in: "body"
-        name: "token"
-        required: true
-      responses:
-        200:
-          description: "Account successfully stored"
-        405:
-          description: "Permission Denied"
-      x-swagger-router-controller: "Secure"
-    put:
-      tags:
-      - "Secure"
-      summary: "Store on  google drive"
-      operationId: "googleStore"
-      parameters:
-      - in: "body"
-        name: "account"
-        required: true
-        schema:
-          $ref: "#/definitions/GoogleUploadPacket"
-      responses:
-        200:
-          description: "Account successfully stored"
-        405:
-          description: "Permission Denied"
-      x-swagger-router-controller: "Secure"
-  /secure/google/auth:
-    get:
-      tags:
-      - "Secure"
       summary: "Get the authorization URL to redirect the user to"
       operationId: "googleAuthUrl"
       parameters: []
       responses:
         200:
           description: "Google authorization URL"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Secure"
+  /secure/google/list:
+    put:
+      tags:
+      - "Secure"
+      summary: "Get the listing of available accounts"
+      operationId: "googleList"
+      parameters:
+      - in: "body"
+        name: "token"
+        required: true
+        schema:
+          $ref: "#/definitions/GoogleToken"
+      responses:
+        200:
+          description: "Account successfully stored"
+          schema:
+            $ref: "#/definitions/GoogleListResult"
+        405:
+          description: "Permission Denied"
+      x-swagger-router-controller: "Secure"
+  /secure/google/put:
+    put:
+      tags:
+      - "Secure"
+      summary: "Store on google drive"
+      operationId: "googlePut"
+      parameters:
+      - in: "body"
+        name: "uploadPacket"
+        required: true
+        schema:
+          $ref: "#/definitions/GooglePutRequest"
+      responses:
+        200:
+          description: "Account successfully stored"
+        405:
+          description: "Permission Denied"
+      x-swagger-router-controller: "Secure"
+  /secure/google/get:
+    put:
+      tags:
+      - "Secure"
+      summary: "Retrieve previously-stored file from google drive"
+      operationId: "googleRetrieve"
+      parameters:
+      - in: "body"
+        name: "token"
+        required: true
+        schema:
+          $ref: "#/definitions/GoogleGetRequest"
+      responses:
+        200:
+          description: "Account successfully stored"
+          schema:
+            $ref: "#/definitions/GoogleGetResult"
+        405:
+          description: "Permission Denied"
       x-swagger-router-controller: "Secure"
 definitions:
   SignedPurchaseRequest:
@@ -692,15 +719,60 @@ definitions:
     title: "A bool that to be returned indicating success/failure"
     example:
       success: true
-  GoogleUploadPacket:
+  GoogleToken:
     required:
-    - "account"
-    - "authCode"
+    - "token"
     properties:
-      authCode:
-        type: "string"
-      account:
+      token:
         type: "string"
     example:
-      authCode: "authCode"
-      account: "account"
+      token: "token"
+  GooglePutRequest:
+    required:
+    - "token"
+    - "wallet"
+    - "walletName"
+    properties:
+      token:
+        $ref: "#/definitions/GoogleToken"
+      wallet:
+        type: "string"
+      walletName:
+        type: "string"
+    example:
+      wallet: "wallet"
+      walletName: "walletName"
+      token:
+        token: "token"
+  GoogleGetRequest:
+    required:
+    - "wallet"
+    - "walletName"
+    properties:
+      wallet:
+        type: "string"
+      walletName:
+        type: "string"
+    example:
+      wallet: "wallet"
+      walletName: "walletName"
+  GoogleGetResult:
+    required:
+    - "wallet"
+    properties:
+      wallet:
+        type: "string"
+    example:
+      wallet: "wallet"
+  GoogleListResult:
+    required:
+    - "accounts"
+    properties:
+      accounts:
+        type: "array"
+        items:
+          type: "string"
+    example:
+      accounts:
+      - "accounts"
+      - "accounts"

@@ -1,5 +1,6 @@
-'use strict';
 
+import { getAuthUrl, storeOnGoogle } from '../secure/gdrive'
+import { BrokerCAD } from "@the-coin/types";
 
 /**
  * Get the authorization URL to redirect the user to
@@ -7,9 +8,13 @@
  * no response value expected for this operation
  **/
 export async function googleAuthUrl() {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
+  try {
+    return getAuthUrl();
+  }
+  catch (err) {
+    console.error(err);
+    throw new Error("Server Error")
+  }
 }
 
 
@@ -32,9 +37,13 @@ export async function googleRetrieve(token) {
  * account GoogleUploadPacket 
  * no response value expected for this operation
  **/
-export async function googleStore(account) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
+export async function googleStore(account: BrokerCAD.GoogleUploadPacket) {
+  try {
+    return storeOnGoogle(account);
+  }
+  catch (err) {
+    console.error(err);
+    throw new Error("Server Error")
+  }
 }
 

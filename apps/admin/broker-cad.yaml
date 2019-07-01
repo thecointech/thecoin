@@ -317,11 +317,14 @@ definitions:
   GoogleUploadPacket:
     required:
       - authCode
-      - account
+      - wallet
+      - wallettName
     properties:
       authCode:
         type: string
-      account:
+      wallet:
+        type: string
+      walletName:
         type: string
 
 ################################################################################
