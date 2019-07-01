@@ -49,6 +49,11 @@ export namespace BrokerCAD {
     referrerId: string;
     newAccount: string;
   }
+  export interface GoogleUploadPacket {
+    authCode: string;
+    wallet: string;
+    walletName?: string;
+  }
   export interface EncryptedPacket {
     encryptedPacket: string;
     name?: string;
