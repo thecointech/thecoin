@@ -7,7 +7,7 @@
     "start": "node build/index.js",
     "debug": "cross-env NODE_ENV=development && npm run build && node --inspect index.js",
     "build": "tsc -p . && npm run build:copy",
-    "build:copy": "(if not exist build\\api mkdir build\\api) && copy src\\api build\\api",
+    "build:copy": "(if not exist build\\api mkdir build\\api) && copy Generated\\api src\\api && copy src\\api build\\api",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
   },
   "keywords": [

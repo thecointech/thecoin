@@ -35,9 +35,11 @@ async function loginAuth(authToken: string)
   auth.setCredentials(res.tokens);
   return auth;
 }
+
 export function getAuthUrl()
 {
-  return buildAuth().generateAuthUrl({
+  const auth = buildAuth();
+  return auth.generateAuthUrl({
     access_type: 'online',
     scope: SCOPES,
   });

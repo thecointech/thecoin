@@ -9,7 +9,8 @@ import { BrokerCAD } from "@the-coin/types";
  **/
 export async function googleAuthUrl() {
   try {
-    return getAuthUrl();
+    const url = getAuthUrl();
+    return url;
   }
   catch (err) {
     console.error(err);

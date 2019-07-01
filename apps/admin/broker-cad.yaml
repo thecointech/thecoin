@@ -314,6 +314,13 @@ definitions:
 
 ################################################################################
 
+  GoogleAuthUrl:
+    required:
+      - url
+    properties:
+      url:
+        type: string
+        
   GoogleToken:
     required:
       - token
@@ -710,7 +717,7 @@ paths:
         200:
           description: Google authorization URL
           schema:
-            type: string
+            $ref: "#/definitions/GoogleAuthUrl"
                 
   /secure/google/list:
     put:
