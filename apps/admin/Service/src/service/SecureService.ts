@@ -6,7 +6,7 @@
  *
  * no response value expected for this operation
  **/
-exports.googleAuthUrl = function() {
+export async function googleAuthUrl() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -19,7 +19,7 @@ exports.googleAuthUrl = function() {
  * token  
  * no response value expected for this operation
  **/
-exports.googleRetrieve = function(token) {
+export async function googleRetrieve(token) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -32,7 +32,7 @@ exports.googleRetrieve = function(token) {
  * account GoogleUploadPacket 
  * no response value expected for this operation
  **/
-exports.googleStore = function(account) {
+export async function googleStore(account) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
