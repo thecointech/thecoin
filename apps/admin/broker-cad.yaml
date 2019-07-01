@@ -312,6 +312,17 @@ definitions:
           success:
             type: boolean
 
+################################################################################
+  
+  GoogleUploadPacket:
+    required:
+      - authCode
+      - account
+    properties:
+      authCode:
+        type: string
+      account:
+        type: string
 
 ################################################################################
 
@@ -652,7 +663,7 @@ paths:
   #############################################################
 
   /secure/google:
-    post:
+    put:
       tags:
         - Secure
       summary: "Store on  google drive"
@@ -661,11 +672,45 @@ paths:
         - in: body
           name: account
           required: true
-          type: string
+          schema: 
+            $ref: "#/definitions/GoogleUploadPacket"
       responses:
         405:
           description: "Permission Denied"
         200:
           description: Account successfully stored
 
+    get:
+      tags:
+        - Secure
+      summary: "Retrieve from google drive"
+      operationId: "googleRetrieve"
+      parameters:
+        - in: body
+          name: token
+          required: true
+          type: string
+      responses:
+        405:
+          description: "Permission Denied"
+        200:
+          description: Account successfully stored
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /secure/google/auth:
+    get:
+      tags:
+        - Secure
+      summary: "Get the authorization URL to redirect the user to"
+      operationId: "googleAuthUrl"
+      responses:
+        200:
+          description: Google authorization URL
+          content:
+            text/plain:
+              schema:
+                type: string
 
