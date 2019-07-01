@@ -17,19 +17,25 @@ export async function googleAuthUrl() {
   }
 }
 
-
 /**
- * Retrieve from google drive
+ * Get the listing of available accounts
  *
- * token  
- * no response value expected for this operation
+ * token GoogleToken 
+ * returns GoogleListResult
  **/
-export async function googleRetrieve(token) {
+export async function googleList(token: BrokerCAD.GoogleToken) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "accounts" : [ "accounts", "accounts" ]
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
-
 
 /**
  * Store on  google drive
@@ -37,7 +43,7 @@ export async function googleRetrieve(token) {
  * account GoogleUploadPacket 
  * no response value expected for this operation
  **/
-export async function googleStore(account: BrokerCAD.GoogleUploadPacket) {
+export async function googlePut(account: BrokerCAD.GooglePutRequest) {
   try {
     return storeOnGoogle(account);
   }
@@ -45,5 +51,26 @@ export async function googleStore(account: BrokerCAD.GoogleUploadPacket) {
     console.error(err);
     throw new Error("Server Error")
   }
+}
+
+
+/**
+ * Retrieve previously-stored file from google drive
+ *
+ * token GoogleGetRequest 
+ * returns GoogleGetResult
+ **/
+export async function googleRetrieve(token: BrokerCAD.GoogleToken) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "wallet" : "wallet"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
 }
 

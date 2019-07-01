@@ -1,4 +1,4 @@
-import {getAuthUrl, listFiles} from './gdrive'
+import {getAuthUrl} from './gdrive'
 
 test("Generates auth URL ", () => {
 

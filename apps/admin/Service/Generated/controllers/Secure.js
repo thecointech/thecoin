@@ -13,9 +13,9 @@ module.exports.googleAuthUrl = function googleAuthUrl (req, res, next) {
     });
 };
 
-module.exports.googleRetrieve = function googleRetrieve (req, res, next) {
+module.exports.googleList = function googleList (req, res, next) {
   var token = req.swagger.params['token'].value;
-  Secure.googleRetrieve(token)
+  Secure.googleList(token)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -24,9 +24,20 @@ module.exports.googleRetrieve = function googleRetrieve (req, res, next) {
     });
 };
 
-module.exports.googleStore = function googleStore (req, res, next) {
-  var account = req.swagger.params['account'].value;
-  Secure.googleStore(account)
+module.exports.googlePut = function googlePut (req, res, next) {
+  var uploadPacket = req.swagger.params['uploadPacket'].value;
+  Secure.googlePut(uploadPacket)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.googleRetrieve = function googleRetrieve (req, res, next) {
+  var token = req.swagger.params['token'].value;
+  Secure.googleRetrieve(token)
     .then(function (response) {
       utils.writeJson(res, response);
     })

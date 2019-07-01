@@ -263,6 +263,94 @@ export interface EncryptedPacket {
 /**
  * 
  * @export
+ * @interface GoogleGetRequest
+ */
+export interface GoogleGetRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleGetRequest
+     */
+    wallet: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleGetRequest
+     */
+    walletName: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface GoogleGetResult
+ */
+export interface GoogleGetResult {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleGetResult
+     */
+    wallet: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface GoogleListResult
+ */
+export interface GoogleListResult {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GoogleListResult
+     */
+    accounts: Array<string>;
+}
+
+/**
+ * 
+ * @export
+ * @interface GooglePutRequest
+ */
+export interface GooglePutRequest {
+    /**
+     * 
+     * @type {GoogleToken}
+     * @memberof GooglePutRequest
+     */
+    token: GoogleToken;
+    /**
+     * 
+     * @type {string}
+     * @memberof GooglePutRequest
+     */
+    wallet: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GooglePutRequest
+     */
+    walletName: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface GoogleToken
+ */
+export interface GoogleToken {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleToken
+     */
+    token: string;
+}
+
+/**
+ * 
+ * @export
  * @interface NewAccountReferal
  */
 export interface NewAccountReferal {
@@ -1302,6 +1390,338 @@ export class ReferrersApi extends BaseAPI {
      */
     public referrerValid(referrer: string, options?: any) {
         return ReferrersApiFp(this.configuration).referrerValid(referrer, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * SecureApi - fetch parameter creator
+ * @export
+ */
+export const SecureApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get the authorization URL to redirect the user to
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleAuthUrl(options: any = {}): FetchArgs {
+            const localVarPath = `/secure/google`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the listing of available accounts
+         * @param {GoogleToken} googleToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleList(googleToken: GoogleToken, options: any = {}): FetchArgs {
+            // verify required parameter 'googleToken' is not null or undefined
+            if (googleToken === null || googleToken === undefined) {
+                throw new RequiredError('googleToken','Required parameter googleToken was null or undefined when calling googleList.');
+            }
+            const localVarPath = `/secure/google/list`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"GoogleToken" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(googleToken || {}) : (googleToken || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Store on google drive
+         * @param {GooglePutRequest} googlePutRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googlePut(googlePutRequest: GooglePutRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'googlePutRequest' is not null or undefined
+            if (googlePutRequest === null || googlePutRequest === undefined) {
+                throw new RequiredError('googlePutRequest','Required parameter googlePutRequest was null or undefined when calling googlePut.');
+            }
+            const localVarPath = `/secure/google/put`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"GooglePutRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(googlePutRequest || {}) : (googlePutRequest || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Retrieve previously-stored file from google drive
+         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleRetrieve(googleGetRequest: GoogleGetRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'googleGetRequest' is not null or undefined
+            if (googleGetRequest === null || googleGetRequest === undefined) {
+                throw new RequiredError('googleGetRequest','Required parameter googleGetRequest was null or undefined when calling googleRetrieve.');
+            }
+            const localVarPath = `/secure/google/get`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"GoogleGetRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(googleGetRequest || {}) : (googleGetRequest || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SecureApi - functional programming interface
+ * @export
+ */
+export const SecureApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get the authorization URL to redirect the user to
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleAuthUrl(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleAuthUrl(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary Get the listing of available accounts
+         * @param {GoogleToken} googleToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleList(googleToken: GoogleToken, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleListResult> {
+            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleList(googleToken, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary Store on google drive
+         * @param {GooglePutRequest} googlePutRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googlePut(googlePutRequest: GooglePutRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googlePut(googlePutRequest, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary Retrieve previously-stored file from google drive
+         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleGetResult> {
+            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleRetrieve(googleGetRequest, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * SecureApi - factory interface
+ * @export
+ */
+export const SecureApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @summary Get the authorization URL to redirect the user to
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleAuthUrl(options?: any) {
+            return SecureApiFp(configuration).googleAuthUrl(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @summary Get the listing of available accounts
+         * @param {GoogleToken} googleToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleList(googleToken: GoogleToken, options?: any) {
+            return SecureApiFp(configuration).googleList(googleToken, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @summary Store on google drive
+         * @param {GooglePutRequest} googlePutRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googlePut(googlePutRequest: GooglePutRequest, options?: any) {
+            return SecureApiFp(configuration).googlePut(googlePutRequest, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @summary Retrieve previously-stored file from google drive
+         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any) {
+            return SecureApiFp(configuration).googleRetrieve(googleGetRequest, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * SecureApi - object-oriented interface
+ * @export
+ * @class SecureApi
+ * @extends {BaseAPI}
+ */
+export class SecureApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get the authorization URL to redirect the user to
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SecureApi
+     */
+    public googleAuthUrl(options?: any) {
+        return SecureApiFp(this.configuration).googleAuthUrl(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @summary Get the listing of available accounts
+     * @param {GoogleToken} googleToken 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SecureApi
+     */
+    public googleList(googleToken: GoogleToken, options?: any) {
+        return SecureApiFp(this.configuration).googleList(googleToken, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @summary Store on google drive
+     * @param {GooglePutRequest} googlePutRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SecureApi
+     */
+    public googlePut(googlePutRequest: GooglePutRequest, options?: any) {
+        return SecureApiFp(this.configuration).googlePut(googlePutRequest, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @summary Retrieve previously-stored file from google drive
+     * @param {GoogleGetRequest} googleGetRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SecureApi
+     */
+    public googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any) {
+        return SecureApiFp(this.configuration).googleRetrieve(googleGetRequest, options)(this.fetch, this.basePath);
     }
 
 }

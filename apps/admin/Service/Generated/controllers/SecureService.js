@@ -4,37 +4,72 @@
 /**
  * Get the authorization URL to redirect the user to
  *
- * no response value expected for this operation
+ * returns String
  **/
 exports.googleAuthUrl = function() {
   return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = "";
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Get the listing of available accounts
+ *
+ * token GoogleToken 
+ * returns GoogleListResult
+ **/
+exports.googleList = function(token) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "accounts" : [ "accounts", "accounts" ]
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Store on google drive
+ *
+ * uploadPacket GooglePutRequest 
+ * no response value expected for this operation
+ **/
+exports.googlePut = function(uploadPacket) {
+  return new Promise(function(resolve, reject) {
     resolve();
   });
 }
 
 
 /**
- * Retrieve from google drive
+ * Retrieve previously-stored file from google drive
  *
- * token  
- * no response value expected for this operation
+ * token GoogleGetRequest 
+ * returns GoogleGetResult
  **/
 exports.googleRetrieve = function(token) {
   return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * Store on  google drive
- *
- * account GoogleUploadPacket 
- * no response value expected for this operation
- **/
-exports.googleStore = function(account) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "wallet" : "wallet"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 

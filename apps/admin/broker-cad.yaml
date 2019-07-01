@@ -313,20 +313,55 @@ definitions:
             type: boolean
 
 ################################################################################
-  
-  GoogleUploadPacket:
+
+  GoogleToken:
     required:
-      - authCode
-      - wallet
-      - wallettName
+      - token
     properties:
-      authCode:
+      token:
         type: string
+  
+  GooglePutRequest:
+    required:
+      - token
+      - wallet
+      - walletName
+    properties:
+      token:
+        $ref: "#/definitions/GoogleToken"
       wallet:
         type: string
       walletName:
         type: string
+        
+  GoogleGetRequest:
+    required:
+      - wallet
+      - walletName
+    properties:
+      wallet:
+        type: string
+      walletName:
+        type: string
+        
+  GoogleGetResult:
+    required:
+      - wallet
+    properties:
+      wallet:
+        type: string
+        
+  GoogleListResult:
+    required:
+      - accounts
+    properties:
+      accounts:
+        type: array
+        items:
+          type: string
+          
 
+          
 ################################################################################
 
 paths:
@@ -666,44 +701,6 @@ paths:
   #############################################################
 
   /secure/google:
-    put:
-      tags:
-        - Secure
-      summary: "Store on  google drive"
-      operationId: "googleStore"
-      parameters:
-        - in: body
-          name: account
-          required: true
-          schema: 
-            $ref: "#/definitions/GoogleUploadPacket"
-      responses:
-        405:
-          description: "Permission Denied"
-        200:
-          description: Account successfully stored
-
-    get:
-      tags:
-        - Secure
-      summary: "Retrieve from google drive"
-      operationId: "googleRetrieve"
-      parameters:
-        - in: body
-          name: token
-          required: true
-          type: string
-      responses:
-        405:
-          description: "Permission Denied"
-        200:
-          description: Account successfully stored
-          content:
-            text/plain:
-              schema:
-                type: string
-
-  /secure/google/auth:
     get:
       tags:
         - Secure
@@ -712,8 +709,66 @@ paths:
       responses:
         200:
           description: Google authorization URL
-          content:
-            text/plain:
-              schema:
-                type: string
+          schema:
+            type: string
+                
+  /secure/google/list:
+    put:
+      tags:
+        - Secure
+      summary: "Get the listing of available accounts"
+      operationId: "googleList"
+      parameters:
+        - in: body
+          name: token
+          required: true
+          schema:
+            $ref: "#/definitions/GoogleToken"
+      responses:
+        405:
+          description: "Permission Denied"
+        200:
+          description: Account successfully stored
+          schema:
+            $ref: "#/definitions/GoogleListResult"
+
+  /secure/google/put:
+    put:
+      tags:
+        - Secure
+      summary: "Store on google drive"
+      operationId: "googlePut"
+      parameters:
+        - in: body
+          name: uploadPacket
+          required: true
+          schema: 
+            $ref: "#/definitions/GooglePutRequest"
+      responses:
+        405:
+          description: "Permission Denied"
+        200:
+          description: Account successfully stored
+  
+  /secure/google/get:
+    put:
+      tags:
+        - Secure
+      summary: "Retrieve previously-stored file from google drive"
+      operationId: "googleRetrieve"
+      parameters:
+        - in: body
+          name: token
+          required: true
+          schema:
+            $ref: "#/definitions/GoogleGetRequest"
+      responses:
+        405:
+          description: "Permission Denied"
+        200:
+          description: Account successfully stored
+          schema:
+            $ref: "#/definitions/GoogleGetResult"
+
+
 

@@ -44,18 +44,21 @@ export function getAuthUrl()
 }
 
 
-export async function storeOnGoogle(account: BrokerCAD.GoogleUploadPacket) {
-  const auth = await loginAuth(account.authCode);
+export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
+  const {walletName, wallet, token } = account;
+  if (!walletName || ! wallet)
+    throw new Error("Missing data from gdrive save");
+
+  const auth = await loginAuth(token.token);
   // Now to the meat: 
   const drive = google.drive({version: 'v3', auth});
 
-  const name = 'account.json';
   var fileMetadata = {
-    name,
+    walletName,
     'parents': ['appDataFolder']
   };
   var media = {
-    body: account.account,
+    body: wallet,
   };
   
   var params: drive_v3.Params$Resource$Files$Create = {
@@ -64,7 +67,7 @@ export async function storeOnGoogle(account: BrokerCAD.GoogleUploadPacket) {
     requestBody: fileMetadata
   }
   const r = await drive.files.create(params)
-  console.log(`Saving : ${name} - ${r.statusText}`);
+  console.log(`Saving : ${walletName} - ${r.statusText}`);
   return r.status == 200;
 }
 
