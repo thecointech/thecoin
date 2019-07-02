@@ -1,4 +1,12 @@
-import { StatusApi, BillPaymentsApi, ReferrersApi, TransferApi, SellApi, PurchaseApi } from '@the-coin/broker-cad'
+import { 
+	StatusApi, 
+	BillPaymentsApi, 
+	ReferrersApi, 
+	TransferApi, 
+	SellApi, 
+	PurchaseApi,
+	SecureApi 
+} from '@the-coin/broker-cad/dist/api'
 import { ServiceAddress, ServicePorts } from '@the-coin/utilities/lib/ServiceAddresses'
 
 const BrokerCADAddress = ServiceAddress(ServicePorts.BROKER_PORT);
@@ -13,3 +21,4 @@ export const GetReferrersApi = () => new ReferrersApi(undefined, BrokerCADAddres
 export const GetTransferApi = () => new TransferApi(undefined, BrokerCADAddress);
 export const GetSellApi = () => new SellApi(undefined, BrokerCADAddress);
 export const GetPurchaseApi = () => new PurchaseApi(undefined, BrokerCADAddress);
+export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);

@@ -37,7 +37,7 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
   {
     link: {
       to: false,
-      name: 'Divider',
+      name: 'Accounts',
     },
   },
 ];
