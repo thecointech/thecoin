@@ -5,12 +5,13 @@ import { BrokerCAD } from "@the-coin/types";
 /**
  * Get the authorization URL to redirect the user to
  *
- * no response value expected for this operation
+ * returns GoogleAuthUrl
  **/
-export async function googleAuthUrl() {
+export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
   try {
+
     const url = getAuthUrl();
-    return url;
+    return {url};
   }
   catch (err) {
     console.error(err);
@@ -46,7 +47,8 @@ export async function googleList(token: BrokerCAD.GoogleToken) {
  **/
 export async function googlePut(account: BrokerCAD.GooglePutRequest) {
   try {
-    return storeOnGoogle(account);
+    const result = await storeOnGoogle(account);
+    return result;
   }
   catch (err) {
     console.error(err);

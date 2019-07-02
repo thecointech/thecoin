@@ -373,7 +373,7 @@ paths:
         200:
           description: "Google authorization URL"
           schema:
-            type: "string"
+            $ref: "#/definitions/GoogleAuthUrl"
       x-swagger-router-controller: "Secure"
   /secure/google/list:
     put:
@@ -719,6 +719,14 @@ definitions:
     title: "A bool that to be returned indicating success/failure"
     example:
       success: true
+  GoogleAuthUrl:
+    required:
+    - "url"
+    properties:
+      url:
+        type: "string"
+    example:
+      url: "url"
   GoogleToken:
     required:
     - "token"

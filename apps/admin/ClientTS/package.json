@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/broker-cad",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "OpenAPI client for @the-coin/broker-cad",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
@@ -13,7 +13,7 @@
   "license": "Unlicense",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
-  "scripts" : {
+  "scripts": {
     "build": "tsc --outDir dist/",
     "prepublishOnly": "npm run build"
   },

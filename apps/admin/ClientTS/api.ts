@@ -263,6 +263,20 @@ export interface EncryptedPacket {
 /**
  * 
  * @export
+ * @interface GoogleAuthUrl
+ */
+export interface GoogleAuthUrl {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleAuthUrl
+     */
+    url: string;
+}
+
+/**
+ * 
+ * @export
  * @interface GoogleGetRequest
  */
 export interface GoogleGetRequest {
@@ -1550,7 +1564,7 @@ export const SecureApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        googleAuthUrl(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        googleAuthUrl(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleAuthUrl> {
             const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleAuthUrl(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

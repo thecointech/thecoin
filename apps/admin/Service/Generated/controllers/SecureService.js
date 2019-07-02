@@ -4,12 +4,14 @@
 /**
  * Get the authorization URL to redirect the user to
  *
- * returns String
+ * returns GoogleAuthUrl
  **/
 exports.googleAuthUrl = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = "";
+    examples['application/json'] = {
+  "url" : "url"
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
