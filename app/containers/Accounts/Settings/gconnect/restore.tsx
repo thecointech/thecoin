@@ -166,7 +166,7 @@ export class GoogleRestore extends React.PureComponent<MyProps> {
 			</Form>
 
 	renderAccountList = (accounts: string[])	=> 
-		accounts.map(() => <li>account</li>)
+		accounts.map(account => <li>{account}</li>)
 
 	render() 
 	{

@@ -167,7 +167,6 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 				alert(r.statusText)
 				if (r.status == 200) {
 					alert(`Account ${name} successfully stored on your google drive`);
-					
 				}	
 			})
 			.catch((reason) => {
