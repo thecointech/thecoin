@@ -3,8 +3,7 @@ import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { IWindow } from './gauth';
-import { GetStoredWallet } from '@the-coin/components/containers/Account/storageSync';
-import { GooglePutRequest } from '@the-coin/broker-cad';
+import { GoogleToken } from '@the-coin/broker-cad';
 import { AccountState } from '@the-coin/components/containers/Account/types';
 
 // Given a cookie key `name`, returns the value of
@@ -21,12 +20,13 @@ type MyProps = {
 	account: AccountState
 }
 
-export class GoogleConnect extends React.PureComponent<MyProps> {
+export class GoogleRestore extends React.PureComponent<MyProps> {
 
 	state = {
 		gauthUrl: "",
 		gauthWindow: null as IWindow|null,
-		timer: undefined as any
+		timer: undefined as any,
+		accounts: null as null|Array<string>
 	}
 
 	async componentWillMount()
@@ -34,8 +34,6 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		// Ensure we don't have any unknown callbacks hanging about
 		this.clearCallback();
 		await this.fetchGAuthUrl()
-		//this.setState({gauthUrl: url});
-		//setTimeout( () => this.setupGauthLogin(url), 0)
 	}
 
 	componentWillUnmount() {
@@ -137,24 +135,14 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		// instead of opening a new brower.
 	}
 
-	completeGauthLogin = (token: string) => {
+	completeGauthLogin = async (token: string) => {
 		this.clearWaitingTimer();
 		this.clearCallback();
 		// Do not download the decrypted wallet: instead
 		// we read the wallet directly from LS and download that
-		const {name} =this.props.account;
 		const secureApi = GetSecureApi();
-		const wallet = GetStoredWallet(name);
-		if (!wallet) {
-			// do something
-			return;
-		}
-		const request: GooglePutRequest = {
-			token: {
-				token
-			},
-			wallet: JSON.stringify(wallet),
-			walletName: name
+		const request: GoogleToken = {
+			token
 		}
 
 		// Prematurely disable the account,
@@ -162,28 +150,30 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		// getting the callbacks triggered below
 		this.setState({gauthUrl: ""});
 
-		secureApi.googlePut(request)
-			.then((r) => {
-				alert(r.statusText)
-				if (r.status == 200) {
-					alert(`Account ${name} successfully stored on your google drive`);
-					
-				}	
-			})
-			.catch((reason) => {
-				console.error(JSON.stringify(reason));
-			})	
+		try {
+			const {accounts} = await secureApi.googleList(request);
+			this.setState({accounts})	
+		}
+		catch(err) {
+			console.error(err);
+			alert(`Connection not established.  Check sushi for possible pathogens`);
+		}
 	}
+
+	renderConnectButton = () =>
+			<Form>
+				<Button onClick={this.onInitiateLogin} disabled={!this.state.gauthUrl}>Restore from Google</Button>
+			</Form>
+
+	renderAccountList = (accounts: string[])	=> 
+		accounts.map(() => <li>account</li>)
 
 	render() 
 	{
-		const {gauthUrl} = this.state;
+		const {accounts} = this.state;
 
-		const disabled = !gauthUrl;
-		return (
-			<Form>
-				<Button onClick={this.onInitiateLogin} disabled={disabled}>Connect to Google</Button>
-			</Form>
-		);
+		return (accounts === null) ?
+			this.renderConnectButton() : 
+			this.renderAccountList(accounts)
 	}
 }

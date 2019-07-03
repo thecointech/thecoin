@@ -8,6 +8,7 @@ import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
 import { Create } from './Create';
 import { Connect } from './Connect';
+import { GoogleRestore } from '../Settings/gconnect/restore';
 
 type MyProps = {
   url: string
@@ -33,6 +34,12 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
     link: {
       to: 'connect',
       name: 'Connect to Web3',
+    },
+  },
+  {
+    link: {
+      to: 'restore',
+      name: 'Restore from Google',
     },
   },
 ];
@@ -81,6 +88,7 @@ class NewAccountClass extends React.PureComponent<Props> {
           render={_ => <UploadWallet readFile={this.readFile} />}
         />
         <Route path={`${url}/connect`} component={Connect} />
+        <Route path={`${url}/restore`} component={GoogleRestore} />
         <Route component={Create} />
       </Switch>
     );
