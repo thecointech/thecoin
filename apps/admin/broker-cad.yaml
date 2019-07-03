@@ -341,21 +341,14 @@ definitions:
       walletName:
         type: string
         
-  GoogleGetRequest:
+  GoogleFileIdent:
     required:
-      - token
-      - walletName
+      - id
+      - name
     properties:
-      token:
-        $ref: "#/definitions/GoogleToken"
-      walletName:
+      id:
         type: string
-        
-  GoogleGetResult:
-    required:
-      - wallet
-    properties:
-      wallet:
+      name:
         type: string
         
   GoogleListResult:
@@ -365,10 +358,25 @@ definitions:
       accounts:
         type: array
         items:
-          type: string
-          
+          $ref: "#/definitions/GoogleFileIdent"
 
-          
+  GoogleGetRequest:
+    required:
+      - token
+      - ident
+    properties:
+      token:
+        $ref: "#/definitions/GoogleToken"
+      walletName:
+        $ref: "#/definitions/GoogleFileIdent"
+        
+  GoogleGetResult:
+    required:
+      - wallet
+    properties:
+      wallet:
+        type: string
+
 ################################################################################
 
 paths:

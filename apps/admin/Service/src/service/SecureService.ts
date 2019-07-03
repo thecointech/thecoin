@@ -1,5 +1,5 @@
 
-import { getAuthUrl, storeOnGoogle } from '../secure/gdrive'
+import { getAuthUrl, storeOnGoogle, listAccounts } from '../secure/gdrive'
 import { BrokerCAD } from "@the-coin/types";
 
 /**
@@ -9,7 +9,6 @@ import { BrokerCAD } from "@the-coin/types";
  **/
 export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
   try {
-
     const url = getAuthUrl();
     return {url};
   }
@@ -25,18 +24,15 @@ export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
  * token GoogleToken 
  * returns GoogleListResult
  **/
-export async function googleList(token: BrokerCAD.GoogleToken) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "accounts" : [ "accounts", "accounts" ]
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCAD.GoogleListResult> {
+  try {
+    const accounts = await listAccounts(token);
+    return {accounts};
+  }
+  catch (err) {
+    console.error(err);
+    throw new Error("Server Error")
+  }
 }
 
 /**

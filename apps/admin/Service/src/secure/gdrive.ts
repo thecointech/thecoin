@@ -9,15 +9,7 @@ import { BrokerCAD } from '@the-coin/types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = 'token.json';
 
-// Load client secrets from a local file.
-	
-  // Authorize a client with credentials, then call the Google Drive API.
-//authorize(listFiles);
 
 function  buildAuth()
 {
@@ -25,15 +17,15 @@ function  buildAuth()
   return new OAuth2Client(client_id, client_secret, redirect_uris[0]);
 }
 
-async function loginAuth(authToken: string)
+async function loginDrive(authToken: BrokerCAD.GoogleToken)
 {
   const auth = buildAuth();
-  const res = await auth.getToken(authToken);
+  const res = await auth.getToken(authToken.token);
   if (!res || !res.tokens) {
     throw new Error("Could not retrieve token: " + JSON.stringify(res));
   }
   auth.setCredentials(res.tokens);
-  return auth;
+  return google.drive({version: 'v3', auth});
 }
 
 export function getAuthUrl()
@@ -51,12 +43,11 @@ export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   if (!walletName || ! wallet)
     throw new Error("Missing data from gdrive save");
 
-  const auth = await loginAuth(token.token);
-  // Now to the meat: 
-  const drive = google.drive({version: 'v3', auth});
-
+  const drive = await loginDrive(token);
+  
   var fileMetadata = {
-    walletName,
+    name: walletName + ".wallet",
+    originalFilename: walletName,
     'parents': ['appDataFolder']
   };
   var media = {
@@ -73,6 +64,30 @@ export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   return r.status == 200;
 }
 
+export async function listAccounts(token: BrokerCAD.GoogleToken) : Promise<string[]>
+{
+  const drive = await loginDrive(token);
+  const params: drive_v3.Params$Resource$Files$List = {
+    spaces: 'appDataFolder',
+  }
+  const r = await drive.files.list(params);
+  return (r && r.data && r.data.files) ?
+    r.data.files.map(file => file.originalFilename || '') :
+    [];
+}
+
+export async function fetchAccount(request: BrokerCAD.GoogleGetRequest) : Promise<string>
+{
+  const drive = await loginDrive(request.token);
+
+  const params: drive_v3.Params$Resource$Files$Get = {
+    fileId: 'appDataFolder',
+  }
+  const r = await drive.files.get(params);
+  return (r && r.data && r.data.files) ?
+    r.data.files.map(file => file.originalFilename || '') :
+    [];
+}
 // type getEventsCallback = (auth: OAuth2Client) => void;
 // /**
 //  * Create an OAuth2 client with the given credentials, and then execute the
