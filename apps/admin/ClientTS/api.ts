@@ -282,10 +282,10 @@ export interface GoogleAuthUrl {
 export interface GoogleGetRequest {
     /**
      * 
-     * @type {string}
+     * @type {GoogleToken}
      * @memberof GoogleGetRequest
      */
-    wallet: string;
+    token: GoogleToken;
     /**
      * 
      * @type {string}

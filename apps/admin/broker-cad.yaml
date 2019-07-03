@@ -343,11 +343,11 @@ definitions:
         
   GoogleGetRequest:
     required:
-      - wallet
+      - token
       - walletName
     properties:
-      wallet:
-        type: string
+      token:
+        $ref: "#/definitions/GoogleToken"
       walletName:
         type: string
         
