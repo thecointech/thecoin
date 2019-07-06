@@ -31,8 +31,6 @@ const initialState = {
 	token: ""
 }
 
-type State = Readonly<typeof initialState>
-
 export class RestoreClass extends React.PureComponent<Props> {
 
 	state = initialState;
@@ -187,11 +185,11 @@ export class RestoreClass extends React.PureComponent<Props> {
 		const asJson = JSON.parse(wallet.wallet)
 		this.props.setSigner(wallet.id.name!, asJson);
 		// Remove wallet from list;
-		this.setState((prevState: State) => {
-			return {
-				wallets: prevState.wallets!.filter(wallet => wallet.id.id != id)
-			}
-		})
+		// this.setState((prevState: State) => {
+		// 	return {
+		// 		wallets: prevState.wallets!.filter(wallet => wallet.id.id != id)
+		// 	}
+		// })
 	}
 
 	renderConnectButton = () =>
