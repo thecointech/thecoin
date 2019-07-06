@@ -44,10 +44,11 @@ class AccountReducer extends TheCoinReducer<AccountState>
       liveWallet = !!signer.provider;
     }
     // Now the specifics are out of the way, 
+    yield this.sendValues(this.actions().updateWithValues, {name, signer});
     if (liveWallet)
     {
       const contract = yield call(ConnectContract, signer);
-      yield this.sendValues(this.actions().updateWithValues, {name, signer, contract});
+      yield this.sendValues(this.actions().updateWithValues, {contract});
       // By default, update balance whenever we get a live account
       yield this.sendValues(this.actions().updateBalance, []);
     }
