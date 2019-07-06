@@ -1,10 +1,13 @@
-//import {GetStoredWallet} from '@the-coin/components/containers/Account/storageSync';
 import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form } from 'semantic-ui-react';
-import { IWindow } from './gauth';
-import { GoogleToken } from '@the-coin/broker-cad';
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import { IWindow } from '../../Settings/gconnect/gauth';
+import { AccountMap } from '@the-coin/components/containers/Account/types';
+import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { buildReducer } from '@the-coin/components/containers/Account/reducer';
+import { connect } from 'react-redux';
+import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
+import { buildMapDispatchToProps, DispatchProps } from '@the-coin/components/containers/Account/actions';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
@@ -16,18 +19,23 @@ function getCookie(name: string) {
 		'';
 }
 
-type MyProps = {
-	account: AccountState
+type Props = {
+  accounts: AccountMap;
+} & DispatchProps;
+
+const initialState = {
+	gauthUrl: "",
+	gauthWindow: null as IWindow|null,
+	timer: undefined as any,
+	wallets: null as null|BrokerCAD.GoogleWalletItem[],
+	token: ""
 }
 
-export class GoogleRestore extends React.PureComponent<MyProps> {
+type State = Readonly<typeof initialState>
 
-	state = {
-		gauthUrl: "",
-		gauthWindow: null as IWindow|null,
-		timer: undefined as any,
-		accounts: null as null|Array<string>
-	}
+export class RestoreClass extends React.PureComponent<Props> {
+
+	state = initialState;
 
 	async componentWillMount()
 	{
@@ -138,21 +146,22 @@ export class GoogleRestore extends React.PureComponent<MyProps> {
 	completeGauthLogin = async (token: string) => {
 		this.clearWaitingTimer();
 		this.clearCallback();
-		// Do not download the decrypted wallet: instead
-		// we read the wallet directly from LS and download that
-		const secureApi = GetSecureApi();
-		const request: GoogleToken = {
-			token
-		}
 
 		// Prematurely disable the account,
 		// because for some reason we aren't
 		// getting the callbacks triggered below
-		this.setState({gauthUrl: ""});
+		this.setState({
+			gauthUrl: "",
+			token
+		});
 
+		// Retrieve all wallets stored on this account
+		// This is because we do not store the token anywhere -
+		// that means it's a single-use token and we can't list/select/read
 		try {
-			const {accounts} = await secureApi.googleList(request);
-			this.setState({accounts})	
+			const secureApi = GetSecureApi();
+			const wallets = await secureApi.googleRetrieve({token: this.state.token})
+			this.setState(wallets)	
 		}
 		catch(err) {
 			console.error(err);
@@ -160,20 +169,74 @@ export class GoogleRestore extends React.PureComponent<MyProps> {
 		}
 	}
 
+	onRestore = async (id: string) => {
+		// We simply push the account into LS
+		const {wallets} = this.state;
+		if (!wallets)
+		{
+			console.error("No wallets found: critical failure");
+			return;
+		}
+		const wallet = wallets.find(w => w.id.id == id);
+		if (!wallet || !wallet.wallet)
+		{
+			console.error("Wallet not found: critical failure");
+			return;
+		}
+		// try and turn into a wallet
+		const asJson = JSON.parse(wallet.wallet)
+		this.props.setSigner(wallet.id.name!, asJson);
+		// Remove wallet from list;
+		this.setState((prevState: State) => {
+			return {
+				wallets: prevState.wallets!.filter(wallet => wallet.id.id != id)
+			}
+		})
+	}
+
 	renderConnectButton = () =>
 			<Form>
 				<Button onClick={this.onInitiateLogin} disabled={!this.state.gauthUrl}>Restore from Google</Button>
 			</Form>
 
-	renderAccountList = (accounts: string[])	=> 
-		accounts.map(account => <li>{account}</li>)
+	renderAccountList = (wallets: BrokerCAD.GoogleWalletItem[])	=> 
+		wallets.map(wallet => {
+			if (!wallet.wallet)
+				return undefined;
+
+			const {address} = JSON.parse(wallet.wallet)
+			const keys = Object.keys(this.props.accounts);
+			const alreadyLoaded = !!(keys.find(key => (
+				this.props.accounts[key].signer &&
+				this.props.accounts[key].signer!.address == address)
+			));
+			console.log(keys);
+			const buttonText = alreadyLoaded ? "Already Loaded" : "Restore";
+			return (
+			<React.Fragment key={wallet.id.id}>
+				<li key={wallet.id.id}>{wallet.id.name}</li>
+				<Button disabled={alreadyLoaded} onClick={() => this.onRestore(wallet.id.id)}>{buttonText}</Button>
+			</React.Fragment>
+			)}
+		)
 
 	render() 
 	{
-		const {accounts} = this.state;
+		const {wallets} = this.state;
 
-		return (accounts === null) ?
+		return (wallets === null) ?
 			this.renderConnectButton() : 
-			this.renderAccountList(accounts)
+			this.renderAccountList(wallets)
 	}
 }
+
+const key = '__@create|ee25b960';
+
+// We need to ensure we have the Accounts reducer live
+// so we add the reducer here.
+export const Restore = buildReducer<{}>(key)(
+  connect(
+    structuredSelectAccounts,
+    buildMapDispatchToProps(key),
+  )(RestoreClass),
+);

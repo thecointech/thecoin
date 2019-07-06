@@ -8,7 +8,7 @@ import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
 import { Create } from './Create';
 import { Connect } from './Connect';
-import { GoogleRestore } from '../Settings/gconnect/restore';
+import { Restore } from './Restore';
 
 type MyProps = {
   url: string
@@ -88,7 +88,7 @@ class NewAccountClass extends React.PureComponent<Props> {
           render={_ => <UploadWallet readFile={this.readFile} />}
         />
         <Route path={`${url}/connect`} component={Connect} />
-        <Route path={`${url}/restore`} component={GoogleRestore} />
+        <Route path={`${url}/restore`} component={Restore} />
         <Route component={Create} />
       </Switch>
     );
