@@ -64,7 +64,7 @@ export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   return r.status == 200;
 }
 
-export async function listAccounts(token: BrokerCAD.GoogleToken) : Promise<string[]>
+export async function listAccounts(token: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleFileIdent[]>
 {
   const drive = await loginDrive(token);
   const params: drive_v3.Params$Resource$Files$List = {
@@ -72,21 +72,30 @@ export async function listAccounts(token: BrokerCAD.GoogleToken) : Promise<strin
   }
   const r = await drive.files.list(params);
   return (r && r.data && r.data.files) ?
-    r.data.files.map(file => file.originalFilename || '') :
+    r.data.files.map(file => {
+      return {
+        name: file.originalFilename || file.name || "<err>",
+        id: file.id || "<err>"
+      }
+    }) :
     [];
 }
 
 export async function fetchAccount(request: BrokerCAD.GoogleGetRequest) : Promise<string>
 {
+  const {walletName} = request;
+  if (!walletName || !walletName.id)
+    throw new Error("Missing Wallet ID");
   const drive = await loginDrive(request.token);
 
   const params: drive_v3.Params$Resource$Files$Get = {
-    fileId: 'appDataFolder',
+    fileId: walletName.id,
+    alt: 'media',
   }
-  const r = await drive.files.get(params);
-  return (r && r.data && r.data.files) ?
-    r.data.files.map(file => file.originalFilename || '') :
-    [];
+
+  const r = await drive.files.get(params, {responseType: 'arraybuffer'});
+
+  return "";
 }
 // type getEventsCallback = (auth: OAuth2Client) => void;
 // /**
