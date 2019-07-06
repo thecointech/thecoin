@@ -64,109 +64,52 @@ export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   return r.status == 200;
 }
 
-export async function listAccounts(token: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleFileIdent[]>
+export async function listWallets(token: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleFileIdent[]>
 {
   const drive = await loginDrive(token);
+  const wallets = await doListWallets(drive);
+  return wallets.map(file => ({
+      name: file.originalFilename || file.name || "<err>",
+      id: file.id || "<err>"
+    }));
+}
+
+export async function doListWallets(drive: drive_v3.Drive) : Promise<drive_v3.Schema$File[]>
+{
   const params: drive_v3.Params$Resource$Files$List = {
     spaces: 'appDataFolder',
   }
   const r = await drive.files.list(params);
   return (r && r.data && r.data.files) ?
-    r.data.files.map(file => {
-      return {
-        name: file.originalFilename || file.name || "<err>",
-        id: file.id || "<err>"
-      }
-    }) :
+    r.data.files :
     [];
 }
 
-export async function fetchAccount(request: BrokerCAD.GoogleGetRequest) : Promise<string>
+const Buffer2Str = (buff: ArrayBuffer) =>
+  String.fromCharCode.apply(null, new Uint8Array(buff));
+
+export async function fetchWallets(request: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleWalletItem[]>
 {
-  const {walletName} = request;
-  if (!walletName || !walletName.id)
-    throw new Error("Missing Wallet ID");
-  const drive = await loginDrive(request.token);
+  const drive = await loginDrive(request);
+  const wallets = await doListWallets(drive);
+  const fetchArray = wallets.map(async (file) => {
+    const r = await drive.files.get({
+      fileId: file.id,
+      alt: 'media',
+    }, {responseType: 'arraybuffer'});
 
-  const params: drive_v3.Params$Resource$Files$Get = {
-    fileId: walletName.id,
-    alt: 'media',
-  }
+    return <BrokerCAD.GoogleWalletItem>{
+        id: {
+          id: file.id!,
+          name: file.originalFilename || file.name,
+          type: "pwd" // Means it's protected by a password...
+        },
+        wallet: (r.status == 200) ? 
+                  Buffer2Str(r.data as ArrayBuffer) : 
+                  `{ "error": "Error Fetching" }`
+      }
+  })
 
-  const r = await drive.files.get(params, {responseType: 'arraybuffer'});
-
-  return "";
+  const all = Promise.all(fetchArray);
+  return all;
 }
-// type getEventsCallback = (auth: OAuth2Client) => void;
-// /**
-//  * Create an OAuth2 client with the given credentials, and then execute the
-//  * given callback function.
-//  * @param {function} callback The callback to call with the authorized client.
-//  */
-// export async function authorize(callback: getEventsCallback) {
-//   const {client_secret, client_id, redirect_uris} = credentials.web;
-//   const oAuth2Client = new OAuth2Client(client_id, client_secret, redirect_uris[0]);
-
-//   // Check if we have previously stored a token.
-//   fs.readFile(TOKEN_PATH, (err, tokenBuffer) => {
-// 		if (err) return getAccessToken(oAuth2Client, callback);
-// 		const token = tokenBuffer.toString();
-//     oAuth2Client.setCredentials(JSON.parse(token));
-//     callback(oAuth2Client);
-//   });
-// }
-
-// /**
-//  * Get and store new token after prompting for user authorization, and then
-//  * execute the given callback with the authorized OAuth2 client.
-//  * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
-//  * @param {getEventsCallback} callback The callback for the authorized client.
-//  */
-// function getAccessToken(oAuth2Client: OAuth2Client, callback: getEventsCallback) {
-//   const authUrl = oAuth2Client.generateAuthUrl({
-//     access_type: 'online',
-//     scope: SCOPES,
-//   });
-//   console.log('Authorize this app by visiting this url:', authUrl);
-//   const rl = readline.createInterface({
-//     input: process.stdin,
-//     output: process.stdout,
-//   });
-//   rl.question('Enter the code from that page here: ', (code) => {
-//     rl.close();
-//     oAuth2Client.getToken(code, (err, token) => {
-//       if (err || !token) return console.error('Error retrieving access token', err);
-//       oAuth2Client.setCredentials(token);
-//       // Store the token to disk for later program executions
-//       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-//         if (err) return console.error(err);
-//         console.log('Token stored to', TOKEN_PATH);
-//       });
-//       callback(oAuth2Client);
-//     });
-//   });
-// }
-
-// /**
-//  * Lists the names and IDs of up to 10 files.
-//  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
-//  */
-// export function listFiles(auth: OAuth2Client) {
-// 	const drive = new drive_v3.Drive({auth})
-//   //const drive = google.drive({version: 'v3', auth});
-//   drive.files.list({
-//     pageSize: 10,
-//     fields: 'nextPageToken, files(id, name)',
-//   }, (err, res) => {
-//     if (err || !res) return console.log('The API returned an error: ' + err);
-//     const files = res.data.files;
-//     if (files && files.length) {
-//       console.log('Files:');
-//       files.map((file) => {
-//         console.log(`${file.name} (${file.id})`);
-//       });
-//     } else {
-//       console.log('No files found.');
-//     }
-//   });
-// }

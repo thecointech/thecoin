@@ -277,21 +277,27 @@ export interface GoogleAuthUrl {
 /**
  * 
  * @export
- * @interface GoogleGetRequest
+ * @interface GoogleFileIdent
  */
-export interface GoogleGetRequest {
-    /**
-     * 
-     * @type {GoogleToken}
-     * @memberof GoogleGetRequest
-     */
-    token: GoogleToken;
+export interface GoogleFileIdent {
     /**
      * 
      * @type {string}
-     * @memberof GoogleGetRequest
+     * @memberof GoogleFileIdent
      */
-    walletName: string;
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleFileIdent
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleFileIdent
+     */
+    type?: string;
 }
 
 /**
@@ -302,10 +308,10 @@ export interface GoogleGetRequest {
 export interface GoogleGetResult {
     /**
      * 
-     * @type {string}
+     * @type {Array<GoogleWalletItem>}
      * @memberof GoogleGetResult
      */
-    wallet: string;
+    wallets: Array<GoogleWalletItem>;
 }
 
 /**
@@ -316,10 +322,10 @@ export interface GoogleGetResult {
 export interface GoogleListResult {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<GoogleFileIdent>}
      * @memberof GoogleListResult
      */
-    accounts: Array<string>;
+    wallets: Array<GoogleFileIdent>;
 }
 
 /**
@@ -360,6 +366,26 @@ export interface GoogleToken {
      * @memberof GoogleToken
      */
     token: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface GoogleWalletItem
+ */
+export interface GoogleWalletItem {
+    /**
+     * 
+     * @type {GoogleFileIdent}
+     * @memberof GoogleWalletItem
+     */
+    id: GoogleFileIdent;
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleWalletItem
+     */
+    wallet?: string;
 }
 
 /**
@@ -1516,14 +1542,14 @@ export const SecureApiFetchParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary Retrieve previously-stored file from google drive
-         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {GoogleToken} googleToken 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        googleRetrieve(googleGetRequest: GoogleGetRequest, options: any = {}): FetchArgs {
-            // verify required parameter 'googleGetRequest' is not null or undefined
-            if (googleGetRequest === null || googleGetRequest === undefined) {
-                throw new RequiredError('googleGetRequest','Required parameter googleGetRequest was null or undefined when calling googleRetrieve.');
+        googleRetrieve(googleToken: GoogleToken, options: any = {}): FetchArgs {
+            // verify required parameter 'googleToken' is not null or undefined
+            if (googleToken === null || googleToken === undefined) {
+                throw new RequiredError('googleToken','Required parameter googleToken was null or undefined when calling googleRetrieve.');
             }
             const localVarPath = `/secure/google/get`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1541,8 +1567,8 @@ export const SecureApiFetchParamCreator = function (configuration?: Configuratio
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"GoogleGetRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(googleGetRequest || {}) : (googleGetRequest || "");
+            const needsSerialization = (<any>"GoogleToken" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(googleToken || {}) : (googleToken || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1617,12 +1643,12 @@ export const SecureApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Retrieve previously-stored file from google drive
-         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {GoogleToken} googleToken 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleGetResult> {
-            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleRetrieve(googleGetRequest, options);
+        googleRetrieve(googleToken: GoogleToken, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleGetResult> {
+            const localVarFetchArgs = SecureApiFetchParamCreator(configuration).googleRetrieve(googleToken, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1674,12 +1700,12 @@ export const SecureApiFactory = function (configuration?: Configuration, fetch?:
         /**
          * 
          * @summary Retrieve previously-stored file from google drive
-         * @param {GoogleGetRequest} googleGetRequest 
+         * @param {GoogleToken} googleToken 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any) {
-            return SecureApiFp(configuration).googleRetrieve(googleGetRequest, options)(fetch, basePath);
+        googleRetrieve(googleToken: GoogleToken, options?: any) {
+            return SecureApiFp(configuration).googleRetrieve(googleToken, options)(fetch, basePath);
         },
     };
 };
@@ -1729,13 +1755,13 @@ export class SecureApi extends BaseAPI {
     /**
      * 
      * @summary Retrieve previously-stored file from google drive
-     * @param {GoogleGetRequest} googleGetRequest 
+     * @param {GoogleToken} googleToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecureApi
      */
-    public googleRetrieve(googleGetRequest: GoogleGetRequest, options?: any) {
-        return SecureApiFp(this.configuration).googleRetrieve(googleGetRequest, options)(this.fetch, this.basePath);
+    public googleRetrieve(googleToken: GoogleToken, options?: any) {
+        return SecureApiFp(this.configuration).googleRetrieve(googleToken, options)(this.fetch, this.basePath);
     }
 
 }

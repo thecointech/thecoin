@@ -424,7 +424,7 @@ paths:
         name: "token"
         required: true
         schema:
-          $ref: "#/definitions/GoogleGetRequest"
+          $ref: "#/definitions/GoogleToken"
       responses:
         200:
           description: "Account successfully stored"
@@ -752,36 +752,67 @@ definitions:
       walletName: "walletName"
       token:
         token: "token"
-  GoogleGetRequest:
+  GoogleFileIdent:
     required:
-    - "token"
-    - "walletName"
+    - "id"
     properties:
-      token:
-        $ref: "#/definitions/GoogleToken"
-      walletName:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      type:
         type: "string"
     example:
-      walletName: "walletName"
-      token:
-        token: "token"
-  GoogleGetResult:
+      name: "name"
+      id: "id"
+      type: "type"
+  GoogleWalletItem:
     required:
-    - "wallet"
+    - "id"
     properties:
+      id:
+        $ref: "#/definitions/GoogleFileIdent"
       wallet:
         type: "string"
     example:
       wallet: "wallet"
+      id:
+        name: "name"
+        id: "id"
+        type: "type"
   GoogleListResult:
     required:
-    - "accounts"
+    - "wallets"
     properties:
-      accounts:
+      wallets:
         type: "array"
         items:
-          type: "string"
+          $ref: "#/definitions/GoogleFileIdent"
     example:
-      accounts:
-      - "accounts"
-      - "accounts"
+      wallets:
+      - name: "name"
+        id: "id"
+        type: "type"
+      - name: "name"
+        id: "id"
+        type: "type"
+  GoogleGetResult:
+    required:
+    - "wallets"
+    properties:
+      wallets:
+        type: "array"
+        items:
+          $ref: "#/definitions/GoogleWalletItem"
+    example:
+      wallets:
+      - wallet: "wallet"
+        id:
+          name: "name"
+          id: "id"
+          type: "type"
+      - wallet: "wallet"
+        id:
+          name: "name"
+          id: "id"
+          type: "type"

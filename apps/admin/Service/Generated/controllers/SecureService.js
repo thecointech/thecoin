@@ -31,7 +31,15 @@ exports.googleList = function(token) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "accounts" : [ "accounts", "accounts" ]
+  "wallets" : [ {
+    "name" : "name",
+    "id" : "id",
+    "type" : "type"
+  }, {
+    "name" : "name",
+    "id" : "id",
+    "type" : "type"
+  } ]
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -58,14 +66,28 @@ exports.googlePut = function(uploadPacket) {
 /**
  * Retrieve previously-stored file from google drive
  *
- * token GoogleGetRequest 
+ * token GoogleToken 
  * returns GoogleGetResult
  **/
 exports.googleRetrieve = function(token) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "wallet" : "wallet"
+  "wallets" : [ {
+    "wallet" : "wallet",
+    "id" : {
+      "name" : "name",
+      "id" : "id",
+      "type" : "type"
+    }
+  }, {
+    "wallet" : "wallet",
+    "id" : {
+      "name" : "name",
+      "id" : "id",
+      "type" : "type"
+    }
+  } ]
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

@@ -344,38 +344,40 @@ definitions:
   GoogleFileIdent:
     required:
       - id
-      - name
     properties:
       id:
         type: string
       name:
         type: string
+      type:
+        type: string
+
+  GoogleWalletItem:
+    required:
+      - id
+    properties:
+      id:
+        $ref: "#/definitions/GoogleFileIdent"
+      wallet:
+        type: string
         
   GoogleListResult:
     required:
-      - accounts
+      - wallets
     properties:
-      accounts:
+      wallets:
         type: array
         items:
           $ref: "#/definitions/GoogleFileIdent"
 
-  GoogleGetRequest:
-    required:
-      - token
-      - ident
-    properties:
-      token:
-        $ref: "#/definitions/GoogleToken"
-      walletName:
-        $ref: "#/definitions/GoogleFileIdent"
-        
   GoogleGetResult:
     required:
-      - wallet
+      - wallets
     properties:
-      wallet:
-        type: string
+      wallets:
+        type: array
+        items:
+          $ref: "#/definitions/GoogleWalletItem"
 
 ################################################################################
 
@@ -776,7 +778,7 @@ paths:
           name: token
           required: true
           schema:
-            $ref: "#/definitions/GoogleGetRequest"
+            $ref: "#/definitions/GoogleToken"
       responses:
         405:
           description: "Permission Denied"

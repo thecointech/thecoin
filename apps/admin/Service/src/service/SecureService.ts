@@ -1,5 +1,5 @@
 
-import { getAuthUrl, storeOnGoogle, listAccounts } from '../secure/gdrive'
+import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
 import { BrokerCAD } from "@the-coin/types";
 
 /**
@@ -26,8 +26,8 @@ export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
  **/
 export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCAD.GoogleListResult> {
   try {
-    const accounts = await listAccounts(token);
-    return {accounts};
+    const wallets = await listWallets(token);
+    return {wallets};
   }
   catch (err) {
     console.error(err);
@@ -41,7 +41,7 @@ export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCA
  * account GoogleUploadPacket 
  * no response value expected for this operation
  **/
-export async function googlePut(account: BrokerCAD.GooglePutRequest) {
+export async function googlePut(account: BrokerCAD.GooglePutRequest): Promise<boolean> {
   try {
     const result = await storeOnGoogle(account);
     return result;
@@ -56,20 +56,17 @@ export async function googlePut(account: BrokerCAD.GooglePutRequest) {
 /**
  * Retrieve previously-stored file from google drive
  *
- * token GoogleGetRequest 
+ * token GoogleToken 
  * returns GoogleGetResult
  **/
-export async function googleRetrieve(token: BrokerCAD.GoogleToken) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "wallet" : "wallet"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+export async function googleRetrieve(request: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleGetResult> {
+  try {
+    const wallets = await fetchWallets(request);
+    return {wallets};
+  }
+  catch (err) {
+    console.error(err);
+    throw new Error("Server Error")
+  }
 }
 
