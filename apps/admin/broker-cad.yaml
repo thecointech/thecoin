@@ -222,6 +222,13 @@ definitions:
       txHash:
         type: string
 
+  eTransferCodeResponse:
+    properties:
+      code:
+        type: string
+      error:
+        type: string
+
   ############################################################
 
   # Do sale via certified request.  Sale includes token to
@@ -661,6 +668,30 @@ paths:
           required: true
           schema: 
             $ref: "#/definitions/CertifiedSale"
+
+  #############################################################
+
+  /exchange/etransfer/code:
+    put:
+      tags:
+        - Buy
+      summary: "Coin e-Transfer secret answer"
+      description: "A unique code for the requesting user to use as an answer to their e-Transfer question"
+      operationId: "eTransferCode"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: The response confirms to the user the order has been processed
+          schema:
+            $ref: "#/definitions/eTransferCodeResponse"
+      parameters:
+        - in: body
+          name: request
+          description: "Signed certified transfer to this brokers address"
+          required: true
+          schema: 
+            $ref: "#/definitions/SignedMessage"
 
   #############################################################
 

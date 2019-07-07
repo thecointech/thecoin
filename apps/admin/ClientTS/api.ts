@@ -237,6 +237,26 @@ export interface CertifiedTransferResponse {
 /**
  * 
  * @export
+ * @interface ETransferCodeResponse
+ */
+export interface ETransferCodeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferCodeResponse
+     */
+    code?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferCodeResponse
+     */
+    error?: string;
+}
+
+/**
+ * 
+ * @export
  * @interface EncryptedPacket
  */
 export interface EncryptedPacket {
@@ -769,6 +789,119 @@ export class BillPaymentsApi extends BaseAPI {
      */
     public certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any) {
         return BillPaymentsApiFp(this.configuration).certifiedBillPayment(user, certifiedBillPayment, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * BuyApi - fetch parameter creator
+ * @export
+ */
+export const BuyApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * A unique code for the requesting user to use as an answer to their e-Transfer question
+         * @summary Coin e-Transfer secret answer
+         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransferCode(signedMessage: SignedMessage, options: any = {}): FetchArgs {
+            // verify required parameter 'signedMessage' is not null or undefined
+            if (signedMessage === null || signedMessage === undefined) {
+                throw new RequiredError('signedMessage','Required parameter signedMessage was null or undefined when calling eTransferCode.');
+            }
+            const localVarPath = `/exchange/etransfer/code`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"SignedMessage" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(signedMessage || {}) : (signedMessage || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BuyApi - functional programming interface
+ * @export
+ */
+export const BuyApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * A unique code for the requesting user to use as an answer to their e-Transfer question
+         * @summary Coin e-Transfer secret answer
+         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransferCode(signedMessage: SignedMessage, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ETransferCodeResponse> {
+            const localVarFetchArgs = BuyApiFetchParamCreator(configuration).eTransferCode(signedMessage, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * BuyApi - factory interface
+ * @export
+ */
+export const BuyApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * A unique code for the requesting user to use as an answer to their e-Transfer question
+         * @summary Coin e-Transfer secret answer
+         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransferCode(signedMessage: SignedMessage, options?: any) {
+            return BuyApiFp(configuration).eTransferCode(signedMessage, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * BuyApi - object-oriented interface
+ * @export
+ * @class BuyApi
+ * @extends {BaseAPI}
+ */
+export class BuyApi extends BaseAPI {
+    /**
+     * A unique code for the requesting user to use as an answer to their e-Transfer question
+     * @summary Coin e-Transfer secret answer
+     * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BuyApi
+     */
+    public eTransferCode(signedMessage: SignedMessage, options?: any) {
+        return BuyApiFp(this.configuration).eTransferCode(signedMessage, options)(this.fetch, this.basePath);
     }
 
 }

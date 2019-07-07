@@ -307,6 +307,29 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "Sell"
+  /exchange/etransfer/code:
+    put:
+      tags:
+      - "Buy"
+      summary: "Coin e-Transfer secret answer"
+      description: "A unique code for the requesting user to use as an answer to their\
+        \ e-Transfer question"
+      operationId: "eTransferCode"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "Signed certified transfer to this brokers address"
+        required: true
+        schema:
+          $ref: "#/definitions/SignedMessage"
+      responses:
+        200:
+          description: "The response confirms to the user the order has been processed"
+          schema:
+            $ref: "#/definitions/eTransferCodeResponse"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Buy"
   /bills/{user}:
     post:
       tags:
@@ -619,6 +642,15 @@ definitions:
     example:
       message: "message"
       txHash: "txHash"
+  eTransferCodeResponse:
+    properties:
+      code:
+        type: "string"
+      error:
+        type: "string"
+    example:
+      code: "code"
+      error: "error"
   CertifiedSale:
     required:
     - "clientEmail"
