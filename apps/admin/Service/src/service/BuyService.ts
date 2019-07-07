@@ -1,4 +1,5 @@
-'use strict';
+import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { GenerateCode } from "../Buy/eTransfer";
 
 
 /**
@@ -8,18 +9,16 @@
  * request SignedMessage Signed certified transfer to this brokers address
  * returns eTransferCodeResponse
  **/
-exports.eTransferCode = function(request) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "code" : "code",
-  "error" : "error"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+export async function eTransferCode(request: BrokerCAD.SignedMessage): Promise<BrokerCAD.eTransferCodeResponse> {
+  try {
+    const code = await GenerateCode(request);
+    return {
+      code
     }
-  });
+  }
+  catch(e) {
+    console.error(JSON.stringify(e));
+    throw new Error("Server Error");
+  }
 }
 
