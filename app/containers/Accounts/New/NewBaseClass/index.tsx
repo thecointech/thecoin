@@ -115,7 +115,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
 
   /////////////////////////////////////////////////////////////
   // Render
-  RenderNameInput() {
+  RenderNameInput(disabled?: boolean) {
     const { forceValidate, nameValid, nameMessage } = this.state;
     return (
       <UxInput
@@ -125,11 +125,12 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         isValid={nameValid}
         message={nameMessage}
         placeholder="Account Name"
+        disabled={disabled}
       />
     );
   }
 
-  RenderReferralInput() {
+  RenderReferralInput(disabled?: boolean) {
     const { forceValidate, referrerValid, referrerMessage } = this.state;
     return (
       <UxInput
@@ -139,6 +140,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         isValid={referrerValid}
         message={referrerMessage}
         placeholder="Referrer"
+        disabled={disabled}
       />
     );
   }

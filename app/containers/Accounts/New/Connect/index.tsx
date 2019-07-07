@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Header } from 'semantic-ui-react';
+import { Button, Form, Header, Message } from 'semantic-ui-react';
 
 import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
 import { buildReducer } from '@the-coin/components/containers/Account/reducer';
@@ -33,39 +33,56 @@ class ConnectClass extends NewBaseClass<BaseState> {
       if (!this.registerReferral(theSigner.address, accountReferrer))
         return false;
       this.props.setSigner(accountName, theSigner);
-			this.TriggerRedirect();
-			return true;
+      this.TriggerRedirect();
+      return true;
     }
     return false;
   }
 
-  render() {
-		if (this.ShouldRedirect())
-			return this.RenderRedirect();
-			
+  RenderWarning = () => (
+    <Message warning>
+      <Message.Header>
+        <FormattedMessage {...messages.warningHeader} />
+      </Message.Header>
+      <p><FormattedMessage {...messages.warningP1} /></p>
+      <p><FormattedMessage {...messages.warningP2} /></p>
+    </Message>
+  );
+
+  RenderContent() {
     const win: any = window;
     const { web3 } = win;
-    return web3 ? (
-      <React.Fragment>
+    const disabled = !web3;
+    const warning = disabled ? this.RenderWarning() : undefined;
+    return (
+      <>
+        {warning}
         <Form>
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage {...messages.header} />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
-          </Header>
-          {this.RenderNameInput()}
-          {this.RenderReferralInput()}
-          <Button onClick={this.onConnect}>Connect to Web3</Button>
+          {this.RenderNameInput(disabled)}
+          {this.RenderReferralInput(disabled)}
+          <Button disabled={disabled} onClick={this.onConnect}>
+            Connect to Web3
+          </Button>
         </Form>
-      </React.Fragment>
-    ) : (
-      <div>
-        Non-Ethereum browser detected. You should consider trying MetaMask or
-        the new Opera browser!'
-      </div>
+      </>
+    );
+  }
+
+  render() {
+    if (this.ShouldRedirect()) return this.RenderRedirect();
+
+    return (
+      <>
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...messages.header} />
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...messages.subHeader} />
+          </Header.Subheader>
+        </Header>
+        {this.RenderContent()}
+      </>
     );
   }
 }
