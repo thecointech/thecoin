@@ -104,7 +104,6 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
     const { accountMap, account, dispatch } = this.props;
     const { signer, name } = account;
     if (signer === null) {
-      //return <UploadWallet onSelect={this.onFileUpload} />;
       return <div>FixMe</div>;
     }
     else {

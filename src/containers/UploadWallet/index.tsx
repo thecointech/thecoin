@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-//import styles from './index.module.css'
-import { Label, Container, Icon } from 'semantic-ui-react';
+import { Label, Container, Icon, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
 import { buildReducer } from '../Account/reducer';
 import { buildMapDispatchToProps, DispatchProps } from '../Account/actions';
+import styles from './index.module.css';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages'
 
 interface MyProps {
   readFile: (path: File) => Promise<string>;
@@ -44,13 +46,31 @@ class UploadWalletClass extends React.PureComponent<Props> {
 
   render() {
     return (
-      <Container>
-        <Label width="4" as="label" htmlFor={this.id} size="massive">
-          <Icon name="cloud upload" size="massive" />
-          Upload File
-        </Label>
-        <input id={this.id} hidden type="file" accept=".json" onChange={this.onChangeFile} />
-      </Container>
+      <>
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...messages.header}/>
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...messages.subHeader} />
+          </Header.Subheader>
+        </Header>
+        <Container>
+            <Label width="4" as="label" htmlFor={this.id} size="huge" className={styles.dropzone}>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column>
+                    <Icon name="cloud upload" size="massive" className={styles.icon}/>
+                  </Grid.Column>
+                  <Grid.Column verticalAlign="middle">
+                    <p>Drag 'n' drop a wallet file here, or click to browse</p>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Label>
+            <input id={this.id} hidden type="file" accept=".json" onChange={this.onChangeFile} />
+        </Container>
+      </>
     );
   }
 }
