@@ -12,16 +12,22 @@ import { Grid, Image, Header } from 'semantic-ui-react';
 
 export function UnderConstruction() {
   return (
-    <Grid centered stretched verticalAlign="middle">
-      <Header as="h1">
-        <Header.Content>
-          <FormattedMessage {...messages.header} />
-        </Header.Content>
-        <Header.Subheader>
-          <Image bordered rounded src={image} alt='Under Construction' />
-          <FormattedMessage {...messages.subHeader} />
-        </Header.Subheader>
-      </Header>
+    <Grid centered textAlign='center' verticalAlign="middle" columns={2}>
+      <Grid.Column textAlign='center' >
+          <Header as="h1">
+            <Header.Content>
+              <FormattedMessage {...messages.header} />
+            </Header.Content>
+            <Header.Subheader>
+              <Image styles={{margin: "auto"}} bordered rounded src={image} alt='Under Construction' />
+              <FormattedMessage {...messages.subHeader} />
+            </Header.Subheader>
+          </Header>
+          <Header as="h4">
+            <FormattedMessage {...messages.suggestEmail} />
+            <a href="mailto:support@thecoin.io">support@thecoin.io</a>
+          </Header>
+      </Grid.Column>
     </Grid>
   );
 }

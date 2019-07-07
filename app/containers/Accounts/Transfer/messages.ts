@@ -30,7 +30,7 @@ export default defineMessages({
   },
   step3: {
     id: `${scope}.step3`,
-    defaultMessage: "Step 3 of 3:\nWaiting for the transfer to be accepted (check progress {link})...",
+    defaultMessage: "Step 3 of 3:\nWaiting for the transfer to be accepted\n(check progress {link})...",
   },
   transferOutProgress: {
     id: `${scope}.transferOutProgress`,

@@ -208,7 +208,6 @@ export class RestoreClass extends React.PureComponent<Props> {
 				this.props.accounts[key].signer &&
 				this.props.accounts[key].signer!.address == address)
 			));
-			console.log(keys);
 			const buttonText = alreadyLoaded ? "Already Loaded" : "Restore";
 			return (
 			<React.Fragment key={wallet.id.id}>

@@ -75,10 +75,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.setState({transferMessage: messages.step2, percentComplete: 0.25});
     const response = await sellApi.certifiedCoinSale(sellCommand);
 
-    console.log(`Response: ${response.message}`);
     if (!response.txHash)
     {
-      alert(response.message);
+      console.log(`Error: ${JSON.stringify(response)}`);
       return false;
     }
     

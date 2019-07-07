@@ -30,8 +30,10 @@ export class GAuth extends React.PureComponent {
       const opener: IWindow = window.opener;
       if (opener && opener.completeGauthLogin) {
 				opener.completeGauthLogin(code);
-				this.setState({ message: messages.tokenSuccess });
-				
+        this.setState({ message: messages.tokenSuccess });
+        // Attempt close.  If this fails, hopefully
+        // the message lets people know  they can ignore this page.
+        window.close()
       } else {
         // If we can't call that function, set the cookie data instead
         document.cookie = `gauth=${encodeURI(code)}; path=/`;
