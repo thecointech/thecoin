@@ -75,6 +75,10 @@ export namespace BrokerCAD {
   export interface GoogleAuthUrl {
     url: string;
   }
+  export interface eTransferCodeResponse {
+    code?: string;
+    error?: string;
+  }
   export interface EncryptedPacket {
     encryptedPacket: string;
     name?: string;
