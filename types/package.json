@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/types",
-  "version": "0.1.11",
+  "version": "0.1.20",
   "main": "lib/index.ts",
   "license": "MIT",
   "scripts": {

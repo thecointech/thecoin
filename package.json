@@ -2,7 +2,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/pricing": "^0.1.1",
-    "@the-coin/types": "^0.1.10",
+    "@the-coin/types": "^0.1.20",
     "@the-coin/utilities": "^0.1.43",
     "@types/lodash": "^4.14.134",
     "connected-react-router": "^6.4.0",
