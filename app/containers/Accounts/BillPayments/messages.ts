@@ -14,7 +14,7 @@ export default defineMessages({
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: "Pay yo bills, biatch!.",
+    defaultMessage: "You can pay your bills directly from The Coin.",
   },
   transferOutHeader: {
     id: `${scope}.transferHeader`,
