@@ -4,7 +4,7 @@ enum ServicePorts {
 } 
 
 function ServiceAddress(port: ServicePorts) {
-	return (process.env.NODE_MODULE !== 'production') ?
+	return (process.env.NODE_ENV !== 'production') ?
 		'http://localhost:' + port :
 		undefined;
 }

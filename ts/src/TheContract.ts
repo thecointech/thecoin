@@ -1,6 +1,6 @@
 import { Wallet, Signer, Contract, ethers } from 'ethers';
 import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
-import { IsDebug } from './IsDebug'
+//import { IsDebug } from './IsDebug'
 
 type Network = "ropsten"|"mainnet";
 async function BuildContract(network: Network) {
@@ -15,8 +15,8 @@ async function BuildContract(network: Network) {
 	return new ethers.Contract(address, abi, provider);
 }
 
-if (!IsDebug)
-	throw new Error("Fix this!");
+//if (!IsDebug)
+//	throw new Error("Fix this!");
 export const InitialCoinBlock = 4456169;
 
 let _contract: Contract|undefined = undefined;
@@ -24,7 +24,7 @@ export async function GetContract() : Promise<Contract> {
 
 	if (!_contract)
 	{
-		const network = IsDebug ? 'ropsten' : 'mainnet';
+		const network = 'ropsten'; //IsDebug ? 'ropsten' : 'mainnet';
 		_contract = await BuildContract(network);
 	}
 	return _contract;
