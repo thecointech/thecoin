@@ -17,7 +17,7 @@ import * as url from "url";
 import * as portableFetch from "portable-fetch";
 import { Configuration } from "./configuration";
 
-const BASE_PATH = "https://the-broker-cad.appspot.com".replace(/\/+$/, "");
+const BASE_PATH = "https://broker-cad.appspot.com".replace(/\/+$/, "");
 
 /**
  *

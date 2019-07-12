@@ -31,7 +31,7 @@ export async function GenerateCode(request: BrokerCAD.SignedMessage)
 	const signer = utils.verifyMessage(mhash, signature);
 	// generate this signers secret key
 	const wallet = await GetWallet();
-	const rhash = GetHash(signer);
+	const rhash = GetHash(signer.toLowerCase());
 	const rsign = await wallet.signMessage(rhash);
 	// We multi-purpose the referrer code
 	// to give a unique & repeatable code per-user

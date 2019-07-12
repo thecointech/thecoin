@@ -1,5 +1,5 @@
 
-import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
+import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../Secure/gdrive'
 import { BrokerCAD } from "@the-coin/types";
 
 /**

@@ -18,7 +18,10 @@
 # Node.js dependencies:
 node_modules/
 coverage/
+Generated/
 src/
+obj/
+.vscode/
 .nyc_output/
 
 # don't upload tests
