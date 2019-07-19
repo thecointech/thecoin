@@ -1,0 +1,31 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+/*-------------------
+       Element
+--------------------*/
+
+@backgroundColor: @primaryColor;
+@textColor: #FFFFFF;
+
+@transition:
+  opacity 0.3s @defaultEasing,
+  background-color 0.3s @defaultEasing,
+  color 0.3s @defaultEasing,
+  box-shadow 0.3s @defaultEasing,
+  background 0.3s @defaultEasing
+;
+/*-------------------
+        State
+--------------------*/
+
+@hoverBackgroundColor: @primaryColor;
+@hoverColor: #FFEF98;
+
+@downBackgroundColor: #2646A4;
+@downColor: #FFEF98;
+
+@activeBackgroundColor: #2646A4;
+@activeColor: #FFEF98;
+
