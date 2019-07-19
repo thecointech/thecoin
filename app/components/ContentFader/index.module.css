@@ -1,4 +1,4 @@
-@value TransitionDuration from "styles/constants.css";
+@value TransitionDuration from "../../styles/constants.css";
 
 .fadeBase > div {
   position: absolute;

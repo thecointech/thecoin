@@ -1,4 +1,4 @@
-@value SidebarWidth from "styles/constants.css";
+@value SidebarWidth from "../../styles/constants.css";
 
 .pageMainInner {
   min-height: 250px;

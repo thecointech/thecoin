@@ -9,6 +9,5 @@ stats.json
 npm-debug.log
 .idea
 .awcache
-*.css.d.ts
 app/styles/semantic/
 .firebase/
