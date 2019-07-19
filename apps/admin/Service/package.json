@@ -16,7 +16,7 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@the-coin/utilities": "^0.1.47",
+    "@the-coin/utilities": "^0.1.48",
     "@types/node-mailjet": "^3.3.0",
     "cors": "^2.8.5",
     "ethers": "^4.0.29",

@@ -9,12 +9,12 @@ import { BrokerCAD } from '@the-coin/types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
-
+const AUTH_REDIR_IDX = process.env.NODE_ENV === 'development' ? 0 : 1;
 
 function  buildAuth()
 {
   const {client_secret, client_id, redirect_uris} = credentials.web;
-  return new OAuth2Client(client_id, client_secret, redirect_uris[0]);
+  return new OAuth2Client(client_id, client_secret, redirect_uris[AUTH_REDIR_IDX]);
 }
 
 async function loginDrive(authToken: BrokerCAD.GoogleToken)

@@ -13,3 +13,5 @@ Service/build/
 Service/obj/incr
 firestore-db-service-account.json
 Service/src/exchange/AutoMailer.secret.ts
+manager-ts/app/containers/BrokerTransferAssistant/secret.json
+broker-cad-8cc826718d9d.json
