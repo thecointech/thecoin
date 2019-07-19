@@ -20,14 +20,18 @@ import "react-datetime/css/react-datetime.css"
 import { GetUserDoc } from '@the-coin/utilities/lib/User';
 import { NextOpenTimestamp } from '@the-coin/utilities/lib/MarketStatus';
 import { Timestamp, DocumentReference } from '@google-cloud/firestore';
+import { GetWallet } from 'containers/BrokerTransferAssistant/Wallet';
+import { utils } from 'ethers';
+import { GetReferrerCode } from '@the-coin/utilities/lib/Referrals';
 
 interface PurchaseRecord {
 	coin: number,
 	fiat: number,
-	created: Timestamp,
+	recieved: Timestamp,
+	settled: Timestamp,
+	completed: Timestamp,
 	txHash: string,
-	emailHash: string,
-	complete: boolean
+	emailHash: string
 }
 
 type MyProps = AccountState & {
@@ -38,7 +42,10 @@ type Props = MyProps & FxSelect.ContainerState & FxAction.DispatchProps;
 const initialState = {
 	coin: 0,
 	account: "",
-	date: new Date(),
+	purchaserCode: "---",
+
+	recievedDate: new Date(),
+	settledDate: new Date(),
 
 	email: "",
 
@@ -49,12 +56,23 @@ const initialState = {
 	doConfirm: false
 }
 
+// Todo: move SignMessage-y fn's to utilities
+function GetHash(
+  value: string
+) {
+  const ethersHash = utils.solidityKeccak256(
+    ["string"],
+    [value]
+  );
+  return utils.arrayify(ethersHash);
+}
+
 class PurchaseClass extends React.PureComponent<Props> {
 
 	state = initialState;
 
 	async sendPurchase() {
-		const { coin, account, date } = this.state;
+		const { coin, account, settledDate } = this.state;
 		const { contract } = this.props;
 		const fxRate = this.getSelectedFxRate()
 
@@ -68,14 +86,14 @@ class PurchaseClass extends React.PureComponent<Props> {
 			alert("Invalid Coin")
 			return;
 		}
-		if (date.getTime() > Date.now()) 
+		if (settledDate.getTime() > Date.now()) 
 		{
 			alert("This set for a future date.\nIt is not possible to complete a purchase in the future.")
 			return;
 		}
 		try {
 			this.setState({isProcessing: true, step: "Initializing Transaction"});
-			const ts = Math.round(date.getTime() / 1000);
+			const ts = Math.round(settledDate.getTime() / 1000);
 
 			// First record our intent to send this tx
 			var doc = await this.recordTxOpen();
@@ -98,30 +116,31 @@ class PurchaseClass extends React.PureComponent<Props> {
 		} catch (e) {
 			alert(e);
 		}
-		this.setState({isProcessing: false})
+		this.setState(initialState)
 	}
 
-	async buildPurchaseEntry() {
-		const { coin, date, email } = this.state;
+	async buildPurchaseEntry() : Promise<PurchaseRecord> {
+		const { coin, recievedDate, settledDate, email } = this.state;
 		const { signer } = this.props;
 		const fxRate = this.getSelectedFxRate();
 		const emailHash = await signer.signMessage(email.toLocaleLowerCase());
 		return {
 			coin,
 			fiat: toHuman(coin * fxRate, true),
-			created: Timestamp.fromDate(date),
+			recieved: Timestamp.fromDate(recievedDate),
+			settled: Timestamp.fromDate(settledDate),
 			txHash: '---',
 			emailHash,
-			complete: false
+			completed: null
 		};
 	}
 
 	async recordTxOpen() {
-		const { account, date } = this.state;
+		const { account, recievedDate } = this.state;
 		const userDoc = await GetUserDoc(account);
 		// We use the timestamp as ID to ensure we have
 		// a chance of catching duplicate purchases
-		const purchaseId = date.getTime().toString();
+		const purchaseId = recievedDate.getTime().toString();
 		const purchaseDoc = userDoc.collection("Purchase").doc(purchaseId);
 
 		try {
@@ -158,7 +177,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 	async recordTxComplete(purchaseDoc: DocumentReference) {
 		try {
 			const data: Partial<PurchaseRecord> = {
-				complete: true
+				completed: Timestamp.now()
 			}
 			await purchaseDoc.update(data);
 		}
@@ -182,15 +201,18 @@ class PurchaseClass extends React.PureComponent<Props> {
 		if (asm.toDate != undefined)
 		{
 			const asDate = await this.getValidDate(asm);
-			this.setState({date: asDate});
+			this.setState({
+				recievedDate: asm.toDate(),
+				settledDate: asDate
+			});
 			this.props.fetchRateAtDate(asDate);
 		}
 	}
 
 	getSelectedFxRate() {
-		const { date } = this.state;
+		const { settledDate } = this.state;
 		const { rates } = this.props;
-		const rate = getFxRate(rates, date.getTime());
+		const rate = getFxRate(rates, settledDate.getTime());
 		return rate.sell * rate.fxRate;
 	}
 
@@ -203,18 +225,27 @@ class PurchaseClass extends React.PureComponent<Props> {
 		this.setState({
 			account: value,
 		});
+		this.updateCode(value);
 	}
 	handleCoinChange = (value: number) => this.setState({ coin: value })
 	confirmOpen = () => this.setState({ doConfirm: true })
 	confirmClose = () => this.setState({ doConfirm: false })
-	handleConfirm = () => {
+	handleConfirm = async () => {
 		this.setState({ doConfirm: false })
-		this.sendPurchase()
+		await this.sendPurchase()
 		this.resetInputs();
 	}
 
+	async updateCode(account: string) {
+		const wallet = await GetWallet();
+		const rhash = GetHash(account.toLowerCase());
+		const rsign = await wallet.signMessage(rhash);
+		const code = GetReferrerCode(rsign);
+		this.setState({purchaserCode: code});
+	}
+
 	render() {
-		const { coin, date, isProcessing, step } = this.state
+		const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode } = this.state
 		const { balance } = this.props;
 		const fxRate = this.getSelectedFxRate()
 
@@ -225,7 +256,8 @@ class PurchaseClass extends React.PureComponent<Props> {
 				<Header>Purchase</Header>
 				<p>Current Balance: {toHuman(balance, true)} </p>
 				<Form>
-					<Datetime value={date} onChange={this.onSetDate} />
+					<Datetime value={recievedDate} onChange={this.onSetDate} />
+					<p>Settled: {settledDate.toString()}</p>
 					<p>FxRate: {roundPlaces(fxRate)} </p>
 					<UxAddress
 						uxChange={this.onAccountValue}
@@ -233,6 +265,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 						forceValidate={forceValidate}
 						placeholder="Purchaser Account"
 					/>
+					<p>Purchaser Code: {purchaserCode}</p>
 					<DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={fxRate} />
 					<Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
 				</Form>

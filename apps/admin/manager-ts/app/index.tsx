@@ -19,8 +19,12 @@ const translationMessages = {
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import './app.global.css';
+//import './app.global.css';
 import 'semantic-ui-css/semantic.min.css'
+
+// We do some hackery with the path.fix to allow
+import {pathFix} from './utils/pathFix';
+pathFix();
 
 const initialState = {};
 const store = configureStore(initialState, history);
