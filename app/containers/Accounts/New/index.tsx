@@ -6,6 +6,7 @@ import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
 import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
+import { Wizard } from './Wizard'
 import { Create } from './Create';
 import { Connect } from './Connect';
 import { Restore } from './Restore';
@@ -89,7 +90,8 @@ class NewAccountClass extends React.PureComponent<Props> {
         />
         <Route path={`${url}/connect`} component={Connect} />
         <Route path={`${url}/restore`} component={Restore} />
-        <Route component={Create} />
+        <Route path={`${url}/create`} component={Create} />
+        <Route component={Wizard} />
       </Switch>
     );
   }

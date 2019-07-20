@@ -10,12 +10,16 @@ export const scope = 'app.containers.Account.Wizard';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'New Account Wizard',
+    defaultMessage: 'New Account Setup',
   },
   subHeader: {
     id: `${scope}.subHeader`,
     defaultMessage:
-      'This wizard will guide you to the best combination of security and convenience for you',
+      'The Coin accounts are built on blockchain technology.\
+      Correctly setup, these accounts provide a level of security\
+      unmatched by traditional institutions.  This wizard will\
+      guide you to ensure your account is stored safely according\
+      to your needs and wants.',
   },
 	
 	valueHeader: {
@@ -30,29 +34,52 @@ export default defineMessages({
     id: `${scope}.valueMessageMouseOver`,
     defaultMessage: 'The more value in an account, the higher security and less convenience we recommend',
   },
-  
 
+  techChoiceHeader: {
+    id: `${scope}.techChoiceHeader`,
+    defaultMessage: 'Technical Options',
+	},
+	techChoiceMessage: {
+    id: `${scope}.techChoiceMessage`,
+    defaultMessage: 'Are you comfortable with either of these actions?',
+	},
+	techChoiceMessageMouseOver: {
+    id: `${scope}.techChoiceMessageMouseOver`,
+    defaultMessage: 'If you aren\'t sure, leave these blank',
+  },
+  
   convenienceHeader: {
     id: `${scope}.convenienceHeader`,
-    defaultMessage: 'Account Convenience',
+    defaultMessage: 'Account Preferences',
 	},
 	convenienceMessage: {
     id: `${scope}.convenienceMessage`,
-    defaultMessage: 'Please rate your desired convenience vs security',
+    defaultMessage: 'Do you prefer convenience or security?',
 	},
 	convenienceMessageMouseOver: {
     id: `${scope}.convenienceMessageMouseOver`,
-    defaultMessage: 'The more convenience in an account, the higher security and less convenience we recommend',
+    defaultMessage: 'Certain options - ie always online, or the ability to restore without a password, are convenient but result in lower security',
+  },
+  
+  accessibilityHeader: {
+    id: `${scope}.accessibilityHeader`,
+    defaultMessage: 'Account Accessibility',
+	},
+	accessibilityMessage: {
+    id: `${scope}.accessibilityMessage`,
+    defaultMessage: 'Do you want to be able to access your account from any computer (eg - from Internet Cafe)?',
+	},
+	accessibilityMessageMouseOver: {
+    id: `${scope}.accessibilityMessageMouseOver`,
+    defaultMessage: 'This may be necessary if you ever need to access your account from, for example, an internet cafe',
 	},
 
-  warningP1: {
-    id: `${scope}.warningP1`,
-    defaultMessage:
-      'This feature connects The Coin to an external Web3 account provider.',
-  },
-  warningP2: {
-    id: `${scope}.warningP2`,
-    defaultMessage:
-      'To use this feature, either install the MetaMask plugin or try the new Opera browser!',
+  recommendHeader: {
+    id: `${scope}.recommendHeader`,
+    defaultMessage: 'Account Recommendations',
+	},
+	recommendMessage: {
+    id: `${scope}.recommendMessage`,
+    defaultMessage: 'We think the following options will work well for your requirements, choose the one that you like best',
   },
 });

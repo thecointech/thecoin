@@ -4,13 +4,8 @@
 	align-items: center;
 }
 
-.LogoImage {
-	margin-left: auto;
-}
-
-
-.PaymentMethod {
-	margin: 10px;
+.stepIcon {
+	padding-right: 50px
 }
 
 .Clear {

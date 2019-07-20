@@ -64,12 +64,6 @@ module.exports = require('./webpack.base.babel')({
         modules: true,
       },
     },
-    {
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: 'inline',
-      },
-    },
   ],
 
   // Emit a source map for easier debugging

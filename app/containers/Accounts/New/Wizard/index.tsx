@@ -1,35 +1,35 @@
 import * as React from 'react';
-import { Form, Header, Accordion, Icon } from 'semantic-ui-react';
+import { Form, Header, Accordion } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-//import AnimateHeight from 'react-animate-height';
-import { Slider } from "react-semantic-ui-range";
 
 import messages from './messages';
 import { HandHoldingUsd } from 'utils/icons';
 import AnimateHeight from 'react-animate-height';
 import styles from './index.module.css';
-//import { HandHoldingUsd } from 'utils/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getRecommendations } from './Options';
+import { CreateOptionDlg } from './CreateOptionDlg';
+import { ValueLimits, Accessible, Option } from './Options/Types';
 
 const initialState = {
-  activeAccordion: -1,
+  activeAccordion: 0,
 
   // Options
-  value: 1000 as 100 | 1000 | 10000 | 100000,
-  techAbility: false,
-  secureConv: 0.2,
-  responsibility: false,
+  value: undefined as ValueLimits|undefined,
+  installExtn: false,
+  installAppn: false,
+  accessible: undefined as Accessible,
 
-  // showDlg: false,
-  // percentComplete: 0,
-  // transferHeader: messages.getTransferCodeHeader,
-  // transferMessage: messages.fetchTransferCode,
-  // transferValues: undefined as any,
+  selectedOption: null as null|Option
 };
 
-type StateType = Readonly<typeof initialState>;
+
+
+type State = Readonly<typeof initialState>;
+type StateKeys = keyof State;
 type Props = {};
 
-export class Wizard extends React.PureComponent<Props, StateType> {
+export class Wizard extends React.PureComponent<Props> {
   state = initialState;
 
   accordionClick = (e, titleProps) => {
@@ -40,44 +40,107 @@ export class Wizard extends React.PureComponent<Props, StateType> {
     this.setState({ activeAccordion: newIndex });
   };
 
-  handleChange = (e, { name, value }) =>
-    this.setState({ [name]: value } as any);
+  handleChange = (e, args: { name: StateKeys, value: any }) =>
+    this.setState((prevState: State) => { 
+      return {
+        activeAccordion: prevState.activeAccordion + 1, 
+        [args.name]: args.value 
+      } as any;
+    });
 
-  renderValueFormRadio = (value: number, current: number) => (
+  handleChangeCB = (e, args: { name: StateKeys, checked: boolean }) =>
+    this.setState({[args.name]: args.checked} );
+
+  onSetStorage = (e: React.MouseEvent<HTMLButtonElement>, option: Option) => {
+    e.preventDefault();
+    this.setState({selectedOption: option})
+  }
+
+  onCancelSetState = () => 
+    this.setState({selectedOption: null})
+
+  ////////////////////////////////////////////
+
+  renderFormRadio = (label: string, name: string, value: any) => (
+    <Form.Radio
+      label={label}
+      value={value}
+      name={name}
+      checked={value === this.state[name]}
+      onChange={this.handleChange}
+    />
+  );
+
+  renderValueFormRadio = (value: number, current: ValueLimits|undefined) => (
     <Form.Radio
       label={value}
       value={value}
+      name="value"
       checked={value === current}
       onChange={this.handleChange}
     />
   );
 
   renderValueForm = () => (
-      <Form>
         <Form.Group inline>
           <label>Less than:</label>
           {this.renderValueFormRadio(1000, this.state.value)}
           {this.renderValueFormRadio(10000, this.state.value)}
           {this.renderValueFormRadio(100000, this.state.value)}
+          {this.renderFormRadio("No Limit", "value", 0)}
         </Form.Group>
-      </Form>
     );
 
-  renderSecurityConvenienceForm = () => (
+  renderTechChoiceForm = () => (
+    <Form.Group inline>
+      <Form.Checkbox name="installExtn" onChange={this.handleChangeCB} label='Installing Browser Extensions' />
+      <Form.Checkbox name="installAppn" onChange={this.handleChangeCB} label='Using Opera Browser' />
+      <Form.Button onClick={this.handleChange}>NEXT</Form.Button>
+    </Form.Group>
+  );
+
+  // renderConvencienceChoice = () => (
+  //   <>
+  //     <Form.Group inline>
+  //       <Form.Radio
+  //         label="Security"
+  //         name="preferSecurity"
+  //         value="security"
+  //         checked={this.state.prefer === "security"}
+  //         onChange={this.handleChange}
+  //       />
+  //       <Form.Radio
+  //         label="Convenience"
+  //         name="preferSecurity"
+  //         value="convenience"
+  //         checked={this.state.prefer === "convenience"}
+  //         onChange={this.handleChange}
+  //       />
+  //     </Form.Group>
+  //   </>
+  // )
+
+  renderAccessibilityChoice = () => (
     <>
-      <Slider value={this.state.secureConv} color="red" settings={{
-        start: 3,
-        min: 0,
-        max: 5,
-        step: 1,
-        onChange: this.handleChange
-    }} />
+      <Form.Group inline>
+        {this.renderFormRadio("Restrict access to my personal device", "accessible", "false")}
+        {this.renderFormRadio("I want access from any device", "accessible", "true")}
+      </Form.Group>
     </>
   )
 
+  renderRecommendationForm = () => (
+    getRecommendations(this.state).map(rec => {
+      return <Form.Button onClick={(e) => this.onSetStorage(e, rec)}>{rec.name}</Form.Button>
+    })
+  )
+
+  ///////////////////////////////////////////////////////////////////
+
+
   render() {
     const { activeAccordion } = this.state;
-    const wizardOptions = [
+    const choices = [
       {
         icon: HandHoldingUsd,
         title: messages.valueHeader,
@@ -86,36 +149,57 @@ export class Wizard extends React.PureComponent<Props, StateType> {
       },
       {
         icon: HandHoldingUsd,
-        title: messages.convenienceHeader,
-        message: messages.convenienceMessage,
-        content: this.renderSecurityConvenienceForm(),
+        title: messages.techChoiceHeader,
+        message: messages.techChoiceMessage,
+        content: this.renderTechChoiceForm(),
       },
+      // {
+      //   icon: HandHoldingUsd,
+      //   title: messages.convenienceHeader,
+      //   message: messages.convenienceMessage,
+      //   content: this.renderConvencienceChoice(),
+      // },
+      {
+        icon: HandHoldingUsd,
+        title: messages.accessibilityHeader,
+        message: messages.accessibilityMessage,
+        content: this.renderAccessibilityChoice(),
+      },
+      {
+        icon: HandHoldingUsd,
+        title: messages.recommendHeader,
+        message: messages.recommendMessage,
+        content: this.renderRecommendationForm(),
+      }
     ];
+
+    const actionDlg = this.state.selectedOption ? 
+      <CreateOptionDlg onCancel={this.onCancelSetState} option={this.state.selectedOption} /> :
+      undefined;
 
     return (
       <>
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...messages.header} />
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...messages.subHeader} />
+          </Header.Subheader>
+        </Header>
         <Form>
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage {...messages.header} />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
-          </Header>
           <Accordion
             fluid
             styled
             activeIndex={activeAccordion}
             onTitleClick={this.accordionClick}
-            panels={wizardOptions.map((item, index) => ({
+            panels={choices.map((item, index) => ({
               key: index,
               title: (
                 <Accordion.Title>
                   <div className={styles.HeaderContainer}>
-                    <Icon name="dropdown" />
-                    {item.title}
-                    {item.icon}
+                    <FontAwesomeIcon icon={item.icon} />
+                    <FormattedMessage {...item.title} />
                     <div style={{ clear: 'both' }} />
                   </div>
                 </Accordion.Title>
@@ -127,6 +211,7 @@ export class Wizard extends React.PureComponent<Props, StateType> {
                     duration={300}
                     height={active ? 'auto' : 0}
                   >
+                    <FormattedMessage {...item.message} />
                     {item.content}
                   </AnimateHeight>
                 </div>
@@ -134,6 +219,7 @@ export class Wizard extends React.PureComponent<Props, StateType> {
             }))}
           />
         </Form>
+        {actionDlg}
       </>
     );
   }

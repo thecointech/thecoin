@@ -8,15 +8,15 @@ import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ContainerState } from '@the-coin/components/containers/FxRate/types';
 import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
 import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
-import { GetBuyApi } from '../../Services/BrokerCAD';
+import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
+import { TheSigner } from '@the-coin/components/SignerIdent';
 
+import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
+import { GetBuyApi } from '../../Services/BrokerCAD';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-Online.png';
 import styles from './index.module.css';
-import { TheSigner } from '@the-coin/components/SignerIdent';
-import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 
 type MyProps = {
   signer: TheSigner;
