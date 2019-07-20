@@ -1,7 +1,7 @@
 
 import {VoiceID} from './Options/VoiceID'
 import { Option, ValueLimits, Accessible } from './Options/Types';
-//import { OfflineBkp } from './Options/OfflineBackup';
+import { OfflineBkp } from './Options/OfflineBackup';
 import { Metamask } from './Options/Metamask';
 import { OfflineSecureBkup } from './Options/OfflineSecureBkup';
 import { Cloud } from './Options/Cloud';
@@ -10,7 +10,7 @@ import { OfflineCold } from './Options/OfflineCold';
 
 export const StorageOptions: Option[] = [
 	VoiceID,
-//	OfflineBkp,
+	OfflineBkp,
 	Metamask,
 	Cloud,
 	OfflineSecureBkup,

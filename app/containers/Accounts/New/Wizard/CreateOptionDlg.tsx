@@ -2,7 +2,7 @@ import React from 'react';
 import { ModalOperation } from "@the-coin/components/containers/ModalOperation";
 import { FormattedMessage } from 'react-intl';
 import { Option } from './Options/Types';
-import Cookies from 'js-cookie'
+//import Cookies from 'js-cookie'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 
@@ -18,8 +18,10 @@ export const CreateOptionDlg = withRouter((props: Props) => {
 	const {messages} = option;
 
 	const onOk = () => {
-		Cookies.set('createOptions', props.option, { expires: 7 });
-		props.history.push('/accounts/create')
+		//Cookies.set('createOptions', props.option, { expires: 7 });
+		const {messages, ...optsNoMessage } = props.option
+		const urlOpt = encodeURI(JSON.stringify(optsNoMessage))
+		props.history.push(`/accounts/create?options=${urlOpt}`);
 	}
 
 	return <ModalOperation

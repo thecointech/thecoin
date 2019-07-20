@@ -131,7 +131,7 @@ export class Wizard extends React.PureComponent<Props> {
 
   renderRecommendationForm = () => (
     getRecommendations(this.state).map(rec => {
-      return <Form.Button onClick={(e) => this.onSetStorage(e, rec)}>{rec.name}</Form.Button>
+      return <Form.Button key={rec.name} onClick={(e) => this.onSetStorage(e, rec)}>{rec.name}</Form.Button>
     })
   )
 
