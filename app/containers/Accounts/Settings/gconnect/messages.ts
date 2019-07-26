@@ -23,5 +23,14 @@ export default defineMessages({
 	cookieSuccess: {
     id: `${scope}.cookieSuccess`,
     defaultMessage: "Authentication passed, please return to your account and complete connecting to google",
-	}
+  },
+  
+  buttonConnect: {
+    id: `${scope}.buttonConnect`,
+    defaultMessage: "Connect to Google",
+  },
+  buttonSuccess: {
+    id: `${scope}.buttonSuccess`,
+    defaultMessage: "Connected",
+  }
 });

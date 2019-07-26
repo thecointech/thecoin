@@ -7,9 +7,10 @@ import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/co
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
 import { Wizard } from './Wizard'
-import { Create } from './Create';
+import { Generate } from './Generate';
 import { Connect } from './Connect';
 import { Restore } from './Restore';
+import { Create } from './Wizard/Create';
 
 type MyProps = {
   url: string
@@ -21,7 +22,7 @@ const NewAccountName = "New Account";
 const ConstantSidebarItems: SidebarMenuItem[] = [
   {
     link: {
-      to: 'create',
+      to: 'generate',
       name: 'Create Account',
     },
   },
@@ -88,9 +89,10 @@ class NewAccountClass extends React.PureComponent<Props> {
           path={`${url}/upload`}
           render={_ => <UploadWallet readFile={this.readFile} />}
         />
+        <Route path={`${url}/create`} component={Create} />
         <Route path={`${url}/connect`} component={Connect} />
         <Route path={`${url}/restore`} component={Restore} />
-        <Route path={`${url}/create`} component={Create} />
+        <Route path={`${url}/generate`} component={Generate} />
         <Route component={Wizard} />
       </Switch>
     );

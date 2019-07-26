@@ -28,9 +28,12 @@ export const initialState = {
 };
 
 export type BaseState = Readonly<typeof initialState>;
-type Props = {
+export type OwnProps = {
+  onComplete?: (name: string) => void
+}
+export type Props = {
   accounts: AccountMap;
-} & DispatchProps;
+} & OwnProps & DispatchProps;
 
 export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   Props,

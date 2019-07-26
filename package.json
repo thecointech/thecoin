@@ -83,6 +83,7 @@
     "minimist": "1.2.0",
     "optipng-bin": "^6.0.0",
     "pngquant-bin": "^5.0.2",
+    "query-string": "^6.8.1",
     "react-animate-height": "^2.0.15",
     "react-helmet": "5.2.1",
     "react-measure": "^2.3.0",

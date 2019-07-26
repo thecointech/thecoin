@@ -1,11 +1,12 @@
 //import {GetStoredWallet} from '@the-coin/components/containers/Account/storageSync';
 import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { IWindow } from './gauth';
 import { GetStoredWallet } from '@the-coin/components/containers/Account/storageSync';
 import { GooglePutRequest } from '@the-coin/broker-cad';
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import messages from './messages';
+import { FormattedMessage } from 'react-intl';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
@@ -18,7 +19,7 @@ function getCookie(name: string) {
 }
 
 type MyProps = {
-	account: AccountState
+	accountName: string
 }
 
 export class GoogleConnect extends React.PureComponent<MyProps> {
@@ -26,7 +27,9 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 	state = {
 		gauthUrl: "",
 		gauthWindow: null as IWindow|null,
-		timer: undefined as any
+		timer: undefined as any,
+		buttonText: messages.buttonConnect,
+		enabled: true
 	}
 
 	async componentWillMount()
@@ -142,11 +145,12 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		this.clearCallback();
 		// Do not download the decrypted wallet: instead
 		// we read the wallet directly from LS and download that
-		const {name} =this.props.account;
+		const name =this.props.accountName;
 		const secureApi = GetSecureApi();
 		const wallet = GetStoredWallet(name);
 		if (!wallet) {
 			// do something
+			alert("warning: account not found");
 			return;
 		}
 		const request: GooglePutRequest = {
@@ -156,18 +160,29 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 			wallet: JSON.stringify(wallet),
 			walletName: name
 		}
+		// Weird-o hack: for some reason, our SVG
+		// header becomes mis-sized and dissappears
+		// when completing this callback (weird, I know)
+		// To fix, we clone it here, and then replace
+		// the DOM element below
+		const hack_headerImg = document.getElementById("HeaderImageBanner")!;
+		var hack_cloneElement = hack_headerImg.cloneNode(true);
 
 		// Prematurely disable the account,
 		// because for some reason we aren't
 		// getting the callbacks triggered below
-		this.setState({gauthUrl: ""});
+		this.setState({enabled: false});
 
 		secureApi.googlePut(request)
 			.then((r) => {
-				alert(r.statusText)
+				// HACK part 2:
+				// Replace weirdly-resized image with original clone
+				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg); 
+
 				if (r.status == 200) {
 					alert(`Account ${name} successfully stored on your google drive`);
-				}	
+				}
+				this.setState({buttonText: messages.buttonSuccess})
 			})
 			.catch((reason) => {
 				console.error(JSON.stringify(reason));
@@ -176,13 +191,13 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 
 	render() 
 	{
-		const {gauthUrl} = this.state;
+		const {gauthUrl, buttonText, enabled} = this.state;
 
-		const disabled = !gauthUrl;
+		const disabled = !gauthUrl || !enabled;
 		return (
-			<Form>
-				<Button onClick={this.onInitiateLogin} disabled={disabled}>Connect to Google</Button>
-			</Form>
+				<Button onClick={this.onInitiateLogin} disabled={disabled}>
+						<FormattedMessage {...buttonText} />
+				</Button>
 		);
 	}
 }

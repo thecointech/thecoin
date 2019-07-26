@@ -13,6 +13,7 @@ export default injectIntl(({ intl }) => (
       src={Logo}
     />
     <img
+      id="HeaderImageBanner"
       className={styles.headerImage}
       alt={intl.formatMessage(messages.BannerAlt)}
       src={Banner}

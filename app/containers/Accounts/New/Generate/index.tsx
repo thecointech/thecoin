@@ -12,6 +12,7 @@ import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import {
   initialState as BaseInitial,
   NewBaseClass,
+  OwnProps
 } from '../NewBaseClass/index';
 
 const initialState = {
@@ -26,7 +27,7 @@ const initialState = {
 };
 type State = Readonly<typeof initialState>;
 
-class CreateClass extends NewBaseClass<State> {
+class GenerateClass extends NewBaseClass<State> {
 
   readonly state = initialState;
 
@@ -94,10 +95,19 @@ class CreateClass extends NewBaseClass<State> {
 
     // Switch to this newly created account
     this.setState({
-      redirect: true,
       isCreating: false,
       cancelCreating: false,
     });
+
+    // Callback allows hosting element to react to completion
+    if (this.props.onComplete) {
+      this.props.onComplete(accountName);
+    }
+    else {
+      this.setState({
+        redirect: true
+      })
+    }
     return true;
   }
 
@@ -149,9 +159,9 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Create = buildReducer<{}>(key)(
+export const Generate = buildReducer<OwnProps>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),
-  )(CreateClass),
+  )(GenerateClass),
 );

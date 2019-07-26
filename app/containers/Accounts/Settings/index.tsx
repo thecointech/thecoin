@@ -12,7 +12,7 @@ export function Settings(props: MyProps) {
 	return (
 	<>
 		<Download {...props} />
-		<GoogleConnect {...props} />
+		<GoogleConnect accountName={props.account.name} />
 	</>
 	);
 }
