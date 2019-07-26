@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, Button, List } from 'semantic-ui-react';
+import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@the-coin/components/components/UxAddress';
 import messages from './messages'
 import { NormalizeAddress } from '@the-coin/utilities';
@@ -68,6 +68,11 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 	renderVerifiedAccounts()
 	{
 		const { verifiedAccounts } = this.state;
+		if (verifiedAccounts === undefined)
+			return <Message>Please wait, loading</Message>
+		if (verifiedAccounts.length === 0)
+			return <Message>No verified accounts found</Message>
+			
 		const verifiedList = verifiedAccounts.map(account => {
 			const code = GetReferrerCode(account.signature);
 			return <List.Item key={account.address}>

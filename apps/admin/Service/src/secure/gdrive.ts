@@ -40,11 +40,14 @@ export function getAuthUrl()
 
 export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   const {walletName, wallet, token } = account;
-  if (!walletName || ! wallet)
+  if (!walletName || !wallet)
     throw new Error("Missing data from gdrive save");
 
+  // Throw if wallet is not valid JSON
+  const walletObject = JSON.parse(wallet);
+  console.log(`Storing wallet for user: ${walletObject.address}`)
   const drive = await loginDrive(token);
-  
+
   var fileMetadata = {
     name: walletName + ".wallet",
     originalFilename: walletName,

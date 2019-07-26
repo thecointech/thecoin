@@ -41,15 +41,19 @@ export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCA
  * account GoogleUploadPacket 
  * no response value expected for this operation
  **/
-export async function googlePut(account: BrokerCAD.GooglePutRequest): Promise<boolean> {
-  try {
-    const result = await storeOnGoogle(account);
-    return result;
-  }
-  catch (err) {
-    console.error(err);
-    throw new Error("Server Error")
-  }
+export function googlePut(account: BrokerCAD.GooglePutRequest): Promise<BrokerCAD.BoolResponse> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await storeOnGoogle(account);
+      resolve({
+        success: result
+      });
+    }
+    catch (err) {
+      console.error(err);
+      reject("Server Error");
+    }
+  })
 }
 
 

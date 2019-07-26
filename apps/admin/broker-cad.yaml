@@ -797,6 +797,8 @@ paths:
           description: "Permission Denied"
         200:
           description: Account successfully stored
+          schema:
+            $ref: "#/definitions/BoolResponse"
   
   /secure/google/get:
     put:
