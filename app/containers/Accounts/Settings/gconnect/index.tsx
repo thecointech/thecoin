@@ -20,6 +20,7 @@ function getCookie(name: string) {
 
 type MyProps = {
 	accountName: string
+	onComplete?: () => void
 }
 
 export class GoogleConnect extends React.PureComponent<MyProps> {
@@ -145,9 +146,9 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		this.clearCallback();
 		// Do not download the decrypted wallet: instead
 		// we read the wallet directly from LS and download that
-		const name =this.props.accountName;
+		const { onComplete, accountName } = this.props;
 		const secureApi = GetSecureApi();
-		const wallet = GetStoredWallet(name);
+		const wallet = GetStoredWallet(accountName);
 		if (!wallet) {
 			// do something
 			alert("warning: account not found");
@@ -158,7 +159,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 				token
 			},
 			wallet: JSON.stringify(wallet),
-			walletName: name
+			walletName: accountName
 		}
 		// Weird-o hack: for some reason, our SVG
 		// header becomes mis-sized and dissappears
@@ -178,11 +179,9 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 				// HACK part 2:
 				// Replace weirdly-resized image with original clone
 				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg); 
-
-				if (r.status == 200) {
-					alert(`Account ${name} successfully stored on your google drive`);
-				}
 				this.setState({buttonText: messages.buttonSuccess})
+				if (onComplete)
+					onComplete()
 			})
 			.catch((reason) => {
 				console.error(JSON.stringify(reason));

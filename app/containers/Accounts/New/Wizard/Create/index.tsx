@@ -9,6 +9,7 @@ import { InstallMetamaskPage, InstallMetamaskStep } from './Metamask';
 import { CreateIntroStep, CreateIntroPage } from './Intro';
 import { CloudStorageStep, CloudStoragePage } from './CloudStorage';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
+import { ConnectWeb3Step, ConnectWeb3Page } from './ConnectWeb3';
 
 type MyProps = {};
 type Props = MyProps & RouteComponentProps;
@@ -20,12 +21,16 @@ export type PageProps = {
   onComplete: () => void
 }
 
+type StepOption = {
+  step?: number
+} & Option
+
 
 function GetOptions(qs: string) {
   const query = queryString.parse(qs);
   const options = query.options as string;
   if (!options) return null;
-  return JSON.parse(options) as Option;
+  return JSON.parse(options) as StepOption;
 }
 
 type WizardPage = (props: PageProps) => React.ReactNode
@@ -35,8 +40,13 @@ function BuildSteps(option: Option) {
   steps.push([CreateIntroStep, CreateIntroPage])
   if (option.password == "lastpass" || option.stored == 'offline')
     steps.push([CreatePasswordStep, CreatePasswordPage]);
-  if (option.stored == 'metamask')
+  if (option.stored == 'metamask') {
     steps.push([InstallMetamaskStep, InstallMetamaskPage]);
+  }
+  if (option.stored == "metamask" || option.stored == "opera")
+  {
+    steps.push([ConnectWeb3Step, ConnectWeb3Page]);
+  }
   if (
     option.stored == 'cloud' ||
     option.stored == 'offline' ||
@@ -58,11 +68,19 @@ export const Create = (props: Props) => {
   const options = GetOptions(props.location.search);
   if (!options) return <div>error: no query provided</div>;
   const steps = BuildSteps(options);
-
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(options.step || 0);
   const [accountName, setName] = useState("");
   const lastStep = steps.length - 1;
-  const nextPage = step == lastStep ? undefined : () => setStep(step + 1) ;
+  const nextPage = step == lastStep ? undefined : () => {
+    // We want to add which step we are on to the URL
+    // This is so a user can refresh the page and end up
+    // at the same part of the creation process
+    const newStep = step + 1;
+    options.step = newStep
+    const urlOpt = encodeURI(JSON.stringify(options))
+    props.history.replace(`/accounts/create?options=${urlOpt}`);
+    setStep(newStep);
+  }
   const buttonText = step == lastStep ? 'DONE' : 'NEXT';
 
   const pageProps: PageProps = {
@@ -83,8 +101,7 @@ export const Create = (props: Props) => {
         {...stepNodes}
       </Step.Group>
       <Container>
-        <CloudStoragePage {...pageProps} />
-        {/*steps[step][1](pageProps)*/}
+        {steps[step][1](pageProps)}
       </Container>
     </>
   );

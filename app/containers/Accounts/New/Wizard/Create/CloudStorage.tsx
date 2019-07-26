@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Step, Icon, Button, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { GoogleConnect } from 'containers/Accounts/Settings/gconnect';
@@ -15,22 +15,26 @@ export const CloudStorageStep = () => (
 	</>
 );
 
-export const CloudStoragePage = (props: PageProps) => (
-  <>
-    <Header as="h1">
-      <Header.Content>
-        <FormattedMessage {...messages.header} />
-      </Header.Content>
-      <Header.Subheader>
-        <FormattedMessage {...messages.subHeader} />
-      </Header.Subheader>
-    </Header>
-    <p>
-      <FormattedMessage {...messages.para1} />
-    </p>
+export const CloudStoragePage = (props: PageProps) => 
+{
+	const [complete, setComplete] = useState(false);
+	return (
+		<>
+		<Header as="h1">
+			<Header.Content>
+				<FormattedMessage {...messages.header} />
+			</Header.Content>
+			<Header.Subheader>
+				<FormattedMessage {...messages.subHeader} />
+			</Header.Subheader>
+		</Header>
 		<p>
-			<GoogleConnect accountName={"my account"} />	
+			<FormattedMessage {...messages.para1} />
 		</p>
-    <Button onClick={props.onComplete}>{props.buttonText}</Button>
-  </>
-)
+		<p>
+			<GoogleConnect accountName={"my account"} onComplete={() => setComplete(true)} />	
+		</p>
+		<Button disabled={!complete} onClick={props.onComplete}>{props.buttonText}</Button>
+	</>	
+	)
+}
