@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Icon, Button } from 'semantic-ui-react';
-import { PageProps } from './index';
+import { PageProps } from './PageProps';
 
 export const CreatePasswordStep = (active?: boolean) => (
   <>

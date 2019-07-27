@@ -3,7 +3,7 @@ import { Step, Icon, Button, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import messages from './OfflineStorage.messages';
 import { GoogleConnect } from 'containers/Accounts/Settings/gconnect';
-import { PageProps } from './index';
+import { PageProps } from './PageProps';
 
 export const OfflineStorageStep = () => (
 	<>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Step, Container } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router';
 import { Option } from '../Options/Types';
-import queryString from 'query-string';
 import { CreatePasswordPage, CreatePasswordStep } from './Passwords';
 import { CreateAccountPage, CreateAccountStep } from './Account';
 import { InstallMetamaskPage, InstallMetamaskStep } from './Metamask';
@@ -10,28 +9,12 @@ import { CreateIntroStep, CreateIntroPage } from './Intro';
 import { CloudStorageStep, CloudStoragePage } from './CloudStorage';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
 import { ConnectWeb3Step, ConnectWeb3Page } from './ConnectWeb3';
+import { InstallOperaStep, InstallOperaPage } from './Opera/index';
+import { PageProps } from './PageProps';
+import { GetOptions, BuildCreateUrl } from './types';
 
 type MyProps = {};
 type Props = MyProps & RouteComponentProps;
-
-export type PageProps = {
-  accountName: string,
-  setName: (name: string) => void,
-  buttonText: string,
-  onComplete: () => void
-}
-
-type StepOption = {
-  step?: number
-} & Option
-
-
-function GetOptions(qs: string) {
-  const query = queryString.parse(qs);
-  const options = query.options as string;
-  if (!options) return null;
-  return JSON.parse(options) as StepOption;
-}
 
 type WizardPage = (props: PageProps) => React.ReactNode
 type StepPair = [() => React.ReactNode, WizardPage];
@@ -42,6 +25,9 @@ function BuildSteps(option: Option) {
     steps.push([CreatePasswordStep, CreatePasswordPage]);
   if (option.stored == 'metamask') {
     steps.push([InstallMetamaskStep, InstallMetamaskPage]);
+  }
+  if (option.stored == 'opera') {
+    steps.push([InstallOperaStep, InstallOperaPage]);
   }
   if (option.stored == "metamask" || option.stored == "opera")
   {
@@ -77,8 +63,7 @@ export const Create = (props: Props) => {
     // at the same part of the creation process
     const newStep = step + 1;
     options.step = newStep
-    const urlOpt = encodeURI(JSON.stringify(options))
-    props.history.replace(`/accounts/create?options=${urlOpt}`);
+    props.history.replace(BuildCreateUrl(options));
     setStep(newStep);
   }
   const buttonText = step == lastStep ? 'DONE' : 'NEXT';
@@ -87,7 +72,8 @@ export const Create = (props: Props) => {
     accountName,
     setName,
     buttonText,
-    onComplete: nextPage || (() => {})
+    onComplete: nextPage || (() => {}),
+    options
   }
 
   const stepNodes = steps.map((pair, i) => (

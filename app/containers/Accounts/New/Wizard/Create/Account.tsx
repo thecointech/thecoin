@@ -1,7 +1,7 @@
 import React from 'react';
 import { Step, Icon } from 'semantic-ui-react';
 import { Generate } from 'containers/Accounts/New/Generate';
-import { PageProps } from './index';
+import { PageProps } from './PageProps';
 
 export const CreateAccountStep = () => (
   <>

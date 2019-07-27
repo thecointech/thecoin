@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Icon } from 'semantic-ui-react';
-import { PageProps } from './index';
+import { PageProps } from './PageProps';
 import { Connect } from 'containers/Accounts/New/Connect';
 
 export const ConnectWeb3Step = () => (

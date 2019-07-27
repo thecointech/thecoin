@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Button, Image, Header, Message } from 'semantic-ui-react';
-import { PageProps } from './index';
+import { PageProps } from './PageProps';
 import Logo from './Metamask.logo.svg'
 import styles from './Metamask.module.css'
 import { FormattedMessage } from 'react-intl';
@@ -31,6 +31,8 @@ export const InstallMetamaskPage = (props: PageProps) => {
         <p>
           <FormattedMessage {...messages.para1} />
         </p>
+        <p><a href="https://words.democracy.earth/tutorial-setting-up-your-metamask-186414589d3a" target="_blank">Metamask Tutorial</a></p>
+        <p>Or, if you know what your doing; </p>
         <p><a href="https://metamask.io/" target="_blank">Install Metamask</a></p>
         <p>
           <FormattedMessage {...messages.para2} />

@@ -91,6 +91,7 @@
     "react-transition-group": "^4.2.1",
     "reselect": "4.0.0",
     "sanitize.css": "11.0.0",
+    "ts-clipboard": "^1.0.17",
     "warning": "4.0.3"
   },
   "devDependencies": {
