@@ -6,6 +6,7 @@ import styles from './index.module.css'
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { BuildCreateUrl } from '../types';
+import { CopyToClipboard } from 'components/CopyToClipboard';
 
 
 export const InstallOperaStep = () => (
@@ -23,7 +24,7 @@ export const InstallOperaPage = (props: PageProps) => {
   const { web3 } = win;
   const hasWeb3 = !!web3;
 
-  const url = BuildCreateUrl(props.options);
+  const url = `${window.location.origin}/#${BuildCreateUrl(props.options)}`;
   const content = hasWeb3 ? 
     <Message>
       <FormattedMessage {...messages.detected} />
@@ -32,14 +33,16 @@ export const InstallOperaPage = (props: PageProps) => {
       <>
         <p><FormattedMessage {...messages.para1} /></p>
         <p>
-          <FormattedMessage {...messages.installLink} />
-          <br />
-          <a href="https://www.opera.com/download" target="_blank">https://www.opera.com/download</a></p>
+          <FormattedMessage {...messages.installLinkPre} />
+          <a href="https://www.opera.com/download" target="_blank">
+            <FormattedMessage {...messages.installLink} />
+          </a>
+        </p>
         <p>
           <FormattedMessage {...messages.copyPageLinkPre} />
-          <a href={url} target="_blank">
+          <CopyToClipboard payload={url}>
             <FormattedMessage {...messages.copyPageLink} />
-          </a>
+          </CopyToClipboard>
           <FormattedMessage {...messages.copyPageLinkPost} />
         </p>
         <p>

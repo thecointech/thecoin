@@ -10,6 +10,7 @@ export function GetOptions(qs: string) {
   const optionsString = query.options as string;
   if (!optionsString) return null;
   const options = JSON.parse(optionsString);
+  // TODO: Data validation!
   return options as StepOption;
 }
 

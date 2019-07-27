@@ -21,10 +21,15 @@ export default defineMessages({
 			exceptional level of security.  The wallet is stored on your android device, and is secured by fingerprint or\
 			pin phrase.",
 	},
+	installLinkPre: {
+    id: `${scope}.installLink`,
+    defaultMessage:
+			"First,",
+	},
 	installLink: {
     id: `${scope}.installLink`,
     defaultMessage:
-			"First, download and install the Opera Browser",
+			"download and install the Opera Browser",
 	},
 	copyPageLinkPre: {
     id: `${scope}.copyPageLinkPre`,
@@ -51,7 +56,7 @@ export default defineMessages({
     defaultMessage:
 			"read this tutorial on connecting Opera on your Android Phone to your Browser",
 	},
-	
+
 	detected: {
     id: `${scope}.detected`,
     defaultMessage:
