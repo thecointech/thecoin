@@ -6,7 +6,7 @@ import messages from './messages';
 import Vault from './vault.svg';
 import styles from './index.module.css'
 
-export const CreateBackupStep = (active?: boolean) => (
+export const OfflineStorageStep = (active?: boolean) => (
   <>
 		<Image className={styles.LogoBlack} src={Vault} avatar circular />
     <Step.Content>
@@ -16,7 +16,7 @@ export const CreateBackupStep = (active?: boolean) => (
   </>
 );
 
-export const CreateBackupPage = (props: PageProps) => (
+export const OfflineStoragePage = (props: PageProps) => (
   <>
     <Header as="h1">
       <Header.Content>
@@ -32,12 +32,12 @@ export const CreateBackupPage = (props: PageProps) => (
 		<p>
       <FormattedMessage {...messages.para2} />
     </p>
-		<p>
+		{/* <p>
       <FormattedMessage {...messages.para3} />
     </p>
 		<p>
       <FormattedMessage {...messages.para4} />
-    </p>
+    </p> */}
     <Button onClick={props.onComplete}>{props.buttonText}</Button>
   </>
 );
