@@ -1,5 +1,5 @@
 /*
-	Offline Backup Storage Option
+  Offline Backup Storage Option
  */
 import { defineMessages } from 'react-intl';
 
@@ -17,15 +17,15 @@ export default defineMessages({
   header: {
     id: `${scope}.header`,
     defaultMessage: 'Upload your account',
-	},
-	subHeader: {
+  },
+  subHeader: {
     id: `${scope}.subHeader`,
     defaultMessage: 'A wallet stored online is always available',
   },
   para1: {
     id: `${scope}.para1`,
     defaultMessage:
-			"If you have an account with either google or microsoft, we can upload your wallet\
-			directly to your cloud storage for safe-keeping.",
-	}
+      'If you have an account with either google or microsoft, we can upload your wallet\
+      directly to your cloud storage for safe-keeping.',
+  },
 });

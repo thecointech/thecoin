@@ -4,13 +4,13 @@ import { RouteComponentProps } from 'react-router';
 import { Option } from '../Options/Types';
 import { CreatePasswordPage, CreatePasswordStep } from './Passwords';
 import { CreateAccountPage, CreateAccountStep } from './Account';
-import { InstallMetamaskPage, InstallMetamaskStep } from './Metamask';
+import { InstallMetamaskPage, InstallMetamaskStep } from './Metamask/Metamask';
 import { CreateIntroStep, CreateIntroPage } from './Intro';
 import { CloudStorageStep, CloudStoragePage } from './CloudStorage/index';
 import { ConnectWeb3Step, ConnectWeb3Page } from './ConnectWeb3';
 import { InstallOperaStep, InstallOperaPage } from './Opera/index';
 import { PageProps } from './PageProps';
-import { GetOptions, BuildCreateUrl } from './types';
+import { GetOptions, BuildCreateUrl } from './Types';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
 // import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';
 
@@ -22,7 +22,7 @@ type StepPair = [WizardStep, WizardPage];
 function BuildSteps(option: Option) {
   const steps: StepPair[] = [];
   steps.push([CreateIntroStep, CreateIntroPage]);
-  if (option.password === 'lastpass' || option.stored === 'offline') {
+  if (option.password === 'lastpass' || option.stored === 'offline' || option.stored === 'cloud') {
     steps.push([CreatePasswordStep, CreatePasswordPage]);
   }
   if (option.stored === 'metamask') {
@@ -77,7 +77,7 @@ export const Create = (props: Props) => {
     accountName: accountName,
     setName: setName,
     buttonText: buttonText,
-    onComplete: nextPage || (() => {}),
+    onComplete: nextPage,
     options: options,
   };
 

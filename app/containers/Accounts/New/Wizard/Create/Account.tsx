@@ -5,7 +5,7 @@ import { PageProps } from './PageProps';
 
 export const CreateAccountStep = () => (
   <>
-    <Icon name="credit card" />
+    <Icon name="file" />
     <Step.Content>
       <Step.Title>Create</Step.Title>
       <Step.Description>Create a new account</Step.Description>
@@ -13,8 +13,11 @@ export const CreateAccountStep = () => (
   </>
 );
 
-export const CreateAccountPage = (props: PageProps) => 
-  <Generate onComplete={(name: string) => {
+export const CreateAccountPage = (props: PageProps) => {
+  const onComplete = React.useCallback((name: string) => {
     props.setName(name);
     props.onComplete();
-  }} />;
+  }, []);
+
+  return <Generate onComplete={onComplete} />;
+};
