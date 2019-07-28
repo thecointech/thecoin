@@ -1,35 +1,35 @@
 import React from 'react'
-import { Form, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import FileSaver from 'file-saver';
-import { AccountState } from '@the-coin/components/containers/Account/types'
 import {GetStoredWallet} from '@the-coin/components/containers/Account/storageSync';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 
 
 type MyProps = {
-	account: AccountState
+	accountName: string
+	onComplete?: () => void
 }
 
-export class Download extends React.PureComponent<MyProps> {
 
-	onDownloadButton = (e: React.MouseEvent<HTMLElement>) =>
-	{
-		if (e) e.preventDefault();
+const onDownloadButton = (e: React.MouseEvent<HTMLElement>, accountName: string) =>
+{
+	if (e) e.preventDefault();
 
-		const {name} =this.props.account;
-		// Do not download the decrypted wallet: instead
-		// we read the wallet directly from LS and download that
-		const wallet = GetStoredWallet(name);
-		const walletStr = JSON.stringify(wallet);
-		const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
-		FileSaver.saveAs(blob, name + ".wallet.json");
-	}
-
-	render() 
-	{
-		return (
-			<Form>
-				<Button onClick={this.onDownloadButton}>DOWNLOAD</Button>
-			</Form>
-		);
-	}
+	// Do not download the decrypted wallet: instead
+	// we read the wallet directly from LS and download that
+	const wallet = GetStoredWallet(accountName);
+	const walletStr = JSON.stringify(wallet);
+	const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
+	FileSaver.saveAs(blob, name + ".wallet.json");
 }
+
+export const Download = (props: MyProps) => 
+	<Button onClick={(e) => {
+		onDownloadButton(e, props.accountName);
+		if (props.onComplete)
+			props.onComplete();
+	}}
+	>
+		<FormattedMessage {...messages.buttonText} />
+	</Button>

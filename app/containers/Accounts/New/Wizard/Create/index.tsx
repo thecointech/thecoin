@@ -6,13 +6,13 @@ import { CreatePasswordPage, CreatePasswordStep } from './Passwords';
 import { CreateAccountPage, CreateAccountStep } from './Account';
 import { InstallMetamaskPage, InstallMetamaskStep } from './Metamask';
 import { CreateIntroStep, CreateIntroPage } from './Intro';
-import { CloudStorageStep, CloudStoragePage } from './CloudStorage';
-import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
+import { CloudStorageStep, CloudStoragePage } from './CloudStorage/index';
 import { ConnectWeb3Step, ConnectWeb3Page } from './ConnectWeb3';
 import { InstallOperaStep, InstallOperaPage } from './Opera/index';
 import { PageProps } from './PageProps';
 import { GetOptions, BuildCreateUrl } from './types';
-import { CreateBackupStep, CreateBackupPage } from './Backup/index';
+import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
+//import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';
 
 type MyProps = {};
 type Props = MyProps & RouteComponentProps;
@@ -47,7 +47,7 @@ function BuildSteps(option: Option) {
   if (option.stored == 'offline')
     steps.push([OfflineStorageStep, OfflineStoragePage])
 
-  steps.push([CreateBackupStep, CreateBackupPage])
+  //steps.push([CreateBackupStep, CreateBackupPage])
   
   return steps;
 }

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Step, Icon, Button, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { GoogleConnect } from 'containers/Accounts/Settings/gconnect';
-import { PageProps } from './PageProps';
-import messages from './CloudStorage.messages';
+import { PageProps } from '../PageProps';
+import messages from './messages';
 
 export const CloudStorageStep = () => (
 	<>
     <Icon name="cloud upload" />
     <Step.Content>
-      <Step.Title>Cloud Storage</Step.Title>
-      <Step.Description>Upload your wallet</Step.Description>
+      <Step.Title><FormattedMessage {...messages.stepHeader} /></Step.Title>
+      <Step.Description><FormattedMessage {...messages.stepSubHeader} /></Step.Description>
     </Step.Content>
 	</>
 );

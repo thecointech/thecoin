@@ -11,7 +11,7 @@ type MyProps = {
 export function Settings(props: MyProps) {
 	return (
 	<>
-		<Download {...props} />
+		<Download accountName={props.account.name} />
 		<GoogleConnect accountName={props.account.name} />
 	</>
 	);

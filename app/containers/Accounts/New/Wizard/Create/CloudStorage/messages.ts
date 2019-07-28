@@ -3,9 +3,17 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Create.Intro';
+export const scope = 'app.containers.Create.Cloud';
 
 export default defineMessages({
+  stepHeader: {
+    id: `${scope}.stepHeader`,
+    defaultMessage: 'Cloud Storage',
+  },
+  stepSubHeader: {
+    id: `${scope}.stepSubHeader`,
+    defaultMessage: 'Access your wallet everywhere',
+  },
   header: {
     id: `${scope}.header`,
     defaultMessage: 'Upload your account',

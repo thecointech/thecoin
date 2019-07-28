@@ -6,39 +6,49 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.Create.Backup';
 
 export default defineMessages({
+	stepHeader: {
+    id: `${scope}.stepHeader`,
+    defaultMessage: 'Offline Storage',
+  },
+  stepSubHeader: {
+    id: `${scope}.stepSubHeader`,
+    defaultMessage: 'Backup your Wallet',
+  },
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Backing up your wallet',
+    defaultMessage: 'Offline Storage',
 	},
 	subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: '5 minutes of prevention...',
+    defaultMessage: 'Protect against accidental loss',
   },
   para1: {
     id: `${scope}.para1`,
     defaultMessage:
-			"The Coin accounts are a little bit different to regular bank accounts, and\
-			it is a good idea to take a quick moment to familiarise yourself with the\
-			key differences.  In traditional accounts, a central authority (eg, a bank) holds\
-			all of your information and decides on who should can get access to your account.",
+			"It is very important to take precautions against accidental loss.",
 	},
 	para2: {
     id: `${scope}.para2`,
     defaultMessage:
-			"We believe this approach is fundamentally flawed.  The 1 in 3 canadians who have been or will be a victim of fraud show that it is time to do better.",
+			"Just like your physical wallet, The Coin wallets are not automatically\
+			stored online.  This guarantees the bad guys can't get to them, but just\
+			like your physical wallet you want to take precautions against losing it."
+  },
+  printButton: {
+		id: `${scope}.printButton`,
+    defaultMessage: "PRINT"
 	},
-	para3: {
-    id: `${scope}.para3`,
+	printMessage: {
+    id: `${scope}.printMessage`,
     defaultMessage:
-			"The Coin is built on the blockchain model of security, which changes who holds the keys\
-			to your account.  Instead of the bank holding your keys, who can be tricked into\
-			giving the keys to a bad actor, you are the one given complete control over your account.\
-			Nobody - not us, not the government, we mean nobody - can access your account without your\
-			keys."
+      "Print your wallet and store it somewhere secure."
+  },
+  
+	downloadMessage: {
+    id: `${scope}.downloadMessage`,
+    defaultMessage:
+      "Download your encrypted wallet for storage on a USB."
 	},
-	para4: {
-    id: `${scope}.para4`,
-    defaultMessage:
-			"Of course, with this control comes an extra level of responsibility.  But don't worry - if you follow our guide, you'll be just fine..."
-	}
+
+
 });
