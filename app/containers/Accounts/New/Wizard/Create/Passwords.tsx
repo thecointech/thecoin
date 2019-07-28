@@ -2,7 +2,7 @@ import React from 'react';
 import { Step, Icon, Button } from 'semantic-ui-react';
 import { PageProps } from './PageProps';
 
-export const CreatePasswordStep = (active?: boolean) => (
+export const CreatePasswordStep = () => (
   <>
     <Icon name="key" />
     <Step.Content>
@@ -12,8 +12,9 @@ export const CreatePasswordStep = (active?: boolean) => (
   </>
 );
 
-export const CreatePasswordPage = (props: PageProps) => 
-<>
-  <p>We need to talk about passwords</p>;
-  <Button onClick={props.onComplete}>{props.buttonText}</Button>
-</>
+export const CreatePasswordPage = (props: PageProps) => (
+  <>
+    <p>We need to talk about passwords</p>;
+    <Button onClick={props.onComplete}>{props.buttonText}</Button>
+  </>
+);

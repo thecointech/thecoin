@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './Intro.messages';
 import { PageProps } from './PageProps';
 
-export const CreateIntroStep = (active?: boolean) => (
+export const CreateIntroStep = () => (
   <>
     <Icon name="exclamation circle" />
     <Step.Content>
@@ -27,13 +27,13 @@ export const CreateIntroPage = (props: PageProps) => (
     <p>
       <FormattedMessage {...messages.para1} />
     </p>
-		<p>
+    <p>
       <FormattedMessage {...messages.para2} />
     </p>
-		<p>
+    <p>
       <FormattedMessage {...messages.para3} />
     </p>
-		<p>
+    <p>
       <FormattedMessage {...messages.para4} />
     </p>
     <Button onClick={props.onComplete}>{props.buttonText}</Button>

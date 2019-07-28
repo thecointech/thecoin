@@ -34,7 +34,7 @@ export const CloudStoragePage = (props: PageProps) => {
       <FormattedMessage {...messages.para1} />
     </p>
     <p>
-      <GoogleConnect accountName={'my account'} onComplete={setCompleteCB} />
+      <GoogleConnect accountName={props.accountName} onComplete={setCompleteCB} />
     </p>
     <Button disabled={!complete} onClick={props.onComplete}>{props.buttonText}</Button>
   </>

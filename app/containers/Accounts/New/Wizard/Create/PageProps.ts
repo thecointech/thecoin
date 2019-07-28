@@ -1,10 +1,10 @@
-import { Option } from "../Options/Types";
+import { Option } from '../Options/Types';
 
-export type PageProps = {
-  accountName: string,
-  setName: (name: string) => void,
-  buttonText: string,
-	onComplete: () => void,
-	options: Option
+export interface PageProps {
+  accountName: string;
+  setName: (name: string) => void;
+  buttonText: string;
+  onComplete: () => void;
+  options: Option;
 }
 

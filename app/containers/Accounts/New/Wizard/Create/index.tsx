@@ -12,85 +12,92 @@ import { InstallOperaStep, InstallOperaPage } from './Opera/index';
 import { PageProps } from './PageProps';
 import { GetOptions, BuildCreateUrl } from './types';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
-//import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';
+// import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';
 
-type MyProps = {};
-type Props = MyProps & RouteComponentProps;
+type Props = RouteComponentProps;
 
-type WizardPage = (props: PageProps) => React.ReactNode
-type StepPair = [() => React.ReactNode, WizardPage];
+type WizardStep = React.FunctionComponent<{}>;
+type WizardPage = React.FunctionComponent<PageProps>;
+type StepPair = [WizardStep, WizardPage];
 function BuildSteps(option: Option) {
   const steps: StepPair[] = [];
-  steps.push([CreateIntroStep, CreateIntroPage])
-  if (option.password == "lastpass" || option.stored == 'offline')
+  steps.push([CreateIntroStep, CreateIntroPage]);
+  if (option.password === 'lastpass' || option.stored === 'offline') {
     steps.push([CreatePasswordStep, CreatePasswordPage]);
-  if (option.stored == 'metamask') {
+  }
+  if (option.stored === 'metamask') {
     steps.push([InstallMetamaskStep, InstallMetamaskPage]);
   }
-  if (option.stored == 'opera') {
+  if (option.stored === 'opera') {
     steps.push([InstallOperaStep, InstallOperaPage]);
   }
-  if (option.stored == "metamask" || option.stored == "opera")
-  {
+  if (option.stored === 'metamask' || option.stored === 'opera') {
     steps.push([ConnectWeb3Step, ConnectWeb3Page]);
   }
   if (
-    option.stored == 'cloud' ||
-    option.stored == 'offline' ||
-    option.stored == 'safetyBox'
-  )
-  {
+    option.stored === 'cloud' ||
+    option.stored === 'offline' ||
+    option.stored === 'safetyBox'
+  ) {
     steps.push([CreateAccountStep, CreateAccountPage]);
   }
-  if (option.stored == 'cloud')
-    steps.push([CloudStorageStep, CloudStoragePage])
-  if (option.stored == 'offline')
-    steps.push([OfflineStorageStep, OfflineStoragePage])
+  if (option.stored === 'cloud') {
+    steps.push([CloudStorageStep, CloudStoragePage]);
+  }
+  if (option.stored === 'offline') {
+    steps.push([OfflineStorageStep, OfflineStoragePage]);
+  }
 
-  //steps.push([CreateBackupStep, CreateBackupPage])
-  
+  // steps.push([CreateBackupStep, CreateBackupPage])
+
   return steps;
 }
 
 
 export const Create = (props: Props) => {
+  const [accountName, setName] = useState('');
   const options = GetOptions(props.location.search);
-  if (!options) return <div>error: no query provided</div>;
+  if (!options) {
+    return <div>error: no query provided</div>;
+  }
   const steps = BuildSteps(options);
-  const [step, setStep] = useState(options.step || 0);
-  const [accountName, setName] = useState("");
+  const step = options.step || 0;
   const lastStep = steps.length - 1;
-  const nextPage = step == lastStep ? undefined : () => {
+
+  const nextPage = React.useCallback(() => {
     // We want to add which step we are on to the URL
     // This is so a user can refresh the page and end up
     // at the same part of the creation process
-    const newStep = step + 1;
-    options.step = newStep
-    props.history.replace(BuildCreateUrl(options));
-    setStep(newStep);
-  }
-  const buttonText = step == lastStep ? 'DONE' : 'NEXT';
+    options.step = (options.step || 0) + 1;
+    props.history.push(BuildCreateUrl(options));
+  }, []);
+  const buttonText = step === lastStep ? 'DONE' : 'NEXT';
 
   const pageProps: PageProps = {
-    accountName,
-    setName,
-    buttonText,
+    accountName: accountName,
+    setName: setName,
+    buttonText: buttonText,
     onComplete: nextPage || (() => {}),
-    options
-  }
+    options: options,
+  };
 
-  const stepNodes = steps.map((pair, i) => (
-    <Step key={i} active={i == step}>
-      {pair[0]()}
+  const stepNodes = steps.map((pair, i) => {
+    const Item = pair[0];
+    return (
+    <Step key={i} active={i === step}>
+      <Item />
     </Step>
-  ))
+    );
+  });
+
+  const Page = steps[step][1];
   return (
     <>
       <Step.Group size="small">
         {...stepNodes}
       </Step.Group>
       <Container>
-        {steps[step][1](pageProps)}
+        <Page {...pageProps} />
       </Container>
     </>
   );
