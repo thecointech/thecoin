@@ -21,7 +21,7 @@ import { BillPayments } from './BillPayments';
 
 
 interface OwnProps {}
-type Props = OwnProps & 
+type Props = OwnProps &
 {
   Sidebar: Sidebar.DispatchProps,
   accounts: AccountMap,
@@ -84,25 +84,33 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
     this.generateSidebarItems = this.generateSidebarItems.bind(this);
   }
 
-  generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
-    // Pull accounts directly from State.  This is because
-    // we may be called mid-change on the state, and our local
-    // state will not yet be updated (but the incoming state will be)
-    const { accounts } = state;
-    if (!accounts)
+  doGenerateSidebarItems(accounts: AccountMap)
+  {
+    if (!accounts) {
       return [];
-      
-    const { match } = this.props;
+    }
     const accountLinks: SidebarMenuItem[] = [];
     Object.entries(accounts).forEach(([name, _]) => {
       accountLinks.push({
         link: {
           to: `e/${name}`,
-          name
+          name,
         }
       });
     });
-    return MapMenuItems(ConstantSidebarItems.concat(accountLinks), match.url);
+    return accountLinks;
+  }
+
+  generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
+    
+    // Pull accounts directly from State.  This is because
+    // we may be called mid-change on the state, and our local
+    // state will not yet be updated (but the incoming state will be)
+    const { accounts } = structuredSelectAccounts(state);
+    const { match } = this.props;
+    const accountLinks = this.doGenerateSidebarItems(accounts);
+    const allItems = ConstantSidebarItems.concat(accountLinks)
+    return MapMenuItems(allItems, match.url);
   } 
 
   componentDidMount() {

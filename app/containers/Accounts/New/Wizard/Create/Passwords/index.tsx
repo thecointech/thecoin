@@ -87,7 +87,8 @@ export const CreatePasswordPage = (props: PageProps) => {
     <Button onClick={onClickNext}>{buttonText}</Button>
     <Confirm open={doConfirm}
       header="Warning: Are you sure you want to skip this?"
-      content="It only takes a few minutes to setup, and it makes your account so very much safer."
+      content="You didn't click on any links, and we just want to check that you really did mean to skip.  If you already have a password manager, we apologise, but if you don't it only takes a few minutes to setup, and it makes your account so very much safer."
       onCancel={onConfirmCancel} onConfirm={onConfirmOk} />
-  </>);
+  </>
+  );
 };

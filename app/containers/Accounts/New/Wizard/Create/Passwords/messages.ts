@@ -63,6 +63,6 @@ export default defineMessages({
     id: `${scope}.profit`,
     defaultMessage:
       'Everytime you need a new password (including for The Coin), rely on your password\
-      manager to generate passwords that are as long as complex as you like.',
+      manager to generate passwords that are as long and as complex as you like.',
   },
 });
