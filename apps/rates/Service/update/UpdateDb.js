@@ -416,7 +416,7 @@ module.exports = {
     },
 
     GetRatesFor: function (currencyCode, timestamp) {
-
+        console.log("getting rates for %d at %s", currencyCode, timestamp);
         return new Promise((resolve, reject) => {
             // Double check this is not for the future
             let now = new Date().getTime() + RateOffsetFromMarket;

@@ -12,6 +12,7 @@ const RatesDB = require('../update/UpdateDb');
 
 exports.getConversion = function (currencyCode, timestamp) {
   return new Promise(function (resolve, reject) {
+    const ts = timestamp || Date.now();
     let coinWait = RatesDB.GetRatesFor(0, timestamp);
     let fxWait = RatesDB.GetRatesFor(currencyCode, timestamp);
     Promise.all([coinWait, fxWait])
