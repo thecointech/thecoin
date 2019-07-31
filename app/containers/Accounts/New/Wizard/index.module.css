@@ -11,3 +11,11 @@
 .Clear {
 	clear: both;
 }
+
+.AccordionContent {
+	margin-left: 25px;
+}
+
+.AccordionIcon {
+	margin-right: 10px;
+}

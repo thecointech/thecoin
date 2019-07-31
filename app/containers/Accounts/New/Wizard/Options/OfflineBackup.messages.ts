@@ -1,5 +1,5 @@
 /*
-	Offline Backup Storage Option
+  Offline Backup Storage Option
  */
 import { defineMessages } from 'react-intl';
 
@@ -13,22 +13,22 @@ export default defineMessages({
   description: {
     id: `${scope}.desc`,
     defaultMessage:
-			"For people who cannot be certain they will remember their passwords.\
-			You can print a copy of your wallet without password protections for\
-			easy restoration.  However, just like a physical wallet, if you\
-			store this physical backup insecurely anyone with access to it can\
-			take money out of it (so keep it safe, and only use this for small accounts!)"
-	},
-	auth: {
-		id: `${scope}.auth`,
-    defaultMessage: "Physical wallet access"
-	},
-	pros: {
-		id: `${scope}.pros`,
-    defaultMessage: "Password-less recovery"
-	},
-	cons: {
-		id: `${scope}.cons`,
-    defaultMessage: "Very insecure.  Not recommended"
-	}
+      'For people who cannot be certain they will remember their passwords.\
+      You can print a copy of your wallet without password protections for\
+      easy restoration.  However, just like a physical wallet, if you\
+      store this physical backup insecurely anyone with access to it can\
+      take money out of it (so keep it safe, and only use this for small accounts!)',
+  },
+  auth: {
+    id: `${scope}.auth`,
+    defaultMessage: 'Physical wallet access',
+  },
+  pros: {
+    id: `${scope}.pros`,
+    defaultMessage: 'Password-less recovery',
+  },
+  cons: {
+    id: `${scope}.cons`,
+    defaultMessage: 'Low security.  Only suitable for low-value accounts',
+  },
 });

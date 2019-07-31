@@ -18,7 +18,11 @@ export default defineMessages({
     id: `${scope}.para1`,
     defaultMessage:
       'The Metamask browser extension provides an excellent way to store your account for every-day usage.\
-      Follow the link, and install the extension for your browser.  Once done, return here and press F5 to refresh this page',
+      To learn more about how to work with Metamask, we recommend this tutorial:',
+  },
+  preInstall: {
+    id: `${scope}.preInstall`,
+    defaultMessage: 'Once your comfortable, follow this link to install the extension:',
   },
   para2: {
     id: `${scope}.para2`,

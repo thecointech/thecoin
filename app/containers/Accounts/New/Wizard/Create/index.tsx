@@ -22,7 +22,7 @@ type StepPair = [WizardStep, WizardPage];
 function BuildSteps(option: Option) {
   const steps: StepPair[] = [];
   steps.push([CreateIntroStep, CreateIntroPage]);
-  if (option.password === 'lastpass' || option.stored === 'offline' || option.stored === 'cloud') {
+  if (option.password === 'lastpass' || option.stored === 'offline' || option.stored === 'cloud' || option.stored === 'metamask') {
     steps.push([CreatePasswordStep, CreatePasswordPage]);
   }
   if (option.stored === 'metamask') {
@@ -82,6 +82,10 @@ export const Create = (props: Props) => {
   };
 
   const stepNodes = steps.map((pair, i) => {
+    // Remove introduction if more than 3 items
+    if (i === 0 && (steps.length > 3)) {
+      return undefined;
+    }
     const Item = pair[0];
     return (
     <Step key={i} active={i === step}>

@@ -6,18 +6,18 @@ import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
 import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
-import { Wizard } from './Wizard'
+import { Wizard } from './Wizard';
 import { Generate } from './Generate';
 import { Connect } from './Connect';
 import { Restore } from './Restore';
 import { Create } from './Wizard/Create';
 
-type MyProps = {
-  url: string
-};
+interface MyProps {
+  url: string;
+}
 type Props = MyProps & Sidebar.DispatchProps;
 
-const NewAccountName = "New Account";
+const NewAccountName = 'New Account';
 
 const ConstantSidebarItems: SidebarMenuItem[] = [
   {
@@ -54,40 +54,43 @@ class NewAccountClass extends React.PureComponent<Props> {
     this.generateSubItems = this.generateSubItems.bind(this);
   }
 
-  generateSubItems(items: SidebarMenuItem[], state: ApplicationBaseState): SidebarMenuItem[] {
+  public generateSubItems(items: SidebarMenuItem[], state: ApplicationBaseState): SidebarMenuItem[] {
     const {url} = this.props;
     const item = FindItem(items, NewAccountName);
-    if (item)
+    if (item) {
       item.subItems = MapMenuItems(ConstantSidebarItems, url);
+    }
     return items;
   }
-  
-  componentDidMount() {
+
+  public componentDidMount() {
     this.props.addGenerator(NewAccountName, this.generateSubItems);
   }
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.props.removeGenerator(NewAccountName);
   }
 
-  readFile(file: File): Promise<string> {
+  public readFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var target: any = e.target;
-        var data = target.result;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const target: any = e.target;
+        const data = target.result;
         resolve(data);
       };
       reader.readAsText(file);
     });
   }
 
-  render() {
+  private renderUploadWallet = () => <UploadWallet readFile={this.readFile} />;
+
+  public render() {
     const { url } = this.props;
     return (
       <Switch>
         <Route
           path={`${url}/upload`}
-          render={_ => <UploadWallet readFile={this.readFile} />}
+          render={this.renderUploadWallet}
         />
         <Route path={`${url}/create`} component={Create} />
         <Route path={`${url}/connect`} component={Connect} />

@@ -21,16 +21,16 @@ export default defineMessages({
       guide you to ensure your account is stored safely according\
       to your needs and wants.',
   },
-	
-	valueHeader: {
+
+  valueHeader: {
     id: `${scope}.valueHeader`,
     defaultMessage: 'Account Value',
-	},
-	valueMessage: {
+  },
+  valueMessage: {
     id: `${scope}.valueMessage`,
     defaultMessage: 'What is the likely value of your account',
-	},
-	valueMessageMouseOver: {
+  },
+  valueMessageMouseOver: {
     id: `${scope}.valueMessageMouseOver`,
     defaultMessage: 'The more value in an account, the higher security and less convenience we recommend',
   },
@@ -38,48 +38,59 @@ export default defineMessages({
   techChoiceHeader: {
     id: `${scope}.techChoiceHeader`,
     defaultMessage: 'Technical Options',
-	},
-	techChoiceMessage: {
+  },
+  techChoiceMessage: {
     id: `${scope}.techChoiceMessage`,
     defaultMessage: 'Are you comfortable with either of these actions?',
-	},
-	techChoiceMessageMouseOver: {
+  },
+  techChoiceMessageMouseOver: {
     id: `${scope}.techChoiceMessageMouseOver`,
     defaultMessage: 'If you aren\'t sure, leave these blank',
   },
-  
+
   convenienceHeader: {
     id: `${scope}.convenienceHeader`,
     defaultMessage: 'Account Preferences',
-	},
-	convenienceMessage: {
+  },
+  convenienceMessage: {
     id: `${scope}.convenienceMessage`,
     defaultMessage: 'Do you prefer convenience or security?',
-	},
-	convenienceMessageMouseOver: {
+  },
+  convenienceMessageMouseOver: {
     id: `${scope}.convenienceMessageMouseOver`,
     defaultMessage: 'Certain options - ie always online, or the ability to restore without a password, are convenient but result in lower security',
   },
-  
+
   accessibilityHeader: {
     id: `${scope}.accessibilityHeader`,
     defaultMessage: 'Account Accessibility',
-	},
-	accessibilityMessage: {
+  },
+  accessibilityMessage: {
     id: `${scope}.accessibilityMessage`,
     defaultMessage: 'Do you want to be able to access your account from any computer (eg - from Internet Cafe)?',
-	},
-	accessibilityMessageMouseOver: {
+  },
+  accessibilityMessageMouseOver: {
     id: `${scope}.accessibilityMessageMouseOver`,
     defaultMessage: 'This may be necessary if you ever need to access your account from, for example, an internet cafe',
-	},
+  },
 
   recommendHeader: {
     id: `${scope}.recommendHeader`,
     defaultMessage: 'Account Recommendations',
-	},
-	recommendMessage: {
+  },
+  recommendMessage: {
     id: `${scope}.recommendMessage`,
     defaultMessage: 'We think the following options will work well for your requirements, choose the one that you like best',
+  },
+
+  noRecommendation: {
+    id: `${scope}.noRecommendation`,
+    defaultMessage: 'We are unable to think of a way to give you an account to satisfy this combination of options.',
+  },
+  noRecommendRecommend: {
+    id: `${scope}.noRecommendRecommend`,
+    defaultMessage: 'Don\'t worry though, that doesn\'t mean you can\'t have it all!  You could consider creating\
+    multiple accounts for your different usages - for example, a high-value account stored purely offline, and\
+    day-to-day usage backed up to your cloud accounts.',
   },
 });

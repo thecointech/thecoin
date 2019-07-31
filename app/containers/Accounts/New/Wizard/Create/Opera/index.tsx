@@ -28,7 +28,7 @@ export const InstallOperaPage = (props: PageProps) => {
   const content = hasWeb3 ? (
     <Message>
       <FormattedMessage {...messages.detected} />
-    </Message> 
+    </Message>
     ) : (
       <>
         <p><FormattedMessage {...messages.para1} /></p>

@@ -1,5 +1,5 @@
 
-import {VoiceID} from './Options/VoiceID'
+import { VoiceID } from './Options/VoiceID';
 import { Option, ValueLimits, Accessible } from './Options/Types';
 import { OfflineBkp } from './Options/OfflineBackup';
 import { Metamask } from './Options/Metamask';
@@ -9,31 +9,34 @@ import { Opera } from './Options/Opera';
 import { OfflineCold } from './Options/OfflineCold';
 
 export const StorageOptions: Option[] = [
-	VoiceID,
-	OfflineBkp,
-	Metamask,
-	Cloud,
-	OfflineSecureBkup,
-	Opera,
-	OfflineCold,
+  VoiceID,
+  OfflineBkp,
+  Metamask,
+  Cloud,
+  OfflineSecureBkup,
+  Opera,
+  OfflineCold,
 ];
 
 export const RequiresExtn = (optn: Option) =>
-  optn.stored == 'metamask' || optn.password == 'lastpass';
-export const RequiresApp = (optn: Option) => optn.stored == 'opera';
-const IsAccessible = (optn: Option) =>
-  optn.stored == 'cloud' ||
-  (optn.stored == 'offline' && optn.password == 'lastpass');
-export const ValueLessThanMax = (maxValue: ValueLimits, value: ValueLimits|undefined) =>
-	value === undefined ? 
-		true :
-		maxValue === 0 ? 
-			true :
-			value && value <= maxValue;
+  optn.stored === 'metamask' || optn.password === 'lastpass';
+export const RequiresApp = (optn: Option) => optn.stored === 'opera';
+
+const IsAccessible = (optn: Option, accessible: Accessible) =>
+  optn.stored === 'opera' ?
+    true :
+    (optn.stored === 'cloud') === (accessible === 'true');
+
+export const ValueLessThanMax = (maxValue: ValueLimits, value: ValueLimits | undefined) =>
+  value === undefined ?
+    true :
+    maxValue === 0 ?
+      true :
+      value && value <= maxValue;
 
 // Return the top 3 recommended (in order)
 export const getRecommendations = (filter: {
-  value: ValueLimits|undefined;
+  value: ValueLimits | undefined;
   installExtn: boolean;
   installAppn: boolean;
   accessible: Accessible;
@@ -41,9 +44,13 @@ export const getRecommendations = (filter: {
   const recommendations = StorageOptions.filter(
     op =>
       ValueLessThanMax(op.maxValue, filter.value) &&
-		(!RequiresExtn(op) || filter.installExtn) &&
-		(!RequiresApp(op) || filter.installAppn) &&
-		(!IsAccessible(op) || filter.accessible === "true")
+    (!RequiresExtn(op) || filter.installExtn) &&
+    (!RequiresApp(op) || filter.installAppn) &&
+    IsAccessible(op, filter.accessible),
   );
-  return recommendations;
+  return recommendations.sort((l, r) => {
+    const c = r.convenience - l.convenience;
+    return c ? c :
+      ValueLessThanMax(r.maxValue, l.maxValue) ? -1 : 1;
+  });
 };
