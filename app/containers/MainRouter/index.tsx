@@ -10,8 +10,8 @@ import { UnderConstruction } from 'containers/UnderConstruction';
 import { GAuth } from 'containers/Accounts/Settings/gconnect/gauth';
 
 export default (props: { location: Location }) => (
-  (window.location.pathname == "/accounts/gauth") ?
-    <GAuth /> :
+  (window.location.pathname === '/accounts/gauth') ?
+    <GAuth /> : (
     <Switch location={props.location}>
       <Route exact path="/" component={HomePage} />
       <Route path="/accounts" component={Accounts} />
@@ -19,4 +19,5 @@ export default (props: { location: Location }) => (
       <Route path="/FAQ" component={UnderConstruction} />
       <Route component={NotFoundPage} />
     </Switch>
+    )
 );

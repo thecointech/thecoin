@@ -14,7 +14,9 @@ import { Grid, Container } from 'semantic-ui-react';
 import IconWithText from 'components/IconWithText/index';
 import * as Icons from 'utils/icons';
 import messages from './messages';
-import ButtonLink from 'components/ButtonLink/index'
+import ButtonLink from 'components/ButtonLink/index';
+import { Returns } from 'containers/ReturnProfile';
+import { ContentSegment } from 'components/ContentSegment';
 
 export default class HomePage extends React.PureComponent {
   public render() {
@@ -54,6 +56,9 @@ export default class HomePage extends React.PureComponent {
             GO TO ACCOUNTS
           </ButtonLink>
         </Container>
+        <ContentSegment>
+          <Returns />
+        </ContentSegment>
       </React.Fragment>
     );
   }
