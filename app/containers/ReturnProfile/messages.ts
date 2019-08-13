@@ -2,12 +2,12 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Returns.Teaser';
+export const scope = 'app.containers.Returns';
 
 export default defineMessages({
   header: {
     id: `${scope}.Header`,
-    defaultMessage: 'Show me my risk and reward!',
+    defaultMessage: 'Show me the potential',
   },
   Starting: {
     id: `${scope}.Starting`,
@@ -19,7 +19,7 @@ export default defineMessages({
   },
   calculate: {
     id: `${scope}.calculate`,
-    defaultMessage: 'Show Potential',
+    defaultMessage: 'Show Returns',
   },
   AverageReturn: {
     id: `${scope}.AverageReturn`,

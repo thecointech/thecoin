@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form, Input, Grid, Label, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import messages from '../messages';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 // import styles from './index.module.css';
@@ -34,11 +34,9 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
 
   return (
     <>
-      <p>
-        <Header>
-          <FormattedMessage {...messages.header} />
-        </Header>
-      </p>
+      <Header>
+        <FormattedMessage {...messages.header} />
+      </Header>
       <hr />
       <Form>
         <Grid>
