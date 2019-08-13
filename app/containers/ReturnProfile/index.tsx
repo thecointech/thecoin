@@ -2,6 +2,10 @@ import React from 'react';
 import { Graph } from './Graph/index';
 import { Grid, Button, Dropdown, Icon, Input, Form, Label } from 'semantic-ui-react';
 import { Slider } from 'react-semantic-ui-range';
+import { FormattedMessage } from 'react-intl';
+import messages from './Teaser/messages';
+import { RouteComponentProps } from 'react-router';
+import queryString from 'query-string';
 
 const options = [
   { key: 'coin', text: 'The Coin', value: 'coin' },
@@ -11,9 +15,14 @@ const options = [
   { key: 'rbcb', text: 'RBC Bond Funds', value: 'rbcb' },
 ];
 
-export class Returns extends React.PureComponent {
+type Props = RouteComponentProps;
+
+export class Returns extends React.PureComponent<Props> {
   public state = {
     months: 6,
+    amount: 1000,
+    returns: 1050,
+    age: 30,
   };
 
   // public const handleValueChange = e => {
@@ -23,6 +32,27 @@ export class Returns extends React.PureComponent {
   //   }
   //   this.setState({months: e.target.value});
   // };
+
+  private maybePullQuery(query: queryString.ParsedQuery, name: string) {
+    const v = parseInt(query[name] as string, 10);
+    if (v) {
+      this.setState({[name]: v});
+    }
+  }
+
+  public componentDidMount() {
+    const qs = this.props.location.search;
+    const query = queryString.parse(qs);
+    this.maybePullQuery(query, 'age');
+    this.maybePullQuery(query, 'amount');
+  }
+
+  private onSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      ...this.state,
+      [e.target.name]: e.target.value,
+    });
+  }
 
   public sliderSettings = () => (
     {
@@ -35,26 +65,33 @@ export class Returns extends React.PureComponent {
   );
 
   public render() {
-    const {months} = this.state;
+    const {amount, age, returns, months} = this.state;
     return (
+      <Form>
       <Grid textAlign="left">
-        <Grid.Row>
-          <Grid.Column width="three">
+        <Grid.Row columns={3}>
+          <Grid.Column>
             <Form.Field>
-              <Label>Starting Value</Label>
-              <Input>1000</Input>
+              <Label>
+                <FormattedMessage {...messages.Starting} />
+              </Label>
+              <Input type="number" name="amount" value={amount} onChange={this.onSetValue} />
             </Form.Field>
           </Grid.Column>
-          <Grid.Column width="ten">
+          <Grid.Column>
             <Form.Field>
-              <Label># of months</Label>
-              <Input disabled>{months}</Input>
+              <Label>
+                <FormattedMessage {...messages.Age} />
+              </Label>
+              <Form.Input type="number" name="age" value={age} onChange={this.onSetValue} />
             </Form.Field>
           </Grid.Column>
-          <Grid.Column width="three">
+          <Grid.Column>
             <Form.Field>
-              <Label>Average Result:</Label>
-              <Input disabled>1050</Input>
+              <Label>
+                <FormattedMessage {...messages.AverageReturn} />
+              </Label>
+              <Form.Input type="number" disabled value={returns} />
             </Form.Field>
           </Grid.Column>
         </Grid.Row>
@@ -83,8 +120,8 @@ export class Returns extends React.PureComponent {
             <Slider value={months} color="red" settings={this.sliderSettings()} />
           </Grid.Column>
         </Grid.Row>
-
       </Grid>
+      </Form>
     );
   }
 }

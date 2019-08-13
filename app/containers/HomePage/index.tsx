@@ -15,8 +15,8 @@ import IconWithText from 'components/IconWithText/index';
 import * as Icons from 'utils/icons';
 import messages from './messages';
 import ButtonLink from 'components/ButtonLink/index';
-import { Returns } from 'containers/ReturnProfile';
 import { ContentSegment } from 'components/ContentSegment';
+import { Teaser } from 'containers/ReturnProfile/Teaser';
 
 export default class HomePage extends React.PureComponent {
   public render() {
@@ -57,7 +57,7 @@ export default class HomePage extends React.PureComponent {
           </ButtonLink>
         </Container>
         <ContentSegment>
-          <Returns />
+          <Teaser />
         </ContentSegment>
       </React.Fragment>
     );

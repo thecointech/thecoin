@@ -8,6 +8,7 @@ import { Accounts } from 'containers/Accounts';
 import { HowItWorks } from 'containers/HowItWorks';
 import { UnderConstruction } from 'containers/UnderConstruction';
 import { GAuth } from 'containers/Accounts/Settings/gconnect/gauth';
+import { Learn } from 'containers/Learn';
 
 export default (props: { location: Location }) => (
   (window.location.pathname === '/accounts/gauth') ?
@@ -15,6 +16,7 @@ export default (props: { location: Location }) => (
     <Switch location={props.location}>
       <Route exact path="/" component={HomePage} />
       <Route path="/accounts" component={Accounts} />
+      <Route path="/learn" component={Learn} />
       <Route path="/howItWorks" component={HowItWorks} />
       <Route path="/FAQ" component={UnderConstruction} />
       <Route component={NotFoundPage} />

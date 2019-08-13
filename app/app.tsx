@@ -31,6 +31,10 @@ import configureStore from './configureStore';
 // Import i18n messages
 import { translationMessages } from 'i18n';
 
+import { initTracking } from './utils/reactga';
+
+initTracking();
+
 // Create redux store with history
 const initialState = {};
 const store = configureStore(initialState, history);
@@ -38,6 +42,7 @@ const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (messages, Component = App) => {
   ReactDOM.render(
+    // tslint:disable-next-line: jsx-wrap-multiline
     <Provider store={store}>
       <LanguageProvider messages={messages}>
         <ConnectedRouter history={history}>

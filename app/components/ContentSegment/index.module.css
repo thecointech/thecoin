@@ -1,12 +1,12 @@
 .contentSegment {
   background-color: #3193A1;
-  padding-top: 2.1vw;
+  padding-top: 2.3vw;
   margin: -50px;
   margin-top: 0px;
   padding: 50px;
   
   clip-path: polygon(
-    0 calc(2vw),
+    0 2vw,
     100% 0,
     100% 100%,
     0 100%
