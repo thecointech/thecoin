@@ -76,7 +76,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 		const { contract } = this.props;
 		const fxRate = this.getSelectedFxRate()
 
-		if (fxRate <= 0)
+		if (fxRate.fxRate <= 0)
 		{
 			alert("Invalid FxRate!")
 			return;
@@ -122,11 +122,12 @@ class PurchaseClass extends React.PureComponent<Props> {
 	async buildPurchaseEntry() : Promise<PurchaseRecord> {
 		const { coin, recievedDate, settledDate, email } = this.state;
 		const { signer } = this.props;
-		const fxRate = this.getSelectedFxRate();
+    const { fxRate, sell } = this.getSelectedFxRate();
+    const conversionRate = fxRate * sell;
 		const emailHash = await signer.signMessage(email.toLocaleLowerCase());
 		return {
 			coin,
-			fiat: toHuman(coin * fxRate, true),
+			fiat: toHuman(coin * conversionRate, true),
 			recieved: Timestamp.fromDate(recievedDate),
 			settled: Timestamp.fromDate(settledDate),
 			txHash: '---',
@@ -213,7 +214,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 		const { settledDate } = this.state;
 		const { rates } = this.props;
 		const rate = getFxRate(rates, settledDate.getTime());
-		return rate.sell * rate.fxRate;
+		return rate;
 	}
 
 	resetInputs() {
@@ -242,12 +243,18 @@ class PurchaseClass extends React.PureComponent<Props> {
 		const rsign = await wallet.signMessage(rhash);
 		const code = GetReferrerCode(rsign);
 		this.setState({purchaserCode: code});
-	}
+  }
+  
+  renderShortDate = (date: Date) => date.toLocaleDateString("en-US", {day: "numeric", hour:"numeric", minute: "numeric"})
 
 	render() {
 		const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode } = this.state
 		const { balance } = this.props;
-		const fxRate = this.getSelectedFxRate()
+    const fxRate = this.getSelectedFxRate();
+    const sellRate = fxRate.sell * fxRate.fxRate;
+    const validFrom = new Date(fxRate.validFrom);
+    const validTill = new Date(fxRate.validTill);
+
 
 		const forceValidate = false;
 
@@ -258,7 +265,12 @@ class PurchaseClass extends React.PureComponent<Props> {
 				<Form>
 					<Datetime value={recievedDate} onChange={this.onSetDate} />
 					<p>Settled: {settledDate.toString()}</p>
-					<p>FxRate: {roundPlaces(fxRate)} </p>
+					<p>
+              FxRate: {roundPlaces(sellRate)} <br />
+               + Valid: {this.renderShortDate(validFrom)} -> {this.renderShortDate(validTill)}<br />
+               + THE: {fxRate.sell} <br />
+               + CAD: {fxRate.fxRate} <br />
+          </p>
 					<UxAddress
 						uxChange={this.onAccountValue}
 						intlLabel={messages.labelAccount}
@@ -266,7 +278,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 						placeholder="Purchaser Account"
 					/>
 					<p>Purchaser Code: {purchaserCode}</p>
-					<DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={fxRate} />
+					<DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={sellRate} />
 					<Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
 				</Form>
 				<Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.handleConfirm} />
