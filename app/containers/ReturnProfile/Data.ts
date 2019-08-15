@@ -1,4 +1,6 @@
 import Papa from 'papaparse';
+import { LineSerieData, LineDatum } from '@nivo/line';
+import { memoize } from 'lodash';
 
 export interface DataFormat {
   Date: Date;
@@ -88,7 +90,7 @@ export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: D
   return periods;
 }
 
-function arrayMin(arr) {
+export function arrayMin(arr) {
   let len = arr.length;
   let min = Infinity;
   while (len--) {
@@ -99,7 +101,7 @@ function arrayMin(arr) {
   return min;
 }
 
-function arrayMax(arr) {
+export function arrayMax(arr) {
   let len = arr.length;
   let max = -Infinity;
   while (len--) {
@@ -115,8 +117,8 @@ export function calcBucketShape(minValue: number, maxValue: number, numBuckets: 
 
   // what would even buckets look like?
   const minBucketSize = spread / numBuckets;
-  const roundBucketSizes = [0.01, 0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10];
-  const bucketSize = roundBucketSizes.find(v => v > minBucketSize) || 10;
+  const roundBucketSizes = [0.01, 0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 30, 50, 100, 200];
+  const bucketSize = roundBucketSizes.find(v => v > minBucketSize) || roundBucketSizes[roundBucketSizes.length - 1];
 
   // calculate round bucket size for min/max
   const minBucket = Math.floor(minValue / bucketSize) * bucketSize;
@@ -128,6 +130,9 @@ export function calcBucketShape(minValue: number, maxValue: number, numBuckets: 
   };
 }
 
+export const CalcIndex = (min: number, max: number, v: number, count: number) =>
+  Math.ceil(count * (v - min) / (max - min));
+
 export function bucketValues(values: number[], numBuckets: number) {
   const minValue = arrayMin(values);
   const maxValue = arrayMax(values);
@@ -136,17 +141,61 @@ export function bucketValues(values: number[], numBuckets: number) {
   const { min, max, size } = calcBucketShape(minValue, maxValue, numBuckets);
 
   const count = Math.round((max - min) / size);
-  const buckets: number[] = Array(numBuckets).fill(0);
+  const bucketCount = Math.max(count + 1, numBuckets);
+  const buckets: number[] = Array(bucketCount).fill(0);
+  let total = 0;
   for (const v of values) {
-    const r = (v - minValue) / (maxValue - minValue);
-    const idx = Math.ceil(r * (count - 1));
+    const idx = CalcIndex(min, max, v, count);
     buckets[idx] = buckets[idx] + 1;
+    total += v;
   }
+  const average = total / values.length;
 
   return {
     min,
     max,
     size,
+    average,
     values: buckets,
   };
 }
+
+export interface CoinReturns {
+  plotData: LineSerieData[];
+  average: number;
+  size: number;
+  // averageMarker: number;
+  // averageLegend: string;
+}
+
+export const NullData: CoinReturns = {
+  plotData: [],
+  average: 0,
+  size: 1,
+};
+
+export function CalcPlotData(monthCount: number, data: DataFormat[]): CoinReturns {
+  if (data.length === 0 || !monthCount) {
+    return NullData;
+  }
+
+  const startDate = new Date(1932, 0);
+  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
+  const { min, size, values, average } = bucketValues(returns, 20);
+  const plotData: LineSerieData = {
+    id: 'The Coin',
+    data: values.map((d, index): LineDatum => {
+      const xval = min + (index * size);
+      // Get rid of float rounding errors
+      const cleanxval = Math.round(xval * 100);
+      return {
+        x: cleanxval,
+        y: d,
+      };
+    }),
+  };
+
+  return {plotData: [plotData], average, size};
+}
+
+export const GetPlotData = memoize(CalcPlotData, (m: number, d: DataFormat[]) => d.length + m);

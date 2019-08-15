@@ -13,7 +13,9 @@ function createWebpackMiddleware(compiler, publicPath) {
   });
 }
 
-const sp500buffer = fsSystem.readFileSync('C:/src/TheCoin/the-website-ts/build/sp500_monthly.csv');
+const sp500buffer = fsSystem.readFileSync(
+  'C:/src/TheCoin/the-website-ts/build/sp500_monthly.csv',
+);
 const sp500string = sp500buffer.toString();
 
 module.exports = function addDevMiddlewares(app, webpackConfig) {

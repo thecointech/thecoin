@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { RouteComponentProps } from 'react-router';
 import queryString from 'query-string';
+import { getData, GetPlotData, DataFormat } from './Data';
 
 const options = [
   { key: 'coin', text: 'The Coin', value: 'coin' },
@@ -19,10 +20,11 @@ type Props = RouteComponentProps;
 
 export class Returns extends React.PureComponent<Props> {
   public state = {
-    months: 6,
+    sliderValue: 21,
     amount: 1000,
     returns: 1050,
     age: 30,
+    rawData: [] as DataFormat[],
   };
 
   // public const handleValueChange = e => {
@@ -45,7 +47,15 @@ export class Returns extends React.PureComponent<Props> {
     const query = queryString.parse(qs);
     this.maybePullQuery(query, 'age');
     this.maybePullQuery(query, 'amount');
+
+    this.updateData();
   }
+
+  private updateData = async () => {
+    const rawData = await getData();
+    this.setState({rawData});
+  }
+
 
   private onSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -54,31 +64,39 @@ export class Returns extends React.PureComponent<Props> {
     });
   }
 
-  private sliderValueToMonths(value: number) {
+  private sliderValueToMonths = () => {
     // Our slider runs as as follows:
     // 1 -> 11: months  (12)
     // 1 -> 10: yearly  (12 + 9)
     // 10+: By 5yrs
-    const months = value < 12 ?
-      value :
-      value < 21 ?
-        12 * (value - 11) :
-        600 * (value - 19);
-    this.setState({months});
+    const {sliderValue} = this.state;
+    return sliderValue < 12 ?
+      sliderValue :
+      sliderValue < 21 ?
+        12 * (sliderValue - 11) :
+        60 * (sliderValue - 19);
   }
 
   public sliderSettings = () => (
     {
-      start: this.state.months,
+      start: this.state.sliderValue,
       min: 1,
-      max: 38,
+      max: 35,
       step: 1,
-      onChange: this.sliderValueToMonths,
+      onChange: (sliderValue: number) => this.setState({sliderValue}),
     }
   );
 
+  private getTimeLabel = (months: number) =>
+    months < 12 ?
+      <FormattedMessage {...messages.AverageReturnMonths} values={{months}} /> :
+      <FormattedMessage {...messages.AverageReturnYears} values={{years: months / 12}} />;
+
   public render() {
-    const {amount, age, returns, months} = this.state;
+    const {amount, rawData, age, returns, sliderValue } = this.state;
+    const months = this.sliderValueToMonths();
+    const graphData = GetPlotData(months, rawData);
+    const returnLabel = this.getTimeLabel(months);
     return (
       <Form>
       <Grid textAlign="left">
@@ -102,7 +120,7 @@ export class Returns extends React.PureComponent<Props> {
           <Grid.Column>
             <Form.Field>
               <Label>
-                <FormattedMessage {...messages.AverageReturn} />
+                {returnLabel}
               </Label>
               <Form.Input type="number" disabled value={returns} />
             </Form.Field>
@@ -110,7 +128,7 @@ export class Returns extends React.PureComponent<Props> {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Graph months={months}/>
+            <Graph data={graphData} multiplier={amount} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns="two">
@@ -130,7 +148,7 @@ export class Returns extends React.PureComponent<Props> {
             </Button.Group>
           </Grid.Column>
           <Grid.Column width={16}>
-            <Slider value={months} color="red" settings={this.sliderSettings()} />
+            <Slider value={sliderValue} color="red" settings={this.sliderSettings()} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
