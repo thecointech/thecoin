@@ -7,7 +7,7 @@ export const scope = 'app.containers.Returns';
 export default defineMessages({
   header: {
     id: `${scope}.Header`,
-    defaultMessage: 'Show me the potential!',
+    defaultMessage: 'Show me the Potential!',
   },
   Starting: {
     id: `${scope}.Starting`,
@@ -23,11 +23,19 @@ export default defineMessages({
   },
   AverageReturnMonths: {
     id: `${scope}.AverageReturn`,
-    defaultMessage: 'Value after {months} months',
+    defaultMessage: 'Average value after {months} months',
   },
   AverageReturnYears: {
     id: `${scope}.AverageReturn`,
-    defaultMessage: 'Value after {years} years',
+    defaultMessage: 'Average value after {years} years',
+  },
+  Play: {
+    id: `${scope}.Play`,
+    defaultMessage: 'Play',
+  },
+  Step: {
+    id: `${scope}.Step`,
+    defaultMessage: 'Step',
   },
 });
 

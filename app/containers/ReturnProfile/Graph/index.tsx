@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResponsiveLine } from '@nivo/line';
-import { CoinReturns } from '../Data';
+import { ResponsiveLine, LineDatum, LineSerieData } from '@nivo/line';
+import { CoinReturns, CalcAverageReturn, CalcRoundedAverageReturn } from '../Data';
 
 interface Props {
   data: CoinReturns;
@@ -54,27 +54,27 @@ export class Graph extends React.PureComponent<Props> {
 
   public render() {
     const {data, multiplier} = this.props;
-    const {plotData, average, size} = data;
-    const avgValue = multiplier * (1 + average); // Math.round(average * 100 * 100) / 100);
-    const averageMarker = Math.round(average / size) * size * 100;
-    const averageLegend = 'Avg: ' + avgValue.toFixed(2);
+    const {values, size, min, count} = data;
 
-    // const mplotData = plotData.map(s => ({
-    //   ...s,
-    //   data: s.data.map(v => ({
-    //     ...v,
-    //     x: v.x ? Number(v.x) * multiplier : v.x,
-    //   })),
-    // }));
-    const mplotData = plotData;
+    const plotData: LineSerieData = {
+      id: 'The Coin',
+      data: values.map((d, index): LineDatum => {
+        const xval = min + (index * size);
+        // Get rid of float rounding errors
+        return {
+          x: '$' + CalcAverageReturn(multiplier, xval),
+          y: 100 * d / count,
+        };
+      }),
+    };
 
     return (
       <div style={{
         height: 300,
       }}>
         <ResponsiveLine
-          data={mplotData}
-          margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
+          data={[plotData]}
+          margin={{ top: 10, right: 110, bottom: 60, left: 60 }}
           curve="monotoneX"
         xScale={{ type: 'point' }}
         yScale={{ type: 'linear', stacked: true, min: 'auto', max: 'auto' }}
@@ -86,8 +86,8 @@ export class Graph extends React.PureComponent<Props> {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: -30,
-            legend: 'Returns (%)',
-            legendOffset: 36,
+            legend: 'Account Value',
+            legendOffset: 52,
             legendPosition: 'middle',
         }}
         axisLeft={{
@@ -95,16 +95,16 @@ export class Graph extends React.PureComponent<Props> {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'Probability',
+            legend: 'Probability (%)',
             legendOffset: -40,
             legendPosition: 'middle',
         }}
         markers={[
           {
             axis: 'x',
-            value: averageMarker,
+            value: '$' + CalcRoundedAverageReturn(multiplier, data),
             lineStyle: { stroke: '#999999', strokeWidth: 2 },
-            legend: averageLegend,
+            legend: 'Avg: $' + CalcAverageReturn(multiplier, data.average),
           },
         ]}
         colors={{ scheme: 'nivo' }}

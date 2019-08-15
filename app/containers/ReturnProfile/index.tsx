@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { RouteComponentProps } from 'react-router';
 import queryString from 'query-string';
-import { getData, GetPlotData, DataFormat } from './Data';
+import { getData, GetPlotData, DataFormat, CalcAverageReturn } from './Data';
 
 const options = [
   { key: 'coin', text: 'The Coin', value: 'coin' },
@@ -16,16 +16,24 @@ const options = [
   { key: 'rbcb', text: 'RBC Bond Funds', value: 'rbcb' },
 ];
 
+const SliderMax = 35;
+
 type Props = RouteComponentProps;
 
-export class Returns extends React.PureComponent<Props> {
-  public state = {
-    sliderValue: 21,
-    amount: 1000,
-    returns: 1050,
-    age: 30,
-    rawData: [] as DataFormat[],
-  };
+const initState = {
+  sliderValue: 21,
+  amount: 1000,
+  age: 30,
+  rawData: [] as DataFormat[],
+};
+
+type State = Readonly<typeof initState>;
+
+export class Returns extends React.PureComponent<Props, State> {
+
+  public state = initState;
+
+  private playTimer = 0;
 
   // public const handleValueChange = e => {
   //   let value = parseInt(e.target.value);
@@ -35,10 +43,10 @@ export class Returns extends React.PureComponent<Props> {
   //   this.setState({months: e.target.value});
   // };
 
-  private maybePullQuery(query: queryString.ParsedQuery, name: string) {
+  private maybePullQuery(query: queryString.ParsedQuery, name: keyof State) {
     const v = parseInt(query[name] as string, 10);
     if (v) {
-      this.setState({[name]: v});
+      this.setState({[name]: v} as any);
     }
   }
 
@@ -51,11 +59,17 @@ export class Returns extends React.PureComponent<Props> {
     this.updateData();
   }
 
+  public componentWillUnmount() {
+    if (this.playTimer) {
+      clearInterval(this.playTimer);
+      this.playTimer = 0;
+    }
+  }
+
   private updateData = async () => {
     const rawData = await getData();
     this.setState({rawData});
   }
-
 
   private onSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -81,7 +95,7 @@ export class Returns extends React.PureComponent<Props> {
     {
       start: this.state.sliderValue,
       min: 1,
-      max: 35,
+      max: SliderMax,
       step: 1,
       onChange: (sliderValue: number) => this.setState({sliderValue}),
     }
@@ -92,11 +106,33 @@ export class Returns extends React.PureComponent<Props> {
       <FormattedMessage {...messages.AverageReturnMonths} values={{months}} /> :
       <FormattedMessage {...messages.AverageReturnYears} values={{years: months / 12}} />;
 
+  private incrSliderValue = () =>
+    this.setState((state: State) => {
+      const sliderValue = Math.min(SliderMax, state.sliderValue + 1);
+      if (sliderValue === SliderMax && this.playTimer) {
+        clearInterval(this.playTimer);
+        this.playTimer = 0;
+      }
+      return {
+        ...state,
+        sliderValue,
+      };
+    })
+
+  private step = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    this.incrSliderValue();
+
+  private play = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    this.playTimer ?
+      clearTimeout(this.playTimer) :
+      this.playTimer = setInterval(this.incrSliderValue, 1200);
+
   public render() {
-    const {amount, rawData, age, returns, sliderValue } = this.state;
+    const {amount, rawData, age, sliderValue } = this.state;
     const months = this.sliderValueToMonths();
     const graphData = GetPlotData(months, rawData);
     const returnLabel = this.getTimeLabel(months);
+    const avgValue = CalcAverageReturn(amount, graphData.average);
     return (
       <Form>
       <Grid textAlign="left">
@@ -122,7 +158,7 @@ export class Returns extends React.PureComponent<Props> {
               <Label>
                 {returnLabel}
               </Label>
-              <Form.Input type="number" disabled value={returns} />
+              <Form.Input value={'$' + avgValue} />
             </Form.Field>
           </Grid.Column>
         </Grid.Row>
@@ -137,12 +173,12 @@ export class Returns extends React.PureComponent<Props> {
           </Grid.Column>
           <Grid.Column>
             <Button.Group>
-            <Button icon labelPosition="left">
+            <Button icon labelPosition="left" onClick={this.play}>
               <Icon name="pause" />
-                Play
+                <FormattedMessage {...messages.Play} />
               </Button>
-              <Button icon labelPosition="right">
-                Next
+              <Button icon labelPosition="right" onClick={this.step}>
+                <FormattedMessage {...messages.Step} />
                 <Icon name="arrow right" />
               </Button>
             </Button.Group>

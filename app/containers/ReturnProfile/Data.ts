@@ -1,5 +1,4 @@
 import Papa from 'papaparse';
-import { LineSerieData, LineDatum } from '@nivo/line';
 import { memoize } from 'lodash';
 
 export interface DataFormat {
@@ -130,10 +129,22 @@ export function calcBucketShape(minValue: number, maxValue: number, numBuckets: 
   };
 }
 
+
+export interface CoinReturns {
+  min: number;
+  max: number;
+  size: number;
+  average: number;
+  values: number[];
+  count: number;
+  // averageMarker: number;
+  // averageLegend: string;
+}
+
 export const CalcIndex = (min: number, max: number, v: number, count: number) =>
   Math.ceil(count * (v - min) / (max - min));
 
-export function bucketValues(values: number[], numBuckets: number) {
+export function bucketValues(values: number[], numBuckets: number): CoinReturns {
   const minValue = arrayMin(values);
   const maxValue = arrayMax(values);
 
@@ -157,21 +168,18 @@ export function bucketValues(values: number[], numBuckets: number) {
     size,
     average,
     values: buckets,
+    count: values.length,
   };
 }
 
-export interface CoinReturns {
-  plotData: LineSerieData[];
-  average: number;
-  size: number;
-  // averageMarker: number;
-  // averageLegend: string;
-}
 
 export const NullData: CoinReturns = {
-  plotData: [],
+  values: [],
   average: 0,
   size: 1,
+  min: 0,
+  max: 0,
+  count: 1,
 };
 
 export function CalcPlotData(monthCount: number, data: DataFormat[]): CoinReturns {
@@ -181,21 +189,13 @@ export function CalcPlotData(monthCount: number, data: DataFormat[]): CoinReturn
 
   const startDate = new Date(1932, 0);
   const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
-  const { min, size, values, average } = bucketValues(returns, 20);
-  const plotData: LineSerieData = {
-    id: 'The Coin',
-    data: values.map((d, index): LineDatum => {
-      const xval = min + (index * size);
-      // Get rid of float rounding errors
-      const cleanxval = Math.round(xval * 100);
-      return {
-        x: cleanxval,
-        y: d,
-      };
-    }),
-  };
-
-  return {plotData: [plotData], average, size};
+  return bucketValues(returns, 20);
 }
 
 export const GetPlotData = memoize(CalcPlotData, (m: number, d: DataFormat[]) => d.length + m);
+
+export const CalcAverageReturn = (multiplier: number, average: number) =>
+  (multiplier * (1 + average)).toFixed(2);
+
+export const CalcRoundedAverageReturn = (multiplier: number, data: CoinReturns) =>
+  (multiplier * (1 + Math.round(data.average / data.size) * data.size)).toFixed(2);
