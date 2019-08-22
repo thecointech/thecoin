@@ -7,9 +7,9 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 
 interface MyProps {
-  option: Option
-  onCancel: () => void,
-};
+  option: Option;
+  onCancel: () => void;
+}
 type Props = MyProps & RouteComponentProps;
 
 export const CreateOptionDlg = withRouter((props: Props) => {

@@ -8,7 +8,6 @@ import { DualFxInput } from '@the-coin/components/components/DualFxInput';
 import { ContainerState } from '@the-coin/components/containers/FxRate/types';
 import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
 import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { TheSigner } from '@the-coin/components/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
@@ -17,10 +16,11 @@ import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-Online.png';
 import styles from './index.module.css';
+import {ETransferModal} from './eTransferModal';
 
-type MyProps = {
+interface MyProps {
   signer: TheSigner;
-};
+}
 
 const initialState = {
   cadPurchase: null as number | null,
@@ -28,36 +28,27 @@ const initialState = {
 
   // Transfer code vars
   showDlg: false,
-  percentComplete: 0,
-  transferHeader: messages.getTransferCodeHeader,
-  transferMessage: messages.fetchTransferCode,
-  transferValues: undefined as any,
+  xferRecipient: undefined as string|undefined,
+  xferSecret: undefined as string|undefined,
 };
 
 type StateType = Readonly<typeof initialState>;
 type Props = MyProps & ContainerState;
 
 class PurchaseClass extends React.PureComponent<Props, StateType> {
-  state = initialState;
+  public state = initialState;
 
-  constructor(props: Props) {
-    super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.accordionClick = this.accordionClick.bind(this);
-  }
-
-  onSubmit(e: React.MouseEvent<HTMLElement>) {
+  public onSubmit = (e: React.MouseEvent<HTMLElement>) => {
     alert('NOT IMPLEMENTED');
   }
 
-  onValueChange(value: number) {
+  public onValueChange = (value: number) => {
     this.setState({
       cadPurchase: value,
     });
   }
 
-  accordionClick = (e, titleProps) => {
+  public accordionClick = (e, titleProps) => {
     const { index } = titleProps;
     const { activeAccordion } = this.state;
     const newIndex = activeAccordion === index ? -1 : index;
@@ -65,17 +56,14 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     this.setState({ activeAccordion: newIndex });
   };
 
-  onCloseDlg = () => this.setState({ showDlg: false });
-  onGenerateRecipient = e => {
+  public onCloseDlg = () => this.setState({ showDlg: false });
+  public onGenerateRecipient = e => {
     this.generateRecipient();
   }
 
-  async generateRecipient() {
+  public async generateRecipient() {
     this.setState({
       showDlg: true,
-      transferHeader: messages.getTransferCodeHeader,
-      transferMessage: messages.fetchTransferCode,
-      percentComplete: 0,
     });
 
     // Build our request
@@ -88,22 +76,17 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     // Display to user
     const toAddress = `${signer.address}@thecoin.io`.toLowerCase();
     this.setState({
-      transferHeader: messages.haveTransferCodeHeader,
-      transferMessage: messages.yourTransferCode,
-      transferValues: {
-        recipient: <a href={`mailto:${toAddress}`}>{toAddress}</a>,
-        secret: response.code
-      },
-      percentComplete: 1
+      xferRecipient: toAddress,
+      xferSecret: response.code || 'TheCoin',
     });
   }
 
-  render() {
+  public render() {
     const { rates } = this.props;
     const rate = weSellAt(rates);
 
     const { activeAccordion } = this.state;
-    //const ImgeTransfer = <img src={InteraceTransfer} alt='logo' />
+    // const ImgeTransfer = <img src={InteraceTransfer} alt='logo' />
     const paymentMethods = [
       {
         logo: InteraceTransfer,
@@ -130,7 +113,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
         ),
       },
       {
-        logo: InteraceOnline, //<img className={styles.LogoImage} src={InteraceOnline} alt='logo' />,
+        logo: InteraceOnline, // <img className={styles.LogoImage} src={InteraceOnline} alt='logo' />,
         title: 'Interac Online',
         content: <p>Direct payment via Interac Online is coming soon!</p>,
       },
@@ -190,14 +173,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
             }))}
           />
         </Form>
-        <ModalOperation
-          isOpen={this.state.showDlg}
-          progressPercent={this.state.percentComplete}
-          header={this.state.transferHeader}
-          progressMessage={this.state.transferMessage}
-          messageValues={this.state.transferValues}
-          okCallback={this.onCloseDlg}
-        />
+        <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
       </>
     );
   }

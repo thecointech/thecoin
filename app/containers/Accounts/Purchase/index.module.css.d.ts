@@ -5,6 +5,8 @@ interface CssExports {
   'HeaderContainer': string;
   'LogoImage': string;
   'PaymentMethod': string;
+  'fixedColumn': string;
+  'floatColumn': string;
 }
 declare var cssExports: CssExports;
 export = cssExports;

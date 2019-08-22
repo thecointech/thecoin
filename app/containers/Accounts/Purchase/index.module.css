@@ -16,3 +16,11 @@
 .Clear {
 	clear: both;
 }
+
+.fixedColumn {
+	flex: 0 0 100px;
+}
+
+.floatColumn {
+	flex: 1;
+}

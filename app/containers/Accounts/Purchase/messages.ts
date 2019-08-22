@@ -14,24 +14,32 @@ export default defineMessages({
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: "Transfer funds into your account.",
+    defaultMessage: 'Transfer funds into your account.',
   },
 
-  
+
   getTransferCodeHeader: {
     id: `${scope}.getTransferCodeHeader`,
-    defaultMessage: "Please wait...",
+    defaultMessage: 'Please wait...',
   },
   haveTransferCodeHeader: {
     id: `${scope}.haveTransferCodeHeader`,
-    defaultMessage: "Your details:",
+    defaultMessage: 'Your details:',
   },
   fetchTransferCode: {
     id: `${scope}.fetchTransferCodeMessage`,
-    defaultMessage: "We are generating your individual e-Transfer recipient info",
+    defaultMessage: 'We are generating your individual e-Transfer recipient info',
   },
   yourTransferCode: {
     id: `${scope}.yourTransferCode`,
-    defaultMessage: "The following is your personalized e-Transfer info.\n\nRecipient: {recipient}\nSecret:    {secret}",
-  }
+    defaultMessage: 'The following is your personalized e-Transfer info:',
+  },
+  yourTransferRecipient: {
+    id: `${scope}.yourTransferRecipient`,
+    defaultMessage: 'Recipient:',
+  },
+  yourTransferSecret: {
+    id: `${scope}.yourTransferSecret`,
+    defaultMessage: 'Secret:',
+  },
 });

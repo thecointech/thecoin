@@ -74,11 +74,11 @@ export const Create = (props: Props) => {
   const buttonText = step === lastStep ? 'DONE' : 'NEXT';
 
   const pageProps: PageProps = {
-    accountName: accountName,
-    setName: setName,
-    buttonText: buttonText,
+    accountName,
+    setName,
+    buttonText,
     onComplete: nextPage,
-    options: options,
+    options,
   };
 
   const stepNodes = steps.map((pair, i) => {
