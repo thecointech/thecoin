@@ -1,30 +1,33 @@
 import React from 'react';
 import { Graph } from './Graph/index';
-import { Grid, Button, Dropdown, Icon, Input, Form, Label } from 'semantic-ui-react';
+import { Grid, Button, Icon, Input, Form, Label } from 'semantic-ui-react';
 import { Slider } from 'react-semantic-ui-range';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { RouteComponentProps } from 'react-router';
 import queryString from 'query-string';
 import { getData, GetPlotData, DataFormat, CalcAverageReturn } from './Data';
+import { GraphHeader } from './GraphHeader';
+import { Explanation } from './Explanation';
 
-const options = [
-  { key: 'coin', text: 'The Coin', value: 'coin' },
-  { key: 'cash', text: 'Cash', value: 'cash' },
-  { key: 'savings', text: 'High-interest savings', value: 'savings' },
-  { key: 'rbcg', text: 'RBC Growth Funds', value: 'rbcg' },
-  { key: 'rbcb', text: 'RBC Bond Funds', value: 'rbcb' },
-];
+// const options = [
+//   { key: 'coin', text: 'The Coin', value: 'coin' },
+//   { key: 'cash', text: 'Cash', value: 'cash' },
+//   { key: 'savings', text: 'High-interest savings', value: 'savings' },
+//   { key: 'rbcg', text: 'RBC Growth Funds', value: 'rbcg' },
+//   { key: 'rbcb', text: 'RBC Bond Funds', value: 'rbcb' },
+// ];
 
-const SliderMax = 35;
+const SliderMax = 37;
 
 type Props = RouteComponentProps;
 
 const initState = {
-  sliderValue: 21,
+  sliderValue: 1,
   amount: 1000,
   age: 30,
   rawData: [] as DataFormat[],
+  playTimer: 0,
 };
 
 type State = Readonly<typeof initState>;
@@ -33,8 +36,6 @@ export class Returns extends React.PureComponent<Props, State> {
 
   public state = initState;
 
-  private playTimer = 0;
-
   // public const handleValueChange = e => {
   //   let value = parseInt(e.target.value);
   //   if (!value) {
@@ -42,6 +43,8 @@ export class Returns extends React.PureComponent<Props, State> {
   //   }
   //   this.setState({months: e.target.value});
   // };
+
+  initialTimer = 0;
 
   private maybePullQuery(query: queryString.ParsedQuery, name: keyof State) {
     const v = parseInt(query[name] as string, 10);
@@ -57,12 +60,21 @@ export class Returns extends React.PureComponent<Props, State> {
     this.maybePullQuery(query, 'amount');
 
     this.updateData();
+    // Start playback after 5 seconds
+    this.initialTimer = setTimeout(() => {
+      this.setState(this.startTimer);
+      this.initialTimer = 0;
+    }, 5000) as any;
   }
 
   public componentWillUnmount() {
-    if (this.playTimer) {
-      clearInterval(this.playTimer);
-      this.playTimer = 0;
+    if (this.initialTimer) {
+      clearTimeout(this.initialTimer);
+    }
+    if (this.state.playTimer) {
+      clearInterval(this.state.playTimer);
+      //thois
+      //this.playTimer = 0;
     }
   }
 
@@ -91,11 +103,19 @@ export class Returns extends React.PureComponent<Props, State> {
         60 * (sliderValue - 19);
   }
 
+  private sliderMax = () =>
+    this.state.age < 60 ?
+      SliderMax - Math.floor(this.state.age / 5) :
+      22
+
+  private monthsToMinimum = (months: number) =>
+    (months < 120) ? -0.5 : undefined
+
   public sliderSettings = () => (
     {
       start: this.state.sliderValue,
       min: 1,
-      max: SliderMax,
+      max: this.sliderMax(),
       step: 1,
       onChange: (sliderValue: number) => this.setState({sliderValue}),
     }
@@ -108,10 +128,10 @@ export class Returns extends React.PureComponent<Props, State> {
 
   private incrSliderValue = () =>
     this.setState((state: State) => {
-      const sliderValue = Math.min(SliderMax, state.sliderValue + 1);
-      if (sliderValue === SliderMax && this.playTimer) {
-        clearInterval(this.playTimer);
-        this.playTimer = 0;
+      const max = this.sliderMax();
+      const sliderValue = Math.min(max, state.sliderValue + 1);
+      if (sliderValue === max) {
+        state = this.clearTimer(state);
       }
       return {
         ...state,
@@ -119,23 +139,67 @@ export class Returns extends React.PureComponent<Props, State> {
       };
     })
 
+  private clearTimer = (state: State) => {
+    let {playTimer} = state;
+    if (playTimer) {
+      clearInterval(playTimer);
+      playTimer = 0;
+    }
+    return {
+      ...state,
+      playTimer,
+    };
+  }
+
+  private startTimer = (state: State) => {
+    let {playTimer} = state;
+    if (!playTimer) {
+      playTimer = Number(setInterval(this.incrSliderValue, 1200));
+    }
+    return {
+      ...state,
+      playTimer,
+    };
+  }
+
   private step = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
     this.incrSliderValue();
 
   private play = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-    this.playTimer ?
-      clearTimeout(this.playTimer) :
-      this.playTimer = setInterval(this.incrSliderValue, 1200);
+    this.setState(this.state.playTimer ? this.clearTimer : this.startTimer)
 
+    /*\
+              <Grid.Column >
+            <Dropdown placeholder="Compare" fluid multiple selection options={options} />
+          </Grid.Column>
+          */
   public render() {
     const {amount, rawData, age, sliderValue } = this.state;
     const months = this.sliderValueToMonths();
-    const graphData = GetPlotData(months, rawData);
-    const returnLabel = this.getTimeLabel(months);
+    const minimum = this.monthsToMinimum(months);
+    const graphData = GetPlotData(months, rawData, minimum);
+    const timeString = this.getTimeLabel(months);
     const avgValue = CalcAverageReturn(amount, graphData.average);
+
+    const playButton = this.state.playTimer ? (
+      <>
+        <Icon name="pause" />
+        <FormattedMessage {...messages.Pause} />
+      </>
+      ) : (
+      <>
+        <Icon name="play" />
+        <FormattedMessage {...messages.Play} />
+      </>
+    );
     return (
       <Form>
       <Grid textAlign="left">
+        <Grid.Row>
+          <Grid.Column>
+            <GraphHeader />
+          </Grid.Column>
+        </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Column>
             <Form.Field>
@@ -156,7 +220,8 @@ export class Returns extends React.PureComponent<Props, State> {
           <Grid.Column>
             <Form.Field>
               <Label>
-                {returnLabel}
+                <FormattedMessage {...messages.AverageReturn} />
+                {timeString}
               </Label>
               <Form.Input value={'$' + avgValue} />
             </Form.Field>
@@ -168,14 +233,10 @@ export class Returns extends React.PureComponent<Props, State> {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns="two">
-          <Grid.Column width={5}>
-            <Dropdown placeholder="Compare" fluid multiple selection options={options} />
-          </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={4}>
             <Button.Group>
-            <Button icon labelPosition="left" onClick={this.play}>
-              <Icon name="pause" />
-                <FormattedMessage {...messages.Play} />
+              <Button icon labelPosition="left" onClick={this.play}>
+                {playButton}
               </Button>
               <Button icon labelPosition="right" onClick={this.step}>
                 <FormattedMessage {...messages.Step} />
@@ -183,8 +244,13 @@ export class Returns extends React.PureComponent<Props, State> {
               </Button>
             </Button.Group>
           </Grid.Column>
-          <Grid.Column width={16}>
-            <Slider value={sliderValue} color="red" settings={this.sliderSettings()} />
+          <Grid.Column width="10">
+            <Slider value={sliderValue} style={{ marginTop: "8px", trackFill: { backgroundColor: "#3193A1"}}} settings={this.sliderSettings()} />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            <Explanation timeString={timeString}/>
           </Grid.Column>
         </Grid.Row>
       </Grid>

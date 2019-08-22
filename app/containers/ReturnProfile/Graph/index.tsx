@@ -63,7 +63,7 @@ export class Graph extends React.PureComponent<Props> {
         // Get rid of float rounding errors
         return {
           x: '$' + CalcAverageReturn(multiplier, xval),
-          y: 100 * d / count,
+          y: (100 * d / count).toFixed(1),
         };
       }),
     };

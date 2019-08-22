@@ -144,8 +144,8 @@ export interface CoinReturns {
 export const CalcIndex = (min: number, max: number, v: number, count: number) =>
   Math.ceil(count * (v - min) / (max - min));
 
-export function bucketValues(values: number[], numBuckets: number): CoinReturns {
-  const minValue = arrayMin(values);
+export function bucketValues(values: number[], numBuckets: number, startingValue?: number): CoinReturns {
+  const minValue = (startingValue === undefined) ? arrayMin(values) : startingValue;
   const maxValue = arrayMax(values);
 
   // Spread
@@ -182,14 +182,14 @@ export const NullData: CoinReturns = {
   count: 1,
 };
 
-export function CalcPlotData(monthCount: number, data: DataFormat[]): CoinReturns {
+export function CalcPlotData(monthCount: number, data: DataFormat[], minimumValue?: number): CoinReturns {
   if (data.length === 0 || !monthCount) {
     return NullData;
   }
 
   const startDate = new Date(1932, 0);
   const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
-  return bucketValues(returns, 20);
+  return bucketValues(returns, 20, minimumValue);
 }
 
 export const GetPlotData = memoize(CalcPlotData, (m: number, d: DataFormat[]) => d.length + m);
