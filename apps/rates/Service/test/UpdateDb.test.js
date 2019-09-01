@@ -19,7 +19,13 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 
 test('should return a valid rate', async function() {
 	let now = new Date();
-	const latest = await Update.GetLatestCoinRate(0, 0)
+	const latest = await Update.GetLatestCoinRate(now.getTime(), 0)
+	expect(latest.ValidFrom).toBeLessThanOrEqual(now); //, "Fetched rate is not yet valid")
+	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now); //, "Fetched rate is already invalid")
+});
+
+test('should return latest rate', async function() {
+	const latest = await Update.GetRatesFor(now.getTime(), 0)
 	expect(latest.ValidFrom).toBeLessThanOrEqual(now); //, "Fetched rate is not yet valid")
 	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now); //, "Fetched rate is already invalid")
 });
