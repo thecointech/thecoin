@@ -6,7 +6,7 @@ interface OwnProps {
   isOpen: boolean;
   header: FormattedMessage.MessageDescriptor;
   progressPercent?: number;
-  progressMessage: FormattedMessage.MessageDescriptor;
+  progressMessage?: FormattedMessage.MessageDescriptor;
   messageValues?: any;
   cancelCallback?: () => void;
   okCallback?: () => void;
@@ -56,18 +56,22 @@ export class ModalOperation extends React.PureComponent<Props, {}, null> {
 
   renderContent = (progressPercent?: number) => (!progressPercent || progressPercent < 1 ? <Loader>{this.renderMessage()}</Loader> : this.renderMessage());
 
-  renderMessage = () => (
+  renderProgress = () => (
     <h3>
-      <pre>
-        <FormattedMessage
-          {...this.props.progressMessage}
-          values={{
-            percentComplete: this.props.progressPercent,
-            ...(this.props.messageValues || {})
-          }}
-        />
-      </pre>
+      <FormattedMessage
+        {...this.props.progressMessage!}
+        values={{
+          percentComplete: this.props.progressPercent,
+          ...(this.props.messageValues || {})
+        }}
+      />
     </h3>
+  );
+
+  renderMessage = () => (
+    this.props.progressMessage ? 
+      this.renderProgress() :
+      this.props.children
   );
 
   render() {

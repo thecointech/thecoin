@@ -44,18 +44,20 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 	implements IActions
 {
 
-	*fetchRateAtDate(date: Date) {
+	*fetchRateAtDate(date?: Date) {
 		try {
 
 			const cc = CurrencyCodes.CAD;
-			const ts = date.getTime();
+			const updateDate = date ? date : new Date();
+			const ts = updateDate.getTime();
 			const rate = getFxRate(this.state.rates, ts);
 			if (rate != EmptyRate)
 				return;
-			console.log("fetching fx rate: %d for time %s", cc, date.toLocaleTimeString());
+
+			console.log(`fetching fx rate: ${cc} for time ${updateDate.toLocaleTimeString()}`);
 			const api = new RatesApi();
 			const getConversion = api.getConversion.bind(api);
-			const newFxRate = yield call(getConversion, cc, ts);
+			const newFxRate = yield call(getConversion, cc, date ? ts : 0);
 			yield put({
 				type: this.actions().addFxRate.type,
 				payload: [newFxRate],
@@ -84,7 +86,7 @@ function* sagaUpdateFxRate() {
   const state = yield select(selectFxRate);
   const reducerImp = new reducerClass(state, state);
   const fn = reducerImp.fetchRateAtDate.bind(reducerImp);
-  return yield call(fn, new Date());
+  return yield call(fn);
 }
 
 //
