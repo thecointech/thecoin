@@ -17,6 +17,9 @@ call npm publish
 cd ..\..
 call npm install @the-coin/utilities
 
+cd broker-cad\Service
+call npm install @the-coin/utilities
+
 echo Complete
 TIMEOUT /T 5
 
