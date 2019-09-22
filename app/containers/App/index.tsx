@@ -16,25 +16,23 @@ import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
-import MainRouter from 'containers/MainRouter'
-import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors'
-import cx from 'classnames';
+import MainRouter from 'containers/MainRouter';
+import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors';
 import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
 
 function App(props: LocationStoreState) {
-  const sidebarVisible = props.location.pathname.startsWith("/accounts");
-  const pageMainInner = cx(styles.pageMainInner, sidebarVisible ? styles.withSidebar : undefined);
+  const sidebarVisible = props.location.pathname.startsWith('/accounts');
 
   return (
     <React.Fragment>
       <Header />
       <MainNavigation />
-      <Container style={{ backgroundColor: "#f3f3f3" }}>
+      <Container style={{ backgroundColor: '#f3f3f3' }}>
         <PageSidebar visible={sidebarVisible}>
           <MainPageTransition location={props.location}>
-            <section className={pageMainInner}>
+            <section className={styles.pageMainInner}>
               <MainRouter location={props.location} />
             </section>
           </MainPageTransition>
