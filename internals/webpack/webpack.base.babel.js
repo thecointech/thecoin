@@ -11,6 +11,8 @@ const webpack = require('webpack');
 // in the next major version of loader-utils.'
 process.noDeprecation = true;
 
+const projectRoot = path.resolve(__dirname, '..', '..');
+
 module.exports = options => ({
   mode: options.mode,
   entry: options.entry,
@@ -69,6 +71,9 @@ module.exports = options => ({
             loader: 'less-loader',
             options: {
               sourceMap: true,
+              modifyVars: {
+                project_root: `"${projectRoot}"`,
+              },
             },
           },
         ],
@@ -154,11 +159,14 @@ module.exports = options => ({
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
     alias: {
-      '../../theme.config$':
-        '/home/bencool/Desktop/tc/the-umbrella/the-website-ts/app/styles/semantic/theme.config',
+      '../../theme.config$': path.resolve(
+        projectRoot,
+        'app/styles/semantic/theme.config',
+      ),
       '@the-coin/components': path.resolve(
-        __dirname,
-        '../../../the-react-components/src',
+        projectRoot,
+        '..',
+        'the-react-components/src',
       ),
     },
   },
