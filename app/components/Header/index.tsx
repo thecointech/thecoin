@@ -6,7 +6,7 @@ import Logo from './logo.svg';
 import messages from './messages';
 
 export default injectIntl(({ intl }) => (
-  <div>
+  <div className={styles.wrapper}>
     <img
       className={styles.headerLogo}
       alt={intl.formatMessage(messages.LogoAlt)}
@@ -18,5 +18,9 @@ export default injectIntl(({ intl }) => (
       alt={intl.formatMessage(messages.BannerAlt)}
       src={Banner}
     />
+    <p className={styles.wallStreet}>Every year Wall Street goes up</p>
+    <p className={styles.inflation}>
+      while inflation drains the value of bank accounts
+    </p>
   </div>
 ));

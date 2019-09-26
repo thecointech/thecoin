@@ -155,7 +155,7 @@ module.exports = options => ({
     mainFields: ['browser', 'jsnext:main', 'main'],
     alias: {
       '../../theme.config$':
-        '/src/TheCoin/the-website-ts/app/styles/semantic/theme.config',
+        '/home/bencool/Desktop/tc/the-umbrella/the-website-ts/app/styles/semantic/theme.config',
       '@the-coin/components': path.resolve(
         __dirname,
         '../../../the-react-components/src',

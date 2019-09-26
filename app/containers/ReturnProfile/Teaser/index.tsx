@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import { RouteComponentProps, withRouter } from 'react-router';
 
-// import styles from './index.module.css';
+import styles from './index.module.css';
 
 type Props = RouteComponentProps;
 
@@ -20,21 +20,29 @@ function BuildCalculatorUrl(state: State) {
 
 export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = React.useState(initState);
-  const showCalculate = React.useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const url = BuildCalculatorUrl(state);
-    props.history.push(url);
-  }, []);
-  const updateValue = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  }, []);
+  const showCalculate = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const url = BuildCalculatorUrl(state);
+      props.history.push(url);
+    },
+    [],
+  );
+  const updateValue = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setState({
+        ...state,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [],
+  );
 
   return (
     <>
       <Header>
-        <FormattedMessage {...messages.header} />
+        <div className={styles.header}>
+          <FormattedMessage {...messages.header} />
+        </div>
       </Header>
       <hr />
       <Form>
@@ -42,10 +50,15 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
           <Grid.Row columns={3}>
             <Grid.Column>
               <Form.Field>
-                <Label>
+                <Label className="styles.label">
                   <FormattedMessage {...messages.Starting} />
                 </Label>
-                <Input type="number" name="amount" value={state.amount} onChange={updateValue} />
+                <Input
+                  type="number"
+                  name="amount"
+                  value={state.amount}
+                  onChange={updateValue}
+                />
               </Form.Field>
             </Grid.Column>
             <Grid.Column>
@@ -53,7 +66,12 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
                 <Label>
                   <FormattedMessage {...messages.Age} />
                 </Label>
-                <Form.Input type="number" name="age" value={state.age} onChange={updateValue} />
+                <Form.Input
+                  type="number"
+                  name="age"
+                  value={state.age}
+                  onChange={updateValue}
+                />
               </Form.Field>
             </Grid.Column>
             <Grid.Column verticalAlign="bottom">

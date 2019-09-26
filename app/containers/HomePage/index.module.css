@@ -1,0 +1,132 @@
+.headingWrapper {
+  display: flex;
+  text-align: right;
+  margin-top: 0rem !important;
+  flex-direction: column;
+}
+
+.laptop {
+  margin-left: 22%;
+  width: 73%;
+}
+.h1 {
+  font-weight: 300;
+  font-family: 'Lato', sans-serif !important;
+  font-size: 2.7rem;
+}
+
+.centerh3 {
+  font-weight: 300;
+  font-size: 2rem;
+  color: #002c8e;
+  line-height: 3rem;
+  font-family: 'Lato', sans-serif !important;
+  margin-bottom: 1em !important;
+}
+.h3 span {
+  font-weight: 500;
+}
+
+.centerh3 span {
+  font-weight: 500;
+}
+
+.h3 {
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #002c8e;
+  line-height: 2.5rem;
+  font-family: 'Lato', sans-serif !important;
+}
+
+.h3right {
+  text-align: center;
+  margin-right: 28%;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #002c8e;
+  line-height: 2.5rem;
+  font-family: 'Lato', sans-serif !important;
+}
+
+.h3left {
+  text-align: center;
+  margin-left: 21%;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #002c8e;
+  line-height: 2.5rem;
+  font-family: 'Lato', sans-serif !important;
+}
+
+.gridWrapper {
+  text-align: center !important;
+}
+.links {
+  font-weight: bold;
+}
+
+.bannerImage {
+  width: 70%;
+}
+
+.topMargin {
+  margin-top: 7rem !important;
+}
+.bannerImgWrapper {
+  position: relative;
+}
+.wallStreet {
+  position: absolute;
+  top: 22%;
+  left: 28%;
+  z-index: 999;
+  color: #10c810;
+  font-size: 1.6rem;
+  -ms-transform: rotate(-18deg);
+  -webkit-transform: rotate(-18deg);
+  transform: rotate(-18deg);
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+.inflation {
+  position: absolute;
+  top: 57%;
+
+  left: 22%;
+
+  z-index: 999;
+
+  color: #f41616;
+  font-size: 1.6rem;
+  -ms-transform: rotate(25deg);
+  -webkit-transform: rotate(25deg);
+  transform: rotate(25deg);
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+
+.yearStart {
+  position: absolute;
+  top: 45%;
+  left: -6%;
+  font-size: 1.4rem;
+}
+.dollar {
+  position: absolute;
+  top: 45%;
+  right: 9%;
+  font-size: 1.4rem;
+}
+
+.sprout {
+  width: 50%;
+  margin-left: -23px;
+  margin-bottom: -17px;
+}
+.sproutWrapper {
+  text-align: center;
+}
+.logoIcon {
+  width: 60%;
+}

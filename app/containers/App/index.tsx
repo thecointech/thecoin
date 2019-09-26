@@ -17,7 +17,10 @@ import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
-import { LocationStoreState, mapLocationStateToProps } from 'containers/Location/selectors';
+import {
+  LocationStoreState,
+  mapLocationStateToProps,
+} from 'containers/Location/selectors';
 import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
@@ -29,7 +32,14 @@ function App(props: LocationStoreState) {
     <React.Fragment>
       <Header />
       <MainNavigation />
-      <Container style={{ backgroundColor: '#f3f3f3' }}>
+
+      <Container
+        style={{
+          backgroundColor: '#ffffff',
+          width: '100%',
+          'max-width': '1600px',
+        }}
+      >
         <PageSidebar visible={sidebarVisible}>
           <MainPageTransition location={props.location}>
             <section className={styles.pageMainInner}>

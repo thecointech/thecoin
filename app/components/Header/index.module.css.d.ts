@@ -4,6 +4,9 @@ interface CssExports {
   'headerImage': string;
   'headerLogo': string;
   'headerText': string;
+  'inflation': string;
+  'wallStreet': string;
+  'wrapper': string;
 }
 declare var cssExports: CssExports;
 export = cssExports;

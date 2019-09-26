@@ -14,7 +14,7 @@ import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
 import { GetBuyApi } from '../../Services/BrokerCAD';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
-import InteraceOnline from './Interac-Online.png';
+import InteraceOnline from './Interac-online.png';
 import styles from './index.module.css';
 import {ETransferModal} from './eTransferModal';
 

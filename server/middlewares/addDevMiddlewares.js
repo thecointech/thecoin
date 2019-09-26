@@ -13,9 +13,11 @@ function createWebpackMiddleware(compiler, publicPath) {
   });
 }
 
-const sp500buffer = fsSystem.readFileSync(
-  'C:/src/TheCoin/the-website-ts/build/sp500_monthly.csv',
-);
+console.log(__dirname);
+
+const csvpath = path.resolve(__dirname, '..', '..', 'app', 'sp500_monthly.csv');
+console.log(csvpath);
+const sp500buffer = fsSystem.readFileSync(csvpath);
 const sp500string = sp500buffer.toString();
 
 module.exports = function addDevMiddlewares(app, webpackConfig) {
@@ -32,7 +34,7 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
-  app.get('/sp500_monthly.csv', (req, res) => {
+  app.get('sp500_monthly.csv', (req, res) => {
     res.send(sp500string);
   });
 

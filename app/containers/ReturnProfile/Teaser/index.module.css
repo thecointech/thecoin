@@ -1,0 +1,13 @@
+.header {
+  font-family: 'Lato', sans-serif !important;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: white;
+  text-align: center;
+}
+
+.label {
+  font-size: 2rem !important;
+  font-weight: 300 !important;
+  color: white !important;
+}

@@ -1,13 +1,24 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
+import Subscribe from '../Subscribe';
+
 import styles from './index.module.css';
 
 class Navigation extends React.Component {
   render() {
     return (
       <div className={styles.navContainer}>
-        <Container>
+        <div className={styles.subscribe}>
+          <Subscribe />
+        </div>
+        <Container
+          style={{
+            backgroundColor: '#ffffff',
+            width: '100%',
+            'max-width': '1600px',
+          }}
+        >
           <Menu className={styles.mainMenu}>
             <HeaderLink to="/" exact>
               HOME
