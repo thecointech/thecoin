@@ -4,8 +4,8 @@
 
 @itemTextColor: @primaryColor;
 
-@hoverItemBackground: @subtleTransparentBlack;
-@hoverItemTextColor: #2646A4;
+@hoverItemBackground: rgba(71, 166, 151, 0.36);
+@hoverItemTextColor: #ffffff;
 
 @activeItemBackground: @primaryColor;
 @activeItemTextColor: @white;

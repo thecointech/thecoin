@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
-import Subscribe from '../Subscribe';
 
 import styles from './index.module.css';
 
@@ -9,9 +8,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className={styles.navContainer}>
-        <div className={styles.subscribe}>
-          <Subscribe />
-        </div>
+        <div className={styles.subscribe}></div>
         <Container
           style={{
             backgroundColor: '#ffffff',

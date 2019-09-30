@@ -1,13 +1,16 @@
+.mainWrapper {
+  padding: 5rem !important;
+}
 .headingWrapper {
-  display: flex;
-  text-align: right;
+  text-align: right !important;
   margin-top: 0rem !important;
   flex-direction: column;
 }
 
 .laptop {
-  margin-left: 22%;
+  margin-right: -30px;
   width: 73%;
+  margin-top: -20px;
 }
 .h1 {
   font-weight: 300;
@@ -22,6 +25,7 @@
   line-height: 3rem;
   font-family: 'Lato', sans-serif !important;
   margin-bottom: 1em !important;
+  margin-top: 70px;
 }
 .h3 span {
   font-weight: 500;
@@ -40,8 +44,6 @@
 }
 
 .h3right {
-  text-align: center;
-  margin-right: 28%;
   font-weight: 300;
   font-size: 1.5rem;
   color: #002c8e;
@@ -50,8 +52,6 @@
 }
 
 .h3left {
-  text-align: center;
-  margin-left: 21%;
   font-weight: 300;
   font-size: 1.5rem;
   color: #002c8e;
@@ -66,16 +66,15 @@
   font-weight: bold;
 }
 
-.bannerImage {
+.tree {
+  margin-left: -81px;
   width: 70%;
 }
 
 .topMargin {
   margin-top: 7rem !important;
 }
-.bannerImgWrapper {
-  position: relative;
-}
+
 .wallStreet {
   position: absolute;
   top: 22%;
@@ -129,4 +128,11 @@
 }
 .logoIcon {
   width: 60%;
+}
+
+.subscribeText {
+  font-size: 1.7rem;
+  font-weight: 300;
+  margin-bottom: 50px !important;
+  color: #002c8e;
 }
