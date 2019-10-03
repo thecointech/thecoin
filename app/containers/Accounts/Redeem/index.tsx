@@ -5,34 +5,34 @@ import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
 import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types'
+import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/components/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors'
+import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetSellApi } from 'containers/Services/BrokerCAD';
+import styles from './index.module.css';
 
 type MyProps = {
-  account: AccountState
-}
+  account: AccountState;
+};
 
 type Props = MyProps & FxState;
 
 const initialState = {
   coinToSell: null as number | null,
-  email: "",
+  email: '',
   transferInProgress: false,
   transferMessage: messages.transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
-  doCancel: false
-}
+  doCancel: false,
+};
 
-type StateType = Readonly<typeof initialState>
+type StateType = Readonly<typeof initialState>;
 
 class RedeemClass extends React.PureComponent<Props, StateType> {
-
   state = initialState;
 
   constructor(props: Props) {
@@ -40,82 +40,103 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.onSubmit = this.onSubmit.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
-    
   }
 
-  async doSale()
-  {
+  async doSale() {
     // Init messages
-    this.setState({transferMessage: messages.step1, percentComplete: 0.0});
+    this.setState({ transferMessage: messages.step1, percentComplete: 0.0 });
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
     var status = await statusApi.status();
     // Check out if we have the right values
-    if (!status.certifiedFee)
-      return false;
+    if (!status.certifiedFee) return false;
 
-    if (this.state.doCancel)
-      return false;
+    if (this.state.doCancel) return false;
 
     // Get our variables
-    const {coinToSell, email} = this.state;
+    const { coinToSell, email } = this.state;
     const { signer, contract } = this.props.account;
-    if (coinToSell === null || !signer || !contract)
-      return false;
+    if (coinToSell === null || !signer || !contract) return false;
 
-    // To redeem, we construct & sign a message that 
+    // To redeem, we construct & sign a message that
     // that allows the broker to transfer TheCoin to itself
-    const sellCommand = await BuildVerifiedSale(email, signer, status.address, coinToSell, status.certifiedFee);
+    const sellCommand = await BuildVerifiedSale(
+      email,
+      signer,
+      status.address,
+      coinToSell,
+      status.certifiedFee,
+    );
     const sellApi = GetSellApi();
-    if (this.state.doCancel)
-      return false;
+    if (this.state.doCancel) return false;
 
     // Send the command to the server
-    this.setState({transferMessage: messages.step2, percentComplete: 0.25});
+    this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
     const response = await sellApi.certifiedCoinSale(sellCommand);
 
-    if (!response.txHash)
-    {
+    if (!response.txHash) {
       console.log(`Error: ${JSON.stringify(response)}`);
       return false;
     }
-    
+
     // Wait on the given hash
     const transferValues = {
-      link: <a  target="_blank" href={`https://ropsten.etherscan.io/tx/${response.txHash}`}>here</a>
-    }
-    this.setState({transferMessage: messages.step3, percentComplete: 0.5, transferValues});
+      link: (
+        <a
+          target="_blank"
+          href={`https://ropsten.etherscan.io/tx/${response.txHash}`}
+        >
+          here
+        </a>
+      ),
+    };
+    this.setState({
+      transferMessage: messages.step3,
+      percentComplete: 0.5,
+      transferValues,
+    });
     const tx = await contract.provider.getTransaction(response.txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
-    const receipt = await contract.provider.getTransactionReceipt(response.txHash);
-    console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`)
-    this.setState({percentComplete: 1 });
+    const receipt = await contract.provider.getTransactionReceipt(
+      response.txHash,
+    );
+    console.log(
+      `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
+    );
+    this.setState({ percentComplete: 1 });
     return true;
   }
 
   async onSubmit(e: React.MouseEvent<HTMLElement>) {
     if (e) e.preventDefault();
-    this.setState({doCancel: false, transferValues: undefined, transferInProgress: true});
+    this.setState({
+      doCancel: false,
+      transferValues: undefined,
+      transferInProgress: true,
+    });
     try {
-      const results = await this.doSale();  
+      const results = await this.doSale();
       if (!results) {
-        alert('We have encountered an error.\nDon\'t worry, your money is safe, but please still contact support@thecoin.io');
-      }
-      else alert('Order recieved.\nYou should receive the e-Transfer in 1-2 business days.');
-    }
-    catch(e) {
+        alert(
+          "We have encountered an error.\nDon't worry, your money is safe, but please still contact support@thecoin.io",
+        );
+      } else
+        alert(
+          'Order recieved.\nYou should receive the e-Transfer in 1-2 business days.',
+        );
+    } catch (e) {
       console.error(e);
       alert(e);
     }
-    this.setState({doCancel: false, transferInProgress: false});
+    this.setState({ doCancel: false, transferInProgress: false });
   }
 
   onValueChange(value: number) {
     this.setState({
-      coinToSell: value
-    })
+      coinToSell: value,
+    });
   }
 
   onEmailChange(event: React.FormEvent<HTMLInputElement>) {
@@ -126,34 +147,58 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   }
 
   onCancelTransfer() {
-    this.setState({doCancel: true});
+    this.setState({ doCancel: true });
   }
 
   render() {
     const { account, rates } = this.props;
     const rate = weBuyAt(rates);
-    const { coinToSell, transferInProgress, transferValues, transferMessage, percentComplete } = this.state;
+    const {
+      coinToSell,
+      transferInProgress,
+      transferValues,
+      transferMessage,
+      percentComplete,
+    } = this.state;
     return (
       <React.Fragment>
+        <div className={styles.wrapper}>
+          <Form>
+            <Header as="h1">
+              <Header.Content>
+                <FormattedMessage {...messages.header} />
+              </Header.Content>
+              <Header.Subheader>
+                <FormattedMessage {...messages.subHeader} />
+              </Header.Subheader>
+            </Header>
 
-      <Form>
-        <Header as="h1">
-          <Header.Content>
-            <FormattedMessage {...messages.header} />
-          </Header.Content>
-          <Header.Subheader>
-            <FormattedMessage {...messages.subHeader} />
-          </Header.Subheader>
-        </Header>
-
-        <DualFxInput onChange={this.onValueChange} asCoin={true} maxValue={account.balance} value={coinToSell} fxRate={rate} />
-        <Form.Input label="Your Email" onChange={this.onEmailChange} placeholder="An email to recieve the e-Transfer" />
-        <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
-      </Form>
-      <ModalOperation cancelCallback={this.onCancelTransfer} isOpen={transferInProgress} header={messages.transferOutHeader} progressMessage={transferMessage} progressPercent={percentComplete} messageValues={transferValues} />
+            <DualFxInput
+              onChange={this.onValueChange}
+              asCoin={true}
+              maxValue={account.balance}
+              value={coinToSell}
+              fxRate={rate}
+            />
+            <Form.Input
+              label="Your Email"
+              onChange={this.onEmailChange}
+              placeholder="An email to recieve the e-Transfer"
+            />
+            <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
+          </Form>
+          <ModalOperation
+            cancelCallback={this.onCancelTransfer}
+            isOpen={transferInProgress}
+            header={messages.transferOutHeader}
+            progressMessage={transferMessage}
+            progressPercent={percentComplete}
+            messageValues={transferValues}
+          />
+        </div>
       </React.Fragment>
-    )
+    );
   }
 }
 
-export const Redeem = connect(selectFxRate)(RedeemClass)
+export const Redeem = connect(selectFxRate)(RedeemClass);

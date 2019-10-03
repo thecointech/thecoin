@@ -8,6 +8,9 @@
 
 @backgroundColor: @primaryColor;
 @textColor: #FFFFFF;
+@fontName          :'Lato';
+@fontSize: 11px;
+
 
 @transition:
   opacity 0.3s @defaultEasing,
