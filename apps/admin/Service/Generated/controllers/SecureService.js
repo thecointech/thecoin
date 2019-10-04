@@ -54,11 +54,19 @@ exports.googleList = function(token) {
  * Store on google drive
  *
  * uploadPacket GooglePutRequest 
- * no response value expected for this operation
+ * returns BoolResponse
  **/
 exports.googlePut = function(uploadPacket) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "success" : true
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 

@@ -387,7 +387,7 @@ definitions:
           $ref: "#/definitions/GoogleWalletItem"
 
 ################################################################################
-
+      
 paths:
   /status:
     get:
@@ -819,6 +819,43 @@ paths:
           description: Account successfully stored
           schema:
             $ref: "#/definitions/GoogleGetResult"
+
+  #############################################################  
+  /newsletter/signup:
+    put:
+      tags:
+        - Newsletter
+      summary: "Register an email address for our newsletter."
+      operationId: "newsletterSignup"
+      parameters:
+        - in: query
+          name: email
+          required: true
+          type: string
+
+  /newsletter/confirm:
+    put:
+      tags:
+        - Newsletter
+      summary: "Confirm email subscription."
+      operationId: "newsletterConfirm"
+      parameters:
+        - in: query
+          name: confirmationToken
+          required: true
+          type: string
+
+  /newsletter/unsubscribe:
+    put:
+      tags:
+        - Newsletter
+      summary: "Register an email address for our newsletter."
+      operationId: "newsletterUnsubscribe"
+      parameters:
+        - in: query
+          name: email
+          required: true
+          type: string
 
 
 

@@ -39,7 +39,7 @@ export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCA
  * Store on  google drive
  *
  * account GoogleUploadPacket 
- * no response value expected for this operation
+ * returns BoolResponse
  **/
 export function googlePut(account: BrokerCAD.GooglePutRequest): Promise<BrokerCAD.BoolResponse> {
   return new Promise(async (resolve, reject) => {

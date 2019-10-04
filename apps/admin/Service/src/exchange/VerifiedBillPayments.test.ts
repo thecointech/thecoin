@@ -1,11 +1,12 @@
-
-//import {datastore} from './Datastore'
-
 import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/lib/VerifiedBillPayment';
 import { ProcessBillPayment, GetNamedPayee, BillPaymentDocument } from './VerifiedBillPayments'
 import { BrokerCAD } from '@the-coin/types';
 import status from './Status';
+
+import * as firestore from './Firestore'
+process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
+firestore.init();
 
 test("Verified bill payments complete properly", async () => {
 

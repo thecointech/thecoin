@@ -4,7 +4,9 @@ import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
 import { DoCertifiedSale, VerifiedSaleRecord } from './VerifiedSale'
 import status from './Status';
-
+import * as firestore from './Firestore'
+process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
+firestore.init();
 
 test("Status is valid", () => {
 	expect(status.address);

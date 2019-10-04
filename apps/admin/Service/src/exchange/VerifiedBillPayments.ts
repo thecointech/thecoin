@@ -8,8 +8,6 @@ import { GetUserDoc } from '@the-coin/utilities/lib/User';
 import { ProcessCertifiedAction, ConfirmedRecord, VerifiedActionResult } from './VerifiedProcess';
 import status from './status.json';
 
-const BILL_PAYMENT_TYPE = "Bill"
-
 type PayeeDocument = {
 	payee: string,	// encrypted JSON doc
 	version: string // version payee was encrypted with
@@ -41,8 +39,8 @@ async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
 		version: payee.version
 	}
 	const payeeDoc = await GetPayeeDoc(user, payee.name);
-	const res = await payeeDoc.set(data);
-	console.log(`${user} Set encrypted payee ${payee.name} @ ${res.writeTime}`);
+	await payeeDoc.set(data);
+	console.log(`${user} Set encrypted payee ${payee.name}`);
 }
 
 async function GetNamedPayee(user: string, payeeName: string)
@@ -68,7 +66,7 @@ async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment)
 		throw new Error("Invalid Destination");
 
 	// Do the CertTransfer, this should transfer Coin to our account
-	const res = await ProcessCertifiedAction(payment, BILL_PAYMENT_TYPE);
+	const res = await ProcessCertifiedAction(payment, "Bill");
 
 	if (payment.encryptedPayee.name)
 	{

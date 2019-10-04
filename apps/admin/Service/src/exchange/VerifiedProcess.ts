@@ -1,14 +1,10 @@
 import { BrokerCAD } from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
-import { DocumentReference, Timestamp } from "@google-cloud/firestore";
-import { GetUserDoc } from "@the-coin/utilities/lib/User";
-import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
-
-async function GetActionDoc(user: string, action: string, hash: string) { 
-    const userDoc = await GetUserDoc(user);
-    return userDoc.collection(action).doc(hash);
-}
+import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
+import { ProcessRecord } from "@the-coin/utilities/lib/Firestore";
+import { DocumentReference } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { firestore } from "firebase-admin";
 
 interface CertifiedAction {
 	transfer: BrokerCAD.CertifiedTransferRequest
@@ -21,14 +17,14 @@ interface VerifiedActionResult {
 }
 
 // Store the xfer info
-async function StoreActionRequest(actionData: CertifiedAction, actionType: string, hash: string)
+async function StoreActionRequest(actionData: CertifiedAction, actionType: UserAction, hash: string)
 {
     const user = actionData.transfer.from;
 
-    const actionDoc = await GetActionDoc(user, actionType, hash);
+    const actionDoc = GetActionDoc(user, actionType, hash);
     const data: ConfirmedRecord = {
         ...actionData,
-        recievedTimestamp: Timestamp.now(), 
+        recievedTimestamp: firestore.Timestamp.now(), 
         hash: hash,
         confirmed: false,
         fiatDisbursed: 0
@@ -40,10 +36,9 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: strin
 // We store an additional link to the new action
 // in a separate collection.  This is essentially
 // the pool of un-completed actions
-async function StoreActionLink(path: string, actionType: string, hash: string)
+function StoreActionLink(path: string, actionType: UserAction, hash: string)
 {
-    const firestore = await GetFirestore();
-    const doc = firestore.collection(actionType).doc(hash);
+  const doc = GetActionRef(actionType, hash);
 	return doc.set({
 		ref: path
 	})
@@ -62,7 +57,7 @@ async function ConfirmAction(tx: TransactionResponse, actionDoc: DocumentReferen
     console.log(`Tx Confirmed: ${res.status}`);
 }
 
-async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: string): Promise<VerifiedActionResult> {
+async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: UserAction): Promise<VerifiedActionResult> {
     const { transfer } = actionData;
     
     // Do the CertTransfer, this should transfer Coin to our account

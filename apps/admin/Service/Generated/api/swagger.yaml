@@ -433,6 +433,8 @@ paths:
       responses:
         200:
           description: "Account successfully stored"
+          schema:
+            $ref: "#/definitions/BoolResponse"
         405:
           description: "Permission Denied"
       x-swagger-router-controller: "Secure"
@@ -456,6 +458,42 @@ paths:
         405:
           description: "Permission Denied"
       x-swagger-router-controller: "Secure"
+  /newsletter/signup:
+    put:
+      tags:
+      - "Newsletter"
+      summary: "Register an email address for our newsletter."
+      operationId: "newsletterSignup"
+      parameters:
+      - name: "email"
+        in: "query"
+        required: true
+        type: "string"
+      x-swagger-router-controller: "Newsletter"
+  /newsletter/confirm:
+    put:
+      tags:
+      - "Newsletter"
+      summary: "Confirm email subscription."
+      operationId: "newsletterConfirm"
+      parameters:
+      - name: "confirmationToken"
+        in: "query"
+        required: true
+        type: "string"
+      x-swagger-router-controller: "Newsletter"
+  /newsletter/unsubscribe:
+    put:
+      tags:
+      - "Newsletter"
+      summary: "Register an email address for our newsletter."
+      operationId: "newsletterUnsubscribe"
+      parameters:
+      - name: "email"
+        in: "query"
+        required: true
+        type: "string"
+      x-swagger-router-controller: "Newsletter"
 definitions:
   SignedPurchaseRequest:
     required:

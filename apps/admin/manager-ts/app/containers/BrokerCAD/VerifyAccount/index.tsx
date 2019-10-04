@@ -7,6 +7,7 @@ import { NormalizeAddress } from '@the-coin/utilities';
 import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/lib/Referrals';
 import { SetUserVerified } from '@the-coin/utilities/lib/User';
 import { TheSigner } from '@the-coin/components/SignerIdent';
+import { now } from 'utils/Firebase';
 
 interface OwnProps {
 	signer: TheSigner,
@@ -47,8 +48,8 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		this.setState({
 			verifiedAccounts: allDocs.docs.map(d => d.data() as VerifiedReferrer)
 		})
-	}
-
+  }
+  
 	async verifyAccount(e: React.MouseEvent<HTMLElement>) {
 
 		const { signer } = this.props;
@@ -60,7 +61,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		const address = NormalizeAddress(account);
 		const signature = await signer.signMessage(address)
 
-		await SetUserVerified(signature, address);
+		await SetUserVerified(signature, address, now());
 		await CreateReferrer(signature, address);
 		alert('Done');
 	}

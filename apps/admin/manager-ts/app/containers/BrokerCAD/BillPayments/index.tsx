@@ -2,7 +2,6 @@ import React from "react";
 import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
 import { GetBillPaymentSigner, DecryptPayee } from "@the-coin/utilities/lib/VerifiedBillPayment";
 import { AccountState } from "../../Account/types";
-import { Timestamp } from "@google-cloud/firestore";
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
@@ -12,9 +11,11 @@ import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
 import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import fs from 'fs';
-import { GetActionDoc } from "@the-coin/utilities/lib/User";
+import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
+import {firestore} from 'firebase';
+import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
 
-const BILL_PAYMENT_TYPE = "Bill"
+const ACTION_TYPE = "Bill"
 
 type MyProps = {
   dispatch: FxActions.DispatchProps,
@@ -84,7 +85,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		if (nextOpen < Date.now()) {
 			this.props.fetchRateAtDate(new Date(nextOpen));		
 		}
-		return Timestamp.fromMillis(nextOpen);
+		return firestore.Timestamp.fromMillis(nextOpen);
 	}
 
 	async processRawBill(bill: any, index: number)
@@ -149,7 +150,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 
 		// Check that we got the right everything:
 		const user = GetBillPaymentSigner(bill);
-		const actionDoc = await GetActionDoc(user, "Bill", bill.hash);
+		const actionDoc = GetActionDoc(user, "Bill", bill.hash);
 		const action = await actionDoc.get();
 		if (!action.exists) 
 			throw new Error("Oh No! You lost your AP");
@@ -157,10 +158,9 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		bill.fiatDisbursed = cad;
 		await actionDoc.set(bill);
 
-		const firestore = await GetFirestore();
-		const ref = firestore.doc(`${BILL_PAYMENT_TYPE}/${bill.hash}`);
+		const ref = GetActionRef(ACTION_TYPE, bill.hash);
 		const deleteResults = await ref.delete();
-		if (!deleteResults.writeTime) {
+		if (deleteResults && !deleteResults.writeTime) {
 			throw new Error("I feel like something should happen here")
 		}
 	}
