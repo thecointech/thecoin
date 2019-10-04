@@ -6,6 +6,7 @@ interface CssExports {
   'Clear': string;
   'HeaderContainer': string;
   'stepIcon': string;
+  'wrapper': string;
 }
 declare var cssExports: CssExports;
 export = cssExports;

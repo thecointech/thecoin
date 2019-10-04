@@ -11,9 +11,7 @@
 
 import * as React from 'react';
 import { Grid, Container } from 'semantic-ui-react';
-import IconWithText from 'components/IconWithText/index';
-import * as Icons from 'utils/icons';
-import messages from './messages';
+
 import { Link } from 'react-router-dom';
 import { ContentSegment } from 'components/ContentSegment';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
@@ -21,6 +19,7 @@ import laptop from './images/laptop.svg';
 import sprout from './images/sprout.svg';
 import tree from './images/tree.svg';
 import logoIcon from './images/logoIcon.svg';
+import Subscribe from '../Subscribe';
 import styles from './index.module.css';
 
 export default class HomePage extends React.PureComponent {
@@ -28,7 +27,7 @@ export default class HomePage extends React.PureComponent {
     return (
       <React.Fragment>
         <Grid divided="vertically">
-          <Grid.Row columns={3}>
+          <Grid.Row columns={3} className={styles.mainWrapper}>
             <Grid.Column>
               <div className={styles.headingWrapper}>
                 <img
@@ -43,6 +42,9 @@ export default class HomePage extends React.PureComponent {
                   <br />
                   Fight inflation and maintain purchasing power.
                 </h3>
+                <Link className={styles.links} to="/howItWorks">
+                  LEARN MORE
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column>
@@ -65,17 +67,34 @@ export default class HomePage extends React.PureComponent {
             </Grid.Column>
 
             <Grid.Column>
-              <div className={styles.bannerImgWrapper}>
-                <img
-                  className={styles.bannerImage}
-                  alt="purchasing power of the dollar vs sp500"
-                  src={tree}
-                />
-                <h3 className={styles.h3right}>
-                  You get 90% of the dividends. <br />
-                  We keep 10% and put it towards fighting
-                  <br /> climate change: <span>Tree planting.</span>
-                </h3>
+              <img
+                className={styles.tree}
+                alt="purchasing power of the dollar vs sp500"
+                src={tree}
+              />
+              <h3 className={styles.h3right}>
+                You get 90% of the dividends. <br />
+                We keep 10% and put it towards fighting
+                <br /> climate change: <span>Tree planting.</span>
+              </h3>
+              <Link className={styles.links} to="/howItWorks">
+                LEARN MORE
+              </Link>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
+        <Grid divided="vertically">
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <div className={styles.sproutWrapper}>
+                <Subscribe />
+                <p className={styles.subscribeText}>
+                  Subscribe to learn how you can help fight climate change with
+                  TheCoin.
+                  <br />
+                  Subscribe to our mailing list today.
+                </p>
               </div>
             </Grid.Column>
           </Grid.Row>
@@ -86,26 +105,6 @@ export default class HomePage extends React.PureComponent {
             <Teaser />
           </Container>
         </ContentSegment>
-
-        <Grid divided="vertically" className={styles.topMargin}>
-          <Grid.Row columns={3} centered>
-            <Grid.Column className={styles.gridWrapper}>
-              <IconWithText
-                icon={Icons.ChartLine}
-                message={messages.blurbGrow}
-              />
-              <Link className={styles.links} to="/howItWorks">
-                LEARN MORE
-              </Link>
-            </Grid.Column>
-            <Grid.Column className={styles.gridWrapper}>
-              <IconWithText icon={Icons.Lock} message={messages.blurbFees} />
-              <Link className={styles.links} to="/accounts">
-                GO TO ACCOUNTS
-              </Link>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
       </React.Fragment>
     );
   }

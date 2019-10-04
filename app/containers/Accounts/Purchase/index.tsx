@@ -16,7 +16,7 @@ import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-online.png';
 import styles from './index.module.css';
-import {ETransferModal} from './eTransferModal';
+import { ETransferModal } from './eTransferModal';
 
 interface MyProps {
   signer: TheSigner;
@@ -28,8 +28,8 @@ const initialState = {
 
   // Transfer code vars
   showDlg: false,
-  xferRecipient: undefined as string|undefined,
-  xferSecret: undefined as string|undefined,
+  xferRecipient: undefined as string | undefined,
+  xferSecret: undefined as string | undefined,
 };
 
 type StateType = Readonly<typeof initialState>;
@@ -40,13 +40,13 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
 
   public onSubmit = (e: React.MouseEvent<HTMLElement>) => {
     alert('NOT IMPLEMENTED');
-  }
+  };
 
   public onValueChange = (value: number) => {
     this.setState({
       cadPurchase: value,
     });
-  }
+  };
 
   public accordionClick = (e, titleProps) => {
     const { index } = titleProps;
@@ -59,7 +59,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
   public onCloseDlg = () => this.setState({ showDlg: false });
   public onGenerateRecipient = e => {
     this.generateRecipient();
-  }
+  };
 
   public async generateRecipient() {
     this.setState({
@@ -121,59 +121,61 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
 
     return (
       <>
-        <Form>
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage {...messages.header} />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
-          </Header>
+        <div className={styles.wrapper}>
+          <Form>
+            <Header as="h1">
+              <Header.Content>
+                <FormattedMessage {...messages.header} />
+              </Header.Content>
+              <Header.Subheader>
+                <FormattedMessage {...messages.subHeader} />
+              </Header.Subheader>
+            </Header>
 
-          <DualFxInput
-            onChange={this.onValueChange}
-            maxValue={3000}
-            value={this.state.cadPurchase}
-            fxRate={rate}
-          />
+            <DualFxInput
+              onChange={this.onValueChange}
+              maxValue={3000}
+              value={this.state.cadPurchase}
+              fxRate={rate}
+            />
 
-          <Accordion
-            fluid
-            styled
-            activeIndex={activeAccordion}
-            onTitleClick={this.accordionClick}
-            panels={paymentMethods.map((item, index) => ({
-              key: index,
-              title: (
-                <Accordion.Title>
-                  <div className={styles.HeaderContainer}>
-                    <Icon name="dropdown" />
-                    {item.title}
-                    <img
-                      src={item.logo}
-                      className={styles.LogoImage}
-                      alt="logo"
-                    />
-                    <div style={{ clear: 'both' }} />
+            <Accordion
+              fluid
+              styled
+              activeIndex={activeAccordion}
+              onTitleClick={this.accordionClick}
+              panels={paymentMethods.map((item, index) => ({
+                key: index,
+                title: (
+                  <Accordion.Title>
+                    <div className={styles.HeaderContainer}>
+                      <Icon name="dropdown" />
+                      {item.title}
+                      <img
+                        src={item.logo}
+                        className={styles.LogoImage}
+                        alt="logo"
+                      />
+                      <div style={{ clear: 'both' }} />
+                    </div>
+                  </Accordion.Title>
+                ),
+                content: (AccordionContent, { key, active }) => (
+                  <div key={key} className={styles.PaymentMethod}>
+                    <AnimateHeight
+                      animateOpacity
+                      duration={300}
+                      height={active ? 'auto' : 0}
+                    >
+                      {item.content}
+                    </AnimateHeight>
                   </div>
-                </Accordion.Title>
-              ),
-              content: (AccordionContent, { key, active }) => (
-                <div key={key} className={styles.PaymentMethod}>
-                  <AnimateHeight
-                    animateOpacity
-                    duration={300}
-                    height={active ? 'auto' : 0}
-                  >
-                    {item.content}
-                  </AnimateHeight>
-                </div>
-              ),
-            }))}
-          />
-        </Form>
-        <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
+                ),
+              }))}
+            />
+          </Form>
+          <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
+        </div>
       </>
     );
   }
