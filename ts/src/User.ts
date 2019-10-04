@@ -1,7 +1,7 @@
 import { IsValidAddress, NormalizeAddress } from ".";
 import { GetFirestore } from './Firestore';
-import { Timestamp } from "@google-cloud/firestore";
 import { ReferralData } from "./Referrals";
+import { Timestamp, DocumentReference } from "./FirebaseFirestore";
 
 type UserVerifiedInfo = {
 	verified: string,
@@ -11,20 +11,22 @@ type UserVerifiedInfo = {
 // A union of all possible data on a user.
 type AllUserData = Partial<UserVerifiedInfo> & Partial<ReferralData>
 
+type UserAction = "Buy"|"Sell"|"Bill";
+
 //
 // Get user document
 //
-async function GetUserDoc(address: string) {
+function GetUserDoc(address: string): DocumentReference {
   if (!IsValidAddress(address)) {
     console.error(`${address} is not a valid address`);
     throw new Error("Invalid address");
   }
-  return (await GetFirestore()).collection("User").doc(NormalizeAddress(address));
+  return GetFirestore().collection("User").doc(NormalizeAddress(address));
 }
 
 // Get data associated with user.
 async function GetUserData(address: string) {
-	const userDoc = await GetUserDoc(address)
+	const userDoc = GetUserDoc(address)
 	const userData = await userDoc.get();
 	return userData.exists ? 
 		userData.data() as AllUserData :
@@ -35,11 +37,11 @@ async function GetUserData(address: string) {
 // Declare that the user address passed in here 
 // is a valid, unique person on authority of signature owner
 //
-async function SetUserVerified(signature: string, address: string) {
-	const userDoc = await GetUserDoc(address)
+async function SetUserVerified(signature: string, address: string, timestamp: Timestamp) {
+	const userDoc = GetUserDoc(address)
 	const data: UserVerifiedInfo = {
 		verified: signature,
-		verifiedTimestamp: Timestamp.now()
+		verifiedTimestamp: timestamp
 	} 
 	// We store the verified signature
 	await userDoc.set(data, { merge: true });
@@ -53,9 +55,13 @@ async function GetUserVerified(address: string) {
 //
 // Helper functions for accessing stuff
 //
-async function GetActionDoc(user: string, action: string, hash: string) { 
-	const userDoc = await GetUserDoc(user);
+function GetActionDoc(user: string, action: UserAction, hash: string): DocumentReference { 
+	const userDoc = GetUserDoc(user);
 	return userDoc.collection(action).doc(hash);
 }
 
-export { GetUserDoc, GetUserData, SetUserVerified, GetUserVerified, GetActionDoc }
+function GetActionRef(action: UserAction, hash: string): DocumentReference { 
+  return GetFirestore().collection(action).doc(hash);
+}
+
+export { UserAction, GetUserDoc, GetUserData, SetUserVerified, GetUserVerified, GetActionDoc, GetActionRef }

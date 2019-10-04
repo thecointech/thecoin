@@ -1,12 +1,12 @@
-import { Timestamp } from "@google-cloud/firestore";
 import { GetFirestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { BrokerCAD } from "@the-coin/types";
 import base32 from "base32";
 import { GetUserDoc, GetUserData } from "./User";
+import { Timestamp } from "./FirebaseFirestore";
 
-export async function GetReferrersCollection() {
-  return (await GetFirestore()).collection("Referrers");
+export function GetReferrersCollection() {
+  return GetFirestore().collection("Referrers");
 }
 
 // Document stored as /Referrer/{id}/
@@ -24,16 +24,16 @@ export interface ReferralData {
 }
 
 // GetReferrer
-export async function GetReferrerDoc(referrerId: string) {
+export function GetReferrerDoc(referrerId: string) {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
     throw new Error("Invalid Referrer");
   }
-  return (await GetReferrersCollection()).doc(referrerId.toLowerCase());
+  return GetReferrersCollection().doc(referrerId.toLowerCase());
 }
 
 export async function GetReferrerData(referrerId: string) {
-  const doc = await GetReferrerDoc(referrerId);
+  const doc = GetReferrerDoc(referrerId);
   const referrer = await doc.get();
   return referrer.exists ? (referrer.data() as VerifiedReferrer) : null;
 }
@@ -61,7 +61,7 @@ export function GetReferrerCode(signature: string) {
 //
 export async function CreateReferrer(signature: string, address: string) {
   const code = GetReferrerCode(signature);
-  const referrerDoc = await GetReferrerDoc(code);
+  const referrerDoc = GetReferrerDoc(code);
 
   const data: VerifiedReferrer = {
     address,
@@ -76,27 +76,27 @@ export async function CreateReferrer(signature: string, address: string) {
 // every account requires a referral code, but it should not
 // be possible to assign codes to existing accounts
 //
-export async function CreateReferree(referral: BrokerCAD.NewAccountReferal) {
+export async function CreateReferree(referral: BrokerCAD.NewAccountReferal, created: Timestamp) {
   const { referrerId, newAccount } = referral;
 
   if (!IsValidReferrerId(referrerId)) throw new Error("Invalid Referrer");
   if (!IsValidAddress(newAccount)) throw new Error("Invalid Address");
 
-  const referrerDoc = await GetReferrerDoc(referrerId);
+  const referrerDoc = GetReferrerDoc(referrerId);
   const referrer = await referrerDoc.get();
   if (!referrer.exists) throw new Error("Referrer doesnt exist");
 
   // Create new referral link
-  const newUserKey = await GetUserDoc(newAccount);
+  const newUserKey = GetUserDoc(newAccount);
   const user = await newUserKey.get();
   if (user.exists) throw new Error("User already exists");
 
   const data: ReferralData = {
     referrer: referrer.get("address"),
-    created: Timestamp.now()
+    created
   };
-  const result = await newUserKey.set(data);
+  await newUserKey.set(data);
   console.log(
-    `Create user: ${newAccount} from ${referrer} ${result.writeTime}`
+    `Create user: ${newAccount} from ${referrer}`
   );
 }

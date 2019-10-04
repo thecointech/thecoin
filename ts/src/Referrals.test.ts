@@ -7,6 +7,10 @@ import {
 import { GetUserDoc } from "./User";
 import { BrokerCAD } from "@the-coin/types";
 
+import "./Firestore.test";
+import { firestore } from "@firebase/testing";
+
+
 async function ClearExistingUser(address: string) {
   // Clear it if it exists already
   try {
@@ -53,10 +57,10 @@ test("Referrals work as expected", async () => {
     newAccount: newAddress
   };
   // bad referrer id
-  expect(CreateReferree(referral)).rejects.toThrow("Referrer doesnt exist");
+  expect(CreateReferree(referral, firestore.Timestamp.now())).rejects.toThrow("Referrer doesnt exist");
   // Non-throw is success
   referral.referrerId = referralId;
-  await CreateReferree(referral);
+  await CreateReferree(referral, firestore.Timestamp.now());
 
   // test data store properly
   const referrer = await GetUsersReferrer(newAddress);
@@ -64,5 +68,5 @@ test("Referrals work as expected", async () => {
   expect(referrer!.referrer).toMatch(validAddress);
 
   // Test re-create fails
-  expect(CreateReferree(referral)).rejects.toThrow("User already exists");
+  expect(CreateReferree(referral, firestore.Timestamp.now())).rejects.toThrow("User already exists");
 });

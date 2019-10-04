@@ -22,12 +22,13 @@
     "removeComments": true,
     "sourceMap": true,
     "rootDir": "./src",
-    "outDir": "./lib",
+    "outDir": "./lib"
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./src/FirebaseFirestore.d.ts"
   ],
   "exclude": [
-    "./src/**/test.ts"
+    "./src/**/*.test.ts"
   ]
 }

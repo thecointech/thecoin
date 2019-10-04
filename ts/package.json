@@ -1,12 +1,12 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.48",
+  "version": "0.1.63",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "..\\..\\node_modules\\.bin\\tsc.cmd"
+    "build": "..\\..\\node_modules\\.bin\\tsc.cmd && copy .\\src\\FirebaseFirestore.d.ts .\\lib"
   },
   "keywords": [
     "TheCoin"
@@ -14,7 +14,6 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "dependencies": {
-    "@google-cloud/firestore": "^2.2.0",
     "@the-coin/contract": "^1.0.9",
     "base32": "0.0.6",
     "dotenv": "^8.0.0"
@@ -23,9 +22,10 @@
     "ethers": "4.0.29"
   },
   "devDependencies": {
+    "@firebase/testing": "^0.13.3",
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.3",
-    "jest": "<24.0.0",
+    "jest": "^24.9.0",
     "ts-jest": "^23.10.5"
   },
   "files": [
