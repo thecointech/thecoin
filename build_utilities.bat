@@ -1,6 +1,6 @@
 @echo off
-cd the-utilities\ts
 setlocal
+cd the-utilities\ts
 
 echo Building Package
 call npm run build
@@ -22,5 +22,6 @@ call npm install @the-coin/utilities
 
 echo Complete
 TIMEOUT /T 5
+
 
 endlocal
