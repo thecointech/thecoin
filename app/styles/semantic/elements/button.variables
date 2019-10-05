@@ -24,7 +24,7 @@
 --------------------*/
 
 @hoverBackgroundColor: @primaryColor;
-@hoverColor: #FFEF98;
+@hoverColor: #BBC2D7;
 
 @downBackgroundColor: #ffffff;
 @downColor: #FFEF98;

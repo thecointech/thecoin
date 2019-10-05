@@ -16,6 +16,7 @@ interface CssExports {
   'mainWrapper': string;
   'sprout': string;
   'sproutWrapper': string;
+  'subContainer': string;
   'subscribeText': string;
   'topMargin': string;
   'tree': string;

@@ -1,5 +1,5 @@
 .mainWrapper {
-  padding: 5rem !important;
+  padding: 3rem !important;
 }
 .headingWrapper {
   text-align: right !important;
@@ -19,7 +19,7 @@
 }
 
 .centerh3 {
-  font-weight: 300;
+  font-weight: 300 !important;
   font-size: 2rem;
   color: #002c8e;
   line-height: 3rem;
@@ -27,10 +27,6 @@
   margin-bottom: 1em !important;
   margin-top: 70px;
 }
-.h3 span {
-  font-weight: 500;
-}
-
 .centerh3 span {
   font-weight: 500;
 }
@@ -43,12 +39,17 @@
   font-family: 'Lato', sans-serif !important;
 }
 
+.h3 span {
+  font-weight: 500;
+}
+
 .h3right {
   font-weight: 300;
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
   font-family: 'Lato', sans-serif !important;
+  max-width: 540px;
 }
 
 .h3left {
@@ -57,6 +58,7 @@
   color: #002c8e;
   line-height: 2.5rem;
   font-family: 'Lato', sans-serif !important;
+  max-width: 540px;
 }
 
 .gridWrapper {
@@ -91,11 +93,8 @@
 .inflation {
   position: absolute;
   top: 57%;
-
   left: 22%;
-
   z-index: 999;
-
   color: #f41616;
   font-size: 1.6rem;
   -ms-transform: rotate(25deg);
@@ -135,4 +134,10 @@
   font-weight: 300;
   margin-bottom: 50px !important;
   color: #002c8e;
+}
+
+.subContainer {
+  width: 70%;
+  max-width: 810px;
+  margin: auto;
 }
