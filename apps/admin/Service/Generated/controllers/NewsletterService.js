@@ -4,12 +4,20 @@
 /**
  * Confirm email subscription.
  *
- * confirmationToken String 
- * no response value expected for this operation
+ * details SubscriptionDetails 
+ * returns BoolResponse
  **/
-exports.newsletterConfirm = function(confirmationToken) {
+exports.newsletterConfirm = function(details) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "success" : true
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 
@@ -18,24 +26,40 @@ exports.newsletterConfirm = function(confirmationToken) {
  * Register an email address for our newsletter.
  *
  * email String 
- * no response value expected for this operation
+ * returns BoolResponse
  **/
 exports.newsletterSignup = function(email) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "success" : true
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 
 
 /**
- * Register an email address for our newsletter.
+ * Unsubscribe an email address from our newsletter.
  *
  * email String 
- * no response value expected for this operation
+ * returns BoolResponse
  **/
 exports.newsletterUnsubscribe = function(email) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "success" : true
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 

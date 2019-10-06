@@ -4,8 +4,8 @@ var utils = require('../utils/writer.js');
 var Newsletter = require('../service/NewsletterService');
 
 module.exports.newsletterConfirm = function newsletterConfirm (req, res, next) {
-  var confirmationToken = req.swagger.params['confirmationToken'].value;
-  Newsletter.newsletterConfirm(confirmationToken)
+  var details = req.swagger.params['details'].value;
+  Newsletter.newsletterConfirm(details)
     .then(function (response) {
       utils.writeJson(res, response);
     })

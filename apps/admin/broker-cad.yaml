@@ -387,7 +387,27 @@ definitions:
           $ref: "#/definitions/GoogleWalletItem"
 
 ################################################################################
-      
+   
+  SubscriptionDetails:
+    required:
+      - email
+      - confirmed
+    properties:
+      email: 
+        type: string
+      confirmed:
+        type: boolean
+      firstName:
+        type: string
+      lastName:
+        type string
+      country:
+        type string
+      city:
+        type string
+
+################################################################################
+
 paths:
   /status:
     get:
@@ -832,6 +852,13 @@ paths:
           name: email
           required: true
           type: string
+      responses:
+        500:
+          description: "Server Error"
+        200:
+          description: Email successfully registered
+          schema:
+            $ref: "#/definitions/BoolResponse"
 
   /newsletter/confirm:
     put:
@@ -840,22 +867,41 @@ paths:
       summary: "Confirm email subscription."
       operationId: "newsletterConfirm"
       parameters:
-        - in: query
-          name: confirmationToken
+        - in: body
+          name: details
           required: true
-          type: string
+          schema:
+            $ref: "#/definitions/SubscriptionDetails"
+      responses:
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
+        200:
+          description: Email successfully confirmed
+          schema:
+            $ref: "#/definitions/BoolResponse"
 
   /newsletter/unsubscribe:
     put:
       tags:
         - Newsletter
-      summary: "Register an email address for our newsletter."
+      summary: "Unsubscribe an email address from our newsletter."
       operationId: "newsletterUnsubscribe"
       parameters:
         - in: query
           name: email
           required: true
           type: string
+      responses:
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
+        200:
+          description: Email successfully registered
+          schema:
+            $ref: "#/definitions/BoolResponse"
 
 
 

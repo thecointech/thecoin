@@ -469,6 +469,13 @@ paths:
         in: "query"
         required: true
         type: "string"
+      responses:
+        200:
+          description: "Email successfully registered"
+          schema:
+            $ref: "#/definitions/BoolResponse"
+        500:
+          description: "Server Error"
       x-swagger-router-controller: "Newsletter"
   /newsletter/confirm:
     put:
@@ -477,22 +484,41 @@ paths:
       summary: "Confirm email subscription."
       operationId: "newsletterConfirm"
       parameters:
-      - name: "confirmationToken"
-        in: "query"
+      - in: "body"
+        name: "details"
         required: true
-        type: "string"
+        schema:
+          $ref: "#/definitions/SubscriptionDetails"
+      responses:
+        200:
+          description: "Email successfully confirmed"
+          schema:
+            $ref: "#/definitions/BoolResponse"
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
       x-swagger-router-controller: "Newsletter"
   /newsletter/unsubscribe:
     put:
       tags:
       - "Newsletter"
-      summary: "Register an email address for our newsletter."
+      summary: "Unsubscribe an email address from our newsletter."
       operationId: "newsletterUnsubscribe"
       parameters:
       - name: "email"
         in: "query"
         required: true
         type: "string"
+      responses:
+        200:
+          description: "Email successfully registered"
+          schema:
+            $ref: "#/definitions/BoolResponse"
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
       x-swagger-router-controller: "Newsletter"
 definitions:
   SignedPurchaseRequest:
@@ -886,3 +912,18 @@ definitions:
           name: "name"
           id: "id"
           type: "type"
+  SubscriptionDetails:
+    required:
+    - "confirmed"
+    - "email"
+    properties:
+      email:
+        type: "string"
+      confirmed:
+        type: "boolean"
+      firstName:
+        type: "string"
+    example:
+      firstName: "firstName"
+      confirmed: true
+      email: "email"
