@@ -923,7 +923,16 @@ definitions:
         type: "boolean"
       firstName:
         type: "string"
+      lastName:
+        type: "string"
+      country:
+        type: "string"
+      city:
+        type: "string"
     example:
       firstName: "firstName"
+      lastName: "lastName"
+      country: "country"
+      city: "city"
       confirmed: true
       email: "email"

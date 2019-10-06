@@ -400,11 +400,11 @@ definitions:
       firstName:
         type: string
       lastName:
-        type string
+        type: string
       country:
-        type string
+        type: string
       city:
-        type string
+        type: string
 
 ################################################################################
 
