@@ -14,6 +14,8 @@ import { GetOptions, BuildCreateUrl } from './Types';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
 // import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';
 
+import styles from './index.module.css';
+
 type Props = RouteComponentProps;
 
 type WizardStep = React.FunctionComponent<{}>;
@@ -22,7 +24,12 @@ type StepPair = [WizardStep, WizardPage];
 function BuildSteps(option: Option) {
   const steps: StepPair[] = [];
   steps.push([CreateIntroStep, CreateIntroPage]);
-  if (option.password === 'lastpass' || option.stored === 'offline' || option.stored === 'cloud' || option.stored === 'metamask') {
+  if (
+    option.password === 'lastpass' ||
+    option.stored === 'offline' ||
+    option.stored === 'cloud' ||
+    option.stored === 'metamask'
+  ) {
     steps.push([CreatePasswordStep, CreatePasswordPage]);
   }
   if (option.stored === 'metamask') {
@@ -53,7 +60,6 @@ function BuildSteps(option: Option) {
   return steps;
 }
 
-
 export const Create = (props: Props) => {
   const [accountName, setName] = useState('');
   const options = GetOptions(props.location.search);
@@ -83,26 +89,26 @@ export const Create = (props: Props) => {
 
   const stepNodes = steps.map((pair, i) => {
     // Remove introduction if more than 3 items
-    if (i === 0 && (steps.length > 3)) {
+    if (i === 0 && steps.length > 3) {
       return undefined;
     }
     const Item = pair[0];
     return (
-    <Step key={i} active={i === step}>
-      <Item />
-    </Step>
+      <Step key={i} active={i === step}>
+        <Item />
+      </Step>
     );
   });
 
   const Page = steps[step][1];
   return (
     <>
-      <Step.Group size="small">
-        {...stepNodes}
-      </Step.Group>
-      <Container>
-        <Page {...pageProps} />
-      </Container>
+      <div className={styles.wrapper}>
+        <Step.Group size="small">{...stepNodes}</Step.Group>
+        <Container>
+          <Page {...pageProps} />
+        </Container>
+      </div>
     </>
   );
 };

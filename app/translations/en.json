@@ -15,6 +15,10 @@
   "app.containers.HomePage.blurbFees": "All the while paying no fees whatsoever, and enjoying the world's most secure accounts.",
   "app.containers.HomePage.blurbGrow": "Grow your wealth alongside Wall Street without taking away access to your finances.",
   "app.containers.HomePage.blurbSpend": "Spend your money at the supermarket or your favorite restaurant.",
-  "app.containers.HomePage.header": "This is the HomePage container!",
-  "app.containers.NotFoundPage.header": "This is the NotFoundPage container!"
+  "app.containers.HomePage.headerTopLeft": "TheCoin is backed by the S&P500. Annual return of 9.8% over the last 90 years Fight inflation and maintain purchasing power.",
+  "app.containers.NotFoundPage.header": "This is the NotFoundPage container!",
+  "app.containers.NotFoundPage.learnMore": "LEARN MORE",
+  "app.containers.NotFoundPage.headerTopCenter": "Creating an account with TheCoin WILL help stop climate change.",
+  "app.containers.NotFoundPage.headerTopRight": "You get 90% of the dividends. We keep 10% and put it towards fighting climate change: Tree planting.",
+  "app.containers.NotFoundPage.subscribe": "Subscribe to learn how you can help fight climate change with TheCoin. Subscribe to our mailing list today."
 }

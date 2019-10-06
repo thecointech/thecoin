@@ -4,10 +4,29 @@
   font-weight: 300;
   color: white;
   text-align: center;
+  margin: 35px 0px;
 }
 
 .label {
-  font-size: 2rem !important;
-  font-weight: 300 !important;
   color: white !important;
+  font-weight: 300 !important;
+  font-size: 2rem !important;
+  padding-left: 0px !important;
+}
+
+.button button {
+  border: 2px solid white !important;
+  margin-bottom: 40px !important;
+}
+
+.getinfo {
+  text-align: center;
+}
+
+.teaser {
+  width: 62%;
+  margin: auto !important;
+}
+
+input {
 }

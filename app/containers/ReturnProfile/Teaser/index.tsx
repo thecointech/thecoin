@@ -44,13 +44,13 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
           <FormattedMessage {...messages.header} />
         </div>
       </Header>
-      <hr />
+
       <Form>
-        <Grid>
-          <Grid.Row columns={3}>
+        <Grid className={styles.teaser}>
+          <Grid.Row columns={2}>
             <Grid.Column>
               <Form.Field>
-                <Label className="styles.label">
+                <Label className={styles.label}>
                   <FormattedMessage {...messages.Starting} />
                 </Label>
                 <Input
@@ -63,7 +63,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
             </Grid.Column>
             <Grid.Column>
               <Form.Field>
-                <Label>
+                <Label className={styles.label}>
                   <FormattedMessage {...messages.Age} />
                 </Label>
                 <Form.Input
@@ -74,10 +74,15 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
                 />
               </Form.Field>
             </Grid.Column>
-            <Grid.Column verticalAlign="bottom">
-              <Form.Button onClick={showCalculate}>
-                <FormattedMessage {...messages.calculate} />
-              </Form.Button>
+          </Grid.Row>
+
+          <Grid.Row columns={1}>
+            <Grid.Column verticalAlign="bottom" className={styles.getinfo}>
+              <div className={styles.button}>
+                <Form.Button onClick={showCalculate}>
+                  <FormattedMessage {...messages.calculate} />
+                </Form.Button>
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

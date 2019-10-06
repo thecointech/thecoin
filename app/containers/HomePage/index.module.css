@@ -1,13 +1,16 @@
+.mainWrapper {
+  padding: 3rem !important;
+}
 .headingWrapper {
-  display: flex;
-  text-align: right;
+  text-align: right !important;
   margin-top: 0rem !important;
   flex-direction: column;
 }
 
 .laptop {
-  margin-left: 22%;
+  margin-right: -30px;
   width: 73%;
+  margin-top: -20px;
 }
 .h1 {
   font-weight: 300;
@@ -16,17 +19,14 @@
 }
 
 .centerh3 {
-  font-weight: 300;
+  font-weight: 300 !important;
   font-size: 2rem;
   color: #002c8e;
   line-height: 3rem;
   font-family: 'Lato', sans-serif !important;
   margin-bottom: 1em !important;
+  margin-top: 70px;
 }
-.h3 span {
-  font-weight: 500;
-}
-
 .centerh3 span {
   font-weight: 500;
 }
@@ -39,24 +39,26 @@
   font-family: 'Lato', sans-serif !important;
 }
 
+.h3 span {
+  font-weight: 500;
+}
+
 .h3right {
-  text-align: center;
-  margin-right: 28%;
   font-weight: 300;
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
   font-family: 'Lato', sans-serif !important;
+  max-width: 540px;
 }
 
 .h3left {
-  text-align: center;
-  margin-left: 21%;
   font-weight: 300;
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
   font-family: 'Lato', sans-serif !important;
+  max-width: 540px;
 }
 
 .gridWrapper {
@@ -66,16 +68,15 @@
   font-weight: bold;
 }
 
-.bannerImage {
+.tree {
+  margin-left: -81px;
   width: 70%;
 }
 
 .topMargin {
   margin-top: 7rem !important;
 }
-.bannerImgWrapper {
-  position: relative;
-}
+
 .wallStreet {
   position: absolute;
   top: 22%;
@@ -92,11 +93,8 @@
 .inflation {
   position: absolute;
   top: 57%;
-
   left: 22%;
-
   z-index: 999;
-
   color: #f41616;
   font-size: 1.6rem;
   -ms-transform: rotate(25deg);
@@ -129,4 +127,17 @@
 }
 .logoIcon {
   width: 60%;
+}
+
+.subscribeText {
+  font-size: 1.7rem;
+  font-weight: 300;
+  margin-bottom: 50px !important;
+  color: #002c8e;
+}
+
+.subContainer {
+  width: 70%;
+  max-width: 810px;
+  margin: auto;
 }

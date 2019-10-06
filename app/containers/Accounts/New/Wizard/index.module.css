@@ -1,21 +1,24 @@
-
 .HeaderContainer {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .stepIcon {
-	padding-right: 50px
+  padding-right: 50px;
 }
 
 .Clear {
-	clear: both;
+  clear: both;
 }
 
 .AccordionContent {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 .AccordionIcon {
-	margin-right: 10px;
+  margin-right: 10px;
+}
+
+.wrapper {
+  padding: 3rem;
 }

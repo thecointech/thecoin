@@ -11,16 +11,17 @@
 
 import * as React from 'react';
 import { Grid, Container } from 'semantic-ui-react';
-import IconWithText from 'components/IconWithText/index';
-import * as Icons from 'utils/icons';
-import messages from './messages';
+
 import { Link } from 'react-router-dom';
 import { ContentSegment } from 'components/ContentSegment';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
 import laptop from './images/laptop.svg';
 import sprout from './images/sprout.svg';
 import tree from './images/tree.svg';
 import logoIcon from './images/logoIcon.svg';
+import Subscribe from '../Subscribe';
 import styles from './index.module.css';
 
 export default class HomePage extends React.PureComponent {
@@ -28,7 +29,7 @@ export default class HomePage extends React.PureComponent {
     return (
       <React.Fragment>
         <Grid divided="vertically">
-          <Grid.Row columns={3}>
+          <Grid.Row columns={3} className={styles.mainWrapper}>
             <Grid.Column>
               <div className={styles.headingWrapper}>
                 <img
@@ -37,45 +38,77 @@ export default class HomePage extends React.PureComponent {
                   src={laptop}
                 />
                 <h3 className={styles.h3left}>
-                  TheCoin is backed by the S&P500.
-                  <br />
-                  Annual return of 9.8% over the last 90 years.
-                  <br />
-                  Fight inflation and maintain purchasing power.
+                  <FormattedMessage
+                    {...messages.headerTopLeft}
+                    values={{
+                      bold: <b>{messages.headerTopLeft.description}</b>,
+                    }}
+                  />
                 </h3>
+                <Link className={styles.links} to="/howItWorks">
+                  <FormattedMessage {...messages.learnMore} />
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column>
               <div className={styles.sproutWrapper}>
                 <img
                   className={styles.sprout}
-                  alt="purchasing power of the dollar vs sp500"
+                  alt="climate change purchasing power"
                   src={sprout}
                 />
                 <img
                   className={styles.logoIcon}
-                  alt="purchasing power of the dollar vs sp500"
+                  alt="purchasing power of  the dollar vs sp500"
                   src={logoIcon}
                 />
                 <h3 className={styles.centerh3}>
-                  Creating an account with <span>TheCoin</span> <br />
-                  WILL help stop climate change.
+                  <FormattedMessage
+                    {...messages.headerTopCenter}
+                    values={{
+                      bold: <b>{messages.headerTopCenter.description}</b>,
+                    }}
+                  />
                 </h3>
               </div>
             </Grid.Column>
 
             <Grid.Column>
-              <div className={styles.bannerImgWrapper}>
-                <img
-                  className={styles.bannerImage}
-                  alt="purchasing power of the dollar vs sp500"
-                  src={tree}
+              <img
+                className={styles.tree}
+                alt="help fight climate change"
+                src={tree}
+              />
+              <h3 className={styles.h3right}>
+                <FormattedMessage
+                  {...messages.headerTopRight}
+                  values={{
+                    bold: <b>{messages.headerTopRight.description}</b>,
+                  }}
                 />
-                <h3 className={styles.h3right}>
-                  You get 90% of the dividends. <br />
-                  We keep 10% and put it towards fighting
-                  <br /> climate change: <span>Tree planting.</span>
-                </h3>
+              </h3>
+              <Link className={styles.links} to="/howItWorks">
+                <FormattedMessage {...messages.learnMore} />
+              </Link>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
+        <Grid divided="vertically">
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <div className={styles.sproutWrapper}>
+                <Subscribe />
+                <div className={styles.subContainer}>
+                  <p className={styles.subscribeText}>
+                    <FormattedMessage
+                      {...messages.subscribe}
+                      values={{
+                        bold: <b>{messages.subscribe.description}</b>,
+                      }}
+                    />
+                  </p>
+                </div>
               </div>
             </Grid.Column>
           </Grid.Row>
@@ -86,26 +119,6 @@ export default class HomePage extends React.PureComponent {
             <Teaser />
           </Container>
         </ContentSegment>
-
-        <Grid divided="vertically" className={styles.topMargin}>
-          <Grid.Row columns={3} centered>
-            <Grid.Column className={styles.gridWrapper}>
-              <IconWithText
-                icon={Icons.ChartLine}
-                message={messages.blurbGrow}
-              />
-              <Link className={styles.links} to="/howItWorks">
-                LEARN MORE
-              </Link>
-            </Grid.Column>
-            <Grid.Column className={styles.gridWrapper}>
-              <IconWithText icon={Icons.Lock} message={messages.blurbFees} />
-              <Link className={styles.links} to="/accounts">
-                GO TO ACCOUNTS
-              </Link>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
       </React.Fragment>
     );
   }

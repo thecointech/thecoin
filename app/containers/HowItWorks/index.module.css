@@ -1,0 +1,58 @@
+.wrapper {
+  padding: 5rem !important;
+}
+
+.icons {
+  max-width: 70% !important;
+}
+
+.h1 {
+  font-weight: 300;
+  font-size: 3rem;
+  color: #002c8e;
+  line-height: 3rem;
+  font-family: 'Lato', sans-serif !important;
+  margin-top: 20px;
+}
+
+.h2 {
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: #002c8e;
+  line-height: 3rem;
+  font-family: 'Lato', sans-serif !important;
+  margin-bottom: 1em !important;
+}
+
+.step1 {
+  font-weight: 300;
+  font-family: 'Lato', sans-serif !important;
+  font-size: 2rem;
+  color: #002c8e;
+}
+
+.step1Sub {
+  font-weight: 300;
+  font-size: 1.35rem;
+  color: #222;
+  font-family: 'Lato', sans-serif !important;
+  margin-top: 10px;
+  line-height: 2.5rem;
+}
+.step1Wrap {
+  padding-top: 11px;
+}
+
+.center {
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.list {
+  margin-top: 13% !important;
+  font-size: 22px;
+  color: #4949a2;
+  font-size: 1.6rem;
+  font-weight: 300;
+  padding-left: 61px;
+  font-style: italic;
+}
