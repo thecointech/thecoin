@@ -36,7 +36,7 @@
     "sourceMap": true,
 
     "incremental": true,                      /* Enable incremental compilation */
-    "tsBuildInfoFile": "./obj/incr",          /* Specify file to store incremental compilation information */
+    "tsBuildInfoFile": "./obj/incr"           /* Specify file to store incremental compilation information */
   },
   "exclude": ["node_modules"]
 }
