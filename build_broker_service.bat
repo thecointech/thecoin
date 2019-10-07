@@ -11,8 +11,11 @@ cd broker-cad\Service && call npm run build
 
 endlocal
 setlocal
+set /p BuildVersion=<broker-cad\version.txt
+set /a "BuildVersion=%BuildVersion%+1"
+java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -g typescript-fetch 	-o broker-cad\ClientTS -c broker-cad\client-ts-spec.json  -DnpmVersion=0.1.%BuildVersion%
 
-java -jar .\openapi-generator-cli.jar generate 	-i broker-cad\broker-cad.yaml -g typescript-fetch 	-o broker-cad\ClientTS -c broker-cad\client-ts-spec.json 
+>broker-cad\version.txt echo %BuildVersion%
 
 cd broker-cad\ClientTS
 echo Building Package
@@ -24,7 +27,7 @@ IF %ERRORLEVEL% NEQ 0 (
 	TIMEOUT /T 5
 	exit /B 1
 )
-call npm version patch
+
 call npm publish
 
 cd ..\..\the-website-ts
