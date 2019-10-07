@@ -8,9 +8,33 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.HomePage';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the HomePage container!',
+  headerTopLeft: {
+    id: `${scope}.headerTopLeft`,
+    defaultMessage:
+      '{bold} here is backed by the S&P500. Annual return of 9.8% over the last 90 years Fight inflation and maintain purchasing power.',
+    description: 'TheCoin',
+  },
+  learnMore: {
+    id: `${scope}.learnMore`,
+    defaultMessage: 'LEARN MORE',
+  },
+  headerTopCenter: {
+    id: `${scope}.headerTopCenter`,
+    defaultMessage:
+      'Creating an account with {bold} WILL help stop climate change.',
+    description: 'TheCoin',
+  },
+  headerTopRight: {
+    id: `${scope}.headerTopRight`,
+    defaultMessage:
+      'You get 90% of the dividends. We keep 10% and put it towards fighting climate change: {bold}.',
+    description: 'Tree planting',
+  },
+  subscribe: {
+    id: `${scope}.subscribe`,
+    defaultMessage:
+      'Subscribe to learn how you can help fight climate change with {bold}. Subscribe to our mailing list today.',
+    description: 'TheCoin',
   },
   blurbGrow: {
     id: `${scope}.blurbGrow`,

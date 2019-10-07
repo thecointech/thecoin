@@ -8,7 +8,6 @@
 }
 
 .label {
-  background: none !important;
   color: white !important;
   font-weight: 300 !important;
   font-size: 2rem !important;
@@ -16,7 +15,10 @@
 }
 
 .button button {
-  border: 1px solid white !important;
+  border: 2px solid white !important;
+  margin-bottom: 40px !important;
+  padding: 1rem 3rem !important;
+  margin-top: 32px !important;
 }
 
 .getinfo {
@@ -26,9 +28,4 @@
 .teaser {
   width: 62%;
   margin: auto !important;
-}
-
-input {
-  font-size: 1.7rem !important;
-  padding: 13px !important;
 }

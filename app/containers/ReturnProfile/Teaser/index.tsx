@@ -78,11 +78,11 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
 
           <Grid.Row columns={1}>
             <Grid.Column verticalAlign="bottom" className={styles.getinfo}>
-              <Form.Button onClick={showCalculate}>
-                <div className={styles.button}>
+              <div className={styles.button}>
+                <Form.Button onClick={showCalculate}>
                   <FormattedMessage {...messages.calculate} />
-                </div>
-              </Form.Button>
+                </Form.Button>
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

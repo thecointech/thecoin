@@ -2,3 +2,6 @@
          Site Overrides
 *******************************/
 
+.ui.label{
+      background: none;
+}

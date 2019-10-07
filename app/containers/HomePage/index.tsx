@@ -14,6 +14,8 @@ import { Grid, Container } from 'semantic-ui-react';
 
 import { Link } from 'react-router-dom';
 import { ContentSegment } from 'components/ContentSegment';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
 import laptop from './images/laptop.svg';
 import sprout from './images/sprout.svg';
@@ -36,14 +38,15 @@ export default class HomePage extends React.PureComponent {
                   src={laptop}
                 />
                 <h3 className={styles.h3left}>
-                  TheCoin is backed by the S&P500.
-                  <br />
-                  Annual return of 9.8% over the last 90 years.
-                  <br />
-                  Fight inflation and maintain purchasing power.
+                  <FormattedMessage
+                    {...messages.headerTopLeft}
+                    values={{
+                      bold: <b>{messages.headerTopLeft.description}</b>,
+                    }}
+                  />
                 </h3>
                 <Link className={styles.links} to="/howItWorks">
-                  LEARN MORE
+                  <FormattedMessage {...messages.learnMore} />
                 </Link>
               </div>
             </Grid.Column>
@@ -51,17 +54,21 @@ export default class HomePage extends React.PureComponent {
               <div className={styles.sproutWrapper}>
                 <img
                   className={styles.sprout}
-                  alt="purchasing power of the dollar vs sp500"
+                  alt="climate change purchasing power"
                   src={sprout}
                 />
                 <img
                   className={styles.logoIcon}
-                  alt="purchasing power of the dollar vs sp500"
+                  alt="purchasing power of  the dollar vs sp500"
                   src={logoIcon}
                 />
                 <h3 className={styles.centerh3}>
-                  Creating an account with <span>TheCoin</span> <br />
-                  WILL help stop climate change.
+                  <FormattedMessage
+                    {...messages.headerTopCenter}
+                    values={{
+                      bold: <b>{messages.headerTopCenter.description}</b>,
+                    }}
+                  />
                 </h3>
               </div>
             </Grid.Column>
@@ -69,16 +76,19 @@ export default class HomePage extends React.PureComponent {
             <Grid.Column>
               <img
                 className={styles.tree}
-                alt="purchasing power of the dollar vs sp500"
+                alt="help fight climate change"
                 src={tree}
               />
               <h3 className={styles.h3right}>
-                You get 90% of the dividends. <br />
-                We keep 10% and put it towards fighting
-                <br /> climate change: <span>Tree planting.</span>
+                <FormattedMessage
+                  {...messages.headerTopRight}
+                  values={{
+                    bold: <b>{messages.headerTopRight.description}</b>,
+                  }}
+                />
               </h3>
               <Link className={styles.links} to="/howItWorks">
-                LEARN MORE
+                <FormattedMessage {...messages.learnMore} />
               </Link>
             </Grid.Column>
           </Grid.Row>
@@ -89,12 +99,16 @@ export default class HomePage extends React.PureComponent {
             <Grid.Column>
               <div className={styles.sproutWrapper}>
                 <Subscribe />
-                <p className={styles.subscribeText}>
-                  Subscribe to learn how you can help fight climate change with
-                  TheCoin.
-                  <br />
-                  Subscribe to our mailing list today.
-                </p>
+                <div className={styles.subContainer}>
+                  <p className={styles.subscribeText}>
+                    <FormattedMessage
+                      {...messages.subscribe}
+                      values={{
+                        bold: <b>{messages.subscribe.description}</b>,
+                      }}
+                    />
+                  </p>
+                </div>
               </div>
             </Grid.Column>
           </Grid.Row>
