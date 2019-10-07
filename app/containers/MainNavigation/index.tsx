@@ -13,7 +13,7 @@ class Navigation extends React.Component {
           style={{
             backgroundColor: '#ffffff',
             width: '100%',
-            'max-width': '1600px',
+            maxWidth: '1600px',
           }}
         >
           <Menu className={styles.mainMenu}>
