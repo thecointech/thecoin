@@ -1,4 +1,12 @@
 export namespace BrokerCAD {
+  export interface SubscriptionDetails {
+    email: string;
+    confirmed: boolean;
+    firstName?: string;
+    lastName?: string;
+    country?: string;
+    city?: string;
+  }
   export interface SignedPurchaseRequest {
     timestamp: number;
     email: string;
