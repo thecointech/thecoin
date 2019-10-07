@@ -2,7 +2,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/pricing": "^0.1.1",
-    "@the-coin/types": "^0.1.22",
+    "@the-coin/types": "^0.1.35",
     "@the-coin/utilities": "^0.1.63",
     "@types/lodash": "^4.14.134",
     "connected-react-router": "^6.4.0",
@@ -39,6 +39,7 @@
     "dotenv": "^8.0.0",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1"
   }
 }

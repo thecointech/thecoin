@@ -3,3 +3,4 @@ details.txt
 types/node_modules/
 node_modules/
 wallets/
+*.log
