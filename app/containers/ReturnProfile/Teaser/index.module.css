@@ -17,6 +17,8 @@
 .button button {
   border: 2px solid white !important;
   margin-bottom: 40px !important;
+  padding: 1rem 3rem !important;
+  margin-top: 32px !important;
 }
 
 .getinfo {
@@ -26,7 +28,4 @@
 .teaser {
   width: 62%;
   margin: auto !important;
-}
-
-input {
 }

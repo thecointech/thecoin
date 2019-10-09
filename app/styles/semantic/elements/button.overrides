@@ -7,5 +7,5 @@
   font-size: 1.3rem !important;
   font-weight: 400;
   margin-left: 0px !important;
-  padding: 0.47rem 2rem !important;
+  padding: 0.47rem 2rem;
 }
