@@ -13,8 +13,9 @@ function SubDoc(email: string)
   return fs.collection("newsletter").doc(email.toLowerCase());
 }
 
-export async function Signup(email: string)
+export async function Signup(details: BrokerCAD.SubscriptionDetails)
 {
+  const { email } = details;
   if (email.indexOf("@") < 0)
   {
     console.log("Invalid email submitted: " + email)
@@ -22,8 +23,7 @@ export async function Signup(email: string)
   }
 
   const register: EmailSubscription = {
-    email,
-    confirmed: false,
+    ...details,
     registerDate: firestore.Timestamp.now()
   };
 

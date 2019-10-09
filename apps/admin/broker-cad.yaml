@@ -848,10 +848,11 @@ paths:
       summary: "Register an email address for our newsletter."
       operationId: "newsletterSignup"
       parameters:
-        - in: query
+        - in: body
           name: email
           required: true
-          type: string
+          schema:
+            $ref: "#/definitions/SubscriptionDetails"
       responses:
         500:
           description: "Server Error"
@@ -883,7 +884,7 @@ paths:
             $ref: "#/definitions/BoolResponse"
 
   /newsletter/unsubscribe:
-    put:
+    get:
       tags:
         - Newsletter
       summary: "Unsubscribe an email address from our newsletter."

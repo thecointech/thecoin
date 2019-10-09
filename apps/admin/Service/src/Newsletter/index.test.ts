@@ -15,7 +15,10 @@ test("Can sign up for email", async () => {
 	if (!isThisAManualTest())
 		return;
 
-	await Signup("stephen.taylor.dev@gmail.com")
+	await Signup({
+    email: "stephen.taylor.dev@gmail.com",
+    confirmed: false,
+  })
 })
 
 test("Can confirm existing email", async () => {
@@ -38,7 +41,10 @@ test("Cannot confim non-existent signup", async () => {
 
 test("Can delete subscription", async () => {
   const email = "sets@dfvs.com";
-  var s = await Signup(email)
+  var s = await Signup({
+    email,
+    confirmed: false,
+  })
   expect(s).toBeTruthy();
   var d = await Unsubscribe(email);
   expect(d).toBeTruthy();

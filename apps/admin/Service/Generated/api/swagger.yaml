@@ -465,10 +465,11 @@ paths:
       summary: "Register an email address for our newsletter."
       operationId: "newsletterSignup"
       parameters:
-      - name: "email"
-        in: "query"
+      - in: "body"
+        name: "email"
         required: true
-        type: "string"
+        schema:
+          $ref: "#/definitions/SubscriptionDetails"
       responses:
         200:
           description: "Email successfully registered"
@@ -500,7 +501,7 @@ paths:
           description: "Server Error"
       x-swagger-router-controller: "Newsletter"
   /newsletter/unsubscribe:
-    put:
+    get:
       tags:
       - "Newsletter"
       summary: "Unsubscribe an email address from our newsletter."

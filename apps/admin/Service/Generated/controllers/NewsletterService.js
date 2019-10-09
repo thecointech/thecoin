@@ -25,7 +25,7 @@ exports.newsletterConfirm = function(details) {
 /**
  * Register an email address for our newsletter.
  *
- * email String 
+ * email SubscriptionDetails 
  * returns BoolResponse
  **/
 exports.newsletterSignup = function(email) {

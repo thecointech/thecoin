@@ -20,10 +20,10 @@ export async function newsletterConfirm(details: BrokerCAD.SubscriptionDetails) 
 /**
  * Register an email address for our newsletter.
  *
- * email String 
+ * email SubscriptionDetails  
  * returns BoolResponse
  **/
-export async function newsletterSignup(email: string) : Promise<BrokerCAD.BoolResponse> {
+export async function newsletterSignup(email: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.BoolResponse> {
   try {
     const success = await Signup(email);
     return { success } 

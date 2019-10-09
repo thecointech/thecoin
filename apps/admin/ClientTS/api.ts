@@ -995,14 +995,14 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
         /**
          * 
          * @summary Register an email address for our newsletter.
-         * @param {string} email 
+         * @param {SubscriptionDetails} subscriptionDetails 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterSignup(email: string, options: any = {}): FetchArgs {
-            // verify required parameter 'email' is not null or undefined
-            if (email === null || email === undefined) {
-                throw new RequiredError('email','Required parameter email was null or undefined when calling newsletterSignup.');
+        newsletterSignup(subscriptionDetails: SubscriptionDetails, options: any = {}): FetchArgs {
+            // verify required parameter 'subscriptionDetails' is not null or undefined
+            if (subscriptionDetails === null || subscriptionDetails === undefined) {
+                throw new RequiredError('subscriptionDetails','Required parameter subscriptionDetails was null or undefined when calling newsletterSignup.');
             }
             const localVarPath = `/newsletter/signup`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1014,14 +1014,14 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (email !== undefined) {
-                localVarQueryParameter['email'] = email;
-            }
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"SubscriptionDetails" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(subscriptionDetails || {}) : (subscriptionDetails || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1046,7 +1046,7 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
-            const localVarRequestOptions = Object.assign({ method: 'PUT' }, baseOptions, options);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, baseOptions, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1095,12 +1095,12 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Register an email address for our newsletter.
-         * @param {string} email 
+         * @param {SubscriptionDetails} subscriptionDetails 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterSignup(email: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
-            const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterSignup(email, options);
+        newsletterSignup(subscriptionDetails: SubscriptionDetails, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterSignup(subscriptionDetails, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1152,12 +1152,12 @@ export const NewsletterApiFactory = function (configuration?: Configuration, fet
         /**
          * 
          * @summary Register an email address for our newsletter.
-         * @param {string} email 
+         * @param {SubscriptionDetails} subscriptionDetails 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterSignup(email: string, options?: any) {
-            return NewsletterApiFp(configuration).newsletterSignup(email, options)(fetch, basePath);
+        newsletterSignup(subscriptionDetails: SubscriptionDetails, options?: any) {
+            return NewsletterApiFp(configuration).newsletterSignup(subscriptionDetails, options)(fetch, basePath);
         },
         /**
          * 
@@ -1194,13 +1194,13 @@ export class NewsletterApi extends BaseAPI {
     /**
      * 
      * @summary Register an email address for our newsletter.
-     * @param {string} email 
+     * @param {SubscriptionDetails} subscriptionDetails 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public newsletterSignup(email: string, options?: any) {
-        return NewsletterApiFp(this.configuration).newsletterSignup(email, options)(this.fetch, this.basePath);
+    public newsletterSignup(subscriptionDetails: SubscriptionDetails, options?: any) {
+        return NewsletterApiFp(this.configuration).newsletterSignup(subscriptionDetails, options)(this.fetch, this.basePath);
     }
 
     /**
