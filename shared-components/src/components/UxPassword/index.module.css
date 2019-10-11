@@ -1,0 +1,29 @@
+.meterStyle {
+  width: 100%;
+  max-width: 85%;
+  opacity: 1;
+  height: 5px;
+  transition: all 400ms linear;
+  display: inline-block;
+  margin-right: 1%;
+}
+
+.infoStyle {
+  width: 100%;
+  overflow: hidden;
+}
+
+.iconStyle {
+  display: inline-block;
+  opacity: 0.25;
+  margin-right: 5px;
+}
+
+.strengthLangStyle {
+  font-size: 0.9em;
+  position: relative;
+}
+
+.unMaskStyle {
+  color: red;
+}
