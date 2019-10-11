@@ -4,9 +4,6 @@
 [submodule "the-contract"]
 	path = the-contract
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-contract
-[submodule "the-website"]
-	path = the-website
-	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website
 [submodule "tapcap-manager"]
 	path = tapcap-manager
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/tapcap-manager
@@ -19,15 +16,6 @@
 [submodule "the-app"]
 	path = the-app
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-app
-[submodule "the-utilities"]
-	path = the-utilities
-	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-utilities
 [submodule "the-core-admin"]
 	path = the-core-admin
 	url = https://tnadevelopment@dev.azure.com/tnadevelopment/TheCoin/_git/the-core-admin
-[submodule "the-website-ts"]
-	path = the-website-ts
-	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-website-ts
-[submodule "the-react-components"]
-	path = the-react-components
-url=https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-react-components
