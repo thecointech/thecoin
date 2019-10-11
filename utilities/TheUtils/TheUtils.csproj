@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="PDOL.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="Processing.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nethereum.Accounts" Version="2.5.1" />
+    <PackageReference Include="Nethereum.JsonRpc.Client" Version="2.5.1" />
+    <PackageReference Include="Nethereum.Signer" Version="2.5.1" />
+    <PackageReference Include="Nethereum.StandardTokenEIP20" Version="2.5.1" />
+    <PackageReference Include="Nethereum.Web3" Version="2.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="PCSC.Iso7816" Version="4.0.1" />
+  </ItemGroup>
+</Project>
