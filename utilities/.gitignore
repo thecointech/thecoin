@@ -1,0 +1,15 @@
+js/node_modules/
+TheUtils/obj/
+TheUtils/bin/
+TheBankAPI/TheBankAPI/bin/
+TheBankAPI/TheBankAPI/obj/
+ts/node_modules/
+ts/dist/
+ts/lib/
+ts/.nyc_output/
+ts/coverage/
+cs/Conversion.cs/bin/
+TheUtils/.vs/
+ts/yarn-error.log
+ts.DotSettings.user
+ts/.vs/
