@@ -1,0 +1,11 @@
+.blurbIcon {
+  color: #415db0;
+  margin: 10px;
+}
+
+.blurbText {
+  color: #444;
+  font-size: 150%;
+  line-height: 150%;
+  padding: 0.5em;
+}

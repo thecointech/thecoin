@@ -1,0 +1,33 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+/*-------------------
+       Fonts
+--------------------*/
+
+@fontName          : 'Muli';
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor        : #415DB0;
+@secondaryColor      : #3193A1;
+
+@complementaryColor	 : #FFC64A
+
+@lightPrimaryColor   : #617AC5;
+@lightSecondaryColor : #51ADBA;
+
+@lightComplementaryColor: #FFDE98
+
+/*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : #F0F0F0;
+
+@lineHeight          : 1.6em;
+@textColor           : rgba(0, 0, 0, 0.87);
+

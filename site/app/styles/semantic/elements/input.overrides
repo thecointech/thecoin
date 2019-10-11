@@ -1,0 +1,10 @@
+/*******************************
+         Site Overrides
+*******************************/
+.ui.action.input:not([class*="left action"]) > input{
+    border-right-color:#415db0 !important;
+   
+}
+.ui.input{
+ font-size: 1.3rem !important;
+}

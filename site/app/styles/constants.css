@@ -1,0 +1,5 @@
+@value TransitionDuration: 300ms;
+
+@value SidebarWidth: 230px;
+
+/* WARNING: We need to fix our technique for sharing code across projects; */

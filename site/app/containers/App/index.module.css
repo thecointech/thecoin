@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400&display=swap');
+body {
+  font-family: 'Lato', sans-serif !important;
+}
+
+.pageMainInner {
+  min-height: 250px;
+  padding: 0em;
+}
+
+.pageMainInner > div {
+  width: inherit;
+  height: inherit;
+}

@@ -1,0 +1,16 @@
+.Link {
+	cursor: pointer
+}
+.ToastBox {
+	position: absolute !important;
+	opacity: 0.0 !important;
+	transition: opacity 0.9s !important;
+	cursor: pointer
+}
+
+.ShowToastBox {
+	position: absolute !important;
+	opacity: 0.9 !important;
+	transition: opacity .3s !important;
+	cursor: pointer
+}
