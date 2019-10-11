@@ -11,7 +11,7 @@ export async function newsletterConfirm(details: BrokerCAD.SubscriptionDetails) 
     const success = await Confirm(details);
     return { success } 
   } catch (e) {
-    console.error("Signup: " + JSON.stringify(e));
+    console.error("Confirm: " + JSON.stringify(e));
   }
   return {success: false};
 }
@@ -23,9 +23,9 @@ export async function newsletterConfirm(details: BrokerCAD.SubscriptionDetails) 
  * email SubscriptionDetails  
  * returns BoolResponse
  **/
-export async function newsletterSignup(email: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.BoolResponse> {
+export async function newsletterSignup(details: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.BoolResponse> {
   try {
-    const success = await Signup(email);
+    const success = await Signup(details);
     return { success } 
   } catch (e) {
     console.error("Signup: " + JSON.stringify(e));
@@ -45,7 +45,7 @@ export async function newsletterUnsubscribe(email: string) : Promise<BrokerCAD.B
     const success = await Unsubscribe(email);
     return { success } 
   } catch (e) {
-    console.error("Signup: " + JSON.stringify(e));
+    console.error("Unsubscribe: " + JSON.stringify(e));
   }
   return {success: false};
 }

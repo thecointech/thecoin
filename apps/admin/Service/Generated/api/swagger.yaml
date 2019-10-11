@@ -13,9 +13,6 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "broker-cad.appspot.com"
 tags:
-- name: "Purchase"
-  description: "The Coin exchange service.  This API allows clients to request purchase\
-    \ THESE"
 - name: "Sell"
   description: "The Coin exchange service.  This API allows clients to exchange THESE\
     \ for CAD"
@@ -89,147 +86,6 @@ paths:
         405:
           description: "Server Error"
       x-swagger-router-controller: "Referrers"
-  /exchange/buy/initiate:
-    post:
-      tags:
-      - "Purchase"
-      summary: "Request to buy Coin"
-      description: "Called by the client to exchange CAD for coin"
-      operationId: "requestCoinPurchase"
-      parameters:
-      - in: "body"
-        name: "request"
-        description: "Signed buy order request"
-        required: true
-        schema:
-          $ref: "#/definitions/SignedPurchaseRequest"
-      responses:
-        200:
-          description: "The response confirms to the user the order was accepted"
-          schema:
-            $ref: "#/definitions/PurchaseResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Purchase"
-  /exchange/buy/{user}/{id}/confirm:
-    post:
-      tags:
-      - "Purchase"
-      summary: "Confirm order opened"
-      description: "Called by the Broker once e-transfer initiated"
-      operationId: "confirmCoinPurchase"
-      parameters:
-      - name: "user"
-        in: "path"
-        description: "User address"
-        required: true
-        type: "string"
-      - name: "id"
-        in: "path"
-        description: "Id of purchase order to return"
-        required: true
-        type: "integer"
-      - in: "body"
-        name: "request"
-        description: "Signed buy order confirm"
-        required: true
-        schema:
-          $ref: "#/definitions/SignedPurchaseConfirm"
-      responses:
-        200:
-          description: "The response confirms to the user the order was accepted"
-          schema:
-            $ref: "#/definitions/PurchaseResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Purchase"
-  /exchange/buy/{user}/{id}/complete:
-    post:
-      tags:
-      - "Purchase"
-      summary: "Mark buy order complete"
-      description: "Called by the broker to confirm CAD was deposited and coin disbursed"
-      operationId: "completeCoinPurchase"
-      parameters:
-      - name: "user"
-        in: "path"
-        description: "User address"
-        required: true
-        type: "string"
-      - name: "id"
-        in: "path"
-        description: "Id of purchase order to complete"
-        required: true
-        type: "integer"
-      - in: "body"
-        name: "request"
-        description: "Signed PurchaseComplete"
-        required: true
-        schema:
-          $ref: "#/definitions/SignedMessage"
-      responses:
-        200:
-          description: "The response confirms to the user the purchase is completed"
-          schema:
-            $ref: "#/definitions/PurchaseResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Purchase"
-  /exchange/buy/:
-    get:
-      tags:
-      - "Purchase"
-      summary: "Query buy order id's"
-      description: "Called by the broker to retrieve all buy orders ID's in the passed\
-        \ state."
-      operationId: "queryCoinPurchasesIds"
-      parameters:
-      - name: "state"
-        in: "query"
-        description: "Numerical state identifier.  Returned array will be all of type\
-          \ state"
-        required: true
-        type: "number"
-      responses:
-        200:
-          description: "A list of all currently open purchases"
-          schema:
-            $ref: "#/definitions/PurchaseIds"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Purchase"
-  /exchange/buy/{user}/{id}:
-    get:
-      tags:
-      - "Purchase"
-      summary: "Query open buy orders"
-      description: "Called by the broker to retrieve all open buy orders."
-      operationId: "queryCoinPurchase"
-      parameters:
-      - name: "user"
-        in: "path"
-        description: "User address"
-        required: true
-        type: "string"
-      - name: "id"
-        in: "path"
-        description: "Id of purchase order to return"
-        required: true
-        type: "integer"
-      - name: "state"
-        in: "query"
-        description: "Numerical state identifier.  If not present, all states will\
-          \ be returned"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "A list of all currently open purchases"
-          schema:
-            $ref: "#/definitions/PurchaseState"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Purchase"
   /exchange/sell/initiate:
     post:
       tags:
@@ -238,38 +94,6 @@ paths:
       description: "Called by the client to exchange coin for CAD"
       operationId: "requestCoinSale"
       parameters:
-      - in: "body"
-        name: "request"
-        description: "Signed sell order request"
-        required: true
-        schema:
-          $ref: "#/definitions/SignedMessage"
-      responses:
-        200:
-          description: "The response confirms to the user the order was accepted"
-          schema:
-            $ref: "#/definitions/SellResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Sell"
-  /exchange/sell/{user}/{id}/complete:
-    post:
-      tags:
-      - "Sell"
-      summary: "Mark coin sale complete"
-      description: "Called by the client to exchange coin for CAD"
-      operationId: "completeCoinSale"
-      parameters:
-      - name: "user"
-        in: "path"
-        description: "User address"
-        required: true
-        type: "string"
-      - name: "id"
-        in: "path"
-        description: "Id of purchase order to return"
-        required: true
-        type: "integer"
       - in: "body"
         name: "request"
         description: "Signed sell order request"
@@ -466,7 +290,7 @@ paths:
       operationId: "newsletterSignup"
       parameters:
       - in: "body"
-        name: "email"
+        name: "details"
         required: true
         schema:
           $ref: "#/definitions/SubscriptionDetails"
@@ -537,11 +361,6 @@ definitions:
         type: "number"
       signature:
         type: "string"
-    example:
-      signature: "signature"
-      cadAmount: 6.02745618307040320615897144307382404804229736328125
-      email: "email"
-      timestamp: 0
   SignedPurchaseConfirm:
     required:
     - "signature"
@@ -551,9 +370,6 @@ definitions:
         type: "integer"
       signature:
         type: "string"
-    example:
-      signature: "signature"
-      timestamp: 0
   PurchaseComplete:
     required:
     - "cadAmount"
@@ -575,21 +391,12 @@ definitions:
         type: "number"
       txHash:
         type: "string"
-    example:
-      cadRate: 5.63737665663332876420099637471139430999755859375
-      coinAmount: 1
-      coinRate: 5.962133916683182377482808078639209270477294921875
-      cadAmount: 6.02745618307040320615897144307382404804229736328125
-      txHash: "txHash"
-      timestamp: 0
   PurchaseResponse:
     required:
     - "orderId"
     properties:
       orderId:
         type: "string"
-    example:
-      orderId: "orderId"
   PurchaseIds:
     type: "array"
     items:
@@ -602,22 +409,6 @@ definitions:
         $ref: "#/definitions/SignedPurchaseConfirm"
       complete:
         $ref: "#/definitions/PurchaseComplete"
-    example:
-      confirm:
-        signature: "signature"
-        timestamp: 0
-      request:
-        signature: "signature"
-        cadAmount: 6.02745618307040320615897144307382404804229736328125
-        email: "email"
-        timestamp: 0
-      complete:
-        cadRate: 5.63737665663332876420099637471139430999755859375
-        coinAmount: 1
-        coinRate: 5.962133916683182377482808078639209270477294921875
-        cadAmount: 6.02745618307040320615897144307382404804229736328125
-        txHash: "txHash"
-        timestamp: 0
   SellRequest:
     required:
     - "email"

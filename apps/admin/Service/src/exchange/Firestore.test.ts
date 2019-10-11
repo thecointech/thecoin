@@ -1,8 +1,9 @@
-import * as firestore from './Firestore'
 import { GetFirestore } from '@the-coin/utilities/lib/Firestore';
+import * as firestore from './Firestore'
 
-process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
-firestore.init();
+beforeAll(async () => {
+  firestore.init();
+});
 
 test("Status is valid", async () => {
   const db = GetFirestore();

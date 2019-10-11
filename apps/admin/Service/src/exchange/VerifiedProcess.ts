@@ -4,7 +4,7 @@ import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
 import { ProcessRecord } from "@the-coin/utilities/lib/Firestore";
 import { DocumentReference } from "@the-coin/utilities/lib/FirebaseFirestore";
-import { firestore } from "firebase-admin";
+import { Timestamp } from "@google-cloud/firestore";
 
 interface CertifiedAction {
 	transfer: BrokerCAD.CertifiedTransferRequest
@@ -24,7 +24,7 @@ async function StoreActionRequest(actionData: CertifiedAction, actionType: UserA
     const actionDoc = GetActionDoc(user, actionType, hash);
     const data: ConfirmedRecord = {
         ...actionData,
-        recievedTimestamp: firestore.Timestamp.now(), 
+        recievedTimestamp: Timestamp.now(), 
         hash: hash,
         confirmed: false,
         fiatDisbursed: 0

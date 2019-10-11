@@ -15,8 +15,8 @@ module.exports.newsletterConfirm = function newsletterConfirm (req, res, next) {
 };
 
 module.exports.newsletterSignup = function newsletterSignup (req, res, next) {
-  var email = req.swagger.params['email'].value;
-  Newsletter.newsletterSignup(email)
+  var details = req.swagger.params['details'].value;
+  Newsletter.newsletterSignup(details)
     .then(function (response) {
       utils.writeJson(res, response);
     })

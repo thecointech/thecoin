@@ -1,6 +1,6 @@
 import { BrokerCAD } from "@the-coin/types";
 import { CreateReferree, GetReferrerData } from '@the-coin/utilities/lib/Referrals'
-import { firestore } from "firebase-admin";
+import { Timestamp } from "@google-cloud/firestore";
 
 /**
  * Register the referral of new account
@@ -11,7 +11,7 @@ import { firestore } from "firebase-admin";
  **/
 export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Promise<BrokerCAD.BoolResponse> {
   try {
-    var now = firestore.Timestamp.now();
+    var now = Timestamp.now();
     await CreateReferree(referral, now);
     return {
       success: true

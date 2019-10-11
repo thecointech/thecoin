@@ -25,10 +25,10 @@ exports.newsletterConfirm = function(details) {
 /**
  * Register an email address for our newsletter.
  *
- * email SubscriptionDetails 
+ * details SubscriptionDetails 
  * returns BoolResponse
  **/
-exports.newsletterSignup = function(email) {
+exports.newsletterSignup = function(details) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

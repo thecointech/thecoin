@@ -1,10 +1,10 @@
 import { GetFirestore } from "@the-coin/utilities/lib/Firestore";
 import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
-import { firestore } from "firebase-admin";
 import { BrokerCAD } from "@the-coin/types";
+import { Timestamp } from "@google-cloud/firestore";
 
 interface EmailSubscription extends BrokerCAD.SubscriptionDetails {
-  registerDate: firestore.Timestamp,
+  registerDate: Timestamp,
 }
 
 function SubDoc(email: string)
@@ -24,7 +24,7 @@ export async function Signup(details: BrokerCAD.SubscriptionDetails)
 
   const register: EmailSubscription = {
     ...details,
-    registerDate: firestore.Timestamp.now()
+    registerDate: Timestamp.now()
   };
 
   const userDoc = SubDoc(email);
