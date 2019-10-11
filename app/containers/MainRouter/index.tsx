@@ -7,6 +7,7 @@ import { NotFoundPage } from '@the-coin/components/containers/NotFoundPage';
 import { Accounts } from 'containers/Accounts';
 import { HowItWorks } from 'containers/HowItWorks';
 import { UnderConstruction } from 'containers/UnderConstruction';
+import { Confirm } from 'containers/Subscribe/Confirm';
 import { GAuth } from 'containers/Accounts/Settings/gconnect/gauth';
 import { Learn } from 'containers/Learn';
 
@@ -15,6 +16,7 @@ export default (props: { location: Location }) => (
     <GAuth /> : (
     <Switch location={props.location}>
       <Route exact path="/" component={HomePage} />
+      <Route exact path="/newsletter/confirm" component={Confirm} />
       <Route path="/accounts" component={Accounts} />
       <Route path="/learn" component={Learn} />
       <Route path="/howItWorks" component={HowItWorks} />

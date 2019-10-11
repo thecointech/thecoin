@@ -16,8 +16,8 @@ const Subscribe = () => {
       const result = await api.newsletterSignup({
         email,
         confirmed: false,
-      });
-      if (!result) {
+      }) as any;
+      if (!result.success) {
         alert('Signup failed: please contact support@thecoin.io');
       } else {
         alert('Signup success!');

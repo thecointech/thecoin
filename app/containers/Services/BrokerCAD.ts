@@ -5,7 +5,6 @@ import {
   TransferApi,
   SellApi,
   BuyApi,
-  PurchaseApi,
   SecureApi,
   NewsletterApi,
 } from '@the-coin/broker-cad/dist/api';
@@ -23,6 +22,5 @@ export const GetReferrersApi = () => new ReferrersApi(undefined, BrokerCADAddres
 export const GetTransferApi = () => new TransferApi(undefined, BrokerCADAddress);
 export const GetBuyApi = () => new BuyApi(undefined, BrokerCADAddress);
 export const GetSellApi = () => new SellApi(undefined, BrokerCADAddress);
-export const GetPurchaseApi = () => new PurchaseApi(undefined, BrokerCADAddress);
 export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
 export const GetNewsletterApi = () => new NewsletterApi(undefined, BrokerCADAddress);
