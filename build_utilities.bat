@@ -1,6 +1,6 @@
 @echo off
 setlocal
-cd the-utilities\ts
+cd utilities\ts
 
 echo Building Package
 call npm run build
