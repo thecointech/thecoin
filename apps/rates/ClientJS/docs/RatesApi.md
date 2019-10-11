@@ -1,4 +1,4 @@
-# ThePricing.RatesApi
+# @TheCoinPricing.RatesApi
 
 All URIs are relative to *https://thecoincore-212314.appspot.com*
 
@@ -17,9 +17,9 @@ Query exchange rate for THE into the given currency
 
 ### Example
 ```javascript
-import ThePricing from 'the-pricing';
+import @TheCoinPricing from '@the-coin/pricing';
 
-let apiInstance = new ThePricing.RatesApi();
+let apiInstance = new @TheCoinPricing.RatesApi();
 let currencyCode = 56; // Number | The integer code for the countries currency
 let timestamp = 789; // Number | The timestamp we are requesting valid values for
 apiInstance.getConversion(currencyCode, timestamp).then((data) => {

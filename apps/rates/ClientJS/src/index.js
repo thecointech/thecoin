@@ -23,9 +23,9 @@ import RatesApi from './api/RatesApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var ThePricing = require('index'); // See note below*.
-* var xxxSvc = new ThePricing.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new ThePricing.Yyy(); // Construct a model instance.
+* var @TheCoinPricing = require('index'); // See note below*.
+* var xxxSvc = new @TheCoinPricing.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new @TheCoinPricing.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -37,8 +37,8 @@ import RatesApi from './api/RatesApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new ThePricing.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new ThePricing.Yyy(); // Construct a model instance.
+* var xxxSvc = new @TheCoinPricing.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new @TheCoinPricing.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
