@@ -14,7 +14,7 @@ import { GetStored, ReadAllAccounts, AsWallet, StoreWallet, StoreSigner } from '
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
-import { TheSigner } from '@the-coin/components/SignerIdent';
+import { TheSigner } from '../../SignerIdent';
 
 class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
