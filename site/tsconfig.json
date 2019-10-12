@@ -9,6 +9,7 @@
     "paths": {
       "@the-coin/components/*": ["../../shared-components/src/*"]
     },
+    "outDir": "./build/",
     "jsx": "react", // process JSX
     "lib": ["dom", "es5", "es6", "es7", "es2017"],
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
