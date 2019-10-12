@@ -10,9 +10,9 @@ import { RouteComponentProps } from 'react-router';
 function getInitialState(qs: string) : BrokerCAD.SubscriptionDetails
 {
   const query = queryString.parse(qs);
-  const email = query.email as string;
+  const id = query.id as string;
   return {
-    email,
+    id,
     confirmed: true
   };
 }
@@ -30,7 +30,8 @@ export const Confirm = (props: RouteComponentProps) => {
   const updateSubscription = React.useCallback(async () => {
     const api = GetNewsletterApi();
     const result = await api.newsletterConfirm(details);
-    console.log("subscribed: " + JSON.stringify(result));
+    setDetails(result);
+    console.log("subscribed: " + result.confirmed);
     setUpdated(!!result);
   }, [details]);
 

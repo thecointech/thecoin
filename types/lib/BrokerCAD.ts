@@ -1,7 +1,8 @@
 export namespace BrokerCAD {
   export interface SubscriptionDetails {
-    email: string;
-    confirmed: boolean;
+    id?: string;
+    email?: string;
+    confirmed?: boolean;
     firstName?: string;
     lastName?: string;
     country?: string;

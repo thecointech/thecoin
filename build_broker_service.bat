@@ -30,7 +30,10 @@ IF %ERRORLEVEL% NEQ 0 (
 
 call npm publish
 
-cd ..\..\the-website-ts
+endlocal
+setlocal
+
+cd site
 call npm install @the-coin/broker-cad
 
 echo Complete
