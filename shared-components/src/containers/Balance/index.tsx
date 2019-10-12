@@ -24,18 +24,13 @@ interface MyProps {
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
 class BalanceClass extends React.PureComponent<Props, {}, null> {
-  constructor(props: Props) {
-    super(props);
-    this.doUpdateBalance = this.doUpdateBalance.bind(this);
-  }
 
-  doUpdateBalance(e: React.MouseEvent<HTMLElement>) {
+
+  doUpdateBalance = (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     this.props.dispatch.updateBalance();
     console.log("UPDATE BALANCE CLICK");
   }
-
-  componentDidMount() {}
 
   render() {
     const { account, dispatch, rates } = this.props;
