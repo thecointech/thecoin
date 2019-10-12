@@ -316,9 +316,30 @@ paths:
           $ref: "#/definitions/SubscriptionDetails"
       responses:
         200:
-          description: "Email successfully confirmed"
+          description: "If found, returns new details merged with existing"
           schema:
-            $ref: "#/definitions/BoolResponse"
+            $ref: "#/definitions/SubscriptionDetails"
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
+      x-swagger-router-controller: "Newsletter"
+  /newsletter/details:
+    get:
+      tags:
+      - "Newsletter"
+      summary: "Get subscription details."
+      operationId: "newsletterDetails"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "If found, returns subscription details"
+          schema:
+            $ref: "#/definitions/SubscriptionDetails"
         400:
           description: "Not Found"
         500:
@@ -331,7 +352,7 @@ paths:
       summary: "Unsubscribe an email address from our newsletter."
       operationId: "newsletterUnsubscribe"
       parameters:
-      - name: "email"
+      - name: "id"
         in: "query"
         required: true
         type: "string"
@@ -705,10 +726,9 @@ definitions:
           id: "id"
           type: "type"
   SubscriptionDetails:
-    required:
-    - "confirmed"
-    - "email"
     properties:
+      id:
+        type: "string"
       email:
         type: "string"
       confirmed:
@@ -726,5 +746,6 @@ definitions:
       lastName: "lastName"
       country: "country"
       city: "city"
+      id: "id"
       confirmed: true
       email: "email"

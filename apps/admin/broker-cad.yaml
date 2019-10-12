@@ -387,10 +387,9 @@ definitions:
 ################################################################################
    
   SubscriptionDetails:
-    required:
-      - email
-      - confirmed
     properties:
+      id:
+        type: string
       email: 
         type: string
       confirmed:
@@ -703,9 +702,30 @@ paths:
         500:
           description: "Server Error"
         200:
-          description: Email successfully confirmed
+          description: If found, returns new details merged with existing
           schema:
-            $ref: "#/definitions/BoolResponse"
+            $ref: "#/definitions/SubscriptionDetails"
+
+  /newsletter/details:
+    get:
+      tags:
+        - Newsletter
+      summary: "Get subscription details."
+      operationId: "newsletterDetails"
+      parameters:
+        - in: query
+          name: id
+          required: true
+          type: string
+      responses:
+        400:
+          description: "Not Found"
+        500:
+          description: "Server Error"
+        200:
+          description: If found, returns subscription details
+          schema:
+            $ref: "#/definitions/SubscriptionDetails"
 
   /newsletter/unsubscribe:
     get:
@@ -715,7 +735,7 @@ paths:
       operationId: "newsletterUnsubscribe"
       parameters:
         - in: query
-          name: email
+          name: id
           required: true
           type: string
       responses:

@@ -681,13 +681,19 @@ export interface SubscriptionDetails {
      * @type {string}
      * @memberof SubscriptionDetails
      */
-    email: string;
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubscriptionDetails
+     */
+    email?: string;
     /**
      * 
      * @type {boolean}
      * @memberof SubscriptionDetails
      */
-    confirmed: boolean;
+    confirmed?: boolean;
     /**
      * 
      * @type {string}
@@ -994,6 +1000,42 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @summary Get subscription details.
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newsletterDetails(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling newsletterDetails.');
+            }
+            const localVarPath = `/newsletter/details`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Register an email address for our newsletter.
          * @param {SubscriptionDetails} subscriptionDetails 
          * @param {*} [options] Override http request option.
@@ -1031,14 +1073,14 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
         /**
          * 
          * @summary Unsubscribe an email address from our newsletter.
-         * @param {string} email 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterUnsubscribe(email: string, options: any = {}): FetchArgs {
-            // verify required parameter 'email' is not null or undefined
-            if (email === null || email === undefined) {
-                throw new RequiredError('email','Required parameter email was null or undefined when calling newsletterUnsubscribe.');
+        newsletterUnsubscribe(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling newsletterUnsubscribe.');
             }
             const localVarPath = `/newsletter/unsubscribe`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1050,8 +1092,8 @@ export const NewsletterApiFetchParamCreator = function (configuration?: Configur
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (email !== undefined) {
-                localVarQueryParameter['email'] = email;
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -1080,8 +1122,27 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterConfirm(subscriptionDetails: SubscriptionDetails, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+        newsletterConfirm(subscriptionDetails: SubscriptionDetails, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SubscriptionDetails> {
             const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterConfirm(subscriptionDetails, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary Get subscription details.
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newsletterDetails(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SubscriptionDetails> {
+            const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterDetails(id, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1114,12 +1175,12 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Unsubscribe an email address from our newsletter.
-         * @param {string} email 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterUnsubscribe(email: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
-            const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterUnsubscribe(email, options);
+        newsletterUnsubscribe(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = NewsletterApiFetchParamCreator(configuration).newsletterUnsubscribe(id, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1151,6 +1212,16 @@ export const NewsletterApiFactory = function (configuration?: Configuration, fet
         },
         /**
          * 
+         * @summary Get subscription details.
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newsletterDetails(id: string, options?: any) {
+            return NewsletterApiFp(configuration).newsletterDetails(id, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @summary Register an email address for our newsletter.
          * @param {SubscriptionDetails} subscriptionDetails 
          * @param {*} [options] Override http request option.
@@ -1162,12 +1233,12 @@ export const NewsletterApiFactory = function (configuration?: Configuration, fet
         /**
          * 
          * @summary Unsubscribe an email address from our newsletter.
-         * @param {string} email 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsletterUnsubscribe(email: string, options?: any) {
-            return NewsletterApiFp(configuration).newsletterUnsubscribe(email, options)(fetch, basePath);
+        newsletterUnsubscribe(id: string, options?: any) {
+            return NewsletterApiFp(configuration).newsletterUnsubscribe(id, options)(fetch, basePath);
         },
     };
 };
@@ -1193,6 +1264,18 @@ export class NewsletterApi extends BaseAPI {
 
     /**
      * 
+     * @summary Get subscription details.
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NewsletterApi
+     */
+    public newsletterDetails(id: string, options?: any) {
+        return NewsletterApiFp(this.configuration).newsletterDetails(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @summary Register an email address for our newsletter.
      * @param {SubscriptionDetails} subscriptionDetails 
      * @param {*} [options] Override http request option.
@@ -1206,13 +1289,13 @@ export class NewsletterApi extends BaseAPI {
     /**
      * 
      * @summary Unsubscribe an email address from our newsletter.
-     * @param {string} email 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public newsletterUnsubscribe(email: string, options?: any) {
-        return NewsletterApiFp(this.configuration).newsletterUnsubscribe(email, options)(this.fetch, this.basePath);
+    public newsletterUnsubscribe(id: string, options?: any) {
+        return NewsletterApiFp(this.configuration).newsletterUnsubscribe(id, options)(this.fetch, this.basePath);
     }
 
 }

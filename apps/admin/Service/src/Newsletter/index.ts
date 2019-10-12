@@ -7,19 +7,32 @@ interface EmailSubscription extends BrokerCAD.SubscriptionDetails {
   registerDate: Timestamp,
 }
 
-function SubDoc(email: string)
+const GetCollection = () => 
+  GetFirestore().collection("newsletter");
+
+const GetDoc = (id: string) =>
+  GetCollection().doc(id);
+
+export async function SubDoc(email: string)
 {
-  const fs = GetFirestore();
-  return fs.collection("newsletter").doc(email.toLowerCase());
+  const normalized = email.toLowerCase();
+  const collection = GetCollection();
+  const snapshot = await collection
+                          .where('email', '==', normalized)
+                          .limit(1)
+                          .get();
+  return !snapshot.empty ? 
+    collection.doc(snapshot.docs[0].id) : 
+    collection.doc(); // new empty document
 }
 
-export async function Signup(details: BrokerCAD.SubscriptionDetails)
+export async function Signup(details: BrokerCAD.SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
-  if (email.indexOf("@") < 0)
+  if (!email || email.indexOf("@") < 0)
   {
     console.log("Invalid email submitted: " + email)
-    return;
+    return false;
   }
 
   const register: EmailSubscription = {
@@ -27,28 +40,43 @@ export async function Signup(details: BrokerCAD.SubscriptionDetails)
     registerDate: Timestamp.now()
   };
 
-  const userDoc = SubDoc(email);
+  const userDoc = await SubDoc(email);
   await userDoc.set(register, {merge: true});
   
-  return await SendTemplate(
-    "newsletter@thecoin.io", 
-    email, 
-    TemplateId.WelcomeConfirm, 
-    {
-      confirmUrl: "https://thecoin.io/newsletter/confirm?email=" + encodeURI(email)
-    });
+  return sendMail  
+    ? await SendTemplate(
+      "newsletter@thecoin.io", 
+      email, 
+      TemplateId.WelcomeConfirm, 
+      {
+        confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(userDoc.id)
+      })
+    : true;
+  }
+
+export async function Confirm(details: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.SubscriptionDetails|null>
+{
+  if (!details.id)
+    return null;
+
+  const userDoc = GetDoc(details.id);
+  const res = await userDoc.update(details);
+  if (!res.writeTime)
+    return null;
+  
+  const newDetails = await userDoc.get();
+  return newDetails.data() as BrokerCAD.SubscriptionDetails;
 }
 
-export async function Confirm(details: BrokerCAD.SubscriptionDetails)
+export async function Unsubscribe(id: string)
 {
-  const userDoc = SubDoc(details.email);
-  var res = await userDoc.update(details);
-  return res.writeTime.seconds > 0;
-}
-
-export async function Unsubscribe(email: string)
-{
-  const userDoc = SubDoc(email);
-  var res = await userDoc.delete();
+  const userDoc = GetDoc(id);
+  await userDoc.delete();
   return true;
+}
+
+export async function Details(id: string)
+{
+  const userDoc = GetDoc(id);
+  return await userDoc.get();
 }
