@@ -4,7 +4,7 @@ import { calcPeriodReturn, getIdx, calcReturns, parseData, bucketValues, arrayMi
 const readfile = util.promisify(fs.readFile);
 
 async function getData() {
-  const buffer = await readfile('C:/src/TheCoin/the-website-ts/build/sp500_monthly.csv');
+  const buffer = await readfile('./sp500_monthly.csv');
   return parseData(buffer.toString().slice(1));
 }
 

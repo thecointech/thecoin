@@ -3,7 +3,7 @@ import { Color } from 'csstype';
 import { ChangeCB, Props as BaseProps } from '../../components/UxInput/types';
 import { ReactNode } from 'react';
 
-export type ChangeCB = ChangeCB;
+export { ChangeCB }
 
 type MyProps = {
   unMaskTime?: number;

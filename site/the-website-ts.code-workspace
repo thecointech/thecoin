@@ -4,10 +4,10 @@
 			"path": "."
 		},
 		{
-			"path": "C:\\src\\TheCoin\\the-react-components"
+			"path": "../shared-components"
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "./node_modules/typescript/lib"
+		"typescript.tsdk": "node_modules\\typescript\\lib"
 	}
 }

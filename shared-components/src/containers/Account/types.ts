@@ -4,6 +4,7 @@ import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes'
 import { ApplicationBaseState } from '@the-coin/components/types';
 import { TheSigner } from '../../SignerIdent'
+import { PutEffect, CallEffect } from 'redux-saga/effects';
 
 /* --- CALLBACKS ---*/
 type DecryptCallback = (percent: number) => boolean;
@@ -68,7 +69,7 @@ interface IActions extends ImmerReducer<AccountState> {
 
 	// Get the balance of the account in Coin
 	updateBalance(newBalance?: number) : Iterator<any>;
-	updateHistory(from: Date, until: Date) : Iterator<any>;
+	updateHistory(from: Date, until: Date) : Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
 
 	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }

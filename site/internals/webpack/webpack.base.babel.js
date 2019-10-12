@@ -166,7 +166,7 @@ module.exports = options => ({
       '@the-coin/components': path.resolve(
         projectRoot,
         '..',
-        'the-react-components/src',
+        'shared-components/src',
       ),
     },
   },

@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "baseUrl": "./src/",
+    "outDir": "./lib/",
+    "jsx": "react",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "pretty": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2017"],
+
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Don't emit; allow Babel to transform files.
+    //"noEmit": true,
+    // Disallow features that require cross-file information for emit.
+    // This throws up a bunch of errors in the-react-components.
+    // (later) consider fixing those errors and re-enabling it
+    //"isolatedModules": true,
+    // Import non-ES modules as default imports.
+    // NOTE: this causes issues with DateTime
+    //"esModuleInterop": true,
+
+    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
+    //
+    // Allow project references
+    //
+    "declaration": true, 
+    "composite": true,
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
