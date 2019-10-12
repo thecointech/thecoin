@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "jestrunner.jestPath": "${workspaceFolder:site}/../node_modules/.bin/jest"
 	}
 }
