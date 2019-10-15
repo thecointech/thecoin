@@ -14,6 +14,7 @@ import { TransactionHistory } from "../TransactionHistory";
 import { Popup } from "semantic-ui-react";
 import bank from "./bank.svg";
 import styles from "./index.module.css";
+import { calculateProfit } from "./profit";
 
 interface MyProps {
   dispatch: AccountActions.DispatchProps;
@@ -23,34 +24,23 @@ interface MyProps {
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
 class BalanceClass extends React.PureComponent<Props, {}, null> {
-  constructor(props: Props) {
-    super(props);
-    this.doUpdateBalance = this.doUpdateBalance.bind(this);
-  }
 
-  doUpdateBalance(e: React.MouseEvent<HTMLElement>) {
+
+  doUpdateBalance = (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     this.props.dispatch.updateBalance();
     console.log("UPDATE BALANCE CLICK");
   }
 
-  componentDidMount() {}
-
   render() {
     const { account, dispatch, rates } = this.props;
-    const { buy, fxRate, sell } = getFxRate(rates, Date.now());
+    const { buy, fxRate } = getFxRate(rates, Date.now());
     const { balance, history, historyLoading } = account;
     const cadBalance = toHuman(buy * balance * fxRate, true);
 
-    const buyPrice = toHuman(buy * balance * fxRate, false);
-    const sellPrice = toHuman(sell * balance * fxRate, false);
+    const rawProfit = calculateProfit(balance, history, rates);
+    const profit = toHuman(rawProfit, true);
 
-    const rawProfit = sellPrice - buyPrice;
-    const profit = rawProfit.toFixed(2);
-
-    console.log("sell ", sellPrice);
-    console.log("profit ", buyPrice);
-    console.log("RAW PROFIT", rawProfit);
 
     return (
       <React.Fragment>
@@ -61,7 +51,7 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
                 <p className={styles.have}>
                   You have:{" "}
                   <span className={styles.balance}>${cadBalance}</span>{" "}
-                  {rawProfit < 1 ? (
+                  {profit < 1 ? (
                     <Popup
                       trigger={<img className={styles.bankIcon} src={bank} />}
                       content="Current Profit: < .1%"

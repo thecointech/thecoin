@@ -40,7 +40,7 @@ let reducerCache: Dictionary<CacheEntry> = {};
 function CreateNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T)
 {
   class NamedReducer extends immerReducerClass {
-    static customName = name
+    //static customName: string = name;
   };
   // We use Object.Assign to clone the prototype as we 
   // need to change the actions() function below and

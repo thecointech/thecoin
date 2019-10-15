@@ -2,7 +2,7 @@ import { Wallet, Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 
 import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes'
-import { ApplicationBaseState } from '@the-coin/components/types';
+import { ApplicationBaseState } from '../../types';
 import { TheSigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 

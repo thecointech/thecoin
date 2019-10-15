@@ -1,6 +1,6 @@
 import { Dispatch, bindActionCreators } from 'redux';
 import { IActions, DefaultAccount } from './types';
-import { call, select, takeLatest } from 'redux-saga/effects'
+import { call, select, takeLatest, debounce } from 'redux-saga/effects'
 import { createAccountSelector } from './selector';
 import { GetNamedReducer } from '../../utils/immerReducer';
 import { AccountReducer } from './reducer';
@@ -26,7 +26,7 @@ function buildSagas(name: string) {
   function* rootSaga() {
     yield takeLatest(actions.decrypt.type, buildSaga("decrypt"));
     yield takeLatest(actions.updateBalance.type, buildSaga("updateBalance"))
-    yield takeLatest(actions.updateHistory.type, buildSaga("updateHistory"))
+    yield debounce(750, actions.updateHistory.type, buildSaga("updateHistory"))
     yield takeLatest(actions.setSigner.type, buildSaga("setSigner"))
   }
 

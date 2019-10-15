@@ -1,13 +1,57 @@
-import { calcProfit } from "./profit";
+import { calculateProfit, fiatChange, totalCad, currentValue } from "./profit";
+import { toHuman } from "@the-coin/utilities";
+import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
 
 
-test('We can calculate a profit correctly', () => {
+test("Calculate simple profit correctly", () => {
+  const change = fiatChange(SimpleTransactions[0], SimpleRates);
+  const hchange = toHuman(change);
+  expect(hchange).toBe(5);
 
-  const buyPrice = 100;
-  const quantity = 100;
-  const sellPrice = 150;
+  const withdrawal = fiatChange(SimpleTransactions[3], SimpleRates);
+  const hwithdrawal = toHuman(withdrawal);
+  expect(hwithdrawal).toBe(-2.5);
 
-  const profit = calcProfit(quantity, buyPrice, sellPrice);
-  expect(profit).toBe(5000);
+  // What is the total CAD we have put into this account?
+  // 5 + 10 - 5 - 2.5 = 7.5
+  const totalCAD = totalCad(SimpleTransactions, SimpleRates);
+  expect(toHuman(totalCAD)).toBe(7.5);
+
+  const currentCoin = SimpleTransactions[3].balance;
+  const balanceCAD = currentValue(currentCoin, SimpleRates);
+  expect(toHuman(balanceCAD)).toBe(12.5);
+
+  const profitCAD = calculateProfit(currentCoin, SimpleTransactions, SimpleRates)
+  expect(toHuman(profitCAD)).toBe(5); 
+});
+
+test('calculate real profit correctly', () => {
+
+  const {balance} = ExampleTransactions[0];
+
+  // Initial deposit, $1000
+  let tx1 = fiatChange(ExampleTransactions[5], ExampleRates);
+  tx1 = toHuman(tx1, true);
+  expect(tx1).toBe(1000);
+
+  // Next two withdraw $10 each
+  let tx2 = fiatChange(ExampleTransactions[4], ExampleRates);
+  tx2 = toHuman(tx2, true);
+  expect(tx2).toBe(-10);
+  let tx3 = fiatChange(ExampleTransactions[2], ExampleRates);
+  tx3 = toHuman(tx3, true);
+  expect(tx3).toBe(-10);
+
+  // Final transfer from 3rd party of $1818.66
+  let tx4 = fiatChange(ExampleTransactions[0], ExampleRates);
+  tx4 = toHuman(tx4, true);
+  expect(tx4).toBe(1818.66);
+
+  // From the example, total in = $2818.66, total out = $20
+  // balance = 2859.91, profit = 2859.91 - (2818.66 - 20) = 61.25
+  const profit = calculateProfit(balance, ExampleTransactions, ExampleRates);
+  const cadProfit = toHuman(profit, true);
+  expect(cadProfit).toBe(61.25);
 
 });
+
