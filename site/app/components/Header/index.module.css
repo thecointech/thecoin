@@ -1,46 +1,12 @@
-.headerImage {
-  width: 100%;
-  position: relative;
-  margin-bottom: 1px;
-}
-
 .headerLogo {
-  margin: 1.5% 0px 0px 5%;
   width: 15%;
-  position: absolute;
-  z-index: 3;
 }
 
 .headerText {
   margin-left: 40%;
   width: 50%;
-  position: absolute;
-  z-index: 2;
 }
 
 .wrapper {
-  position: relative;
-}
-.wallStreet {
-  position: absolute;
-  top: 22%;
-  left: 43%;
-  z-index: 999;
-  color: white;
-  font-size: 1.2rem;
-  -ms-transform: rotate(-11deg); /* IE 9 */
-  -webkit-transform: rotate(-11deg); /* Safari 3-8 */
-  transform: rotate(-11deg);
 }
 
-.inflation {
-  position: absolute;
-  top: 55%;
-  left: 46%;
-  z-index: 999;
-  color: white;
-  font-size: 1.2rem;
-  -ms-transform: rotate(1deg); /* IE 9 */
-  -webkit-transform: rotate(1deg); /* Safari 3-8 */
-  transform: rotate(1deg);
-}

@@ -1,25 +1,17 @@
 .navContainer {
-  border: none !important;
-  margin-top: -2px;
-  margin-top: -33px !important;
+  border: none;
 }
 .mainMenu {
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
   height: 64px;
   font-size: 16px;
-  box-shadow: none !important;
-  border: none !important;
   justify-content: flex-end;
-  background: #4b65b4 !important;
+  background: #4b65b4;
 }
 .subscribe {
   position: absolute;
   left: 2%;
   top: 18%;
-  z-index: 999;
 }
 
 .ui.menu .item {
-  color: white !important;
 }

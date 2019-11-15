@@ -17,10 +17,7 @@ import { ContentSegment } from 'components/ContentSegment';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
-import laptop from './images/laptop.svg';
-import sprout from './images/sprout.svg';
-import tree from './images/tree.svg';
-import logoIcon from './images/logoIcon.svg';
+//import tree from './images/tree.svg';
 import Subscribe from '../Subscribe';
 import styles from './index.module.css';
 
@@ -32,11 +29,6 @@ export default class HomePage extends React.PureComponent {
           <Grid.Row columns={3} className={styles.mainWrapper}>
             <Grid.Column>
               <div className={styles.headingWrapper}>
-                <img
-                  className={styles.laptop}
-                  alt="purchasing power of the dollar vs sp500"
-                  src={laptop}
-                />
                 <h3 className={styles.h3left}>
                   <FormattedMessage
                     {...messages.headerTopLeft}
@@ -52,16 +44,7 @@ export default class HomePage extends React.PureComponent {
             </Grid.Column>
             <Grid.Column>
               <div className={styles.sproutWrapper}>
-                <img
-                  className={styles.sprout}
-                  alt="climate change purchasing power"
-                  src={sprout}
-                />
-                <img
-                  className={styles.logoIcon}
-                  alt="purchasing power of  the dollar vs sp500"
-                  src={logoIcon}
-                />
+                
                 <h3 className={styles.centerh3}>
                   <FormattedMessage
                     {...messages.headerTopCenter}
@@ -74,11 +57,6 @@ export default class HomePage extends React.PureComponent {
             </Grid.Column>
 
             <Grid.Column>
-              <img
-                className={styles.tree}
-                alt="help fight climate change"
-                src={tree}
-              />
               <h3 className={styles.h3right}>
                 <FormattedMessage
                   {...messages.headerTopRight}
