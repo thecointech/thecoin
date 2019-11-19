@@ -1,15 +1,15 @@
 .search input {
-  border: 7px solid #415db0 !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+  border: 7px solid #415db0;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .search {
-  margin-bottom: 62px !important;
+  margin-bottom: 62px;
 }
 
 button {
-  margin-left: -10px !important;
+  margin-left: -10px;
   font-weight: 300;
-  font-size: 1.4rem !important;
-  border: 10px solid #415db0 !important;
+  font-size: 1.4rem;
+  border: 10px solid #415db0;
 }
