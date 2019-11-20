@@ -4,7 +4,8 @@ import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
-import styles from './index.module.css';
+
+import styles from '../../../styles/base.css';
 import { RouteComponentProps } from 'react-router';
 
 function getInitialState(qs: string) : BrokerCAD.SubscriptionDetails

@@ -19,7 +19,7 @@ import messages from './messages';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
 //import tree from './images/tree.svg';
 import Subscribe from '../Subscribe';
-import styles from './index.module.css';
+import styles from '../../styles/base.css';
 
 export default class HomePage extends React.PureComponent {
   public render() {

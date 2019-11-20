@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
 
-import styles from './index.module.css';
+import styles from '../../styles/base.css';
 
 class Navigation extends React.Component {
   render() {
