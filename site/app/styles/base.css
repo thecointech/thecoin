@@ -3,14 +3,15 @@
 *{
 	margin: 0;
 	padding: 0;
-	border: 0;
+  border: none;
+  box-shadow: none;
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-    background: transparent;
-    color: inherit;
-    padding: 0;
-    font-family: 'Lato', sans-serif;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
 }
 
 button.ui.button {
@@ -19,6 +20,10 @@ button.ui.button {
     padding: 1rem 3rem;
     margin-top: 32px;
     color: white !important;
+}
+
+.ui.segments .segment, .ui.container .ui.segment, .ui.container{
+  border-color: white;
 }
 
 .mainWrapper {
@@ -90,10 +95,51 @@ button.ui.button {
 .sproutWrapper {
   text-align: center;
 }
-.logoIcon {
-  width: 60%;
+/* --- Header Logo --- */
+
+.headerLogo {
+  height: 50px;
+  padding: 15px;
 }
 
+.wrapperLogo{
+  display: inline;
+  width: 20%;
+  float: left;
+  width: 130px;
+}
+
+.logoIcon {
+  width: 100%;
+}
+
+
+/* ---  Main Navigation --- */
+.navContainer {
+}
+.mainMenu {
+  font-size: 16px;
+  width: auto;
+  display: inline-block;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.subscribe {
+  position: absolute;
+  left: 2%;
+}
+
+.ui.container{
+  border: none !important;
+}
+
+.ui.menu .item:hover {
+  background-color: red;
+}
+
+
+
+/* --- Subscribe --- */
 .subscribeText {
   font-size: 1.7rem;
   font-weight: 300;
@@ -106,9 +152,6 @@ button.ui.button {
   max-width: 810px;
   margin: auto;
 }
-
-
-/* --- Subscribe --- */
 .search input {
   border: 7px solid #415db0;
   border-top-right-radius: 0px;
@@ -216,23 +259,6 @@ button {
   font-style: italic;
 }
 
-/* ---  Main Navigation --- */
-.navContainer {
-}
-.mainMenu {
-  height: 64px;
-  font-size: 16px;
-  justify-content: flex-end;
-  background: #4b65b4;
-}
-.subscribe {
-  position: absolute;
-  left: 2%;
-  top: 18%;
-}
-
-.ui.menu .item {
-}
 
 
 /* --- Account Bill Payement --- */

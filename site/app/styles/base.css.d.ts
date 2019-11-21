@@ -6,6 +6,7 @@ interface CssExports {
   'button': string;
   'center': string;
   'centerh3': string;
+  'container': string;
   'createNewWallet': string;
   'createNewWalletContainer': string;
   'getinfo': string;
@@ -16,6 +17,7 @@ interface CssExports {
   'h3left': string;
   'h3right': string;
   'header': string;
+  'headerLogo': string;
   'headingWrapper': string;
   'icons': string;
   'imageUpload': string;
@@ -31,6 +33,8 @@ interface CssExports {
   'menu': string;
   'navContainer': string;
   'search': string;
+  'segment': string;
+  'segments': string;
   'sproutWrapper': string;
   'step1': string;
   'step1Sub': string;
@@ -42,6 +46,7 @@ interface CssExports {
   'topMargin': string;
   'ui': string;
   'wrapper': string;
+  'wrapperLogo': string;
   'yearStart': string;
 }
 declare var cssExports: CssExports;

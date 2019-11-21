@@ -4,11 +4,11 @@
 
 @itemTextColor: @primaryColor;
 
-@hoverItemBackground: rgba(71, 166, 151, 0.36);
-@hoverItemTextColor: #ffffff;
+@hoverItemBackground: transparent;
+@hoverItemTextColor: inherit;
 
-@activeItemBackground: @primaryColor;
-@activeItemTextColor: @white;
+@activeItemBackground: transparent;
+@activeItemTextColor: inherit;
 @activeItemFontWeight: inherit;
 
 /* Active Hovered Item */

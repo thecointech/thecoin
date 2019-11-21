@@ -9,23 +9,16 @@ class Navigation extends React.Component {
     return (
       <div className={styles.navContainer}>
         <div className={styles.subscribe}></div>
-        <Container
-          style={{
-            backgroundColor: '#ffffff',
-            width: '100%',
-            maxWidth: '1600px',
-          }}
-        >
-          <Menu className={styles.mainMenu}>
-            <HeaderLink to="/" exact>
-              HOME
-            </HeaderLink>
-            <HeaderLink to="/accounts">ACCOUNTS</HeaderLink>
-            <HeaderLink to="/howItWorks">HOW IT WORKS</HeaderLink>
+        <Container>
+          <Menu pointing secondary className={styles.mainMenu}>
+            <HeaderLink to="/" exact>Home</HeaderLink>
+            <HeaderLink to="/howItWorks">How It Works</HeaderLink>
             <HeaderLink to="/FAQ">FAQ</HeaderLink>
+            <HeaderLink to="/accounts">Accounts</HeaderLink>
           </Menu>
-        </Container>
+        </Container>   
       </div>
+      
     );
   }
 }

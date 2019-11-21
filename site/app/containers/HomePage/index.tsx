@@ -17,7 +17,7 @@ import { ContentSegment } from 'components/ContentSegment';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { Teaser } from 'containers/ReturnProfile/Teaser';
-//import tree from './images/tree.svg';
+import phone from './images/GroupeMobileApp.svg';
 import Subscribe from '../Subscribe';
 import styles from '../../styles/base.css';
 
@@ -26,7 +26,7 @@ export default class HomePage extends React.PureComponent {
     return (
       <React.Fragment>
         <Grid divided="vertically">
-          <Grid.Row columns={3} className={styles.mainWrapper}>
+          <Grid.Row columns={2} className={styles.mainWrapper}>
             <Grid.Column>
               <div className={styles.headingWrapper}>
                 <h3 className={styles.h3left}>
@@ -42,32 +42,13 @@ export default class HomePage extends React.PureComponent {
                 </Link>
               </div>
             </Grid.Column>
-            <Grid.Column>
-              <div className={styles.sproutWrapper}>
-                
-                <h3 className={styles.centerh3}>
-                  <FormattedMessage
-                    {...messages.headerTopCenter}
-                    values={{
-                      bold: <b>{messages.headerTopCenter.description}</b>,
-                    }}
-                  />
-                </h3>
-              </div>
-            </Grid.Column>
 
             <Grid.Column>
-              <h3 className={styles.h3right}>
-                <FormattedMessage
-                  {...messages.headerTopRight}
-                  values={{
-                    bold: <b>{messages.headerTopRight.description}</b>,
-                  }}
+              
+              <img
+                  alt="mobile interac"
+                  src={phone}
                 />
-              </h3>
-              <Link className={styles.links} to="/howItWorks">
-                <FormattedMessage {...messages.learnMore} />
-              </Link>
             </Grid.Column>
           </Grid.Row>
         </Grid>
