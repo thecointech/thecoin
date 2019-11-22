@@ -1,11 +1,11 @@
 .Logo {
-	background-color: rgba(0, 0, 0, 0.85) !important;
-	border: 5px solid rgba(0, 0, 0, 0.85) !important;
+	background-color: rgba(0, 0, 0, 0.85);
+	border: 5px solid rgba(0, 0, 0, 0.85);
 	height: 32.5px;
 	width: 32.5px;
 }
 
 .LogoBlack {
-	height: 32.5px !important;
-	width: 32.5px !important;
+	height: 32.5px;
+	width: 32.5px;
 }

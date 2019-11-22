@@ -1,9 +1,8 @@
 .wrapper {
-  padding: 5rem !important;
 }
 
 .icons {
-  max-width: 70% !important;
+  max-width: 70%;
 }
 
 .h1 {
@@ -11,7 +10,6 @@
   font-size: 3rem;
   color: #002c8e;
   line-height: 3rem;
-  font-family: 'Lato', sans-serif !important;
   margin-top: 20px;
 }
 
@@ -20,13 +18,11 @@
   font-size: 1.6rem;
   color: #002c8e;
   line-height: 3rem;
-  font-family: 'Lato', sans-serif !important;
-  margin-bottom: 1em !important;
+  margin-bottom: 1em;
 }
 
 .step1 {
   font-weight: 300;
-  font-family: 'Lato', sans-serif !important;
   font-size: 2rem;
   color: #002c8e;
 }
@@ -35,7 +31,6 @@
   font-weight: 300;
   font-size: 1.35rem;
   color: #222;
-  font-family: 'Lato', sans-serif !important;
   margin-top: 10px;
   line-height: 2.5rem;
 }
@@ -48,7 +43,6 @@
   margin-bottom: 30px;
 }
 .list {
-  margin-top: 13% !important;
   font-size: 22px;
   color: #4949a2;
   font-size: 1.6rem;
