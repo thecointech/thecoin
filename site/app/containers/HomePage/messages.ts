@@ -33,7 +33,7 @@ export default defineMessages({
   subscribe: {
     id: `${scope}.subscribe`,
     defaultMessage:
-      'Subscribe to learn how you can help fight climate change with {bold}. Subscribe to our mailing list today.',
+      'Subscribe to learn how you can help fight climate change with {bold}.',
     description: 'TheCoin',
   },
   blurbGrow: {

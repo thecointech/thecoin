@@ -8,4 +8,36 @@
   font-weight: 400;
   margin-left: 0px !important;
   padding: 0.47rem 2rem;
+  height: 50px;
+  width: 170px;
+  margin-top: 20px;
+  text-align: center;
+  color: white;
 }
+
+#subscribeButton{
+  color: white;
+}
+
+#createAccount, #knowMore{
+  line-height: 33px;
+  width: 250px;
+}
+
+#createAccount{
+  float:right;
+}
+
+@media only screen and (max-width: 830px) {
+
+  #createAccount, #knowMore{
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 390px) {  
+  #subscribeButton{
+    width: 120px;
+    font-size: 14px !important;
+  }
+}
+

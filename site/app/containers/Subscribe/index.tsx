@@ -27,10 +27,11 @@ const Subscribe = () => {
   return (
     <div className={styles.search}>
       <Input 
+        id='subscribeField'
         onChange={onInputChange}
         action={(
-        <Button onClick={doSubscribe}>
-          <FormattedMessage id="Subscribe.button" defaultMessage="Get Connected!" />
+        <Button onClick={doSubscribe} id='subscribeButton'>
+          <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
         </Button>)}
       placeholder="Your email" />
     </div>

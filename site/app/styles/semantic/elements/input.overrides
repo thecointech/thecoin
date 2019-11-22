@@ -8,3 +8,9 @@
 .ui.input{
  font-size: 1.3rem !important;
 }
+
+@media only screen and (max-width: 390px) {
+    #subscribeField{
+        width: 180px;
+    }
+}
