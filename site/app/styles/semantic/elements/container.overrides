@@ -1,3 +1,33 @@
 /*******************************
          Site Overrides
 *******************************/
+
+#infosZone{
+  font-family: 'Lato', sans-serif;
+  color: #3255A4;
+}
+
+.ui.segments .segment, .ui.container .ui.segment, .ui.container{
+  border-color: white;
+  box-shadow: none;
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 750px) {
+  .mainWrapper .column{
+    width: 100% !important;
+  }
+}
+@media only screen and (max-width: 390px) {
+
+  #phoneZone{
+    display: none;
+  }
+  #infosZone{
+    width: 100% !important;
+  }
+  #homeZone{
+    padding:0;
+    margin: 0;
+  }
+}

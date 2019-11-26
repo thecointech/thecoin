@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400&display=swap');
+
+*{
+	margin: 0;
+	padding: 0;
+  border: none;
+  box-shadow: none;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+button.ui.button {
+    border: 2px solid white;
+    margin-bottom: 40px;
+    padding: 1rem 3rem;
+    margin-top: 32px;
+    color: white;
+}
+.h1 {
+  font-weight: 300;
+  font-size: 2.7rem;
+}
+.centerh3 {
+  font-weight: 300;
+  font-size: 2rem;
+  color: #002c8e;
+  line-height: 3rem;
+  margin-bottom: 1em;
+  margin-top: 70px;
+}
+.centerh3 span {
+  font-weight: 500;
+}
+.h3 {
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+}
+.h3 span {
+  font-weight: 500;
+}
+.h3right {
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  max-width: 540px;
+}
+.h3left {
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  max-width: 540px;
+}
+.gridWrapper {
+  text-align: center;
+}
+.links {
+  font-weight: bold;
+}
+.topMargin {
+  margin-top: 7rem;
+}
+.yearStart {
+  top: 45%;
+  left: -6%;
+  font-size: 1.4rem;
+}
+.sproutWrapper {
+  text-align: center;
+}
+
+/* --- Home --- */
+.mainWrapper .column{
+  margin: 20px;
+  text-align: center;
+  color: #3255A4;
+}
+.headingWrapper {
+  text-align: left;
+  flex-direction: column;
+  margin-left: 40px;
+  margin-top: 40px;
+}
+.mainWrapper {
+  margin-left: 40px;
+  margin-top: 40px;
+}
+.phoneApp img{
+  width: 80%;
+  right: -50px;
+  top: -120px;
+  position: relative;
+  max-width: 200px;
+  max-height: 600px;
+}
+.mainWrapper .column .ui.secondary.button{
+  right: 20px;
+}
+.listHome{
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-bottom: 40px;
+  line-height: 35px;
+  font-size: 15px;
+}
+.h2Home{
+  font-size: 30px;
+  margin-left: 80px;
+  padding-top: 40px;
+  width: 50%;
+}
+#createAccount{
+  float: right;
+}
+.interac{
+  width: 40px;
+  margin-top: -10px;
+}
+.treeLogo{
+  width: 80px;
+  margin-top: -10px;
+}
+
+
+@media only screen and (min-width: 750px) {
+
+  .listHome{
+    font-size: 25px;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .h2Home{
+    font-size: 25px;
+    width: 100%;
+    margin-left: 0px;
+  }
+  .listHome{
+    margin-left: 0;
+  }
+  .headingWrapper {
+    margin-left: 0;
+    margin-top: 0;
+  }
+  .mainWrapper .column{
+    width: 100% !important;
+  }
+  .phoneApp img{
+    right: -20px;
+    top: -10px;
+  }
+}
+@media only screen and (max-width: 390px) {
+
+  .phoneApp img{
+    display: none;
+  }
+}
+
+
+
+/* --- Header Logo --- */
+.headerLogo {
+  height: 50px;
+  padding: 10px;
+  margin-top: 5px;
+  margin-left: 5%;
+}
+.wrapperLogo{
+  display: inline;
+  width: 20%;
+  float: left;
+  width: 180px;
+}
+.logoIcon {
+  width: 100%;
+}
+
+/* ---  Main Navigation --- */
+.navContainer {
+}
+.mainMenu {
+  font-size: 16px;
+  width: auto;
+  display: inline-block;
+  height: 50px;
+  margin-bottom: 10px;
+  width: 339px;
+}
+.ui.container{
+  border: none !important;
+}
+
+
+/* --- Subscribe --- */
+.subscribe {
+  position: absolute;
+  left: 2%;
+}
+.subscribeText {
+  font-size: 1.7rem;
+  font-weight: 300;
+  margin-bottom: 50px;
+  color: #002c8e;
+}
+.subContainer {
+  width: 70%;
+  max-width: 810px;
+  margin: auto;
+}
+
+@media only screen and (max-width: 390px) {
+  .subContainer {
+    width: 90%;
+  }
+}
+
+.search input {
+  border: 7px solid #415db0;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.search {
+  margin-bottom: 62px;
+}
+button {
+  margin-left: -10px;
+  font-weight: 300;
+}
+.FormStyle {
+  
+}
+
+/* --- RetunProfile ---*/
+.header {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: white;
+    text-align: center;
+    margin: 35px 0px;
+  }
+  .label {
+    color: white;
+    font-weight: 300;
+    font-size: 2rem;
+    padding-left: 0px;
+  }
+  .button button {
+    border: 2px solid white;
+    margin-bottom: 40px;
+    padding: 1rem 3rem;
+    margin-top: 32px;
+  }
+  .getinfo {
+    text-align: center;
+  }
+  .teaser {
+    width: 62%;
+    margin: auto;
+  }
+
+  /* --- HowItWorks --- */
+  .wrapper {
+  }
+  .icons {
+    max-width: 70%;
+  }
+  .h1 {
+    font-weight: 300;
+    font-size: 3rem;
+    color: #002c8e;
+    line-height: 3rem;
+    margin-top: 20px;
+  }
+  .h2 {
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: #002c8e;
+    line-height: 3rem;
+    margin-bottom: 1em;
+  }
+  .step1 {
+    font-weight: 300;
+    font-size: 2rem;
+    color: #002c8e;
+  }
+  .step1Sub {
+    font-weight: 300;
+    font-size: 1.35rem;
+    color: #222;
+    margin-top: 10px;
+    line-height: 2.5rem;
+  }
+  .step1Wrap {
+    padding-top: 11px;
+  }
+  .center {
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  .list {
+    font-size: 22px;
+    color: #4949a2;
+    font-size: 1.6rem;
+    font-weight: 300;
+    padding-left: 61px;
+    font-style: italic;
+  }
+
+/* --- Account Bill Payement --- */
+.wrapper {
+}
+
+
+/* --- Account New Connect --- */
+.createNewWalletContainer {
+}
+
+.createNewWallet {
+  width: 45%;
+  float: left;
+  border-right: solid;
+  border-color: #3193a1;
+  border-radius: 1px;
+}
+
+.createNewWallet > span {
+  font-size: 32px;
+  text-align: left;
+}
+
+.createNewWallet > input {
+  width: 70%;
+  height: 25px;
+  margin-bottom: 2%;
+}
+
+.createNewWallet > button {
+  margin: 5% auto 0 15%;
+  height: 5.5%;
+  width: 70%;
+  text-align: center;
+  font-size: 18px;
+  color: white;
+  background-color: #415db0;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.createNewWallet p:last-child {
+  text-align: center;
+  margin: 10px auto 0 auto;
+}
+
+.importNewWallet {
+  width: 45%;
+  text-align: center;
+  float: right;
+}
+
+.importNewWallet > div:first-child {
+  font-size: 32px;
+  margin: 5% auto 0 auto;
+}
+
+.importNewWallet > div:last-child {
+  margin: 5% auto 0 auto;
+  width: 70%;
+  height: 20%;
+  border: solid;
+  border-color: #3193a1;
+  border-radius: 8px;
+}
+
+.imageUpload > input {
+  display: none;
+}
+
+.imageUpload > div {
+  margin: 15% auto;
+}
+
+.imageUpload > div > label {
+  color: #3193a1;
+  font-size: 32px;
+}
+
+.imageUpload > div > span {
+  color: #3193a1;
+  font-size: 16px;
+  text-align: center;
+}
+
+
+/* --- Offline Storage --- */
+.LogoBlack {
+	height: 32.5px;
+	width: 32.5px;
+}
+
+
+/* ---  ---- */
+.ui.menu.link.item {
+}

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { PageProps } from '../PageProps';
 import messages from './messages';
 import Vault from './vault.svg';
-import styles from './index.module.css';
+import styles from '../../../../../../styles/base.css';
 import QRCode from 'qrcode';
 import { Download } from 'containers/Accounts/Settings/download';
 

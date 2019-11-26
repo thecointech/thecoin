@@ -2,15 +2,15 @@
 	cursor: pointer
 }
 .ToastBox {
-	position: absolute !important;
-	opacity: 0.0 !important;
-	transition: opacity 0.9s !important;
-	cursor: pointer
+	position: absolute;
+	opacity: 0.0;
+	transition: opacity 0.9s;
+	cursor: pointer;
 }
 
 .ShowToastBox {
-	position: absolute !important;
-	opacity: 0.9 !important;
-	transition: opacity .3s !important;
-	cursor: pointer
+	position: absolute;
+	opacity: 0.9;
+	transition: opacity .3s;
+	cursor: pointer;
 }

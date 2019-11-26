@@ -10,86 +10,66 @@
  */
 
 import * as React from 'react';
-import { Grid, Container } from 'semantic-ui-react';
+//import { Grid, Container } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
-import { Link } from 'react-router-dom';
-import { ContentSegment } from 'components/ContentSegment';
+
+import { Button } from 'semantic-ui-react'
+import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import { Teaser } from 'containers/ReturnProfile/Teaser';
-import laptop from './images/laptop.svg';
-import sprout from './images/sprout.svg';
-import tree from './images/tree.svg';
-import logoIcon from './images/logoIcon.svg';
+//import { ContentSegment } from 'components/ContentSegment';
+//import { Teaser } from 'containers/ReturnProfile/Teaser';
+import phone from './images/GroupeMobileApp.svg';
+import interac from './images/interacLogo.svg';
+import treeLogo from './images/treeCanadaLogo.png';
+
 import Subscribe from '../Subscribe';
-import styles from './index.module.css';
+import styles from '../../styles/base.css';
 
 export default class HomePage extends React.PureComponent {
   public render() {
     return (
       <React.Fragment>
+        <h2 className={styles.h2Home}>
+          Our Socially Responsible, Self-Service Investment Account
+        </h2>
         <Grid divided="vertically">
-          <Grid.Row columns={3} className={styles.mainWrapper}>
-            <Grid.Column>
+          <Grid.Row columns={2} id='homeZone' className={styles.mainWrapper}>
+            <Grid.Column id='infosZone'>
               <div className={styles.headingWrapper}>
-                <img
-                  className={styles.laptop}
-                  alt="purchasing power of the dollar vs sp500"
-                  src={laptop}
-                />
-                <h3 className={styles.h3left}>
-                  <FormattedMessage
-                    {...messages.headerTopLeft}
-                    values={{
-                      bold: <b>{messages.headerTopLeft.description}</b>,
-                    }}
-                  />
-                </h3>
-                <Link className={styles.links} to="/howItWorks">
+                <ol className={styles.listHome}>
+                  <li>Transfer and Pay with &nbsp;&nbsp; 
+                    <img
+                      className={styles.interac}
+                      alt="interac"
+                      src={interac}
+                    /></li>
+                  <li>Grow your money (average <b>Growth of 9.8%</b>) </li>
+                  <li>Pay <b>No Bank Fees</b></li>
+                  <li><b>We plant trees with    </b>
+                    <img
+                      className={styles.treeLogo}
+                      alt="tree Canada Logo"
+                      src={treeLogo}
+                    /></li>
+                </ol>
+                <p>No engagement, no obligations.</p>
+                {/*<Link className={styles.links} to="/howItWorks">
                   <FormattedMessage {...messages.learnMore} />
-                </Link>
-              </div>
-            </Grid.Column>
-            <Grid.Column>
-              <div className={styles.sproutWrapper}>
-                <img
-                  className={styles.sprout}
-                  alt="climate change purchasing power"
-                  src={sprout}
-                />
-                <img
-                  className={styles.logoIcon}
-                  alt="purchasing power of  the dollar vs sp500"
-                  src={logoIcon}
-                />
-                <h3 className={styles.centerh3}>
-                  <FormattedMessage
-                    {...messages.headerTopCenter}
-                    values={{
-                      bold: <b>{messages.headerTopCenter.description}</b>,
-                    }}
-                  />
-                </h3>
+                  </Link>*/}
+
+                <Button as={ NavLink } to="/howItWorks" content='More Infos' primary size='massive' id='knowMore'/>
+                <Button as={ NavLink } right to="/accounts" content='Try It' secondary size='massive' id='createAccount'/>
               </div>
             </Grid.Column>
 
-            <Grid.Column>
+            <Grid.Column className={styles.phoneApp} id='phoneZone'>
+              
               <img
-                className={styles.tree}
-                alt="help fight climate change"
-                src={tree}
-              />
-              <h3 className={styles.h3right}>
-                <FormattedMessage
-                  {...messages.headerTopRight}
-                  values={{
-                    bold: <b>{messages.headerTopRight.description}</b>,
-                  }}
+                  alt="mobile interac"
+                  src={phone}
                 />
-              </h3>
-              <Link className={styles.links} to="/howItWorks">
-                <FormattedMessage {...messages.learnMore} />
-              </Link>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -97,9 +77,7 @@ export default class HomePage extends React.PureComponent {
         <Grid divided="vertically">
           <Grid.Row columns={1}>
             <Grid.Column>
-              <div className={styles.sproutWrapper}>
-                <Subscribe />
-                <div className={styles.subContainer}>
+            <div className={styles.subContainer}>
                   <p className={styles.subscribeText}>
                     <FormattedMessage
                       {...messages.subscribe}
@@ -109,16 +87,18 @@ export default class HomePage extends React.PureComponent {
                     />
                   </p>
                 </div>
+              <div className={styles.sproutWrapper}>
+                <Subscribe />
               </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
 
-        <ContentSegment>
+        {/*<ContentSegment>
           <Container>
             <Teaser />
           </Container>
-        </ContentSegment>
+        </ContentSegment>*/}
       </React.Fragment>
     );
   }

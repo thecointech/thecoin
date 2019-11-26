@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 import cx from 'classnames';
-import styles from './index.module.css';
+import styles from '../../styles/base.css';
 
 interface HeaderLinkProps {
   to: string;

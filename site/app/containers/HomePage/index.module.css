@@ -1,30 +1,21 @@
 .mainWrapper {
-  padding: 3rem !important;
 }
 .headingWrapper {
-  text-align: right !important;
-  margin-top: 0rem !important;
+  text-align: right;
   flex-direction: column;
 }
 
-.laptop {
-  margin-right: -30px;
-  width: 73%;
-  margin-top: -20px;
-}
 .h1 {
   font-weight: 300;
-  font-family: 'Lato', sans-serif !important;
   font-size: 2.7rem;
 }
 
 .centerh3 {
-  font-weight: 300 !important;
+  font-weight: 300;
   font-size: 2rem;
   color: #002c8e;
   line-height: 3rem;
-  font-family: 'Lato', sans-serif !important;
-  margin-bottom: 1em !important;
+  margin-bottom: 1em;
   margin-top: 70px;
 }
 .centerh3 span {
@@ -36,7 +27,6 @@
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
-  font-family: 'Lato', sans-serif !important;
 }
 
 .h3 span {
@@ -48,7 +38,6 @@
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
-  font-family: 'Lato', sans-serif !important;
   max-width: 540px;
 }
 
@@ -57,71 +46,27 @@
   font-size: 1.5rem;
   color: #002c8e;
   line-height: 2.5rem;
-  font-family: 'Lato', sans-serif !important;
+  font-family: 'Lato', sans-serif;
   max-width: 540px;
 }
 
 .gridWrapper {
-  text-align: center !important;
+  text-align: center;
 }
 .links {
   font-weight: bold;
 }
 
-.tree {
-  margin-left: -81px;
-  width: 70%;
-}
-
 .topMargin {
-  margin-top: 7rem !important;
-}
-
-.wallStreet {
-  position: absolute;
-  top: 22%;
-  left: 28%;
-  z-index: 999;
-  color: #10c810;
-  font-size: 1.6rem;
-  -ms-transform: rotate(-18deg);
-  -webkit-transform: rotate(-18deg);
-  transform: rotate(-18deg);
-  font-family: 'Lato', sans-serif;
-  font-weight: bold;
-}
-.inflation {
-  position: absolute;
-  top: 57%;
-  left: 22%;
-  z-index: 999;
-  color: #f41616;
-  font-size: 1.6rem;
-  -ms-transform: rotate(25deg);
-  -webkit-transform: rotate(25deg);
-  transform: rotate(25deg);
-  font-family: 'Lato', sans-serif;
-  font-weight: bold;
+  margin-top: 7rem;
 }
 
 .yearStart {
-  position: absolute;
   top: 45%;
   left: -6%;
   font-size: 1.4rem;
 }
-.dollar {
-  position: absolute;
-  top: 45%;
-  right: 9%;
-  font-size: 1.4rem;
-}
 
-.sprout {
-  width: 50%;
-  margin-left: -23px;
-  margin-bottom: -17px;
-}
 .sproutWrapper {
   text-align: center;
 }
@@ -132,7 +77,7 @@
 .subscribeText {
   font-size: 1.7rem;
   font-weight: 300;
-  margin-bottom: 50px !important;
+  margin-bottom: 50px;
   color: #002c8e;
 }
 

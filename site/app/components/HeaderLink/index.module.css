@@ -1,7 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400&display=swap');
+*{
+  margin: 0;
+  border: none;
+  background: none;
+  color: #002c8e;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+
+.button button {
+  border: 2px solid white;
+  margin-bottom: 40px;
+  padding: 1rem 3rem;
+  margin-top: 32px;
+}
+
 .ui.menu.link.item {
-  padding: 15px 46px;
-  font-size: 1.1em;
-  font-weight: 300 !important;
-  border-bottom-left-radius: 0 !important;
-  color: #ffffff;
 }

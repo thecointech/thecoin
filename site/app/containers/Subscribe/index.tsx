@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
-import styles from './index.module.css';
+import styles from '../../styles/base.css';
 import { FormattedMessage } from 'react-intl';
 
 const Subscribe = () => {
@@ -27,10 +27,11 @@ const Subscribe = () => {
   return (
     <div className={styles.search}>
       <Input 
+        id='subscribeField'
         onChange={onInputChange}
         action={(
-        <Button onClick={doSubscribe}>
-          <FormattedMessage id="Subscribe.button" defaultMessage="Get Connected!" />
+        <Button onClick={doSubscribe} id='subscribeButton'>
+          <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
         </Button>)}
       placeholder="Your email" />
     </div>

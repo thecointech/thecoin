@@ -24,7 +24,7 @@ import {
 } from 'containers/Services/BrokerCAD';
 import { UxInput } from '@the-coin/components/components/UxInput';
 
-import styles from './index.module.css';
+import styles from '../../../styles/base.css';
 
 type MyProps = {
   account: AccountState;
