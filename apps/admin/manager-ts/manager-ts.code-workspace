@@ -4,19 +4,20 @@
 			"path": "."
 		},
 		{
-			"path": "C:\\src\\TheCoin\\the-react-components\\src"
+			"path": "../../shared-components/src"
 		}
 	],
-	"settings": {
-		"files.associations": {
-			".babelrc": "jsonc",
-			".eslintrc": "jsonc",
-			".prettierrc": "jsonc",
-			".stylelintrc": "json",
-			".dockerignore": "ignore",
-			".eslintignore": "ignore",
-			".flowconfig": "ignore"
-		},
-		"typescript.tsdk": "node_modules\\typescript\\lib"
-	}
+  "settings": {
+    "files.associations": {
+      ".babelrc": "jsonc",
+      ".eslintrc": "jsonc",
+      ".prettierrc": "jsonc",
+      ".stylelintrc": "json",
+      ".dockerignore": "ignore",
+      ".eslintignore": "ignore",
+      ".flowconfig": "ignore"
+    },
+    "typescript.tsdk": "..\\node_modules\\typescript\\lib",
+    "deepcode.review.results.hideInformationIssues": false
+  }
 }

@@ -17,7 +17,7 @@
   "private": true,
   "dependencies": {
     "@google-cloud/firestore": "^2.4.0",
-    "@the-coin/utilities": "^0.1.63",
+    "@the-coin/utilities": "^0.1.64",
     "@types/node-mailjet": "^3.3.0",
     "cors": "^2.8.5",
     "ethers": "^4.0.29",

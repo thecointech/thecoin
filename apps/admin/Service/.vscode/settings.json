@@ -10,5 +10,6 @@
 	"files.watcherExclude": {
 		"build": true,
 		"obj": true
-	}
+  },
+  "deepcode.review.results.hideInformationIssues": false
 }

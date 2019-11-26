@@ -22,16 +22,17 @@ import { NextOpenTimestamp } from '@the-coin/utilities/lib/MarketStatus';
 import { GetWallet } from 'containers/BrokerTransferAssistant/Wallet';
 import { utils } from 'ethers';
 import { GetReferrerCode } from '@the-coin/utilities/lib/Referrals';
-import { Timestamp, DocumentReference } from '@the-coin/utilities/lib/FirebaseFirestore';
-import { now } from 'utils/Firebase';
-import { firestore } from 'firebase';
+import { DocumentReference } from '@the-coin/utilities/lib/FirebaseFirestore';
+
+//import { now } from 'utils/Firebase';
+//import { firestore } from 'firebase';
 
 interface PurchaseRecord {
 	coin: number,
 	fiat: number,
-	recieved: Timestamp,
-	settled: Timestamp,
-	completed: Timestamp,
+	recieved: Date,
+	settled: Date,
+	completed: Date,
 	txHash: string,
 	emailHash: string
 }
@@ -130,8 +131,8 @@ class PurchaseClass extends React.PureComponent<Props> {
 		return {
 			coin,
 			fiat: toHuman(coin * conversionRate, true),
-			recieved: firestore.Timestamp.fromDate(recievedDate),
-			settled: firestore.Timestamp.fromDate(settledDate),
+			recieved: recievedDate,
+			settled: settledDate,
 			txHash: '---',
 			emailHash,
 			completed: null
@@ -180,7 +181,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 	async recordTxComplete(purchaseDoc: DocumentReference) {
 		try {
 			const data: Partial<PurchaseRecord> = {
-				completed: now()
+				completed: new Date()
 			}
 			await purchaseDoc.update(data);
 		}

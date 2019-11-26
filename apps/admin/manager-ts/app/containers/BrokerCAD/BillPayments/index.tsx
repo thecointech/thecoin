@@ -1,7 +1,7 @@
 import React from "react";
 import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
 import { GetBillPaymentSigner, DecryptPayee } from "@the-coin/utilities/lib/VerifiedBillPayment";
-import { AccountState } from "../../Account/types";
+import { AccountState } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
@@ -13,7 +13,10 @@ import { connect } from "react-redux";
 import fs from 'fs';
 import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
 import {firestore} from 'firebase';
-import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
+//import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
+import firebase from "firebase";
+
+type Timestamp = firebase.firestore.Timestamp;
 
 const ACTION_TYPE = "Bill"
 

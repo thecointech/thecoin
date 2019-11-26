@@ -1,6 +1,6 @@
 import React from "react";
 import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
-import { AccountState } from "../Account/types";
+import { AccountState } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";

@@ -2,9 +2,8 @@
   "compilerOptions": {
     "target": "es2017",
     "baseUrl": "./app/",
-    "rootDirs": ["./app/", "../../the-react-components/src"],
     "paths": {
-      "@the-coin/components/*": ["../../../the-react-components/src/*"]
+      "@the-coin/components/*": ["../../../shared-components/src/*"]
     },
     "jsx": "react",
     "module": "es2015",
@@ -29,5 +28,6 @@
     //"strict": true,
     //"strictFunctionTypes": false,
   },
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "references": [{ "path": "../../shared-components" }]
 }

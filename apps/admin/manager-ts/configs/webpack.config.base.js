@@ -23,7 +23,12 @@ export default {
               cacheDirectory: true
             }
           },
-          'ts-loader'
+          {
+            loader: 'ts-loader',
+            options: {
+              projectReferences: true
+            }
+          }
         ]
       },
       {

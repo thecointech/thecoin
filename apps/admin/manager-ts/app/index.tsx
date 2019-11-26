@@ -26,6 +26,10 @@ import 'semantic-ui-css/semantic.min.css'
 import {pathFix} from './utils/pathFix';
 pathFix();
 
+// We do some hackery with the path.fix to allow
+import {signIn} from './utils/Firebase';
+signIn();
+
 const initialState = {};
 const store = configureStore(initialState, history);
 
