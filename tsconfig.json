@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "baseUrl": "./src/",
-    "outDir": "./build/",
     "jsx": "react",
-    "module": "es2015",
-    "moduleResolution": "node",
+
     "pretty": true,
     "sourceMap": true,
     "resolveJsonModule": true,
@@ -33,7 +29,9 @@
     // Allow project references
     //
     "declaration": true, 
+    "declarationMap": true, 
     "composite": true,
+
     //
     // Fix jest testing
     //

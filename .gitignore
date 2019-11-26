@@ -4,3 +4,5 @@ types/node_modules/
 node_modules/
 wallets/
 *.log
+shared-components/tsconfig.tsbuildinfo
+shared-components/build/

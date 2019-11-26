@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.63",
+  "version": "0.1.64",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/contract": "^1.0.9",
+    "axios": "^0.19.0",
     "base32": "0.0.6",
     "dotenv": "^8.0.0"
   },

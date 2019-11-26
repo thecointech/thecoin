@@ -1,5 +1,5 @@
 import { ImmerReducer } from 'immer-reducer';
-import { ApplicationBaseState } from '@the-coin/components/types';
+import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
 
 /* --- STATE --- */

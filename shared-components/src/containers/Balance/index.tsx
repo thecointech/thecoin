@@ -12,9 +12,10 @@ import * as AccountActions from "../../containers/Account/actions";
 
 import { TransactionHistory } from "../TransactionHistory";
 import { Popup } from "semantic-ui-react";
-import bank from "./bank.svg";
 import styles from "./index.module.css";
 import { calculateProfit } from "./profit";
+
+const bank = require("./bank.svg") as string;
 
 interface MyProps {
   dispatch: AccountActions.DispatchProps;

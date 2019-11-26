@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
 import { buildReducer } from "./reducer";
 import styles from "./index.module.css";
-import { ApplicationBaseState } from "@the-coin/components/types";
+import { ApplicationBaseState } from "../../types";
 
 interface OwnProps {
   visible: boolean;

@@ -16,11 +16,23 @@ function GetFirestore()
 }
 
 interface ProcessRecord { 
-  recievedTimestamp: Timestamp,
-  processedTimestamp?: Timestamp,
+  recievedTimestamp: Timestamp|Date,
+  processedTimestamp?: Timestamp|Date,
   hash: string,
   confirmed: boolean,
   fiatDisbursed: number
 }
 
-export { SetFirestore, GetFirestore, ProcessRecord };
+function isDate(d: Timestamp|Date) : d is Date {
+  return (d as Date).getFullYear != undefined;
+} 
+function isTimestamp(d: Timestamp|Date) : d is Timestamp {
+  return (d as Timestamp).nanoseconds != undefined;
+} 
+
+function AsDate(d: Timestamp|Date) : Date {
+  if (isDate(d))
+    return d;
+  else return d.toDate();
+}
+export { SetFirestore, GetFirestore, ProcessRecord, AsDate, isDate, isTimestamp }

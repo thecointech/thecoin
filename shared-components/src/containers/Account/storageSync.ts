@@ -1,6 +1,6 @@
 import { Wallet } from 'ethers';
 import { AccountMap, DefaultAccount } from './types';
-import { TheSigner, SignerIdent } from '@the-coin/components/SignerIdent';
+import { TheSigner, SignerIdent } from '../../SignerIdent';
 
 // NOTE: These prefixes must be all equal length
 enum Prefix {

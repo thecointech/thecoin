@@ -1,6 +1,8 @@
-const request = require('request');
+import { default as axios, AxiosRequestConfig } from 'axios';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
+
+
 // TODO: Make sure we don't publish this in the website...
 const AccessToken = 'iIAGXtPBcpae7eBS4wXgP8RRUlGT';
 
@@ -13,26 +15,26 @@ async function GetCalendar(date: Date) {
   if (exists)
     return exists;
 
-  const options = {
+  const options: AxiosRequestConfig = {
     headers: {
       Authorization: AccessToken,
       Accept: 'application/json'
-    },
-    uri: `${ENDPOINT}?${uriArgs}`,
-    method: 'GET'
+    }
   };
-  return new Promise(function(resolve, reject) {
-    request.get(options, function(err, resp, body) {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("Loaded Calendar for: %i-%i, (%i cached)", date.getMonth()+1, date.getFullYear(), Object.keys(CalendarCache).length)
-        const {calendar }= JSON.parse(body);
-        CalendarCache[uriArgs] = calendar;
-        resolve(calendar);
-      }
-    })
-  });
+  const url = `${ENDPOINT}?${uriArgs}`
+
+
+  const resp = await axios.get(url, options);
+  if (resp.status != 200) {
+    console.error(resp.statusText);
+  }
+  else {
+    console.log("Loaded Calendar for: %i-%i, (%i cached)", date.getMonth()+1, date.getFullYear(), Object.keys(CalendarCache).length)
+    const {calendar }= resp.data;
+    CalendarCache[uriArgs] = calendar;
+    return calendar;
+  }
+  return null;
 }
 
 //////////////////////////////////////////////////////////////////////////

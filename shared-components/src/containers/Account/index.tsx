@@ -54,7 +54,7 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
 
   generateSubItems(
     items: SidebarMenuItem[],
-    state: ApplicationBaseState
+    _state: ApplicationBaseState
   ): SidebarMenuItem[] {
     const { accountMap, accountName, account } = this.props;
     if (account.signer) {

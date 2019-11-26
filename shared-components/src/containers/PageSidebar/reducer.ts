@@ -1,7 +1,7 @@
 import { ImmerReducer, createReducerFunction } from 'immer-reducer';
 import injectReducer from '../../utils/injectReducer';
 import { SidebarGenerators, IActions, ItemGenerator, ItemModifier } from './types';
-import { ApplicationBaseState } from '@the-coin/components/types';
+import { ApplicationBaseState } from '../../types';
 
 const SIDEBAR_KEY : keyof ApplicationBaseState = "sidebar";
 

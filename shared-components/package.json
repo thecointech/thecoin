@@ -4,7 +4,8 @@
   "description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -b -v"
   },
   "author": "",
   "license": "MIT",
@@ -13,5 +14,8 @@
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
     "ts-jest": "^24.1.0"
+  },
+  "dependencies": {
+    "typescript": "^3.7.2"
   }
 }
