@@ -20,6 +20,7 @@
     "npmcheckversion": "node ./internals/scripts/npmcheckversion.js",
     "preinstall": "npm run npmcheckversion",
     "prebuild": "npm run build:clean",
+    "postinstall": "cd .. && npm install && cd shared-components && npm install",
     "build": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout && npm run build:copy",
     "build:clean": "rimraf ./build",
     "build:copy": "xcopy .\\app\\sp500_monthly.csv .\\build\\ /S /I /Y /Q",
