@@ -27,7 +27,7 @@ import { selectAccounts } from '@the-coin/components/containers/Account/selector
 
 export const HomePage = () => {
   const accounts = useSelector(selectAccounts);
-  const accountButtonText = hasAccount(accounts) ? "Accounts" : "Try It";
+  const accountButtonText = hasAccount(accounts) ? "My Accounts" : "Try It";
   const defaultAddress = getDefaultAccountAddress(accounts);
 
   return (
