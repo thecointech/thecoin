@@ -1,4 +1,3 @@
-import { ImmerReducerClass } from 'immer-reducer';
 import { FXRate } from '@the-coin/pricing'
 
 /* --- STATE --- */
