@@ -2,6 +2,11 @@
          Site Overrides
 *******************************/
 
+#app{
+  max-width: 1500px;
+  margin: auto;
+}
+
 #infosZone{
   font-family: 'Lato', sans-serif;
   color: #3255A4;
