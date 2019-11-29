@@ -1,15 +1,18 @@
 import { AccountMap } from "@the-coin/components/containers/Account/types";
 
-export const IsOpera = () =>
-  navigator.userAgent.indexOf("Opera");
+export const isOpera = () : boolean =>
+  navigator.userAgent.indexOf("Opera") < 0;
 
-export const IsWeb3Enabled = () : boolean => {
+export const isWeb3Enabled = () : boolean => {
   const win: any = window;
   const { web3 } = win;
   return !!web3;
 }
 
-export const GetDefaultAccountAddress = (accounts: AccountMap) : string => {
+export const hasAccount = (accounts: AccountMap) : boolean =>
+  accounts && Object.keys(accounts).length > 0;
+
+export const getDefaultAccountAddress = (accounts: AccountMap) : string => {
   const base = "/accounts";
 
   const firstAccount = accounts && Object.keys(accounts)[0];
@@ -18,7 +21,7 @@ export const GetDefaultAccountAddress = (accounts: AccountMap) : string => {
     return `${base}/e/${encodeURI(firstAccount)}`;
   }
 
-  if (IsWeb3Enabled()) {
+  if (isWeb3Enabled()) {
     return `${base}/connect`;
   }
 
