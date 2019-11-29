@@ -96,6 +96,7 @@
     "reselect": "4.0.0",
     "sanitize.css": "11.0.0",
     "ts-clipboard": "^1.0.17",
+    "typescript": "^3.7.2",
     "warning": "4.0.3"
   },
   "devDependencies": {

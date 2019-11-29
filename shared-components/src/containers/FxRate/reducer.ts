@@ -51,7 +51,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 			const updateDate = date ? date : new Date();
 			const ts = updateDate.getTime();
 			const rate = getFxRate(this.state.rates, ts);
-			if (rate != EmptyRate)
+			if (rate !== EmptyRate)
 				return;
 
 			console.log(`fetching fx rate: ${cc} for time ${updateDate.toLocaleTimeString()}`);
@@ -71,7 +71,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 
 	addFxRate(newRate: FXRate): void {
 		// First check if the rate is already registered
-		if (getFxRate(this.state.rates, newRate.validFrom).buy != 0)
+		if (!!getFxRate(this.state.rates, newRate.validFrom).buy)
 			return;
 		// Search is not ordered, so our push doesn't need to be either
 		this.draftState.rates.push(newRate);

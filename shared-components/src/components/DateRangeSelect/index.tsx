@@ -44,7 +44,7 @@ class DateRangeSelect extends React.PureComponent<PropsType, {}, StateType> {
     const todaysDate = new Date();
     todaysDate.setHours(0, 0, 0, 0);
     const { startDate, endDate } = arg;
-    const end = (endDate == null || endDate.toDate() == todaysDate) ?
+    const end = (endDate === null || endDate.toDate() === todaysDate) ?
       new Date() :
       endDate.toDate();
     const start = (startDate != null) ?

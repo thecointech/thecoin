@@ -215,7 +215,7 @@ class AccountReducer extends TheCoinReducer<AccountState>
 
   *updateHistory(from: Date, until: Date) {
     const { signer, contract } = this.state;
-    if (contract == null || signer == null)
+    if (contract === null || signer === null)
       return;
     if (this.state.historyStart && this.state.historyEnd) {
       if (from >= this.state.historyStart && until <= this.state.historyEnd)

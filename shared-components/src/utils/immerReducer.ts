@@ -45,7 +45,7 @@ function CreateNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T)
   // We use Object.Assign to clone the prototype as we 
   // need to change the actions() function below and
   // need to ensure that change is local to the NamedReducer class
-  Object.getOwnPropertyNames(immerReducerClass.prototype).forEach(function (key) {
+  Object.getOwnPropertyNames(immerReducerClass.prototype).forEach((key) => {
     if (key === "constructor") {
         return;
     }

@@ -91,7 +91,7 @@ export function ReadAllAccounts() : AccountMap {
 
     const name = Strip(raw);
     const walletOrSigner = GetStored(name);
-    if (walletOrSigner != null) {
+    if (walletOrSigner !== null) {
       allAccounts[name] = {
         ...DefaultAccount,
         name,

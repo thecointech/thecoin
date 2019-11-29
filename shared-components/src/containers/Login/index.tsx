@@ -69,7 +69,7 @@ class Login extends React.PureComponent<Props, State, null> {
         cancelDecrypting: false
       });
       return false;
-    } else if (percent == -1) {
+    } else if (percent === -1) {
       // Invalid password?
       if (!this.state.cancelDecrypting) {
         this.setState({
@@ -77,7 +77,7 @@ class Login extends React.PureComponent<Props, State, null> {
         });
       }
       return false;
-    } else if (percent == 100) {
+    } else if (percent === 100) {
       this.setState({
         state: LoginState.Complete,
         cancelDecrypting: false

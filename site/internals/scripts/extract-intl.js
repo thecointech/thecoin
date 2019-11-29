@@ -4,6 +4,8 @@
  * and package them in the translation json files in the translations file.
  */
 
+// file deepcode ignore PromiseNotCaughtNode: (internal-only code)
+
 require('shelljs/global');
 
 const fs = require('fs');
