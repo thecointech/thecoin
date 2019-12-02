@@ -41,7 +41,7 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
   {
     link: {
       to: 'restore',
-      name: 'Restore from Google',
+      name: 'Restore',
     },
   },
 ];

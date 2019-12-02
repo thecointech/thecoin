@@ -60,7 +60,7 @@ export default class HomePage extends React.PureComponent {
                   </Link>*/}
 
                 <Button as={ NavLink } to="/howItWorks" content='More Infos' primary size='massive' id='knowMore'/>
-                <Button as={ NavLink } right to="/accounts" content='Try It' secondary size='massive' id='createAccount'/>
+                <Button as={ NavLink } right to="/accounts/generate" content='Try It' secondary size='massive' id='createAccount'/>
               </div>
             </Grid.Column>
 

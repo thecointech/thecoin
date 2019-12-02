@@ -140,7 +140,7 @@ class GenerateClass extends NewBaseClass<State> {
             placeholder="Account Password"
           />
           {this.RenderReferralInput()}
-          <Button onClick={this.onGenerateNewWallet}>
+          <Button onClick={this.onGenerateNewWallet} id="createAccountStep1">
             <FormattedMessage {...messages.buttonCreate} />
           </Button>
         </Form>
