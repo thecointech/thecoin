@@ -3,4 +3,7 @@
  */
 import loadable from 'loadable-components';
 
-export default loadable(() => import('./index'));
+export default loadable(async () => {
+  const homepage = await import('./index');
+  return homepage.HomePage
+});
