@@ -20,11 +20,13 @@
 }
 
 #createAccountHeader{
-  width: 150px;
+  width: 180px;
+  height: 40px;
   position: fixed;
   right: 0px;
   left: 70%;
   top: -10px;
+  font-size: 12px !important;
 }
 
 #createAccount, #knowMore{
