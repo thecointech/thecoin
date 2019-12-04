@@ -121,7 +121,7 @@ class GenerateClass extends NewBaseClass<State> {
 
     return (
       <React.Fragment>
-        <Form>
+        <Form id="formCreateAccountStep1">
           <Header as="h1">
             <Header.Content>
               <FormattedMessage {...messages.header} />
@@ -140,7 +140,7 @@ class GenerateClass extends NewBaseClass<State> {
             placeholder="Account Password"
           />
           {this.RenderReferralInput()}
-          <Button onClick={this.onGenerateNewWallet} id="createAccountStep1">
+          <Button onClick={this.onGenerateNewWallet} id="buttonCreateAccountStep1">
             <FormattedMessage {...messages.buttonCreate} />
           </Button>
         </Form>

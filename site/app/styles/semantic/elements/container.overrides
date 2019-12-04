@@ -12,6 +12,10 @@
   color: #3255A4;
 }
 
+form.ui.form#formCreateAccountStep1{
+    padding: 30px !important;
+  }
+
 .ui.segments .segment, .ui.container .ui.segment, .ui.container{
   border-color: white;
   box-shadow: none;
