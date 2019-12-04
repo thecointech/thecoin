@@ -7,9 +7,9 @@ import { SidebarMenuItem, FindItem, MapMenuItems } from '@the-coin/components/co
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
 import { ApplicationBaseState } from '@the-coin/components/types';
 import { Wizard } from './Wizard';
-import { Generate } from './Generate';
 import { Connect } from './Connect';
 import { Restore } from './Restore';
+import { Returning } from '../Returning';
 import { Create } from './Wizard/Create';
 
 interface MyProps {
@@ -42,6 +42,12 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
     link: {
       to: 'restore',
       name: 'Restore',
+    },
+  },
+  {
+    link: {
+      to: 'returning',
+      name: 'Returning',
     },
   },
 ];
@@ -95,7 +101,7 @@ class NewAccountClass extends React.PureComponent<Props> {
         <Route path={`${url}/create`} component={Create} />
         <Route path={`${url}/connect`} component={Connect} />
         <Route path={`${url}/restore`} component={Restore} />
-        <Route path={`${url}/generate`} component={Generate} />
+        <Route path={`${url}/returning`} component={Returning} />
         <Route component={Wizard} />
       </Switch>
     );
