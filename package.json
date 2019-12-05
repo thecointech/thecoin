@@ -50,7 +50,6 @@
     "eslint-plugin-react-hooks": "^2.1.2",
     "eslint-plugin-redux-saga": "^1.1.1",
     "prettier": "^1.18.2",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.0-beta"
+    "tslint-config-prettier": "^1.18.0"
   }
 }
