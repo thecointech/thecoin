@@ -61,7 +61,7 @@ class ConnectClass extends NewBaseClass<BaseState> {
           {this.RenderNameInput(disabled)}
           {this.RenderReferralInput(disabled)}
           <Button disabled={disabled} onClick={this.onConnect}>
-            Connect to Web3
+            Connect to Existing
           </Button>
         </Form>
       </>

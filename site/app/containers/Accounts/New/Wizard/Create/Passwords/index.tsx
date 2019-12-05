@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Icon, Button, Header, List, Confirm } from 'semantic-ui-react';
-import { PageProps } from '../PageProps';
+import { PageProps } from '../../../../PageProps';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 

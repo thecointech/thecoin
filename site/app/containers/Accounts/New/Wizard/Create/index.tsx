@@ -9,7 +9,7 @@ import { CreateIntroStep, CreateIntroPage } from './Intro';
 import { CloudStorageStep, CloudStoragePage } from './CloudStorage/index';
 import { ConnectWeb3Step, ConnectWeb3Page } from './ConnectWeb3';
 import { InstallOperaStep, InstallOperaPage } from './Opera/index';
-import { PageProps } from './PageProps';
+import { PageProps } from '../../../PageProps';
 import { GetOptions, BuildCreateUrl } from './Types';
 import { OfflineStorageStep, OfflineStoragePage } from './OfflineStorage';
 // import { OnlineStorageStep, OnlineStoragePage } from './OnlineStorage/index';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Step, Icon, Header, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import messages from './Intro.messages';
-import { PageProps } from './PageProps';
+import { PageProps } from '../../../PageProps';
 
 export const CreateIntroStep = () => (
   <>

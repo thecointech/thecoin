@@ -21,9 +21,5 @@ export const getDefaultAccountAddress = (accounts: AccountMap) : string => {
     return `${base}/e/${encodeURI(firstAccount)}`;
   }
 
-  if (isWeb3Enabled()) {
-    return `${base}/connect`;
-  }
-
   return base;
 }

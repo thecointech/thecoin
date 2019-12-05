@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Button, Image, Header, Message } from 'semantic-ui-react';
-import { PageProps } from '../PageProps';
+import { PageProps } from '../../../../PageProps';
 import Logo from './LogoBlack.svg';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';

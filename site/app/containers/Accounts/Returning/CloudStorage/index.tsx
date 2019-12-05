@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Step, Icon, Button, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { GoogleConnect } from 'containers/Accounts/Settings/gconnect';
-import { PageProps } from '../PageProps';
+import { PageProps } from '../../PageProps';
 import messages from './messages';
 
 export const CloudStorageStep = () => (

@@ -70,8 +70,8 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 		if (vTHE)
 			vTHE = toHuman(vTHE);
 
-		let viCAD = (vCAD == null) ? "" : roundPlaces(vCAD);
-		let viTHE = (vTHE == null) ? "" : roundPlaces(vTHE);
+		let viCAD = (vCAD === null) ? "" : roundPlaces(vCAD);
+		let viTHE = (vTHE === null) ? "" : roundPlaces(vTHE);
 		return (
 			<React.Fragment>
 				<Form.Input id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={viCAD} type="number" onChange={this.onChange} />

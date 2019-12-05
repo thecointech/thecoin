@@ -9,10 +9,13 @@ import { TheCoinReducer, GetNamedReducer }  from '../../utils/immerReducer';
 import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
 
+
 // The initial state of the App
 const initialState: ContainerState = {
 	rates: []
 }
+
+// file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
 
 const EmptyRate: FXRate = {
 	target: -1,
@@ -51,7 +54,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 			const updateDate = date ? date : new Date();
 			const ts = updateDate.getTime();
 			const rate = getFxRate(this.state.rates, ts);
-			if (rate !== EmptyRate)
+   if (rate !== EmptyRate)
 				return;
 
 			console.log(`fetching fx rate: ${cc} for time ${updateDate.toLocaleTimeString()}`);

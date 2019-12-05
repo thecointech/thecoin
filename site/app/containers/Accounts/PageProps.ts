@@ -1,4 +1,4 @@
-import { Option } from '../Options/Types';
+import { Option } from './New/Wizard/Options/Types';
 
 export interface PageProps {
   accountName: string;

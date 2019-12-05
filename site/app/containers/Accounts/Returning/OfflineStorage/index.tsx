@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GetStoredWallet } from '@the-coin/components/containers/Account/storageSync';
 import { Step, Header, Button, Image, List, Icon } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { PageProps } from '../PageProps';
+import { PageProps } from '../../PageProps';
 import messages from './messages';
 import Vault from './vault.svg';
 import styles from '../../../../styles/base.css';
