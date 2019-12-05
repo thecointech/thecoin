@@ -12,7 +12,7 @@ import { structuredSelectAccounts } from '@the-coin/components/containers/Accoun
 
 import { ApplicationRootState } from 'types';
 import { Balance } from '@the-coin/components/containers/Balance';
-import { NewAccount, NewAccountName } from './New';
+import { NewAccount, NewAccountName } from './NewAccount';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
