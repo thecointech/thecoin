@@ -15,9 +15,8 @@ class Navigation extends React.Component {
             <HeaderLink to="/" exact>Home</HeaderLink>
             <HeaderLink to="/howItWorks">How It Works</HeaderLink>
             <HeaderLink to="/FAQ">FAQ</HeaderLink>
-            <HeaderLink to="/accounts/generate">Accounts</HeaderLink>
           </Menu>
-          <Button as={ NavLink } right to="/accounts/generate" content='Login' secondary size='massive' id='createAccountHeader'/>
+          <Button as={ NavLink } right to="/accounts/" content='My Accounts' secondary size='massive' id='createAccountHeader'/>
         </Container>   
       </div>
       

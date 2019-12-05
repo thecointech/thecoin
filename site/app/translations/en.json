@@ -7,7 +7,7 @@
   "app.components.UxPassword.score2": "weak",
   "app.components.UxPassword.score3": "moderate",
   "app.components.UxPassword.score4": "strong",
-  "app.containers.Account.Create.buttonCreate": "CREATE ACCOUNT",
+  "app.containers.Account.Create.buttonCreate": "Create my Account",
   "app.containers.Account.Create.header": "Create a New Account",
   "app.containers.Account.Create.labelName": "Account Name",
   "app.containers.Account.Create.labelPassword": "Password",

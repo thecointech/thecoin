@@ -20,7 +20,7 @@
 }
 
 #createAccountHeader{
-  width: 100px;
+  width: 150px;
   height: 40px;
   line-height: 25px;
   position: fixed;
@@ -51,4 +51,3 @@
     font-size: 14px !important;
   }
 }
-

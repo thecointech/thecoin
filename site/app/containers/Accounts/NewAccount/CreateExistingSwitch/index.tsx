@@ -17,13 +17,14 @@ export const CreateExistingSwitch = (props: Props) => {
   const existingUrl = doConnect
     ? `${url}connect/exist`
     : `${url}restore/`
+
+    const connectOtherAccount = `${url}connect/exist`;
   return (
-    <Container>
-      <div>
-        <Button as={NavLink} to={createUrl} content='I want to create an account with The Coin' secondary size='massive' style={{ width: '400px' }} />
-      </div>
-      <div>
-        <Button as={NavLink} to={existingUrl} right content='I have an account with The Coin' secondary size='massive' style={{ width: '400px' }} />
+    <Container id="accountUserChoiceStep1">
+      <div id="">
+        <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary style={{ width: '250px' }} />
+        <Button as={NavLink} to={existingUrl} content='I already have an Account' primary style={{ width: '250px' }} />
+        <Button as={NavLink} disabled={!doConnect} to={connectOtherAccount} content='I want to connect my existing ETH Account' primary style={{ width: '250px' }} />
       </div>
     </Container>
   )
