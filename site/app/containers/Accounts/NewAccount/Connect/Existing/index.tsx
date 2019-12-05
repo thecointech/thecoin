@@ -16,12 +16,10 @@ export const Existing = () => {
         </Header.Subheader>
       </Header>
       <Connect />
-      <div>
-        <h4>
-          <a href="#/accounts/restore">
-            <FormattedMessage {...messages.existTransfer} />
-          </a>
-        </h4>
+      <div><br />
+        <a href="#/accounts/">
+          <FormattedMessage {...messages.existTransfer} />
+        </a>
       </div>
     </Container>
   );

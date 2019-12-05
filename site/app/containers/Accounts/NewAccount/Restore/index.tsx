@@ -252,6 +252,11 @@ export class RestoreClass extends React.PureComponent<Props> {
         </Header>
 				<Divider />
         {this.renderContent()}
+        <div><br />
+          <a href="#/accounts/">
+            {'<- Back To My Options'}
+          </a>
+        </div>
       </>
     );
   }

@@ -20,6 +20,6 @@ export default defineMessages({
   existTransfer: {
     id: `${scope}.creaexistTransferteTransfer`,
     defaultMessage:
-      'Or, you can restore an account previously saved online!',
+      '<- Back To My Options',
   }
 });

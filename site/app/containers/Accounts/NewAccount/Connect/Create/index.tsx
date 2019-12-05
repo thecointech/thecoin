@@ -15,9 +15,10 @@ export const Create = () => {
           <FormattedMessage {...messages.subHeader} />
         </Header.Subheader>
       </Header>
+
       <Connect />
       <div>
-        <a href="/accounts/generate"><FormattedMessage {...messages.createTransfer} /></a>
+        <a href="accounts/generate/"><FormattedMessage {...messages.createTransfer} /></a>
       </div>
     </Container>
   );

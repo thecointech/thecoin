@@ -13,12 +13,12 @@ export const hasAccount = (accounts: AccountMap) : boolean =>
   accounts && Object.keys(accounts).length > 0;
 
 export const getDefaultAccountAddress = (accounts: AccountMap) : string => {
-  const base = "/accounts";
+  const base = "/accounts/";
 
   const firstAccount = accounts && Object.keys(accounts)[0];
   // If we know we have an account, automatically redirect to it
   if (firstAccount) {
-    return `${base}/e/${encodeURI(firstAccount)}`;
+    return `${base}e/${encodeURI(firstAccount)}`;
   }
 
   return base;
