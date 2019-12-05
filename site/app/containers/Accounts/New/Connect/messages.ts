@@ -10,12 +10,12 @@ export const scope = 'app.containers.Account.Connect';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Connect an external account',
+    defaultMessage: 'Compatible account detected',
   },
   subHeader: {
     id: `${scope}.subHeader`,
     defaultMessage:
-      'To connect an existing account to this site, enter in your referrer and any name you like',
+      'Your browser already has an account compatible with the Coin.  Would you like to connect with it?',
   },
   warningHeader: {
     id: `${scope}.warningHeader`,

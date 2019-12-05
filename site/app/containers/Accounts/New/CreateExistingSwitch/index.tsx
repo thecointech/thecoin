@@ -6,7 +6,7 @@ import { isWeb3Enabled } from 'utils/detection';
 type Props = {
   url: string
 }
-export const CreateRestoreSwitch = (props: Props) => {
+export const CreateExistingSwitch = (props: Props) => {
 
   const {url} = props;
   const doConnect = isWeb3Enabled();

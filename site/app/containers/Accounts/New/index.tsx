@@ -8,7 +8,7 @@ import { Connect } from './Connect';
 import { Restore } from './Restore';
 import { Returning } from '../Returning';
 import { Create } from './Wizard/Create';
-import { CreateRestoreSwitch } from './CreateRestoreSwitch';
+import { CreateExistingSwitch } from './CreateExistingSwitch';
 
 interface MyProps {
   url: string;
@@ -91,7 +91,7 @@ class NewAccountClass extends React.PureComponent<Props> {
         <Route path={`${url}/connect`} component={Connect} />
         <Route path={`${url}/restore`} component={Restore} />
         <Route path={`${url}/returning`} component={Returning} />
-        <Route render={() => <CreateRestoreSwitch url={url} />}/>
+        <Route render={() => <CreateExistingSwitch url={url} />}/>
       </Switch>
     );
   }
