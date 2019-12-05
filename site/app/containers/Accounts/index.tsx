@@ -37,7 +37,7 @@ const ConstantSidebarItems: SidebarMenuItem[] = [
   {
     link: {
       to: false,
-      name: 'Accounts',
+      name: 'My Accounts',
     },
   },
 ];
@@ -97,6 +97,16 @@ class AccountsClass extends React.PureComponent<Props, {}, null> {
         },
       });
     });
+    // Tell the user that the site is not malfunctionning and no account is available to us at that moment
+    if (accountLinks.length < 1){
+      accountLinks.push({
+        link: {
+          to: `generate`,
+          name: "We didn't find an Account. Want to Create One?",
+        },
+      });
+    }
+
     return accountLinks;
   }
 
