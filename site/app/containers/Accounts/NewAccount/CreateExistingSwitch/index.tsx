@@ -10,9 +10,10 @@ export const CreateExistingSwitch = (props: Props) => {
 
   const {url} = props;
   const doConnect = isWeb3Enabled();
-  const createUrl = doConnect
+  /*const createUrl = doConnect
     ? `${url}connect/create`
     : `${url}generate/`
+    : `${url}generate/`*/
 
   const existingUrl = doConnect
     ? `${url}connect/exist`
@@ -23,6 +24,7 @@ export const CreateExistingSwitch = (props: Props) => {
   : `We haven't detected a compatible account. Come back here with Opera.`
 
   const connectOtherAccount = `${url}connect/exist`;
+  const createNewAccount = `${url}generate`;
 
   return (
     <Container id="accountUserChoiceStep1">
@@ -33,7 +35,7 @@ export const CreateExistingSwitch = (props: Props) => {
         </Header.Subheader>
       </Header>
       <div id="accountUserChoiceStep1Buttons">
-        <Button as={NavLink} to={createUrl} content='I want to create a new The Coin Account' secondary style={{ width: '300px', marginLeft: '7%' }} />
+        <Button as={NavLink} to={createNewAccount} content='I want to create a new The Coin Account' secondary style={{ width: '300px', marginLeft: '7%' }} />
         <Button as={NavLink} to={existingUrl} content='I already have a The Coin Account' primary style={{ width: '300px', marginLeft: '7%'  }} />
         <br />
         <Divider horizontal>Or</Divider>
