@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Header, Message } from 'semantic-ui-react';
+import { Button, Form, Message } from 'semantic-ui-react';
 
 import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
 import { buildReducer } from '@the-coin/components/containers/Account/reducer';
@@ -70,20 +70,7 @@ class ConnectClass extends NewBaseClass<BaseState> {
 
   render() {
     if (this.ShouldRedirect()) return this.RenderRedirect();
-
-    return (
-      <>
-        <Header as="h1">
-          <Header.Content>
-            <FormattedMessage {...messages.header} />
-          </Header.Content>
-          <Header.Subheader>
-            <FormattedMessage {...messages.subHeader} />
-          </Header.Subheader>
-        </Header>
-        {this.RenderContent()}
-      </>
-    );
+    return this.RenderContent()
   }
 }
 

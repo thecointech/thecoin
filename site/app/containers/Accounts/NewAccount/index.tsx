@@ -4,11 +4,11 @@ import { Switch, Route } from 'react-router-dom';
 
 import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
 import { UploadWallet } from '@the-coin/components/containers/UploadWallet';
-import { Connect } from './Connect';
+import { Create as ConnectCreate } from './Connect/Create';
+import { Existing as ConnectExist } from './Connect/Existing';
 import { Restore } from './Restore';
-import { Returning } from '../Returning';
-import { Create } from './Wizard/Create';
 import { CreateExistingSwitch } from './CreateExistingSwitch';
+import { Generate } from './Generate';
 
 interface MyProps {
   url: string;
@@ -87,10 +87,10 @@ class NewAccountClass extends React.PureComponent<Props> {
     return (
       <Switch>
         <Route path={`${url}/upload`} render={this.renderUploadWallet} />
-        <Route path={`${url}/create`} component={Create} />
-        <Route path={`${url}/connect`} component={Connect} />
+        <Route path={`${url}/generate`} component={Generate} />
+        <Route path={`${url}/connect/exist`} component={ConnectExist} />
+        <Route path={`${url}/connect/create`} component={ConnectCreate} />
         <Route path={`${url}/restore`} component={Restore} />
-        <Route path={`${url}/returning`} component={Returning} />
         <Route render={() => <CreateExistingSwitch url={url} />}/>
       </Switch>
     );

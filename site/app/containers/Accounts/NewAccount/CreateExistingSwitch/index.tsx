@@ -11,12 +11,12 @@ export const CreateExistingSwitch = (props: Props) => {
   const {url} = props;
   const doConnect = isWeb3Enabled();
   const createUrl = doConnect
-    ? `${url}connect/`
+    ? `${url}connect/create`
     : `${url}generate/`
 
   const existingUrl = doConnect
-    ? `${url}connect/`
-    : `${url}generate/`
+    ? `${url}connect/exist`
+    : `${url}restore/`
   return (
     <>
       <div>

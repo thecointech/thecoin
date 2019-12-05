@@ -8,15 +8,7 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.Account.Connect';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'Compatible account detected',
-  },
-  subHeader: {
-    id: `${scope}.subHeader`,
-    defaultMessage:
-      'Your browser already has an account compatible with the Coin.  Would you like to connect with it?',
-  },
+
   warningHeader: {
     id: `${scope}.warningHeader`,
     defaultMessage: 'No external providers detected!',
@@ -30,5 +22,16 @@ export default defineMessages({
     id: `${scope}.warningP2`,
     defaultMessage:
       'To use this feature, either install the MetaMask plugin or try the new Opera browser!',
+  },
+
+  createTransfer: {
+    id: `${scope}.createTransfer`,
+    defaultMessage:
+      'Or, you can create an entirely new account!',
+  },
+  existOnline: {
+    id: `${scope}.existOnline`,
+    defaultMessage:
+      'Or, if you can restore an account generated previously',
   },
 });
