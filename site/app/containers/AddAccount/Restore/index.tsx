@@ -1,7 +1,7 @@
 import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
-import { IWindow } from '../../Settings/gconnect/gauth';
+import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
 import { buildReducer } from '@the-coin/components/containers/Account/reducer';

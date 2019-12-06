@@ -1,5 +1,5 @@
 import React from "react"
-import { Connect } from ".."
+import { Connect } from "../../Connect"
 import { FormattedMessage } from "react-intl"
 import messages from "./messages"
 import { Header, Container } from "semantic-ui-react"

@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import {HomePage} from 'containers/HomePage/index';
 import { NotFoundPage } from '@the-coin/components/containers/NotFoundPage';
 import { Accounts } from 'containers/Accounts';
+import { AddAccount } from 'containers/AddAccount';
 import { HowItWorks } from 'containers/HowItWorks';
 import { UnderConstruction } from 'containers/UnderConstruction';
 import { Confirm } from 'containers/Subscribe/Confirm';
@@ -17,6 +18,7 @@ export default (props: { location: Location }) => (
     <Switch location={props.location}>
       <Route exact path="/" component={HomePage} />
       <Route exact path="/newsletter/confirm" component={Confirm} />
+      <Route path="/addAccount" component={AddAccount} />
       <Route path="/accounts" component={Accounts} />
       <Route path="/learn" component={Learn} />
       <Route path="/howItWorks" component={HowItWorks} />

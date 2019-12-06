@@ -1,24 +1,22 @@
 import * as React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 
-import { buildReducer as buildFxRateReducer } from '@the-coin/components/containers/FxRate/reducer';
 import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
+import { SidebarMenuItem, ItemGenerator } from '@the-coin/components/containers/PageSidebar/types';
 
 import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
-import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 
-import { ApplicationRootState } from 'types';
 import { Balance } from '@the-coin/components/containers/Balance';
-import { NewAccount, NewAccountName } from './NewAccount';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
 import { Purchase } from './Purchase';
 import { BillPayments } from './BillPayments';
-
+import { SelectActiveAccount } from './Selectors';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { buildReducer } from './Reducer';
 
 interface OwnProps {}
 type Props = OwnProps &
@@ -28,12 +26,6 @@ type Props = OwnProps &
 }  & RouteComponentProps;
 
 const ConstantSidebarItems: SidebarMenuItem[] = [
-  {
-    link: {
-      to: '',
-      name: NewAccountName,
-    },
-  },
   {
     link: {
       to: false,
@@ -76,88 +68,106 @@ const AccountRoutes: RouterPath[] = [
   },
 ];
 
-class AccountsClass extends React.PureComponent<Props, {}, null> {
+const GenerateSidebar: ItemGenerator = () => {
+  return ConstantSidebarItems;
+}
 
-  constructor(props: Props) {
-    super(props);
-
-    this.generateSidebarItems = this.generateSidebarItems.bind(this);
-  }
-
-  public doGenerateSidebarItems(accounts: AccountMap) {
-    if (!accounts) {
-      return [];
-    }
-    const accountLinks: SidebarMenuItem[] = [];
-    Object.entries(accounts).forEach(([name, _]) => {
-      accountLinks.push({
-        link: {
-          to: `e/${name}`,
-          name,
-        },
-      });
-    });
-    // Tell the user that the site is not malfunctionning and no account is available to us at that moment
-    if (accountLinks.length < 1){
-      accountLinks.push({
-        link: {
-          to: `generate`,
-          name: "We didn't find an Account. Want to Create One?",
-        },
-      });
-    }
-
-    return accountLinks;
-  }
-
-  public generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
-
-    // Pull accounts directly from State.  This is because
-    // we may be called mid-change on the state, and our local
-    // state will not yet be updated (but the incoming state will be)
-    const { accounts } = structuredSelectAccounts(state);
-    const { match } = this.props;
-    const accountLinks = this.doGenerateSidebarItems(accounts);
-    const allItems = ConstantSidebarItems.concat(accountLinks);
-    return MapMenuItems(allItems, match.url);
-  }
-
-  public componentDidMount() {
-    const { Sidebar} = this.props;
-    Sidebar.setRootGenerator(this.generateSidebarItems);
-  }
-
-  public componentWillUnmount() {
-    const { Sidebar} = this.props;
-    Sidebar.setRootGenerator(null);
-  }
-
-  public render() {
-    const { match, accounts } = this.props;
+export const AccountsClass = (props: Props) => {
+    const { match } = props;
     const { url } = match;
+    const dispatch = useDispatch();
+    const activeAccount = SelectActiveAccount();
 
-    const accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
-      const accountUrl = `${url}/e/${key}`;
-      return <Route key={key} path={accountUrl} render={(state) => <Account accountName={key} accountMap={AccountRoutes} url={accountUrl} />} />;
-    });
-    return (
-      <Switch>
-        {accountRoutes}
-        <Route render={(state) => <NewAccount url={url} />} />
-      </Switch>
-    );
-  }
+    useEffect(() => {
+      const sidebar = Sidebar.Dispatch(dispatch);
+      sidebar.setRootGenerator(GenerateSidebar);
+    }, [])
+
+    if (!activeAccount) {
+      return <Redirect to="/addAccount" />
+    }
+    return <Account accountName={activeAccount} accountMap={AccountRoutes} url={url} />;
+
+  //   const accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
+  //     const accountUrl = `${url}/e/${key}`;
+  //     return <Route key={key} path={accountUrl} render={(state) => } />;
+  //   });
+  //   return (
+  //     <Switch>
+  //       {accountRoutes}
+  //     </Switch>
+  //   );
+  // }
 }
 
-function mapDispathToProps(dispatch) {
-  return {
-    Sidebar: Sidebar.mapDispatchToProps(dispatch),
-  };
-}
+// class AccountsClass extends React.PureComponent<Props, {}, null> {
 
-export const Accounts = buildFxRateReducer<OwnProps>()(
-  connect(
-    structuredSelectAccounts,
-    mapDispathToProps,
-  )(AccountsClass),
-);
+//   constructor(props: Props) {
+//     super(props);
+//     this.generateSidebarItems = this.generateSidebarItems.bind(this);
+//   }
+
+//   public doGenerateSidebarItems(accounts: AccountMap) {
+//     if (!accounts) {
+//       return [];
+//     }
+//     const accountLinks: SidebarMenuItem[] = [];
+//     Object.entries(accounts).forEach(([name, _]) => {
+//       accountLinks.push({
+//         link: {
+//           to: `e/${name}`,
+//           name,
+//         },
+//       });
+//     });
+
+//     return accountLinks;
+//   }
+
+//   public generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
+
+//     // Pull accounts directly from State.  This is because
+//     // we may be called mid-change on the state, and our local
+//     // state will not yet be updated (but the incoming state will be)
+//     const { accounts } = structuredSelectAccounts(state);
+//     const { match } = this.props;
+//     const accountLinks = this.doGenerateSidebarItems(accounts);
+//     const allItems = ConstantSidebarItems.concat(accountLinks);
+//     return MapMenuItems(allItems, match.url);
+//   }
+
+//   public componentDidMount() {
+//     const { Sidebar} = this.props;
+//     Sidebar.setRootGenerator(this.generateSidebarItems);
+//   }
+
+//   public componentWillUnmount() {
+//     const { Sidebar} = this.props;
+//     Sidebar.setRootGenerator(null);
+//   }
+
+//   public render() {
+//     const { match, accounts } = this.props;
+//     const { url } = match;
+
+//     return <Account accountName={key} accountMap={AccountRoutes} url={url} />;
+
+//     const accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
+//       const accountUrl = `${url}/e/${key}`;
+//       return <Route key={key} path={accountUrl} render={(state) => } />;
+//     });
+//     return (
+//       <Switch>
+//         {accountRoutes}
+//       </Switch>
+//     );
+//   }
+// }
+
+// function mapDispathToProps(dispatch) {
+//   return {
+//     Sidebar: Sidebar.mapDispatchToProps(dispatch),
+//   };
+// }
+
+export const Accounts = buildReducer<OwnProps>()(AccountsClass)

@@ -161,7 +161,7 @@ function NamedAccount(props: OwnProps) {
     const mapDispatchToProps = function(dispatch: Dispatch) {
       return {
         dispatch: accountDispatch(dispatch),
-        ...Sidebar.mapDispatchToProps(dispatch)
+        ...Sidebar.Dispatch(dispatch)
       };
     };
     const mapPropsToState = function(state: ApplicationBaseState) {
