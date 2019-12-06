@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Container, Button } from 'semantic-ui-react';
+import { Menu, Container, Dropdown } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 import HeaderLink from '../../components/HeaderLink';
@@ -16,7 +16,15 @@ class Navigation extends React.Component {
             <HeaderLink to="/howItWorks">How It Works</HeaderLink>
             <HeaderLink to="/FAQ">FAQ</HeaderLink>
           </Menu>
-          <Button as={ NavLink } right to="/accounts/" content='My Accounts' secondary size='massive' id='createAccountHeader'/>
+          <Dropdown button text='My Accounts' id='createAccountHeader'>
+            <Dropdown.Menu>
+              <Dropdown.Header>New Account</Dropdown.Header>
+                <Dropdown.Item text='New Account' description='' as={ NavLink } to="/accounts/" />
+                <Dropdown.Item text='Connect' description='' as={ NavLink } to="/accounts/" />
+              <Dropdown.Divider />
+                <Dropdown.Item text='Login' />
+            </Dropdown.Menu>
+          </Dropdown>
         </Container>   
       </div>
       
