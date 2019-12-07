@@ -43,7 +43,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   // Validate our inputs
   onNameChange = (value: string) => {
     const validation =
-      value.length == 0
+      value.length === 0
         ? {
             nameValid: false,
             nameMessage: messages.errorNameTooShort,
@@ -73,7 +73,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
 
   onReferrerChange = async (value: string) => {
     const validation =
-      value.length != 6
+      value.length !== 6
         ? {
             referrerValid: false,
             referrerMessage: messages.errorReferrerNumChars,

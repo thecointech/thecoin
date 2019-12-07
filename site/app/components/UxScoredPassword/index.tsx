@@ -73,7 +73,7 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
     const stats = this.getScore(value);
     const isValid = this.props.uxChange(value, stats ? stats.score : -1);
 
-    if (stats != null) {
+    if (stats !== null) {
       const hasWarning = stats.feedback.warning.length > 0;
       let newState = {
         tooltip: {

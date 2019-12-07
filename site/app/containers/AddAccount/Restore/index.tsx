@@ -19,7 +19,7 @@ import messages from './messages';
 function getCookie(name: string) {
   const value = '; ' + document.cookie;
   const parts = value.split('; ' + name + '=');
-  return parts.length == 2
+  return parts.length === 2
     ? decodeURI(
         parts
           .pop()!
@@ -116,7 +116,7 @@ export class RestoreClass extends React.PureComponent<Props> {
 
   waitGauthLogin = async (gauthWindow: IWindow) => {
     const myWindow: IWindow = window;
-    var timer = setInterval(function() {
+    var timer = setInterval(() => {
       if (gauthWindow.closed) {
         clearInterval(timer);
         // Check, did we get our cookie?

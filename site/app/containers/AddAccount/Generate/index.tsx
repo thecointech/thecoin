@@ -80,7 +80,7 @@ class GenerateClass extends NewBaseClass<State> {
     });
 
     // If cancelled, do not store generated account
-    if (this.state.isCreating == false) return false;
+    if (this.state.isCreating === false) return false;
 
     // Register this account with our system
     if (!(await this.registerReferral(newAccount.address, accountReferrer)))
