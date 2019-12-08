@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { Dropdown, DropdownItemProps } from "semantic-ui-react"
-import { NavLink } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
 import { selectActiveAccount } from "containers/Accounts/Selectors"
 import { selectAccounts } from "@the-coin/components/containers/Account/selector"
 import { DispatchAccounts } from "containers/Accounts/Reducer"
@@ -28,15 +28,16 @@ export const AccountSwitcher = () => {
     <Dropdown button text={activeAccount} id='createAccountHeader'>
       <Dropdown.Menu>
         <Dropdown.Header>My Account</Dropdown.Header>
-        <Dropdown.Item text='Settings' description='' as={NavLink} to="/accounts/addAccount" />
+        <Dropdown.Item text='Settings' description='' as={NavLink} to="/accounts/settings" />
         <Dropdown.Item text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
         <Dropdown.Divider />
         {allNames
           .filter(account => account != activeAccount)
-          .map(name => <Dropdown.Item key={name} text={name} account={name} description='' onClick={doSetActive} to="/accounts/" />)
+          .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
         }
         <Dropdown.Divider />
-        <Dropdown.Item text='Remove Accounts' description='' as={NavLink} to="/accounts/removeAll" />
+        <Dropdown.Item text='Add Another Account' description='' as={NavLink} to="/addAccount" />
+        <Dropdown.Item text='Remove Accounts' description='' as={NavLink} to="/removeAccount" />
         <Dropdown.Divider />
         <Dropdown.Item text='Privacy Policy' />
       </Dropdown.Menu>
