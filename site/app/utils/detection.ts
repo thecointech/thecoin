@@ -1,4 +1,5 @@
 import { AccountMap } from "@the-coin/components/containers/Account/types";
+import { getDefaultAccount } from "containers/Accounts/Selectors";
 
 export const isOpera = () : boolean =>
   navigator.userAgent.indexOf("Opera") < 0;
@@ -15,10 +16,10 @@ export const hasAccount = (accounts: AccountMap) : boolean =>
 export const getDefaultAccountAddress = (accounts: AccountMap) : string => {
   const base = "/accounts/";
 
-  const firstAccount = accounts && Object.keys(accounts)[0];
+  const defaultAccount = getDefaultAccount(accounts);
   // If we know we have an account, automatically redirect to it
-  if (firstAccount) {
-    return `${base}e/${encodeURI(firstAccount)}`;
+  if (defaultAccount) {
+    return `${base}e/${encodeURI(defaultAccount)}`;
   }
 
   return base;

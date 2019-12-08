@@ -3,7 +3,7 @@ import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Button, Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { buildReducer } from '@the-coin/components/containers/Account/reducer';
+import { buildSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
 import { UxScoredPassword } from 'components/UxScoredPassword';
@@ -164,7 +164,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Generate = buildReducer<OwnProps>(key)(
+export const Generate = buildSingleAccountReducer<OwnProps>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

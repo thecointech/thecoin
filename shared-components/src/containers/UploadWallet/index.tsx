@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Label, Container, Icon, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
-import { buildReducer } from '../Account/reducer';
+import { buildSingleAccountReducer } from '../Account/reducer';
 import { buildMapDispatchToProps, DispatchProps } from '../Account/actions';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
@@ -78,7 +78,7 @@ class UploadWalletClass extends React.PureComponent<Props> {
 const uploadAnonKey = '__@anonf5c95d2b';
 const mapDispatchToProps = buildMapDispatchToProps(uploadAnonKey);
 
-export const UploadWallet = buildReducer<MyProps>(uploadAnonKey)(
+export const UploadWallet = buildSingleAccountReducer<MyProps>(uploadAnonKey)(
   connect(
     null,
     mapDispatchToProps

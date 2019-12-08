@@ -6,8 +6,6 @@ import { Log } from 'ethers/providers';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
 import { buildSagas } from './actions';
-//import { createAccountSelector } from './selector';
-import { compose } from 'redux';
 
 import { GetStored, ReadAllAccounts, AsWallet, StoreWallet, StoreSigner } from './storageSync'
 
@@ -16,6 +14,7 @@ import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
 import { TheSigner } from '../../SignerIdent';
 
+// The reducer for a single account state
 class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
 
@@ -297,27 +296,31 @@ class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
-function buildReducer<T>(key: string) {
+function buildRootReducer<T>() {
 
-  // Create the reducer
-  GetNamedReducer(AccountReducer, key, DefaultAccount, ACCOUNTS_KEY);
-
-  const withReducer = injectReducer<T>({
+  // First, create the root-level reducer.  This is a dictionary
+  // that redirects all our child
+  return injectReducer<T>({
     key: ACCOUNTS_KEY,
     reducer: buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
   });
 
-  // Note, our saga requires us 
+}
+
+function buildSingleAccountReducer<T>(key: string) {
+
+  // Create a reducer for a single account.  It
+  // is required that buildRootReducer is called before
+  // attempting to create a single account reducer
+  GetNamedReducer(AccountReducer, key, DefaultAccount, ACCOUNTS_KEY);
+  
   const withSaga = injectSaga<T>({
     key: key,
     saga: buildSagas(key)
   });
 
-  return compose(
-    withReducer,
-    withSaga,
-  )
+  return withSaga;
 }
 
-export { buildReducer, AccountReducer, ACCOUNTS_KEY };
+export { buildRootReducer, buildSingleAccountReducer, AccountReducer, ACCOUNTS_KEY };
 

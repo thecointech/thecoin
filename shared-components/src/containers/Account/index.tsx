@@ -12,7 +12,7 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 
 import { ConnectWeb3 } from "./Web3";
 import { AccountState } from "./types";
-import { buildReducer } from "./reducer";
+import { buildSingleAccountReducer } from "./reducer";
 import { createAccountSelector } from "./selector";
 import * as Account from "./actions";
 import { AsWallet } from "./storageSync";
@@ -58,20 +58,20 @@ class AccountClass extends React.PureComponent<Props, {}, null> {
   ): SidebarMenuItem[] {
     const { accountMap, accountName, account } = this.props;
     if (account.signer) {
-      // Not default:
-      const item = FindItem(items, accountName);
-      if (item) {
-        item.subItems = Array.from(
-          accountMap.map(item => {
-            return {
-              link: {
-                name: item.name,
-                to: this.buildLink(item)
-              }
-            };
-          })
-        );
-      }
+
+      const menuItems = accountMap.map(item => (
+        {
+          link: {
+            name: item.name,
+            to: this.buildLink(item)
+          }
+        })
+      );
+      const parent = FindItem(items, accountName);
+      if (parent)
+        parent.subItems = menuItems
+      else
+        items.push(...menuItems);
     }
     return items;
   }
@@ -158,19 +158,19 @@ function NamedAccount(props: OwnProps) {
   const { accountName } = props;
   if (!__AccountMap[accountName]) {
     const accountDispatch = Account.buildMapDispatchToProps(accountName);
-    const mapDispatchToProps = function(dispatch: Dispatch) {
+    const mapDispatchToProps = function (dispatch: Dispatch) {
       return {
         dispatch: accountDispatch(dispatch),
         ...Sidebar.Dispatch(dispatch)
       };
     };
-    const mapPropsToState = function(state: ApplicationBaseState) {
+    const mapPropsToState = function (state: ApplicationBaseState) {
       return {
         account: createAccountSelector(accountName)(state)
       };
     };
 
-    __AccountMap[accountName] = buildReducer<OwnProps>(accountName)(
+    __AccountMap[accountName] = buildSingleAccountReducer<OwnProps>(accountName)(
       connect(
         mapPropsToState,
         mapDispatchToProps

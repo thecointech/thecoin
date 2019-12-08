@@ -21,14 +21,14 @@ import treeLogo from './images/treeCanadaLogo.png';
 
 import Subscribe from '../Subscribe';
 import styles from '../../styles/base.css';
-import { getDefaultAccountAddress, hasAccount } from 'utils/detection';
+import { hasAccount } from 'utils/detection';
 import { useSelector } from 'react-redux';
 import { selectAccounts } from '@the-coin/components/containers/Account/selector';
 
 export const HomePage = () => {
   const accounts = useSelector(selectAccounts);
-  const accountButtonText = hasAccount(accounts) ? "My Accounts" : "Try It";
-  const defaultAddress = getDefaultAccountAddress(accounts);
+  const userHasAccount = hasAccount(accounts);
+  const accountButtonText = userHasAccount ? "My Accounts" : "Try It";
   return (
     <React.Fragment>
       <h2 className={styles.h2Home}>
@@ -57,7 +57,7 @@ export const HomePage = () => {
               <p>No engagement, no obligations.</p>
 
               <Button as={ NavLink } to="/howItWorks" content='More Infos' primary size='massive' id='knowMore'/>
-              <Button as={ NavLink } right to={defaultAddress} content={accountButtonText} secondary size='massive' id='createAccount'/>
+              <Button as={ NavLink } to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount'/>
             </div>
           </Grid.Column>
           <Grid.Column className={styles.phoneApp} id='phoneZone'>
