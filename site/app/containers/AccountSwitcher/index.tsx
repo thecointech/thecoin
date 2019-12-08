@@ -33,7 +33,7 @@ export const AccountSwitcher = () => {
         <Dropdown.Divider />
         {allNames
           .filter(account => account != activeAccount)
-          .map(name => <Dropdown.Item text={name} account={name} description='' onClick={doSetActive} to="/accounts/" />)
+          .map(name => <Dropdown.Item key={name} text={name} account={name} description='' onClick={doSetActive} to="/accounts/" />)
         }
         <Dropdown.Divider />
         <Dropdown.Item text='Remove Accounts' description='' as={NavLink} to="/accounts/removeAll" />
