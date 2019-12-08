@@ -19,7 +19,23 @@
   color: white;
 }
 
+.ui.active.button{
+  background-color: #31aabb;
+  color: white;
+  box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset
+}
+
+.ui.active.button:hover{
+  background-color: #31aabb;
+  color: white;
+}
+#createAccountHeader:hover{
+  background-color: #31aabb;
+  color: white;
+}
+
 #createAccountHeader{
+  background-color: #31aabb;
   width: 150px;
   height: 40px;
   line-height: 25px;
@@ -28,6 +44,13 @@
   right: 5%;
   top: 0px;
   font-size: 14px !important;
+  z-index: 100;
+}
+
+#createAccountHeader .dropdown.icon{
+  float: right;
+  top: -18px;
+  position: relative;
 }
 
 #createAccount, #knowMore{
