@@ -7,6 +7,8 @@ import { connectRouter } from 'connected-react-router';
 
 import history from '@the-coin/components/utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
+import { createRootReducer } from '@the-coin/components/containers/Account/reducer';
+import { reducer as activeAccountReducer } from "containers/Accounts/Reducer";
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -15,6 +17,8 @@ export function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
     language: languageProviderReducer,
     router: connectRouter(history),
+    accounts: createRootReducer(),
+    activeAccount: activeAccountReducer,
     ...injectedReducers,
   });
 

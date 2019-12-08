@@ -4,7 +4,7 @@ import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
 import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
-import { buildSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
+import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { connect } from 'react-redux';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import {
@@ -266,7 +266,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Restore = buildSingleAccountReducer<{}>(key)(
+export const Restore = injectSingleAccountReducer<{}>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

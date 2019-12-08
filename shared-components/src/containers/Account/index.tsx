@@ -12,7 +12,7 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 
 import { ConnectWeb3 } from "./Web3";
 import { AccountState } from "./types";
-import { buildSingleAccountReducer } from "./reducer";
+import { injectSingleAccountReducer } from "./reducer";
 import { createAccountSelector } from "./selector";
 import * as Account from "./actions";
 import { AsWallet } from "./storageSync";
@@ -170,7 +170,7 @@ function NamedAccount(props: OwnProps) {
       };
     };
 
-    __AccountMap[accountName] = buildSingleAccountReducer<OwnProps>(accountName)(
+    __AccountMap[accountName] = injectSingleAccountReducer<OwnProps>(accountName)(
       connect(
         mapPropsToState,
         mapDispatchToProps

@@ -11,8 +11,6 @@ import { Purchase } from './Purchase';
 import { BillPayments } from './BillPayments';
 import { selectActiveAccount } from './Selectors';
 
-import { buildReducer } from './Reducer';
-
 interface OwnProps {}
 type Props = OwnProps &
 {
@@ -54,7 +52,7 @@ const AccountRoutes: RouterPath[] = [
   },
 ];
 
-export const AccountsClass = (props: Props) => {
+export const Accounts = (props: Props) => {
     const activeAccount = selectActiveAccount();
     if (!activeAccount) {
       return <Redirect to="/addAccount" />
@@ -64,5 +62,3 @@ export const AccountsClass = (props: Props) => {
     const { url } = match;
     return <Account accountName={activeAccount} accountMap={AccountRoutes} url={url} />;
 }
-
-export const Accounts = buildReducer<OwnProps>()(AccountsClass)

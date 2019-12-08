@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form, Message } from 'semantic-ui-react';
 
 import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
-import { buildSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
+import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
 import { ConnectWeb3 } from '@the-coin/components/containers/Account/Web3';
@@ -78,7 +78,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Connect = buildSingleAccountReducer<{}>(key)(
+export const Connect = injectSingleAccountReducer<{}>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

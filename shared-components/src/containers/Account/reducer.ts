@@ -15,7 +15,7 @@ import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '..
 import { TheSigner } from '../../SignerIdent';
 
 // The reducer for a single account state
-class AccountReducer extends TheCoinReducer<AccountState>
+export class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
 
   setName(name: string): void {
@@ -296,18 +296,21 @@ class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
-function buildRootReducer<T>() {
+export const createRootReducer = () =>
+  buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
+
+export function injectRootReducer<T>() {
 
   // First, create the root-level reducer.  This is a dictionary
   // that redirects all our child
   return injectReducer<T>({
     key: ACCOUNTS_KEY,
-    reducer: buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
+    reducer: createRootReducer()
   });
 
 }
 
-function buildSingleAccountReducer<T>(key: string) {
+export function injectSingleAccountReducer<T>(key: string) {
 
   // Create a reducer for a single account.  It
   // is required that buildRootReducer is called before
@@ -321,6 +324,3 @@ function buildSingleAccountReducer<T>(key: string) {
 
   return withSaga;
 }
-
-export { buildRootReducer, buildSingleAccountReducer, AccountReducer, ACCOUNTS_KEY };
-
