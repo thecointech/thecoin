@@ -13,6 +13,7 @@ import {
 } from '@the-coin/components/containers/Account/actions';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import { ExistsSwitcher } from '../ExistsSwitcher';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
@@ -252,11 +253,7 @@ export class RestoreClass extends React.PureComponent<Props> {
         </Header>
 				<Divider />
         {this.renderContent()}
-        <div><br />
-          <a href="#/accounts/">
-            {'<- Back To My Options'}
-          </a>
-        </div>
+        <ExistsSwitcher filter="restore" />
       </>
     );
   }

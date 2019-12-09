@@ -16,10 +16,5 @@ export default defineMessages({
     id: `${scope}.subHeader`,
     defaultMessage:
       'Your browser has a compatible account, would you like to connect to it?',
-  },
-  existTransfer: {
-    id: `${scope}.creaexistTransferteTransfer`,
-    defaultMessage:
-      '<- Back To My Options',
   }
 });

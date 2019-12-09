@@ -11,12 +11,7 @@ type Props = OwnProps & DispatchProps;
 class Measurable extends React.PureComponent<Props> {
   timestamp = new Date().getTime();
 
-  constructor(props) {
-    super(props);
-    this.onContentSized = this.onContentSized.bind(this);
-  }
-
-  onContentSized(bounds) {
+  onContentSized = (bounds: { bounds: { height: number; }; }) => {
     this.props.setHeight(bounds.bounds.height, this.timestamp);
   }
 

@@ -1,11 +1,12 @@
 import React from "react"
 import { Connect } from "../../Connect"
-import { useIntl, FormattedMessage } from "react-intl"
+import { FormattedMessage } from "react-intl"
 import messages from "./messages"
-import { Header, Container, Divider, Dropdown } from "semantic-ui-react"
+import { Header, Container, Divider } from "semantic-ui-react"
+import { Link } from "react-router-dom"
 
 export const Create = () => {
-  const intl = useIntl();
+
 
   return (
     <Container>
@@ -19,13 +20,10 @@ export const Create = () => {
       </Header>
 
       <Connect />
-      <Divider />
-      <Dropdown text={intl.formatMessage(messages.createTransfer)}>
-        <Dropdown.Menu>
-          <Dropdown.Item text='New' />
-          <Dropdown.Item text='Open...' description='ctrl + o' />
-        </Dropdown.Menu>
-      </Dropdown>
+      <Divider text="Or"/>
+      <Link to="/accounts/generate">
+        <FormattedMessage {...messages.createTransfer} />
+      </Link>
     </Container>
   );
 }
