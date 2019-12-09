@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor, FormattedMessage } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Lock } from 'utils/icons';
 import { Color } from 'csstype';
@@ -11,8 +11,8 @@ import { Props as MyProps } from './types';
 import { UxPassword } from '@the-coin/components/components/UxPassword';
 
 const initialState = {
-  message: undefined as FormattedMessage.MessageDescriptor | undefined,
-  tooltip: undefined as FormattedMessage.MessageDescriptor | undefined,
+  message: undefined as MessageDescriptor | undefined,
+  tooltip: undefined as MessageDescriptor | undefined,
   stats: null as ZXCVBNResult | null,
 }
 

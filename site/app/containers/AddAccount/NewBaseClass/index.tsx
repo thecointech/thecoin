@@ -5,7 +5,7 @@ import { DispatchProps } from '@the-coin/components/containers/Account/actions';
 import { UxInput } from '@the-coin/components/components/UxInput';
 import { IsValidReferrerId } from '@the-coin/utilities';
 
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import messages from '../messages';
 import { Redirect } from 'react-router-dom';
 import { GetReferrersApi } from 'containers/Services/BrokerCAD';
@@ -15,10 +15,10 @@ export const initialState = {
   accountReferrer: '',
 
   nameValid: undefined as boolean | undefined,
-  nameMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  nameMessage: undefined as MessageDescriptor | undefined,
 
   referrerValid: undefined as boolean | undefined,
-  referrerMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  referrerMessage: undefined as MessageDescriptor | undefined,
 
   forceValidate: false,
   redirect: false,

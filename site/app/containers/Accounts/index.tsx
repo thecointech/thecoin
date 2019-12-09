@@ -12,6 +12,7 @@ import { BillPayments } from './BillPayments';
 import { selectActiveAccount } from './Selectors';
 
 interface OwnProps {}
+
 type Props = OwnProps &
 {
   Sidebar: Sidebar.DispatchProps,

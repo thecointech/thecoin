@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Label, Input, Message } from 'semantic-ui-react';
-import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import cx from 'classnames';
 import styles from './index.module.css';
 import { Props as MyProps } from './types';
@@ -11,7 +11,7 @@ const initialState = {
 };
 
 type State = Readonly<typeof initialState>;
-type Props = Readonly<MyProps & InjectedIntlProps>;
+type Props = Readonly<MyProps & WrappedComponentProps>;
 
 class UxInputClass extends React.Component<Props, State> {
   state = initialState;

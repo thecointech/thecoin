@@ -2,7 +2,7 @@ import React from 'react';
 import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Button, Header, Form } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
@@ -19,7 +19,7 @@ const initialState = {
   ...BaseInitial,
   accountPwd: '',
   pwdValid: undefined as boolean | undefined,
-  pwdMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  pwdMessage: undefined as MessageDescriptor | undefined,
 
   isCreating: false,
   cancelCreating: false,

@@ -1,12 +1,12 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 
 import { UxInput } from '../../components/UxInput';
 import { Props } from './types';
 
 const initialState = {
-  message: undefined as FormattedMessage.MessageDescriptor | undefined,
+  message: undefined as MessageDescriptor | undefined,
   isPassword: false,
   maskPassword: null,
   selectionStart: 0,

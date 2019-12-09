@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import { ReactNode } from 'react';
 import { InputProps } from 'semantic-ui-react';
 
@@ -12,12 +12,12 @@ export enum ErrorState {
 export type ChangeCB = (value: string) => void;
 
 export interface Props {
-  intlLabel: FormattedMessage.MessageDescriptor;
+  intlLabel: MessageDescriptor;
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: FormattedMessage.MessageDescriptor;
-  tooltip?: FormattedMessage.MessageDescriptor;
+  message?: MessageDescriptor;
+  tooltip?: MessageDescriptor;
 
   forceValidate?: boolean;
 

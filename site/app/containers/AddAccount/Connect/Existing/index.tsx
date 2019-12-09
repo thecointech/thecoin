@@ -2,7 +2,7 @@ import React from "react"
 import { Connect } from "../../Connect"
 import { FormattedMessage } from "react-intl"
 import messages from "./messages"
-import { Header, Container } from "semantic-ui-react"
+import { Header, Container, Divider } from "semantic-ui-react"
 
 export const Existing = () => {
   return (
@@ -16,11 +16,10 @@ export const Existing = () => {
         </Header.Subheader>
       </Header>
       <Connect />
-      <div><br />
-        <a href="#/accounts/">
-          <FormattedMessage {...messages.existTransfer} />
-        </a>
-      </div>
+      <Divider />
+      <a href="#/accounts/">
+        <FormattedMessage {...messages.existTransfer} />
+      </a>
     </Container>
   );
 }
