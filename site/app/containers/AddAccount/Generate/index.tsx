@@ -2,8 +2,8 @@ import React from 'react';
 import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Button, Header, Form } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
-import { buildReducer } from '@the-coin/components/containers/Account/reducer';
+import { FormattedMessage, MessageDescriptor } from 'react-intl';
+import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
 import { UxScoredPassword } from 'components/UxScoredPassword';
@@ -19,7 +19,7 @@ const initialState = {
   ...BaseInitial,
   accountPwd: '',
   pwdValid: undefined as boolean | undefined,
-  pwdMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  pwdMessage: undefined as MessageDescriptor | undefined,
 
   isCreating: false,
   cancelCreating: false,
@@ -80,7 +80,7 @@ class GenerateClass extends NewBaseClass<State> {
     });
 
     // If cancelled, do not store generated account
-    if (this.state.isCreating == false) return false;
+    if (this.state.isCreating === false) return false;
 
     // Register this account with our system
     if (!(await this.registerReferral(newAccount.address, accountReferrer)))
@@ -164,7 +164,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Generate = buildReducer<OwnProps>(key)(
+export const Generate = injectSingleAccountReducer<OwnProps>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

@@ -15,7 +15,8 @@ let lastTimestamp = 0;
 class HeightMeasureReducer extends TheCoinReducer<ContainerState>
   implements IActions {
   setHeight(newHeight: number, timestamp: number) {
-    if (timestamp < lastTimestamp) return;
+    if (timestamp < lastTimestamp)
+      return;
     this.draftState.height = newHeight;
     lastTimestamp = timestamp;
   }

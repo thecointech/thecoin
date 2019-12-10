@@ -1,12 +1,12 @@
 import { Modal, Loader, Button, Icon } from 'semantic-ui-react';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor, FormattedMessage } from 'react-intl';
 
 interface OwnProps {
   isOpen: boolean;
-  header: FormattedMessage.MessageDescriptor;
+  header: MessageDescriptor;
   progressPercent?: number;
-  progressMessage?: FormattedMessage.MessageDescriptor;
+  progressMessage?: MessageDescriptor;
   messageValues?: any;
   cancelCallback?: () => void;
   okCallback?: () => void;

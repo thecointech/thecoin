@@ -5,7 +5,7 @@ import { DispatchProps } from '@the-coin/components/containers/Account/actions';
 import { UxInput } from '@the-coin/components/components/UxInput';
 import { IsValidReferrerId } from '@the-coin/utilities';
 
-import { FormattedMessage } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import messages from '../messages';
 import { Redirect } from 'react-router-dom';
 import { GetReferrersApi } from 'containers/Services/BrokerCAD';
@@ -15,10 +15,10 @@ export const initialState = {
   accountReferrer: '',
 
   nameValid: undefined as boolean | undefined,
-  nameMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  nameMessage: undefined as MessageDescriptor | undefined,
 
   referrerValid: undefined as boolean | undefined,
-  referrerMessage: undefined as FormattedMessage.MessageDescriptor | undefined,
+  referrerMessage: undefined as MessageDescriptor | undefined,
 
   forceValidate: false,
   redirect: false,
@@ -43,7 +43,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   // Validate our inputs
   onNameChange = (value: string) => {
     const validation =
-      value.length == 0
+      value.length === 0
         ? {
             nameValid: false,
             nameMessage: messages.errorNameTooShort,
@@ -73,7 +73,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
 
   onReferrerChange = async (value: string) => {
     const validation =
-      value.length != 6
+      value.length !== 6
         ? {
             referrerValid: false,
             referrerMessage: messages.errorReferrerNumChars,

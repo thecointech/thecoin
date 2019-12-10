@@ -1,10 +1,12 @@
 import React from "react"
-import { Connect } from ".."
+import { Connect } from "../../Connect"
 import { FormattedMessage } from "react-intl"
 import messages from "./messages"
 import { Header, Container } from "semantic-ui-react"
+import { ExistsSwitcher } from "containers/AddAccount/ExistsSwitcher"
 
 export const Existing = () => {
+  
   return (
     <Container>
       <Header as="h1">
@@ -16,11 +18,7 @@ export const Existing = () => {
         </Header.Subheader>
       </Header>
       <Connect />
-      <div><br />
-        <a href="#/accounts/">
-          <FormattedMessage {...messages.existTransfer} />
-        </a>
-      </div>
+      <ExistsSwitcher filter="connect" />
     </Container>
   );
 }

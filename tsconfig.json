@@ -28,14 +28,14 @@
     //
     // Allow project references
     //
-    "declaration": true, 
-    "declarationMap": true, 
+    "declaration": true,
+    "declarationMap": true,
     "composite": true,
 
     //
     // Fix jest testing
     //
-    "types": ["jest", "node"],
+    //"types": ["jest", "node"],
     "typeRoots": ["./types", "./node_modules/@types"]
   },
   "exclude": ["node_modules", "**/node_modules/*"]

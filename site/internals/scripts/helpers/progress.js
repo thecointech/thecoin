@@ -14,9 +14,10 @@ function animateProgress(message, amountOfDots) {
   }
 
   let i = 0;
-  return setInterval(function() {
+  return setInterval(() => {
     readline.cursorTo(process.stdout, 0);
     i = (i + 1) % (amountOfDots + 1);
+    // deepcode ignore ArrayConstructor: <please specify a reason of ignoring this>
     const dots = new Array(i + 1).join('.');
     process.stdout.write(message + dots);
   }, 500);

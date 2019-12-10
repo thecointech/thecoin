@@ -1,46 +1,23 @@
 import * as React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
-
-import { buildReducer as buildFxRateReducer } from '@the-coin/components/containers/FxRate/reducer';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
-
 import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
-import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
-
-import { ApplicationRootState } from 'types';
 import { Balance } from '@the-coin/components/containers/Balance';
-import { NewAccount, NewAccountName } from './NewAccount';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
 import { Purchase } from './Purchase';
 import { BillPayments } from './BillPayments';
-
+import { selectActiveAccount } from './Selectors';
 
 interface OwnProps {}
+
 type Props = OwnProps &
 {
   Sidebar: Sidebar.DispatchProps,
   accounts: AccountMap,
 }  & RouteComponentProps;
-
-const ConstantSidebarItems: SidebarMenuItem[] = [
-  {
-    link: {
-      to: '',
-      name: NewAccountName,
-    },
-  },
-  {
-    link: {
-      to: false,
-      name: 'My Accounts',
-    },
-  },
-];
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -76,88 +53,13 @@ const AccountRoutes: RouterPath[] = [
   },
 ];
 
-class AccountsClass extends React.PureComponent<Props, {}, null> {
-
-  constructor(props: Props) {
-    super(props);
-
-    this.generateSidebarItems = this.generateSidebarItems.bind(this);
-  }
-
-  public doGenerateSidebarItems(accounts: AccountMap) {
-    if (!accounts) {
-      return [];
-    }
-    const accountLinks: SidebarMenuItem[] = [];
-    Object.entries(accounts).forEach(([name, _]) => {
-      accountLinks.push({
-        link: {
-          to: `e/${name}`,
-          name,
-        },
-      });
-    });
-    // Tell the user that the site is not malfunctionning and no account is available to us at that moment
-    if (accountLinks.length < 1){
-      accountLinks.push({
-        link: {
-          to: `generate`,
-          name: "We didn't find an Account. Want to Create One?",
-        },
-      });
+export const Accounts = (props: Props) => {
+    const activeAccount = selectActiveAccount();
+    if (!activeAccount) {
+      return <Redirect to="/addAccount" />
     }
 
-    return accountLinks;
-  }
-
-  public generateSidebarItems(state: ApplicationRootState): SidebarMenuItem[] {
-
-    // Pull accounts directly from State.  This is because
-    // we may be called mid-change on the state, and our local
-    // state will not yet be updated (but the incoming state will be)
-    const { accounts } = structuredSelectAccounts(state);
-    const { match } = this.props;
-    const accountLinks = this.doGenerateSidebarItems(accounts);
-    const allItems = ConstantSidebarItems.concat(accountLinks);
-    return MapMenuItems(allItems, match.url);
-  }
-
-  public componentDidMount() {
-    const { Sidebar} = this.props;
-    Sidebar.setRootGenerator(this.generateSidebarItems);
-  }
-
-  public componentWillUnmount() {
-    const { Sidebar} = this.props;
-    Sidebar.setRootGenerator(null);
-  }
-
-  public render() {
-    const { match, accounts } = this.props;
+    const { match } = props;
     const { url } = match;
-
-    const accountRoutes = Array.from(Object.entries(accounts), ([key, value]) => {
-      const accountUrl = `${url}/e/${key}`;
-      return <Route key={key} path={accountUrl} render={(state) => <Account accountName={key} accountMap={AccountRoutes} url={accountUrl} />} />;
-    });
-    return (
-      <Switch>
-        {accountRoutes}
-        <Route render={(state) => <NewAccount url={url} />} />
-      </Switch>
-    );
-  }
+    return <Account accountName={activeAccount} accountMap={AccountRoutes} url={url} />;
 }
-
-function mapDispathToProps(dispatch) {
-  return {
-    Sidebar: Sidebar.mapDispatchToProps(dispatch),
-  };
-}
-
-export const Accounts = buildFxRateReducer<OwnProps>()(
-  connect(
-    structuredSelectAccounts,
-    mapDispathToProps,
-  )(AccountsClass),
-);

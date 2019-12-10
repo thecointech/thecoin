@@ -88,19 +88,16 @@ class PageSidebar extends React.PureComponent<Props, {}, null> {
 
 // Map State into a list of menu items.
 function mapStateToProps(state: ApplicationBaseState) {
-  if (!state.sidebar || !state.sidebar.rootGenerator) {
-    return {
-      items: []
-    };
-  }
+  let items: SidebarMenuItem[] = [];
 
-  let baseItems = state.sidebar.rootGenerator(state);
+  if (state.sidebar.rootGenerator)
+    items = state.sidebar.rootGenerator(state);
+
   Object.entries(state.sidebar.subGenerators).forEach(([_, generator]) => {
-    baseItems = generator(baseItems, state);
+    items = generator(items, state);
   });
-  return {
-    items: baseItems
-  };
+  
+  return {items};
 }
 
 const ConnectedPageSidebar = buildReducer<OwnProps>()(

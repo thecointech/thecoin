@@ -102,9 +102,9 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: any
   let existing = dictionaryReducers[dictionaryFilter];
   if (!existing) {
     // Check we have at least one existing reducer matching this name
-    const reducerCreated = !!Object.entries(reducerCache).find(([_, value]) => value.dictionaryName === dictionaryFilter);
-    if (!reducerCreated)
-      alert("Invalid dictionary reducer - no matching entries in cache");
+    // const reducerCreated = !!Object.entries(reducerCache).find(([_, value]) => value.dictionaryName === dictionaryFilter);
+    // if (!reducerCreated)
+    //   alert("Invalid dictionary reducer - no matching entries in cache");
       
     // Redirect reducer into named accounts
     existing = function(state: Dictionary<any>, action: any) 

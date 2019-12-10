@@ -1,10 +1,10 @@
 import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
-import { IWindow } from '../../Settings/gconnect/gauth';
+import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
 import { AccountMap } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
-import { buildReducer } from '@the-coin/components/containers/Account/reducer';
+import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { connect } from 'react-redux';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
 import {
@@ -13,13 +13,14 @@ import {
 } from '@the-coin/components/containers/Account/actions';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import { ExistsSwitcher } from '../ExistsSwitcher';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
 function getCookie(name: string) {
   const value = '; ' + document.cookie;
   const parts = value.split('; ' + name + '=');
-  return parts.length == 2
+  return parts.length === 2
     ? decodeURI(
         parts
           .pop()!
@@ -116,7 +117,7 @@ export class RestoreClass extends React.PureComponent<Props> {
 
   waitGauthLogin = async (gauthWindow: IWindow) => {
     const myWindow: IWindow = window;
-    var timer = setInterval(function() {
+    var timer = setInterval(() => {
       if (gauthWindow.closed) {
         clearInterval(timer);
         // Check, did we get our cookie?
@@ -252,11 +253,7 @@ export class RestoreClass extends React.PureComponent<Props> {
         </Header>
 				<Divider />
         {this.renderContent()}
-        <div><br />
-          <a href="#/accounts/">
-            {'<- Back To My Options'}
-          </a>
-        </div>
+        <ExistsSwitcher filter="restore" />
       </>
     );
   }
@@ -266,7 +263,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Restore = buildReducer<{}>(key)(
+export const Restore = injectSingleAccountReducer<{}>(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

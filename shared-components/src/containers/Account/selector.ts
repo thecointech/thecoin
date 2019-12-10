@@ -1,24 +1,23 @@
 import { ApplicationBaseState } from "../../types";
 import { AccountState, AccountMap, DefaultAccount } from "./types";
 import { ReadAllAccounts } from "./storageSync";
+import { useSelector } from "react-redux";
 
-function selectAccounts(state: ApplicationBaseState) : AccountMap {
+export function accountSelector(state: ApplicationBaseState) : AccountMap {
 	return state.accounts || ReadAllAccounts();
 }
 
-function structuredSelectAccounts(state: ApplicationBaseState) {
-	return {
-		accounts: selectAccounts(state)
-	}
-}
+export const selectAccounts = () =>
+    useSelector(accountSelector);
 
-function createAccountSelector(accountName: string) {
-	return (state: ApplicationBaseState) : AccountState => 
-		selectAccounts(state)[accountName] || {
+export const structuredSelectAccounts = (state: ApplicationBaseState) => ({
+  accounts: accountSelector(state)
+})
+
+export const createAccountSelector = (accountName: string) => 
+  (state: ApplicationBaseState) : AccountState => (
+    accountSelector(state)[accountName] || {
 			...DefaultAccount,
 			name: accountName
 		}
-}
-
-
-export { selectAccounts, structuredSelectAccounts, createAccountSelector }
+  )

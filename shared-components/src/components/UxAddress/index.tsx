@@ -3,11 +3,12 @@ import { IsValidAddress } from '@the-coin/utilities';
 import messages from './messages';
 import { UxInput } from '../UxInput';
 import { ChangeCB } from '../UxInput/types';
+import { MessageDescriptor } from 'react-intl';
 
 type MyProps = {
 	forceValidate?: boolean,
 	placeholder?: string,
-	intlLabel?: ReactIntl.FormattedMessage.MessageDescriptor,
+	intlLabel?: MessageDescriptor,
 	uxChange: ChangeCB
 }
 
@@ -16,7 +17,7 @@ class UxAddress extends React.PureComponent<MyProps> {
 	state = {
 		account: "",
 		isValid: undefined,
-		message: undefined as ReactIntl.FormattedMessage.MessageDescriptor | undefined,
+		message: undefined as MessageDescriptor | undefined,
 	};
 
 	// Validate our inputs

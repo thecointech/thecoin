@@ -15,6 +15,7 @@ import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
+import { FxRates } from '@the-coin/components/containers/FxRate';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
 import {
@@ -29,7 +30,7 @@ function App(props: LocationStoreState) {
   const sidebarVisible = props.location.pathname.startsWith('/accounts');
 
   return (
-    <React.Fragment>
+    <>
       <Header />
       <MainNavigation />
 
@@ -49,7 +50,9 @@ function App(props: LocationStoreState) {
         </PageSidebar>
       </Container>
       <Footer />
-    </React.Fragment>
+
+      <FxRates />
+    </>
   );
 }
 
