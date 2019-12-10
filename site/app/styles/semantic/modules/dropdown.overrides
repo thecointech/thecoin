@@ -1,3 +1,38 @@
 /*******************************
         User Overrides
 *******************************/
+
+
+#createAccountHeader:hover{
+  background-color: #31aabb;
+  color: white;
+}
+
+#createAccountHeader{
+  background-color: #31aabb;
+  width: 150px;
+  height: 40px;
+  line-height: 25px;
+  position: fixed;
+  right: 0px;
+  right: 10%;
+  top: 0px;
+  font-size: 14px !important;
+  z-index: 100;
+}
+
+#createAccountHeader .dropdown.icon{
+  float: right;
+  top: 8px;
+  position: relative;
+}
+
+
+#createAccountHeader img{
+        width: 10px;
+        margin-top: 5px;
+}
+
+#createAccountHeader .menu.transition i .dropdown.icon{
+  top: 4px;
+}
