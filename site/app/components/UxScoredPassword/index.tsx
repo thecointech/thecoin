@@ -140,7 +140,7 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
     return (
       <UxPassword
-        intlLabel={intlLabel}
+        intlLabel={intlLabel} id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}
         {...inputProps}

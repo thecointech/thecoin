@@ -23,6 +23,13 @@
   margin-top: 10px;
 }
 
+#formCreateAccountStep1{
+  background-color: rgba(75,101,180,.25);
+  padding: 6%;
+  border-radius: 25px;
+}
+
+
 @media only screen and (max-width: 750px) {
   .mainWrapper .column{
     width: 100% !important;

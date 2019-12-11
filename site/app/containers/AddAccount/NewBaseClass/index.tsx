@@ -128,6 +128,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         isValid={nameValid}
         message={nameMessage}
         placeholder="Account Name"
+        id="accountNameField"
         disabled={disabled}
       />
     );
@@ -143,6 +144,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         isValid={referrerValid}
         message={referrerMessage}
         placeholder="Referrer"
+        id="referrerField"
         disabled={disabled}
       />
     );

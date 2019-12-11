@@ -7,14 +7,12 @@ import { DispatchAccounts } from "containers/Accounts/Reducer"
 import { useDispatch } from "react-redux"
 
 import cross from './images/cross.svg';
-import rectangle from './images/greenrectangle.svg';
 //import dot from './images/greendot.svg';
 
-// import { AccountMap } from "@the-coin/components/containers/Account/types"
+//import { AccountMap } from "@the-coin/components/containers/Account/types"
 
 
-// const isLoggedIn = (accounts: AccountMap, name: string) =>
-//   accounts[name].signer != null;
+//const isLoggedIn = (accounts: AccountMap, name: string) => accounts[name].signer != null;
 
 
 export const AccountSwitcher = () => {
@@ -37,7 +35,7 @@ export const AccountSwitcher = () => {
             .filter(account => account == activeAccount)
             .map(name => 
               <Dropdown.Item>
-                <Dropdown text={name.substring(0, 15)+'...'}>
+                <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14)+'...'}>
                   <Dropdown.Menu direction='right'>
                   <Dropdown.Item key={name} text='See' account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />
                     <Dropdown.Item text='Settings' description='' as={NavLink} to="/accounts/settings" />
@@ -51,8 +49,6 @@ export const AccountSwitcher = () => {
             .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
           }
         <Dropdown.Item text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/generate/" />
-        <Dropdown.Divider />
-        <Dropdown.Item text='Remove Accounts' image={{ avatar: false, src: rectangle }} description='' as={NavLink} to="/removeAccount" />
       </Dropdown.Menu>
     </Dropdown>
   )
