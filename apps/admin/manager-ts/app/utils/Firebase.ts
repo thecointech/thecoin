@@ -7,7 +7,6 @@ import * as firebase from "firebase/app";
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
-import "firebase/auth";
 import { SetFirestore } from "@the-coin/utilities/lib/Firestore";
 
 // Your web app's Firebase configuration
@@ -40,4 +39,6 @@ export const signIn = async () =>
   }
 }
 export const now = () => firebase.firestore.Timestamp.now();
+
+export const fromMillis = (millis: number) => firebase.firestore.Timestamp.fromMillis(millis);
 // if (IsDebug)

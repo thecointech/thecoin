@@ -3,7 +3,8 @@ import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
 import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
-import { buildReducer } from '@the-coin/components/containers/FxRate/reducer'
+import { FxRates } from '@the-coin/components/containers/FxRate'
+import { injectRootReducer } from '@the-coin/components/containers/Account/reducer'
 
 class App extends React.PureComponent {
 
@@ -15,10 +16,11 @@ class App extends React.PureComponent {
             <Routes />
           </Container>
         </PageSidebar>
+        <FxRates />
       </React.Fragment>
     );
   }
 }
 
-const HotApp = buildReducer<{}>()(hot(App));
+const HotApp = injectRootReducer<{}>()(hot(App));
 export { HotApp as App }

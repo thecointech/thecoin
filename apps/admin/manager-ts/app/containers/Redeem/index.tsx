@@ -13,7 +13,7 @@ import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/
 import { GetSaleSigner } from '@the-coin/utilities/lib/VerifiedSale';
 import { DocumentSnapshot } from "@the-coin/utilities/lib/FirebaseFirestore";
 import { firestore } from "firebase";
-import { signIn } from "utils/Firebase";
+import { signIn, fromMillis } from "utils/Firebase";
 
 const ACTION_TYPE : UserAction = "Sell";
 
@@ -69,7 +69,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
     if (nextOpen < Date.now()) {
       this.props.fetchRateAtDate(new Date(nextOpen));		
     }
-    return firestore.Timestamp.fromMillis(nextOpen);
+    return fromMillis(nextOpen);
   }
 
   async processRawSale(doc: DocumentSnapshot) : Promise<VerifiedSaleRecord|null>

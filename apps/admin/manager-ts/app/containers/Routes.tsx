@@ -4,12 +4,9 @@ import { TheCoin } from 'containers/TheCoinAccount'
 import { BrokerCAD } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
-import { DispatchProps, mapDispatchToProps } from '@the-coin/components/containers/PageSidebar/actions';
+import { Dispatch } from '@the-coin/components/containers/PageSidebar/actions';
 import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
-import { connect } from 'react-redux';
-
-type MyProps = {}
-type Props = MyProps & DispatchProps;
+import { useDispatch } from 'react-redux';
 
 const ConstantSidebarItems: SidebarMenuItem[] = 
 [
@@ -32,34 +29,27 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 		}
 	}
 ];
+
+const generateSidebarItems = () : SidebarMenuItem[] => 
+  MapMenuItems(ConstantSidebarItems, "/");
   
-  
-class RoutesClass extends React.PureComponent<Props, {}, null> {
+export const Routes = () => {
 
-	generateSidebarItems(): SidebarMenuItem[] {
-		return MapMenuItems(ConstantSidebarItems, "/");
-	  } 
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const sidebar = Dispatch(dispatch)
+    sidebar.setRootGenerator(generateSidebarItems);
 
-	componentDidMount() {
-		this.props.setRootGenerator(this.generateSidebarItems);
-	}
+    return () => sidebar.setRootGenerator(null);
+  }, [dispatch])
 
-	componentWillUnmount() {
-		this.props.setRootGenerator(null);
-	}
-
-	render() {
-		const brokerCad = `/${BrokerCAD.AccountName}`;
-		const theCoin = `/${TheCoin.AccountName}`;
-		return (
-			<Switch>
-				<Route path={brokerCad} key={brokerCad} component={BrokerCAD} />
-				<Route path={theCoin} key={theCoin} component={TheCoin} />
-				<Route key="default" component={NotFoundPage} />
-			</Switch>
-		)
-	}
+  const brokerCad = `/${BrokerCAD.AccountName}`;
+  const theCoin = `/${TheCoin.AccountName}`;
+  return (
+    <Switch>
+      <Route path={brokerCad} key={brokerCad} component={BrokerCAD} />
+      <Route path={theCoin} key={theCoin} component={TheCoin} />
+      <Route key="default" component={NotFoundPage} />
+    </Switch>
+  )
 }
-
-const Routes = connect(null, mapDispatchToProps)(RoutesClass);
-export { Routes }

@@ -90,6 +90,7 @@ app.on('ready', async () => {
     }
   });
 
+  // deepcode ignore AttrAccessOnNull: <please specify a reason of ignoring this>
   mainWindow.on('closed', () => {
     mainWindow = null;
   });

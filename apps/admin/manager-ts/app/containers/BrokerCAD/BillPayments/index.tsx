@@ -12,9 +12,8 @@ import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import fs from 'fs';
 import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
-import {firestore} from 'firebase';
-//import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
 import firebase from "firebase";
+import { fromMillis } from "utils/Firebase";
 
 type Timestamp = firebase.firestore.Timestamp;
 
@@ -88,7 +87,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		if (nextOpen < Date.now()) {
 			this.props.fetchRateAtDate(new Date(nextOpen));		
 		}
-		return firestore.Timestamp.fromMillis(nextOpen);
+		return fromMillis(nextOpen);
 	}
 
 	async processRawBill(bill: any, index: number)

@@ -231,7 +231,7 @@
     "electron-debug": "^3.0.0",
     "electron-log": "^3.0.6",
     "electron-updater": "^4.0.6",
-    "firebase": "^7.0.0",
+    "firebase": "^7.5.2",
     "history": "^4.9.0",
     "react-datetime": "^2.16.3",
     "react-hot-loader": "^4.11.1",
