@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.module.css';
 
 export default () => (
-  <div>
+  <div id="footer">
     <div>
       <ul className={styles.footerItems}>
         <li>terms</li>
