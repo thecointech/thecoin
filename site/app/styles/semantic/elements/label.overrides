@@ -4,4 +4,8 @@
 
 .ui.label{
       background: none;
+      font-size: 10px;
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+      border-bottom-left-radius: 0;
+      padding-left: 8px;
 }

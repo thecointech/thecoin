@@ -2,6 +2,43 @@
          Site Overrides
 *******************************/
 
+#backgroundDecor{
+  height: 100%;
+  width: 550px;
+  z-index: -100;
+  position: fixed;
+  right: 0;
+  top: 10px;
+  background-image: linear-gradient(transparent, #3193A1);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  
+  border-radius: 100% 0% 0% 100%; 
+}
+
+#backgroundDecorMore{
+  height: 300px;
+  width: 300px;
+  z-index: -100;
+  position: fixed;
+  left: 20%;
+  bottom: -10px;
+  background-image: linear-gradient(transparent, #E6E6E6);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  
+  border-radius: 100% 100% 100% 100%; 
+}
+
+
+.ui.segments .segment, .ui.container .ui.segment, .ui.container{
+  border-color: transparent !important;
+}
+
+.ui.container{
+  background-color: transparent !important;
+}
+
 #app{
   max-width: 1500px;
   margin: auto;
@@ -24,9 +61,12 @@
 }
 
 #formCreateAccountStep1{
-  background-color: rgba(75,101,180,.25);
-  padding: 6%;
-  border-radius: 25px;
+  background-color: rgba(255,255,255,1);
+  padding: 5%;
+  border-radius: 10px;
+  min-width: 300px;
+  width: 50%;
+  margin: auto;
 }
 
 
@@ -36,6 +76,10 @@
   }
 }
 @media only screen and (max-width: 390px) {
+
+  #backgroundDecor{
+    transform: none;
+  }
 
   #phoneZone{
     display: none;
