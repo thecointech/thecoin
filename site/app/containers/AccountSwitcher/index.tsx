@@ -48,7 +48,10 @@ export const AccountSwitcher = () => {
             .filter(account => account != activeAccount)
             .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
           }
+        
         <Dropdown.Item text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/generate/" />
+        
+        <Dropdown.Item text='Login' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/restore/" />
       </Dropdown.Menu>
     </Dropdown>
   )

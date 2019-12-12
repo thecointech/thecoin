@@ -8,7 +8,7 @@ import { ExistsSwitcher } from "containers/AddAccount/ExistsSwitcher"
 export const Existing = () => {
   
   return (
-    <Container>
+    <Container id="formCreateAccountStep1">
       <Header as="h1">
         <Header.Content>
           <FormattedMessage {...messages.header} />

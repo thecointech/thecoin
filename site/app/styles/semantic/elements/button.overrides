@@ -1,7 +1,16 @@
 /*******************************
          Site Overrides
 *******************************/
-
+#switch{
+  position: relative;
+  height: 40px;
+  top: -70px;
+  line-height: 26px;
+  left: 365px;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+}
 
 .ui.button{
   font-size: 1.3rem;

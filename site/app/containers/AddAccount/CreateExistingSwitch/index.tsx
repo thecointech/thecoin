@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Header } from 'semantic-ui-react';
+import { Button, Container, Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { isWeb3Enabled } from 'utils/detection';
 
@@ -35,8 +35,9 @@ export const CreateExistingSwitch = (props: Props) => {
           <Header.Subheader>
           </Header.Subheader>
         </Header>
-        <Button as={NavLink} to={createUrl} content='I want to create a new account' secondary style={{ width: '300px', marginLeft: '7%' }} />
-        <Button as={NavLink} to={existingUrl} content='I already have an Account' primary style={{ width: '300px', marginLeft: '7%'  }} />
+        <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary style={{ width: '300px', lineHeight:'30px' , marginLeft: '7%', marginTop: '40px', marginBottom: '10px' }} />
+        <Divider horizontal>Or</Divider>
+        <Button as={NavLink} to={existingUrl} content='I already have an Account' primary style={{ width: '300px', lineHeight:'30px', marginLeft: '7%', marginTop: '10px' }} />
       </div>
     </Container>
   )
