@@ -50,8 +50,7 @@ export const AccountSwitcher = () => {
           }
         
         <Dropdown.Item text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/generate/" />
-        
-        <Dropdown.Item text='Login' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/restore/" />
+        <Dropdown.Item text='Restore' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/restore/" />
       </Dropdown.Menu>
     </Dropdown>
   )

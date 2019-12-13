@@ -2,7 +2,6 @@ import React from 'react';
 import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Button, Header, Form } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
@@ -123,7 +122,6 @@ class GenerateClass extends NewBaseClass<State> {
     return (
       <React.Fragment>
         <Form id="formCreateAccountStep1">
-        <Button as={ NavLink } to="/addAccount/restore/" content='Switch To Login' primary size='small' id='switch'/>
           <Header as="h1">
             <Header.Content>
               <FormattedMessage {...messages.header} />
