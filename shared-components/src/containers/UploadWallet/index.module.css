@@ -1,21 +1,17 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	font-family: sans-serif;
 }
 
 .icon {
 	min-width: 190px;
-	vertical-align: inherit !important;
 }
 
 .dropzone {
 	align-items: center;
-	padding: 20px;
-	border-width: 2px !important;
 	border-radius: 2px !important;
 	border-color: rgba(0, 0, 0, 0.5) !important;
-	border-style: dashed !important;
+	border: 2px dashed !important;
 	outline: none;
 	transition: border .24s ease-in-out;
 }
