@@ -70,7 +70,6 @@ export class UxPassword extends React.PureComponent<Props, State> {
   }
 
   uxChange(value: string): void {
-    //this.toggleMask();
     const returnValue = this.props.uxChange(value);
     return returnValue;
   }

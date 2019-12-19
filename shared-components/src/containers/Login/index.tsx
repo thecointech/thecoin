@@ -143,7 +143,7 @@ class Login extends React.PureComponent<Props, State, null> {
     return (
       <React.Fragment>
         <div className={styles.wrapper}>
-          <Form>
+          <Form id="formCreateAccountStep1">
             <Header as="h1">
               <Header.Content>
                 <FormattedMessage
