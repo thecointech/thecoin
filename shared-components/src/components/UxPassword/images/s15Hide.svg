@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="9px" viewBox="0 0 16 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <g id="UserPath" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-967.000000, -465.000000)">
+            <g id="FormCreateAccount" transform="translate(468.000000, 345.000000)">
+                <g id="Group-4" transform="translate(499.000000, 121.000000)">
+                    <g id="Group-9" transform="translate(1.000000, 0.000000)" stroke="#000000" stroke-linecap="square">
+                        <path d="M0,5 C3.07655356,3.66666667 5.40988689,3 7,3 C8.59011311,3 10.9234464,3.66666667 14,5" id="Line-3" transform="translate(7.000000, 4.000000) scale(1, -1) translate(-7.000000, -4.000000) "></path>
+                        <path d="M0,3 C3.07655356,1 5.40988689,0 7,0 C8.59011311,0 10.9234464,1 14,3" id="Line-3"></path>
+                    </g>
+                    <path d="M3.78014753,1.2123094 L8,-1.7408297e-13 L11.5,0.714880912 L14.5,3 L13.1704357,3.5 C12.2546219,4.15937287 10.9098198,4.5983687 9.13602919,4.81698749 C7.47006789,5.02231637 4.5271571,4.24889263 1.5,3 L3.78014753,1.2123094 Z" id="Rectangle" fill="#000000"></path>
+                    <rect id="Rectangle" fill="#000000" transform="translate(1.500000, 4.000000) rotate(30.000000) translate(-1.500000, -4.000000) " x="1" y="2.99999981" width="1" height="2"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(14.500000, 4.000000) rotate(-30.000000) translate(-14.500000, -4.000000) " x="14" y="2.99999981" width="1" height="2"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(11.500000, 5.500000) rotate(-25.000000) translate(-11.500000, -5.500000) " x="11" y="3.99999981" width="1" height="3"></rect>
+                    <rect id="Rectangle" fill="#000000" x="7.5" y="5" width="1" height="3"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(4.500000, 5.500000) rotate(25.000000) translate(-4.500000, -5.500000) " x="4" y="3.99999981" width="1" height="3"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

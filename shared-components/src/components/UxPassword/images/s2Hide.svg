@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="12px" viewBox="0 0 14 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <g id="UserPath" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-917.000000, -481.000000)">
+            <g id="FormCreateAccount" transform="translate(468.000000, 359.000000)">
+                <g id="Group-4" transform="translate(449.000000, 122.000000)">
+                    <path d="M0,6 C3.07655356,4 5.40988689,3 7,3 C8.59011311,3 10.9234464,4 14,6" id="Line-3" stroke="#000000" stroke-linecap="square"></path>
+                    <path d="M0,9 C3.07655356,7 5.40988689,6 7,6 C8.59011311,6 10.9234464,7 14,9" id="Line-3" stroke="#000000" stroke-linecap="square" transform="translate(7.000000, 7.500000) scale(1, -1) translate(-7.000000, -7.500000) "></path>
+                    <circle id="Oval-2" stroke="#000000" stroke-width="2" cx="7" cy="6" r="2"></circle>
+                    <rect id="Rectangle" fill="#000000" transform="translate(6.828030, 6.122645) rotate(53.000000) translate(-6.828030, -6.122645) " x="6.32802951" y="-1.87735479" width="1" height="16"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
