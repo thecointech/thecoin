@@ -8,14 +8,14 @@ type VerifiedSaleRecord = BrokerCAD.CertifiedSale&ConfirmedRecord;
 
 const ValidSale = (sale: BrokerCAD.CertifiedSale) => {
     var saleSigner = GetSaleSigner(sale);
-    return (NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
+    return (saleSigner && NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
 }
 const ValidDestination = (transfer: BrokerCAD.CertifiedTransferRequest) => 
     NormalizeAddress(transfer.to) == NormalizeAddress(status.address);
 
 async function  DoCertifiedSale(sale: BrokerCAD.CertifiedSale) {
-    const { transfer, clientEmail, signature } = sale;
-    if (!transfer || !clientEmail || !signature) 
+    const { transfer, encryptedETransfer, signature } = sale;
+    if (!transfer || !encryptedETransfer || !signature) 
         throw new Error("Invalid arguments");
     
     console.log(`Cert Sale from ${clientEmail}`);

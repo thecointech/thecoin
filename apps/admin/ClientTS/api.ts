@@ -161,7 +161,7 @@ export interface CertifiedSale {
      * @type {string}
      * @memberof CertifiedSale
      */
-    clientEmail: string;
+    encryptedETransfer?: string;
     /**
      * 
      * @type {string}
@@ -252,6 +252,32 @@ export interface ETransferCodeResponse {
      * @memberof ETransferCodeResponse
      */
     error?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface ETransferPacket
+ */
+export interface ETransferPacket {
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferPacket
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferPacket
+     */
+    secret: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferPacket
+     */
+    message?: string;
 }
 
 /**

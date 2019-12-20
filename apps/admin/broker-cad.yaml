@@ -229,35 +229,7 @@ definitions:
 
   ############################################################
 
-  # Do sale via certified request.  Sale includes token to
-  # process transfer, and the email address the proceeds
-  # are to be returned to.
-  CertifiedSale:
-    required:
-      - transfer
-      - clientEmail
-      - signature
-    properties:
-      # Signed transfer request sending coin to the broker
-      transfer:
-        $ref: "#/definitions/CertifiedTransferRequest"
-      # We send the results via interac e-Transfer
-      clientEmail:
-        type:
-          string
-      # Client must sign email + transfer.signature
-      signature:
-        type:
-          string
-    
-  ############################################################
-
-  BillPayeePacket:
-    properties:
-      payee:
-        type: string
-      accountNumber:
-        type: string
+  # Encodes an arbitrary object into an encrypted form for safe storage
 
   EncryptedPacket:
     required:
@@ -267,9 +239,54 @@ definitions:
       encryptedPacket:
         type: string
         # encrypted $ref: "#/definitions/BillPayeePacket"
-      name:
-        type: string
       version:
+        type: string
+
+  ############################################################
+
+  # Do sale via certified request.  Sale includes token to
+  # process transfer, and the email address the proceeds
+  # are to be returned to.
+  ETransferPacket:
+    required:
+      - email
+      - secret
+    properties:
+      email:
+        type:
+          string
+      secret:
+        type:
+          string
+      message:
+        type:
+          string
+
+  CertifiedSale:
+    required:
+      - transfer
+      - encryptedSale
+      - signature
+    properties:
+      # Signed transfer request sending coin to the broker
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      # We send the results via interac e-Transfer
+      encryptedETransfer:
+        $ref: "#/definitions/EncryptedPacket"
+      # Client must sign email + transfer.signature
+      signature:
+        type:
+          string
+    
+  ############################################################
+
+  # The minimum details required to pay this account
+  BillPayeePacket:
+    properties:
+      payee:
+        type: string
+      accountNumber:
         type: string
 
   CertifiedBillPayment:

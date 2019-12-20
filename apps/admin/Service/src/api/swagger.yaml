@@ -528,15 +528,25 @@ definitions:
     example:
       code: "code"
       error: "error"
+  ETransferPacket:
+    required:
+    - "email"
+    - "secret"
+    properties:
+      email:
+        type: "string"
+      secret:
+        type: "string"
+      message:
+        type: "string"
   CertifiedSale:
     required:
-    - "clientEmail"
     - "signature"
     - "transfer"
     properties:
       transfer:
         $ref: "#/definitions/CertifiedTransferRequest"
-      clientEmail:
+      encryptedETransfer:
         type: "string"
       signature:
         type: "string"
@@ -548,7 +558,7 @@ definitions:
         to: "to"
         value: 0
         timestamp: 1
-      clientEmail: "clientEmail"
+      encryptedETransfer: "encryptedETransfer"
       signature: "signature"
   BillPayeePacket:
     properties:
