@@ -11,6 +11,11 @@ function validateVisa(val: string) {
 	return r.isValid && !!r.card && r.card.type === 'visa';
 }
 
+function validateNumber(val: string, length: number) {
+	const r = number(val);
+	return r.isValid && val.length == length;
+}
+
 function findType(text: string): types {
 	const item = payees.find(item => item.text === text)
 	return item ? item.type : "none"
@@ -20,7 +25,8 @@ export function validate(name: string, value: string)
 {
 	switch(findType(name))
 	{
-		case "visa": return validateVisa(value);
+    case "visa": return validateVisa(value);
+    case "num9": return validateNumber(value, 9);
 		case "none": return true;
 	}
 	return false;
@@ -64,6 +70,8 @@ export const payees: ValidatedItemProps[] = [
 	{ type: "none", text: "CRA (REVENUE) TAX AMOUNT OWING", value: "CRA (REVENUE) TAX AMOUNT OWING" },
 	{ type: "none", text: "CRA (REVENUE) 2018 TAX RETURN", value: "CRA (REVENUE) 2018 TAX RETURN" },
 	{ type: "none", text: "CRA CHILD AND FAMILY BENEFITS", value: "CRA CHILD AND FAMILY BENEFITS" },
-	{ type: "none", text: "CRA REVENUE TAX INSTALMENT", value: "CRA REVENUE TAX INSTALMENT" }
+  { type: "none", text: "CRA REVENUE TAX INSTALMENT", value: "CRA REVENUE TAX INSTALMENT" },
+  { type: "num9", text: "FIDO", value: "FIDO" },
+  { type: "none", text: "ENERGIR", value: "ENERGIR" }
 ];
 

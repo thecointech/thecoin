@@ -1,12 +1,12 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "description": "Utilities to share amongst TheCoin projects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "..\\..\\node_modules\\.bin\\tsc.cmd && copy .\\src\\FirebaseFirestore.d.ts .\\lib"
+    "build": "tsc && copy .\\src\\FirebaseFirestore.d.ts .\\lib"
   },
   "keywords": [
     "TheCoin"

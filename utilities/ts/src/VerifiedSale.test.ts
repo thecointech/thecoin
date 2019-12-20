@@ -1,13 +1,17 @@
 import { GetContract } from "./TheContract";
 import { Wallet } from "ethers";
 import { BuildVerifiedSale, GetSaleSigner } from "./VerifiedSale";
+import { BrokerCAD } from "@the-coin/types";
 
 test('Can build verified sale', async () => {
 
 	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 
-	const email = "address@email.com";
+	const email: BrokerCAD.ETransferPacket = {
+    email: "address@email.com",
+    secret: "secret"
+  }
 	const wallet = Wallet.createRandom();
 	const value = 100000;
 	const fee = 2000;

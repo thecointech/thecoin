@@ -84,13 +84,17 @@ export namespace BrokerCAD {
   export interface GoogleAuthUrl {
     url: string;
   }
+  export interface ETransferPacket {
+    email: string;
+    secret: string;
+    message?: string;
+  }
   export interface eTransferCodeResponse {
     code?: string;
     error?: string;
   }
   export interface EncryptedPacket {
     encryptedPacket: string;
-    name?: string;
     version: string;
   }
   export interface CertifiedTransferResponse {
@@ -107,7 +111,7 @@ export namespace BrokerCAD {
   }
   export interface CertifiedSale {
     transfer: CertifiedTransferRequest;
-    clientEmail: string;
+    encryptedETransfer?: EncryptedPacket;
     signature: string;
   }
   export interface CertifiedBillPayment {

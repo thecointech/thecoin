@@ -56,4 +56,6 @@ function App(props: LocationStoreState) {
   );
 }
 
-export default connect(mapLocationStateToProps)(App);
+export default injectRootReducer<App>()(
+  connect(mapLocationStateToProps)(App)
+);

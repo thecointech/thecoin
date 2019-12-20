@@ -5,7 +5,7 @@ import { Timestamp, DocumentReference } from "./FirebaseFirestore";
 
 type UserVerifiedInfo = {
 	verified: string,
-	verifiedTimestamp: Timestamp
+	verifiedTimestamp: Timestamp|Date
 }
 
 // A union of all possible data on a user.

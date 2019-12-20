@@ -2,8 +2,8 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/pricing": "^0.1.1",
-    "@the-coin/types": "^0.1.43",
-    "@the-coin/utilities": "^0.1.64",
+    "@the-coin/types": "^0.1.46",
+    "@the-coin/utilities": "^0.1.65",
     "@types/classnames": "^2.2.9",
     "@types/lodash": "^4.14.134",
     "connected-react-router": "^6.4.0",
@@ -33,7 +33,6 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-fontawesome": "^1.6.4",
     "@types/react-helmet": "^5.0.0",
-    "@types/react-intl": "^2.3.17",
     "@types/react-redux": "^7.1.1",
     "@types/react-router-dom": "^4.3.2",
     "@types/react-transition-group": "^2.9.2",

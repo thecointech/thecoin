@@ -76,7 +76,7 @@ export async function CreateReferrer(signature: string, address: string) {
 // every account requires a referral code, but it should not
 // be possible to assign codes to existing accounts
 //
-export async function CreateReferree(referral: BrokerCAD.NewAccountReferal, created: Date) {
+export async function CreateReferree(referral: BrokerCAD.NewAccountReferal, created: Timestamp) {
   const { referrerId, newAccount } = referral;
 
   if (!IsValidReferrerId(referrerId)) throw new Error("Invalid Referrer");
