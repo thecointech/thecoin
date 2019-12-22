@@ -2,13 +2,13 @@
 
 
 /**
- * Request coin sale
- * Called by the client to exchange coin for CAD using a certified transfer
+ * Request eTransfer
+ * Called by the client to exchange coin for CAD and send via eTransfer
  *
- * request CertifiedSale Signed certified transfer to this brokers address
+ * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
  * returns CertifiedTransferResponse
  **/
-exports.certifiedCoinSale = function(request) {
+exports.eTransfer = function(request) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -25,17 +25,18 @@ exports.certifiedCoinSale = function(request) {
 
 
 /**
- * Request coin sale
- * Called by the client to exchange coin for CAD
+ * Required answer for eTransfer sent to this broker
+ * A code unique to the user that is required on all eTransfers sent in to this broker
  *
- * request SignedMessage Signed sell order request
- * returns SellResponse
+ * request SignedMessage Signed timestamp message
+ * returns eTransferCodeResponse
  **/
-exports.requestCoinSale = function(request) {
+exports.eTransferInCode = function(request) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "orderId" : "orderId"
+  "code" : "code",
+  "error" : "error"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

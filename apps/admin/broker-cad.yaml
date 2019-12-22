@@ -25,142 +25,6 @@ schemes:
 
 definitions:
 
-  # Client order to purchase Coin.
-  # We send an email to the client to request
-  # payment in the amount specified here.
-  # Signing - just because - cannot think of any attacks it prevents
-  # Attack vectors:
-  #   - Spamming requests to random email addresses
-  #   - Trying to duplicate legitimate request for a specific email 
-  SignedPurchaseRequest:
-    required:
-      - timestamp
-      - cadAmount
-      - email
-      - signature
-    properties:
-      timestamp:
-        type: integer
-      email:
-        type: string
-      cadAmount:
-        type: number
-      # Signature is included in purchase request so it
-      # can be stored along with the 
-      signature:
-        type: string # Signature is amount + email + timestamp
-
-  # Sent by broker to confirm email request sent
-  # Signed:
-  #   Prevents: Attacker with access to DB fakes email to client
-  #             and injects this value to prevent us from sending
-  #             (not much of an defense, but allays suspicion)
-  #   Allows: Verification of sender for brokers with multiple users.
-  SignedPurchaseConfirm:
-    required:
-      - timestamp
-      - signature # Signature is sig(timestamp + orderId)
-    properties:
-      timestamp:
-        type: integer
-      signature:
-        type: string
-
-  # Message sent by the Broker to confirm that
-  # purchase has been completed
-  # Signing - just because
-  PurchaseComplete:
-    required:
-      - timestamp
-      - cadAmount
-      - coinAmount
-      - coinRate
-      - cadRate
-      - txHash
-    properties:
-      timestamp:
-        type: integer
-      cadAmount:
-        type: number
-      coinAmount:
-        type: integer
-      coinRate:
-        type: number
-      cadRate:
-        type: number
-      txHash:       # Hash of the transaction which deposit coinAmount in userAddress at timestamp
-        type: string
-
-  # Sent in response to an order request.
-  # Order ID is the id of the order, and is
-  # defined by the broker.
-  PurchaseResponse:
-    required:
-      - orderId
-    properties:
-      orderId:
-        type: string
-
-  # An array of Id's
-  PurchaseIds:
-    type: array
-    items:
-      type: string
-
-  PurchaseState:
-    minProperties: 1
-    properties:
-      request:
-        $ref: "#/definitions/SignedPurchaseRequest"
-      confirm:
-        $ref: "#/definitions/SignedPurchaseConfirm"
-      complete:
-        $ref: "#/definitions/PurchaseComplete"
-
-  ############################################################
-
-  SellRequest:
-    required:
-      - txHash
-      - email
-    properties:
-      email:
-        type: string    # The email to transfer the proceeds of sale to
-      txHash:
-        type: string    # The hash of the sell order transaction
-      blockNumber:
-        type: integer   # The block the transaction was mined in.
-
-  # The confirm is not sent, instead the server
-  # directly confirms the transaction by watching
-  # the block chain directly.
-
-  SellComplete:
-    required:
-      - timestamp   # Time the CAD was sent to the client
-      - coinAmount  # Amount of funds 
-      - coinRate
-      - cadRate
-      - cadAmount
-    properties:
-      timestamp:
-        type: integer
-      cadAmount:
-        type: number
-      coinAmount:
-        type: integer
-      coinRate:
-        type: number
-      cadRate:
-        type: number
-
-  SellResponse:
-    required:
-      - orderId
-    properties:
-      orderId:
-        type: string
-
   ############################################################
 
   # The message must be a signed JSON string, however
@@ -220,17 +84,9 @@ definitions:
       txHash:
         type: string
 
-  eTransferCodeResponse:
-    properties:
-      code:
-        type: string
-      error:
-        type: string
-
   ############################################################
 
-  # Encodes an arbitrary object into an encrypted form for safe storage
-
+  # Encodes an arbitrary object into an encrypted form for encrypted-at-rest storage
   EncryptedPacket:
     required:
       - encryptedPacket
@@ -242,6 +98,24 @@ definitions:
       version:
         type: string
 
+  CertifiedTransfer:
+    required:
+      - transfer
+      - instructionPacket
+      - signature
+    properties:
+      # Signed transfer request sending coin to the broker
+      transfer:
+        $ref: "#/definitions/CertifiedTransferRequest"
+      # The transfer instructions, the type depends on
+      # the operation being performed (Bill payment, eTransfer etc)
+      instructionPacket:
+        $ref: "#/definitions/EncryptedPacket"
+      # Client must sign instruction + transfer.signature
+      signature:
+        type:
+          string
+
   ############################################################
 
   # Do sale via certified request.  Sale includes token to
@@ -250,36 +124,28 @@ definitions:
   ETransferPacket:
     required:
       - email
-      - secret
+      - question
+      - answer
     properties:
       email:
         type:
           string
-      secret:
+      question:
+        type:
+          string
+      answer:
         type:
           string
       message:
         type:
           string
 
-  CertifiedSale:
-    required:
-      - transfer
-      - encryptedSale
-      - signature
+  eTransferCodeResponse:
     properties:
-      # Signed transfer request sending coin to the broker
-      transfer:
-        $ref: "#/definitions/CertifiedTransferRequest"
-      # We send the results via interac e-Transfer
-      encryptedETransfer:
-        $ref: "#/definitions/EncryptedPacket"
-      # Client must sign email + transfer.signature
-      signature:
-        type:
-          string
-    
-  ############################################################
+      code:
+        type: string
+      error:
+        type: string
 
   # The minimum details required to pay this account
   BillPayeePacket:
@@ -289,20 +155,7 @@ definitions:
       accountNumber:
         type: string
 
-  CertifiedBillPayment:
-    required:
-      - transfer
-      - encryptedPayee
-      - signature
-    properties: 
-      transfer:
-        $ref: "#/definitions/CertifiedTransferRequest"
-      encryptedPayee:
-        $ref: "#/definitions/EncryptedPacket"
-      signature: 
-        # signed(transfer.sig + encryptedPayee.encryptedPacket + encryptedPayee.version)
-        type: string
-
+  ############################################################
   #
   # Any general purpose info on the broker can be stored here.
   BrokerStatus:
@@ -482,38 +335,14 @@ paths:
             $ref: "#/definitions/BoolResponse"
 
   #############################################################
-  # This query is open to anyone
-  /exchange/sell/initiate:
+
+  /exchange/eTransfer:
     post:
       tags: 
-        - Sell
-      summary: "Request coin sale"
-      description: "Called by the client to exchange coin for CAD"
-      operationId: "requestCoinSale"
-      responses:
-        405:
-          description: "Invalid input"
-        200:
-          description: The response confirms to the user the order was accepted
-          schema:
-            $ref: "#/definitions/SellResponse"
-      parameters:
-        - in: body
-          name: request
-          description: "Signed sell order request"
-          required: true
-          schema: 
-            $ref: "#/definitions/SignedMessage"
-
-  #############################################################
-
-  /exchange/sell/certified:
-    post:
-      tags: 
-        - Sell
-      summary: "Request coin sale"
-      description: "Called by the client to exchange coin for CAD using a certified transfer"
-      operationId: "certifiedCoinSale"
+        - eTransfer
+      summary: "Request eTransfer"
+      description: "Called by the client to exchange coin for CAD and send via eTransfer"
+      operationId: "eTransfer"
       responses:
         405:
           description: "Invalid input"
@@ -524,44 +353,42 @@ paths:
       parameters:
         - in: body
           name: request
-          description: "Signed certified transfer to this brokers address"
+          description: "Must contain a transfer to this brokers address, and an encrypted ETransferPacket"
           required: true
           schema: 
-            $ref: "#/definitions/CertifiedSale"
+            $ref: "#/definitions/CertifiedTransfer"
 
-  #############################################################
-
-  /exchange/etransfer/code:
+  /exchange/eTransfer/code:
     put:
       tags:
-        - Buy
-      summary: "Coin e-Transfer secret answer"
-      description: "A unique code for the requesting user to use as an answer to their e-Transfer question"
-      operationId: "eTransferCode"
+        - eTransfer
+      summary: "Required answer for eTransfer sent to this broker"
+      description: "A code unique to the user that is required on all eTransfers sent in to this broker"
+      operationId: "eTransferInCode"
       responses:
         405:
           description: "Invalid input"
         200:
-          description: The response confirms to the user the order has been processed
+          description: The requesters unique eTransfer code.
           schema:
             $ref: "#/definitions/eTransferCodeResponse"
       parameters:
         - in: body
           name: request
-          description: "Signed certified transfer to this brokers address"
+          description: "Signed timestamp message"
           required: true
           schema: 
             $ref: "#/definitions/SignedMessage"
 
   #############################################################
 
-  /bills/{user}:
+  /bills/payment:
     post:
       tags: 
         - Bill Payments
-      summary: "Trigger a Bill Payment"
-      description: "Called by the client to pay a bill in CAD with coin via a certified transfer"
-      operationId: "certifiedBillPayment"
+      summary: "Bill Payment"
+      description: "Called by the client to pay a bill with coin via a certified transfer"
+      operationId: "billPayment"
       responses:
         405:
           description: "Invalid input"
@@ -572,25 +399,20 @@ paths:
       parameters:
         - in: body
           name: request
-          description: "Signed certified transfer to this brokers address"
+          description: "Must contain a transfer to this brokers address, and an encrypted BillPayeePacket"
           required: true
           schema: 
-            $ref: "#/definitions/CertifiedBillPayment"
-        - name: user
-          in: path
-          required: true
-          description: User address
-          type: string
+            $ref: "#/definitions/CertifiedTransfer"
             
   #############################################################
 
-  /certifiedTransfer:
+  /transfer:
     post:
       tags:
         - Transfer
-      summary: "Request Transfer from->to"
+      summary: "Transfer to another The Coin account"
       description: "A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether"
-      operationId: "makeCertifiedTransfer"
+      operationId: "transfer"
       parameters:
         - in: body
           name: request

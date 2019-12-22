@@ -121,51 +121,25 @@ export interface BrokerStatus {
 /**
  * 
  * @export
- * @interface CertifiedBillPayment
+ * @interface CertifiedTransfer
  */
-export interface CertifiedBillPayment {
+export interface CertifiedTransfer {
     /**
      * 
      * @type {CertifiedTransferRequest}
-     * @memberof CertifiedBillPayment
+     * @memberof CertifiedTransfer
      */
     transfer: CertifiedTransferRequest;
     /**
      * 
      * @type {EncryptedPacket}
-     * @memberof CertifiedBillPayment
+     * @memberof CertifiedTransfer
      */
-    encryptedPayee: EncryptedPacket;
+    instructionPacket: EncryptedPacket;
     /**
      * 
      * @type {string}
-     * @memberof CertifiedBillPayment
-     */
-    signature: string;
-}
-
-/**
- * 
- * @export
- * @interface CertifiedSale
- */
-export interface CertifiedSale {
-    /**
-     * 
-     * @type {CertifiedTransferRequest}
-     * @memberof CertifiedSale
-     */
-    transfer: CertifiedTransferRequest;
-    /**
-     * 
-     * @type {string}
-     * @memberof CertifiedSale
-     */
-    encryptedETransfer?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CertifiedSale
+     * @memberof CertifiedTransfer
      */
     signature: string;
 }
@@ -271,7 +245,13 @@ export interface ETransferPacket {
      * @type {string}
      * @memberof ETransferPacket
      */
-    secret: string;
+    question: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ETransferPacket
+     */
+    answer: string;
     /**
      * 
      * @type {string}
@@ -292,12 +272,6 @@ export interface EncryptedPacket {
      * @memberof EncryptedPacket
      */
     encryptedPacket: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof EncryptedPacket
-     */
-    name?: string;
     /**
      * 
      * @type {string}
@@ -457,176 +431,6 @@ export interface NewAccountReferal {
 /**
  * 
  * @export
- * @interface PurchaseComplete
- */
-export interface PurchaseComplete {
-    /**
-     * 
-     * @type {number}
-     * @memberof PurchaseComplete
-     */
-    timestamp: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PurchaseComplete
-     */
-    cadAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PurchaseComplete
-     */
-    coinAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PurchaseComplete
-     */
-    coinRate: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PurchaseComplete
-     */
-    cadRate: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PurchaseComplete
-     */
-    txHash: string;
-}
-
-/**
- * 
- * @export
- * @interface PurchaseIds
- */
-export interface PurchaseIds extends Array<string> {
-}
-
-/**
- * 
- * @export
- * @interface PurchaseResponse
- */
-export interface PurchaseResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof PurchaseResponse
-     */
-    orderId: string;
-}
-
-/**
- * 
- * @export
- * @interface PurchaseState
- */
-export interface PurchaseState {
-    /**
-     * 
-     * @type {SignedPurchaseRequest}
-     * @memberof PurchaseState
-     */
-    request?: SignedPurchaseRequest;
-    /**
-     * 
-     * @type {SignedPurchaseConfirm}
-     * @memberof PurchaseState
-     */
-    confirm?: SignedPurchaseConfirm;
-    /**
-     * 
-     * @type {PurchaseComplete}
-     * @memberof PurchaseState
-     */
-    complete?: PurchaseComplete;
-}
-
-/**
- * 
- * @export
- * @interface SellComplete
- */
-export interface SellComplete {
-    /**
-     * 
-     * @type {number}
-     * @memberof SellComplete
-     */
-    timestamp: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof SellComplete
-     */
-    cadAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof SellComplete
-     */
-    coinAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof SellComplete
-     */
-    coinRate: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof SellComplete
-     */
-    cadRate: number;
-}
-
-/**
- * 
- * @export
- * @interface SellRequest
- */
-export interface SellRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof SellRequest
-     */
-    email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SellRequest
-     */
-    txHash: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof SellRequest
-     */
-    blockNumber?: number;
-}
-
-/**
- * 
- * @export
- * @interface SellResponse
- */
-export interface SellResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SellResponse
-     */
-    orderId: string;
-}
-
-/**
- * 
- * @export
  * @interface SignedMessage
  */
 export interface SignedMessage {
@@ -640,58 +444,6 @@ export interface SignedMessage {
      * 
      * @type {string}
      * @memberof SignedMessage
-     */
-    signature: string;
-}
-
-/**
- * 
- * @export
- * @interface SignedPurchaseConfirm
- */
-export interface SignedPurchaseConfirm {
-    /**
-     * 
-     * @type {number}
-     * @memberof SignedPurchaseConfirm
-     */
-    timestamp: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof SignedPurchaseConfirm
-     */
-    signature: string;
-}
-
-/**
- * 
- * @export
- * @interface SignedPurchaseRequest
- */
-export interface SignedPurchaseRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof SignedPurchaseRequest
-     */
-    timestamp: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof SignedPurchaseRequest
-     */
-    email: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof SignedPurchaseRequest
-     */
-    cadAmount: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof SignedPurchaseRequest
      */
     signature: string;
 }
@@ -754,24 +506,18 @@ export interface SubscriptionDetails {
 export const BillPaymentsApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Called by the client to pay a bill in CAD with coin via a certified transfer
-         * @summary Trigger a Bill Payment
-         * @param {string} user User address
-         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * Called by the client to pay a bill with coin via a certified transfer
+         * @summary Bill Payment
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options: any = {}): FetchArgs {
-            // verify required parameter 'user' is not null or undefined
-            if (user === null || user === undefined) {
-                throw new RequiredError('user','Required parameter user was null or undefined when calling certifiedBillPayment.');
+        billPayment(certifiedTransfer: CertifiedTransfer, options: any = {}): FetchArgs {
+            // verify required parameter 'certifiedTransfer' is not null or undefined
+            if (certifiedTransfer === null || certifiedTransfer === undefined) {
+                throw new RequiredError('certifiedTransfer','Required parameter certifiedTransfer was null or undefined when calling billPayment.');
             }
-            // verify required parameter 'certifiedBillPayment' is not null or undefined
-            if (certifiedBillPayment === null || certifiedBillPayment === undefined) {
-                throw new RequiredError('certifiedBillPayment','Required parameter certifiedBillPayment was null or undefined when calling certifiedBillPayment.');
-            }
-            const localVarPath = `/bills/{user}`
-                .replace(`{${"user"}}`, encodeURIComponent(String(user)));
+            const localVarPath = `/bills/payment`;
             const localVarUrlObj = url.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -787,8 +533,8 @@ export const BillPaymentsApiFetchParamCreator = function (configuration?: Config
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CertifiedBillPayment" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(certifiedBillPayment || {}) : (certifiedBillPayment || "");
+            const needsSerialization = (<any>"CertifiedTransfer" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(certifiedTransfer || {}) : (certifiedTransfer || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -805,15 +551,14 @@ export const BillPaymentsApiFetchParamCreator = function (configuration?: Config
 export const BillPaymentsApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Called by the client to pay a bill in CAD with coin via a certified transfer
-         * @summary Trigger a Bill Payment
-         * @param {string} user User address
-         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * Called by the client to pay a bill with coin via a certified transfer
+         * @summary Bill Payment
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
-            const localVarFetchArgs = BillPaymentsApiFetchParamCreator(configuration).certifiedBillPayment(user, certifiedBillPayment, options);
+        billPayment(certifiedTransfer: CertifiedTransfer, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
+            const localVarFetchArgs = BillPaymentsApiFetchParamCreator(configuration).billPayment(certifiedTransfer, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -834,15 +579,14 @@ export const BillPaymentsApiFp = function(configuration?: Configuration) {
 export const BillPaymentsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Called by the client to pay a bill in CAD with coin via a certified transfer
-         * @summary Trigger a Bill Payment
-         * @param {string} user User address
-         * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+         * Called by the client to pay a bill with coin via a certified transfer
+         * @summary Bill Payment
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any) {
-            return BillPaymentsApiFp(configuration).certifiedBillPayment(user, certifiedBillPayment, options)(fetch, basePath);
+        billPayment(certifiedTransfer: CertifiedTransfer, options?: any) {
+            return BillPaymentsApiFp(configuration).billPayment(certifiedTransfer, options)(fetch, basePath);
         },
     };
 };
@@ -855,30 +599,142 @@ export const BillPaymentsApiFactory = function (configuration?: Configuration, f
  */
 export class BillPaymentsApi extends BaseAPI {
     /**
-     * Called by the client to pay a bill in CAD with coin via a certified transfer
-     * @summary Trigger a Bill Payment
-     * @param {string} user User address
-     * @param {CertifiedBillPayment} certifiedBillPayment Signed certified transfer to this brokers address
+     * Called by the client to pay a bill with coin via a certified transfer
+     * @summary Bill Payment
+     * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BillPaymentsApi
      */
-    public certifiedBillPayment(user: string, certifiedBillPayment: CertifiedBillPayment, options?: any) {
-        return BillPaymentsApiFp(this.configuration).certifiedBillPayment(user, certifiedBillPayment, options)(this.fetch, this.basePath);
+    public billPayment(certifiedTransfer: CertifiedTransfer, options?: any) {
+        return BillPaymentsApiFp(this.configuration).billPayment(certifiedTransfer, options)(this.fetch, this.basePath);
     }
 
 }
 
 /**
- * BuyApi - fetch parameter creator
+ * ETransferApi - fetch parameter creator
  * @export
  */
-export const BuyApiFetchParamCreator = function (configuration?: Configuration) {
+export const ETransferApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * A unique code for the requesting user to use as an answer to their e-Transfer question
-         * @summary Coin e-Transfer secret answer
-         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * Called by the client to exchange coin for CAD and send via eTransfer
+         * @summary Request eTransfer
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransfer(certifiedTransfer: CertifiedTransfer, options: any = {}): FetchArgs {
+            // verify required parameter 'certifiedTransfer' is not null or undefined
+            if (certifiedTransfer === null || certifiedTransfer === undefined) {
+                throw new RequiredError('certifiedTransfer','Required parameter certifiedTransfer was null or undefined when calling eTransfer.');
+            }
+            const localVarPath = `/exchange/eTransfer`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, baseOptions, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CertifiedTransfer" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(certifiedTransfer || {}) : (certifiedTransfer || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ETransferApi - functional programming interface
+ * @export
+ */
+export const ETransferApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Called by the client to exchange coin for CAD and send via eTransfer
+         * @summary Request eTransfer
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
+            const localVarFetchArgs = ETransferApiFetchParamCreator(configuration).eTransfer(certifiedTransfer, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * ETransferApi - factory interface
+ * @export
+ */
+export const ETransferApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Called by the client to exchange coin for CAD and send via eTransfer
+         * @summary Request eTransfer
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
+            return ETransferApiFp(configuration).eTransfer(certifiedTransfer, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * ETransferApi - object-oriented interface
+ * @export
+ * @class ETransferApi
+ * @extends {BaseAPI}
+ */
+export class ETransferApi extends BaseAPI {
+    /**
+     * Called by the client to exchange coin for CAD and send via eTransfer
+     * @summary Request eTransfer
+     * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ETransferApi
+     */
+    public eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
+        return ETransferApiFp(this.configuration).eTransfer(certifiedTransfer, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * ETransferInCodeApi - fetch parameter creator
+ * @export
+ */
+export const ETransferInCodeApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * A code unique to the user that is required on all eTransfers sent in to this broker
+         * @summary Required answer for eTransfer sent to this broker
+         * @param {SignedMessage} signedMessage Signed timestamp message
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -887,7 +743,7 @@ export const BuyApiFetchParamCreator = function (configuration?: Configuration) 
             if (signedMessage === null || signedMessage === undefined) {
                 throw new RequiredError('signedMessage','Required parameter signedMessage was null or undefined when calling eTransferCode.');
             }
-            const localVarPath = `/exchange/etransfer/code`;
+            const localVarPath = `/exchange/eTransfer/code`;
             const localVarUrlObj = url.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -915,20 +771,20 @@ export const BuyApiFetchParamCreator = function (configuration?: Configuration) 
 };
 
 /**
- * BuyApi - functional programming interface
+ * ETransferInCodeApi - functional programming interface
  * @export
  */
-export const BuyApiFp = function(configuration?: Configuration) {
+export const ETransferInCodeApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * A unique code for the requesting user to use as an answer to their e-Transfer question
-         * @summary Coin e-Transfer secret answer
-         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * A code unique to the user that is required on all eTransfers sent in to this broker
+         * @summary Required answer for eTransfer sent to this broker
+         * @param {SignedMessage} signedMessage Signed timestamp message
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         eTransferCode(signedMessage: SignedMessage, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ETransferCodeResponse> {
-            const localVarFetchArgs = BuyApiFetchParamCreator(configuration).eTransferCode(signedMessage, options);
+            const localVarFetchArgs = ETransferInCodeApiFetchParamCreator(configuration).eTransferCode(signedMessage, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -943,41 +799,41 @@ export const BuyApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * BuyApi - factory interface
+ * ETransferInCodeApi - factory interface
  * @export
  */
-export const BuyApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+export const ETransferInCodeApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * A unique code for the requesting user to use as an answer to their e-Transfer question
-         * @summary Coin e-Transfer secret answer
-         * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+         * A code unique to the user that is required on all eTransfers sent in to this broker
+         * @summary Required answer for eTransfer sent to this broker
+         * @param {SignedMessage} signedMessage Signed timestamp message
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         eTransferCode(signedMessage: SignedMessage, options?: any) {
-            return BuyApiFp(configuration).eTransferCode(signedMessage, options)(fetch, basePath);
+            return ETransferInCodeApiFp(configuration).eTransferCode(signedMessage, options)(fetch, basePath);
         },
     };
 };
 
 /**
- * BuyApi - object-oriented interface
+ * ETransferInCodeApi - object-oriented interface
  * @export
- * @class BuyApi
+ * @class ETransferInCodeApi
  * @extends {BaseAPI}
  */
-export class BuyApi extends BaseAPI {
+export class ETransferInCodeApi extends BaseAPI {
     /**
-     * A unique code for the requesting user to use as an answer to their e-Transfer question
-     * @summary Coin e-Transfer secret answer
-     * @param {SignedMessage} signedMessage Signed certified transfer to this brokers address
+     * A code unique to the user that is required on all eTransfers sent in to this broker
+     * @summary Required answer for eTransfer sent to this broker
+     * @param {SignedMessage} signedMessage Signed timestamp message
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BuyApi
+     * @memberof ETransferInCodeApi
      */
     public eTransferCode(signedMessage: SignedMessage, options?: any) {
-        return BuyApiFp(this.configuration).eTransferCode(signedMessage, options)(this.fetch, this.basePath);
+        return ETransferInCodeApiFp(this.configuration).eTransferCode(signedMessage, options)(this.fetch, this.basePath);
     }
 
 }
@@ -1849,196 +1705,6 @@ export class SecureApi extends BaseAPI {
 }
 
 /**
- * SellApi - fetch parameter creator
- * @export
- */
-export const SellApiFetchParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Called by the client to exchange coin for CAD using a certified transfer
-         * @summary Request coin sale
-         * @param {CertifiedSale} certifiedSale Signed certified transfer to this brokers address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        certifiedCoinSale(certifiedSale: CertifiedSale, options: any = {}): FetchArgs {
-            // verify required parameter 'certifiedSale' is not null or undefined
-            if (certifiedSale === null || certifiedSale === undefined) {
-                throw new RequiredError('certifiedSale','Required parameter certifiedSale was null or undefined when calling certifiedCoinSale.');
-            }
-            const localVarPath = `/exchange/sell/certified`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign({ method: 'POST' }, baseOptions, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CertifiedSale" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(certifiedSale || {}) : (certifiedSale || "");
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Called by the client to exchange coin for CAD
-         * @summary Request coin sale
-         * @param {SignedMessage} signedMessage Signed sell order request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        requestCoinSale(signedMessage: SignedMessage, options: any = {}): FetchArgs {
-            // verify required parameter 'signedMessage' is not null or undefined
-            if (signedMessage === null || signedMessage === undefined) {
-                throw new RequiredError('signedMessage','Required parameter signedMessage was null or undefined when calling requestCoinSale.');
-            }
-            const localVarPath = `/exchange/sell/initiate`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign({ method: 'POST' }, baseOptions, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"SignedMessage" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(signedMessage || {}) : (signedMessage || "");
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * SellApi - functional programming interface
- * @export
- */
-export const SellApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * Called by the client to exchange coin for CAD using a certified transfer
-         * @summary Request coin sale
-         * @param {CertifiedSale} certifiedSale Signed certified transfer to this brokers address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        certifiedCoinSale(certifiedSale: CertifiedSale, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
-            const localVarFetchArgs = SellApiFetchParamCreator(configuration).certifiedCoinSale(certifiedSale, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Called by the client to exchange coin for CAD
-         * @summary Request coin sale
-         * @param {SignedMessage} signedMessage Signed sell order request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        requestCoinSale(signedMessage: SignedMessage, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SellResponse> {
-            const localVarFetchArgs = SellApiFetchParamCreator(configuration).requestCoinSale(signedMessage, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-    }
-};
-
-/**
- * SellApi - factory interface
- * @export
- */
-export const SellApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
-    return {
-        /**
-         * Called by the client to exchange coin for CAD using a certified transfer
-         * @summary Request coin sale
-         * @param {CertifiedSale} certifiedSale Signed certified transfer to this brokers address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        certifiedCoinSale(certifiedSale: CertifiedSale, options?: any) {
-            return SellApiFp(configuration).certifiedCoinSale(certifiedSale, options)(fetch, basePath);
-        },
-        /**
-         * Called by the client to exchange coin for CAD
-         * @summary Request coin sale
-         * @param {SignedMessage} signedMessage Signed sell order request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        requestCoinSale(signedMessage: SignedMessage, options?: any) {
-            return SellApiFp(configuration).requestCoinSale(signedMessage, options)(fetch, basePath);
-        },
-    };
-};
-
-/**
- * SellApi - object-oriented interface
- * @export
- * @class SellApi
- * @extends {BaseAPI}
- */
-export class SellApi extends BaseAPI {
-    /**
-     * Called by the client to exchange coin for CAD using a certified transfer
-     * @summary Request coin sale
-     * @param {CertifiedSale} certifiedSale Signed certified transfer to this brokers address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SellApi
-     */
-    public certifiedCoinSale(certifiedSale: CertifiedSale, options?: any) {
-        return SellApiFp(this.configuration).certifiedCoinSale(certifiedSale, options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * Called by the client to exchange coin for CAD
-     * @summary Request coin sale
-     * @param {SignedMessage} signedMessage Signed sell order request
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SellApi
-     */
-    public requestCoinSale(signedMessage: SignedMessage, options?: any) {
-        return SellApiFp(this.configuration).requestCoinSale(signedMessage, options)(this.fetch, this.basePath);
-    }
-
-}
-
-/**
  * StatusApi - fetch parameter creator
  * @export
  */
@@ -2147,17 +1813,17 @@ export const TransferApiFetchParamCreator = function (configuration?: Configurat
     return {
         /**
          * A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether
-         * @summary Request Transfer from->to
+         * @summary Transfer to another The Coin account
          * @param {CertifiedTransferRequest} certifiedTransferRequest A request appropriately filled out and signed as described in the comments
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        makeCertifiedTransfer(certifiedTransferRequest: CertifiedTransferRequest, options: any = {}): FetchArgs {
+        transfer(certifiedTransferRequest: CertifiedTransferRequest, options: any = {}): FetchArgs {
             // verify required parameter 'certifiedTransferRequest' is not null or undefined
             if (certifiedTransferRequest === null || certifiedTransferRequest === undefined) {
-                throw new RequiredError('certifiedTransferRequest','Required parameter certifiedTransferRequest was null or undefined when calling makeCertifiedTransfer.');
+                throw new RequiredError('certifiedTransferRequest','Required parameter certifiedTransferRequest was null or undefined when calling transfer.');
             }
-            const localVarPath = `/certifiedTransfer`;
+            const localVarPath = `/transfer`;
             const localVarUrlObj = url.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -2192,13 +1858,13 @@ export const TransferApiFp = function(configuration?: Configuration) {
     return {
         /**
          * A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether
-         * @summary Request Transfer from->to
+         * @summary Transfer to another The Coin account
          * @param {CertifiedTransferRequest} certifiedTransferRequest A request appropriately filled out and signed as described in the comments
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        makeCertifiedTransfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
-            const localVarFetchArgs = TransferApiFetchParamCreator(configuration).makeCertifiedTransfer(certifiedTransferRequest, options);
+        transfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
+            const localVarFetchArgs = TransferApiFetchParamCreator(configuration).transfer(certifiedTransferRequest, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2220,13 +1886,13 @@ export const TransferApiFactory = function (configuration?: Configuration, fetch
     return {
         /**
          * A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether
-         * @summary Request Transfer from->to
+         * @summary Transfer to another The Coin account
          * @param {CertifiedTransferRequest} certifiedTransferRequest A request appropriately filled out and signed as described in the comments
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        makeCertifiedTransfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any) {
-            return TransferApiFp(configuration).makeCertifiedTransfer(certifiedTransferRequest, options)(fetch, basePath);
+        transfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any) {
+            return TransferApiFp(configuration).transfer(certifiedTransferRequest, options)(fetch, basePath);
         },
     };
 };
@@ -2240,14 +1906,14 @@ export const TransferApiFactory = function (configuration?: Configuration, fetch
 export class TransferApi extends BaseAPI {
     /**
      * A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether
-     * @summary Request Transfer from->to
+     * @summary Transfer to another The Coin account
      * @param {CertifiedTransferRequest} certifiedTransferRequest A request appropriately filled out and signed as described in the comments
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransferApi
      */
-    public makeCertifiedTransfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any) {
-        return TransferApiFp(this.configuration).makeCertifiedTransfer(certifiedTransferRequest, options)(this.fetch, this.basePath);
+    public transfer(certifiedTransferRequest: CertifiedTransferRequest, options?: any) {
+        return TransferApiFp(this.configuration).transfer(certifiedTransferRequest, options)(this.fetch, this.basePath);
     }
 
 }

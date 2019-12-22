@@ -1,80 +1,67 @@
 
 import { BrokerCAD } from '@the-coin/types'
-import { NormalizeAddress } from '@the-coin/utilities';
-import { GetBillPaymentSigner } from '@the-coin/utilities/lib/VerifiedBillPayment'
-import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
-import { GetUserDoc } from '@the-coin/utilities/lib/User';
+import { CertifiedActionProcess } from './CertifiedActionProcess';
+import { CertifiedActionVerify } from './CertifiedActionVerify';
 
-import { ProcessCertifiedAction, ConfirmedRecord, VerifiedActionResult } from './VerifiedProcess';
-import status from './status.json';
+// type PayeeDocument = {
+// 	payee: string,	// encrypted JSON doc
+// 	version: string // version payee was encrypted with
+// }
 
-type PayeeDocument = {
-	payee: string,	// encrypted JSON doc
-	version: string // version payee was encrypted with
-}
+// function ValidSignatures(payment: BrokerCAD.CertifiedTransfer) {
+// 	const paymentSigner = GetSigner(payment);
+// 	const xferSigner = GetTransferSigner(payment.transfer);
+// 	return (paymentSigner == xferSigner);
+// }
 
-type BillPaymentDocument = BrokerCAD.CertifiedBillPayment&ConfirmedRecord
+// function ValidDestination(payment: BrokerCAD.CertifiedTransfer) {
+// 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
+// }
 
-function ValidSignatures(payment: BrokerCAD.CertifiedBillPayment) {
-	const paymentSigner = GetBillPaymentSigner(payment);
-	const xferSigner = GetTransferSigner(payment.transfer);
-	return (paymentSigner == xferSigner);
-}
+// async function GetPayeeDoc(user: string, payeeName: string) {
+// 	const userDoc = await GetUserDoc(user);
+// 	return userDoc.collection("Payees").doc(payeeName);
+// }
 
-function ValidDestination(payment: BrokerCAD.CertifiedBillPayment) {
-	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
-}
+// TODO: Get/Set named payee's will be moved to a separate process
+// and not made part of the actual bill payment.  This will be done
+// so the payee name can be encrypted by the client, and also so
+// we do not have any way to tell if the bill being paid is a named
+// bill or not (or what it is named).
 
-async function GetPayeeDoc(user: string, payeeName: string) {
-	const userDoc = await GetUserDoc(user);
-	return userDoc.collection("Payees").doc(payeeName);
-}
-async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
-{
-	if (!payee.name)
-		return;
+// async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
+// {
+// 	if (!payee.name)
+// 		return;
 
-	const data: PayeeDocument = {
-		payee: payee.encryptedPacket,
-		version: payee.version
-	}
-	const payeeDoc = await GetPayeeDoc(user, payee.name);
-	await payeeDoc.set(data);
-	console.log(`${user} Set encrypted payee ${payee.name}`);
-}
+// 	const data: PayeeDocument = {
+// 		payee: payee.encryptedPacket,
+// 		version: payee.version
+// 	}
+// 	const payeeDoc = await GetPayeeDoc(user, payee.name);
+// 	await payeeDoc.set(data);
+// 	console.log(`${user} Set encrypted payee ${payee.name}`);
+// }
 
-async function GetNamedPayee(user: string, payeeName: string)
-{
-	const payeeDoc = await GetPayeeDoc(user, payeeName);
-	const payee = await payeeDoc.get();
-	return payee.exists ? 
-		payee.data() as PayeeDocument :
-		null
-}
+// async function GetNamedPayee(user: string, payeeName: string)
+// {
+// 	const payeeDoc = await GetPayeeDoc(user, payeeName);
+// 	const payee = await payeeDoc.get();
+// 	return payee.exists ? 
+// 		payee.data() as PayeeDocument :
+// 		null
+// }
 
 // Billpayment works by:
 //  User Creates Billpayment which is just VeriXFer 
 //	User adds bill payment
-async function ProcessBillPayment(payment: BrokerCAD.CertifiedBillPayment)
+export async function ProcessBillPayment(payment: BrokerCAD.CertifiedTransfer)
 {
-	// First, check that bill payment & the transfer are signed by the same person
-	if (!ValidSignatures(payment))
-		throw new Error("Mismatching Signatures");
-
-	// verify that the transfer recipient is the Broker CAD
-	if (!ValidDestination(payment))
-		throw new Error("Invalid Destination");
-
+  // First, check that bill payment & the transfer are signed by the same person
+  CertifiedActionVerify(payment);
+  
 	// Do the CertTransfer, this should transfer Coin to our account
-	const res = await ProcessCertifiedAction(payment, "Bill");
+	const res = await CertifiedActionProcess(payment, "Bill");
 
-	if (payment.encryptedPayee.name)
-	{
-		// If the user has named this bill payment, store that info in here.
-		const user = GetBillPaymentSigner(payment);
-		await StoreNamedPayee(user, payment.encryptedPayee);
-	}
 	return res;
 }
-
-export { ProcessBillPayment, GetNamedPayee, StoreNamedPayee, BillPaymentDocument }

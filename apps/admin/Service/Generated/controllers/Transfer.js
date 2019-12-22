@@ -3,9 +3,9 @@
 var utils = require('../utils/writer.js');
 var Transfer = require('../service/TransferService');
 
-module.exports.makeCertifiedTransfer = function makeCertifiedTransfer (req, res, next) {
+module.exports.transfer = function transfer (req, res, next) {
   var request = req.swagger.params['request'].value;
-  Transfer.makeCertifiedTransfer(request)
+  Transfer.transfer(request)
     .then(function (response) {
       utils.writeJson(res, response);
     })

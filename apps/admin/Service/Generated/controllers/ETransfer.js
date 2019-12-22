@@ -1,11 +1,11 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Sell = require('../service/SellService');
+var ETransfer = require('../service/ETransferService');
 
-module.exports.certifiedCoinSale = function certifiedCoinSale (req, res, next) {
+module.exports.eTransfer = function eTransfer (req, res, next) {
   var request = req.swagger.params['request'].value;
-  Sell.certifiedCoinSale(request)
+  ETransfer.eTransfer(request)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -14,9 +14,9 @@ module.exports.certifiedCoinSale = function certifiedCoinSale (req, res, next) {
     });
 };
 
-module.exports.requestCoinSale = function requestCoinSale (req, res, next) {
+module.exports.eTransferInCode = function eTransferInCode (req, res, next) {
   var request = req.swagger.params['request'].value;
-  Sell.requestCoinSale(request)
+  ETransfer.eTransferInCode(request)
     .then(function (response) {
       utils.writeJson(res, response);
     })

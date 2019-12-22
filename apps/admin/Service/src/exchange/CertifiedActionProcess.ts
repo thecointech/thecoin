@@ -2,27 +2,22 @@ import { BrokerCAD } from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
-import { ProcessRecord } from "@the-coin/utilities/lib/Firestore";
+import { TransferRecord } from "@the-coin/utilities/lib/Firestore";
 import { DocumentReference } from "@the-coin/utilities/lib/FirebaseFirestore";
 import { Timestamp } from "@google-cloud/firestore";
 
-interface CertifiedAction {
-	transfer: BrokerCAD.CertifiedTransferRequest
-}
-type ConfirmedRecord = CertifiedAction & ProcessRecord;
-
-interface VerifiedActionResult {
+export type VerifiedActionResult = {
 	doc: DocumentReference,
 	hash: string
 }
 
 // Store the xfer info
-async function StoreActionRequest(actionData: CertifiedAction, actionType: UserAction, hash: string)
+async function StoreActionRequest(actionData: BrokerCAD.CertifiedTransfer, actionType: UserAction, hash: string)
 {
     const user = actionData.transfer.from;
 
     const actionDoc = GetActionDoc(user, actionType, hash);
-    const data: ConfirmedRecord = {
+    const data: TransferRecord = {
         ...actionData,
         recievedTimestamp: Timestamp.now(), 
         hash: hash,
@@ -57,9 +52,14 @@ async function ConfirmAction(tx: TransactionResponse, actionDoc: DocumentReferen
     console.log(`Tx Confirmed: ${res.status}`);
 }
 
-async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: UserAction): Promise<VerifiedActionResult> {
+export async function  CertifiedActionProcess(actionData: BrokerCAD.CertifiedTransfer, actionType: UserAction): Promise<VerifiedActionResult> {
     const { transfer } = actionData;
-    
+
+    // First, create an initial record of the transaction.  This is a time-stamped 
+    // record that is a fail-safe in case our tx fails
+    let actionDoc = await StoreActionRequest(actionData, actionType, Date.now().toString());
+    console.log(`Valid Cert Action: id: ${actionDoc.id}`);
+
     // Do the CertTransfer, this should transfer Coin to our account
     const res = await DoCertifiedTransferWaitable(transfer);
     if (!res.hash)
@@ -68,9 +68,8 @@ async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: 
         throw new Error("Unknown problem with returned value from DoCertTransfer")
     }
 
-	// Next, create an initial record of the transaction
-    const actionDoc = await StoreActionRequest(actionData, actionType, res.hash);
-    console.log(`Valid Cert Xfer: id: ${actionDoc.id}`);
+    actionDoc.delete();
+    actionDoc = await StoreActionRequest(actionData, actionType, res.hash);
 
     await StoreActionLink(actionDoc.path, actionType, res.hash);
         
@@ -83,5 +82,3 @@ async function  ProcessCertifiedAction(actionData: CertifiedAction, actionType: 
         hash: res.hash
 	}
 }
-
-export { ProcessCertifiedAction, ConfirmedRecord, VerifiedActionResult }

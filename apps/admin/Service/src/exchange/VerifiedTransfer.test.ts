@@ -5,10 +5,15 @@ import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
 import status from './Status';
 
-const host = process.env.DATASTORE_EMULATOR_HOST;
-const RunningLocal = host == "localhost:8081"
+import * as firestore from './Firestore'
+import { IsDebug } from "@the-coin/utilities/lib/IsDebug";
+
+beforeAll(async () => {
+  firestore.init();
+});
 
 test("Transfer checks balance", async () => {
+  jest.setTimeout(180000);
 	const wallet = Wallet.createRandom();
 	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, 100, status.certifiedFee);
 	await expect(DoCertifiedTransferWaitable(certTransfer)).rejects.toThrow("Insufficient funds");
@@ -23,7 +28,7 @@ test("Transfer checks fee", async () => {
 
 
 test("Transfer completes sale properly", async () => {
-	if (!RunningLocal)
+	if (!IsDebug) // Running locally only
 		return;
 	
 	jest.setTimeout(180000);

@@ -2,20 +2,21 @@
 import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
-import { DoCertifiedSale, VerifiedSaleRecord } from './VerifiedSale'
+import { DoCertifiedSale } from './VerifiedSale'
 import status from './Status';
 import * as firestore from './Firestore'
+import { BrokerCAD } from '@the-coin/types';
+import { TransferRecord } from '@the-coin/utilities/lib/Firestore';
 
 beforeAll(async () => {
   firestore.init();
 });
 
-
 test("Status is valid", () => {
 	expect(status.address);
 	expect(status.address.length).toBe(42);
 	const fee = toHuman(status.certifiedFee);
-	expect(fee).toBe(0.02);
+	expect(fee).toBe(0.005);
 })
 
 test("Certified sale completes sale properly", async () => {
@@ -29,10 +30,15 @@ test("Certified sale completes sale properly", async () => {
 	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
-	const email = "test@random.com";
+	const eTransfer: BrokerCAD.ETransferPacket = {
+    email: "test@random.com",
+    question: "vvv",
+    answer: "lskdjf"
+  };
+
 	const fee = status.certifiedFee;
 	const sellAmount = 100;
-	const certSale = await BuildVerifiedSale(email, wallet, status.address, sellAmount, fee);
+	const certSale = await BuildVerifiedSale(eTransfer, wallet, status.address, sellAmount, fee);
 	const tx = await DoCertifiedSale(certSale);
 	
 	expect(tx).toBeTruthy();
@@ -56,13 +62,16 @@ test("Certified sale completes sale properly", async () => {
 	await delay(1000);
 
 	// Verify money was subtracted
-	const newBalance = await tc.balanceOf(wallet.address)
+  const newBalance = await tc.balanceOf(wallet.address)
+  // Note, this number can sometimes be messed up if multiple
+  // tests are runnin a the same time.  It's an issue
+  // with using the same wallet for testing that processed the tx's
 	expect(newBalance.toNumber()).toBe(myBalance.toNumber() - sellAmount);
 	
 	const r = await tx.doc.get();
-	const record = r.data() as VerifiedSaleRecord;
+	const record = r.data() as TransferRecord;
 	expect(record.hash).toEqual(tx.hash);
-	expect(record.clientEmail).toEqual(email);
+	//expect(record.clientEmail).toEqual(email);
 	expect(record.confirmed).toEqual(true);
 	expect(record.fiatDisbursed).toEqual(0);
 })

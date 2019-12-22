@@ -27,7 +27,9 @@ type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 type VerifiedSaleRecord = BrokerCAD.CertifiedSale & ProcessRecord;
 
 const initialState = {
+  privateKey: "",
   unsettledSales: [] as VerifiedSaleRecord[],
+  decryptedTransfers: [] as BrokerCAD.ETransferPacket[],
   activeIndex: -1,
   doConfirm: false
 }
@@ -110,7 +112,11 @@ class RedeemClass extends React.PureComponent<Props, State> {
 
     // Check that we got the right everything:
     const user = GetSaleSigner(sale);
-    console.log(user)
+    if (!user)
+    {
+      debugger;
+      throw new Error("Must have user to complete this action");
+    }
     // Check that this sale really does exist
     // (this should be moot, we fetch in fetchSalesToSettle)
     const actionDoc = GetActionDoc(user, ACTION_TYPE, sale.hash);
@@ -135,7 +141,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
   // Render an individual sale
   renderSale(sale: VerifiedSaleRecord, index: number)
   {
-    const { recievedTimestamp, processedTimestamp, transfer, clientEmail } = sale;
+    const { recievedTimestamp, processedTimestamp, transfer } = sale;
     const processedDate = processedTimestamp.toDate();
     if (processedTimestamp.toMillis() > Date.now()) {
       return <div>This sale can be settled on {processedDate.toDateString()}</div>
@@ -152,18 +158,21 @@ class RedeemClass extends React.PureComponent<Props, State> {
     const recievedAt = recievedTimestamp.toDate();
     const active = activeIndex === index
     const processOn = recievedTimestamp === processedTimestamp ? null : <div>Process On: {processDate.toString()}</div>;
+    const eTransfer = this.state.decryptedTransfers[index];
     
     return (
       <Accordion>
         <Accordion.Title active={active} index={index} onClick={this.onSaleAccordionClicked}>
           <Icon name='dropdown' />
-          {clientEmail} - THE: {toHuman(transfer.value)}
+          {eTransfer.email} - THE: {toHuman(transfer.value)}
         </Accordion.Title>
         <Accordion.Content active={active}>
           <div>CAD: ${cad}</div>
           <div>Recieved: {recievedAt.toLocaleTimeString()}</div>
           {processOn}
-          <div>Payee: {clientEmail}</div>
+          <div>Question: {eTransfer.question}</div>
+          <div>Answer: {eTransfer.answer}</div>
+          <div>Message: {eTransfer.message}</div>
           <Button onClick={this.onBeginMarkComplete}>Mark Complete</Button>
         </Accordion.Content>
       </Accordion>
@@ -181,7 +190,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
       return (
         <List.Item key={sale.hash}>
           <List.Content>
-            <List.Header>{recDate.toDateString()} - {sale.clientEmail}</List.Header>
+            <List.Header>{recDate.toDateString()} - {sale.transfer.value}</List.Header>
             { this.renderSale(sale, index) }
           </List.Content>
         </List.Item>

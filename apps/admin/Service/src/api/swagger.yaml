@@ -86,43 +86,21 @@ paths:
         405:
           description: "Server Error"
       x-swagger-router-controller: "Referrers"
-  /exchange/sell/initiate:
+  /exchange/eTransfer:
     post:
       tags:
-      - "Sell"
-      summary: "Request coin sale"
-      description: "Called by the client to exchange coin for CAD"
-      operationId: "requestCoinSale"
+      - "eTransfer"
+      summary: "Request eTransfer"
+      description: "Called by the client to exchange coin for CAD and send via eTransfer"
+      operationId: "eTransfer"
       parameters:
       - in: "body"
         name: "request"
-        description: "Signed sell order request"
+        description: "Must contain a transfer to this brokers address, and an encrypted\
+          \ ETransferPacket"
         required: true
         schema:
-          $ref: "#/definitions/SignedMessage"
-      responses:
-        200:
-          description: "The response confirms to the user the order was accepted"
-          schema:
-            $ref: "#/definitions/SellResponse"
-        405:
-          description: "Invalid input"
-      x-swagger-router-controller: "Sell"
-  /exchange/sell/certified:
-    post:
-      tags:
-      - "Sell"
-      summary: "Request coin sale"
-      description: "Called by the client to exchange coin for CAD using a certified\
-        \ transfer"
-      operationId: "certifiedCoinSale"
-      parameters:
-      - in: "body"
-        name: "request"
-        description: "Signed certified transfer to this brokers address"
-        required: true
-        schema:
-          $ref: "#/definitions/CertifiedSale"
+          $ref: "#/definitions/CertifiedTransfer"
       responses:
         200:
           description: "The response confirms to the user the order has been processed"
@@ -130,50 +108,45 @@ paths:
             $ref: "#/definitions/CertifiedTransferResponse"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "Sell"
-  /exchange/etransfer/code:
+      x-swagger-router-controller: "ETransfer"
+  /exchange/eTransfer/code:
     put:
       tags:
-      - "Buy"
-      summary: "Coin e-Transfer secret answer"
-      description: "A unique code for the requesting user to use as an answer to their\
-        \ e-Transfer question"
-      operationId: "eTransferCode"
+      - "eTransfer"
+      summary: "Required answer for eTransfer sent to this broker"
+      description: "A code unique to the user that is required on all eTransfers sent\
+        \ in to this broker"
+      operationId: "eTransferInCode"
       parameters:
       - in: "body"
         name: "request"
-        description: "Signed certified transfer to this brokers address"
+        description: "Signed timestamp message"
         required: true
         schema:
           $ref: "#/definitions/SignedMessage"
       responses:
         200:
-          description: "The response confirms to the user the order has been processed"
+          description: "The requesters unique eTransfer code."
           schema:
             $ref: "#/definitions/eTransferCodeResponse"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "Buy"
-  /bills/{user}:
+      x-swagger-router-controller: "ETransfer"
+  /bills/payment:
     post:
       tags:
       - "Bill Payments"
-      summary: "Trigger a Bill Payment"
-      description: "Called by the client to pay a bill in CAD with coin via a certified\
-        \ transfer"
-      operationId: "certifiedBillPayment"
+      summary: "Bill Payment"
+      description: "Called by the client to pay a bill with coin via a certified transfer"
+      operationId: "billPayment"
       parameters:
       - in: "body"
         name: "request"
-        description: "Signed certified transfer to this brokers address"
+        description: "Must contain a transfer to this brokers address, and an encrypted\
+          \ BillPayeePacket"
         required: true
         schema:
-          $ref: "#/definitions/CertifiedBillPayment"
-      - name: "user"
-        in: "path"
-        description: "User address"
-        required: true
-        type: "string"
+          $ref: "#/definitions/CertifiedTransfer"
       responses:
         200:
           description: "The response confirms to the user the order has been processed"
@@ -182,16 +155,16 @@ paths:
         405:
           description: "Invalid input"
       x-swagger-router-controller: "BillPayments"
-  /certifiedTransfer:
+  /transfer:
     post:
       tags:
       - "Transfer"
-      summary: "Request Transfer from->to"
+      summary: "Transfer to another The Coin account"
       description: "A client may request that the Broker initiate a transfer from\
         \ their account to another.  The transfer includes a fee paid to the broker\
         \ to cover the cost of the transfer.  This allows a user to operate on the\
         \ Ethereum blockchain without requiring their own ether"
-      operationId: "makeCertifiedTransfer"
+      operationId: "transfer"
       parameters:
       - in: "body"
         name: "request"
@@ -367,106 +340,6 @@ paths:
           description: "Server Error"
       x-swagger-router-controller: "Newsletter"
 definitions:
-  SignedPurchaseRequest:
-    required:
-    - "cadAmount"
-    - "email"
-    - "signature"
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "integer"
-      email:
-        type: "string"
-      cadAmount:
-        type: "number"
-      signature:
-        type: "string"
-  SignedPurchaseConfirm:
-    required:
-    - "signature"
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "integer"
-      signature:
-        type: "string"
-  PurchaseComplete:
-    required:
-    - "cadAmount"
-    - "cadRate"
-    - "coinAmount"
-    - "coinRate"
-    - "timestamp"
-    - "txHash"
-    properties:
-      timestamp:
-        type: "integer"
-      cadAmount:
-        type: "number"
-      coinAmount:
-        type: "integer"
-      coinRate:
-        type: "number"
-      cadRate:
-        type: "number"
-      txHash:
-        type: "string"
-  PurchaseResponse:
-    required:
-    - "orderId"
-    properties:
-      orderId:
-        type: "string"
-  PurchaseIds:
-    type: "array"
-    items:
-      type: "string"
-  PurchaseState:
-    properties:
-      request:
-        $ref: "#/definitions/SignedPurchaseRequest"
-      confirm:
-        $ref: "#/definitions/SignedPurchaseConfirm"
-      complete:
-        $ref: "#/definitions/PurchaseComplete"
-  SellRequest:
-    required:
-    - "email"
-    - "txHash"
-    properties:
-      email:
-        type: "string"
-      txHash:
-        type: "string"
-      blockNumber:
-        type: "integer"
-  SellComplete:
-    required:
-    - "cadAmount"
-    - "cadRate"
-    - "coinAmount"
-    - "coinRate"
-    - "timestamp"
-    properties:
-      timestamp:
-        type: "integer"
-      cadAmount:
-        type: "number"
-      coinAmount:
-        type: "integer"
-      coinRate:
-        type: "number"
-      cadRate:
-        type: "number"
-  SellResponse:
-    required:
-    - "orderId"
-    properties:
-      orderId:
-        type: "string"
-    example:
-      orderId: "orderId"
   SignedMessage:
     required:
     - "message"
@@ -519,53 +392,6 @@ definitions:
     example:
       message: "message"
       txHash: "txHash"
-  eTransferCodeResponse:
-    properties:
-      code:
-        type: "string"
-      error:
-        type: "string"
-    example:
-      code: "code"
-      error: "error"
-  ETransferPacket:
-    required:
-    - "email"
-    - "secret"
-    properties:
-      email:
-        type: "string"
-      secret:
-        type: "string"
-      message:
-        type: "string"
-  CertifiedSale:
-    required:
-    - "signature"
-    - "transfer"
-    properties:
-      transfer:
-        $ref: "#/definitions/CertifiedTransferRequest"
-      encryptedETransfer:
-        type: "string"
-      signature:
-        type: "string"
-    example:
-      transfer:
-        signature: "signature"
-        fee: 6
-        from: "from"
-        to: "to"
-        value: 0
-        timestamp: 1
-      encryptedETransfer: "encryptedETransfer"
-      signature: "signature"
-  BillPayeePacket:
-    properties:
-      payee:
-        type: "string"
-      accountNumber:
-        type: "string"
   EncryptedPacket:
     required:
     - "encryptedPacket"
@@ -573,29 +399,25 @@ definitions:
     properties:
       encryptedPacket:
         type: "string"
-      name:
-        type: "string"
       version:
         type: "string"
     example:
-      name: "name"
       encryptedPacket: "encryptedPacket"
       version: "version"
-  CertifiedBillPayment:
+  CertifiedTransfer:
     required:
-    - "encryptedPayee"
+    - "instructionPacket"
     - "signature"
     - "transfer"
     properties:
       transfer:
         $ref: "#/definitions/CertifiedTransferRequest"
-      encryptedPayee:
+      instructionPacket:
         $ref: "#/definitions/EncryptedPacket"
       signature:
         type: "string"
     example:
-      encryptedPayee:
-        name: "name"
+      instructionPacket:
         encryptedPacket: "encryptedPacket"
         version: "version"
       transfer:
@@ -606,6 +428,35 @@ definitions:
         value: 0
         timestamp: 1
       signature: "signature"
+  ETransferPacket:
+    required:
+    - "answer"
+    - "email"
+    - "question"
+    properties:
+      email:
+        type: "string"
+      question:
+        type: "string"
+      answer:
+        type: "string"
+      message:
+        type: "string"
+  eTransferCodeResponse:
+    properties:
+      code:
+        type: "string"
+      error:
+        type: "string"
+    example:
+      code: "code"
+      error: "error"
+  BillPayeePacket:
+    properties:
+      payee:
+        type: "string"
+      accountNumber:
+        type: "string"
   BrokerStatus:
     required:
     - "address"

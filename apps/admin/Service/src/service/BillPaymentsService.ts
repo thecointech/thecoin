@@ -1,25 +1,15 @@
-import { success, failure } from "../exchange/VerifiedTransfer";
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
 import { BrokerCAD } from "@the-coin/types";
+import { DoActionAndNotify } from "utils/DoActionAndNotify";
 
 /**
- * Trigger a Bill Payment
- * Called by the client to pay a bill in CAD with coin via a certified transfer
+ * Bill Payment
+ * Called by the client to pay a bill with coin via a certified transfer
  *
- * request CertifiedBillPayment Signed certified transfer to this brokers address
- * user String User address
+ * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
  * returns CertifiedTransferResponse
  **/
-export async function certifiedBillPayment(request: BrokerCAD.CertifiedBillPayment, user: string) {
-
-  console.log("Bill payment from " + user);
-  try {
-    const results = await ProcessBillPayment(request);
-    return success(results.hash);
-  }
-  catch (e) {
-    console.error(JSON.stringify(e));
-    return failure(e.message)
-  }
+export function billPayment(request: BrokerCAD.CertifiedTransfer) {
+  return DoActionAndNotify(request, ProcessBillPayment);
 }
 

@@ -1,35 +1,15 @@
 import { BrokerCAD } from '@the-coin/types';
-import { NormalizeAddress } from '@the-coin/utilities';
-import { GetSaleSigner } from '@the-coin/utilities/lib/VerifiedSale';
-import { ProcessCertifiedAction, ConfirmedRecord } from './VerifiedProcess';
-import status from './status.json';
+import { CertifiedActionVerify } from './CertifiedActionVerify';
+import { CertifiedActionProcess } from './CertifiedActionProcess';
 
-type VerifiedSaleRecord = BrokerCAD.CertifiedSale&ConfirmedRecord;
+async function  DoCertifiedSale(sale: BrokerCAD.CertifiedTransfer) {
 
-const ValidSale = (sale: BrokerCAD.CertifiedSale) => {
-    var saleSigner = GetSaleSigner(sale);
-    return (saleSigner && NormalizeAddress(saleSigner) == NormalizeAddress(sale.transfer.from))
-}
-const ValidDestination = (transfer: BrokerCAD.CertifiedTransferRequest) => 
-    NormalizeAddress(transfer.to) == NormalizeAddress(status.address);
-
-async function  DoCertifiedSale(sale: BrokerCAD.CertifiedSale) {
-    const { transfer, encryptedETransfer, signature } = sale;
-    if (!transfer || !encryptedETransfer || !signature) 
-        throw new Error("Invalid arguments");
+  CertifiedActionVerify(sale);
     
-    console.log(`Cert Sale from ${clientEmail}`);
+  //console.log(`e-Transfer from ${clientEmail}`);
     
-    // First, verify the email address
-    if (!ValidSale(sale))
-        throw new Error("Invalid data");
-
-    // Finally, verify that the transfer recipient is the Broker CAD
-    if (!ValidDestination(transfer))
-        throw new Error("Invalid Destination");
-
-    // Process the action
-    return await ProcessCertifiedAction(sale, "Sell");
+  // Process the action
+  return await CertifiedActionProcess(sale, "Sell");
 }
 
-export { DoCertifiedSale, VerifiedSaleRecord }
+export { DoCertifiedSale }

@@ -2,14 +2,13 @@
 
 
 /**
- * Trigger a Bill Payment
- * Called by the client to pay a bill in CAD with coin via a certified transfer
+ * Bill Payment
+ * Called by the client to pay a bill with coin via a certified transfer
  *
- * request CertifiedBillPayment Signed certified transfer to this brokers address
- * user String User address
+ * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
  * returns CertifiedTransferResponse
  **/
-exports.certifiedBillPayment = function(request,user) {
+exports.billPayment = function(request) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

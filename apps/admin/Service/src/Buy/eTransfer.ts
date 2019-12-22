@@ -24,7 +24,7 @@ export async function GenerateCode(request: BrokerCAD.SignedMessage)
 	const age = Date.now() - ts;
 	console.log(`Generating code for TS: ${ts}, ${age / 1000}s old`);
 	if (age > (5 * 60 * 1000))
-		throw("Timestamp too old");
+		throw new Error("Timestamp too old");
 
 	// Ok - it's a valid message.  Get the signer
 	const mhash = GetHash(message);

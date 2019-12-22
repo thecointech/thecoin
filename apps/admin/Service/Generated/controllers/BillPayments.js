@@ -3,10 +3,9 @@
 var utils = require('../utils/writer.js');
 var BillPayments = require('../service/BillPaymentsService');
 
-module.exports.certifiedBillPayment = function certifiedBillPayment (req, res, next) {
+module.exports.billPayment = function billPayment (req, res, next) {
   var request = req.swagger.params['request'].value;
-  var user = req.swagger.params['user'].value;
-  BillPayments.certifiedBillPayment(request,user)
+  BillPayments.billPayment(request)
     .then(function (response) {
       utils.writeJson(res, response);
     })

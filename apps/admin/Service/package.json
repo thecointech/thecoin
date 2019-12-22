@@ -17,8 +17,7 @@
   "private": true,
   "dependencies": {
     "@google-cloud/firestore": "^2.4.0",
-    "@the-coin/utilities": "^0.1.65",
-    "@types/node-mailjet": "^3.3.0",
+    "@the-coin/utilities": "^0.1.70",
     "cors": "^2.8.5",
     "ethers": "^4.0.40",
     "express": "^4.16.3",
@@ -27,12 +26,12 @@
     "jest": "^24.8.0",
     "js-yaml": "^3.3.0",
     "node-mailjet": "^3.3.1",
-    "swagger-tools": "0.10.4",
-    "typescript": "^3.7.2"
+    "swagger-tools": "0.10.4"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.2",
+    "@types/node-mailjet": "^3.3.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.1"
   }
