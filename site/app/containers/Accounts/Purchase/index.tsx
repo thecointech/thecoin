@@ -11,7 +11,7 @@ import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
 import { TheSigner } from '@the-coin/components/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
-import { GetBuyApi } from '../../Services/BrokerCAD';
+import { GetETransferApi } from '../../Services/BrokerCAD';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-online.png';
@@ -70,8 +70,8 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     const { signer } = this.props;
     const ts = `${Date.now()}`;
     const request = await GetSignedMessage(ts, signer);
-    const api = GetBuyApi();
-    const response = await api.eTransferCode(request);
+    const api = GetETransferApi();
+    const response = await api.eTransferInCode(request);
 
     // Display to user
     const toAddress = `${signer.address}@thecoin.io`.toLowerCase();

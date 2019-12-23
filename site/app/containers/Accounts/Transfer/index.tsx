@@ -77,7 +77,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
     // Send the command to the server
     this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
-    const response = await transferApi.makeCertifiedTransfer(transferCommand);
+    const response = await transferApi.transfer(transferCommand);
 
     console.log(`TxResponse: ${response.message}`);
     if (!response.txHash) {

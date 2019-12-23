@@ -89,7 +89,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     if (this.state.doCancel) return false;
 
     // Get our variables
-    const { coinToSell, payeeName, payee, accountNumber } = this.state;
+    const { coinToSell, payee, accountNumber } = this.state;
     const { signer, contract } = this.props.account;
     if (coinToSell === null || !signer || !contract || !payee) return false;
 
@@ -101,7 +101,6 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     // that allows the broker to transfer TheCoin to itself
     const billPayCommand = await BuildVerifiedBillPayment(
       packet,
-      payeeName,
       signer,
       status.address,
       coinToSell,

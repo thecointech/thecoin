@@ -72,7 +72,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@nivo/line": "^0.59.3",
-    "@the-coin/broker-cad": "^0.1.41",
+    "@the-coin/broker-cad": "^0.1.42",
     "card-validator": "^6.2.0",
     "chalk": "^2.4.2",
     "compression": "1.7.4",

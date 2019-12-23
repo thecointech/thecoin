@@ -2,7 +2,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/pricing": "^0.1.1",
-    "@the-coin/types": "^0.1.52",
+    "@the-coin/types": "^0.1.53",
     "@the-coin/utilities": "^0.1.70",
     "@types/classnames": "^2.2.9",
     "@types/lodash": "^4.14.134",
