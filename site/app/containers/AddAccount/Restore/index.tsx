@@ -242,7 +242,7 @@ export class RestoreClass extends React.PureComponent<Props> {
 
   render() {
     return (
-      <>
+      <div id="formCreateAccountStep1">
         <Header as="h1">
           <Header.Content>
             <FormattedMessage {...messages.header} />
@@ -254,7 +254,7 @@ export class RestoreClass extends React.PureComponent<Props> {
 				<Divider />
         {this.renderContent()}
         <ExistsSwitcher filter="restore" />
-      </>
+      </div>
     );
   }
 }

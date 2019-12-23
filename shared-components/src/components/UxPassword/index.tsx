@@ -1,13 +1,16 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
 import { MessageDescriptor } from 'react-intl';
+import { Container } from 'semantic-ui-react';
+import show from './images/s1Show.svg';
+import hide from './images/s15Hide.svg';
 
 import { UxInput } from '../../components/UxInput';
 import { Props } from './types';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,
-  isPassword: false,
+  isPassword: true,
   maskPassword: null,
   selectionStart: 0,
   selectionEnd: 0
@@ -16,6 +19,12 @@ type State = Readonly<typeof initialState>;
 
 const UnMasked = "text";
 const Masked = "password";
+const hideStyle = {
+  display: 'none',
+} as React.CSSProperties;
+const showStyle = {
+  display: 'block',
+} as React.CSSProperties;
 
 export class UxPassword extends React.PureComponent<Props, State> {
 
@@ -34,6 +43,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
     // set debouncer for password
     this.maskPassword = debounce(this.addPasswordType, props.unMaskTime);
     this.uxChange = this.uxChange.bind(this);
+    this.toggleMask = this.toggleMask.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +70,6 @@ export class UxPassword extends React.PureComponent<Props, State> {
   }
 
   uxChange(value: string): void {
-    this.toggleMask();
     const returnValue = this.props.uxChange(value);
     return returnValue;
   }
@@ -68,16 +77,9 @@ export class UxPassword extends React.PureComponent<Props, State> {
   //
   //////////////////////////////////////////////////////////////////////////////
   toggleMask() {
-    const { unMaskTime } = this.props;
-    if (unMaskTime! > 0) {
-      // display password, then
-      this.setState({
-        isPassword: false
-      });
-
-      // debounce remasking password
-      this.maskPassword();
-    }
+    this.setState({
+      isPassword: !this.state.isPassword
+    });
   }
 
   componentWillUnmount() {
@@ -88,21 +90,28 @@ export class UxPassword extends React.PureComponent<Props, State> {
     }
   }
 
-  render() {    
+  render() {
     const {
       uxChange,
       unMaskTime,
+      toggleMask,
       ...inputProps
     } = this.props;
 
     const { isPassword } = this.state;
 
     return (
-      <UxInput
-        type={isPassword ? Masked : UnMasked}
-        uxChange={this.uxChange}
-        {...inputProps}
-      />
+      <Container> 
+        <p onClick={this.toggleMask} id="togglePassword" unselectable="on"> 
+          <p style={ isPassword ? showStyle : hideStyle }><img alt="Show Password" src={show}/>&nbsp;Show Password</p>
+          <p style={ isPassword ? hideStyle : showStyle }><img alt="Hide Password" src={hide}/>&nbsp;Hide Password</p>
+        </p>
+        <UxInput
+          type={isPassword ? Masked : UnMasked}
+          uxChange={this.uxChange}
+          {...inputProps}
+        />
+      </Container>
     )
   }
 }

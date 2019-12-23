@@ -151,11 +151,6 @@ class GenerateClass extends NewBaseClass<State> {
           progressPercent={this.state.percentComplete}
           progressMessage={messages.whileCreatingMessage}
         />
-        <div><br />
-          <a href="#/accounts/">
-            {'<- Back To My Options'}
-          </a>
-        </div>
       </React.Fragment>
     );
   }

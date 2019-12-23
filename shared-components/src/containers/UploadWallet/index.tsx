@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Label, Container, Icon, Header, Grid } from 'semantic-ui-react';
+import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
 import { injectSingleAccountReducer } from '../Account/reducer';
 import { buildMapDispatchToProps, DispatchProps } from '../Account/actions';
@@ -46,7 +46,7 @@ class UploadWalletClass extends React.PureComponent<Props> {
 
   render() {
     return (
-      <>
+      <Container id="formCreateAccountStep1">
         <Header as="h1">
           <Header.Content>
             <FormattedMessage {...messages.header}/>
@@ -58,10 +58,7 @@ class UploadWalletClass extends React.PureComponent<Props> {
         <Container>
             <Label width="4" as="label" htmlFor={this.id} size="huge" className={styles.dropzone}>
               <Grid>
-                <Grid.Row columns={2}>
-                  <Grid.Column>
-                    <Icon name="cloud upload" size="massive" className={styles.icon}/>
-                  </Grid.Column>
+                <Grid.Row columns={1}>
                   <Grid.Column verticalAlign="middle">
                     <p>Drag 'n' drop a wallet file here, or click to browse</p>
                   </Grid.Column>
@@ -70,7 +67,7 @@ class UploadWalletClass extends React.PureComponent<Props> {
             </Label>
             <input id={this.id} hidden type="file" accept=".json" onChange={this.onChangeFile} />
         </Container>
-      </>
+      </Container>
     );
   }
 }

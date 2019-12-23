@@ -15,7 +15,7 @@ import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import phone from './images/GroupeMobileApp.svg';
+import phone from './images/phoneAndMoney.svg';
 import interac from './images/interacLogo.svg';
 import treeLogo from './images/treeCanadaLogo.png';
 

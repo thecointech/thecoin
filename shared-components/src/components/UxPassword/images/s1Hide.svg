@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="6px" viewBox="0 0 16 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <g id="UserPath" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-966.000000, -486.000000)">
+            <g id="FormCreateAccount" transform="translate(468.000000, 359.000000)">
+                <g id="Group-4" transform="translate(498.000000, 127.000000)">
+                    <path d="M1,3 C4.07655356,1.66666667 6.40988689,1 8,1 C9.59011311,1 11.9234464,1.66666667 15,3" id="Line-3" stroke="#000000" stroke-linecap="square" transform="translate(8.000000, 2.000000) scale(1, -1) translate(-8.000000, -2.000000) "></path>
+                    <path d="M1,4 C4.07655356,2 6.40988689,1 8,1 C9.59011311,1 11.9234464,2 15,4" id="Line-3" stroke="#000000" stroke-linecap="square" transform="translate(8.000000, 2.500000) scale(1, -1) translate(-8.000000, -2.500000) "></path>
+                    <rect id="Rectangle" fill="#000000" transform="translate(1.500000, 2.000000) rotate(30.000000) translate(-1.500000, -2.000000) " x="1" y="0.999999811" width="1" height="2"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(14.500000, 2.000000) rotate(-30.000000) translate(-14.500000, -2.000000) " x="14" y="0.999999811" width="1" height="2"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(11.500000, 3.500000) rotate(-25.000000) translate(-11.500000, -3.500000) " x="11" y="1.99999981" width="1" height="3"></rect>
+                    <rect id="Rectangle" fill="#000000" x="7.5" y="3" width="1" height="3"></rect>
+                    <rect id="Rectangle" fill="#000000" transform="translate(4.500000, 3.500000) rotate(25.000000) translate(-4.500000, -3.500000) " x="4" y="1.99999981" width="1" height="3"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

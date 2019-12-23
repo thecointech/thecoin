@@ -2,6 +2,80 @@
          Site Overrides
 *******************************/
 
+#app .ui.container{
+}
+
+#footer{
+  position: fixed;
+  bottom: 0;
+  background-color:#f4f4f4;
+  color:rgb(154, 161, 155);
+  padding: 0px;
+  width: 100%;
+}
+
+#backgroundDecor{
+  height: 100%;
+  width: 550px;
+  z-index: -100;
+  position: fixed;
+  right: 0;
+  top: 10px;
+  background-image: linear-gradient(transparent, #3193A1);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  border-radius: 100% 0% 0% 100%; 
+}
+
+#backgroundDecorMore{
+  height: 300px;
+  width: 300px;
+  z-index: -100;
+  position: fixed;
+  left: 20%;
+  bottom: -10px;
+  background-image: linear-gradient(transparent, #E6E6E6);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  border-radius: 100% 100% 100% 100%; 
+}
+
+
+#backgroundDecorMoreAgain{
+  height: 100px;
+  width: 100px;
+  z-index: -100;
+  position: fixed;
+  left: 22%;
+  bottom: 350px;
+  background-image: linear-gradient(#FFEDD7, transparent);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  border-radius: 100% 100% 100% 100%; 
+}
+
+#backgroundDecorMoreAgainAndAgain{
+  height: 200px;
+  width: 200px;
+  z-index: -100;
+  position: fixed;
+  left: 50%;
+  bottom: 70%;
+  background-image: linear-gradient(#FFEDD7, transparent);
+  /*transform: skewX(-55deg);
+  transform-origin: top right;*/
+  border-radius: 100% 100% 100% 100%; 
+}
+
+
+.ui.segments .segment, .ui.container .ui.segment, .ui.container{
+  border-color: transparent !important;
+}
+
+.ui.container{
+  background-color: transparent !important;
+}
+
 #app{
   max-width: 1500px;
   margin: auto;
@@ -23,12 +97,53 @@
   margin-top: 10px;
 }
 
+#formCreateAccountStep1{
+  background-color: rgba(255,255,255,1);
+  padding: 5%;
+  border-radius: 10px;
+  min-width: 300px;
+  width: 50%;
+  margin: auto;
+}
+
+
+#togglePassword{
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */  
+
+  position: relative;
+  height: 10px;
+  line-height: 10px;
+  float: right;
+  right: 0px;
+  top: 25px;
+  font-size: 11px;
+}
+#togglePassword img{
+  margin-top: -2px;
+  padding: 2px;
+}
+
+@media only screen and (min-width: 1700px) {
+  #backgroundDecor{
+    height: 150%;
+    width: 700px;
+    top: -50px;
+  }
+}
+
 @media only screen and (max-width: 750px) {
   .mainWrapper .column{
     width: 100% !important;
   }
 }
 @media only screen and (max-width: 390px) {
+
+  #backgroundDecor{
+    transform: none;
+  }
 
   #phoneZone{
     display: none;
