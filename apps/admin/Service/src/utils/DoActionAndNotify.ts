@@ -1,8 +1,7 @@
 import { BrokerCAD } from "@the-coin/types";
-import { DoCertifiedSale } from "exchange/VerifiedSale";
-import { SendMail } from "exchange/AutoMailer";
-import { VerifiedActionResult } from "exchange/CertifiedActionProcess";
-import { success, failure } from "exchange/VerifiedTransfer";
+import { SendMail } from "../exchange/AutoMailer";
+import { VerifiedActionResult } from "../exchange/CertifiedActionProcess";
+import { success, failure } from "../exchange/VerifiedTransfer";
 
 type CertifiedActionFunction = (action: BrokerCAD.CertifiedTransfer) => Promise<VerifiedActionResult>;
 

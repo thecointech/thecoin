@@ -1,8 +1,8 @@
 import { BrokerCAD } from "@the-coin/types";
-import { DoCertifiedSale } from "exchange/VerifiedSale";
-import { DoActionAndNotify } from "utils/DoActionAndNotify";
-import { GenerateCode } from "Buy/eTransfer";
-import { SendMail } from "exchange/AutoMailer";
+import { SendMail } from "../exchange/AutoMailer";
+import { DoCertifiedSale } from "../exchange/VerifiedSale";
+import { DoActionAndNotify } from "../utils/DoActionAndNotify";
+import { GenerateCode } from "../Buy/eTransfer";
 
 /**
  * Request eTransfer

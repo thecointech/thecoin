@@ -1,5 +1,5 @@
-import React from "react";
-import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
+import React, { useState, useCallback } from "react";
+import { GetFirestore, ProcessRecord, TransferRecord } from "@the-coin/utilities/lib/Firestore";
 import { GetBillPaymentSigner } from "@the-coin/utilities/lib/VerifiedBillPayment";
 import { decryptTo } from "@the-coin/utilities/lib/Encrypt";
 import { AccountState } from '@the-coin/components/containers/Account/types';
@@ -11,50 +11,54 @@ import * as FxActions from '@the-coin/components/containers/FxRate/actions';
 import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
 import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
 import { connect } from "react-redux";
-import fs from 'fs';
 import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
-import firebase from "firebase";
 import { fromMillis } from "utils/Firebase";
-
-type Timestamp = firebase.firestore.Timestamp;
-
-const ACTION_TYPE = "Bill"
-
-type MyProps = {
-  dispatch: FxActions.DispatchProps,
-	account: AccountState
-}
-type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
+import { PrivateKeyButton } from "./PrivateKeyButton";
 
 // TODO: Dedup this with definitions in service
-type BillPaymentRecord = BrokerCAD.CertifiedBillPayment & ProcessRecord;
+
+export type InstructionPacket = BrokerCAD.BillPayeePacket|BrokerCAD.ETransferPacket;
 
 const initialState = {
-	privateKey: "",
-	unsettledBills: [] as BillPaymentRecord[],
-	decryptedPayees: [] as BrokerCAD.BillPayeePacket[],
+
+	transferRecords: [] as TransferRecord[],
+	decryptedRecords: [] as BrokerCAD.BillPayeePacket[],
 	activeIndex: -1,
 	doConfirm: false
 }
 type State = Readonly<typeof initialState>;
+
+export const EncryptedList = () => {
+  const [privateKey, setPrivateKey] = useState("");
+  const [transferRecords, setTransferRecords] = useState<TransferRecord[]>([]);
+  const [decryptedRecords, decryptedRecords] = useState<InstructionPacket[]>([]);
+
+  const setKeyAndUpdate = useCallback((pk: string) => {
+    setPrivateKey(_ => {
+      // Decrypt and set decryptedRecords
+      return pk;
+    })
+  }, [setPrivateKey]);
+
+
+  return (
+    <>
+      {
+        // Optionally show button to load PrivateKey
+        privateKey
+        ? undefined
+        : <PrivateKeyButton setPrivateKey={setKeyAndUpdate} />
+      }
+    </>
+  )
+}
 
 class BillPaymentsClass extends React.PureComponent<Props, State> {
 
 	state = initialState;
 
 	onBillAccordionClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, data: AccordionTitleProps) => this.setState({activeIndex: data.index as number})
-	onPkSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { files } = e.target
-		if (!files)
-			throw("Empty or Missing FileList");
 
-		const file = files[0];
-		console.log("Loading PK: " + file.name);
-		const privateKey = await fs.readFileSync(file.path);
-		this.setState({privateKey: privateKey.toString()})
-		// Delay processing to allow setState to complete
-		setTimeout(() => this.processAllRawBills(), 100);
-	}
 
 	onBeginMarkComplete = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		event.preventDefault()

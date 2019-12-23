@@ -1,6 +1,6 @@
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
 import { BrokerCAD } from "@the-coin/types";
-import { DoActionAndNotify } from "utils/DoActionAndNotify";
+import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
 /**
  * Bill Payment
