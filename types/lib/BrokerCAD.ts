@@ -8,51 +8,9 @@ export namespace BrokerCAD {
     country?: string;
     city?: string;
   }
-  export interface SignedPurchaseRequest {
-    timestamp: number;
-    email: string;
-    cadAmount: number;
-    signature: string;
-  }
-  export interface SignedPurchaseConfirm {
-    timestamp: number;
-    signature: string;
-  }
   export interface SignedMessage {
     message: string;
     signature: string;
-  }
-  export interface SellResponse {
-    orderId: string;
-  }
-  export interface SellRequest {
-    email: string;
-    txHash: string;
-    blockNumber?: number;
-  }
-  export interface SellComplete {
-    timestamp: number;
-    cadAmount: number;
-    coinAmount: number;
-    coinRate: number;
-    cadRate: number;
-  }
-  export interface PurchaseState {
-    request?: SignedPurchaseRequest;
-    confirm?: SignedPurchaseConfirm;
-    complete?: PurchaseComplete;
-  }
-  export interface PurchaseResponse {
-    orderId: string;
-  }
-  export interface PurchaseIds {}
-  export interface PurchaseComplete {
-    timestamp: number;
-    cadAmount: number;
-    coinAmount: number;
-    coinRate: number;
-    cadRate: number;
-    txHash: string;
   }
   export interface NewAccountReferal {
     referrerId: string;
@@ -86,7 +44,8 @@ export namespace BrokerCAD {
   }
   export interface ETransferPacket {
     email: string;
-    secret: string;
+    question: string;
+    answer: string;
     message?: string;
   }
   export interface eTransferCodeResponse {
@@ -109,14 +68,9 @@ export namespace BrokerCAD {
     timestamp: number;
     signature: string;
   }
-  export interface CertifiedSale {
+  export interface CertifiedTransfer {
     transfer: CertifiedTransferRequest;
-    encryptedETransfer?: EncryptedPacket;
-    signature: string;
-  }
-  export interface CertifiedBillPayment {
-    transfer: CertifiedTransferRequest;
-    encryptedPayee: EncryptedPacket;
+    instructionPacket: EncryptedPacket;
     signature: string;
   }
   export interface BrokerStatus {

@@ -9,7 +9,7 @@
 
 import * as React from 'react';
 import { Container } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { useLocation } from 'react-router';
 
 import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
@@ -18,16 +18,15 @@ import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
 import { FxRates } from '@the-coin/components/containers/FxRate';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
-import {
-  LocationStoreState,
-  mapLocationStateToProps,
-} from 'containers/Location/selectors';
+
 import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
+import { injectRootReducer } from '@the-coin/components/containers/Account/reducer';
 
-function App(props: LocationStoreState) {
-  const sidebarVisible = props.location.pathname.startsWith('/accounts');
+const AppClass = () => {
+  const location = useLocation()
+  const sidebarVisible = location.pathname.startsWith('/accounts');
 
   return (
     <>
@@ -36,15 +35,15 @@ function App(props: LocationStoreState) {
 
       <Container
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: '#fffff f',
           width: '100%',
           'max-width': '1600px',
         }}
       >
         <PageSidebar visible={sidebarVisible}>
-          <MainPageTransition location={props.location}>
+          <MainPageTransition location={location}>
             <section className={styles.pageMainInner}>
-              <MainRouter location={props.location} />
+              <MainRouter location={location} />
             </section>
           </MainPageTransition>
         </PageSidebar>
@@ -56,6 +55,4 @@ function App(props: LocationStoreState) {
   );
 }
 
-export default injectRootReducer<App>()(
-  connect(mapLocationStateToProps)(App)
-);
+export const App = injectRootReducer<{}>()(AppClass);

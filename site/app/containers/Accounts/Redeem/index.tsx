@@ -11,8 +11,9 @@ import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import messages from './messages';
-import { GetStatusApi, GetSellApi } from 'containers/Services/BrokerCAD';
+import { GetStatusApi, GetETransferApi } from 'containers/Services/BrokerCAD';
 import styles from './index.module.css';
+import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
 
 type MyProps = {
   account: AccountState;
@@ -23,6 +24,9 @@ type Props = MyProps & FxState;
 const initialState = {
   coinToSell: null as number | null,
   email: '',
+  question: '',
+  answer: '',
+  message: undefined as string | undefined,
   transferInProgress: false,
   transferMessage: messages.transferOutProgress,
   transferValues: undefined as any,
@@ -34,13 +38,6 @@ type StateType = Readonly<typeof initialState>;
 
 class RedeemClass extends React.PureComponent<Props, StateType> {
   state = initialState;
-
-  constructor(props: Props) {
-    super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
-  }
 
   async doSale() {
     // Init messages
@@ -55,25 +52,31 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     if (this.state.doCancel) return false;
 
     // Get our variables
-    const { coinToSell, email } = this.state;
+    const { coinToSell, email, question, answer, message } = this.state;
     const { signer, contract } = this.props.account;
-    if (coinToSell === null || !signer || !contract) return false;
+    if (coinToSell === null || !signer || !contract) 
+      return false;
 
     // To redeem, we construct & sign a message that
     // that allows the broker to transfer TheCoin to itself
-    const sellCommand = await BuildVerifiedSale(
-      email,
+    const eTransfer: BrokerCAD.ETransferPacket = {
+      email, question, answer, message
+    }
+    const command = await BuildVerifiedSale(
+      eTransfer,
       signer,
       status.address,
       coinToSell,
       status.certifiedFee,
     );
-    const sellApi = GetSellApi();
-    if (this.state.doCancel) return false;
+    const eTransferApi = GetETransferApi();
+    
+    if (this.state.doCancel) 
+      return false;
 
     // Send the command to the server
     this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
-    const response = await sellApi.certifiedCoinSale(sellCommand);
+    const response = await eTransferApi.eTransfer(command);
 
     if (!response.txHash) {
       console.log(`Error: ${JSON.stringify(response)}`);
@@ -109,7 +112,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     return true;
   }
 
-  async onSubmit(e: React.MouseEvent<HTMLElement>) {
+  onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     this.setState({
       doCancel: false,
@@ -133,17 +136,17 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.setState({ doCancel: false, transferInProgress: false });
   }
 
-  onValueChange(value: number) {
+  onValueChange = (value: number) => {
     this.setState({
       coinToSell: value,
     });
   }
 
-  onEmailChange(event: React.FormEvent<HTMLInputElement>) {
-    const { value } = event.currentTarget;
+  onInputChanged = (event: React.FormEvent<HTMLInputElement>) => {
+    const { value, name } = event.currentTarget;
     this.setState({
-      email: value,
-    });
+      [name]: value,
+    } as any);  
   }
 
   onCancelTransfer() {
@@ -181,9 +184,29 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               fxRate={rate}
             />
             <Form.Input
-              label="Your Email"
-              onChange={this.onEmailChange}
-              placeholder="An email to recieve the e-Transfer"
+              label="Recipient Email"
+              name="email"
+              onChange={this.onInputChanged}
+              placeholder="An email address to send the e-Transfer to"
+            />
+            <Form.Input
+              label="Security question"
+              name="question"
+              onChange={this.onInputChanged}
+              placeholder="No numbers or special characters"
+            />
+            <Form.Input
+              label="Security answer"
+              name="question"
+              onChange={this.onInputChanged}
+              placeholder="No spaces or special characters"
+            />
+            <Form.Input
+              label="Message (optional)"
+              name="message"
+              type="text"
+              onChange={this.onInputChanged}
+              placeholder="An optional message to the recipient.  Should not include the security answer"
             />
             <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
           </Form>

@@ -1,6 +1,8 @@
 import { FXRate } from "@the-coin/pricing"
 import { Transaction } from "../Account/types"
 
+// file deepcode ignore DateMonthIndex%2Ftest: <please specify a reason of ignoring this>
+
 export const ExampleTransactions: Transaction[] = [
   {
     "txHash": "0xc6ae1c594780a475c15f21413a9417e84a1b1bedbe93e3a528a1f9b04b80da07",

@@ -1,38 +1,40 @@
 import { Firestore, Timestamp } from "./FirebaseFirestore";
+import { BrokerCAD } from "@the-coin/types";
 
 let __firestore: Firestore|null = null;
 
-function SetFirestore(db: Firestore)
+export function SetFirestore(db: Firestore)
 {
   __firestore = db;
 }
 
 
-function GetFirestore()
+export function GetFirestore()
 {
   if (!__firestore)
     throw new Error("Firestore not initialized");
   return __firestore;
 }
 
-interface ProcessRecord { 
-  recievedTimestamp: Timestamp|Date,
-  processedTimestamp?: Timestamp|Date,
+export type ProcessRecord = { 
+  recievedTimestamp: Timestamp,
+  processedTimestamp?: Timestamp,
   hash: string,
   confirmed: boolean,
   fiatDisbursed: number
 }
 
-function isDate(d: Timestamp|Date) : d is Date {
+export type TransferRecord = BrokerCAD.CertifiedTransfer & ProcessRecord;
+
+export function isDate(d: Timestamp|Date) : d is Date {
   return (d as Date).getFullYear != undefined;
 } 
-function isTimestamp(d: Timestamp|Date) : d is Timestamp {
+export function isTimestamp(d: Timestamp|Date) : d is Timestamp {
   return (d as Timestamp).nanoseconds != undefined;
 } 
 
-function AsDate(d: Timestamp|Date) : Date {
+export function AsDate(d: Timestamp|Date) : Date {
   if (isDate(d))
     return d;
   else return d.toDate();
 }
-export { SetFirestore, GetFirestore, ProcessRecord, AsDate, isDate, isTimestamp }

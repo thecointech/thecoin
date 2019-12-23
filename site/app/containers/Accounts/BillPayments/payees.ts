@@ -1,10 +1,13 @@
 import { DropdownItemProps } from 'semantic-ui-react';
 import { number } from 'card-validator';
 
-export type types = "visa"|"none"
-interface ValidatedItemProps extends DropdownItemProps {
-	type: types
+export type types = "visa"|"numeric"|"none"
+export type Validatable = {
+  type: types,
+  parameter?: any,
 }
+type ValidatedItemProps = DropdownItemProps & Validatable;
+
 
 function validateVisa(val: string) {
 	const r = number(val);
@@ -13,22 +16,27 @@ function validateVisa(val: string) {
 
 function validateNumber(val: string, length: number) {
 	const r = number(val);
-	return r.isValid && val.length == length;
+	return r.isValid && val.length === length;
 }
 
-function findType(text: string): types {
-	const item = payees.find(item => item.text === text)
-	return item ? item.type : "none"
+function findType(text: string): Validatable|undefined {
+  const item = payees.find(item => item.text === text)
+  return item;
 }
 
 export function validate(name: string, value: string)
 {
-	switch(findType(name))
-	{
-    case "visa": return validateVisa(value);
-    case "num9": return validateNumber(value, 9);
-		case "none": return true;
-	}
+  const validatable = findType(name)
+  if (validatable !== undefined)
+  {
+    const {type, parameter} = validatable;
+    switch(type)
+    {
+      case "visa": return validateVisa(value);
+      case "numeric": return validateNumber(value, parameter);
+      case "none": return true;
+    }
+  }
 	return false;
 }
 
@@ -71,7 +79,7 @@ export const payees: ValidatedItemProps[] = [
 	{ type: "none", text: "CRA (REVENUE) 2018 TAX RETURN", value: "CRA (REVENUE) 2018 TAX RETURN" },
 	{ type: "none", text: "CRA CHILD AND FAMILY BENEFITS", value: "CRA CHILD AND FAMILY BENEFITS" },
   { type: "none", text: "CRA REVENUE TAX INSTALMENT", value: "CRA REVENUE TAX INSTALMENT" },
-  { type: "num9", text: "FIDO", value: "FIDO" },
-  { type: "none", text: "ENERGIR", value: "ENERGIR" }
+  { type: "numeric", parameter: 9, text: "FIDO", value: "FIDO" },
+  { type: "numeric", parameter: 9, text: "ENERGIR", value: "ENERGIR" }
 ];
 

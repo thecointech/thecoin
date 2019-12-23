@@ -112,11 +112,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
 
     // Send the command to the server
     this.setState({ paymentMessage: messages.step2, percentComplete: 0.25 });
-    const address = await signer.getAddress();
-    const response = await billPayApi.certifiedBillPayment(
-      address,
-      billPayCommand,
-    );
+    const response = await billPayApi.billPayment(billPayCommand);
 
     console.log(`Response: ${response.message}`);
     if (!response.txHash) {

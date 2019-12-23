@@ -2,7 +2,6 @@ import { calculateProfit, fiatChange, totalCad, currentValue } from "./profit";
 import { toHuman } from "@the-coin/utilities";
 import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
 
-
 test("Calculate simple profit correctly", () => {
   const change = fiatChange(SimpleTransactions[0], SimpleRates);
   const hchange = toHuman(change);
