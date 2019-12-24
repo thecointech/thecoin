@@ -27,7 +27,7 @@ type MyProps = {
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
 // TODO: Dedup this with definitions in service
-type BillPaymentRecord = BrokerCAD.CertifiedBillPayment & ProcessRecord;
+type BillPaymentRecord = BrokerCAD.CertifiedTransfer & ProcessRecord;
 
 const initialState = {
 	privateKey: "",

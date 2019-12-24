@@ -654,83 +654,6 @@ export const ETransferApiFetchParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
-    }
-};
-
-/**
- * ETransferApi - functional programming interface
- * @export
- */
-export const ETransferApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * Called by the client to exchange coin for CAD and send via eTransfer
-         * @summary Request eTransfer
-         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
-            const localVarFetchArgs = ETransferApiFetchParamCreator(configuration).eTransfer(certifiedTransfer, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-    }
-};
-
-/**
- * ETransferApi - factory interface
- * @export
- */
-export const ETransferApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
-    return {
-        /**
-         * Called by the client to exchange coin for CAD and send via eTransfer
-         * @summary Request eTransfer
-         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
-            return ETransferApiFp(configuration).eTransfer(certifiedTransfer, options)(fetch, basePath);
-        },
-    };
-};
-
-/**
- * ETransferApi - object-oriented interface
- * @export
- * @class ETransferApi
- * @extends {BaseAPI}
- */
-export class ETransferApi extends BaseAPI {
-    /**
-     * Called by the client to exchange coin for CAD and send via eTransfer
-     * @summary Request eTransfer
-     * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ETransferApi
-     */
-    public eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
-        return ETransferApiFp(this.configuration).eTransfer(certifiedTransfer, options)(this.fetch, this.basePath);
-    }
-
-}
-
-/**
- * ETransferInCodeApi - fetch parameter creator
- * @export
- */
-export const ETransferInCodeApiFetchParamCreator = function (configuration?: Configuration) {
-    return {
         /**
          * A code unique to the user that is required on all eTransfers sent in to this broker
          * @summary Required answer for eTransfer sent to this broker
@@ -738,10 +661,10 @@ export const ETransferInCodeApiFetchParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eTransferCode(signedMessage: SignedMessage, options: any = {}): FetchArgs {
+        eTransferInCode(signedMessage: SignedMessage, options: any = {}): FetchArgs {
             // verify required parameter 'signedMessage' is not null or undefined
             if (signedMessage === null || signedMessage === undefined) {
-                throw new RequiredError('signedMessage','Required parameter signedMessage was null or undefined when calling eTransferCode.');
+                throw new RequiredError('signedMessage','Required parameter signedMessage was null or undefined when calling eTransferInCode.');
             }
             const localVarPath = `/exchange/eTransfer/code`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -771,11 +694,30 @@ export const ETransferInCodeApiFetchParamCreator = function (configuration?: Con
 };
 
 /**
- * ETransferInCodeApi - functional programming interface
+ * ETransferApi - functional programming interface
  * @export
  */
-export const ETransferInCodeApiFp = function(configuration?: Configuration) {
+export const ETransferApiFp = function(configuration?: Configuration) {
     return {
+        /**
+         * Called by the client to exchange coin for CAD and send via eTransfer
+         * @summary Request eTransfer
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CertifiedTransferResponse> {
+            const localVarFetchArgs = ETransferApiFetchParamCreator(configuration).eTransfer(certifiedTransfer, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
         /**
          * A code unique to the user that is required on all eTransfers sent in to this broker
          * @summary Required answer for eTransfer sent to this broker
@@ -783,8 +725,8 @@ export const ETransferInCodeApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eTransferCode(signedMessage: SignedMessage, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ETransferCodeResponse> {
-            const localVarFetchArgs = ETransferInCodeApiFetchParamCreator(configuration).eTransferCode(signedMessage, options);
+        eTransferInCode(signedMessage: SignedMessage, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ETransferCodeResponse> {
+            const localVarFetchArgs = ETransferApiFetchParamCreator(configuration).eTransferInCode(signedMessage, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -799,11 +741,21 @@ export const ETransferInCodeApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * ETransferInCodeApi - factory interface
+ * ETransferApi - factory interface
  * @export
  */
-export const ETransferInCodeApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+export const ETransferApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
+        /**
+         * Called by the client to exchange coin for CAD and send via eTransfer
+         * @summary Request eTransfer
+         * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
+            return ETransferApiFp(configuration).eTransfer(certifiedTransfer, options)(fetch, basePath);
+        },
         /**
          * A code unique to the user that is required on all eTransfers sent in to this broker
          * @summary Required answer for eTransfer sent to this broker
@@ -811,29 +763,41 @@ export const ETransferInCodeApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eTransferCode(signedMessage: SignedMessage, options?: any) {
-            return ETransferInCodeApiFp(configuration).eTransferCode(signedMessage, options)(fetch, basePath);
+        eTransferInCode(signedMessage: SignedMessage, options?: any) {
+            return ETransferApiFp(configuration).eTransferInCode(signedMessage, options)(fetch, basePath);
         },
     };
 };
 
 /**
- * ETransferInCodeApi - object-oriented interface
+ * ETransferApi - object-oriented interface
  * @export
- * @class ETransferInCodeApi
+ * @class ETransferApi
  * @extends {BaseAPI}
  */
-export class ETransferInCodeApi extends BaseAPI {
+export class ETransferApi extends BaseAPI {
+    /**
+     * Called by the client to exchange coin for CAD and send via eTransfer
+     * @summary Request eTransfer
+     * @param {CertifiedTransfer} certifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ETransferApi
+     */
+    public eTransfer(certifiedTransfer: CertifiedTransfer, options?: any) {
+        return ETransferApiFp(this.configuration).eTransfer(certifiedTransfer, options)(this.fetch, this.basePath);
+    }
+
     /**
      * A code unique to the user that is required on all eTransfers sent in to this broker
      * @summary Required answer for eTransfer sent to this broker
      * @param {SignedMessage} signedMessage Signed timestamp message
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ETransferInCodeApi
+     * @memberof ETransferApi
      */
-    public eTransferCode(signedMessage: SignedMessage, options?: any) {
-        return ETransferInCodeApiFp(this.configuration).eTransferCode(signedMessage, options)(this.fetch, this.basePath);
+    public eTransferInCode(signedMessage: SignedMessage, options?: any) {
+        return ETransferApiFp(this.configuration).eTransferInCode(signedMessage, options)(this.fetch, this.basePath);
     }
 
 }
