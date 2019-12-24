@@ -6,7 +6,7 @@ import { Balance } from '@the-coin/components/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
-import { Redeem } from 'containers/Redeem';
+import { ETransfers } from './ETransfers';
 
 interface OwnProps {
 }
@@ -26,9 +26,9 @@ const AccountMap: RouterPath[] = [
     creator: (routerProps: AccountProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />)
   },
   {
-    name: "Complete Redemption",
-    urlFragment: "redeem",
-    creator: (routerProps: AccountProps) => ((props: any) => <Redeem {...props} {...routerProps.account} />)
+    name: "Complete e-Transfer",
+    urlFragment: "eTransfer",
+    creator: (routerProps: AccountProps) => ((props: any) => <ETransfers {...props} {...routerProps.account} />)
   },
   {
     name: "Bill Payments",

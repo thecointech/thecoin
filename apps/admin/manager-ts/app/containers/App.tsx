@@ -9,10 +9,15 @@ import { injectRootReducer } from '@the-coin/components/containers/Account/reduc
 class App extends React.PureComponent {
 
   render() {
+
+    const divStyle = {
+      minHeight: "500px"
+    };
+
     return (
       <React.Fragment>
         <PageSidebar visible={true} inverted>
-          <Container>
+          <Container style={divStyle}>
             <Routes />
           </Container>
         </PageSidebar>

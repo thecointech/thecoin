@@ -1,6 +1,5 @@
 import React from "react";
 import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
-import { GetBillPaymentSigner } from "@the-coin/utilities/lib/VerifiedBillPayment";
 import { decryptTo } from "@the-coin/utilities/lib/Encrypt";
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from "@the-coin/types";
@@ -13,6 +12,7 @@ import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import fs from 'fs';
 import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
+import { GetSigner } from "@the-coin/utilities/lib/VerifiedAction";
 import firebase from "firebase";
 import { fromMillis } from "utils/Firebase";
 
@@ -94,7 +94,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 	async processRawBill(bill: any, index: number)
 	{
 		const rawData = bill as BillPaymentRecord;
-		let {processedTimestamp, recievedTimestamp, encryptedPayee } = rawData;
+		let {processedTimestamp, recievedTimestamp, instructionPacket } = rawData;
 		// ** Temp testing hack, deal with renamed items **
 		if (!recievedTimestamp) {
 			recievedTimestamp = processedTimestamp;
@@ -102,7 +102,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		if (!processedTimestamp) {
 			processedTimestamp = await this.processTimestamp(recievedTimestamp);
 		}
-		const decryptedPayee = decryptTo<BrokerCAD.BillPayeePacket>(this.state.privateKey, encryptedPayee);
+		const decryptedPayee = decryptTo<BrokerCAD.BillPayeePacket>(this.state.privateKey, instructionPacket);
 		this.setState((state, props) => {
 			let newDecrypted = [].concat(state.decryptedPayees);
 			newDecrypted[index] = decryptedPayee;
@@ -152,7 +152,10 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		const cad = toHuman(bill.transfer.value * rate, true);
 
 		// Check that we got the right everything:
-		const user = GetBillPaymentSigner(bill);
+    const user = GetSigner(bill);
+    if (!user)
+      throw "Not a good thing";
+      
 		const actionDoc = GetActionDoc(user, "Bill", bill.hash);
 		const action = await actionDoc.get();
 		if (!action.exists) 

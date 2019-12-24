@@ -2,9 +2,12 @@ import React, { useCallback } from "react";
 import fs from 'fs';
 import { Button } from "semantic-ui-react";
 
+type Props = {
+  hasKey: boolean;
+  setPrivateKey: (v: string) => void;
+}
 
-
-export const PrivateKeyButton = (props: {setPrivateKey: (v: string) => void}) => {
+export const PrivateKeyButton = (props: Props) => {
 
   const onPkSelected = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
@@ -17,12 +20,14 @@ export const PrivateKeyButton = (props: {setPrivateKey: (v: string) => void}) =>
     props.setPrivateKey(privateKey.toString())
   }, []);
 
-  return (
-    <>
-      <Button as="label" htmlFor="file" type="button">
-        Select Private Key
-      </Button>
-      <input type="file" id="file" accept=".pem" hidden onChange={onPkSelected} />
-    </>
-  )
+  return props.hasKey 
+    ? <></>
+    : (
+        <>
+          <Button as="label" htmlFor="file" type="button">
+            Select Private Key
+          </Button>
+          <input type="file" id="file" accept=".pem" hidden onChange={onPkSelected} />
+        </>
+      );
 }

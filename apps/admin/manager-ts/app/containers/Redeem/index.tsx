@@ -1,5 +1,5 @@
 import React from "react";
-import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
+import { GetFirestore, TransferRecord } from "@the-coin/utilities/lib/Firestore";
 import { AccountState } from '@the-coin/components/containers/Account/types';
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
@@ -10,10 +10,10 @@ import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
 import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
-import { GetSaleSigner } from '@the-coin/utilities/lib/VerifiedSale';
 import { DocumentSnapshot } from "@the-coin/utilities/lib/FirebaseFirestore";
 import { firestore } from "firebase";
 import { signIn, fromMillis } from "utils/Firebase";
+import { GetSigner } from "@the-coin/utilities/lib/VerifiedAction";
 
 const ACTION_TYPE : UserAction = "Sell";
 
@@ -23,12 +23,9 @@ type MyProps = {
 }
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
-// TODO: Dedup this with definitions in service
-type VerifiedSaleRecord = BrokerCAD.CertifiedSale & ProcessRecord;
-
 const initialState = {
   privateKey: "",
-  unsettledSales: [] as VerifiedSaleRecord[],
+  unsettledSales: [] as TransferRecord[],
   decryptedTransfers: [] as BrokerCAD.ETransferPacket[],
   activeIndex: -1,
   doConfirm: false
@@ -74,9 +71,9 @@ class RedeemClass extends React.PureComponent<Props, State> {
     return fromMillis(nextOpen);
   }
 
-  async processRawSale(doc: DocumentSnapshot) : Promise<VerifiedSaleRecord|null>
+  async processRawSale(doc: DocumentSnapshot) : Promise<TransferRecord|null>
   {
-    const sale = doc.data() as VerifiedSaleRecord|null;
+    const sale = doc.data() as TransferRecord|null;
     if (!sale) {
       alert("Missing Sale Data!")
       return null;
@@ -104,14 +101,14 @@ class RedeemClass extends React.PureComponent<Props, State> {
 
   //
   // Update DB with completion
-  async markSaleComplete(sale: VerifiedSaleRecord) {
+  async markSaleComplete(sale: TransferRecord) {
     console.log(JSON.stringify(sale))
     const { processedTimestamp } = sale;
     const rate = weBuyAt(this.props.rates, processedTimestamp.toDate())
     const cad = toHuman(sale.transfer.value * rate, true);
 
     // Check that we got the right everything:
-    const user = GetSaleSigner(sale);
+    const user = GetSigner(sale);
     if (!user)
     {
       debugger;
@@ -139,7 +136,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
 
   //
   // Render an individual sale
-  renderSale(sale: VerifiedSaleRecord, index: number)
+  renderSale(sale: TransferRecord, index: number)
   {
     const { recievedTimestamp, processedTimestamp, transfer } = sale;
     const processedDate = processedTimestamp.toDate();
