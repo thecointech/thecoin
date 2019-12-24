@@ -8,7 +8,6 @@
 		}
 	],
 	"settings": {
-    "typescript.tsdk": "site\\node_modules\\typescript\\lib",
     "deepcode.review.results.hideInformationIssues": false
 	}
 }
