@@ -53,18 +53,9 @@ export const EncryptedList = ({render, type}: Props) => {
   }, [privateKey, records])
 
   const onMarkComplete = useCallback(async (index: number) => {
-		// const { activeIndex } = this.state;
-		// const bill = this.state.unsettledBills[activeIndex];
-		// await this.markBillComplete(bill);
-		// this.setState((state) => {
-		// 	delete state.unsettledBills[activeIndex];
-		// 	delete state.decryptedPayees[activeIndex];
-		// 	return {
-		// 		unsettledBills: [].concat(state.unsettledBills),
-		// 		decryptedPayees: [].concat(state.decryptedPayees),
-		// 		doConfirm: false
-		// 	}
-    // })
+		const record = records[index];
+    await MarkComplete(record, settlements[index]);
+    setRecords(records => delete records[index] && records);
   }, [records, settlements]);
 
   return (
@@ -82,7 +73,7 @@ export const EncryptedList = ({render, type}: Props) => {
 }
 
 async function FetchUnsettledRecords(type: string) {
-  const firestore = await GetFirestore()
+  const firestore = GetFirestore()
   const collection = firestore.collection(type);
   const allDocs = await collection.get();
   const fetchAllBills = allDocs.docs.map(async (d) => {
