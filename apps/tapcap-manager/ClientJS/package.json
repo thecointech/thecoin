@@ -1,0 +1,26 @@
+{
+  "name": "@the-coin/tapcap-manager",
+  "version": "0.0.1",
+  "description": "The_TapCap_resolution___This_service_is_the_trusted_3rd_party_that_weekly_settles_TapCap_purchases",
+  "license": "Apache 2.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register --recursive"
+  },
+  "browser": {
+    "fs": false
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "superagent": "3.7.0"
+  },
+  "devDependencies": {
+    "babel-core": "6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "expect.js": "~0.3.1",
+    "mocha": "~2.3.4",
+    "sinon": "1.17.3"
+  }
+}

@@ -1,0 +1,233 @@
+swagger: "2.0"
+info:
+  description: "The TapCap resolution.  This service is the trusted 3rd party that weekly settles TapCap purchases"
+  version: "0.0.1"
+  title: "The TapCap Manager"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "tapcap-dot-thecoincore-212314.appspot.com" # "localhost:8091"
+tags:
+- name: "Transactions"
+  description: "The: TapCap manager is responsible for resolving TapCap transactions, transfering the appropriate coin from seller to buyer weekly"
+- name: "Status"
+  description: "Users may query their account status"
+
+# ---------------------------------------------------------------- #
+
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+- "https"
+
+paths:
+  /tap/broker:
+    post:
+      tags:
+        - Transactions
+      summary: "Broker: Register new TapCap transaction"
+      operationId: "tapCapBroker"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerComplete )
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Transaction Result
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+
+    delete:
+      tags:
+        - Transactions
+      summary: "Broker: Notify of an incomplete or failed transaction"
+      operationId: "deleteBroker"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/TapCapUnCompleted"
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Transaction Result
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+
+  /tap/client:
+    post:
+      tags:
+        - Transactions
+      summary: "Client: Confirm new TapCap transaction"
+      operationId: "tapCapClient"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap status request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapBrokerPurchase ) )
+      responses:
+        405:
+          description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: "TapCap Token valid for the next purchase"
+          schema:
+            $ref: "#/definitions/TapCapQueryResponse"
+
+  /status/summary:
+    post:
+      tags:
+        - Status
+      summary: "TapCap current status"
+      description: "User TapCap status"
+      operationId: "tapCapStatus"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap status request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
+      responses:
+        405:
+          description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: TapCap Status
+          schema:
+            $ref: "#/definitions/TapCapQueryResponse"
+
+  /status/history:
+    post:
+      tags:
+        - Status
+      summary: "TapCap history"
+      description: "User TapCap history in the ranges provided"
+      operationId: "tapCapHistory"
+      parameters:
+        - in: body
+          name: request
+          description: "Purchase Request info"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
+      responses:
+        405:
+          description: "Invalid input"
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: TapCap Status
+          schema:
+            $ref: "#/definitions/TapCapHistoryResponse"
+
+
+
+definitions:
+  # Query the Manager for a clients TapCap balance
+  TapCapQueryRequest:
+    required:
+    - timestamp
+    properties:
+      timestamp:  # Only requests in the past X seconds will be acccepted?  Security risk here?
+        type: integer
+        format: int64
+
+  # basic stats
+  TapCapQueryResponse:
+    required:
+    - balance
+    - token
+    properties:
+      balance:
+        type: integer
+        format: int64
+      token:
+        $ref: "../common.yaml#/definitions/SignedMessage" # sign ( TapCapToken )
+
+  TapCapHistoryRequest:
+    required:
+    - fromTimestamp
+    - untilTimestamp
+    - msgTimestamp
+    properties:
+      fromTimestamp:
+        type: integer
+        format: int64
+      untilTimestamp:
+        type: integer
+        format: int64
+      # Only requests from the preceding 5 seconds will be fullfilled.
+      # This prevents someone copying/cloning a message and using repeating it later.
+      msgTimestamp:
+        type: integer
+        format: int64
+
+
+  TapCapCompletedTransaction:
+    required:
+      - timestamp
+      - fiatAmount
+      - coinAmount
+      - coinBalance
+      - merchantId
+    properties:
+      timestamp:
+        type: integer
+        format: int64
+      fiatAmount:
+        type: number
+        format: double
+      coinAmount:
+        type: integer
+        format: int64
+      coinBalance:
+        type: integer
+        format: int64
+      merchantId:
+        type: string
+
+  TapCapHistoryResponse:
+    required:
+      - history
+    properties:
+      history:
+        type: array
+        items:
+          $ref: "#/definitions/TapCapCompletedTransaction"
+
+  # We need to explicitly include definitions that are used but not directly referenced
+  TapCapToken:
+    $ref: '../common.yaml#/definitions/TapCapToken'
+  TapCapClientRequest:
+    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+  TapCapBrokerPurchase:
+    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+  TapCapBrokerComplete:
+    $ref: '../common.yaml#/definitions/TapCapBrokerComplete'
+  FXRate:
+    $ref: '../common.yaml#/definitions/FXRate'
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
