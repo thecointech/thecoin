@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "baseUrl": "./app/",
+    "paths": {
+      "@the-coin/components/*": ["../../../shared-components/src/*"]
+    },
+    "jsx": "react",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "pretty": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2017"],
+
+    // Don't emit; allow Babel to transform files.
+    //"noEmit": true,
+    // Disallow features that require cross-file information for emit.
+    // This throws up a bunch of errors in the-react-components.
+    // (later) consider fixing those errors and re-enabling it
+    //"isolatedModules": true,
+    // Import non-ES modules as default imports.
+    // NOTE: this causes issues with DateTime
+    //"esModuleInterop": true,
+
+    "allowSyntheticDefaultImports": true // no errors with commonjs modules interop
+    //"strict": true,
+    //"strictFunctionTypes": false,
+  },
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "references": [{ "path": "../../shared-components" }]
+}

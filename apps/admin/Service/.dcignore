@@ -1,0 +1,4 @@
+Generated/
+build/
+coverage/
+node_modules/
