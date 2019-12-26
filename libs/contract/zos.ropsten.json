@@ -1,0 +1,299 @@
+{
+  "contracts": {
+    "TheCoin": {
+      "address": "0xb9E12D18Af107530739a158fdada6a0D66014B3C",
+      "constructorCode": "608060405234801561001057600080fd5b5061531f806100206000396000f3fe",
+      "bodyBytecodeHash": "55c893bd416d110286e38f1507bd327cae91602d2efe066542886ec37081f31a",
+      "localBytecodeHash": "362fad1ac0bc027c2dc37668858d2f768427283806f20a44180989aaa774f243",
+      "deployedBytecodeHash": "362fad1ac0bc027c2dc37668858d2f768427283806f20a44180989aaa774f243",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_string": {
+          "id": "t_string",
+          "kind": "elementary",
+          "label": "string"
+        },
+        "t_uint8": {
+          "id": "t_uint8",
+          "kind": "elementary",
+          "label": "uint8"
+        },
+        "t_mapping<t_uint256>": {
+          "id": "t_mapping<t_uint256>",
+          "valueType": "t_uint256",
+          "label": "mapping(key => uint256)",
+          "kind": "mapping"
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_struct<TheCoin.TapCapData>": {
+          "id": "t_struct<TheCoin.TapCapData>",
+          "kind": "struct",
+          "label": "TheCoin.TapCapData",
+          "members": [
+            {
+              "label": "TransactionId",
+              "astId": 913,
+              "type": "t_uint256",
+              "src": "9485:18:2"
+            },
+            {
+              "label": "TapCapEscrow",
+              "astId": 915,
+              "type": "t_uint256",
+              "src": "9547:17:2"
+            },
+            {
+              "label": "TapCapRefill",
+              "astId": 917,
+              "type": "t_uint256",
+              "src": "9616:17:2"
+            }
+          ]
+        },
+        "t_mapping<t_struct<TheCoin.TapCapData>>": {
+          "id": "t_mapping<t_struct<TheCoin.TapCapData>>",
+          "valueType": "t_struct<TheCoin.TapCapData>",
+          "label": "mapping(key => TheCoin.TapCapData)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "zos-lib\\contracts\\Initializable.sol",
+          "label": "initialized",
+          "astId": 1886,
+          "type": "t_bool",
+          "src": "757:24:7"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib\\contracts\\Initializable.sol",
+          "label": "initializing",
+          "astId": 1888,
+          "type": "t_bool",
+          "src": "876:25:7"
+        },
+        {
+          "contract": "Initializable",
+          "path": "zos-lib\\contracts\\Initializable.sol",
+          "label": "______gap",
+          "astId": 1937,
+          "type": "t_array:50<t_uint256>",
+          "src": "1891:29:7"
+        },
+        {
+          "contract": "ERC20Detailed",
+          "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
+          "label": "_name",
+          "astId": 1756,
+          "type": "t_string",
+          "src": "382:20:5"
+        },
+        {
+          "contract": "ERC20Detailed",
+          "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
+          "label": "_symbol",
+          "astId": 1758,
+          "type": "t_string",
+          "src": "408:22:5"
+        },
+        {
+          "contract": "ERC20Detailed",
+          "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
+          "label": "_decimals",
+          "astId": 1760,
+          "type": "t_uint8",
+          "src": "436:23:5"
+        },
+        {
+          "contract": "ERC20Detailed",
+          "path": "openzeppelin-eth\\contracts\\token\\ERC20\\ERC20Detailed.sol",
+          "label": "______gap",
+          "astId": 1812,
+          "type": "t_array:50<t_uint256>",
+          "src": "1097:29:5"
+        },
+        {
+          "contract": "ERC20Local",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\ERC20Local.sol",
+          "label": "_balances",
+          "astId": 15,
+          "type": "t_mapping<t_uint256>",
+          "src": "1015:47:0"
+        },
+        {
+          "contract": "ERC20Local",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\ERC20Local.sol",
+          "label": "_allowed",
+          "astId": 21,
+          "type": "t_mapping<t_uint256>",
+          "src": "1069:66:0"
+        },
+        {
+          "contract": "ERC20Local",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\ERC20Local.sol",
+          "label": "_totalSupply",
+          "astId": 23,
+          "type": "t_uint256",
+          "src": "1142:28:0"
+        },
+        {
+          "contract": "ERC20Local",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\ERC20Local.sol",
+          "label": "______gap",
+          "astId": 437,
+          "type": "t_array:50<t_uint256>",
+          "src": "7903:29:0"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "freezeUntil",
+          "astId": 534,
+          "type": "t_mapping<t_uint256>",
+          "src": "1353:36:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "lastTxTimestamp",
+          "astId": 538,
+          "type": "t_mapping<t_uint256>",
+          "src": "1795:40:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "role_TapCapManager",
+          "astId": 540,
+          "type": "t_address",
+          "src": "2010:26:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "role_Minter",
+          "astId": 542,
+          "type": "t_address",
+          "src": "2181:19:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "role_TheCoin",
+          "astId": 544,
+          "type": "t_address",
+          "src": "2377:20:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "role_Police",
+          "astId": 546,
+          "type": "t_address",
+          "src": "2499:19:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "new_TapCapManager",
+          "astId": 548,
+          "type": "t_address",
+          "src": "2694:25:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "new_Minter",
+          "astId": 550,
+          "type": "t_address",
+          "src": "2726:18:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "new_TheCoin",
+          "astId": 552,
+          "type": "t_address",
+          "src": "2751:19:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "new_Police",
+          "astId": 554,
+          "type": "t_address",
+          "src": "2777:18:2"
+        },
+        {
+          "contract": "TheCoin",
+          "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+          "label": "tapCaps",
+          "astId": 922,
+          "type": "t_mapping<t_struct<TheCoin.TapCapData>>",
+          "src": "9692:38:2"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": [],
+        "storageUncheckedVars": [
+          {
+            "contract": "TheCoin",
+            "path": "..\\..\\..\\C\\src\\TheCoin\\the-contract\\contracts\\TheCoin.sol",
+            "label": "tapCaps",
+            "astId": 922,
+            "type": "t_mapping<t_struct<TheCoin.TapCapData>>",
+            "src": "9692:38:2"
+          }
+        ],
+        "storageDiff": []
+      }
+    }
+  },
+  "solidityLibs": {},
+  "proxies": {
+    "the-contract/TheCoin": [
+      {
+        "address": "0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530",
+        "version": "0.1.0",
+        "implementation": "0xb9E12D18Af107530739a158fdada6a0D66014B3C"
+      }
+    ]
+  },
+  "zosversion": "2.2",
+  "version": "0.1.0",
+  "dependencies": {
+    "openzeppelin-eth": {
+      "package": "0x2a9e7b63514438906a83a1e320dbbd814d417002",
+      "version": "2.1.3"
+    }
+  },
+  "proxyAdmin": {
+    "address": "0x35a5600F587e98a5FEB2202C39bCa1fFC80dE787"
+  }
+}

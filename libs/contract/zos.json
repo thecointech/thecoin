@@ -1,0 +1,11 @@
+{
+  "zosversion": "2.2",
+  "name": "the-contract",
+  "version": "0.1.0",
+  "contracts": {
+    "TheCoin": "TheCoin"
+  },
+  "dependencies": {
+    "openzeppelin-eth": "^2.1.3"
+  }
+}

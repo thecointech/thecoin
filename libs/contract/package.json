@@ -1,0 +1,25 @@
+{
+  "name": "@the-coin/contract",
+  "version": "1.0.9",
+  "description": "Contract for THE Universal Currency",
+  "main": "index.js",
+  "scripts": {
+    "build": "truffle compile",
+    "test": "truffle test",
+    "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
+    "zospush": "yarn run zossession && zos push",
+    "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
+    "zosupgrade": "yarn run zospush && zos update TheCoin",
+    "console": "truffle console"
+  },
+  "author": "Stephen Taylor",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "ethers": "^4.0.27",
+    "openzeppelin-eth": "^2.1.3",
+    "truffle": "^5.0.12",
+    "zos": "^2.2.2",
+    "zos-lib": "^2.2.2"
+  }
+}
