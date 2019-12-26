@@ -1,0 +1,5 @@
+cron:
+- description: "Update exchange rates Morning"
+  url: /doUpdate
+  schedule: every 3 hours from 00:31 to 22:32
+  timezone: America/New_York

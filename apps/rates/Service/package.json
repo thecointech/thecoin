@@ -1,0 +1,42 @@
+{
+  "name": "thecoin-core",
+  "version": "0.1.0",
+  "description": "TheCoin core services.  Published by TheCoin Tech",
+  "author": "TheCoin Tech Inc.",
+  "repository": {
+    "type": "git",
+    "url": "https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/TheCoinCore"
+  },
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gcloud app deploy",
+    "prestart": "npm install",
+    "start": "node index.js",
+    "test-unit": "NODE_ENV=test mocha '/**/*.spec.js'"
+  },
+  "engines": {
+    "node": "10.x.x"
+  },
+  "keywords": [
+    "TheCoin",
+    "Cryptocurrency"
+  ],
+  "license": "Apache2.0",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/datastore": "^1.3.4",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "js-yaml": "^3.13.1",
+    "node-fetch": "^2.2.0",
+    "swagger-tools": "^0.10.4",
+    "timezone": "^1.0.13"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0"
+  }
+}
