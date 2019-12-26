@@ -161,4 +161,16 @@ exports.WatchTapCapDeposits = async () => {
 
 if (process.env.NODE_ENV === 'test') {
     exports.doTapCapTopUp = doTapCapTopUp;
+    exports.TCTopUpList = TCTopUpList
+}
+else if (process.env.DATASTORE_EMULATOR_HOST !== undefined)
+{
+    // Add some $$$ to my personal account.  This is the 
+    // easiest way to fund an account on the development server.
+    let ts = new Date().getTime();
+    let autoTopMeUp = () => doTapCapTopUp("0x8B40D01D2bcFFef5CF3441a8197cD33e9eD6e836", 100000000, "123456789", 123456789, ts);
+
+    autoTopMeUp.attempts = 0;
+    TCTopUpList.push(autoTopMeUp);
+    setTimeout(ProcessList, 10000);
 }

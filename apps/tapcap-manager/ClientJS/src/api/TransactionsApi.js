@@ -16,6 +16,7 @@ import ApiClient from "../ApiClient";
 import ErrorMessage from '../model/ErrorMessage';
 import SignedMessage from '../model/SignedMessage';
 import TapCapQueryResponse from '../model/TapCapQueryResponse';
+import TapCapUnCompleted from '../model/TapCapUnCompleted';
 
 /**
 * Transactions service.
@@ -39,15 +40,15 @@ export default class TransactionsApi {
 
     /**
      * Broker: Notify of an incomplete or failed transaction
-     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
+     * @param {module:model/TapCapUnCompleted} tapCapUnCompleted TapCap exchange request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ErrorMessage} and HTTP response
      */
-    deleteBrokerWithHttpInfo(signedMessage) {
-      let postBody = signedMessage;
+    deleteBrokerWithHttpInfo(tapCapUnCompleted) {
+      let postBody = tapCapUnCompleted;
 
-      // verify the required parameter 'signedMessage' is set
-      if (signedMessage === undefined || signedMessage === null) {
-        throw new Error("Missing the required parameter 'signedMessage' when calling deleteBroker");
+      // verify the required parameter 'tapCapUnCompleted' is set
+      if (tapCapUnCompleted === undefined || tapCapUnCompleted === null) {
+        throw new Error("Missing the required parameter 'tapCapUnCompleted' when calling deleteBroker");
       }
 
 
@@ -74,11 +75,11 @@ export default class TransactionsApi {
 
     /**
      * Broker: Notify of an incomplete or failed transaction
-     * @param {module:model/SignedMessage} signedMessage TapCap exchange request
+     * @param {module:model/TapCapUnCompleted} tapCapUnCompleted TapCap exchange request
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ErrorMessage}
      */
-    deleteBroker(signedMessage) {
-      return this.deleteBrokerWithHttpInfo(signedMessage)
+    deleteBroker(tapCapUnCompleted) {
+      return this.deleteBrokerWithHttpInfo(tapCapUnCompleted)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 <a name="deleteBroker"></a>
 # **deleteBroker**
-> ErrorMessage deleteBroker(signedMessage)
+> ErrorMessage deleteBroker(tapCapUnCompleted)
 
 Broker: Notify of an incomplete or failed transaction
 
@@ -20,8 +20,8 @@ Broker: Notify of an incomplete or failed transaction
 import @TheCoinTapcapManager from '@the-coin/tapcap-manager';
 
 let apiInstance = new @TheCoinTapcapManager.TransactionsApi();
-let signedMessage = new @TheCoinTapcapManager.SignedMessage(); // SignedMessage | TapCap exchange request
-apiInstance.deleteBroker(signedMessage).then((data) => {
+let tapCapUnCompleted = new @TheCoinTapcapManager.TapCapUnCompleted(); // TapCapUnCompleted | TapCap exchange request
+apiInstance.deleteBroker(tapCapUnCompleted).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -33,7 +33,7 @@ apiInstance.deleteBroker(signedMessage).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **signedMessage** | [**SignedMessage**](SignedMessage.md)| TapCap exchange request | 
+ **tapCapUnCompleted** | [**TapCapUnCompleted**](TapCapUnCompleted.md)| TapCap exchange request | 
 
 ### Return type
 
