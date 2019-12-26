@@ -1,9 +1,6 @@
 [submodule "the-pricing"]
 	path = the-pricing
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-pricing
-[submodule "the-contract"]
-	path = the-contract
-	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-contract
 [submodule "tapcap-manager"]
 	path = tapcap-manager
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/tapcap-manager
