@@ -7,28 +7,13 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>TapCapSupplier.Server</AssemblyName>
     <PackageId>TapCapSupplier.Server</PackageId>
-    <UserSecretsId>fd30a135-0e18-4b0c-8c6d-b1f10109a688</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.0" />
-    <PackageReference Include="PCSC.Iso7816" Version="4.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0"/>
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\tapcap-manager\ClientCS\src\TapCapManager.Client\TapCapManager.Client.csproj" />
-    <ProjectReference Include="..\..\..\..\the-pricing\ClientCS\src\ThePricing\ThePricing.csproj" />
-    <ProjectReference Include="..\..\..\..\the-utilities\TheBankAPI\TheBankAPI\TheBankAPI.csproj" />
-    <ProjectReference Include="..\..\..\..\the-utilities\TheUtils\TheUtils.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="nlog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>

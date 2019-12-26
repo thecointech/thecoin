@@ -17,37 +17,14 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using TapCapSupplier.Server.Attributes;
 using TapCapSupplier.Server.Models;
-using TapCapSupplier.Server.Card;
-using TapCapSupplier.Server.TapCap;
-using NLog;
 
 namespace TapCapSupplier.Server.Controllers
-{
+{ 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     public class TransactionApiController : ControllerBase
-    {
-
-		private readonly IEmvCard Card;
-		private readonly HandleTx Handler;
-		private string Address;
-
-		private Logger logger = LogManager.GetCurrentClassLogger();
-
-		/// <summary>
-		/// Initialize ApiController
-		/// </summary>
-		/// <param name="card">Interface to local payment card</param>
-		/// <param name="tap">Interface to tx handler</param>
-		/// <param name="account"></param>
-		public TransactionApiController(IEmvCard card, HandleTx tap, Nethereum.Web3.Accounts.Account account)
-		{
-			Card = card;
-			Handler = tap;
-			Address = account.Address;
-		}
-
+    { 
         /// <summary>
         /// Notify of a contested transaction
         /// </summary>
@@ -61,7 +38,7 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerOperation("ContestTapCap")]
         [SwaggerResponse(statusCode: 200, type: typeof(ContestResponse), description: "Server status")]
         public virtual IActionResult ContestTapCap([FromBody]SignedTapcapContest signedTapcapContest)
-        {
+        { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(ContestResponse));
 
@@ -69,8 +46,8 @@ namespace TapCapSupplier.Server.Controllers
             // return StatusCode(405);
 
             string exampleJson = null;
-            exampleJson = "";
-
+            exampleJson = "{\r\n  \"code\" : 0\r\n}";
+            
             var example = exampleJson != null
             ? JsonConvert.DeserializeObject<ContestResponse>(exampleJson)
             : default(ContestResponse);
@@ -91,71 +68,82 @@ namespace TapCapSupplier.Server.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(StaticResponses), description: "Static response cache")]
         [SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
         public virtual IActionResult GetStatic([FromBody]SignedMessage signedMessage)
-        {
-			var responses = Card.StaticResponses;
-			responses.Address = Address;
-			//TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-			// TODO: Verify source from signed message (should be a token)
-			return StatusCode(200, responses);
+        { 
+            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(200, default(StaticResponses));
+
+            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(405, default(ErrorMessage));
+
+            string exampleJson = null;
+            exampleJson = "{\r\n  \"address\" : \"address\",\r\n  \"responseParentIndex\" : [ 0, 0 ],\r\n  \"gpoPdol\" : \"gpoPdol\",\r\n  \"responses\" : [ \"responses\", \"responses\" ],\r\n  \"queries\" : [ \"queries\", \"queries\" ],\r\n  \"cryptoPdol\" : \"cryptoPdol\"\r\n}";
+            
+            var example = exampleJson != null
+            ? JsonConvert.DeserializeObject<StaticResponses>(exampleJson)
+            : default(StaticResponses);
+            //TODO: Change the data returned
+            return new ObjectResult(example);
         }
 
-		/// <summary>
-		/// Query the server for a single message if it is unknown
-		/// </summary>
-		/// <param name="queryWithHistory">Static data request</param>
-		/// <response code="200">Static response cache</response>
-		/// <response code="405">Invalid input</response>
-		[HttpPost]
-		[Route("/static/single")]
-		[ValidateModelState]
-		[SwaggerOperation("GetStaticSingle")]
-		[SwaggerResponse(statusCode: 200, type: typeof(StaticResponse), description: "Static response cache")]
-		[SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
-		public virtual IActionResult GetStaticSingle([FromBody]QueryWithHistory queryWithHistory)
-		{
-			var response = Card.GetSingleResponse(queryWithHistory);
-			if (response != null)
-			{
-				return StatusCode(200, new StaticResponse()
-				{
-					Response = response
-				});
-			}
-			return StatusCode(405, new ErrorMessage()
-			{
-				Code = 0x0FECC0FF,
-				Message = "Stop touching me!"
-			});
-		}
+        /// <summary>
+        /// Query the server for a single message if it is unknown
+        /// </summary>
+        /// <param name="queryWithHistory">Static data request</param>
+        /// <response code="200">Static response cache</response>
+        /// <response code="405">Invalid input</response>
+        [HttpPost]
+        [Route("/static/single")]
+        [ValidateModelState]
+        [SwaggerOperation("GetStaticSingle")]
+        [SwaggerResponse(statusCode: 200, type: typeof(StaticResponse), description: "Static response cache")]
+        [SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
+        public virtual IActionResult GetStaticSingle([FromBody]QueryWithHistory queryWithHistory)
+        { 
+            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(200, default(StaticResponse));
 
-		/// <summary>
-		/// Request TapCap transaction
-		/// </summary>
-		/// <remarks>This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal</remarks>
-		/// <param name="signedMessage">TapCap exchange request</param>
-		/// <response code="200">Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal</response>
-		/// <response code="405">Invalid input</response>
-		[HttpPost]
+            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(405, default(ErrorMessage));
+
+            string exampleJson = null;
+            exampleJson = "{\r\n  \"response\" : \"response\"\r\n}";
+            
+            var example = exampleJson != null
+            ? JsonConvert.DeserializeObject<StaticResponse>(exampleJson)
+            : default(StaticResponse);
+            //TODO: Change the data returned
+            return new ObjectResult(example);
+        }
+
+        /// <summary>
+        /// Request TapCap transaction
+        /// </summary>
+        /// <remarks>This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal</remarks>
+        /// <param name="signedMessage">TapCap exchange request</param>
+        /// <response code="200">Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal</response>
+        /// <response code="405">Invalid input</response>
+        [HttpPost]
         [Route("/tap")]
         [ValidateModelState]
         [SwaggerOperation("RequestTapCap")]
         [SwaggerResponse(statusCode: 200, type: typeof(SignedMessage), description: "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal")]
         [SwaggerResponse(statusCode: 405, type: typeof(ErrorMessage), description: "Invalid input")]
         public virtual IActionResult RequestTapCap([FromBody]SignedMessage signedMessage)
-        {
-			logger.Info("Received TC Request");
-			var tx = Handler.RequestTransaction(signedMessage);
-			if (tx != null && tx.Signature.Length > 0)
-			{
-				// TODO: Sign this
-				return StatusCode(200, tx);
-			}
+        { 
+            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(200, default(SignedMessage));
 
-			return StatusCode(405, new ErrorMessage() {
-				Code = 1,
-				Id = "Payment Failed - please retry",
-				Message = tx?.Message
-			});
+            //TODO: Uncomment the next line to return response 405 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(405, default(ErrorMessage));
+
+            string exampleJson = null;
+            exampleJson = "{\r\n  \"signature\" : \"signature\",\r\n  \"message\" : \"message\"\r\n}";
+            
+            var example = exampleJson != null
+            ? JsonConvert.DeserializeObject<SignedMessage>(exampleJson)
+            : default(SignedMessage);
+            //TODO: Change the data returned
+            return new ObjectResult(example);
         }
     }
 }
