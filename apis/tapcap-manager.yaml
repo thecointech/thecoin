@@ -37,16 +37,16 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerComplete )
+            $ref: "./common.yaml#/definitions/SignedMessage" # signed ( TapCapBrokerComplete )
       responses:
         405:
           description: Invalid input
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: Transaction Result
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
 
     delete:
       tags:
@@ -59,16 +59,16 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/TapCapUnCompleted"
+            $ref: "./common.yaml#/definitions/TapCapUnCompleted"
       responses:
         405:
           description: Invalid input
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: Transaction Result
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
 
   /tap/client:
     post:
@@ -82,12 +82,12 @@ paths:
           description: "TapCap status request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapBrokerPurchase ) )
+            $ref: "./common.yaml#/definitions/SignedMessage" # signed ( signed ( TapCapBrokerPurchase ) )
       responses:
         405:
           description: "Invalid input"
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: "TapCap Token valid for the next purchase"
           schema:
@@ -106,12 +106,12 @@ paths:
           description: "TapCap status request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
+            $ref: "./common.yaml#/definitions/SignedMessage" # signed ( TapCapQueryRequest )
       responses:
         405:
           description: "Invalid input"
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: TapCap Status
           schema:
@@ -130,12 +130,12 @@ paths:
           description: "Purchase Request info"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
+            $ref: "./common.yaml#/definitions/SignedMessage" # signed ( TapCapHistoryRequest )
       responses:
         405:
           description: "Invalid input"
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: TapCap Status
           schema:
@@ -163,7 +163,7 @@ definitions:
         type: integer
         format: int64
       token:
-        $ref: "../common.yaml#/definitions/SignedMessage" # sign ( TapCapToken )
+        $ref: "./common.yaml#/definitions/SignedMessage" # sign ( TapCapToken )
 
   TapCapHistoryRequest:
     required:
@@ -218,15 +218,15 @@ definitions:
 
   # We need to explicitly include definitions that are used but not directly referenced
   TapCapToken:
-    $ref: '../common.yaml#/definitions/TapCapToken'
+    $ref: './common.yaml#/definitions/TapCapToken'
   TapCapClientRequest:
-    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+    $ref: './common.yaml#/definitions/TapCapClientRequest'
   TapCapBrokerPurchase:
-    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+    $ref: './common.yaml#/definitions/TapCapBrokerPurchase'
   TapCapBrokerComplete:
-    $ref: '../common.yaml#/definitions/TapCapBrokerComplete'
+    $ref: './common.yaml#/definitions/TapCapBrokerComplete'
   FXRate:
-    $ref: '../common.yaml#/definitions/FXRate'
+    $ref: './common.yaml#/definitions/FXRate'
 
 externalDocs:
   description: "Find out more about Swagger"

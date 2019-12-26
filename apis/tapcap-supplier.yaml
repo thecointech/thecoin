@@ -35,12 +35,12 @@ paths:
           description: "Static data request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # sign (Token)
+            $ref: "./common.yaml#/definitions/SignedMessage" # sign (Token)
       responses:
         405:
           description: Invalid input
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: Static response cache
           schema:
@@ -63,7 +63,7 @@ paths:
         405:
           description: Invalid input
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: Static response cache
           schema:
@@ -82,16 +82,16 @@ paths:
           description: "TapCap exchange request"
           required: true
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapClientRequest)
+            $ref: "./common.yaml#/definitions/SignedMessage" # sign (TapCapClientRequest)
       responses:
         405:
           description: Invalid input
           schema:
-            $ref: "../common.yaml#/definitions/ErrorMessage"
+            $ref: "./common.yaml#/definitions/ErrorMessage"
         200:
           description: "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal"
           schema:
-            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapBrokerPurchase)
+            $ref: "./common.yaml#/definitions/SignedMessage" # sign (TapCapBrokerPurchase)
 
   /contest:
     post:
@@ -135,7 +135,7 @@ definitions:
         type: string
         format: byte
       token:
-        $ref: "../common.yaml#/definitions/SignedMessage"
+        $ref: "./common.yaml#/definitions/SignedMessage"
       signature:
         type: string # sign ( pdol )
 
@@ -214,12 +214,12 @@ definitions:
 
   # We need to explicitly include definitions that are used but not directly referenced
   TapCapToken:
-    $ref: '../common.yaml#/definitions/TapCapToken'
+    $ref: './common.yaml#/definitions/TapCapToken'
   TapCapClientRequest:
-    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+    $ref: './common.yaml#/definitions/TapCapClientRequest'
   TapCapBrokerPurchase:
-    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+    $ref: './common.yaml#/definitions/TapCapBrokerPurchase'
   FXRate:
-    $ref: '../common.yaml#/definitions/FXRate'
+    $ref: './common.yaml#/definitions/FXRate'
 
 

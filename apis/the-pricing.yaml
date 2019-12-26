@@ -33,7 +33,7 @@ paths:
         200:
           description: TheCoin exchange multiplier to the listed currency
           schema:
-            $ref: "../common.yaml#/definitions/FXRate"
+            $ref: "./common.yaml#/definitions/FXRate"
 
       parameters:
       - in: path
