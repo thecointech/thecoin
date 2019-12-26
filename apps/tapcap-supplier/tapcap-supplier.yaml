@@ -1,0 +1,225 @@
+swagger: "2.0"
+info:
+  description: "The interace for TapCap between buyers & sellers."
+  version: "0.1.0"
+  title: "THE TapCap supply"
+  contact:
+    email: "stephen.taylor.dev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "thecoincad.tplinkdns.com:9361" #localhost:8070"
+tags:
+- name: "TapCap"
+  description: "Facilitate a 3-way TapCap transaction"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "https"
+tags:
+- name: "Transaction"
+  description: "These API's can be called by a client to affect a TapCap purchase transaction, exchanging THE with the supplier to complete fiat tap transactions"
+
+paths:
+  /static:
+    post:
+      tags:
+        - Transaction
+      summary: "Get the list of static responses to cache for terminal queries"
+      operationId: "getStatic"
+      parameters:
+        - in: body
+          name: request
+          description: "Static data request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (Token)
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Static response cache
+          schema:
+            $ref: "#/definitions/StaticResponses"
+
+  /static/single:
+    post:
+      tags:
+        - Transaction
+      summary: "Query the server for a single message if it is unknown"
+      operationId: "getStaticSingle"
+      parameters:
+        - in: body
+          name: request
+          description: "Static data request"
+          required: true
+          schema:
+            $ref: "#/definitions/QueryWithHistory"
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: Static response cache
+          schema:
+            $ref: "#/definitions/StaticResponse"
+
+  /tap:
+    post:
+      tags:
+        - Transaction
+      summary: "Request TapCap transaction"
+      description: This is sent in response to a terminal request.  The supplier is expected to return a valid certificate to pass to the terminal
+      operationId: "requestTapCap"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapClientRequest)
+      responses:
+        405:
+          description: Invalid input
+          schema:
+            $ref: "../common.yaml#/definitions/ErrorMessage"
+        200:
+          description: "Info required to complete the transaction, including coin charged, and the data to be returned to the teriminal"
+          schema:
+            $ref: "../common.yaml#/definitions/SignedMessage" # sign (TapCapBrokerPurchase)
+
+  /contest:
+    post:
+      tags:
+        - Transaction
+      summary: Notify of a contested transaction
+      description: "Notify supplier that the client will contest the passed transaction.  This is not necessary, a supplier should auotomatically undo any incompelete transactions, but it is a courtesy to the supplier"
+      operationId: "contestTapCap"
+      parameters:
+        - in: body
+          name: request
+          description: "TapCap exchange request"
+          required: true
+          schema:
+            $ref: "#/definitions/SignedTapcapContest"
+      responses:
+        405:
+          description: Invalid input
+        200:
+          description: Server status
+          schema:
+            $ref: "#/definitions/ContestResponse"
+
+definitions:
+
+  SignedTapcapContest:
+    required:
+      - timestamp
+      - fiatAmount
+      - pdol
+      - token
+      - signature
+    properties:
+      timestamp:
+        type: integer
+        format: int64
+      fiatAmount:
+        type: number
+        format: double
+      pdol:
+        type: string
+        format: byte
+      token:
+        $ref: "../common.yaml#/definitions/SignedMessage"
+      signature:
+        type: string # sign ( pdol )
+
+  QueryWithHistory:
+    required:
+      - query
+      - queries
+      - responses
+    properties:
+      query:
+        type: string
+        format: byte
+      queries:
+        type: array
+        items: 
+          type: string
+          format: byte
+      responses:
+        type: array
+        items: 
+          type: string
+          format: byte
+
+  StaticResponse:
+    required:
+      - response
+    properties:
+      response:
+        type: string
+        format: byte
+
+  StaticResponses:
+    required:
+      - address
+      - gpoPdol
+      - cryptPdol
+      - queries
+      - responses
+      - responseParentIndex
+    properties:
+      address:
+        type: string # The address of the this supplier
+      gpoPdol:
+        type: string
+        format: byte
+      cryptoPdol:
+        type: string
+        format: byte
+      queries:
+        type: array
+        items: 
+          type: string
+          format: byte
+      responses:
+        type: array
+        items: 
+          type: string
+          format: byte
+      # The space of potential responses
+      # is a tree structure.  Each time the
+      # terminal sends a message, it is
+      # choosing a path in the tree.  Each
+      # responses marks it's parent item in 
+      # the below array.
+      responseParentIndex:
+        type: array
+        items: 
+          type: integer
+
+
+  ContestResponse:
+    properties:
+      code:
+        type: integer
+        format: int32
+
+  # We need to explicitly include definitions that are used but not directly referenced
+  TapCapToken:
+    $ref: '../common.yaml#/definitions/TapCapToken'
+  TapCapClientRequest:
+    $ref: '../common.yaml#/definitions/TapCapClientRequest'
+  TapCapBrokerPurchase:
+    $ref: '../common.yaml#/definitions/TapCapBrokerPurchase'
+  FXRate:
+    $ref: '../common.yaml#/definitions/FXRate'
+
+
