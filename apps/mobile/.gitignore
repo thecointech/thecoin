@@ -1,0 +1,9 @@
+.vs/
+TheApp.Android/bin/
+TheApp.Android/obj/
+TheApp.iOS/obj/
+TheApp.UWP/bin/
+TheApp.UWP/obj/
+TheApp/obj/
+TheApp/bin/
+node_modules/

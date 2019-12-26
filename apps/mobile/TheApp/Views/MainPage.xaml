@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TheApp.Converters"
+             x:Class="TheApp.Views.MainPage"
+             Title="{Binding Title}">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <local:CoinToHumanConverter x:Key="coinToHuman" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Label Text="Welcome to Xamarin Forms and Prism!" />
+
+        <Button Text="Connect" IsEnabled="{Binding CanConnect}" Command="{Binding ConnectCommand}" />
+        <Label Text="{Binding Logs}" />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+            <Label Text="TapCap Balance:" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Total Balance:" Grid.Row="1" Grid.Column="0" />
+            <Label Text="Cad Balance:" Grid.Row="2" Grid.Column="0" />
+            <Label Text="{Binding TapCapBalance, Converter={StaticResource coinToHuman}}"  Grid.Row="0" Grid.Column="1" />
+            <Label Text="{Binding TotalBalance, Converter={StaticResource coinToHuman}}" Grid.Row="1" Grid.Column="1"/>
+            <Label Text="{Binding CadBalance}" Grid.Row="2" Grid.Column="1"/>
+        </Grid>
+
+		<Button IsEnabled="False" Text="Test Purchase" Command="{Binding TestPurchaseCommand}" />
+		<Button IsEnabled="False" Text="History" Command="{Binding ShowHistoryCommand}" />
+
+    </StackLayout>
+
+</ContentPage>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:forms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="TheApp.Views.Scanner">
+
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <forms:ZXingScannerView IsScanning="{Binding IsScanning}" IsAnalyzing="{Binding IsAnalyzing}" Result="{Binding Result, Mode=TwoWay}" ScanResultCommand="{Binding QRScanResultCommand}" Options="{Binding ScanOptions}"></forms:ZXingScannerView>
+        <forms:ZXingDefaultOverlay TopText="Sample top text" BottomText="sample bottom text" ShowFlashButton="False" Opacity="0.9"></forms:ZXingDefaultOverlay>
+    </Grid>
+
+</ContentPage>
