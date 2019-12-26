@@ -4,6 +4,3 @@
 [submodule "tapcap-supplier"]
 	path = tapcap-supplier
 	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/tapcap-supplier
-[submodule "the-app"]
-	path = the-app
-	url = https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/the-app
