@@ -197,7 +197,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
             />
             <Form.Input
               label="Security answer"
-              name="question"
+              name="answer"
               onChange={this.onInputChanged}
               placeholder="No spaces or special characters"
             />

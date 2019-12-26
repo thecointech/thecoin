@@ -11,11 +11,9 @@ import { AccountState } from "../../containers/Account/types";
 import * as AccountActions from "../../containers/Account/actions";
 
 import { TransactionHistory } from "../TransactionHistory";
-import { Popup } from "semantic-ui-react";
+import { Popup, Icon } from "semantic-ui-react";
 import styles from "./index.module.css";
 import { calculateProfit } from "./profit";
-
-const bank = require("./bank.svg") as string;
 
 interface MyProps {
   dispatch: AccountActions.DispatchProps;
@@ -43,6 +41,8 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
     const profit = toHuman(rawProfit, true);
 
 
+    const profitDisplay = "Current Profit: " + (profit < 1 ? "< .1%" : profit.toString())
+
     return (
       <React.Fragment>
         <div className={styles.wrapper}>
@@ -52,19 +52,11 @@ class BalanceClass extends React.PureComponent<Props, {}, null> {
                 <p className={styles.have}>
                   You have:{" "}
                   <span className={styles.balance}>${cadBalance}</span>{" "}
-                  {profit < 1 ? (
-                    <Popup
-                      trigger={<img className={styles.bankIcon} src={bank} />}
-                      content="Current Profit: < .1%"
-                      position="top left"
-                    />
-                  ) : (
-                    <Popup
-                      trigger={<img className={styles.bankIcon} src={bank} />}
-                      content={`Current Profit: $` + profit}
-                      position="top left"
-                    />
-                  )}
+                  <Popup
+                    trigger={<Icon name="chart line" className={styles.bankIcon} />}
+                    content={profitDisplay}
+                    position="top left"
+                  />
                 </p>
               </Grid.Column>
               <Grid.Column width={2}></Grid.Column>

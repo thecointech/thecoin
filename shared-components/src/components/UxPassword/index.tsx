@@ -1,9 +1,8 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
 import { MessageDescriptor } from 'react-intl';
-import { Container } from 'semantic-ui-react';
-import show from './images/s1Show.svg';
-import hide from './images/s15Hide.svg';
+import { Container, Icon } from 'semantic-ui-react';
+
 
 import { UxInput } from '../../components/UxInput';
 import { Props } from './types';
@@ -103,8 +102,8 @@ export class UxPassword extends React.PureComponent<Props, State> {
     return (
       <Container> 
         <p onClick={this.toggleMask} id="togglePassword" unselectable="on"> 
-          <p style={ isPassword ? showStyle : hideStyle }><img alt="Show Password" src={show}/>&nbsp;Show Password</p>
-          <p style={ isPassword ? hideStyle : showStyle }><img alt="Hide Password" src={hide}/>&nbsp;Hide Password</p>
+          <p style={ isPassword ? showStyle : hideStyle }><Icon name='hide' />&nbsp;Show Password</p>
+          <p style={ isPassword ? hideStyle : showStyle }><Icon name='unhide' />&nbsp;Hide Password</p>
         </p>
         <UxInput
           type={isPassword ? Masked : UnMasked}

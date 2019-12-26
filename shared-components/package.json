@@ -14,5 +14,8 @@
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
     "ts-jest": "^24.1.0"
+  },
+  "dependencies": {
+    "@types/node": "^13.1.0"
   }
 }
