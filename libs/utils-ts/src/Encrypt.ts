@@ -60,7 +60,7 @@ export function encrypt(object: Object) {
 
 export function decrypt(privateKey: string, value: string) {
   const buffer = Buffer.from(value, "base64");
-  const output = Crypto.privateDecrypt(privateKey, buffer);
+  const output = Crypto.publicDecrypt(privateKey, buffer);
   return output.toString();
 }
 

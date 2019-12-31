@@ -1,20 +1,8 @@
 import React from 'react';
 import { debounce, Cancelable } from 'lodash';
-import { MessageDescriptor } from 'react-intl';
 import { Container, Icon } from 'semantic-ui-react';
-
-
 import { UxInput } from '../../components/UxInput';
-import { Props } from './types';
-
-const initialState = {
-  message: undefined as MessageDescriptor | undefined,
-  isPassword: true,
-  maskPassword: null,
-  selectionStart: 0,
-  selectionEnd: 0
-}
-type State = Readonly<typeof initialState>;
+import { Props, State, initialState } from './types';
 
 const UnMasked = "text";
 const Masked = "password";

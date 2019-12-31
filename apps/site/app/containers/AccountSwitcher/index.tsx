@@ -2,14 +2,14 @@ import React, { useCallback } from "react"
 import { Dropdown, DropdownItemProps } from "semantic-ui-react"
 import { NavLink, Link } from "react-router-dom"
 import { selectActiveAccount } from "containers/Accounts/Selectors"
-import { selectAccounts } from "@the-coin/components/containers/Account/selector"
+import { selectAccounts } from "@the-coin/shared/containers/Account/selector"
 import { DispatchAccounts } from "containers/Accounts/Reducer"
 import { useDispatch } from "react-redux"
 
 import cross from './images/cross.svg';
 //import dot from './images/greendot.svg';
 
-//import { AccountMap } from "@the-coin/components/containers/Account/types"
+//import { AccountMap } from "@the-coin/shared/containers/Account/types"
 
 
 //const isLoggedIn = (accounts: AccountMap, name: string) => accounts[name].signer != null;

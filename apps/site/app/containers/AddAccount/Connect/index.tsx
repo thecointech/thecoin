@@ -2,10 +2,10 @@ import React from 'react';
 import { Button, Form, Message } from 'semantic-ui-react';
 
 import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
-import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
-import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
-import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
-import { ConnectWeb3 } from '@the-coin/components/containers/Account/Web3';
+import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
+import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
+import { buildMapDispatchToProps } from '@the-coin/shared/containers/Account/actions';
+import { ConnectWeb3 } from '@the-coin/shared/containers/Account/Web3';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react';
 import FileSaver from 'file-saver';
-import {GetStoredWallet} from '@the-coin/components/containers/Account/storageSync';
+import {GetStoredWallet} from '@the-coin/shared/containers/Account/storageSync';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 

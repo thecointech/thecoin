@@ -5,11 +5,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-// Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
-// 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
-// see https://github.com/webpack/loader-utils/issues/56 parseQuery() will be replaced with getOptions()
-// in the next major version of loader-utils.'
-process.noDeprecation = true;
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const projectRoot = path.resolve(__dirname, '..', '..');
 
@@ -28,7 +24,7 @@ module.exports = options => ({
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.jsx?$/, // Transform all .js and .jsx files required somewhere with Babel
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -36,7 +32,7 @@ module.exports = options => ({
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts(x?)$/,
         exclude: /node_modules/,
         use: options.tsLoaders,
       },
@@ -45,13 +41,21 @@ module.exports = options => ({
         // This is the place to add your own loaders (e.g. sass/less etc.)
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
-        exclude: [/node_modules/, /semantic/],
-        use: options.styleLoaders,
+        exclude: /node_modules/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            },
+          },
+        ],
       },
       {
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
-        include: [/node_modules/, /semantic/],
+        include: /node_modules/,
         use: ['style-loader', 'css-loader'],
       },
       {
@@ -64,6 +68,7 @@ module.exports = options => ({
           {
             loader: 'css-loader',
             options: {
+              importLoaders: 1,
               sourceMap: true,
             },
           },
@@ -148,11 +153,10 @@ module.exports = options => ({
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; Terser will automatically
     // drop any unreachable code.
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }),
+    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
   resolve: {
     modules: ['node_modules', 'app'],
@@ -162,11 +166,6 @@ module.exports = options => ({
       '../../theme.config$': path.resolve(
         projectRoot,
         'app/styles/semantic/theme.config',
-      ),
-      '@the-coin/components': path.resolve(
-        projectRoot,
-        '..',
-        'shared-components/src',
       ),
     },
   },

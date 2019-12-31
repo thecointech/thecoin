@@ -4,12 +4,12 @@ import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
-import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types';
-import { weBuyAt } from '@the-coin/components/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
+import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
+import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
+import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'containers/Services/BrokerCAD';
 import styles from './index.module.css';

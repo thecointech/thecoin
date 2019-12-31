@@ -6,3 +6,6 @@ wallets/
 *.log
 **/tsconfig.tsbuildinfo
 shared-components/build/
+libs/utils-ts/lib/
+apis/broker/ts/dist/
+apps/admin/build/

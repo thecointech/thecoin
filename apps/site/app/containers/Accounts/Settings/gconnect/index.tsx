@@ -1,9 +1,9 @@
-//import {GetStoredWallet} from '@the-coin/components/containers/Account/storageSync';
+//import {GetStoredWallet} from '@the-coin/shared/containers/Account/storageSync';
 import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { IWindow } from './gauth';
-import { GetStoredWallet } from '@the-coin/components/containers/Account/storageSync';
+import { GetStoredWallet } from '@the-coin/shared/containers/Account/storageSync';
 import { GooglePutRequest } from '@the-coin/broker-cad';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';

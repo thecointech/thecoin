@@ -3,12 +3,12 @@ import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
 import { Button, Header, Form } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
-import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
-import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
-import { buildMapDispatchToProps } from '@the-coin/components/containers/Account/actions';
+import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
+import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
+import { buildMapDispatchToProps } from '@the-coin/shared/containers/Account/actions';
 import { UxScoredPassword } from 'components/UxScoredPassword';
 import messages from '../messages';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import {
   initialState as BaseInitial,
   NewBaseClass,

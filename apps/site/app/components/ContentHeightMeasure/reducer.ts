@@ -1,6 +1,6 @@
 
-import injectReducer from '@the-coin/components/utils/injectReducer';
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/components/utils/immerReducer'
+import injectReducer from '@the-coin/shared/utils/injectReducer';
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 import { ContainerState, IActions } from './types';
 import { ApplicationRootState } from 'types';
 

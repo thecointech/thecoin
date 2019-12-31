@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { AccountMap } from '@the-coin/components/containers/Account/types';
-import { DispatchProps } from '@the-coin/components/containers/Account/actions';
-import { UxInput } from '@the-coin/components/components/UxInput';
+import { AccountMap } from '@the-coin/shared/containers/Account/types';
+import { DispatchProps } from '@the-coin/shared/containers/Account/actions';
+import { UxInput } from '@the-coin/shared/components/UxInput';
 import { IsValidReferrerId } from '@the-coin/utilities';
 
 import { MessageDescriptor } from 'react-intl';

@@ -4,11 +4,11 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import AnimateHeight from 'react-animate-height';
 
-import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { ContainerState } from '@the-coin/components/containers/FxRate/types';
-import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
-import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
-import { TheSigner } from '@the-coin/components/SignerIdent';
+import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
+import { ContainerState } from '@the-coin/shared/containers/FxRate/types';
+import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
+import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
+import { TheSigner } from '@the-coin/shared/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
 import { GetETransferApi } from '../../Services/BrokerCAD';

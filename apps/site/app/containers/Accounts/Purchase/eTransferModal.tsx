@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { CopyToClipboard } from 'components/CopyToClipboard';
 import { Grid } from 'semantic-ui-react';
 import messages from './messages';

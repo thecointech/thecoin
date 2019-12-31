@@ -1,14 +1,12 @@
 import React from 'react';
 import { MessageDescriptor, FormattedMessage } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Lock } from 'utils/icons';
 import { Color } from 'csstype';
-
+import { Icon } from 'semantic-ui-react';
 import styles from './index.module.css';
 import messages, { scope as MessageScope } from './messages';
 import { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
-import { UxPassword } from '@the-coin/components/components/UxPassword';
+import { UxPassword } from '@the-coin/shared/components/UxPassword';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,
@@ -27,7 +25,7 @@ type Props = Readonly<MyProps>;
 export class UxScoredPassword extends React.PureComponent<Props, State> {
 
   static defaultProps = defaultProps;
-  state = initialState;
+state = initialState;
 
   // This is the link to the zxcvbn function that
   // does the actual password scoring
@@ -130,7 +128,7 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
       const meterStyles = this.getMeterStyle(statusColor!, statusInactiveColor!)
       infoBarComponent = (
         <div className={styles.infoStyle}>
-          <FontAwesomeIcon className={styles.iconStyle} icon={Lock} size='xs' />
+          <Icon className={styles.iconStyle} type="lock" size="small" />
           <span style={meterStyles} className={styles.meterStyle} />
           <span className={styles.strengthLangStyle}>
             <FormattedMessage {...messages[messageId]} />
@@ -140,7 +138,8 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
     return (
       <UxPassword
-        intlLabel={intlLabel} id="uxPasswordField"
+        intlLabel={intlLabel} 
+        id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}
         {...inputProps}

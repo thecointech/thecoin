@@ -1,5 +1,5 @@
-import { AccountMap } from "@the-coin/components/containers/Account/types";
-import { getDefaultAccount } from "containers/Accounts/Selectors";
+import { AccountMap } from "@the-coin/shared/containers/Account/types";
+import { getDefaultAccount } from 'containers/Accounts/Selectors';
 
 export const isOpera = () : boolean =>
   navigator.userAgent.indexOf("Opera") < 0;

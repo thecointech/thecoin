@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "incremental": true,
+    "noEmit": true,
+    "target": "es5",
     "module": "esnext", //commonjs destroys 'dynamic imports' which is used for code splitting
     "noImplicitAny": false,
     "preserveConstEnums": true,
-    "typeRoots": ["node_modules/@types"],
     "baseUrl": "./app",
-    "paths": {
-      "@the-coin/components/*": ["../../shared-components/src/*"]
-    },
-    "outDir": "./build/",
     "jsx": "react", // process JSX
     "lib": ["dom", "es5", "es6", "es7", "es2017"],
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
@@ -19,27 +16,18 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    // "importHelpers": true, // importing helper functions from tslib
-    // "noEmitHelpers": true, // disable emitting inline helper functions
-    "types": ["jest", "node"],
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "strict": true,
     "strictFunctionTypes": false,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true,
-
-    "incremental": true,                      /* Enable incremental compilation */
-    "tsBuildInfoFile": "./obj/incr"           /* Specify file to store incremental compilation information */
+    "sourceMap": true
   },
-  "exclude": ["node_modules", "**/node_modules/*"],
-  "references": [
-    { "path": "../shared-components" }
-  ]
+  "include": ["app/**/*", "internals/templates/**/*"],
+  "exclude": ["node_modules"]
 }

@@ -23,7 +23,7 @@ import Subscribe from '../Subscribe';
 import styles from '../../styles/base.css';
 import { hasAccount } from 'utils/detection';
 import { useSelector } from 'react-redux';
-import { selectAccounts } from '@the-coin/components/containers/Account/selector';
+import { selectAccounts } from '@the-coin/shared/containers/Account/selector';
 
 export const HomePage = () => {
   const accounts = useSelector(selectAccounts);

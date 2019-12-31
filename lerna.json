@@ -2,9 +2,9 @@
   "packages": [
     "libs/*",
     "apps/*",
-    "apis/*"
+    "apis/**/*"
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "independent",
+  "version": "2.0.0"
 }

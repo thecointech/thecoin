@@ -14,15 +14,15 @@ import { useLocation } from 'react-router';
 import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
-import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
-import { FxRates } from '@the-coin/components/containers/FxRate';
+import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
+import { FxRates } from '@the-coin/shared/containers/FxRate';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
 
 import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
-import { injectRootReducer } from '@the-coin/components/containers/Account/reducer';
+import { injectRootReducer } from '@the-coin/shared/containers/Account/reducer';
 
 const AppClass = () => {
   const location = useLocation()

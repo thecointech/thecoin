@@ -6,9 +6,7 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "@google-cloud/datastore": "^2.0.0"
-  },
+
   "scripts": {
     "start": "node ./src/server.js",
     "debug": "nodemon --inspect ./src/server.js"

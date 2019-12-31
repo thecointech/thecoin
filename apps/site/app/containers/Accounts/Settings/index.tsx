@@ -1,5 +1,5 @@
 import React from 'react';
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { Download } from './download';
 import { GoogleConnect } from './gconnect';
 

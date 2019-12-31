@@ -1,21 +1,41 @@
 {
-  "name": "shared-components",
-  "version": "1.0.0",
-  "description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
-  "main": "index.js",
+  "name": "@the-coin/shared",
+  "version": "2.0.0",
+  "description": "The Coin: Shared functionality for the react website & admin app",
+  "keywords": [
+    "THE",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.com>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "tsc -b -v"
+    "build": "tsc -b -v && yarn copy",
+    "copy": "cpx \"./src/**/*.module.css\" ../../packages/libs/shared"
   },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "jest": "^24.9.0",
-    "jest-cli": "^24.9.0",
-    "ts-jest": "^24.1.0"
+  "main": "dist/index.js",
+  "directories": {
+    "src": "src",
+    "build": "build"
   },
+  "files": [
+    "lib/src/**/*"
+  ],
   "dependencies": {
-    "@types/node": "^13.1.0"
+    "@the-coin/pricing": "*",
+    "@the-coin/types": "*",
+    "@the-coin/utilities": "*",
+    "immer-reducer": "^0.7.10",
+    "react-dates": "^21.5.1",
+    "react-with-direction": "^1.3.1",
+    "hoist-non-react-statics": "^3.3.1",
+    "history": "4.9.0"
+  },
+  "devDependencies": {
+    "@types/react-dates": "^17.1.6",
+    "@types/history": "^4.7.3",
+    "@babel/runtime": "^7.7.7",    
+    "@types/hoist-non-react-statics": "^3.3.1"
   }
 }

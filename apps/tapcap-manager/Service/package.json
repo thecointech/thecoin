@@ -11,11 +11,9 @@
   "keywords": [
     "swagger"
   ],
-  "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@google-cloud/datastore": "^2.0.0",
-    "@the-coin/utilities": "^0.1.4",
+    "@the-coin/utilities": "*",
     "cors": "^2.8.4",
     "eslint": "^5.6.1",
     "esm": "^3.0.84",
@@ -23,9 +21,5 @@
     "express": "^4.16.3",
     "js-yaml": "^3.3.0",
     "swagger-tools": "0.10.1"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0"
   }
 }

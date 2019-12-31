@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/pricing",
-  "version": "0.1.1",
+  "version": "2.0.0",
   "description": "OpenAPI client for @the-coin/pricing",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [

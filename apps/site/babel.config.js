@@ -14,7 +14,7 @@ module.exports = {
   ],
   env: {
     production: {
-      only: ['app', '../the-react-components/src'],
+      only: ['app'],
       plugins: [
         'lodash',
         'transform-react-remove-prop-types',

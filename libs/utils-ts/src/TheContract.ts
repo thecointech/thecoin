@@ -5,7 +5,7 @@ import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
 type Network = "ropsten"|"mainnet";
 async function BuildContract(network: Network) {
 	const deploy = await import(`@the-coin/contract/zos.${network}.json`);
-	const TheCoinSpec = await import('@the-coin/contract/build/contracts/TheCoin.json');
+	const TheCoinSpec = await import('@the-coin/contract/lib/TheCoin.json');
 	if (!deploy || !TheCoinSpec)
 		throw new Error('Cannot create contract: missing deployment');
 

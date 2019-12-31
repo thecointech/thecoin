@@ -4,11 +4,11 @@
  *
  */
 
-import { CHANGE_LOCALE } from './constants';
+import ActionTypes from './constants';
 
 export function changeLocale(languageLocale) {
   return {
-    type: CHANGE_LOCALE,
+    type: ActionTypes.CHANGE_LOCALE,
     locale: languageLocale,
   };
 }

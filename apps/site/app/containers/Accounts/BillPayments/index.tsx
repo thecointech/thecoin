@@ -9,12 +9,12 @@ import {
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/lib/VerifiedBillPayment';
-import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { ContainerState as FxState } from '@the-coin/components/containers/FxRate/types';
-import { weBuyAt } from '@the-coin/components/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/components/containers/FxRate/selectors';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
+import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
+import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
+import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { payees, validate } from './payees';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
@@ -22,7 +22,7 @@ import {
   GetStatusApi,
   GetBillPaymentsApi,
 } from 'containers/Services/BrokerCAD';
-import { UxInput } from '@the-coin/components/components/UxInput';
+import { UxInput } from '@the-coin/shared/components/UxInput';
 
 import styles from '../../../styles/base.css';
 

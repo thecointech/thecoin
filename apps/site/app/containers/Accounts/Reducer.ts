@@ -1,7 +1,7 @@
 import { initialState, IAccountsActions, AccountsState } from "./types"
 import { Dispatch, bindActionCreators } from "redux";
 import { ApplicationRootState } from "types";
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/components/utils/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 
 
 const ACCOUNTS_KEY : keyof ApplicationRootState = "activeAccount";

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResponsiveLine, LineDatum, LineSerieData } from '@nivo/line';
+import { ResponsiveLine, Serie, Datum } from '@nivo/line';
 import { CoinReturns, CalcAverageReturn, CalcRoundedAverageReturn } from '../Data';
 
 interface Props {
@@ -56,9 +56,9 @@ export class Graph extends React.PureComponent<Props> {
     const {data, multiplier} = this.props;
     const {values, size, min, count} = data;
 
-    const plotData: LineSerieData = {
+    const plotData: Serie = {
       id: 'The Coin',
-      data: values.map((d, index): LineDatum => {
+      data: values.map((d, index): Datum => {
         const xval = min + (index * size);
         // Get rid of float rounding errors
         return {

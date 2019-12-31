@@ -2,15 +2,15 @@ import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
 import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
-import { AccountMap } from '@the-coin/components/containers/Account/types';
+import { AccountMap } from '@the-coin/shared/containers/Account/types';
 import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
-import { injectSingleAccountReducer } from '@the-coin/components/containers/Account/reducer';
+import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
 import { connect } from 'react-redux';
-import { structuredSelectAccounts } from '@the-coin/components/containers/Account/selector';
+import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
 import {
   buildMapDispatchToProps,
   DispatchProps,
-} from '@the-coin/components/containers/Account/actions';
+} from '@the-coin/shared/containers/Account/actions';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { ExistsSwitcher } from '../ExistsSwitcher';

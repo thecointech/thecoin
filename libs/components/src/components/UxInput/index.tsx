@@ -1,14 +1,8 @@
 import React from 'react';
 import { Form, Label, Input, Message } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import cx from 'classnames';
 import styles from './index.module.css';
-import { Props as MyProps } from './types';
-
-const initialState = {
-  value: '',
-  showState: false,
-};
+import { Props as MyProps, initialState } from './types';
 
 type State = Readonly<typeof initialState>;
 type Props = Readonly<MyProps & WrappedComponentProps>;
@@ -90,13 +84,13 @@ class UxInputClass extends React.Component<Props, State> {
         error={errorTag}
         hidden={!showMessage}
         attached="bottom"
-        className={cx(
-          styles.ui,
-          styles.attached,
-          styles.bottom,
-          styles.message,
-          styles.inputMessage,
-        )}
+        className={`
+          ${styles.ui}
+          ${styles.attached}
+          ${styles.bottom}
+          ${styles.message}
+          ${styles.inputMessage}
+        `}
       >
         {message ? <FormattedMessage {...message} /> : undefined}
       </Message>

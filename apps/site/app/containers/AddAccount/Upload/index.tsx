@@ -1,7 +1,7 @@
 import React from "react"
 import { Container } from "semantic-ui-react"
 import { ExistsSwitcher } from "containers/AddAccount/ExistsSwitcher"
-import { UploadWallet } from "@the-coin/components/containers/UploadWallet"
+import { UploadWallet } from "@the-coin/shared/containers/UploadWallet"
 
 
 function readFile(file: File): Promise<string> {

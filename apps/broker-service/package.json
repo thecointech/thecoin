@@ -1,0 +1,33 @@
+{
+  "name": "@the-coin/broker-service",
+  "version": "0.1.0",
+  "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "debug": "cross-env NODE_ENV=development && npm run build && node --inspect index.js",
+    "build": "tsc -p . && npm run build:copy",
+    "build:copy": "(if not exist build\\api mkdir build\\api) && copy Generated\\api src\\api && copy src\\api build\\api",
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/firestore": "^2.4.0",
+    "@the-coin/utilities": "*",
+    "cors": "^2.8.5",
+    "ethers": "^4.0.40",
+    "express": "^4.16.3",
+    "googleapis": "^39.2.0",
+    "grpc": "^1.20.3",
+    "js-yaml": "^3.3.0",
+    "node-mailjet": "^3.3.1",
+    "swagger-tools": "0.10.4"
+  },
+  "devDependencies": {
+    "@types/node-mailjet": "^3.3.0"
+  }
+}

@@ -3,7 +3,7 @@ import { Location } from 'history';
 
 import { Switch, Route } from 'react-router-dom';
 import {HomePage} from 'containers/HomePage/index';
-import { NotFoundPage } from '@the-coin/components/containers/NotFoundPage';
+import { NotFoundPage } from '@the-coin/shared/containers/NotFoundPage';
 import { Accounts } from 'containers/Accounts';
 import { AddAccount } from 'containers/AddAccount';
 import { HowItWorks } from 'containers/HowItWorks';

@@ -22,30 +22,14 @@ module.exports = require('./webpack.base.babel')({
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
 
-  // Added from: https://github.com/react-boilerplate/react-boilerplate/issues/2142
-  styleLoaders: [
-    'style-loader',
-    'css-modules-typescript-loader',
-    {
-      loader: 'css-loader',
-      options: {
-        modules: true,
-      },
-    },
-    {
-      loader: 'postcss-loader',
-    },
-  ],
-
   tsLoaders: [
+    // Babel also have typescript transpiler. Uncomment this if you prefer and comment-out ts-loader
+    // { loader: 'babel-loader' },
     {
-      loader: 'awesome-typescript-loader',
+      loader: 'ts-loader',
       options: {
-        useBabel: true,
-        babelOptions: {
-          babelrc: true,
-        },
-        useCache: false,
+        transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+        logLevel: 'info',
       },
     },
   ],
@@ -74,28 +58,23 @@ module.exports = require('./webpack.base.babel')({
     nodeEnv: 'production',
     sideEffects: true,
     concatenateModules: true,
+    runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
-      minSize: 30000,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      name: true,
+      maxInitialRequests: 10,
+      minSize: 0,
       cacheGroups: {
-        commons: {
+        vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all',
-        },
-        main: {
-          chunks: 'all',
-          minChunks: 2,
-          reuseExistingChunk: true,
-          enforce: true,
+          name(module) {
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+            )[1];
+            return `npm.${packageName.replace('@', '')}`;
+          },
         },
       },
     },
-    runtimeChunk: true,
   },
 
   plugins: [

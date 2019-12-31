@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { ApplicationRootState } from "types";
-import { AccountMap } from "@the-coin/components/containers/Account/types";
+import { AccountMap } from "@the-coin/shared/containers/Account/types";
 
 export const getDefaultAccount = (accounts: AccountMap) =>
   Object.keys(accounts)[0];

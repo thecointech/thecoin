@@ -1,5 +1,11 @@
 After Checkout:
 
+NOTE: 
+
+for node-gyp errors on windows, ensure that it's (node-gyp is) looking in the right path for msbuild
+
+https://github.com/nodejs/node-gyp/issues/1753
+
 1) Ensure submodules are pulled
 
 2) Connect to our private NPM feed.  

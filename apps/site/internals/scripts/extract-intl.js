@@ -4,8 +4,6 @@
  * and package them in the translation json files in the translations file.
  */
 
-// file deepcode ignore PromiseNotCaughtNode: (internal-only code)
-
 require('shelljs/global');
 
 const fs = require('fs');
@@ -16,7 +14,7 @@ const get = require('lodash/get');
 const animateProgress = require('./helpers/progress');
 const addCheckmark = require('./helpers/checkmark');
 
-const { appLocales, DEFAULT_LOCALE } = require('../../app/i18n');
+const { appLocales, DEFAULT_LOCALE } = require('./../../app/i18n.ts');
 
 const babel = require('../../babel.config.js');
 const { presets } = babel;
@@ -28,7 +26,7 @@ plugins.push('react-intl');
 plugins = plugins.filter(p => p !== 'styled-components');
 
 // Glob to match all js files except test files
-const FILES_TO_PARSE = 'app/**/messages.ts';
+const FILES_TO_PARSE = 'app/**/!(*.test).ts*';
 
 const newLine = () => process.stdout.write('\n');
 

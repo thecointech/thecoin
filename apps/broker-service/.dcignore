@@ -1,0 +1,5 @@
+Generated/
+build/
+coverage/
+node_modules/
+src/controllers

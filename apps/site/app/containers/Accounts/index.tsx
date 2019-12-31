@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import * as Sidebar from '@the-coin/components/containers/PageSidebar/actions';
-import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
-import { AccountMap } from '@the-coin/components/containers/Account/types';
-import { Balance } from '@the-coin/components/containers/Balance';
+import * as Sidebar from '@the-coin/shared/containers/PageSidebar/actions';
+import { Account, RouterPath, AccountProps } from '@the-coin/shared/containers/Account';
+import { AccountMap } from '@the-coin/shared/containers/Account/types';
+import { Balance } from '@the-coin/shared/containers/Balance';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
