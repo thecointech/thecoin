@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es2017",
+    "module": "esnext",
     "baseUrl": "./src/",
-    "outDir": "../../packages/libs/shared",
-    "tsBuildInfoFile": "../../packages/libs/shared.buildinfo",
+    "outDir": "./lib/",
+    "incremental": true,
+    "tsBuildInfoFile": "./lib/shared.buildinfo",
     "rootDir": "./src/",
     "jsx": "react",
-    "module": "es2015",
     "moduleResolution": "node",
     "pretty": true,
     "sourceMap": true,
@@ -37,11 +38,7 @@
     //
     "declaration": true, 
     "composite": true,
-    //
-    // Fix jest testing
-    //
-    //"types": ["jest"],
-    //"typeRoots": ["./types", "./node_modules/@types"]
+    "types": ["jest", "node"],
   },
-  "exclude": ["node_modules", "**/node_modules/*", "lib/**"]
+  "include": ["src/**/*"]
 }

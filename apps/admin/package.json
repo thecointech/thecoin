@@ -1,8 +1,8 @@
 {
   "name": "@the-coin/admin",
   "productName": "THECoin: Admin app",
-  "version": "0.17.1",
-  "description": "Electron application implements management functionality for THECoin",
+  "version": "2.0.0",
+  "description": "A Desktop application to run back-end functionality for THECoin",
   "scripts": {
     "build": "concurrently \"yarn run build-main\" \"yarn run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -54,8 +54,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "THECoin: Admin",
+    "appId": "org.thecoin.admin",
     "files": [
       "app/dist/",
       "app/app.html",

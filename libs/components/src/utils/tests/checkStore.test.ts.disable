@@ -3,9 +3,10 @@
  */
 
 import checkStore from '../checkStore';
+import { LifeStore } from 'types';
 
 describe('checkStore', () => {
-  let store;
+  let store: Partial<LifeStore>|undefined;
 
   beforeEach(() => {
     store = {
@@ -16,7 +17,7 @@ describe('checkStore', () => {
       runSaga: () => {},
       injectedReducers: {},
       injectedSagas: {},
-    };
+    } as any;
   });
 
   it('should not throw if passed valid store shape', () => {

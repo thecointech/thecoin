@@ -30,6 +30,7 @@ module.exports = require('./webpack.base.babel')({
       options: {
         transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
         logLevel: 'info',
+        projectReferences: true,
       },
     },
   ],

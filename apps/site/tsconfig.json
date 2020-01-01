@@ -8,7 +8,7 @@
     "preserveConstEnums": true,
     "baseUrl": "./app",
     "jsx": "react", // process JSX
-    "lib": ["dom", "es5", "es6", "es7", "es2017"],
+    "lib": ["dom", "es2017"],
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
     "esModuleInterop": true,
     "allowJs": true, // include js files
@@ -29,5 +29,6 @@
     "sourceMap": true
   },
   "include": ["app/**/*", "internals/templates/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [{ "path": "../../libs/components/", "prepend": false }]
 }

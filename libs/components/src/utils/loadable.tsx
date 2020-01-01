@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from 'react';
 interface Props {
   fallback: React.ReactNode | null;
 }
-const loadable = <T extends React.ComponentType<any>>(
+export const loadable = <T extends React.ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
   { fallback = null }: Props = { fallback: null },
 ) => {
@@ -15,5 +15,3 @@ const loadable = <T extends React.ComponentType<any>>(
     </Suspense>
   );
 };
-
-export default loadable;

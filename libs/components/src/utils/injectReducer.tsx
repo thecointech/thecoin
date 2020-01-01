@@ -1,7 +1,7 @@
 import * as React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { InjectReducerParams } from '../types';
-import getInjectors from './reducerInjectors';
+import { getInjectors } from './reducerInjectors';
 import { ReactReduxContext } from 'react-redux'
 /**
  * Dynamically injects a reducer
