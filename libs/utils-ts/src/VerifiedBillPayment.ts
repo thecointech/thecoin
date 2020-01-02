@@ -1,10 +1,10 @@
-import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { BillPayeePacket } from "@the-coin/types";
 import { Signer } from "ethers";
 import { BuildVerifiedAction } from "./VerifiedAction";
 
 
 export const BuildVerifiedBillPayment = async (
-  payee: BrokerCAD.BillPayeePacket,
+  payee: BillPayeePacket,
   from: Signer,
   to: string,
   value: number,

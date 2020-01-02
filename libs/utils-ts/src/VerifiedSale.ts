@@ -1,11 +1,11 @@
-import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { ETransferPacket } from "@the-coin/types";
 import { Signer } from "ethers";
 import { BuildVerifiedAction } from "./VerifiedAction";
 
 // ---------------------------------------------------------\\
 
 export const BuildVerifiedSale = async (
-  eTransfer: BrokerCAD.ETransferPacket,
+  eTransfer: ETransferPacket,
   from: Signer,
   to: string,
   value: number,

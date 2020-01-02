@@ -1,10 +1,10 @@
-import { BrokerCAD } from "@the-coin/types";
+import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@the-coin/types";
 import { Signer, ethers } from "ethers";
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 import { encrypt, GetHash } from "./Encrypt";
 
 // TODO: Propage this throught code base (not yet done)
-export type InstructionPacket = BrokerCAD.BillPayeePacket|BrokerCAD.ETransferPacket;
+export type InstructionPacket = BillPayeePacket|ETransferPacket;
 
 export async function BuildVerifiedAction(
   packet: InstructionPacket,
@@ -12,7 +12,7 @@ export async function BuildVerifiedAction(
   to: string,
   value: number,
   fee: number) 
-: Promise<BrokerCAD.CertifiedTransfer>
+: Promise<CertifiedTransfer>
 {
   const xfer = await BuildVerifiedXfer(from, to, value, fee);
   const instructionPacket = encrypt(packet);
@@ -26,7 +26,7 @@ export async function BuildVerifiedAction(
   };
 }
 
-export function GetSigner(sale: BrokerCAD.CertifiedTransfer) {
+export function GetSigner(sale: CertifiedTransfer) {
   const { transfer, instructionPacket, signature } = sale;
   if (instructionPacket)
   {

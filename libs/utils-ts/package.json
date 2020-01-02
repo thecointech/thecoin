@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/utilities",
+  "name": "@the-coin/utilities-src",
   "version": "2.0.0",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
@@ -9,18 +9,19 @@
   ],
   "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
   "homepage": "http://thecoin.io",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "tsc && copy .\\src\\FirebaseFirestore.d.ts .\\lib"
+    "build": "tsc && cpx ./src/FirebaseFirestore.d.ts ../../build/utils-ts"
   },
   "license": "MIT",
   "dependencies": {
     "@the-coin/contract": "*",
     "base32": "0.0.6"
   },
+  "devDependencies": {
+    "cpx": "*"
+  },
   "files": [
-    "lib/**/*"
+    "src/**/*"
   ]
 }

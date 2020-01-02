@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/shared",
+  "name": "@the-coin/shared-src",
   "version": "2.0.0",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [

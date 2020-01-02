@@ -22,7 +22,11 @@
     "removeComments": true,
     "sourceMap": true,
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "../../build/utils-ts",
+
+    "incremental": true,
+    "tsBuildInfoFile": "../../build/utils-ts.buildinfo",
+
   },
   "include": [
     "./src/**/*",

@@ -1,5 +1,5 @@
 import Crypto from "crypto";
-import { BrokerCAD } from "@the-coin/types";
+import { EncryptedPacket, CertifiedTransferRequest } from "@the-coin/types";
 import { ethers } from "ethers";
 
 //import ecKeyUtils from 'eckey-utils';
@@ -51,7 +51,7 @@ export function encrypt(object: Object) {
   const bufferPayee = Buffer.from(toEncrypt);
   const encryptedPayee = Crypto.publicEncrypt(publicCert, bufferPayee);
 
-  const r: BrokerCAD.EncryptedPacket = {
+  const r: EncryptedPacket = {
     encryptedPacket: encryptedPayee.toString("base64"),
     version: certVersion
   };
@@ -65,15 +65,15 @@ export function decrypt(privateKey: string, value: string) {
 }
 
 
-export function decryptTo<T>(privateKey: string, encrypted: BrokerCAD.EncryptedPacket): T
+export function decryptTo<T>(privateKey: string, encrypted: EncryptedPacket): T
 {
   const asString = decrypt(privateKey, encrypted.encryptedPacket);
   return JSON.parse(asString) as T;
 }
 
 export function GetHash(
-  encryptedPayee: BrokerCAD.EncryptedPacket,
-  transfer: BrokerCAD.CertifiedTransferRequest
+  encryptedPayee: EncryptedPacket,
+  transfer: CertifiedTransferRequest
 ) {
   return ethers.utils.solidityKeccak256(
     ["string", "string", "string"],

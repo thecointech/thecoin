@@ -1,5 +1,5 @@
 import { Firestore, Timestamp } from "./FirebaseFirestore";
-import { BrokerCAD } from "@the-coin/types";
+import { CertifiedTransfer } from "@the-coin/types";
 
 let __firestore: Firestore|null = null;
 
@@ -24,7 +24,7 @@ export type ProcessRecord = {
   fiatDisbursed: number
 }
 
-export type TransferRecord = BrokerCAD.CertifiedTransfer & ProcessRecord;
+export type TransferRecord = CertifiedTransfer & ProcessRecord;
 
 export function isDate(d: Timestamp|Date) : d is Date {
   return (d as Date).getFullYear != undefined;

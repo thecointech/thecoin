@@ -1,5 +1,5 @@
 import { utils, Signer } from "ethers";
-import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { SignedMessage } from "@the-coin/types";
 
 export function GetHash(
   value: string
@@ -11,7 +11,7 @@ export function GetHash(
   return utils.arrayify(ethersHash);
 }
 
-export async function GetSignedMessage(message: string, signer: Signer) : Promise<BrokerCAD.SignedMessage>
+export async function GetSignedMessage(message: string, signer: Signer) : Promise<SignedMessage>
 {
 	return {
 		message,
@@ -19,7 +19,7 @@ export async function GetSignedMessage(message: string, signer: Signer) : Promis
 	}
 }
 
-export async function GetSigner(signedMessage: BrokerCAD.SignedMessage) {
+export async function GetSigner(signedMessage: SignedMessage) {
 	const {message, signature} = signedMessage;
 	return utils.verifyMessage(GetHash(message), signature);
 }

@@ -10,7 +10,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "broker-cad.appspot.com"
 tags:
-- name: "Sell"
+- name: "eTransfer"
   description: "The Coin exchange service.  This API allows clients to exchange THESE for CAD"
 - name: "Transfer"
   description: "Request the broker to make a transfer on the clients behalf"

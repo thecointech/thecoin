@@ -1,6 +1,6 @@
 import { GetContract } from "./TheContract";
 import { Wallet } from "ethers";
-import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { CertifiedTransferRequest, BillPayeePacket } from "@the-coin/types";
 import { BuildVerifiedAction, GetSigner } from "./VerifiedAction";
 
 const wallet = Wallet.createRandom();
@@ -20,7 +20,7 @@ const fee = 2000;
 // });
 
 // Helper to verify that the transfer is avlid
-async function VerifyTransfer(xfer: BrokerCAD.CertifiedTransferRequest) {
+async function VerifyTransfer(xfer: CertifiedTransferRequest) {
   const contract = await GetContract();
   var xferSigner = await contract.recoverSigner(
     xfer.from,
@@ -34,7 +34,7 @@ async function VerifyTransfer(xfer: BrokerCAD.CertifiedTransferRequest) {
 }
 
 test("Can build full verified billpayment", async () => {
-  const payee: BrokerCAD.BillPayeePacket = {
+  const payee: BillPayeePacket = {
     payee: "TD Visa or some such",
     accountNumber: "123456789123456789"
   };
@@ -55,7 +55,7 @@ test("Can build full verified billpayment", async () => {
 
 // test("Can build partial verified billpayment", async () => {
 //   const name = "My Visa";
-//   const payee: BrokerCAD.BillPayeePacket = {};
+//   const payee: BillPayeePacket = {};
 
 //   const sale = await BuildVerifiedBillPayment(
 //     payee,
@@ -73,7 +73,7 @@ test("Can build full verified billpayment", async () => {
 // });
 
 // test("Passes if missing name", async () => {
-//   const invalidPayee: BrokerCAD.BillPayeePacket = {
+//   const invalidPayee: BillPayeePacket = {
 //     payee: "TD Visa or some such",
 //     accountNumber: "123456789123456789"
 //   };
@@ -92,7 +92,7 @@ test("Can build full verified billpayment", async () => {
 // });
 
 // test("Fails if missing name & other", async () => {
-//   const invalidPayee: BrokerCAD.BillPayeePacket = {
+//   const invalidPayee: BillPayeePacket = {
 //     payee: "TD Visa or some such"
 //   };
 
@@ -110,7 +110,7 @@ test("Can build full verified billpayment", async () => {
 
 // test("Fails if XOR accountName/payee", async () => {
 //   const name = "something";
-//   const missingAccountNumber: BrokerCAD.BillPayeePacket = {
+//   const missingAccountNumber: BillPayeePacket = {
 //     payee: "TD Visa or some such"
 //   };
 
@@ -125,7 +125,7 @@ test("Can build full verified billpayment", async () => {
 //     );
 //   expect(fn1()).rejects.toEqual(new Error("Invalid data supplied to GetHash"));
 
-//   const missingPayee: BrokerCAD.BillPayeePacket = {
+//   const missingPayee: BillPayeePacket = {
 //     accountNumber: "123456789123456789"
 //   };
 

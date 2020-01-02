@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { BrokerCAD } from "@the-coin/types/lib/BrokerCAD";
+import { CertifiedTransferRequest } from "@the-coin/types";
 
 // ---------------------------------------------------------\\
 
@@ -30,7 +30,7 @@ export async function SignVerifiedXfer(
 }
 
 export function GetTransferSigner(
-  transfer: BrokerCAD.CertifiedTransferRequest
+  transfer: CertifiedTransferRequest
 ) {
   const { from, to, value, fee, timestamp, signature } = transfer;
   const hash = GetHash(from, to, value, fee, timestamp);
@@ -48,7 +48,7 @@ export async function BuildVerifiedXfer(
   const timestamp = Date.now();
   const address = await from.getAddress();
   const signature = await SignVerifiedXfer(from, to, value, fee, timestamp);
-  const r: BrokerCAD.CertifiedTransferRequest = {
+  const r: CertifiedTransferRequest = {
     from: address,
     to: to,
     value: value,

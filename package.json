@@ -6,7 +6,7 @@
       "libs/*",
       "apps/*",
       "apis/**/*",
-      "packages/**/*"
+      "build/**/*"
     ],
     "nohoist": [
       "**/semantic-ui-less"
