@@ -9,7 +9,7 @@ import createSagaMiddleware from 'redux-saga';
 import { ApplicationRootState } from 'types';
 import { History } from 'history';
 import createReducer from './reducers';
-import { InjectedStore } from '@the-coin/shared/lib/types';
+import { InjectedStore } from '@the-coin/shared/types';
 
 export default function configureStore(initialState: ApplicationRootState | {} = {}, history: History) {
   const reduxSagaMonitorOptions = {};
@@ -39,7 +39,7 @@ export default function configureStore(initialState: ApplicationRootState | {} =
     createReducer(),
     initialState,
     enhancer,
-  ) as InjectedStore;
+  ) as any as InjectedStore;
 
   // Extensions
   store.runSaga = sagaMiddleware.run;

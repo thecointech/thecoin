@@ -8,7 +8,7 @@ import {
   InputOnChangeData,
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { BuildVerifiedBillPayment } from '@the-coin/utilities/lib/VerifiedBillPayment';
+import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
@@ -17,7 +17,7 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { payees, validate } from './payees';
-import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
+import { BillPayeePacket } from '@the-coin/types';
 import {
   GetStatusApi,
   GetBillPaymentsApi,
@@ -93,7 +93,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     const { signer, contract } = this.props.account;
     if (coinToSell === null || !signer || !contract || !payee) return false;
 
-    const packet: BrokerCAD.BillPayeePacket = {
+    const packet: BillPayeePacket = {
       accountNumber,
       payee,
     };

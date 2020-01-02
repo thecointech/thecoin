@@ -19,6 +19,12 @@ stdin.on('end', function () {
     json.main = json.main.replace("src/", "");
     json.types = json.main.replace(".js", ".d.ts");
   }
+  if (json.dependencies)
+  {
+    Object.keys(json.dependencies).forEach(key => {
+      json.dependencies[key] = "*"
+    })
+  }
   json.files = undefined;
   json.scripts = undefined;
   json.devDependencies = undefined;

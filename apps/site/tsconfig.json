@@ -7,6 +7,7 @@
     "noImplicitAny": false,
     "preserveConstEnums": true,
     "baseUrl": "./app",
+    "outDir": "../../build/.obj/app/",
     "jsx": "react", // process JSX
     "lib": ["dom", "es2017"],
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
@@ -26,9 +27,10 @@
     "strictFunctionTypes": false,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["jest", "node"]
   },
   "include": ["app/**/*", "internals/templates/**/*"],
-  "exclude": ["node_modules"],
-  "references": [{ "path": "../../libs/components/", "prepend": false }]
+  "exclude": ["node_modules", "**/*.test.*"],
+  "references": [{ "path": "../../libs/shared/", "prepend": false }]
 }

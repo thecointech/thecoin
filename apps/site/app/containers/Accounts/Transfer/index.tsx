@@ -4,7 +4,7 @@ import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { NormalizeAddress } from '@the-coin/utilities';
-import { BuildVerifiedXfer } from '@the-coin/utilities/lib/VerifiedTransfer';
+import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
 import { StatusApi, TransferApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';

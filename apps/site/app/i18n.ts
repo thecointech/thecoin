@@ -17,8 +17,12 @@ if (!Intl.PluralRules) {
 //   require('@formatjs/intl-relativetimeformat/polyfill');
 //   require('@formatjs/intl-relativetimeformat/dist/locale-data/de'); // Add locale data for de
 // }
+
+interface Messages {
+  [index:string]: string;
+}
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const enTranslationMessages = require('./translations/en.json');
+const enTranslationMessages: Messages = require('./translations/en.json');
 
 export const DEFAULT_LOCALE = 'en';
 
@@ -27,11 +31,13 @@ export const appLocales = [
   'en',
 ];
 
-export const formatTranslationMessages = (locale, messages) => {
+
+
+export const formatTranslationMessages = (locale: string, messages: Messages) => {
   const defaultFormattedMessages = locale !== DEFAULT_LOCALE
     ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
     : {};
-  const flattenFormattedMessages = (formattedMessages, key) => {
+  const flattenFormattedMessages = (formattedMessages: Messages, key: string): Messages => {
     const formattedMessage = !messages[key] && locale !== DEFAULT_LOCALE
       ? defaultFormattedMessages[key]
       : messages[key];

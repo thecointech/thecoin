@@ -7,7 +7,7 @@ import {
   NewsletterApi,
   ETransferApi,
 } from '@the-coin/broker-cad/dist/api';
-import { ServiceAddress, ServicePorts } from '@the-coin/utilities/lib/ServiceAddresses';
+import { ServiceAddress, ServicePorts } from '@the-coin/utilities/ServiceAddresses';
 
 const BrokerCADAddress = ServiceAddress(ServicePorts.BROKER_PORT);
 

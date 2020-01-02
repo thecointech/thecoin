@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
+import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
@@ -13,7 +13,7 @@ import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'containers/Services/BrokerCAD';
 import styles from './index.module.css';
-import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
+import { ETransferPacket } from '@the-coin/types';
 
 type MyProps = {
   account: AccountState;
@@ -59,7 +59,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
     // To redeem, we construct & sign a message that
     // that allows the broker to transfer TheCoin to itself
-    const eTransfer: BrokerCAD.ETransferPacket = {
+    const eTransfer: ETransferPacket = {
       email, question, answer, message
     }
     const command = await BuildVerifiedSale(

@@ -3,12 +3,12 @@ import { Button, Form } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
+import { SubscriptionDetails } from '@the-coin/types';
 
 import styles from '../../../styles/base.css';
 import { RouteComponentProps } from 'react-router';
 
-function getInitialState(qs: string) : BrokerCAD.SubscriptionDetails
+function getInitialState(qs: string) : SubscriptionDetails
 {
   const query = queryString.parse(qs);
   const id = query.id as string;

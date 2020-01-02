@@ -10,7 +10,7 @@ import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
 
-import { GetSignedMessage } from '@the-coin/utilities/lib/SignedMessages';
+import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
 import { GetETransferApi } from '../../Services/BrokerCAD';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';

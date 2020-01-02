@@ -1,9 +1,8 @@
-import { GetSecureApi } from 'containers/Services/BrokerCAD';
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
 import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
 import { AccountMap } from '@the-coin/shared/containers/Account/types';
-import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
+import { GoogleWalletItem } from '@the-coin/types';
 import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
 import { connect } from 'react-redux';
 import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
@@ -14,6 +13,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { ExistsSwitcher } from '../ExistsSwitcher';
+import { GetSecureApi } from 'containers/Services/BrokerCAD';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
@@ -38,7 +38,7 @@ const initialState = {
   gauthUrl: '',
   gauthWindow: null as IWindow | null,
   timer: undefined as any,
-  wallets: null as null | BrokerCAD.GoogleWalletItem[],
+  wallets: null as null | GoogleWalletItem[],
   token: '',
 };
 
@@ -201,7 +201,7 @@ export class RestoreClass extends React.PureComponent<Props> {
     </Form>
   );
 
-  renderAccounts = (wallets: BrokerCAD.GoogleWalletItem[]) =>
+  renderAccounts = (wallets: GoogleWalletItem[]) =>
     wallets.map(wallet => {
       if (!wallet.wallet) return undefined;
 
@@ -227,7 +227,7 @@ export class RestoreClass extends React.PureComponent<Props> {
       );
     });
 
-  renderAccountList = (wallets: BrokerCAD.GoogleWalletItem[]) => (
+  renderAccountList = (wallets: GoogleWalletItem[]) => (
     <List divided relaxed>
       {this.renderAccounts(wallets)}
     </List>
