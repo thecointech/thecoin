@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
 import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
 import { AccountMap } from '@the-coin/shared/containers/Account/types';
-import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
 import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
 import { connect } from 'react-redux';
 import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';

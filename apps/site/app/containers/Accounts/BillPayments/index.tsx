@@ -17,7 +17,7 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { payees, validate } from './payees';
-import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
 import {
   GetStatusApi,
   GetBillPaymentsApi,

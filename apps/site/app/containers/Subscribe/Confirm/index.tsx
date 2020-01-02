@@ -3,7 +3,7 @@ import { Button, Form } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
 
 import styles from '../../../styles/base.css';
 import { RouteComponentProps } from 'react-router';

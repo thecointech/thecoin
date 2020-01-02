@@ -13,7 +13,7 @@ import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'containers/Services/BrokerCAD';
 import styles from './index.module.css';
-import { BrokerCAD } from '@the-coin/types/lib/BrokerCAD';
+import { BrokerCAD } from '@the-coin/types/src/BrokerCAD';
 
 type MyProps = {
   account: AccountState;
