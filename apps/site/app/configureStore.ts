@@ -6,10 +6,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { applyMiddleware, createStore } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
-import { InjectedStore, ApplicationRootState } from 'types';
+import { ApplicationRootState } from 'types';
 import { History } from 'history';
 import createReducer from './reducers';
-
+import { InjectedStore } from '@the-coin/shared/lib/types';
 
 export default function configureStore(initialState: ApplicationRootState | {} = {}, history: History) {
   const reduxSagaMonitorOptions = {};

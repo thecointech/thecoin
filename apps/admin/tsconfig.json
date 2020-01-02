@@ -29,5 +29,5 @@
     //"strictFunctionTypes": false,
   },
   "exclude": ["node_modules", "**/node_modules/*"],
-  "references": [{ "path": "../../shared-components" }]
+  "references": [{ "path": "../../libs/components" }]
 }

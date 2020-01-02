@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/types",
+  "name": "@the-coin/types-src",
   "description": "The Coin: Typescript type information exported from swagger yaml",
   "version": "2.0.0",
   "scripts": {

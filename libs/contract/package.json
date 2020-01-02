@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/contract",
+  "name": "@the-coin/contract-src",
   "private": true,
   "version": "2.0.0",
   "description": "The Coin: Solidity contract for The Universal Currency",
@@ -11,7 +11,7 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
-    "build": "truffle compile --contracts_build_directory=./lib",
+    "build": "truffle compile --contracts_build_directory=../../build/contract && cpx zos.* ../../build/contract",
     "test": "truffle test",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
     "zospush": "yarn run zossession && zos push",
@@ -24,7 +24,7 @@
     "test": "test"
   },
   "files": [
-    "lib/**/*"
+    "contracts/**/*"
   ],
   "devDependencies": {
     "openzeppelin-eth": "^2.1.3",
