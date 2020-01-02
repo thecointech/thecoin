@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
-import { toHuman } from '@the-coin/utilities/lib/Conversion'
+import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
 import { Transaction } from '../Account/types'
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';

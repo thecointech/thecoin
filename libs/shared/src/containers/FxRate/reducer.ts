@@ -1,5 +1,5 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
-import { CurrencyCodes } from '@the-coin/utilities/lib/CurrencyCodes';
+import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
 import { compose } from 'redux';
 import { call, fork, put, select, take, delay, takeEvery } from 'redux-saga/effects';
 import injectReducer from '../../utils/injectReducer';

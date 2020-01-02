@@ -3,9 +3,9 @@
     "target": "es2017",
     "module": "esnext",
     "baseUrl": "./src/",
-    "outDir": "./lib/",
+    "outDir": "../../build/shared/",
     "incremental": true,
-    "tsBuildInfoFile": "./lib/shared.buildinfo",
+    "tsBuildInfoFile": "../../build/shared.buildinfo",
     "rootDir": "./src/",
     "jsx": "react",
     "moduleResolution": "node",
@@ -40,5 +40,6 @@
     "composite": true,
     "types": ["jest", "node"],
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["**/*.test.ts"]
 }

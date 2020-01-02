@@ -8,6 +8,7 @@
     "preserveConstEnums": true,
     "resolveJsonModule": true,
     "declaration": true,
+    "declarationMap": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2015"],
     "moduleResolution": "node",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import { toHuman, toCoin } from '@the-coin/utilities/lib/Conversion';
+import { toHuman, toCoin } from '@the-coin/utilities/Conversion';
 
 type OnChangeCallback = (value: number) => void;
 type Props = {

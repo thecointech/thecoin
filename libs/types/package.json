@@ -3,7 +3,7 @@
   "description": "The Coin: Typescript type information exported from swagger yaml",
   "version": "2.0.0",
   "scripts": {
-    "build": "node --inspect-brk buildall.js"
+    "build": "node buildall.js"
   },
   "devDependencies": {
     "@manifoldco/swagger-to-ts": "^1.1.1",

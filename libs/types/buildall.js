@@ -16,4 +16,4 @@ writeFileSync("./src/index.ts", output);
 // To keep this in sync with our build expectations,
 // we also directly export this as a types file to our build folder
 // This isn't stricly necessary, but it's nice to be consistent
-writeFileSync(`${root}/build/types/index.ts`, output);
+writeFileSync(`${root}/build/types/index.d.ts`, output);

@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/lib/TheContract';
+import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContract';
 import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
