@@ -35,6 +35,12 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
+app.get('*.js.map', (req, res, next) => {
+  req.url = req.url + '.gz'; // eslint-disable-line
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
+
 // Start your app.
 app.listen(port, host, async err => {
   if (err) {

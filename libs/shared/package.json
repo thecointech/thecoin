@@ -11,8 +11,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "tsc -b -v && yarn copy",
-    "copy": "cpx \"./src/**/*.module.css\" ../../packages/libs/shared"
+    "build": "tsc -b -v && yarn build:copy",
+    "build:copy": "cpx \"./src/**/*.module.css\" ../../build/shared"
   },
   "main": "dist/index.js",
   "directories": {

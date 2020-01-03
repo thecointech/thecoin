@@ -4,7 +4,6 @@ import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 
-import checkStore from './checkStore';
 import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from './constants';
 import { InjectedStore } from '../types';
 import { Saga } from 'redux-saga';
@@ -34,16 +33,13 @@ function checkDescriptor<S extends Saga>(descriptor: SagaDescriptor<S>) {
   );
 };
 
-export function injectSagaFactory(store: InjectedStore, isValid: boolean = false) {
+export function injectSagaFactory(store: InjectedStore) {
   // tslint:disable-next-line: only-arrow-functions
   return function injectSaga<S extends Saga>(
     key: string,
     descriptor: SagaDescriptor<S>,
     ...args: Parameters<S>
   ) {
-    if (!isValid) {
-      checkStore(store);
-    }
 
     const newDescriptor = {
       ...descriptor,
@@ -77,12 +73,8 @@ export function injectSagaFactory(store: InjectedStore, isValid: boolean = false
   };
 }
 
-export function ejectSagaFactory(store: InjectedStore, isValid: boolean = false) {
-  // tslint:disable-next-line: only-arrow-functions
+export function ejectSagaFactory(store: InjectedStore) {  // tslint:disable-next-line: only-arrow-functions
   return function ejectSaga(key: string) {
-    if (!isValid) {
-      checkStore(store);
-    }
 
     checkKey(key);
 
@@ -101,11 +93,10 @@ export function ejectSagaFactory(store: InjectedStore, isValid: boolean = false)
 }
 
 export function getInjectors(store: InjectedStore) {
-  checkStore(store);
 
   return {
-    injectSaga: injectSagaFactory(store, true),
-    ejectSaga: ejectSagaFactory(store, true),
+    injectSaga: injectSagaFactory(store),
+    ejectSaga: ejectSagaFactory(store),
   };
 }
 

@@ -5,17 +5,27 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// Until project references are satisfactorily resolved, we
+// are using a frankenstein system of tsc to compile typescript,
+// and then webpack just processes the raw typescript
+// https://github.com/TypeStrong/ts-loader/issues/1042
+//const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const projectRoot = path.resolve(__dirname, '..', '..');
+//const parsedFolder = path.parse(__dirname);
+//const myDir  = path.sep + parsedFolder.dir.substring(parsedFolder.root.length);
+
+const projectRoot = path.join(__dirname, '..', '..', '..', '..');
+const buildRoot = path.join(projectRoot,  'build');
+const inputsRoot = path.join(buildRoot, ".obj", "site");
+const outputPath = path.join(buildRoot, 'site');
 
 module.exports = options => ({
   mode: options.mode,
   entry: options.entry,
   output: Object.assign(
     {
-      // Compile into js/build.js
-      path: path.resolve(process.cwd(), 'build'),
+      // Compile into <monorepo-root>/build/site
+      path: outputPath,
       publicPath: '/',
     },
     options.output,
@@ -77,7 +87,8 @@ module.exports = options => ({
             options: {
               sourceMap: true,
               modifyVars: {
-                project_root: `"${projectRoot}"`,
+                project_root: `"${projectRoot.replace('\\', '/')}/"`,
+                site_root: `"${inputsRoot.replace('\\', '/')}/"`,
               },
             },
           },
@@ -156,17 +167,14 @@ module.exports = options => ({
     new webpack.EnvironmentPlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }),
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    //new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
   resolve: {
-    modules: ['node_modules', 'app'],
+    modules: ['node_modules', inputsRoot],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
     alias: {
-      '../../theme.config$': path.resolve(
-        projectRoot,
-        'app/styles/semantic/theme.config',
-      ),
+      '../../theme.config$': "../../../../build/.obj/site/styles/semantic/theme.config"
     },
   },
   devtool: options.devtool,

@@ -24,7 +24,7 @@
     "outDir": "../../build/utils-ts",
 
     "incremental": true,
-    "tsBuildInfoFile": "../../build/.buildinfo/utils-ts.buildinfo",
+    "tsBuildInfoFile": "../../build/.obj/utils-ts.buildinfo",
 
     "declarationMap": true,
     "declaration": true, 

@@ -19,7 +19,7 @@ import { FxRates } from '@the-coin/shared/containers/FxRate';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
 
-import 'semantic-ui-less/semantic.less';
+import 'styles/semantic/semantic.css';
 
 import styles from './index.module.css';
 import { injectRootReducer } from '@the-coin/shared/containers/Account/reducer';
