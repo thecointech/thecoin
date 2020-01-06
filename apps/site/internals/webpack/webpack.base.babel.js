@@ -4,20 +4,20 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 // Until project references are satisfactorily resolved, we
 // are using a frankenstein system of tsc to compile typescript,
 // and then webpack just processes the raw typescript
 // https://github.com/TypeStrong/ts-loader/issues/1042
-//const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
-//const parsedFolder = path.parse(__dirname);
-//const myDir  = path.sep + parsedFolder.dir.substring(parsedFolder.root.length);
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const projectRoot = path.join(__dirname, '..', '..', '..', '..');
 const buildRoot = path.join(projectRoot,  'build');
 const inputsRoot = path.join(buildRoot, ".obj", "site");
 const outputPath = path.join(buildRoot, 'site');
+const configPath = path.join(__dirname, '../../app/styles/semantic/theme.config')
+console.log(configPath);
 
 module.exports = options => ({
   mode: options.mode,
@@ -167,14 +167,15 @@ module.exports = options => ({
     new webpack.EnvironmentPlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }),
-    //new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
   resolve: {
-    modules: ['node_modules', inputsRoot],
+    modules: ['node_modules'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
+    plugins: [new TsconfigPathsPlugin({ /*configFile: "./path/to/tsconfig.json" */ })],
     alias: {
-      '../../theme.config$': "../../../../build/.obj/site/styles/semantic/theme.config"
+      '../../theme.config': configPath
     },
   },
   devtool: options.devtool,

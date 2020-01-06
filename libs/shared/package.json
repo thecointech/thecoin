@@ -14,29 +14,30 @@
     "build": "tsc -b -v && yarn build:copy",
     "build:copy": "cpx \"./src/**/*.module.css\" ../../build/shared"
   },
-  "main": "dist/index.js",
   "directories": {
-    "src": "src",
-    "build": "build"
+    "src": "src"
   },
   "files": [
-    "lib/src/**/*"
+    "./src/**/*"
   ],
   "dependencies": {
+    "@reduxjs/toolkit": "^1.2.1",
     "@the-coin/pricing": "*",
     "@the-coin/types": "*",
     "@the-coin/utilities": "*",
+    "history": "4.9.0",
+    "hoist-non-react-statics": "^3.3.1",
     "immer-reducer": "^0.7.10",
     "react-dates": "^21.5.1",
     "react-with-direction": "^1.3.1",
-    "hoist-non-react-statics": "^3.3.1",
-    "history": "4.9.0"
+    "redux-injectors": "^1.2.0"
   },
   "devDependencies": {
-    "@types/react-dates": "^17.1.6",
+    "@babel/runtime": "^7.7.7",
     "@types/history": "^4.7.3",
-    "@babel/runtime": "^7.7.7",    
+    "@types/node": "*",
     "@types/hoist-non-react-statics": "^3.3.1",
+    "@types/react-dates": "^17.1.6",
     "jest": "*"
   }
 }

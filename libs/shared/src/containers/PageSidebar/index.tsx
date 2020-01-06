@@ -1,106 +1,109 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import { Sidebar, Menu, MenuItem, Segment, Divider } from "semantic-ui-react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
-import { buildReducer } from "./reducer";
 import styles from "./index.module.css";
 import { ApplicationBaseState } from "../../types";
+import { selectSidebar } from "./selector";
 
-interface OwnProps {
+type Props = {
   visible: boolean;
   inverted?: boolean;
 }
-type GeneratedItems = {
-  items: SidebarMenuItem[];
-};
 
-type Props = OwnProps & GeneratedItems;
+export const PageSidebar: React.FC<Props> = (props) => {
+  const { visible, inverted } = props;
 
-class PageSidebar extends React.PureComponent<Props, {}, null> {
-  getAsItem(item: SidebarMenuItem) {
-    return (
-      <React.Fragment key={`Fragment${item.link.to}`}>
-        <MenuItem
-          as={NavLink}
-          exact={true}
-          key={item.link.to as string}
-          to={item.link.to}
-        >
-          {item.link.name}
-        </MenuItem>
-        {this.buildSubMenuArray(item)}
-      </React.Fragment>
-    );
-  }
+  const appState = useSelector(s => s as ApplicationBaseState);
+  const generators = selectSidebar(appState);
+  const menuItems = useMemo(() => {
+    let items: SidebarMenuItem[] = [];
 
-  getAsDivider(item: SidebarMenuItem) {
-    return (
-      <Divider horizontal key={`Divider${item.link.name}`}>
+    if (generators.rootGenerator)
+      items = generators.rootGenerator(appState);
+
+    Object.entries(generators.subGenerators).forEach(([_, generator]) => {
+      items = generator(items, appState);
+    });
+    
+    return buildMenuArray(items);
+  }, [appState])
+
+  const pusherClass = visible ? styles.mainPagePusherOut : undefined;
+
+  return (
+    <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
+      <Sidebar
+        as={Menu}
+        animation="push"
+        direction="left"
+        vertical
+        visible={visible}
+        className={styles.mainPageSidebar}
+        inverted={inverted}
+      >
+        {menuItems}
+      </Sidebar>
+      <Sidebar.Pusher className={pusherClass}>
+        {props.children}
+      </Sidebar.Pusher>
+    </Sidebar.Pushable>
+  );
+}
+
+const getAsItem = (item: SidebarMenuItem) =>
+    <React.Fragment key={`Fragment${item.link.to}`}>
+      <MenuItem
+        as={NavLink}
+        exact={true}
+        key={item.link.to as string}
+        to={item.link.to}
+      >
         {item.link.name}
-      </Divider>
-    );
-  }
+      </MenuItem>
+      {buildSubMenuArray(item)}
+    </React.Fragment>
 
-  // Utility function builds a list of menu items
-  // from the props set to this components store state
-  buildMenuArray(items: SidebarMenuItem[]): React.ReactChild[] {
-    return items.map(item =>
-      item.link.to !== false ? this.getAsItem(item) : this.getAsDivider(item)
-    );
-  }
 
-  buildSubMenuArray(item: SidebarMenuItem) {
-    const { subItems } = item;
-    return subItems ? (
-      <Menu.Menu>{this.buildMenuArray(subItems)}</Menu.Menu>
-    ) : (
-      undefined
-    );
-  }
+const getAsDivider = (item: SidebarMenuItem) =>
+  <Divider horizontal key={`Divider${item.link.name}`}>
+    {item.link.name}
+  </Divider>
 
-  render() {
-    const { visible, items, inverted } = this.props;
-    const menuItems = this.buildMenuArray(items);
-
-    const pusherClass = visible ? styles.mainPagePusherOut : undefined;
-
-    return (
-      <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
-        <Sidebar
-          as={Menu}
-          animation="push"
-          direction="left"
-          vertical
-          visible={visible}
-          className={styles.mainPageSidebar}
-          inverted={inverted}
-        >
-          {menuItems}
-        </Sidebar>
-        <Sidebar.Pusher className={pusherClass}>
-          {this.props.children}
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
-    );
-  }
+// Utility function builds a list of menu items
+// from the props set to this components store state
+const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
+  return items.map(item =>
+    item.link.to !== false ? getAsItem(item) : getAsDivider(item)
+  );
 }
 
-// Map State into a list of menu items.
-function mapStateToProps(state: ApplicationBaseState) {
-  let items: SidebarMenuItem[] = [];
+const buildSubMenuArray = (item: SidebarMenuItem) => {
+  const { subItems } = item;
+  return subItems ? (
+    <Menu.Menu>{buildMenuArray(subItems)}</Menu.Menu>
+  ) : (
+    undefined
+  );
+}
 
-  if (state.sidebar.rootGenerator)
-    items = state.sidebar.rootGenerator(state);
+// // Map State into a list of menu items.
+// function mapStateToProps(state: ApplicationBaseState, ownProps: OwnProps) {
+//   let items: SidebarMenuItem[] = [];
 
-  Object.entries(state.sidebar.subGenerators).forEach(([_, generator]) => {
-    items = generator(items, state);
-  });
+//   if (state.sidebar.rootGenerator)
+//     items = state.sidebar.rootGenerator(state);
+
+//   Object.entries(state.sidebar.subGenerators).forEach(([_, generator]) => {
+//     items = generator(items, state);
+//   });
   
-  return {items};
-}
+//   return {items};
+// }
+// const v= connect(mapStateToProps)(PageSidebar);
 
-const ConnectedPageSidebar = buildReducer<OwnProps>()(
-  connect(mapStateToProps)(PageSidebar)
-);
-export { ConnectedPageSidebar as PageSidebar };
+// const ConnectedPageSidebar = buildReducer()(
+  
+// );
+// export { ConnectedPageSidebar as PageSidebar };

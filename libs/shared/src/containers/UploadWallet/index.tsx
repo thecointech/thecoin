@@ -1,83 +1,85 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
-import { injectSingleAccountReducer } from '../Account/reducer';
-import { buildMapDispatchToProps, DispatchProps } from '../Account/actions';
+import { getAccountReducer } from '../Account/reducer';
+import { BindActions } from '../Account/actions';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages'
+import { useState } from 'react';
+import { useCallback } from 'react';
+import { useInjectReducer } from 'redux-injectors';
 
-interface MyProps {
-  readFile: (path: File) => Promise<string>;
-  addressMatch?: (address: string) => boolean;
+type ReadFileCallback = (path: File) => Promise<string>;
+type ValidateCallback = (address: string) => boolean;
+
+interface Props {
+  readFile: ReadFileCallback;
+  validate?: ValidateCallback;
 }
-type Props = MyProps & DispatchProps;
-class UploadWalletClass extends React.PureComponent<Props> {
-  private id: string = 'upload' + Math.random();
 
-  constructor(props: Props) {
-    super(props);
-    this.onChangeFile = this.onChangeFile.bind(this);
-  }
+export const UploadWallet = (props: Props) => {
+  // We use a random ID to avoid conflicting with other
+  // existing reducers.  This reducer will be renamed, so
+  // the name is not important, it just needs to be random
+  // and constant for the lifetime of this class
+  // We store it in state to give it peristance
+  const [id] = useState('upload' + Math.random());
 
-  private async onChangeFile(e: any) {
-    const files: FileList = e.target.files;
-    if (!files) throw 'Empty or Missing FileList';
+  const { actions, reducer } = getAccountReducer(id)
+  useInjectReducer({ key: id, reducer });
 
-    const file = files[0];
-    const data = await this.props.readFile(file);
-    const obj = JSON.parse(data.trim());
-    const name = file.name.split('.')[0];
-    this.onFileUpload(name, obj);
-  }
-
-  async onFileUpload(name: string, jsonWallet: any) {
-    const { address } = jsonWallet;
-    const { addressMatch } = this.props;
-    const isValid = addressMatch ? addressMatch(address) : IsValidAddress(address);
-
+  const dispatch = useDispatch();
+  const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { wallet, name } = await ReadFile(e, props.readFile);
+    const isValid = ValidateFile(wallet, props.validate);
     if (isValid) {
-      this.props.setSigner(name, jsonWallet);
+      const walletActions = BindActions(actions, dispatch);
+      walletActions.setSigner(name, wallet);
     } else {
       alert('Bad Wallet');
     }
-  }
+  }, [actions, dispatch])
 
-  render() {
-    return (
-      <Container id="formCreateAccountStep1">
-        <Header as="h1">
-          <Header.Content>
-            <FormattedMessage {...messages.header}/>
-          </Header.Content>
-          <Header.Subheader>
-            <FormattedMessage {...messages.subHeader} />
-          </Header.Subheader>
-        </Header>
-        <Container>
-            <Label width="4" as="label" htmlFor={this.id} size="huge" className={styles.dropzone}>
-              <Grid>
-                <Grid.Row columns={1}>
-                  <Grid.Column verticalAlign="middle">
-                    <p>Drag 'n' drop a wallet file here, or click to browse</p>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Label>
-            <input id={this.id} hidden type="file" accept=".json" onChange={this.onChangeFile} />
-        </Container>
+  return (
+    <Container id="formCreateAccountStep1">
+      <Header as="h1">
+        <Header.Content>
+          <FormattedMessage {...messages.header} />
+        </Header.Content>
+        <Header.Subheader>
+          <FormattedMessage {...messages.subHeader} />
+        </Header.Subheader>
+      </Header>
+      <Container>
+        <Label width="4" as="label" htmlFor={id} size="huge" className={styles.dropzone}>
+          <Grid>
+            <Grid.Row columns={1}>
+              <Grid.Column verticalAlign="middle">
+                <p>Drag 'n' drop a wallet file here, or click to browse</p>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Label>
+        <input id={id} hidden type="file" accept=".json" onChange={onRecieveFile} />
       </Container>
-    );
-  }
+    </Container>
+  );
 }
 
-const uploadAnonKey = '__@anonf5c95d2b';
-const mapDispatchToProps = buildMapDispatchToProps(uploadAnonKey);
+const ReadFile = async (e: React.ChangeEvent<HTMLInputElement>, cb: ReadFileCallback) => {
+  const { files } = e.target;
+  if (!files) throw 'Empty or Missing FileList';
 
-export const UploadWallet = injectSingleAccountReducer<MyProps>(uploadAnonKey)(
-  connect(
-    null,
-    mapDispatchToProps
-  )(UploadWalletClass)
-);
+  const file = files[0];
+  const data = await cb(file);
+  const wallet = JSON.parse(data.trim());
+  const name = file.name.split('.')[0];
+  return { wallet, name };
+}
+
+const ValidateFile = async (jsonWallet: any, validate?: ValidateCallback) => {
+  const { address } = jsonWallet;
+  return validate ? validate(address) : IsValidAddress(address);
+}

@@ -1,14 +1,13 @@
 import { Dispatch, bindActionCreators } from 'redux';
-import { IActions, DefaultAccount } from './types';
+import { IActions } from './types';
 import { call, select, takeLatest, debounce } from 'redux-saga/effects'
 import { createAccountSelector } from './selector';
-import { GetNamedReducer } from '../../utils/immerReducer';
-import { AccountReducer } from './reducer';
+import { getAccountReducer } from './reducer';
 
 //type AccountSelector = (state:any) => ContainerState|null;
 
 function buildSagas(name: string) {
-  const { actions, reducerClass } = GetNamedReducer(AccountReducer, name, DefaultAccount)
+  const { actions, reducerClass } = getAccountReducer(name)
   const selectAccount = createAccountSelector(name);
   function buildSaga(fnName:string) {
     function* saga(action: any) {
@@ -33,12 +32,13 @@ function buildSagas(name: string) {
   return rootSaga;
 }
 
+export const BindActions = (actions: any, dispatch: Dispatch) => 
+  (bindActionCreators(actions, dispatch) as any) as IActions;
+
 // Map Disptach to your DispatchProps
-function buildMapDispatchToProps(name: string) {
-  const { actions } = GetNamedReducer(AccountReducer, name, DefaultAccount);
-  return function mapDispatchToProps(dispatch: Dispatch): IActions {
-    return (bindActionCreators(actions, dispatch) as any) as IActions;
-  }  
+export function buildMapDispatchToProps(name: string) {
+  const { actions } = getAccountReducer(name);
+  return (dispatch: Dispatch) => BindActions(actions, dispatch);
 }
 
-export { IActions as DispatchProps, buildMapDispatchToProps, buildSagas }
+export { IActions as DispatchProps, buildSagas }

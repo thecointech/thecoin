@@ -3,8 +3,7 @@ import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
-import injectReducer from '../../utils/injectReducer';
-import injectSaga from '../../utils/injectSaga';
+import { injectReducer, injectSaga } from "redux-injectors";
 import { buildSagas } from './actions';
 
 import { GetStored, ReadAllAccounts, AsWallet, StoreWallet, StoreSigner } from './storageSync'
@@ -296,28 +295,31 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
+export const getAccountReducer = (name: string) => 
+  GetNamedReducer(AccountReducer, name, DefaultAccount)
+
 export const createRootReducer = () =>
   buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
 
-export function injectRootReducer<T>() {
+export function injectRootReducer() {
 
   // First, create the root-level reducer.  This is a dictionary
   // that redirects all our child
-  return injectReducer<T>({
+  return injectReducer({
     key: ACCOUNTS_KEY,
     reducer: createRootReducer()
   });
 
 }
 
-export function injectSingleAccountReducer<T>(key: string) {
+export function injectSingleAccountReducer(key: string) {
 
   // Create a reducer for a single account.  It
   // is required that buildRootReducer is called before
   // attempting to create a single account reducer
   GetNamedReducer(AccountReducer, key, DefaultAccount, ACCOUNTS_KEY);
   
-  const withSaga = injectSaga<T>({
+  const withSaga = injectSaga({
     key: key,
     saga: buildSagas(key)
   });

@@ -15,17 +15,18 @@ import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
-import { FxRates } from '@the-coin/shared/containers/FxRate';
+import { useFxRates } from '@the-coin/shared/containers/FxRate/reducer';
 import MainPageTransition from 'containers/MainPageTransition';
 import MainRouter from 'containers/MainRouter';
 
-import 'styles/semantic/semantic.css';
+import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
-import { injectRootReducer } from '@the-coin/shared/containers/Account/reducer';
 
-const AppClass = () => {
-  const location = useLocation()
+export const App = () => {
+  
+  useFxRates();
+  const location = useLocation();
   const sidebarVisible = location.pathname.startsWith('/accounts');
 
   return (
@@ -49,10 +50,6 @@ const AppClass = () => {
         </PageSidebar>
       </Container>
       <Footer />
-
-      <FxRates />
     </>
   );
 }
-
-export const App = injectRootReducer<{}>()(AppClass);

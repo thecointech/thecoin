@@ -10,6 +10,7 @@ import { ApplicationRootState } from 'types';
 import { History } from 'history';
 import createReducer from './reducers';
 import { InjectedStore } from '@the-coin/shared/types';
+import { createInjectorsEnhancer } from "redux-injectors";
 
 export default function configureStore(initialState: ApplicationRootState | {} = {}, history: History) {
   const reduxSagaMonitorOptions = {};

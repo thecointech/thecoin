@@ -27,10 +27,11 @@ import LanguageProvider from 'containers/LanguageProvider';
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import configureStore from './configureStore';
+import {configureAppStore} from '@the-coin/shared/configureStore';
+import createReducer from './reducers';
 
 // Import i18n messages
-import { translationMessages } from 'i18n';
+import { translationMessages } from './i18n';
 
 import { initTracking } from './utils/reactga';
 initTracking();
@@ -46,7 +47,7 @@ openSansObserver.load().then(() => {
 
 // Create redux store with history
 const initialState = {};
-const store = configureStore(initialState, history);
+const store = configureAppStore(createReducer, initialState, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (messages: any, Component = App) => {

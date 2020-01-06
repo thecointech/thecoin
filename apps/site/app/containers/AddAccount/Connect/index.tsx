@@ -78,7 +78,7 @@ const key = '__@create|ee25b960';
 
 // We need to ensure we have the Accounts reducer live
 // so we add the reducer here.
-export const Connect = injectSingleAccountReducer<{}>(key)(
+export const Connect = injectSingleAccountReducer(key)(
   connect(
     structuredSelectAccounts,
     buildMapDispatchToProps(key),

@@ -2,13 +2,13 @@ import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
 import { compose } from 'redux';
 import { call, fork, put, select, take, delay, takeEvery } from 'redux-saga/effects';
-import injectReducer from '../../utils/injectReducer';
-import injectSaga from '../../utils/injectSaga';
+import { injectReducer, injectSaga, useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer }  from '../../utils/immerReducer';
 import { selectFxRate } from './selectors';
 import { ContainerState, IActions } from './types';
 
+const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
 // The initial state of the App
 const initialState: ContainerState = {
@@ -142,22 +142,27 @@ function buildSagas(name: keyof ApplicationBaseState) {
 	return rootSaga;
 }
 
-function buildReducer<T>() {
+function buildReducer() {
 
-	const withReducer = injectReducer<T>({
-		key: 'fxRates',
+	const withReducer = injectReducer({
+		key: FXRATES_KEY,
 		reducer: reducer
 	});
 
-	const withSaga = injectSaga<T>({
-    key: 'fxRates',
-    saga: buildSagas('fxRates')
+	const withSaga = injectSaga({
+    key: FXRATES_KEY,
+    saga: buildSagas(FXRATES_KEY)
   });
 
   return compose(
     withReducer,
     withSaga,
   )
+}
+
+export const useFxRates = () => {
+  useInjectReducer({ key: FXRATES_KEY, reducer: reducer });
+  useInjectSaga({ key: FXRATES_KEY, saga: buildSagas(FXRATES_KEY)});
 }
 
 export { buildReducer, actions, getFxRate, weBuyAt, weSellAt };

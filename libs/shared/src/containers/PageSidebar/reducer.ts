@@ -1,5 +1,5 @@
 import { ImmerReducer, createReducerFunction } from 'immer-reducer';
-import injectReducer from '../../utils/injectReducer';
+import { injectReducer } from "redux-injectors";
 import { SidebarGenerators, IActions, ItemGenerator, ItemModifier } from './types';
 import { ApplicationBaseState } from '../../types';
 
@@ -27,10 +27,10 @@ class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
 
 const reducer = createReducerFunction(SidebarItemsReducer, initialState);
 
-function buildReducer<T>() {
-  return injectReducer<T>({
+function buildReducer() {
+  return injectReducer({
     key: SIDEBAR_KEY,
-    reducer: reducer
+    reducer: reducer as any
   });
 }
 

@@ -8,6 +8,6 @@ class FxRateDummy extends React.PureComponent {
   render = () => <></>
 }
 
-export const FxRates = buildReducer<{}>()(FxRateDummy)
+export const FxRates = buildReducer()(FxRateDummy)
 
 
