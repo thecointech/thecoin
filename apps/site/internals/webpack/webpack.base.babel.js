@@ -5,27 +5,17 @@
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-
-// Until project references are satisfactorily resolved, we
-// are using a frankenstein system of tsc to compile typescript,
-// and then webpack just processes the raw typescript
-// https://github.com/TypeStrong/ts-loader/issues/1042
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const projectRoot = path.join(__dirname, '..', '..', '..', '..');
-const buildRoot = path.join(projectRoot,  'build');
-const inputsRoot = path.join(buildRoot, ".obj", "site");
-const outputPath = path.join(buildRoot, 'site');
-const configPath = path.join(__dirname, '../../app/styles/semantic/theme.config')
-console.log(configPath);
+const projectRoot = path.resolve(__dirname, '..', '..');
 
 module.exports = options => ({
   mode: options.mode,
   entry: options.entry,
   output: Object.assign(
     {
-      // Compile into <monorepo-root>/build/site
-      path: outputPath,
+      // Compile into js/build.js
+      path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
     },
     options.output,
@@ -86,9 +76,11 @@ module.exports = options => ({
             loader: 'less-loader',
             options: {
               sourceMap: true,
+              // paths: [
+              //   path.join(projectRoot, 'app', 'styles', 'semantic', 'na', 'na')
+              // ]
               modifyVars: {
-                project_root: `"${projectRoot.replace('\\', '/')}/"`,
-                site_root: `"${inputsRoot.replace('\\', '/')}/"`,
+                project_root: `"${projectRoot}"`,
               },
             },
           },
@@ -170,12 +162,15 @@ module.exports = options => ({
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
   resolve: {
-    modules: ['node_modules'],
+    modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
     plugins: [new TsconfigPathsPlugin({ /*configFile: "./path/to/tsconfig.json" */ })],
     alias: {
-      '../../theme.config': configPath
+      '../../theme.config$': path.resolve(
+        projectRoot,
+        'app/styles/semantic/theme.config',
+      ),
     },
   },
   devtool: options.devtool,
