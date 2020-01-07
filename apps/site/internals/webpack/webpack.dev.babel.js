@@ -61,6 +61,7 @@ module.exports = require('./webpack.base.babel')({
       loader: 'ts-loader',
       options: {
         transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+        projectReferences: true,
         logLevel: 'info',
       },
     },

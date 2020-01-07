@@ -55,11 +55,10 @@ const AccountRoutes: RouterPath[] = [
 
 export const Accounts = (props: Props) => {
     const activeAccount = selectActiveAccount();
-    if (!activeAccount) {
-      return <Redirect to="/addAccount" />
-    }
-
     const { match } = props;
     const { url } = match;
-    return <Account accountName={activeAccount} accountMap={AccountRoutes} url={url} />;
+    
+    return (!activeAccount) 
+      ? <Redirect to="/addAccount" />
+      : <Account account={activeAccount} accountMap={AccountRoutes} url={url} />;
 }

@@ -32,7 +32,7 @@ export const AccountSwitcher = () => {
       <Dropdown.Menu>
         <Dropdown.Header>My Accounts</Dropdown.Header>
         {allNames
-            .filter(account => account == activeAccount)
+            .filter(account => account == activeAccount.name)
             .map(name => 
               <Dropdown.Item>
                 <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14)+'...'}>
@@ -45,7 +45,7 @@ export const AccountSwitcher = () => {
               </Dropdown.Item>)
           }
         {allNames
-            .filter(account => account != activeAccount)
+            .filter(account => account != activeAccount.name)
             .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
           }
         <Dropdown.Divider />
