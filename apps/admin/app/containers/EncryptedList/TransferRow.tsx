@@ -1,8 +1,8 @@
 import React from "react";
-import { TransferRecord } from "@the-coin/utilities/lib/Firestore";
+import { TransferRecord } from "@the-coin/utilities/Firestore";
 import { toHuman } from "@the-coin/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
 import { InstructionRenderer, InstructionPacket } from "./types";
 
 type Props = { 

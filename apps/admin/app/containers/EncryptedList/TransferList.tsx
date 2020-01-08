@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { List } from "semantic-ui-react";
-import { TransferRecord } from "@the-coin/utilities/lib/Firestore";
+import { TransferRecord } from "@the-coin/utilities/Firestore";
 import { TransferRow } from "./TransferRow";
-import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
 import { InstructionPacket, InstructionRenderer } from "./types";
-import { selectFxRate } from "@the-coin/components/containers/FxRate/selectors";
+import { selectFxRate } from "@the-coin/shared/containers/FxRate/selectors";
 import { useSelector } from "react-redux";
-import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
+import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { FXRate } from "@the-coin/pricing";
 import { toHuman } from "@the-coin/utilities";
 

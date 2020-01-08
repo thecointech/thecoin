@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
-import { Balance } from '@the-coin/components/containers/Balance';
+import { Account, RouterPath, AccountProps } from '@the-coin/shared/containers/Account';
+import { Balance } from '@the-coin/shared/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 import { ETransfers } from './ETransfers';
+import { useSelector } from 'react-redux';
+import { createAccountSelector } from '../../../../../libs/shared/src/containers/Account/selector';
 
-interface OwnProps {
-}
-type Props = OwnProps & RouteComponentProps;
+type Props = RouteComponentProps;
 
 // Does this work?
 const AccountMap: RouterPath[] = [
@@ -42,14 +42,10 @@ const AccountMap: RouterPath[] = [
   }
 ]
 
-class BrokerCAD extends React.PureComponent<Props, {}, null> {
+export const AccountName = "BrokerCAD";
 
-  static AccountName = "BrokerCAD";
-
-  render() {
-    const { url } = this.props.match;
-    return <Account accountName={BrokerCAD.AccountName} accountMap={AccountMap} url={url} />
-  }
+export const BrokerCAD = (props: Props) =>  {
+  const { url } = this.props.match;
+  const brokerAccount = useSelector(createAccountSelector(AccountName))
+  return <Account account={brokerAccount} accountMap={AccountMap} url={url} />
 }
-
-export { BrokerCAD }

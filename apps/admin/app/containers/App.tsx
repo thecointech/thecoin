@@ -2,30 +2,26 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
-import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
-import { FxRates } from '@the-coin/components/containers/FxRate'
-import { injectRootReducer } from '@the-coin/components/containers/Account/reducer'
+import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
+import { useAccounts } from '@the-coin/shared/containers/Account/reducer'
+import { useFxRates } from '../../../../libs/shared/src/containers/FxRate/reducer';
 
-class App extends React.PureComponent {
+export const App = hot(() => {
 
-  render() {
+  useFxRates();
+  const divStyle = {
+    minHeight: "500px"
+  };
 
-    const divStyle = {
-      minHeight: "500px"
-    };
+  useAccounts();
 
-    return (
-      <React.Fragment>
-        <PageSidebar visible={true} inverted>
-          <Container style={divStyle}>
-            <Routes />
-          </Container>
-        </PageSidebar>
-        <FxRates />
-      </React.Fragment>
-    );
-  }
-}
-
-const HotApp = injectRootReducer<{}>()(hot(App));
-export { HotApp as App }
+  return (
+    <React.Fragment>
+      <PageSidebar visible={true} inverted>
+        <Container style={divStyle}>
+          <Routes />
+        </Container>
+      </PageSidebar>
+    </React.Fragment>
+  );
+})

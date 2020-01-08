@@ -1,18 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { GetFirestore, TransferRecord } from "@the-coin/utilities/lib/Firestore";
-import { decryptTo } from "@the-coin/utilities/lib/Encrypt";
-import { NextOpenTimestamp } from "@the-coin/utilities/lib/MarketStatus";
-import * as FxActions from '@the-coin/components/containers/FxRate/actions';
+import { GetFirestore, TransferRecord } from "@the-coin/utilities/Firestore";
+import { decryptTo } from "@the-coin/utilities/Encrypt";
+import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
 import { useDispatch } from "react-redux";
 import { fromMillis } from "utils/Firebase";
 import { PrivateKeyButton } from "./PrivateKeyButton";
-import { Timestamp } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
 import { TransferList } from "./TransferList";
 import { InstructionPacket, InstructionRenderer } from "./types";
+import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
+import { toHuman } from "@the-coin/utilities";
+import { GetSigner } from "@the-coin/utilities/VerifiedAction";
+import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 
 type Props = {
   render: InstructionRenderer,
-  type: string
+  type: UserAction,
 }
 
 export const EncryptedList = ({render, type}: Props) => {
@@ -54,7 +58,7 @@ export const EncryptedList = ({render, type}: Props) => {
 
   const onMarkComplete = useCallback(async (index: number) => {
 		const record = records[index];
-    await MarkComplete(record, settlements[index]);
+    await MarkComplete(type, record, settlements[index]);
     setRecords(records => delete records[index] && records);
   }, [records, settlements]);
 
@@ -201,28 +205,33 @@ function DecryptRecords(records: TransferRecord[], privateKey: string) {
 // 		setTimeout(() => this.processAllRawBills(), 100);
 // 	}
 
-// 	// Update DB with completion
-// 	async markBillComplete(bill: BillPaymentRecord) {
-// 		const { processedTimestamp } = bill;
-// 		const rate = weBuyAt(this.props.rates, processedTimestamp.toDate())
-// 		const cad = toHuman(bill.transfer.value * rate, true);
+	// Update DB with completion
+	async function MarkComplete(actionType: UserAction, bill: TransferRecord, processed: Timestamp) {
+		const { processedTimestamp } = bill;
+		const rate = weBuyAt(this.props.rates, processedTimestamp.toDate())
+		const cad = toHuman(bill.transfer.value * rate, true);
 
-// 		// Check that we got the right everything:
-// 		const user = GetBillPaymentSigner(bill);
-// 		const actionDoc = GetActionDoc(user, "Bill", bill.hash);
-// 		const action = await actionDoc.get();
-// 		if (!action.exists) 
-// 			throw new Error("Oh No! You lost your AP");
+		// Check that we got the right everything:
+    const user = GetSigner(bill);
+    if (!user)
+      throw new Error("No user present");
+      
+		const actionDoc = GetActionDoc(user, "Bill", bill.hash);
+		const action = await actionDoc.get();
+		if (!action.exists) 
+			throw new Error("Oh No! You lost your AP");
 
-// 		bill.fiatDisbursed = cad;
-// 		await actionDoc.set(bill);
+    bill.fiatDisbursed = cad;
+    bill.processedTimestamp = processed;
+    //bill.completed
+		await actionDoc.set(bill);
 
-// 		const ref = GetActionRef(ACTION_TYPE, bill.hash);
-// 		const deleteResults = await ref.delete();
-// 		if (deleteResults && !deleteResults.writeTime) {
-// 			throw new Error("I feel like something should happen here")
-// 		}
-// 	}
+		const ref = GetActionRef(actionType, bill.hash);
+		const deleteResults = await ref.delete();
+		if (deleteResults && !deleteResults.writeTime) {
+			throw new Error("I feel like something should happen here")
+		}
+	}
 
 // 	//
 // 	// Render an individual bill

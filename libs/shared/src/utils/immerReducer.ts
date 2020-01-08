@@ -1,6 +1,7 @@
-import { ImmerReducer, createReducerFunction, createActionCreators, ImmerReducerClass, ActionCreators, isActionFrom } from "immer-reducer";
+import { ImmerReducer, createReducerFunction, createActionCreators, ImmerReducerClass, ActionCreators, isActionFrom, ImmerReducerFunction } from "immer-reducer";
 import { put } from "redux-saga/effects";
 import { Dictionary } from "lodash";
+import { Reducer } from "redux";
 
 class TheCoinReducer<T> extends ImmerReducer<T> {
 
@@ -29,13 +30,23 @@ class TheCoinReducer<T> extends ImmerReducer<T> {
 //  on named reducers.  This allows us to use a unique reducer on individual entries within
 //  a dictionary, and/or use the same reducer multiple times.
 //
-type CacheEntry  = {
+type CacheEntry<T extends ImmerReducerClass>  = {
   dictionaryName?: string,
-  reducer: any, 
-  actions: any,
-  reducerClass: any
+  reducer: Reducer, 
+  actions: ActionCreators<T>,
+  reducerClass: T
 };
-let reducerCache: Dictionary<CacheEntry> = {};
+
+let reducerCache: Dictionary<CacheEntry<ImmerReducerClass>> = {};
+
+export function GetReducer<T extends ImmerReducerClass>(immerReducerClass: T, initialState: any)
+  : { reducer: ImmerReducerFunction<T>; actions: ActionCreators<T>; }
+{
+  return { 
+    reducer: createReducerFunction(immerReducerClass, initialState),
+    actions: createActionCreators(immerReducerClass),
+  }
+}
 
 function CreateNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T)
 {
@@ -58,13 +69,12 @@ function CreateNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T)
   return NamedReducer
 }
 
-function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name: string, initialState: any, dictionaryName?: string) 
-  : { reducer: any; actions: ActionCreators<T>; reducerClass: T }
+function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name: string, initialState: any, dictionaryName?: string) : CacheEntry<T>
 {
   if (!reducerCache[name]) {
 
     let namedReducer = CreateNamedReducer(immerReducerClass);
-    const reducer = createReducerFunction(namedReducer, initialState);
+    const reducer = createReducerFunction(namedReducer, initialState) as any;
     const actionCreators = createActionCreators(namedReducer);
 
     // Redirect actions function to return appropriate data
@@ -85,7 +95,7 @@ function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name
       console.error("WARNING: Mis-matched dictionary names being passed to GetNamedReducer");
     r.dictionaryName = dictionaryName;
   }
-  return r;
+  return r as CacheEntry<T>;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,21 +103,16 @@ function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name
 // buildNamedDictionaryReducer: Build a special reducer for a dictionary
 //  This special-purpose reducer handles the case when there
 //  is a named reducer for each entry in a dictionary of values
-let dictionaryReducers: Dictionary<any> = {}
-function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: any) 
+let dictionaryReducers: Dictionary<(state: Dictionary<any>, action: any) => Dictionary<any>> = {}
+function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: Dictionary<any>) 
 {
   // Don't recreate a new reducer for an existing dictionary.
   // Doing this can lose our existing state as the current
   // dictionary gets pushed out due to HMR
   let existing = dictionaryReducers[dictionaryFilter];
   if (!existing) {
-    // Check we have at least one existing reducer matching this name
-    // const reducerCreated = !!Object.entries(reducerCache).find(([_, value]) => value.dictionaryName === dictionaryFilter);
-    // if (!reducerCreated)
-    //   alert("Invalid dictionary reducer - no matching entries in cache");
-      
     // Redirect reducer into named accounts
-    existing = function(state: Dictionary<any>, action: any) 
+    existing = (state: Dictionary<any>, action: any) =>
     {
       let newState = state;
       Object.entries(reducerCache).forEach(
@@ -120,7 +125,7 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: any
           if (isActionFrom(action, reducerClass)) {
             // we manually pass through to the appropriate account
             let account = state[name];
-            let newAccount = reducer(account, action);
+            let newAccount = reducer(account, action) as any;
             // Handle name change - remove original name and add under dictIndex
             let dictIndex = newAccount.name || name;
             const { [name]: _, ...omitted } = state;

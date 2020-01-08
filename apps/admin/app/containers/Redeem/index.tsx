@@ -1,19 +1,19 @@
 import React from "react";
-import { GetFirestore, TransferRecord } from "@the-coin/utilities/lib/Firestore";
-import { AccountState } from '@the-coin/components/containers/Account/types';
-import { BrokerCAD } from "@the-coin/types";
+import { GetFirestore, TransferRecord } from "@the-coin/utilities/Firestore";
+import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { ETransferPacket } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
-import { NextOpenTimestamp } from "@the-coin/utilities/lib/MarketStatus";
-import * as FxActions from '@the-coin/components/containers/FxRate/actions';
-import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
-import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
+import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
+import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
+import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { connect } from "react-redux";
-import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
-import { DocumentSnapshot } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
+import { DocumentSnapshot } from "@the-coin/utilities/FirebaseFirestore";
 import { firestore } from "firebase";
 import { signIn, fromMillis } from "utils/Firebase";
-import { GetSigner } from "@the-coin/utilities/lib/VerifiedAction";
+import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 
 const ACTION_TYPE : UserAction = "Sell";
 
@@ -26,7 +26,7 @@ type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 const initialState = {
   privateKey: "",
   unsettledSales: [] as TransferRecord[],
-  decryptedTransfers: [] as BrokerCAD.ETransferPacket[],
+  decryptedTransfers: [] as ETransferPacket[],
   activeIndex: -1,
   doConfirm: false
 }

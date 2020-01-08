@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { TheCoin } from 'containers/TheCoinAccount'
-import { BrokerCAD } from 'containers/BrokerCAD'
+import { TheCoin, AccountName as TheCoinName } from 'containers/TheCoinAccount'
+import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
-import { Dispatch } from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
+import { Dispatch } from '@the-coin/shared/containers/PageSidebar/actions';
+import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
 import { useDispatch } from 'react-redux';
 
 const ConstantSidebarItems: SidebarMenuItem[] = 
@@ -13,7 +13,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "TheCoin",
-			to: TheCoin.AccountName
+			to: TheCoinName
 		}
 	},
 	{
@@ -25,7 +25,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "BrokerCAD",
-			to: BrokerCAD.AccountName
+			to: BrokerName
 		}
 	}
 ];
@@ -43,8 +43,8 @@ export const Routes = () => {
     return () => sidebar.setRootGenerator(null);
   }, [dispatch])
 
-  const brokerCad = `/${BrokerCAD.AccountName}`;
-  const theCoin = `/${TheCoin.AccountName}`;
+  const brokerCad = `/${BrokerName}`;
+  const theCoin = `/${TheCoinName}`;
   return (
     <Switch>
       <Route path={brokerCad} key={brokerCad} component={BrokerCAD} />

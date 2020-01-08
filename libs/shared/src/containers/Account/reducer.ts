@@ -3,10 +3,10 @@ import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
-import { injectReducer, injectSaga } from "redux-injectors";
+import { injectReducer, injectSaga, useInjectReducer } from "redux-injectors";
 import { buildSagas } from './actions';
 
-import { GetStored, ReadAllAccounts, AsWallet, StoreWallet, StoreSigner } from './storageSync'
+import { GetStored, ReadAllAccounts, isWallet, StoreWallet, StoreSigner } from './storageSync'
 
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
@@ -27,12 +27,11 @@ export class AccountReducer extends TheCoinReducer<AccountState>
 
   *setSigner(name:string, signer: TheSigner) {
     // We persist any signers passed here
-    const asWallet = AsWallet(signer);
     let liveWallet = false;
-    if (asWallet)
+    if (isWallet(signer))
     {
-      if(!asWallet.privateKey)
-        StoreWallet(name, asWallet);
+      if(!signer.privateKey)
+        StoreWallet(name, signer);
       else
         liveWallet = true
     }
@@ -262,11 +261,10 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
-    const asWallet = AsWallet(signer);
-    if (!asWallet) {
+    if (!isWallet(signer)) {
       throw new Error(`Attempting to decrypt a non-wallet signer: ${name}`)
     }
-    if (asWallet.privateKey) {
+    if (signer.privateKey) {
       throw new Error(`Attempting decryption of already-decrypted wallet: ${name}`);
     }
 
@@ -279,7 +277,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
             throw ("Operation cancelled");
           }
         }
-      const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(asWallet), password, cb);
+      const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(signer), password, cb);
       // Ensure callback is called with 100% result so caller knows we are done
       console.log("Account decrypted successfully");
       if (callback) {
@@ -296,11 +294,15 @@ export class AccountReducer extends TheCoinReducer<AccountState>
 }
 
 export const getAccountReducer = (name: string) => 
-  GetNamedReducer(AccountReducer, name, DefaultAccount)
+  GetNamedReducer(AccountReducer, name, DefaultAccount, ACCOUNTS_KEY)
 
 export const createRootReducer = () =>
   buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
 
+export const useAccounts = () => {
+  useInjectReducer({ key: ACCOUNTS_KEY, reducer: createRootReducer() });
+}
+  
 export function injectRootReducer() {
 
   // First, create the root-level reducer.  This is a dictionary
@@ -309,7 +311,6 @@ export function injectRootReducer() {
     key: ACCOUNTS_KEY,
     reducer: createRootReducer()
   });
-
 }
 
 export function injectSingleAccountReducer(key: string) {
@@ -317,7 +318,7 @@ export function injectSingleAccountReducer(key: string) {
   // Create a reducer for a single account.  It
   // is required that buildRootReducer is called before
   // attempting to create a single account reducer
-  GetNamedReducer(AccountReducer, key, DefaultAccount, ACCOUNTS_KEY);
+  getAccountReducer(key);
   
   const withSaga = injectSaga({
     key: key,

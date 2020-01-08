@@ -1,11 +1,11 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
 import { InstructionPacket } from "containers/EncryptedList/types";
-import { BrokerCAD } from "@the-coin/types";
+import { ETransferPacket } from "@the-coin/types";
 
 const RenderETransfer = (props: InstructionPacket) => (
   <>
-    <div>EMAIL: {(props as BrokerCAD.ETransferPacket).email}</div>
+    <div>EMAIL: {(props as ETransferPacket).email}</div>
   </>
 )
 

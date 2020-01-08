@@ -7,6 +7,7 @@ import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 export default {
   externals: [...Object.keys(dependencies || {})],
@@ -18,21 +19,17 @@ export default {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true
-            }
-          },
-          {
             loader: 'ts-loader',
             options: {
-              projectReferences: true
+              transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+              projectReferences: true,
+              logLevel: 'info',
             }
           }
         ]
       },
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -57,7 +54,7 @@ export default {
     extensions: ['.js', '.ts', '.tsx', '.json'],
     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     alias: {
-      '@the-coin/components': path.resolve(
+      '@the-coin/shared': path.resolve(
         __dirname,
         '../../../the-react-components/src'
       )
@@ -68,7 +65,7 @@ export default {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'
     }),
-
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]
 };

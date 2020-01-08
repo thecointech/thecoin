@@ -2,11 +2,10 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-//import 'react-dates/initialize';
-
+import {createReducer} from './reducers';
 import { App } from './containers/App';
-import { configureStore } from './store/configureStore';
-import history from '@the-coin/components/utils/history';
+import { configureAppStore } from '@the-coin/shared/configureStore';
+import history from '@the-coin/shared/utils/history';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -31,7 +30,7 @@ import {signIn} from './utils/Firebase';
 signIn();
 
 const initialState = {};
-const store = configureStore(initialState, history);
+const store = configureAppStore(createReducer, initialState, history);
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 

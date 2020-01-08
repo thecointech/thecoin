@@ -1,18 +1,18 @@
 import React from "react";
-import { GetFirestore, ProcessRecord } from "@the-coin/utilities/lib/Firestore";
-import { decryptTo } from "@the-coin/utilities/lib/Encrypt";
-import { AccountState } from '@the-coin/components/containers/Account/types';
-import { BrokerCAD } from "@the-coin/types";
+import { GetFirestore, ProcessRecord } from "@the-coin/utilities/Firestore";
+import { decryptTo } from "@the-coin/utilities/Encrypt";
+import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { CertifiedTransfer, BillPayeePacket } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
-import { NextOpenTimestamp } from "@the-coin/utilities/lib/MarketStatus";
-import * as FxActions from '@the-coin/components/containers/FxRate/actions';
-import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
-import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
+import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
+import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
+import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import fs from 'fs';
-import { GetActionDoc, GetActionRef } from "@the-coin/utilities/lib/User";
-import { GetSigner } from "@the-coin/utilities/lib/VerifiedAction";
+import { GetActionDoc, GetActionRef } from "@the-coin/utilities/User";
+import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 import firebase from "firebase";
 import { fromMillis } from "utils/Firebase";
 
@@ -27,12 +27,12 @@ type MyProps = {
 type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
 
 // TODO: Dedup this with definitions in service
-type BillPaymentRecord = BrokerCAD.CertifiedTransfer & ProcessRecord;
+type BillPaymentRecord = CertifiedTransfer & ProcessRecord;
 
 const initialState = {
 	privateKey: "",
 	unsettledBills: [] as BillPaymentRecord[],
-	decryptedPayees: [] as BrokerCAD.BillPayeePacket[],
+	decryptedPayees: [] as BillPayeePacket[],
 	activeIndex: -1,
 	doConfirm: false
 }
@@ -102,7 +102,7 @@ class BillPaymentsClass extends React.PureComponent<Props, State> {
 		if (!processedTimestamp) {
 			processedTimestamp = await this.processTimestamp(recievedTimestamp);
 		}
-		const decryptedPayee = decryptTo<BrokerCAD.BillPayeePacket>(this.state.privateKey, instructionPacket);
+		const decryptedPayee = decryptTo<BillPayeePacket>(this.state.privateKey, instructionPacket);
 		this.setState((state, props) => {
 			let newDecrypted = [].concat(state.decryptedPayees);
 			newDecrypted[index] = decryptedPayee;

@@ -13,7 +13,8 @@ import { ConnectWeb3 } from "./Web3";
 import { AccountState } from "./types";
 import { getAccountReducer } from "./reducer";
 import * as AccountActions from "./actions";
-import { AsWallet } from "./storageSync";
+import { isWallet } from "./storageSync";
+import { useInjectSaga } from "redux-injectors";
 
 
 interface AccountProps {
@@ -43,6 +44,8 @@ export const Account = (props: Props) => {
   const { actions } = getAccountReducer(account.name);
   const accountActions = AccountActions.BindActions(actions, dispatch);
   
+  useInjectSaga({ key: account.name, saga: AccountActions.buildSagas(account.name) });
+
   const sidebarCb = useCallback(
     (items: SidebarMenuItem[], _state: ApplicationBaseState) =>
       generateSubItems(props, items, _state),
@@ -54,23 +57,22 @@ export const Account = (props: Props) => {
     sidebar.addGenerator(account.name, sidebarCb);
 
     // Is this a remote account?
-    if (signer && !AsWallet(signer) && !signer.provider) {
+    if (signer && !isWallet(signer) && !signer.provider) {
       ConnectSigner(account, accountActions);
     }
     return () => sidebar.removeGenerator(account.name);
-  }, [account, signer])
+  }, [account, signer, sidebarCb])
 
 
   if (signer === null) {
     debugger;
     return <div>Critical Error: Given account does not have a signer - please contact <a href="mailto:support@thecoin.io">support</a></div>;
   } else {
-    const asWallet = AsWallet(signer);
-    if (asWallet) {
-      if (!asWallet.privateKey)
+    if (isWallet(signer)) {
+      if (!signer.privateKey)
         return (
           <Login
-            wallet={asWallet}
+            wallet={signer}
             walletName={account.name}
             decrypt={accountActions.decrypt}
           />

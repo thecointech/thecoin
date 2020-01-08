@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import messages from './messages';
-import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { selectFxRate, ContainerState as FxRates } from '@the-coin/components/containers/FxRate/selectors';
-import { weSellAt } from '@the-coin/components/containers/FxRate/reducer';
+import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { selectFxRate, ContainerState as FxRates } from '@the-coin/shared/containers/FxRate/selectors';
+import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
-import { AccountState } from '@the-coin/components/containers/Account/types'
-import { DispatchProps } from '@the-coin/components/containers/Account/actions'
+import { AccountState } from '@the-coin/shared/containers/Account/types'
+import { DispatchProps } from '@the-coin/shared/containers/Account/actions'
 
 type MyProps = AccountState & {
 	updateBalance: Function

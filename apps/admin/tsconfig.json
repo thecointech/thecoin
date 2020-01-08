@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es2017",
     "baseUrl": "./app/",
-    "paths": {
-      "@the-coin/components/*": ["../../../shared-components/src/*"]
-    },
+    "outDir": "../../build/admin/",
+    "incremental": true,
+    "tsBuildInfoFile": "../../build/.obj/admin.buildinfo",
     "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",
@@ -24,10 +24,12 @@
     // NOTE: this causes issues with DateTime
     //"esModuleInterop": true,
 
-    "allowSyntheticDefaultImports": true // no errors with commonjs modules interop
+    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
     //"strict": true,
     //"strictFunctionTypes": false,
+    "types": ["jest", "node"]
   },
-  "exclude": ["node_modules", "**/node_modules/*"],
-  "references": [{ "path": "../../libs/components" }]
+  "include": ["app/**/*"],
+  "exclude": ["node_modules", "**/*.test.*"],
+  "references": [{ "path": "../../libs/shared" }]
 }
