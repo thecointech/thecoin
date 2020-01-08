@@ -19,6 +19,7 @@ export function GetFirestore()
 export type ProcessRecord = { 
   recievedTimestamp: Timestamp,
   processedTimestamp?: Timestamp,
+  completedTimestamp?: Timestamp,
   hash: string,
   confirmed: boolean,
   fiatDisbursed: number

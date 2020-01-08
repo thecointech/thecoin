@@ -4,16 +4,16 @@ import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import { useAccounts } from '@the-coin/shared/containers/Account/reducer'
-import { useFxRates } from '../../../../libs/shared/src/containers/FxRate/reducer';
+import { useFxRates } from '@the-coin/shared/containers/FxRate/reducer';
 
 export const App = hot(() => {
 
   useFxRates();
+  useAccounts();
+
   const divStyle = {
     minHeight: "500px"
   };
-
-  useAccounts();
 
   return (
     <React.Fragment>
