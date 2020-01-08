@@ -4,6 +4,8 @@ import { Balance } from '@the-coin/shared/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
+import { useSelector } from 'react-redux';
+import { createAccountSelector } from '../../../../../libs/shared/src/containers/Account/selector';
 
 //import { Balance } from 
 
@@ -30,14 +32,10 @@ const AccountMap: RouterPath[] = [
   }
 ];
 
-class TheCoin extends React.PureComponent<Props, {}, null> {
+export const AccountName = "TheCoin";
 
-  static AccountName = "TheCoin";
-
-  render() {
-    const { url } = this.props.match;
-    return <Account accountName={TheCoin.AccountName} accountMap={AccountMap} url={url} />
-  }
+export const TheCoin = (props: Props) =>  {
+  const { url } = this.props.match;
+  const brokerAccount = useSelector(createAccountSelector(AccountName))
+  return <Account account={brokerAccount} accountMap={AccountMap} url={url} />
 }
-
-export { TheCoin }

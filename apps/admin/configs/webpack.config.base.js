@@ -7,6 +7,7 @@ import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 export default {
   externals: [...Object.keys(dependencies || {})],
@@ -18,21 +19,17 @@ export default {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true
-            }
-          },
-          {
             loader: 'ts-loader',
             options: {
-              projectReferences: true
+              transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+              projectReferences: true,
+              logLevel: 'info',
             }
           }
         ]
       },
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -68,7 +65,7 @@ export default {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'
     }),
-
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]
 };

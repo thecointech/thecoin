@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { TheCoin } from 'containers/TheCoinAccount'
-import { BrokerCAD } from 'containers/BrokerCAD'
+import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
 import { Dispatch } from '@the-coin/shared/containers/PageSidebar/actions';
@@ -25,7 +25,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "BrokerCAD",
-			to: BrokerCAD.AccountName
+			to: BrokerName
 		}
 	}
 ];
@@ -43,7 +43,7 @@ export const Routes = () => {
     return () => sidebar.setRootGenerator(null);
   }, [dispatch])
 
-  const brokerCad = `/${BrokerCAD.AccountName}`;
+  const brokerCad = `/${BrokerName}`;
   const theCoin = `/${TheCoin.AccountName}`;
   return (
     <Switch>

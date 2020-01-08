@@ -1,13 +1,13 @@
 {
 	"folders": [
 		{
-			"path": "./site"
+			"path": "apps\\site"
 		},
 		{
-			"path": "./shared-components"
+			"path": "libs\\shared"
 		}
 	],
-	"settings": {
+  "settings": {
     "deepcode.review.results.hideInformationIssues": false
-	}
+  }
 }
