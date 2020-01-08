@@ -2,9 +2,9 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
-import { PageSidebar } from '@the-coin/components/containers/PageSidebar';
-import { FxRates } from '@the-coin/components/containers/FxRate'
-import { injectRootReducer } from '@the-coin/components/containers/Account/reducer'
+import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
+import { FxRates } from '@the-coin/shared/containers/FxRate'
+import { injectRootReducer } from '@the-coin/shared/containers/Account/reducer'
 
 class App extends React.PureComponent {
 

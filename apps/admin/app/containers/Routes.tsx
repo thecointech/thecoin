@@ -4,8 +4,8 @@ import { TheCoin } from 'containers/TheCoinAccount'
 import { BrokerCAD } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
-import { Dispatch } from '@the-coin/components/containers/PageSidebar/actions';
-import { SidebarMenuItem, MapMenuItems } from '@the-coin/components/containers/PageSidebar/types';
+import { Dispatch } from '@the-coin/shared/containers/PageSidebar/actions';
+import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
 import { useDispatch } from 'react-redux';
 
 const ConstantSidebarItems: SidebarMenuItem[] = 

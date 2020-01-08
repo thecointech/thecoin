@@ -1,13 +1,13 @@
 import React from "react";
 import { GetFirestore, TransferRecord } from "@the-coin/utilities/lib/Firestore";
-import { AccountState } from '@the-coin/components/containers/Account/types';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { BrokerCAD } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
 import { NextOpenTimestamp } from "@the-coin/utilities/lib/MarketStatus";
-import * as FxActions from '@the-coin/components/containers/FxRate/actions';
-import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
-import { weBuyAt } from "@the-coin/components/containers/FxRate/reducer";
+import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
+import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
+import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
 import { DocumentSnapshot } from "@the-coin/utilities/lib/FirebaseFirestore";

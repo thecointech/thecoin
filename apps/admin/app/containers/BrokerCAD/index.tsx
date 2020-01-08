@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { Account, RouterPath, AccountProps } from '@the-coin/components/containers/Account';
-import { Balance } from '@the-coin/components/containers/Balance';
+import { Account, RouterPath, AccountProps } from '@the-coin/shared/containers/Account';
+import { Balance } from '@the-coin/shared/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';

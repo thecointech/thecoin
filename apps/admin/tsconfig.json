@@ -3,7 +3,7 @@
     "target": "es2017",
     "baseUrl": "./app/",
     "paths": {
-      "@the-coin/components/*": ["../../../shared-components/src/*"]
+      "@the-coin/shared/*": ["../../../shared-components/src/*"]
     },
     "jsx": "react",
     "module": "es2015",

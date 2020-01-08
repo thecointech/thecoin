@@ -57,7 +57,7 @@ export default {
     extensions: ['.js', '.ts', '.tsx', '.json'],
     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     alias: {
-      '@the-coin/components': path.resolve(
+      '@the-coin/shared': path.resolve(
         __dirname,
         '../../../the-react-components/src'
       )

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { GetFirestore, TransferRecord } from "@the-coin/utilities/lib/Firestore";
 import { decryptTo } from "@the-coin/utilities/lib/Encrypt";
 import { NextOpenTimestamp } from "@the-coin/utilities/lib/MarketStatus";
-import * as FxActions from '@the-coin/components/containers/FxRate/actions';
+import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
 import { useDispatch } from "react-redux";
 import { fromMillis } from "utils/Firebase";
 import { PrivateKeyButton } from "./PrivateKeyButton";

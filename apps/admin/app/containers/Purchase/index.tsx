@@ -7,13 +7,13 @@ import { Moment } from 'moment';
 import { toHuman } from '@the-coin/utilities';
 import { roundPlaces } from '@the-coin/utilities/lib/Conversion';
 
-import * as FxSelect from '@the-coin/components/containers/FxRate/selectors';
-import * as FxAction from '@the-coin/components/containers/FxRate/actions';
-import { getFxRate } from '@the-coin/components/containers/FxRate/reducer';
-import { ModalOperation } from '@the-coin/components/containers/ModalOperation';
-import { AccountState } from '@the-coin/components/containers/Account/types';
-import { DualFxInput } from '@the-coin/components/components/DualFxInput';
-import { UxAddress } from '@the-coin/components/components/UxAddress';
+import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
+import * as FxAction from '@the-coin/shared/containers/FxRate/actions';
+import { getFxRate } from '@the-coin/shared/containers/FxRate/reducer';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
+import { UxAddress } from '@the-coin/shared/components/UxAddress';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"

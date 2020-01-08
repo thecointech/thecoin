@@ -2,9 +2,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import {createReducer} from 'reducers';
 import createSagaMiddleware from 'redux-saga';
-import history from '@the-coin/components/utils/history'
+import history from '@the-coin/shared/utils/history'
 import { History } from 'history';
-import { LifeStore } from '@the-coin/components/types';
+import { LifeStore } from '@the-coin/shared/types';
 import { createLogger } from 'redux-logger';
 
 const sagaMiddleware = createSagaMiddleware();
