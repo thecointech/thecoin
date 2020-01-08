@@ -21,7 +21,6 @@
     "./src/**/*"
   ],
   "dependencies": {
-    "@reduxjs/toolkit": "^1.2.1",
     "@the-coin/pricing": "*",
     "@the-coin/types": "*",
     "@the-coin/utilities": "*",
@@ -35,8 +34,8 @@
   "devDependencies": {
     "@babel/runtime": "^7.7.7",
     "@types/history": "^4.7.3",
-    "@types/node": "*",
     "@types/hoist-non-react-statics": "^3.3.1",
+    "@types/node": "*",
     "@types/react-dates": "^17.1.6",
     "jest": "*"
   }

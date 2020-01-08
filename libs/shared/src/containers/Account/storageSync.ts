@@ -19,11 +19,9 @@ const PadWallet = (name: string): string => Pad(name, Prefix.WALLET);
 const PadSigner = (name: string): string => Pad(name, Prefix.SIGNER);
 const ThrowIfNotValid = (data: any) => { if (data.privateKey) throw new Error("Cannot store unencrypted wallet") }
 
-export function AsWallet(signer: TheSigner|null) {
-  const asWallet = signer as any;
-  if (asWallet && (asWallet["x-ethers"] || asWallet.privateKey))
-    return asWallet;
-  return null;
+export function isWallet(signer: TheSigner|null): signer is Wallet {
+  const asAny = signer as any;
+  return  asAny && (asAny["x-ethers"] || asAny.privateKey)
 }
 
 // Read stored signer/wallet from memory
