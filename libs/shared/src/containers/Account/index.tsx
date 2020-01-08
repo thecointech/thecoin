@@ -42,11 +42,10 @@ export const Account = (props: Props) => {
   const { signer } = account;
   const dispatch = useDispatch();
   const { actions } = getAccountReducer(account.name);
-
-  useInjectSaga({ key: account.name, saga: AccountActions.buildSagas(account.name) });
-
   const accountActions = AccountActions.BindActions(actions, dispatch);
   
+  useInjectSaga({ key: account.name, saga: AccountActions.buildSagas(account.name) });
+
   const sidebarCb = useCallback(
     (items: SidebarMenuItem[], _state: ApplicationBaseState) =>
       generateSubItems(props, items, _state),
@@ -62,7 +61,7 @@ export const Account = (props: Props) => {
       ConnectSigner(account, accountActions);
     }
     return () => sidebar.removeGenerator(account.name);
-  }, [account, signer])
+  }, [account, signer, sidebarCb])
 
 
   if (signer === null) {
