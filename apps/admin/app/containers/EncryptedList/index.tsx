@@ -104,6 +104,10 @@ async function GetSettlementDates(records: TransferRecord[], fxActions: FxAction
 
 function DecryptRecords(records: TransferRecord[], privateKey: string) {
   return records.map((record) => {
+    // const buffer = Buffer.from(record.instructionPacket.encryptedPacket, "base64");
+    // const output = Crypto.privateDecrypt(privateKey, buffer);
+    // return output.toString();
+
     const instructions = decryptTo<InstructionPacket>(privateKey, record.instructionPacket);
     return instructions;
   });

@@ -52,7 +52,7 @@ export default merge.smart(baseConfig, {
       {
         test: /\.module\.css$/,
         use: [
-          'css-modules-typescript-loader',
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
