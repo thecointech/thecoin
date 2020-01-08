@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { TheCoin } from 'containers/TheCoinAccount'
+import { TheCoin, AccountName as TheCoinName } from 'containers/TheCoinAccount'
 import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
@@ -13,7 +13,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "TheCoin",
-			to: TheCoin.AccountName
+			to: TheCoinName
 		}
 	},
 	{
@@ -44,7 +44,7 @@ export const Routes = () => {
   }, [dispatch])
 
   const brokerCad = `/${BrokerName}`;
-  const theCoin = `/${TheCoin.AccountName}`;
+  const theCoin = `/${TheCoinName}`;
   return (
     <Switch>
       <Route path={brokerCad} key={brokerCad} component={BrokerCAD} />

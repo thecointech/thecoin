@@ -3,7 +3,7 @@ import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
-import { injectReducer, injectSaga } from "redux-injectors";
+import { injectReducer, injectSaga, useInjectReducer } from "redux-injectors";
 import { buildSagas } from './actions';
 
 import { GetStored, ReadAllAccounts, isWallet, StoreWallet, StoreSigner } from './storageSync'
@@ -299,6 +299,10 @@ export const getAccountReducer = (name: string) =>
 export const createRootReducer = () =>
   buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
 
+export const useAccounts = () => {
+  useInjectReducer({ key: ACCOUNTS_KEY, reducer: createRootReducer() });
+}
+  
 export function injectRootReducer() {
 
   // First, create the root-level reducer.  This is a dictionary

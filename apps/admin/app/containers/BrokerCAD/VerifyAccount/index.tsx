@@ -4,8 +4,8 @@ import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
 import messages from './messages'
 import { NormalizeAddress } from '@the-coin/utilities';
-import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/lib/Referrals';
-import { SetUserVerified } from '@the-coin/utilities/lib/User';
+import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/Referrals';
+import { SetUserVerified } from '@the-coin/utilities/User';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
 import { now } from 'utils/Firebase';
 
