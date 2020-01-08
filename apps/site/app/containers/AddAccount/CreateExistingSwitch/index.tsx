@@ -26,18 +26,20 @@ export const CreateExistingSwitch = (props: Props) => {
   // const createNewAccount = `${url}generate`;
 
   return (
-    <Container id="accountUserChoiceStep1">
-      <div id="accountUserChoiceStep1Buttons">
-        <Header as="h1">
-          <Header.Content>
-            Lets Get Started
-          </Header.Content>
-          <Header.Subheader>
-          </Header.Subheader>
-        </Header>
-        <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary style={{ width: '300px', lineHeight:'30px' , marginLeft: '7%', marginTop: '40px', marginBottom: '10px' }} />
-        <Divider horizontal>Or</Divider>
-        <Button as={NavLink} to={existingUrl} content='I already have an Account' primary style={{ width: '300px', lineHeight:'30px', marginLeft: '7%', marginTop: '10px' }} />
+    <Container>
+      <div id="accountUserChoiceStep1">
+        <div id="accountUserChoiceStep1Buttons">
+          <Header as="h1">
+            <Header.Content>
+              Lets Get Started
+            </Header.Content>
+            <Header.Subheader>
+            </Header.Subheader>
+          </Header>
+          <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary style={{ width: '300px', lineHeight:'30px' , marginLeft: '7%', marginTop: '40px', marginBottom: '10px' }} />
+          <Divider horizontal>Or</Divider>
+          <Button as={NavLink} to={existingUrl} content='I already have an Account' primary style={{ width: '300px', lineHeight:'30px', marginLeft: '7%', marginTop: '10px' }} />
+        </div>
       </div>
     </Container>
   )

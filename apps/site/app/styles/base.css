@@ -160,12 +160,6 @@ button.ui.button {
     top: -10px;
   }
 }
-@media only screen and (max-width: 390px) {
-
-  .phoneApp img{
-    display: none;
-  }
-}
 
 
 
@@ -411,5 +405,30 @@ button {
 
 /* --- Menu ---- */
 .ui.menu.link.item {
+}
+
+
+@media only screen and (max-width: 650px) {
+
+  .phoneApp img{
+    display: none;
+  }
+  .ui.secondary.pointing.menu{
+    width: 100% !important;
+  }
+}
+
+
+@media only screen and (max-width: 390px) {
+
+
+  .headerLogo {
+    height: 40px;
+    margin-top: 20px;
+  }
+
+  .wrapperLogo{
+    width: 140px;
+  }
 }
 

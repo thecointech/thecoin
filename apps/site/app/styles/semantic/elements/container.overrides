@@ -98,11 +98,19 @@
 }
 
 #formCreateAccountStep1{
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255,255,255,1) !important;
   padding: 5%;
   border-radius: 10px;
   min-width: 300px;
   width: 50%;
+  margin: auto;
+}
+
+#accountSettings{
+  background-color: rgba(255,255,255,1) !important;
+  padding: 5%;
+  border-radius: 10px;
+  min-width: 300px;
   margin: auto;
 }
 
@@ -154,5 +162,20 @@
   #homeZone{
     padding:0;
     margin: 0;
+  }
+
+  section{
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .wrapperLogo{
+      height: 40px;
+      line-height: 40px;
+  }
+
+  #formCreateAccountStep1{
+    width: 90%;
+    min-width: auto;
   }
 }

@@ -19,7 +19,7 @@ function readFile(file: File): Promise<string> {
 export const Upload = () => {
   
   return (
-    <Container>
+    <Container id="formCreateAccountStep1">
       <UploadWallet readFile={readFile}/>
       <ExistsSwitcher filter="upload" />
     </Container>

@@ -26,6 +26,10 @@ import { useSelector } from 'react-redux';
 import { selectAccounts } from '@the-coin/shared/containers/Account/selector';
 
 export const HomePage = () => {
+  //const multicodec = require('multicodec');
+  //const Box = require('3box');
+  //const IdentityWallet = require('identity-wallet')
+
   const accounts = useSelector(selectAccounts);
   const userHasAccount = hasAccount(accounts);
   const accountButtonText = userHasAccount ? "My Accounts" : "Try It";
