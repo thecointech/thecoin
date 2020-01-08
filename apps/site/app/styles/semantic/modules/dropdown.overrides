@@ -36,3 +36,7 @@
 #createAccountHeader .menu.transition i .dropdown.icon{
   top: 4px;
 }
+
+.ui.dropdown .menu > .item .dropdown.icon{
+  margin: -0.5em -1em 0em 0em;
+}

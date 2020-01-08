@@ -28,7 +28,7 @@ export const AccountSwitcher = () => {
   }, [dispatch])
 
   return (
-    <Dropdown button text='My Account' id='createAccountHeader' direction='left'>
+    <Dropdown button text='My Account' id='createAccountHeader' direction='right'>
       <Dropdown.Menu>
         <Dropdown.Header>My Accounts</Dropdown.Header>
         {allNames
