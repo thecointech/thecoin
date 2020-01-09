@@ -11,31 +11,31 @@ type Props = {
   markComplete: () => void,
   render: InstructionRenderer;
   instruction?: InstructionPacket,
-  settlementTimestamp?: Timestamp,
+  processedTimestamp?: Timestamp,
   active?: boolean
 }
 	//
 	// Render an individual bill
-	export const TransferRow = ({ item, instruction, settlementTimestamp, active, setActive, render, markComplete }: Props) =>	{
+	export const TransferRow = ({ item, instruction, processedTimestamp, active, setActive, render, markComplete }: Props) =>	{
 
     const { recievedTimestamp, transfer } = item;
 		if (!instruction) {
 			return <div>Not Decoded: Add the private encryption key</div>
     }
-    if (!settlementTimestamp) {
-      return <div>Settlement Date not computed: please wait</div>
+    if (!processedTimestamp) {
+      return <div>Settlement Date not computed: please wait...</div>
     }
 		if (!item.confirmed) {
 			return <div>Instruction submitted on {recievedTimestamp.toDate().toDateString()} is not confirmed</div>
 		}
 
     // const now = new Date();
-    const settlementDate = settlementTimestamp.toDate();
+    const settlementDate = processedTimestamp.toDate();
 		// const { rates } = useSelector(selectFxRate);
 		// const rate = weBuyAt(rates, new Date(Math.min(settlementDate.getTime(), now.getTime()));
 		// const cad = toHuman(transfer.value * rate, true);
 		const recievedAt = recievedTimestamp.toDate();
-    const processOn = recievedTimestamp === settlementTimestamp ? null : <div>Process On: {settlementDate.toString()}</div>;
+    const processOn = recievedTimestamp === processedTimestamp ? null : <div>Process On: {settlementDate.toString()}</div>;
     const completion = (settlementDate.getTime() > Date.now())
       ? <div>This instruction can be settled on {settlementDate.toDateString()}</div>
       : <Button onClick={markComplete}>Mark Complete</Button>    

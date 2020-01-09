@@ -16,7 +16,5 @@ const RenderETransfer = (props: InstructionPacket) => {
   )
 }
 
-export const ETransfers = () => {
-
-  return <EncryptedList render={RenderETransfer} type="Sell" />
-}
+export const ETransfers = () =>
+  <EncryptedList render={RenderETransfer} type="Sell" />
