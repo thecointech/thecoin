@@ -11,3 +11,4 @@ apis/broker/ts/dist/
 apps/admin/build/
 packages/
 build/
+apps/admin/app/containers/BrokerTransferAssistant/secret.json

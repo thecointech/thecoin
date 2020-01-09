@@ -3,8 +3,8 @@ import { GetFirestore, TransferRecord } from "@the-coin/utilities/Firestore";
 import { decryptTo } from "@the-coin/utilities/Encrypt";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
 import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
-import { useDispatch } from "react-redux";
-import { fromMillis } from "utils/Firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { fromMillis, now } from "utils/Firebase";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
 import { TransferList } from "./TransferList";
@@ -13,6 +13,8 @@ import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { toHuman } from "@the-coin/utilities";
 import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
+import { selectFxRate } from "../../../../../libs/shared/src/containers/FxRate/selectors";
+import { FXRate } from "@the-coin/pricing";
 
 type Props = {
   render: InstructionRenderer,
@@ -24,6 +26,7 @@ export const EncryptedList = ({render, type}: Props) => {
   const [records, setRecords] = useState<TransferRecord[]>([]);
   const [instructions, setInstructions] = useState<InstructionPacket[]>([]);
   const [settlements, setSettlements] = useState<Timestamp[]>([]);
+  const rates = useSelector(selectFxRate);
   const dispatch = useDispatch();
 
   const setKeyAndUpdate = useCallback((pk: string) => {
@@ -58,7 +61,8 @@ export const EncryptedList = ({render, type}: Props) => {
 
   const onMarkComplete = useCallback(async (index: number) => {
 		const record = records[index];
-    await MarkComplete(type, record, settlements[index]);
+    await MarkComplete(type, record, settlements[index], rates.rates);
+    console.log("Record completed: " + index);
     setRecords(records => delete records[index] && records);
   }, [records, settlements]);
 
@@ -104,6 +108,10 @@ async function GetSettlementDates(records: TransferRecord[], fxActions: FxAction
 
 function DecryptRecords(records: TransferRecord[], privateKey: string) {
   return records.map((record) => {
+    // const buffer = Buffer.from(record.instructionPacket.encryptedPacket, "base64");
+    // const output = Crypto.privateDecrypt(privateKey, buffer);
+    // return output.toString();
+
     const instructions = decryptTo<InstructionPacket>(privateKey, record.instructionPacket);
     return instructions;
   });
@@ -206,9 +214,8 @@ function DecryptRecords(records: TransferRecord[], privateKey: string) {
 // 	}
 
 	// Update DB with completion
-	async function MarkComplete(actionType: UserAction, bill: TransferRecord, processed: Timestamp) {
-		const { processedTimestamp } = bill;
-		const rate = weBuyAt(this.props.rates, processedTimestamp.toDate())
+	async function MarkComplete(actionType: UserAction, bill: TransferRecord, processed: Timestamp, rates: FXRate[]) {
+		const rate = weBuyAt(rates, processed.toDate())
 		const cad = toHuman(bill.transfer.value * rate, true);
 
 		// Check that we got the right everything:
@@ -216,13 +223,14 @@ function DecryptRecords(records: TransferRecord[], privateKey: string) {
     if (!user)
       throw new Error("No user present");
       
-		const actionDoc = GetActionDoc(user, "Bill", bill.hash);
+		const actionDoc = GetActionDoc(user, actionType, bill.hash);
 		const action = await actionDoc.get();
 		if (!action.exists) 
 			throw new Error("Oh No! You lost your AP");
 
     bill.fiatDisbursed = cad;
     bill.processedTimestamp = processed;
+    bill.completedTimestamp = now();
     //bill.completed
 		await actionDoc.set(bill);
 

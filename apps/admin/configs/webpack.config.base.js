@@ -51,14 +51,9 @@ export default {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
+    modules: ['node_modules', 'app'],
     extensions: ['.js', '.ts', '.tsx', '.json'],
     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
-    alias: {
-      '@the-coin/shared': path.resolve(
-        __dirname,
-        '../../../the-react-components/src'
-      )
-    }
   },
 
   plugins: [
