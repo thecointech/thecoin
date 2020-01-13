@@ -2,6 +2,6 @@
  * Asynchronously loads the component for HomePage
  */
 
-// import loadable from 'utils/loadable';
+//import {loadable} from '@the-coin/shared/utils/loadable';
 
-// export default loadable(() => import('./index'));
+export default () => null; //loadable(() => import('./index'));

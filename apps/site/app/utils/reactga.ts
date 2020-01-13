@@ -1,7 +1,8 @@
 import ReactGA from 'react-ga';
 import history from '@the-coin/shared/utils/history';
 
-function recordLocation(location) {
+
+function recordLocation(location: { pathname: string }) {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 }

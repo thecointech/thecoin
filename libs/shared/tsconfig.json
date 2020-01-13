@@ -2,11 +2,17 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "esnext",
-    "baseUrl": "./src/",
     "outDir": "../../build/shared/",
     "incremental": true,
     "tsBuildInfoFile": "../../build/.obj/shared.buildinfo",
     "rootDir": "./src/",
+    "baseUrl": "./",
+    "paths": {
+      "*": [
+          "src/*",
+          "declarations/*"
+      ]
+    },
     "jsx": "react",
     "moduleResolution": "node",
     "pretty": true,

@@ -1,18 +1,18 @@
 
 import injectReducer from '@the-coin/shared/utils/injectReducer';
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
-import { ContainerState, IActions } from './types';
+import { ContentState, IActions } from './types';
 import { ApplicationRootState } from 'types';
 
 const CONTENT_KEY : keyof ApplicationRootState = "content";
 
 // The initial state of the App
-const initialState: ContainerState = {
+const initialState: ContentState = {
   height: 250,
 };
 
 let lastTimestamp = 0;
-class HeightMeasureReducer extends TheCoinReducer<ContainerState>
+class HeightMeasureReducer extends TheCoinReducer<ContentState>
   implements IActions {
   setHeight(newHeight: number, timestamp: number) {
     if (timestamp < lastTimestamp)

@@ -11,8 +11,7 @@ import messages from '../messages';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import {
   initialState as BaseInitial,
-  NewBaseClass,
-  OwnProps
+  NewBaseClass
 } from '../NewBaseClass/index';
 
 const initialState = {

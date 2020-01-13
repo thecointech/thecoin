@@ -47,6 +47,7 @@ export async function getData() {
 ///////////////////////////////////
 
 export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], maxFee: number) {
+  console.log("FIX MAXFEE: " + maxFee);
   let shares = 1;
   for (let i = startIdx + 1; i <= endIdx; i++) {
     const month = data[i];
@@ -89,7 +90,7 @@ export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: D
   return periods;
 }
 
-export function arrayMin(arr) {
+export function arrayMin(arr: number[]) {
   let len = arr.length;
   let min = Infinity;
   while (len--) {
@@ -100,7 +101,7 @@ export function arrayMin(arr) {
   return min;
 }
 
-export function arrayMax(arr) {
+export function arrayMax(arr: number[]) {
   let len = arr.length;
   let max = -Infinity;
   while (len--) {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, ButtonProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import cx from 'classnames';
 import styles from './index.module.css';
 
 interface ButtonLinkProps extends ButtonProps {
@@ -14,7 +13,7 @@ export default (props: ButtonLinkProps) => {
     <Button
       as={Link}
       to={to}
-      className={cx(styles.ui, styles.button, styles.mainButton)}
+      className={`${styles.ui} ${styles.button} ${styles.mainButton}`}
       {...rest}
     />
   );

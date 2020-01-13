@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 import { TransitionDuration } from 'styles/constants';
 import styles from './index.module.css';
 
-import {
-  ContainerState as MeasureState,
-  mapStateToProps,
-} from '../ContentHeightMeasure/selector';
+import { mapStateToProps } from '../ContentHeightMeasure/selector';
+import { ContentState } from '../ContentHeightMeasure/types';
 
 interface OwnProps {}
 
-type Props = OwnProps & MeasureState;
+type Props = OwnProps & ContentState;
 
 class ContentHeightAnimate extends React.PureComponent<Props> {
   render() {

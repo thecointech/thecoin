@@ -1,18 +1,36 @@
 {
   "compilerOptions": {
+
+    "incremental": true,
+
     "jsx": "react",
+    "allowJs": true, // include js files
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "lib": ["dom", "es2017"],
+    "types": ["jest", "node"],
+    "build": true,
+
+    //"allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
 
     "pretty": true,
     "sourceMap": true,
-    "resolveJsonModule": true,
-    "lib": ["dom", "es2017"],
+    "noEmitOnError": true,
 
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "preserveConstEnums": true,
+
+    // Strict-ness
     "strict": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    //"preserveConstEnums": true,
 
     // Don't emit; allow Babel to transform files.
     //"noEmit": true,
@@ -24,19 +42,19 @@
     // NOTE: this causes issues with DateTime
     //"esModuleInterop": true,
 
-    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
     //
     // Allow project references
     //
     "declaration": true,
     "declarationMap": true,
-    "composite": true,
+    //"composite": true,
 
     //
     // Fix jest testing
     //
-    //"types": ["jest", "node"],
-    "typeRoots": ["./types", "./node_modules/@types"]
+    //"typeRoots": ["./types", "./node_modules/@types"]
+
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "exclude": ["node_modules", "**/node_modules/**", "**/*.test.*"]
 }

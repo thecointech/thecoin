@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Header, Accordion, Icon, List, Button } from 'semantic-ui-react';
+import { Form, Header, Accordion, Icon, List, Button, AccordionTitleProps } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import AnimateHeight from 'react-animate-height';
@@ -24,7 +24,7 @@ interface MyProps {
 
 const initialState = {
   cadPurchase: null as number | null,
-  activeAccordion: -1,
+  activeAccordion: undefined as number|undefined,
 
   // Transfer code vars
   showDlg: false,
@@ -38,7 +38,7 @@ type Props = MyProps & ContainerState;
 class PurchaseClass extends React.PureComponent<Props, StateType> {
   public state = initialState;
 
-  public onSubmit = (e: React.MouseEvent<HTMLElement>) => {
+  public onSubmit = () => {
     alert('NOT IMPLEMENTED');
   };
 
@@ -48,16 +48,20 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     });
   };
 
-  public accordionClick = (e, titleProps) => {
+  public accordionClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, titleProps: AccordionTitleProps) => {
     const { index } = titleProps;
     const { activeAccordion } = this.state;
-    const newIndex = activeAccordion === index ? -1 : index;
+    const newIndex = activeAccordion === index 
+      ? undefined 
+      : typeof(index) === 'string'
+        ? parseInt(index)
+        : index;
 
     this.setState({ activeAccordion: newIndex });
   };
 
   public onCloseDlg = () => this.setState({ showDlg: false });
-  public onGenerateRecipient = e => {
+  public onGenerateRecipient = () => {
     this.generateRecipient();
   };
 
@@ -160,7 +164,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
                     </div>
                   </Accordion.Title>
                 ),
-                content: (AccordionContent, { key, active }) => (
+                content: (_, { key, active }) => (
                   <div key={key} className={styles.PaymentMethod}>
                     <AnimateHeight
                       animateOpacity

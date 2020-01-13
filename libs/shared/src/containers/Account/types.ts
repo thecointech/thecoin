@@ -1,6 +1,6 @@
 import { Wallet, Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-
+import { Dictionary } from "lodash";
 import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes'
 import { ApplicationBaseState } from '../../types';
 import { TheSigner } from '../../SignerIdent'
@@ -54,9 +54,7 @@ const DefaultAccount: AccountState = {
 	displayCurrency: CurrencyCodes.CAD
   }
 
-class AccountMap {
-	[index: string]: AccountState;
-};
+type AccountMap = Dictionary<AccountState>;
 
 const ACCOUNTS_KEY: keyof ApplicationBaseState = "accounts";
 

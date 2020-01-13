@@ -77,8 +77,8 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		myWindow.completeGauthLogin = undefined
 	}
 
-	onInitiateLogin = (e) => {
-		e.preventDefault();
+	onInitiateLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e?.preventDefault();
 
 		const {gauthUrl }= this.state;
 		// First, setup the callback
@@ -175,7 +175,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		this.setState({enabled: false});
 
 		secureApi.googlePut(request)
-			.then((r) => {
+			.then(() => {
 				// HACK part 2:
 				// Replace weirdly-resized image with original clone
 				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg); 

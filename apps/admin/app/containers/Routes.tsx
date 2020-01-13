@@ -4,9 +4,8 @@ import { TheCoin, AccountName as TheCoinName } from 'containers/TheCoinAccount'
 import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
 
-import { Dispatch } from '@the-coin/shared/containers/PageSidebar/actions';
+import { useSidebar } from '@the-coin/shared/containers/PageSidebar/actions';
 import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
-import { useDispatch } from 'react-redux';
 
 const ConstantSidebarItems: SidebarMenuItem[] = 
 [
@@ -35,13 +34,11 @@ const generateSidebarItems = () : SidebarMenuItem[] =>
   
 export const Routes = () => {
 
-  const dispatch = useDispatch();
+  const sidebar = useSidebar();
   React.useEffect(() => {
-    const sidebar = Dispatch(dispatch)
     sidebar.setRootGenerator(generateSidebarItems);
-
     return () => sidebar.setRootGenerator(null);
-  }, [dispatch])
+  }, [sidebar])
 
   const brokerCad = `/${BrokerName}`;
   const theCoin = `/${TheCoinName}`;

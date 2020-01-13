@@ -82,8 +82,8 @@ export class RestoreClass extends React.PureComponent<Props> {
     myWindow.completeGauthLogin = undefined;
   }
 
-  onInitiateLogin = e => {
-    e.preventDefault();
+  onInitiateLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e?.preventDefault();
 
     const { gauthUrl } = this.state;
     // First, setup the callback

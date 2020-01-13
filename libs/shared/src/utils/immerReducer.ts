@@ -103,8 +103,8 @@ function GetNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T, name
 // buildNamedDictionaryReducer: Build a special reducer for a dictionary
 //  This special-purpose reducer handles the case when there
 //  is a named reducer for each entry in a dictionary of values
-let dictionaryReducers: Dictionary<(state: Dictionary<any>, action: any) => Dictionary<any>> = {}
-function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: Dictionary<any>) 
+let dictionaryReducers: Dictionary<(state: Dictionary<any>|undefined, action: any) => Dictionary<any>> = {}
+function buildNamedDictionaryReducer<T>(dictionaryFilter: string, initialState: Dictionary<T>) : Reducer<Dictionary<T>>
 {
   // Don't recreate a new reducer for an existing dictionary.
   // Doing this can lose our existing state as the current
@@ -112,8 +112,11 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: Dic
   let existing = dictionaryReducers[dictionaryFilter];
   if (!existing) {
     // Redirect reducer into named accounts
-    existing = (state: Dictionary<any>, action: any) =>
+    existing = (state: Dictionary<T>|undefined, action: any) =>
     {
+      if (!state)
+        return initialState;
+
       let newState = state;
       Object.entries(reducerCache).forEach(
         ([name, value]) => {
@@ -125,7 +128,7 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: Dic
           if (isActionFrom(action, reducerClass)) {
             // we manually pass through to the appropriate account
             let account = state[name];
-            let newAccount = reducer(account, action) as any;
+            let newAccount = reducer(account, action);
             // Handle name change - remove original name and add under dictIndex
             let dictIndex = newAccount.name || name;
             const { [name]: _, ...omitted } = state;
@@ -137,7 +140,7 @@ function buildNamedDictionaryReducer(dictionaryFilter: string, initialState: Dic
         }
       );
       // Default state for a dictionary is always an empty dictionary
-      return newState || initialState;
+      return newState;
     }
     dictionaryReducers[dictionaryFilter] = existing;
   }

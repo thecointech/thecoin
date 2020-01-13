@@ -12,6 +12,7 @@ function readFile(file: File): Promise<string> {
       const data = target.result;
       resolve(data);
     };
+    reader.onerror = reject;
     reader.readAsText(file);
   });
 }

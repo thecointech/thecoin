@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import { Dictionary } from 'lodash';
 
 function getUrlParams(search: string) {
   let hashes = search.slice(search.indexOf('?') + 1).split('&');
-  let params = {};
+  let params: Dictionary<string> = {};
   hashes.map(hash => {
     let [key, val] = hash.split('=');
     params[key] = decodeURIComponent(val);

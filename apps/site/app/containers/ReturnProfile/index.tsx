@@ -1,7 +1,7 @@
 import React from 'react';
 import { Graph } from './Graph/index';
 import { Grid, Button, Icon, Input, Form, Label } from 'semantic-ui-react';
-import { Slider } from 'react-semantic-ui-range';
+//import { Slider } from 'react-semantic-ui-range';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { RouteComponentProps } from 'react-router';
@@ -162,10 +162,10 @@ export class Returns extends React.PureComponent<Props, State> {
     };
   }
 
-  private step = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+  private step = () =>
     this.incrSliderValue();
 
-  private play = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+  private play = () =>
     this.setState(this.state.playTimer ? this.clearTimer : this.startTimer)
 
     /*\
@@ -174,7 +174,7 @@ export class Returns extends React.PureComponent<Props, State> {
           </Grid.Column>
           */
   public render() {
-    const {amount, rawData, age, sliderValue } = this.state;
+    const {amount, rawData, age } = this.state;
     const months = this.sliderValueToMonths();
     const minimum = this.monthsToMinimum(months);
     const graphData = GetPlotData(months, rawData, minimum);
@@ -245,7 +245,7 @@ export class Returns extends React.PureComponent<Props, State> {
             </Button.Group>
           </Grid.Column>
           <Grid.Column width="10">
-            <Slider value={sliderValue} style={{ marginTop: "8px", trackFill: { backgroundColor: "#3193A1"}}} settings={this.sliderSettings()} />
+            {/*<Slider value={sliderValue} style={{ marginTop: "8px", trackFill: { backgroundColor: "#3193A1"}}} settings={this.sliderSettings()} />*/}
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>

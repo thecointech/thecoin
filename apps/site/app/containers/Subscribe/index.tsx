@@ -9,6 +9,8 @@ const Subscribe = () => {
   const [email, setEmail] = React.useState('');
   const onInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.currentTarget.value), [setEmail]);
   const doSubscribe = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e?.preventDefault();
+
     if (email.indexOf('@') < 0) {
       alert('Please enter a valid email');
     } else {

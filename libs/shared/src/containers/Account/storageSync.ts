@@ -81,7 +81,7 @@ export function StoreSigner(name: string, signer: TheSigner) {
 
 // Utility function for fetching all stored accounts
 export function ReadAllAccounts() : AccountMap {
-  const allAccounts = new AccountMap();
+  const allAccounts: AccountMap = {};;
   for (let i = 0; i <= localStorage.length - 1; i++) {
     const raw = localStorage.key(i);
     if (!raw)

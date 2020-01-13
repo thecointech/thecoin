@@ -56,11 +56,11 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
   state = initialState;
 
   onPayeeSelect = (
-    event: React.SyntheticEvent<HTMLElement, Event>,
+    _: React.SyntheticEvent<HTMLElement, Event>,
     data: DropdownProps,
   ) => this.setState({ payee: (data.value as string) || '' });
   onNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    _: React.ChangeEvent<HTMLInputElement>,
     data: InputOnChangeData,
   ) => this.setState({ payeeName: data.value });
   onValueChange = (value: number) => this.setState({ coinToSell: value });

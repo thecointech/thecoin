@@ -1,5 +1,5 @@
 import React from 'react';
-import Measure from 'react-measure';
+import Measure, { ContentRect } from 'react-measure';
 import { connect } from 'react-redux';
 import { DispatchProps, mapDispatchToProps } from './actions';
 import { buildReducer } from './reducer';
@@ -11,8 +11,10 @@ type Props = OwnProps & DispatchProps;
 class Measurable extends React.PureComponent<Props> {
   timestamp = new Date().getTime();
 
-  onContentSized = (bounds: { bounds: { height: number; }; }) => {
-    this.props.setHeight(bounds.bounds.height, this.timestamp);
+  onContentSized = (contentRect: ContentRect) => {
+    const height = contentRect.bounds?.height;
+    if (height)
+      this.props.setHeight(height, this.timestamp);
   }
 
   render() {

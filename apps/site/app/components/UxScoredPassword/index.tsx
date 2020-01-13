@@ -77,20 +77,16 @@ state = initialState;
         tooltip: {
           id: `${MessageScope}.Tooltip`,
           defaultMessage: `This password requires ${stats.crack_times_display.offline_slow_hashing_1e4_per_second} to crack`
-        }
+        },
+        message: hasWarning 
+          ? {
+              id: `${MessageScope}.Warning`,
+              defaultMessage: stats.feedback.warning
+            } 
+          : isValid 
+            ? undefined 
+            : messages.PasswordRequired
       };
-      if (hasWarning) {
-        newState["message"] = {
-          id: `${MessageScope}.Warning`,
-          defaultMessage: stats.feedback.warning
-        }
-      }
-      else {
-        newState["message"] = isValid ?
-          undefined : 
-          messages.PasswordRequired;
-      }
-
       this.setState(newState);
     }
   }

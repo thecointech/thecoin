@@ -22,7 +22,7 @@ export const AccountSwitcher = () => {
   const activeAccount = selectActiveAccount();
 
   const dispatch = useDispatch();
-  const doSetActive = useCallback((event: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
+  const doSetActive = useCallback((_: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
     const accounts = DispatchAccounts(dispatch);
     accounts.setActiveAccount(data.account)
   }, [dispatch])

@@ -313,7 +313,7 @@ export const useAccount = (name: string) => {
 
 
 export const createRootReducer = () =>
-  buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())
+  buildNamedDictionaryReducer<AccountState>(ACCOUNTS_KEY, ReadAllAccounts())
 
 export const useAccounts = () => {
   useInjectReducer({ key: ACCOUNTS_KEY, reducer: createRootReducer() });

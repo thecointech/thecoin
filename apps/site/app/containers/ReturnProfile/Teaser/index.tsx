@@ -22,6 +22,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = React.useState(initState);
   const showCalculate = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e?.preventDefault();
       const url = BuildCalculatorUrl(state);
       props.history.push(url);
     },

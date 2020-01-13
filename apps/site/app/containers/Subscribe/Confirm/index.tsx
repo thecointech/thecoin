@@ -21,13 +21,14 @@ export const Confirm = (props: RouteComponentProps) => {
 
   const [hasUpdated, setUpdated] = React.useState(false);
   const [details, setDetails] = React.useState(getInitialState(props.location.search));
-  const onInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = React.useCallback((event: React.SyntheticEvent<HTMLInputElement>) => {
     const {value, name} = event.currentTarget;
     setDetails({
       ...details,
       [name]: value
     });
   }, [details, setDetails]);
+
   const updateSubscription = React.useCallback(async () => {
     const api = GetNewsletterApi();
     const result = await api.newsletterConfirm(details);

@@ -1,8 +1,4 @@
-import React, { ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Color } from 'csstype';
 import { Props as BaseProps } from '@the-coin/shared/components/UxPassword/types';
-import { InputProps } from 'semantic-ui-react';
 
 export type ChangeCB = (value: string, score: number) => boolean;
 

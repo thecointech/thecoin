@@ -1,18 +1,10 @@
-import * as actions from './actions';
-import { ApplicationRootState } from 'types';
 
 /* --- STATE --- */
-interface ContentState {
+export interface ContentState {
   readonly height: number;
 }
 
 /* --- ACTIONS --- */
-interface IActions {
+export interface IActions {
   setHeight(newHeight: number, timestamp: number): void;
 }
-
-/* --- EXPORTS --- */
-
-type ContainerState = ContentState;
-
-export { IActions, ContainerState };

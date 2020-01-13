@@ -35,7 +35,7 @@ const AccountMap: RouterPath[] = [
 export const AccountName = "TheCoin";
 
 export const TheCoin = (props: Props) =>  {
-  const { url } = this.props.match;
+  const { url } = props.match;
   const brokerAccount = useSelector(createAccountSelector(AccountName))
   return <Account account={brokerAccount} accountMap={AccountMap} url={url} />
 }
