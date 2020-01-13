@@ -1,0 +1,13 @@
+
+
+#buttonsContainer{
+  width: 350px;
+  margin: auto;
+  padding-top: 10px;
+}
+
+#buttonsContainer .button {
+  width: 100%;
+  line-height: 30px;
+  margin: 10px 10px;
+}

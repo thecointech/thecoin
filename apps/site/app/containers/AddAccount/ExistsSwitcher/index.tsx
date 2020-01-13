@@ -37,7 +37,7 @@ export const ExistsSwitcher = (props: Props) => {
           {
             Options
               .filter(o => o.name != props.filter)
-              .map(o => <Dropdown.Item text={intl.formatMessage(o.text)} as={Link} to={`/addAccount/${o.name}`} />)
+              .map(o => <Dropdown.Item key={o.name} text={intl.formatMessage(o.text)} as={Link} to={`/addAccount/${o.name}`} />)
           }
         </Dropdown.Menu>
       </Dropdown>

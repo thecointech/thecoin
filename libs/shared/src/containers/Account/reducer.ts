@@ -3,8 +3,8 @@ import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
-import { injectReducer, injectSaga, useInjectReducer } from "redux-injectors";
-import { buildSagas } from './actions';
+import { injectReducer, injectSaga, useInjectReducer, useInjectSaga } from "redux-injectors";
+import { buildSagas, BindActions } from './actions';
 
 import { GetStored, ReadAllAccounts, isWallet, StoreWallet, StoreSigner } from './storageSync'
 
@@ -12,6 +12,8 @@ import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { toHuman } from '@the-coin/utilities';
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
 import { TheSigner } from '../../SignerIdent';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
@@ -293,8 +295,22 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
-export const getAccountReducer = (name: string) => 
-  GetNamedReducer(AccountReducer, name, DefaultAccount, ACCOUNTS_KEY)
+export const getAccountReducer = (name: string) =>
+  GetNamedReducer(AccountReducer, name, DefaultAccount, ACCOUNTS_KEY);
+
+export const useAccount = (name: string) => {
+  
+  const { actions } = getAccountReducer(name);
+  useInjectSaga({ key: name, saga: buildSagas(name) });
+  // Register an on-unload callback to remove the saga
+  useEffect(() => {
+    console.log("loading reducer for: " + name);
+    return () => console.log("I've unloaded")
+  });
+  const dispatch = useDispatch();
+  return BindActions(actions, dispatch);
+}
+
 
 export const createRootReducer = () =>
   buildNamedDictionaryReducer(ACCOUNTS_KEY, ReadAllAccounts())

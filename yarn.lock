@@ -20261,7 +20261,7 @@ typescript-logic@^0.0.0:
   resolved "https://registry.yarnpkg.com/typescript-logic/-/typescript-logic-0.0.0.tgz#66ebd82a2548f2b444a43667bec120b496890196"
   integrity sha512-zXFars5LUkI3zP492ls0VskH3TtdeHCqu0i7/duGt60i5IGPIpAHE/DWo5FqJ6EjQ15YKXrt+AETjv60Dat34Q==
 
-typescript-plugin-css-modules@^2.1.2:
+typescript-plugin-css-modules@*, typescript-plugin-css-modules@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/typescript-plugin-css-modules/-/typescript-plugin-css-modules-2.1.2.tgz#c12b9bf1da6eab9ad7a72422e4bcc890da9acf1d"
   integrity sha512-SMZjhSii0C86eviPv4Rv/p+0/M52LUlZLeA0lZcaxyljok/i/YG0Q8u9+Cc9r/rFd36IX+v5JQiJx3z4K0Dtyg==

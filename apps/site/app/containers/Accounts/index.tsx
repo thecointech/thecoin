@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import * as Sidebar from '@the-coin/shared/containers/PageSidebar/actions';
 import { Account, RouterPath, AccountProps } from '@the-coin/shared/containers/Account';
 import { AccountMap } from '@the-coin/shared/containers/Account/types';
 import { Balance } from '@the-coin/shared/containers/Balance';
@@ -10,14 +9,6 @@ import { Settings } from './Settings';
 import { Purchase } from './Purchase';
 import { BillPayments } from './BillPayments';
 import { selectActiveAccount } from './Selectors';
-
-interface OwnProps {}
-
-type Props = OwnProps &
-{
-  Sidebar: Sidebar.DispatchProps,
-  accounts: AccountMap,
-}  & RouteComponentProps;
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -52,6 +43,12 @@ const AccountRoutes: RouterPath[] = [
     creator: (routerProps: AccountProps) => ((props) => <Settings {...props} account={routerProps.account} />),
   },
 ];
+
+
+type Props =
+{
+  accounts: AccountMap,
+}  & RouteComponentProps;
 
 export const Accounts = (props: Props) => {
     const activeAccount = selectActiveAccount();

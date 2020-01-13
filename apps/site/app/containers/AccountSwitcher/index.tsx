@@ -38,21 +38,20 @@ export const AccountSwitcher = () => {
                 <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14)+'...'}>
                   <Dropdown.Menu direction='right'>
                   <Dropdown.Item key={name} text='See' account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />
-                    <Dropdown.Item text='Settings' description='' as={NavLink} to="/accounts/settings" />
-                    <Dropdown.Item text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
+                  <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" />
+                  <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
                   </Dropdown.Menu>
                 </Dropdown>
               </Dropdown.Item>)
           }
         {allNames
             .filter(account => account != activeAccount.name)
-            .filter(account => account != activeAccount)
             .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
           }
         <Dropdown.Divider />
-        <Dropdown.Item text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/" />
-        <Dropdown.Item text='Load an Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/upload/" />
-        <Dropdown.Item text='Restore' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/restore/" />
+        <Dropdown.Item key='add' text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/" />
+        <Dropdown.Item key='load' text='Load an Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/upload/" />
+        <Dropdown.Item key='rest' text='Restore' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/restore/" />
       </Dropdown.Menu>
     </Dropdown>
   )

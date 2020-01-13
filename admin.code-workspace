@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "apps\\admin"
+		},
+		{
+			"path": "libs\\shared"
+		},
+		{
+			"path": "libs\\utils-ts"
+		}
+	],
+  "settings": {
+    "files.associations": {
+      ".babelrc": "jsonc",
+      ".eslintrc": "jsonc",
+      ".prettierrc": "jsonc",
+      ".stylelintrc": "json",
+      ".dockerignore": "ignore",
+      ".eslintignore": "ignore",
+      ".flowconfig": "ignore"
+    },
+    "typescript.tsdk": "node_modules\\typescript\\lib"
+  }
+}

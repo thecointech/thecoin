@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
-import { getAccountReducer } from '../Account/reducer';
-import { BindActions } from '../Account/actions';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages'
 import { useState } from 'react';
 import { useCallback } from 'react';
-import { useInjectReducer } from 'redux-injectors';
+import { useAccount } from '../Account/reducer';
 
 type ReadFileCallback = (path: File) => Promise<string>;
 type ValidateCallback = (address: string) => boolean;
@@ -26,21 +23,17 @@ export const UploadWallet = (props: Props) => {
   // and constant for the lifetime of this class
   // We store it in state to give it peristance
   const [id] = useState('upload' + Math.random());
-
-  const { actions, reducer } = getAccountReducer(id)
-  useInjectReducer({ key: id, reducer });
-
-  const dispatch = useDispatch();
+  const walletActions = useAccount(id)
+  
   const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = ValidateFile(wallet, props.validate);
     if (isValid) {
-      const walletActions = BindActions(actions, dispatch);
       walletActions.setSigner(name, wallet);
     } else {
       alert('Bad Wallet');
     }
-  }, [actions, dispatch])
+  }, [walletActions])
 
   return (
     <Container id="formCreateAccountStep1">

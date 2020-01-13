@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@the-coin/contract": "*",
+    "@the-coin/types": "*",
     "base32": "0.0.6"
   },
   "devDependencies": {

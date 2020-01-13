@@ -1,20 +1,18 @@
 import React, { useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 
 import { Login } from "../../containers/Login";
 import { NotFoundPage } from "../../containers/NotFoundPage";
 
 import { ApplicationBaseState } from "../../types";
-import * as Sidebar from "../PageSidebar/actions";
+import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 
 import { ConnectWeb3 } from "./Web3";
 import { AccountState } from "./types";
-import { getAccountReducer } from "./reducer";
+import { useAccount } from "./reducer";
 import * as AccountActions from "./actions";
 import { isWallet } from "./storageSync";
-import { useInjectSaga } from "redux-injectors";
 
 
 interface AccountProps {
@@ -40,11 +38,7 @@ export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
   const { signer } = account;
-  const dispatch = useDispatch();
-  const { actions } = getAccountReducer(account.name);
-  const accountActions = AccountActions.BindActions(actions, dispatch);
-  
-  useInjectSaga({ key: account.name, saga: AccountActions.buildSagas(account.name) });
+  const accountActions = useAccount(account.name);
 
   const sidebarCb = useCallback(
     (items: SidebarMenuItem[], _state: ApplicationBaseState) =>
@@ -52,7 +46,7 @@ export const Account = (props: Props) => {
     [props]
   );
 
-  const sidebar = Sidebar.Dispatch(dispatch);
+  const sidebar = useSidebar();
   useEffect(() => {
     sidebar.addGenerator(account.name, sidebarCb);
 
@@ -104,7 +98,7 @@ export const Account = (props: Props) => {
           />
         );
       })}
-        <Route component={NotFoundPage} />
+      <Route component={NotFoundPage} />
     </Switch>
   );
 }
