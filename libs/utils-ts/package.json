@@ -15,9 +15,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@ctrl/ts-base32": "^1.1.4",
     "@the-coin/contract": "*",
-    "@the-coin/types": "*",
-    "base32": "0.0.6"
+    "@the-coin/types": "*"
   },
   "devDependencies": {
     "cpx": "*"

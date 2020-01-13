@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "module": "esnext",
     "lib": ["dom", "es2017"],
     "types": ["jest", "node"],
     "build": true,
@@ -56,5 +57,5 @@
 
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "exclude": ["node_modules", "**/node_modules/**", "**/*.test.*"]
+  "exclude": ["node_modules", "build/**/*", "**/node_modules/**", "**/*.test.*"]
 }

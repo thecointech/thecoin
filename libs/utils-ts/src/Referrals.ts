@@ -1,7 +1,7 @@
 import { GetFirestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
-import base32 from "base32";
+import { base32Encode } from '@ctrl/ts-base32';
 import { GetUserDoc, GetUserData } from "./User";
 import { Timestamp } from "./FirebaseFirestore";
 
@@ -49,7 +49,7 @@ export async function GetUsersReferrer(address: string) {
 export function GetReferrerCode(signature: string) {
   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
   const buffer = Buffer.from(normSig, "hex");
-  const s2: string = base32.encode(buffer);
+  const s2 = base32Encode(buffer, undefined, { padding: false });
   return s2.slice(-6).toLowerCase();
 }
 

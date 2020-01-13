@@ -11,7 +11,7 @@ type UserVerifiedInfo = {
 // A union of all possible data on a user.
 type AllUserData = Partial<UserVerifiedInfo> & Partial<ReferralData>
 
-type UserAction = "Buy"|"Sell"|"Bill";
+export type UserAction = "Buy"|"Sell"|"Bill";
 
 //
 // Get user document
@@ -64,4 +64,4 @@ function GetActionRef(action: UserAction, hash: string): DocumentReference {
   return GetFirestore().collection(action).doc(hash);
 }
 
-export { UserAction, GetUserDoc, GetUserData, SetUserVerified, GetUserVerified, GetActionDoc, GetActionRef }
+export { GetUserDoc, GetUserData, SetUserVerified, GetUserVerified, GetActionDoc, GetActionRef }

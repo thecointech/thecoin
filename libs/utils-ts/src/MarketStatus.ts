@@ -1,4 +1,5 @@
 import { default as axios, AxiosRequestConfig } from 'axios';
+import { Dictionary } from 'lodash';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 
@@ -7,7 +8,7 @@ const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 const AccessToken = 'iIAGXtPBcpae7eBS4wXgP8RRUlGT';
 
 // Cache accesses to reduce hits on the API
-let CalendarCache = {};
+let CalendarCache: Dictionary<any> = {};
 
 async function GetCalendar(date: Date) {
   const uriArgs = `month=${date.getMonth() + 1}&year=${date.getFullYear()}`;

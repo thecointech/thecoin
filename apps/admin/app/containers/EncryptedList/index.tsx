@@ -13,7 +13,7 @@ import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { toHuman } from "@the-coin/utilities";
 import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { selectFxRate } from "../../../../../libs/shared/src/containers/FxRate/selectors";
+import { selectFxRate } from "@the-coin/shared/containers/FxRate/selectors";
 import { FXRate } from "@the-coin/pricing";
 import { Confirm } from "semantic-ui-react";
 

@@ -4,7 +4,7 @@ export function IsValidAddress(address: string) {
 }
 
 // Valid ID's exclude IOUL
-export function IsValidReferrerId(id) {
+export function IsValidReferrerId(id: string) {
 	return /^[a-hj-km-np-tv-z0-9]{6}$/i.test(id)
 }
 
