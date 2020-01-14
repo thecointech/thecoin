@@ -3,9 +3,6 @@ import { number } from 'card-validator';
 import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types'
 import messages from './messages';
 
-//export type types = visa|"numeric"|"none"
-
-
 export type Validatable = {
   validate: (value: string) => ValuedMessageDesc|null,
   parameter?: any,
