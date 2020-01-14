@@ -32,8 +32,8 @@ export const Confirm = (props: RouteComponentProps) => {
   const updateSubscription = React.useCallback(async () => {
     const api = GetNewsletterApi();
     const result = await api.newsletterConfirm(details);
-    setDetails(result);
-    console.log("subscribed: " + result.confirmed);
+    setDetails(result.data);
+    console.log("subscribed: " + result.data.confirmed);
     setUpdated(!!result);
   }, [details]);
 
@@ -45,7 +45,7 @@ export const Confirm = (props: RouteComponentProps) => {
   return (
     <div>
       {
-        hasUpdated ? 
+        hasUpdated ?
           <h4>Your subscription has been confirmed</h4> :
           <h4>Please wait - we are confirming your subscription</h4>
       }

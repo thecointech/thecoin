@@ -58,9 +58,9 @@ export class RestoreClass extends React.PureComponent<Props> {
     try {
       const secureApi = GetSecureApi();
       const gauth = await secureApi.googleAuthUrl();
-      if (gauth && gauth.url) {
-        this.setState({ gauthUrl: gauth.url });
-        return gauth.url;
+      if (gauth?.data?.url) {
+        this.setState({ gauthUrl: gauth.data.url });
+        return gauth.data.url;
       } else throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));
     } catch (err) {
       console.error(JSON.stringify(err));

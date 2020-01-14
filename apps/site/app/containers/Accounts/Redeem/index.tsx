@@ -45,16 +45,16 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
-    var status = await statusApi.status();
+    var {data} = await statusApi.status();
     // Check out if we have the right values
-    if (!status.certifiedFee) return false;
+    if (!data.certifiedFee) return false;
 
     if (this.state.doCancel) return false;
 
     // Get our variables
     const { coinToSell, email, question, answer, message } = this.state;
     const { signer, contract } = this.props.account;
-    if (coinToSell === null || !signer || !contract) 
+    if (coinToSell === null || !signer || !contract)
       return false;
 
     // To redeem, we construct & sign a message that
@@ -65,20 +65,20 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     const command = await BuildVerifiedSale(
       eTransfer,
       signer,
-      status.address,
+      data.address,
       coinToSell,
-      status.certifiedFee,
+      data.certifiedFee,
     );
     const eTransferApi = GetETransferApi();
-    
-    if (this.state.doCancel) 
+
+    if (this.state.doCancel)
       return false;
 
     // Send the command to the server
     this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
     const response = await eTransferApi.eTransfer(command);
 
-    if (!response.txHash) {
+    if (!response.data?.txHash) {
       console.log(`Error: ${JSON.stringify(response)}`);
       return false;
     }
@@ -88,7 +88,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       link: (
         <a
           target="_blank"
-          href={`https://ropsten.etherscan.io/tx/${response.txHash}`}
+          href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}
         >
           here
         </a>
@@ -99,11 +99,11 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       percentComplete: 0.5,
       transferValues,
     });
-    const tx = await contract.provider.getTransaction(response.txHash);
+    const tx = await contract.provider.getTransaction(response.data.txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
-      response.txHash,
+      response.data.txHash,
     );
     console.log(
       `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
@@ -146,7 +146,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     const { value, name } = event.currentTarget;
     this.setState({
       [name]: value,
-    } as any);  
+    } as any);
   }
 
   onCancelTransfer() {

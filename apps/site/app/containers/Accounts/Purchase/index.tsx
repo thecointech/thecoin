@@ -51,8 +51,8 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
   public accordionClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, titleProps: AccordionTitleProps) => {
     const { index } = titleProps;
     const { activeAccordion } = this.state;
-    const newIndex = activeAccordion === index 
-      ? undefined 
+    const newIndex = activeAccordion === index
+      ? undefined
       : typeof(index) === 'string'
         ? parseInt(index)
         : index;
@@ -81,7 +81,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     const toAddress = `${signer.address}@thecoin.io`.toLowerCase();
     this.setState({
       xferRecipient: toAddress,
-      xferSecret: response.code || 'TheCoin',
+      xferSecret: response.data?.code || 'TheCoin',
     });
   }
 

@@ -54,7 +54,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     const statusApi = new StatusApi(); //undefined, "http://localhost:8080"
     var status = await statusApi.status();
     // Check out if we have the right values
-    if (!status.certifiedFee) return false;
+    if (!status.data.certifiedFee) return false;
 
     if (this.state.doCancel) return false;
 
@@ -69,7 +69,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
       signer,
       NormalizeAddress(toAddress),
       coinTransfer,
-      status.certifiedFee,
+      status.data.certifiedFee,
     );
     const transferApi = new TransferApi();
 
@@ -79,9 +79,9 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
     const response = await transferApi.transfer(transferCommand);
 
-    console.log(`TxResponse: ${response.message}`);
-    if (!response.txHash) {
-      alert(response.message);
+    console.log(`TxResponse: ${response.data.message}`);
+    if (!response.data.txHash) {
+      alert(response.data.message);
       return false;
     }
 
@@ -90,7 +90,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
       link: (
         <a
           target="_blank"
-          href={`https://ropsten.etherscan.io/tx/${response.txHash}`}
+          href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}
         >
           here
         </a>
@@ -101,11 +101,11 @@ class TransferClass extends React.PureComponent<Props, StateType> {
       percentComplete: 0.5,
       transferValues,
     });
-    const tx = await contract.provider.getTransaction(response.txHash);
+    const tx = await contract.provider.getTransaction(response.data.txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
-      response.txHash,
+      response.data.txHash,
     );
     console.log(
       `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,

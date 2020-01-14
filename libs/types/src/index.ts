@@ -27,7 +27,7 @@ export interface GoogleWalletItem {
 export interface GoogleToken {
   token: string;
 }
-export interface GooglePutRequest {
+export interface GoogleStoreAccount {
   token: GoogleToken;
   wallet: string;
   walletName: string;

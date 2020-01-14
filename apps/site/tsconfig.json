@@ -8,6 +8,11 @@
     //"noImplicitAny": false,
     //"preserveConstEnums": true,
     "baseUrl": "./app",
+    "paths": {
+      "@the-coin/shared/*": [
+        "../../../libs/shared/src/*"
+      ]
+    },
     "outDir": "../../build/.obj/site/"
     //"jsx": "react", // process JSX
     //"lib": ["dom", "es2017"],
