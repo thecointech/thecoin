@@ -16,12 +16,17 @@ export enum ErrorState {
 
 export type ChangeCB = (value: string) => void;
 
+// Allow embedding values directly into MessageDescriptor
+export type ValuedMessageDesc = {
+  values?: Object
+} & MessageDescriptor;
+
 export interface Props {
   intlLabel: MessageDescriptor;
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: MessageDescriptor;
+  message?: ValuedMessageDesc;
   tooltip?: MessageDescriptor;
 
   forceValidate?: boolean;
