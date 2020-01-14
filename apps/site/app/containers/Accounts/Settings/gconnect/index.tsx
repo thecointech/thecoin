@@ -4,7 +4,6 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { IWindow } from './gauth';
 import { GetStoredWallet } from '@the-coin/shared/containers/Account/storageSync';
-import { GooglePutRequest } from '@the-coin/broker-cad';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
 
@@ -50,10 +49,10 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		try {
 			const secureApi = GetSecureApi();
 			const gauth = await secureApi.googleAuthUrl()
-			if (gauth && gauth.url)
+			if (gauth?.data?.url)
 			{
-				this.setState({gauthUrl: gauth.url});
-				return gauth.url;
+				this.setState({gauthUrl: gauth.data.url});
+				return gauth.data.url;
 			}
 			else throw new Error("Oh No, wtf: " + JSON.stringify(gauth));
 		}
@@ -154,7 +153,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 			alert("warning: account not found");
 			return;
 		}
-		const request: GooglePutRequest = {
+		const request = {
 			token: {
 				token
 			},

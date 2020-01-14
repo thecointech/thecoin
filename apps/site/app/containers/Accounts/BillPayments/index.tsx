@@ -82,11 +82,13 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
-    var status = await statusApi.status();
+    var {data} = await statusApi.status();
     // Check out if we have the right values
-    if (!status.certifiedFee) return false;
+    if (!data?.certifiedFee)
+      return false;
 
-    if (this.state.doCancel) return false;
+    if (this.state.doCancel)
+      return false;
 
     // Get our variables
     const { coinToSell, payee, accountNumber } = this.state;
@@ -102,9 +104,9 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     const billPayCommand = await BuildVerifiedBillPayment(
       packet,
       signer,
-      status.address,
+      data.address,
       coinToSell,
-      status.certifiedFee,
+      data.certifiedFee,
     );
     const billPayApi = GetBillPaymentsApi();
     if (this.state.doCancel) return false;
@@ -112,9 +114,8 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     // Send the command to the server
     this.setState({ paymentMessage: messages.step2, percentComplete: 0.25 });
     const response = await billPayApi.billPayment(billPayCommand);
-
-    console.log(`Response: ${response.message}`);
-    if (!response.txHash) {
+    const txHash = response.data?.txHash;
+    if (!txHash) {
       alert(JSON.stringify(response));
       return false;
     }
@@ -124,7 +125,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
       link: (
         <a
           target="_blank"
-          href={`https://ropsten.etherscan.io/tx/${response.txHash}`}
+          href={`https://ropsten.etherscan.io/tx/${txHash}`}
         >
           here
         </a>
@@ -135,11 +136,11 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
       percentComplete: 0.5,
       transferValues,
     });
-    const tx = await contract.provider.getTransaction(response.txHash);
+    const tx = await contract.provider.getTransaction(txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
-      response.txHash,
+      txHash,
     );
     console.log(
       `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,

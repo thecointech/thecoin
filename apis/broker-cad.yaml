@@ -195,15 +195,15 @@ definitions:
     properties:
       url:
         type: string
-        
+
   GoogleToken:
     required:
       - token
     properties:
       token:
         type: string
-  
-  GooglePutRequest:
+
+  GoogleStoreAccount:
     required:
       - token
       - wallet
@@ -215,7 +215,7 @@ definitions:
         type: string
       walletName:
         type: string
-        
+
   GoogleFileIdent:
     required:
       - id
@@ -235,7 +235,7 @@ definitions:
         $ref: "#/definitions/GoogleFileIdent"
       wallet:
         type: string
-        
+
   GoogleListResult:
     required:
       - wallets
@@ -255,12 +255,12 @@ definitions:
           $ref: "#/definitions/GoogleWalletItem"
 
 ################################################################################
-   
+
   SubscriptionDetails:
     properties:
       id:
         type: string
-      email: 
+      email:
         type: string
       confirmed:
         type: boolean
@@ -324,7 +324,7 @@ paths:
           name: referral
           description: "Set referal for new account"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/NewAccountReferal"
       responses:
         405:
@@ -338,7 +338,7 @@ paths:
 
   /exchange/eTransfer:
     post:
-      tags: 
+      tags:
         - eTransfer
       summary: "Request eTransfer"
       description: "Called by the client to exchange coin for CAD and send via eTransfer"
@@ -355,7 +355,7 @@ paths:
           name: request
           description: "Must contain a transfer to this brokers address, and an encrypted ETransferPacket"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/CertifiedTransfer"
 
   /exchange/eTransfer/code:
@@ -377,14 +377,14 @@ paths:
           name: request
           description: "Signed timestamp message"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/SignedMessage"
 
   #############################################################
 
   /bills/payment:
     post:
-      tags: 
+      tags:
         - Bill Payments
       summary: "Bill Payment"
       description: "Called by the client to pay a bill with coin via a certified transfer"
@@ -401,9 +401,9 @@ paths:
           name: request
           description: "Must contain a transfer to this brokers address, and an encrypted BillPayeePacket"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/CertifiedTransfer"
-            
+
   #############################################################
 
   /transfer:
@@ -418,7 +418,7 @@ paths:
           name: request
           description: "A request appropriately filled out and signed as described in the comments"
           required: true
-          schema: 
+          schema:
             $ref: "#/definitions/CertifiedTransferRequest"
       responses:
         405:
@@ -441,7 +441,7 @@ paths:
           description: Google authorization URL
           schema:
             $ref: "#/definitions/GoogleAuthUrl"
-                
+
   /secure/google/list:
     put:
       tags:
@@ -472,8 +472,8 @@ paths:
         - in: body
           name: uploadPacket
           required: true
-          schema: 
-            $ref: "#/definitions/GooglePutRequest"
+          schema:
+            $ref: "#/definitions/GoogleStoreAccount"
       responses:
         405:
           description: "Permission Denied"
@@ -481,7 +481,7 @@ paths:
           description: Account successfully stored
           schema:
             $ref: "#/definitions/BoolResponse"
-  
+
   /secure/google/get:
     put:
       tags:
@@ -502,7 +502,7 @@ paths:
           schema:
             $ref: "#/definitions/GoogleGetResult"
 
-  #############################################################  
+  #############################################################
   /newsletter/signup:
     put:
       tags:

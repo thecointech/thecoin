@@ -47,7 +47,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 	implements IActions
 {
 
-	*fetchRateAtDate(date?: Date) {
+	*fetchRateAtDate(date?: Date) : Generator<any> {
 		try {
 
 			const cc = CurrencyCodes.CAD;
@@ -65,7 +65,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
 				type: this.actions().addFxRate.type,
 				payload: [newFxRate],
 				args: true
-			})	
+			})
 		}
 		catch (err) {
 			console.error(err);
@@ -93,7 +93,7 @@ function* sagaUpdateFxRate() {
 }
 
 //
-// The loop function waits for updtes 
+// The loop function waits for updtes
 function* loopFxUpdates() {
 
 	let latest = 0;
@@ -109,7 +109,7 @@ function* loopFxUpdates() {
 		yield delay(waitTime);
 		// Then tell the FxRate to update
 		yield call(sagaUpdateFxRate);
-	}	
+	}
 }
 
 function createRootEntitySelector<T>(rootKey: keyof ApplicationBaseState, initialState: T) {
@@ -117,7 +117,7 @@ function createRootEntitySelector<T>(rootKey: keyof ApplicationBaseState, initia
 }
 
 function buildSagas(name: keyof ApplicationBaseState) {
-  
+
   const selectAccount = createRootEntitySelector(name, initialState);
 
 	function buildSaga(fnName: string) {
@@ -133,12 +133,12 @@ function buildSagas(name: keyof ApplicationBaseState) {
 	}
   // Root saga
   function* rootSaga() {
-		
+
 		yield fork(loopFxUpdates);
 		yield call(sagaUpdateFxRate)
 		yield takeEvery(actions.fetchRateAtDate.type, buildSaga("fetchRateAtDate"))
 	}
-	
+
 	return rootSaga;
 }
 
