@@ -13,8 +13,7 @@
     ]
   },
   "scripts": {
-    "preinstall": "cpx \"libs/*/package.json\" build --command \"node ./tools/package-clean.js\"",
-    "postinstall": "yarn build:apis",
+    "preinstall": "cpx \"libs/*/package.json\" build --command \"node ./tools/package-clean.js\" && gen:apis",
     "gen:rates": "openapi-generator generate -i apis/the-pricing.yaml -g typescript-fetch -o apis/rates/ts -c apis/rates/client-ts-spec.json",
     "gen:broker": "openapi-generator generate -i apis/broker-cad.yaml -g typescript-fetch -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:apis": "concurrently \"yarn gen:rates\" \"yarn gen:broker\"",
