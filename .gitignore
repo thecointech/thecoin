@@ -8,9 +8,6 @@ wallets/
 shared-components/build/
 libs/utils-ts/lib/
 apis/broker/ts/dist/
-apps/admin/build/
 packages/
 build/
 apps/admin/app/containers/BrokerTransferAssistant/secret.json
-apis/broker/ts/
-apis/rates/ts/
