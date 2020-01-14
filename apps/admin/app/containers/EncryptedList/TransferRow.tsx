@@ -2,10 +2,10 @@ import React from "react";
 import { TransferRecord } from "@the-coin/utilities/Firestore";
 import { toHuman } from "@the-coin/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
+import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { InstructionRenderer, InstructionPacket } from "./types";
 
-type Props = { 
+type Props = {
   item: TransferRecord,
   setActive: () => void,
   markComplete: () => void,
@@ -38,11 +38,11 @@ type Props = {
     const processOn = recievedTimestamp === processedTimestamp ? null : <div>Process On: {settlementDate.toString()}</div>;
     const completion = (settlementDate.getTime() > Date.now())
       ? <div>This instruction can be settled on {settlementDate.toDateString()}</div>
-      : <Button onClick={markComplete}>Mark Complete</Button>    
-		
+      : <Button onClick={markComplete}>Mark Complete</Button>
+
 		return (
       <>
-        
+
         <Accordion>
           <Accordion.Title active={active} onClick={setActive}>
             <Icon name='dropdown' />

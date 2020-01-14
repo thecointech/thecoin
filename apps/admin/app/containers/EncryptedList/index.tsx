@@ -6,7 +6,7 @@ import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
 import { useDispatch, useSelector } from "react-redux";
 import { fromMillis, now } from "utils/Firebase";
 import { PrivateKeyButton } from "./PrivateKeyButton";
-import { Timestamp } from "@the-coin/utilities/FirebaseFirestore";
+import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { TransferList } from "./TransferList";
 import { InstructionPacket, InstructionRenderer } from "./types";
 import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
@@ -72,11 +72,11 @@ export const EncryptedList = ({render, type}: Props) => {
     const record = records[completeIndex];
     await MarkComplete(type, record);
     console.log("Record completed: " + completeIndex);
-    setRecords(records => delete records[completeIndex] && records);  
+    setRecords(records => delete records[completeIndex] && records);
   }, [completeIndex, records]);
 
   /////////////////////////////////////////////
-  
+
   const onCancel = useCallback(() => setCompleteIndex(-1), [setCompleteIndex])
   const toComplete = records[completeIndex];
 
@@ -89,10 +89,10 @@ export const EncryptedList = ({render, type}: Props) => {
         markComplete={setCompleteIndex}
         render={render}
         />
-      <Confirm 
+      <Confirm
         content={`Confirm ${type}: $${toComplete?.fiatDisbursed} from ${toComplete?.recievedTimestamp.toDate().toDateString()}`}
-        open={completeIndex >= 0} 
-        onCancel={onCancel} 
+        open={completeIndex >= 0}
+        onCancel={onCancel}
         onConfirm={confirmedComplete} />
     </>
   )
@@ -117,7 +117,7 @@ async function GetSettlementDate(recieved: Timestamp, fxActions: FxActions.Dispa
   const recievedAt = recieved.toDate();
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
-    fxActions.fetchRateAtDate(new Date(nextOpen));		
+    fxActions.fetchRateAtDate(new Date(nextOpen));
   }
   return fromMillis(nextOpen);
 }
@@ -143,10 +143,10 @@ async function MarkComplete(actionType: UserAction, record: TransferRecord) {
   const user = GetSigner(record);
   if (!user)
     throw new Error("No user present");
-  
+
   const actionDoc = GetActionDoc(user, actionType, record.hash);
   const action = await actionDoc.get();
-  if (!action.exists) 
+  if (!action.exists)
     throw new Error("Oh No! You lost your AP");
 
   // Ensure we only complete once filling in the appropriate data

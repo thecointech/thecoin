@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 
-// tslint:disable
-
   /**
    * Document data (for use with `DocumentReference.set()`) consists of fields
    * mapped to values.
@@ -587,7 +585,7 @@
      *
      * @param data A map of the fields and values for the document.
      * @param options An object to configure the set behavior.
-     * @return A Promise resolved with the write time of this set 
+     * @return A Promise resolved with the write time of this set
      *  (or void if running in Electron)
      */
     set(data: DocumentData, options?: SetOptions): Promise<WriteResult|void>;

@@ -11,7 +11,8 @@
   "homepage": "http://thecoin.io",
   "scripts": {
     "test": "jest",
-    "build": "tsc && cpx ./src/FirebaseFirestore.d.ts ../../build/utils-ts"
+    "build": "tsc",
+    "postinstallaa": "yarn build"
   },
   "license": "MIT",
   "dependencies": {

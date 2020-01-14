@@ -1229,7 +1229,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@ctrl/ts-base32@^1.1.4":
+"@ctrl/ts-base32@*", "@ctrl/ts-base32@^1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@ctrl/ts-base32/-/ts-base32-1.1.4.tgz#ad995e8f3959ca992c4a68f135f2b701215239d5"
   integrity sha512-VSBEqiPQljebmai3TD2ctaYLj6Jx0CCyOCtU9D3fWOCuy1qaJzzwdOfk+Pr9BHLqKjZYH6sFFotpJ0fCNfuJfQ==
@@ -4632,13 +4632,6 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
-
-base32@*:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/base32/-/base32-0.0.6.tgz#79038bcb5aec2d8f22bcc1c28402924f50a6d2ac"
-  integrity sha1-eQOLy1rsLY8ivMHChAKST1Cm0qw=
-  dependencies:
-    optimist ">=0.1.0"
 
 base64-js@^1.0.2, base64-js@^1.2.3, base64-js@^1.3.0:
   version "1.3.1"
@@ -15082,7 +15075,7 @@ opn@^5.5.0:
   dependencies:
     is-wsl "^1.1.0"
 
-optimist@>=0.1.0, optimist@^0.6.1, optimist@~0.6.1:
+optimist@^0.6.1, optimist@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
   integrity sha1-2j6nRob6IaGaERwybpDrFaAZZoY=
@@ -16402,6 +16395,9 @@ postcss@^7.0.23:
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+"postinstallcwd@file:./tools":
+  version "2.0.0"
 
 power-assert-context-formatter@^1.0.7:
   version "1.2.0"

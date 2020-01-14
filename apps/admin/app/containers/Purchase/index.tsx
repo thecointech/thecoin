@@ -22,7 +22,7 @@ import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { GetWallet } from 'containers/BrokerTransferAssistant/Wallet';
 import { utils } from 'ethers';
 import { GetReferrerCode } from '@the-coin/utilities/Referrals';
-import { DocumentReference } from '@the-coin/utilities/FirebaseFirestore';
+import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
 
 //import { now } from 'utils/Firebase';
 //import { firestore } from 'firebase';
@@ -89,7 +89,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 			alert("Invalid Coin")
 			return;
 		}
-		if (settledDate.getTime() > Date.now()) 
+		if (settledDate.getTime() > Date.now())
 		{
 			alert("This set for a future date.\nIt is not possible to complete a purchase in the future.")
 			return;
@@ -247,7 +247,7 @@ class PurchaseClass extends React.PureComponent<Props> {
 		const code = GetReferrerCode(rsign);
 		this.setState({purchaserCode: code});
   }
-  
+
   renderShortDate = (date: Date) => date.toLocaleDateString("en-US", {day: "numeric", hour:"numeric", minute: "numeric"})
 
 	render() {

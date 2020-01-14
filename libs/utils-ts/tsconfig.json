@@ -28,11 +28,8 @@
     "tsBuildInfoFile": "../../build/.obj/utils-ts.buildinfo",
 
     // "declarationMap": true,
-    // "declaration": true, 
+    // "declaration": true,
     // "composite": true,
   },
-  "include": [
-    "./src/**/*",
-    "./src/FirebaseFirestore.d.ts"
-  ]
+  "include": ["./src/**/*"]
 }

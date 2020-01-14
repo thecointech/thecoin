@@ -10,7 +10,7 @@ import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
 import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { connect } from "react-redux";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { DocumentSnapshot } from "@the-coin/utilities/FirebaseFirestore";
+import { DocumentSnapshot } from "@the-coin/types/FirebaseFirestore";
 import { firestore } from "firebase";
 import { signIn, fromMillis } from "utils/Firebase";
 import { GetSigner } from "@the-coin/utilities/VerifiedAction";
@@ -66,7 +66,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
     const recievedAt = ts.toDate();
     const nextOpen = await NextOpenTimestamp(recievedAt, );
     if (nextOpen < Date.now()) {
-      this.props.fetchRateAtDate(new Date(nextOpen));		
+      this.props.fetchRateAtDate(new Date(nextOpen));
     }
     return fromMillis(nextOpen);
   }
@@ -156,7 +156,7 @@ class RedeemClass extends React.PureComponent<Props, State> {
     const active = activeIndex === index
     const processOn = recievedTimestamp === processedTimestamp ? null : <div>Process On: {processDate.toString()}</div>;
     const eTransfer = this.state.decryptedTransfers[index];
-    
+
     return (
       <Accordion>
         <Accordion.Title active={active} index={index} onClick={this.onSaleAccordionClicked}>

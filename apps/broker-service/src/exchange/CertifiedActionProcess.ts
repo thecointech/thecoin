@@ -1,9 +1,9 @@
 import { BrokerCAD } from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
-import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/lib/User";
-import { TransferRecord } from "@the-coin/utilities/lib/Firestore";
-import { DocumentReference } from "@the-coin/utilities/lib/FirebaseFirestore";
+import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
+import { TransferRecord } from "@the-coin/utilities/Firestore";
+import { DocumentReference } from "@the-coin/types/FirebaseFirestore";
 import { Timestamp } from "@google-cloud/firestore";
 
 export type VerifiedActionResult = {
@@ -19,7 +19,7 @@ async function StoreActionRequest(actionData: BrokerCAD.CertifiedTransfer, actio
     const actionDoc = GetActionDoc(user, actionType, hash);
     const data: TransferRecord = {
         ...actionData,
-        recievedTimestamp: Timestamp.now(), 
+        recievedTimestamp: Timestamp.now(),
         hash: hash,
         confirmed: false,
         fiatDisbursed: 0
@@ -55,7 +55,7 @@ async function ConfirmAction(tx: TransactionResponse, actionDoc: DocumentReferen
 export async function  CertifiedActionProcess(actionData: BrokerCAD.CertifiedTransfer, actionType: UserAction): Promise<VerifiedActionResult> {
     const { transfer } = actionData;
 
-    // First, create an initial record of the transaction.  This is a time-stamped 
+    // First, create an initial record of the transaction.  This is a time-stamped
     // record that is a fail-safe in case our tx fails
     let actionDoc = await StoreActionRequest(actionData, actionType, Date.now().toString());
     console.log(`Valid Cert Action: id: ${actionDoc.id}`);
@@ -72,7 +72,7 @@ export async function  CertifiedActionProcess(actionData: BrokerCAD.CertifiedTra
     actionDoc = await StoreActionRequest(actionData, actionType, res.hash);
 
     await StoreActionLink(actionDoc.path, actionType, res.hash);
-        
+
     // Fire & Forget callback waits for res to be mined & updates DB
     ConfirmAction(res, actionDoc);
 
