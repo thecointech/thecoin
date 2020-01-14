@@ -1,32 +1,20 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Measure, { ContentRect } from 'react-measure';
-import { connect } from 'react-redux';
-import { DispatchProps, mapDispatchToProps } from './actions';
-import { buildReducer } from './reducer';
+import { useHeightMeasure } from './reducer';
 
-type Props = DispatchProps;
 
-class Measurable extends React.PureComponent<Props> {
-  timestamp = new Date().getTime();
-
-  onContentSized = (contentRect: ContentRect) => {
+export const ContentHeightMeasure: React.FC = (props) => {
+  const [timestamp] = useState(new Date().getTime());
+  const actions = useHeightMeasure();
+  const onContentSized = useCallback((contentRect: ContentRect) => {
     const height = contentRect.bounds?.height;
     if (height)
-      this.props.setHeight(height, this.timestamp);
-  }
+    actions.setHeight(height, timestamp);
+  }, [actions]);
 
-  render() {
-    return (
-      <Measure bounds onResize={this.onContentSized}>
-        {({ measureRef }) => <div ref={measureRef}>{this.props.children}</div>}
-      </Measure>
-    );
-  }
+  return (
+    <Measure bounds onResize={onContentSized}>
+      {({ measureRef }) => <div ref={measureRef}>{props.children}</div>}
+    </Measure>
+  );
 }
-
-export default buildReducer()(
-  connect(
-    null,
-    mapDispatchToProps,
-  )(Measurable),
-);

@@ -47,6 +47,6 @@
     "composite": true,
     "types": ["jest", "node"],
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "declarations/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]
 }

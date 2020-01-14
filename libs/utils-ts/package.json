@@ -11,8 +11,7 @@
   "homepage": "http://thecoin.io",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "postinstallaa": "yarn build"
+    "build": "tsc"
   },
   "license": "MIT",
   "dependencies": {
@@ -21,7 +20,7 @@
     "@the-coin/types": "*"
   },
   "devDependencies": {
-    "cpx": "*"
+    "@types/node": "10.17.0"
   },
   "files": [
     "src/**/*"

@@ -6350,7 +6350,7 @@ coveralls@3.0.4:
     minimist "^1.2.0"
     request "^2.86.0"
 
-cpx@*, cpx@^1.5.0:
+cpx@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/cpx/-/cpx-1.5.0.tgz#185be018511d87270dedccc293171e37655ab88f"
   integrity sha1-GFvgGFEdhycN7czCkxceN2VauI8=

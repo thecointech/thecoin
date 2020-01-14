@@ -2,12 +2,14 @@
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 import { ContentState, IActions } from './types';
 import { ApplicationRootState } from 'types';
-import { injectReducer } from 'redux-injectors';
+import { useInjectReducer } from 'redux-injectors';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const CONTENT_KEY : keyof ApplicationRootState = "content";
 
 // The initial state of the App
-const initialState: ContentState = {
+export const initialState: ContentState = {
   height: 250,
 };
 
@@ -22,13 +24,8 @@ class HeightMeasureReducer extends TheCoinReducer<ContentState>
   }
 }
 
-const { reducer, actions } = GetNamedReducer(HeightMeasureReducer, CONTENT_KEY, initialState);
-
-function buildReducer() {
-  return injectReducer({
-    key: CONTENT_KEY,
-    reducer: reducer
-  });
+export const useHeightMeasure = () => {
+  const { reducer, actions } = GetNamedReducer(HeightMeasureReducer, CONTENT_KEY, initialState);
+  useInjectReducer({ key: CONTENT_KEY, reducer });
+  return (bindActionCreators(actions, useDispatch()) as any) as IActions;
 }
-
-export { actions, buildReducer, HeightMeasureReducer, CONTENT_KEY, initialState }
