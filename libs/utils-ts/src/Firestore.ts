@@ -1,4 +1,4 @@
-import { Firestore, Timestamp } from "./FirebaseFirestore";
+import { Firestore, Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { CertifiedTransfer } from "@the-coin/types";
 
 let __firestore: Firestore|null = null;
@@ -16,7 +16,7 @@ export function GetFirestore()
   return __firestore;
 }
 
-export type ProcessRecord = { 
+export type ProcessRecord = {
   recievedTimestamp: Timestamp,
   processedTimestamp?: Timestamp,
   completedTimestamp?: Timestamp,
@@ -29,10 +29,10 @@ export type TransferRecord = CertifiedTransfer & ProcessRecord;
 
 export function isDate(d: Timestamp|Date) : d is Date {
   return (d as Date).getFullYear != undefined;
-} 
+}
 export function isTimestamp(d: Timestamp|Date) : d is Timestamp {
   return (d as Timestamp).nanoseconds != undefined;
-} 
+}
 
 export function AsDate(d: Timestamp|Date) : Date {
   if (isDate(d))

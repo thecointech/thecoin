@@ -7,10 +7,10 @@ import { TheSigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 
 /* --- CALLBACKS ---*/
-type DecryptCallback = (percent: number) => boolean;
+export type DecryptCallback = (percent: number) => boolean;
 
 /* --- STATE --- */
-type Transaction = {
+export type Transaction = {
 	txHash?: string;
 	date: Date;
 	change: number;
@@ -20,7 +20,7 @@ type Transaction = {
 
 // An account state holds all relevant info
 // for an account, including loaded transactions etc
-type AccountState = {
+export type AccountState = {
 	name: string; // Convenience storage of name
 	// Possibly encrypted raw ethers wallet
 	signer: TheSigner | Wallet | null;
@@ -44,7 +44,7 @@ type AccountState = {
 	historyEndBlock?: number;
 };
 
-const DefaultAccount: AccountState = {
+export const DefaultAccount: AccountState = {
 	name: "",
 	signer: null,
 	contract: null,
@@ -54,13 +54,13 @@ const DefaultAccount: AccountState = {
 	displayCurrency: CurrencyCodes.CAD
   }
 
-type AccountMap = Dictionary<AccountState>;
+export type AccountMap = Dictionary<AccountState>;
 
-const ACCOUNTS_KEY: keyof ApplicationBaseState = "accounts";
+export const ACCOUNTS_KEY: keyof ApplicationBaseState = "accounts";
 
 
 /* --- ACTIONS --- */
-interface IActions extends ImmerReducer<AccountState> {
+export interface IActions extends ImmerReducer<AccountState> {
 
 	setName(name: string) : void;
 	setSigner(name: string, signer: TheSigner): Iterator<any>;
@@ -72,4 +72,8 @@ interface IActions extends ImmerReducer<AccountState> {
 	decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
 /* --- EXPORTS --- */
-export { IActions, AccountState, AccountMap, DefaultAccount, Transaction, DecryptCallback, ACCOUNTS_KEY };
+
+export interface AccountPageProps {
+  account: AccountState;
+  actions: IActions;
+}

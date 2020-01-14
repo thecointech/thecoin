@@ -19,7 +19,7 @@
     "package-ci": "yarn run postinstall && yarn run build && electron-builder --publish always",
     "package-linux": "yarn run build && electron-builder build --linux",
     "package-win": "yarn run build && electron-builder build --win --x64",
-    "postinstallaa": "node ../../tools/postinstallcwd.js",
+    "postinstall": "node ./postinstallcwd.js",
     "postinstallcwd": "electron-builder install-app-deps package.json",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "prestart": "yarn run build",

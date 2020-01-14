@@ -18,7 +18,7 @@
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
     "console": "truffle console",
-    "postinstallaa": "node ../../tools/postinstallcwd.js",
+    "postinstall": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
   "directories": {

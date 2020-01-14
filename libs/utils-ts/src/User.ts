@@ -1,7 +1,7 @@
 import { IsValidAddress, NormalizeAddress } from ".";
 import { GetFirestore } from './Firestore';
 import { ReferralData } from "./Referrals";
-import { Timestamp, DocumentReference } from "./FirebaseFirestore";
+import { Timestamp, DocumentReference } from "../../types/src/FirebaseFirestore";
 
 type UserVerifiedInfo = {
 	verified: string,
@@ -28,13 +28,13 @@ function GetUserDoc(address: string): DocumentReference {
 async function GetUserData(address: string) {
 	const userDoc = GetUserDoc(address)
 	const userData = await userDoc.get();
-	return userData.exists ? 
+	return userData.exists ?
 		userData.data() as AllUserData :
 		null;
 }
 
 //
-// Declare that the user address passed in here 
+// Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
 //
 async function SetUserVerified(signature: string, address: string, timestamp: Timestamp) {
@@ -42,7 +42,7 @@ async function SetUserVerified(signature: string, address: string, timestamp: Ti
 	const data: UserVerifiedInfo = {
 		verified: signature,
 		verifiedTimestamp: timestamp
-	} 
+	}
 	// We store the verified signature
 	await userDoc.set(data, { merge: true });
 }
@@ -55,12 +55,12 @@ async function GetUserVerified(address: string) {
 //
 // Helper functions for accessing stuff
 //
-function GetActionDoc(user: string, action: UserAction, hash: string): DocumentReference { 
+function GetActionDoc(user: string, action: UserAction, hash: string): DocumentReference {
 	const userDoc = GetUserDoc(user);
 	return userDoc.collection(action).doc(hash);
 }
 
-function GetActionRef(action: UserAction, hash: string): DocumentReference { 
+function GetActionRef(action: UserAction, hash: string): DocumentReference {
   return GetFirestore().collection(action).doc(hash);
 }
 

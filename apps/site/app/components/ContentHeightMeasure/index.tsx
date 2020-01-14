@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { DispatchProps, mapDispatchToProps } from './actions';
 import { buildReducer } from './reducer';
 
-interface OwnProps {}
-
-type Props = OwnProps & DispatchProps;
+type Props = DispatchProps;
 
 class Measurable extends React.PureComponent<Props> {
   timestamp = new Date().getTime();
@@ -26,7 +24,7 @@ class Measurable extends React.PureComponent<Props> {
   }
 }
 
-export default buildReducer<OwnProps>()(
+export default buildReducer()(
   connect(
     null,
     mapDispatchToProps,

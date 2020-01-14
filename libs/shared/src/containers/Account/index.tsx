@@ -1,25 +1,20 @@
 import React, { useEffect, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { Login } from "../../containers/Login";
-import { NotFoundPage } from "../../containers/NotFoundPage";
+import { Login } from "../Login";
+import { NotFoundPage } from "../NotFoundPage";
 
 import { ApplicationBaseState } from "../../types";
 import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 
 import { ConnectWeb3 } from "./Web3";
-import { AccountState } from "./types";
+import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccount } from "./reducer";
-import * as AccountActions from "./actions";
 import { isWallet } from "./storageSync";
 
 
-interface AccountProps {
-  account: AccountState;
-  dispatch: AccountActions.DispatchProps;
-}
-type PageCreator = (props: AccountProps) => (props: any) => React.ReactNode;
+type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 type RouterPath = {
   name: string;
   urlFragment: string;
@@ -52,7 +47,7 @@ export const Account = (props: Props) => {
 
     // Is this a remote account?
     if (signer && !isWallet(signer) && !signer.provider) {
-      ConnectSigner(account, accountActions);
+      connectSigner(account, accountActions);
     }
     return () => sidebar.removeGenerator(account.name);
   }, [account, signer, sidebarCb])
@@ -79,9 +74,9 @@ export const Account = (props: Props) => {
     }
   }
 
-  const accountArgs = {
+  const accountArgs: AccountPageProps = {
     account: account,
-    dispatch: accountActions
+    actions: accountActions
   };
 
   return (
@@ -103,7 +98,7 @@ export const Account = (props: Props) => {
   );
 }
 
-const ConnectSigner = async (accountState: AccountState, accountActions: AccountActions.DispatchProps) => {
+const connectSigner = async (accountState: AccountState, accountActions: IActions) => {
   const { signer, name } = accountState;
   const theSigner = await ConnectWeb3();
   if (signer && theSigner) {
@@ -174,4 +169,4 @@ const generateSubItems = (
 //   return React.createElement(__AccountMap[accountName], props);
 // }
 
-export { RouterPath, PageCreator, AccountProps };
+export { RouterPath, PageCreator, AccountPageProps as AccountProps };

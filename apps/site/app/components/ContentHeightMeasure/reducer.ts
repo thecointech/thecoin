@@ -1,8 +1,8 @@
 
-import injectReducer from '@the-coin/shared/utils/injectReducer';
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 import { ContentState, IActions } from './types';
 import { ApplicationRootState } from 'types';
+import { injectReducer } from 'redux-injectors';
 
 const CONTENT_KEY : keyof ApplicationRootState = "content";
 
@@ -24,8 +24,8 @@ class HeightMeasureReducer extends TheCoinReducer<ContentState>
 
 const { reducer, actions } = GetNamedReducer(HeightMeasureReducer, CONTENT_KEY, initialState);
 
-function buildReducer<T>() {
-  return injectReducer<T>({
+function buildReducer() {
+  return injectReducer({
     key: CONTENT_KEY,
     reducer: reducer
   });

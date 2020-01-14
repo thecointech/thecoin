@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
 import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
-import { AccountMap } from '@the-coin/shared/containers/Account/types';
+import { AccountMap, IActions } from '@the-coin/shared/containers/Account/types';
 import { GoogleWalletItem } from '@the-coin/types';
 import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
 import { connect } from 'react-redux';
 import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
 import {
   buildMapDispatchToProps,
-  DispatchProps,
 } from '@the-coin/shared/containers/Account/actions';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -32,7 +31,7 @@ function getCookie(name: string) {
 
 type Props = {
   accounts: AccountMap;
-} & DispatchProps;
+} & IActions;
 
 const initialState = {
   gauthUrl: '',

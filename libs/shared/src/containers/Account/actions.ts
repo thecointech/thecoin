@@ -6,7 +6,7 @@ import { getAccountReducer } from './reducer';
 
 //type AccountSelector = (state:any) => ContainerState|null;
 
-function buildSagas(name: string) {
+export function buildSagas(name: string) {
   const { actions, reducerClass } = getAccountReducer(name)
   const selectAccount = createAccountSelector(name);
   function buildSaga(fnName:string) {
@@ -32,7 +32,7 @@ function buildSagas(name: string) {
   return rootSaga;
 }
 
-export const BindActions = (actions: any, dispatch: Dispatch) => 
+export const BindActions = (actions: any, dispatch: Dispatch) =>
   (bindActionCreators(actions, dispatch) as any) as IActions;
 
 // Map Disptach to your DispatchProps
@@ -40,5 +40,3 @@ export function buildMapDispatchToProps(name: string) {
   const { actions } = getAccountReducer(name);
   return (dispatch: Dispatch) => BindActions(actions, dispatch);
 }
-
-export { IActions as DispatchProps, buildSagas }

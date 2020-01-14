@@ -1,4 +1,4 @@
-import { BillPayeePacket } from "@the-coin/types";
+import { BillPayeePacket, CertifiedTransfer } from "@the-coin/types";
 import { Signer } from "ethers";
 import { BuildVerifiedAction } from "./VerifiedAction";
 
@@ -9,4 +9,4 @@ export const BuildVerifiedBillPayment = async (
   to: string,
   value: number,
   fee: number
-) => BuildVerifiedAction(payee, from, to, value, fee);
+): Promise<CertifiedTransfer> => BuildVerifiedAction(payee, from, to, value, fee);

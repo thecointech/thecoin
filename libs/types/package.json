@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "scripts": {
     "build": "node buildall.js",
-    "postinstallaa": "node postinstallcwd",
+    "postinstall": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
   "devDependencies": {

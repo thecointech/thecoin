@@ -1,8 +1,0 @@
-{
-  "name": "@the-coin/tools",
-  "private": true,
-  "version": "2.0.1",
-  "bin":{
-    "postinstall-cwd": "./postinstallcwd.js"
-  }
-}

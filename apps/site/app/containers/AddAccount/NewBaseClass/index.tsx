@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { AccountMap } from '@the-coin/shared/containers/Account/types';
-import { DispatchProps } from '@the-coin/shared/containers/Account/actions';
+import { AccountMap, IActions } from '@the-coin/shared/containers/Account/types';
 import { UxInput } from '@the-coin/shared/components/UxInput';
 import { IsValidReferrerId } from '@the-coin/utilities';
 
@@ -33,7 +32,7 @@ export type OwnProps = {
 }
 export type Props = {
   accounts: AccountMap;
-} & OwnProps & DispatchProps;
+} & OwnProps & IActions;
 
 export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   Props,
@@ -166,18 +165,3 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
     return undefined;
   }
 }
-
-// // Random key ensures no collisions with named accounts
-// const key = '__@create|ee25b960';
-// // We need to ensure we have the Accounts reducer live
-// // so we add the reducer here.
-// export function NewBaseClassHOC<U, T>(impClass: ComponentClass<U, T>)
-// {
-//   buildReducer<{}>(key)(
-//     connect(
-//       structuredSelectAccounts,
-//       buildMapDispatchToProps(key),
-//     )(impClass)
-//   );
-// }
-

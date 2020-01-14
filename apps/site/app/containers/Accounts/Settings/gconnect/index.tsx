@@ -49,7 +49,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 	async fetchGAuthUrl() {
 		try {
 			const secureApi = GetSecureApi();
-			const gauth = await secureApi.googleAuthUrl()	
+			const gauth = await secureApi.googleAuthUrl()
 			if (gauth && gauth.url)
 			{
 				this.setState({gauthUrl: gauth.url});
@@ -88,7 +88,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		const gauthWindow = window.open(gauthUrl, name);
 		if (gauthWindow) {
 			this.setState({gauthWindow});
-			//this.waitGauthLogin(gauthWindow);	
+			//this.waitGauthLogin(gauthWindow);
 		}
 		else {
 			// TODO: verify non-popup flow
@@ -106,7 +106,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 	// 		const gauthWindow = window.open(gauthUrl, name);
 	// 		if (gauthWindow) {
 	// 			this.setState({gauthWindow});
-	// 			this.waitGauthLogin(gauthWindow);	
+	// 			this.waitGauthLogin(gauthWindow);
 	// 		}
 	// 	}
 	// }
@@ -114,7 +114,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 	waitGauthLogin = async (gauthWindow: IWindow) => {
 
 		const myWindow : IWindow = window;
-		var timer = setInterval(function() { 
+		var timer = setInterval(function() {
 			if(gauthWindow.closed) {
 					clearInterval(timer);
 					// Check, did we get our cookie?
@@ -178,17 +178,17 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 			.then(() => {
 				// HACK part 2:
 				// Replace weirdly-resized image with original clone
-				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg); 
+				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg);
 				this.setState({buttonText: messages.buttonSuccess})
 				if (onComplete)
 					onComplete()
 			})
-			.catch((reason) => {
+			.catch((reason: unknown) => {
 				console.error(JSON.stringify(reason));
-			})	
+			})
 	}
 
-	render() 
+	render()
 	{
 		const {gauthUrl, buttonText, enabled} = this.state;
 

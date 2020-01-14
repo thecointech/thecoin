@@ -1,4 +1,5 @@
 {
     "supportsES6": true,
-    "npmName": "@the-coin/broker-cad"
+    "npmName": "@the-coin/broker-cad",
+    "npmVersion" : "2.0.0"
 }

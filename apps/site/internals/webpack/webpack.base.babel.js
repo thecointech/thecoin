@@ -8,6 +8,8 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const projectRoot = path.resolve(__dirname, '..', '..');
+const systemRoot = path.resolve(projectRoot, '..', '..');
+const sharedRoot = path.resolve(systemRoot, 'libs', 'shared');
 
 module.exports = options => ({
   mode: options.mode,
@@ -33,8 +35,20 @@ module.exports = options => ({
       },
       {
         test: /\.ts(x?)$/,
-        exclude: /node_modules/,
+        include: path.join(projectRoot, "app"),
         use: options.tsLoaders,
+      },
+      {
+        test: /\.ts(x?)$/,
+        include: path.join(sharedRoot, "src"),
+        loader: 'ts-loader',
+        options: {
+          instance: "shared",
+            configFile: path.join(sharedRoot, 'tsconfig.json'),
+            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+            projectReferences: true,
+            logLevel: 'info',
+        },
       },
       {
         // Preprocess our own .css files
@@ -170,6 +184,12 @@ module.exports = options => ({
       '../../theme.config$': path.resolve(
         projectRoot,
         'app/styles/semantic/theme.config',
+      ),
+      '@the-coin/shared': path.resolve(
+        systemRoot,
+        'libs',
+        'shared',
+        'src',
       ),
     },
   },

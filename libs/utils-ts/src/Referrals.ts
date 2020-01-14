@@ -3,7 +3,7 @@ import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
 import { base32Encode } from '@ctrl/ts-base32';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp } from "./FirebaseFirestore";
+import { Timestamp } from "../../types/src/FirebaseFirestore";
 
 export function GetReferrersCollection() {
   return GetFirestore().collection("Referrers");
@@ -71,7 +71,7 @@ export async function CreateReferrer(signature: string, address: string) {
   return code;
 }
 
-// 
+//
 // Create a new account with the given referral code.  Not
 // every account requires a referral code, but it should not
 // be possible to assign codes to existing accounts

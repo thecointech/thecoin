@@ -14,7 +14,8 @@ console.warn(`
 
 const root = path.resolve(__dirname, "..", "..")
 const yamlPath = path.resolve(root, "apis", "broker-cad.yaml");
-const outPath = path.resolve(__dirname, "build", "types")
+const outPath = path.resolve(root, "build", "types")
+console.log("Writing types to: " + outPath)
 file = readFileSync(yamlPath, 'utf8');
 const input = yaml.safeLoad(file); // Input be any JS object (OpenAPI format)
 const output = swaggerToTS(input, {

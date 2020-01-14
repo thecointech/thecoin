@@ -31,7 +31,7 @@
     "build:less": "yarn lessc --include-paths=",
     "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ../../build/.obj/site && cpx \"./app/.htaccess\" ../../build/.obj/site",
     "temp": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
-    "build:clean": "rimraf ./build",
+    "build:clean": "rimraf ../../build/site",
     "start": "cross-env NODE_ENV=development node server",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start:production": "yarn test && yarn build && yarn start:prod",
