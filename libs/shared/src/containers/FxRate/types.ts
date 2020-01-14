@@ -1,16 +1,14 @@
 import { FXRate } from '@the-coin/pricing'
 
 /* --- STATE --- */
-type ContainerState = {
+export type ContainerState = {
   rates: FXRate[];
 }
 
 /* --- ACTIONS --- */
-interface IActions {
+export interface IActions {
   fetchRateAtDate(date: Date) : Iterator<any>;
   addFxRate(rates: FXRate): void;
 }
 
 /* --- EXPORTS --- */
-
-export { IActions, ContainerState };

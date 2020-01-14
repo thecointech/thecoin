@@ -6,12 +6,12 @@ import { ApplicationBaseState } from '../../types';
 const SIDEBAR_KEY : keyof ApplicationBaseState = "sidebar";
 
 // The initial state of the App
-const initialState: SidebarGenerators = {
+export const initialState: SidebarGenerators = {
   rootGenerator: null,
   subGenerators: {}
 };
 
-class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
+export class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
   implements IActions {
 
   addGenerator(name: string, generator: ItemModifier): void {
@@ -31,11 +31,9 @@ export const useSidebar = () => {
   useInjectReducer({ key: SIDEBAR_KEY, reducer: reducer });
 }
 
-function buildReducer() {
+export function buildReducer() {
   return injectReducer({
     key: SIDEBAR_KEY,
     reducer: reducer
   });
 }
-
-export { buildReducer, SidebarItemsReducer, initialState }

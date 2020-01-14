@@ -7,5 +7,5 @@ function mapDispatchToProps(dispatch: Dispatch): IActions {
   return (bindActionCreators(actions, dispatch) as any) as IActions;
 }
 
-export { IActions as DispatchProps, mapDispatchToProps }
+export { mapDispatchToProps }
 

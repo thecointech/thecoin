@@ -1,9 +1,10 @@
 {
+  "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "esnext",
+    //"target": "es2017",
+    //"module": "esnext",
     "outDir": "../../build/shared/",
-    "incremental": true,
+    //"incremental": true,
     "tsBuildInfoFile": "../../build/.obj/shared.buildinfo",
     "rootDir": "./src/",
     "baseUrl": "./",
@@ -13,20 +14,20 @@
           "declarations/*"
       ]
     },
-    "jsx": "react",
-    "moduleResolution": "node",
-    "pretty": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "lib": ["dom", "es2017"],
+    // "jsx": "react",
+    // "moduleResolution": "node",
+    // "pretty": true,
+    // "sourceMap": true,
+    // "resolveJsonModule": true,
+    // "lib": ["dom", "es2017"],
 
-    "strict": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    // "strict": true,
+    // "noImplicitReturns": true,
+    // "noImplicitThis": true,
+    // "noImplicitAny": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
 
     // Don't emit; allow Babel to transform files.
     //"noEmit": true,
@@ -38,14 +39,14 @@
     // NOTE: this causes issues with DateTime
     //"esModuleInterop": true,
 
-    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
+    //"allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
     //
     // Allow project references
     //
-    "declarationMap": true,
-    "declaration": true,
-    "composite": true,
-    "types": ["jest", "node"],
+    // "declarationMap": true,
+    // "declaration": true,
+    // "composite": true,
+    // "types": ["jest", "node"],
   },
   "include": ["src/**/*", "declarations/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]

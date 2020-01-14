@@ -5,7 +5,7 @@ import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker, FocusedInputShape } from 'react-dates';
 
-type OnChangeCallback = (startTime: Date, endTime: Date) => void;
+export type OnChangeCallback = (startTime: Date, endTime: Date) => void;
 
 type PropsType = {
   onDateRangeChange: OnChangeCallback
@@ -84,4 +84,4 @@ class DateRangeSelect extends React.PureComponent<PropsType, {}, StateType> {
   }
 };
 
-export { DateRangeSelect, OnChangeCallback };
+export { DateRangeSelect };

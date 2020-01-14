@@ -1,21 +1,17 @@
 import React, { useEffect, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
-
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
-
 import { ApplicationBaseState } from "../../types";
 import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
-
 import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccount } from "./reducer";
 import { isWallet } from "./storageSync";
 
-
-type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
-type RouterPath = {
+export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
+export type RouterPath = {
   name: string;
   urlFragment: string;
   creator: PageCreator;
@@ -169,4 +165,4 @@ const generateSubItems = (
 //   return React.createElement(__AccountMap[accountName], props);
 // }
 
-export { RouterPath, PageCreator, AccountPageProps as AccountProps };
+//export { RouterPath, PageCreator, AccountPageProps as AccountProps };

@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2018",
     "composite": true,
   }
 }

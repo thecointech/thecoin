@@ -3,12 +3,12 @@ import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
 
 /* --- STATE --- */
-interface SidebarMenuLink {
+export interface SidebarMenuLink {
   name: string;
   to: string | false;
 }
 
-interface SidebarMenuItem {
+export interface SidebarMenuItem {
   link: SidebarMenuLink;
   subItems?: SidebarMenuItem[];
 }
@@ -16,11 +16,11 @@ interface SidebarMenuItem {
 // Sidebar does not directly recieve state: instead;
 // we recieve a generator that transfors App State
 // into the appropriate sidebar objects
-type ItemGenerator = (state: ApplicationBaseState) => SidebarMenuItem[];
-type ItemModifier = (items: SidebarMenuItem[], state: ApplicationBaseState) => SidebarMenuItem[];
+export type ItemGenerator = (state: ApplicationBaseState) => SidebarMenuItem[];
+export type ItemModifier = (items: SidebarMenuItem[], state: ApplicationBaseState) => SidebarMenuItem[];
 
 
-type SidebarGenerators = {
+export type SidebarGenerators = {
   // A root generator runs before the rest of them
   rootGenerator: ItemGenerator|null;
   // sub generators run after, and may modify the
@@ -43,7 +43,7 @@ type SidebarGenerators = {
 ////////////////////////////////////////////////////////////////
 // Utility Functions
 // Search through items to find the named entity
-function FindItem(items: SidebarMenuItem[], name: string) {
+export function FindItem(items: SidebarMenuItem[], name: string) {
   return items.find(item => item.link.name === name);
 }
 
@@ -53,7 +53,7 @@ const stripTrailingSlash = (str: string) : string => {
       str;
 };
 
-function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
+export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
   let surl = stripTrailingSlash(url);
   return item.map(element => {
     if (element.link.to !== false) {
@@ -73,12 +73,8 @@ function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
 }
 
 /* --- ACTIONS --- */
-interface IActions extends ImmerReducer<SidebarGenerators> {
+export interface IActions extends ImmerReducer<SidebarGenerators> {
   addGenerator(name: string, generator: ItemModifier): void;
   removeGenerator(name: string): void;
   setRootGenerator(generator: ItemGenerator|null): void;
 }
-
-/* --- EXPORTS --- */
-
-export { IActions, SidebarGenerators, FindItem, MapMenuItems, ItemGenerator, ItemModifier, SidebarMenuItem, SidebarMenuLink };
