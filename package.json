@@ -13,14 +13,16 @@
     ]
   },
   "scripts": {
-    "preinstall": "yarn gen:apis && cpx \"libs/*/package.json\" build --command \"node ./tools/package-clean.js\"",
+    "preinstall": "cpx \"libs/*/package.json\" build --command \"node ./tools/package-clean.js\"",
     "postinstall": "yarn build:apis",
     "gen:rates": "openapi-generator generate -i apis/the-pricing.yaml -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
     "gen:broker": "openapi-generator generate -i apis/broker-cad.yaml -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:apis": "yarn gen:rates && yarn gen:broker",
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
-    "build:apis": "concurrently \"yarn build:rates\" \"yarn build:broker\""
+    "build:apis": "concurrently \"yarn build:rates\" \"yarn build:broker\"",
+
+    "start:site": "cd apps/site && yarn start"
   },
   "dependencies": {
     "axios": "^0.19.0",
