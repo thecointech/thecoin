@@ -1,16 +1,14 @@
 .navContainer {
 }
 .mainMenu {
-  height: 64px;
   font-size: 16px;
-  justify-content: flex-end;
-  background: #4b65b4;
+  width: auto;
+  display: inline-block;
+  height: 50px;
+  margin-bottom: 10px;
+  width: 250px;
 }
-.subscribe {
-  position: absolute;
-  left: 2%;
-  top: 18%;
+.ui.container{
+  border: none !important;
 }
 
-.ui.menu .item {
-}
