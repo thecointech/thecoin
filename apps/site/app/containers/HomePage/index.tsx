@@ -20,7 +20,7 @@ import interac from './images/interacLogo.svg';
 import treeLogo from './images/treeCanadaLogo.png';
 
 import Subscribe from '../Subscribe';
-import styles from '../../styles/base.css';
+import styles from './index.module.css';
 import { hasAccount } from 'utils/detection';
 import { useSelector } from 'react-redux';
 import { selectAccounts } from '@the-coin/shared/containers/Account/selector';

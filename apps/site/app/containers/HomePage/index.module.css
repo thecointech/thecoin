@@ -1,88 +1,80 @@
-.mainWrapper {
+.mainWrapper .column{
+  margin: 20px;
+  text-align: center;
+  color: #3255A4;
 }
 .headingWrapper {
-  text-align: right;
+  text-align: left;
   flex-direction: column;
+  margin-left: 40px;
+  margin-top: 40px;
+}
+.mainWrapper {
+  margin-left: 40px;
+  margin-top: 40px;
+}
+.phoneApp img{
+  width: 80%;
+  right: -50px;
+  top: -150px;
+  position: relative;
+  max-width: 200px;
+  max-height: 600px;
+}
+.mainWrapper .column .ui.secondary.button{
+  right: 20px;
+}
+.listHome{
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-bottom: 40px;
+  line-height: 35px;
+  font-size: 15px;
+}
+.h2Home{
+  font-size: 30px;
+  margin-left: 80px;
+  padding-top: 40px;
+  width: 50%;
+}
+#createAccount{
+  float: right;
+}
+.interac{
+  width: 40px;
+  margin-top: -10px;
+}
+.treeLogo{
+  width: 80px;
+  margin-top: -10px;
 }
 
-.h1 {
-  font-weight: 300;
-  font-size: 2.7rem;
+
+@media only screen and (min-width: 750px) {
+
+  .listHome{
+    font-size: 25px;
+  }
 }
 
-.centerh3 {
-  font-weight: 300;
-  font-size: 2rem;
-  color: #002c8e;
-  line-height: 3rem;
-  margin-bottom: 1em;
-  margin-top: 70px;
-}
-.centerh3 span {
-  font-weight: 500;
-}
-
-.h3 {
-  font-weight: 300;
-  font-size: 1.5rem;
-  color: #002c8e;
-  line-height: 2.5rem;
-}
-
-.h3 span {
-  font-weight: 500;
-}
-
-.h3right {
-  font-weight: 300;
-  font-size: 1.5rem;
-  color: #002c8e;
-  line-height: 2.5rem;
-  max-width: 540px;
-}
-
-.h3left {
-  font-weight: 300;
-  font-size: 1.5rem;
-  color: #002c8e;
-  line-height: 2.5rem;
-  font-family: 'Lato', sans-serif;
-  max-width: 540px;
-}
-
-.gridWrapper {
-  text-align: center;
-}
-.links {
-  font-weight: bold;
-}
-
-.topMargin {
-  margin-top: 7rem;
-}
-
-.yearStart {
-  top: 45%;
-  left: -6%;
-  font-size: 1.4rem;
-}
-
-.sproutWrapper {
-  text-align: center;
-}
-.logoIcon {
-  width: 60%;
-}
-
-.subscribeText {
-  font-size: 1.7rem;
-  font-weight: 300;
-  margin-bottom: 50px;
-  color: #002c8e;
-}
-
-.subContainer {
-  width: 70%;
-  max-width: 810px;
-  margin: auto;
+@media only screen and (max-width: 750px) {
+  .h2Home{
+    font-size: 25px;
+    width: 100%;
+    margin-left: 0px;
+  }
+  .listHome{
+    margin-left: 0;
+  }
+  .headingWrapper {
+    margin-left: 0;
+    margin-top: 0;
+  }
+  .mainWrapper .column{
+    width: 100% !important;
+  }
+  .phoneApp img{
+    right: -20px;
+    top: -10px;
+  }
 }
