@@ -1,4 +1,4 @@
-call npm run build
+call yarn build
 IF %ERRORLEVEL% NEQ 0 (
 	echo !
 	echo !build failed!

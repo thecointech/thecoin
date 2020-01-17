@@ -54,7 +54,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  updateWithValues(newState: AccountState) {
+  updateWithValues(newState: Partial<AccountState>) {
     Object.assign(this.draftState, newState);
   }
 
