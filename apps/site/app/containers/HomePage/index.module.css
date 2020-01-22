@@ -48,15 +48,12 @@
   width: 80px;
   margin-top: -10px;
 }
-
-
 @media only screen and (min-width: 750px) {
 
   .listHome{
     font-size: 25px;
   }
 }
-
 @media only screen and (max-width: 750px) {
   .h2Home{
     font-size: 25px;
