@@ -7,21 +7,23 @@ import { Document } from 'prismic-javascript/d.ts/documents'
 import { ApplicationRootState } from 'types'
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { buildSaga } from '@the-coin/shared/utils/sagas'
+import { useDispatch } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 const apiEndpoint = 'https://thecoin.cdn.prismic.io/api/v2'
 const accessToken = '' // This is where you would add your access token for a Private repository
+const Client = Prismic.client(apiEndpoint, { accessToken });
 
 export class PrismicReducer extends TheCoinReducer<PrismicState>
 	implements IActions
 {
   	
-  Client = Prismic.client(apiEndpoint, { accessToken });
-
+  
   *fetchFaqs(): Generator<any> {
 	
     const fetchData = async () : Promise<Document[]|null> => {
-      const response = await this.Client.query(
-        Prismic.Predicates.at('document.type', 'page'),
+      const response = await Client.query(
+        Prismic.Predicates.at('document.type', 'faq'),
         {}
       )
       if (response) {
@@ -38,24 +40,20 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
 // TODO: CLEAN THIS UP!
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
-const { actions, reducer } = GetNamedReducer(PrismicReducer, "prismic_docs", initialState)
+const { actions, reducer, reducerClass } = GetNamedReducer(PrismicReducer, "prismic_docs", initialState)
 function createRootEntitySelector<T>(rootKey: keyof ApplicationRootState, initialState: T) {
 	return (state: ApplicationRootState) : T => state[rootKey] as any || initialState;
 }
 const rootSelector = createRootEntitySelector("documents", initialState);
 
-export function buildSagas() {
-
-  // Root saga
-  function* rootSaga() {
-    yield takeLatest(actions.fetchFaqs.type, buildSaga(reducer, rootSelector, "fetchFaqs"));
-  }
-
-  return rootSaga;
+function* rootSaga() {
+  yield takeLatest(actions.fetchFaqs.type, buildSaga<PrismicReducer>(reducerClass, rootSelector, "fetchFaqs"));
 }
-
 
 export const usePrismic = () => {
   useInjectReducer({ key: DOCUMENTS_KEY, reducer: reducer });
-  useInjectSaga({ key: DOCUMENTS_KEY, saga: buildSagas()});
+  useInjectSaga({ key: DOCUMENTS_KEY, saga: rootSaga});
 }
+
+export const usePrismicActions = () => 
+  (bindActionCreators(actions, useDispatch()) as any) as IActions;

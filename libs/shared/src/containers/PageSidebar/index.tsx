@@ -9,7 +9,7 @@ import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
 
 type Props = {
-  visible: boolean;
+  visible?: boolean;
   inverted?: boolean;
 }
 
@@ -21,17 +21,15 @@ export const PageSidebar: React.FC<Props> = (props) => {
   const menuItems = useMemo(() => {
     let items: SidebarMenuItem[] = [];
 
-    if (generators.rootGenerator)
-      items = generators.rootGenerator(appState);
-
-    Object.entries(generators.subGenerators).forEach(([_, generator]) => {
+    Object.entries(generators.generators).forEach(([_, generator]) => {
       items = generator(items, appState);
     });
     
     return buildMenuArray(items);
-  }, [appState])
+  }, [appState, generators])
 
-  const pusherClass = visible ? styles.mainPagePusherOut : undefined;
+  const isVisible = visible ?? (menuItems && menuItems.length > 0);
+  const pusherClass = isVisible ? styles.mainPagePusherOut : undefined;
 
   return (
     <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
@@ -40,7 +38,7 @@ export const PageSidebar: React.FC<Props> = (props) => {
         animation="push"
         direction="left"
         vertical
-        visible={visible}
+        visible={isVisible}
         className={styles.mainPageSidebar}
         inverted={inverted}
       >
@@ -96,7 +94,7 @@ const buildSubMenuArray = (item: SidebarMenuItem) => {
 //   if (state.sidebar.rootGenerator)
 //     items = state.sidebar.rootGenerator(state);
 
-//   Object.entries(state.sidebar.subGenerators).forEach(([_, generator]) => {
+//   Object.entries(state.sidebar.generators).forEach(([_, generator]) => {
 //     items = generator(items, state);
 //   });
   

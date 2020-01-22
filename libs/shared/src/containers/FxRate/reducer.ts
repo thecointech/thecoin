@@ -122,7 +122,7 @@ function buildSagas(name: keyof ApplicationBaseState) {
 
   function* rootSaga() {
     yield fork(loopFxUpdates);
-    yield takeEvery(actions.fetchRateAtDate.type, buildSaga(reducerClass, selectAccount, "fetchRateAtDate"))
+    yield takeEvery(actions.fetchRateAtDate.type, buildSaga<FxRateReducer>(reducerClass, selectAccount, "fetchRateAtDate"))
     yield sendValues(actions.fetchRateAtDate);
   }
 

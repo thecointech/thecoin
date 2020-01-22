@@ -27,7 +27,6 @@ export const App = () => {
   
   useFxRates();
   const location = useLocation();
-  const sidebarVisible = location.pathname.startsWith('/accounts');
 
   return (
     <>
@@ -40,7 +39,7 @@ export const App = () => {
           width: '100%',
         }}
       >
-        <PageSidebar visible={sidebarVisible}>
+        <PageSidebar>
           <MainPageTransition location={location}>
             <section className={styles.pageMainInner}>
               <MainRouter location={location} />
