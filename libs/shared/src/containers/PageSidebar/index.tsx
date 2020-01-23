@@ -24,7 +24,7 @@ export const PageSidebar: React.FC<Props> = (props) => {
     Object.entries(generators.generators).forEach(([_, generator]) => {
       items = generator(items, appState);
     });
-    
+
     return buildMenuArray(items);
   }, [appState, generators])
 
@@ -51,18 +51,23 @@ export const PageSidebar: React.FC<Props> = (props) => {
   );
 }
 
-const getAsItem = (item: SidebarMenuItem) =>
-    <React.Fragment key={`Fragment${item.link.to}`}>
+const getAsItem = (item: SidebarMenuItem) => {
+  const url = item.link.to.toString();
+  return (
+    <React.Fragment key={`Fragment${url}`}>
       <MenuItem
         as={NavLink}
         exact={true}
-        key={item.link.to as string}
-        to={item.link.to}
+        key={url}
+        to={url}
       >
         {item.link.name}
       </MenuItem>
       {buildSubMenuArray(item)}
     </React.Fragment>
+  )
+}
+
 
 
 const getAsDivider = (item: SidebarMenuItem) =>
@@ -80,29 +85,7 @@ const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
 
 const buildSubMenuArray = (item: SidebarMenuItem) => {
   const { subItems } = item;
-  return subItems ? (
-    <Menu.Menu>{buildMenuArray(subItems)}</Menu.Menu>
-  ) : (
-    undefined
-  );
+  return subItems 
+    ? <Menu.Menu>{buildMenuArray(subItems)}</Menu.Menu>
+    : undefined;
 }
-
-// // Map State into a list of menu items.
-// function mapStateToProps(state: ApplicationBaseState, ownProps: OwnProps) {
-//   let items: SidebarMenuItem[] = [];
-
-//   if (state.sidebar.rootGenerator)
-//     items = state.sidebar.rootGenerator(state);
-
-//   Object.entries(state.sidebar.generators).forEach(([_, generator]) => {
-//     items = generator(items, state);
-//   });
-  
-//   return {items};
-// }
-// const v= connect(mapStateToProps)(PageSidebar);
-
-// const ConnectedPageSidebar = buildReducer()(
-  
-// );
-// export { ConnectedPageSidebar as PageSidebar };

@@ -1,11 +1,12 @@
 import { ImmerReducer } from 'immer-reducer';
 import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
+import { RUrl } from '@the-coin/utilities/RUrl';
 
 /* --- STATE --- */
 export interface SidebarMenuLink {
   name: string;
-  to: string | false;
+  to: RUrl | false;
 }
 
 export interface SidebarMenuItem {
@@ -56,7 +57,7 @@ export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuI
       const mapped: SidebarMenuItem = {
         link: {
           ...element.link,
-          to: `${surl}/${element.link.to}`,
+          to: new RUrl(surl, element.link.to.toString()),
         },
         subItems: element.subItems
           ? MapMenuItems(element.subItems, surl)

@@ -10,7 +10,7 @@ import { HowItWorks } from 'containers/HowItWorks';
 import { Confirm } from 'containers/Subscribe/Confirm';
 import { GAuth } from 'containers/Accounts/Settings/gconnect/gauth';
 import { Learn } from 'containers/Learn';
-import { FAQs } from 'containers/Faqs';
+import { HelpDocs } from 'containers/HelpDocs';
 
 export default (props: { location: Location }) => (
   (window.location.pathname === '/accounts/gauth') ?
@@ -22,7 +22,7 @@ export default (props: { location: Location }) => (
       <Route path="/accounts" component={Accounts} />
       <Route path="/learn" component={Learn} />
       <Route path="/howItWorks" component={HowItWorks} />
-      <Route path="/FAQ" component={FAQs} />
+      <Route path="/FAQ" component={HelpDocs} />
       <Route component={NotFoundPage} />
     </Switch>
     )

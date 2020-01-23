@@ -23,7 +23,7 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
 	
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
-        Prismic.Predicates.at('document.type', 'faq'),
+        '', //Prismic.Predicates.at('document.type', 'faq'),
         {}
       )
       if (response) {
@@ -31,9 +31,12 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
       }
       return null;
     }
-    const results: any = yield call(fetchData);
+    const results: Document[] = (yield call(fetchData)) as any;
     if (results)
-      yield this.storeValues({faqs: results})
+      yield this.storeValues({
+        faqs: results.filter(item => item.type === 'faq') ?? [],
+        articles: results.filter(item => item.type === 'article') ?? []
+      })
   };
 }
 

@@ -33,7 +33,6 @@ export const Confirm = (props: RouteComponentProps) => {
     const api = GetNewsletterApi();
     const result = await api.newsletterConfirm(details);
     setDetails(result.data);
-    console.log("subscribed: " + result.data.confirmed);
     setUpdated(!!result);
   }, [details]);
 
