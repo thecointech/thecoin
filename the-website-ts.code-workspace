@@ -12,7 +12,7 @@
   ],
   "settings": {
     "deepcode.review.results.hideInformationIssues": false,
-    "typescript.tsdk": "..\\node_modules\\typescript\\lib",
+    "typescript.tsdk": "utils-ts/..\\node_modules\\typescript\\lib",
     "typescript.tsserver.pluginPaths": ["typescript-plugin-css-modules"]
   }
 }

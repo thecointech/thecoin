@@ -18,13 +18,11 @@ import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { payees, validate } from './payees';
 import { BillPayeePacket } from '@the-coin/types';
-import {
-  GetStatusApi,
-  GetBillPaymentsApi,
-} from 'containers/Services/BrokerCAD';
+import { GetStatusApi, GetBillPaymentsApi } from 'containers/Services/BrokerCAD';
 import { UxInput } from '@the-coin/shared/components/UxInput';
 
 import styles from '../../../styles/base.css';
+import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
 
 type MyProps = {
   account: AccountState;
@@ -40,7 +38,7 @@ const initialState = {
   accountNumber: '',
   payeeName: '',
 
-  accountNumberValid: false,
+  validationMessage: null as ValuedMessageDesc|null,
   forceValidate: false,
 
   transferInProgress: false,
@@ -70,9 +68,9 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     this.doSubmit();
   };
   onAccountNumber = (value: string) => {
-    const isValid = validate(this.state.payee, value);
+    const validation = validate(this.state.payee, value);
     this.setState({
-      accountNumberValid: isValid,
+      validationMessage: validation,
       accountNumber: value,
     });
   };
@@ -158,8 +156,9 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     });
 
     // Validate inputs
-    const { coinToSell, payee, accountNumber, accountNumberValid } = this.state;
-    if (!coinToSell || !payee || !accountNumber || !accountNumberValid) return;
+    const { coinToSell, payee, accountNumber, validationMessage } = this.state;
+    const isValid = !validationMessage;
+    if (!coinToSell || !payee || !accountNumber || !isValid) return;
 
     try {
       const results = await this.doBillPayment();
@@ -190,13 +189,11 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
       transferValues,
       paymentMessage,
       percentComplete,
-      accountNumberValid,
+      validationMessage,
       forceValidate,
     } = this.state;
-    const accountMessage = accountNumberValid
-      ? undefined
-      : messages.invalidAccountNumer;
-    const canSubmit = accountNumberValid && coinToSell;
+    const isValid = !validationMessage;
+    const canSubmit = isValid && coinToSell;
     return (
       <React.Fragment>
         <div className={styles.wrapper}>
@@ -222,9 +219,9 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
             <UxInput
               intlLabel={messages.accountNumer}
               uxChange={this.onAccountNumber}
-              isValid={accountNumberValid}
+              isValid={isValid}
               forceValidate={forceValidate}
-              message={accountMessage}
+              message={validationMessage}
               placeholder="Payee account number"
             />
             {/*<Form.Input label="Bill Name" onChange={this.onNameChange} placeholder="An optional name to remember this payee by" /> */}

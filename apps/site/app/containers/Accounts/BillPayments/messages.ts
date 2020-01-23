@@ -41,8 +41,22 @@ export default defineMessages({
     id: `${scope}.accountNumer`,
     defaultMessage: "Payee Account Number"
   },
-  invalidAccountNumer: {
-    id: `${scope}.invalidAccountNumer`,
+
+  invalidVisaChars: {
+    id: `${scope}.invalidVisaCardLength`,
+    defaultMessage: "Your card number should be 16 digits long"
+  },
+  invalidVisaAccount: {
+    id: `${scope}.invalidVisaAccount`,
+    defaultMessage: "The given number is not a valid visa card"
+  },
+
+  invalidNumericChars: {
+    id: `${scope}.invalidNumericChars`,
+    defaultMessage: "You have entered {len} numbers, but your account requires {max}"
+  },
+  invalidNumericLength: {
+    id: `${scope}.invalidNumericLength`,
     defaultMessage: "Invalid account number"
   }
 });

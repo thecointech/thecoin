@@ -57,8 +57,9 @@ class UxInputClass extends React.Component<Props, State> {
       uxChange,
       forceValidate,
       footer,
-      isValid, 
+      isValid,
       message,
+      messageValues,
       tooltip,
       ...inputProps
     } = this.props;
