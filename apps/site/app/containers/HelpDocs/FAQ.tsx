@@ -1,9 +1,7 @@
 import React from "react";
 import { FAQDocument } from "containers/Prismic/types";
-import { Segment, Item } from "semantic-ui-react";
+import { Item } from "semantic-ui-react";
 import { Renderer } from "./Renderer/Renderer";
-import { ArrayRenderer } from "./Renderer/ArrayRenderer";
-
 
 export const FAQ = ({ data }: FAQDocument) =>
   <Item>

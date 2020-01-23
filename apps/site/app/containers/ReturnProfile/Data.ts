@@ -47,6 +47,7 @@ export async function getData() {
 ///////////////////////////////////
 
 export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], maxFee: number) {
+  console.log("FIX MAXFEE: " + maxFee);
   let shares = 1;
   for (let i = startIdx + 1; i <= endIdx; i++) {
     const month = data[i];
