@@ -1,11 +1,12 @@
 import { ImmerReducer } from 'immer-reducer';
 import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
+import { RUrl } from '@the-coin/utilities/RUrl';
 
 /* --- STATE --- */
 export interface SidebarMenuLink {
   name: string;
-  to: string | false;
+  to: RUrl | false;
 }
 
 export interface SidebarMenuItem {
@@ -16,16 +17,12 @@ export interface SidebarMenuItem {
 // Sidebar does not directly recieve state: instead;
 // we recieve a generator that transfors App State
 // into the appropriate sidebar objects
-export type ItemGenerator = (state: ApplicationBaseState) => SidebarMenuItem[];
-export type ItemModifier = (items: SidebarMenuItem[], state: ApplicationBaseState) => SidebarMenuItem[];
-
+export type SidebarGenerator = (items: SidebarMenuItem[], state: ApplicationBaseState) => SidebarMenuItem[];
 
 export type SidebarGenerators = {
-  // A root generator runs before the rest of them
-  rootGenerator: ItemGenerator|null;
   // sub generators run after, and may modify the
   // list (ie - by toggling items open/closed etc)
-  subGenerators: Dictionary<ItemModifier>;
+  generators: Dictionary<SidebarGenerator>;
 }
 //   readonly items: SidebarMenuItem[];
 //   // We have a complex issue to resolve.  Our main page
@@ -60,7 +57,7 @@ export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuI
       const mapped: SidebarMenuItem = {
         link: {
           ...element.link,
-          to: `${surl}/${element.link.to}`,
+          to: new RUrl(surl, element.link.to.toString()),
         },
         subItems: element.subItems
           ? MapMenuItems(element.subItems, surl)
@@ -74,7 +71,6 @@ export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuI
 
 /* --- ACTIONS --- */
 export interface IActions extends ImmerReducer<SidebarGenerators> {
-  addGenerator(name: string, generator: ItemModifier): void;
+  addGenerator(name: string, generator: SidebarGenerator): void;
   removeGenerator(name: string): void;
-  setRootGenerator(generator: ItemGenerator|null): void;
 }

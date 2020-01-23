@@ -9,6 +9,7 @@ import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccount } from "./reducer";
 import { isWallet } from "./storageSync";
+import {RUrl} from '@the-coin/utilities/RUrl';
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
@@ -79,7 +80,7 @@ export const Account = (props: Props) => {
     <Switch>
       {accountMap.map(item => {
         const component = item.creator(accountArgs);
-        const targetUrl = BuildLink(item, props.url);
+        const targetUrl = BuildLink(item, props.url).toString();
         return (
           <Route
             path={targetUrl}
@@ -105,11 +106,8 @@ const connectSigner = async (accountState: AccountState, accountActions: IAction
   }
 }
 
-const BuildLink = (item: RouterPath, url: string) => {
-  return url.endsWith("/")
-    ? `${url}${item.urlFragment}`
-    : `${url}/${item.urlFragment}`;
-}
+const BuildLink = (item: RouterPath, url: string) => 
+  new RUrl(url, item.urlFragment);
 
 const generateSubItems = (
   props: Props,

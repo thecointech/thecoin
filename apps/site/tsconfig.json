@@ -1,12 +1,8 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
-    //"incremental": true,
     "tsBuildInfoFile": "../../build/.obj/site.buildinfo",
     "target": "es6",
-    //, //commonjs destroys 'dynamic imports' which is used for code splitting
-    //"noImplicitAny": false,
-    //"preserveConstEnums": true,
     "baseUrl": "./app",
     "paths": {
       "@the-coin/shared/*": [
@@ -14,31 +10,6 @@
       ]
     },
     "outDir": "../../build/.obj/site/"
-    //"jsx": "react", // process JSX
-    //"lib": ["dom", "es2017"],
-    //"allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    //"esModuleInterop": true,
-    //"allowJs": true, // include js files
-    //"declaration": false,
-    //"emitDecoratorMetadata": true,
-    //"experimentalDecorators": true,
-    //"forceConsistentCasingInFileNames": true,
-    //"moduleResolution": "node",
-    //"noEmitOnError": true,
-    //"noFallthroughCasesInSwitch": true,
-    //"noImplicitReturns": true,
-    //"noImplicitThis": true,
-    //"noUnusedLocals": false,
-    //"strict": true,
-    //"strictFunctionTypes": false,
-    //"pretty": true,
-    //"removeComments": true,
-    //"sourceMap": true,
-    //"types": ["jest", "node"],
-
-    //"plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["app/**/*", "internals/templates/**/*"]
-  //"exclude": ["node_modules", "**/*.test.*"],
-  //"references": [{ "path": "../../libs/shared/", "prepend": false }]
 }

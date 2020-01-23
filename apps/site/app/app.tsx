@@ -13,7 +13,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import FontFaceObserver from 'fontfaceobserver';
+//import FontFaceObserver from 'fontfaceobserver';
 import history from '@the-coin/shared/utils/history';
 import 'sanitize.css/sanitize.css';
 
@@ -36,14 +36,19 @@ import { translationMessages } from './i18n';
 import { initTracking } from './utils/reactga';
 initTracking();
 
+// TODO: We are temporarily removing the web-fonts
+// as we seem to be throwing exceptions in their
+// loading.  We need to investigate this methods usefulness
+// before deciding whether or not to ditch entirely though.
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Open Sans', {});
+//const openSansObserver = new FontFaceObserver('Open Sans', {});
 
 // When Open Sans is loaded, add a font-family using Open Sans to the body
-openSansObserver.load().then(() => {
-  document.body.classList.add('fontLoaded');
-});
+// openSansObserver.load().then(() => {
+//   document.body.classList.add('fontLoaded');
+// });
 
 // Create redux store with history
 const initialState = {};
