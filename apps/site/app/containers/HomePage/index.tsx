@@ -17,7 +17,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import phone from './images/phoneAndMoney.svg';
 import interac from './images/interacLogo.svg';
-import treeLogo from './images/treeCanadaLogo.png';
 
 import Subscribe from '../Subscribe';
 import styles from './index.module.css';
@@ -51,12 +50,6 @@ export const HomePage = () => {
                   /></li>
                 <li>Grow your money (average <b>Growth of 9.8%</b>) </li>
                 <li>Pay <b>No Bank Fees</b></li>
-                <li><b>We plant trees with    </b>
-                  <img
-                    className={styles.treeLogo}
-                    alt="tree Canada Logo"
-                    src={treeLogo}
-                  /></li>
               </ol>
               <p>No engagement, no obligations.</p>
 
