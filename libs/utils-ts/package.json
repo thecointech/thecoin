@@ -19,9 +19,6 @@
     "@the-coin/contract": "*",
     "@the-coin/types": "*"
   },
-  "devDependencies": {
-    "@types/node": "10.17.0"
-  },
   "files": [
     "src/**/*"
   ]

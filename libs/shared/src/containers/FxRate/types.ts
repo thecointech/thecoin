@@ -8,7 +8,6 @@ export type ContainerState = {
 /* --- ACTIONS --- */
 export interface IActions {
   fetchRateAtDate(date: Date) : Iterator<any>;
-  addFxRate(rates: FXRate): void;
 }
 
 /* --- EXPORTS --- */

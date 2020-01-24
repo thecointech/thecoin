@@ -32,22 +32,22 @@ export const AccountSwitcher = () => {
       <Dropdown.Menu>
         <Dropdown.Header>My Accounts</Dropdown.Header>
         {allNames
-            .filter(account => account == activeAccount.name)
-            .map(name => 
-              <Dropdown.Item>
-                <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14)+'...'}>
-                  <Dropdown.Menu direction='right'>
-                  <Dropdown.Item key={name} text='See' account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />
+          .filter(account => account == activeAccount.name)
+          .map(name =>
+            <Dropdown.Item key={name}>
+              <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14) + '...'}>
+                <Dropdown.Menu direction='right'>
+                  <Dropdown.Item key="see" text='See' account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />
                   <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" />
                   <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Dropdown.Item>)
-          }
+                </Dropdown.Menu>
+              </Dropdown>
+            </Dropdown.Item>)
+        }
         {allNames
-            .filter(account => account != activeAccount.name)
-            .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
-          }
+          .filter(account => account != activeAccount.name)
+          .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
+        }
         <Dropdown.Divider />
         <Dropdown.Item key='add' text='Add a New Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/" />
         <Dropdown.Item key='load' text='Load an Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/upload/" />
