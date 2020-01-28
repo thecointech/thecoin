@@ -11,16 +11,18 @@ import { RUrl } from "@the-coin/utilities/RUrl";
 
 const FAQS_KEY = "faqItems";
 
-export const HelpDocs = (props: RouteComponentProps) => {
-  usePrismic();
+const HelpDocsInternal = (props: RouteComponentProps) => {
   const actions = usePrismicActions();
   const sidebarActions = useSidebar();
   const docs = useSelector((s: ApplicationRootState) => s.documents);
-
   const {match} = props;
   const buildUrl = (id: string) => new RUrl(match.url, id);
 
-  useEffect(() => {actions.fetchFaqs()}, []);
+
+  useEffect(() => {
+    actions.fetchFaqs();
+  }, []);
+
   useEffect(() => {
     sidebarActions.addGenerator(
       FAQS_KEY,
@@ -52,10 +54,16 @@ export const HelpDocs = (props: RouteComponentProps) => {
     <Switch>
       {
         docs.articles.map(a => 
-          <Route path={buildUrl(a.id).toString()} render={()=> <Article {...a} />} />
+          <Route key={a.id} path={buildUrl(a.id).toString()} render={()=> <Article {...a} />} />
         )
       }
       <Route path={buildUrl("").toString()} exact={true} render={()=> <FAQs faqs={docs.faqs} />} />
     </Switch>
   );
+}
+
+// https://github.com/react-boilerplate/redux-injectors/issues/16
+export const HelpDocs = (props: RouteComponentProps) => {
+  usePrismic();
+  return <HelpDocsInternal {...props} /> // The rest of the code
 }

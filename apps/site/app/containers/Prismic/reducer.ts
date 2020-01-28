@@ -20,6 +20,12 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
   	
   
   *fetchFaqs(): Generator<any> {
+
+    // Only fetch FAQ's once
+    if (this.state.faqs.length !== 0) {
+      console.log("FAQs already fetched, nothing to do");
+      return;
+    }
 	
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
