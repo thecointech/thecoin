@@ -123,3 +123,28 @@
   transform-origin: top right;*/
   border-radius: 100% 100% 100% 100%; 
 }
+
+.item .content .ui.header{
+  margin-top: 20px;
+  margin-bottom: 5px;
+  font-size: 30px;
+}
+
+.item .content .ui.small.header{
+  font-size: 20px;
+}
+
+
+.item .content .meta{
+  display: none;
+}
+
+.ui.segment p{
+  margin-left: 15px;
+}
+
+div.extra{
+  margin-left: 15px;
+  font-style: italic;
+}
+
