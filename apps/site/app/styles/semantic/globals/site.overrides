@@ -125,13 +125,18 @@
 }
 
 .item .content .ui.header{
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 5px;
-  font-size: 30px;
+  font-size: 2rem;
+  font-weight: 300;
+  color:#002c8e;
+  font-weight: 300;
 }
 
 .item .content .ui.small.header{
-  font-size: 20px;
+  font-size: 1.5rem;
+  color:#002c8e;
+  font-weight: 300;
 }
 
 
@@ -140,11 +145,17 @@
 }
 
 .ui.segment p{
-  margin-left: 15px;
+  font-weight: 300;
+  font-size: 1.35rem;
+  color:#222;
+  margin-top: 10px;
 }
 
 div.extra{
-  margin-left: 15px;
   font-style: italic;
+  font-weight: 300;
+  font-size: 1.35rem;
+  color:#222;
+  margin-top: 10px;
 }
 
