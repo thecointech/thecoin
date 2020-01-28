@@ -1,3 +1,10 @@
+#subscribeBlock{
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 100px;
+}
+
 .mainWrapper .column{
   margin: 20px;
   text-align: center;
@@ -54,6 +61,15 @@
     font-size: 25px;
   }
 }
+
+@media only screen and (max-width: 550px) {
+  #phoneZone{
+    display: none;
+  }
+  #infosZone{
+    width: 100% !important;
+  }
+}
 @media only screen and (max-width: 750px) {
   .h2Home{
     font-size: 25px;
@@ -73,5 +89,17 @@
   .phoneApp img{
     right: -20px;
     top: -10px;
+  }
+  #subscribeBlock{
+    width: 85%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #subscribeBlock input{
+    width: 150px;
+  }
+  #subscribeBlock button{
+    width: 120px;
+    font-size: 12px;
   }
 }

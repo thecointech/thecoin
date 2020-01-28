@@ -39,7 +39,7 @@ export const HomePage = () => {
       </h2>
       <Grid divided="vertically">
         <Grid.Row columns={2} id='homeZone' className={styles.mainWrapper}>
-          <Grid.Column id='infosZone'>
+          <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
               <ol className={styles.listHome}>
                 <li>Transfer and Pay with &nbsp;&nbsp;
@@ -57,7 +57,7 @@ export const HomePage = () => {
               <Button as={ NavLink } to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount'/>
             </div>
           </Grid.Column>
-          <Grid.Column className={styles.phoneApp} id='phoneZone'>
+          <Grid.Column className={styles.phoneApp} id={styles.phoneZone}>
             <img
                 alt="mobile interac"
                 src={phone}
@@ -65,7 +65,7 @@ export const HomePage = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Grid divided="vertically">
+      <Grid divided="vertically" id={styles.subscribeBlock}>
         <Grid.Row columns={1}>
           <Grid.Column>
           <div className={styles.subContainer}>
@@ -78,9 +78,7 @@ export const HomePage = () => {
                   />
                 </p>
               </div>
-            <div className={styles.sproutWrapper}>
               <Subscribe />
-            </div>
           </Grid.Column>
         </Grid.Row>
       </Grid>
