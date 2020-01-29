@@ -6,8 +6,10 @@ export const ElementRender = ({type, text}: RenderableType) => {
 
   switch(type)
   {
-    case "heading2":
+    case "heading1":
       return <Header>{text}</Header>;
+    case "heading2":
+      return <Header size="medium">{text}</Header>;
     case "heading3":
       return <Header size="small">{text}</Header>;
     case "paragraph":
