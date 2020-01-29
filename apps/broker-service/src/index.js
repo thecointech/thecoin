@@ -8,7 +8,7 @@ var app = require('express')();
 var cors = require('cors')
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
-const PORT = process.env.PORT || require('@the-coin/utilities/lib/ServiceAddresses').ServicePorts.BROKER_PORT;
+const PORT = process.env.PORT || require('@the-coin/utilities/ServiceAddresses').ServicePorts.BROKER_PORT;
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),

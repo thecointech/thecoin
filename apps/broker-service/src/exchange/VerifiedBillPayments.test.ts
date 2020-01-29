@@ -1,10 +1,10 @@
 import { GetContract, GetWallet } from './Wallet'
-import { BuildVerifiedBillPayment } from '@the-coin/utilities/lib/VerifiedBillPayment';
+import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
-import { BrokerCAD } from '@the-coin/types';
-import status from './Status';
+import { BillPayeePacket } from '@the-coin/types';
+import status from './status.json';
 import * as firestore from './Firestore'
-import { TransferRecord } from '@the-coin/utilities/lib/Firestore';
+import { TransferRecord } from '@the-coin/utilities/Firestore';
 
 beforeAll(async () => {
   firestore.init();
@@ -21,7 +21,7 @@ test("Verified bill payments complete properly", async () => {
 	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
-	const payee: BrokerCAD.BillPayeePacket = {
+	const payee: BillPayeePacket = {
 		payee: "VISA - TORONTO DOMINION",
 		accountNumber: "123456789123546"
 	};

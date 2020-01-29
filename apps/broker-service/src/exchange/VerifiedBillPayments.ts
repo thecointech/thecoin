@@ -1,5 +1,5 @@
 
-import { BrokerCAD } from '@the-coin/types'
+import { CertifiedTransfer } from '@the-coin/types'
 import { CertifiedActionProcess } from './CertifiedActionProcess';
 import { CertifiedActionVerify } from './CertifiedActionVerify';
 
@@ -8,13 +8,13 @@ import { CertifiedActionVerify } from './CertifiedActionVerify';
 // 	version: string // version payee was encrypted with
 // }
 
-// function ValidSignatures(payment: BrokerCAD.CertifiedTransfer) {
+// function ValidSignatures(payment: CertifiedTransfer) {
 // 	const paymentSigner = GetSigner(payment);
 // 	const xferSigner = GetTransferSigner(payment.transfer);
 // 	return (paymentSigner == xferSigner);
 // }
 
-// function ValidDestination(payment: BrokerCAD.CertifiedTransfer) {
+// function ValidDestination(payment: CertifiedTransfer) {
 // 	return NormalizeAddress(payment.transfer.to) == NormalizeAddress(status.address);
 // }
 
@@ -29,7 +29,7 @@ import { CertifiedActionVerify } from './CertifiedActionVerify';
 // we do not have any way to tell if the bill being paid is a named
 // bill or not (or what it is named).
 
-// async function StoreNamedPayee(user: string, payee: BrokerCAD.EncryptedPacket)
+// async function StoreNamedPayee(user: string, payee: EncryptedPacket)
 // {
 // 	if (!payee.name)
 // 		return;
@@ -55,7 +55,7 @@ import { CertifiedActionVerify } from './CertifiedActionVerify';
 // Billpayment works by:
 //  User Creates Billpayment which is just VeriXFer 
 //	User adds bill payment
-export async function ProcessBillPayment(payment: BrokerCAD.CertifiedTransfer)
+export async function ProcessBillPayment(payment: CertifiedTransfer)
 {
   // First, check that bill payment & the transfer are signed by the same person
   CertifiedActionVerify(payment);

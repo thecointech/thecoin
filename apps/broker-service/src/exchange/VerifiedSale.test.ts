@@ -1,12 +1,12 @@
 
 import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
-import { BuildVerifiedSale } from '@the-coin/utilities/lib/VerifiedSale';
+import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
 import { DoCertifiedSale } from './VerifiedSale'
-import status from './Status';
+import status from './status.json';
 import * as firestore from './Firestore'
-import { BrokerCAD } from '@the-coin/types';
-import { TransferRecord } from '@the-coin/utilities/lib/Firestore';
+import { ETransferPacket } from '@the-coin/types';
+import { TransferRecord } from '@the-coin/utilities/Firestore';
 
 beforeAll(async () => {
   firestore.init();
@@ -30,7 +30,7 @@ test("Certified sale completes sale properly", async () => {
 	const myBalance = await tc.balanceOf(wallet.address)
 	expect(myBalance.toNumber()).toBeGreaterThan(0);
 
-	const eTransfer: BrokerCAD.ETransferPacket = {
+	const eTransfer: ETransferPacket = {
     email: "test@random.com",
     question: "vvv",
     answer: "lskdjf"

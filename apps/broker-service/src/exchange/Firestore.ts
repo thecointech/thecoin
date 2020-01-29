@@ -1,4 +1,4 @@
-import { IsDebug } from "@the-coin/utilities/lib/IsDebug";
+import { IsDebug } from "@the-coin/utilities/IsDebug";
 
 
 export async function init()

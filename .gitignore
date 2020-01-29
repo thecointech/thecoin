@@ -11,3 +11,6 @@ apis/broker/ts/dist/
 packages/
 build/
 apps/admin/app/containers/BrokerTransferAssistant/secret.json
+apps/broker-service/obj/
+apps/broker-service/src/exchange/secret.json
+apps/broker-service/src/exchange/AutoMailer.secret.json

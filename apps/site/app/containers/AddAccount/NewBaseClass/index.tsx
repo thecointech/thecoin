@@ -101,16 +101,18 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
     // Register this account on the server
     const api = GetReferrersApi();
     // Weird typescript hack
-    var isRegistered: any = await api.referralCreate({
-      newAccount: address,
-      referrerId: referrer,
-    });
-
-    if (!isRegistered.success) {
-      alert(
-        'Registering this account failed. Please contact support@thecoin.io',
-      );
-      return false;
+    if (process.env.NODE_ENV !== 'development') {
+      var isRegistered: any = await api.referralCreate({
+        newAccount: address,
+        referrerId: referrer,
+      });
+  
+      if (!isRegistered.success) {
+        alert(
+          'Registering this account failed. Please contact support@thecoin.io',
+        );
+        return false;
+      }  
     }
     return true;
   }

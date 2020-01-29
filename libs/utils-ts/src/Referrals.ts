@@ -3,7 +3,7 @@ import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
 import { base32Encode } from '@ctrl/ts-base32';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp } from "../../types/src/FirebaseFirestore";
+import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 
 export function GetReferrersCollection() {
   return GetFirestore().collection("Referrers");

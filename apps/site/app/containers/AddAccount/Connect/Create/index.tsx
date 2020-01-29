@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 import { getWeb3Type } from "utils/detection"
 
 const BounceLink = () => 
-  <Link to="/accounts/generate">
+  <Link to="/addAccount/generate/">
     <FormattedMessage {...messages.createTransfer} />
   </Link>
 

@@ -1,9 +1,9 @@
-import { GetFirestore } from "@the-coin/utilities/lib/Firestore";
+import { GetFirestore } from "@the-coin/utilities/Firestore";
 import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
-import { BrokerCAD } from "@the-coin/types";
+import { SubscriptionDetails } from "@the-coin/types";
 import { Timestamp } from "@google-cloud/firestore";
 
-interface EmailSubscription extends BrokerCAD.SubscriptionDetails {
+interface EmailSubscription extends SubscriptionDetails {
   registerDate: Timestamp,
 }
 
@@ -26,7 +26,7 @@ export async function SubDoc(email: string)
     collection.doc(); // new empty document
 }
 
-export async function Signup(details: BrokerCAD.SubscriptionDetails, sendMail: boolean)
+export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
   if (!email || email.indexOf("@") < 0)
@@ -54,7 +54,7 @@ export async function Signup(details: BrokerCAD.SubscriptionDetails, sendMail: b
     : true;
   }
 
-export async function Confirm(details: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.SubscriptionDetails|null>
+export async function Confirm(details: SubscriptionDetails) : Promise<SubscriptionDetails|null>
 {
   if (!details.id)
     return null;
@@ -65,7 +65,7 @@ export async function Confirm(details: BrokerCAD.SubscriptionDetails) : Promise<
     return null;
   
   const newDetails = await userDoc.get();
-  return newDetails.data() as BrokerCAD.SubscriptionDetails;
+  return newDetails.data() as SubscriptionDetails;
 }
 
 export async function Unsubscribe(id: string)

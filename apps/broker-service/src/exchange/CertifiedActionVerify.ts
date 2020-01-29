@@ -1,11 +1,11 @@
 
-import { BrokerCAD } from '@the-coin/types'
+import { CertifiedTransfer } from '@the-coin/types'
 import { NormalizeAddress } from '@the-coin/utilities';
-import { GetSigner } from '@the-coin/utilities/lib/VerifiedAction'
-import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer'
+import { GetSigner } from '@the-coin/utilities/VerifiedAction'
+import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer'
 import status from './status.json';
 
-const ValidSignatures = (action: BrokerCAD.CertifiedTransfer) => {
+const ValidSignatures = (action: CertifiedTransfer) => {
   const actionSigner = GetSigner(action);
   if (!actionSigner)
     return false;
@@ -18,10 +18,10 @@ const ValidSignatures = (action: BrokerCAD.CertifiedTransfer) => {
          signer === NormalizeAddress(xferSigner);
 }
 
-const ValidDestination = (action: BrokerCAD.CertifiedTransfer) => 
+const ValidDestination = (action: CertifiedTransfer) => 
   NormalizeAddress(action.transfer.to) == NormalizeAddress(status.address);
 
-export const CertifiedActionVerify = async (action: BrokerCAD.CertifiedTransfer) => {
+export const CertifiedActionVerify = async (action: CertifiedTransfer) => {
 	// First, check that bill payment & the transfer are signed by the same person
 	if (!ValidSignatures(action))
 		throw new Error("Mismatching Signatures");

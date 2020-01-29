@@ -1,7 +1,7 @@
-import { BrokerCAD } from "@the-coin/types";
+import { SignedMessage} from "@the-coin/types";
 import { GetWallet } from "../exchange/Wallet";
 import { utils } from 'ethers';
-import { GetReferrerCode } from "@the-coin/utilities/lib/Referrals";
+import { GetReferrerCode } from "@the-coin/utilities/Referrals";
 
 // Todo: move SignMessage-y fn's to utilities
 export function GetHash(
@@ -14,7 +14,7 @@ export function GetHash(
   return utils.arrayify(ethersHash);
 }
 
-export async function GenerateCode(request: BrokerCAD.SignedMessage)
+export async function GenerateCode(request: SignedMessage)
 {
 	const { message, signature } = request;
 	// First, valid message?
