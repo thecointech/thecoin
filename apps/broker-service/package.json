@@ -7,7 +7,7 @@
     "start": "node build/index.js",
     "debug": "cross-env NODE_ENV=development && yarn build && node --inspect index.js",
     "build": "tsc -p . && yarn build:copy",
-    "build:copy": "(if not exist build\\api mkdir build\\api) && copy Generated\\api src\\api && copy src\\api build\\api",
+    "build:copy": "(if not exist ../../build/broker-service/api mkdir ../../build/broker-service/api) && copy Generated/api src/api && copy src/api ../../build/broker-service/api",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
   },
   "keywords": [

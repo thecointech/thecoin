@@ -18,17 +18,17 @@ const AccountRoutes: RouterPath[] = [
     exact: true,
   },
   {
-    name: 'Transfer In',
+    name: 'Deposit Instructions',
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
   },
   {
-    name: 'Transfer Out',
+    name: 'Send an e-Transfer',
     urlFragment: 'redeem',
     creator: (routerProps: AccountPageProps) => ((props) => <Redeem {...props} account={routerProps.account} />),
   },
   {
-    name: 'Transfer To',
+    name: 'Transfer',
     urlFragment: 'transfer',
     creator: (routerProps: AccountPageProps) => ((props) => <Transfer {...props} account={routerProps.account} />),
   },

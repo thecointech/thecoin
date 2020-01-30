@@ -27,7 +27,7 @@ export default defineMessages({
   },
   labelReferrer: {
     id: `${scope}.labelReferrer`,
-    defaultMessage: 'Referrer',
+    defaultMessage: 'Referral Code',
   },
   buttonCreate: {
     id: `${scope}.buttonCreate`,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from 'semantic-ui-react';
-import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
+import { GetNewsletterApi } from 'api';
 import styles from '../../styles/base.css';
 import { FormattedMessage } from 'react-intl';
 

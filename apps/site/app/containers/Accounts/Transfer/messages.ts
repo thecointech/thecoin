@@ -10,11 +10,11 @@ export const scope = 'app.containers.Accounts.Transfer';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Transfer To',
+    defaultMessage: 'Make a Transfer',
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: "Transfer directly to another coin account.",
+    defaultMessage: "Transfer directly to another account with TheCoin.",
   },
   transferOutHeader: {
     id: `${scope}.transferHeader`,

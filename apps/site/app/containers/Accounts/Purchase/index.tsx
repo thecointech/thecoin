@@ -11,7 +11,7 @@ import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
-import { GetETransferApi } from '../../Services/BrokerCAD';
+import { GetETransferApi } from '../../../api';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-online.png';

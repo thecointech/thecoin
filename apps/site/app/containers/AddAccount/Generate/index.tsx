@@ -136,7 +136,7 @@ class GenerateClass extends NewBaseClass<State> {
             forceValidate={forceValidate}
             isValid={pwdValid}
             message={pwdMessage}
-            placeholder="Account Password"
+            placeholder="At least moderate strength"
           />
           {this.RenderReferralInput()}
           <Button onClick={this.onGenerateNewWallet} id="buttonCreateAccountStep1">

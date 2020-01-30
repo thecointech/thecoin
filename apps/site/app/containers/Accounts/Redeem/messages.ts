@@ -10,11 +10,11 @@ export const scope = 'app.containers.Accounts.Login';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Transfer Out',
+    defaultMessage: 'Send an e-Transfer',
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: "Transfer out with an interac e-Transfer.",
+    defaultMessage: "Email money to anyone with an interac e-Transfer.",
   },
   transferOutHeader: {
     id: `${scope}.sellHeader`,

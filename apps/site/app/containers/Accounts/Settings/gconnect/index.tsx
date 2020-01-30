@@ -1,5 +1,5 @@
 //import {GetStoredWallet} from '@the-coin/shared/containers/Account/storageSync';
-import { GetSecureApi } from 'containers/Services/BrokerCAD';
+import { GetSecureApi } from 'api';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { IWindow } from './gauth';
