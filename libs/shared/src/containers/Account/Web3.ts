@@ -29,7 +29,7 @@ async function AddTheCoin(ethereum: any)
 		if (added) {
 			console.log('Thanks for your interest!')
 		} else {
-			console.log('Your loss!')
+			console.log('Maybe next time!')
 		}
 	}
 	catch (err) {

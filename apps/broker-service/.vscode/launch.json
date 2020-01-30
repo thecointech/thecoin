@@ -7,7 +7,6 @@
         {
             "type": "node",
             "request": "launch",
-            "preLaunchTask": "build",
             "protocol": "inspector",
             "name": "Debug Server",
             "program": "${workspaceFolder}/src/index.js",

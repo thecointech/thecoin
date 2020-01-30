@@ -1,12 +1,12 @@
 import { GetWallet } from "./Wallet";
-import { GetContract } from "@the-coin/utilities/lib/TheContract";
-import { BuildVerifiedXfer } from "@the-coin/utilities/lib/VerifiedTransfer";
+import { GetContract } from "@the-coin/utilities/TheContract";
+import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
-import status from './Status';
+import status from './status.json';
 
 import * as firestore from './Firestore'
-import { IsDebug } from "@the-coin/utilities/lib/IsDebug";
+import { IsDebug } from "@the-coin/utilities/IsDebug";
 
 beforeAll(async () => {
   firestore.init();

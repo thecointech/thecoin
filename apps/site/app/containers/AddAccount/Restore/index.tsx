@@ -12,7 +12,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { ExistsSwitcher } from '../ExistsSwitcher';
-import { GetSecureApi } from 'containers/Services/BrokerCAD';
+import { GetSecureApi } from 'api';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.

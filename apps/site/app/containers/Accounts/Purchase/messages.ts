@@ -10,11 +10,11 @@ export const scope = 'app.containers.Accounts.Login';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Transfer In',
+    defaultMessage: 'Deposit Instructions',
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: 'Transfer funds into your account.',
+    defaultMessage: 'Transfer funds from your Canadian bank to your account.',
   },
 
 

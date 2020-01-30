@@ -1,4 +1,4 @@
-import { BrokerCAD } from "@the-coin/types";
+import { CertifiedTransfer, SignedMessage, eTransferCodeResponse } from "@the-coin/types";
 import { SendMail } from "../exchange/AutoMailer";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
@@ -11,7 +11,7 @@ import { GenerateCode } from "../Buy/eTransfer";
  * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket
  * returns CertifiedTransferResponse
  **/
-export function eTransfer(request: BrokerCAD.CertifiedTransfer) {
+export function eTransfer(request: CertifiedTransfer) {
   return DoActionAndNotify(request, DoCertifiedSale);
 }
 
@@ -23,7 +23,7 @@ export function eTransfer(request: BrokerCAD.CertifiedTransfer) {
  * request SignedMessage Signed timestamp message
  * returns eTransferCodeResponse
  **/
-export async function eTransferInCode(request: BrokerCAD.SignedMessage) : Promise<BrokerCAD.eTransferCodeResponse> {
+export async function eTransferInCode(request: SignedMessage) : Promise<eTransferCodeResponse> {
   try {
     return {
       code: await GenerateCode(request)

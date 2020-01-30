@@ -1,5 +1,5 @@
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { BrokerCAD } from "@the-coin/types";
+import { CertifiedTransfer } from "@the-coin/types";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
 /**
@@ -9,7 +9,7 @@ import { DoActionAndNotify } from "../utils/DoActionAndNotify";
  * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
  * returns CertifiedTransferResponse
  **/
-export function billPayment(request: BrokerCAD.CertifiedTransfer) {
+export function billPayment(request: CertifiedTransfer) {
   return DoActionAndNotify(request, ProcessBillPayment);
 }
 

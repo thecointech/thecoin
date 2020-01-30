@@ -1,5 +1,5 @@
 import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransfer';
-import { BrokerCAD } from '@the-coin/types'
+import { CertifiedTransferRequest, CertifiedTransferResponse} from '@the-coin/types'
 
 /**
  * Transfer to another The Coin account
@@ -8,7 +8,7 @@ import { BrokerCAD } from '@the-coin/types'
  * request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments
  * returns CertifiedTransferResponse
  **/
-export async function transfer(request: BrokerCAD.CertifiedTransferRequest) : Promise<BrokerCAD.CertifiedTransferResponse> {
+export async function transfer(request: CertifiedTransferRequest) : Promise<CertifiedTransferResponse> {
   try {
     const result = await DoCertifiedTransferWaitable(request);
     return success(result.hash);

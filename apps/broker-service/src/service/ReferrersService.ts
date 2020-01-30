@@ -1,5 +1,5 @@
-import { BrokerCAD } from "@the-coin/types";
-import { CreateReferree, GetReferrerData } from '@the-coin/utilities/lib/Referrals'
+import { NewAccountReferal, BoolResponse } from "@the-coin/types";
+import { CreateReferree, GetReferrerData } from '@the-coin/utilities/Referrals'
 import { Timestamp } from "@google-cloud/firestore";
 
 /**
@@ -9,7 +9,7 @@ import { Timestamp } from "@google-cloud/firestore";
  * referral NewAccountReferal Set referal for new account
  * returns BoolResponse
  **/
-export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Promise<BrokerCAD.BoolResponse> {
+export async function referralCreate(referral: NewAccountReferal): Promise<BoolResponse> {
   try {
     var now = Timestamp.now();
     await CreateReferree(referral, now);
@@ -30,7 +30,7 @@ export async function referralCreate(referral: BrokerCAD.NewAccountReferal): Pro
  * referrer String Referrers ID.  This ID must have been previously registered with the system
  * returns BoolResponse
  **/
-export async function referrerValid(referrerId: string): Promise<BrokerCAD.BoolResponse> {
+export async function referrerValid(referrerId: string): Promise<BoolResponse> {
   try {
     const referrer = await GetReferrerData(referrerId);
     return {

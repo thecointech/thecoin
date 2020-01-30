@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Form } from 'semantic-ui-react';
-import { GetNewsletterApi } from 'containers/Services/BrokerCAD';
+import { GetNewsletterApi } from 'api';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import { SubscriptionDetails } from '@the-coin/types';

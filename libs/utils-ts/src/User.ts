@@ -1,7 +1,7 @@
 import { IsValidAddress, NormalizeAddress } from ".";
 import { GetFirestore } from './Firestore';
 import { ReferralData } from "./Referrals";
-import { Timestamp, DocumentReference } from "../../types/src/FirebaseFirestore";
+import { Timestamp, DocumentReference } from "@the-coin/types/FirebaseFirestore";
 
 type UserVerifiedInfo = {
 	verified: string,

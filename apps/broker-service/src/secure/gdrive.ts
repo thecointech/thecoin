@@ -1,11 +1,8 @@
-import fs from 'fs';
-import readline from 'readline';
-//import {google} from 'googleapis';
-import { drive_v3, google } from 'googleapis/build/src/';
-import { OAuth2Client } from 'google-auth-library';
+import {google, drive_v3} from 'googleapis';
+import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
 
 import credentials from './gdrive_cred.json'
-import { BrokerCAD } from '@the-coin/types';
+import { GoogleToken, GoogleStoreAccount, GoogleWalletItem, GoogleFileIdent } from '@the-coin/types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
@@ -17,7 +14,7 @@ function  buildAuth()
   return new OAuth2Client(client_id, client_secret, redirect_uris[AUTH_REDIR_IDX]);
 }
 
-async function loginDrive(authToken: BrokerCAD.GoogleToken)
+async function loginDrive(authToken: GoogleToken)
 {
   const auth = buildAuth();
   const res = await auth.getToken(authToken.token);
@@ -38,7 +35,7 @@ export function getAuthUrl()
 }
 
 
-export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
+export async function storeOnGoogle(account: GoogleStoreAccount) {
   const {walletName, wallet, token } = account;
   if (!walletName || !wallet)
     throw new Error("Missing data from gdrive save");
@@ -67,7 +64,7 @@ export async function storeOnGoogle(account: BrokerCAD.GooglePutRequest) {
   return r.status == 200;
 }
 
-export async function listWallets(token: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleFileIdent[]>
+export async function listWallets(token: GoogleToken) : Promise<GoogleFileIdent[]>
 {
   const drive = await loginDrive(token);
   const wallets = await doListWallets(drive);
@@ -88,28 +85,27 @@ export async function doListWallets(drive: drive_v3.Drive) : Promise<drive_v3.Sc
     [];
 }
 
-const Buffer2Str = (buff: ArrayBuffer) =>
-  String.fromCharCode.apply(null, new Uint8Array(buff));
-
-export async function fetchWallets(request: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleWalletItem[]>
+export async function fetchWallets(request: GoogleToken) : Promise<GoogleWalletItem[]>
 {
   const drive = await loginDrive(request);
   const wallets = await doListWallets(drive);
   const fetchArray = wallets.map(async (file) => {
-    const r = await drive.files.get({
-      fileId: file.id,
-      alt: 'media',
-    }, {responseType: 'arraybuffer'});
 
-    return <BrokerCAD.GoogleWalletItem>{
+    const get: drive_v3.Params$Resource$Files$Get = {
+      fileId: file.id ?? undefined,
+      alt: 'media',
+    }
+    const r = await drive.files.get(get, {responseType: 'json'});
+
+    return <GoogleWalletItem>{
         id: {
           id: file.id!,
           name: file.originalFilename || file.name,
           type: "pwd" // Means it's protected by a password...
         },
-        wallet: (r.status == 200) ? 
-                  Buffer2Str(r.data as ArrayBuffer) : 
-                  `{ "error": "Error Fetching" }`
+        wallet: (r.status == 200)
+          ? r.data 
+          : `{ "error": "Error Fetching" }`
       }
   })
 

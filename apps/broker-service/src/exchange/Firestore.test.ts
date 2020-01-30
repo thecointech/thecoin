@@ -1,4 +1,4 @@
-import { GetFirestore } from '@the-coin/utilities/lib/Firestore';
+import { GetFirestore } from '@the-coin/utilities/Firestore';
 import * as firestore from './Firestore'
 
 beforeAll(async () => {

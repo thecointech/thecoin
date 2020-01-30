@@ -7,7 +7,7 @@ import { IsValidReferrerId } from '@the-coin/utilities';
 import { MessageDescriptor } from 'react-intl';
 import messages from '../messages';
 import { Redirect } from 'react-router-dom';
-import { GetReferrersApi } from 'containers/Services/BrokerCAD';
+import { GetReferrersApi } from 'api';
 
 export const initialState = {
   accountName: '',
@@ -66,8 +66,8 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   async IsLegalReferrer(id: string) {
     const api = GetReferrersApi()
     // Weird issue: typescript not recognizing the return type
-    const isValid: any = await api.referrerValid(id);
-    return isValid.success;
+    const isValid = await api.referrerValid(id);
+    return isValid.data?.success;
   }
 
   onReferrerChange = async (value: string) => {
@@ -100,18 +100,17 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   async registerReferral(address: string, referrer: string) {
     // Register this account on the server
     const api = GetReferrersApi();
-    // Weird typescript hack
-    var isRegistered: any = await api.referralCreate({
+    var isRegistered = await api.referralCreate({
       newAccount: address,
       referrerId: referrer,
     });
 
-    if (!isRegistered.success) {
+    if (!isRegistered.data?.success) {
       alert(
         'Registering this account failed. Please contact support@thecoin.io',
       );
       return false;
-    }
+    }  
     return true;
   }
 
@@ -126,7 +125,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         forceValidate={forceValidate}
         isValid={nameValid}
         message={nameMessage}
-        placeholder="Account Name"
+        placeholder="Any name you like"
         id="accountNameField"
         disabled={disabled}
       />
@@ -142,7 +141,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
         forceValidate={forceValidate}
         isValid={referrerValid}
         message={referrerMessage}
-        placeholder="Referrer"
+        placeholder="6 letters or numbers"
         id="referrerField"
         disabled={disabled}
       />
@@ -159,7 +158,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   }
   RenderRedirect() {
     if (this.state.redirect) {
-      const addr = `/accounts/e/${this.state.accountName}`;
+      const addr = `/accounts`;
       return <Redirect to={addr} />;
     }
     return undefined;

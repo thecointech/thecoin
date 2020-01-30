@@ -1,13 +1,13 @@
 
-import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../Secure/gdrive'
-import { BrokerCAD } from "@the-coin/types";
+import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
+import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, BoolResponse, GoogleGetResult } from "@the-coin/types";
 
 /**
  * Get the authorization URL to redirect the user to
  *
  * returns GoogleAuthUrl
  **/
-export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
+export async function googleAuthUrl() : Promise<GoogleAuthUrl> {
   try {
     const url = getAuthUrl();
     return {url};
@@ -24,7 +24,7 @@ export async function googleAuthUrl() : Promise<BrokerCAD.GoogleAuthUrl> {
  * token GoogleToken 
  * returns GoogleListResult
  **/
-export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCAD.GoogleListResult> {
+export async function googleList(token: GoogleToken): Promise<GoogleListResult> {
   try {
     const wallets = await listWallets(token);
     return {wallets};
@@ -41,7 +41,7 @@ export async function googleList(token: BrokerCAD.GoogleToken): Promise<BrokerCA
  * account GoogleUploadPacket 
  * returns BoolResponse
  **/
-export function googlePut(account: BrokerCAD.GooglePutRequest): Promise<BrokerCAD.BoolResponse> {
+export function googlePut(account: GoogleStoreAccount): Promise<BoolResponse> {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await storeOnGoogle(account);
@@ -63,7 +63,7 @@ export function googlePut(account: BrokerCAD.GooglePutRequest): Promise<BrokerCA
  * token GoogleToken 
  * returns GoogleGetResult
  **/
-export async function googleRetrieve(request: BrokerCAD.GoogleToken) : Promise<BrokerCAD.GoogleGetResult> {
+export async function googleRetrieve(request: GoogleToken) : Promise<GoogleGetResult> {
   try {
     const wallets = await fetchWallets(request);
     return {wallets};

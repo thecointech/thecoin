@@ -1,4 +1,4 @@
-import { BrokerCAD } from "@the-coin/types";
+import { CertifiedTransfer} from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
@@ -12,7 +12,7 @@ export type VerifiedActionResult = {
 }
 
 // Store the xfer info
-async function StoreActionRequest(actionData: BrokerCAD.CertifiedTransfer, actionType: UserAction, hash: string)
+async function StoreActionRequest(actionData: CertifiedTransfer, actionType: UserAction, hash: string)
 {
     const user = actionData.transfer.from;
 
@@ -52,7 +52,7 @@ async function ConfirmAction(tx: TransactionResponse, actionDoc: DocumentReferen
     console.log(`Tx Confirmed: ${res.status}`);
 }
 
-export async function  CertifiedActionProcess(actionData: BrokerCAD.CertifiedTransfer, actionType: UserAction): Promise<VerifiedActionResult> {
+export async function  CertifiedActionProcess(actionData: CertifiedTransfer, actionType: UserAction): Promise<VerifiedActionResult> {
     const { transfer } = actionData;
 
     // First, create an initial record of the transaction.  This is a time-stamped

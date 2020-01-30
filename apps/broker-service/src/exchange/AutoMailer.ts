@@ -1,5 +1,10 @@
 
-import { Mailjet } from './AutoMailer.secret';
+import { Mailjet } from './AutoMailer.secret.json';
+
+async function connect() {
+  const mailjet = (await import('node-mailjet')).default;
+  return mailjet.connect("7ae2f3b83905fca0cb618a5027409495", Mailjet)
+}
 
 async function SendMail(subject: string, message: string) {
 
@@ -20,8 +25,9 @@ async function SendMail(subject: string, message: string) {
 			},
 		],
   };
-	
-	const response = await Mailjet.post('send', { version: 'v3.1' }).request(options);
+  
+  const mj = await connect();
+	const response = await mj.post('send', { version: 'v3.1' }).request(options);
 	
 	console.log(response.body);
 	// Render the index route on success
@@ -38,7 +44,7 @@ async function SendTemplate(from: string, to: string, template: TemplateId, vari
 		Messages: [
 			{
 				From: {
-					Email: 'newsletter@thecoin.io',
+					Email: from,
 					Name: 'The Coin',
 				},
 				To: [
@@ -54,7 +60,8 @@ async function SendTemplate(from: string, to: string, template: TemplateId, vari
   };
   
   try {
-    const response = await Mailjet.post('send', { version: 'v3.1' }).request(options);
+    const mj = await connect();
+    const response = await mj.post('send', { version: 'v3.1' }).request(options);
     console.log(response.body);
   }
   catch (e)

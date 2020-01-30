@@ -1,11 +1,10 @@
 import { GetContract } from './Wallet';
 import status from './status.json';
-import { TheContract } from '@the-coin/utilities';
-import { GetTransferSigner } from '@the-coin/utilities/lib/VerifiedTransfer';
-import { BrokerCAD } from '@the-coin/types';
+import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer';
+import { CertifiedTransferRequest, CertifiedTransferResponse } from '@the-coin/types';
 import { TransactionResponse } from 'ethers/providers';
 
-function success(val: string | undefined): BrokerCAD.CertifiedTransferResponse {
+function success(val: string | undefined): CertifiedTransferResponse {
   if (!val) {
     console.error('Success hash undefined');
     return {
@@ -19,7 +18,7 @@ function success(val: string | undefined): BrokerCAD.CertifiedTransferResponse {
   };
 }
 
-function failure(val: string): BrokerCAD.CertifiedTransferResponse {
+function failure(val: string): CertifiedTransferResponse {
   console.log('Tx Failure, ', val);
   return {
     message: val,
@@ -27,19 +26,19 @@ function failure(val: string): BrokerCAD.CertifiedTransferResponse {
   };
 }
 
-function FeeValid(transfer: BrokerCAD.CertifiedTransferRequest) {
+function FeeValid(transfer: CertifiedTransferRequest) {
   return transfer.fee == status.certifiedFee;
 }
-async function AvailableBalance(transfer: BrokerCAD.CertifiedTransferRequest) {
+async function AvailableBalance(transfer: CertifiedTransferRequest) {
 	const contract = await GetContract();
   const userBalance = await contract.balanceOf(transfer.from);
   return userBalance.toNumber() >= transfer.fee + transfer.value;
 }
-function ValidXfer(transfer: BrokerCAD.CertifiedTransferRequest) {
+function ValidXfer(transfer: CertifiedTransferRequest) {
   return GetTransferSigner(transfer) == transfer.from;
 }
 
-async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransferRequest) {
+async function DoCertifiedTransferWaitable(transfer: CertifiedTransferRequest) {
   // First check: is this the right sized fee?
   if (!FeeValid(transfer))
     // TODO: Is that even remotely the right size?
@@ -62,10 +61,10 @@ async function DoCertifiedTransferWaitable(transfer: BrokerCAD.CertifiedTransfer
   return tx;
 }
 
-// function isTx(tx:  BrokerCAD.CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
+// function isTx(tx:  CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
 // 	return (<TransactionResponse>tx).hash !== undefined;
 // }
-// async function DoCertifiedTransfer(transfer: BrokerCAD.CertifiedTransferRequest) {
+// async function DoCertifiedTransfer(transfer: CertifiedTransferRequest) {
 // 	const res = await DoCertifiedTransferWaitable(transfer);
 // 	return res;
 // }

@@ -1,12 +1,12 @@
 import { Signup, Confirm, Unsubscribe, Details } from '../Newsletter'
-import { BrokerCAD } from '@the-coin/types';
+import { SubscriptionDetails, BoolResponse } from '@the-coin/types';
 /**
  * Confirm email subscription.
  *
  * details SubscriptionDetails 
  * returns BoolResponse
  **/
-export async function newsletterConfirm(details: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.SubscriptionDetails> {
+export async function newsletterConfirm(details: SubscriptionDetails) : Promise<SubscriptionDetails> {
   try {
     return await Confirm(details) || {};
   } catch (e) {
@@ -22,7 +22,7 @@ export async function newsletterConfirm(details: BrokerCAD.SubscriptionDetails) 
  * email SubscriptionDetails  
  * returns BoolResponse
  **/
-export async function newsletterSignup(details: BrokerCAD.SubscriptionDetails) : Promise<BrokerCAD.BoolResponse> {
+export async function newsletterSignup(details: SubscriptionDetails) : Promise<BoolResponse> {
   try {
     const success = await Signup(details, true);
     return { success } 
@@ -39,7 +39,7 @@ export async function newsletterSignup(details: BrokerCAD.SubscriptionDetails) :
  * id String 
  * returns SubscriptionDetails
  **/
-export async function newsletterDetails(id: string) : Promise<BrokerCAD.SubscriptionDetails> {
+export async function newsletterDetails(id: string) : Promise<SubscriptionDetails> {
   try {
     return await Details(id);
   } catch (e) {
@@ -60,7 +60,7 @@ export async function newsletterDetails(id: string) : Promise<BrokerCAD.Subscrip
  * id String 
  * returns BoolResponse
  **/
-export async function newsletterUnsubscribe(id: string) : Promise<BrokerCAD.BoolResponse> {
+export async function newsletterUnsubscribe(id: string) : Promise<BoolResponse> {
   try {
     const success = await Unsubscribe(id);
     return { success } 

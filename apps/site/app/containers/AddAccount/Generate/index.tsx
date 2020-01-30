@@ -31,6 +31,11 @@ class GenerateClass extends NewBaseClass<State> {
   readonly state = initialState;
 
   onCancelGenerate = () => this.setState({ cancelCreating: true });
+  onFinishedGenerate = () => this.setState({
+    isCreating: false,
+    redirect: true,
+  });
+
   onGenerateNewWallet = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     await this.generateNewWallet();
@@ -94,7 +99,6 @@ class GenerateClass extends NewBaseClass<State> {
 
     // Switch to this newly created account
     this.setState({
-      isCreating: false,
       cancelCreating: false,
     });
 
@@ -102,11 +106,7 @@ class GenerateClass extends NewBaseClass<State> {
     if (this.props.onComplete) {
       this.props.onComplete(accountName);
     }
-    else {
-      this.setState({
-        redirect: true
-      })
-    }
+
     return true;
   }
 
@@ -116,7 +116,14 @@ class GenerateClass extends NewBaseClass<State> {
     if (this.ShouldRedirect()) {
       return this.RenderRedirect();
     }
-    const { forceValidate, pwdValid, pwdMessage } = this.state;
+    const { forceValidate, pwdValid, pwdMessage, isCreating, percentComplete } = this.state;
+
+    const cbCancel = isCreating && percentComplete < 100
+      ? this.onCancelGenerate 
+      : undefined;
+    const cbOk = cbCancel
+      ? undefined
+      : this.onFinishedGenerate
 
     return (
       <React.Fragment>
@@ -136,7 +143,7 @@ class GenerateClass extends NewBaseClass<State> {
             forceValidate={forceValidate}
             isValid={pwdValid}
             message={pwdMessage}
-            placeholder="Account Password"
+            placeholder="At least moderate strength"
           />
           {this.RenderReferralInput()}
           <Button onClick={this.onGenerateNewWallet} id="buttonCreateAccountStep1">
@@ -144,10 +151,11 @@ class GenerateClass extends NewBaseClass<State> {
           </Button>
         </Form>
         <ModalOperation
-          cancelCallback={this.onCancelGenerate}
-          isOpen={this.state.isCreating}
+          cancelCallback={cbCancel}
+          okCallback={cbOk}
+          isOpen={isCreating}
           header={messages.whileCreatingHeader}
-          progressPercent={this.state.percentComplete}
+          progressPercent={percentComplete}
           progressMessage={messages.whileCreatingMessage}
         />
       </React.Fragment>

@@ -1,4 +1,4 @@
-import { SetFirestore } from "@the-coin/utilities/lib/Firestore";
+import { SetFirestore } from "@the-coin/utilities/Firestore";
 import { Firestore, Settings } from '@google-cloud/firestore';
 
 export async function init()

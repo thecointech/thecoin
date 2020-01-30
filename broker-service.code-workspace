@@ -1,0 +1,14 @@
+{
+	"folders": [
+    {
+      "path": "apps\\broker-service"
+    },
+    {
+      "path": "libs\\utils-ts"
+    }
+  ],
+  "settings": {
+    "typescript.tsdk": "../../node_modules/typescript/lib",
+    "npm.packageManager": "yarn",
+  }
+}
