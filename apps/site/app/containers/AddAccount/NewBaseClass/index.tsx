@@ -158,7 +158,7 @@ export class NewBaseClass<State extends BaseState> extends React.PureComponent<
   }
   RenderRedirect() {
     if (this.state.redirect) {
-      const addr = `/accounts/e/${this.state.accountName}`;
+      const addr = `/accounts`;
       return <Redirect to={addr} />;
     }
     return undefined;

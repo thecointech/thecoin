@@ -10,7 +10,7 @@ export const scope = 'app.containers.Accounts.Transfer';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Make a Transfer',
+    defaultMessage: 'Direct Transfer',
   },
   subHeader: {
     id: `${scope}.subHeader`,

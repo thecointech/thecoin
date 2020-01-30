@@ -36,7 +36,7 @@ export default defineMessages({
   decryptInProgress: {
     id: `${scope}.decryptInProgress`,
     defaultMessage:
-      "Please wait, we are {percentComplete}% done opening your account"
+      "Please wait, We are {percentComplete}% done opening your account."
   },
   labelPassword: {
     id: `${scope}.labelPassword`,

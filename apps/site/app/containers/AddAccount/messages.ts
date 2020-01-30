@@ -40,7 +40,7 @@ export default defineMessages({
   whileCreatingMessage: {
     id: `${scope}.whileCreatingMessage`,
     defaultMessage:
-      'We are {percentComplete}% done cooking your brand-new account.',
+      "We are {percentComplete}% done cooking your brand-new account.\nBefore you get to it though, we'd like to talk about an important feature of your new account.",
   },
 
   errorNameTooShort: {
