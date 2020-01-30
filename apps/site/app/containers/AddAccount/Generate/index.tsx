@@ -1,7 +1,7 @@
 import React from 'react';
 import { Wallet } from 'ethers';
 import { connect } from 'react-redux';
-import { Button, Header, Form } from 'semantic-ui-react';
+import { Button, Header, Form, Container } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
 import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
@@ -156,8 +156,14 @@ class GenerateClass extends NewBaseClass<State> {
           isOpen={isCreating}
           header={messages.whileCreatingHeader}
           progressPercent={percentComplete}
-          progressMessage={messages.whileCreatingMessage}
+          children={
+            <Container>
+              <p>TEXT</p>{percentComplete}%
+              <a href="" target="_blank">LINK TO FAQ</a>
+            </Container>
+          }
         />
+        
       </React.Fragment>
     );
   }
