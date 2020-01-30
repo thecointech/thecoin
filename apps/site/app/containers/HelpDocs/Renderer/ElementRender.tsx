@@ -13,7 +13,7 @@ export const ElementRender = ({type, text}: RenderableType) => {
     case "heading3":
       return <Header size="small">{text}</Header>;
     case "list-item":
-        return <div>- {text}</div>;
+        return <div><p>- {text}</p></div>;
       
     case "paragraph":
       return <p>{text}</p>
