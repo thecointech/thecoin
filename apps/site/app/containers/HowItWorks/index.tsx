@@ -14,7 +14,7 @@ import moneyhand from './images/moneyhand.svg';
 import save from './images/save.svg';
 import user from './images/user.svg';
 
-import styles from '../../styles/base.css';
+import styles from './styles.module.css';
 
 export function HowItWorks() {
   return (

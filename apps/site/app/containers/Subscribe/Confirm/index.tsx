@@ -4,12 +4,10 @@ import { GetNewsletterApi } from 'api';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import { SubscriptionDetails } from '@the-coin/types';
-
-import styles from '../../../styles/base.css';
 import { RouteComponentProps } from 'react-router';
+import styles from './styles.module.css';
 
-function getInitialState(qs: string) : SubscriptionDetails
-{
+function getInitialState(qs: string): SubscriptionDetails {
   const query = queryString.parse(qs);
   const id = query.id as string;
   return {
@@ -22,7 +20,7 @@ export const Confirm = (props: RouteComponentProps) => {
   const [hasUpdated, setUpdated] = React.useState(false);
   const [details, setDetails] = React.useState(getInitialState(props.location.search));
   const onInputChange = React.useCallback((event: React.SyntheticEvent<HTMLInputElement>) => {
-    const {value, name} = event.currentTarget;
+    const { value, name } = event.currentTarget;
     setDetails({
       ...details,
       [name]: value
@@ -49,7 +47,7 @@ export const Confirm = (props: RouteComponentProps) => {
           <h4>Please wait - we are confirming your subscription</h4>
       }
       We would love to get to know you better!  Would you mind letting us know your details?
-      <Form className={styles.FormStyle}>
+      <Form className={styles.formStyle}>
         <Form.Input onChange={onInputChange} placeholder="Email" value={details.email} name="email" />
         <Form.Input onChange={onInputChange} placeholder="First Name" value={details.firstName} name="firstName" />
         <Form.Input onChange={onInputChange} placeholder="Last Name" value={details.lastName} name="lastName" />
@@ -58,7 +56,7 @@ export const Confirm = (props: RouteComponentProps) => {
         <Form.Checkbox onChange={onInputChange} label="Yes, I want to connect with The Coin" checked={details.confirmed} name="confirmed" />
       </Form>
       <Button onClick={updateSubscription}>
-          <FormattedMessage id="Subscribe.button" defaultMessage="Update Details!" />
-        </Button>
+        <FormattedMessage id="Subscribe.button" defaultMessage="Update Details!" />
+      </Button>
     </div>)
 };

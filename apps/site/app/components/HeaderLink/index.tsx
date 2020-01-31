@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
-import styles from '../../styles/base.css';
 
 interface HeaderLinkProps {
   to: string;
@@ -14,7 +13,6 @@ export default (props: HeaderLinkProps) => (
     as={NavLink}
     to={props.to}
     exact={props.exact}
-    className={`${styles.ui} ${styles.menu} ${styles.link} ${styles.item}`}
     activeClassName="active"
   >
     {props.children}

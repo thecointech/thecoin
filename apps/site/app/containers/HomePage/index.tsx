@@ -13,12 +13,10 @@ import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
 import phone from './images/phoneAndMoney.svg';
 import interac from './images/interacLogo.svg';
 
-import Subscribe from '../Subscribe';
+import { Subscribe } from '../Subscribe';
 import styles from './index.module.css';
 import { hasAccount } from 'utils/detection';
 import { useSelector } from 'react-redux';
@@ -31,7 +29,7 @@ export const HomePage = () => {
 
   const accounts = useSelector(selectAccounts);
   const userHasAccount = hasAccount(accounts);
-  const accountButtonText = userHasAccount ? "My Accounts" : "Try It";
+  const accountButtonText = userHasAccount ? "My Accounts" : "Get Started";
   return (
     <React.Fragment>
       <h2 className={styles.h2Home}>
@@ -48,40 +46,24 @@ export const HomePage = () => {
                     alt="interac"
                     src={interac}
                   /></li>
-                <li>Grow your money (average <b>Growth of 9.8%</b>) </li>
+                <li>Grow your money (average <b>rate of 9.8%</b>) </li>
                 <li>Pay <b>No Bank Fees</b></li>
               </ol>
               <p>No engagement, no obligations.</p>
 
-              <Button as={ NavLink } to="/howItWorks" content='More Infos' primary size='massive' id='knowMore'/>
-              <Button as={ NavLink } to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount'/>
+              <Button as={NavLink} to="/howItWorks" content='More Infos' primary size='massive' id='knowMore' />
+              <Button as={NavLink} to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount' />
             </div>
           </Grid.Column>
           <Grid.Column className={styles.phoneApp} id={styles.phoneZone}>
             <img
-                alt="mobile interac"
-                src={phone}
-              />
+              alt="mobile interac"
+              src={phone}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Grid divided="vertically" id={styles.subscribeBlock}>
-        <Grid.Row columns={1}>
-          <Grid.Column>
-          <div className={styles.subContainer}>
-                <p className={styles.subscribeText}>
-                  <FormattedMessage
-                    {...messages.subscribe}
-                    values={{
-                      bold: <b>{messages.subscribe.description}</b>,
-                    }}
-                  />
-                </p>
-              </div>
-              <Subscribe />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Subscribe />
     </React.Fragment>
   );
 }
