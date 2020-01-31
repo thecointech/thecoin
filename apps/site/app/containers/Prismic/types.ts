@@ -13,6 +13,8 @@ export type FAQResult = {
 
 export type ArticleResult = {
   title: RenderableType[]|null;
+  questions: RenderableType[]|null;
+  answers: RenderableType[]|null;
   content: RenderableType[]|null;
   author: RenderableType[]|null;
 }

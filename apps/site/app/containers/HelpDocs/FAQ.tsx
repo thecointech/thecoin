@@ -13,6 +13,5 @@ export const FAQ = ({ data }: FAQDocument) =>
       <Item.Description>
         <Renderer r={data.answer} />
       </Item.Description>
-      <Item.Extra>for more details, click here</Item.Extra>
     </Item.Content>
   </Item>

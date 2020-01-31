@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
-import styles from '../../styles/base.css';
+import styles from './index.module.css';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
 
 class Navigation extends React.Component {

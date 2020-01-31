@@ -1,0 +1,10 @@
+.subscribe {
+    position: absolute;
+    left: 2%;
+}
+.subscribeText {
+    font-size: 1.7rem;
+    font-weight: 300;
+    margin-bottom: 50px;
+    color: #002c8e;
+}

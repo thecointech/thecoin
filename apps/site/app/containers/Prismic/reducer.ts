@@ -10,10 +10,10 @@ import { buildSaga } from '@the-coin/shared/utils/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-const apiEndpoint = 'https://thecoin.cdn.prismic.io/api/v2'
+const apiEndpoint = 'https://thecoinio.cdn.prismic.io/api/v2'
 const accessToken = '' // This is where you would add your access token for a Private repository
 const Client = Prismic.client(apiEndpoint, { accessToken });
-
+console.log(Client);
 export class PrismicReducer extends TheCoinReducer<PrismicState>
 	implements IActions
 {
@@ -40,8 +40,8 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
     const results: Document[] = (yield call(fetchData)) as any;
     if (results)
       yield this.storeValues({
-        faqs: results.filter(item => item.type === 'faq') ?? [],
-        articles: results.filter(item => item.type === 'article') ?? []
+        faqs: results.filter(item => item.type === 'the_coin_faq') ?? [],
+        articles: results.filter(item => item.type === 'the_coin_faq') ?? []
       })
   };
 }

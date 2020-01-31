@@ -40,7 +40,7 @@ export default defineMessages({
   step3Sub: {
     id: `${scope}.step3Sub`,
     defaultMessage:
-      'Transfer money in using interac e-Transfer and an email address specific to only your account.\n\n\nYour dollars will be converted into The Coin, a digital currency based on the stockmarket, and powered by blockchain technology (which helps make it super-safe!).  It’s value is tied to the best stocks on Wall Street (the S&P 500).',
+      'Transfer money in using interac e-Transfer and an email address specific to only your account.\n\n\nYour dollars will be converted into The Coin, a digital currency based on the stockmarket, and powered by blockchain technology (which helps make it super-safe!).  Its value is tied to the best stocks on Wall Street (the S&P 500).',
   },
   step4: {
     id: `${scope}.step4`,

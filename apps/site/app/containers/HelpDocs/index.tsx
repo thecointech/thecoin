@@ -28,17 +28,12 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
       FAQS_KEY,
       () => {
         let items: SidebarMenuItem[] = [
-          {
-            link: {
-              name: "FAQs",
-              to: buildUrl("")
-            }
-          },
+          
           ...docs.articles.map(d => (
             {
               link: {
-                name: d.data.title 
-                  ? d.data.title[0].text
+                name: d.data.questions 
+                  ? d.data.questions[0].text
                   : "Missing Title",
                 to: buildUrl(d.id)
               }

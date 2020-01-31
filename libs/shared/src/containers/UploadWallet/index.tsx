@@ -36,7 +36,7 @@ export const UploadWallet = (props: Props) => {
   }, [walletActions])
 
   return (
-    <Container id="formCreateAccountStep1">
+    <Container>
       <Header as="h1">
         <Header.Content>
           <FormattedMessage {...messages.header} />

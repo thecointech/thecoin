@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
-import styles from '../../styles/base.css';
+import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
 
 const Subscribe = () => {
