@@ -23,3 +23,6 @@ declare module '*.svg';
 declare module '*.jpg';
 
 declare module '*.png';
+
+type MaybeString = string | undefined;
+type MaybeNumber = number | undefined;

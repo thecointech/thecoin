@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Header, List, Divider } from 'semantic-ui-react';
-import { IWindow } from '../../Accounts/Settings/gconnect/gauth';
+import { IWindow } from '../../StoreOnline/Google/gauth';
 import { AccountMap, IActions } from '@the-coin/shared/containers/Account/types';
 import { GoogleWalletItem } from '@the-coin/types';
 import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';

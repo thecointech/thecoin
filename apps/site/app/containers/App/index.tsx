@@ -22,9 +22,10 @@ import MainRouter from 'containers/MainRouter';
 import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
+import { usePrismic } from 'containers/Prismic/reducer';
 
 export const App = () => {
-  
+  usePrismic();
   useFxRates();
   const location = useLocation();
 

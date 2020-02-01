@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { usePrismic, usePrismicActions } from "containers/Prismic/reducer";
+import { usePrismicActions } from "containers/Prismic/reducer";
 import { useSidebar } from "@the-coin/shared/containers/PageSidebar/actions";
 import { SidebarMenuItem } from "@the-coin/shared/containers/PageSidebar/types";
 import { ApplicationRootState } from "types";
@@ -59,6 +59,5 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
 
 // https://github.com/react-boilerplate/redux-injectors/issues/16
 export const HelpDocs = (props: RouteComponentProps) => {
-  usePrismic();
   return <HelpDocsInternal {...props} /> // The rest of the code
 }

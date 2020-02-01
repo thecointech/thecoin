@@ -7,7 +7,7 @@ export function accountSelector(state: ApplicationBaseState): AccountMap {
   return state.accounts || ReadAllAccounts();
 }
 
-export const selectAccounts = () =>
+export const useAccounts = () =>
   useSelector(accountSelector);
 
 export const structuredSelectAccounts = (state: ApplicationBaseState) => ({

@@ -22,7 +22,7 @@ type MyProps = {
 	onComplete?: () => void
 }
 
-export class GoogleConnect extends React.PureComponent<MyProps> {
+export class StoreGoogle extends React.PureComponent<MyProps> {
 
 	state = {
 		gauthUrl: "",
@@ -165,8 +165,8 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 		// when completing this callback (weird, I know)
 		// To fix, we clone it here, and then replace
 		// the DOM element below
-		const hack_headerImg = document.getElementById("HeaderImageBanner")!;
-		var hack_cloneElement = hack_headerImg.cloneNode(true);
+		const hack_headerImg = document.getElementById("HeaderImageBanner");
+		var hack_cloneElement = hack_headerImg?.cloneNode(true);
 
 		// Prematurely disable the account,
 		// because for some reason we aren't
@@ -177,7 +177,7 @@ export class GoogleConnect extends React.PureComponent<MyProps> {
 			.then(() => {
 				// HACK part 2:
 				// Replace weirdly-resized image with original clone
-				hack_headerImg.parentNode!.replaceChild(hack_cloneElement, hack_headerImg);
+				hack_headerImg?.parentNode!.replaceChild(hack_cloneElement!, hack_headerImg!);
 				this.setState({buttonText: messages.buttonSuccess})
 				if (onComplete)
 					onComplete()
