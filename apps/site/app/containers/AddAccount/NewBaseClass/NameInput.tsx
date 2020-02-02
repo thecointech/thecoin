@@ -2,8 +2,7 @@ import React, { useState, useCallback } from "react";
 import { UxInput } from "@the-coin/shared/components/UxInput";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
-import { useAccounts } from "@the-coin/shared/containers/Account/selector";
-import { AccountMap } from "@the-coin/shared/containers/Account/types";
+import { useAccountMap, AccountDict } from "@the-coin/shared/containers/AccountMap";
 
 
 type Props = {
@@ -22,7 +21,7 @@ type State = typeof initialState;
 export const NameInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
-  const accounts = useAccounts();
+  const accounts = useAccountMap();
   const onChange = useCallback((value: string) => {
     const newState = validateName(value, accounts);
     setState(newState);
@@ -45,7 +44,7 @@ export const NameInput = (props: Props) => {
 
 
 // Validate our inputs
-const validateName = (value: string, accounts: AccountMap) : State =>  {
+const validateName = (value: string, accounts: AccountDict) : State =>  {
   const validation =
     value.length === 0
       ? {

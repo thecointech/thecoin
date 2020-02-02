@@ -1,30 +1,34 @@
 import React from 'react';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { Download } from './download';
-import { GoogleConnect } from './gconnect';
+import { StoreGoogle } from '../../StoreOnline/Google';
 
 import { Container, Divider, Header } from "semantic-ui-react"
+import { isWallet } from '@the-coin/shared/SignerIdent';
 
 
 interface MyProps {
   account: AccountState;
 }
 
-export function Settings(props: MyProps) {
-  return (
-  <Container id="accountSettings">
-    <Divider horizontal>
-      <Header as='h4'>
-        Save Locally
-      </Header>
-    </Divider>
-    <Download accountName={props.account.name} />
-    <Divider horizontal>
-      <Header as='h4'>
-        Save Online
-      </Header>
-    </Divider>
-    <GoogleConnect accountName={props.account.name} />
-  </Container>
-  );
+export function Settings({account}: MyProps) {
+  const isLocal = isWallet(account.signer);
+  return isLocal
+  ? <Container id="accountSettings">
+      <Divider horizontal>
+        <Header as='h4'>
+          Save Locally
+        </Header>
+      </Divider>
+      <Download address={account.signer.address} />
+      <Divider horizontal>
+        <Header as='h4'>
+          Save Online
+        </Header>
+      </Divider>
+      <StoreGoogle address={account.signer.address} />
+    </Container>
+  : <Container id="accountSettings">
+      This account has no locally editable settings
+    </Container>
 }

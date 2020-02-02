@@ -23,10 +23,12 @@ import 'semantic-ui-less/semantic.less';
 
 import styles from './index.module.css';
 import { usePrismic } from 'containers/Prismic/reducer';
+import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 
 export const App = () => {
   usePrismic();
   useFxRates();
+  useAccountMapStore();
   const location = useLocation();
 
   return (

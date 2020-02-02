@@ -3,9 +3,10 @@ import { GetSecureApi } from 'api';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { IWindow } from './gauth';
-import { GetStoredWallet } from '@the-coin/shared/containers/Account/storageSync';
+import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
+import { isWallet } from '@the-coin/shared/SignerIdent';
 
 // Given a cookie key `name`, returns the value of
 // the cookie or `null`, if the key is not found.
@@ -18,7 +19,7 @@ function getCookie(name: string) {
 }
 
 type MyProps = {
-	accountName: string
+	address: string
 	onComplete?: () => void
 }
 
@@ -145,20 +146,26 @@ export class StoreGoogle extends React.PureComponent<MyProps> {
 		this.clearCallback();
 		// Do not download the decrypted wallet: instead
 		// we read the wallet directly from LS and download that
-		const { onComplete, accountName } = this.props;
+		const { onComplete, address } = this.props;
 		const secureApi = GetSecureApi();
-		const wallet = GetStoredWallet(accountName);
-		if (!wallet) {
+		const account = getStoredAccountData(address);
+		if (!account) {
 			// do something
 			alert("warning: account not found");
 			return;
-		}
+    }
+    const {signer} = account;
+    if (!signer || !isWallet(signer)) {
+      // do something
+			alert("Cannot upload: not a local account");
+			return;
+    }
 		const request = {
 			token: {
 				token
 			},
-			wallet: JSON.stringify(wallet),
-			walletName: accountName
+			wallet: JSON.stringify(signer),
+			walletName: account.name
 		}
 		// Weird-o hack: for some reason, our SVG
 		// header becomes mis-sized and dissappears

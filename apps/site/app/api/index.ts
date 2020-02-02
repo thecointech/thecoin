@@ -6,7 +6,7 @@ import {
   SecureApi,
   NewsletterApi,
   ETransferApi,
-} from '@the-coin/broker-cad/dist/api';
+} from '@the-coin/broker-cad';
 import { ServiceAddress, ServicePorts } from '@the-coin/utilities/ServiceAddresses';
 import { MockReferrersApi } from './mock/referrers';
 

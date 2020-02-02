@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { TheSigner } from '../../SignerIdent'
+import { TheSigner, SignerIdent } from '../../SignerIdent'
 import { TheContract } from '@the-coin/utilities';
 
 async function AddTheCoin(ethereum: any)
@@ -52,8 +52,12 @@ export async function ConnectWeb3()
 			await AddTheCoin(ethereum);
 
 			// Our local/stored version remembers it's address
-			var address = await signer.getAddress();
-			const theSigner: TheSigner = Object.assign(signer, { address });
+      var address = await signer.getAddress();
+      const ident: SignerIdent = {
+        address, 
+        _isSigner: true
+      }
+			const theSigner: TheSigner = Object.assign(signer, ident);
 			return theSigner;
 
 		} catch (error) {

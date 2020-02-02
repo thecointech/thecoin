@@ -17,7 +17,7 @@ function readFile(file: File): Promise<string> {
   });
 }
 
-export const Upload = () => {
+export const FromJson = () => {
   
   return (
     <Container id="formCreateAccountStep1">

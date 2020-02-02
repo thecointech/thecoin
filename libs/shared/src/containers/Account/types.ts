@@ -1,9 +1,7 @@
-import { Wallet, Contract } from 'ethers';
+import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-import { Dictionary } from "lodash";
 import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes'
-import { ApplicationBaseState } from '../../types';
-import { TheSigner } from '../../SignerIdent'
+import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 
 /* --- CALLBACKS ---*/
@@ -23,11 +21,11 @@ export type Transaction = {
 export type AccountState = {
   name: string; // Convenience storage of name
   // Possibly encrypted raw ethers wallet
-  signer: TheSigner | Wallet | null;
+  signer: AnySigner;
   // Contract connected to this wallet as a signer
   contract: Contract | null;
   // The timestamp of the last update to balance/history
-  lastUpdate: number;
+  lastUpdate: Date;
   // Current balance in Coin
   balance: number;
   // Transaction history
@@ -44,21 +42,19 @@ export type AccountState = {
   historyEndBlock?: number;
 };
 
-export const DefaultAccount: AccountState = {
-  name: "",
-  signer: null,
+export const DefaultAccountValues = {
   contract: null,
-  lastUpdate: 0,
+  lastUpdate: new Date(0),
   balance: -1,
   history: [],
   displayCurrency: CurrencyCodes.CAD
-}
+};
 
 /* --- ACTIONS --- */
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(name: string, signer: TheSigner): Iterator<any>;
+  setSigner(signer: TheSigner): void;
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): Iterator<any>;

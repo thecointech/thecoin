@@ -1,52 +1,45 @@
 import React, { useCallback } from "react"
 import { Dropdown, DropdownItemProps } from "semantic-ui-react"
 import { NavLink, Link } from "react-router-dom"
-import { selectActiveAccount } from "containers/Accounts/Selectors"
-import { selectAccounts } from "@the-coin/shared/containers/Account/selector"
-import { DispatchAccounts } from "containers/Accounts/Reducer"
 import { useDispatch } from "react-redux"
+import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap"
 
 import cross from './images/cross.svg';
-//import dot from './images/greendot.svg';
-
-//import { AccountMap } from "@the-coin/shared/containers/Account/types"
-
-
-//const isLoggedIn = (accounts: AccountMap, name: string) => accounts[name].signer != null;
-
+import { AccountState } from "@the-coin/shared/containers/Account/types"
 
 export const AccountSwitcher = () => {
 
-  const allAccounts = selectAccounts();
-  const allNames = Object.keys(allAccounts);
-  const activeAccount = selectActiveAccount();
-
+  const {active, map} = useAccounts();
+  const activeAccount = active 
+    ? map[active]
+    : undefined;
+  
   const dispatch = useDispatch();
   const doSetActive = useCallback((_: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
-    const accounts = DispatchAccounts(dispatch);
+    const accounts = accountMapApi(dispatch);
     accounts.setActiveAccount(data.account)
   }, [dispatch])
 
+  const allAccounts = Object.values(map);
   return (
     <Dropdown button text='My Account' id='createAccountHeader' direction='right'>
       <Dropdown.Menu>
         <Dropdown.Header>My Accounts</Dropdown.Header>
-        {allNames
-          .filter(account => account == activeAccount.name)
-          .map(name =>
-            <Dropdown.Item key={name}>
-              <Dropdown image={{ avatar: false, src: cross }} text={name.substring(0, 14) + '...'}>
-                <Dropdown.Menu direction='right'>
-                  <Dropdown.Item key="see" text='See' account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />
-                  <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" />
-                  <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
-                </Dropdown.Menu>
-              </Dropdown>
-            </Dropdown.Item>)
-        }
-        {allNames
-          .filter(account => account != activeAccount.name)
-          .map(name => <Dropdown.Item key={name} text={name} account={name} description='' as={Link} onClick={doSetActive} to="/accounts/" />)
+        <ActiveAccount account={activeAccount} />
+        {
+          allAccounts
+            .filter(account => account.signer.address !== activeAccount?.signer.address)
+            .map(account => (
+              <Dropdown.Item 
+                key={account.name} 
+                text={account.name}
+                account={account.signer.address}
+                description='' 
+                as={Link} 
+                onClick={doSetActive} 
+                to="/accounts/" />
+              )
+            )
         }
         <Dropdown.Divider />
         <Dropdown.Item key='add' text='Add an Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/" />
@@ -54,3 +47,19 @@ export const AccountSwitcher = () => {
     </Dropdown>
   )
 }
+
+type ActiveProps = {
+  account: AccountState|undefined
+}
+const ActiveAccount = ({account}: ActiveProps) =>
+  account
+  ? <Dropdown.Item key={name}>
+      <Dropdown image={{ avatar: false, src: cross }} text={account.name.substring(0, 14) + '...'}>
+        <Dropdown.Menu direction='right'>
+          <Dropdown.Item key="see" text='See' account={name} description='' as={Link} to="/accounts/" />
+          <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" />
+          <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
+        </Dropdown.Menu>
+      </Dropdown>
+    </Dropdown.Item>
+  : null

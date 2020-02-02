@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
+import { RUrl } from '@the-coin/utilities/RUrl';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
 import { ApplicationBaseState } from "../../types";
@@ -7,9 +8,8 @@ import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
-import { useAccount } from "./reducer";
-import { isWallet } from "./storageSync";
-import {RUrl} from '@the-coin/utilities/RUrl';
+import { useAccountApi } from "./reducer";
+import { isWallet } from "../../SignerIdent";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
@@ -30,7 +30,7 @@ export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
   const { signer } = account;
-  const accountActions = useAccount(account.name);
+  const accountActions = useAccountApi(signer.address);
 
   const sidebarCb = useCallback(
     (items: SidebarMenuItem[], _state: ApplicationBaseState) =>
@@ -57,11 +57,7 @@ export const Account = (props: Props) => {
     if (isWallet(signer)) {
       if (!signer.privateKey)
         return (
-          <Login
-            wallet={signer}
-            walletName={account.name}
-            decrypt={accountActions.decrypt}
-          />
+          <Login account={account} />
         );
     } else {
       if (!signer.provider) {
@@ -96,17 +92,17 @@ export const Account = (props: Props) => {
 }
 
 const connectSigner = async (accountState: AccountState, accountActions: IActions) => {
-  const { signer, name } = accountState;
+  const { signer } = accountState;
   const theSigner = await ConnectWeb3();
   if (signer && theSigner) {
     if (theSigner.address != signer.address) {
       return;
     }
-    accountActions.setSigner(name, theSigner);
+    accountActions.setSigner(theSigner);
   }
 }
 
-const BuildLink = (item: RouterPath, url: string) => 
+const BuildLink = (item: RouterPath, url: string) =>
   new RUrl(url, item.urlFragment);
 
 const generateSubItems = (
@@ -133,34 +129,3 @@ const generateSubItems = (
   }
   return items;
 }
-
-// Fancy-pants mapper returns the component with the appropriate reducer applied
-
-// var __AccountMap: { [name: string]: React.ComponentType<OwnProps> } = {};
-// function NamedAccount(props: OwnProps) {
-//   const { accountName } = props;
-//   if (!__AccountMap[accountName]) {
-//     const accountDispatch = Account.buildMapDispatchToProps(accountName);
-//     const mapDispatchToProps = function (dispatch: Dispatch) {
-//       return {
-//         dispatch: accountDispatch(dispatch),
-//         ...Sidebar.Dispatch(dispatch)
-//       };
-//     };
-//     const mapPropsToState = function (state: ApplicationBaseState) {
-//       return {
-//         account: createAccountSelector(accountName)(state)
-//       };
-//     };
-
-//     __AccountMap[accountName] = injectSingleAccountReducer(accountName)(
-//       connect(
-//         mapPropsToState,
-//         mapDispatchToProps
-//       )(AccountClass)
-//     );
-//   }
-//   return React.createElement(__AccountMap[accountName], props);
-// }
-
-//export { RouterPath, PageCreator, AccountPageProps as AccountProps };

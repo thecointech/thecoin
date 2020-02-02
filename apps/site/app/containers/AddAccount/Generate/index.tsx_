@@ -13,6 +13,7 @@ import {
   initialState as BaseInitial,
   NewBaseClass
 } from '../NewBaseClass/index';
+import { Redirect } from 'react-router-dom';
 
 const initialState = {
   ...BaseInitial,
@@ -34,6 +35,7 @@ class GenerateClass extends NewBaseClass<State> {
   onFinishedGenerate = () => this.setState({
     isCreating: false,
     redirect: true,
+    cancelCreating: false,
   });
 
   onGenerateNewWallet = async (e: React.MouseEvent<HTMLElement>) => {
@@ -98,10 +100,8 @@ class GenerateClass extends NewBaseClass<State> {
     this.props.setSigner(accountName, asJson);
 
     // Switch to this newly created account
-    this.setState({
-      cancelCreating: false,
-    });
-
+    this.onFinishedGenerate();
+    
     // Callback allows hosting element to react to completion
     if (this.props.onComplete) {
       this.props.onComplete(accountName);
@@ -114,7 +114,8 @@ class GenerateClass extends NewBaseClass<State> {
   // Render
   render() {
     if (this.ShouldRedirect()) {
-      return this.RenderRedirect();
+      const addr = `/accounts`;
+      return <Redirect to={addr} />;
     }
     const { forceValidate, pwdValid, pwdMessage, isCreating, percentComplete } = this.state;
 

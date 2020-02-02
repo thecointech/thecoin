@@ -4,9 +4,8 @@ import { IsValidAddress } from '@the-coin/utilities';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages'
-import { useState } from 'react';
 import { useCallback } from 'react';
-import { useAccount } from '../Account/reducer';
+import { useAccountMapApi } from '../AccountMap';
 
 type ReadFileCallback = (path: File) => Promise<string>;
 type ValidateCallback = (address: string) => boolean;
@@ -16,24 +15,22 @@ interface Props {
   validate?: ValidateCallback;
 }
 
+// Random ID to connect input & label
+const id = '__upload26453312f';
+
 export const UploadWallet = (props: Props) => {
-  // We use a random ID to avoid conflicting with other
-  // existing reducers.  This reducer will be renamed, so
-  // the name is not important, it just needs to be random
-  // and constant for the lifetime of this class
-  // We store it in state to give it peristance
-  const [id] = useState('upload' + Math.random());
-  const walletActions = useAccount(id)
+ 
+  const accountMapApi = useAccountMapApi()
   
   const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = ValidateFile(wallet, props.validate);
     if (isValid) {
-      walletActions.setSigner(name, wallet);
+      accountMapApi.addAccount(name, wallet, true);
     } else {
       alert('Bad Wallet');
     }
-  }, [walletActions])
+  }, [accountMapApi])
 
   return (
     <Container>

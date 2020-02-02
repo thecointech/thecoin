@@ -19,15 +19,15 @@ import interac from './images/interacLogo.svg';
 import { Subscribe } from '../Subscribe';
 import styles from './index.module.css';
 import { hasAccount } from 'utils/detection';
-import { useSelector } from 'react-redux';
-import { selectAccounts } from '@the-coin/shared/containers/Account/selector';
+import { useAccounts } from '@the-coin/shared/containers/AccountMap';
+
 
 export const HomePage = () => {
   //const multicodec = require('multicodec');
   //const Box = require('3box');
   //const IdentityWallet = require('identity-wallet')
 
-  const accounts = useSelector(selectAccounts);
+  const accounts = useAccounts();
   const userHasAccount = hasAccount(accounts);
   const accountButtonText = userHasAccount ? "My Accounts" : "Get Started";
   return (

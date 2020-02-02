@@ -1,5 +1,4 @@
-import { AccountMap } from "@the-coin/shared/containers/Account/types";
-import { getDefaultAccount } from 'containers/Accounts/Selectors';
+import { AccountMapState } from "@the-coin/shared/containers/AccountMap/types";
 
 export const isOpera = () : boolean =>
   /Opera|OPR\//.test(navigator.userAgent)
@@ -24,17 +23,5 @@ export const getWeb3Type = (): Web3Type =>
         ? "Opera"    
         : "Generic";
 
-export const hasAccount = (accounts: AccountMap) : boolean =>
-  accounts && Object.keys(accounts).length > 0;
-
-export const getDefaultAccountAddress = (accounts: AccountMap) : string => {
-  const base = "/accounts/";
-
-  const defaultAccount = getDefaultAccount(accounts);
-  // If we know we have an account, automatically redirect to it
-  if (defaultAccount) {
-    return `${base}e/${encodeURI(defaultAccount)}`;
-  }
-
-  return base;
-}
+export const hasAccount = (accounts: AccountMapState) : boolean =>
+  accounts && Object.keys(accounts.map).length > 0;

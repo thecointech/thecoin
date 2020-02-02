@@ -8,7 +8,7 @@ import { Accounts } from 'containers/Accounts';
 import { AddAccount } from 'containers/AddAccount';
 import { HowItWorks } from 'containers/HowItWorks';
 import { Confirm } from 'containers/Subscribe/Confirm';
-import { GAuth } from 'containers/Accounts/Settings/gconnect/gauth';
+import { GAuth } from 'containers/StoreOnline/Google/gauth';
 import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
 
