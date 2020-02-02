@@ -1,12 +1,12 @@
 import { AccountState } from '../containers/Account/types';
 import { AccountDict } from '../containers/AccountMap/types';
 import { isSigner, SignerIdent } from '../SignerIdent';
-import { IsValidAddress } from '@the-coin/utilities';
+import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { Deprecated_GetStored } from './storageSync_deprecated';
 
-const ThrowIfNotValid = (data: any) => { 
-  if (data.privateKey || !IsValidAddress(data.address)) 
-    throw new Error("Cannot store unencrypted wallet") 
+const ThrowIfNotValid = (data: any) => {
+  if (data.privateKey || !IsValidAddress(data.address))
+    throw new Error("Cannot store unencrypted wallet")
 }
 
 export function storeAccount(account: AccountState) {
@@ -29,10 +29,19 @@ export function storeAccount(account: AccountState) {
 }
 
 
-export function getStoredAccountData(address: string): AccountState|null {
+export function getStoredAccountData(address: string): AccountState | null {
+
+  if (!IsValidAddress(address))
+    return null;
+
   const storedItem = localStorage.getItem(address);
   if (storedItem !== null) {
     const r = JSON.parse(storedItem) as AccountState
+
+    r.address = NormalizeAddress(r.signer.address);
+    localStorage.removeItem(address);
+    localStorage.setItem(r.address, storedItem);
+
     if (r.address && r.address === address) {
       return r;
     }
@@ -48,14 +57,21 @@ export function readAllAccounts(): AccountDict {
     if (!raw)
       continue;
 
-    let account = IsValidAddress(raw) 
-      ? getStoredAccountData(raw)
-      : Deprecated_GetStored(raw);
+    let account = 
+      getStoredAccountData(raw) ??
+      Deprecated_GetStored(raw);
 
-    // Rough check that this is, indeed, a valid account
-    const address = account?.signer?.address;
-    if (address && IsValidAddress(address))
-      allAccounts[address] = account!;
+    if (account) {
+      const { address, signer } = account;
+
+      // Rough check that this is, indeed, a valid account
+      if (address &&
+        IsValidAddress(address) &&
+        address == NormalizeAddress(signer.address)
+      ) {
+        allAccounts[address] = account!;
+      }
+    }
   }
   return allAccounts
 }
@@ -66,7 +82,7 @@ export function readAllAccounts(): AccountDict {
 export function updateStoredAccount(account: AccountState) {
   const existing = localStorage.getItem(account.address);
   if (existing) {
-    const { contract, signer, ...toStore} = account;
+    const { contract, signer, ...toStore } = account;
     const updated = {
       ...JSON.parse(existing),
       ...toStore

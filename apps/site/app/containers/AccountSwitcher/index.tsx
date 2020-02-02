@@ -29,6 +29,7 @@ export const AccountSwitcher = () => {
         {
           allAccounts
             .filter(account => account.address !== activeAccount?.address)
+            .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
               <Dropdown.Item 
                 key={account.name} 

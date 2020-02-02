@@ -13,13 +13,16 @@ import { composeReducers } from "immer-reducer";
 class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapActions {
 
   setActiveAccount(address?: string) {
-    if (address && !IsValidAddress(address))
-      throw new Error("Invalid Address: " + address);
+    if (address) {
+      if (!IsValidAddress(address))
+        throw new Error("Invalid Address: " + address);
+      if (NormalizeAddress(address) !== address) {
+        debugger;
+        address = NormalizeAddress(address);
+      }
+    } 
       
-    
     this.draftState.active = address
-      ? NormalizeAddress(address)
-      : undefined;
   }
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
