@@ -3,6 +3,7 @@ import { GoogleWalletItem } from "@the-coin/types";
 import { useAccountMap, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
 import { List, Button } from "semantic-ui-react";
 import { Wallet } from "ethers";
+import { NormalizeAddress } from "@the-coin/utilities";
 
 type Props = {
   wallets: GoogleWalletItem[],
@@ -28,7 +29,7 @@ export const AccountList = ({ wallets }: Props) => {
             }))
             .map(w => ({
               ...w,
-              exists: !existingAccounts.find(e => e.signer.address === w.wallet?.address)
+              exists: !existingAccounts.find(e => e.address === NormalizeAddress(w.wallet?.address))
             }))
             .map(w => (
               <List.Item key={w.id}>

@@ -36,7 +36,7 @@ export const Login = (props: Props) => {
 
   const history = useHistory();
   const { account } = props;
-  const {signer }= account;
+  const { signer, address }= account;
   if (!isWallet(signer) || signer.privateKey) {
     history.push('/accounts/');
   }
@@ -51,7 +51,7 @@ export const Login = (props: Props) => {
   }, [loginState, setLoginState, setPassword]);
 
   ////////////////////////////////
-  const accountApi = useAccountApi(signer.address);
+  const accountApi = useAccountApi(address);
   const onDecryptWallet = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     __cancel = false;

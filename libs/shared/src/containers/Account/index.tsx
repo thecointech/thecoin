@@ -29,8 +29,8 @@ interface Props {
 export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
-  const { signer } = account;
-  const accountActions = useAccountApi(signer.address);
+  const { signer, address } = account;
+  const accountActions = useAccountApi(address);
 
   const sidebarCb = useCallback(
     (items: SidebarMenuItem[], _state: ApplicationBaseState) =>

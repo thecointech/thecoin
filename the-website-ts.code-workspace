@@ -8,6 +8,9 @@
     },
     {
       "path": "libs/utils-ts"
+    },
+    {
+      "path": "submodules/redux-injectors"
     }
   ],
   "settings": {

@@ -2,9 +2,9 @@ import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContra
 import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { Log } from 'ethers/providers';
-import { useInjectSaga, injectSaga } from "redux-injectors";
-import { toHuman, IsValidAddress } from '@the-coin/utilities';
-import { useDispatch, useStore } from 'react-redux';
+import { useInjectSaga } from "@the-coin/redux-injectors";
+import { toHuman, IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
+import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, IActions, Transaction } from './types';
 import { buildSagas, bindActions } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
@@ -301,8 +301,12 @@ export const getAccountReducer = (address: string) => {
   // In development mode, ensure we are only called with a legal address
   if (process.env.NODE_ENV !== "production") {
     if (!IsValidAddress(address)) {
-      debugger;
+      alert('Connect debugger and figure this out');
       throw new Error("Invalid Address passed to accountApi");
+    }
+    if (NormalizeAddress(address) != address) {
+      alert('Connect debugger and figure this out');
+      throw new Error("Un-normalized address being passed to accountApi");
     }
   }
 

@@ -33,8 +33,9 @@ export function getStoredAccountData(address: string): AccountState|null {
   const storedItem = localStorage.getItem(address);
   if (storedItem !== null) {
     const r = JSON.parse(storedItem) as AccountState
-    if (r.signer.address && address === r.signer.address)
+    if (r.address && r.address === address) {
       return r;
+    }
   }
   return null;
 }
@@ -63,19 +64,19 @@ export function readAllAccounts(): AccountDict {
 //  Update an existing account with new state
 // (Store transactions, balance etc);
 export function updateStoredAccount(account: AccountState) {
-  const existing = localStorage.getItem(account.signer.address);
+  const existing = localStorage.getItem(account.address);
   if (existing) {
     const { contract, signer, ...toStore} = account;
     const updated = {
       ...JSON.parse(existing),
       ...toStore
     }
-    localStorage.setItem(account.signer.address, JSON.stringify(updated));
+    localStorage.setItem(account.address, JSON.stringify(updated));
   }
 }
 
 //
 // Delete the named account from localstorage (not tested)
 export function deleteAccount(account: AccountState) {
-  localStorage.removeItem(account.signer.address);
+  localStorage.removeItem(account.address);
 }

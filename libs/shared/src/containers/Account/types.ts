@@ -19,7 +19,10 @@ export type Transaction = {
 // An account state holds all relevant info
 // for an account, including loaded transactions etc
 export type AccountState = {
-  name: string; // Convenience storage of name
+   // The accounts name as specified by the user
+  name: string;
+  // A normalized version of the accounts address
+  address: string;
   // Possibly encrypted raw ethers wallet
   signer: AnySigner;
   // Contract connected to this wallet as a signer

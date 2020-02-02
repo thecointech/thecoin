@@ -1,7 +1,7 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
 import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
-import { useInjectReducer, useInjectSaga } from "redux-injectors";
+import { useInjectReducer, useInjectSaga } from "@the-coin/redux-injectors";
 import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { ContainerState, IActions } from './types';

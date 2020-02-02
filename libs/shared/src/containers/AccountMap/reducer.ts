@@ -1,8 +1,8 @@
-import { useInjectReducer } from "redux-injectors";
+import { useInjectReducer } from "@the-coin/redux-injectors";
 import { bindActionCreators, Dispatch } from "redux";
 import { Wallet } from "ethers";
 import { useDispatch } from "react-redux";
-import { IsValidAddress } from "@the-coin/utilities";
+import { IsValidAddress, NormalizeAddress } from "@the-coin/utilities";
 import { ACCOUNTMAP_KEY, initialState, AccountMapState, IAccountMapActions } from "./types";
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from "../../utils/immerReducer";
 import { AccountState, DefaultAccountValues } from "../Account/types";
@@ -16,7 +16,10 @@ class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapA
     if (address && !IsValidAddress(address))
       throw new Error("Invalid Address: " + address);
       
-    this.draftState.active = address;
+    
+    this.draftState.active = address
+      ? NormalizeAddress(address)
+      : undefined;
   }
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
@@ -26,6 +29,7 @@ class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapA
     const newAccount: AccountState = {
       ...DefaultAccountValues,
       name,
+      address: NormalizeAddress(signer.address),
       signer: unlocked ?? signer,
     }
     const {address} = signer;
@@ -38,8 +42,7 @@ class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapA
 
   // Remove the given account from list & storage
   deleteAccount(account: AccountState): void {
-    const {signer} = account;
-    const {address} = signer;
+    const {signer, address} = account;
     // We don't want active account with an invalid value
     if (this.state.active == address) {
       this.draftState.active = undefined;

@@ -20,13 +20,13 @@ export function Settings({account}: MyProps) {
           Save Locally
         </Header>
       </Divider>
-      <Download address={account.signer.address} />
+      <Download address={account.address} />
       <Divider horizontal>
         <Header as='h4'>
           Save Online
         </Header>
       </Divider>
-      <StoreGoogle address={account.signer.address} />
+      <StoreGoogle address={account.address} />
     </Container>
   : <Container id="accountSettings">
       This account has no locally editable settings

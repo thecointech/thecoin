@@ -1,6 +1,7 @@
 import { Wallet } from "ethers";
 import { AccountState, DefaultAccountValues } from "../containers/Account/types";
 import { TheSigner, AnySigner } from "../SignerIdent";
+import { NormalizeAddress } from "../../../utils-ts/src";
 
 // NOTE: These prefixes must be all equal length
 enum Prefix {
@@ -34,15 +35,17 @@ export const Deprecated_GetStored = (raw: string) : AccountState|null => {
   if (!signer)
     return null;
 
+  const normalizedAddress = NormalizeAddress(signer.address)
   const account = {
     ...DefaultAccountValues,
+    address: normalizedAddress,
     name,
     signer,
   };
 
   // Immediately save back using address and remove named version
   localStorage.removeItem(raw);
-  localStorage.setItem(signer.address, JSON.stringify(account));
+  localStorage.setItem(normalizedAddress, JSON.stringify(account));
 
   return account;
 };

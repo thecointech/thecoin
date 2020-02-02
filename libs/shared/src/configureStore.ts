@@ -4,7 +4,7 @@
 
 //import { configureStore, getDefaultMiddleware, StoreEnhancer } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
-import { createInjectorsEnhancer } from 'redux-injectors';
+import { createInjectorsEnhancer } from '@the-coin/redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { ApplicationBaseState } from './types';
 import { History } from 'history';

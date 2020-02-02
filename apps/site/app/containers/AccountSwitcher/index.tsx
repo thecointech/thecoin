@@ -17,7 +17,7 @@ export const AccountSwitcher = () => {
   const dispatch = useDispatch();
   const doSetActive = useCallback((_: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
     const accounts = accountMapApi(dispatch);
-    accounts.setActiveAccount(data.account)
+    accounts.setActiveAccount(data.address)
   }, [dispatch])
 
   const allAccounts = Object.values(map);
@@ -28,12 +28,12 @@ export const AccountSwitcher = () => {
         <ActiveAccount account={activeAccount} />
         {
           allAccounts
-            .filter(account => account.signer.address !== activeAccount?.signer.address)
+            .filter(account => account.address !== activeAccount?.address)
             .map(account => (
               <Dropdown.Item 
                 key={account.name} 
                 text={account.name}
-                account={account.signer.address}
+                address={account.address}
                 description='' 
                 as={Link} 
                 onClick={doSetActive} 
