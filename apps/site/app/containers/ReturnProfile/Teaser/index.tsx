@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import { RouteComponentProps, withRouter } from 'react-router';
 
-import styles from '../../../styles/base.css';
+import styles from './styles.module.css';
 
 type Props = RouteComponentProps;
 

@@ -37,8 +37,8 @@ export class ModalOperation extends React.PureComponent<Props, {}, null> {
 
   renderOkButton = (okCallback?: () => void, progressPercent?: number) =>
     okCallback && progressPercent && progressPercent >= 1 ? (
-      <Button onClick={okCallback} inverted>
-        <Icon name="cancel" /> Ok
+      <Button onClick={okCallback} inverted primary>
+        <Icon />OK
       </Button>
     ) : (
       undefined

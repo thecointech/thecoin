@@ -1,10 +1,11 @@
 import React from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
+import messages from './messages'
 
-const Subscribe = () => {
+export const Subscribe = () => {
 
   const [email, setEmail] = React.useState('');
   const onInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.currentTarget.value), [setEmail]);
@@ -27,17 +28,27 @@ const Subscribe = () => {
     }
   }, [email]);
   return (
-    <div className={styles.search}>
-      <Input 
-        id='subscribeField'
-        onChange={onInputChange}
-        action={(
-        <Button onClick={doSubscribe} id='subscribeButton'>
-          <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
-        </Button>)}
-      placeholder="Your email" />
+    <div className={styles.subscribeBlock}>
+      <span className={styles.subContainer}>
+        <p className={styles.subscribeText}>
+          <FormattedMessage
+            {...messages.subscribe}
+            values={{
+              bold: <b>{messages.subscribe.description}</b>,
+            }}
+          />
+        </p>
+      </span>
+      <span className={styles.search}>
+        <Input
+          id='subscribeField'
+          onChange={onInputChange}
+          action={(
+            <Button onClick={doSubscribe} id='subscribeButton'>
+              <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
+            </Button>)}
+          placeholder="Your email" />
+      </span>
     </div>
   );
 };
-
-export default Subscribe;

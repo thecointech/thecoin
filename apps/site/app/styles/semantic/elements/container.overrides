@@ -152,11 +152,6 @@
     margin-right: 0;
   }
 
-  .wrapperLogo{
-      height: 40px;
-      line-height: 40px;
-  }
-
   #formCreateAccountStep1{
     width: 90%;
     min-width: auto;
