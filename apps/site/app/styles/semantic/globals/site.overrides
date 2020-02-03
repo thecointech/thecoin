@@ -147,7 +147,7 @@
   display: none;
 }
 
-.ui.segment p{
+.pusher .ui.segment p{
   font-weight: 300;
   font-size: 1.35rem;
   color:#222;

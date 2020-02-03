@@ -14,7 +14,7 @@
   font-family: 'Lato', sans-serif;
 }
 
-section{
+section {
   margin: 30px;
   align-content: center;
 }
@@ -70,39 +70,9 @@ button.ui.button {
 .topMargin {
   margin-top: 7rem;
 }
-.yearStart {
-  top: 45%;
-  left: -6%;
-  font-size: 1.4rem;
-}
-.sproutWrapper {
-  text-align: center;
-}
-
-/* --- Home --- */
-
-
-
-/* --- Header Logo --- */
-.headerLogo {
-  height: 50px;
-  padding: 10px;
-  margin-top: 5px;
-  margin-left: 5%;
-}
-.wrapperLogo{
-  display: inline;
-  width: 20%;
-  float: left;
-  width: 180px;
-}
-.logoIcon {
-  width: 100%;
-}
 
 /* ---  Main Navigation --- */
-.navContainer {
-}
+
 .mainMenu {
   font-size: 16px;
   width: auto;
@@ -113,46 +83,6 @@ button.ui.button {
 }
 .ui.container{
   border: none !important;
-}
-
-
-/* --- Subscribe --- */
-.subscribe {
-  position: absolute;
-  left: 2%;
-}
-.subscribeText {
-  font-size: 1.7rem;
-  font-weight: 300;
-  margin-bottom: 50px;
-  color: #002c8e;
-}
-.subContainer {
-  width: 70%;
-  max-width: 810px;
-  margin: auto;
-}
-
-@media only screen and (max-width: 390px) {
-  .subContainer {
-    width: 90%;
-  }
-}
-
-.search input {
-  border: 7px solid #415db0;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-.search {
-  margin-bottom: 62px;
-}
-button {
-  margin-left: -10px;
-  font-weight: 300;
-}
-.FormStyle {
-  
 }
 
 /* --- RetunProfile ---*/
@@ -184,8 +114,7 @@ button {
   }
 
   /* --- HowItWorks --- */
-  .wrapper {
-  }
+
   .icons {
     max-width: 70%;
   }
@@ -230,125 +159,3 @@ button {
     padding-left: 61px;
     font-style: italic;
   }
-
-/* --- Account Bill Payement --- */
-.wrapper {
-}
-
-
-/* --- Account New Connect --- */
-.createNewWalletContainer {
-}
-
-.createNewWallet {
-  width: 45%;
-  float: left;
-  border-right: solid;
-  border-color: #3193a1;
-  border-radius: 1px;
-}
-
-.createNewWallet > span {
-  font-size: 32px;
-  text-align: left;
-}
-
-.createNewWallet > input {
-  width: 70%;
-  height: 25px;
-  margin-bottom: 2%;
-}
-
-.createNewWallet > button {
-  margin: 5% auto 0 15%;
-  height: 5.5%;
-  width: 70%;
-  text-align: center;
-  font-size: 18px;
-  color: white;
-  background-color: #415db0;
-  border-radius: 8px;
-  padding: 15px;
-}
-
-.createNewWallet p:last-child {
-  text-align: center;
-  margin: 10px auto 0 auto;
-}
-
-.importNewWallet {
-  width: 45%;
-  text-align: center;
-  float: right;
-}
-
-.importNewWallet > div:first-child {
-  font-size: 32px;
-  margin: 5% auto 0 auto;
-}
-
-.importNewWallet > div:last-child {
-  margin: 5% auto 0 auto;
-  width: 70%;
-  height: 20%;
-  border: solid;
-  border-color: #3193a1;
-  border-radius: 8px;
-}
-
-.imageUpload > input {
-  display: none;
-}
-
-.imageUpload > div {
-  margin: 15% auto;
-}
-
-.imageUpload > div > label {
-  color: #3193a1;
-  font-size: 32px;
-}
-
-.imageUpload > div > span {
-  color: #3193a1;
-  font-size: 16px;
-  text-align: center;
-}
-
-
-/* --- Offline Storage --- */
-.LogoBlack {
-	height: 32.5px;
-	width: 32.5px;
-}
-
-
-/* --- Menu ---- */
-.ui.menu.link.item {
-}
-
-
-@media only screen and (max-width: 650px) {
-
-  .phoneApp img{
-    display: none;
-  }
-  .ui.secondary.pointing.menu{
-    width: 100% !important;
-  }
-}
-
-
-@media only screen and (max-width: 390px) {
-
-
-  .headerLogo {
-    height: 40px;
-    margin-top: 20px;
-  }
-
-  .wrapperLogo{
-    width: 140px;
-  }
-}
-

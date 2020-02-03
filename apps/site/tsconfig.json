@@ -9,7 +9,8 @@
         "../../../libs/shared/src/*"
       ]
     },
-    "outDir": "../../build/.obj/site/"
+    "outDir": "../../build/.obj/site/",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["app/**/*", "internals/templates/**/*"]
 }
