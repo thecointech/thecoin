@@ -16,10 +16,7 @@ class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapA
     if (address) {
       if (!IsValidAddress(address))
         throw new Error("Invalid Address: " + address);
-      if (NormalizeAddress(address) !== address) {
-        debugger;
-        address = NormalizeAddress(address);
-      }
+      address = NormalizeAddress(address);
     } 
       
     this.draftState.active = address
@@ -27,20 +24,30 @@ class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapA
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
   addAccount(name: string, signer: AnySigner, store: boolean, unlocked?: Wallet) {
-
-    // Store the account in our live list
+    // Check the signer & unlocked are actually the same account
+    if (unlocked && NormalizeAddress(signer.address) != NormalizeAddress(unlocked?.address)) {
+      throw new Error("Accounts being stored are mis-matched");
+    }
+    // Create the account with default values
+    const address = NormalizeAddress(signer.address);
     const newAccount: AccountState = {
       ...DefaultAccountValues,
       name,
-      address: NormalizeAddress(signer.address),
-      signer: unlocked ?? signer,
+      address,
+      signer,
     }
-    const {address} = signer;
-    this.draftState.map[address] = newAccount
-
+    // If asked to store, push to storage
     if (store) {
       storeAccount(newAccount);
     }
+
+    // If we have an unlocked account, replace the signer
+    // (after the account has been pushed to storage)
+    if (unlocked) {
+      newAccount.signer = unlocked;
+    }
+    // Now for live storage
+    this.draftState.map[address] = newAccount
   }
 
   // Remove the given account from list & storage

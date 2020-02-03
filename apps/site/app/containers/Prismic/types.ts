@@ -7,8 +7,10 @@ export type RenderableType = {
 }
 
 export type FAQResult = {
-  marketddown: RenderableType[]|null;
-  answer: RenderableType[]|null;
+  questions: RenderableType[]|null;
+  answers: RenderableType[]|null;
+  category: string;
+  starred?: boolean;
 }
 
 export type ArticleResult = {

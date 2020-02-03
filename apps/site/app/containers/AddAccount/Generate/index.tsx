@@ -1,26 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { Wallet } from 'ethers';
-import { Button, Header, Form, Container } from 'semantic-ui-react';
+import { Button, Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { Redirect, useHistory, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
-import { useAccountMapApi, IAccountMapActions } from '@the-coin/shared/containers/AccountMap';
+import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
-
-// const initialState = {
-//   ...BaseInitial,
-//   accountPwd: '',
-//   pwdValid: undefined as boolean | undefined,
-//   pwdMessage: undefined as MessageDescriptor | undefined,
-
-//   isCreating: false,
-//   cancelCreating: false,
-//   percentComplete: 0,
-// };
-
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -33,13 +21,11 @@ export const Generate = (props: RouteComponentProps) => {
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
+  
+  ////////////////////////////////
+  // Callback to actually generate the account
   const accountMapApi = useAccountMapApi();
-
-  if (progress && progress >= 100) {
-    const addr = `/accounts`;
-    return <Redirect to={addr} />;
-  }
-
+  const { history } = props;
   const onGenerate = useCallback(async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     if (!(password && referral && name)) {
@@ -49,25 +35,26 @@ export const Generate = (props: RouteComponentProps) => {
     _isCancelled = false;
     const generated = await generateNewWallet(password, setProgress);
     if (generated) {
-      storeWallet(generated.wallet, referral, generated.decrypted, accountMapApi);
+      const { wallet, decrypted } = generated;
+      accountMapApi.addAccount(name, wallet, true, decrypted);
+      accountMapApi.setActiveAccount(wallet.address)
+      registerReferral(wallet.address, referral);
+
+      const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");
+      history.push(toStoragePage);
     }
+
+    // Else, we probably cancelled, so do nothing...
     return undefined;
-  }, [name, password, referral, setForceValidate, setProgress])
+  }, [name, password, referral, setForceValidate, setProgress, accountMapApi, history])
+  ////////////////////////////////
 
-  const history = useHistory();
-  const onComplete = useCallback(() => {
-    const toStoragePage = props.location.pathname + '/store'
-    history.push(toStoragePage);
-  }, [])
-
-
-  // console.log(`Pc: ${percentComplete}`);
-  const cbCancel = (progress && progress < 100)
-    ? setCancelled 
-    : undefined;
-  const cbOk = cbCancel
-    ? undefined
-    : onComplete
+  // const cbCancel = (progress && progress < 100)
+  //   ? setCancelled 
+  //   : undefined;
+  // const cbOk = cbCancel
+  //   ? undefined
+  //   : onComplete
 
   return (
     <React.Fragment>
@@ -88,22 +75,13 @@ export const Generate = (props: RouteComponentProps) => {
         </Button>
       </Form>
       <ModalOperation
-        cancelCallback={cbCancel}
-        okCallback={cbOk}
+        cancelCallback={setCancelled}
+        //okCallback={cbOk}
         isOpen={progress !== undefined}
         header={messages.whileCreatingHeader}
-        children={
-          <Container>
-            <FormattedMessage 
-              {...messages.whileCreatingMessage}
-              values={{
-                percentComplete: progress,
-              }}
-            />
-          </Container>
-        }
+        progressPercent={progress!}
+        progressMessage={messages.whileCreatingMessage}
       />
-      
     </React.Fragment>
   );
 }
@@ -137,10 +115,4 @@ const generateNewWallet = async (password: string, setProgress: (v: number) => v
     wallet: JSON.parse(asStr),
     decrypted: newWallet,
   } 
-}
-
-const storeWallet = async (wallet: Wallet, referralCode: string, decrypted: Wallet, accountsApi: IAccountMapActions) => {
-  accountsApi.addAccount(name, wallet, true, decrypted);
-  accountsApi.setActiveAccount(wallet.address)
-  registerReferral(wallet.address, referralCode);  
 }

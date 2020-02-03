@@ -1,19 +1,18 @@
 import React from "react";
 import { RenderableType } from "containers/Prismic/types"
-import { Header } from "semantic-ui-react";
 
 export const ElementRender = ({type, text}: RenderableType) => {
 
   switch(type)
   {
     case "heading1":
-      return <Header>{text}</Header>;
+      return <span>{text}</span>;
     case "heading2":
-      return <Header size="medium">{text}</Header>;
+      return <span>{text}</span>;
     case "heading3":
-      return <Header size="small">{text}</Header>;
+      return <span>{text}</span>;
     case "list-item":
-        return <div><p>- {text}</p></div>;
+        return <div>• {text}</div>;
       
     case "paragraph":
       return <p>{text}</p>

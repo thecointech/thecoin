@@ -22,10 +22,10 @@
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "concurrently \"yarn build:rates\" \"yarn build:broker\"",
-
     "start:site": "cd apps/site && yarn start"
   },
   "dependencies": {
+    "@types/url-join": "^4.0.0",
     "axios": "^0.19.0",
     "ethers": "^4.0.41",
     "invariant": "2.2.4",

@@ -21,6 +21,9 @@ type State = typeof initialState;
 export const NameInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
+  const { setName, ...rest } = props;
+
+  ////////////////////////////////
   const accounts = useAccountMap();
   const onChange = useCallback((value: string) => {
     const newState = validateName(value, accounts);
@@ -28,7 +31,9 @@ export const NameInput = (props: Props) => {
     props.setName(newState.isValid
       ? newState.value
       : undefined)
-  }, [setState, accounts])
+  }, [setState, accounts, setName])
+  ////////////////////////////////
+
 
   return (
     <UxInput
@@ -37,7 +42,7 @@ export const NameInput = (props: Props) => {
       isValid={state.isValid}
       message={state.message}
       placeholder="Any name you like"
-      {...props}
+      {...rest}
     />
   );
 }
@@ -45,13 +50,14 @@ export const NameInput = (props: Props) => {
 
 // Validate our inputs
 const validateName = (value: string, accounts: AccountDict) : State =>  {
+  const allAccounts = Object.values(accounts);
   const validation =
     value.length === 0
       ? {
         isValid: false,
         message: messages.errorNameTooShort,
       }
-      : accounts[value]
+      : allAccounts.find(account => account.name === value) 
         ? {
           isValid: false,
           message: messages.errorNameDuplicate,

@@ -23,15 +23,16 @@ type State = typeof initialState;
 export const ReferralInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
+  const { setReferral, ...rest} = props;
 
   const onChange = useCallback(async (value: string) => {
     const newState = await validateReferral(value);
     setState(newState);
-    props.setReferral(newState.isValid
+    setReferral(newState.isValid
       ? newState.value
       : undefined);
       
-  }, [setState]);
+  }, [setState, setReferral]);
   
   return (
     <UxInput
@@ -40,7 +41,7 @@ export const ReferralInput = (props: Props) => {
       isValid={state.isValid}
       message={state.message}
       placeholder="6 letters or numbers"
-      {...props}
+      {...rest}
     />
   );
 }

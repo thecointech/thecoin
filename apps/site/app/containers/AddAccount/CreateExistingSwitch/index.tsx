@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Header, Divider } from 'semantic-ui-react';
+import { Button, Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { isWeb3Enabled } from 'utils/detection';
 import styles from './styles.module.css';
@@ -13,26 +13,24 @@ export const CreateExistingSwitch = (props: Props) => {
   const doConnect = isWeb3Enabled();
   const createUrl = doConnect
     ? `${url}connect/create`
-    : `${url}generate/`
+    : `${url}generate/intro`
 
   const existingUrl = doConnect
     ? `${url}connect/exist`
     : `${url}restore/`
 
   return (
-    <Container>
-        <div id={styles.buttonsContainer}>
-          <Header as="h1">
-            <Header.Content>
-              Lets Get Started
-            </Header.Content>
-            <Header.Subheader>
-            </Header.Subheader>
-          </Header>
-          <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary className={styles.button}/>
-          <Divider horizontal>Or</Divider>
-          <Button as={NavLink} to={existingUrl} content='I already have an Account' primary className={styles.button}/>
-        </div>
-    </Container>
+    <div id={styles.buttonsContainer}>
+      <Header as="h1">
+        <Header.Content>
+          Lets Get Started
+        </Header.Content>
+        <Header.Subheader>
+        </Header.Subheader>
+      </Header>
+      <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary className={styles.button}/>
+      <Divider horizontal>Or</Divider>
+      <Button as={NavLink} to={existingUrl} content='I already have an Account' primary className={styles.button}/>
+    </div>
   )
 }

@@ -19,22 +19,27 @@ type State = typeof initialState;
 export const PasswordInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
+  const { setPassword, ...rest } = props;
+
+  ////////////////////////////////
   const onChange = useCallback((value: string, score: number) => {
     const newState = validatePassword(value, score);
     setState(newState);
-    props.setPassword(newState.isValid 
+    setPassword(newState.isValid 
       ? newState.value
       : undefined);
 
     return newState.isValid ?? false;
-  }, [setState])
+  }, [setState, setPassword])
+
+  ////////////////////////////////
 
   return (
     <UxScoredPassword
     uxChange={onChange}
     intlLabel={messages.labelPassword}
     placeholder="At least moderate strength"
-    {...props}
+    {...rest}
     {...state}
   />
   );

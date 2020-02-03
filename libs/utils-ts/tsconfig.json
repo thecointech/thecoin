@@ -24,6 +24,8 @@
     "rootDir": "./src",
     "outDir": "../../build/utils-ts",
 
+    "allowSyntheticDefaultImports": true,
+
     //"incremental": true,
     "tsBuildInfoFile": "../../build/.obj/utils-ts.buildinfo",
 
