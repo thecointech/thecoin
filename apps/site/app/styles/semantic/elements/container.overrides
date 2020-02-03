@@ -5,15 +5,6 @@
 #app .ui.container{
 }
 
-#footer{
-  position: fixed;
-  bottom: 0;
-  background-color:#f4f4f4;
-  color:rgb(154, 161, 155);
-  padding: 0px;
-  width: 100%;
-}
-
 #backgroundDecor{
   height: 100%;
   width: 550px;
