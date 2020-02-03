@@ -3,6 +3,7 @@ import { debounce, Cancelable } from 'lodash';
 import { Container, Icon } from 'semantic-ui-react';
 import { UxInput } from '../../components/UxInput';
 import { Props, State, initialState } from './types';
+import styles from './styles.module.css';
 
 const UnMasked = "text";
 const Masked = "password";
@@ -89,10 +90,10 @@ export class UxPassword extends React.PureComponent<Props, State> {
 
     return (
       <Container> 
-        <p onClick={this.toggleMask} id="togglePassword" unselectable="on"> 
+        <div onClick={this.toggleMask} id={styles.togglePassword} unselectable="on"> 
           <p style={ isPassword ? showStyle : hideStyle }><Icon name='hide' />&nbsp;Show Password</p>
           <p style={ isPassword ? hideStyle : showStyle }><Icon name='unhide' />&nbsp;Hide Password</p>
-        </p>
+        </div>
         <UxInput
           type={isPassword ? Masked : UnMasked}
           uxChange={this.uxChange}

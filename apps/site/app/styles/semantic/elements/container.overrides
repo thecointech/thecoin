@@ -115,24 +115,7 @@
 }
 
 
-#togglePassword{
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */  
 
-  position: relative;
-  height: 10px;
-  line-height: 10px;
-  float: right;
-  right: 0px;
-  top: 25px;
-  font-size: 11px;
-}
-#togglePassword img{
-  margin-top: -2px;
-  padding: 2px;
-}
 
 @media only screen and (min-width: 1700px) {
   #backgroundDecor{

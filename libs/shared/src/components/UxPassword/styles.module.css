@@ -1,0 +1,52 @@
+#togglePassword{
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future(?) */  
+
+  position: relative;
+  height: 10px;
+  line-height: 10px;
+  float: right;
+  right: 0px;
+  top: 25px;
+  height: 30px;
+}
+#togglePassword img{
+  margin-top: -2px;
+  padding: 2px;
+}
+#togglePassword p{
+  font-size: 10px;
+}
+
+.meterStyle {
+  width: 100%;
+  max-width: 85%;
+  opacity: 1;
+  height: 5px;
+  transition: all 400ms linear;
+  display: inline-block;
+  margin-right: 1%;
+}
+
+.infoStyle {
+  width: 100%;
+  overflow: hidden;
+}
+
+.iconStyle {
+  display: inline-block;
+  opacity: 0.25;
+  margin-right: 5px;
+}
+
+.strengthLangStyle {
+  font-size: 0.9em;
+  position: relative;
+}
+
+.unMaskStyle {
+  color: red;
+}
+
