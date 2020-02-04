@@ -71,20 +71,6 @@ button.ui.button {
   margin-top: 7rem;
 }
 
-/* ---  Main Navigation --- */
-
-.mainMenu {
-  font-size: 16px;
-  width: auto;
-  display: inline-block;
-  height: 50px;
-  margin-bottom: 10px;
-  width: 250px;
-}
-.ui.container{
-  border: none !important;
-}
-
 /* --- RetunProfile ---*/
 .header {
     font-size: 2.5rem;
@@ -132,21 +118,7 @@ button.ui.button {
     line-height: 3rem;
     margin-bottom: 1em;
   }
-  .step1 {
-    font-weight: 300;
-    font-size: 2rem;
-    color: #002c8e;
-  }
-  .step1Sub {
-    font-weight: 300;
-    font-size: 1.35rem;
-    color: #222;
-    margin-top: 10px;
-    line-height: 2.5rem;
-  }
-  .step1Wrap {
-    padding-top: 11px;
-  }
+  
   .center {
     justify-content: center;
     margin-bottom: 30px;
