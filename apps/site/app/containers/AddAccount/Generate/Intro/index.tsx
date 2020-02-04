@@ -23,10 +23,10 @@ export const Intro = () => {
         <p><FormattedMessage {...messages.articles} /></p>
         <List>
           <List.Item>
-            <Link to="/FAQ/creating-a-good-password" target="_blank">How to make a good password</Link>
+            <Link to="/FAQ/my-account" target="_blank">How to make a good password</Link>
           </List.Item>
           <List.Item>
-            <Link to="/FAQ/creating-a-good-password" target="_blank">Where is my account stored?</Link>
+            <Link to="/FAQ/my-account" target="_blank">Where is my account stored?</Link>
           </List.Item>
         </List>
         <p><FormattedMessage {...messages.infoAdvantages} /></p>

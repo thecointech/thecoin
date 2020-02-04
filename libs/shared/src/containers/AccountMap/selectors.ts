@@ -31,6 +31,9 @@ export const activeAccountSelector = (state: ApplicationBaseState) => {
 
   // If we have no active account, just return the first one.
   const allAccounts = Object.values(map);
+  if (allAccounts.length == 0)
+    return undefined;
+    
   return allAccounts[0];
 }
 

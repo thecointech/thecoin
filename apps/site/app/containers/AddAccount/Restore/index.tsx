@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import { IWindow } from '../../StoreOnline/Google/gauth';
 import { GoogleWalletItem } from '@the-coin/types';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -8,26 +7,20 @@ import { ExistsSwitcher } from '../ExistsSwitcher';
 import { GetSecureApi } from 'api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
+import { onInitiateLogin, fetchGAuthUrl, clearCallback, setupCallback } from 'containers/StoreOnline/Google/googleUtils';
 
 
 export const Restore = () => {
 
   const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
   const [wallets, setWallets] = useState([] as GoogleWalletItem[]);
-  const myWindow: IWindow = window;
 
-  // We ask the server for the URL we use to request the login code
-  useEffect(() => {
-    fetchGAuthUrl(setAuthUrl);
-
-    // Don't leave this callback active
-    //return () => myWindow.completeGauthLogin = undefined;
-  }, [setAuthUrl]);
-
+  /////////////////////////////////////////
   // We create a callback to this component, and assign to window
   // This allows our popup to communicate back with us
   const completeCallback = useCallback(async (token: string) => {
-    myWindow.completeGauthLogin = undefined;
+
+    clearCallback();
     const wallets = await fetchStoredWallets(token)
     if (!wallets) {
       alert('Fetching Wallets Failed - please contact support')
@@ -36,12 +29,23 @@ export const Restore = () => {
       setWallets(wallets);
     }
   }, [setWallets]);
-  myWindow.completeGauthLogin = completeCallback;
+  useEffect(() => { setupCallback(completeCallback)}, [completeCallback])
 
+  /////////////////////////////////////////
+  // We ask the server for the URL we use to request the login code
+  useEffect(() => {
+    fetchGAuthUrl(setAuthUrl);
+
+    // Don't leave this callback active
+    //return () => myWindow.completeGauthLogin = undefined;
+  }, [setAuthUrl]);
+  
+  /////////////////////////////////////////
   const onConnectClick = useCallback(() => {
     onInitiateLogin(gauthUrl!);
   }, [gauthUrl]);
 
+  /////////////////////////////////////////
   return (
     <div id="formCreateAccountStep1">
       <Header as="h1">
@@ -60,20 +64,20 @@ export const Restore = () => {
   );
 }
 
-function onInitiateLogin(gauthUrl: string) {
-  // First, setup the callback
-  //setupCallback();
+// function onInitiateLogin(gauthUrl: string) {
+//   // First, setup the callback
+//   //setupCallback();
 
-  // Next trigger opening
-  const gauthWindow = window.open(gauthUrl, name);
-  if (gauthWindow) {
-    //setWindow(gauthWindow);
-    //this.waitGauthLogin(gauthWindow);
-  } else {
-    // TODO: verify non-popup flow
-    window.location.assign(gauthUrl);
-  }
-};
+//   // Next trigger opening
+//   const gauthWindow = window.open(gauthUrl, name);
+//   if (gauthWindow) {
+//     //setWindow(gauthWindow);
+//     //this.waitGauthLogin(gauthWindow);
+//   } else {
+//     // TODO: verify non-popup flow
+//     window.location.assign(gauthUrl);
+//   }
+// };
 
 // setupGauthLogin = (gauthUrl) => {
 // 	const button = document.getElementById(ButtonId);
@@ -151,22 +155,22 @@ async function fetchStoredWallets(token: string) {
 // };
 
 
-async function fetchGAuthUrl(setUrl: (url: string) => void) {
-  try {
-    const secureApi = GetSecureApi();
-    const gauth = await secureApi.googleAuthUrl();
-    if (gauth?.data?.url) {
-      setUrl(gauth.data.url);
-    } 
-    else {
-      throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));
-    }
-  } catch (err) {
-    console.error(JSON.stringify(err));
-    alert('Could not setup Google Login');
-  }
-  return false;
-}
+// async function fetchGAuthUrl(setUrl: (url: string) => void) {
+//   try {
+//     const secureApi = GetSecureApi();
+//     const gauth = await secureApi.googleAuthUrl();
+//     if (gauth?.data?.url) {
+//       setUrl(gauth.data.url);
+//     } 
+//     else {
+//       throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));
+//     }
+//   } catch (err) {
+//     console.error(JSON.stringify(err));
+//     alert('Could not setup Google Login');
+//   }
+//   return false;
+// }
 
 //
 // Setup the callback called by our opened auth window

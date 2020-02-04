@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-
-const getUrlParams = () => 
-  new URLSearchParams(window.location.search);
-  
-export type AuthCallback = (query: string) => void;
-
-export interface IWindow extends Window {
-  completeGauthLogin?: AuthCallback
-}
+import { getUrlParams } from 'utils/localState';
+import { IWindow } from './googleUtils';
 
 export const GAuth = () => {
 

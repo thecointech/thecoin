@@ -29,6 +29,34 @@ export default defineMessages({
     id: `${scope}.buttonConnect`,
     defaultMessage: "Connect to Google",
   },
+  messageErrorRemoteHeader: {
+    id: `${scope}.messageErrorRemoteHeader`,
+    defaultMessage: "Cannot Upload",
+  },
+  messageErrorRemoteMessage: {
+    id: `${scope}.messageErrorRemoteMessage`,
+    defaultMessage: "This account isn't stored locally, and so cannot be uploaded to Google",
+  },
+
+
+  messageErrorFailedUploadHeader: {
+    id: `${scope}.messageErrorFailedUploadHeader`,
+    defaultMessage: "Upload Failed",
+  },
+  messageErrorFailedUploadMessage: {
+    id: `${scope}.messageErrorFailedUploadMessage`,
+    defaultMessage: "Something went wrong, your account has not been backed up.  Please contact support@thecoin.io",
+  },
+
+  messageSuccessHeader: {
+    id: `${scope}.messageSuccessHeader`,
+    defaultMessage: "Congratulations",
+  },
+  messageSuccessMessage: {
+    id: `${scope}.messageSuccessMessage`,
+    defaultMessage: "You have successfully backed up your account to your personal Google Drive",
+  },
+
   buttonSuccess: {
     id: `${scope}.buttonSuccess`,
     defaultMessage: "Connected",

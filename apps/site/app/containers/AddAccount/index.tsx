@@ -29,4 +29,3 @@ export const AddAccount = () => {
     </div>
   );
 }
-

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { Download } from './download';
-import { StoreGoogle } from '../../StoreOnline/Google';
-
 import { Container, Divider, Header } from "semantic-ui-react"
 import { isWallet } from '@the-coin/shared/SignerIdent';
-
+import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage"
+import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google/StoreGoogle';
 
 interface MyProps {
   account: AccountState;
@@ -13,8 +12,15 @@ interface MyProps {
 
 export function Settings({account}: MyProps) {
   const isLocal = isWallet(account.signer);
+  
+  const [feedback, setFeedback] = useState({} as MessageProps)
+  const onStateChange = useCallback((_state: UploadState, message: MessageProps) => {
+    setFeedback(message);
+  }, [setFeedback])
+
   return isLocal
   ? <Container id="accountSettings">
+      <MaybeMessage {...feedback} />
       <Divider horizontal>
         <Header as='h4'>
           Save Locally
@@ -26,7 +32,7 @@ export function Settings({account}: MyProps) {
           Save Online
         </Header>
       </Divider>
-      <StoreGoogle address={account.address} />
+      <StoreGoogle onStateChange={onStateChange} />
     </Container>
   : <Container id="accountSettings">
       This account has no locally editable settings
