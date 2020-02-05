@@ -7,11 +7,12 @@ import { ExistsSwitcher } from '../ExistsSwitcher';
 import { GetSecureApi } from 'api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
-import { onInitiateLogin, fetchGAuthUrl, clearCallback, setupCallback } from 'containers/StoreOnline/Google/googleUtils';
+import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from 'containers/StoreOnline/Google/googleUtils';
 
 
 export const Restore = () => {
 
+  const [state, setState] = useState(UploadState.Waiting);
   const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
   const [wallets, setWallets] = useState([] as GoogleWalletItem[]);
 
@@ -29,23 +30,26 @@ export const Restore = () => {
       setWallets(wallets);
     }
   }, [setWallets]);
-  useEffect(() => { setupCallback(completeCallback)}, [completeCallback])
+  useEffect(() => { setupCallback(completeCallback) }, [completeCallback])
 
   /////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
   useEffect(() => {
-    fetchGAuthUrl(setAuthUrl);
+    doSetup(setAuthUrl, setState);
+  }, [setAuthUrl, setState]);
 
-    // Don't leave this callback active
-    //return () => myWindow.completeGauthLogin = undefined;
-  }, [setAuthUrl]);
-  
   /////////////////////////////////////////
   const onConnectClick = useCallback(() => {
     onInitiateLogin(gauthUrl!);
   }, [gauthUrl]);
 
   /////////////////////////////////////////
+
+  // const loading = state === UploadState.Waiting
+  //   || state === UploadState.Uploading;
+  const disabled = state === UploadState.Invalid
+    || state === UploadState.Complete;
+
   return (
     <div id="formCreateAccountStep1">
       <Header as="h1">
@@ -57,7 +61,7 @@ export const Restore = () => {
         </Header.Subheader>
       </Header>
       <Divider />
-      <ConnectButton onClick={onConnectClick} disabled={!gauthUrl} isVisible={!wallets.length} />
+      <ConnectButton onClick={onConnectClick} disabled={disabled} isVisible={!wallets.length} />
       <AccountList wallets={wallets} />
       <ExistsSwitcher filter="restore" />
     </div>
@@ -122,7 +126,7 @@ async function fetchStoredWallets(token: string) {
   // that means it's a single-use token and we can't list/select/read
   try {
     const secureApi = GetSecureApi();
-    const wallets = await secureApi.googleRetrieve({token});
+    const wallets = await secureApi.googleRetrieve({ token });
     return wallets.data.wallets;
   } catch (err) {
     console.error(err);

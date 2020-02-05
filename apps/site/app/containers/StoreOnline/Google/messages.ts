@@ -27,11 +27,11 @@ export default defineMessages({
   
   buttonConnect: {
     id: `${scope}.buttonConnect`,
-    defaultMessage: "Connect to Google",
+    defaultMessage: "CONNECT TO GOOGLE",
   },
   buttonSuccess: {
     id: `${scope}.buttonSuccess`,
-    defaultMessage: "Connected",
+    defaultMessage: "CONNECTED",
   },
 
   messageErrorRemoteHeader: {

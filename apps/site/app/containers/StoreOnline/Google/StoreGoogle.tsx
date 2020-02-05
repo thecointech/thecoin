@@ -6,19 +6,11 @@ import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@the-coin/shared/SignerIdent';
-import { fetchGAuthUrl, onInitiateLogin, setupCallback } from './googleUtils';
+import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { Props as MessageProps } from 'components/MaybeMessage';
-import { Wallet } from 'ethers';
 
-export enum UploadState {
-  Waiting,
-  Ready,
-  Invalid,
-  Uploading,
-  Failed,
-  Complete,
-}
+
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
 
 type MyProps = {
@@ -63,9 +55,12 @@ export const StoreGoogle = (props: MyProps) => {
   ////////////////////////////////////////////////////////////////
   const completeCallback = useCallback(async (token: string) => {
     if (activeAccount) {
+      debugger;
+      console.log("Commencing upload of: " + activeAccount.name);
       setState(UploadState.Uploading);
       if (await completeStore(token, activeAccount.address))
       {
+        console.log("Upload Complete!");
         setState(UploadState.Complete);
         onStateChange && onStateChange(
           UploadState.Complete,
@@ -104,8 +99,8 @@ export const StoreGoogle = (props: MyProps) => {
                 || props.disabled;
 
   const message = state === UploadState.Complete
-    ? messages.buttonConnect
-    : messages.buttonSuccess
+    ? messages.buttonSuccess
+    : messages.buttonConnect
   return (
     <>
       <Button onClick={onConnectClick} disabled={disabled} loading={loading}>
@@ -113,17 +108,6 @@ export const StoreGoogle = (props: MyProps) => {
       </Button>
     </>
   );
-}
-
-async function doSetup(setAuthUrl: (url: string) => void, setState: (state: UploadState) => void) {
-  const url = await fetchGAuthUrl();
-  if (url) {
-    setAuthUrl(url);
-    setState(UploadState.Ready);
-  }
-  else { 
-    setState(UploadState.Invalid);
-  }
 }
 
 async function completeStore(token: string, address: string) {
@@ -147,6 +131,7 @@ async function completeStore(token: string, address: string) {
 
   try {
     const res = await secureApi.googlePut(request);
+    console.log("got: " + JSON.stringify(res));
     return res.status == 200 && res.data;
   }
   catch (e) {

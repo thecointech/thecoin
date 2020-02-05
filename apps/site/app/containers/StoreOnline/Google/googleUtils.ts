@@ -1,5 +1,14 @@
 import { GetSecureApi } from "api";
 
+export enum UploadState {
+  Waiting,
+  Ready,
+  Invalid,
+  Uploading,
+  Failed,
+  Complete,
+}
+
 export async function fetchGAuthUrl() {
   try {
     const secureApi = GetSecureApi();
@@ -16,6 +25,18 @@ export async function fetchGAuthUrl() {
   }
   return false;
 }
+
+export async function doSetup(setAuthUrl: (url: string) => void, setState: (state: UploadState) => void) {
+  const url = await fetchGAuthUrl();
+  if (url) {
+    setAuthUrl(url);
+    setState(UploadState.Ready);
+  }
+  else { 
+    setState(UploadState.Invalid);
+  }
+}
+
 
 export type AuthCallback = (token: string) => Promise<void>;
 

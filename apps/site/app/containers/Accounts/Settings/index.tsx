@@ -4,7 +4,7 @@ import { Download } from './download';
 import { Container, Divider, Header } from "semantic-ui-react"
 import { isWallet } from '@the-coin/shared/SignerIdent';
 import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage"
-import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google/StoreGoogle';
+import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google';
 
 interface MyProps {
   account: AccountState;

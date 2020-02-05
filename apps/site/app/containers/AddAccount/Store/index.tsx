@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react"
 import { Header, Segment, Button } from "semantic-ui-react"
 import { FormattedMessage } from "react-intl"
 import messages from "./messages"
-import { StoreGoogle, UploadState } from "containers/StoreOnline/Google/StoreGoogle"
+import { StoreGoogle, UploadState } from "containers/StoreOnline/Google"
 import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage"
 import { Link } from "react-router-dom"
 
