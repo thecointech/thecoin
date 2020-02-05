@@ -14,7 +14,7 @@ export function storeAccount(account: AccountState) {
 
   // Strip the contract from the account.
   let { contract, ...toStore } = account;
-  const { address } = toStore.signer;
+  const { address } = toStore;
   if (isSigner(toStore.signer)) {
     // We can't directly save a signer (it has a circular reference)
     // but also it's data isn't particularily useful.
@@ -34,15 +34,20 @@ export function getStoredAccountData(address: string): AccountState | null {
   if (!IsValidAddress(address))
     return null;
 
-  const storedItem = localStorage.getItem(address);
+  const normAddress = NormalizeAddress(address);
+
+  if (normAddress != address) {
+    const switcheroo = localStorage.getItem(address);
+    localStorage.setItem(normAddress, switcheroo!);
+    localStorage.removeItem(address);
+  }
+
+  const storedItem = localStorage.getItem(normAddress);
+
   if (storedItem !== null) {
     const r = JSON.parse(storedItem) as AccountState
-
-    r.address = NormalizeAddress(r.signer.address);
-    localStorage.removeItem(address);
-    localStorage.setItem(r.address, storedItem);
-
-    if (r.address && r.address === address) {
+    r.address = normAddress;
+    if (NormalizeAddress(r.signer.address) === normAddress) {
       return r;
     }
   }
@@ -56,6 +61,8 @@ export function readAllAccounts(): AccountDict {
     const raw = localStorage.key(i);
     if (!raw)
       continue;
+
+
 
     let account = 
       getStoredAccountData(raw) ??

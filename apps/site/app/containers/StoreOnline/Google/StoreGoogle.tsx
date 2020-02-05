@@ -6,12 +6,14 @@ import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@the-coin/shared/SignerIdent';
-import { fetchGAuthUrl, onInitiateLogin } from './googleUtils';
+import { fetchGAuthUrl, onInitiateLogin, setupCallback } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { Props as MessageProps } from 'components/MaybeMessage';
+import { Wallet } from 'ethers';
 
 export enum UploadState {
   Waiting,
+  Ready,
   Invalid,
   Uploading,
   Failed,
@@ -20,13 +22,14 @@ export enum UploadState {
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
 
 type MyProps = {
-	onStateChange?: StoreCallback;
+  onStateChange?: StoreCallback;
+  disabled?: boolean;
 }
 
 export const StoreGoogle = (props: MyProps) => {
 
   const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
-  const [enabled, setEnabled] = useState(true);
+  const [state, setState] = useState(UploadState.Waiting);
   const activeAccount = useActiveAccount();
 
   const {onStateChange} = props;
@@ -37,10 +40,9 @@ export const StoreGoogle = (props: MyProps) => {
   ////////////////////////////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
   useEffect(() => {
-    fetchGAuthUrl(setAuthUrl);
-
+    
     if (!wallet) {
-      setEnabled(false);
+      setState(UploadState.Invalid);
       onStateChange && onStateChange(
         UploadState.Invalid,
         { 
@@ -50,17 +52,21 @@ export const StoreGoogle = (props: MyProps) => {
         }
       )
     }
-
+    else {
+      doSetup(setAuthUrl, setState);
+    }
     // Don't leave this callback active
     //return () => myWindow.completeGauthLogin = undefined;
-  }, [activeAccount, setAuthUrl, setEnabled, onStateChange]);
+  }, [wallet, setAuthUrl, setState, onStateChange]);
 
 
   ////////////////////////////////////////////////////////////////
   const completeCallback = useCallback(async (token: string) => {
-    if (wallet) {
-      if (await completeStore(token, wallet.address))
+    if (activeAccount) {
+      setState(UploadState.Uploading);
+      if (await completeStore(token, activeAccount.address))
       {
+        setState(UploadState.Complete);
         onStateChange && onStateChange(
           UploadState.Complete,
           {
@@ -71,6 +77,7 @@ export const StoreGoogle = (props: MyProps) => {
         )
       }
       else {
+        setState(UploadState.Failed);
         onStateChange && onStateChange(
           UploadState.Failed,
           {
@@ -85,44 +92,57 @@ export const StoreGoogle = (props: MyProps) => {
 
   ////////////////////////////////////////////////////////////////
   const onConnectClick = useCallback(() => {
+    setupCallback(completeCallback);
     onInitiateLogin(gauthUrl!);
   }, [gauthUrl, completeCallback]);
 
   ////////////////////////////////////////////////////////////////
-  const disabled = !gauthUrl || !enabled;
+  const loading = state === UploadState.Waiting
+                || state === UploadState.Uploading;
+  const disabled = state === UploadState.Invalid
+                || state === UploadState.Complete
+                || props.disabled;
+
+  const message = state === UploadState.Complete
+    ? messages.buttonConnect
+    : messages.buttonSuccess
   return (
     <>
-      <Button onClick={onConnectClick} disabled={disabled}>
-          <FormattedMessage {...messages.buttonConnect} />
+      <Button onClick={onConnectClick} disabled={disabled} loading={loading}>
+          <FormattedMessage {...message } />
       </Button>
     </>
   );
 }
 
+async function doSetup(setAuthUrl: (url: string) => void, setState: (state: UploadState) => void) {
+  const url = await fetchGAuthUrl();
+  if (url) {
+    setAuthUrl(url);
+    setState(UploadState.Ready);
+  }
+  else { 
+    setState(UploadState.Invalid);
+  }
+}
 
 async function completeStore(token: string, address: string) {
 
   // Do not upload the decrypted wallet: instead
-  // we read the wallet directly from LS and download that
+  // we read the wallet directly from LS and upload that
+  // This is because we trust our (soon to be sandboxed) storage to have
+  // the right account data, but we do not trust what's in-memory
   const secureApi = GetSecureApi();
-  const account = getStoredAccountData(address);
-  if (!account) {
-    // do something
-    alert("warning: account not found");
-    return false;
-  }
-  const {signer} = account;
-  if (!signer || !isWallet(signer)) {
-    // do something
-    alert("Cannot upload: not a local account");
-    return false;
-  }
+
+  // This should succeed, all these checks should have happened already
+  const {wallet,name} = fetchAndVerifyWallet(address);
+
   const request = {
     token: {
       token
     },
-    wallet: JSON.stringify(signer),
-    walletName: account.name
+    wallet: JSON.stringify(wallet),
+    walletName: name
   }
 
   try {
@@ -136,3 +156,21 @@ async function completeStore(token: string, address: string) {
   return false;
 }
 
+function fetchAndVerifyWallet(address: string) { 
+  const account = getStoredAccountData(address);
+  if (account == null) {
+    alert("Could not find local account - if you are seeing this, contact support@thecoin.io");
+    throw new Error("Could not find local account: " + address);
+  }
+
+  const wallet = account.signer;
+  if (!isWallet(wallet)) {
+    alert("Cannot upload this wallet: it is not a local account");
+    throw new Error("Could not find local account: " + address);
+  }
+  if (wallet.privateKey) {
+    alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
+    throw new Error("Cannot upload wallet with private key");
+  }
+  return { wallet, name: account.name };
+}

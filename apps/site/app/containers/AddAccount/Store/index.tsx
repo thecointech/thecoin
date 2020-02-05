@@ -30,7 +30,7 @@ export const Store = () => {
     <Segment>
       <p><FormattedMessage {...messages.infop1} /></p>
       <p><FormattedMessage {...messages.infop2} /></p>
-      <StoreGoogle onStateChange={onStateChange} />
+      <StoreGoogle onStateChange={onStateChange} disabled={backedUp}/>
       <p><FormattedMessage {...messages.infop3} /></p>
       <Button as={Link} to="/accounts" disabled={!backedUp}>
         <FormattedMessage {...messages.gotoAccount} />

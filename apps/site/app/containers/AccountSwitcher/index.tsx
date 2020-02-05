@@ -32,7 +32,7 @@ export const AccountSwitcher = () => {
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
               <Dropdown.Item 
-                key={account.name} 
+                key={account.address} 
                 text={account.name}
                 address={account.address}
                 description='' 

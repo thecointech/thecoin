@@ -1,11 +1,11 @@
 import { GetSecureApi } from "api";
 
-export async function fetchGAuthUrl(setUrl: (url: string) => void) {
+export async function fetchGAuthUrl() {
   try {
     const secureApi = GetSecureApi();
     const gauth = await secureApi.googleAuthUrl();
     if (gauth?.data?.url) {
-      return setUrl(gauth.data.url);
+      return gauth.data.url;
     }
     else {
       throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));

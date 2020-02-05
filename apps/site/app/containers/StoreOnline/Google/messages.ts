@@ -29,6 +29,11 @@ export default defineMessages({
     id: `${scope}.buttonConnect`,
     defaultMessage: "Connect to Google",
   },
+  buttonSuccess: {
+    id: `${scope}.buttonSuccess`,
+    defaultMessage: "Connected",
+  },
+
   messageErrorRemoteHeader: {
     id: `${scope}.messageErrorRemoteHeader`,
     defaultMessage: "Cannot Upload",
@@ -56,9 +61,4 @@ export default defineMessages({
     id: `${scope}.messageSuccessMessage`,
     defaultMessage: "You have successfully backed up your account to your personal Google Drive",
   },
-
-  buttonSuccess: {
-    id: `${scope}.buttonSuccess`,
-    defaultMessage: "Connected",
-  }
 });
