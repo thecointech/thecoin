@@ -22,6 +22,9 @@
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "concurrently \"yarn build:rates\" \"yarn build:broker\"",
+
+    "gen:broker:server": "openapi-generator generate -i apis/broker-cad.yaml -g nodejs-express-server -o apps/broker-service/Generated",
+    "copy:broker:api": "cpx \"apps/broker-service/Generated/controllers/*.*\" \"apps/broker-service/src/controllers\" && cpx \"apps/broker-service/Generated/api/*.*\" \"apps/broker-service/src/api",
     "start:site": "cd apps/site && yarn start"
   },
   "dependencies": {
