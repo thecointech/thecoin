@@ -21,7 +21,7 @@ import MainRouter from 'containers/MainRouter';
 
 import 'semantic-ui-less/semantic.less';
 
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 export const App = () => {
   
@@ -41,7 +41,7 @@ export const App = () => {
       >
         <PageSidebar>
           <MainPageTransition location={location}>
-            <section className={styles.pageMainInner}>
+            <section id={styles.mainContent} className={styles.pageMainInner}>
               <MainRouter location={location} />
             </section>
           </MainPageTransition>

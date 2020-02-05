@@ -1,9 +1,0 @@
-.pageMainInner {
-  min-height: 250px;
-  padding: 0em;
-}
-
-.pageMainInner > div {
-  width: inherit;
-  height: inherit;
-}
