@@ -53,6 +53,11 @@ export const DefaultAccountValues = {
   displayCurrency: CurrencyCodes.CAD
 };
 
+export type AccountPageProps = {
+  account: AccountState;
+  actions: IActions;
+}
+
 /* --- ACTIONS --- */
 export interface IActions extends ImmerReducer<AccountState> {
 
@@ -65,9 +70,4 @@ export interface IActions extends ImmerReducer<AccountState> {
 
   decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
 }
-/* --- EXPORTS --- */
 
-export interface AccountPageProps {
-  account: AccountState;
-  actions: IActions;
-}

@@ -5,9 +5,7 @@ import { ETransferPacket } from "@the-coin/types";
 import { List, Accordion, Icon, Button, AccordionTitleProps, Confirm } from "semantic-ui-react";
 import { toHuman } from "@the-coin/utilities";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
-import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
-import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
+import { weBuyAt, IFxRates, FxRatesState, mapDispatchToProps, selectFxRate } from "@the-coin/shared/containers/FxRate";
 import { connect } from "react-redux";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 import { DocumentSnapshot } from "@the-coin/types/FirebaseFirestore";
@@ -18,10 +16,9 @@ import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 const ACTION_TYPE : UserAction = "Sell";
 
 type MyProps = {
-  dispatch: FxActions.DispatchProps,
   account: AccountState
 }
-type Props = MyProps & FxActions.DispatchProps & FxSelect.ContainerState;
+type Props = MyProps & IFxRates & FxRatesState;
 
 const initialState = {
   privateKey: "",
@@ -209,5 +206,5 @@ class RedeemClass extends React.PureComponent<Props, State> {
   }
 }
 
-export const Redeem = connect(FxSelect.selectFxRate, FxActions.mapDispatchToProps)(RedeemClass);
+export const Redeem = connect(selectFxRate, mapDispatchToProps)(RedeemClass);
 

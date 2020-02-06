@@ -1,11 +1,13 @@
 import { Dispatch, bindActionCreators } from 'redux';
-import { IActions } from './types';
+import { IFxRates } from './types';
 import { actions } from './reducer';
+import { useDispatch } from 'react-redux';
 
 // Map Disptach to your DispatchProps
-function mapDispatchToProps(dispatch: Dispatch): IActions {
-  return (bindActionCreators(actions, dispatch) as any) as IActions;
+export function mapDispatchToProps(dispatch: Dispatch): IFxRates {
+  return (bindActionCreators(actions, dispatch) as any) as IFxRates;
 }
 
-export { mapDispatchToProps }
+export const useFxRatesApi = () => 
+  mapDispatchToProps(useDispatch())
 

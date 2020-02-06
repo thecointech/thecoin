@@ -45,8 +45,8 @@ export const Restore = () => {
 
   /////////////////////////////////////////
 
-  // const loading = state === UploadState.Waiting
-  //   || state === UploadState.Uploading;
+  const loading = state === UploadState.Waiting
+    || state === UploadState.Uploading;
   const disabled = state === UploadState.Invalid
     || state === UploadState.Complete;
 
@@ -61,7 +61,7 @@ export const Restore = () => {
         </Header.Subheader>
       </Header>
       <Divider />
-      <ConnectButton onClick={onConnectClick} disabled={disabled} isVisible={!wallets.length} />
+      <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
       <AccountList wallets={wallets} />
       <ExistsSwitcher filter="restore" />
     </div>

@@ -12,12 +12,3 @@ export { NotFoundPage } from './containers/NotFoundPage';
 export { PageSidebar } from './containers/PageSidebar';
 export { TransactionHistory } from './containers/TransactionHistory';
 export { UploadWallet } from './containers/UploadWallet';
-
-
-//export * from 'containers/FxRate/actions';
-// export module FxRates {
-// 	export * from 'containers/FxRate/actions';
-// 	export * from 'containers/FxRate/reducer';
-// 	export * from 'containers/FxRate/selectors';
-// 	export * from 'containers/FxRate/types';	
-// }

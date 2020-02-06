@@ -10,7 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
+import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
@@ -28,7 +28,7 @@ type MyProps = {
   account: AccountState;
 };
 
-type Props = MyProps & FxState;
+type Props = MyProps & FxRatesState;
 
 const initialState = {
   coinToSell: null as number | null,

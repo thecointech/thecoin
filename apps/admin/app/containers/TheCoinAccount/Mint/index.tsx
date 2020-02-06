@@ -1,91 +1,69 @@
-import * as React from 'react';
-//import styles from './index.module.css'
+import React, { useState, useCallback } from 'react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import messages from './messages';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { selectFxRate, ContainerState as FxRates } from '@the-coin/shared/containers/FxRate/selectors';
-import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
+import { useFxRates, weSellAt } from '@the-coin/shared/containers/FxRate';
 import { toHuman } from '@the-coin/utilities';
-import { AccountState } from '@the-coin/shared/containers/Account/types'
-import { DispatchProps } from '@the-coin/shared/containers/Account/actions'
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap'
+import { useAccountApi } from '@the-coin/shared/containers/Account';
 
-type MyProps = AccountState & {
-	updateBalance: Function
-}
-type Props = MyProps & FxRates & DispatchProps;
-
-class MintClass extends React.PureComponent<Props> {
-
-	state = {
-		toMint: 0,
-
-		txHash: '',
-		isProcessing: false,
-
-		doConfirm: false
-	};
-
-	constructor(props) {
-		// TODO: This constructor is irrelevant
-		super(props);
-
-		this.confirmOpen = this.confirmOpen.bind(this);
-		this.confirmClose = this.confirmClose.bind(this);
-		this.handleConfirm = this.handleConfirm.bind(this);
-	}
-
-	handleCoinChange = (value: number) => this.setState({ toMint: value })
-
-	// async UpdateAvailableCoins() {
-	// 	const { contract } = this.props;
-	// 	const available = await contract.reservedCoins();
-	// 	this.setState({ coinsAvailable: available.toNumber() })
-	// }
-
-	async mintCoins() {
-		const { toMint } = this.state;
-		const { contract } = this.props;
-		try {
-			this.setState({isProcessing: true});
-			const tx = await contract.mintCoins(toMint);
-			this.setState({ txHash: tx.hash })
-			await tx.wait();
-			//await this.UpdateAvailableCoins();
-			this.props.updateBalance();
-			this.setState({isProcessing: false});
-		} catch (e) {
-			alert(e);
-		}
-		this.setState({isProcessing: false})
-	}
-
-	confirmOpen = () => this.setState({ doConfirm: true })
-	confirmClose = () => this.setState({ doConfirm: false })
-	handleConfirm = () => {
-		this.setState({ doConfirm: false })
-		this.mintCoins()
-	}
-
-	render() {
-		const { toMint, isProcessing, txHash } = this.state
-		const { rates, balance } = this.props;
-		const fxRate = weSellAt(rates);
-		return (
-			<React.Fragment>
-				<Header>Mint Coin</Header>
-				<p>Current Balance: {toHuman(balance, true)} </p>
-				<Form>
-					<DualFxInput onChange={this.handleCoinChange} asCoin={true} value={toMint} fxRate={fxRate} />
-					<Form.Button onClick={this.confirmOpen}>MINT</Form.Button>
-				</Form>
-				<Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.handleConfirm} />
-				<ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{txHash}}/>
-			</React.Fragment>
-		);
-	}
+enum MintStatus {
+  WAITING,
+  CONFIRM,
+  PROCESSING,
+  COMPLETE,
 }
 
-export const Mint = connect(selectFxRate)(MintClass);
+export const Mint = () => {
 
+  const [toMint, setToMint] = useState(0);
+  const [status, setStatus] = useState(MintStatus.WAITING);
+  const [txHash, setTxHash] = useState(undefined as MaybeString);
+
+  const {rates} = useFxRates();
+  const account = useActiveAccount();
+  const accountApi = useAccountApi(account?.address);
+
+  /////////////////////////////////////////////////////////
+  const onMintCoins = useCallback(async () => {
+    setStatus(MintStatus.PROCESSING);
+    const account = useActiveAccount();
+    try {
+      const { contract } = account;
+      const tx = await contract.mintCoins(toMint);
+      setTxHash(tx.hash);
+      await tx.wait();
+      accountApi?.updateBalance();
+
+    } catch (e) {
+      alert(e);
+    }
+
+    setStatus(MintStatus.COMPLETE);
+  }, [setTxHash, setStatus, account, accountApi])
+
+  /////////////////////////////////////////////////////////
+  const onConfirm = useCallback(() => { setStatus(MintStatus.CONFIRM); }, [setStatus]);
+  const onCancel = useCallback(() => { setStatus(MintStatus.WAITING); }, [setStatus]);
+
+  const doConfirm = status === MintStatus.CONFIRM;
+  const fxRate = weSellAt(rates);
+  return (
+    <React.Fragment>
+      <Header>Mint Coin</Header>
+      <p>Current Balance: {toHuman(account.balance, true)} </p>
+      <Form>
+        <DualFxInput onChange={setToMint} asCoin={true} value={toMint} fxRate={fxRate} />
+        <Form.Button onClick={onConfirm}>MINT</Form.Button>
+      </Form>
+      <Confirm open={doConfirm} onCancel={onCancel} onConfirm={onMintCoins} />
+      <ModalOperation
+        isOpen={status === MintStatus.PROCESSING}
+        header={messages.mintingHeader}
+        progressMessage={messages.mintingInProgress}
+        messageValues={{ txHash }}
+      />
+    </React.Fragment>
+  );
+}

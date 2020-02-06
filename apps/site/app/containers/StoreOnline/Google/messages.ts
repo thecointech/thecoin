@@ -31,7 +31,7 @@ export default defineMessages({
   },
   buttonSuccess: {
     id: `${scope}.buttonSuccess`,
-    defaultMessage: "CONNECTED",
+    defaultMessage: "UPLOADED",
   },
 
   messageErrorRemoteHeader: {

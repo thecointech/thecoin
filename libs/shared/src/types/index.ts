@@ -1,16 +1,14 @@
 import { Store, Reducer } from 'redux';
-//import { RouterState } from 'connected-react-router';
-//import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { SidebarGenerators } from '../containers/PageSidebar/types';
 import { AccountMapState } from '../containers/AccountMap';
-import { ContainerState as FxRateState } from '../containers/FxRate/types';
+import { FxRatesState } from '../containers/FxRate/types';
 import { Saga, Task } from 'redux-saga';
 
 // Your root reducer type, which is your redux state types also
 export interface ApplicationBaseState {
   readonly sidebar: SidebarGenerators;
   readonly accounts: AccountMapState;
-  readonly fxRates: FxRateState;
+  readonly fxRates: FxRatesState;
 }
 
 export interface InjectedStore extends Store<{}> {

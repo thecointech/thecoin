@@ -1,6 +1,5 @@
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/types";
 import { buildResponse, delay } from "./network";
-import { IWindow } from "containers/StoreOnline/Google/googleUtils";
 import testWallet from './testAccount.json';
 
 let wallets = [
@@ -17,6 +16,14 @@ let wallets = [
     wallet: JSON.stringify(testWallet),
   }
 ];
+
+const MockedCode = "MockedCode";
+
+const checkCode = ({token}: GoogleToken) => {
+  if (MockedCode !== token) {
+    throw new Error("Invalid Code");
+  }
+}
 /**
  * SecureApi - object-oriented interface
  * @export
@@ -35,17 +42,8 @@ export class MockSecureApi {
   {
     await delay(2500);
 
-    // Poll to simulate the user going to the new window
-    // and completeing login
-    const polling = setInterval(() => {
-      const myWindow: IWindow = window;
-      if (!myWindow.completeGauthLogin)
-        return;
-      clearInterval(polling);
-      myWindow.completeGauthLogin("MockedCode")
-    })
     return buildResponse<GoogleAuthUrl>({
-      url: "MockedURL"
+      url: `${window.location.origin}/#/accounts/gauth?code=${MockedCode}`
     });
   }
   /**
@@ -56,7 +54,8 @@ export class MockSecureApi {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleList(_token: GoogleToken, _options?: any) {
+  async googleList(token: GoogleToken, _options?: any) {
+    checkCode(token);
     await delay(250);
     return buildResponse<GoogleListResult>({
       wallets
@@ -71,6 +70,8 @@ export class MockSecureApi {
    * @memberof SecureApi
    */
   async googlePut(uploadPacket: GoogleStoreAccount, _options?: any) {
+    checkCode(uploadPacket.token);
+
     await delay(2500);
     wallets.push({
       id: wallets.length.toString(),
@@ -88,7 +89,8 @@ export class MockSecureApi {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleRetrieve(_token: GoogleToken, _options?: any) {
+  async googleRetrieve(token: GoogleToken, _options?: any) {
+    checkCode(token);
     await delay(250);
     const results: GoogleWalletItem[] = wallets.map((w) => ({
       wallet: w.wallet,

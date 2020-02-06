@@ -7,9 +7,8 @@ import { Moment } from 'moment';
 import { toHuman } from '@the-coin/utilities';
 import { roundPlaces } from '@the-coin/utilities/Conversion';
 
-import * as FxSelect from '@the-coin/shared/containers/FxRate/selectors';
-import * as FxAction from '@the-coin/shared/containers/FxRate/actions';
-import { getFxRate } from '@the-coin/shared/containers/FxRate/reducer';
+
+import { getFxRate, FxRatesState, IFxRates, selectFxRate, mapDispatchToProps } from '@the-coin/shared/containers/FxRate';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
@@ -40,7 +39,7 @@ interface PurchaseRecord {
 type MyProps = AccountState & {
 	updateBalance: Function
 }
-type Props = MyProps & FxSelect.ContainerState & FxAction.DispatchProps;
+type Props = MyProps & FxRatesState & IFxRates;
 
 const initialState = {
 	coin: 0,
@@ -291,5 +290,5 @@ class PurchaseClass extends React.PureComponent<Props> {
 	}
 }
 
-export const Purchase = connect(FxSelect.selectFxRate, FxAction.mapDispatchToProps)(PurchaseClass);
+export const Purchase = connect(selectFxRate, mapDispatchToProps)(PurchaseClass);
 

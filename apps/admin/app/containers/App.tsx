@@ -3,13 +3,13 @@ import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container } from 'semantic-ui-react';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
-import { useAccounts } from '@the-coin/shared/containers/Account/reducer'
-import { useFxRates } from '@the-coin/shared/containers/FxRate/reducer';
+import { useAccountMapStore } from '@the-coin/shared//containers/AccountMap';
+import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 
 export const App = hot(() => {
 
-  useFxRates();
-  useAccounts();
+  useFxRatesStore();
+  useAccountMapStore();
 
   const divStyle = {
     minHeight: "500px"

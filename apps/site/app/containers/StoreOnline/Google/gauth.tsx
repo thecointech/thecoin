@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import { getUrlParams } from 'utils/localState';
+import { getUrlParameterByName } from 'utils/localState';
 import { IWindow } from './googleUtils';
 
 export const GAuth = () => {
@@ -9,8 +9,7 @@ export const GAuth = () => {
   const [message, setMessage] = useState(messages.tokenWaiting);
 
   useEffect(() => {
-    const params = getUrlParams();
-    const code = params.get('code');
+    const code = getUrlParameterByName('code');
     if (code) {
       const opener: IWindow = window.opener;
       if (opener && opener.completeGauthLogin) {

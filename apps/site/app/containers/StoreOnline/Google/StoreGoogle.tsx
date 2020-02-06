@@ -55,7 +55,6 @@ export const StoreGoogle = (props: MyProps) => {
   ////////////////////////////////////////////////////////////////
   const completeCallback = useCallback(async (token: string) => {
     if (activeAccount) {
-      debugger;
       console.log("Commencing upload of: " + activeAccount.name);
       setState(UploadState.Uploading);
       if (await completeStore(token, activeAccount.address))

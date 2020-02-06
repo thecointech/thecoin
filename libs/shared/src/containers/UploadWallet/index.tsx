@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages'
 import { useCallback } from 'react';
 import { useAccountMapApi } from '../AccountMap';
+import { useHistory } from 'react-router';
 
 type ReadFileCallback = (path: File) => Promise<string>;
 type ValidateCallback = (address: string) => boolean;
@@ -21,16 +22,20 @@ const id = '__upload26453312f';
 export const UploadWallet = (props: Props) => {
  
   const accountMapApi = useAccountMapApi()
-  
+  const history = useHistory();
+
   const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = ValidateFile(wallet, props.validate);
+    
     if (isValid) {
       accountMapApi.addAccount(name, wallet, true);
+      accountMapApi.setActiveAccount(wallet.address);
+      history.push("/accounts");
     } else {
       alert('Bad Wallet');
     }
-  }, [accountMapApi])
+  }, [accountMapApi, history])
 
   return (
     <Container>

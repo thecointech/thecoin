@@ -2,20 +2,18 @@ import React, { useState, useCallback, useEffect } from "react";
 import { GetFirestore, TransferRecord } from "@the-coin/utilities/Firestore";
 import { decryptTo } from "@the-coin/utilities/Encrypt";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import * as FxActions from '@the-coin/shared/containers/FxRate/actions';
-import { useDispatch, useSelector } from "react-redux";
+import { useFxRatesApi, weBuyAt, IFxRates, useFxRates } from "@the-coin/shared/containers/FxRate";
 import { fromMillis, now } from "utils/Firebase";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { TransferList } from "./TransferList";
 import { InstructionPacket, InstructionRenderer } from "./types";
-import { weBuyAt } from "@the-coin/shared/containers/FxRate/reducer";
 import { toHuman } from "@the-coin/utilities";
 import { GetSigner } from "@the-coin/utilities/VerifiedAction";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { selectFxRate } from "@the-coin/shared/containers/FxRate/selectors";
 import { FXRate } from "@the-coin/pricing";
 import { Confirm } from "semantic-ui-react";
+
 
 type Props = {
   render: InstructionRenderer,
@@ -28,9 +26,9 @@ export const EncryptedList = ({render, type}: Props) => {
   const [instructions, setInstructions] = useState<InstructionPacket[]>([]);
 
   const [completeIndex, setCompleteIndex] = useState(-1);
-  const rates = useSelector(selectFxRate);
-  const dispatch = useDispatch();
+  const {rates} = useFxRates();
 
+  ////////////////////////////////////////////////////////
   const setKeyAndUpdate = useCallback((pk: string) => {
     setPrivateKey(_ => {
       // Decrypt and set decryptedRecords
@@ -38,24 +36,27 @@ export const EncryptedList = ({render, type}: Props) => {
     })
   }, [setPrivateKey]);
 
+  ////////////////////////////////////////////////////////
   // Load all transfers from DB on mount
+  const fxApi = useFxRatesApi();
   useEffect(() => {
-    const fxActions = FxActions.mapDispatchToProps(dispatch);
-    FetchUnsettledRecords(type, fxActions)
+    FetchUnsettledRecords(type, fxApi)
       .then(setRecords)
       .then(() => setCompleteIndex(-2))
       .catch(alert)
   }, [])
 
+  ////////////////////////////////////////////////////////
   // Update Fiat as it becomes available
   useEffect(() => {
     const withFiat = records.map(r => ({
       ...r,
-      fiatDisbursed: toFiat(r, rates.rates)
+      fiatDisbursed: toFiat(r, rates)
     }))
     setRecords(withFiat)
   }, [rates, completeIndex])
 
+  ////////////////////////////////////////////////////////
   // Decrypt all when possible
   useEffect(() => {
     if (!!privateKey)
@@ -65,6 +66,7 @@ export const EncryptedList = ({render, type}: Props) => {
     }
   }, [privateKey, records])
 
+  ////////////////////////////////////////////////////////
   //
   const confirmedComplete = useCallback(async () => {
     if (completeIndex <= 0 || completeIndex >= records.length)
@@ -75,7 +77,7 @@ export const EncryptedList = ({render, type}: Props) => {
     setRecords(records => delete records[completeIndex] && records);
   }, [completeIndex, records]);
 
-  /////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
 
   const onCancel = useCallback(() => setCompleteIndex(-1), [setCompleteIndex])
   const toComplete = records[completeIndex];
@@ -98,7 +100,7 @@ export const EncryptedList = ({render, type}: Props) => {
   )
 }
 
-async function FetchUnsettledRecords(type: string, fxActions: FxActions.DispatchProps) {
+async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
   const firestore = GetFirestore()
   const collection = firestore.collection(type);
   const allDocs = await collection.get();
@@ -107,17 +109,17 @@ async function FetchUnsettledRecords(type: string, fxActions: FxActions.Dispatch
     const billDocument = firestore.doc(path);
     const rawData = await billDocument.get();
     const record = rawData.data() as TransferRecord;
-    record.processedTimestamp = await GetSettlementDate(record.recievedTimestamp, fxActions);
+    record.processedTimestamp = await GetSettlementDate(record.recievedTimestamp, fxApi);
     return record;
   });
   return await Promise.all(fetchAllBills)
 }
 
-async function GetSettlementDate(recieved: Timestamp, fxActions: FxActions.DispatchProps) {
+async function GetSettlementDate(recieved: Timestamp, fxApi: IFxRates) {
   const recievedAt = recieved.toDate();
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
-    fxActions.fetchRateAtDate(new Date(nextOpen));
+    fxApi.fetchRateAtDate(new Date(nextOpen));
   }
   return fromMillis(nextOpen);
 }
