@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl"
 import messages from "./messages"
 import { Header, Container, Divider, Message } from "semantic-ui-react"
 import { Link } from "react-router-dom"
-import { getWeb3Type } from "utils/detection"
+import { getWeb3Type } from "@the-coin/shared/utils/detection"
 
 const BounceLink = () => 
   <Link to="/addAccount/generate/">

@@ -8,7 +8,11 @@ import { useCallback } from 'react';
 import { useAccountMapApi } from '../AccountMap';
 import { useHistory } from 'react-router';
 
-type ReadFileCallback = (path: File) => Promise<string>;
+export type ReadFileData = {
+  wallet: string;
+  name: string|undefined;
+}
+type ReadFileCallback = (path: File) => Promise<ReadFileData>;
 type ValidateCallback = (address: string) => boolean;
 
 interface Props {
@@ -68,10 +72,10 @@ const ReadFile = async (e: React.ChangeEvent<HTMLInputElement>, cb: ReadFileCall
   if (!files) throw 'Empty or Missing FileList';
 
   const file = files[0];
-  const data = await cb(file);
-  const wallet = JSON.parse(data.trim());
-  const name = file.name.split('.')[0];
-  return { wallet, name };
+  let { wallet, name } = await cb(file);
+  const asJson = JSON.parse(wallet.trim());
+  const asName = name ?? file.name.split('.')[0];
+  return { wallet: asJson, name: asName };
 }
 
 const ValidateFile = async (jsonWallet: any, validate?: ValidateCallback) => {

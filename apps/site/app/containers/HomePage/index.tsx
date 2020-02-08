@@ -18,7 +18,7 @@ import interac from './images/interacLogo.svg';
 
 import { Subscribe } from '../Subscribe';
 import styles from './index.module.css';
-import { hasAccount } from 'utils/detection';
+import { hasAccount } from '@the-coin/shared/utils/detection';
 import { useAccounts } from '@the-coin/shared/containers/AccountMap';
 
 

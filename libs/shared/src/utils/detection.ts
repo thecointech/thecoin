@@ -1,4 +1,4 @@
-import { AccountMapState } from "@the-coin/shared/containers/AccountMap/types";
+import { AccountMapState } from "../containers/AccountMap/types";
 
 export const isOpera = () : boolean =>
   /Opera|OPR\//.test(navigator.userAgent)

@@ -21,31 +21,14 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     this.draftState.name = name;
   }
 
-  setSigner(signer: TheSigner) {
-    this.draftState.signer = signer;
-    // We persist any signers passed here
-    // let liveWallet = false;
-    // if (isWallet(signer))
-    // {
-    //   if(!signer.privateKey)
-    //     StoreWallet(name, signer);
-    //   else
-    //     liveWallet = true
-    // }
-    // else 
-    // {
-    //   StoreSigner(name, signer);
-    //   liveWallet = !!signer.provider;
-    // }
-    // // Now the specifics are out of the way, 
-    // yield this.sendValues(this.actions().updateWithValues, {name, signer});
-    // if (liveWallet)
-    // {
-    //   const contract = yield call(ConnectContract, signer);
-    //   yield this.sendValues(this.actions().updateWithValues, {contract});
-    //   // By default, update balance whenever we get a live account
-    //   yield this.sendValues(this.actions().updateBalance, []);
-    // }
+  *setSigner(signer: TheSigner) {
+    // Connect to the contract
+    const contract = yield call(ConnectContract, signer);
+    yield this.storeValues({
+      signer, 
+      contract
+    });
+    yield this.sendValues(this.actions().updateBalance, []);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -282,11 +265,11 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       }
 
       // Connect to the contract
-      const contract = yield call(ConnectContract, decrypted);
+      //const contract = yield call(ConnectContract, decrypted);
       // Store the live data
-      yield this.storeValues({contract, signer: decrypted})
+      //yield this.storeValues({contract, signer: decrypted})
       // Now, update balance
-      yield this.sendValues(this.actions().updateBalance, []);
+      yield this.sendValues(this.actions().setSigner, [decrypted]);
     }
     catch (error) {
       console.error(error);

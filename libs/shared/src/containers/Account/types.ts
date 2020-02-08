@@ -62,7 +62,7 @@ export type AccountPageProps = {
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(signer: TheSigner): void;
+  setSigner(signer: TheSigner): Iterator<any>;
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): Iterator<any>;
