@@ -2,13 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
 import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
+import { UploadWallet, ReadFileData } from '@the-coin/shared/containers/UploadWallet';
 
 import { Balance } from '@the-coin/shared/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 import { ETransfers } from './ETransfers';
-
 
 type Props = RouteComponentProps;
 
@@ -50,12 +50,31 @@ export const BrokerCAD = (props: Props) =>  {
   const accounts = useAccountMap();
   const accountsApi = useAccountMapApi();
   const brokerCAD = Object.values(accounts)
-    .find(account => account.name.toLowerCase().indexOf("broker") >= 0);
+    .find(account => account.name === AccountName);
 
   React.useEffect(() => {
     accountsApi.setActiveAccount(brokerCAD?.address);
   }, [accountsApi, brokerCAD])
 
+  const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> { 
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const target: any = e.target;
+        const data = target.result;
+        resolve({ 
+          wallet: data, 
+          name: AccountName }
+        );
+      };
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  }, []);
   
-  return <Account account={brokerCAD} accountMap={AccountMap} url={url} />
+  return brokerCAD
+    ? <Account account={brokerCAD} accountMap={AccountMap} url={url} />
+    : <UploadWallet readFile={onReadFile} />
 }
+
+

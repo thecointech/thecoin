@@ -67,18 +67,17 @@ export const EncryptedList = ({render, type}: Props) => {
   }, [privateKey, records])
 
   ////////////////////////////////////////////////////////
-  //
   const confirmedComplete = useCallback(async () => {
-    if (completeIndex <= 0 || completeIndex >= records.length)
+    if (completeIndex < 0 || completeIndex >= records.length)
       throw new Error("Invalid index to complete")
     const record = records[completeIndex];
     await MarkComplete(type, record);
     console.log("Record completed: " + completeIndex);
     setRecords(records => delete records[completeIndex] && records);
+    setCompleteIndex(-1);
   }, [completeIndex, records]);
 
   ////////////////////////////////////////////////////////
-
   const onCancel = useCallback(() => setCompleteIndex(-1), [setCompleteIndex])
   const toComplete = records[completeIndex];
 
