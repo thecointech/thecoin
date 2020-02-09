@@ -35,9 +35,6 @@ export function HowItWorks() {
 
         <Grid.Row className={styles.center}>
           <Grid.Column width={1}>
-            <p className={styles.list}>1.</p>
-          </Grid.Column>
-          <Grid.Column width={1}>
             <img className={styles.icons} src={user} />
           </Grid.Column>
           <Grid.Column width={8} className={styles.step1Wrap}>
@@ -51,9 +48,6 @@ export function HowItWorks() {
         </Grid.Row>
 
         <Grid.Row className={styles.center}>
-          <Grid.Column width={1}>
-            <p className={styles.list}>2.</p>
-          </Grid.Column>
           <Grid.Column width={1}>
             <img className={styles.icons} src={save} />
           </Grid.Column>
@@ -69,9 +63,6 @@ export function HowItWorks() {
 
         <Grid.Row className={styles.center}>
           <Grid.Column width={1}>
-            <p className={styles.list}>3.</p>
-          </Grid.Column>
-          <Grid.Column width={1}>
             <img className={styles.icons} src={exchange} />
           </Grid.Column>
           <Grid.Column width={8} className={styles.step1Wrap}>
@@ -86,9 +77,6 @@ export function HowItWorks() {
 
         <Grid.Row className={styles.center}>
           <Grid.Column width={1}>
-            <p className={styles.list}>4.</p>
-          </Grid.Column>
-          <Grid.Column width={1}>
             <img className={styles.icons} src={check} />
           </Grid.Column>
           <Grid.Column width={8} className={styles.step1Wrap}>
@@ -102,9 +90,6 @@ export function HowItWorks() {
         </Grid.Row>
 
         <Grid.Row className={styles.center}>
-          <Grid.Column width={1}>
-            <p className={styles.list}>5.</p>
-          </Grid.Column>
           <Grid.Column width={1}>
             <img className={styles.icons} src={moneyhand} />
           </Grid.Column>

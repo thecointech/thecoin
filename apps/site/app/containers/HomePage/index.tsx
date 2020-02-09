@@ -51,7 +51,7 @@ export const HomePage = () => {
               </ol>
               <p>No engagement, no obligations.</p>
 
-              <Button as={NavLink} to="/howItWorks" content='More Infos' primary size='massive' id='knowMore' />
+              <Button as={NavLink} to="/howItWorks" content='More Info' primary size='massive' id='knowMore' />
               <Button as={NavLink} to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount' />
             </div>
           </Grid.Column>
