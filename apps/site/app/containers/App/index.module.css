@@ -1,3 +1,8 @@
+#mainContent{
+  margin: 30px;
+  margin-bottom: 50px;
+}
+
 .pageMainInner {
   min-height: 250px;
   padding: 0em;
@@ -6,4 +11,11 @@
 .pageMainInner > div {
   width: inherit;
   height: inherit;
+}
+
+@media only screen and (max-width: 750px) {
+  #mainContent{
+    margin: 10px;
+    margin-bottom: 30px;
+  }
 }
