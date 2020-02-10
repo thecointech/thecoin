@@ -5,7 +5,7 @@ import { IActions, PrismicState, initialState } from './types'
 import { call, takeLatest } from 'redux-saga/effects'
 import { Document } from 'prismic-javascript/d.ts/documents'
 import { ApplicationRootState } from 'types'
-import { useInjectReducer, useInjectSaga } from "redux-injectors";
+import { useInjectReducer, useInjectSaga } from "@the-coin/redux-injectors";
 import { buildSaga } from '@the-coin/shared/utils/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'

@@ -11,7 +11,7 @@
     // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
     "sourceMap": true,                        /* Generates corresponding '.map' file. */
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
-    "outDir": "../../build/broker-service",   /* Redirect output structure to the directory. */
+    "outDir": "./build/broker-service",   /* Redirect output structure to the directory. */
     "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "baseUrl": "./src/",                       /* Base directory to resolve non-absolute module names. */
     // "composite": true,                     /* Enable project compilation */

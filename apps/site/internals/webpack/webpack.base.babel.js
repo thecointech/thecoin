@@ -10,6 +10,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const projectRoot = path.resolve(__dirname, '..', '..');
 const systemRoot = path.resolve(projectRoot, '..', '..');
 const sharedRoot = path.resolve(systemRoot, 'libs', 'shared');
+const utilsRoot = path.resolve(systemRoot, 'libs', 'utils-ts');
 
 module.exports = options => ({
   mode: options.mode,
@@ -45,6 +46,18 @@ module.exports = options => ({
         options: {
           instance: "shared",
             configFile: path.join(sharedRoot, 'tsconfig.json'),
+            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+            projectReferences: true,
+            logLevel: 'info',
+        },
+      },
+      {
+        test: /\.ts(x?)$/,
+        include: path.join(utilsRoot, "src"),
+        loader: 'ts-loader',
+        options: {
+          instance: "utils",
+            configFile: path.join(utilsRoot, 'tsconfig.json'),
             transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
             projectReferences: true,
             logLevel: 'info',

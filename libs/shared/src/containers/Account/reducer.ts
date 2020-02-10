@@ -1,19 +1,17 @@
 import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContract';
 import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
-import { AccountState, DecryptCallback, IActions, Transaction, DefaultAccount, ACCOUNTS_KEY } from './types';
 import { Log } from 'ethers/providers';
-import { injectReducer, injectSaga, useInjectReducer, useInjectSaga } from "redux-injectors";
-import { buildSagas, BindActions } from './actions';
-
-import { GetStored, ReadAllAccounts, isWallet, StoreWallet, StoreSigner } from './storageSync'
-
-import { actions as FxActions } from '../../containers/FxRate/reducer';
-import { toHuman } from '@the-coin/utilities';
-import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from '../../utils/immerReducer';
-import { TheSigner } from '../../SignerIdent';
+import { useInjectSaga } from "@the-coin/redux-injectors";
+import { toHuman, IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { AccountState, DecryptCallback, IActions, Transaction } from './types';
+import { buildSagas, bindActions } from './actions';
+import { actions as FxActions } from '../../containers/FxRate/reducer';
+import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
+import { isSigner, TheSigner } from '../../SignerIdent';
+import { ACCOUNTMAP_KEY } from '../AccountMap';
+
 
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
@@ -21,36 +19,16 @@ export class AccountReducer extends TheCoinReducer<AccountState>
 
   setName(name: string): void {
     this.draftState.name = name;
-    // If we don't yet have a wallet,
-    // try and load under the new name
-    if (!this.state.signer)
-      this.draftState.signer = GetStored(name);
   }
 
-  *setSigner(name:string, signer: TheSigner) {
-    // We persist any signers passed here
-    let liveWallet = false;
-    if (isWallet(signer))
-    {
-      if(!signer.privateKey)
-        StoreWallet(name, signer);
-      else
-        liveWallet = true
-    }
-    else 
-    {
-      StoreSigner(name, signer);
-      liveWallet = !!signer.provider;
-    }
-    // Now the specifics are out of the way, 
-    yield this.sendValues(this.actions().updateWithValues, {name, signer});
-    if (liveWallet)
-    {
-      const contract = yield call(ConnectContract, signer);
-      yield this.sendValues(this.actions().updateWithValues, {contract});
-      // By default, update balance whenever we get a live account
-      yield this.sendValues(this.actions().updateBalance, []);
-    }
+  *setSigner(signer: TheSigner) {
+    // Connect to the contract
+    const contract = yield call(ConnectContract, signer);
+    yield this.storeValues({
+      signer, 
+      contract
+    });
+    yield this.sendValues(this.actions().updateBalance, []);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -263,7 +241,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
-    if (!isWallet(signer)) {
+    if (isSigner(signer)) {
       throw new Error(`Attempting to decrypt a non-wallet signer: ${name}`)
     }
     if (signer.privateKey) {
@@ -285,7 +263,13 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       if (callback) {
         callback(1);
       }
-      yield this.sendValues(this.actions().setSigner, [name, decrypted])
+
+      // Connect to the contract
+      //const contract = yield call(ConnectContract, decrypted);
+      // Store the live data
+      //yield this.storeValues({contract, signer: decrypted})
+      // Now, update balance
+      yield this.sendValues(this.actions().setSigner, [decrypted]);
     }
     catch (error) {
       console.error(error);
@@ -295,51 +279,27 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
-export const getAccountReducer = (name: string) =>
-  GetNamedReducer(AccountReducer, name, DefaultAccount, ACCOUNTS_KEY);
+export const getAccountReducer = (address: string) => {
 
-export const useAccount = (name: string) => {
+  // In development mode, ensure we are only called with a legal address
+  if (process.env.NODE_ENV !== "production") {
+    if (!IsValidAddress(address)) {
+      alert('Connect debugger and figure this out');
+      throw new Error("Invalid Address passed to accountApi");
+    }
+    if (NormalizeAddress(address) != address) {
+      alert('Connect debugger and figure this out');
+      throw new Error("Un-normalized address being passed to accountApi");
+    }
+  }
+
+  return GetNamedReducer(AccountReducer, address, {}, ACCOUNTMAP_KEY);
+}
   
-  const { actions } = getAccountReducer(name);
-  useInjectSaga({ key: name, saga: buildSagas(name) });
-  // Register an on-unload callback to remove the saga
-  useEffect(() => {
-    console.log("loading reducer for: " + name);
-    return () => console.log("I've unloaded")
-  });
+export const useAccountApi = (address: string) => {
+  
+  const { actions } = getAccountReducer(address);
+  useInjectSaga({ key: address, saga: buildSagas(address) });
   const dispatch = useDispatch();
-  return BindActions(actions, dispatch);
-}
-
-
-export const createRootReducer = () =>
-  buildNamedDictionaryReducer<AccountState>(ACCOUNTS_KEY, ReadAllAccounts())
-
-export const useAccounts = () => {
-  useInjectReducer({ key: ACCOUNTS_KEY, reducer: createRootReducer() });
-}
-  
-export function injectRootReducer() {
-
-  // First, create the root-level reducer.  This is a dictionary
-  // that redirects all our child
-  return injectReducer({
-    key: ACCOUNTS_KEY,
-    reducer: createRootReducer()
-  });
-}
-
-export function injectSingleAccountReducer(key: string) {
-
-  // Create a reducer for a single account.  It
-  // is required that buildRootReducer is called before
-  // attempting to create a single account reducer
-  getAccountReducer(key);
-  
-  const withSaga = injectSaga({
-    key: key,
-    saga: buildSagas(key)
-  });
-
-  return withSaga;
+  return bindActions(actions, dispatch);
 }

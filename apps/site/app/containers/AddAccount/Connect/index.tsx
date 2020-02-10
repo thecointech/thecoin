@@ -1,86 +1,58 @@
-import React from 'react';
-import { Button, Form, Message } from 'semantic-ui-react';
-
-import { NewBaseClass, initialState, BaseState } from '../NewBaseClass/index';
-import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
-import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
-import { buildMapDispatchToProps } from '@the-coin/shared/containers/Account/actions';
+import React, { useCallback, useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@the-coin/shared/containers/Account/Web3';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import { WarnIfDisabled } from './WarnIfDisabled';
+import { NameInput } from '../NewBaseClass/NameInput';
+import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
+import messages from '../messages';
+import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { IAccountMapActions, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
+import { useHistory } from 'react-router';
 
-class ConnectClass extends NewBaseClass<BaseState> {
-  state = initialState;
+export const Connect = () => {
 
-  onConnect = async (event: React.MouseEvent<HTMLElement>) => {
+  const [name, setName] = useState(undefined as MaybeString);
+  const [referral, setReferral] = useState(undefined as MaybeString);
+  const [forceValidate, setForceValidate] = useState(false);
+
+  const accountsApi = useAccountMapApi();
+  const history = useHistory();
+  const onConnect = useCallback(async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    if (await this.tryConnect()) this.setState(initialState);
-  };
-
-  async tryConnect() {
-    const {
-      nameValid,
-      accountName,
-      referrerValid,
-      accountReferrer,
-    } = this.state;
-    if (!nameValid || !referrerValid) return false;
-
+    if (!(referral && name)) {
+      setForceValidate(true);
+      return false;
+    }
     const theSigner = await ConnectWeb3();
     if (theSigner) {
-      // Ensure this account is appropriately referred
-      if (!this.registerReferral(theSigner.address, accountReferrer))
-        return false;
-      this.props.setSigner(accountName, theSigner);
-      this.TriggerRedirect();
-      return true;
+      storeSigner(theSigner, referral, accountsApi);
     }
-    return false;
-  }
+    else {
+      alert("We couldn't connect to your account - we don't know why.  If this is an error, please contact support@thecoin.io");
+    }
 
-  RenderWarning = () => (
-    <Message warning>
-      <Message.Header>
-        <FormattedMessage {...messages.warningHeader} />
-      </Message.Header>
-      <p><FormattedMessage {...messages.warningP1} /></p>
-      <p><FormattedMessage {...messages.warningP2} /></p>
-    </Message>
+    // We redirect directly to the now-active account
+    history.push('/accounts');
+    return true;
+  }, [referral, name, setForceValidate, accountsApi, history]);
+
+  return (
+    <>
+      <WarnIfDisabled />
+      <Form>
+        <NameInput forceValidate={forceValidate} setName={setName} />
+        <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
+        <Button onClick={onConnect} id="buttonCreateAccountStep1">
+          <FormattedMessage {...messages.buttonCreate} />
+        </Button>
+      </Form>
+    </>
   );
-
-  RenderContent() {
-    const win: any = window;
-    const { web3 } = win;
-    const disabled = !web3;
-    const warning = disabled ? this.RenderWarning() : undefined;
-    return (
-      <>
-        {warning}
-        <Form>
-          {this.RenderNameInput(disabled)}
-          {this.RenderReferralInput(disabled)}
-          <Button disabled={disabled} onClick={this.onConnect}>
-            Connect to Existing
-          </Button>
-        </Form>
-      </>
-    );
-  }
-
-  render() {
-    if (this.ShouldRedirect()) return this.RenderRedirect();
-    return this.RenderContent()
-  }
 }
 
-const key = '__@create|ee25b960';
-
-// We need to ensure we have the Accounts reducer live
-// so we add the reducer here.
-export const Connect = injectSingleAccountReducer(key)(
-  connect(
-    structuredSelectAccounts,
-    buildMapDispatchToProps(key),
-  )(ConnectClass),
-);
+const storeSigner = async (wallet: TheSigner, referralCode: string, accountsApi: IAccountMapActions) => {
+  accountsApi.addAccount(name, wallet, true);
+  accountsApi.setActiveAccount(wallet.address)
+  registerReferral(wallet.address, referralCode);  
+}

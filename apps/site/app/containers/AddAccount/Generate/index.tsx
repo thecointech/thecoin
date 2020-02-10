@@ -1,180 +1,118 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Wallet } from 'ethers';
-import { connect } from 'react-redux';
-import { Button, Header, Form, Container } from 'semantic-ui-react';
-import { FormattedMessage, MessageDescriptor } from 'react-intl';
-import { injectSingleAccountReducer } from '@the-coin/shared/containers/Account/reducer';
-import { structuredSelectAccounts } from '@the-coin/shared/containers/Account/selector';
-import { buildMapDispatchToProps } from '@the-coin/shared/containers/Account/actions';
-import { UxScoredPassword } from 'components/UxScoredPassword';
-import messages from '../messages';
+import { Button, Header, Form } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import {
-  initialState as BaseInitial,
-  NewBaseClass
-} from '../NewBaseClass/index';
+import { RouteComponentProps } from 'react-router-dom';
+import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
+import { NameInput } from '../NewBaseClass/NameInput';
+import { PasswordInput } from './PasswordInput';
+import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
+import messages from '../messages';
 
-const initialState = {
-  ...BaseInitial,
-  accountPwd: '',
-  pwdValid: undefined as boolean | undefined,
-  pwdMessage: undefined as MessageDescriptor | undefined,
+let _isCancelled = false;
+const setCancelled = () => _isCancelled = true;
 
-  isCreating: false,
-  cancelCreating: false,
-  percentComplete: 0,
-};
-type State = Readonly<typeof initialState>;
+export const Generate = (props: RouteComponentProps) => {
 
-class GenerateClass extends NewBaseClass<State> {
+  const [name, setName] = useState(undefined as MaybeString);
+  const [password, setPassword] = useState(undefined as MaybeString);
+  const [referral, setReferral] = useState(undefined as MaybeString);
+  const [progress, setProgress] = useState(undefined as MaybeNumber);
+  const [forceValidate, setForceValidate] = useState(false);
 
-  readonly state = initialState;
+  
+  ////////////////////////////////
+  // Callback to actually generate the account
+  const accountMapApi = useAccountMapApi();
+  const { history } = props;
+  const onGenerate = useCallback(async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (!(password && referral && name)) {
+      setForceValidate(true);
+      return false;
+    }
+    _isCancelled = false;
+    const generated = await generateNewWallet(password, setProgress);
+    if (generated) {
+      const { wallet, decrypted } = generated;
+      accountMapApi.addAccount(name, wallet, true, decrypted);
+      accountMapApi.setActiveAccount(wallet.address)
+      registerReferral(wallet.address, referral);
 
-  onCancelGenerate = () => this.setState({ cancelCreating: true });
-  onFinishedGenerate = () => this.setState({
-    isCreating: false,
-    redirect: true,
+      const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");
+      history.push(toStoragePage);
+    }
+
+    // Else, we probably cancelled, so do nothing...
+    return undefined;
+  }, [name, password, referral, setForceValidate, setProgress, accountMapApi, history])
+  ////////////////////////////////
+
+  // const cbCancel = (progress && progress < 100)
+  //   ? setCancelled 
+  //   : undefined;
+  // const cbOk = cbCancel
+  //   ? undefined
+  //   : onComplete
+
+  return (
+    <React.Fragment>
+      <Form id="formCreateAccountStep1">
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...messages.header} />
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...messages.subHeader} />
+          </Header.Subheader>
+        </Header>
+        <NameInput forceValidate={forceValidate} setName={setName}/>
+        <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
+        <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
+        <Button onClick={onGenerate} id="buttonCreateAccountStep1">
+          <FormattedMessage {...messages.buttonCreate} />
+        </Button>
+      </Form>
+      <ModalOperation
+        cancelCallback={setCancelled}
+        //okCallback={cbOk}
+        isOpen={progress !== undefined}
+        header={messages.whileCreatingHeader}
+        progressPercent={progress!}
+        progressMessage={messages.whileCreatingMessage}
+      />
+    </React.Fragment>
+  );
+}
+
+
+const generateNewWallet = async (password: string, setProgress: (v: number) => void) => {
+  // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
+
+  // Generate new account
+  setProgress(0);
+
+  const newWallet = Wallet.createRandom();
+  var asStr = await newWallet.encrypt(password, (percent: number) => {
+    // To break out of this callback, we need to throw
+    if (_isCancelled)
+      throw 'User Cancelled';
+
+    const per = Math.round(percent * 100);
+    setProgress(per);
   });
 
-  onGenerateNewWallet = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    await this.generateNewWallet();
-  };
-  onPasswordChange = (value: string, score: number): boolean => {
-    const isValid = score > 2;
-    this.setState({
-      accountPwd: value,
-      pwdValid: isValid,
-    });
-    return isValid;
-  };
+  // If cancelled, do not store generated account
+  if (_isCancelled) 
+    return false;
 
-  async generateNewWallet() {
-    // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-    const {
-      accountPwd,
-      accountName,
-      pwdValid,
-      nameValid,
-      accountReferrer,
-      referrerValid,
-    } = this.state;
-
-    if (!(pwdValid && nameValid && referrerValid)) {
-      this.setState({
-        forceValidate: true,
-      });
-      return false;
-    }
-
-    // Generate new account
-    this.setState({ isCreating: true });
-
-    const newAccount = Wallet.createRandom();
-    var asStr = await newAccount.encrypt(accountPwd, (percent: number) => {
-      if (this.state.cancelCreating) {
-        this.setState({
-          isCreating: false,
-          cancelCreating: false,
-        });
-        throw 'User Cancelled';
-      }
-      const per = Math.round(percent * 100);
-      this.setState({ percentComplete: per });
-    });
-
-    // If cancelled, do not store generated account
-    if (this.state.isCreating === false) return false;
-
-    // Register this account with our system
-    if (!(await this.registerReferral(newAccount.address, accountReferrer)))
-      return false;
-
-    // Add to wallet, this makes it available to user on this site
-    // We set the wallet in encrypted format, as we wish to force
-    // the user to decrypt the account (to protect against misspelled
-    // passwords)
-    const asJson = JSON.parse(asStr);
-    this.props.setSigner(accountName, asJson);
-
-    // Switch to this newly created account
-    this.setState({
-      cancelCreating: false,
-    });
-
-    // Callback allows hosting element to react to completion
-    if (this.props.onComplete) {
-      this.props.onComplete(accountName);
-    }
-
-    return true;
-  }
-
-  /////////////////////////////////////////////////////////////
-  // Render
-  render() {
-    if (this.ShouldRedirect()) {
-      return this.RenderRedirect();
-    }
-    const { forceValidate, pwdValid, pwdMessage, isCreating, percentComplete } = this.state;
-
-    const cbCancel = isCreating && percentComplete < 100
-      ? this.onCancelGenerate 
-      : undefined;
-    const cbOk = cbCancel
-      ? undefined
-      : this.onFinishedGenerate
-
-    return (
-      <React.Fragment>
-        <Form id="formCreateAccountStep1">
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage {...messages.header} />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
-          </Header>
-          {this.RenderNameInput()}
-          <UxScoredPassword
-            uxChange={this.onPasswordChange}
-            intlLabel={messages.labelPassword}
-            forceValidate={forceValidate}
-            isValid={pwdValid}
-            message={pwdMessage}
-            placeholder="At least moderate strength"
-          />
-          {this.RenderReferralInput()}
-          <Button onClick={this.onGenerateNewWallet} id="buttonCreateAccountStep1">
-            <FormattedMessage {...messages.buttonCreate} />
-          </Button>
-        </Form>
-        <ModalOperation
-          cancelCallback={cbCancel}
-          okCallback={cbOk}
-          isOpen={isCreating}
-          header={messages.whileCreatingHeader}
-          progressPercent={percentComplete}
-          children={
-            <Container>
-              <p>TEXT</p>{percentComplete}%
-              <a href="" target="_blank">LINK TO FAQ</a>
-            </Container>
-          }
-        />
-        
-      </React.Fragment>
-    );
-  }
+  // Add to wallet, this makes it available to user on this site
+  // We set the wallet in encrypted format, as we wish to force
+  // the user to decrypt the account (to protect against misspelled
+  // passwords)
+  return { 
+    wallet: JSON.parse(asStr),
+    decrypted: newWallet,
+  } 
 }
-const key = '__@create|ee25b960';
-
-// We need to ensure we have the Accounts reducer live
-// so we add the reducer here.
-export const Generate = injectSingleAccountReducer(key)(
-  connect(
-    structuredSelectAccounts,
-    buildMapDispatchToProps(key),
-  )(GenerateClass),
-);

@@ -1,16 +1,16 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
 import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
-import { useInjectReducer, useInjectSaga } from "redux-injectors";
+import { useInjectReducer, useInjectSaga } from "@the-coin/redux-injectors";
 import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
-import { ContainerState, IActions } from './types';
+import { FxRatesState, IFxRates } from './types';
 import { buildSaga, sendValues } from '../../utils/sagas';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
 // The initial state of the App
-const initialState: ContainerState = {
+const initialState: FxRatesState = {
   rates: []
 }
 
@@ -53,8 +53,8 @@ async function fetchRates(date: Date): Promise<FXRate | null> {
   return r.data;
 }
 
-class FxRateReducer extends TheCoinReducer<ContainerState>
-  implements IActions {
+class FxRateReducer extends TheCoinReducer<FxRatesState>
+  implements IFxRates {
 
   *fetchRateAtDate(date?: Date): Generator<any> {
     try {
@@ -73,7 +73,7 @@ class FxRateReducer extends TheCoinReducer<ContainerState>
     }
   }
 
-  updateWithValues(newState: Partial<ContainerState>) {
+  updateWithValues(newState: Partial<FxRatesState>) {
     newState.rates?.forEach(r => {
       if (!this.haveRateFor(r.validFrom))
         this.draftState.rates.push(r)
@@ -97,7 +97,7 @@ function* loopFxUpdates() {
   let endPolling = false;
   while (!endPolling) {
     const rateAction = yield take(actions.updateWithValues.type);
-    const {rates} = rateAction.payload as Partial<ContainerState>;
+    const {rates} = rateAction.payload as Partial<FxRatesState>;
     if (!rates)
       continue;
 
@@ -129,7 +129,7 @@ function buildSagas(name: keyof ApplicationBaseState) {
   return rootSaga;
 }
 
-export const useFxRates = () => {
+export const useFxRatesStore = () => {
   useInjectReducer({ key: FXRATES_KEY, reducer: reducer });
   useInjectSaga({ key: FXRATES_KEY, saga: buildSagas(FXRATES_KEY) });
 }

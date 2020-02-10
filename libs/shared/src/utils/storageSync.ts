@@ -1,0 +1,105 @@
+import { AccountState } from '../containers/Account/types';
+import { AccountDict } from '../containers/AccountMap/types';
+import { isSigner, SignerIdent } from '../SignerIdent';
+import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
+import { Deprecated_GetStored } from './storageSync_deprecated';
+
+const ThrowIfNotValid = (data: any) => {
+  if (data.privateKey || !IsValidAddress(data.address))
+    throw new Error("Cannot store unencrypted wallet")
+}
+
+export function storeAccount(account: AccountState) {
+  ThrowIfNotValid(account.signer);
+
+  // Strip the contract from the account.
+  let { contract, ...toStore } = account;
+  const { address } = toStore;
+  if (isSigner(toStore.signer)) {
+    // We can't directly save a signer (it has a circular reference)
+    // but also it's data isn't particularily useful.
+    let signerIdent: SignerIdent = {
+      address,
+      _isSigner: true,
+    };
+    toStore.signer = signerIdent as any;
+  }
+  // And that's it - write to local storage
+  localStorage[address] = JSON.stringify(toStore);
+}
+
+
+export function getStoredAccountData(address: string): AccountState | null {
+
+  if (!IsValidAddress(address))
+    return null;
+
+  const normAddress = NormalizeAddress(address);
+
+  if (normAddress != address) {
+    const switcheroo = localStorage.getItem(address);
+    localStorage.setItem(normAddress, switcheroo!);
+    localStorage.removeItem(address);
+  }
+
+  const storedItem = localStorage.getItem(normAddress);
+
+  if (storedItem !== null) {
+    const r = JSON.parse(storedItem) as AccountState
+    r.address = normAddress;
+    if (NormalizeAddress(r.signer.address) === normAddress) {
+      return r;
+    }
+  }
+  return null;
+}
+
+// Utility function for fetching all stored accounts
+export function readAllAccounts(): AccountDict {
+  const allAccounts: AccountDict = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const raw = localStorage.key(i);
+    if (!raw)
+      continue;
+
+
+
+    let account = 
+      getStoredAccountData(raw) ??
+      Deprecated_GetStored(raw);
+
+    if (account) {
+      const { address, signer } = account;
+
+      // Rough check that this is, indeed, a valid account
+      if (address &&
+        IsValidAddress(address) &&
+        address == NormalizeAddress(signer.address)
+      ) {
+        allAccounts[address] = account!;
+      }
+    }
+  }
+  return allAccounts
+}
+
+
+//  Update an existing account with new state
+// (Store transactions, balance etc);
+export function updateStoredAccount(account: AccountState) {
+  const existing = localStorage.getItem(account.address);
+  if (existing) {
+    const { contract, signer, ...toStore } = account;
+    const updated = {
+      ...JSON.parse(existing),
+      ...toStore
+    }
+    localStorage.setItem(account.address, JSON.stringify(updated));
+  }
+}
+
+//
+// Delete the named account from localstorage (not tested)
+export function deleteAccount(account: AccountState) {
+  localStorage.removeItem(account.address);
+}

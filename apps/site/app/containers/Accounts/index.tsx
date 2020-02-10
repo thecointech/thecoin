@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Account, RouterPath } from '@the-coin/shared/containers/Account';
-import { AccountMap, AccountPageProps } from '@the-coin/shared/containers/Account/types';
+import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { Balance } from '@the-coin/shared/containers/Balance';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
 import { Purchase } from './Purchase';
 import { BillPayments } from './BillPayments';
-import { selectActiveAccount } from './Selectors';
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -44,14 +44,8 @@ const AccountRoutes: RouterPath[] = [
   },
 ];
 
-
-type Props =
-{
-  accounts: AccountMap,
-}  & RouteComponentProps;
-
-export const Accounts = (props: Props) => {
-    const activeAccount = selectActiveAccount();
+export const Accounts = (props: RouteComponentProps) => {
+    const activeAccount = useActiveAccount();
     const { match } = props;
     const { url } = match;
 

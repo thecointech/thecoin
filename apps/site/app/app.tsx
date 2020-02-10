@@ -5,6 +5,12 @@
  * code.
  */
 
+if (window.location.pathname === "/accounts/gauth") {
+  debugger;
+  const newUrl = `/#${window.location.pathname}${window.location.search}`;
+  window.location.replace(newUrl)
+}
+
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import AnimateHeight from 'react-animate-height';
 
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { ContainerState } from '@the-coin/shared/containers/FxRate/types';
+import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
@@ -33,7 +33,7 @@ const initialState = {
 };
 
 type StateType = Readonly<typeof initialState>;
-type Props = MyProps & ContainerState;
+type Props = MyProps & FxRatesState;
 
 class PurchaseClass extends React.PureComponent<Props, StateType> {
   public state = initialState;

@@ -154,7 +154,7 @@ export const RatesApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getConversion(currencyCode: number, timestamp: number, options?: any) {
+        getConversion(currencyCode: number, timestamp: number, options?: any): AxiosPromise<FXRate> {
             return RatesApiFp(configuration).getConversion(currencyCode, timestamp, options)(axios, basePath);
         },
     };

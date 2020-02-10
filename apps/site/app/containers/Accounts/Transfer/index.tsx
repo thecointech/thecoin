@@ -8,7 +8,7 @@ import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
 import { StatusApi, TransferApi } from '@the-coin/broker-cad';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
-import { ContainerState as FxState } from '@the-coin/shared/containers/FxRate/types';
+import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
@@ -20,7 +20,7 @@ type MyProps = {
   account: AccountState;
 };
 
-type Props = MyProps & FxState;
+type Props = MyProps & FxRatesState;
 
 const initialState = {
   coinTransfer: null as number | null,

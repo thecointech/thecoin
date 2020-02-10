@@ -7,11 +7,11 @@ export const FAQ = ({ data }: FAQDocument) =>
   <Item>
     <Item.Content>
       <Item.Header>
-        <Renderer r={data.marketddown} />
+        <Renderer r={data.questions} />
       </Item.Header>
       <Item.Meta>Description</Item.Meta>
       <Item.Description>
-        <Renderer r={data.answer} />
+        <Renderer r={data.answers} />
       </Item.Description>
     </Item.Content>
   </Item>

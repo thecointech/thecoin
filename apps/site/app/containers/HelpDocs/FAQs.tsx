@@ -7,7 +7,10 @@ type Props = {
   faqs: FAQDocument[]
 }
 
-export const FAQs = ({ faqs }: Props) =>
-  <Item.Group>
-    {faqs.map(faq => <FAQ key={faq.id} {...faq} />)}
-  </Item.Group>
+export const FAQs = ({ faqs }: Props) => {
+  return (
+    <Item.Group divided>
+      {faqs.map(faq => <FAQ key={faq.id} {...faq} />)}
+    </Item.Group>
+  )
+}

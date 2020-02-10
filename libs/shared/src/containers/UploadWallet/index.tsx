@@ -4,11 +4,15 @@ import { IsValidAddress } from '@the-coin/utilities';
 import styles from './index.module.css';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages'
-import { useState } from 'react';
 import { useCallback } from 'react';
-import { useAccount } from '../Account/reducer';
+import { useAccountMapApi } from '../AccountMap';
+import { useHistory } from 'react-router';
 
-type ReadFileCallback = (path: File) => Promise<string>;
+export type ReadFileData = {
+  wallet: string;
+  name: string|undefined;
+}
+type ReadFileCallback = (path: File) => Promise<ReadFileData>;
 type ValidateCallback = (address: string) => boolean;
 
 interface Props {
@@ -16,24 +20,26 @@ interface Props {
   validate?: ValidateCallback;
 }
 
+// Random ID to connect input & label
+const id = '__upload26453312f';
+
 export const UploadWallet = (props: Props) => {
-  // We use a random ID to avoid conflicting with other
-  // existing reducers.  This reducer will be renamed, so
-  // the name is not important, it just needs to be random
-  // and constant for the lifetime of this class
-  // We store it in state to give it peristance
-  const [id] = useState('upload' + Math.random());
-  const walletActions = useAccount(id)
-  
+ 
+  const accountMapApi = useAccountMapApi()
+  const history = useHistory();
+
   const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = ValidateFile(wallet, props.validate);
+    
     if (isValid) {
-      walletActions.setSigner(name, wallet);
+      accountMapApi.addAccount(name, wallet, true);
+      accountMapApi.setActiveAccount(wallet.address);
+      history.push("/accounts");
     } else {
       alert('Bad Wallet');
     }
-  }, [walletActions])
+  }, [accountMapApi, history])
 
   return (
     <Container>
@@ -66,10 +72,10 @@ const ReadFile = async (e: React.ChangeEvent<HTMLInputElement>, cb: ReadFileCall
   if (!files) throw 'Empty or Missing FileList';
 
   const file = files[0];
-  const data = await cb(file);
-  const wallet = JSON.parse(data.trim());
-  const name = file.name.split('.')[0];
-  return { wallet, name };
+  let { wallet, name } = await cb(file);
+  const asJson = JSON.parse(wallet.trim());
+  const asName = name ?? file.name.split('.')[0];
+  return { wallet: asJson, name: asName };
 }
 
 const ValidateFile = async (jsonWallet: any, validate?: ValidateCallback) => {
