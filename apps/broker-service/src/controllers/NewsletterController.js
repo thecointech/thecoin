@@ -1,3 +1,5 @@
+import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
+
 const Controller = require('./Controller');
 
 class NewsletterController {

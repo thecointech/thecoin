@@ -3,6 +3,8 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { NewsletterController } from './../controllers/Newsletter.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ReferrersController } from './../controllers/Referrers.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { StatusController } from './../controllers/Status.controller';
@@ -11,6 +13,20 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  "SubscriptionDetails": {
+    "dataType": "refObject",
+    "properties": {
+      "id": { "dataType": "string" },
+      "email": { "dataType": "string" },
+      "confirmed": { "dataType": "boolean" },
+      "firstName": { "dataType": "string" },
+      "lastName": { "dataType": "string" },
+      "country": { "dataType": "string" },
+      "city": { "dataType": "string" },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   "BoolResponse": {
     "dataType": "refObject",
     "properties": {
@@ -38,6 +54,50 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
+  app.get('/api/v1/newsletter',
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new NewsletterController();
+
+
+      const promise = controller.newsletterDetails.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post('/api/v1/newsletter',
+    function(request: any, response: any, next: any) {
+      const args = {
+        details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new NewsletterController();
+
+
+      const promise = controller.newsletterConfirm.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.get('/api/v1/referrers',
     function(request: any, response: any, next: any) {
       const args = {
