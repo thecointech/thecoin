@@ -21,9 +21,9 @@ import {MainRouter} from 'containers/MainRouter';
 
 import 'semantic-ui-less/semantic.less';
 
-import styles from './index.module.css';
 import { usePrismic } from 'containers/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
+import styles from './index.module.css';
 
 export const App = () => {
   usePrismic();
@@ -44,7 +44,7 @@ export const App = () => {
       >
         <PageSidebar>
           <MainPageTransition location={location}>
-            <section className={styles.pageMainInner}>
+            <section id={styles.mainContent} className={styles.pageMainInner}>
               <MainRouter location={location} />
             </section>
           </MainPageTransition>
