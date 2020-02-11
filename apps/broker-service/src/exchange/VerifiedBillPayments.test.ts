@@ -2,7 +2,7 @@ import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
 import { BillPayeePacket } from '@the-coin/types';
-import status from './status.json';
+import status from '../status/Status.json';
 import * as firestore from './Firestore'
 import { TransferRecord } from '@the-coin/utilities/Firestore';
 

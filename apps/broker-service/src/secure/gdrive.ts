@@ -1,5 +1,5 @@
-import {google, drive_v3} from 'googleapis';
-import { OAuth2Client } from 'googleapis/node_modules/google-auth-library';
+import { google, drive_v3 } from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 
 import credentials from './gdrive_cred.json'
 import { GoogleToken, GoogleStoreAccount, GoogleWalletItem, GoogleFileIdent } from '@the-coin/types';

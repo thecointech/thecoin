@@ -17,6 +17,7 @@
     "pretty": true,
     "sourceMap": true,
     "noEmitOnError": true,
+    "noEmit": false,
 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

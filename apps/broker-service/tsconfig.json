@@ -2,42 +2,18 @@
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2018",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
-    "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
-    "lib": ["es6"],                           /* Specify library files to be included in the compilation. */
-    "allowJs": true,                          /* Allow javascript files to be compiled. */
-    "checkJs": true,                          /* Report errors in .js files. */
-    // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
-    // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    "sourceMap": true,                        /* Generates corresponding '.map' file. */
-    // "outFile": "./",                       /* Concatenate and emit output to single file. */
-    "outDir": "./build/broker-service",   /* Redirect output structure to the directory. */
+    "module": "commonjs",
+    "outDir": "../../build/broker-service",   /* Redirect output structure to the directory. */
     "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "baseUrl": "./src/",                       /* Base directory to resolve non-absolute module names. */
-    // "composite": true,                     /* Enable project compilation */
-    "incremental": true,                      /* Enable incremental compilation */
-    "tsBuildInfoFile": "./obj/incr",          /* Specify file to store incremental compilation information */
-    // "removeComments": true,                /* Do not emit comments to output. */
-    // "noEmit": true,                        /* Do not emit outputs. */
-    // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
-    // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
-    // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "declaration": false,
-    "declarationMap": false,
-
-    //
-    // Fix jest testing
-    //
-    "types": ["jest", "node"],
-    "typeRoots": ["../../node_modules/@types", "./types"]
+    "tsBuildInfoFile": "../../build/_obj/broker-service.buildinfo",          /* Specify file to store incremental compilation information */
+    /* Required for TSOA */
+    "experimentalDecorators": true,
+    "alwaysStrict": false,
+    "noImplicitUseStrict": true,
   },
   "include": [
-    "./src/**/*"
-  ]
+    "./src/**/*.*"
+  ],
+  "references": [{ "path": "../../libs/utils-ts/", "prepend": false }]
 }

@@ -1,4 +1,4 @@
-import ServerStatus from '../exchange/status.json';
+import ServerStatus from '../status/Status.json';
 import { BrokerStatus } from '@the-coin/types';
 /**
  * Gets the operating status of the broker

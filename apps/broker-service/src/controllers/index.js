@@ -1,9 +1,9 @@
 const BillPaymentsController = require('./BillPaymentsController');
 const ETransferController = require('./ETransferController');
 const NewsletterController = require('./NewsletterController');
-const ReferrersController = require('./ReferrersController');
+const ReferrersController = require('./Referrers.controller');
 const SecureController = require('./SecureController');
-const StatusController = require('./StatusController');
+const StatusController = require('./Status.controller');
 const TransferController = require('./TransferController');
 
 module.exports = {

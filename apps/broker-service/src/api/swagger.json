@@ -1,0 +1,121 @@
+{
+	"basePath": "/api/v1",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {
+		"BoolResponse": {
+			"properties": {
+				"success": {
+					"type": "boolean",
+					"x-nullable": true
+				}
+			},
+			"type": "object",
+			"additionalProperties": false
+		},
+		"NewAccountReferal": {
+			"properties": {
+				"referrerId": {
+					"type": "string"
+				},
+				"newAccount": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"referrerId",
+				"newAccount"
+			],
+			"type": "object",
+			"additionalProperties": false
+		}
+	},
+	"info": {
+		"title": "@the-coin/broker-service",
+		"version": "0.1.0",
+		"description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
+		"license": {
+			"name": "Unlicense"
+		}
+	},
+	"paths": {
+		"/referrers": {
+			"get": {
+				"operationId": "ReferrerValid",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/BoolResponse"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "referrerId",
+						"required": true,
+						"type": "string"
+					}
+				]
+			},
+			"post": {
+				"operationId": "ReferralCreate",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/BoolResponse"
+						}
+					},
+					"400": {
+						"description": "Bad request"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "referral",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/NewAccountReferal"
+						}
+					}
+				]
+			}
+		},
+		"/status": {
+			"get": {
+				"operationId": "Status",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"additionalProperties": true,
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {}
+}

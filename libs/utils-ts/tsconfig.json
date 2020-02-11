@@ -1,37 +1,13 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    //"target": "es5",
-    //"module": "commonjs",
-    //"esModuleInterop": true,
-    //"noImplicitAny": false,
-    //"strictNullChecks": true,
-    //"preserveConstEnums": true,
-    //"resolveJsonModule": true,
-    //"forceConsistentCasingInFileNames": true,
-    //"lib": ["ES2015"],
-    //"moduleResolution": "node",
-    //"noEmitOnError": true,
-    //"noFallthroughCasesInSwitch": true,
-    //"noImplicitReturns": true,
-    //"noImplicitThis": true,
-    //"noUnusedLocals": true,
-    //"strict": true,
-    //"strictFunctionTypes": false,
-    //"pretty": true,
-    //"removeComments": true,
-    //"sourceMap": true,
+
     "rootDir": "./src",
     "outDir": "../../build/utils-ts",
 
     "allowSyntheticDefaultImports": true,
 
-    //"incremental": true,
-    "tsBuildInfoFile": "../../build/.obj/utils-ts.buildinfo",
-
-    // "declarationMap": true,
-    // "declaration": true,
-    // "composite": true,
+    "tsBuildInfoFile": "../../build/_obj/utils-ts.buildinfo",
   },
   "include": ["./src/**/*"]
 }

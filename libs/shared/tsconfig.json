@@ -1,11 +1,8 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    //"target": "es2017",
-    //"module": "esnext",
     "outDir": "../../build/shared/",
-    //"incremental": true,
-    "tsBuildInfoFile": "../../build/.obj/shared.buildinfo",
+    "tsBuildInfoFile": "../../build/_obj/shared.buildinfo",
     "rootDir": "./src/",
     "baseUrl": "./",
     "paths": {
