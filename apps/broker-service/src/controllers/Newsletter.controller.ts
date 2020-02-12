@@ -6,13 +6,13 @@ import { SubscriptionDetails, BoolResponse } from '@the-coin/types';
 export class NewsletterController extends Controller {
 
 
-@Get('')
     /**
      * Get subscription details.
      *
      * id String 
      * returns SubscriptionDetails
      **/
+    @Get('newsletterDetails')
     async newsletterDetails(@Query() id: string) : Promise<SubscriptionDetails> {
         try {
             return await Details(id);
@@ -24,12 +24,14 @@ export class NewsletterController extends Controller {
         email: ""
         };
     }
+
     /**
      * Unsubscribe an email address from our newsletter.
      *
      * id String 
      * returns BoolResponse
      **/
+    @Get('newsletterUnsubscribe')
     async newsletterUnsubscribe(@Query() id: string) : Promise<BoolResponse> {
         try {
         const success = await Unsubscribe(id);
@@ -40,38 +42,40 @@ export class NewsletterController extends Controller {
         return {success: false};
     }
 
+    @Response('400', 'Bad request')
 
-  @Response('400', 'Bad request')
-  @Post()
-  /**
-   * Confirm email subscription.
-   *
-   * details SubscriptionDetails 
-   * returns BoolResponse
-   **/
-  async newsletterConfirm(@Body() details: SubscriptionDetails) : Promise<SubscriptionDetails> {
-      try {
-          return await Confirm(details) || {};
-      }
-      catch(err) {
-      console.error(err);
-      throw new Error('Server Error');
-      }
-  }
-  /**
-   * Register an email address for our newsletter.
-   *
-   * email SubscriptionDetails  
-   * returns BoolResponse
-   **/
-  async newsletterSignup(@Body() details: SubscriptionDetails) : Promise<BoolResponse> {
-      try {
-      const success = await Signup(details, true);
-      return { success } 
-      } catch (e) {
-      console.error("Signup: " + JSON.stringify(e));
-      }
-      return {success: false};
-  }
+    /**
+     * Confirm email subscription.
+     *
+     * details SubscriptionDetails 
+     * returns BoolResponse
+     **/
+    @Post("newsletterConfirm")
+    async newsletterConfirm(@Body() details: SubscriptionDetails) : Promise<SubscriptionDetails> {
+        try {
+            return await Confirm(details) || {};
+        }
+        catch(err) {
+        console.error(err);
+        throw new Error('Server Error');
+        }
+    }
+    
+    /**
+     * Register an email address for our newsletter.
+     *
+     * email SubscriptionDetails  
+     * returns BoolResponse
+     **/
+    @Post("newsletterSignup")
+    async newsletterSignup(@Body() details: SubscriptionDetails) : Promise<BoolResponse> {
+        try {
+        const success = await Signup(details, true);
+        return { success } 
+        } catch (e) {
+        console.error("Signup: " + JSON.stringify(e));
+        }
+        return {success: false};
+    }
 
 }
