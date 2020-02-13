@@ -1,20 +1,20 @@
-import { Controller, Body, Route, Post, Response } from 'tsoa';
+import { Controller, Body, Route, Get, Put, Response } from 'tsoa';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, BoolResponse, GoogleGetResult } from "@the-coin/types";
 
 
 
-@Route('etransfer')
+@Route('secure')
 export class SecureController extends Controller {
-
-  @Response('400', 'Bad request')
 
     /**
      * Get the authorization URL to redirect the user to
      *
      * returns GoogleAuthUrl
      **/
-    @Post("googleAuthUrl")
+    @Get("google")
+    @Response('200', 'Google authorization URL')
+    @Response('400', 'Bad request')
     async googleAuthUrl() : Promise<GoogleAuthUrl> {
         try {
             const url = getAuthUrl();
@@ -32,7 +32,9 @@ export class SecureController extends Controller {
      * token GoogleToken 
      * returns GoogleListResult
      **/
-    @Post("googleList")
+    @Put("google/list")
+    @Response('200', 'Account successfully listed')
+    @Response('405', 'Permission Denied')
     async googleList(@Body() token: GoogleToken): Promise<GoogleListResult> {
       try {
         const wallets = await listWallets(token);
@@ -50,7 +52,9 @@ export class SecureController extends Controller {
      * account GoogleUploadPacket 
      * returns BoolResponse
      **/
-    @Post("googlePut")
+    @Put("google/put")
+    @Response('200', 'Account successfully stored')
+    @Response('405', 'Permission Denied')
     async googlePut(@Body() account: GoogleStoreAccount): Promise<BoolResponse> {
       return new Promise(async (resolve, reject) => {
         try {
@@ -72,7 +76,7 @@ export class SecureController extends Controller {
      * token GoogleToken 
      * returns GoogleGetResult
      **/
-    @Post("googleRetrieve")
+    @Put("google/get")
     async googleRetrieve(@Body() request: GoogleToken) : Promise<GoogleGetResult> {
       try {
         const wallets = await fetchWallets(request);
