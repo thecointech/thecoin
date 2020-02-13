@@ -6,7 +6,6 @@ import { CertifiedTransferRequest, CertifiedTransferResponse} from '@the-coin/ty
 @Route('transfert')
 export class TransferController extends Controller {
 
-  @Response('400', 'Bad request')
 
   /**
      * Transfer to another The Coin account
@@ -16,6 +15,8 @@ export class TransferController extends Controller {
      * returns CertifiedTransferResponse
      **/
   @Post()
+  @Response('200', 'The response confirms to the user the order transfer is valid and has been initiated')
+  @Response('405', 'Invalid input')
   async transfer(@Body() request: CertifiedTransferRequest) : Promise<CertifiedTransferResponse> {
     try {
         const result = await DoCertifiedTransferWaitable(request);

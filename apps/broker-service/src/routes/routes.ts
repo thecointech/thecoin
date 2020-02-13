@@ -119,7 +119,7 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
-  app.post('/api/v1/billpayments',
+  app.post('/api/v1/bills/payment',
     function(request: any, response: any, next: any) {
       const args = {
         request: { "in": "body", "name": "request", "required": true, "ref": "CertifiedTransfer" },
@@ -141,7 +141,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/etransfer/eTransfer',
+  app.post('/api/v1/exchange/eTransfer',
     function(request: any, response: any, next: any) {
       const args = {
         request: { "in": "body", "name": "request", "required": true, "ref": "CertifiedTransfer" },
@@ -163,7 +163,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/etransfer/eTransferInCode',
+  app.put('/api/v1/exchange/eTransfer/code',
     function(request: any, response: any, next: any) {
       const args = {
         request: { "in": "body", "name": "request", "required": true, "ref": "SignedMessage" },
@@ -185,7 +185,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/newsletter/newsletterDetails',
+  app.get('/api/v1/newsletter/details',
     function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
@@ -207,7 +207,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/newsletter/newsletterUnsubscribe',
+  app.get('/api/v1/newsletter/unsubscribe',
     function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
@@ -229,7 +229,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/newsletter/newsletterConfirm',
+  app.put('/api/v1/newsletter/confirm',
     function(request: any, response: any, next: any) {
       const args = {
         details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
@@ -251,7 +251,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/newsletter/newsletterSignup',
+  app.post('/api/v1/newsletter/signup',
     function(request: any, response: any, next: any) {
       const args = {
         details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },

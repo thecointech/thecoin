@@ -192,20 +192,27 @@
 		}
 	},
 	"paths": {
-		"/billpayments": {
+		"/bills/payment": {
 			"post": {
 				"operationId": "BillPayment",
 				"produces": [
 					"application/json"
 				],
 				"responses": {
+					"200": {
+						"description": "The response confirms to the user the order has been processed"
+					},
 					"204": {
 						"description": "No content"
 					},
 					"400": {
 						"description": "Bad request"
+					},
+					"405": {
+						"description": "Invalid input"
 					}
 				},
+				"description": "Bill Payment\nCalled by the client to pay a bill with coin via a certified transfer\nMust contain a transfer to this brokers address, and an encrypted BillPayeePacket\n\nrequest CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket\nreturns CertifiedTransferResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -219,20 +226,24 @@
 				]
 			}
 		},
-		"/etransfer/eTransfer": {
+		"/exchange/eTransfer": {
 			"post": {
 				"operationId": "ETransfer",
 				"produces": [
 					"application/json"
 				],
 				"responses": {
+					"200": {
+						"description": "The response confirms to the user the order has been processed"
+					},
 					"204": {
 						"description": "No content"
 					},
-					"400": {
-						"description": "Bad request"
+					"405": {
+						"description": "Invalid input"
 					}
 				},
+				"description": "Request eTransfer    \nCalled by the client to exchange coin for CAD and send via eTransfer\n\nrequest CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket\nreturns CertifiedTransferResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -246,8 +257,8 @@
 				]
 			}
 		},
-		"/etransfer/eTransferInCode": {
-			"post": {
+		"/exchange/eTransfer/code": {
+			"put": {
 				"operationId": "ETransferInCode",
 				"produces": [
 					"application/json"
@@ -258,6 +269,9 @@
 						"schema": {
 							"$ref": "#/definitions/eTransferCodeResponse"
 						}
+					},
+					"405": {
+						"description": "Invalid input"
 					}
 				},
 				"description": "Required answer for eTransfer sent to this broker\nA code unique to the user that is required on all eTransfers sent in to this broker\n\nrequest SignedMessage Signed timestamp message\nreturns eTransferCodeResponse",
@@ -274,7 +288,7 @@
 				]
 			}
 		},
-		"/newsletter/newsletterDetails": {
+		"/newsletter/details": {
 			"get": {
 				"operationId": "NewsletterDetails",
 				"produces": [
@@ -286,6 +300,12 @@
 						"schema": {
 							"$ref": "#/definitions/SubscriptionDetails"
 						}
+					},
+					"400": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Server Error"
 					}
 				},
 				"description": "Get subscription details.\n\nid String \nreturns SubscriptionDetails",
@@ -300,7 +320,7 @@
 				]
 			}
 		},
-		"/newsletter/newsletterUnsubscribe": {
+		"/newsletter/unsubscribe": {
 			"get": {
 				"operationId": "NewsletterUnsubscribe",
 				"produces": [
@@ -312,6 +332,12 @@
 						"schema": {
 							"$ref": "#/definitions/BoolResponse"
 						}
+					},
+					"400": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Server Error"
 					}
 				},
 				"description": "Unsubscribe an email address from our newsletter.\n\nid String \nreturns BoolResponse",
@@ -326,8 +352,8 @@
 				]
 			}
 		},
-		"/newsletter/newsletterConfirm": {
-			"post": {
+		"/newsletter/confirm": {
+			"put": {
 				"operationId": "NewsletterConfirm",
 				"produces": [
 					"application/json"
@@ -340,9 +366,13 @@
 						}
 					},
 					"400": {
-						"description": "Bad request"
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Server Error"
 					}
 				},
+				"description": "Confirm email subscription.\n\ndetails SubscriptionDetails \nreturns BoolResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -356,7 +386,7 @@
 				]
 			}
 		},
-		"/newsletter/newsletterSignup": {
+		"/newsletter/signup": {
 			"post": {
 				"operationId": "NewsletterSignup",
 				"produces": [
@@ -368,6 +398,12 @@
 						"schema": {
 							"$ref": "#/definitions/BoolResponse"
 						}
+					},
+					"400": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Server Error"
 					}
 				},
 				"description": "Register an email address for our newsletter.\n\nemail SubscriptionDetails  \nreturns BoolResponse",
@@ -396,8 +432,12 @@
 						"schema": {
 							"$ref": "#/definitions/BoolResponse"
 						}
+					},
+					"405": {
+						"description": "Server Error"
 					}
 				},
+				"description": "Returns a boolean indicating whether the passed referrer is valid\n\nReferrers ID: This ID must have been previously registered with the system",
 				"security": [],
 				"parameters": [
 					{
@@ -420,10 +460,11 @@
 							"$ref": "#/definitions/BoolResponse"
 						}
 					},
-					"400": {
-						"description": "Bad request"
+					"405": {
+						"description": "Server Error"
 					}
 				},
+				"description": "Set referal for new account\n\nNewAccountReferal: This referral must have been previously registered with the system",
 				"security": [],
 				"parameters": [
 					{
@@ -450,8 +491,15 @@
 							"additionalProperties": true,
 							"type": "object"
 						}
+					},
+					"400": {
+						"description": "Bad request"
+					},
+					"405": {
+						"description": "Server Error"
 					}
 				},
+				"description": "Returns info like brokers address, available balance, etc (?)\nGets the operating status of the broker",
 				"security": [],
 				"parameters": []
 			}
@@ -469,10 +517,11 @@
 							"$ref": "#/definitions/CertifiedTransferResponse"
 						}
 					},
-					"400": {
-						"description": "Bad request"
+					"405": {
+						"description": "Invalid input"
 					}
 				},
+				"description": "Transfer to another The Coin account\nA client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether\n\nrequest CertifiedTransferRequest A request appropriately filled out and signed as described in the comments\nreturns CertifiedTransferResponse",
 				"security": [],
 				"parameters": [
 					{

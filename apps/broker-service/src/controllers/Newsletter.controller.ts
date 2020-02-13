@@ -1,10 +1,9 @@
-import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
+import { Controller, Get, Put, Route, Query, Body, Post, Response } from 'tsoa';
 import { Signup, Confirm, Unsubscribe, Details } from '../Newsletter'
 import { SubscriptionDetails, BoolResponse } from '@the-coin/types';
 
 @Route('newsletter')
 export class NewsletterController extends Controller {
-
 
     /**
      * Get subscription details.
@@ -12,16 +11,19 @@ export class NewsletterController extends Controller {
      * id String 
      * returns SubscriptionDetails
      **/
-    @Get('newsletterDetails')
+    @Get('details')
+    @Response('200', 'Email successfully registered')
+    @Response('400', 'Not Found')
+    @Response('500', 'Server Error')
     async newsletterDetails(@Query() id: string) : Promise<SubscriptionDetails> {
         try {
             return await Details(id);
         } catch (e) {
-        console.error("Details fetch failed: " + JSON.stringify(e));
+            console.error("Details fetch failed: " + JSON.stringify(e));
         }
         return {
-        confirmed: false,
-        email: ""
+            confirmed: false,
+            email: ""
         };
     }
 
@@ -31,18 +33,19 @@ export class NewsletterController extends Controller {
      * id String 
      * returns BoolResponse
      **/
-    @Get('newsletterUnsubscribe')
+    @Get('unsubscribe')
+    @Response('200', 'Email successfully removed')
+    @Response('400', 'Not Found')
+    @Response('500', 'Server Error')
     async newsletterUnsubscribe(@Query() id: string) : Promise<BoolResponse> {
         try {
-        const success = await Unsubscribe(id);
-        return { success } 
+            const success = await Unsubscribe(id);
+            return { success } 
         } catch (e) {
-        console.error("Unsubscribe: " + JSON.stringify(e));
+            console.error("Unsubscribe: " + JSON.stringify(e));
         }
         return {success: false};
     }
-
-    @Response('400', 'Bad request')
 
     /**
      * Confirm email subscription.
@@ -50,14 +53,17 @@ export class NewsletterController extends Controller {
      * details SubscriptionDetails 
      * returns BoolResponse
      **/
-    @Post("newsletterConfirm")
+    @Put("confirm")
+    @Response('200', 'Email registered')
+    @Response('400', 'Not Found')
+    @Response('500', 'Server Error')
     async newsletterConfirm(@Body() details: SubscriptionDetails) : Promise<SubscriptionDetails> {
         try {
             return await Confirm(details) || {};
         }
         catch(err) {
-        console.error(err);
-        throw new Error('Server Error');
+            console.error(err);
+            throw new Error('Server Error');
         }
     }
     
@@ -67,13 +73,16 @@ export class NewsletterController extends Controller {
      * email SubscriptionDetails  
      * returns BoolResponse
      **/
-    @Post("newsletterSignup")
+    @Post("signup")
+    @Response('200', 'Email successfully registered')
+    @Response('400', 'Not Found')
+    @Response('500', 'Server Error')
     async newsletterSignup(@Body() details: SubscriptionDetails) : Promise<BoolResponse> {
         try {
-        const success = await Signup(details, true);
-        return { success } 
+            const success = await Signup(details, true);
+            return { success } 
         } catch (e) {
-        console.error("Signup: " + JSON.stringify(e));
+            console.error("Signup: " + JSON.stringify(e));
         }
         return {success: false};
     }

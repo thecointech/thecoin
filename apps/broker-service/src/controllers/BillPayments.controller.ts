@@ -4,19 +4,21 @@ import { CertifiedTransfer } from "@the-coin/types";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
 
-@Route('billpayments')
+@Route('bills')
 export class BillPaymentsController extends Controller {
-
-    @Response('400', 'Bad request')
 
     /**
      * Bill Payment
      * Called by the client to pay a bill with coin via a certified transfer
+     * Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
      *
      * request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket
      * returns CertifiedTransferResponse
      **/
-    @Post()
+    @Post("payment")
+    @Response('200', 'The response confirms to the user the order has been processed')
+    @Response('400', 'Bad request')
+    @Response('405', 'Invalid input')
     async billPayment(@Body() request: CertifiedTransfer) {
         await DoActionAndNotify(request, ProcessBillPayment);
     }

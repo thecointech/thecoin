@@ -6,7 +6,15 @@ import { Timestamp } from '@google-cloud/firestore';
 @Route('referrers')
 export class ReferrersController extends Controller {
 
-  @Get('')
+  /**
+  * Returns a boolean indicating whether the passed referrer is valid
+  * 
+  * Referrers ID: This ID must have been previously registered with the system
+  * 
+  **/
+  @Get()
+  @Response('200', 'Id Valid')
+  @Response('405', 'Server Error')
   async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
     try {
       const referrer = await GetReferrerData(referrerId);
@@ -20,8 +28,15 @@ export class ReferrersController extends Controller {
     }
   }
 
-  @Response('400', 'Bad request')
+  /**
+  * Set referal for new account
+  * 
+  * NewAccountReferal: This referral must have been previously registered with the system
+  * 
+  **/
   @Post()
+  @Response('200', 'Referral success')
+  @Response('405', 'Server Error')
   async referralCreate(@Body() referral: NewAccountReferal): Promise<BoolResponse> {
     try {
       var now = Timestamp.now();
