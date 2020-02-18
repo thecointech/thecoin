@@ -1,6 +1,6 @@
 #mainContent{
-  margin: 30px;
-  margin-bottom: 50px;
+  margin: 50px;
+  margin-bottom: 80px;
 }
 
 .pageMainInner {
@@ -15,7 +15,7 @@
 
 @media only screen and (max-width: 750px) {
   #mainContent{
-    margin: 10px;
-    margin-bottom: 30px;
+    margin: 15px;
+    margin-bottom: 80px;
   }
 }

@@ -33,23 +33,25 @@ export const HomePage = () => {
   return (
     <React.Fragment>
       <h2 className={styles.h2Home}>
-        Our Socially Responsible, Self-Service Investment Account
+        Combining all the benefits of <br />Investment &amp; Spending
       </h2>
       <Grid divided="vertically">
         <Grid.Row columns={2} id='homeZone' className={styles.mainWrapper}>
           <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
               <ol className={styles.listHome}>
-                <li>Transfer and Pay with &nbsp;&nbsp;
+                <li>Pay Bills and e-Transfer with &nbsp;&nbsp;
                   <img
                     className={styles.interac}
                     alt="interac"
                     src={interac}
                   /></li>
-                <li>Grow your money (average <b>rate of 9.8%</b>) </li>
+                <li>Grow your money (average <b>rate of 9.8%*</b>) </li>
                 <li>Pay <b>No Bank Fees</b></li>
               </ol>
               <p>No engagement, no obligations.</p>
+              <p>*Based on historical returns.**</p>
+              <p>**We can't guarantee the future, all anyone can do is look at history to see what is likely.</p>
 
               <Button as={NavLink} to="/howItWorks" content='More Info' primary size='massive' id='knowMore' />
               <Button as={NavLink} to={"/accounts"} content={accountButtonText} secondary size='massive' id='createAccount' />

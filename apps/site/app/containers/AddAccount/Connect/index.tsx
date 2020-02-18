@@ -26,14 +26,11 @@ export const Connect = () => {
     }
     const theSigner = await ConnectWeb3();
     if (theSigner) {
-      storeSigner(theSigner, referral, accountsApi);
-    }
-    else {
-      alert("We couldn't connect to your account - we don't know why.  If this is an error, please contact support@thecoin.io");
+      storeSigner(theSigner, name, referral, accountsApi);
+      // We redirect directly to the now-active account
+      history.push('/accounts');
     }
 
-    // We redirect directly to the now-active account
-    history.push('/accounts');
     return true;
   }, [referral, name, setForceValidate, accountsApi, history]);
 
@@ -51,7 +48,7 @@ export const Connect = () => {
   );
 }
 
-const storeSigner = async (wallet: TheSigner, referralCode: string, accountsApi: IAccountMapActions) => {
+const storeSigner = async (wallet: TheSigner, name: string, referralCode: string, accountsApi: IAccountMapActions) => {
   accountsApi.addAccount(name, wallet, true);
   accountsApi.setActiveAccount(wallet.address)
   registerReferral(wallet.address, referralCode);  
