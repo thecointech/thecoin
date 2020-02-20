@@ -1,6 +1,28 @@
 {
   "name": "the-coin",
   "private": true,
+  "jest": {
+    "verbose": true,
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.base.json"
+      }
+    },
+    "preset": "ts-jest/presets/js-with-babel",
+    "testEnvironment": "node",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
   "workspaces": {
     "packages": [
       "submodules/*",
