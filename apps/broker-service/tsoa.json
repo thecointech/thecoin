@@ -14,5 +14,8 @@
     "entryFile": "./src/main.ts",
     "routesDir": "./src/routes",
     "middleware": "express"
-  }
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ]
 }
