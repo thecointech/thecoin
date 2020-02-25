@@ -16,18 +16,14 @@ test("Can sign up for email", async () => {
 	// 	return;
 
 	await Signup({
-    email: "stephen.taylor.dev@gmail.com",
+    email: "marie@thecoin.io",
     confirmed: false,
   }, false)
 })
 
 test("Can confirm existing email", async () => {
-  const email = "stephen.taylor.dev@gmail.com";
-  await Signup({
-    email,
-    confirmed: false,
-  }, false)
-
+  const email = "1@thecoin.io";
+  await expect(Signup({ email, confirmed: false,}, false)).resolves.toEqual(true);
   
   var res = await Confirm({
     id: await getDocId(email),

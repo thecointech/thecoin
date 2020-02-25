@@ -26,12 +26,18 @@ export async function SubDoc(email: string)
     collection.doc(); // new empty document
 }
 
+
+export function validateEmail(email: string) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
 export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
-  if (!email || email.indexOf("@") < 0)
+  if (!validateEmail(String(email)))
   {
-    console.log("Invalid email submitted: " + email)
+    console.log("Invalid email submitted: " + email);
     return false;
   }
 
@@ -40,13 +46,13 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
     registerDate: Timestamp.now()
   };
 
-  const userDoc = await SubDoc(email);
+  const userDoc = await SubDoc(String(email));
   await userDoc.set(register, {merge: true});
   
   return sendMail  
     ? await SendTemplate(
       "newsletter@thecoin.io", 
-      email, 
+      String(email), 
       TemplateId.WelcomeConfirm, 
       {
         confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(userDoc.id)
