@@ -1,54 +1,85 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { GoogleWalletItem } from "@the-coin/types";
 import { useAccountMap, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
-import { List, Button } from "semantic-ui-react";
+import { List, Button, ButtonProps } from "semantic-ui-react";
 import { Wallet } from "ethers";
 import { NormalizeAddress } from "@the-coin/utilities";
+import { Dictionary } from "lodash";
+import { useHistory } from "react-router";
+import styles from './styles.module.css';
 
 type Props = {
   wallets: GoogleWalletItem[],
 }
 
+type LoadingWallet = {
+  wallet: Wallet;
+  name: string;
+  id: string;
+  exists: true;
+}
 export const AccountList = ({ wallets }: Props) => {
   const existing = useAccountMap();
-  const existingAccounts = Object.values(existing);
+
+  const loadableWallets: Dictionary<LoadingWallet> = {};
+  wallets.forEach(w => {
+    if (!w.id.name || !w.id.id)
+      return;
+
+    const wallet = JSON.parse(w.wallet!) as Wallet;
+    const address = NormalizeAddress(wallet.address);
+    if (!loadableWallets[address]) {
+      loadableWallets[address] = {
+        wallet,
+        exists: !!existing[address],
+        id: w.id.id,
+        name: w.id.name.split('.wallet')[0]
+      }
+    }
+  });
 
   const accountMapApi = useAccountMapApi();
+  const history = useHistory();
+  const onRestore = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
+    event?.preventDefault();
+    const loadable: LoadingWallet = data.loadable;
+    var {name, wallet, exists} = loadable;
+    if (exists) {
+      accountMapApi.setActiveAccount(wallet.address);
+      history.push("/accounts")
+    }
+    else {
+      accountMapApi.addAccount(name, wallet, true);
+    }
+  }, [accountMapApi, history])
 
 
   return wallets
     ? (
       <List divided relaxed>
         {
-          wallets
-            .filter(w => w.wallet && w.id.name)
-            .map(w => ({
-              wallet: JSON.parse(w.wallet!) as Wallet,
-              id: w.id.id,
-              name: w.id.name!,
-            }))
-            .map(w => ({
-              ...w,
-              exists: !existingAccounts.find(e => e.address === NormalizeAddress(w.wallet?.address))
-            }))
-            .map(w => (
-              <List.Item key={w.id}>
-                <List.Content>
-                  {w.name}
-                  <Button
-                    disabled={w.exists}
-                    style={{ float: "right" }}
-                    onClick={() => accountMapApi.addAccount(w.name, w.wallet, true)}
-                  >
-                    {
-                      w.exists ? 'Already Loaded' : 'Restore'
-                    }
-                  </Button>
-                </List.Content>
-              </List.Item>
-            ))
+          Object
+            .keys(loadableWallets)
+            .map(address => {
+              const w = loadableWallets[address];
+              return (
+                <List.Item key={w.id}>
+                  <List.Content className={styles.accountRow}>
+                    {w.name}
+                    <Button
+                      loadable={w}
+                      onClick={onRestore}
+                    >
+                      {
+                        w.exists ? 'GO TO' : 'RESTORE'
+                      }
+                    </Button>
+                  </List.Content>
+                </List.Item>
+              )
+            })
         }
       </List>
     )
-  : null;
+    : null;
 }

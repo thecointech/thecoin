@@ -14,7 +14,7 @@ export default defineMessages({
   },
   subHeader: {
     id: `${scope}.subHeader`,
-    defaultMessage: 'Check out our delectable selection of pastries',
+    defaultMessage: 'See what interests you from the menu on the left',
   },
   blurb: {
     id: `${scope}.blurb`,

@@ -1,11 +1,12 @@
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/types";
 import { buildResponse, delay } from "./network";
-import testWallet from './testAccount.json';
+import testWallet from './testAccount1.json';
+import Thisismy from './Thisismy.wallet.json';
 
 let wallets = [
   {
     id: "123",
-    name: "TestAccNoT First",
+    name: "TestAccNoT First.wallet.json",
     type: "Type?",
     wallet: JSON.stringify(testWallet),
   },
@@ -14,6 +15,12 @@ let wallets = [
     name: "TestAccNoT Another",
     type: "Type?",
     wallet: JSON.stringify(testWallet),
+  },
+  {
+    id: "789",
+    name: "This is my.wallet.json",
+    type: "Type?",
+    wallet: JSON.stringify(Thisismy),
   }
 ];
 

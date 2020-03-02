@@ -1,0 +1,10 @@
+
+.accountRow {
+  display: flex;
+  align-items: center;
+}
+
+.accountRow > :last-child {
+  margin: 0 !important;
+  margin-left: auto !important;
+}
