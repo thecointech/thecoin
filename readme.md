@@ -69,6 +69,15 @@ https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-
 You should now see the website load and be able to interact with it.
 
 
+========================================================================================
+====================================== API =============================================
+================================= 2nd march 2020 =======================================
+========================================================================================
+cd apps/broker-service
+yarn install
+yarn dev
+Navigate to localhost:4000/docs for swagger
+
 
 ========================================================================================
 ====================================== JEST ============================================
@@ -116,4 +125,6 @@ On 2nd march 2020: 11 errors are still not fixed:
 ==================================== Firestore =========================================
 ================================= 2nd march 2020 =======================================
 ========================================================================================
+Root of the project: firebase emulators:start --only firestore
+Check https://firebase.google.com/docs/cli for more infos
 For local tests the firestore.rules can be modified of not used at all. If no rules are defined they will be considered open (read and write).
