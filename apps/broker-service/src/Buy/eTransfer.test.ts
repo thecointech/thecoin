@@ -14,10 +14,11 @@ async function getCode(ts: number)
 }
 
 test("Can generate eTransfer key", async () => {
+  jest.setTimeout(50000);
 	const code = await getCode(Date.now());
 	expect(code).toBeTruthy();
 	expect(code.length).toBe(6);
-})
+});
 
 test("rejects old eTransfer key", async () => {
 
@@ -30,4 +31,4 @@ test("rejects old eTransfer key", async () => {
       }
   }
 	await expect(shouldThrow()).rejects.toThrow();
-})
+});

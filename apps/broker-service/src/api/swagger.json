@@ -166,6 +166,116 @@
 			"type": "object",
 			"additionalProperties": false
 		},
+		"GoogleAuthUrl": {
+			"properties": {
+				"url": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"url"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleFileIdent": {
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string",
+					"x-nullable": true
+				},
+				"type": {
+					"type": "string",
+					"x-nullable": true
+				}
+			},
+			"required": [
+				"id"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleListResult": {
+			"properties": {
+				"wallets": {
+					"items": {
+						"$ref": "#/definitions/GoogleFileIdent"
+					},
+					"type": "array"
+				}
+			},
+			"required": [
+				"wallets"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleToken": {
+			"properties": {
+				"token": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"token"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleStoreAccount": {
+			"properties": {
+				"token": {
+					"$ref": "#/definitions/GoogleToken"
+				},
+				"wallet": {
+					"type": "string"
+				},
+				"walletName": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"token",
+				"wallet",
+				"walletName"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleWalletItem": {
+			"properties": {
+				"id": {
+					"$ref": "#/definitions/GoogleFileIdent"
+				},
+				"wallet": {
+					"type": "string",
+					"x-nullable": true
+				}
+			},
+			"required": [
+				"id"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
+		"GoogleGetResult": {
+			"properties": {
+				"wallets": {
+					"items": {
+						"$ref": "#/definitions/GoogleWalletItem"
+					},
+					"type": "array"
+				}
+			},
+			"required": [
+				"wallets"
+			],
+			"type": "object",
+			"additionalProperties": false
+		},
 		"CertifiedTransferResponse": {
 			"properties": {
 				"message": {
@@ -473,6 +583,118 @@
 						"required": true,
 						"schema": {
 							"$ref": "#/definitions/NewAccountReferal"
+						}
+					}
+				]
+			}
+		},
+		"/secure/google": {
+			"get": {
+				"operationId": "GoogleAuthUrl",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/GoogleAuthUrl"
+						}
+					},
+					"400": {
+						"description": "Bad request"
+					}
+				},
+				"description": "Get the authorization URL to redirect the user to\n\nreturns GoogleAuthUrl",
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/secure/google/list": {
+			"put": {
+				"operationId": "GoogleList",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/GoogleListResult"
+						}
+					},
+					"405": {
+						"description": "Permission Denied"
+					}
+				},
+				"description": "Get the listing of available accounts\n\ntoken GoogleToken \nreturns GoogleListResult",
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "token",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/GoogleToken"
+						}
+					}
+				]
+			}
+		},
+		"/secure/google/put": {
+			"put": {
+				"operationId": "GooglePut",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/BoolResponse"
+						}
+					},
+					"405": {
+						"description": "Permission Denied"
+					}
+				},
+				"description": "Store on google drive\n\naccount GoogleUploadPacket \nreturns BoolResponse",
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "account",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/GoogleStoreAccount"
+						}
+					}
+				]
+			}
+		},
+		"/secure/google/get": {
+			"put": {
+				"operationId": "GoogleRetrieve",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/GoogleGetResult"
+						}
+					}
+				},
+				"description": "Retrieve previously-stored file from google drive\n\ntoken GoogleToken \nreturns GoogleGetResult",
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "request",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/GoogleToken"
 						}
 					}
 				]

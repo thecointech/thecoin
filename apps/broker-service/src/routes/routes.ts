@@ -11,6 +11,8 @@ import { NewsletterController } from './../controllers/Newsletter.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ReferrersController } from './../controllers/Referrers.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { SecureController } from './../controllers/Secure.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { StatusController } from './../controllers/Status.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TransferController } from './../controllers/Transfert.controller';
@@ -96,6 +98,67 @@ const models: TsoaRoute.Models = {
     "properties": {
       "referrerId": { "dataType": "string", "required": true },
       "newAccount": { "dataType": "string", "required": true },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleAuthUrl": {
+    "dataType": "refObject",
+    "properties": {
+      "url": { "dataType": "string", "required": true },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleFileIdent": {
+    "dataType": "refObject",
+    "properties": {
+      "id": { "dataType": "string", "required": true },
+      "name": { "dataType": "string" },
+      "type": { "dataType": "string" },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleListResult": {
+    "dataType": "refObject",
+    "properties": {
+      "wallets": { "dataType": "array", "array": { "ref": "GoogleFileIdent" }, "required": true },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleToken": {
+    "dataType": "refObject",
+    "properties": {
+      "token": { "dataType": "string", "required": true },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleStoreAccount": {
+    "dataType": "refObject",
+    "properties": {
+      "token": { "ref": "GoogleToken", "required": true },
+      "wallet": { "dataType": "string", "required": true },
+      "walletName": { "dataType": "string", "required": true },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleWalletItem": {
+    "dataType": "refObject",
+    "properties": {
+      "id": { "ref": "GoogleFileIdent", "required": true },
+      "wallet": { "dataType": "string" },
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "GoogleGetResult": {
+    "dataType": "refObject",
+    "properties": {
+      "wallets": { "dataType": "array", "array": { "ref": "GoogleWalletItem" }, "required": true },
     },
     "additionalProperties": false,
   },
@@ -314,6 +377,93 @@ export function RegisterRoutes(app: express.Express) {
 
 
       const promise = controller.referralCreate.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get('/api/v1/secure/google',
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new SecureController();
+
+
+      const promise = controller.googleAuthUrl.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.put('/api/v1/secure/google/list',
+    function(request: any, response: any, next: any) {
+      const args = {
+        token: { "in": "body", "name": "token", "required": true, "ref": "GoogleToken" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new SecureController();
+
+
+      const promise = controller.googleList.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.put('/api/v1/secure/google/put',
+    function(request: any, response: any, next: any) {
+      const args = {
+        account: { "in": "body", "name": "account", "required": true, "ref": "GoogleStoreAccount" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new SecureController();
+
+
+      const promise = controller.googlePut.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.put('/api/v1/secure/google/get',
+    function(request: any, response: any, next: any) {
+      const args = {
+        request: { "in": "body", "name": "request", "required": true, "ref": "GoogleToken" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new SecureController();
+
+
+      const promise = controller.googleRetrieve.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

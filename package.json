@@ -1,28 +1,6 @@
 {
   "name": "the-coin",
   "private": true,
-  "jest": {
-    "verbose": true,
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.base.json"
-      }
-    },
-    "preset": "ts-jest/presets/js-with-babel",
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
   "workspaces": {
     "packages": [
       "submodules/*",
@@ -49,10 +27,13 @@
     "start:site": "cd apps/site && yarn start"
   },
   "dependencies": {
+    "@firebase/testing": "^0.16.12",
     "@types/url-join": "^4.0.0",
     "axios": "^0.19.0",
     "base32": "^0.0.6",
     "ethers": "^4.0.41",
+    "firebase-admin": "^8.9.2",
+    "firebase-functions-test": "^0.2.0",
     "invariant": "2.2.4",
     "lodash": "^4.17.14",
     "moment": "^2.24.0",
@@ -124,6 +105,7 @@
     "husky": "3.0.0",
     "jest": "24.9.0",
     "jest-cli": "24.8.0",
+    "jest-environment-uint8array": "^1.0.0",
     "jest-watch-typeahead": "0.3.1",
     "lerna": "^3.19.0",
     "lint-staged": "9.5.0",

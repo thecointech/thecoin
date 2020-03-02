@@ -14,7 +14,7 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 	fin = now.getSeconds() * 1000 + now.getMilliseconds() + toWait;
 
 	expect(toWait).toEqual(0); // "Waited when it should not have");
-	done();
+	//done();
 });
 
 test('should return a valid rate', async function() {
@@ -25,6 +25,7 @@ test('should return a valid rate', async function() {
 });
 
 test('should return latest rate', async function() {
+	let now = new Date();
 	const latest = await Update.GetRatesFor(now.getTime(), 0)
 	expect(latest.ValidFrom).toBeLessThanOrEqual(now); //, "Fetched rate is not yet valid")
 	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now); //, "Fetched rate is already invalid")

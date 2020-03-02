@@ -1,5 +1,5 @@
 
-import { Signup, Confirm, Unsubscribe, SubDoc } from './index'
+import { Signup, Confirm, Unsubscribe, SubDoc } from './newsletter'
 import * as firestore from '../exchange/Firestore'
 
 process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
@@ -17,13 +17,13 @@ test("Can sign up for email", async () => {
 
 	await Signup({
     email: "marie@thecoin.io",
-    confirmed: false,
+    confirmed: true,
   }, false)
-})
+});
 
 test("Can confirm existing email", async () => {
-  const email = "1@thecoin.io";
-  await expect(Signup({ email, confirmed: false,}, false)).resolves.toEqual(true);
+  const email = "marie@thecoin.io";
+  expect(Signup({ email, confirmed: false,}, false)).resolves.toEqual(true);
   
   var res = await Confirm({
     id: await getDocId(email),
