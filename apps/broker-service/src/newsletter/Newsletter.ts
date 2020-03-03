@@ -26,6 +26,10 @@ export async function SubDoc(email: string)
     collection.doc(); // new empty document
 }
 
+export async function numberOccurrencesEmail(email: string) {
+  var numberOccurences = (await (await GetCollection().where("email", "==", email).get()).size);
+  return numberOccurences;
+}
 
 export function validateEmail(email: string) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -35,10 +39,21 @@ export function validateEmail(email: string) {
 export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
+  // Check it email is OK
   if (!validateEmail(String(email)))
   {
     console.log("Invalid email submitted: " + email);
     return false;
+  } 
+  if (details.email) {
+    details.email = details.email.toLowerCase();
+
+    //Check if email is already here
+    var numberOcc = await numberOccurrencesEmail(details.email);
+    if (numberOcc > 0){
+      console.log("Email already subscribed: " + email );
+      return false;
+    }
   }
 
   const register: EmailSubscription = {
