@@ -1,5 +1,5 @@
 import { Controller, Get, Put, Route, Query, Body, Post, Response } from 'tsoa';
-import { Signup, Confirm, Unsubscribe, Details } from '../Newsletter'
+import { Signup, Confirm, Unsubscribe, Details } from '../newsletter/Newsletter'
 import { SubscriptionDetails, BoolResponse } from '@the-coin/types';
 
 @Route('newsletter')
