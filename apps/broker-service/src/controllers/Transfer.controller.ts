@@ -3,7 +3,7 @@ import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransf
 import { CertifiedTransferRequest, CertifiedTransferResponse} from '@the-coin/types'
 
 
-@Route('transfert')
+@Route('transfer')
 export class TransferController extends Controller {
 
 
