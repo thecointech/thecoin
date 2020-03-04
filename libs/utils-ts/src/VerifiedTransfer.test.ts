@@ -37,4 +37,4 @@ test("Verified signature matches", async () => {
     signature
   });
   expect(signer2 == wallet.address);
-});
+}, 50000);

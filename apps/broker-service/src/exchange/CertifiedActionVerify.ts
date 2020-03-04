@@ -3,7 +3,7 @@ import { CertifiedTransfer } from '@the-coin/types'
 import { NormalizeAddress } from '@the-coin/utilities';
 import { GetSigner } from '@the-coin/utilities/VerifiedAction'
 import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer'
-import status from './status.json';
+import status from '../status/Status.json';
 
 const ValidSignatures = (action: CertifiedTransfer) => {
   const actionSigner = GetSigner(action);

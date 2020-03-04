@@ -3,7 +3,7 @@ import { GetContract } from "@the-coin/utilities/TheContract";
 import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
-import status from './status.json';
+import status from '../status/Status.json';
 
 import * as firestore from './Firestore'
 import { IsDebug } from "@the-coin/utilities/IsDebug";

@@ -1,0 +1,53 @@
+import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
+import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
+import { BoolResponse, NewAccountReferal } from '@the-coin/types';
+import { Timestamp } from '@google-cloud/firestore';
+
+@Route('referrers')
+export class ReferrersController extends Controller {
+
+  /**
+  * Returns a boolean indicating whether the passed referrer is valid
+  * 
+  * Referrers ID: This ID must have been previously registered with the system
+  * 
+  **/
+  @Get()
+  @Response('200', 'Id Valid')
+  @Response('405', 'Server Error')
+  async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
+    try {
+      const referrer = await GetReferrerData(referrerId);
+      return {
+        success: !!referrer
+      };
+    }
+    catch(err) {
+      console.error(err);
+      throw new Error('Server Error');
+    }
+  }
+
+  /**
+  * Set referal for new account
+  * 
+  * NewAccountReferal: This referral must have been previously registered with the system
+  * 
+  **/
+  @Post()
+  @Response('200', 'Referral success')
+  @Response('405', 'Server Error')
+  async referralCreate(@Body() referral: NewAccountReferal): Promise<BoolResponse> {
+    try {
+      var now = Timestamp.now();
+      await CreateReferree(referral, now);
+      return {
+        success: true
+      };
+    } catch(err) {
+      console.error(err);
+      this.setStatus(500); 
+      throw new Error('Server Error');
+    }
+  }
+}

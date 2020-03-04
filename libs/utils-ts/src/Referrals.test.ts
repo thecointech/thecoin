@@ -5,7 +5,7 @@ import {
   GetUsersReferrer
 } from "./Referrals";
 import { GetUserDoc } from "./User";
-import { BrokerCAD } from "@the-coin/types";
+import { NewAccountReferal } from "@the-coin/types";
 
 import "./Firestore.test";
 import { firestore } from "@firebase/testing";
@@ -23,7 +23,7 @@ async function ClearExistingUser(address: string) {
 
 test("Referrals work as expected", async () => {
   jest.setTimeout(30000);
-  const validAddress = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
+  const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
 
   // Create a referrer
   const referralId = await CreateReferrer(validAddress, validAddress);
@@ -47,12 +47,12 @@ test("Referrals work as expected", async () => {
 
   // Running on emulator
   // Create new account referral
-  const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; // BrokerCAD wallet
+  const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; //  wallet
   // Allow any existing to be removed
   await ClearExistingUser(newAddress);
 
   // Create new referral
-  const referral: BrokerCAD.NewAccountReferal = {
+  const referral: NewAccountReferal = {
     referrerId: junk,
     newAccount: newAddress
   };
