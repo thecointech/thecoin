@@ -14,15 +14,19 @@ test("Can sign up for email", async () => {
 	// I don't want to spam myself, so only run this test if manually requested
 	// if (!isThisAManualTest())
 	// 	return;
-
+  var email = "marie@thecoin.io";
 	await Signup({
-    email: "MaQiiE@thecoin.io",
+    email: email,
     confirmed: true,
   }, false)
+
+  // Let's clean after
+  const id = await getDocId(email);
+  await Unsubscribe(id);
 });
 
 test("Can confirm existing email", async () => {
-  const email = "1@thecoin.io";
+  const email = "yiopieowyi@ghgyu.io";
   await (Signup({ email, confirmed: false,}, false));
   
   var res = await Confirm({
@@ -35,6 +39,10 @@ test("Can confirm existing email", async () => {
   expect(res).toBeTruthy();
   expect(res!.confirmed).toBeTruthy();
   expect(res!.email).toBe(email);
+
+  // Let's clean after
+  const id = await getDocId(email);
+  await Unsubscribe(id);
 });
 
 test("Cannot confim non-existent signup", async () => {

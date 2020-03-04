@@ -27,8 +27,17 @@ export async function SubDoc(email: string)
 }
 
 export async function numberOccurrencesEmail(email: string) {
-  var numberOccurences = (await (await GetCollection().where("email", "==", email).get()).size);
+  var numberOccurences = (await GetCollection().where("email", "==", email).get()).size;
   return numberOccurences;
+}
+
+export async function isAlreadySubscribed(email: string) {
+  var numberOccurences = await numberOccurrencesEmail(email);
+  if (numberOccurences > 0){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function validateEmail(email: string) {
@@ -49,8 +58,8 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
     details.email = details.email.toLowerCase();
 
     //Check if email is already here
-    var numberOcc = await numberOccurrencesEmail(details.email);
-    if (numberOcc > 0){
+    var alreadySubscribed = await isAlreadySubscribed(details.email);
+    if (alreadySubscribed){
       console.log("Email already subscribed: " + email );
       return false;
     }
@@ -63,7 +72,7 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 
   const userDoc = await SubDoc(String(email));
   await userDoc.set(register, {merge: true});
-  
+
   return sendMail  
     ? await SendTemplate(
       "newsletter@thecoin.io", 
