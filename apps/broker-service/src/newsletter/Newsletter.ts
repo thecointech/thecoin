@@ -26,6 +26,19 @@ export async function SubDoc(email: string)
     collection.doc(); // new empty document
 }
 
+export async function numberOccurrencesEmail(email: string) {
+  var numberOccurences = (await GetCollection().where("email", "==", email).get()).size;
+  return numberOccurences;
+}
+
+export async function isAlreadySubscribed(email: string) {
+  var numberOccurences = await numberOccurrencesEmail(email);
+  if (numberOccurences > 0){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export function validateEmail(email: string) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -35,10 +48,21 @@ export function validateEmail(email: string) {
 export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
+  // Check it email is OK
   if (!validateEmail(String(email)))
   {
     console.log("Invalid email submitted: " + email);
     return false;
+  } 
+  if (details.email) {
+    details.email = details.email.toLowerCase();
+
+    //Check if email is already here
+    var alreadySubscribed = await isAlreadySubscribed(details.email);
+    if (alreadySubscribed){
+      console.log("Email already subscribed: " + email );
+      return false;
+    }
   }
 
   const register: EmailSubscription = {
@@ -48,7 +72,7 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 
   const userDoc = await SubDoc(String(email));
   await userDoc.set(register, {merge: true});
-  
+
   return sendMail  
     ? await SendTemplate(
       "newsletter@thecoin.io", 
