@@ -27,6 +27,7 @@ export async function SubDoc(email: string)
 }
 
 export async function numberOccurrencesEmail(email: string) {
+  var email = email.toLowerCase();
   var numberOccurences = (await GetCollection().where("email", "==", email).get()).size;
   return numberOccurences;
 }
@@ -60,7 +61,7 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
     //Check if email is already here
     var alreadySubscribed = await isAlreadySubscribed(details.email);
     if (alreadySubscribed){
-      console.log("Email already subscribed: " + email );
+      console.log("Email already subscribed: " + details.email );
       return false;
     }
   }
