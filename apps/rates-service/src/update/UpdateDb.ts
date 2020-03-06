@@ -3,10 +3,10 @@
 // the project specified by the GOOGLE_CLOUD_PROJECT environment variable. See
 // https://github.com/GoogleCloudPlatform/google-cloud-node/blob/master/docs/authentication.md
 // These environment variables are set automatically on Google App Engine
-const Datastore = require('@google-cloud/datastore');
-const fetch = require("node-fetch");
-const ApiKey = require('./ApiKey');
-const tz = require('timezone/loaded');
+import { Datastore } from '@google-cloud/datastore';
+import { fetch } from "node-fetch";
+import { ApiKey }  from './ApiKey';
+import { tz }  from 'timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
 // Rates come into effect 30 seconds afeter the market rate.
@@ -62,7 +62,7 @@ let Exchanges = {
 //
 //  Returns the latest stored rate, or null if none present
 //
-function GetLatestExchangeRate(code) {
+export function GetLatestExchangeRate(code) {
     return new Promise((resolve, reject) => {
         let exchange = Exchanges[code];
         if (exchange == null) {
@@ -86,7 +86,7 @@ function GetLatestExchangeRate(code) {
     });
 }
 
-function SetMostRecentRate(code, newRecord) {
+export function SetMostRecentRate(code, newRecord) {
     Exchanges[code].LatestRate = newRecord;
     return datastore.save({
         key: Exchanges[code].LatestKey,
@@ -94,7 +94,7 @@ function SetMostRecentRate(code, newRecord) {
     });
 }
 
-function InsertRate(code, ts, newRecord) {
+export function InsertRate(code, ts, newRecord) {
     let recordKey = datastore.key([code, ts]);
     return datastore.save({
         key: recordKey,
@@ -110,7 +110,7 @@ function InsertRate(code, ts, newRecord) {
 // the existing rate if it decides that the current
 // rate is still valid (ie - if it decides the market is closed)
 //
-async function EnsureLatestCoinRate(now) {
+export async function EnsureLatestCoinRate(now) {
     let latest = await GetLatestExchangeRate(0);
     const validUntil = latest ? latest.ValidUntil : 0;
 
@@ -124,7 +124,7 @@ async function EnsureLatestCoinRate(now) {
     return await UpdateLatestCoinRate(now, validUntil);
 }
 
-async function UpdateLatestCoinRate(now, latestValidUntil) {
+export async function UpdateLatestCoinRate(now, latestValidUntil) {
     let newRecord = await GetLatestCoinRate(now, latestValidUntil);
     InsertRate(0, newRecord.ValidUntil, newRecord);
     SetMostRecentRate(0, newRecord);
@@ -132,7 +132,7 @@ async function UpdateLatestCoinRate(now, latestValidUntil) {
     return latest;
 }
 
-async function GetLatestCoinRate(now, latestValidUntil) {
+export async function GetLatestCoinRate(now, latestValidUntil) {
         // So we are legitimately updating.  Fetch
     // the latest records.
     var data = await QueryCoinRates();
@@ -199,7 +199,7 @@ async function GetLatestCoinRate(now, latestValidUntil) {
     return new ExchangeRate(low, high, validFrom, validUntil);
 }
 
-function FixCoinValidUntil(lastTime, now) {
+export function FixCoinValidUntil(lastTime, now) {
     let fixedUntil = now
     // If EOD, add enough time so the market is open again
     if (tzus(lastTime, "%-HH%MM", "America/New_York") == "16H00M") {
@@ -237,7 +237,7 @@ function FixCoinValidUntil(lastTime, now) {
     return fixedUntil
 }
 
-async function QueryExchange(args) {
+export async function QueryExchange(args) {
     var avURL = 'https://www.alphavantage.co/query?function=' + args + '&apikey=' + ApiKey.AlphaVantage;
     try {
         const response = await fetch(avURL);
@@ -250,7 +250,7 @@ async function QueryExchange(args) {
     return null;
 }
 
-async function QueryCoinRates() {
+export async function QueryCoinRates() {
     var forexJs = await QueryExchange("TIME_SERIES_INTRADAY&symbol=SPX&interval=1min");
     var dataJs = forexJs["Time Series (1min)"];
     return dataJs;
@@ -258,7 +258,7 @@ async function QueryCoinRates() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function AlignToNextBoundary(timestamp, updateInterval)
+export function AlignToNextBoundary(timestamp, updateInterval)
 {
     let hours = tzus(timestamp, "%H", "America/New_York");
     let minutes = tzus(timestamp, "%M", "America/New_York");
@@ -293,13 +293,13 @@ function AlignToNextBoundary(timestamp, updateInterval)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function QueryForexRate(currencyCode) {
+export async function QueryForexRate(currencyCode) {
     const ticker = Exchanges[currencyCode].Name;
     var forexJs = await QueryExchange("CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=" + ticker);
     return forexJs["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
 }
 
-async function EnsureLatestFXRate(currencyCode, now) {
+export async function EnsureLatestFXRate(currencyCode, now) {
     let latest = await GetLatestExchangeRate(currencyCode);
     // Only update FX every 5 minutes (it doesn't change that fast).
     const lastUntil = latest ? latest.ValidUntil : 0;
@@ -338,14 +338,14 @@ async function EnsureLatestFXRate(currencyCode, now) {
     return latest
 }
 
-function EnsureLatestRate(code, timestamp) 
+export function EnsureLatestRate(code, timestamp) 
 {
     if (code == 0)
         return EnsureLatestCoinRate(timestamp);
     return EnsureLatestFXRate(code, timestamp);
 }
 
-async function DoUpdates(now) {
+export async function DoUpdates(now) {
 
     try {
         let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
@@ -370,16 +370,16 @@ async function DoUpdates(now) {
     return false;
 }
 
-function Sleep(ms) {
+export function Sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function GetMsTillSecsPast(seconds, nowDate) {
+export function GetMsTillSecsPast(seconds, nowDate) {
     let nowMs = nowDate.getMilliseconds() + nowDate.getSeconds() * 1000;
     return Math.max((seconds * 1000) - nowMs, 0);
 }
 
-function ForceLatestRate(resolve, reject, code, timestamp)
+export function ForceLatestRate(resolve, reject, code, timestamp)
 {
     EnsureLatestRate(code, timestamp)
     .then((rates) => {
@@ -394,79 +394,77 @@ function ForceLatestRate(resolve, reject, code, timestamp)
     })
 }
 
-module.exports = {
-    UpdateRates: function () {
-        return new Promise(async (resolve, reject) => {
-            // Wait at until at least 2 seconds past the mark
-            // to ensure that our data provider is ready with
-            // the latest deets.
-            let pauseMs = GetMsTillSecsPast(2, new Date());
-            await Sleep(pauseMs);
-            let now = new Date().getTime();
-            const success = await DoUpdates(now);
-            if (success)
-                resolve(success);
-            else
-                reject("Update Failed");
-        });
-    },
+export function UpdateRates() {
+    return new Promise(async (resolve, reject) => {
+        // Wait at until at least 2 seconds past the mark
+        // to ensure that our data provider is ready with
+        // the latest deets.
+        let pauseMs = GetMsTillSecsPast(2, new Date());
+        await Sleep(pauseMs);
+        let now = new Date().getTime();
+        const success = await DoUpdates(now);
+        if (success)
+            resolve(success);
+        else
+            reject("Update Failed");
+    });
+}
 
-    GetLatestRateFor: function (currencyCode) {
-        //GetLatestCoinRate
-    },
+ export function GetLatestRateFor(currencyCode) {
+    //GetLatestCoinRate
+}
 
-    GetRatesFor: function (currencyCode, timestamp) {
-        console.log("getting rates for %d at %s", currencyCode, timestamp);
-        return new Promise((resolve, reject) => {
-            // Double check this is not for the future
-            let now = new Date().getTime() + RateOffsetFromMarket;
-            if (timestamp > now)
+export function GetRatesFor(currencyCode, timestamp) {
+    console.log("getting rates for %d at %s", currencyCode, timestamp);
+    return new Promise((resolve, reject) => {
+        // Double check this is not for the future
+        let now = new Date().getTime() + RateOffsetFromMarket;
+        if (timestamp > now)
+        {
+            console.error("Request for future rates (%s) rejected", tzus(timestamp, "%F %R:%S", "America/New_York"));
+            reject("Could not retrieve rates");
+            return;
+        }
+
+        let query = datastore
+            .createQuery(currencyCode)
+            .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
+            .order('__key__')
+            .limit(10)
+
+        datastore.runQuery(query, function (err, entities) {
+            if (err != null)
             {
-                console.error("Request for future rates (%s) rejected", tzus(timestamp, "%F %R:%S", "America/New_York"));
+                console.error(err);
                 reject("Could not retrieve rates");
-                return;
             }
-
-            let query = datastore
-                .createQuery(currencyCode)
-                .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
-                .order('__key__')
-                .limit(10)
-
-            datastore.runQuery(query, function (err, entities) {
-                if (err != null)
-                {
-                    console.error(err);
-                    reject("Could not retrieve rates");
-                }
-                else if (entities.length == 0)
-                {
-                    console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
-                    ForceLatestRate(resolve, reject, currencyCode, timestamp);
-                }
-                else if (entities[0].ValidUntil < timestamp)
-                {
-                    console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidUntil, "%F %R:%S", "America/New_York"));
-                    ForceLatestRate(resolve, reject, currencyCode, timestamp);
-                }
-                else if (entities[0].ValidFrom > timestamp)
-                {
-                    console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidFrom, "%F %R:%S", "America/New_York"));
-                    reject("Could not retrieve rates");
-                }
-                else {
-                    resolve(entities[0]);
-                }
-            });
-        })
-    }
+            else if (entities.length == 0)
+            {
+                console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
+                ForceLatestRate(resolve, reject, currencyCode, timestamp);
+            }
+            else if (entities[0].ValidUntil < timestamp)
+            {
+                console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidUntil, "%F %R:%S", "America/New_York"));
+                ForceLatestRate(resolve, reject, currencyCode, timestamp);
+            }
+            else if (entities[0].ValidFrom > timestamp)
+            {
+                console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidFrom, "%F %R:%S", "America/New_York"));
+                reject("Could not retrieve rates");
+            }
+            else {
+                resolve(entities[0]);
+            }
+        });
+    })
 }
 
-if (process.env.NODE_ENV === 'test') {
-    module.exports.GetMsTillSecsPast = GetMsTillSecsPast;
-    module.exports.FixCoinValidUntil = FixCoinValidUntil;
-    module.exports.GetLatestCoinRate = GetLatestCoinRate;
-    module.exports.AlignToNextBoundary = AlignToNextBoundary;
-    module.exports.FXUpdateInterval = FXUpdateInterval;
-    module.exports.CoinUpdateInterval = CoinUpdateInterval;
-}
+//if (process.env.NODE_ENV === 'test') {
+//    module.exports.GetMsTillSecsPast = GetMsTillSecsPast;
+//    module.exports.FixCoinValidUntil = FixCoinValidUntil;
+//    module.exports.GetLatestCoinRate = GetLatestCoinRate;
+//    module.exports.AlignToNextBoundary = AlignToNextBoundary;
+//    module.exports.FXUpdateInterval = FXUpdateInterval;
+//    module.exports.CoinUpdateInterval = CoinUpdateInterval;
+//}
