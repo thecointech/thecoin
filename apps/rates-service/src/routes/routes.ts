@@ -3,34 +3,12 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { NewsletterController } from './../controllers/Rates.controller';
+import { RatesController } from './../controllers/Rates.controller';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-  "SubscriptionDetails": {
-    "dataType": "refObject",
-    "properties": {
-      "id": { "dataType": "string" },
-      "email": { "dataType": "string" },
-      "confirmed": { "dataType": "boolean" },
-      "firstName": { "dataType": "string" },
-      "lastName": { "dataType": "string" },
-      "country": { "dataType": "string" },
-      "city": { "dataType": "string" },
-    },
-    "additionalProperties": false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  "BoolResponse": {
-    "dataType": "refObject",
-    "properties": {
-      "success": { "dataType": "boolean" },
-    },
-    "additionalProperties": false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const validationService = new ValidationService(models);
 
@@ -41,10 +19,10 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
-  app.get('/api/v1/newsletter/details',
+  app.get('/api/v1/rates',
     function(request: any, response: any, next: any) {
       const args = {
-        id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
+        req: { "in": "query", "name": "req", "required": true, "dataType": "string" },
       };
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -56,76 +34,10 @@ export function RegisterRoutes(app: express.Express) {
         return next(err);
       }
 
-      const controller = new NewsletterController();
+      const controller = new RatesController();
 
 
-      const promise = controller.newsletterDetails.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/newsletter/unsubscribe',
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new NewsletterController();
-
-
-      const promise = controller.newsletterUnsubscribe.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.put('/api/v1/newsletter/confirm',
-    function(request: any, response: any, next: any) {
-      const args = {
-        details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new NewsletterController();
-
-
-      const promise = controller.newsletterConfirm.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/newsletter/signup',
-    function(request: any, response: any, next: any) {
-      const args = {
-        details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new NewsletterController();
-
-
-      const promise = controller.newsletterSignup.apply(controller, validatedArgs as any);
+      const promise = controller.doUpdate.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

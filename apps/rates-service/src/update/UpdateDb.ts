@@ -6,7 +6,7 @@
 import { Datastore } from '@google-cloud/datastore';
 import { fetch } from "node-fetch";
 import { ApiKey }  from './ApiKey';
-import { tz }  from 'timezone/loaded');
+import { tz }  from 'timezone/loaded';
 const tzus = tz(require("timezone/America"));
 
 // Rates come into effect 30 seconds afeter the market rate.
@@ -22,6 +22,10 @@ const CoinUpdateInterval = 60 * 60 * 3 * 1000;
 const FXUpdateInterval = CoinUpdateInterval;
 
 class ExchangeRate {
+    Buy: string;
+    Sell: string;
+    ValidFrom: Date;
+    ValidUntil: Date;
     constructor(buy, sell, from, until) {
         this.Buy = buy;
         this.Sell = sell;
@@ -31,6 +35,9 @@ class ExchangeRate {
 }
 
 class FXRate {
+    Rate: string;
+    ValidFrom: Date;
+    ValidUntil: Date;
     constructor(rate, from, until) {
         this.Rate = rate;
         this.ValidFrom = from;
@@ -77,7 +84,8 @@ export function GetLatestExchangeRate(code) {
         // if we have no cached value, read from DB
         datastore.get(exchange.LatestKey, function (err, entity) {
             if (err == null) {
-                exchange.LatestRate = entity;
+                var latestRate = new ExchangeRate(entity.Buy, entity.Sell, entity.ValidFrom, entity.ValidUntil);
+                exchange.LatestRate = latestRate;
                 resolve(exchange.LatestRate);
             }
             // no error, we just don't have a latest value
@@ -125,10 +133,13 @@ export async function EnsureLatestCoinRate(now) {
 }
 
 export async function UpdateLatestCoinRate(now, latestValidUntil) {
+    var latest;
     let newRecord = await GetLatestCoinRate(now, latestValidUntil);
-    InsertRate(0, newRecord.ValidUntil, newRecord);
-    SetMostRecentRate(0, newRecord);
-    latest = newRecord;
+    if (newRecord){
+        InsertRate(0, newRecord.ValidUntil, newRecord);
+        SetMostRecentRate(0, newRecord);
+        latest = newRecord;
+    }
     return latest;
 }
 
@@ -302,7 +313,9 @@ export async function QueryForexRate(currencyCode) {
 export async function EnsureLatestFXRate(currencyCode, now) {
     let latest = await GetLatestExchangeRate(currencyCode);
     // Only update FX every 5 minutes (it doesn't change that fast).
-    const lastUntil = latest ? latest.ValidUntil : 0;
+    if (latest){
+        const lastUntil = latest ? latest.ValidUntil : 0;
+    }
     if (lastUntil - now > RateOffsetFromMarket)
         return latest;
 
