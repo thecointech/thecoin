@@ -13,7 +13,7 @@
 		}
 	},
 	"paths": {
-		"/rates": {
+		"/rates/doUpdate": {
 			"get": {
 				"operationId": "DoUpdate",
 				"produces": [
@@ -31,7 +31,7 @@
 						"description": "unknown exception"
 					}
 				},
-				"description": "Get rates.\n\nid String \nreturns Status",
+				"description": "Get rates.",
 				"security": [],
 				"parameters": [
 					{

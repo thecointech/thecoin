@@ -7,6 +7,10 @@ import { Datastore } from '@google-cloud/datastore';
 import { fetch } from "node-fetch";
 import { ApiKey }  from './ApiKey';
 import { tz }  from 'timezone/loaded';
+import { Timestamp } from '../../../../libs/types/src/FirebaseFirestore';
+import { any } from 'prop-types';
+//import { ArrayRenderer } from '../../../site/app/containers/HelpDocs/Renderer/ArrayRenderer';
+//import { number } from 'card-validator';
 const tzus = tz(require("timezone/America"));
 
 // Rates come into effect 30 seconds afeter the market rate.
@@ -21,11 +25,11 @@ const RateOffsetFromMarket = 30 * 1000
 const CoinUpdateInterval = 60 * 60 * 3 * 1000;
 const FXUpdateInterval = CoinUpdateInterval;
 
-class ExchangeRate {
+export class ExchangeRate {
     Buy: string;
     Sell: string;
-    ValidFrom: Date;
-    ValidUntil: Date;
+    ValidFrom: number;
+    ValidUntil: number;
     constructor(buy, sell, from, until) {
         this.Buy = buy;
         this.Sell = sell;
@@ -34,10 +38,10 @@ class ExchangeRate {
     }
 }
 
-class FXRate {
+export class FXRate {
     Rate: string;
-    ValidFrom: Date;
-    ValidUntil: Date;
+    ValidFrom: number;
+    ValidUntil: number;
     constructor(rate, from, until) {
         this.Rate = rate;
         this.ValidFrom = from;
@@ -69,7 +73,7 @@ let Exchanges = {
 //
 //  Returns the latest stored rate, or null if none present
 //
-export function GetLatestExchangeRate(code) {
+export function GetLatestExchangeRate(code):Promise<any> {
     return new Promise((resolve, reject) => {
         let exchange = Exchanges[code];
         if (exchange == null) {
@@ -310,14 +314,39 @@ export async function QueryForexRate(currencyCode) {
     return forexJs["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
 }
 
-export async function EnsureLatestFXRate(currencyCode, now) {
+export async function EnsureLatestFXRate(currencyCode, now:number) {
     let latest = await GetLatestExchangeRate(currencyCode);
+    var validFrom = <any>0;
+    var validUntil = <any>0;
+    var lastUntil = <any>0;
     // Only update FX every 5 minutes (it doesn't change that fast).
-    if (latest){
-        const lastUntil = latest ? latest.ValidUntil : 0;
-    }
-    if (lastUntil - now > RateOffsetFromMarket)
-        return latest;
+    if (latest && latest instanceof ExchangeRate){
+        lastUntil = latest ? latest.ValidUntil : 0;
+        lastUntil = lastUntil;
+        if (lastUntil && (<any>lastUntil - <any>now) > RateOffsetFromMarket)
+            return latest;
+
+        // Assume that last interval is still valid (normal operatino)
+        let validFrom = lastUntil;
+        // NOTE: This Valid Until does not take into account time changes, so
+        // may become out-of-sync during DST.  
+        let validUntil = <any>FXUpdateInterval + <any>validFrom;
+        // If the value is out of sync, reset the validUntil 
+        // to be correct again.
+        if (validFrom < now) {
+            // This can happen on first runs, and possibly if
+            // we've had issues and failed a prior update
+            // If our last interval expired prematurely, there isn't much we can do
+            // However, we want to ensure that our valid until is set to about FXUpdateInterval
+            // in the future, as we assume thats the next time we update. 
+
+
+        }
+    }            
+    // We reset validFrom to be timestamp (as we can't
+    // set a price in the past)
+    validFrom = now;
+    validUntil = AlignToNextBoundary(now, FXUpdateInterval)
 
     // Update with the latest USD/CAD forex
     // Unlike stocks, this is a point-in-time,
@@ -326,32 +355,14 @@ export async function EnsureLatestFXRate(currencyCode, now) {
     let rate = await QueryForexRate(currencyCode);
     rate = Number.parseFloat(rate);
 
-    // Assume that last interval is still valid (normal operatino)
-    let validFrom = lastUntil;
-    // NOTE: This Valid Until does not take into account time changes, so
-    // may become out-of-sync during DST.  
-    let validUntil = FXUpdateInterval + validFrom;
-    // If the value is out of sync, reset the validUntil 
-    // to be correct again.
-    if (validFrom < now) {
-        // This can happen on first runs, and possibly if
-        // we've had issues and failed a prior update
-        // If our last interval expired prematurely, there isn't much we can do
-        // However, we want to ensure that our valid until is set to about FXUpdateInterval
-        // in the future, as we assume thats the next time we update. 
 
-        // We reset validFrom to be timestamp (as we can't
-        // set a price in the past)
-        validFrom = now;
-        validUntil = AlignToNextBoundary(now, FXUpdateInterval)
-    }
     latest = new FXRate(rate, validFrom, validUntil);
     InsertRate(currencyCode, validUntil, latest);
     SetMostRecentRate(currencyCode, latest);
     return latest
 }
 
-export function EnsureLatestRate(code, timestamp) 
+export function EnsureLatestRate(code, timestamp:number) 
 {
     if (code == 0)
         return EnsureLatestCoinRate(timestamp);
@@ -359,9 +370,10 @@ export function EnsureLatestRate(code, timestamp)
 }
 
 export async function DoUpdates(now) {
-
     try {
-        let currencyWaits = Object.keys(Exchanges).reduce((accum, value, index) => {
+        const accum = [] as any;
+        let currencyWaits = Object.keys(Exchanges).reduce((accum: Object[], value, index) => {
+            //const accum = [] as any;
             accum.push(EnsureLatestRate(value, now));
             return accum;
         }, []);
@@ -369,11 +381,16 @@ export async function DoUpdates(now) {
         let validUntil = Number.MAX_SAFE_INTEGER;
         for (let i = 0; i < currencyWaits.length; i++) {
             let latestFX = await currencyWaits[i];
-            if (latestFX.ValidUntil < now) {
-                console.error("Invalid timestamp: " + latestFX.ValidUntil);
-                return false;
+            if (latestFX  instanceof ExchangeRate){
+                if (latestFX.ValidUntil < now) {
+                    console.error("Invalid timestamp: " + latestFX.ValidUntil);
+                    return false;
+                }
+                if (validUntil > latestFX.ValidUntil){
+
+                }
+                validUntil = Math.min(validUntil, latestFX.ValidUntil);
             }
-            validUntil = Math.min(validUntil, latestFX.ValidUntil);
         }
         return validUntil;
     }
