@@ -1,5 +1,5 @@
 {
-  "name": "thecoin-core",
+  "name": "@the-coin/rates-service",
   "version": "0.1.0",
   "description": "TheCoin core services.  Published by TheCoin Tech",
   "author": "TheCoin Tech Inc.",
@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/TheCoinCore"
   },
-  "main": "index.js",
+  "main": "src/main.ts",
   "scripts": {
     "deploy": "gcloud app deploy",
     "prestart": "npm install",
