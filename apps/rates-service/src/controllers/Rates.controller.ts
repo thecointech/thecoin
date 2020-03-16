@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Route, Query, Body, Post, Response } from 'tsoa';
+import { Controller, Get, Route, Response } from 'tsoa';
 //import { Signup, Confirm, Unsubscribe, Details } from '../newsletter/Newsletter'
 //import { BoolResponse } from '@the-coin/types';
 
@@ -14,7 +14,7 @@ export class RatesController extends Controller {
     @Get('doUpdate')
     @Response('200', 'Success')
     @Response('405', 'unknown exception')
-    async doUpdate(@Query() req: string) : Promise<any> {
+    async doUpdate() : Promise<any> {
       try {
           return await UpdateRates();
       } catch (e) {

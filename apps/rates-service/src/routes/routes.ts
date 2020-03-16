@@ -22,7 +22,6 @@ export function RegisterRoutes(app: express.Express) {
   app.get('/api/v1/rates/doUpdate',
     function(request: any, response: any, next: any) {
       const args = {
-        req: { "in": "query", "name": "req", "required": true, "dataType": "string" },
       };
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

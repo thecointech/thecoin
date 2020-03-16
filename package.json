@@ -32,8 +32,6 @@
     "axios": "^0.19.0",
     "base32": "^0.0.6",
     "ethers": "^4.0.41",
-    "firebase-admin": "^8.9.2",
-    "firebase-functions-test": "^0.2.0",
     "invariant": "2.2.4",
     "lodash": "^4.17.14",
     "moment": "^2.24.0",

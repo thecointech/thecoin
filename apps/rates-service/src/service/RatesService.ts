@@ -1,4 +1,4 @@
-import { GetRatesFor, ExchangeRate, FXRate } from '../update/UpdateDb';
+import { GetRatesFor } from '../update/UpdateDb';
 /**
  * Exchange Rate
  * Query exchange rate for THE into the given currency
@@ -8,7 +8,7 @@ import { GetRatesFor, ExchangeRate, FXRate } from '../update/UpdateDb';
  * returns FXRate
  **/
 
-export function getConversion(currencyCode, timestamp) {
+export function getConversion(currencyCode: any, timestamp: number) {
   return new Promise(function (resolve, reject) {
     const ts = timestamp || Date.now();
     let coinWait = <any> GetRatesFor(0, ts);

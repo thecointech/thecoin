@@ -3,14 +3,15 @@
 // the project specified by the GOOGLE_CLOUD_PROJECT environment variable. See
 // https://github.com/GoogleCloudPlatform/google-cloud-node/blob/master/docs/authentication.md
 // These environment variables are set automatically on Google App Engine
-import { Datastore } from '@google-cloud/datastore';
-import { fetch } from "node-fetch";
+
+import fetch from "node-fetch";
 import { ApiKey }  from './ApiKey';
-import { tz }  from 'timezone/loaded';
-import { Timestamp } from '../../../../libs/types/src/FirebaseFirestore';
-import { any } from 'prop-types';
 //import { ArrayRenderer } from '../../../site/app/containers/HelpDocs/Renderer/ArrayRenderer';
 //import { number } from 'card-validator';
+
+var Datastore = require('@google-cloud/datastore');
+
+var tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
 // Rates come into effect 30 seconds afeter the market rate.
@@ -26,11 +27,11 @@ const CoinUpdateInterval = 60 * 60 * 3 * 1000;
 const FXUpdateInterval = CoinUpdateInterval;
 
 export class ExchangeRate {
-    Buy: string;
-    Sell: string;
+    Buy: number;
+    Sell: number;
     ValidFrom: number;
     ValidUntil: number;
-    constructor(buy, sell, from, until) {
+    constructor(buy: number, sell: number, from: number, until: number) {
         this.Buy = buy;
         this.Sell = sell;
         this.ValidFrom = from;
@@ -39,10 +40,10 @@ export class ExchangeRate {
 }
 
 export class FXRate {
-    Rate: string;
+    Rate: number;
     ValidFrom: number;
     ValidUntil: number;
-    constructor(rate, from, until) {
+    constructor(rate: number, from: number, until: number) {
         this.Rate = rate;
         this.ValidFrom = from;
         this.ValidUntil = until;
@@ -59,11 +60,13 @@ const datastore = Datastore({
 //
 let Exchanges = {
     0: {
+        Key: 0,
         Name: 'Coin',
         LatestKey: datastore.key([0, 'Latest']),
         LatestRate: null
     },
     124: {
+        Key: 124,
         Name: 'CAD',
         LatestKey: datastore.key([124, 'Latest']),
         LatestRate: null
@@ -73,7 +76,7 @@ let Exchanges = {
 //
 //  Returns the latest stored rate, or null if none present
 //
-export function GetLatestExchangeRate(code):Promise<any> {
+export function GetLatestExchangeRate(code: number):Promise<any> {
     return new Promise((resolve, reject) => {
         let exchange = Exchanges[code];
         if (exchange == null) {
@@ -86,7 +89,7 @@ export function GetLatestExchangeRate(code):Promise<any> {
         }
 
         // if we have no cached value, read from DB
-        datastore.get(exchange.LatestKey, function (err, entity) {
+        datastore.get(exchange.LatestKey, function (err: null, entity: { Buy: any; Sell: any; ValidFrom: any; ValidUntil: any; }) {
             if (err == null) {
                 var latestRate = new ExchangeRate(entity.Buy, entity.Sell, entity.ValidFrom, entity.ValidUntil);
                 exchange.LatestRate = latestRate;
@@ -98,7 +101,7 @@ export function GetLatestExchangeRate(code):Promise<any> {
     });
 }
 
-export function SetMostRecentRate(code, newRecord) {
+export function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
     Exchanges[code].LatestRate = newRecord;
     return datastore.save({
         key: Exchanges[code].LatestKey,
@@ -106,7 +109,7 @@ export function SetMostRecentRate(code, newRecord) {
     });
 }
 
-export function InsertRate(code, ts, newRecord) {
+export function InsertRate(code: number, ts: number, newRecord: ExchangeRate) {
     let recordKey = datastore.key([code, ts]);
     return datastore.save({
         key: recordKey,
@@ -122,7 +125,7 @@ export function InsertRate(code, ts, newRecord) {
 // the existing rate if it decides that the current
 // rate is still valid (ie - if it decides the market is closed)
 //
-export async function EnsureLatestCoinRate(now) {
+export async function EnsureLatestCoinRate(now: number) {
     let latest = await GetLatestExchangeRate(0);
     const validUntil = latest ? latest.ValidUntil : 0;
 
@@ -136,7 +139,7 @@ export async function EnsureLatestCoinRate(now) {
     return await UpdateLatestCoinRate(now, validUntil);
 }
 
-export async function UpdateLatestCoinRate(now, latestValidUntil) {
+export async function UpdateLatestCoinRate(now: number, latestValidUntil: any) {
     var latest;
     let newRecord = await GetLatestCoinRate(now, latestValidUntil);
     if (newRecord){
@@ -147,7 +150,7 @@ export async function UpdateLatestCoinRate(now, latestValidUntil) {
     return latest;
 }
 
-export async function GetLatestCoinRate(now, latestValidUntil) {
+export async function GetLatestCoinRate(now: number, latestValidUntil: number) {
         // So we are legitimately updating.  Fetch
     // the latest records.
     var data = await QueryCoinRates();
@@ -214,7 +217,7 @@ export async function GetLatestCoinRate(now, latestValidUntil) {
     return new ExchangeRate(low, high, validFrom, validUntil);
 }
 
-export function FixCoinValidUntil(lastTime, now) {
+export function FixCoinValidUntil(lastTime: number, now: number) {
     let fixedUntil = now
     // If EOD, add enough time so the market is open again
     if (tzus(lastTime, "%-HH%MM", "America/New_York") == "16H00M") {
@@ -252,7 +255,7 @@ export function FixCoinValidUntil(lastTime, now) {
     return fixedUntil
 }
 
-export async function QueryExchange(args) {
+export async function QueryExchange(args: string) {
     var avURL = 'https://www.alphavantage.co/query?function=' + args + '&apikey=' + ApiKey.AlphaVantage;
     try {
         const response = await fetch(avURL);
@@ -273,7 +276,7 @@ export async function QueryCoinRates() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export function AlignToNextBoundary(timestamp, updateInterval)
+export function AlignToNextBoundary(timestamp: number, updateInterval: number)
 {
     let hours = tzus(timestamp, "%H", "America/New_York");
     let minutes = tzus(timestamp, "%M", "America/New_York");
@@ -308,13 +311,13 @@ export function AlignToNextBoundary(timestamp, updateInterval)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function QueryForexRate(currencyCode) {
+export async function QueryForexRate(currencyCode: number) {
     const ticker = Exchanges[currencyCode].Name;
     var forexJs = await QueryExchange("CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=" + ticker);
     return forexJs["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
 }
 
-export async function EnsureLatestFXRate(currencyCode, now:number) {
+export async function EnsureLatestFXRate(currencyCode: number, now:number) {
     let latest = await GetLatestExchangeRate(currencyCode);
     var validFrom = <any>0;
     var validUntil = <any>0;
@@ -328,9 +331,6 @@ export async function EnsureLatestFXRate(currencyCode, now:number) {
 
         // Assume that last interval is still valid (normal operatino)
         let validFrom = lastUntil;
-        // NOTE: This Valid Until does not take into account time changes, so
-        // may become out-of-sync during DST.  
-        let validUntil = <any>FXUpdateInterval + <any>validFrom;
         // If the value is out of sync, reset the validUntil 
         // to be correct again.
         if (validFrom < now) {
@@ -362,17 +362,16 @@ export async function EnsureLatestFXRate(currencyCode, now:number) {
     return latest
 }
 
-export function EnsureLatestRate(code, timestamp:number) 
+export function EnsureLatestRate(code: number, timestamp:number) 
 {
     if (code == 0)
         return EnsureLatestCoinRate(timestamp);
     return EnsureLatestFXRate(code, timestamp);
 }
 
-export async function DoUpdates(now) {
+export async function DoUpdates(now: number) {
     try {
-        const accum = [] as any;
-        let currencyWaits = Object.keys(Exchanges).reduce((accum: Object[], value, index) => {
+        let currencyWaits = Object.keys(Exchanges).reduce((accum: Object[], value: any) => {
             //const accum = [] as any;
             accum.push(EnsureLatestRate(value, now));
             return accum;
@@ -400,25 +399,25 @@ export async function DoUpdates(now) {
     return false;
 }
 
-export function Sleep(ms) {
+export function Sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function GetMsTillSecsPast(seconds, nowDate) {
+export function GetMsTillSecsPast(seconds: number, nowDate: Date) {
     let nowMs = nowDate.getMilliseconds() + nowDate.getSeconds() * 1000;
     return Math.max((seconds * 1000) - nowMs, 0);
 }
 
-export function ForceLatestRate(resolve, reject, code, timestamp)
+export function ForceLatestRate(resolve: { (value?: unknown): void; (value?: unknown): void; (arg0: any): void; }, reject: { (reason?: any): void; (reason?: any): void; (arg0: string | undefined): void; }, code: number, timestamp: number)
 {
     EnsureLatestRate(code, timestamp)
-    .then((rates) => {
+    .then((rates: ExchangeRate) => {
         if (rates.ValidUntil > timestamp)
             resolve(rates)
         else 
             reject();
     })
-    .catch((err) => {
+    .catch((err: any) => {
         console.error(err);
         reject("Could not retrieve rates");
     })
@@ -440,11 +439,11 @@ export function UpdateRates() {
     });
 }
 
- export function GetLatestRateFor(currencyCode) {
+ export function GetLatestRateFor() {
     //GetLatestCoinRate
 }
 
-export function GetRatesFor(currencyCode, timestamp) {
+export function GetRatesFor(currencyCode: number, timestamp: number) {
     console.log("getting rates for %d at %s", currencyCode, timestamp);
     return new Promise((resolve, reject) => {
         // Double check this is not for the future
@@ -462,7 +461,7 @@ export function GetRatesFor(currencyCode, timestamp) {
             .order('__key__')
             .limit(10)
 
-        datastore.runQuery(query, function (err, entities) {
+        datastore.runQuery(query, function (err: null, entities: string | any[]) {
             if (err != null)
             {
                 console.error(err);
