@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "alwaysStrict": false,
     "noImplicitUseStrict": true,
+    "suppressImplicitAnyIndexErrors": true,
   },
   "include": [
     "./src/**/*.*"

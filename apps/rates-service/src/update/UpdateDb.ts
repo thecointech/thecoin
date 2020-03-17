@@ -78,7 +78,7 @@ let Exchanges = {
 //
 export function GetLatestExchangeRate(code: number):Promise<any> {
     return new Promise((resolve, reject) => {
-        let exchange = Exchanges[code];
+        let exchange = Exchanges[<number>code];
         if (exchange == null) {
             reject("Unsupported Currency");
             return;
