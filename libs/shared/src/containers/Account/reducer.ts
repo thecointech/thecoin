@@ -2,7 +2,7 @@ import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContra
 import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { Log } from 'ethers/providers';
-import { useInjectSaga } from "@the-coin/redux-injectors";
+import { useInjectSaga } from "redux-injectors";
 import { toHuman, IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, IActions, Transaction } from './types';

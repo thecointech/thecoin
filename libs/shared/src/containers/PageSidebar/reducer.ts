@@ -1,5 +1,5 @@
 import { ImmerReducer, createReducerFunction } from 'immer-reducer';
-import { injectReducer, useInjectReducer } from "@the-coin/redux-injectors";
+import { injectReducer, useInjectReducer } from "redux-injectors";
 import { SidebarGenerators, IActions, SidebarGenerator } from './types';
 import { ApplicationBaseState } from '../../types';
 
