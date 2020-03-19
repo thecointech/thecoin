@@ -1,5 +1,5 @@
 
-import { Signup, Confirm, Unsubscribe, SubDoc } from './Newsletter'
+import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail } from './Newsletter'
 import * as firestore from '../exchange/Firestore'
 
 process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
@@ -24,6 +24,35 @@ test("Can sign up for email", async () => {
   const id = await getDocId(email);
   await Unsubscribe(id);
 });
+
+test("Cannot sign up more than once", async () => {
+
+  var email = "marie@thecoin.io";
+	await Signup({
+    email: email,
+    confirmed: true,
+  }, false)
+
+  var email = "Marie@thecoin.io";
+  await Signup({
+    email: email,
+    confirmed: true,
+  }, false)
+
+  var email = "MARIE@thecoin.io";
+	await Signup({
+    email: email,
+    confirmed: true,
+  }, false)
+
+  var numberOccurences = await numberOccurrencesEmail(email)
+  expect(numberOccurences).toBe(1);
+
+  // Let's clean after
+  const id = await getDocId(email);
+  await Unsubscribe(id);
+});
+
 
 test("Can confirm existing email", async () => {
   const email = "yiopieowyi@ghgyu.io";
