@@ -50,6 +50,17 @@ export class FXRate {
     }
 }
 
+class ExchangeObj { 
+    Name: string; 
+    LatestKey: number; 
+    LatestRate: number; 
+    constructor(name: string, latestKey: number, latestRate: number){
+        this.Name = name;
+        this.LatestKey = latestKey;
+        this.LatestRate = latestRate;
+    }
+}
+
 // Instantiate a datastore client
 const datastore = Datastore({
     projectId: "thecoincore-212314"
@@ -58,20 +69,12 @@ const datastore = Datastore({
 //
 // All the supported exchanges
 //
-let Exchanges = {
-    0: {
-        Key: 0,
-        Name: 'Coin',
-        LatestKey: datastore.key([0, 'Latest']),
-        LatestRate: null
-    },
-    124: {
-        Key: 124,
-        Name: 'CAD',
-        LatestKey: datastore.key([124, 'Latest']),
-        LatestRate: null
-    }
-}
+let Exchange0 = new ExchangeObj('Coin', datastore.key([0, 'Latest']), 0);
+let Exchange124 = new ExchangeObj('CAD', datastore.key([124, 'Latest']), 0);
+
+let Exchanges : ExchangeObj[] = [];
+Exchanges.splice(0, 0, Exchange0)
+Exchanges.splice(124, 0, Exchange124)
 
 //
 //  Returns the latest stored rate, or null if none present
@@ -89,10 +92,11 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
         }
 
         // if we have no cached value, read from DB
+
         datastore.get(exchange.LatestKey, function (err: null, entity: { Buy: any; Sell: any; ValidFrom: any; ValidUntil: any; }) {
             if (err == null) {
                 var latestRate = new ExchangeRate(entity.Buy, entity.Sell, entity.ValidFrom, entity.ValidUntil);
-                exchange.LatestRate = latestRate;
+                exchange.LatestRate = latestRate.Buy;
                 resolve(exchange.LatestRate);
             }
             // no error, we just don't have a latest value
@@ -102,7 +106,7 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
 }
 
 export function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
-    Exchanges[code].LatestRate = newRecord;
+    Exchanges[code].LatestRate = newRecord.Buy;
     return datastore.save({
         key: Exchanges[code].LatestKey,
         data: newRecord
