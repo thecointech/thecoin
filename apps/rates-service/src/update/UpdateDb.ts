@@ -455,7 +455,7 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
         if (timestamp > now)
         {
             console.error("Request for future rates (%s) rejected", tzus(timestamp, "%F %R:%S", "America/New_York"));
-            reject("Could not retrieve rates");
+            reject("Could not retrieve rates 1");
             return;
         }
 
@@ -469,7 +469,7 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
             if (err != null)
             {
                 console.error(err);
-                reject("Could not retrieve rates");
+                reject("Could not retrieve rates 2");
             }
             else if (entities.length == 0)
             {
@@ -484,7 +484,7 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
             else if (entities[0].ValidFrom > timestamp)
             {
                 console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidFrom, "%F %R:%S", "America/New_York"));
-                reject("Could not retrieve rates");
+                reject("Could not retrieve rates 3");
             }
             else {
                 resolve(entities[0]);

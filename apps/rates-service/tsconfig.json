@@ -12,6 +12,7 @@
     "alwaysStrict": false,
     "noImplicitUseStrict": true,
     "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false,
   },
   "include": [
     "./src/**/*.*"

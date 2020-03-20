@@ -1,7 +1,14 @@
+
+import * as firestore from '../exchange/Firestore';
+import { ExchangeRate } from '../update/UpdateDb';
+
 const Update = require('../Update/UpdateDb');
-const assert = require('assert');
+//const assert = require('assert');
 const tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
+
+process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
+firestore.init();
 
 test('should return ms to wait to reach "seconds past the minute"', function () {
 	let now = new Date(1539739800123);
@@ -20,15 +27,23 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 test('should return a valid rate', async function() {
 	let now = new Date();
 	const latest = await Update.GetLatestCoinRate(now.getTime(), 0)
-	expect(latest.ValidFrom).toBeLessThanOrEqual(now); //, "Fetched rate is not yet valid")
-	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now); //, "Fetched rate is already invalid")
+	expect(latest.ValidFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
+	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
 });
 
 test('should return latest rate', async function() {
 	let now = new Date();
-	const latest = await Update.GetRatesFor(now.getTime(), 0)
-	expect(latest.ValidFrom).toBeLessThanOrEqual(now); //, "Fetched rate is not yet valid")
-	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now); //, "Fetched rate is already invalid")
+	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime());
+	Update.InsertRate(0, now.getTime()-2000, latestRate);
+	Update.SetMostRecentRate(0, latestRate);
+
+	var latestRate2 = new ExchangeRate(12, 12, now.getTime(), now.getTime());
+	Update.InsertRate(0, now.getTime()-1000, latestRate2);
+	Update.SetMostRecentRate(0, latestRate2);
+    
+	const latest = await Update.GetRatesFor(0, now.getTime())
+	expect(latest.ValidFrom).toBeLessThanOrEqual(<any>now); //, "Fetched rate is not yet valid")
+	expect(latest.ValidUntil).toBeGreaterThanOrEqual(<any>now); //, "Fetched rate is already invalid")
 });
 
 test('should correctly generate a validity taking into account end-of-day', function() {
@@ -47,9 +62,9 @@ test('should correctly generate a validity taking into account end-of-day', func
 })
 
 test('should correctly find boundaries for a variety of times', function() {
-	let validate = function(ts, boundary) {
-		let dbgts = tzus(ts, "%F %H %M:%S", "America/New_York");
-		let dbgbd = tzus(boundary, "%F %H %M:%S", "America/New_York");
+	let validate = function(ts: number, boundary: number) {
+		//let dbgts = tzus(ts, "%F %H %M:%S", "America/New_York");
+		//let dbgbd = tzus(boundary, "%F %H %M:%S", "America/New_York");
 		expect(boundary).toBeGreaterThan(ts); //, "Did not find future boundary")
 		expect(boundary % 1000).toBe(0); //, "Did not remove MS");
 		expect(tzus(boundary, "%M:%S", "America/New_York")).toMatch("31:30"); //, "Did not land on min/sec boundary")
