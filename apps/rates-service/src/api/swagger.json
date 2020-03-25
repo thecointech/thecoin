@@ -13,7 +13,7 @@
 		}
 	},
 	"paths": {
-		"/rates/doUpdate": {
+		"/doUpdate": {
 			"get": {
 				"operationId": "DoUpdate",
 				"produces": [

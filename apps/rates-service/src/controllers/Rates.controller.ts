@@ -4,14 +4,14 @@ import { Controller, Get, Route, Response } from 'tsoa';
 
 import { UpdateRates }  from '../update/UpdateDb';
 
-@Route('rates')
+@Route('doUpdate')
 export class RatesController extends Controller {
 
     /**
      * Get rates.
      *
      **/
-    @Get('doUpdate')
+    @Get('')
     @Response('200', 'Success')
     @Response('405', 'unknown exception')
     async doUpdate() : Promise<any> {

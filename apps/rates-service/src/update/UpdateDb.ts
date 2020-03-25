@@ -6,10 +6,13 @@
 
 import fetch from "node-fetch";
 import { ApiKey }  from './ApiKey';
+//var { Datastore } = require('@google-cloud/datastore');
+import { GetFirestore } from "@the-coin/utilities/Firestore";
+
 //import { ArrayRenderer } from '../../../site/app/containers/HelpDocs/Renderer/ArrayRenderer';
 //import { number } from 'card-validator';
 
-var Datastore = require('@google-cloud/datastore');
+//var Datastore = require('@google-cloud/datastore');
 
 var tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
@@ -50,7 +53,7 @@ export class FXRate {
     }
 }
 
-class ExchangeObj { 
+class ExchangeObj {
     Name: string; 
     LatestKey: number; 
     LatestRate: number; 
@@ -61,20 +64,53 @@ class ExchangeObj {
     }
 }
 
-// Instantiate a datastore client
-const datastore = Datastore({
-    projectId: "thecoincore-212314"
-});
+export let Exchanges : ExchangeObj[] = [];
+
+const getCollectionRates = (type: number) => 
+    GetFirestore().collection("rates/"+type);
+
+
+export async function getRates(type: number){
+  let now = new Date().getTime();
+  const collection = getCollectionRates(type);
+  const snapshot = await collection
+                        .where('validUntil', '>=', now)
+                        .limit(1)
+                        .get();
+  return !snapshot.empty ? 
+     collection.doc(snapshot.docs[0].id) : 
+     collection.doc(); // new empty document
+}
+
 
 //
 // All the supported exchanges
-//
-let Exchange0 = new ExchangeObj('Coin', datastore.key([0, 'Latest']), 0);
-let Exchange124 = new ExchangeObj('CAD', datastore.key([124, 'Latest']), 0);
+// The CAD Rates
+(await getRates(0)).get().then(function(doc) {
+    if (doc.exists) {
+        let Exchange0 = new ExchangeObj('Coin', doc.get("Buy"), 0);
+        Exchanges.splice(0, 0, Exchange0)
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such Rate!");
+    }
+}).catch(function(error) {
+    console.log("Error getting rate:", error);
+});
 
-let Exchanges : ExchangeObj[] = [];
-Exchanges.splice(0, 0, Exchange0)
-Exchanges.splice(124, 0, Exchange124)
+// The Coin Rates
+(await getRates(124)).get().then(function(doc) {
+    if (doc.exists) {
+        let Exchange124 = new ExchangeObj('CAD', doc.get("Buy"), 0);
+        Exchanges.splice(124, 0, Exchange124)
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such Rate");
+    }
+}).catch(function(error) {
+    console.log("Error getting rate:", error);
+});
+
 
 //
 //  Returns the latest stored rate, or null if none present
@@ -105,20 +141,27 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
     });
 }
 
-export function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
+export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
+
     Exchanges[code].LatestRate = newRecord.Buy;
-    return datastore.save({
+    let rateToInsert = {
         key: Exchanges[code].LatestKey,
         data: newRecord
-    });
+    }
+    return (await getRates(code)).set(rateToInsert, {merge: false});
 }
 
-export function InsertRate(code: number, ts: number, newRecord: ExchangeRate) {
+export async function InsertRate(code: number, ts: number, newRecord: ExchangeRate) {
     let recordKey = datastore.key([code, ts]);
-    return datastore.save({
+    
+
+    Exchanges[code].LatestRate = newRecord.Buy;
+    let rateToInsert = {
         key: recordKey,
         data: newRecord
-    });
+    }
+    return (await getRates(code)).set(rateToInsert, {merge: false});
+
 }
 
 //////////////////////////////////////////////////////////////////////////

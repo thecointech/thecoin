@@ -1,6 +1,5 @@
-
 import * as firestore from '../exchange/Firestore';
-import { ExchangeRate } from '../update/UpdateDb';
+import { ExchangeRate, GetCollectionRatesCAD, GetCollectionRatesTheCoin } from '../update/UpdateDb';
 
 const Update = require('../Update/UpdateDb');
 //const assert = require('assert');
@@ -11,6 +10,9 @@ process.env.FIRESTORE_EMULATOR_HOST="localhost:8377"
 firestore.init();
 
 test('should return ms to wait to reach "seconds past the minute"', function () {
+
+	console.log(GetCollectionRatesCAD);
+	console.log(GetCollectionRatesTheCoin);
 	let now = new Date(1539739800123);
 	let toWait = Update.GetMsTillSecsPast(2, now);
 	let fin = now.getSeconds() * 1000 + now.getMilliseconds() + toWait;
