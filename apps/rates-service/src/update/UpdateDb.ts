@@ -69,12 +69,12 @@ export let Exchanges : ExchangeObj[] = [];
 const getCollectionRates = (type: number) => 
     GetFirestore().collection("rates/"+type);
 
-
 export async function getRates(type: number){
   let now = new Date().getTime();
   const collection = getCollectionRates(type);
   const snapshot = await collection
                         .where('validUntil', '>=', now)
+                        .orderBy('validUntil', "desc")
                         .limit(1)
                         .get();
   return !snapshot.empty ? 
@@ -129,7 +129,7 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
 
         // if we have no cached value, read from DB
 
-        datastore.get(exchange.LatestKey, function (err: null, entity: { Buy: any; Sell: any; ValidFrom: any; ValidUntil: any; }) {
+        (await getRates(0)).get(exchange.LatestKey, function (err: null, entity: { Buy: any; Sell: any; ValidFrom: any; ValidUntil: any; }) {
             if (err == null) {
                 var latestRate = new ExchangeRate(entity.Buy, entity.Sell, entity.ValidFrom, entity.ValidUntil);
                 exchange.LatestRate = latestRate.Buy;
@@ -492,7 +492,7 @@ export function UpdateRates() {
 
 export function GetRatesFor(currencyCode: number, timestamp: number) {
     console.log("getting rates for %d at %s", currencyCode, timestamp);
-    return new Promise((resolve, reject) => {
+    return  new Promise(async (resolve, reject) => {
         // Double check this is not for the future
         let now = new Date().getTime() + RateOffsetFromMarket;
         if (timestamp > now)
@@ -502,37 +502,26 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
             return;
         }
 
-        let query = datastore
-            .createQuery(currencyCode)
-            .filter('__key__', '>', datastore.key([currencyCode, timestamp]))
-            .order('__key__')
-            .limit(10)
-
-        datastore.runQuery(query, function (err: null, entities: string | any[]) {
-            if (err != null)
-            {
-                console.error(err);
-                reject("Could not retrieve rates 2");
-            }
-            else if (entities.length == 0)
-            {
-                console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
-                ForceLatestRate(resolve, reject, currencyCode, timestamp);
-            }
-            else if (entities[0].ValidUntil < timestamp)
-            {
-                console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidUntil, "%F %R:%S", "America/New_York"));
-                ForceLatestRate(resolve, reject, currencyCode, timestamp);
-            }
-            else if (entities[0].ValidFrom > timestamp)
-            {
-                console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(entities[0].ValidFrom, "%F %R:%S", "America/New_York"));
-                reject("Could not retrieve rates 3");
-            }
-            else {
-                resolve(entities[0]);
-            }
-        });
+        let datas = await getRates(currencyCode);
+        if ((await datas.get()).exists){
+            reject("Could not retrieve rates 2");
+        }
+        else if (datas.collection.length == 0){
+            console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
+            ForceLatestRate(resolve, reject, currencyCode, timestamp);
+        }
+        else if (datas[0].ValidUntil < timestamp){
+            console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(datas[0].ValidUntil, "%F %R:%S", "America/New_York"));
+            ForceLatestRate(resolve, reject, currencyCode, timestamp);
+        }
+        else if (datas[0].ValidFrom > timestamp){
+            console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(datas[0].ValidFrom, "%F %R:%S", "America/New_York"));
+            reject("Could not retrieve rates 3");
+        }
+        else {
+            resolve(datas[0]);
+        }
+        
     })
 }
 
