@@ -83,40 +83,44 @@ export async function getRates(type: number){
 }
 
 
-//
-// All the supported exchanges
-// The CAD Rates
-(await getRates(0)).get().then(function(doc) {
-    if (doc.exists) {
-        let Exchange0 = new ExchangeObj('Coin', doc.get("Buy"), 0);
-        Exchanges.splice(0, 0, Exchange0)
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("No such Rate!");
-    }
-}).catch(function(error) {
-    console.log("Error getting rate:", error);
-});
+async function initialize(){
+    //
+    // All the supported exchanges
+    // The CAD Rates
+    (await getRates(0)).get().then(function(doc) {
+        if (doc.exists) {
+            let Exchange0 = new ExchangeObj('Coin', doc.get("Buy"), 0);
+            Exchanges.splice(0, 0, Exchange0)
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such Rate!");
+        }
+    }).catch(function(error) {
+        console.log("Error getting rate:", error);
+    });
 
-// The Coin Rates
-(await getRates(124)).get().then(function(doc) {
-    if (doc.exists) {
-        let Exchange124 = new ExchangeObj('CAD', doc.get("Buy"), 0);
-        Exchanges.splice(124, 0, Exchange124)
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("No such Rate");
-    }
-}).catch(function(error) {
-    console.log("Error getting rate:", error);
-});
+    // The Coin Rates
+    (await getRates(124)).get().then(function(doc) {
+        if (doc.exists) {
+            let Exchange124 = new ExchangeObj('CAD', doc.get("Buy"), 0);
+            Exchanges.splice(124, 0, Exchange124)
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such Rate");
+        }
+    }).catch(function(error) {
+        console.log("Error getting rate:", error);
+    });
+}
+
+initialize();
 
 
 //
 //  Returns the latest stored rate, or null if none present
 //
 export function GetLatestExchangeRate(code: number):Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let exchange = Exchanges[<number>code];
         if (exchange == null) {
             reject("Unsupported Currency");
@@ -128,16 +132,17 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
         }
 
         // if we have no cached value, read from DB
-
-        (await getRates(0)).get(exchange.LatestKey, function (err: null, entity: { Buy: any; Sell: any; ValidFrom: any; ValidUntil: any; }) {
-            if (err == null) {
-                var latestRate = new ExchangeRate(entity.Buy, entity.Sell, entity.ValidFrom, entity.ValidUntil);
-                exchange.LatestRate = latestRate.Buy;
-                resolve(exchange.LatestRate);
-            }
-            // no error, we just don't have a latest value
-            else resolve(null);
-        });
+        let datas = await getRates(exchange.LatestKey);
+        let collection = (await datas.get());
+        
+        if ((await datas.get()).exists) {
+            var latestRate = new ExchangeRate(collection.get("Buy"), collection.get("Sell"), collection.get("ValidFrom"), collection.get("ValidUntil"));
+            exchange.LatestRate = latestRate.Buy;
+            resolve(exchange.LatestRate);
+        }
+        // no error, we just don't have a latest value
+        else resolve(null);
+        
     });
 }
 
@@ -152,12 +157,8 @@ export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
 }
 
 export async function InsertRate(code: number, ts: number, newRecord: ExchangeRate) {
-    let recordKey = datastore.key([code, ts]);
-    
-
-    Exchanges[code].LatestRate = newRecord.Buy;
+    //let recordKey = datastore.key([code, ts]);
     let rateToInsert = {
-        key: recordKey,
         data: newRecord
     }
     return (await getRates(code)).set(rateToInsert, {merge: false});
@@ -503,23 +504,24 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
         }
 
         let datas = await getRates(currencyCode);
-        if ((await datas.get()).exists){
+        let collection = (await datas.get());
+        if (!(await datas.get()).exists){
             reject("Could not retrieve rates 2");
-        }
+        } 
         else if (datas.collection.length == 0){
             console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
             ForceLatestRate(resolve, reject, currencyCode, timestamp);
         }
-        else if (datas[0].ValidUntil < timestamp){
-            console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(datas[0].ValidUntil, "%F %R:%S", "America/New_York"));
+        else if (collection.get("ValidUntil") < timestamp){
+            console.warn("Forced update at %s, previous interval expired at %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(collection.get("ValidUntil") , "%F %R:%S", "America/New_York"));
             ForceLatestRate(resolve, reject, currencyCode, timestamp);
         }
-        else if (datas[0].ValidFrom > timestamp){
-            console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(datas[0].ValidFrom, "%F %R:%S", "America/New_York"));
+        else if (collection.get("ValidUntil") > timestamp){
+            console.error("Queried rates are not yet valid: %s < %s", tzus(timestamp, "%F %R:%S", "America/New_York"), tzus(collection.get("ValidFrom") , "%F %R:%S", "America/New_York"));
             reject("Could not retrieve rates 3");
         }
         else {
-            resolve(datas[0]);
+            resolve(collection);
         }
         
     })

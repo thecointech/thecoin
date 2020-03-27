@@ -5,7 +5,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      tsConfig: "tsconfig.base.json"
+      tsConfig: "tsconfig.base.json",
     }
   },
   preset: "ts-jest/presets/js-with-babel",

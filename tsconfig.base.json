@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "module": "esnext",
+    "target":"ES2017",
     "lib": ["dom", "es2017"],
     "types": ["jest", "node"],
     "build": true,
