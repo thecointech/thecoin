@@ -9,6 +9,7 @@ import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 import { ETransfers } from './ETransfers';
+import { Gmail } from 'containers/gmail';
 
 type Props = RouteComponentProps;
 
@@ -39,6 +40,11 @@ const AccountMap: RouterPath[] = [
     name: "Verify",
     urlFragment: "verify",
     creator: (routerProps: AccountPageProps) => ((props: any) => <VerifyAccount {...props} signer={routerProps.account.signer} /> )
+  },
+  {
+    name: "AutoPurchase",
+    urlFragment: "autoPurchase",
+    creator: (routerProps: AccountPageProps) => ((props: any) => <Gmail /> )
   }
 ]
 

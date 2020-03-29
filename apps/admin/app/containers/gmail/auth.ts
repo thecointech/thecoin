@@ -1,104 +1,66 @@
-// import {parse} from 'url'
-// import {remote} from 'electron'
-// import axios from 'axios'
-// import qs from 'qs'
+import { shell } from 'electron';
+import { google } from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 
-// const GOOGLE_AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
-// const GOOGLE_TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
-// const GOOGLE_PROFILE_URL = 'https://www.googleapis.com/userinfo/v2/me'
+import credentials from './credentials.json';
 
-// const GOOGLE_CLIENT_ID = "1006073898040-1oa7a3ehvjs7i4dt030uib4db11srlu0.apps.googleusercontent.com"
-// const GOOGLE_REDIRECT_URI = "broker.manager.app"
+// If modifying these scopes, delete token.json.
+const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
+// The file token.json stores the user's access and refresh tokens, and is
+// created automatically when the authorization flow completes for the first
+// time.
+const TOKEN_KEY = 'token.json';
 
-// export async function googleSignIn () {
-//   const code = await signInWithPopup()
-//   const tokens = await fetchAccessTokens(code)
-//   const {id, email, name} = await fetchGoogleProfile(tokens.access_token)
-//   const providerUser = {
-//     uid: id,
-//     email,
-//     displayName: name,
-//     idToken: tokens.id_token,
-//   }
+/**
+ * Create an OAuth2 client with the given credentials, and then execute the
+ * given callback function.
+ * @param {Object} credentials The authorization client credentials.
+ * @param {function} callback The callback to call with the authorized client.
+ */
+export async function authorize() {
+  const { client_secret, client_id, redirect_uris } = credentials.installed
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id, client_secret, redirect_uris[0]);
 
-//   return providerUser;
-//   //return mySignInFunction(providerUser)
-// }
+  // Check if we have previously stored a token.
+  const existing = localStorage.getItem(TOKEN_KEY)
+  if (existing) {
+    oAuth2Client.setCredentials(JSON.parse(existing));
+  }
+  else {
+    await getNewToken(oAuth2Client);
+  }
+  return oAuth2Client
+}
 
-// export async function fetchGoogleProfile (accessToken: string) {
-//   const response = await axios.get(GOOGLE_PROFILE_URL, {
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${accessToken}`,
-//     },
-//   })
-//   return response.data
-// }
+export function isValid(oAuth2Client: OAuth2Client) {
+  return !!oAuth2Client?.credentials?.access_token;
+}
 
-// export function signInWithPopup () {
-//   return new Promise((resolve, reject) => {
-//     const authWindow = new remote.BrowserWindow({
-//       width: 500,
-//       height: 600,
-//       show: true,
-//     })
+/**
+ * Get and store new token after prompting for user authorization, and then
+ * execute the given callback with the authorized OAuth2 client.
+ * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
+ * @param {getEventsCallback} callback The callback for the authorized client.
+ */
+async function getNewToken(oAuth2Client: OAuth2Client) {
+  const authUrl = oAuth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: SCOPES,
+  });
 
-//     // TODO: Generate and validate PKCE code_challenge value
-//     const urlParams = {
-//       response_type: 'code',
-//       redirect_uri: GOOGLE_REDIRECT_URI,
-//       client_id: GOOGLE_CLIENT_ID,
-//       scope: 'profile email',
-//     }
-//     const authUrl = `${GOOGLE_AUTHORIZATION_URL}?${qs.stringify(urlParams)}`
+  shell.openExternal(authUrl);
+}
 
-//     function handleNavigation (url) {
-//       // ...
-//     }
-
-//     authWindow.on('closed', () => {
-//       // TODO: Handle this smoothly
-//       throw new Error('Auth window was closed by user')
-//     })
-
-//     authWindow.webContents.on('will-navigate', (event, url) => {
-//       handleNavigation(url)
-//     })
-
-//     authWindow.webContents.on('did-get-redirect-request', (event, oldUrl, newUrl) => {
-//       handleNavigation(newUrl)
-//     })
-
-//     authWindow.loadURL(authUrl)
-//   })
-// }
-
-// function handleNavigation (url) {
-// 	const query = parse(url, true).query
-// 	if (query) {
-// 		if (query.error) {
-// 			reject(new Error(`There was an error: ${query.error}`))
-// 		} else if (query.code) {
-// 			// Login is complete
-// 			authWindow.removeAllListeners('closed')
-// 			setImmediate(() => authWindow.close())
-
-// 			// This is the authorization code we need to request tokens
-// 			resolve(query.code)
-// 		}
-// 	}
-// }
-
-// export async function fetchAccessTokens (code) {
-//   const response = await axios.post(GOOGLE_TOKEN_URL, qs.stringify({
-//     code,
-//     client_id: GOOGLE_CLIENT_ID,
-//     redirect_uri: GOOGLE_REDIRECT_URI,
-//     grant_type: 'authorization_code',
-//   }), {
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//   })
-//   return response.data
-// }
+export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
+  if (oAuth2Client.credentials.access_token)
+  {
+    // TODO: timeout?
+  }
+  else
+  {
+    var response = await oAuth2Client.getToken(code)
+    localStorage.setItem(TOKEN_KEY, JSON.stringify(response.tokens))
+    oAuth2Client.setCredentials(response.tokens);  
+  }
+}

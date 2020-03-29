@@ -25,7 +25,7 @@ export type ProcessRecord = {
   fiatDisbursed: number
 }
 
-export type TransferRecord = CertifiedTransfer & ProcessRecord;
+export type CertifiedTransferRecord = CertifiedTransfer & ProcessRecord;
 
 export function isDate(d: Timestamp|Date) : d is Date {
   return (d as Date).getFullYear != undefined;

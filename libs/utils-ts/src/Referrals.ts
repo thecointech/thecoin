@@ -3,9 +3,9 @@ import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
 import { base32Encode } from '@ctrl/ts-base32';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp } from "@the-coin/types/FirebaseFirestore";
+import { Timestamp, CollectionReference, DocumentReference } from "@the-coin/types/FirebaseFirestore";
 
-export function GetReferrersCollection() {
+export function GetReferrersCollection() : CollectionReference {
   return GetFirestore().collection("Referrers");
 }
 
@@ -24,7 +24,7 @@ export interface ReferralData {
 }
 
 // GetReferrer
-export function GetReferrerDoc(referrerId: string) {
+export function GetReferrerDoc(referrerId: string) : DocumentReference {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
     throw new Error("Invalid Referrer");

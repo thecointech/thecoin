@@ -1,11 +1,11 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
-import { InstructionPacket } from "containers/EncryptedList/types";
 import { ETransferPacket } from "@the-coin/types";
 import { Segment } from "semantic-ui-react";
+import { TransferData } from "containers/TransferList/types";
 
-const RenderETransfer = (props: InstructionPacket) => {
-  const eTransfer = props as ETransferPacket;
+const RenderETransfer = (props: TransferData) => {
+  const eTransfer = props.instruction as ETransferPacket;
   return (
     <Segment>
       <div>Email: {eTransfer.email}</div>

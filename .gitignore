@@ -16,3 +16,4 @@ apps/broker-service/src/exchange/secret.json
 apps/broker-service/src/exchange/AutoMailer.secret.json
 apps/broker-service/dist/
 apps/broker-service-old/
+apps/admin/app/containers/gmail/credentials.json
