@@ -17,23 +17,23 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
+    "@google-cloud/firestore": "^2.4.0",
     "cors": "^2.8.5",
+    "ethers": "^4.0.46",
     "express": "^4.16.4",
+    "google-auth-library": "^5.6.1",
+    "googleapis": "47.0.0",
+    "node-mailjet": "^3.3.1",
     "swagger-express-middleware": "3.0.0-alpha.5",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2",
-    "@google-cloud/firestore": "^2.4.0",
-    "googleapis": "47.0.0",
-    "google-auth-library": "^5.6.1",
-    "ethers": "^4.0.41",
-    "node-mailjet": "^3.3.1",
     "tsoa": "^2.5.13"
   },
   "devDependencies": {
+    "@firebase/testing": "^0.16.14",
     "@types/node-mailjet": "^3.3.1",
     "@types/swagger-express-middleware": "^1.0.10",
-    "@types/swagger-ui-express": "^4.1.1",
-    "@firebase/testing": "^0.16.9"
+    "@types/swagger-ui-express": "^4.1.1"
   },
   "eslintConfig": {
     "env": {
