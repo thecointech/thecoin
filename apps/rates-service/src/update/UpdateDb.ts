@@ -147,7 +147,6 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
 }
 
 export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
-
     Exchanges[code].LatestRate = newRecord.Buy;
     let rateToInsert = {
         key: Exchanges[code].LatestKey,
@@ -156,8 +155,7 @@ export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
     return (await getRates(code)).set(rateToInsert, {merge: false});
 }
 
-export async function InsertRate(code: number, ts: number, newRecord: ExchangeRate) {
-    //let recordKey = datastore.key([code, ts]);
+export async function InsertRate(code: number, newRecord: ExchangeRate) {
     let rateToInsert = {
         data: newRecord
     }
@@ -191,7 +189,7 @@ export async function UpdateLatestCoinRate(now: number, latestValidUntil: any) {
     var latest;
     let newRecord = await GetLatestCoinRate(now, latestValidUntil);
     if (newRecord){
-        InsertRate(0, newRecord.ValidUntil, newRecord);
+        InsertRate(0, newRecord);
         SetMostRecentRate(0, newRecord);
         latest = newRecord;
     }
@@ -405,7 +403,7 @@ export async function EnsureLatestFXRate(currencyCode: number, now:number) {
 
 
     latest = new FXRate(rate, validFrom, validUntil);
-    InsertRate(currencyCode, validUntil, latest);
+    InsertRate(currencyCode, latest);
     SetMostRecentRate(currencyCode, latest);
     return latest
 }
