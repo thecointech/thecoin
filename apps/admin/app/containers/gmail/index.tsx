@@ -10,6 +10,7 @@ import { useFxRates, useFxRatesApi, IFxRates } from '@the-coin/shared/containers
 import { TransferList } from 'containers/TransferList/TransferList';
 import { calcCoin, AddSettlementDate } from 'containers/TransferList/utils';
 import { DepositRenderer } from './DepositRenderer';
+import { resolveExisting } from './resolveExisting';
 
 
 export const Gmail = () => {
@@ -33,12 +34,6 @@ export const Gmail = () => {
     // We use the setCode to trigger the second effect below (cheap, I know, but meh)
     setCode("");
   }, [auth, code, setCode])
-
-  // const onProcess = useCallback(async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   const dataIndex = event.currentTarget.getAttribute("data-index");
-  //   const index = parseInt(dataIndex);
-  //   processDeposit(emails[index])
-  // }, [emails]);
   
   //////////////////////////////////////////////////
   // First, we initiate the login process
@@ -51,6 +46,7 @@ export const Gmail = () => {
     if (isValid(auth)) {
       fetchDepositEmails(auth)
         .then(r => addSettlementDate(r, fxApi))
+        .then(r => resolveExisting(r))
         .then(setEmails)
         .then(() => setCompleteIndex(-2))
         .catch(alert)
@@ -93,7 +89,6 @@ export const Gmail = () => {
         markComplete={markComplete}
         />
     </div>
-    
   )
 }
 

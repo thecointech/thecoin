@@ -28,7 +28,7 @@ import base32 from 'base32';
 //import { now } from 'utils/Firebase';
 //import { firestore } from 'firebase';
 
-interface PurchaseRecord {
+export interface PurchaseRecord {
   coin: number,
   fiat: number,
   recieved: Date,

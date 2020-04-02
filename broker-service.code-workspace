@@ -1,8 +1,8 @@
 {
 	"folders": [
-		{
-			"path": "apps\\service-broker"
-		}
+    {
+      "path": "apps\\broker-service"
+    }
   ],
   "settings": {}
 }
