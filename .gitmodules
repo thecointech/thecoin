@@ -1,3 +1,0 @@
-[submodule "submodules/redux-injectors"]
-	path = submodules/redux-injectors
-	url = https://github.com/FrozenKiwi/redux-injectors.git
