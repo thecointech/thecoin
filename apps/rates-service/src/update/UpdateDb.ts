@@ -12,8 +12,6 @@ import { GetFirestore } from "@the-coin/utilities/Firestore";
 //import { ArrayRenderer } from '../../../site/app/containers/HelpDocs/Renderer/ArrayRenderer';
 //import { number } from 'card-validator';
 
-//var Datastore = require('@google-cloud/datastore');
-
 var tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
