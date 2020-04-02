@@ -10,8 +10,6 @@ export class StatusController extends Controller {
   **/
   @Get()
   @Response('200', 'Server status')
-  @Response('400', 'Bad request')
-  @Response('405', 'Server Error')
   async status() {
     return ServerStatus;
   }
