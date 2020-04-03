@@ -64,8 +64,9 @@ class ExchangeObj {
 
 export let Exchanges : ExchangeObj[] = [];
 
+
 const getCollectionRates = (type: number) => 
-    GetFirestore().collection("rates/"+type);
+    GetFirestore().collection("rates"+type);
 
 export async function getRates(type: number){
   let now = new Date().getTime();
@@ -80,9 +81,8 @@ export async function getRates(type: number){
      collection.doc(); // new empty document
 }
 
-
 async function initialize(){
-    //
+    //TODO: array with all the supported currencies
     // All the supported exchanges
     // The CAD Rates
     (await getRates(0)).get().then(function(doc) {
@@ -91,7 +91,7 @@ async function initialize(){
             Exchanges.splice(0, 0, Exchange0)
         } else {
             // doc.data() will be undefined in this case
-            console.log("No such Rate!");
+            //console.log("No such Rate!");
         }
     }).catch(function(error) {
         console.log("Error getting rate:", error);
@@ -104,20 +104,21 @@ async function initialize(){
             Exchanges.splice(124, 0, Exchange124)
         } else {
             // doc.data() will be undefined in this case
-            console.log("No such Rate");
+            //console.log("No such Rate");
         }
     }).catch(function(error) {
         console.log("Error getting rate:", error);
     });
-}
 
-initialize();
+    return Exchanges;
+}
 
 
 //
 //  Returns the latest stored rate, or null if none present
 //
-export function GetLatestExchangeRate(code: number):Promise<any> {
+export async function GetLatestExchangeRate(code: number):Promise<any> {
+    let Exchanges = await initialize();
     return new Promise(async (resolve, reject) => {
         let exchange = Exchanges[<number>code];
         if (exchange == null) {
@@ -145,6 +146,8 @@ export function GetLatestExchangeRate(code: number):Promise<any> {
 }
 
 export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
+    let Exchanges = await initialize();
+    console.log(Exchanges)
     Exchanges[code].LatestRate = newRecord.Buy;
     let rateToInsert = {
         key: Exchanges[code].LatestKey,

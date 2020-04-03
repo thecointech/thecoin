@@ -3,7 +3,6 @@ import { IsDebug } from "@the-coin/utilities/IsDebug";
 
 export async function init()
 {
-console.log("TOTO")
   if (process.env.GAE_ENV) // Release build, running on server
   {
     const server = await import('./Firestore.server')
