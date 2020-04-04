@@ -15,7 +15,7 @@ import { SecureController } from './../controllers/Secure.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { StatusController } from './../controllers/Status.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TransferController } from '../controllers/Transfer.controller';
+import { TransferController } from './../controllers/Transfer.controller';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -488,7 +488,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/transfert',
+  app.post('/api/v1/transfer',
     function(request: any, response: any, next: any) {
       const args = {
         request: { "in": "body", "name": "request", "required": true, "ref": "CertifiedTransferRequest" },
