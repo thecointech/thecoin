@@ -1,5 +1,4 @@
 import { DepositData, OldPurchseDB } from "./types";
-import { GetFirestore } from "@the-coin/utilities/Firestore";
 import { GetUserDoc } from "@the-coin/utilities/User";
 import { Dictionary } from 'lodash';
 
