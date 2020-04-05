@@ -29,8 +29,7 @@ pathFix();
 import {signIn} from './utils/Firebase';
 signIn();
 
-const initialState = {};
-const store = configureAppStore(createReducer, initialState, history);
+const store = configureAppStore(createReducer, undefined, history);
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 

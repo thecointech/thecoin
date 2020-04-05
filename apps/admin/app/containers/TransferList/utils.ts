@@ -26,7 +26,11 @@ export function calcCoin(record: TransferRecord, rates: FXRate[]) {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
   const rate = weSellAt(rates, fxDate);
-  return toCoin(rate * record.fiatDisbursed);
+  const i = weBuyAt(rates, fxDate);
+  if (i > rate) {
+    console.error("Wait, what?")
+  }
+  return toCoin(record.fiatDisbursed / rate);
 }
 
 // Update DB with completion

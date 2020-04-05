@@ -14,6 +14,7 @@ export type Transaction = {
   change: number;
   logEntry: string;
   balance: number;
+  counterPartyAddress: string;
 }
 
 // An account state holds all relevant info

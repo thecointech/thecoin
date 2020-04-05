@@ -95,12 +95,13 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   static async transferToTransaction(toWallet: boolean, ethersLog: Log, contract: Contract): Promise<Transaction> {
     const res = contract.interface.parseLog(ethersLog);
     const {from, to, value} = res.values;
-    var r = {
+    var r: Transaction = {
       txHash: ethersLog.transactionHash,
       date: new Date(),
       change: toWallet ? value.toNumber() : -value.toNumber(),
       logEntry: "---",
-      balance: -1
+      balance: -1,
+      counterPartyAddress: toWallet ? from : to
     }
 
     if (!await AccountReducer.addAdditionalInfo(r, toWallet, contract))

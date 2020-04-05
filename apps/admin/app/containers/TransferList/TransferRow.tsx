@@ -15,7 +15,7 @@ type Props = {
 export const TransferRow = ({ transfer, active, setActive, render, markComplete }: Props) => {
 
   const { record, instruction } = transfer;
-  const { processedTimestamp, recievedTimestamp } = record;
+  const { processedTimestamp, recievedTimestamp, completedTimestamp } = record;
   if (!instruction) {
     return <div>Not Decoded: Add the private encryption key</div>
   }
@@ -37,7 +37,9 @@ export const TransferRow = ({ transfer, active, setActive, render, markComplete 
   const processOn = recievedTimestamp === processedTimestamp ? null : <div>Process On: {settlementDate.toString()}</div>;
   const completion = (settlementDate.getTime() > Date.now())
     ? <div>This instruction can be settled on {settlementDate.toDateString()}</div>
-    : <Button onClick={markComplete}>Mark Complete</Button>
+    : (!completedTimestamp) 
+      ? <Button onClick={markComplete}>Mark Complete</Button>
+      : <div>Completed</div>
 
   return (
     <Accordion>

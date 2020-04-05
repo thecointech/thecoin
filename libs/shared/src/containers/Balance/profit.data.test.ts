@@ -10,41 +10,47 @@ export const ExampleTransactions: Transaction[] = [
     "change": 473200151,
     "logEntry": "Transfer: 0x0E53b70a831003d3714aeBC36f33c98a5F848872",
     "balance": 730012295, // FIX ME
+    "counterPartyAddress": "FIXME",
   },
   {
     "txHash": "0x0a61b44f94b3b7d32549747ffaddc58fce162464a40fb4e9606ddee5767b9dd5",
     "date": new Date("2019-05-02T15:19:41.000Z"),
     "change": -20000,
     "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
-    "balance": 256812144
+    "balance": 256812144,
+    "counterPartyAddress": "FIXME",
   },
   {
     "txHash": "0x0a61b44f94b3b7d32549747ffaddc58fce162464a40fb4e9606ddee5767b9dd5",
     "date": new Date("2019-05-02T15:19:41.000Z"),
     "change": -2541359,
     "logEntry": "Transfer: 0x445758E37F47B44E05e74eE4799F3469De62a2Cb",
-    "balance": 256832144
+    "balance": 256832144,
+    "counterPartyAddress": "FIXME",
   },
   {
     "txHash": "0x301cf09ec466a77628fb5d80c7918dfbe0df151ee138a565671950d4a6ff4bb6",
     "date": new Date("2019-05-02T15:14:58.000Z"),
     "change": -20000,
     "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
-    "balance": 259373503
+    "balance": 259373503,
+    "counterPartyAddress": "FIXME",
   },
   {
     "txHash": "0x301cf09ec466a77628fb5d80c7918dfbe0df151ee138a565671950d4a6ff4bb6",
     "date": new Date("2019-05-02T15:14:58.000Z"),
     "change": -2541359,
     "logEntry": "Transfer: 0x445758E37F47B44E05e74eE4799F3469De62a2Cb",
-    "balance": 259393503
+    "balance": 259393503,
+    "counterPartyAddress": "FIXME",
   },
   {
     "txHash": "0x2cf020d5ff600f484942c02dc6baf16313bb1dd2228dc348239c432dae87ce8b",
     "date": new Date("2019-04-01T19:58:11.000Z"),
     "change": 261934862,
     "logEntry": "Purchase: 261.93",
-    "balance": 261934862
+    "balance": 261934862,
+    "counterPartyAddress": "FIXME",
   }
 ]
 
@@ -70,24 +76,28 @@ export const SimpleTransactions: Transaction[] = [
     change: 50000,
     logEntry: "",
     balance: 50000, // Deposit: $5
+    "counterPartyAddress": "FIXME",
   },
   {
     date: new Date(2018, 2),
     change: 50000,
     logEntry: "",
     balance: 100000, // Deposit: $10
+    "counterPartyAddress": "FIXME",
   },
   {
     date: new Date(2018, 3),  // Withdraw: $5
     change: -25000,
     logEntry: "",
     balance: 75000,
+    "counterPartyAddress": "FIXME",
   },
   {
     date: new Date(2018, 4),  // Withdraw: $2.50
     change: -25000,
     logEntry: "",
     balance: 50000,
+    "counterPartyAddress": "FIXME",
   }
 ];
 

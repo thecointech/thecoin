@@ -13,7 +13,9 @@ export type TransferRecord = {
 
 export type TransferData = {
   record: TransferRecord,
-  instruction: InstructionPacket
+  instruction: InstructionPacket,
+  isComplete?: boolean,
 }
 
 export type TransferRenderer = (transfer: TransferData) => JSX.Element;
+

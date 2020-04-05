@@ -4,9 +4,10 @@ import { DepositData } from './types';
 import { Base64 } from 'js-base64';
 import { TransferRecord } from 'containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
+import { addNewEntries } from './utils';
 
 
-export async function fetchDepositEmails(auth: OAuth2Client) : Promise<DepositData[]> {
+export async function addFromGmail(auth: OAuth2Client) : Promise<DepositData[]> {
   const gmail = google.gmail({ version: 'v1', auth });
   let result = [] as DepositData[];
   let nextPageToken = undefined;
@@ -34,7 +35,7 @@ export async function fetchDepositEmails(auth: OAuth2Client) : Promise<DepositDa
   } while (nextPageToken !== undefined)
 
   // Filter out any null entries (could come from invalid emails being picked up by the filter)
-  return result.filter(deposit => !!deposit);
+  return addNewEntries([], result.filter(deposit => !!deposit));
 }
 
 
@@ -49,7 +50,6 @@ function toDepositEmail(email: gmail_v1.Schema$Message) : DepositData {
     console.error(`Unknown deposit type: ${dateRecieved} - ${subject}`);
     return null;
   }
-  console.log(`Translating: ${dateRecieved.toDateString()} - ${subject}`);
 
   const record: TransferRecord =  { 
       transfer: {
@@ -67,11 +67,15 @@ function toDepositEmail(email: gmail_v1.Schema$Message) : DepositData {
     instruction: {
       depositUrl: getDepositUrl(body),
       address: getAddressCoin(email),
+      recieved: dateRecieved,
       ...getUserInfo(email),
       subject,
       body,
       raw: email
-    }
+    },
+    db: null,
+    bank: null,
+    tx: null,
   }
 }
 
@@ -88,7 +92,7 @@ function getUserInfo(email: gmail_v1.Schema$Message) {
   const toField = email.payload.headers.find(h => h.name === "Reply-To").value;
   const match = /<([^<>]+)>$/gi.exec(toField);
   return {
-    name: toField.substr(0, match.index),
+    name: toField.substr(0, match.index).trim(),
     email: match[1]
   }
 }
