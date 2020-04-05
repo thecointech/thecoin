@@ -125,6 +125,7 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
 
 function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Transaction[])
 {
+  deposit.tx = tx;
   deposit.record.hash = tx.txHash;
   deposit.record.processedTimestamp = fromMillis(tx.date.getTime());
   if (!deposit.record.completedTimestamp) {
