@@ -3,6 +3,7 @@ import { IsValidAddress } from "@the-coin/utilities";
 import { GetUserDoc } from "@the-coin/utilities/User";
 import { Dictionary } from 'lodash';
 import { addNewEntries } from "./utils";
+import { PurchaseType } from "containers/TransferList/types";
 
 // Search through all deposits, and match with existing deposits 
 export async function addFromDB(deposits: DepositData[]) {
@@ -145,7 +146,7 @@ function buildUnmatchedDBEntries(deposits: DepositData[], db: Dictionary<OldPurc
           confirmed: !!d.completed,
           fiatDisbursed: d.fiat,
           transfer: {value: d.coin },
-          type: 'other',
+          type: PurchaseType.other,
         },
         db: d,
         tx: null,

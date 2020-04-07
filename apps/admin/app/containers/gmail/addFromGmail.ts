@@ -2,7 +2,7 @@ import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
-import { DepositRecord } from 'containers/TransferList/types';
+import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
 import { addNewEntries } from './utils';
 
@@ -84,7 +84,7 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
     hash: "",
     confirmed: false,
     fiatDisbursed: getAmount(body),
-    type: "etransfer"
+    type: PurchaseType.etransfer,
   }
 
   return {

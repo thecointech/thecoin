@@ -2,6 +2,7 @@ import { DepositData, BankRecord } from "./types";
 import bank from "./banktx.json"
 import { fromMillis } from "utils/Firebase";
 import { compareDateTo, addNewEntries } from "./utils";
+import { PurchaseType } from "containers/TransferList/types";
 
 export async function addFromBank(deposits: DepositData[]) {
   let bankRecords = parseTransactions();
@@ -47,8 +48,8 @@ function applyBankRecord(deposit: DepositData, record: BankRecord, allRecords: B
   if (!deposit.record.completedTimestamp) {
     deposit.record.completedTimestamp = fromMillis(record.Date.getTime());
   }
-  if (deposit.record.type === 'other') {
-    deposit.record.type = 'deposit';
+  if (deposit.record.type === PurchaseType.other) {
+    deposit.record.type = PurchaseType.deposit;
   }
   allRecords.splice(allRecords.indexOf(record), 1);
 }
@@ -125,7 +126,7 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
         fiatDisbursed: bank.Amount,
         hash: "",
         confirmed: false,
-        type: "deposit",
+        type: PurchaseType.deposit,
       },
       instruction,
       db: null,

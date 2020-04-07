@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header, Confirm } from 'semantic-ui-react';
+import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import * as Datetime from 'react-datetime';
 import { Moment } from 'moment';
 
@@ -16,23 +16,15 @@ import { UxAddress } from '@the-coin/shared/components/UxAddress';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { GetUserDoc } from '@the-coin/utilities/User';
+import { GetActionDoc } from '@the-coin/utilities/User';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
 import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
+import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
+import { fromMillis } from 'utils/Firebase';
 
-//import { now } from 'utils/Firebase';
+import { now } from 'utils/Firebase';
 //import { firestore } from 'firebase';
-
-export interface PurchaseRecord {
-  coin: number,
-  fiat: number,
-  recieved: Date,
-  settled: Date,
-  completed: Date,
-  txHash: string,
-  emailHash: string
-}
 
 type MyProps = AccountState & {
   updateBalance: Function
@@ -48,6 +40,7 @@ const initialState = {
   settledDate: new Date(),
 
   email: "",
+  type: PurchaseType.other,
 
   txHash: '',
   step: "",
@@ -82,13 +75,13 @@ class PurchaseClass extends React.PureComponent<Props> {
       const ts = Math.round(settledDate.getTime() / 1000);
 
       // First record our intent to send this tx
-      var doc = await this.recordTxOpen();
+      //var doc = await this.recordTxOpen();
       // Send the purchase request
       this.setState({ isProcessing: true, step: "Sending Transaction" });
 
       const tx = await contract.coinPurchase(account, coin, 0, ts);
       // Update the DB with tx hash
-      await this.recordTxHash(doc, tx.hash);
+      var doc = await this.recordTxHash(tx.hash);
 
       // Wait for TX to complete on blockchain
       this.setState({ txHash: tx.hash, step: `Waiting on ${tx.hash}` });
@@ -105,54 +98,33 @@ class PurchaseClass extends React.PureComponent<Props> {
     this.setState(initialState)
   }
 
-  async buildPurchaseEntry(): Promise<PurchaseRecord> {
-    const { coin, recievedDate, settledDate, email } = this.state;
-    const { signer } = this.props;
+  async buildPurchaseEntry(type: PurchaseType): Promise<DepositRecord> {
+    const { coin, recievedDate, settledDate } = this.state;
+    //const { signer } = this.props;
     const { fxRate, sell } = this.getSelectedFxRate();
     const conversionRate = fxRate * sell;
-    const emailHash = await signer.signMessage(email.toLocaleLowerCase());
+    //const emailHash = await signer.signMessage(email.toLocaleLowerCase());
     return {
-      coin,
-      fiat: toHuman(coin * conversionRate, true),
-      recieved: recievedDate,
-      settled: settledDate,
-      txHash: '---',
-      emailHash,
-      completed: null
+      transfer: {
+        value: coin,
+      },
+      fiatDisbursed: toHuman(coin * conversionRate, true),
+      recievedTimestamp: fromMillis(recievedDate.getTime()),
+      processedTimestamp: fromMillis(settledDate.getTime()),
+      confirmed: true,
+      hash: 'NONE',
+      type,
     };
   }
 
-  async recordTxOpen() {
-    const { account, recievedDate } = this.state;
-    const userDoc = await GetUserDoc(account);
-    // We use the timestamp as ID to ensure we have
-    // a chance of catching duplicate purchases
-    const purchaseId = recievedDate.getTime().toString();
-    const purchaseDoc = userDoc.collection("Purchase").doc(purchaseId);
-
+  async recordTxHash(txHash: string) {
     try {
-      const purchaseData = await purchaseDoc.get()
-      if (purchaseData.exists) {
-        throw new Error(`Purchase ${purchaseId} already exists: check tx ${JSON.stringify(purchaseData.data())}`)
-      }
-
-      const entry = await this.buildPurchaseEntry();
-      purchaseDoc.set(entry);
-      return purchaseDoc;
-    }
-    catch (err) {
-      console.error(err);
-      alert(err);
-      throw err;
-    }
-  }
-
-  async recordTxHash(purchaseDoc: DocumentReference, txHash: string) {
-    try {
-      const data: Partial<PurchaseRecord> = {
-        txHash
-      }
-      await purchaseDoc.update(data);
+      const { account, type } = this.state;
+      var doc = GetActionDoc(account, "Buy", txHash)
+      const record = await this.buildPurchaseEntry(type);
+      record.hash = txHash;
+      await doc.set(record);
+      return doc;
     }
     catch (err) {
       console.error(err);
@@ -163,8 +135,8 @@ class PurchaseClass extends React.PureComponent<Props> {
 
   async recordTxComplete(purchaseDoc: DocumentReference) {
     try {
-      const data: Partial<PurchaseRecord> = {
-        completed: new Date()
+      const data: Partial<DepositRecord> = {
+        completedTimestamp: now()
       }
       await purchaseDoc.update(data);
     }
@@ -213,6 +185,11 @@ class PurchaseClass extends React.PureComponent<Props> {
     });
     this.updateCode(value);
   }
+  onSetType = (event: React.SyntheticEvent<HTMLElement, Event>) => {
+    this.setState({
+      type: event.currentTarget.innerText
+    })
+  }
   handleCoinChange = (value: number) => this.setState({ coin: value })
   confirmOpen = () => this.setState({ doConfirm: true })
   confirmClose = () => this.setState({ doConfirm: false })
@@ -232,14 +209,20 @@ class PurchaseClass extends React.PureComponent<Props> {
 
   renderShortDate = (date: Date) => date.toLocaleDateString("en-US", { day: "numeric", hour: "numeric", minute: "numeric" })
 
+  getTypeOptions = () => Object.keys(PurchaseType).map(k => ({ 
+    key: k,
+    value: k,
+    text: k
+  }));
+
+
   render() {
-    const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode } = this.state
+    const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode, type } = this.state
     const { balance } = this.props;
     const fxRate = this.getSelectedFxRate();
     const sellRate = fxRate.sell * fxRate.fxRate;
     const validFrom = new Date(fxRate.validFrom);
     const validTill = new Date(fxRate.validTill);
-
 
     const forceValidate = false;
 
@@ -263,6 +246,7 @@ class PurchaseClass extends React.PureComponent<Props> {
             placeholder="Purchaser Account"
           />
           <p>Purchaser Code: {purchaserCode}</p>
+          <Select value={type} options={this.getTypeOptions()} onChange={this.onSetType}/>
           <DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={sellRate} />
           <Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
         </Form>

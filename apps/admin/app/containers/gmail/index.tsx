@@ -17,7 +17,7 @@ import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useAccountApi, Transaction } from '@the-coin/shared/containers/Account';
 import { RbcApi, ETransferErrorCode } from 'RbcApi';
 import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
-import { DepositRecord } from 'containers/TransferList/types';
+import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
 import { GetActionDoc } from '@the-coin/utilities/User';
 import { Contract } from 'ethers';
 import { ModalOperation } from '../../../../../libs/shared/src/containers/ModalOperation';
@@ -200,7 +200,7 @@ function setComplete(deposit: DepositData[]) {
 
 async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contract: Contract, progressCb: (v: string) => void) {
   // We assume types of 'other' (wages) were successfully deposited
-  let wasDeposited = deposit.record.type === 'other' || !!deposit.bank;
+  let wasDeposited = deposit.record.type === PurchaseType.other || !!deposit.bank;
 
   if (deposit.isComplete) {
     if (deposit.instruction.raw && !wasDeposited) {

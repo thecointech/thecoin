@@ -17,8 +17,13 @@ export type TransferData = {
   isComplete?: boolean,
 }
 
+export enum PurchaseType {
+  etransfer = "etransfer",
+  deposit = "deposit",
+  other = "other",
+}
 export type DepositRecord = {
-  type: "etransfer"|"deposit"|"other"; // One of eTransfer, directDeposit, other, etc
+  type: PurchaseType; // One of eTransfer, directDeposit, other, etc
   
 } & TransferRecord;
 
