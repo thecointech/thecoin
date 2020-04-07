@@ -1,5 +1,5 @@
 import * as firestore from '../exchange/Firestore';
-import { ExchangeRate, getRates } from '../update/UpdateDb';
+import { ExchangeRate, getRates, insertRate } from '../update/UpdateDb';
 
 const Update = require('../Update/UpdateDb');
 //const assert = require('assert');
@@ -26,19 +26,32 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 test('should return a valid rate', async function() {
 	let now = new Date();
 	const latest = await Update.GetLatestCoinRate(now.getTime(), 0)
-	expect(latest.ValidFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
-	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
+	expect(latest.validFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
+	expect(latest.validUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
 });
 
 test('should return latest rate', async function() {
 	let now = new Date();
-	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime());
-	await Update.InsertRate(0, now.getTime()-2000, latestRate);
+	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+1000000);
+	insertRate(0, latestRate);
+
+	//expect(latest.ValidUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
 	//Update.SetMostRecentRate(0, latestRate);
-	//console.log(await (await ((await getRates(0)).get())).get("Buy"));
+		//console.log(await (await getRates(0)).get("ValidUntil"));
+    (await getRates(0)).get().then(function(doc) {
+        if (doc.exists) {
+			//let idToDelete = doc.id;
+			//let buyToTest = doc.get("buy");
+			expect(doc.get("buy")).toEqual(10);
+        } 
+    }).catch(function(error) {
+        console.log("Error getting rate:", error);
+    });
+
+	//console.log(await (await ((await getRates(0)).get()));
 
 	var latestRate2 = new ExchangeRate(12, 12, now.getTime(), now.getTime());
-	Update.InsertRate(0, now.getTime()-1000, latestRate2);
+	insertRate(0, latestRate2);
 	//Update.SetMostRecentRate(0, latestRate2);
     
 	//const latest = await Update.GetRatesFor(0, now.getTime())
