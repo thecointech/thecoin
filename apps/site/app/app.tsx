@@ -57,8 +57,7 @@ initTracking();
 // });
 
 // Create redux store with history
-const initialState = {};
-const store = configureAppStore(createReducer, initialState, history);
+const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (messages: any, Component = App) => {

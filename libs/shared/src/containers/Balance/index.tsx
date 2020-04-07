@@ -25,7 +25,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   }, [])
 
   const { rates } = useSelector(selectFxRate);
-  const { buy, fxRate } = getFxRate(rates, Date.now());
+  const { buy, fxRate } = getFxRate(rates, 0);
   const { balance, history, historyLoading } = account;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
