@@ -18,12 +18,8 @@ import messages from './messages';
 import "react-datetime/css/react-datetime.css"
 import { GetUserDoc } from '@the-coin/utilities/User';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
-import { GetWallet } from 'containers/BrokerTransferAssistant/Wallet';
-import { utils } from 'ethers';
-import { GetReferrerCode } from '@the-coin/utilities/Referrals';
+import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
 import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
-
-import base32 from 'base32';
 
 //import { now } from 'utils/Firebase';
 //import { firestore } from 'firebase';
@@ -47,7 +43,6 @@ const initialState = {
   coin: 0,
   account: "",
   purchaserCode: "---",
-  deprecatedCode: "---",
   
   recievedDate: new Date(),
   settledDate: new Date(),
@@ -59,17 +54,6 @@ const initialState = {
   isProcessing: false,
 
   doConfirm: false
-}
-
-// Todo: move SignMessage-y fn's to utilities
-function GetHash(
-  value: string
-) {
-  const ethersHash = utils.solidityKeccak256(
-    ["string"],
-    [value]
-  );
-  return utils.arrayify(ethersHash);
 }
 
 class PurchaseClass extends React.PureComponent<Props> {
@@ -239,58 +223,17 @@ class PurchaseClass extends React.PureComponent<Props> {
   }
 
 
-  _deprecated_GetReferrerCode(signature: string) {
-    const normSig = signature[1] == "x" ? signature.slice(2) : signature;
-    const buffer = Buffer.from(normSig, "hex");
-    const s2 = base32.encode(buffer);
-    return s2.slice(-6).toLowerCase();
-  }
-
-//   async GenerateCode(message: string, signature: any)
-//   {
-// 	// First, valid message?
-// 	// Message should be timestamp, within the last 5 minutes
-
-// 	const ts = parseInt(message);
-// 	const age = Date.now() - ts;
-// 	console.log(`Generating code for TS: ${ts}, ${age / 1000}s old`);
-
-// 	// Ok - it's a valid message.  Get the signer
-// 	const mhash = this.GetHash1(message);
-// 	const signer = utils.verifyMessage(mhash, signature);
-// 	// generate this signers secret key
-// 	const wallet = await GetWallet();
-// 	const rhash = this.GetHash1(signer.toLowerCase());
-// 	const rsign = await wallet.signMessage(rhash);
-// 	// We multi-purpose the referrer code
-// 	// to give a unique & repeatable code per-user
-// 	return GetReferrerCode(rsign);
-// }
-
   async updateCode(account: string) {
-
-    const wallet = await GetWallet();
-    // generate this signers secret key
-    const rhash = GetHash(account.toLowerCase());
-    const rsign = await wallet.signMessage(rhash);
-    const code = GetReferrerCode(rsign);
-
-    const dep_code = this._deprecated_GetReferrerCode(rsign);
-    // const message = "1581276518938";
-    // const signature = undefined;
-    // const code1 = await this.GenerateCode(message, signature);
-    console.log(`Code1: ${dep_code}: Address: ${code}`);
-
+    const code = await GetAccountCode(account);
     this.setState({ 
       purchaserCode: code,
-      deprecatedCode: dep_code,
      });
   }
 
   renderShortDate = (date: Date) => date.toLocaleDateString("en-US", { day: "numeric", hour: "numeric", minute: "numeric" })
 
   render() {
-    const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode, deprecatedCode } = this.state
+    const { coin, recievedDate, settledDate, isProcessing, step, purchaserCode } = this.state
     const { balance } = this.props;
     const fxRate = this.getSelectedFxRate();
     const sellRate = fxRate.sell * fxRate.fxRate;
@@ -320,7 +263,6 @@ class PurchaseClass extends React.PureComponent<Props> {
             placeholder="Purchaser Account"
           />
           <p>Purchaser Code: {purchaserCode}</p>
-          <p>Deprecated Version: {deprecatedCode}</p>
           <DualFxInput onChange={this.handleCoinChange} maxValue={balance} asCoin={true} value={coin} fxRate={sellRate} />
           <Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
         </Form>

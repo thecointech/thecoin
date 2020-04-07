@@ -22,7 +22,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Complete Purchase",
     urlFragment: "purchase",
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps} />),
+    creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />),
   }
 ];
 

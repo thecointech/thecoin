@@ -144,7 +144,8 @@ function buildUnmatchedDBEntries(deposits: DepositData[], db: Dictionary<OldPurc
           completedTimestamp: d.completed,
           confirmed: !!d.completed,
           fiatDisbursed: d.fiat,
-          transfer: {value: d.coin }
+          transfer: {value: d.coin },
+          type: 'other',
         },
         db: d,
         tx: null,

@@ -1,5 +1,5 @@
 import {gmail_v1} from 'googleapis';
-import { TransferRecord } from 'containers/TransferList/types';
+import { DepositRecord } from 'containers/TransferList/types';
 import { Timestamp } from '@the-coin/types/FirebaseFirestore';
 import { Transaction } from '@the-coin//shared/containers/Account';
 
@@ -38,7 +38,7 @@ export type BankRecord = {
 export type DepositData = {
 
   // Data to be saved to the database
-  record: TransferRecord,
+  record: DepositRecord,
 
   // Instructions used to complete the transaction
   instruction: DepositInstructions,

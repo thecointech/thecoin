@@ -2,25 +2,51 @@ import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
-import { TransferRecord } from 'containers/TransferList/types';
+import { DepositRecord } from 'containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
 import { addNewEntries } from './utils';
 
+let __gmail: gmail_v1.Gmail | null = null;
 
-export async function addFromGmail(auth: OAuth2Client) : Promise<DepositData[]> {
-  const gmail = google.gmail({ version: 'v1', auth });
+const __labels = {
+  etransfer: null as string | null,
+  deposited: null as string | null,
+  rejected: null as string | null,
+};
+type Labels = typeof __labels;
+
+export async function initializeApi(auth: OAuth2Client) {
+  if (__gmail)
+    return;
+
+  __gmail = google.gmail({ version: 'v1', auth });
+
+  var response = await __gmail.users.labels.list({
+    userId: "me"
+  })
+  const labels = response.data.labels;
+  const keys = Object.keys(__labels);
+  for (const label of labels) {
+    const k = keys.find(k => label.name.endsWith(k));
+    if (k) {
+      __labels[k] = label.id;
+    }
+  }
+}
+
+export async function addFromGmail(): Promise<DepositData[]> {
   let result = [] as DepositData[];
   let nextPageToken = undefined;
   do {
     // Fetch a list of all message id's
-    const response = await gmail.users.messages.list({
+    const response = await __gmail.users.messages.list({
       'userId': 'me',
       'q': 'REDIRECT INTERAC -remember'
     });
 
     // Fetch the actual email
     const emailPending = response.data.messages.map(m =>
-      gmail.users.messages.get({
+      __gmail.users.messages.get({
         id: m.id,
         userId: 'me'
       })
@@ -28,7 +54,7 @@ export async function addFromGmail(auth: OAuth2Client) : Promise<DepositData[]> 
     var emails = await Promise.all(emailPending);
     result = result.concat(
       emails.map(r => toDepositEmail(r.data))
-    ); 
+    );
 
     // TODO: untested, but we could have more than 50 emails in a day
     nextPageToken = response.data.nextPageToken;
@@ -39,26 +65,26 @@ export async function addFromGmail(auth: OAuth2Client) : Promise<DepositData[]> 
 }
 
 
-function toDepositEmail(email: gmail_v1.Schema$Message) : DepositData {
+function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
 
   const subject = getSubject(email);
   const body = getBody(email);
   const dateRecieved = getRecievedDate(email);
 
-  if (!subject.endsWith("sent you money."))
-  {
+  if (!subject.endsWith("sent you money.")) {
     console.error(`Unknown deposit type: ${dateRecieved} - ${subject}`);
     return null;
   }
 
-  const record: TransferRecord =  { 
-      transfer: {
-        value: -1
-      },
-      recievedTimestamp: fromMillis(dateRecieved.getTime()),
-      hash: "",
-      confirmed: false,
-      fiatDisbursed: getAmount(body)
+  const record: DepositRecord = {
+    transfer: {
+      value: -1
+    },
+    recievedTimestamp: fromMillis(dateRecieved.getTime()),
+    hash: "",
+    confirmed: false,
+    fiatDisbursed: getAmount(body),
+    type: "etransfer"
   }
 
   return {
@@ -110,19 +136,27 @@ function getRecievedDate(email: gmail_v1.Schema$Message) {
   return new Date(parseInt(email.internalDate));
 }
 
-// function wasProcessed(email: gmail_v1.Schema$Message) {
-//   return false;
-// }
-
 function getSubject(email: gmail_v1.Schema$Message) {
   return email.payload.headers.find(h => h.name === "Subject").value.substr(32);
 }
 
-function getBody(email: gmail_v1.Schema$Message) : string {
+function getBody(email: gmail_v1.Schema$Message): string {
   const textPart = email.payload.parts[0].parts[0].parts[0];
   const decoded = Base64.decode(textPart.body.data);
   return decoded;
 }
 
+///////////////////////////////////////////////////////////
 
-
+export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {
+  const labelId = __labels[labelName]
+  await __gmail.users.messages.modify({
+    id: email.id,
+    userId: "me",
+    requestBody: {
+      addLabelIds: [
+        labelId,
+      ]
+    }
+  })
+}

@@ -17,5 +17,10 @@ export type TransferData = {
   isComplete?: boolean,
 }
 
+export type DepositRecord = {
+  type: "etransfer"|"deposit"|"other"; // One of eTransfer, directDeposit, other, etc
+  
+} & TransferRecord;
+
 export type TransferRenderer = (transfer: TransferData) => JSX.Element;
 

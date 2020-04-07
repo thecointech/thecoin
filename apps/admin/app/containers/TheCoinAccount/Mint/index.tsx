@@ -28,7 +28,6 @@ export const Mint = () => {
   /////////////////////////////////////////////////////////
   const onMintCoins = useCallback(async () => {
     setStatus(MintStatus.PROCESSING);
-    const account = useActiveAccount();
     try {
       const { contract } = account;
       const tx = await contract.mintCoins(toMint);

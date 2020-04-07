@@ -1,7 +1,9 @@
 import { GetFirestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
-import { base32Encode } from '@ctrl/ts-base32';
+//import { base32Encode } from '@ctrl/ts-base32';
+import base32 from 'base32';
+import { utils, Wallet } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
 import { Timestamp, CollectionReference, DocumentReference } from "@the-coin/types/FirebaseFirestore";
 
@@ -46,10 +48,17 @@ export async function GetUsersReferrer(address: string) {
   return null;
 }
 
+// export function GetReferrerCode(signature: string) {
+//   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
+//   const buffer = Buffer.from(normSig, "hex");
+//   const s2 = base32Encode(buffer, undefined, { padding: false });
+//   return s2.slice(-6).toLowerCase();
+// }
+
 export function GetReferrerCode(signature: string) {
   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
   const buffer = Buffer.from(normSig, "hex");
-  const s2 = base32Encode(buffer, undefined, { padding: false });
+  const s2 = base32.encode(buffer);
   return s2.slice(-6).toLowerCase();
 }
 
@@ -99,4 +108,27 @@ export async function CreateReferree(referral: NewAccountReferal, created: Times
   console.log(
     `Create user: ${newAccount} from ${referrer}`
   );
+}
+
+//
+// 
+//
+export async function GetAccountCode(address: string, wallet: Wallet)
+{
+  // generate this signers secret key
+  const rhash = GetHash(address.toLowerCase());
+  const rsign = await wallet.signMessage(rhash);
+  return GetReferrerCode(rsign);
+}
+
+
+// Todo: move SignMessage-y fn's to utilities
+export function GetHash(
+  value: string
+) {
+  const ethersHash = utils.solidityKeccak256(
+    ["string"],
+    [value]
+  );
+  return utils.arrayify(ethersHash);
 }

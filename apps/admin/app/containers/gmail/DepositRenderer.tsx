@@ -1,17 +1,17 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { TransferData } from "containers/TransferList/types";
 import { DepositData } from "./types";
-import { Segment, Button, Select } from "semantic-ui-react";
+import { Segment, Select } from "semantic-ui-react";
 
 
 export const DepositRenderer = (props: TransferData) => {
   const deposit = props as DepositData;
-  const { instruction } = deposit;
+  const { instruction, record } = deposit;
 
 
   return (
     <Segment>
-    <div>Name: {instruction.name}</div>
+    <div>Name: {instruction.name} - {record.type}</div>
     <div>Address: {instruction.address}</div>
 
     <div>
@@ -45,10 +45,7 @@ type TxSelectProps = {
 }
 const TxSelect = ({deposit}: TxSelectProps) => {
   const {db} = deposit;
-  if (!db) {
-    return <TxDeposit deposit={deposit} />
-  }
-  else if (Array.isArray(db)) {
+  if (Array.isArray(db)) {
     const options = db.map((dep, index) => (
       {
         key: dep.txHash,
@@ -60,13 +57,14 @@ const TxSelect = ({deposit}: TxSelectProps) => {
       : null;
   }
   else {
-    return <div>Matched to: {db.txHash}</div>;
+    return (
+      <div>
+      { 
+        db
+        ? `Db Stored: ${db.txHash}`
+        : "Warning: No DB found"
+      }
+      </div>
+    )
   }
-}
-
-const TxDeposit = ({deposit} : TxSelectProps) => {
-  const onDeposit = useCallback(() => { 
-    alert("Now we make the deposit");
-  }, [deposit]);
-  return <Button onClick={onDeposit}>Deposit</Button>;
 }

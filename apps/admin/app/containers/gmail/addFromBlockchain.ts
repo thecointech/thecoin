@@ -111,13 +111,15 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
   // Does the first one match the deposit?
   if (accountTransfers.length > 0)
   {
-    const tx =accountTransfers[0];
+    const dateMatch = accountTransfers.find(t => Math.abs(deposit.record.processedTimestamp.seconds - (t.date.getTime() / 1000)) < 60)
+    //const dateMatch = accountTransfers.find(t => t.date == deposit.record.processedTimestamp.toDate())
+    const tx = dateMatch ?? accountTransfers[0];
     // Now, find one that matches the deposit
     const matches = VerifyDeposit(deposit, tx, allTransfers, fxRates);
     if (!matches) {
       if (deposit.bank)
       {
-        console.error("We don't have a transaction, but we did deposit this");
+        console.error(`Deposited tx from ${deposit.instruction.name} but cannot find matching hash`);
       }
     }
   }

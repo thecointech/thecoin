@@ -44,8 +44,12 @@ function getMatches(deposit: DepositData, bankRecords: BankRecord[])
 function applyBankRecord(deposit: DepositData, record: BankRecord, allRecords: BankRecord[])
 {
   deposit.bank = record;
-  if (!deposit.record.completedTimestamp)
+  if (!deposit.record.completedTimestamp) {
     deposit.record.completedTimestamp = fromMillis(record.Date.getTime());
+  }
+  if (deposit.record.type === 'other') {
+    deposit.record.type = 'deposit';
+  }
   allRecords.splice(allRecords.indexOf(record), 1);
 }
 
@@ -82,10 +86,11 @@ function matchFromGuess(deposit: DepositData, bankRecords: BankRecord[]) {
     const dateDeposited = first.Date;
     // Delta in days
     const delta = (dateDeposited.getTime() - dateRecieved.getTime()) / (1000*60*60*24);
-    const maximumAllowableDelta = 6; // 5 days
+    const maximumAllowableDelta = 30;
     if (delta < -1 || delta > maximumAllowableDelta) 
     {
       console.warn(`Apply bank with delta: ${delta}, of ${records.length} possibilities: ${deposit.instruction.name} on ${dateRecieved.toDateString()}`);
+      return;
     }
     applyBankRecord(deposit, first, bankRecords);
   }
@@ -119,7 +124,8 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
         completedTimestamp: fromMillis(bank.Date.getTime()),
         fiatDisbursed: bank.Amount,
         hash: "",
-        confirmed: false
+        confirmed: false,
+        type: "deposit",
       },
       instruction,
       db: null,
