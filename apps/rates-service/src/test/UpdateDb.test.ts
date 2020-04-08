@@ -40,8 +40,8 @@ test('can insert rates', async function() {
 	jest.setTimeout(50000);
 	let now = new Date();
 
-	// ------- Create a new rate (expire in 7 min) -------
-	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+500000);
+	// ------- Create a new rate (expire in 1.5 min) -------
+	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+125000);
 	insertRate(0, latestRate);
 	// ------- Check if the new rate is here -------
     (await getRateFromDb(0)).get().then(function(doc) {

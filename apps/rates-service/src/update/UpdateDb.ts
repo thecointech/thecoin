@@ -80,20 +80,23 @@ export async function getRateFromDb(type: number, ts?: number){
                               .limit(1)
                               .get();
 
-        return !snapshot.empty ? 
-        collection.doc(snapshot.docs[0].id) : 
-        collection.doc(); // new empty document
-    } else {
-        // ------- Get Latest -------
-        const snapshot = await collection
-                              .where('validUntil', '>=', now)
-                              .orderBy('validUntil', "desc")
-                              .limit(1)
-                              .get();
-        return !snapshot.empty ? 
+        if (!snapshot.empty){
+            return !snapshot.empty ? 
             collection.doc(snapshot.docs[0].id) : 
             collection.doc(); // new empty document
-    }
+        }
+    } 
+    
+    // ------- Get Latest -------
+    const snapshot = await collection
+                            .where('validUntil', '>=', now)
+                            .orderBy('validUntil', "desc")
+                            .limit(1)
+                            .get();
+    return !snapshot.empty ? 
+        collection.doc(snapshot.docs[0].id) : 
+        collection.doc(); // new empty document
+    
 }
 
 //
