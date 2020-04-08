@@ -25,7 +25,7 @@ const RateOffsetFromMarket = 30 * 1000
 // to a loooong time (3hrs), in production this should be
 // set to 1 minute (shortest possible interval)
 const CoinUpdateInterval = 60 * 60 * 3 * 1000;
-const FXUpdateInterval = CoinUpdateInterval;
+export const FXUpdateInterval = CoinUpdateInterval;
 
 export class ExchangeRate {
     buy: number;
@@ -64,22 +64,38 @@ class ExchangeObj {
 
 export let Exchanges : ExchangeObj[] = [];
 
-
-const getCollectionRates = (type: number) => 
+export const getCollectionRates = (type: number) => 
     GetFirestore().collection("rates"+type);
 
-export async function getRates(type: number){
-  let now = new Date().getTime();
-  const collection = getCollectionRates(type);
-  const snapshot = await collection
-                        .where('validUntil', '>=', now)
-                        .orderBy('validUntil', "desc")
-                        .limit(1)
-                        .get();
-                        console.log(snapshot.empty);
-  return !snapshot.empty ? 
-     collection.doc(snapshot.docs[0].id) : 
-     collection.doc(); // new empty document
+export async function getRates(type: number, ts?: number){
+    let now = new Date().getTime();
+    let collection = getCollectionRates(type);
+    if (ts){
+        // ------- Get Specific Time -------
+        const collection = getCollectionRates(type);
+        const snapshot = await collection
+                              .where('validUntil', '>=', ts)
+                              .where('validFrom', '<=', ts)
+                              .orderBy('validUntil', "desc")
+                              .limit(1)
+                              .get();
+
+        return !snapshot.empty ? 
+        collection.doc(snapshot.docs[0].id) : 
+        collection.doc(); // new empty document
+    } else {
+        // ------- Get Latest -------
+        const snapshot = await collection
+                              .where('validUntil', '>=', now)
+                              .orderBy('validUntil', "desc")
+                              .limit(1)
+                              .get();
+        return !snapshot.empty ? 
+            collection.doc(snapshot.docs[0].id) : 
+            collection.doc(); // new empty document
+
+    }
+
 }
 
 async function initialize(){
@@ -203,7 +219,7 @@ export async function updateLatestCoinRate(now: number, latestValidUntil: any) {
 export async function GetLatestCoinRate(now: number, latestValidUntil: number) {
         // So we are legitimately updating.  Fetch
     // the latest records.
-    var data = await QueryCoinRates();
+    var data = await queryCoinRates();
 
     // Shift now back to the most recent price change boundary
     if (data == null) {
@@ -299,7 +315,7 @@ export function FixCoinValidUntil(lastTime: number, now: number) {
 
     }
     else {
-        fixedUntil = AlignToNextBoundary(now, CoinUpdateInterval);
+        fixedUntil = alignToNextBoundary(now, CoinUpdateInterval);
     }
     console.log('Update Validity until: ' + tzus(fixedUntil, "%F %R:%S", "America/New_York"));
     return fixedUntil
@@ -318,7 +334,7 @@ export async function queryExchange(args: string) {
     return null;
 }
 
-export async function QueryCoinRates() {
+export async function queryCoinRates() {
     var forexJs = await queryExchange("TIME_SERIES_INTRADAY&symbol=SPX&interval=1min");
     var dataJs = forexJs["Time Series (1min)"];
     return dataJs;
@@ -326,7 +342,7 @@ export async function QueryCoinRates() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export function AlignToNextBoundary(timestamp: number, updateInterval: number)
+export function alignToNextBoundary(timestamp: number, updateInterval: number)
 {
     let hours = tzus(timestamp, "%H", "America/New_York");
     let minutes = tzus(timestamp, "%M", "America/New_York");
@@ -396,7 +412,7 @@ export async function ensureLatestFXRate(currencyCode: number, now:number) {
     // We reset validFrom to be timestamp (as we can't
     // set a price in the past)
     validFrom = now;
-    validUntil = AlignToNextBoundary(now, FXUpdateInterval)
+    validUntil = alignToNextBoundary(now, FXUpdateInterval)
 
     // Update with the latest USD/CAD forex
     // Unlike stocks, this is a point-in-time,
@@ -528,12 +544,3 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
         
     })
 }
-
-//if (process.env.NODE_ENV === 'test') {
-//    module.exports.GetMsTillSecsPast = GetMsTillSecsPast;
-//    module.exports.FixCoinValidUntil = FixCoinValidUntil;
-//    module.exports.GetLatestCoinRate = GetLatestCoinRate;
-//    module.exports.AlignToNextBoundary = AlignToNextBoundary;
-//    module.exports.FXUpdateInterval = FXUpdateInterval;
-//    module.exports.CoinUpdateInterval = CoinUpdateInterval;
-//}
