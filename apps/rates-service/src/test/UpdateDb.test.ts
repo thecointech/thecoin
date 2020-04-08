@@ -1,5 +1,5 @@
 import * as firestore from '../exchange/Firestore';
-import { ExchangeRate, FXUpdateInterval, getRates, insertRate, getCollectionRates, alignToNextBoundary } from '../update/UpdateDb';
+import { ExchangeRate, FXUpdateInterval, getRateFromDb, insertRate, getCollectionRates, alignToNextBoundary, getLatestCoinRate } from '../update/UpdateDb';
 
 const Update = require('../Update/UpdateDb');
 //const assert = require('assert');
@@ -24,21 +24,27 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 });
 
 test('should return a valid rate', async function() {
+	
 	let now = new Date();
-	const latest = await Update.GetLatestCoinRate(now.getTime(), 0)
-	expect(latest.validFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
-	expect(latest.validUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
+
+	const latest = await getLatestCoinRate(now.getTime(), 0);
+	if (latest){
+		expect(latest.validFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
+		expect(latest.validUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
+	} else {
+		throw new Error('No rate returned');
+	}
 });
 
 test('can insert rates', async function() {
 	jest.setTimeout(50000);
 	let now = new Date();
 
-	// ------- Create a new rate (expire in 15 min) -------
-	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+1000000);
+	// ------- Create a new rate (expire in 7 min) -------
+	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+500000);
 	insertRate(0, latestRate);
 	// ------- Check if the new rate is here -------
-    (await getRates(0)).get().then(function(doc) {
+    (await getRateFromDb(0)).get().then(function(doc) {
         if (doc.exists) {
 			let idToDelete = doc.id;
 			expect(doc.get("buy")).toEqual(10);
@@ -55,7 +61,7 @@ test('should return latest rate', async function() {
 	let now = new Date().getTime();
 
 	// ------- Check if the new rate is here -------
-    (await getRates(0)).get().then(function(doc) {
+    (await getRateFromDb(0)).get().then(function(doc) {
         if (doc.exists) {
 			let validFrom = doc.get("validFrom");
 			let validUntil = doc.get("validUntil");

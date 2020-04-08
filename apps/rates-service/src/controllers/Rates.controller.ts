@@ -2,7 +2,7 @@ import { Controller, Get, Route, Response } from 'tsoa';
 //import { Signup, Confirm, Unsubscribe, Details } from '../newsletter/Newsletter'
 //import { BoolResponse } from '@the-coin/types';
 
-import { UpdateRates }  from '../update/UpdateDb';
+import { updateRates }  from '../update/UpdateDb';
 
 @Route('doUpdate')
 export class RatesController extends Controller {
@@ -16,7 +16,7 @@ export class RatesController extends Controller {
     @Response('405', 'unknown exception')
     async doUpdate() : Promise<any> {
       try {
-          return await UpdateRates();
+          return await updateRates();
       } catch (e) {
           console.error("Details fetch failed: " + JSON.stringify(e));
       }

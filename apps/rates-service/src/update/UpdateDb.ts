@@ -67,7 +67,7 @@ export let Exchanges : ExchangeObj[] = [];
 export const getCollectionRates = (type: number) => 
     GetFirestore().collection("rates"+type);
 
-export async function getRates(type: number, ts?: number){
+export async function getRateFromDb(type: number, ts?: number){
     let now = new Date().getTime();
     let collection = getCollectionRates(type);
     if (ts){
@@ -93,48 +93,48 @@ export async function getRates(type: number, ts?: number){
         return !snapshot.empty ? 
             collection.doc(snapshot.docs[0].id) : 
             collection.doc(); // new empty document
-
     }
-
 }
 
-async function initialize(){
-    //TODO: array with all the supported currencies
-    // All the supported exchanges
-    // The CAD Rates
-    (await getRates(0)).get().then(function(doc) {
+//
+//  Returns the latest stored rate, or null if none present
+//
+async function getLastRate(code: number, name: string){
+    (await getRateFromDb(code)).get().then(function(doc) {
         if (doc.exists) {
-            let Exchange0 = new ExchangeObj('Coin', doc.get("buy"), 0);
-            Exchanges.splice(0, 0, Exchange0)
-        } else {
-            // doc.data() will be undefined in this case
-            //console.log("No such Rate!");
-        }
+            let Exchange = new ExchangeObj(name, doc.get("buy"), 0);
+            return Exchange;
+        } 
+		throw new Error("Error getting rate");
     }).catch(function(error) {
-        console.log("Error getting rate:", error);
+		throw new Error("Error getting rate:" + error);
     });
+    return null;
+}
 
+//
+//  Returns the latest stored rates
+//
+async function getAllRates(){
+    // All the supported exchanges
     // The Coin Rates
-    (await getRates(124)).get().then(function(doc) {
-        if (doc.exists) {
-            let Exchange124 = new ExchangeObj('CAD', doc.get("buy"), 0);
-            Exchanges.splice(124, 0, Exchange124)
-        } else {
-            // doc.data() will be undefined in this case
-            //console.log("No such Rate");
-        }
-    }).catch(function(error) {
-        console.log("Error getting rate:", error);
-    });
+    let Exchange0 = await getLastRate(0, "Coin");
+    if (Exchange0){
+        Exchanges.splice(0, 0, Exchange0);
+    }
+    // The CAD Rates
+    let Exchange124 = await getLastRate(124, "CAD");
+    if (Exchange124){
+        Exchanges.splice(124, 0, Exchange124);
+    }
     return Exchanges;
 }
-
 
 //
 //  Returns the latest stored rate, or null if none present
 //
 export async function getLatestExchangeRate(code: number):Promise<any> {
-    let Exchanges = await initialize();
+    let Exchanges = await getAllRates();
     return new Promise(async (resolve, reject) => {
         let exchange = Exchanges[<number>code];
         if (exchange == null) {
@@ -147,7 +147,7 @@ export async function getLatestExchangeRate(code: number):Promise<any> {
         }
 
         // if we have no cached value, read from DB
-        let datas = await getRates(exchange.LatestKey);
+        let datas = await getRateFromDb(exchange.LatestKey);
         let collection = (await datas.get());
         
         if ((await datas.get()).exists) {
@@ -157,12 +157,11 @@ export async function getLatestExchangeRate(code: number):Promise<any> {
         }
         // no error, we just don't have a latest value
         else resolve(null);
-        
     });
 }
 
 export async function SetMostRecentRate(code: number, newRecord: ExchangeRate) {
-    let Exchanges = await initialize();
+    let Exchanges = await getAllRates();
     const collection = getCollectionRates(code);
     Exchanges[code].LatestRate = newRecord.buy;
     let rateToInsert = {
@@ -207,7 +206,7 @@ export async function ensureLatestCoinRate(now: number) {
 
 export async function updateLatestCoinRate(now: number, latestValidUntil: any) {
     var latest;
-    let newRecord = await GetLatestCoinRate(now, latestValidUntil);
+    let newRecord = await getLatestCoinRate(now, latestValidUntil);
     if (newRecord){
         insertRate(0, newRecord);
         SetMostRecentRate(0, newRecord);
@@ -216,7 +215,7 @@ export async function updateLatestCoinRate(now: number, latestValidUntil: any) {
     return latest;
 }
 
-export async function GetLatestCoinRate(now: number, latestValidUntil: number) {
+export async function getLatestCoinRate(now: number, latestValidUntil: number) {
         // So we are legitimately updating.  Fetch
     // the latest records.
     var data = await queryCoinRates();
@@ -428,18 +427,18 @@ export async function ensureLatestFXRate(currencyCode: number, now:number) {
     return latest
 }
 
-export function EnsureLatestRate(code: number, timestamp:number) 
+export function ensureLatestRate(code: number, timestamp:number) 
 {
     if (code == 0)
         return ensureLatestCoinRate(timestamp);
     return ensureLatestFXRate(code, timestamp);
 }
 
-export async function DoUpdates(now: number) {
+export async function doUpdates(now: number) {
     try {
         let currencyWaits = Object.keys(Exchanges).reduce((accum: Object[], value: any) => {
             //const accum = [] as any;
-            accum.push(EnsureLatestRate(value, now));
+            accum.push(ensureLatestRate(value, now));
             return accum;
         }, []);
 
@@ -476,8 +475,7 @@ export function GetMsTillSecsPast(seconds: number, nowDate: Date) {
 
 export function ForceLatestRate(resolve: { (value?: unknown): void; (value?: unknown): void; (arg0: any): void; }, reject: { (reason?: any): void; (reason?: any): void; (arg0: string | undefined): void; }, code: number, timestamp: number)
 {
-    EnsureLatestRate(code, timestamp)
-    .then((rates: ExchangeRate) => {
+    ensureLatestRate(code, timestamp).then((rates: ExchangeRate) => {
         if (rates.validUntil > timestamp)
             resolve(rates)
         else 
@@ -489,7 +487,7 @@ export function ForceLatestRate(resolve: { (value?: unknown): void; (value?: unk
     })
 }
 
-export function UpdateRates() {
+export function updateRates() {
     return new Promise(async (resolve, reject) => {
         // Wait at until at least 2 seconds past the mark
         // to ensure that our data provider is ready with
@@ -497,7 +495,7 @@ export function UpdateRates() {
         let pauseMs = GetMsTillSecsPast(2, new Date());
         await Sleep(pauseMs);
         let now = new Date().getTime();
-        const success = await DoUpdates(now);
+        const success = await doUpdates(now);
         if (success)
             resolve(success);
         else
@@ -521,7 +519,7 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
             return;
         }
 
-        let datas = await getRates(currencyCode);
+        let datas = await getRateFromDb(currencyCode);
         let collection = (await datas.get());
         if (!(await datas.get()).exists){
             reject("Could not retrieve rates 2");
