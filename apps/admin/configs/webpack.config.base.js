@@ -46,7 +46,7 @@ export default {
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2'
   },
-
+  node: { fs: 'empty' },
   /**
    * Determine the array of extensions that should be used to resolve modules.
    */

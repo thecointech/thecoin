@@ -13,7 +13,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 //declare var module: any;
 declare var window: any;
 
-export function configureAppStore(createReducer: () => any, initialState: ApplicationBaseState | {} = {}, history: History<any>) {
+export function configureAppStore(createReducer: () => any, initialState: ApplicationBaseState | undefined = undefined, history: History<any>) {
   const reduxSagaMonitorOptions = {};
 
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);

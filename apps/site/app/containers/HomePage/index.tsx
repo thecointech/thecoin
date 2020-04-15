@@ -10,7 +10,7 @@
  */
 
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import phone from './images/phoneAndMoney.svg';
@@ -20,6 +20,9 @@ import { Subscribe } from '../Subscribe';
 import styles from './index.module.css';
 import { hasAccount } from '@the-coin/shared/utils/detection';
 import { useAccounts } from '@the-coin/shared/containers/AccountMap';
+
+import { ContentSegment } from 'components/ContentSegment';
+import { Teaser } from 'containers/ReturnProfile/Teaser';
 
 
 export const HomePage = () => {
@@ -66,7 +69,13 @@ export const HomePage = () => {
         </Grid.Row>
       </Grid>
       <Subscribe />
+    <ContentSegment>
+          <Container>
+            <Teaser />
+          </Container>
+      </ContentSegment>
     </React.Fragment>
+
   );
 }
 

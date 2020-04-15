@@ -22,6 +22,7 @@ const SliderMax = 37;
 
 type Props = RouteComponentProps;
 
+
 const initState = {
   sliderValue: 1,
   amount: 1000,

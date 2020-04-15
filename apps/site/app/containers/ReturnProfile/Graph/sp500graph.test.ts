@@ -5,7 +5,8 @@ const readfile = util.promisify(fs.readFile);
 
 // CWD == c:\src\TheCoin\site
 async function getData() {
-  const buffer = await readfile('.\\app\\sp500_monthly.csv');
+  const buffer = await readfile('sp500_monthly.csv');
+  //console.log(buffer)
   return parseData(buffer.toString().slice(1));
 }
 
@@ -16,7 +17,7 @@ test('Should read data in properly', async () => {
   // Ok - lets test getting % return over time
   const start = getIdx(new Date(1919, 0), data);
   const end = getIdx(new Date(2019, 1), data);
-  const returns = calcReturns(start, end, data, 1.85);
+  const returns = calcReturns(start, end, data);
   console.log(returns * 100);
 
 });
@@ -29,7 +30,7 @@ test('can build returns data', async () => {
   const startDate = new Date(2018, 10);
   const endDate = new Date();
 
-  const returns = calcPeriodReturn(data, startDate, endDate, 6, 0);
+  const returns = calcPeriodReturn(data, startDate, endDate, 6);
   console.log(returns);
 });
 
@@ -41,7 +42,7 @@ test('can build bucketted returns data', async () => {
   const startDate = new Date(1919, 0);
   const endDate = new Date();
 
-  const returns = calcPeriodReturn(data, startDate, endDate, 6, 0);
+  const returns = calcPeriodReturn(data, startDate, endDate, 6);
   const bucketted = bucketValues(returns, 20);
   // expect)(bucketted.min
   console.log(bucketted.values);
@@ -72,7 +73,7 @@ test('verify bucketting', async () => {
   const monthCount = 1;
   const numBuckets = 30;
   const startDate = new Date(1919, 0);
-  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
+  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount);
   const { size, values, average } = bucketValues(returns, numBuckets);
   expect(size).toBe(0.05);
 

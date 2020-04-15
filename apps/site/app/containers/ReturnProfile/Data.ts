@@ -41,13 +41,19 @@ export function parseData(data: string) {
 
 export async function getData() {
   const data = await fetch('/sp500_monthly.csv');
+  let fileToUse = new File(["sp500"], "/sp500_monthly.csv");
+  Papa.parse(fileToUse, {
+    complete: function(results) {
+      console.log("Finished:", results.data);
+    }
+  });
   return parseData(await data.text());
 }
 
 ///////////////////////////////////
 
-export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], maxFee: number) {
-  console.log("FIX MAXFEE: " + maxFee);
+export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[]) {
+  //console.log("FIX MAXFEE: " + maxFee);
   let shares = 1;
   for (let i = startIdx + 1; i <= endIdx; i++) {
     const month = data[i];
@@ -73,7 +79,7 @@ export function getIdx(date: Date, data: any[]) {
   return Math.min(yearIdx + monthIdx, data.length);
 }
 
-export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: Date, monthCount: number, fee: number) {
+export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: Date, monthCount: number) {
   const start = getIdx(startDate, data);
   let end = getIdx(endDate, data);
   end = Math.min(end, data.length - monthCount);
@@ -85,7 +91,7 @@ export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: D
   const periods = Array(numDatum);
   for (let i = 0; i < numDatum; i++) {
     const s = i + start;
-    periods[i] = calcReturns(s, s + monthCount, data, fee);
+    periods[i] = calcReturns(s, s + monthCount, data);
   }
   return periods;
 }
@@ -189,7 +195,7 @@ export function CalcPlotData(monthCount: number, data: DataFormat[], minimumValu
   }
 
   const startDate = new Date(1932, 0);
-  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
+  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount);
   return bucketValues(returns, 20, minimumValue);
 }
 
