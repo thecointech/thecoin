@@ -13,7 +13,6 @@ function createWebpackMiddleware(compiler, publicPath) {
   });
 }
 
-console.log(__dirname);
 
 const csvpath = path.resolve(__dirname, '..', '..', 'app', 'sp500_monthly.csv');
 const sp500buffer = fsSystem.readFileSync(csvpath);
@@ -33,7 +32,7 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
-  app.get('sp500_monthly.csv', (req, res) => {
+  app.get('/sp500_monthly.csv', (req, res) => {
     res.send(sp500string);
   });
 

@@ -41,12 +41,6 @@ export function parseData(data: string) {
 
 export async function getData() {
   const data = await fetch('/sp500_monthly.csv');
-  let fileToUse = new File(["sp500"], "/sp500_monthly.csv");
-  Papa.parse(fileToUse, {
-    complete: function(results) {
-      console.log("Finished:", results.data);
-    }
-  });
   return parseData(await data.text());
 }
 
