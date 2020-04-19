@@ -1,5 +1,5 @@
 import * as firestore from '../exchange/Firestore';
-import { ExchangeRate, getRates } from '../update/UpdateDb';
+import { ExchangeRate, FXUpdateInterval, getRateFromDb, insertRate, getCollectionRates, alignToNextBoundary, getLatestCoinRate } from '../update/UpdateDb';
 
 const Update = require('../Update/UpdateDb');
 //const assert = require('assert');
@@ -13,7 +13,7 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 	let now = new Date(1539739800123);
 	let toWait = Update.GetMsTillSecsPast(2, now);
 	let fin = now.getSeconds() * 1000 + now.getMilliseconds() + toWait;
-	expect(fin).toEqual(2000); // "Did not wait"
+	expect(fin).toEqual(2000);
 
 	now = new Date(1539739835123);
 	toWait = Update.GetMsTillSecsPast(30, now);
@@ -24,26 +24,53 @@ test('should return ms to wait to reach "seconds past the minute"', function () 
 });
 
 test('should return a valid rate', async function() {
+	
 	let now = new Date();
-	const latest = await Update.GetLatestCoinRate(now.getTime(), 0)
-	expect(latest.ValidFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
-	expect(latest.ValidUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
+
+	const latest = await getLatestCoinRate(now.getTime(), 0);
+	if (latest){
+		expect(latest.validFrom).toBeLessThanOrEqual(now.getTime()); //, "Fetched rate is not yet valid")
+		expect(latest.validUntil).toBeGreaterThanOrEqual(now.getTime()); //, "Fetched rate is already invalid")
+	} else {
+		throw new Error('No rate returned');
+	}
+});
+
+test('can insert rates', async function() {
+	jest.setTimeout(50000);
+	let now = new Date();
+
+	// ------- Create a new rate (expire in 1.5 min) -------
+	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime()+125000);
+	insertRate(0, latestRate);
+	// ------- Check if the new rate is here -------
+    (await getRateFromDb(0)).get().then(function(doc) {
+        if (doc.exists) {
+			let idToDelete = doc.id;
+			expect(doc.get("buy")).toEqual(10);
+
+			// ------- Delete the rate created -------
+			getCollectionRates(0).doc(idToDelete).delete();
+        } 
+    }).catch(function(error) {
+        console.log("Error getting rate:", error);
+    });
 });
 
 test('should return latest rate', async function() {
-	let now = new Date();
-	var latestRate = new ExchangeRate(10, 10, now.getTime(), now.getTime());
-	await Update.InsertRate(0, now.getTime()-2000, latestRate);
-	//Update.SetMostRecentRate(0, latestRate);
-	//console.log(await (await ((await getRates(0)).get())).get("Buy"));
+	let now = new Date().getTime();
 
-	var latestRate2 = new ExchangeRate(12, 12, now.getTime(), now.getTime());
-	Update.InsertRate(0, now.getTime()-1000, latestRate2);
-	//Update.SetMostRecentRate(0, latestRate2);
-    
-	//const latest = await Update.GetRatesFor(0, now.getTime())
-	//expect(latest.ValidFrom).toBeLessThanOrEqual(<any>now); //, "Fetched rate is not yet valid")
-	//expect(latest.ValidUntil).toBeGreaterThanOrEqual(<any>now); //, "Fetched rate is already invalid")
+	// ------- Check if the new rate is here -------
+    (await getRateFromDb(0)).get().then(function(doc) {
+        if (doc.exists) {
+			let validFrom = doc.get("validFrom");
+			let validUntil = doc.get("validUntil");
+			expect(validFrom).toBeLessThanOrEqual(<any>now); //, "Fetched rate is not yet valid")
+			expect(validUntil).toBeGreaterThanOrEqual(<any>now); //, "Fetched rate is already invalid")	
+        } 
+    }).catch(function(error) {
+        console.log("Error getting rate:", error);
+    });
 });
 
 test('should correctly generate a validity taking into account end-of-day', function() {
@@ -70,23 +97,22 @@ test('should correctly find boundaries for a variety of times', function() {
 		expect(tzus(boundary, "%M:%S", "America/New_York")).toMatch("31:30"); //, "Did not land on min/sec boundary")
 
 		let bhr = tzus(boundary, "%H", "America/New_York")
-		let hrs = Update.FXUpdateInterval / (60 * 60 * 1000)
+		let hrs = FXUpdateInterval / (60 * 60 * 1000)
 		expect(bhr % hrs).toBe(0); //, "Did not land on hour boundary")
 	}
-	let AlignToNextBoundary = Update.AlignToNextBoundary
 	let ts = tz("2000-01-01");
-	let boundary = AlignToNextBoundary(ts, Update.FXUpdateInterval);
+	let boundary = alignToNextBoundary(ts, FXUpdateInterval);
 	validate(ts, boundary);
 
 	ts = new Date().getTime()
-	boundary = AlignToNextBoundary(ts, Update.FXUpdateInterval);
+	boundary = alignToNextBoundary(ts, FXUpdateInterval);
 	validate(ts, boundary);
 
 	ts = tzus("2018-07-20 00:10:13", "America/New_York")
-	boundary = AlignToNextBoundary(ts, Update.FXUpdateInterval);
+	boundary = alignToNextBoundary(ts, FXUpdateInterval);
 	validate(ts, boundary);
 
 	ts = tzus("2018-07-20 23:45:27.132", "America/New_York")
-	boundary = AlignToNextBoundary(ts, Update.FXUpdateInterval);
+	boundary = alignToNextBoundary(ts, FXUpdateInterval);
 	validate(ts, boundary);
 });
