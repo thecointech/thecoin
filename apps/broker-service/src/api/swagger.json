@@ -713,12 +713,6 @@
 							"additionalProperties": true,
 							"type": "object"
 						}
-					},
-					"400": {
-						"description": "Bad request"
-					},
-					"405": {
-						"description": "Server Error"
 					}
 				},
 				"description": "Returns info like brokers address, available balance, etc (?)\nGets the operating status of the broker",
@@ -726,7 +720,7 @@
 				"parameters": []
 			}
 		},
-		"/transfert": {
+		"/transfer": {
 			"post": {
 				"operationId": "Transfer",
 				"produces": [

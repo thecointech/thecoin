@@ -4,7 +4,7 @@
 
 //import { configureStore, getDefaultMiddleware, StoreEnhancer } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
-import { createInjectorsEnhancer } from '@the-coin/redux-injectors';
+import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { ApplicationBaseState } from './types';
 import { History } from 'history';
@@ -13,7 +13,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 //declare var module: any;
 declare var window: any;
 
-export function configureAppStore(createReducer: () => any, initialState: ApplicationBaseState | {} = {}, history: History<any>) {
+export function configureAppStore(createReducer: () => any, initialState: ApplicationBaseState | undefined = undefined, history: History<any>) {
   const reduxSagaMonitorOptions = {};
 
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);

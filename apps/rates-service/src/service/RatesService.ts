@@ -1,6 +1,4 @@
-'use strict';
-
-const RatesDB = require('../update/UpdateDb');
+import { GetRatesFor } from '../update/UpdateDb';
 /**
  * Exchange Rate
  * Query exchange rate for THE into the given currency
@@ -10,11 +8,11 @@ const RatesDB = require('../update/UpdateDb');
  * returns FXRate
  **/
 
-exports.getConversion = function (currencyCode, timestamp) {
+export function getConversion(currencyCode: any, timestamp: number) {
   return new Promise(function (resolve, reject) {
     const ts = timestamp || Date.now();
-    let coinWait = RatesDB.GetRatesFor(0, ts);
-    let fxWait = RatesDB.GetRatesFor(currencyCode, ts);
+    let coinWait = <any> GetRatesFor(0, ts);
+    let fxWait = <any> GetRatesFor(currencyCode, ts);
     Promise.all([coinWait, fxWait])
       .then(([coinRates, fxRates]) => {
         let result = {

@@ -1,0 +1,45 @@
+{
+	"basePath": "/api/v1",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {},
+	"info": {
+		"title": "@the-coin/rates-service",
+		"version": "0.1.0",
+		"description": "TheCoin core services.  Published by TheCoin Tech",
+		"license": {
+			"name": "Apache2.0"
+		}
+	},
+	"paths": {
+		"/doUpdate": {
+			"get": {
+				"operationId": "DoUpdate",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"additionalProperties": true,
+							"type": "object"
+						}
+					},
+					"405": {
+						"description": "unknown exception"
+					}
+				},
+				"description": "Get rates.",
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {}
+}
