@@ -68,13 +68,14 @@ export async function addFromGmail(): Promise<DepositData[]> {
 function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
 
   const subject = getSubject(email);
-  const body = getBody(email);
-  const dateRecieved = getRecievedDate(email);
-
-  if (!subject.endsWith("sent you money.")) {
-    console.error(`Unknown deposit type: ${dateRecieved} - ${subject}`);
+  if (!subject) 
     return null;
-  }
+  const dateRecieved = getRecievedDate(email);
+  if (!dateRecieved) 
+    return null;
+  const body = getBody(email);
+  if (!body) 
+    return null;
 
   const record: DepositRecord = {
     transfer: {
@@ -137,11 +138,17 @@ function getRecievedDate(email: gmail_v1.Schema$Message) {
 }
 
 function getSubject(email: gmail_v1.Schema$Message) {
-  return email.payload.headers.find(h => h.name === "Subject").value.substr(32);
+  const subject = email.payload.headers.find(h => h.name === "Subject").value;
+  const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
+  if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
+    console.error(`Unknown deposit type: ${subject}`);
+    return null;
+  }
+  return subject.substr(redirectHeader.length);
 }
 
 function getBody(email: gmail_v1.Schema$Message): string {
-  const textPart = email.payload.parts[0].parts[0].parts[0];
+  const textPart = email.payload.parts[0]?.parts[0]?.parts[0];
   const decoded = Base64.decode(textPart.body.data);
   return decoded;
 }
