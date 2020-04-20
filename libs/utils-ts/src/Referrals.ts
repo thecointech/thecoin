@@ -1,11 +1,10 @@
 import { GetFirestore } from "./Firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
-import { NewAccountReferal } from "@the-coin/types";
+import { NewAccountReferal, Timestamp, CollectionReference, DocumentReference } from "@the-coin/types";
 //import { base32Encode } from '@ctrl/ts-base32';
 import base32 from 'base32';
 import { utils, Wallet } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp, CollectionReference, DocumentReference } from "@the-coin/types/FirebaseFirestore";
 
 export function GetReferrersCollection() : CollectionReference {
   return GetFirestore().collection("Referrers");

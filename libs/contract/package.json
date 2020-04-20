@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/contract-src",
+  "name": "@the-coin/contract",
   "private": true,
   "version": "2.0.0",
   "description": "The Coin: Solidity contract for The Universal Currency",
@@ -17,9 +17,7 @@
     "zospush": "yarn run zossession && zos push",
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
-    "console": "truffle console",
-    "postinstall": "node ./postinstallcwd.js",
-    "postinstallcwd": "yarn build"
+    "console": "truffle console"
   },
   "directories": {
     "contracts": "contracts",
@@ -29,9 +27,9 @@
     "contracts/**/*"
   ],
   "devDependencies": {
-    "openzeppelin-eth": "^2.1.3",
-    "truffle": "^5.0.12",
-    "zos": "^2.2.2",
-    "zos-lib": "^2.2.2"
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/contracts-ethereum-package": "^2.5.0",
+    "shelljs": "*",
+    "truffle": "^5.1.22"
   }
 }

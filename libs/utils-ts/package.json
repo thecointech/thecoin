@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/utilities-src",
+  "name": "@the-coin/utilities",
   "version": "2.0.0",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [

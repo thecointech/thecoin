@@ -3,11 +3,11 @@ pragma solidity ^0.5.0;
 import "./ERC20Local.sol";
 import "./LibCertTransfer.sol";
 
-import "openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol";
 import "zos-lib/contracts/Initializable.sol";
 
-import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
-import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
+import "zeppelin/contracts/token/ERC20/ERC20Detailed.sol";
+import "zeppelin/contracts/token/ERC20/IERC20.sol";
+import "zeppelin/contracts/cryptography/ECDSA.sol";
 
 
 // ----------------------------------------------------------------------------
@@ -20,6 +20,8 @@ import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
 // Enjoy.
 //
 // ----------------------------------------------------------------------------
+
+NOTE - We need to fix this and update to latest version of OpenZeppelin
 
 // ----------------------------------------------------------------------------
 // ERC20 Token, with the addition of symbol, name and decimals 

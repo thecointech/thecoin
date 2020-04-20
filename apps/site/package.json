@@ -17,7 +17,6 @@
     "npm": ">=5",
     "node": ">=8.15.1"
   },
-  "author": "Max Stoiber",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
@@ -60,11 +59,6 @@
     "*.{md,json}": [
       "git add --force"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:tslint"
-    }
   },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"

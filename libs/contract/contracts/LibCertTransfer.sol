@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
+import "zeppelin/contracts/cryptography/ECDSA.sol";
 //import "./Seriality/Seriality.sol";
 
 contract LibCertTransfer {

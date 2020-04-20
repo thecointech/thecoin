@@ -1,5 +1,4 @@
-import { Firestore, Timestamp } from "@the-coin/types/FirebaseFirestore";
-import { CertifiedTransfer } from "@the-coin/types";
+import { Firestore, Timestamp, CertifiedTransfer } from "@the-coin/types";
 
 let __firestore: Firestore|null = null;
 

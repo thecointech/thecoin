@@ -1,8 +1,10 @@
 pragma solidity ^0.5.0;
 
-import "zos-lib/contracts/Initializable.sol";
-import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
-import "openzeppelin-eth/contracts/math/SafeMath.sol";
+// import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
+// import "openzeppelin-eth/contracts/math/SafeMath.sol";
+import 'zeppelin/contracts/math/SafeMath.sol';
+import 'zeppelin/contracts/token/ERC20/IERC20.sol';
+
 
 
 /**
@@ -21,7 +23,7 @@ import "openzeppelin-eth/contracts/math/SafeMath.sol";
  * all accounts just by listening to said events. Note that this isn't required by the specification, and other
  * compliant implementations may not do it.
  */
-contract ERC20Local is Initializable, IERC20 {
+contract ERC20Local is IERC20 {
     using SafeMath for uint256;
 
     mapping (address => uint256) internal _balances;
