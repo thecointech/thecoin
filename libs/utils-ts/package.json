@@ -20,7 +20,8 @@
     "@the-coin/types": "*"
   },
   "files": [
-    "src/**/*"
+    "src/**/*",
+    "build/**/*"
   ],
   "main": "./build/index.js",
   "exports": {

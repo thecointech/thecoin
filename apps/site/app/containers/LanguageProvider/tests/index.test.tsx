@@ -7,7 +7,7 @@ import LanguageProvider from '../index';
 import configureStore from '../../../configureStore';
 
 import { translationMessages } from '../../../i18n';
-import history from '@the-coin/shared/utils/history';
+import { utils } from '@the-coin/shared';
 
 const messages = defineMessages({
   someMessage: {
@@ -21,7 +21,7 @@ describe('<LanguageProvider />', () => {
   let store;
 
   beforeEach(() => {
-    store = configureStore({}, history);
+    store = configureStore({}, utils.history);
   });
 
   it('should render its children', () => {

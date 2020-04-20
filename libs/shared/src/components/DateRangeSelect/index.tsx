@@ -2,7 +2,8 @@ import React from 'react';
 import moment, { Moment } from 'moment'
 
 import 'react-dates/initialize'
-import 'react-dates/lib/css/_datepicker.css';
+//import 'react-dates/lib/css/_datepicker.css';
+
 import { DateRangePicker, FocusedInputShape } from 'react-dates';
 
 export type OnChangeCallback = (startTime: Date, endTime: Date) => void;

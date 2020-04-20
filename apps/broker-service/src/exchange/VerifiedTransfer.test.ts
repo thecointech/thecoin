@@ -1,12 +1,10 @@
 import { GetWallet } from "./Wallet";
-import { GetContract } from "@the-coin/utilities/TheContract";
-import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
+import { TheContract, BuildVerifiedXfer } from "@the-coin/utilities";
+import {IsDebug} from "@the-coin/utilities/src/IsDebug";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
 import status from '../status/Status.json';
-
 import * as firestore from './Firestore'
-import { IsDebug } from "@the-coin/utilities/IsDebug";
 
 beforeAll(async () => {
   firestore.init();
@@ -34,7 +32,7 @@ test("Transfer completes sale properly", async () => {
 	jest.setTimeout(180000);
 
 	const wallet = await GetWallet();
-	const tc = await GetContract();
+	const tc = await TheContract.GetContract();
 	expect(wallet).toBeDefined();
 
 	// TODO!  Create a testing account to handle this stuff!

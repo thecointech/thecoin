@@ -1,10 +1,9 @@
 import { GetContract, GetWallet } from './Wallet'
-import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
+import { BuildVerifiedBillPayment, ProcessRecord } from '@the-coin/utilities';
 import { ProcessBillPayment } from './VerifiedBillPayments'
 import { BillPayeePacket } from '@the-coin/types';
 import status from '../status/Status.json';
 import * as firestore from './Firestore'
-import { TransferRecord } from '@the-coin/utilities/Firestore';
 
 beforeAll(async () => {
   firestore.init();
@@ -36,7 +35,7 @@ test("Verified bill payments complete properly", async () => {
 
 	// Wait one more second to make sure the datastore has been updated;
 	// Check that the datastore now has the right values
-	const r = (await tx.doc.get()).data() as TransferRecord;
+	const r = (await tx.doc.get()).data() as ProcessRecord;
 	expect(r.hash).toEqual(tx.hash);
 	expect(r.fiatDisbursed).toEqual(0);
 	//expect(r.encryptedPayee).toMatch(name);

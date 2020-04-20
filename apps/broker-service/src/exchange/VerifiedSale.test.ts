@@ -1,12 +1,11 @@
 
 import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
-import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
+import { BuildVerifiedSale, ProcessRecord } from '@the-coin/utilities';
 import { DoCertifiedSale } from './VerifiedSale'
 import status from '../status/Status.json';
 import * as firestore from './Firestore'
 import { ETransferPacket } from '@the-coin/types';
-import { TransferRecord } from '@the-coin/utilities/Firestore';
 
 beforeAll(async () => {
   firestore.init();
@@ -69,7 +68,7 @@ test("Certified sale completes sale properly", async () => {
 	expect(newBalance.toNumber()).toBe(myBalance.toNumber() - sellAmount);
 	
 	const r = await tx.doc.get();
-	const record = r.data() as TransferRecord;
+	const record = r.data() as ProcessRecord;
 	expect(record.hash).toEqual(tx.hash);
 	//expect(record.clientEmail).toEqual(email);
 	expect(record.confirmed).toEqual(true);

@@ -12,13 +12,14 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -b -v && yarn build:copy",
-    "build:copy": "cpx \"./src/**/*.module.css\" ./build/shared"
+    "build:copy": "cpx \"./src/**/*.module.css\" ./build"
   },
   "directories": {
     "src": "src"
   },
   "files": [
-    "./src/**/*"
+    "./src/**/*",
+    "./build/**/*"
   ],
   "main": "./build/index.js",
   "exports": {

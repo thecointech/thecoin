@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es2017",
     "baseUrl": "./app/",
-    "outDir": "./build/admin/",
+    "outDir": "./build",
     "incremental": true,
-    "tsBuildInfoFile": "./build/.obj/admin.buildinfo",
+    "tsBuildInfoFile": "./build/_obj.buildinfo",
     "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",
