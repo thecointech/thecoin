@@ -1,4 +1,4 @@
-import { Timestamp } from "@the-coin/types/FirebaseFirestore";
+import { Timestamp } from "@the-coin/types";
 import { DepositData } from "./types";
 
 

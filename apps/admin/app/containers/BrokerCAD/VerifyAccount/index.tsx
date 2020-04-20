@@ -1,23 +1,20 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
 import messages from './messages'
-import { NormalizeAddress } from '@the-coin/utilities';
-import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/Referrals';
-import { SetUserVerified } from '@the-coin/utilities/User';
-import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { Referrals, SetUserVerified, NormalizeAddress } from '@the-coin/utilities';
+import { UxAddress, SignerIdent } from '@the-coin/shared';
 import { now } from 'utils/Firebase';
 
 interface OwnProps {
-	signer: TheSigner,
+	signer: SignerIdent.TheSigner,
 }
 type Props = OwnProps;
 
 const initialState = {
 	account: '',
 	forceValidate: false,
-	verifiedAccounts: [] as VerifiedReferrer[]
+	verifiedAccounts: [] as Referrals.VerifiedReferrer[]
 }
 
 //
@@ -43,10 +40,10 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 	}
 
 	async fetchExistingAccounts() {
-		const billCollection = await GetReferrersCollection();
+		const billCollection = await Referrals.GetReferrersCollection();
 		const allDocs = await billCollection.get();
 		this.setState({
-			verifiedAccounts: allDocs.docs.map(d => d.data() as VerifiedReferrer)
+			verifiedAccounts: allDocs.docs.map(d => d.data() as Referrals.VerifiedReferrer)
 		})
   }
   
@@ -62,7 +59,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		const signature = await signer.signMessage(address)
 
 		await SetUserVerified(signature, address, now());
-		await CreateReferrer(signature, address);
+		await Referrals.CreateReferrer(signature, address);
 		alert('Done');
 	}
 
@@ -75,7 +72,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 			return <Message>No verified accounts found</Message>
 			
 		const verifiedList = verifiedAccounts.map(account => {
-			const code = GetReferrerCode(account.signature);
+			const code = Referrals.GetReferrerCode(account.signature);
 			return <List.Item key={account.address}>
 				<List.Content>
 					<List.Header>{code}</List.Header>

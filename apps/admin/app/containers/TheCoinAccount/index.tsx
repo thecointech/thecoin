@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import { Balance } from '@the-coin/shared/containers/Balance';
+//import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
+//import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
+import { Balance, AccountMap, Account } from '@the-coin/shared';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
 
 
-const AccountMap: RouterPath[] = [
+const AccountRoutes: Account.RouterPath[] = [
   {
     name: "Balance",
     urlFragment: "",
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} />),
+    creator: (routerProps: Account.AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} />),
     exact: true
   },
   {
@@ -22,7 +22,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Complete Purchase",
     urlFragment: "purchase",
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />),
+    creator: (routerProps: Account.AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />),
   }
 ];
 
@@ -31,8 +31,8 @@ export const AccountName = "TheCoin";
 export const TheCoin = (props: RouteComponentProps) => {
   const { url } = props.match;
 
-  const accounts = useAccountMap();
-  const accountsApi = useAccountMapApi();
+  const accounts = AccountMap.useAccountMap();
+  const accountsApi = AccountMap.useAccountMapApi();
   const theCoin = Object.values(accounts)
     .find(account => account.name === AccountName);
 
@@ -41,5 +41,5 @@ export const TheCoin = (props: RouteComponentProps) => {
   }, [accountsApi, theCoin])
 
 
-  return <Account account={theCoin} accountMap={AccountMap} url={url} />
+  return <Account.Account account={theCoin} accountMap={AccountRoutes} url={url} />
 }

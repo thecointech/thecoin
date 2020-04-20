@@ -6,21 +6,18 @@ import { addFromGmail, setETransferLabel, initializeApi } from './addFromGmail';
 import { DepositData } from './types';
 import { OAuth2Client } from 'google-auth-library';
 
-import { useFxRates, useFxRatesApi, IFxRates } from '@the-coin/shared/containers/FxRate';
+import { FxRate, AccountMap, Account, ModalOperation } from '@the-coin/shared';
 import { TransferList } from 'containers/TransferList/TransferList';
 import { AddSettlementDate } from 'containers/TransferList/utils';
 import { DepositRenderer } from './DepositRenderer';
 import { addFromDB } from './addFromDB';
 import { addFromBank } from './addFromBank';
 import { addFromBlockchain } from './addFromBlockchain';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { useAccountApi, Transaction } from '@the-coin/shared/containers/Account';
 import { RbcApi, ETransferErrorCode } from 'RbcApi';
 import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
 import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
-import { GetActionDoc } from '@the-coin/utilities/User';
+import { GetActionDoc } from '@the-coin/utilities';
 import { Contract } from 'ethers';
-import { ModalOperation } from '../../../../../libs/shared/src/containers/ModalOperation';
 import messages from './messages';
 
 
@@ -44,10 +41,10 @@ export const Gmail = () => {
   const [rbcApi, setRbcApi] = useState(null as RbcApi)
 
 
-  const { rates } = useFxRates();
-  const fxApi = useFxRatesApi();
-  const account = useActiveAccount();
-  const accountApi = useAccountApi(account.address);
+  const { rates } = FxRate.useFxRates();
+  const fxApi = FxRate.useFxRatesApi();
+  const account = AccountMap.useActiveAccount();
+  const accountApi = Account.useAccountApi(account.address);
 
   const onInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setCode(event.currentTarget.value)
@@ -183,7 +180,7 @@ async function InitiateLogin(setAuth: (v: OAuth2Client) => void, setText: (v: st
   // The user is next expected to click onBegin
 }
 
-async function addSettlementDate(deposits: DepositData[], fxApi: IFxRates) {
+async function addSettlementDate(deposits: DepositData[], fxApi: FxRate.IFxRates) {
   for (let i = 0; i < deposits.length; i++) {
     const d = deposits[i];
     await AddSettlementDate(d.record, fxApi)
@@ -270,7 +267,7 @@ async function storeInDB(address: string, record: DepositRecord) {
   }
 }
 
-async function completeTheTransfer(deposit: DepositData, contract: Contract, progressCb: (v: string) => void) : Promise<Transaction>
+async function completeTheTransfer(deposit: DepositData, contract: Contract, progressCb: (v: string) => void) : Promise<Account.Transaction>
 {
   progressCb('Beginning TheCoin transfer');
   const {record, instruction} = deposit;

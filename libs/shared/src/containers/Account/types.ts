@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes'
+import { CurrencyCodes } from '@the-coin/utilities'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 

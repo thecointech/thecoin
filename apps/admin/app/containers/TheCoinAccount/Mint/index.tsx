@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import messages from './messages';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { useFxRates, weSellAt } from '@the-coin/shared/containers/FxRate';
+import { DualFxInput, ModalOperation, FxRate, Account, AccountMap } from '@the-coin/shared';
 import { toHuman } from '@the-coin/utilities';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap'
-import { useAccountApi } from '@the-coin/shared/containers/Account';
+
+const { useFxRates, weSellAt } = FxRate;
+
 
 enum MintStatus {
   WAITING,
@@ -22,8 +21,8 @@ export const Mint = () => {
   const [txHash, setTxHash] = useState(undefined as MaybeString);
 
   const {rates} = useFxRates();
-  const account = useActiveAccount();
-  const accountApi = useAccountApi(account?.address);
+  const account = AccountMap.useActiveAccount();
+  const accountApi = Account.useAccountApi(account?.address);
 
   /////////////////////////////////////////////////////////
   const onMintCoins = useCallback(async () => {

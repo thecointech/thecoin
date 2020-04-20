@@ -11,12 +11,14 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
-    "build": "truffle compile --contracts_build_directory=../../build/contract && cpx \"zos.*\" ../../build/contract",
+    "build": "truffle compile",
     "test": "truffle test",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
     "zospush": "yarn run zossession && zos push",
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
+    "postinstall": "node ./postinstallcwd.js",
+    "postinstallcwd": "yarn build",
     "console": "truffle console"
   },
   "directories": {
@@ -31,5 +33,9 @@
     "@openzeppelin/contracts-ethereum-package": "^2.5.0",
     "shelljs": "*",
     "truffle": "^5.1.22"
+  },
+  "main": "./src/index.ts",
+  "exports": {
+    "./": "./build/contracts"
   }
 }

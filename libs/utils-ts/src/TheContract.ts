@@ -4,8 +4,9 @@ import { SignedMessage } from "@the-coin/types";
 
 type Network = "ropsten"|"mainnet";
 async function BuildContract(network: Network) {
-	const deploy = await import(`@the-coin/contract/zos.${network}.json`);
-	const TheCoinSpec = await import('@the-coin/contract/TheCoin.json');
+	const contract = await import('@the-coin/contract');
+	const deploy = contract[network]; // await import(`@the-coin/contract/zos.${network}.json`);
+	const TheCoinSpec = contract.TheCoin; //{ TheCoin } = await import('@the-coin/contract');
 	if (!deploy || !TheCoinSpec)
 		throw new Error('Cannot create contract: missing deployment');
 

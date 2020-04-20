@@ -3,11 +3,10 @@ import { Switch, Route } from 'react-router-dom';
 import { TheCoin, AccountName as TheCoinName } from 'containers/TheCoinAccount'
 import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
 import { NotFoundPage } from './NotFoundPage';
-import {RUrl} from '@the-coin/utilities/RUrl';
-import { useSidebar } from '@the-coin/shared/containers/PageSidebar/actions';
-import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
+import {RUrl} from '@the-coin/utilities';
+import { PageSidebar } from '@the-coin/shared';
 
-const ConstantSidebarItems: SidebarMenuItem[] = 
+const ConstantSidebarItems: PageSidebar.SidebarMenuItem[] = 
 [
 	{
 		link: {
@@ -29,14 +28,14 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	}
 ];
 
-const generateSidebarItems = () : SidebarMenuItem[] => 
-  MapMenuItems(ConstantSidebarItems, "/");
+const generateSidebarItems = () : PageSidebar.SidebarMenuItem[] => 
+	PageSidebar.MapMenuItems(ConstantSidebarItems, "/");
 
 const SIDEBAR_KEY = "RootItems"
   
 export const Routes = () => {
 
-  const sidebar = useSidebar();
+  const sidebar = PageSidebar.useSidebar();
   React.useEffect(() => {
     sidebar.addGenerator(SIDEBAR_KEY, generateSidebarItems);
     return () => sidebar.removeGenerator(SIDEBAR_KEY);

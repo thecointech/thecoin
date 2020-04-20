@@ -4,32 +4,23 @@ import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import * as Datetime from 'react-datetime';
 import { Moment } from 'moment';
 
-import { toHuman } from '@the-coin/utilities';
-import { roundPlaces } from '@the-coin/utilities/Conversion';
-
-
-import { getFxRate, FxRatesState, IFxRates, selectFxRate, mapDispatchToProps } from '@the-coin/shared/containers/FxRate';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
+import { roundPlaces, toHuman, GetActionDoc, NextOpenTimestamp } from '@the-coin/utilities';
+import { ModalOperation, FxRate, Account, DualFxInput, UxAddress } from '@the-coin/shared';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { GetActionDoc } from '@the-coin/utilities/User';
-import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
-import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
 import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
 
 import { now } from 'utils/Firebase';
+import { DocumentReference } from '@the-coin/types';
 //import { firestore } from 'firebase';
 
-type MyProps = AccountState & {
+type MyProps = Account.AccountState & {
   updateBalance: Function
 }
-type Props = MyProps & FxRatesState & IFxRates;
+type Props = MyProps & FxRate.FxRatesState & FxRate.IFxRates;
 
 const initialState = {
   coin: 0,
@@ -170,7 +161,7 @@ class PurchaseClass extends React.PureComponent<Props> {
   getSelectedFxRate() {
     const { settledDate } = this.state;
     const { rates } = this.props;
-    const rate = getFxRate(rates, settledDate.getTime());
+    const rate = FxRate.getFxRate(rates, settledDate.getTime());
     return rate;
   }
 
@@ -257,5 +248,5 @@ class PurchaseClass extends React.PureComponent<Props> {
   }
 }
 
-export const Purchase = connect(selectFxRate, mapDispatchToProps)(PurchaseClass);
+export const Purchase = connect(FxRate.selectFxRate, FxRate.mapDispatchToProps)(PurchaseClass);
 

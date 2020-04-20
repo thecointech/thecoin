@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
-import { RUrl } from '@the-coin/utilities/RUrl';
+import { RUrl, NormalizeAddress } from '@the-coin/utilities';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
 import { ApplicationBaseState } from "../../types";
@@ -10,7 +10,6 @@ import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
 import { isWallet } from "../../SignerIdent";
-import { NormalizeAddress } from "@the-coin/utilities";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {

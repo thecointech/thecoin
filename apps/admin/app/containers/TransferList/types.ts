@@ -1,4 +1,4 @@
-import { ProcessRecord } from "@the-coin/utilities/Firestore";
+import { ProcessRecord } from "@the-coin/utilities";
 import { BillPayeePacket, ETransferPacket } from "@the-coin/types";
 import { DepositInstructions } from "containers/gmail/types";
 

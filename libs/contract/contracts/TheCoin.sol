@@ -3,11 +3,9 @@ pragma solidity ^0.5.0;
 import "./ERC20Local.sol";
 import "./LibCertTransfer.sol";
 
-import "zos-lib/contracts/Initializable.sol";
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol";
 
-import "zeppelin/contracts/token/ERC20/ERC20Detailed.sol";
-import "zeppelin/contracts/token/ERC20/IERC20.sol";
-import "zeppelin/contracts/cryptography/ECDSA.sol";
 
 
 // ----------------------------------------------------------------------------
@@ -21,10 +19,10 @@ import "zeppelin/contracts/cryptography/ECDSA.sol";
 //
 // ----------------------------------------------------------------------------
 
-NOTE - We need to fix this and update to latest version of OpenZeppelin
+//NOTE - We need to fix this and update to latest version of OpenZeppelin
 
 // ----------------------------------------------------------------------------
-// ERC20 Token, with the addition of symbol, name and decimals 
+// ERC20 Token, with the addition of symbol, name and decimals
 //
 // NOTE: 100 SpyCoins is equivalent to 1 share of SPY,
 // or *at time of writing* roughly $2.70 USD
@@ -40,9 +38,9 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // A stored list of timestamps that are used to uniquely
     // specify transactions running through paidTransaction.
     // Each tx comes with a timestamp that must be higher than
-    // the last tx timestamp, and (more or less) be in the 
+    // the last tx timestamp, and (more or less) be in the
     // same time as the block being mined.  This ensures
-    // tx authentications are unique, and expire 
+    // tx authentications are unique, and expire
     // relatively shortly after issue
     mapping(address => uint) lastTxTimestamp;
 

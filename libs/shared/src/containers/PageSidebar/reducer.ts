@@ -23,7 +23,7 @@ export class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
 
 const reducer = createReducerFunction(SidebarItemsReducer, initialState) as any;
 
-export const useSidebar = () => {
+export const useStore = () => {
   useInjectReducer({ key: SIDEBAR_KEY, reducer: reducer });
 }
 

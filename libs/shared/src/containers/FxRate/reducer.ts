@@ -1,5 +1,5 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
-import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
+import { CurrencyCodes } from '@the-coin/utilities';
 import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';

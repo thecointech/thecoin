@@ -12,7 +12,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -b -v && yarn build:copy",
-    "build:copy": "cpx \"./src/**/*.module.css\" ../../build/shared"
+    "build:copy": "cpx \"./src/**/*.module.css\" ./build/shared"
   },
   "directories": {
     "src": "src"
@@ -20,6 +20,10 @@
   "files": [
     "./src/**/*"
   ],
+  "main": "./build/index.js",
+  "exports": {
+    "./": "./build"
+  },
   "dependencies": {
     "@the-coin/contract": "*",
     "@the-coin/pricing": "*",

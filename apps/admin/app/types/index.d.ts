@@ -2,7 +2,7 @@ import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
 
-import { ApplicationBaseState } from '@the-coin/shared/types'
+import { ApplicationBaseState } from '@the-coin/shared'
 
 
 // Your root reducer type, which is your redux state types also

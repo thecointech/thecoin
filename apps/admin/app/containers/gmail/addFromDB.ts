@@ -1,6 +1,6 @@
 import { DepositData, OldPurchseDB } from "./types";
 import { IsValidAddress } from "@the-coin/utilities";
-import { GetUserDoc } from "@the-coin/utilities/User";
+import { GetUserDoc } from "@the-coin/utilities";
 import { Dictionary } from 'lodash';
 import { addNewEntries } from "./utils";
 import { PurchaseType, DepositRecord } from "containers/TransferList/types";

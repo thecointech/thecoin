@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import {createReducer} from './reducers';
 import { App } from './containers/App';
-import { configureAppStore } from '@the-coin/shared/configureStore';
-import history from '@the-coin/shared/utils/history';
+import { configureAppStore } from '@the-coin/shared';
+import {utils} from '@the-coin/shared';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -29,14 +29,14 @@ pathFix();
 import {signIn} from './utils/Firebase';
 signIn();
 
-const store = configureAppStore(createReducer, undefined, history);
+const store = configureAppStore(createReducer, undefined, utils.history);
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <Provider store={store}>
     <LanguageProvider messages={translationMessages}>
-      <ConnectedRouter history={history}>
+      <ConnectedRouter history={utils.history}>
         <App />
       </ConnectedRouter>
     </LanguageProvider>

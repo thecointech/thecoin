@@ -1,12 +1,12 @@
 import { DepositData } from "./types";
-import { Transaction } from "@the-coin/shared/containers/Account";
-import { weSellAt } from "@the-coin/shared/containers/FxRate";
-import { FXRate } from '@the-coin/pricing'
+import { Account, FxRate } from "@the-coin/shared";
 import { toHuman, IsValidAddress, NormalizeAddress, toCoin } from "@the-coin/utilities";
 import { fromMillis } from "utils/Firebase";
 
+type Transaction = Account.Transaction;
+type FXRate = FxRate.FXRate;
 
-export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FXRate[])
+export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FxRate.FXRate[])
 {
   // Let's verify all hash'es, and see if we can find 
   // appropriate transfers for any that do not have hashes
@@ -51,17 +51,17 @@ export async function addFromBlockchain(deposits: DepositData[], transfers: Tran
   return deposits;
 }
 
-function addCoinValue(deposit: DepositData, fxRates: FXRate[])
+function addCoinValue(deposit: DepositData, fxRates: FxRate.FXRate[])
 {
   if (deposit.record.transfer.value < 0) {
     if (deposit.record.processedTimestamp) {
-      const fxRate = weSellAt(fxRates, deposit.record.processedTimestamp.toDate());
+      const fxRate = FxRate.weSellAt(fxRates, deposit.record.processedTimestamp.toDate());
       deposit.record.transfer.value = toCoin(deposit.record.fiatDisbursed / fxRate);
     }
   }
 }
 
-function VerifyLinkedTx(deposit: DepositData, allTransfers: Transaction[], fxRates: FXRate[]) {
+function VerifyLinkedTx(deposit: DepositData, allTransfers: Transaction[], fxRates: FxRate.FXRate[]) {
   const tx = allTransfers.find(t => t.txHash === deposit.record.hash);
   if (!tx)
   {
@@ -83,7 +83,7 @@ function VerifyDeposit(deposit: DepositData, tx: Transaction, allTransfers: Tran
     return false;
   }
 
-  const txValue = toHuman(weSellAt(fxRates, tx.date) * tx.change, true);
+  const txValue = toHuman(FxRate.weSellAt(fxRates, tx.date) * tx.change, true);
   const txDelta = ((tx.date.getTime() / 1000) - deposit.record.recievedTimestamp.seconds) / (60*60*24);
   if (-txValue != deposit.record.fiatDisbursed)
   {
@@ -144,7 +144,7 @@ function buildUnmatchedBCEntries(deposits: DepositData[], allTransfers: Transact
 
     // First, do have this user anywhere?
     const deposit = deposits.find(d => d.instruction.address == tx.counterPartyAddress);
-    const txValue = toHuman(weSellAt(fxRates, tx.date) * tx.change, true);
+    const txValue = toHuman(FxRate.weSellAt(fxRates, tx.date) * tx.change, true);
     return { 
       name: deposit?.instruction.name,
       value: txValue,

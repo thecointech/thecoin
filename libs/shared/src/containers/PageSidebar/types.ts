@@ -1,7 +1,7 @@
 import { ImmerReducer } from 'immer-reducer';
 import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
-import { RUrl } from '@the-coin/utilities/RUrl';
+import { RUrl } from '@the-coin/utilities';
 
 /* --- STATE --- */
 export interface SidebarMenuLink {

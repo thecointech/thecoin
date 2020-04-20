@@ -2,7 +2,7 @@ import { Wallet, Contract } from 'ethers';
 import encrypted from './BrokerTransferAssistantWallet.json';
 import { key } from './secret.json';
 import {TheContract} from '@the-coin/utilities';
-import { GetAccountCode as GetAccountCodeBase } from '@the-coin/utilities/Referrals';
+import { Referrals } from '@the-coin/utilities';
 
 let TCWallet: Wallet|null = null;
 let ConnectedContract: Contract|null = null;
@@ -32,7 +32,7 @@ export async function GetAccountCode(address: string)
 {
   const wallet = await GetWallet();
   // generate this signers secret key
-  return GetAccountCodeBase(address, wallet);
+  return Referrals.GetAccountCode(address, wallet);
 }
 
 export { GetWallet, GetContract }

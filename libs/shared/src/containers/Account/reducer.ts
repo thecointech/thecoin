@@ -1,9 +1,8 @@
-import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContract';
+import { TheContract, toHuman, IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { Wallet, Contract } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { Log } from 'ethers/providers';
 import { useInjectSaga } from "redux-injectors";
-import { toHuman, IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, IActions, Transaction } from './types';
 import { buildSagas, bindActions } from './actions';
@@ -23,7 +22,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
 
   *setSigner(signer: TheSigner) {
     // Connect to the contract
-    const contract = yield call(ConnectContract, signer);
+    const contract = yield call(TheContract.ConnectContract, signer);
     yield this.storeValues({
       signer, 
       contract
@@ -212,7 +211,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     console.log(`Updating from ${from} -> ${until}`);
 
     const origHistory = this.state.history;
-    const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
+    const fromBlock = this.state.historyEndBlock || TheContract.InitialCoinBlock;
     // Retrieve transactions for all time
     const newHistory: Transaction[] = yield call(AccountReducer.loadAndMergeHistory, address, fromBlock, contract, origHistory);
     // Take current balance and use it plus Tx to reconstruct historical balances.

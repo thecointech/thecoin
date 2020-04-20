@@ -1,12 +1,10 @@
-import { IFxRates, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import { FxRate } from "@the-coin/shared";
+import { NextOpenTimestamp, toHuman, toCoin, GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities";
 import { fromMillis, now } from "../../utils/Firebase";
 import { TransferRecord } from "./types";
-import { toHuman, toCoin } from "@the-coin/utilities";
-import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { FXRate } from "@the-coin/pricing";
+//import { FXRate } from "@the-coin/pricing";
 
-export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates) {
+export async function AddSettlementDate(record: TransferRecord, fxApi: FxRate.IFxRates) {
   const recievedAt = record.recievedTimestamp.toDate()
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
@@ -15,18 +13,18 @@ export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates)
   record.processedTimestamp = fromMillis(nextOpen);
 }
 
-export function toFiat(record: TransferRecord, rates: FXRate[]) {
+export function toFiat(record: TransferRecord, rates: FxRate.FXRate[]) {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
-  const rate = weBuyAt(rates, fxDate);
+  const rate = FxRate.weBuyAt(rates, fxDate);
   return toHuman(rate * record.transfer.value, true);
 }
 
-export function calcCoin(record: TransferRecord, rates: FXRate[]) {
+export function calcCoin(record: TransferRecord, rates: FxRate.FXRate[]) {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
-  const rate = weSellAt(rates, fxDate);
-  const i = weBuyAt(rates, fxDate);
+  const rate = FxRate.weSellAt(rates, fxDate);
+  const i = FxRate.weBuyAt(rates, fxDate);
   if (i > rate) {
     console.error("Wait, what?")
   }

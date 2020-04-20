@@ -1,11 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { GetFirestore, CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
-import { decryptTo } from "@the-coin/utilities/Encrypt";
-import { useFxRatesApi, IFxRates, useFxRates } from "@the-coin/shared/containers/FxRate";
+import { GetFirestore, CertifiedTransferRecord, decryptTo, GetSigner, UserAction } from "@the-coin/utilities";
+import { FxRate } from "@the-coin/shared";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList } from "../TransferList/TransferList";
-import { GetSigner } from "@the-coin/utilities/VerifiedAction";
-import { UserAction } from "@the-coin/utilities/User";
+
 import { Confirm } from "semantic-ui-react";
 import { AddSettlementDate, MarkComplete, toFiat } from "../TransferList/utils";
 import { TransferRenderer, InstructionPacket } from "containers/TransferList/types";
@@ -22,7 +20,7 @@ export const EncryptedList = ({render, type}: Props) => {
   const [instructions, setInstructions] = useState<InstructionPacket[]>([]);
 
   const [completeIndex, setCompleteIndex] = useState(-1);
-  const {rates} = useFxRates();
+  const {rates} = FxRate.useFxRates();
 
   ////////////////////////////////////////////////////////
   const setKeyAndUpdate = useCallback((pk: string) => {
@@ -34,7 +32,7 @@ export const EncryptedList = ({render, type}: Props) => {
 
   ////////////////////////////////////////////////////////
   // Load all transfers from DB on mount
-  const fxApi = useFxRatesApi();
+  const fxApi = FxRate.useFxRatesApi();
   useEffect(() => {
     FetchUnsettledRecords(type, fxApi)
       .then(setRecords)
@@ -99,7 +97,7 @@ export const EncryptedList = ({render, type}: Props) => {
   )
 }
 
-async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
+async function FetchUnsettledRecords(type: string, fxApi: FxRate.IFxRates) {
   const firestore = GetFirestore()
   const collection = firestore.collection(type);
   const allDocs = await collection.get();

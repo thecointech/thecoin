@@ -6,7 +6,7 @@ import { SidebarMenuItem } from "./types";
 import styles from "./index.module.css";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
-import { useSidebar } from "./reducer";
+import { useStore } from "./reducer";
 
 type Props = {
   visible?: boolean;
@@ -15,7 +15,7 @@ type Props = {
 
 export const PageSidebar: React.FC<Props> = (props) => {
   const { visible, inverted } = props;
-  useSidebar();
+  useStore();
   const appState = useSelector(s => s as ApplicationBaseState);
   const generators = selectSidebar(appState);
   const menuItems = useMemo(() => {

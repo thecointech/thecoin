@@ -1,7 +1,7 @@
 import {gmail_v1} from 'googleapis';
 import { DepositRecord } from 'containers/TransferList/types';
-import { Timestamp } from '@the-coin/types/FirebaseFirestore';
-import { Transaction } from '@the-coin//shared/containers/Account';
+import { Timestamp } from '@the-coin/types';
+import { Account } from '@the-coin/shared';
 
 export type DepositInstructions = {
   name: string,
@@ -50,7 +50,7 @@ export type DepositData = {
   bank: BankRecord|null,
 
   // A matching entry from our ethereum account
-  tx: Transaction|null,
+  tx: Account.Transaction|null,
 
   // Set to true when we have verified all info.
   isComplete?: boolean,
