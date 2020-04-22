@@ -50,7 +50,7 @@ const TxSelect = ({deposit}: TxSelectProps) => {
       {
         key: dep.txHash,
         value: index,
-        text: `$${dep.fiat} - ${dep.settled.toDate().toDateString()}`
+        text: `$${dep.fiat} - ${dep.settled?.toDate().toDateString()}`
       }))
     return db.length > 0 
       ? <Select placeholder="Select a TX" options={options} />
