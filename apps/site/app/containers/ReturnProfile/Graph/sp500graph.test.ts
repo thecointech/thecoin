@@ -34,6 +34,43 @@ test('can build returns data', async () => {
   console.log(returns);
 });
 
+
+test('can build average return graph', async () => {
+  const data = await getData();
+  const firstYear = 1935;
+  const iterations = 10;
+  const monthsWeWantToGraph = 7*12;
+  const startDate = new Date(firstYear, 0);
+  const returns = Array(monthsWeWantToGraph);
+  const average = Array(monthsWeWantToGraph);
+
+  var endDate;
+  var monthToInsert = 1;
+  var beginDate = startDate;
+
+  for (let y = 1; y <= iterations; y++){
+    returns[y] = Array(monthsWeWantToGraph);
+    monthToInsert = 1;
+    for (let i = y; i < monthsWeWantToGraph+y; i++) {
+      endDate = new Date(firstYear, i);
+      beginDate = new Date(firstYear, i-1);
+      returns[y][monthToInsert] = calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0];
+      if (typeof average[monthToInsert] == 'undefined'){
+        average[monthToInsert] = (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+      } else {
+        average[monthToInsert] = average[monthToInsert] + (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+      }
+      monthToInsert = monthToInsert+1;
+    }
+  }
+
+  for (let x = 1; x <= monthsWeWantToGraph; x++){
+    console.log(x,average[x]/iterations);
+  }
+  console.table(returns);
+});
+
+
 test('can build bucketted returns data', async () => {
   const data = await getData();
   // console.log(data);
