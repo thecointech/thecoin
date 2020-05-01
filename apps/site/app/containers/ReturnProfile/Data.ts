@@ -41,6 +41,7 @@ export function parseData(data: string) {
 
 export async function getData() {
   const data = await fetch('/sp500_monthly.csv');
+  //console.log(parseData(await data.text()))
   return parseData(await data.text());
 }
 
@@ -148,10 +149,8 @@ export const CalcIndex = (min: number, max: number, v: number, count: number) =>
 export function bucketValues(values: number[], numBuckets: number, startingValue?: number): CoinReturns {
   const minValue = (startingValue === undefined) ? arrayMin(values) : startingValue;
   const maxValue = arrayMax(values);
-
   // Spread
   const { min, max, size } = calcBucketShape(minValue, maxValue, numBuckets);
-
   const count = Math.round((max - min) / size);
   const bucketCount = Math.max(count + 1, numBuckets);
   const buckets: number[] = Array(bucketCount).fill(0);
@@ -182,7 +181,7 @@ export const NullData: CoinReturns = {
   max: 0,
   count: 1,
 };
-
+//
 export function CalcPlotData(monthCount: number, data: DataFormat[], minimumValue?: number): CoinReturns {
   if (data.length === 0 || !monthCount) {
     return NullData;

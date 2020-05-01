@@ -37,6 +37,8 @@ test('can build returns data', async () => {
 
 test('can build average return graph', async () => {
   const data = await getData();
+
+  console.log("---------DATA!!---------", data[0]);
   const firstYear = 1935;
   const iterations = 10;
   const monthsWeWantToGraph = 7*12;
@@ -65,9 +67,9 @@ test('can build average return graph', async () => {
   }
 
   for (let x = 1; x <= monthsWeWantToGraph; x++){
-    console.log(x,average[x]/iterations);
+    //console.log(x,average[x]/iterations);
   }
-  console.table(returns);
+  //console.table(returns);
 });
 
 

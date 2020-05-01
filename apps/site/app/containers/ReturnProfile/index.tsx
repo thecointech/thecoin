@@ -1,12 +1,13 @@
-import React from 'react';
+//import React from 'react';
+import React, { useEffect } from 'react';
 import { Graph } from './Graph/index';
 import { Grid, Button, Icon, Input, Form, Label } from 'semantic-ui-react';
 //import { Slider } from 'react-semantic-ui-range';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 import queryString from 'query-string';
-import { getData, GetPlotData, DataFormat, CalcAverageReturn } from './Data';
+import { getData, GetPlotData, DataFormat, CalcAverageReturn,calcPeriodReturn } from './Data';
 import { GraphHeader } from './GraphHeader';
 import { Explanation } from './Explanation';
 
@@ -29,74 +30,81 @@ const initState = {
   age: 30,
   rawData: [] as DataFormat[],
   playTimer: 0,
+  averages: [] as any,
 };
 
-type State = Readonly<typeof initState>;
+//let averages: number[];
 
-export class Returns extends React.PureComponent<Props, State> {
+export type State = Readonly<typeof initState>;
 
-  public state = initState;
+export const state = initState;
 
-  // public const handleValueChange = e => {
-  //   let value = parseInt(e.target.value);
-  //   if (!value) {
-  //     value = 0;
-  //   }
-  //   this.setState({months: e.target.value});
-  // };
+  let initialTimer = 0;
 
-  initialTimer = 0;
-
-  private maybePullQuery(query: queryString.ParsedQuery, name: keyof State) {
+  export function maybePullQuery(query: queryString.ParsedQuery, name: keyof State) {
     const v = parseInt(query[name] as string, 10);
     if (v) {
-      this.setState({[name]: v} as any);
+      setState({[name]: v} as any);
     }
   }
 
-  public componentDidMount() {
+  export function componentDidMount(this: any) {
     const qs = this.props.location.search;
     const query = queryString.parse(qs);
-    this.maybePullQuery(query, 'age');
-    this.maybePullQuery(query, 'amount');
+    maybePullQuery(query, 'age');
+    maybePullQuery(query, 'amount');
 
-    this.updateData();
+    updateData();
     // Start playback after 5 seconds
     this.initialTimer = setTimeout(() => {
-      this.setState(this.startTimer);
-      this.initialTimer = 0;
+    this.setState(this.startTimer);
+    this.initialTimer = 0;
     }, 5000) as any;
   }
 
-  public componentWillUnmount() {
-    if (this.initialTimer) {
-      clearTimeout(this.initialTimer);
+  export function componentWillUnmount() {
+    if (initialTimer) {
+      clearTimeout(initialTimer);
     }
-    if (this.state.playTimer) {
-      clearInterval(this.state.playTimer);
+    if (state.playTimer) {
+      clearInterval(state.playTimer);
       //thois
       //this.playTimer = 0;
     }
   }
 
-  private updateData = async () => {
-    const rawData = await getData();
-    this.setState({rawData});
+  export function setStateData(rawData: any[]){
+    state.rawData = rawData;
   }
 
-  private onSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      ...this.state,
+
+  export async function updateData(){
+    const rawData = await getData();
+    setStateData(rawData);
+  }
+
+  export async function  getRawData(){
+    const rawData = await getData();
+    return rawData;
+  }
+
+  export function getAmount(){
+    return state.amount;
+  }
+
+  export function onSetValue(e: React.ChangeEvent<HTMLInputElement>){
+    setState({
+      ...state,
       [e.target.name]: e.target.value,
     });
   }
 
-  private sliderValueToMonths = () => {
+  export function sliderValueToMonths(){
     // Our slider runs as as follows:
     // 1 -> 11: months  (12)
     // 1 -> 10: yearly  (12 + 9)
     // 10+: By 5yrs
-    const {sliderValue} = this.state;
+    const {sliderValue} = state;
     return sliderValue < 12 ?
       sliderValue :
       sliderValue < 21 ?
@@ -104,43 +112,51 @@ export class Returns extends React.PureComponent<Props, State> {
         60 * (sliderValue - 19);
   }
 
-  private sliderMax = () =>
-    this.state.age < 60 ?
-      SliderMax - Math.floor(this.state.age / 5) :
+  export function sliderMax(){
+    return state.age < 60 ?
+      SliderMax - Math.floor(state.age / 5) :
       22
+  }
 
-  private monthsToMinimum = (months: number) =>
-    (months < 120) ? -0.5 : undefined
+  export function monthsToMinimum(months: number){
+    return (months < 120) ? -0.5 : undefined
+  }
 
-  public sliderSettings = () => (
-    {
-      start: this.state.sliderValue,
-      min: 1,
-      max: this.sliderMax(),
-      step: 1,
-      onChange: (sliderValue: number) => this.setState({sliderValue}),
-    }
-  );
+  /*export const sliderSettings(): any{
+    var sliderSet = {
+          start: state.sliderValue,
+          min: 1,
+          max: sliderMax(),
+          step: 1,
+          onChange: (sliderValue: number) => setState({sliderValue}),
+        }
+    return sliderSet;
+  }*/
 
-  private getTimeLabel = (months: number) =>
-    months < 12 ?
+  export function getTimeLabel (months: number){ 
+    var timeLabel = months < 12 ?
       <FormattedMessage {...messages.AverageReturnMonths} values={{months}} /> :
       <FormattedMessage {...messages.AverageReturnYears} values={{years: months / 12}} />;
+      return timeLabel;
+  }
 
-  private incrSliderValue = () =>
-    this.setState((state: State) => {
-      const max = this.sliderMax();
-      const sliderValue = Math.min(max, state.sliderValue + 1);
-      if (sliderValue === max) {
-        state = this.clearTimer(state);
-      }
-      return {
-        ...state,
-        sliderValue,
-      };
-    })
+  export function setState(state: State){
+    const max = sliderMax();
+    const sliderValue = Math.min(max, state.sliderValue + 1);
+    if (sliderValue === max) {
+      state = clearTimer(state);
+    }
+    return {
+      ...state,
+      sliderValue,
+    };
+  };
 
-  private clearTimer = (state: State) => {
+  export function incrSliderValue(){
+    setState(state);
+  }
+
+  export function clearTimer(state: State){
     let {playTimer} = state;
     if (playTimer) {
       clearInterval(playTimer);
@@ -152,10 +168,10 @@ export class Returns extends React.PureComponent<Props, State> {
     };
   }
 
-  private startTimer = (state: State) => {
+  export function startTimer(state: State){
     let {playTimer} = state;
     if (!playTimer) {
-      playTimer = Number(setInterval(this.incrSliderValue, 1200));
+      playTimer = Number(setInterval(incrSliderValue, 1200));
     }
     return {
       ...state,
@@ -163,36 +179,120 @@ export class Returns extends React.PureComponent<Props, State> {
     };
   }
 
-  private step = () =>
-    this.incrSliderValue();
+ export async function prepareAverages(){
+    const data = await getData();
+    const firstYear = 1935;
+    const iterations = 10;
+    const monthsWeWantToGraph = 7*12;
+    const startDate = new Date(firstYear, 0);
+    const returns = Array(monthsWeWantToGraph);
+    const average = Array(monthsWeWantToGraph);
+  
+    var endDate;
+    var monthToInsert = 1;
+    var beginDate = startDate;
+  
+    for (let y = 1; y <= iterations; y++){
+      returns[y] = Array(monthsWeWantToGraph);
+      monthToInsert = 1;
+      for (let i = y; i < monthsWeWantToGraph+y; i++) {
+        endDate = new Date(firstYear, i);
+        beginDate = new Date(firstYear, i-1);
+        returns[y][monthToInsert] = calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0];
+        if (typeof average[monthToInsert] == 'undefined'){
+          average[monthToInsert] = (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+        } else {
+          average[monthToInsert] = average[monthToInsert] + (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+        }
+        monthToInsert = monthToInsert+1;
+      }
+    }
 
-  private play = () =>
-    this.setState(this.state.playTimer ? this.clearTimer : this.startTimer)
+    var final = Array(monthsWeWantToGraph)
+    for (let x = 1; x <= monthsWeWantToGraph; x++){
+      final[x] = average[x]/iterations;
+    }
+    final[0] = 0;
+    return final;
+  }
 
-    /*\
-              <Grid.Column >
-            <Dropdown placeholder="Compare" fluid multiple selection options={options} />
-          </Grid.Column>
-          */
-  public render() {
-    const {amount, rawData, age } = this.state;
-    const months = this.sliderValueToMonths();
-    const minimum = this.monthsToMinimum(months);
-    const graphData = GetPlotData(months, rawData, minimum);
-    const timeString = this.getTimeLabel(months);
-    const avgValue = CalcAverageReturn(amount, graphData.average);
+ export function step(){
+    incrSliderValue();
+ }
 
-    const playButton = this.state.playTimer ? (
-      <>
-        <Icon name="pause" />
-        <FormattedMessage {...messages.Pause} />
-      </>
-      ) : (
-      <>
-        <Icon name="play" />
-        <FormattedMessage {...messages.Play} />
-      </>
-    );
+export function setStatePlayTime(timer: any){
+  state.playTimer = timer;
+}
+
+  export function play(){
+    setStatePlayTime(state.playTimer ? clearTimer : startTimer)
+  }
+
+
+
+  function BuildCalculatorUrl(state: State) {
+    return `/graph/calculator?age=${state.age}&amount=${state.amount}`;
+  }
+
+export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
+  
+  const [state, setState] = React.useState(initState);
+  const showCalculate = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e?.preventDefault();
+      const url = BuildCalculatorUrl(state);
+      props.history.push(url);
+    },
+    [],
+  );
+  const updateValue = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setState({
+        ...state,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [],
+  );
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      state.averages = (await prepareAverages());
+      
+      const qs = props.location.search;
+      const query = queryString.parse(qs);
+      maybePullQuery(query, 'age');
+      maybePullQuery(query, 'amount');
+  
+      updateData();
+      // Start playback after 5 seconds
+      initialTimer = setTimeout(() => {
+      setState(startTimer);
+      initialTimer = 0;
+      }, 5000) as any;
+      
+    }   
+    fetchDataAsync()
+   }, []);
+
+
+  const {amount, rawData, age } = state;
+  const months = sliderValueToMonths();
+  const minimum = monthsToMinimum(months);
+  const graphData = GetPlotData(months, rawData, minimum);
+  const timeString = getTimeLabel(months);
+  const avgValue = CalcAverageReturn(amount, graphData.average);
+  
+  graphData.values = state.averages;
+  const playButton = state.playTimer ? (
+    <>
+      <Icon name="pause" />
+    </>
+    ) : (
+    <>
+      <Icon name="play" />
+    </>
+  );
+  
     return (
       <Form>
       <Grid textAlign="left">
@@ -207,7 +307,7 @@ export class Returns extends React.PureComponent<Props, State> {
               <Label>
                 <FormattedMessage {...messages.Starting} />
               </Label>
-              <Input type="number" name="amount" value={amount} onChange={this.onSetValue} />
+              <Input type="number" name="amount" value={amount} onChange={onSetValue} />
             </Form.Field>
           </Grid.Column>
           <Grid.Column>
@@ -215,7 +315,7 @@ export class Returns extends React.PureComponent<Props, State> {
               <Label>
                 <FormattedMessage {...messages.Age} />
               </Label>
-              <Form.Input type="number" name="age" value={age} onChange={this.onSetValue} />
+              <Form.Input type="number" name="age" value={age} onChange={onSetValue} />
             </Form.Field>
           </Grid.Column>
           <Grid.Column>
@@ -236,10 +336,10 @@ export class Returns extends React.PureComponent<Props, State> {
         <Grid.Row columns="two">
           <Grid.Column width={4}>
             <Button.Group>
-              <Button icon labelPosition="left" onClick={this.play}>
+              <Button icon labelPosition="left" onClick={play}>
                 {playButton}
               </Button>
-              <Button icon labelPosition="right" onClick={this.step}>
+              <Button icon labelPosition="right" onClick={step}>
                 <FormattedMessage {...messages.Step} />
                 <Icon name="arrow right" />
               </Button>
@@ -257,5 +357,8 @@ export class Returns extends React.PureComponent<Props, State> {
       </Grid>
       </Form>
     );
-  }
-}
+  };
+
+//export default View;
+
+export const View = withRouter(graphFrom);
