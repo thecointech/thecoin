@@ -18,7 +18,7 @@
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
     "console": "truffle console",
-    "postinstall": "node ./postinstallcwd.js",
+    "postinstall.fixme": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
   "directories": {
@@ -29,9 +29,8 @@
     "contracts/**/*"
   ],
   "devDependencies": {
-    "openzeppelin-eth": "^2.1.3",
-    "truffle": "^5.0.12",
-    "zos": "^2.2.2",
-    "zos-lib": "^2.2.2"
+    "truffle": "^5.1.12",
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/upgrades": "^2.8.0"
   }
 }

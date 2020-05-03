@@ -1,5 +1,5 @@
 import { FXRate } from "@the-coin/pricing"
-import { Transaction } from "../Account/types"
+import { Transaction } from "./types"
 
 // file deepcode ignore DateMonthIndex%2Ftest: <please specify a reason of ignoring this>
 
@@ -141,4 +141,4 @@ export const SimpleRates: FXRate[] = [
   },
 ]
 
-test('Always passes', () => console.log("just to make jest stop complaining"));
+test('Always passes', () => true); // just to stop jest complaining;

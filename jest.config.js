@@ -18,5 +18,9 @@ module.exports = {
     "jsx",
     "json",
     "node"
+  ],
+  setupFiles: [
+    './mocks/localStorage.js',
+    './mocks/indexedDb.js'
   ]
 };

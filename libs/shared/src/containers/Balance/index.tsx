@@ -10,7 +10,7 @@ import { AccountPageProps } from "../Account/types";
 import { TransactionHistory } from "../TransactionHistory";
 import { Popup, Icon } from "semantic-ui-react";
 import styles from "./index.module.css";
-import { calculateProfit } from "./profit";
+import { calculateProfit } from "../Account/profit";
 import { selectFxRate } from "../FxRate/selectors";
 
 

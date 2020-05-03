@@ -1,7 +1,10 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import credentials from './credentials.json';
 import fs from 'fs';
-import path from 'path';
+import Axios, { AxiosRequestConfig } from 'axios';
+import { RbcTransaction } from './types';
+import { fetchStoredTransactions, storeTransactions } from './RbcStore';
+//import path from 'path';
 
 export enum ETransferErrorCode {
   UnknownError = -1,
@@ -17,7 +20,7 @@ export type DepositResult = {
 
 let _browser: Browser | null = null;
 async function initBrowser() {
-  _browser = await puppeteer.launch();
+  _browser = await puppeteer.launch({headless: false});
   _browser.on('disconnected', initBrowser);
   return _browser;
 }
@@ -25,8 +28,6 @@ async function getPage() {
   const browser = _browser ?? await initBrowser();
   return browser.newPage();
 }
-
-
 
 export class RbcApi {
 
@@ -39,7 +40,21 @@ export class RbcApi {
     }
   }
 
-  async getTransactions(from: Date, to: Date) {
+  async fetchLatestTransactions()
+  {
+    const fromDate = getLastInsertDate();
+    // newest possible date is yesterday
+    const toDate = new Date();
+    toDate.setDate(toDate.getDate()-1);
+
+    const oldTxs = await fetchStoredTransactions();
+    const newTxs = await this.getTransactions(fromDate, toDate);
+    await storeTransactions(newTxs);
+    setLastInsertDate(toDate);
+    return [...oldTxs, ...newTxs];
+  }
+
+  async getTransactions(from: Date, to: Date) : Promise<RbcTransaction[]> {
     const act = await ApiAction.New('getTransactions', true);
     const { page } = act;
 
@@ -66,16 +81,29 @@ export class RbcApi {
     if (!downloadButton)
       throw new Error('We have no download button');
 
-    // Allow downloads
-    const client = await page.target().createCDPSession();
-    await client.send('Page.setDownloadBehavior', {
-      behavior: 'allow', downloadPath: '/temp/'
-    });
-    
-    await act.clickToDownload(downloadButton, {
-      filename: 'transactions.csv',
+    const txs = await act.clickToDownload(downloadButton, {
       resourceType: 'document'
     });
+
+    const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
+
+    const allLines = txs.split('\n');
+    return allLines
+      .slice(1)
+      .map(line => {
+        const entries = line.split(',');
+        const v: RbcTransaction = {
+          AccountType: entries[0],
+          AccountNumber: entries[1],
+          TransactionDate: new Date(`${entries[2]} EST`),
+          ChequeNumber: maybeParse(entries[3]),
+          Description1: entries[4],
+          Description2: entries[5],
+          CAD: maybeParse(entries[6]),
+          USD: maybeParse(entries[7]),
+        }
+        return v;
+      });
   }
 
   async selectTxDate(page: Page, fromTo: string, date: Date) {
@@ -111,7 +139,7 @@ export class RbcApi {
 
     progressCb("Entering Deposit Details");
 
-    // Input the code.  It's possible that RBC might skip this 
+    // Input the code.  It's possible that RBC might skip this
     // page if we have previously attempted to deposit this but not been completely successful
     const input = await page.$("input[name=CP_RESPONSE]");
     if (input != null) {
@@ -208,9 +236,9 @@ class ApiAction {
   /**
    * Clicks an element that kicks off a download, writes download to a file,
    * then returns the path to the file.
-   * 
+   *
    * Example usage:
-   * 
+   *
    * const downloadButton = await this.page.$('#downloadButton');
    * const myDownload = await clickToDownload(downloadButton, {
    *   downloadPath: '/path/to/save/to',
@@ -234,61 +262,162 @@ class ApiAction {
 
     // Set default options.
     const resourceType = options?.resourceType || 'xhr';
-    const downloadPath = options?.downloadPath || this.outCache;
+    // const downloadPath = options?.downloadPath || this.outCache;
+
+    await this.page.setRequestInterception(true);
 
     return new Promise(async (resolve, reject) => {
+      //let paused = false;
+      //let pausedRequests = [] as any[];
+
+      this.page.on('request', async request => {
+        //console.log('Requesting: ' + request.url());
+        // if (paused) {
+        //   pausedRequests.push(() => request.continue());
+        // } else {
+        //  paused = true; // pause, as we are processing a request now
+        if (/*!paused && */isRequested(request, resourceType))
+        {
+          // paused = true;
+          await this.page.setRequestInterception(false);
+
+          const shimmed: AxiosRequestConfig = {
+            method: request.method(),
+            url: request.url(),
+            data: request.postData(),
+            headers: request.headers()
+          }
+          let cookies = await this.page.cookies();
+          shimmed.headers.Cookie = cookies.map(ck => ck.name + '=' + ck.value).join(';');
+          const req = await Axios.request(shimmed);
+          console.log("Did: " + req.statusText);
+          if (req.status == 200)
+            resolve(req.data)
+          else
+            reject(req.statusText);
+        }
+        // else if (paused) {
+        //   pausedRequests.push(request);
+        // }
+        else {
+          request.continue();
+        }
+        //}
+      });
+
+      // this.page.on('requestfinished', async (request) => {
+      //   const response = requestedResponse(request, options?.resourceType);
+      //   if (response)
+      //   {
+      //     console.log('Processing now');
+      //     try {
+      //       const buffer = await response.buffer();
+      //       console.log('Buffer' + buffer.length);
+      //     }
+      //     catch (e)
+      //     {
+      //      console.error(e);
+      //     }
+      //   }
+      //   //nextRequest(); // continue with next request
+      // });
+
+      //this.page.on('requestfailed', nextRequest);
 
       // Create the listener.
-      const listener = async (response: any) => {
-        try {
-          const url = response.url();
-          console.log(`${response.request().resourceType()} - ${url}`);
-          console.log(`${response.headers()['content-type']} - ${response.headers()['content-length']}`);
+      // const listener = async (response: puppeteer.Response) => {
+      //   try {
+      //     const url = response.url();
+      //     console.log(`${response.request().resourceType()} - ${url} : ${response.headers()['content-type']} - ${response.headers()['content-length']}`);
 
-          if (response.request().resourceType() === resourceType) {
-            const text = await response.text();
-            console.log(text);
-            const file = await response.buffer();
-            if (file.length == 0) {
-              console.error("Zero length buffer downloaded");
-              return;
-            }
+      //     if (response.request().resourceType() === resourceType) {
+      //       //const text = await response.text();
+      //       //console.log(text);
+      //       if (url)
+      //         return;
+      //       const file = await response.buffer();
+      //       if (file.length == 0) {
+      //         console.error("Zero length buffer downloaded");
+      //         return;
+      //       }
 
-            // If a filename is specified, use that. If not, use the URL requested
-            // but without any query parameters if any.
-            const destFilename = (options?.filename)
-              ? options!.filename
-              : url.split('/').pop().replace(/\?.*$/, '');
-            const filePath = path.resolve(downloadPath, destFilename);
+      //       // // If a filename is specified, use that. If not, use the URL requested
+      //       // // but without any query parameters if any.
+      //       const destFilename = options?.filename || url.split('/').pop()?.replace(/\?.*$/, '') || "download";
+      //       const filePath = path.resolve(downloadPath, destFilename);
+      //       console.log(filePath)
 
-            // Create a writable stream and write to it.
-            const writeStream = fs.createWriteStream(filePath);
-            writeStream.write(file, (err) => {
-              if (err) reject(err);
-              console.log(`Bytes written: ${writeStream.bytesWritten}`);
-              onDone(filePath);
-            });
-          }
-        }
-        catch (e) {
-          console.error(`${e.message} - ${e.stack}`);
-        }
-      };
+      //       // // Create a writable stream and write to it.
+      //       const writeStream = fs.createWriteStream(filePath);
+      //       writeStream.write(file, (err) => {
+      //         if (err) reject(err);
+      //         console.log(`Bytes written: ${writeStream.bytesWritten}`);
+      //         onDone(filePath);
+      //       });
+      //     }
+      //   }
+      //   catch (e) {
+      //     console.error(`${e.message} - ${e.stack}`);
+      //   }
+      // };
+
+      // this.page.on('requestfinished', async (request) => {
+
+      //   const response = request.response();
+      //   if (!response)
+      //     return;
+
+      //   console.log(`Finished: ${request.url()}`);
+      //   const contentLength = response.headers()['content-length'];
+      //   if (contentLength && contentLength != '0') {
+      //     console.log("With length: " + contentLength);
+      //     // try {
+      //     //   console.log('- fetching body of .mp4 file');
+      //     //   const buffer = await response.buffer();
+      //     //   console.log(`-- .mp4: OK: ${buffer.length}`);
+      //     // } catch (e) {
+      //     //   console.log(`-- .mp4: FAIL - ${e.message}`);
+      //     // }
+      //   }
+      // });
 
       // When the file is saved, remove this listener, and return the file path.
-      const onDone = (filePath: string) => {
-        console.log(`Done downloading to ${filePath}`);
-        this.page.removeListener('request', listener);
-        resolve(filePath);
-      };
+      // const onDone = (filePath: string) => {
+      //   console.log(`Done downloading to ${filePath}`);
+      //   this.page.removeListener('request', listener);
+      //   resolve(filePath);
+      // };
 
-      // Tell the page to start watching for a download then click the button 
+      // Tell the page to start watching for a download then click the button
       // to start a download.
-      this.page.on('response', listener);
+      // this.page.on('response', listener);
       await elementHandle.click();
     });
   }
 }
+
+function isRequested(request: puppeteer.Request, resourceType?: puppeteer.ResourceType)
+{
+  const requestType = request.resourceType();
+  return !resourceType || requestType === resourceType;
+}
+
+// function requestedResponse(request: puppeteer.Request, resourceType?: puppeteer.ResourceType) {
+
+//   if (!isRequested(request, resourceType))
+//     return null;
+//   const response = request.response();
+//   if (!response)
+//     return null;
+
+//   const requestType = request.resourceType();
+//   const url = request.url();
+//   const contentLength = response.headers()['content-length'];
+//   console.log(`${requestType} - ${url} : ${response.headers()['content-type']} - ${contentLength}`);
+//   return (contentLength)
+//     ? response
+//     : null;
+// }
 
 
 
@@ -316,4 +445,14 @@ function getErrorResult(mssg: string): DepositResult {
     message: ` Unknown Error: ${mssg}`,
     code: ETransferErrorCode.UnknownError
   }
+}
+
+const LastTxFetchKey = 'LastTxFetch';
+function getLastInsertDate() {
+  // This project started in 2016 (?)
+  const lastUpdate = localStorage.getItem(LastTxFetchKey);
+  return lastUpdate ? new Date(lastUpdate) : new Date(2016);
+}
+function setLastInsertDate(date: Date) {
+  localStorage.setItem(LastTxFetchKey, date.toISOString());
 }
