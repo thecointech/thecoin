@@ -11,20 +11,15 @@ var month = 0;
 export class Graph extends React.PureComponent<Props> {
 
   public render() {
+    const ratio = 0.01;
     const {data, multiplier} = this.props;
     const {values, size, min, count} = data;
 //console.log(data)
     const plotData: Serie = {
-      id: 'The Coin',
+      id: 'Average Return',
       data: values.map((d, index): Datum => {
-        console.log("---VALUES",d)
         const xval = d;
         month = month+1;
-        //const rawData = await getData();
-        //const graphData = GetPlotData(month, rawData, min);
-        //console.log(min,graphData.average,CalcAverageReturn(min, graphData.average));
-        //const avgValue = CalcAverageReturn(min, graphData.average);
-        // Get rid of float rounding errors
         return {
           x: month,
           y: CalcAverageReturn(multiplier, xval),
@@ -32,17 +27,49 @@ export class Graph extends React.PureComponent<Props> {
       }),
     };
 
+    month = 0;
+    const plotDataMax: Serie = {
+      id: 'Max',
+      data: values.map((d, index): Datum => {
+        //console.log("---VALUES",d)
+        const xval = d+ratio;
+        month = month+1;
+        return {
+          x: month,
+          y: CalcAverageReturn(multiplier, xval),
+        };
+      }),
+    };
+
+    month = 0;
+    const plotDataMin: Serie = {
+      id: 'Min',
+      data: values.map((d, index): Datum => {
+        //console.log("---VALUES",d)
+        const xval = d-ratio;
+        month = month+1;
+        return {
+          x: month,
+          y: CalcAverageReturn(multiplier, xval),
+        };
+      }),
+    };
+    console.log(plotDataMin)
+
+
+
     return (
       <div style={{ height: 300, }}>
         <ResponsiveLine
-          data={[plotData]}
+          data={[plotDataMin, plotData, plotDataMax]}
           margin={{ top: 10, right: 110, bottom: 60, left: 60 }}
-          curve="linear"
+          curve="natural"
         xScale={{ type: 'point' }}
         yScale={{ type: 'linear', stacked: true, min: 'auto', max: 'auto' }}
         axisTop={null}
         axisRight={null}
-        enableArea={true}
+        enableArea={false}
+        enablePoints={false}
         axisBottom={{
             orient: 'bottom',
             tickSize: 5,
@@ -69,7 +96,7 @@ export class Graph extends React.PureComponent<Props> {
             legend: 'Avg: $' + CalcAverageReturn(multiplier, data.average),
           },
         ]}*/
-        colors={{ scheme: 'nivo' }}
+        colors={{ scheme: 'paired' }}
         pointSize={10}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
