@@ -1,45 +1,29 @@
-import Dexie from 'dexie';
 import { RbcTransaction } from "./types";
 
-const dbName = "the_data";
+//const dbName = "rbc_data";
+//const lastTxFetchKey = 'LastTxFetch';
 
-type StoredTransaction = {
-  id?: number,
-} & RbcTransaction;
-
-export class AdminDB extends Dexie {
-  // Declare implicit table properties.
-  // (just to inform Typescript. Instanciated by Dexie in stores() method)
-  txs: Dexie.Table<StoredTransaction, number>; // number = type of the primkey
-  //...other tables goes here...
-
-  constructor () {
-      super(dbName);
-      this.version(1).stores({
-        txs: '++id, AccountType, AccountNumber, TransactionDate, ChequeNumber, Description1, Description2, CAD, USD',
-          //...other tables goes here...
-      });
-      // The following line is needed if your typescript
-      // is compiled using babel instead of tsc:
-      this.txs = this.table("txs");
-  }
-}
-
-const db = new AdminDB();
-
-
-export async function storeTransactions(txs: RbcTransaction[])
+export async function storeTransactions(_txs: RbcTransaction[], _date: Date)
 {
-  await db.transaction('rw', db.txs, async function () {
-    txs.forEach(tx => {
-      db.txs.add(tx);
-    })
-  });
+  // await db.transaction('rw', db.txs, async function () {
+  //   txs.forEach(tx => {
+  //     db.txs.add(tx);
+  //   })
+  // });
 }
 
-export async function fetchStoredTransactions() {
-  let txs = await db.txs.toArray();
-  return txs;
+export async function fetchStoredTransactions() : Promise<RbcTransaction[]> {
+  // let txs = await db.txs.toArray();
+  // return txs;
+  return [];
+}
+
+
+
+export function getLastInsertDate() {
+  // This project started in 2016 (?)
+  const lastUpdate = null; //localStorage.getItem(LastTxFetchKey);
+  return lastUpdate ? new Date(lastUpdate) : new Date(2016);
 }
 
 

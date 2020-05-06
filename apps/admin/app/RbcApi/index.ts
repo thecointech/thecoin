@@ -1,9 +1,8 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import credentials from './credentials.json';
 import fs from 'fs';
-import Axios, { AxiosRequestConfig } from 'axios';
 import { RbcTransaction } from './types';
-import { fetchStoredTransactions, storeTransactions } from './RbcStore';
+import { getLastInsertDate, storeTransactions, fetchStoredTransactions } from './RbcStore';
 //import path from 'path';
 
 export enum ETransferErrorCode {
@@ -42,16 +41,21 @@ export class RbcApi {
 
   async fetchLatestTransactions()
   {
+    const storedTxs = await fetchStoredTransactions();
     const fromDate = getLastInsertDate();
     // newest possible date is yesterday
     const toDate = new Date();
-    toDate.setDate(toDate.getDate()-1);
 
-    const oldTxs = await fetchStoredTransactions();
-    const newTxs = await this.getTransactions(fromDate, toDate);
-    await storeTransactions(newTxs);
-    setLastInsertDate(toDate);
-    return [...oldTxs, ...newTxs];
+    if (!sameDay(fromDate, toDate))
+    {
+      toDate.setDate(toDate.getDate()-1);
+      const newTxs = await this.getTransactions(fromDate, toDate);
+      if (newTxs.length)
+      {
+        await storeTransactions(newTxs, toDate);
+      }
+    }
+    return storedTxs;
   }
 
   async getTransactions(from: Date, to: Date) : Promise<RbcTransaction[]> {
@@ -59,7 +63,7 @@ export class RbcApi {
     const { page } = act;
 
     // Go to CAD account
-    await act.clickOnLinkText('03631-1003342', '#search-transaction');
+    await act.clickOnLinkText(credentials.accountNo, '#search-transaction');
     // To to download transactions
     await act.clickOnLinkText('Download Transactions', '#ACCOUNT_INFO1');
 
@@ -81,9 +85,7 @@ export class RbcApi {
     if (!downloadButton)
       throw new Error('We have no download button');
 
-    const txs = await act.clickToDownload(downloadButton, {
-      resourceType: 'document'
-    });
+    const txs = await act.downloadTxCsv();
 
     const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
 
@@ -103,7 +105,8 @@ export class RbcApi {
           USD: maybeParse(entries[7]),
         }
         return v;
-      });
+      })
+      .filter(tx => tx.AccountNumber == credentials.accountNo);
   }
 
   async selectTxDate(page: Page, fromTo: string, date: Date) {
@@ -205,7 +208,9 @@ class ApiAction {
   }
 
   async clickAndNavigate(selector: string, stepName: string) {
-    const navigationWaiter = this.page.waitForNavigation();
+    const navigationWaiter = this.page.waitForNavigation({
+      timeout: 90000 // MB internet means this can timeout prematurely
+    });
     await this.page.click(selector)
     await navigationWaiter;
     await this.writeStep(stepName);
@@ -252,58 +257,83 @@ class ApiAction {
    * @param options.filename Filename to save file as (defaults to the URL clicked).
    * @returns Path where file is downloaded to.
    */
-  async clickToDownload(
-    elementHandle: puppeteer.ElementHandle,
-    options?: {
-      resourceType?: puppeteer.ResourceType;
-      downloadPath?: string;
-      filename?: string
-    }): Promise<string> {
+  async downloadTxCsv(
+    // elementHandle: puppeteer.ElementHandle,
+    // options?: {
+    //   resourceType?: puppeteer.ResourceType;
+    //   downloadPath?: string;
+    //   filename?: string
+    //}
+    ): Promise<string> {
+
+    var csv = await this.page.evaluate(async () => {
+      // taken from the page JS
+      //@ts-ignore
+      setSubmitVals();
+      //@ts-ignore
+      const form = document.PFM_FORM;
+      const result = await fetch(form.action, {
+        method: form.method,
+        body: new URLSearchParams([...(new FormData(form) as any)])
+      })
+      return await result.text();
+    });
+    return csv
+  }
+}
+      // const form = event.target as HTMLFormElement;
+
+      //   // casting to any here to satisfy tsc
+      //   // sending body as x-www-form-url-encoded
+      //   const result = await fetch(form.action, {
+      //     method: form.method,
+      //     body: new URLSearchParams([...(new FormData(form) as any)])
+      //   })  
 
     // Set default options.
-    const resourceType = options?.resourceType || 'xhr';
+    //const resourceType = options?.resourceType || 'xhr';
     // const downloadPath = options?.downloadPath || this.outCache;
 
-    await this.page.setRequestInterception(true);
+    // await this.page.setRequestInterception(true);
 
-    return new Promise(async (resolve, reject) => {
-      //let paused = false;
-      //let pausedRequests = [] as any[];
+    // return new Promise(async (resolve, reject) => {
+    //   let paused = true;
+    //   //let pausedRequests = [] as any[];
 
-      this.page.on('request', async request => {
-        //console.log('Requesting: ' + request.url());
-        // if (paused) {
-        //   pausedRequests.push(() => request.continue());
-        // } else {
-        //  paused = true; // pause, as we are processing a request now
-        if (/*!paused && */isRequested(request, resourceType))
-        {
-          // paused = true;
-          await this.page.setRequestInterception(false);
+    //   this.page.on('request', async request => {
+    //     //console.log('Requesting: ' + request.url());
+    //     // if (paused) {
+    //     //   pausedRequests.push(() => request.continue());
+    //     // } else {
+    //     //  paused = true; // pause, as we are processing a request now
+    //     if (/*!paused && */isRequested(request, resourceType))
+    //     {
+    //       paused = false;
+    //       await this.page.setRequestInterception(false);
 
-          const shimmed: AxiosRequestConfig = {
-            method: request.method(),
-            url: request.url(),
-            data: request.postData(),
-            headers: request.headers()
-          }
-          let cookies = await this.page.cookies();
-          shimmed.headers.Cookie = cookies.map(ck => ck.name + '=' + ck.value).join(';');
-          const req = await Axios.request(shimmed);
-          console.log("Did: " + req.statusText);
-          if (req.status == 200)
-            resolve(req.data)
-          else
-            reject(req.statusText);
-        }
-        // else if (paused) {
-        //   pausedRequests.push(request);
-        // }
-        else {
-          request.continue();
-        }
-        //}
-      });
+    //       const shimmed: AxiosRequestConfig = {
+    //         method: request.method(),
+    //         url: request.url(),
+    //         data: request.postData(),
+    //         headers: request.headers()
+    //       }
+    //       let cookies = await this.page.cookies();
+    //       shimmed.headers.Cookie = cookies.map(ck => ck.name + '=' + ck.value).join(';');
+    //       const req = await Axios.request(shimmed);
+    //       console.log("Did: " + req.statusText);
+    //       if (req.status == 200)
+    //         resolve(req.data)
+    //       else
+    //         reject(req.statusText);
+    //     }
+    //     // else if (paused) {
+    //     //   pausedRequests.push(request);
+    //     // }
+    //     else if (paused) {
+    //       request.continue();
+    //     }
+    //     //}
+    //   });
 
       // this.page.on('requestfinished', async (request) => {
       //   const response = requestedResponse(request, options?.resourceType);
@@ -391,16 +421,16 @@ class ApiAction {
       // Tell the page to start watching for a download then click the button
       // to start a download.
       // this.page.on('response', listener);
-      await elementHandle.click();
-    });
-  }
-}
+  //     await elementHandle.click();
+  //   });
+  // }
+//}
 
-function isRequested(request: puppeteer.Request, resourceType?: puppeteer.ResourceType)
-{
-  const requestType = request.resourceType();
-  return !resourceType || requestType === resourceType;
-}
+// function isRequested(request: puppeteer.Request, resourceType?: puppeteer.ResourceType)
+// {
+//   const requestType = request.resourceType();
+//   return !resourceType || requestType === resourceType;
+// }
 
 // function requestedResponse(request: puppeteer.Request, resourceType?: puppeteer.ResourceType) {
 
@@ -447,12 +477,9 @@ function getErrorResult(mssg: string): DepositResult {
   }
 }
 
-const LastTxFetchKey = 'LastTxFetch';
-function getLastInsertDate() {
-  // This project started in 2016 (?)
-  const lastUpdate = localStorage.getItem(LastTxFetchKey);
-  return lastUpdate ? new Date(lastUpdate) : new Date(2016);
-}
-function setLastInsertDate(date: Date) {
-  localStorage.setItem(LastTxFetchKey, date.toISOString());
+
+function sameDay(d1: Date, d2: Date) {
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
 }

@@ -20,7 +20,6 @@ module.exports = {
     "node"
   ],
   setupFiles: [
-    './mocks/localStorage.js',
-    './mocks/indexedDb.js'
+    './mocks/localStorage.js'
   ]
 };
