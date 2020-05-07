@@ -1,11 +1,11 @@
 import { DepositData, BankRecord } from "./types";
-import bank from "./banktx.json"
 import { fromMillis } from "utils/Firebase";
 import { compareDateTo, addNewEntries } from "./utils";
 import { PurchaseType } from "containers/TransferList/types";
+import { RbcApi } from "RbcApi";
 
-export async function addFromBank(deposits: DepositData[]) {
-  let bankRecords = parseTransactions();
+export async function addFromBank(deposits: DepositData[], bankApi: RbcApi) {
+  let bankRecords = await parseTransactions(bankApi);
 
   for (const deposit of deposits) {
     // Find a matching deposit?
@@ -24,14 +24,15 @@ export async function addFromBank(deposits: DepositData[]) {
   return addNewEntries(deposits, newDeposits);
 }
 
-function parseTransactions() {
-  return bank.transactions
-    .filter(tx => tx.Description === "e-Transfer received")
+async function parseTransactions(bankApi: RbcApi) {
+  const txs = await bankApi.fetchLatestTransactions();
+  return txs
+    .filter(tx => tx.Description1 === "e-Transfer received")
     .map((tx): BankRecord => ({
-      Description: tx.Description.toString(),
-      Amount: tx.Amount,
-      Details: tx.Details || "-- not set --",
-      Date: new Date(tx.Date),
+      Description: tx.Description1,
+      Amount: tx.CAD,
+      Details: tx.Description2 || "-- not set --",
+      Date: tx.TransactionDate,
     }))
 }
 

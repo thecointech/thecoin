@@ -71,7 +71,6 @@ export const Gmail = () => {
     }
     // Initiate RBC Login
     const api = new RbcApi();
-    api.initialize();
     setRbcApi(api);
 
   }, [setText]);
@@ -96,12 +95,12 @@ export const Gmail = () => {
         console.log(`\n---- Starting Processing: ${emails.length} Records ----\n`);
         let r = emails;
         r = await addFromDB(r);
-        r = await addFromBank(r);
+        r = await addFromBank(r, rbcApi);
         r = await addSettlementDate(r, fxApi);
         setStep2(r)
       })()
     }
-  }, [setDeposits, emails, rates, account.history])
+  }, [setDeposits, emails, rates, account.history, rbcApi])
 
   useEffect(() => {
     if (step2.length > 0 && account.history.length > 0) {

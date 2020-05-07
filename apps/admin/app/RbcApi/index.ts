@@ -3,6 +3,7 @@ import credentials from './credentials.json';
 import fs from 'fs';
 import { RbcTransaction } from './types';
 import { getLastInsertDate, storeTransactions, fetchStoredTransactions } from './RbcStore';
+import { downloadTxCsv } from './downloadTxs';
 //import path from 'path';
 
 export enum ETransferErrorCode {
@@ -19,7 +20,7 @@ export type DepositResult = {
 
 let _browser: Browser | null = null;
 async function initBrowser() {
-  _browser = await puppeteer.launch({headless: false});
+  _browser = await puppeteer.launch();
   _browser.on('disconnected', initBrowser);
   return _browser;
 }
@@ -85,7 +86,7 @@ export class RbcApi {
     if (!downloadButton)
       throw new Error('We have no download button');
 
-    const txs = await act.downloadTxCsv();
+    const txs = await downloadTxCsv(act.page);
 
     const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
 
@@ -236,220 +237,7 @@ class ApiAction {
     await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
     this.step = this.step + 1;
   }
-
-
-  /**
-   * Clicks an element that kicks off a download, writes download to a file,
-   * then returns the path to the file.
-   *
-   * Example usage:
-   *
-   * const downloadButton = await this.page.$('#downloadButton');
-   * const myDownload = await clickToDownload(downloadButton, {
-   *   downloadPath: '/path/to/save/to',
-   *   filename: 'mydownload.csv'
-   * });
-   * console.log(`My file is now located in ${myDownload}.`);
-   *
-   * @param elementHandle Element handle to click.
-   * @param options.resourceType Type of resource to watch for. (defaults to "xhr").
-   * @param options.downloadPath Path to save file to (defaults to "/tmp").
-   * @param options.filename Filename to save file as (defaults to the URL clicked).
-   * @returns Path where file is downloaded to.
-   */
-  async downloadTxCsv(
-    // elementHandle: puppeteer.ElementHandle,
-    // options?: {
-    //   resourceType?: puppeteer.ResourceType;
-    //   downloadPath?: string;
-    //   filename?: string
-    //}
-    ): Promise<string> {
-
-    var csv = await this.page.evaluate(async () => {
-      // taken from the page JS
-      //@ts-ignore
-      setSubmitVals();
-      //@ts-ignore
-      const form = document.PFM_FORM;
-      const result = await fetch(form.action, {
-        method: form.method,
-        body: new URLSearchParams([...(new FormData(form) as any)])
-      })
-      return await result.text();
-    });
-    return csv
-  }
 }
-      // const form = event.target as HTMLFormElement;
-
-      //   // casting to any here to satisfy tsc
-      //   // sending body as x-www-form-url-encoded
-      //   const result = await fetch(form.action, {
-      //     method: form.method,
-      //     body: new URLSearchParams([...(new FormData(form) as any)])
-      //   })  
-
-    // Set default options.
-    //const resourceType = options?.resourceType || 'xhr';
-    // const downloadPath = options?.downloadPath || this.outCache;
-
-    // await this.page.setRequestInterception(true);
-
-    // return new Promise(async (resolve, reject) => {
-    //   let paused = true;
-    //   //let pausedRequests = [] as any[];
-
-    //   this.page.on('request', async request => {
-    //     //console.log('Requesting: ' + request.url());
-    //     // if (paused) {
-    //     //   pausedRequests.push(() => request.continue());
-    //     // } else {
-    //     //  paused = true; // pause, as we are processing a request now
-    //     if (/*!paused && */isRequested(request, resourceType))
-    //     {
-    //       paused = false;
-    //       await this.page.setRequestInterception(false);
-
-    //       const shimmed: AxiosRequestConfig = {
-    //         method: request.method(),
-    //         url: request.url(),
-    //         data: request.postData(),
-    //         headers: request.headers()
-    //       }
-    //       let cookies = await this.page.cookies();
-    //       shimmed.headers.Cookie = cookies.map(ck => ck.name + '=' + ck.value).join(';');
-    //       const req = await Axios.request(shimmed);
-    //       console.log("Did: " + req.statusText);
-    //       if (req.status == 200)
-    //         resolve(req.data)
-    //       else
-    //         reject(req.statusText);
-    //     }
-    //     // else if (paused) {
-    //     //   pausedRequests.push(request);
-    //     // }
-    //     else if (paused) {
-    //       request.continue();
-    //     }
-    //     //}
-    //   });
-
-      // this.page.on('requestfinished', async (request) => {
-      //   const response = requestedResponse(request, options?.resourceType);
-      //   if (response)
-      //   {
-      //     console.log('Processing now');
-      //     try {
-      //       const buffer = await response.buffer();
-      //       console.log('Buffer' + buffer.length);
-      //     }
-      //     catch (e)
-      //     {
-      //      console.error(e);
-      //     }
-      //   }
-      //   //nextRequest(); // continue with next request
-      // });
-
-      //this.page.on('requestfailed', nextRequest);
-
-      // Create the listener.
-      // const listener = async (response: puppeteer.Response) => {
-      //   try {
-      //     const url = response.url();
-      //     console.log(`${response.request().resourceType()} - ${url} : ${response.headers()['content-type']} - ${response.headers()['content-length']}`);
-
-      //     if (response.request().resourceType() === resourceType) {
-      //       //const text = await response.text();
-      //       //console.log(text);
-      //       if (url)
-      //         return;
-      //       const file = await response.buffer();
-      //       if (file.length == 0) {
-      //         console.error("Zero length buffer downloaded");
-      //         return;
-      //       }
-
-      //       // // If a filename is specified, use that. If not, use the URL requested
-      //       // // but without any query parameters if any.
-      //       const destFilename = options?.filename || url.split('/').pop()?.replace(/\?.*$/, '') || "download";
-      //       const filePath = path.resolve(downloadPath, destFilename);
-      //       console.log(filePath)
-
-      //       // // Create a writable stream and write to it.
-      //       const writeStream = fs.createWriteStream(filePath);
-      //       writeStream.write(file, (err) => {
-      //         if (err) reject(err);
-      //         console.log(`Bytes written: ${writeStream.bytesWritten}`);
-      //         onDone(filePath);
-      //       });
-      //     }
-      //   }
-      //   catch (e) {
-      //     console.error(`${e.message} - ${e.stack}`);
-      //   }
-      // };
-
-      // this.page.on('requestfinished', async (request) => {
-
-      //   const response = request.response();
-      //   if (!response)
-      //     return;
-
-      //   console.log(`Finished: ${request.url()}`);
-      //   const contentLength = response.headers()['content-length'];
-      //   if (contentLength && contentLength != '0') {
-      //     console.log("With length: " + contentLength);
-      //     // try {
-      //     //   console.log('- fetching body of .mp4 file');
-      //     //   const buffer = await response.buffer();
-      //     //   console.log(`-- .mp4: OK: ${buffer.length}`);
-      //     // } catch (e) {
-      //     //   console.log(`-- .mp4: FAIL - ${e.message}`);
-      //     // }
-      //   }
-      // });
-
-      // When the file is saved, remove this listener, and return the file path.
-      // const onDone = (filePath: string) => {
-      //   console.log(`Done downloading to ${filePath}`);
-      //   this.page.removeListener('request', listener);
-      //   resolve(filePath);
-      // };
-
-      // Tell the page to start watching for a download then click the button
-      // to start a download.
-      // this.page.on('response', listener);
-  //     await elementHandle.click();
-  //   });
-  // }
-//}
-
-// function isRequested(request: puppeteer.Request, resourceType?: puppeteer.ResourceType)
-// {
-//   const requestType = request.resourceType();
-//   return !resourceType || requestType === resourceType;
-// }
-
-// function requestedResponse(request: puppeteer.Request, resourceType?: puppeteer.ResourceType) {
-
-//   if (!isRequested(request, resourceType))
-//     return null;
-//   const response = request.response();
-//   if (!response)
-//     return null;
-
-//   const requestType = request.resourceType();
-//   const url = request.url();
-//   const contentLength = response.headers()['content-length'];
-//   console.log(`${requestType} - ${url} : ${response.headers()['content-type']} - ${contentLength}`);
-//   return (contentLength)
-//     ? response
-//     : null;
-// }
-
-
 
 ////////////////////////////////////////////////////////////////
 
