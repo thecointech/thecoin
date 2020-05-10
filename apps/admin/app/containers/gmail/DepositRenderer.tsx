@@ -24,7 +24,7 @@ export const DepositRenderer = (props: TransferData) => {
     <div>
     {
       deposit.bank 
-        ? `Deposited on: ${deposit.bank.Date.toDateString()}`
+        ? `Deposited on: ${deposit.bank.Date.toFormat("DD")}`
         : "Warning: Could not find deposit"
     }
     </div>

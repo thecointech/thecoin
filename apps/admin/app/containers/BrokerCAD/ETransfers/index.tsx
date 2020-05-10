@@ -12,6 +12,7 @@ const RenderETransfer = (props: TransferData) => {
       <div>Question: {eTransfer.question}</div>
       <div>Answer: {eTransfer.answer}</div>
       <div>Message: {eTransfer.message}</div>
+      <div>Hash: {props.record.hash}</div>
     </Segment>
   )
 }

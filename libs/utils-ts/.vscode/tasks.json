@@ -9,10 +9,8 @@
 			"problemMatcher": [
 				"$tsc"
 			],
-			"group": {
-                "kind": "build",
-                "isDefault": true
-            }
+			"group": "build",
+			"label": "tsc: build - tsconfig.json"
 		}
 	]
 }

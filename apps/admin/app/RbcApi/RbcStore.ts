@@ -1,31 +1,84 @@
 import { RbcTransaction } from "./types";
+import PouchDB from 'pouchdb';
+import { DateTime } from "luxon";
 
-//const dbName = "rbc_data";
-//const lastTxFetchKey = 'LastTxFetch';
+const dbName = "rbc_data";
+const lastSyncKey = 'LastSync';
 
-export async function storeTransactions(_txs: RbcTransaction[], _date: Date)
+
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}>
+type StoredSyncDate = {
+  time: number
+}
+
+export class RbcStore
 {
-  // await db.transaction('rw', db.txs, async function () {
-  //   txs.forEach(tx => {
-  //     db.txs.add(tx);
-  //   })
-  // });
+  private static db: PouchDB.Database;
+  private static counter: number = 0;
+
+  static initialize(options?: PouchDB.Configuration.DatabaseConfiguration)
+  {
+    if (RbcStore.counter == 0)
+    {
+      console.log("Initializing DB");
+      RbcStore.db = new PouchDB(dbName, options);
+    }
+    RbcStore.counter++;
+  }
+
+  static release()
+  {
+    RbcStore.counter = Math.max(0, RbcStore.counter - 1);
+    if (0 == RbcStore.counter)
+    {
+      RbcStore.db?.close();
+    }
+  }
+
+  static async storeTransactions(txs: RbcTransaction[], _date: Date) {
+    let counter = 0;
+    let daySwitcher = 0;
+    for (let i = 0; i < txs.length; i++)
+    {
+      const tx = txs[i];
+      const txTime = tx.TransactionDate.toMillis();
+      if (daySwitcher != txTime) {
+        daySwitcher = txTime;
+        counter = 0;
+      }
+      
+      await RbcStore.db.put<StoredTx>({
+        _id: (txTime + counter++).toString(), // Add counter to enforce uniqueness on the key.
+        ...tx,
+        TransactionDate: txTime
+      })
+    }
+    // Store the last synced time
+    await RbcStore.db.put<StoredSyncDate>({
+      _id: lastSyncKey,
+      time: _date.getTime()
+    });
+  }
+  
+  static async fetchStoredTransactions(): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
+    const allDocs = await RbcStore.db.allDocs<StoredTx>({include_docs: true});
+    const txs = allDocs.rows
+      .filter(doc => doc.id != lastSyncKey)
+      .map(doc => mapStoredToTx(doc.doc!));
+    const lastInsertRow = allDocs.rows.find(doc => doc.id == lastSyncKey)
+
+    return {
+      txs,
+      syncedTill: new Date((lastInsertRow?.doc as any as StoredSyncDate)?.time ?? "2017-01-03")
+    }
+  }
 }
 
-export async function fetchStoredTransactions() : Promise<RbcTransaction[]> {
-  // let txs = await db.txs.toArray();
-  // return txs;
-  return [];
-}
-
-
-
-export function getLastInsertDate() {
-  // This project started in 2016 (?)
-  const lastUpdate = null; //localStorage.getItem(LastTxFetchKey);
-  return lastUpdate ? new Date(lastUpdate) : new Date(2016);
-}
-
+const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
+  ...doc,
+  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0)
+})
 
 
 // var db = indexedDB.open(dbName);

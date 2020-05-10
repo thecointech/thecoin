@@ -2,8 +2,9 @@ import puppeteer, { Browser, Page } from 'puppeteer';
 import credentials from './credentials.json';
 import fs from 'fs';
 import { RbcTransaction } from './types';
-import { getLastInsertDate, storeTransactions, fetchStoredTransactions } from './RbcStore';
+import { RbcStore } from './RbcStore';
 import { downloadTxCsv } from './downloadTxs';
+import { DateTime } from 'luxon';
 //import path from 'path';
 
 export enum ETransferErrorCode {
@@ -42,21 +43,22 @@ export class RbcApi {
 
   async fetchLatestTransactions()
   {
-    const storedTxs = await fetchStoredTransactions();
-    const fromDate = getLastInsertDate();
+    const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions();
     // newest possible date is yesterday
     const toDate = new Date();
+    toDate.setDate(toDate.getDate()-1);
 
-    if (!sameDay(fromDate, toDate))
+    if (!sameDay(syncedTill, toDate))
     {
-      toDate.setDate(toDate.getDate()-1);
-      const newTxs = await this.getTransactions(fromDate, toDate);
+      
+      const newTxs = await this.getTransactions(syncedTill, toDate);
       if (newTxs.length)
       {
-        await storeTransactions(newTxs, toDate);
+        await RbcStore.storeTransactions(newTxs, toDate);
+        return [...txs, ...newTxs];
       }
     }
-    return storedTxs;
+    return txs;
   }
 
   async getTransactions(from: Date, to: Date) : Promise<RbcTransaction[]> {
@@ -89,25 +91,25 @@ export class RbcApi {
     const txs = await downloadTxCsv(act.page);
 
     const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
+    const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
+    const toDate = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", { zone: "America/Montreal" });
 
     const allLines = txs.split('\n');
     return allLines
       .slice(1)
-      .map(line => {
-        const entries = line.split(',');
-        const v: RbcTransaction = {
-          AccountType: entries[0],
-          AccountNumber: entries[1],
-          TransactionDate: new Date(`${entries[2]} EST`),
-          ChequeNumber: maybeParse(entries[3]),
-          Description1: entries[4],
-          Description2: entries[5],
-          CAD: maybeParse(entries[6]),
-          USD: maybeParse(entries[7]),
-        }
-        return v;
-      })
-      .filter(tx => tx.AccountNumber == credentials.accountNo);
+      .map(line => line.split(','))  // Split into component pieces
+      .filter(entry => entry[1] == credentials.accountNo) // Do not accept any line that does not have the right account type 
+      .map((entry) : RbcTransaction =>  ({
+          AccountType: entry[0],
+          AccountNumber: entry[1],
+          TransactionDate: toDate(entry[2]),
+          ChequeNumber: maybeParse(entry[3]),
+          Description1: trimQuotes(entry[4]),
+          Description2: trimQuotes(entry[5]),
+          CAD: maybeParse(entry[6]),
+          USD: maybeParse(entry[7]),
+        })
+      )
   }
 
   async selectTxDate(page: Page, fromTo: string, date: Date) {

@@ -2,6 +2,7 @@ import {gmail_v1} from 'googleapis';
 import { DepositRecord } from 'containers/TransferList/types';
 import { Timestamp } from '@the-coin/types/FirebaseFirestore';
 import { Transaction } from '@the-coin//shared/containers/Account';
+import { DateTime } from 'luxon';
 
 export type DepositInstructions = {
   name: string,
@@ -29,7 +30,7 @@ export interface OldPurchseDB {
 
 
 export type BankRecord = {
-  Date: Date,
+  Date: DateTime,
 	Description: string,
 	Details: string,
 	Amount: number

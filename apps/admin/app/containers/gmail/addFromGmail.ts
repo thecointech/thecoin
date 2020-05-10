@@ -125,8 +125,9 @@ function getUserInfo(email: gmail_v1.Schema$Message) {
 }
 
 function getAmount(body: string) {
-  const culturedAmount = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body)[1];
-  return parseFloat(culturedAmount.replace(',', ''))
+  const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body) ??
+                    /vous a envoyé un virement de ([0-9.,]+) \$ \(CAD\)/.exec(body)
+  return parseFloat(amountRes[1].replace(',', ''))
 }
 
 function getDepositUrl(body: string) {
@@ -139,8 +140,21 @@ function getRecievedDate(email: gmail_v1.Schema$Message) {
 
 function getSubject(email: gmail_v1.Schema$Message) {
   const subject = email.payload.headers.find(h => h.name === "Subject").value;
+  return getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
+}
+
+function getSubjectAnglais(subject: string) {
   const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
   if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
+    console.error(`Unknown deposit type: ${subject}`);
+    return null;
+  }
+  return subject.substr(redirectHeader.length);
+}
+
+function getSubjectFrancais(subject: string) {
+  const redirectHeader = "[REDIRECT:] Virement INTERAC"
+  if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
     console.error(`Unknown deposit type: ${subject}`);
     return null;
   }
