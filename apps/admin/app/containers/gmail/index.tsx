@@ -20,7 +20,7 @@ import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
 import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
 import { GetActionDoc } from '@the-coin/utilities/User';
 import { Contract } from 'ethers';
-import { ModalOperation } from '../../../../../libs/shared/src/containers/ModalOperation';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
 
 

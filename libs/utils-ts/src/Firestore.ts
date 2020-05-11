@@ -21,6 +21,7 @@ export type ProcessRecord = {
   processedTimestamp?: Timestamp,
   completedTimestamp?: Timestamp,
   hash: string,
+  hashRefund?: string,
   confirmed: boolean,
   fiatDisbursed: number
 }

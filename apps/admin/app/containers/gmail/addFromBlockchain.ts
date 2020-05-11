@@ -47,13 +47,13 @@ export async function addFromBlockchain(deposits: DepositData[], transfers: Tran
       TryAddHash(d, allTransfers, fxRates);
   }
 
-  const unmatched = buildUnmatchedBCEntries(deposits, allTransfers, fxRates);
+  /*const unmatched = */buildUnmatchedBCEntries(deposits, allTransfers, fxRates);
   // Do any of these unmatched deposits match un-matched deposits in the list?
-  for (const d of deposits) 
-  {
-    if (!d.record.hash)
-      TryMatchUnmatched(d, unmatched);
-  }
+  // for (const d of deposits) 
+  // {
+  //   if (!d.record.hash)
+  //     TryMatchUnmatched(d, unmatched);
+  // }
 
   return deposits;
 }
@@ -132,10 +132,10 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
   }
 }
 
-function TryMatchUnmatched(deposit: DepositData, allTransfers: DepositData[])
-{
-  // Find 
-}
+// function TryMatchUnmatched(deposit: DepositData, allTransfers: DepositData[])
+// {
+//   // Find 
+// }
 
 function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Transaction[])
 {
