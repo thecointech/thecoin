@@ -48,9 +48,9 @@ const TxSelect = ({deposit}: TxSelectProps) => {
   if (Array.isArray(db)) {
     const options = db.map((dep, index) => (
       {
-        key: dep.txHash,
+        key: dep.hash,
         value: index,
-        text: `$${dep.fiat} - ${dep.settled?.toDate().toDateString()}`
+        text: `$${dep.fiatDisbursed} - ${dep.processedTimestamp?.toDate().toDateString()}`
       }))
     return db.length > 0 
       ? <Select placeholder="Select a TX" options={options} />
@@ -61,7 +61,7 @@ const TxSelect = ({deposit}: TxSelectProps) => {
       <div>
       { 
         db
-        ? `Db Stored: ${db.txHash}`
+        ? `Db Stored: ${db.hash}`
         : "Warning: No DB found"
       }
       </div>

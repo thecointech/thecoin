@@ -5,6 +5,7 @@ import { RbcTransaction } from './types';
 import { RbcStore } from './RbcStore';
 import { downloadTxCsv } from './downloadTxs';
 import { DateTime } from 'luxon';
+import { trimQuotes } from 'utils';
 //import path from 'path';
 
 export enum ETransferErrorCode {
@@ -32,6 +33,8 @@ async function getPage() {
 
 export class RbcApi {
 
+  public static DateTimeZone = { zone: "America/Montreal" };
+
   async depositETransfer(prefix: string, url: string, code: string, progressCb: (v: string) => void): Promise<DepositResult> {
     try {
       return this.completeDeposit(prefix, url, code, progressCb);
@@ -43,7 +46,7 @@ export class RbcApi {
 
   async fetchLatestTransactions()
   {
-    const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions();
+    const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions(RbcApi.DateTimeZone);
     // newest possible date is yesterday
     const toDate = new Date();
     toDate.setDate(toDate.getDate()-1);
@@ -52,11 +55,8 @@ export class RbcApi {
     {
       
       const newTxs = await this.getTransactions(syncedTill, toDate);
-      if (newTxs.length)
-      {
-        await RbcStore.storeTransactions(newTxs, toDate);
-        return [...txs, ...newTxs];
-      }
+      await RbcStore.storeTransactions(newTxs, toDate);
+      return [...txs, ...newTxs];
     }
     return txs;
   }
@@ -91,8 +91,7 @@ export class RbcApi {
     const txs = await downloadTxCsv(act.page);
 
     const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
-    const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
-    const toDate = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", { zone: "America/Montreal" });
+    const toDateTime = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", RbcApi.DateTimeZone);
 
     const allLines = txs.split('\n');
     return allLines
@@ -102,7 +101,7 @@ export class RbcApi {
       .map((entry) : RbcTransaction =>  ({
           AccountType: entry[0],
           AccountNumber: entry[1],
-          TransactionDate: toDate(entry[2]),
+          TransactionDate: toDateTime(entry[2]),
           ChequeNumber: maybeParse(entry[3]),
           Description1: trimQuotes(entry[4]),
           Description2: trimQuotes(entry[5]),

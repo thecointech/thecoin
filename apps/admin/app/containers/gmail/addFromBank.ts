@@ -1,8 +1,10 @@
 import { DepositData, BankRecord } from "./types";
 import { fromMillis } from "utils/Firebase";
-import { compareDateTo, addNewEntries } from "./utils";
+import { addNewEntries } from "./utils";
 import { PurchaseType } from "containers/TransferList/types";
 import { RbcApi } from "RbcApi";
+import { Timestamp } from "@the-coin/types/FirebaseFirestore";
+import { DateTime } from "luxon";
 
 export async function addFromBank(deposits: DepositData[], bankApi: RbcApi) {
   let bankRecords = await parseTransactions(bankApi);
@@ -43,6 +45,12 @@ function getMatches(deposit: DepositData, bankRecords: BankRecord[])
   return ofAmount;
 }
 
+export function compareDateTo(ts: Timestamp) {
+  const ds = DateTime.fromMillis(ts.toMillis(), RbcApi.DateTimeZone);
+  return (k: BankRecord) => k.Date.hasSame(ds, "day");
+}
+
+
 function applyBankRecord(deposit: DepositData, record: BankRecord, allRecords: BankRecord[])
 {
   deposit.bank = record;
@@ -64,7 +72,7 @@ function matchFromTimestamp(deposit: DepositData, bankRecords: BankRecord[]) {
   }
   else {
     // Find the record on the same day as this one
-    const record = records.find(compareDateTo("Date", deposit.record.completedTimestamp));
+    const record = records.find(compareDateTo(deposit.record.completedTimestamp));
     if (record)
     {
       applyBankRecord(deposit, record, bankRecords);
@@ -84,14 +92,14 @@ function matchFromGuess(deposit: DepositData, bankRecords: BankRecord[]) {
     // Else, we can we assume it's the first one?
     const first = records[0];
     // Did this record happen reasonable soon after we recieved the email?
-    const dateRecieved = deposit.instruction.recieved;
+    const dateRecieved = deposit.record.recievedTimestamp;
     const dateDeposited = first.Date;
     // Delta in days
-    const delta = (dateDeposited.toMillis() - dateRecieved.getTime()) / (1000*60*60*24);
+    const delta = (dateDeposited.toMillis() - dateRecieved.toMillis()) / (1000*60*60*24);
     const maximumAllowableDelta = 30;
     if (delta < -1 || delta > maximumAllowableDelta) 
     {
-      console.warn(`Apply bank with delta: ${delta}, of ${records.length} possibilities: ${deposit.instruction.name} on ${dateRecieved.toDateString()}`);
+      console.warn(`Apply bank with delta: ${delta}, of ${records.length} possibilities: ${deposit.instruction.name} on ${dateRecieved.toDate().toDateString()}`);
       return;
     }
     applyBankRecord(deposit, first, bankRecords);
@@ -108,7 +116,9 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
       body: "",
       ...clientData 
       ? {
-          address: clientData.instruction.address,
+          // we cannot be certain that the matched address is/was the one being deposited to
+          // (ie, a client may have multiple accounts, and we can't tell which one was intended here)
+          //address: clientData.instruction.address,  
           email: clientData.instruction.email,
         }
       : {

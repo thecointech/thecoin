@@ -3,7 +3,8 @@ import { Transaction } from "@the-coin/shared/containers/Account";
 import { weSellAt } from "@the-coin/shared/containers/FxRate";
 import { FXRate } from '@the-coin/pricing'
 import { toHuman, IsValidAddress, NormalizeAddress, toCoin } from "@the-coin/utilities";
-import { fromMillis } from "utils/Firebase";
+import { fromMillis, toTimestamp } from "utils/Firebase";
+import { PurchaseType } from "containers/TransferList/types";
 
 
 export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FXRate[])
@@ -46,7 +47,13 @@ export async function addFromBlockchain(deposits: DepositData[], transfers: Tran
       TryAddHash(d, allTransfers, fxRates);
   }
 
-  buildUnmatchedBCEntries(deposits, allTransfers, fxRates);
+  const unmatched = buildUnmatchedBCEntries(deposits, allTransfers, fxRates);
+  // Do any of these unmatched deposits match un-matched deposits in the list?
+  for (const d of deposits) 
+  {
+    if (!d.record.hash)
+      TryMatchUnmatched(d, unmatched);
+  }
 
   return deposits;
 }
@@ -125,6 +132,11 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
   }
 }
 
+function TryMatchUnmatched(deposit: DepositData, allTransfers: DepositData[])
+{
+  // Find 
+}
+
 function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Transaction[])
 {
   deposit.tx = tx;
@@ -137,17 +149,37 @@ function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Tra
 }
 
 
-function buildUnmatchedBCEntries(deposits: DepositData[], allTransfers: Transaction[], fxRates: FXRate[])
+function buildUnmatchedBCEntries(deposits: DepositData[], allTransfers: Transaction[], fxRates: FXRate[]) : DepositData[]
 {
   //const myOtherWallet: "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
+  // For each transaction, is there anything that might be matching?
   return allTransfers.map(tx => {
 
     // First, do have this user anywhere?
-    const deposit = deposits.find(d => d.instruction.address == tx.counterPartyAddress);
+    const deposit = deposits.find(d => d.instruction.address && NormalizeAddress(d.instruction.address) == tx.counterPartyAddress);
     const txValue = toHuman(weSellAt(fxRates, tx.date) * tx.change, true);
-    return { 
-      name: deposit?.instruction.name,
-      value: txValue,
-    }
+
+    const r: DepositData = {
+      instruction: {
+        name: deposit?.instruction.name,
+        email: deposit?.instruction.email,
+      },
+      record: {
+        transfer: {
+          value: tx.change,
+        },
+        recievedTimestamp: toTimestamp(tx.date),
+        processedTimestamp: toTimestamp(tx.date),
+        completedTimestamp: toTimestamp(tx.completed),
+        hash: tx.txHash,
+        fiatDisbursed: txValue,
+        confirmed: true,
+        type: PurchaseType.other,
+      },
+      tx: tx,
+      db: null,
+      bank: null,
+    };
+    return r;
   });
 }

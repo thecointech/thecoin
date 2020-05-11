@@ -5,6 +5,7 @@ import { Base64 } from 'js-base64';
 import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
 import { addNewEntries } from './utils';
+import { trimQuotes } from 'utils';
 
 let __gmail: gmail_v1.Gmail | null = null;
 
@@ -115,19 +116,27 @@ function getAddressCoin(email: gmail_v1.Schema$Message) {
     : "MISSING ACCOUNT INFO";
 }
 
-function getUserInfo(email: gmail_v1.Schema$Message) {
+function getUserInfo(email: gmail_v1.Schema$Message) { 
+  // We use the "Reply-To" header here because some banks (ex-RBC)
+  // put their clients email address in this field.
   const toField = email.payload.headers.find(h => h.name === "Reply-To").value;
   const match = /<([^<>]+)>$/gi.exec(toField);
   return {
-    name: toField.substr(0, match.index).trim(),
+    name: trimQuotes(toField.substr(0, match.index).trim()),
     email: match[1]
   }
 }
 
-function getAmount(body: string) {
-  const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body) ??
-                    /vous a envoyé un virement de ([0-9.,]+) \$ \(CAD\)/.exec(body)
-  return parseFloat(amountRes[1].replace(',', ''))
+const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body);
+function getAmountAnglais(body: string) {
+  const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
+  if (amountRes)
+    return parseFloat(amountRes[1].replace(',', ''))
+}
+function getAmountFrancais(body: string) {
+  const amountRes = /vous a envoyé un virement de ([0-9,]+) \$ \(CAD\)/.exec(body)
+  if (amountRes)
+    return parseFloat(amountRes[1])
 }
 
 function getDepositUrl(body: string) {

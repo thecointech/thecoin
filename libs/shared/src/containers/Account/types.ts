@@ -11,6 +11,7 @@ export type DecryptCallback = (percent: number) => boolean;
 export type Transaction = {
   txHash?: string;
   date: Date;
+  completed: Date;
   change: number;
   logEntry: string;
   balance: number;

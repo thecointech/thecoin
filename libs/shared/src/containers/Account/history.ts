@@ -25,14 +25,17 @@ import { Log } from "ethers/providers";
 
     // Parse out additional purchase/redeem info
     const txReceipt = await contract.provider.getTransactionReceipt(txHash);
-    if (!txReceipt.logs)
+    if (!txReceipt.logs || !txReceipt.blockHash)
       return false;
+
+    const blockData = await contract.provider.getBlock(txReceipt.blockHash)
 
     for (let i = 0; i < txReceipt.logs.length; i++) {
       const extra = contract.interface.parseLog(txReceipt.logs[i]);
       if (extra && extra.name == "Purchase") {
         const {balance, timestamp} = extra.values;
         transaction.date = new Date(timestamp.toNumber() * 1000);
+        transaction.completed = new Date(blockData.timestamp * 1000);
         const change = toHuman(transaction.change, true);
         if (toWallet) {
           transaction.balance = balance.toNumber();
@@ -53,6 +56,7 @@ import { Log } from "ethers/providers";
     var r: Transaction = {
       txHash: ethersLog.transactionHash,
       date: new Date(),
+      completed: new Date(),
       change: toWallet ? value.toNumber() : -value.toNumber(),
       logEntry: "---",
       balance: -1,

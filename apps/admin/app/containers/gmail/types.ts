@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 export type DepositInstructions = {
   name: string,
   email: string,
-  address: string,
+  address?: string,
   recieved?: Date,
   depositUrl?: string,
 
@@ -45,7 +45,7 @@ export type DepositData = {
   instruction: DepositInstructions,
 
   // Any existing DB records
-  db: OldPurchseDB|OldPurchseDB[]|null,
+  db: DepositRecord|DepositRecord[]|null,
 
   // A matching entry from the bank (to verify)
   bank: BankRecord|null,

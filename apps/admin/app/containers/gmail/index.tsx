@@ -100,7 +100,7 @@ export const Gmail = () => {
         setStep2(r)
       })()
     }
-  }, [setDeposits, emails, rates, account.history, rbcApi])
+  }, [setDeposits, emails, rbcApi])
 
   useEffect(() => {
     if (step2.length > 0 && account.history.length > 0) {
@@ -192,7 +192,9 @@ async function addSettlementDate(deposits: DepositData[], fxApi: IFxRates) {
 
 function setComplete(deposit: DepositData[]) {
   deposit.forEach(d => {
-    d.isComplete = d.bank != null && d.tx != null;
+    d.isComplete = 
+      (d.tx != null) && 
+      (d.bank != null || d.record.type == PurchaseType.other);
   })
 }
 //////////////////////////////////////////////////////
@@ -286,8 +288,9 @@ async function completeTheTransfer(deposit: DepositData, contract: Contract, pro
     balance: -1,
     change: -record.transfer.value,
     counterPartyAddress: address,
-    date: new Date(),
+    date: record.processedTimestamp.toDate(),
     logEntry: "We just sent it",
     txHash: tx.hash,
+    completed: new Date(),
   }
 }
