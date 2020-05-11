@@ -1,0 +1,1 @@
+export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
