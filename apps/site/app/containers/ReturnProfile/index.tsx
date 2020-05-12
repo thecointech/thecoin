@@ -333,22 +333,7 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
             <Graph data={graphData} multiplier={amount} />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns="two">
-          <Grid.Column width={4}>
-            <Button.Group>
-              <Button icon labelPosition="left" onClick={play}>
-                {playButton}
-              </Button>
-              <Button icon labelPosition="right" onClick={step}>
-                <FormattedMessage {...messages.Step} />
-                <Icon name="arrow right" />
-              </Button>
-            </Button.Group>
-          </Grid.Column>
-          <Grid.Column width="10">
-            {/*<Slider value={sliderValue} style={{ marginTop: "8px", trackFill: { backgroundColor: "#3193A1"}}} settings={this.sliderSettings()} />*/}
-          </Grid.Column>
-        </Grid.Row>
+        <br /><br /><br /><br /><br /><br />
         <Grid.Row>
           <Grid.Column>
             <Explanation timeString={timeString}/>

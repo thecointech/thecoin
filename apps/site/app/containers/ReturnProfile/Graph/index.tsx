@@ -56,10 +56,26 @@ export class Graph extends React.PureComponent<Props> {
     };
     console.log(plotDataMin)
 
+const height = 300;
+const width = 800;
 
+const gradProps = {
+  gradientUnits: 'userSpaceOnUse',
+  x1: '0',
+  y1: '0',
+  x2: '0',
+  y2: height
+};
+const gradProps0 = {
+  gradientUnits: 'userSpaceOnUse',
+  x1: '0',
+  y1: '0',
+  x2: '0',
+  y2: height
+};
 
     return (
-      <div style={{ height: 300, }}>
+      <div style={{ height: 300 }}>
         <ResponsiveLine
           data={[plotDataMin, plotData, plotDataMax]}
           margin={{ top: 10, right: 110, bottom: 60, left: 60 }}
@@ -68,7 +84,7 @@ export class Graph extends React.PureComponent<Props> {
         yScale={{ type: 'linear', stacked: true, min: 'auto', max: 'auto' }}
         axisTop={null}
         axisRight={null}
-        enableArea={false}
+        enableArea={true}
         enablePoints={false}
         axisBottom={{
             orient: 'bottom',
@@ -84,10 +100,11 @@ export class Graph extends React.PureComponent<Props> {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'Account Value ($)',
+            legend: '',
             legendOffset: -40,
             legendPosition: 'middle',
         }}
+        
         /*markers={[
           {
             axis: 'x',
@@ -96,14 +113,16 @@ export class Graph extends React.PureComponent<Props> {
             legend: 'Avg: $' + CalcAverageReturn(multiplier, data.average),
           },
         ]}*/
-        colors={{ scheme: 'paired' }}
+        colors={[ "url(#gradientBottom)", "url(#gradientMiddle)", "url(#gradientTop)"]}
         pointSize={10}
+        enableGridX={false}
+        enableGridY={false}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}
         pointLabel="y"
         pointLabelYOffset={-12}
-        useMesh={true}
+        useMesh={false}
         legends={[
             {
                 anchor: 'bottom-right',
@@ -131,6 +150,28 @@ export class Graph extends React.PureComponent<Props> {
             },
         ]}
         />
+
+        <svg>
+          <defs>
+            <linearGradient id="gradientTop" {...gradProps} gradientTransform="rotate(-2)"> 
+              <stop offset="25%" stopColor="green" />
+              <stop offset="100%" stopColor="red" />
+            </linearGradient>
+
+            <linearGradient id="gradientMiddle" {...gradProps}>   
+              <stop offset="0%" stop-color="green" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="white"/>
+            </linearGradient>
+
+          <linearGradient id="gradientBottom" {...gradProps0} gradientTransform="rotate(-2)">   
+            <stop offset="0%" stop-color="green"/>
+            <stop offset="0%" stop-color="white" stop-opacity="1.0"/>
+          </linearGradient>
+
+
+            
+          </defs>
+        </svg>
       </div>
     );
   }
