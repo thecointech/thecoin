@@ -7,17 +7,9 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { RouteComponentProps, withRouter } from 'react-router';
 import queryString from 'query-string';
-import { getData, GetPlotData, DataFormat, CalcAverageReturn,calcPeriodReturn } from './Data';
+import { getData, GetPlotData, DataFormat,calcPeriodReturn } from './Data';
 import { GraphHeader } from './GraphHeader';
 import { Explanation } from './Explanation';
-
-// const options = [
-//   { key: 'coin', text: 'The Coin', value: 'coin' },
-//   { key: 'cash', text: 'Cash', value: 'cash' },
-//   { key: 'savings', text: 'High-interest savings', value: 'savings' },
-//   { key: 'rbcg', text: 'RBC Growth Funds', value: 'rbcg' },
-//   { key: 'rbcb', text: 'RBC Bond Funds', value: 'rbcb' },
-// ];
 
 const SliderMax = 37;
 
@@ -31,9 +23,10 @@ const initState = {
   rawData: [] as DataFormat[],
   playTimer: 0,
   averages: [] as any,
+  mins: [] as any,
+  maxs: [] as any,
 };
 
-//let averages: number[];
 
 export type State = Readonly<typeof initState>;
 
@@ -45,31 +38,6 @@ export const state = initState;
     const v = parseInt(query[name] as string, 10);
     if (v) {
       setState({[name]: v} as any);
-    }
-  }
-
-  export function componentDidMount(this: any) {
-    const qs = this.props.location.search;
-    const query = queryString.parse(qs);
-    maybePullQuery(query, 'age');
-    maybePullQuery(query, 'amount');
-
-    updateData();
-    // Start playback after 5 seconds
-    this.initialTimer = setTimeout(() => {
-    this.setState(this.startTimer);
-    this.initialTimer = 0;
-    }, 5000) as any;
-  }
-
-  export function componentWillUnmount() {
-    if (initialTimer) {
-      clearTimeout(initialTimer);
-    }
-    if (state.playTimer) {
-      clearInterval(state.playTimer);
-      //thois
-      //this.playTimer = 0;
     }
   }
 
@@ -122,17 +90,6 @@ export const state = initState;
     return (months < 120) ? -0.5 : undefined
   }
 
-  /*export const sliderSettings(): any{
-    var sliderSet = {
-          start: state.sliderValue,
-          min: 1,
-          max: sliderMax(),
-          step: 1,
-          onChange: (sliderValue: number) => setState({sliderValue}),
-        }
-    return sliderSet;
-  }*/
-
   export function getTimeLabel (months: number){ 
     var timeLabel = months < 12 ?
       <FormattedMessage {...messages.AverageReturnMonths} values={{months}} /> :
@@ -179,14 +136,15 @@ export const state = initState;
     };
   }
 
- export async function prepareAverages(){
+ export async function prepareAveragesAndPercentiles(){
     const data = await getData();
     const firstYear = 1935;
-    const iterations = 10;
+    const iterations = 800;
     const monthsWeWantToGraph = 7*12;
     const startDate = new Date(firstYear, 0);
     const returns = Array(monthsWeWantToGraph);
     const average = Array(monthsWeWantToGraph);
+    const valuesForMinAndMax = Array(monthsWeWantToGraph);
   
     var endDate;
     var monthToInsert = 1;
@@ -199,21 +157,62 @@ export const state = initState;
         endDate = new Date(firstYear, i);
         beginDate = new Date(firstYear, i-1);
         returns[y][monthToInsert] = calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0];
+        if (typeof valuesForMinAndMax[monthToInsert] == 'undefined'){
+          valuesForMinAndMax[monthToInsert] = [];
+        }
+        valuesForMinAndMax[monthToInsert][y] = returns[y][monthToInsert];
         if (typeof average[monthToInsert] == 'undefined'){
-          average[monthToInsert] = (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+          average[monthToInsert] = returns[y][monthToInsert];
         } else {
-          average[monthToInsert] = average[monthToInsert] + (calcPeriodReturn(data, beginDate, endDate, monthToInsert)[0]);
+          average[monthToInsert] = average[monthToInsert] + returns[y][monthToInsert];
         }
         monthToInsert = monthToInsert+1;
       }
     }
 
+    var sortedArray = Array(monthsWeWantToGraph)
+    var percentilesMins = Array(monthsWeWantToGraph)
+    var percentilesMaxs = Array(monthsWeWantToGraph)
+    var percentileWeWant = 25/100;
+    var percentileMin = Math.floor(iterations*percentileWeWant);
+    var percentileMax = Math.floor(iterations*(1-percentileWeWant));
+
+
+    if ( typeof percentilesMins[0] == 'undefined' ){
+      percentilesMins[0] = [];
+      percentilesMins[0] = 0;
+      percentilesMaxs[0] = [];
+      percentilesMaxs[0] = 0;
+    }
+
     var final = Array(monthsWeWantToGraph)
     for (let x = 1; x <= monthsWeWantToGraph; x++){
+      percentilesMins[x] = [];
+      percentilesMaxs[x] = [];
+      
+
+      sortedArray[x] = Array(monthsWeWantToGraph);
       final[x] = average[x]/iterations;
+      if ( typeof percentilesMins[x] == 'undefined' ){
+        percentilesMins[x] = 0;
+        percentilesMaxs[x] = 0;
+      }
+
+      if ( typeof valuesForMinAndMax[x] != 'undefined' ){
+        sortedArray = valuesForMinAndMax[x].sort();
+        percentilesMins[x] = sortedArray[percentileMin];
+        percentilesMaxs[x] = sortedArray[percentileMax];
+      }
     }
+
+
     final[0] = 0;
-    return final;
+    let returnsFinal = [];
+    returnsFinal[0] = final;
+    returnsFinal[1] = percentilesMins;
+    returnsFinal[2] = percentilesMaxs;
+
+    return returnsFinal;
   }
 
  export function step(){
@@ -229,34 +228,15 @@ export function setStatePlayTime(timer: any){
   }
 
 
-
-  function BuildCalculatorUrl(state: State) {
-    return `/graph/calculator?age=${state.age}&amount=${state.amount}`;
-  }
-
 export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
   
   const [state, setState] = React.useState(initState);
-  const showCalculate = React.useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e?.preventDefault();
-      const url = BuildCalculatorUrl(state);
-      props.history.push(url);
-    },
-    [],
-  );
-  const updateValue = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setState({
-        ...state,
-        [e.target.name]: e.target.value,
-      });
-    },
-    [],
-  );
+
   useEffect(() => {
     const fetchDataAsync = async () => {
-      state.averages = (await prepareAverages());
+      state.averages = (await prepareAveragesAndPercentiles())[0];
+      state.mins = (await prepareAveragesAndPercentiles())[1];
+      state.maxs = (await prepareAveragesAndPercentiles())[2];
       
       const qs = props.location.search;
       const query = queryString.parse(qs);
@@ -264,10 +244,10 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
       maybePullQuery(query, 'amount');
   
       updateData();
-      // Start playback after 5 seconds
+
       initialTimer = setTimeout(() => {
-      setState(startTimer);
-      initialTimer = 0;
+        setState(startTimer);
+        initialTimer = 0;
       }, 5000) as any;
       
     }   
@@ -280,18 +260,10 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
   const minimum = monthsToMinimum(months);
   const graphData = GetPlotData(months, rawData, minimum);
   const timeString = getTimeLabel(months);
-  const avgValue = CalcAverageReturn(amount, graphData.average);
   
   graphData.values = state.averages;
-  const playButton = state.playTimer ? (
-    <>
-      <Icon name="pause" />
-    </>
-    ) : (
-    <>
-      <Icon name="play" />
-    </>
-  );
+  graphData.mins = state.mins;
+  graphData.maxs = state.maxs;
   
     return (
       <Form>
@@ -318,22 +290,12 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
               <Form.Input type="number" name="age" value={age} onChange={onSetValue} />
             </Form.Field>
           </Grid.Column>
-          <Grid.Column>
-            <Form.Field>
-              <Label>
-                <FormattedMessage {...messages.AverageReturn} />
-                {timeString}
-              </Label>
-              <Form.Input value={'$' + avgValue} />
-            </Form.Field>
-          </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
             <Graph data={graphData} multiplier={amount} />
           </Grid.Column>
         </Grid.Row>
-        <br /><br /><br /><br /><br /><br />
         <Grid.Row>
           <Grid.Column>
             <Explanation timeString={timeString}/>
@@ -343,7 +305,5 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
       </Form>
     );
   };
-
-//export default View;
 
 export const View = withRouter(graphFrom);

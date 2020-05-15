@@ -139,6 +139,8 @@ export interface CoinReturns {
   average: number;
   values: number[];
   count: number;
+  mins: number[];
+  maxs: number[];
   // averageMarker: number;
   // averageLegend: string;
 }

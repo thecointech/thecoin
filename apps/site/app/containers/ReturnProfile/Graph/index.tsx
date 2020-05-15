@@ -11,10 +11,9 @@ var month = 0;
 export class Graph extends React.PureComponent<Props> {
 
   public render() {
-    const ratio = 0.01;
     const {data, multiplier} = this.props;
-    const {values, size, min, count} = data;
-//console.log(data)
+    const {values, mins, maxs} = data;
+
     const plotData: Serie = {
       id: 'Average Return',
       data: values.map((d, index): Datum => {
@@ -30,9 +29,8 @@ export class Graph extends React.PureComponent<Props> {
     month = 0;
     const plotDataMax: Serie = {
       id: 'Max',
-      data: values.map((d, index): Datum => {
-        //console.log("---VALUES",d)
-        const xval = d+ratio;
+      data: maxs.map((d, index): Datum => {
+        const xval = d;
         month = month+1;
         return {
           x: month,
@@ -40,21 +38,21 @@ export class Graph extends React.PureComponent<Props> {
         };
       }),
     };
-
+    
     month = 0;
     const plotDataMin: Serie = {
       id: 'Min',
-      data: values.map((d, index): Datum => {
-        //console.log("---VALUES",d)
-        const xval = d-ratio;
+      data: mins.map((d, index): Datum => {
+        const xval = d;
         month = month+1;
+        console.log("min-calc",month,xval,CalcAverageReturn(multiplier, xval))
         return {
           x: month,
           y: CalcAverageReturn(multiplier, xval),
         };
       }),
     };
-    console.log(plotDataMin)
+    //console.log(plotDataMin)
 
 const height = 300;
 const width = 800;
@@ -85,6 +83,7 @@ const gradProps0 = {
         axisTop={null}
         axisRight={null}
         enableArea={true}
+        areaBlendMode="screen"
         enablePoints={false}
         axisBottom={{
             orient: 'bottom',
@@ -92,7 +91,7 @@ const gradProps0 = {
             tickPadding: 5,
             tickRotation: -30,
             legend: 'Months',
-            legendOffset: 52,
+            legendOffset: 452,
             legendPosition: 'middle',
         }}
         axisLeft={{
@@ -104,68 +103,30 @@ const gradProps0 = {
             legendOffset: -40,
             legendPosition: 'middle',
         }}
-        
-        /*markers={[
-          {
-            axis: 'x',
-            value: '$' + CalcRoundedAverageReturn(multiplier, data),
-            lineStyle: { stroke: '#999999', strokeWidth: 2 },
-            legend: 'Avg: $' + CalcAverageReturn(multiplier, data.average),
-          },
-        ]}*/
-        colors={[ "url(#gradientBottom)", "url(#gradientMiddle)", "url(#gradientTop)"]}
+        colors={[ "url(#gradientBottom)", "url(#gradientTop)", "url(#gradientTop)"]}
         pointSize={10}
         enableGridX={false}
         enableGridY={false}
-        pointColor={{ theme: 'background' }}
-        pointBorderWidth={2}
-        pointBorderColor={{ from: 'serieColor' }}
+        areaOpacity={1.0}
         pointLabel="y"
-        pointLabelYOffset={-12}
-        useMesh={false}
-        legends={[
-            {
-                anchor: 'bottom-right',
-                direction: 'column',
-                justify: false,
-                translateX: 100,
-                translateY: 0,
-                itemsSpacing: 0,
-                itemDirection: 'left-to-right',
-                itemWidth: 80,
-                itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
-                symbolShape: 'circle',
-                symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                effects: [
-                    {
-                        on: 'hover',
-                        style: {
-                            itemBackground: 'rgba(0, 0, 0, .03)',
-                            itemOpacity: 1,
-                        },
-                    },
-                ],
-            },
-        ]}
+        useMesh={true}
         />
 
         <svg>
           <defs>
             <linearGradient id="gradientTop" {...gradProps} gradientTransform="rotate(-2)"> 
-              <stop offset="25%" stopColor="green" />
-              <stop offset="100%" stopColor="red" />
+              <stop offset="0%" stopColor="white" />
+              <stop offset="550%" stopColor="green" />
             </linearGradient>
 
             <linearGradient id="gradientMiddle" {...gradProps}>   
-              <stop offset="0%" stop-color="green" stop-opacity="0.1"/>
-              <stop offset="100%" stop-color="white"/>
+              <stop offset="0%" stopColor="green"/>
+              <stop offset="100%" stopColor="white" stopOpacity="1.0"/>
             </linearGradient>
 
           <linearGradient id="gradientBottom" {...gradProps0} gradientTransform="rotate(-2)">   
-            <stop offset="0%" stop-color="green"/>
-            <stop offset="0%" stop-color="white" stop-opacity="1.0"/>
+            <stop offset="0%" stopColor="white"/>
+            <stop offset="100%" stopColor="white" stopOpacity="1.0"/>
           </linearGradient>
 
 
