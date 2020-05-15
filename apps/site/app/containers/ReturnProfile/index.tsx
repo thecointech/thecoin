@@ -1,7 +1,7 @@
 //import React from 'react';
 import React, { useEffect } from 'react';
 import { Graph } from './Graph/index';
-import { Grid, Button, Icon, Input, Form, Label } from 'semantic-ui-react';
+import { Grid, Input, Form, Label } from 'semantic-ui-react';
 //import { Slider } from 'react-semantic-ui-range';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -137,19 +137,19 @@ export const state = initState;
   }
 
  export async function prepareAveragesAndPercentiles(){
-    const data = await getData();
-    const firstYear = 1935;
-    const iterations = 800;
-    const monthsWeWantToGraph = 7*12;
-    const startDate = new Date(firstYear, 0);
-    const returns = Array(monthsWeWantToGraph);
-    const average = Array(monthsWeWantToGraph);
-    const valuesForMinAndMax = Array(monthsWeWantToGraph);
+    let data = await getData();
+    let firstYear = 1935;
+    let iterations = 800;
+    let monthsWeWantToGraph = 7*12;
+    let startDate = new Date(firstYear, 0);
+    let returns = Array(monthsWeWantToGraph);
+    let average = Array(monthsWeWantToGraph);
+    let valuesForMinAndMax = Array(monthsWeWantToGraph);
+    let endDate;
+    let monthToInsert = 1;
+    let beginDate = startDate;
   
-    var endDate;
-    var monthToInsert = 1;
-    var beginDate = startDate;
-  
+    // ------------- Prepare the datas ---------------
     for (let y = 1; y <= iterations; y++){
       returns[y] = Array(monthsWeWantToGraph);
       monthToInsert = 1;
@@ -170,13 +170,35 @@ export const state = initState;
       }
     }
 
-    var sortedArray = Array(monthsWeWantToGraph)
-    var percentilesMins = Array(monthsWeWantToGraph)
-    var percentilesMaxs = Array(monthsWeWantToGraph)
-    var percentileWeWant = 25/100;
+    let averages = getAverages(monthsWeWantToGraph, average, iterations);
+    let percentiles = getPercentiles(30,valuesForMinAndMax,iterations);
+
+    averages[0] = 0;
+    let returnsFinal = [];
+    returnsFinal[0] = averages;
+    returnsFinal[1] = percentiles["percentilesMins"];
+    returnsFinal[2] = percentiles["percentilesMaxs"];
+
+    return returnsFinal;
+  }
+
+  function getAverages(monthsWeWantToGraph: number, average: any[], iterations: number){
+
+    var final = Array(monthsWeWantToGraph)
+    for (let x = 1; x <= monthsWeWantToGraph; x++){
+      final[x] = average[x]/iterations;
+    }
+    return final;
+  }
+
+  function getPercentiles(percent: number, data: any[], iterations: number){
+
+    var sortedArray = Array(data.length)
+    var percentilesMins = Array(data.length)
+    var percentilesMaxs = Array(data.length)
+    var percentileWeWant = percent/100;
     var percentileMin = Math.floor(iterations*percentileWeWant);
     var percentileMax = Math.floor(iterations*(1-percentileWeWant));
-
 
     if ( typeof percentilesMins[0] == 'undefined' ){
       percentilesMins[0] = [];
@@ -185,34 +207,22 @@ export const state = initState;
       percentilesMaxs[0] = 0;
     }
 
-    var final = Array(monthsWeWantToGraph)
-    for (let x = 1; x <= monthsWeWantToGraph; x++){
+    for (let x = 1; x <= data.length-1; x++){
       percentilesMins[x] = [];
       percentilesMaxs[x] = [];
-      
-
-      sortedArray[x] = Array(monthsWeWantToGraph);
-      final[x] = average[x]/iterations;
+      sortedArray[x] = Array(data.length);
       if ( typeof percentilesMins[x] == 'undefined' ){
         percentilesMins[x] = 0;
         percentilesMaxs[x] = 0;
       }
 
-      if ( typeof valuesForMinAndMax[x] != 'undefined' ){
-        sortedArray = valuesForMinAndMax[x].sort();
+      if ( typeof data[x] != 'undefined' ){
+        sortedArray = data[x].sort();
         percentilesMins[x] = sortedArray[percentileMin];
         percentilesMaxs[x] = sortedArray[percentileMax];
       }
     }
-
-
-    final[0] = 0;
-    let returnsFinal = [];
-    returnsFinal[0] = final;
-    returnsFinal[1] = percentilesMins;
-    returnsFinal[2] = percentilesMaxs;
-
-    return returnsFinal;
+    return {percentilesMins,percentilesMaxs};
   }
 
  export function step(){

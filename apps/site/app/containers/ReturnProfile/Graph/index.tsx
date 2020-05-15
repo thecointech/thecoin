@@ -16,7 +16,7 @@ export class Graph extends React.PureComponent<Props> {
 
     const plotData: Serie = {
       id: 'Average Return',
-      data: values.map((d, index): Datum => {
+      data: values.map((d): Datum => {
         const xval = d;
         month = month+1;
         return {
@@ -29,7 +29,7 @@ export class Graph extends React.PureComponent<Props> {
     month = 0;
     const plotDataMax: Serie = {
       id: 'Max',
-      data: maxs.map((d, index): Datum => {
+      data: maxs.map((d): Datum => {
         const xval = d;
         month = month+1;
         return {
@@ -42,20 +42,17 @@ export class Graph extends React.PureComponent<Props> {
     month = 0;
     const plotDataMin: Serie = {
       id: 'Min',
-      data: mins.map((d, index): Datum => {
+      data: mins.map((d): Datum => {
         const xval = d;
         month = month+1;
-        console.log("min-calc",month,xval,CalcAverageReturn(multiplier, xval))
         return {
           x: month,
           y: CalcAverageReturn(multiplier, xval),
         };
       }),
     };
-    //console.log(plotDataMin)
 
 const height = 300;
-const width = 800;
 
 const gradProps = {
   gradientUnits: 'userSpaceOnUse',

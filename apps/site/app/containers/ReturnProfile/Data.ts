@@ -152,6 +152,8 @@ export function bucketValues(values: number[], numBuckets: number, startingValue
   const minValue = (startingValue === undefined) ? arrayMin(values) : startingValue;
   const maxValue = arrayMax(values);
   // Spread
+  const mins: never[] = [];
+  const maxs: never[] = [];
   const { min, max, size } = calcBucketShape(minValue, maxValue, numBuckets);
   const count = Math.round((max - min) / size);
   const bucketCount = Math.max(count + 1, numBuckets);
@@ -171,6 +173,8 @@ export function bucketValues(values: number[], numBuckets: number, startingValue
     average,
     values: buckets,
     count: values.length,
+    mins,
+    maxs
   };
 }
 
@@ -182,6 +186,8 @@ export const NullData: CoinReturns = {
   min: 0,
   max: 0,
   count: 1,
+  mins: [],
+  maxs: []
 };
 //
 export function CalcPlotData(monthCount: number, data: DataFormat[], minimumValue?: number): CoinReturns {
