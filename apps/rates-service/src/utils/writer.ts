@@ -1,13 +1,18 @@
-var ResponsePayload = function(code, payload) {
-  this.code = code;
-  this.payload = payload;
+export class ResponsePayload {
+  code: any;
+  payload: any;
+  constructor(code: any, payload: any) {
+      this.code = code;
+      this.payload = payload;
+  }
 }
 
-exports.respondWithCode = function(code, payload) {
+
+export function respondWithCode(code: any, payload: any) {
   return new ResponsePayload(code, payload);
 }
 
-var writeJson = exports.writeJson = function(response, arg1, arg2) {
+var writeJson = exports.writeJson = function(response: any, arg1: any, arg2: any) {
   var code;
   var payload;
 

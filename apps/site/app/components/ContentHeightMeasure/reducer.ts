@@ -2,7 +2,7 @@
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 import { ContentState, IActions } from './types';
 import { ApplicationRootState } from 'types';
-import { useInjectReducer } from '@the-coin/redux-injectors';
+import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

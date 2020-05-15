@@ -1,4 +1,4 @@
-import { useInjectReducer } from "@the-coin/redux-injectors";
+import { useInjectReducer } from "redux-injectors";
 import { bindActionCreators, Dispatch } from "redux";
 import { Wallet } from "ethers";
 import { useDispatch } from "react-redux";
