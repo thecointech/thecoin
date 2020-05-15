@@ -141,6 +141,7 @@ export const state = initState;
     let firstYear = 1935;
     let iterations = 800;
     let monthsWeWantToGraph = 7*12;
+    let percentilesWeWant = 30;
     let startDate = new Date(firstYear, 0);
     let returns = Array(monthsWeWantToGraph);
     let average = Array(monthsWeWantToGraph);
@@ -149,7 +150,7 @@ export const state = initState;
     let monthToInsert = 1;
     let beginDate = startDate;
   
-    // ------------- Prepare the datas ---------------
+    // ------------- Prepare the data ---------------
     for (let y = 1; y <= iterations; y++){
       returns[y] = Array(monthsWeWantToGraph);
       monthToInsert = 1;
@@ -170,8 +171,9 @@ export const state = initState;
       }
     }
 
+    // ------------- Get the values for the graph ---------------
     let averages = getAverages(monthsWeWantToGraph, average, iterations);
-    let percentiles = getPercentiles(30,valuesForMinAndMax,iterations);
+    let percentiles = getPercentiles(percentilesWeWant,valuesForMinAndMax,iterations);
 
     averages[0] = 0;
     let returnsFinal = [];
@@ -244,9 +246,10 @@ export const graphFrom: React.FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     const fetchDataAsync = async () => {
-      state.averages = (await prepareAveragesAndPercentiles())[0];
-      state.mins = (await prepareAveragesAndPercentiles())[1];
-      state.maxs = (await prepareAveragesAndPercentiles())[2];
+      let dataForTheGraph = await prepareAveragesAndPercentiles();
+      state.averages = dataForTheGraph[0];
+      state.mins = dataForTheGraph[1];
+      state.maxs = dataForTheGraph[2];
       
       const qs = props.location.search;
       const query = queryString.parse(qs);
