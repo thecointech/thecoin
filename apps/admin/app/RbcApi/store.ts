@@ -1,13 +1,13 @@
 import { RbcTransaction } from "./types";
 import PouchDB from 'pouchdb';
 import upsert from 'pouchdb-upsert';
-import { DateTime, DateTimeOptions } from "luxon";
+import { DateTime } from "luxon";
+import credentials from './credentials.json';
 
 PouchDB.plugin(upsert);
 
 const dbName = "rbc_data";
 const lastSyncKey = 'LastSync';
-
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}> & {
@@ -29,7 +29,11 @@ export class RbcStore
     if (RbcStore.counter == 0)
     {
       console.log("Initializing DB");
-      RbcStore.db = new PouchDB(dbName, options);
+      RbcStore.db = new PouchDB(dbName, {
+        revs_limit: 1,
+        auto_compaction: true,
+        ...options
+      });
     }
     RbcStore.counter++;
   }
@@ -47,7 +51,7 @@ export class RbcStore
     let counter = 0;
     let daySwitcher = 0;
     // We only store if we have actual data
-    // this to avoid potentiall storing a lastSyncTime
+    // this to avoid potentially storing a lastSyncTime
     // where we didn't get any values (error or any other reason)
     if (txs.length > 0)
     {
@@ -89,11 +93,11 @@ export class RbcStore
     RbcStore.lastSync = syncDate;
   }
   
-  static async fetchStoredTransactions(timezoneOptions?: DateTimeOptions): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
+  static async fetchStoredTransactions(): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
     const allDocs = await RbcStore.db.allDocs<StoredTx>({include_docs: true});
     const txs = allDocs.rows
       .filter(doc => doc.id != lastSyncKey)
-      .map(doc => mapStoredToTx(doc.doc!, timezoneOptions));
+      .map(doc => mapStoredToTx(doc.doc!));
 
     // Get last stored sync time, and cache it if newer
     const lastSyncRow = allDocs.rows.find(doc => doc.id == lastSyncKey)
@@ -108,9 +112,9 @@ export class RbcStore
   }
 }
 
-const mapStoredToTx = (doc: StoredTx, timezoneOptions?: DateTimeOptions) : RbcTransaction => ({
+const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
   ...doc,
-  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, timezoneOptions)
+  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, credentials.TimeZone)
 })
 
 const isSubset = (superObj: StoredTx, subObj: StoredTx) => {
@@ -118,58 +122,3 @@ const isSubset = (superObj: StoredTx, subObj: StoredTx) => {
       return subObj[ele] === superObj[ele]
   });
 };
-// var db = indexedDB.open(dbName);
-
-
-// export function StoreNewTransactions(txs: RbcTransaction[]) {
-//   var request = db.transaction([txTable], "readwrite")
-//   .objectStore("employee")
-//   .add({ id: "01", name: "prasad", age: 24, email: "prasad@tutorialspoint.com" });
-
-//   request.onsuccess = function(event) {
-//      alert("Prasad has been added to your database.");
-//   };
-
-//   request.onerror = function(event) {
-//      alert("Unable to add data\r\nPrasad is already exist in your database! ");
-//   }
-// }
-
-// function addTables(e: any) {
-//   const db = e.target.result;
-//   db.createObjectStore(txTable, {autoIncrement: true});
-// }
-
-
-//   db.onerror = (event) => {
-//     console.error("Something went wrong!");
-//     // Handle errors.
-//   };
-//   db.onupgradeneeded = (event) => {
-//     var db = event.target.result;
-
-//     // Create an objectStore to hold information about our customers. We're
-//     // going to use "ssn" as our key path because it's guaranteed to be
-//     // unique - or at least that's what I was told during the kickoff meeting.
-//     var objectStore = db.createObjectStore("customers", { keyPath: "ssn" });
-//     // Create another object store called "names" with the autoIncrement flag set as true.
-//     var objStore = db.createObjectStore("names", { autoIncrement : true });
-//     // Create an index to search customers by name. We may have duplicates
-//     // so we can't use a unique index.
-//     objectStore.createIndex("name", "name", { unique: false });
-
-//     // Create an index to search customers by email. We want to ensure that
-//     // no two customers have the same email, so use a unique index.
-//     objectStore.createIndex("email", "email", { unique: true });
-
-//     // Use transaction oncomplete to make sure the objectStore creation is
-//     // finished before adding data into it.
-//     objectStore.transaction.oncomplete = function(event) {
-//       // Store values in the newly created objectStore.
-//       var customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
-//       customerData.forEach(function(customer) {
-//         customerObjectStore.add(customer);
-//       });
-//     };
-//   };
-// }

@@ -10,3 +10,15 @@ export type RbcTransaction = {
   CAD?: number;
   USD?: number;
 }
+
+export enum ETransferErrorCode {
+  UnknownError = -1,
+  Success = 0,
+  AlreadyDeposited = 2,
+  Cancelled = 38,
+}
+
+export type DepositResult = {
+  message: string,
+  code: ETransferErrorCode,
+}

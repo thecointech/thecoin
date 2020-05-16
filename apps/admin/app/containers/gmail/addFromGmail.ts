@@ -41,8 +41,8 @@ export async function addFromGmail(): Promise<DepositData[]> {
   do {
     // Fetch a list of all message id's
     const response = await __gmail.users.messages.list({
-      'userId': 'me',
-      'q': 'REDIRECT INTERAC -remember'
+      userId: 'me',
+      q: 'REDIRECT INTERAC -remember'
     });
 
     // Fetch the actual email
