@@ -9,6 +9,7 @@ import { ExchangeRate, FXRate, CoinUpdateInterval, RateOffsetFromMarket, Finnhub
 import Axios from 'axios';
 import { finnhub_key } from './secret.json';
 import { log } from './logging';
+import fs from 'fs';
 
 var config = {
   keyFilename: '/src/TheCoin/apps/rates-patcher/thecoincore-212314-6f71b16407ed.json'
@@ -45,9 +46,12 @@ function getCoinRate(ts: number, data1m: FinnhubData, data5m?: FinnhubData): Exc
         }
       }
     }
+    log.debug("Could not find entry for: " + periodStart);
   }
-  log.fatal(`Could not find coin rate for: ${ts}`)
-  throw new Error("RateNotFound");
+
+  const cnt = data1m.t?.length ?? 0;
+  log.fatal(`Could not find coin rate for: ${ts}.  \nWe have ${data1m.t.length} rates, from ${new Date(data1m.t[0] * 1000)} => ${new Date(data1m.t[cnt - 1] * 1000)}`)
+  throw new Error("RateNotFound"); 
 }
 
 // function getFxRate(ts: number) : FXRate {
@@ -97,12 +101,13 @@ async function setLatest(kind: string, rate: ExchangeRate | FXRate) {
 }
 
 async function fetchNewCoinRates(resolution: string, from: number, to: number) {
-  log.trace("Fetching SPX rates");
+  log.trace(`Fetching SPX rates from ${new Date(from)} until now`);
   const fromInt = Math.round(from / 1000);
   const toInt = Math.floor(to / 1000);
   const url = `https://finnhub.io/api/v1/stock/candle?symbol=%5EGSPC&resolution=${resolution}&token=${finnhub_key}&from=${fromInt}&to=${toInt}`
   var r = await Axios.get<FinnhubData>(url);
   log.debug(`Fetched SPX rates: ${r?.statusText} - ${r?.data?.t?.length} results`);
+  fs.writeFileSync(`./data${resolution}m.json`, JSON.stringify(r.data));
   return r.data
 }
 
@@ -128,7 +133,7 @@ async function fetchLastUpdateTS(): Promise<number> {
 
 async function update() {
 
-  log.trace("Starting");
+  log.debug("--Begin Update--");
   const latestTs = await fetchLastUpdateTS();
   log.debug("Current value valid until " + new Date(latestTs));
   let now = Date.now();
@@ -138,8 +143,12 @@ async function update() {
     return;
   }
 
-  const new1m = await fetchNewCoinRates("1", latestTs - (90 * 1000), now);
-  //const new5m = await fetchNewCoinRates("5");
+  // we fetch from 3.5 mins prior to latest validity.
+  // This is to ensure we include the candle starting 1.5 mins
+  // before our last validity expired
+  const fetchTimestamp = latestTs - 6.5 * (60 * 1000);
+  const new1m = await fetchNewCoinRates("1", fetchTimestamp, now);
+  const new5m = await fetchNewCoinRates("5", fetchTimestamp, now);
   const newFxRate = await fetchNewFxRates();
 
   //const latestCoin = await getLatest<ExchangeRate>("0", latestTs);
@@ -150,7 +159,7 @@ async function update() {
 
   let validUntil = latestTs;
   while (validUntil < now) {
-    const coinRate = getCoinRate(validUntil, new1m);
+    const coinRate = getCoinRate(validUntil, new1m, new5m);
     const fxRate = newFxRate.quote.CAD; // getFxRate(validUntil);
 
     const buy = coinRate.Buy * fxRate;
@@ -185,4 +194,16 @@ async function update() {
     });
   }
 }
-update();
+
+async function tryUpdate()
+{
+  try {
+    await update();
+  }
+  catch(e)
+  {
+    log.fatal(e);
+    throw e;
+  }
+}
+tryUpdate();
