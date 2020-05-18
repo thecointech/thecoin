@@ -3,6 +3,7 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
 import credentials from './credentials.json';
+import { ConfigStore } from 'store/config';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -11,7 +12,8 @@ const SCOPES = [
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_KEY = 'token.json';
+
+const TOKEN_KEY = "token.json";
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -25,7 +27,7 @@ export async function authorize() {
     client_id, client_secret, redirect_uris[0]);
 
   // Check if we have previously stored a token.
-  const existing = localStorage.getItem(TOKEN_KEY)
+  const existing = await ConfigStore.get(TOKEN_KEY);
   if (existing) {
     oAuth2Client.setCredentials(JSON.parse(existing));
   }
@@ -62,7 +64,7 @@ export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
   else
   {
     var response = await oAuth2Client.getToken(code)
-    localStorage.setItem(TOKEN_KEY, JSON.stringify(response.tokens))
+    await ConfigStore.set(TOKEN_KEY, JSON.stringify(response.tokens))
     oAuth2Client.setCredentials(response.tokens);  
   }
 }

@@ -1,6 +1,6 @@
 import {RbcApi} from './index';
-import { RbcStore } from './RbcStore';
-import PouchDB from 'pouchdb';
+import { RbcStore } from './store';
+import * as PouchDB from 'pouchdb';
 
 
 beforeAll(() => {
@@ -23,6 +23,14 @@ afterAll(() => {
 
 //     expect(tx.length).toBeGreaterThan(0);
 // });
+
+test("Get's stored transactions ", async () => {
+  jest.setTimeout(500000);
+
+  const { txs } = await RbcStore.fetchStoredTransactions();
+
+  expect(txs.length).toBe(0);
+});
 
 test("Get's new transactions but no more", async () => {
   jest.setTimeout(500000);

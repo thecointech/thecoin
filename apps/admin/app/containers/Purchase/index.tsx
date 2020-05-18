@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Form, Header, Confirm, Select } from 'semantic-ui-react';
-import * as Datetime from 'react-datetime';
+import Datetime from 'react-datetime';
 import { Moment } from 'moment';
 
 import { toHuman } from '@the-coin/utilities';
@@ -35,7 +35,7 @@ const initialState = {
   coin: 0,
   account: "",
   purchaserCode: "---",
-  
+
   recievedDate: new Date(),
   settledDate: new Date(),
 
@@ -202,14 +202,14 @@ class PurchaseClass extends React.PureComponent<Props> {
 
   async updateCode(account: string) {
     const code = await GetAccountCode(account);
-    this.setState({ 
+    this.setState({
       purchaserCode: code,
      });
   }
 
   renderShortDate = (date: Date) => date.toLocaleDateString("en-US", { day: "numeric", hour: "numeric", minute: "numeric" })
 
-  getTypeOptions = () => Object.keys(PurchaseType).map(k => ({ 
+  getTypeOptions = () => Object.keys(PurchaseType).map(k => ({
     key: k,
     value: k,
     text: k

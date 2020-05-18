@@ -6,7 +6,7 @@ import {createReducer} from './reducers';
 import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
-import { RbcStore } from 'RbcApi/RbcStore';
+import { RbcStore } from 'RbcApi/store';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -28,9 +28,11 @@ pathFix();
 
 // We do some hackery with the path.fix to allow
 import {signIn} from './utils/Firebase';
+import { ConfigStore } from 'store/config';
 signIn();
 
 RbcStore.initialize();
+ConfigStore.initialize();
 
 const store = configureAppStore(createReducer, undefined, history);
 

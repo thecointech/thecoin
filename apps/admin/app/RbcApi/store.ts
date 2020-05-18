@@ -1,12 +1,8 @@
 import { RbcTransaction } from "./types";
-import PouchDB from 'pouchdb';
-import upsert from 'pouchdb-upsert';
 import { DateTime } from "luxon";
 import credentials from './credentials.json';
+import { BaseStore, ConfigStore } from "../store";
 
-PouchDB.plugin(upsert);
-
-const dbName = "rbc_data";
 const lastSyncKey = 'LastSync';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
@@ -14,38 +10,9 @@ type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}> & {
   incr?: number;
 }
 
-type StoredSyncDate = {
-  time: number
-}
-
-export class RbcStore
+export class RbcStore extends BaseStore<StoredTx>("rbc_data")
 {
-  private static db: PouchDB.Database;
-  private static counter: number = 0;
   private static lastSync = new Date(0);
-
-  static initialize(options?: PouchDB.Configuration.DatabaseConfiguration)
-  {
-    if (RbcStore.counter == 0)
-    {
-      console.log("Initializing DB");
-      RbcStore.db = new PouchDB(dbName, {
-        revs_limit: 1,
-        auto_compaction: true,
-        ...options
-      });
-    }
-    RbcStore.counter++;
-  }
-
-  static release()
-  {
-    RbcStore.counter = Math.max(0, RbcStore.counter - 1);
-    if (0 == RbcStore.counter)
-    {
-      RbcStore.db?.close();
-    }
-  }
 
   static async storeTransactions(txs: RbcTransaction[], syncDate: Date) {
     let counter = 0;
@@ -63,7 +30,7 @@ export class RbcStore
           daySwitcher = txTime;
           counter = 0;
         }
-        
+
         try {
           // The ID is intended to be unique and re-creatable per-document
           const _id = (txTime + counter++).toString();
@@ -84,24 +51,23 @@ export class RbcStore
         }
       }
       // Store the last synced time
-      await RbcStore.db.upsert<StoredSyncDate>(lastSyncKey, (_doc) => ({
-        time: syncDate.getTime()
-      }));
+      await ConfigStore.set(lastSyncKey, syncDate.getTime().toString());
     }
 
     // We cache the lastSync time so we don't make futher fetches in this session.
     RbcStore.lastSync = syncDate;
   }
-  
+
   static async fetchStoredTransactions(): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
     const allDocs = await RbcStore.db.allDocs<StoredTx>({include_docs: true});
-    const txs = allDocs.rows
-      .filter(doc => doc.id != lastSyncKey)
-      .map(doc => mapStoredToTx(doc.doc!));
+    const txs = allDocs.rows.map(doc => mapStoredToTx(doc.doc!));
 
     // Get last stored sync time, and cache it if newer
-    const lastSyncRow = allDocs.rows.find(doc => doc.id == lastSyncKey)
-    const lastSync = new Date((lastSyncRow?.doc as any as StoredSyncDate)?.time ?? "2017-01-03");
+    const lastSyncTime = await ConfigStore.get(lastSyncKey);
+    const lastSync = lastSyncTime
+      ? new Date(parseInt(lastSyncTime))
+      : new Date("2017-01-03");
+
     if (lastSync > RbcStore.lastSync)
       RbcStore.lastSync = lastSync;
 

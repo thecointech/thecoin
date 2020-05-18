@@ -1,11 +1,11 @@
 import { Page } from "puppeteer";
 
 import { DateTime } from "luxon";
-import { trimQuotes } from "utils";
+import { trimQuotes } from "../utils";
 import { RbcTransaction } from "./types";
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
-import { RbcStore } from "./RbcStore";
+import { RbcStore } from "./store";
 import credentials from './credentials.json';
 
 //
@@ -20,7 +20,7 @@ export async function fetchLatestTransactions()
 
   if (!sameDay(syncedTill, toDate))
   {
-    const newTxs = await this.getTransactions(syncedTill, toDate);
+    const newTxs = await getTransactions(syncedTill, toDate);
     await RbcStore.storeTransactions(newTxs, toDate);
     return [...txs, ...newTxs];
   }
@@ -66,7 +66,7 @@ export async function getTransactions(from: Date, to: Date) : Promise<RbcTransac
   return allLines
     .slice(1)
     .map(line => line.split(','))  // Split into component pieces
-    .filter(entry => entry[1] == credentials.accountNo) // Do not accept any line that does not have the right account type 
+    .filter(entry => entry[1] == credentials.accountNo) // Do not accept any line that does not have the right account type
     .map((entry) : RbcTransaction =>  ({
         AccountType: entry[0],
         AccountNumber: entry[1],

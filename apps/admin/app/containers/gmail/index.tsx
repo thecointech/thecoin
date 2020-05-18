@@ -36,7 +36,7 @@ export const Gmail = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [messageValues, setMessageValues] = useState({
-    step: -1, 
+    step: -1,
     total: -1,
     currentAction: "Not Set"
   })
@@ -127,7 +127,7 @@ export const Gmail = () => {
     const deposit = deposits[index];
     deposit.isComplete = !deposit.isComplete;
     setDeposits([...deposits]);
-    
+
     setIsProcessing(true);
     await processSingleDeposit(deposit, 1, 1);
     setIsProcessing(false);
@@ -136,11 +136,11 @@ export const Gmail = () => {
   const processSingleDeposit = useCallback(async (deposit: DepositData, index: number, total: number) => {
     const setProgress = (currentAction: string) => {
       console.log(`${deposit.instruction.name} - ${deposit.record.recievedTimestamp.toDate().toDateString()}: ${currentAction}`)
-      setMessageValues({ 
-        step: index, 
+      setMessageValues({
+        step: index,
         total: total,
         currentAction,
-      })  
+      })
     }
     setProgress("Begin Processing");
     await processDeposit(deposit, rbcApi, account.contract, setProgress);
@@ -192,8 +192,8 @@ async function addSettlementDate(deposits: DepositData[], fxApi: IFxRates) {
 
 function setComplete(deposit: DepositData[]) {
   deposit.forEach(d => {
-    d.isComplete = 
-      (d.tx != null) && 
+    d.isComplete =
+      (d.tx != null) &&
       (d.bank != null || d.record.type == PurchaseType.other);
   })
 }
@@ -227,7 +227,7 @@ async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contract: Co
     }
     if (deposit.record.hash) {
       progressCb('Storing Deposit in DB');
-      await storeInDB(deposit.instruction.address, deposit.record);  
+      await storeInDB(deposit.instruction.address, deposit.record);
     }
   }
   if (deposit.instruction.raw)
@@ -277,14 +277,14 @@ async function completeTheTransfer(deposit: DepositData, contract: Contract, pro
   const {record, instruction} = deposit;
   const {address} =instruction;
   const tx = await contract.coinPurchase(
-    address, 
-    record.transfer.value, 
-    0, 
+    address,
+    record.transfer.value,
+    0,
     record.processedTimestamp.seconds
   );
   progressCb('Awaiting TheCoin transfer:\n' + tx.hash);
   await tx.wait();
-  return { 
+  return {
     balance: -1,
     change: -record.transfer.value,
     counterPartyAddress: address,

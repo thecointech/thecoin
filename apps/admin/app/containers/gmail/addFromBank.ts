@@ -46,7 +46,7 @@ function getMatches(deposit: DepositData, bankRecords: BankRecord[])
 }
 
 export function compareDateTo(ts: Timestamp) {
-  const ds = DateTime.fromMillis(ts.toMillis(), RbcApi.DateTimeZone);
+  const ds = DateTime.fromMillis(ts.toMillis(), RbcApi.ApiTimeZone);
   return (k: BankRecord) => k.Date.hasSame(ds, "day");
 }
 
@@ -97,9 +97,9 @@ function matchFromGuess(deposit: DepositData, bankRecords: BankRecord[]) {
     // Delta in days
     const delta = (dateDeposited.toMillis() - dateRecieved.toMillis()) / (1000*60*60*24);
     const maximumAllowableDelta = 30;
-    if (delta < -1 || delta > maximumAllowableDelta) 
+    if (delta < -1 || delta > maximumAllowableDelta)
     {
-      console.warn(`Apply bank with delta: ${delta}, of ${records.length} possibilities: ${deposit.instruction.name} on ${dateRecieved.toDate().toDateString()}`);
+      console.warn(`Cannout apply bank with delta: ${delta}, of ${records.length} possibilities: ${deposit.instruction.name} on ${dateRecieved.toDate().toDateString()}`);
       return;
     }
     applyBankRecord(deposit, first, bankRecords);
@@ -114,11 +114,11 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
       depositUrl: "",
       subject: "",
       body: "",
-      ...clientData 
+      ...clientData
       ? {
           // we cannot be certain that the matched address is/was the one being deposited to
           // (ie, a client may have multiple accounts, and we can't tell which one was intended here)
-          //address: clientData.instruction.address,  
+          //address: clientData.instruction.address,
           email: clientData.instruction.email,
         }
       : {

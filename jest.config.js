@@ -1,7 +1,7 @@
 module.exports = {
   verbose: true,
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.(tsx?|json)$": "ts-jest"
   },
   globals: {
     'ts-jest': {

@@ -3,8 +3,5 @@ const {defaults} = require('../../jest.config');
 module.exports = {
   ...defaults,
 
-  testPathIgnorePatterns: [
-    "/node_modules/",
-    "/RbcApi/"
-  ]
+  preset: "ts-jest/presets/js-with-babel",
 };
