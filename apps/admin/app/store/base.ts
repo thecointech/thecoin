@@ -3,7 +3,7 @@ import upsert from 'pouchdb-upsert';
 
 PouchDB.plugin(upsert);
 
-const STORAGE_PATH = process.env.COIN_ADMINDB_PATH;
+const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
 
 export function BaseStore<T>(name: string) {
   return class BaseStore {
@@ -17,7 +17,7 @@ export function BaseStore<T>(name: string) {
           prefix: STORAGE_PATH,
           ...options
         };
-        console.log(`Initializing DB at: ${mergeopts.prefix ?? 'localStorage'}`);
+        console.log(`Initialized DB ${name} at: ${mergeopts.prefix ?? 'localStorage'}`);
 
         BaseStore.db = new PouchDB(name, mergeopts);
       }

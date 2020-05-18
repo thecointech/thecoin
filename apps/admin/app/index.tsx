@@ -7,6 +7,7 @@ import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
 import { RbcStore } from 'RbcApi/store';
+import { ConfigStore } from 'store/config';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -28,11 +29,10 @@ pathFix();
 
 // We do some hackery with the path.fix to allow
 import {signIn} from './utils/Firebase';
-import { ConfigStore } from 'store/config';
 signIn();
 
-RbcStore.initialize();
-ConfigStore.initialize();
+RbcStore.initialize({adapter: "leveldb"});
+ConfigStore.initialize({adapter: "leveldb"});
 
 const store = configureAppStore(createReducer, undefined, history);
 

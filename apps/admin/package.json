@@ -139,7 +139,8 @@
     "react-datetime": "^2.16.3",
     "react-hot-loader": "^4.11.1",
     "semantic-ui-css": "^2.4.1",
-    "source-map-support": "^0.5.12"
+    "source-map-support": "^0.5.12",
+    "pouchdb": "*"
   },
   "devEngines": {
     "node": ">=10.x",

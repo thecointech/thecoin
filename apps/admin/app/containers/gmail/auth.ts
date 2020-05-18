@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
 import credentials from './credentials.json';
-import { ConfigStore } from 'store/config';
+import { ConfigStore } from '../../store/config';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -53,7 +53,16 @@ async function getNewToken(oAuth2Client: OAuth2Client) {
     scope: SCOPES,
   });
 
-  shell.openExternal(authUrl);
+  if (shell)
+    shell.openExternal(authUrl);
+  else
+    openurl(authUrl);
+}
+
+function openurl(url: string)
+{
+  var start = (process.platform == 'darwin'? 'open': process.platform == 'win32'? 'start': 'xdg-open');
+  require('child_process').exec(start + ' ' + url);
 }
 
 export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
@@ -65,6 +74,6 @@ export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
   {
     var response = await oAuth2Client.getToken(code)
     await ConfigStore.set(TOKEN_KEY, JSON.stringify(response.tokens))
-    oAuth2Client.setCredentials(response.tokens);  
+    oAuth2Client.setCredentials(response.tokens);
   }
 }
