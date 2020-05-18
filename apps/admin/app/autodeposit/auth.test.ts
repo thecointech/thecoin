@@ -1,4 +1,4 @@
-import { ConfigStore } from '../../store/config';
+import { ConfigStore } from '../store/config';
 import { authorize, isValid, finishLogin } from './auth';
 
 const readline = require('readline').createInterface({

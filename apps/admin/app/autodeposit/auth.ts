@@ -2,8 +2,8 @@ import { shell } from 'electron';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
-import credentials from './credentials.json';
-import { ConfigStore } from '../../store/config';
+import credentials from '../containers/gmail/credentials.json';
+import { ConfigStore } from '../store/config';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [

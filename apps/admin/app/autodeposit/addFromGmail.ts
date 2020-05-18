@@ -69,13 +69,13 @@ export async function addFromGmail(): Promise<DepositData[]> {
 function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
 
   const subject = getSubject(email);
-  if (!subject) 
+  if (!subject)
     return null;
   const dateRecieved = getRecievedDate(email);
-  if (!dateRecieved) 
+  if (!dateRecieved)
     return null;
   const body = getBody(email);
-  if (!body) 
+  if (!body)
     return null;
 
   const record: DepositRecord = {
@@ -116,7 +116,7 @@ function getAddressCoin(email: gmail_v1.Schema$Message) {
     : "MISSING ACCOUNT INFO";
 }
 
-function getUserInfo(email: gmail_v1.Schema$Message) { 
+function getUserInfo(email: gmail_v1.Schema$Message) {
   // We use the "Reply-To" header here because some banks (ex-RBC)
   // put their clients email address in this field.
   const toField = email.payload.headers.find(h => h.name === "Reply-To").value;

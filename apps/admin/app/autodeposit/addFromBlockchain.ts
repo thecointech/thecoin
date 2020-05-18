@@ -9,7 +9,7 @@ import { PurchaseType } from "containers/TransferList/types";
 
 export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FXRate[])
 {
-  // Let's verify all hash'es, and see if we can find 
+  // Let's verify all hash'es, and see if we can find
   // appropriate transfers for any that do not have hashes
 
 
@@ -41,7 +41,7 @@ export async function addFromBlockchain(deposits: DepositData[], transfers: Tran
     }
   }
 
-  for (const d of deposits) 
+  for (const d of deposits)
   {
     if (!d.record.hash)
       TryAddHash(d, allTransfers, fxRates);
@@ -49,7 +49,7 @@ export async function addFromBlockchain(deposits: DepositData[], transfers: Tran
 
   /*const unmatched = */buildUnmatchedBCEntries(deposits, allTransfers, fxRates);
   // Do any of these unmatched deposits match un-matched deposits in the list?
-  // for (const d of deposits) 
+  // for (const d of deposits)
   // {
   //   if (!d.record.hash)
   //     TryMatchUnmatched(d, unmatched);
@@ -134,7 +134,7 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
 
 // function TryMatchUnmatched(deposit: DepositData, allTransfers: DepositData[])
 // {
-//   // Find 
+//   // Find
 // }
 
 function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Transaction[])

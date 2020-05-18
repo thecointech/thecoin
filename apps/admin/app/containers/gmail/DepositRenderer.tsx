@@ -1,6 +1,6 @@
 import React from "react";
 import { TransferData } from "containers/TransferList/types";
-import { DepositData } from "./types";
+import { DepositData } from "../../autodeposit/types";
 import { Segment, Select } from "semantic-ui-react";
 
 
@@ -16,21 +16,21 @@ export const DepositRenderer = (props: TransferData) => {
 
     <div>
     {
-      deposit.instruction.raw 
+      deposit.instruction.raw
         ? `Email Recieved on: ${deposit.instruction.recieved?.toDateString()}`
         : "Warning: No matching email"
     }
     </div>
     <div>
     {
-      deposit.bank 
+      deposit.bank
         ? `Deposited on: ${deposit.bank.Date.toFormat("DD")}`
         : "Warning: Could not find deposit"
     }
     </div>
     <div>
     {
-      deposit.tx 
+      deposit.tx
         ? `Tx Hash: ${deposit.tx.txHash}`
         : "Warning: No hash present"
     }
@@ -52,14 +52,14 @@ const TxSelect = ({deposit}: TxSelectProps) => {
         value: index,
         text: `$${dep.fiatDisbursed} - ${dep.processedTimestamp?.toDate().toDateString()}`
       }))
-    return db.length > 0 
+    return db.length > 0
       ? <Select placeholder="Select a TX" options={options} />
       : null;
   }
   else {
     return (
       <div>
-      { 
+      {
         db
         ? `Db Stored: ${db.hash}`
         : "Warning: No DB found"

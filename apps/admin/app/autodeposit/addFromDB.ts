@@ -5,7 +5,7 @@ import { Dictionary } from 'lodash';
 import { addNewEntries } from "./utils";
 import { PurchaseType, DepositRecord } from "containers/TransferList/types";
 
-// Search through all deposits, and match with existing deposits 
+// Search through all deposits, and match with existing deposits
 export async function addFromDB(deposits: DepositData[]) {
   const originalLength = deposits.length;
   console.log(` -- Matching DB for ${originalLength} deposits -- `);
@@ -59,7 +59,7 @@ async function matchDepositsWithDb(address: string, deposits: DepositData[], db:
   const docs = db[address];
   if (!docs)
     return;
- 
+
   // First, exact matches
   deposits.forEach(deposit => findExactMatch(deposit, docs))
   // Next, fuzzy matches
