@@ -1,4 +1,3 @@
-//import React from 'react';
 import React, { useEffect } from 'react';
 import { Graph } from './Graph/index';
 import { Grid, Input, Form, Label } from 'semantic-ui-react';
@@ -15,7 +14,6 @@ const SliderMax = 37;
 
 type Props = RouteComponentProps;
 
-
 const initState = {
   sliderValue: 1,
   amount: 1000,
@@ -27,9 +25,7 @@ const initState = {
   maxs: [] as any,
 };
 
-
 export type State = Readonly<typeof initState>;
-
 export const state = initState;
 
   let initialTimer = 0;
@@ -44,7 +40,6 @@ export const state = initState;
   export function setStateData(rawData: any[]){
     state.rawData = rawData;
   }
-
 
   export async function updateData(){
     const rawData = await getData();
