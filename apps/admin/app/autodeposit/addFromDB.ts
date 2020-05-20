@@ -2,7 +2,7 @@ import { DepositData } from "./types";
 import { IsValidAddress } from "@the-coin/utilities";
 import { GetUserDoc } from "@the-coin/utilities/User";
 import { Dictionary } from 'lodash';
-import { addNewEntries } from "./utils";
+import { addNewEntries } from "./process";
 import { PurchaseType, DepositRecord } from "containers/TransferList/types";
 
 // Search through all deposits, and match with existing deposits

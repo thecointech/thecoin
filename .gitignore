@@ -19,3 +19,5 @@ apps/broker-service-old/
 apps/admin/app/containers/gmail/credentials.json
 apps/rates-patcher/thecoincore-212314-6f71b16407ed.json
 apps/rates-patcher/src/secret.json
+apps/admin/app/autodeposit/account.json
+apps/admin/app/autodeposit/account-secret.json

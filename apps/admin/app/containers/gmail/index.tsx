@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { authorize, finishLogin, isValid } from '../../autodeposit/auth';
 import { Input, Button } from 'semantic-ui-react';
-import { addFromGmail, initializeApi } from '../../autodeposit/addFromGmail';
+import { addFromGmail, initializeApi, setETransferLabel } from '../../autodeposit/addFromGmail';
 import { DepositData } from '../../autodeposit/types';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -15,11 +15,13 @@ import { addFromBank } from '../../autodeposit/addFromBank';
 import { addFromBlockchain } from '../../autodeposit/addFromBlockchain';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useAccountApi } from '@the-coin/shared/containers/Account';
-import { RbcApi } from 'RbcApi';
+import { RbcApi, ETransferErrorCode } from 'RbcApi';
 import { PurchaseType } from 'containers/TransferList/types';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
-import { processDeposit } from 'autodeposit';
+import { Contract } from 'ethers';
+import { storeInDB, depositInBank } from 'autodeposit/process';
+import { completeTheTransfer } from 'autodeposit/contract';
 
 
 export const Gmail = () => {
@@ -196,3 +198,58 @@ function setComplete(deposit: DepositData[]) {
   })
 }
 //////////////////////////////////////////////////////
+
+
+export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contract: Contract, progressCb: (v: string) => void) {
+  // We assume types of 'other' (wages) were successfully deposited
+  let wasDeposited = deposit.record.type === PurchaseType.other || !!deposit.bank;
+
+  if (deposit.isComplete) {
+    if (deposit.instruction.raw && !wasDeposited) {
+      // This deposit should be successful, but hasn't been deposited yet.
+      wasDeposited = await doDeposit(deposit, rbcApi, progressCb)
+    }
+
+    if (!deposit.tx) {
+      if (wasDeposited) {
+        // Complete this deposit (send $$ to user)
+        deposit.tx = await completeTheTransfer(deposit);
+        deposit.record.hash = deposit.tx.txHash;
+      }
+      else {
+        // Remove the completed timestamp
+        progressCb('Skipping TheCoin transfer because deposit not completed');
+        deposit.record.completedTimestamp = null;
+      }
+    }
+    else if (!wasDeposited) {
+      alert('We have a completed deposit that seems invalid');
+      deposit.record.completedTimestamp = null;
+    }
+    if (deposit.record.hash) {
+      progressCb('Storing Deposit in DB');
+      await storeInDB(deposit.instruction.address, deposit.record);
+    }
+  }
+  if (deposit.instruction.raw)
+  {
+    await setETransferLabel(deposit.instruction.raw, wasDeposited ? "deposited" : "rejected");
+  }
+  progressCb('Completed deposit');
+}
+
+export async function doDeposit(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) {
+  progressCb("Depositing in Bank");
+  const response = await depositInBank(deposit, rbcApi, progressCb);
+  if (response.code !== ETransferErrorCode.Success) {
+    if (response.code === ETransferErrorCode.AlreadyDeposited)
+    {
+      console.warn(`Deposit from ${deposit.instruction.name} already deposited, but missing from bank`);
+    }
+    else {
+      alert("Could not deposit: " + response.message);
+      return false;
+    }
+  }
+  return true;
+}

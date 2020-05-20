@@ -2,10 +2,11 @@ import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
-import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
+import { DepositRecord, PurchaseType } from '../containers/TransferList/types';
 import { fromMillis } from 'utils/Firebase';
-import { addNewEntries } from './utils';
-import { trimQuotes } from 'utils';
+import { addNewEntries } from './process';
+import { trimQuotes } from '../utils';
+import { log } from 'logging';
 
 let __gmail: gmail_v1.Gmail | null = null;
 
@@ -33,16 +34,19 @@ export async function initializeApi(auth: OAuth2Client) {
       __labels[k] = label.id;
     }
   }
+  log.trace(`Gmail API initialized`);
 }
 
-export async function addFromGmail(): Promise<DepositData[]> {
+export async function addFromGmail(query?: string): Promise<DepositData[]> {
   let result = [] as DepositData[];
   let nextPageToken = undefined;
+
+  const q = query ?? 'REDIRECT INTERAC -remember';
   do {
     // Fetch a list of all message id's
     const response = await __gmail.users.messages.list({
       userId: 'me',
-      q: 'REDIRECT INTERAC -remember'
+      q
     });
 
     // Fetch the actual email
@@ -60,6 +64,8 @@ export async function addFromGmail(): Promise<DepositData[]> {
     // TODO: untested, but we could have more than 50 emails in a day
     nextPageToken = response.data.nextPageToken;
   } while (nextPageToken !== undefined)
+
+  log.debug(`fetched ${result.length} raw emails`);
 
   // Filter out any null entries (could come from invalid emails being picked up by the filter)
   return addNewEntries([], result.filter(deposit => !!deposit));
@@ -149,13 +155,20 @@ function getRecievedDate(email: gmail_v1.Schema$Message) {
 
 function getSubject(email: gmail_v1.Schema$Message) {
   const subject = email.payload.headers.find(h => h.name === "Subject").value;
-  return getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
+  // First, filter an RE emails
+  if (subject.startsWith("Re: [REDIRECT:]"))
+    return null;
+
+  const parsed = getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
+  if (!parsed)
+    log.error(`Unknown deposit type: ${subject}`);
+
+  return parsed;
 }
 
 function getSubjectAnglais(subject: string) {
   const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
   if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
-    console.error(`Unknown deposit type: ${subject}`);
     return null;
   }
   return subject.substr(redirectHeader.length);
@@ -164,7 +177,6 @@ function getSubjectAnglais(subject: string) {
 function getSubjectFrancais(subject: string) {
   const redirectHeader = "[REDIRECT:] Virement INTERAC"
   if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
-    console.error(`Unknown deposit type: ${subject}`);
     return null;
   }
   return subject.substr(redirectHeader.length);

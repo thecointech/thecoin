@@ -52,8 +52,6 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   }
 
-
-
   *updateHistory(from: Date, until: Date) {
     const { signer, contract } = this.state;
     if (contract === null || signer === null)

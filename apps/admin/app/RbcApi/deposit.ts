@@ -13,7 +13,8 @@ export async function depositETransfer(prefix: string, url: string, code: string
 
 
 async function completeDeposit(prefix: string, url: string, code: string, progressCb: (v: string) => void): Promise<DepositResult> {
-	progressCb("Initializing Bank API");
+
+  progressCb("Initializing Bank API");
 
 	const act = await ApiAction.New(prefix);
 	const { page } = act;

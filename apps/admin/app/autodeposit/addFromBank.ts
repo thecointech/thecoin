@@ -1,6 +1,6 @@
 import { DepositData, BankRecord } from "./types";
 import { fromMillis } from "utils/Firebase";
-import { addNewEntries } from "./utils";
+import { addNewEntries } from "./process";
 import { PurchaseType } from "containers/TransferList/types";
 import { RbcApi } from "RbcApi";
 import { Timestamp } from "@the-coin/types/FirebaseFirestore";
