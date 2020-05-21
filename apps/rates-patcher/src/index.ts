@@ -51,7 +51,7 @@ function getCoinRate(ts: number, data1m: FinnhubData, data5m?: FinnhubData): Exc
 
   const cnt = data1m.t?.length ?? 0;
   log.fatal(`Could not find coin rate for: ${ts}.  \nWe have ${data1m.t.length} rates, from ${new Date(data1m.t[0] * 1000)} => ${new Date(data1m.t[cnt - 1] * 1000)}`)
-  throw new Error("RateNotFound"); 
+  throw new Error("RateNotFound");
 }
 
 // function getFxRate(ts: number) : FXRate {
@@ -65,7 +65,7 @@ function getCoinRate(ts: number, data1m: FinnhubData, data5m?: FinnhubData): Exc
 //                 Rate: usdcad5m.o[idx5],
 //                 ValidFrom: ts,
 //                 ValidUntil: ts + CoinUpdateInterval
-//             } 
+//             }
 //         }
 //     }
 //     throw "Not Possible:  " + ts;
@@ -131,16 +131,16 @@ async function fetchLastUpdateTS(): Promise<number> {
   return data.ValidUntil;
 }
 
-async function update() {
+async function update(count: number) : Promise<boolean> {
 
-  log.debug("--Begin Update--");
+  log.debug(`--Begin Update ${count} --`);
   const latestTs = await fetchLastUpdateTS();
   log.debug("Current value valid until " + new Date(latestTs));
   let now = Date.now();
 
   if (latestTs > now) {
     log.debug(`Nothing to do: ${new Date(now)} < ${new Date(latestTs)}`);
-    return;
+    return true;
   }
 
   // we fetch from 3.5 mins prior to latest validity.
@@ -193,17 +193,26 @@ async function update() {
       ValidFrom: coinRate.ValidFrom
     });
   }
+  return true;
 }
 
 async function tryUpdate()
 {
-  try {
-    await update();
+  let ex: any = undefined;
+  for (let i = 0; i < 10; i++) {
+    try {
+      const success = await update(i);
+      if (success) {
+        ex = undefined;
+        break;
+      }
+    }
+    catch (e) {
+      ex = e;
+      log.fatal(e);
+    }
   }
-  catch(e)
-  {
-    log.fatal(e);
-    throw e;
-  }
+
+  if (ex) throw ex;
 }
 tryUpdate();

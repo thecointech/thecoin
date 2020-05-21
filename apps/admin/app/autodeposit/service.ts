@@ -115,8 +115,16 @@ export async function ProcessUnsettledDeposits()
     // All is good, finally we try to process the deposit
     var hash = await completeTheTransfer(deposit);
 
+    // If deposited & transferred, then we mark complete
+    if (hash)
+    {
+      deposit.record.completedTimestamp = now();
+      deposit.record.confirmed = true;
+    }
+
     await setETransferLabel(deposit.instruction.raw, "deposited");
     console.log(hash);
+
     // We must set this, regardless of whether or not the deposit completed (?)
     var success = await storeInDB(deposit.instruction.address, deposit.record);
 

@@ -25,15 +25,9 @@ export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progre
 
 export async function storeInDB(address: string, record: DepositRecord) {
   const userDoc = GetActionDoc(address, "Buy", record.hash);
-
-  var result = await userDoc.set(record);
-  if (!result) {
-    log.error({address: address, hash: record.hash},
-      "Failed to store tx {hash} for address {address}");
-    return false;
-  }
-
+  // set always returns null on Node
+  await userDoc.set(record);
   log.debug({address: address, hash: record.hash},
-    "Stored tx {hash} for address {address} at with result: " + result.writeTime);
+    "Stored tx {hash} for address {address}");
   return true;
 }
