@@ -95,7 +95,8 @@
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
     "semantic-ui-less": "^2.4.1",
-    "ts-clipboard": "^1.0.17"
+    "ts-clipboard": "^1.0.17",
+    "3box": "^1.19.0"
   },
   "devDependencies": {
     "@octokit/rest": "16.33.1",
