@@ -1,5 +1,5 @@
 import {gmail_v1} from 'googleapis';
-import { DepositRecord } from 'containers/TransferList/types';
+import { DepositRecord } from 'autoaction/types';
 import { Timestamp } from '@the-coin/types/FirebaseFirestore';
 import { Transaction } from '@the-coin//shared/containers/Account';
 import { DateTime } from 'luxon';

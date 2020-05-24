@@ -4,7 +4,7 @@ import { weSellAt } from "@the-coin/shared/containers/FxRate";
 import { FXRate } from '@the-coin/pricing'
 import { toHuman, IsValidAddress, NormalizeAddress, toCoin } from "@the-coin/utilities";
 import { fromMillis, toTimestamp } from "utils/Firebase";
-import { PurchaseType } from "containers/TransferList/types";
+import { PurchaseType } from "autoaction/types";
 
 
 export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FXRate[])

@@ -1,5 +1,5 @@
 import React from "react";
-import { TransferData } from "containers/TransferList/types";
+import { TransferData } from "autoaction/types";
 import { DepositData } from "../../autodeposit/types";
 import { Segment, Select } from "semantic-ui-react";
 

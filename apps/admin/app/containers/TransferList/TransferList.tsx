@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { List, Icon } from "semantic-ui-react";
 import { TransferRow } from "./TransferRow";
-import { TransferData, TransferRenderer } from "./types";
+import { TransferData, TransferRenderer } from "../../autoaction/types";
 
 type Props = {
   transfers: TransferData[];
@@ -19,15 +19,15 @@ export const TransferList = ({transfers, render, markComplete}: Props) => {
           <List.Content>
             <List.Header>
               <span style={{minWidth: 200}}>
-                {transfer.record.recievedTimestamp.toDate().toDateString()} - 
+                {transfer.record.recievedTimestamp.toDate().toDateString()} -
                 ${transfer.record.fiatDisbursed?.toFixed(2)}
               </span>
               <TransferStateIcon isComplete={transfer.isComplete} />
             </List.Header>
-            <TransferRow 
+            <TransferRow
               transfer={transfer}
-              active={active === index} 
-              setActive={() => setActive(index)} 
+              active={active === index}
+              setActive={() => setActive(index)}
               markComplete={() => markComplete(index)}
               render={render} />
 
@@ -45,6 +45,6 @@ type CompleteStateProps = {
 }
 
 const TransferStateIcon = ({isComplete}: CompleteStateProps) =>
-  isComplete 
+  isComplete
     ? <Icon name="check circle outline" style={{color: "green"}} />
     : <Icon name="circle outline"  style={{color: "blue"}} />

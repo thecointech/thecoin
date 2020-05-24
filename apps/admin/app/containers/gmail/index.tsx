@@ -8,7 +8,7 @@ import { OAuth2Client } from 'google-auth-library';
 
 import { useFxRates, useFxRatesApi, IFxRates } from '@the-coin/shared/containers/FxRate';
 import { TransferList } from 'containers/TransferList/TransferList';
-import { AddSettlementDate } from 'containers/TransferList/utils';
+import { AddSettlementDate } from 'autoaction/utils';
 import { DepositRenderer } from './DepositRenderer';
 import { addFromDB } from '../../autodeposit/addFromDB';
 import { addFromBank } from '../../autodeposit/addFromBank';
@@ -16,7 +16,7 @@ import { addFromBlockchain } from '../../autodeposit/addFromBlockchain';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useAccountApi } from '@the-coin/shared/containers/Account';
 import { RbcApi, ETransferErrorCode } from 'RbcApi';
-import { PurchaseType } from 'containers/TransferList/types';
+import { PurchaseType } from 'autoaction/types';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
 import { Contract } from 'ethers';

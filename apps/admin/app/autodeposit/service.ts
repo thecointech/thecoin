@@ -4,7 +4,7 @@ import { log } from '../logging';
 import { RbcApi, ETransferErrorCode } from "../RbcApi";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
 import { fromMillis, now } from "../utils/Firebase";
-import { TransferRecord, DepositRecord } from "containers/TransferList/types";
+import { TransferRecord, DepositRecord } from "autoaction/types";
 import { RatesApi } from '@the-coin/pricing';
 import { depositInBank, storeInDB } from "./process";
 import { toCoin } from "@the-coin/utilities";

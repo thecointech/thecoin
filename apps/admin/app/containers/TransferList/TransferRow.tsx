@@ -1,7 +1,7 @@
 import React from "react";
 import { toHuman } from "@the-coin/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { TransferData, TransferRenderer } from "./types";
+import { TransferData, TransferRenderer } from "../../autoaction/types";
 
 type Props = {
   transfer: TransferData,
@@ -23,7 +23,7 @@ export const TransferRow = ({ transfer, active, setActive, render, markComplete 
     return <div>Settlement Date not computed: please wait...</div>
   }
   // A confirmed action has the initial tx finished, but for sales we need to
-  // to show deposits even before they are 
+  // to show deposits even before they are
   if (!record.confirmed && !record.fiatDisbursed) {
     return <div>Instruction submitted on {recievedTimestamp.toDate().toDateString()} is not confirmed</div>
   }
@@ -38,7 +38,7 @@ export const TransferRow = ({ transfer, active, setActive, render, markComplete 
   const completion = (settlementDate.getTime() > Date.now())
     ? <div>This instruction can be settled on {settlementDate.toDateString()}</div>
     : <Button onClick={markComplete}>Mark Complete</Button>
-    // (!completedTimestamp) 
+    // (!completedTimestamp)
     //   ? <Button onClick={markComplete}>Mark Complete</Button>
     //   : <div>Completed</div>
 

@@ -8,8 +8,8 @@ import fs from 'fs';
 // action do not affect synchronous actions.
 
 let _browser: Browser | null = null;
-async function initBrowser() {
-  _browser = await puppeteer.launch();
+export async function initBrowser(options?: puppeteer.LaunchOptions) {
+  _browser = await puppeteer.launch(options);
   _browser.on('disconnected', initBrowser);
   return _browser;
 }
@@ -22,6 +22,7 @@ async function getPage() {
 export class ApiAction {
 
   page!: Page;
+  navigationPromise!: Promise<puppeteer.Response>;
   outCache: string;
   step: number = 0;
 
@@ -30,9 +31,15 @@ export class ApiAction {
     fs.mkdirSync(this.outCache, { recursive: true });
   }
 
+  private async init()
+  {
+    this.page = await getPage();
+    this.navigationPromise = this.page.waitForNavigation()
+  }
+
   public static async New(identifier: string, login?: true) {
     const action = new ApiAction(identifier);
-    action.page = await getPage();
+    await action.init();
 
     if (login) {
       await action.page.goto("https://www.rbcroyalbank.com/ways-to-bank/online-banking/index.html");
@@ -61,8 +68,12 @@ export class ApiAction {
     await this.writeStep(stepName);
   }
 
+  async findElementsWithText(elementType: string, searchText) {
+    return this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
+  }
+
   async clickOnLinkText(linkText: string, waitElement?: string, stepName?: string) {
-    const [link] = await this.page.$x(`//a[contains(., '${linkText}')]`);
+    const [link] = await this.findElementsWithText('a', linkText);
     if (!link)
       throw (`Could not find link: ${linkText}`)
 

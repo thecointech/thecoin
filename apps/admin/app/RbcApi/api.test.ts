@@ -1,6 +1,7 @@
 import {RbcApi} from './index';
 import { RbcStore } from './store';
 import * as PouchDB from 'pouchdb';
+import { initBrowser } from './action';
 
 
 beforeAll(() => {
@@ -8,6 +9,10 @@ beforeAll(() => {
     RbcStore.initialize({
         adapter: "memory"
     });
+
+    initBrowser({
+      headless: false
+    })
 });
 
 afterAll(() => {

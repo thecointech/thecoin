@@ -2,7 +2,7 @@ import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
 import { BillPayeePacket } from "@the-coin/types";
 import { Segment } from "semantic-ui-react";
-import { TransferData } from "containers/TransferList/types";
+import { TransferData } from "autoaction/types";
 
 const RenderBillPayment = (props: TransferData) => {
   const billPay = props.instruction as BillPayeePacket;

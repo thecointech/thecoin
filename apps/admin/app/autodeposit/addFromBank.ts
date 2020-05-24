@@ -1,7 +1,7 @@
 import { DepositData, BankRecord } from "./types";
 import { fromMillis } from "utils/Firebase";
 import { addNewEntries } from "./process";
-import { PurchaseType } from "containers/TransferList/types";
+import { PurchaseType } from "autoaction/types";
 import { RbcApi } from "RbcApi";
 import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { DateTime } from "luxon";

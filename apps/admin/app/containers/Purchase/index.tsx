@@ -20,7 +20,7 @@ import { GetActionDoc } from '@the-coin/utilities/User';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
 import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
-import { DepositRecord, PurchaseType } from 'containers/TransferList/types';
+import { DepositRecord, PurchaseType } from 'autoaction/types';
 import { fromMillis } from 'utils/Firebase';
 
 import { now } from 'utils/Firebase';

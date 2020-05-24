@@ -1,7 +1,7 @@
 import { RbcStore } from "../RbcApi/store";
 import { ConfigStore } from "../store";
 import {FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits} from './service'
-import { PurchaseType } from "../containers/TransferList/types";
+import { PurchaseType } from "../autoaction/types";
 import { signIn } from "../utils/Firebase";
 
 beforeAll(async () => {

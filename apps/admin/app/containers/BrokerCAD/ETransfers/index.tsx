@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { EncryptedList } from "containers/EncryptedList";
 import { ETransferPacket, CertifiedTransferRequest } from "@the-coin/types";
 import { Segment, Button } from "semantic-ui-react";
-import { TransferData } from "containers/TransferList/types";
+import { TransferData } from "autoaction/types";
 import { useActiveAccount } from "../../../../../../libs/shared/src/containers/AccountMap";
 import { Contract } from "ethers";
 
@@ -44,11 +44,11 @@ async function RefundTransfer(transfer: CertifiedTransferRequest, contract: Cont
   console.log(`Transfering value:  sale ${transfer.from}`);
 
   // Send the transfer back
-  // TODO: Refunds should not be 
+  // TODO: Refunds should not be
   const tx = await contract.coinPurchase(
-    from, 
-    value, 
-    0, 
+    from,
+    value,
+    0,
     Math.floor(transfer.timestamp / 1000)
   );
 

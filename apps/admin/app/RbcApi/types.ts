@@ -22,3 +22,5 @@ export type DepositResult = {
   message: string,
   code: ETransferErrorCode,
 }
+
+export type ProgressCallback = (v: string) => void;

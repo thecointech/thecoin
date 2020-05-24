@@ -1,6 +1,6 @@
 import { IFxRates, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { fromMillis, now } from "../../utils/Firebase";
+import { fromMillis, now } from "../utils/Firebase";
 import { TransferRecord } from "./types";
 import { toHuman, toCoin } from "@the-coin/utilities";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";

@@ -2,7 +2,7 @@ import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
-import { DepositRecord, PurchaseType } from '../containers/TransferList/types';
+import { DepositRecord, PurchaseType } from '../autoaction/types';
 import { fromMillis } from 'utils/Firebase';
 import { addNewEntries } from './process';
 import { trimQuotes } from '../utils';
