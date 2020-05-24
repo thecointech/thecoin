@@ -83,6 +83,9 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
   const body = getBody(email);
   if (!body)
     return null;
+  const address = getAddressCoin(email);
+  if (!address)
+    return null;
 
   const record: DepositRecord = {
     transfer: {
@@ -100,7 +103,7 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
 
     instruction: {
       depositUrl: getDepositUrl(body),
-      address: getAddressCoin(email),
+      address: address,
       recieved: dateRecieved,
       ...getUserInfo(email),
       subject,
@@ -113,13 +116,12 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
   }
 }
 
-
 function getAddressCoin(email: gmail_v1.Schema$Message) {
   const toField = email.payload.headers.find(h => h.name === "To").value;
   const match = /<([A-Fx0-9]+)@thecoin.io>\s*$/gi.exec(toField);
   return (match)
     ? match[1]
-    : "MISSING ACCOUNT INFO";
+    : null;
 }
 
 function getUserInfo(email: gmail_v1.Schema$Message) {

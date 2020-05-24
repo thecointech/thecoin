@@ -5,9 +5,10 @@ import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList } from "../TransferList/TransferList";
 import { UserAction } from "@the-coin/utilities/User";
 import { Confirm } from "semantic-ui-react";
-import { toFiat } from "../../autoaction/utils";
+import { withFiat } from "../../autoaction/utils";
 import { TransferRenderer, InstructionPacket } from "autoaction/types";
 import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "autoaction";
+import { setActionPrivateKey } from "autoaction/key";
 
 
 type Props = {
@@ -29,6 +30,7 @@ export const EncryptedList = ({render, type}: Props) => {
       // Decrypt and set decryptedRecords
       return pk;
     })
+    setActionPrivateKey(pk);
   }, [setPrivateKey]);
 
   ////////////////////////////////////////////////////////
@@ -44,11 +46,8 @@ export const EncryptedList = ({render, type}: Props) => {
   ////////////////////////////////////////////////////////
   // Update Fiat as it becomes available
   useEffect(() => {
-    const withFiat = records.map(r => ({
-      ...r,
-      fiatDisbursed: toFiat(r, rates)
-    }))
-    setRecords(withFiat)
+    const toComplete = withFiat(records, rates);
+    setRecords(toComplete);
   }, [rates, completeIndex])
 
   ////////////////////////////////////////////////////////

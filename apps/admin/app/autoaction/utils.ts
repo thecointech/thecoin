@@ -15,11 +15,19 @@ export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates)
   record.processedTimestamp = fromMillis(nextOpen);
 }
 
-export function toFiat(record: TransferRecord, rates: FXRate[]) {
+
+export function toFiat<T extends TransferRecord>(record: T, rates: FXRate[])  {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
   const rate = weBuyAt(rates, fxDate);
   return toHuman(rate * record.transfer.value, true);
+}
+
+export function withFiat<T extends TransferRecord>(records: T[], rates: FXRate[]) : T[] {
+  return records.map(r => ({
+    ...r,
+    fiatDisbursed: toFiat(r, rates)
+  }))
 }
 
 export function calcCoin(record: TransferRecord, rates: FXRate[]) {

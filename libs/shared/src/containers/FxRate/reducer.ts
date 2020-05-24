@@ -15,7 +15,7 @@ const initialState: FxRatesState = {
 }
 
 // file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
-const EmptyRate: FXRate = {
+export const EmptyRate: FXRate = {
   target: -1,
   buy: 0,
   sell: 0,
@@ -33,7 +33,7 @@ function getFxRate(rates: FXRate[], ts: number): FXRate {
   return rates.find((rate: FXRate) => rate.validFrom <= ts && rate.validTill > ts) || EmptyRate
 }
 
-const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date?.getTime() ?? 0);
+export const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date?.getTime() ?? 0);
 
 function weBuyAt(rates: FXRate[], date?: Date) {
   const { buy, fxRate } = getRate(rates, date);
@@ -45,7 +45,7 @@ function weSellAt(rates: FXRate[], date?: Date) {
   return sell * fxRate;
 }
 
-async function fetchRates(date?: Date): Promise<FXRate | null> {
+export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCodes.CAD;
   console.log(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
   const api = new RatesApi();
@@ -69,10 +69,10 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
       if (date != null) {
         const ts = date.getTime();
         if (this.haveRateFor(ts))
-          return;  
+          return;
       }
 
-      const newFxRate: FXRate|null = (yield call<typeof fetchRates>(fetchRates, date)) as any;
+      const newFxRate: FXRate|null = (yield call<typeof fetchRate>(fetchRate, date)) as any;
       if (newFxRate)
         yield this.storeValues({rates: [newFxRate]});
     }

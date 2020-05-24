@@ -1,10 +1,11 @@
-import { IFxRates } from "../../../../libs/shared/src/containers/FxRate";
-import { GetFirestore, CertifiedTransferRecord } from "../../../../libs/utils-ts/src/Firestore";
-import { AddSettlementDate, MarkComplete } from "autoaction/utils";
-import { decryptTo } from "../../../../libs/utils-ts/src/Encrypt";
-import { InstructionPacket, GetSigner } from "../../../../libs/utils-ts/src/VerifiedAction";
-import { UserAction } from "../../../../libs/utils-ts/src/User";
+import { IFxRates } from "@the-coin/shared/containers/FxRate";
+import { GetFirestore, CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
+import { decryptTo } from "@the-coin/utilities/Encrypt";
+import { InstructionPacket, GetSigner } from "@the-coin/utilities/VerifiedAction";
+import { UserAction } from "@the-coin/utilities/User";
 
+import { AddSettlementDate, MarkComplete } from "autoaction/utils";
+import { log } from "logging";
 
 
 export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
@@ -19,6 +20,7 @@ export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
     await AddSettlementDate(record, fxApi);
     return record;
   });
+  log.debug({action: type}, `Fetched ${fetchAllBills.length} actions of type: {action}`)
   return await Promise.all(fetchAllBills)
 }
 
@@ -36,4 +38,6 @@ export async function MarkCertComplete(actionType: UserAction, record: Certified
     throw new Error("No user present");
 
   await MarkComplete(user, actionType, record);
+  log.debug({action: actionType, hash: record.hash, address: user},
+    `Completed Certified {action} action for {address} with hash: {hash}`);
 }

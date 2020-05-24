@@ -24,6 +24,7 @@ export type ProcessRecord = {
   hashRefund?: string,
   confirmed: boolean,
   fiatDisbursed: number
+  confirmation?: number;
 }
 
 export type CertifiedTransferRecord = CertifiedTransfer & ProcessRecord;
