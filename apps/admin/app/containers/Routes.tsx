@@ -12,7 +12,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "TheCoin",
-			to: new RUrl(TheCoinName)
+			to: new RUrl("/" + TheCoinName)
 		}
 	},
 	{
@@ -24,7 +24,7 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	{
 		link: {
 			name: "BrokerCAD",
-			to: new RUrl(BrokerName)
+			to: new RUrl("/" + BrokerName)
 		}
 	}
 ];

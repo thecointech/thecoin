@@ -5,7 +5,7 @@ import { FXRate } from '@the-coin/pricing';
 import { Transaction } from '../Account/types'
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
-import { fiatChange } from '../Balance/profit';
+import { fiatChange } from '../Account/profit';
 
 type MyProps = {
   transactions: Transaction[];

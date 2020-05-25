@@ -1,5 +1,6 @@
 import { default as axios, AxiosRequestConfig } from 'axios';
 import { Dictionary } from 'lodash';
+import {DateTime} from 'luxon';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 
@@ -41,7 +42,20 @@ async function GetCalendar(date: Date) {
 //////////////////////////////////////////////////////////////////////////
 //  Returns timestamp of next time market will be open
 
-const getAsTS = (data: any, startEnd: string) => new Date(`${data.date} ${data.open[startEnd]}`).getTime();
+function getAsTS(data: any, startEnd: string) {
+  const [year, month, day] = data.date.split("-");
+  const [hour, minute] = data.open[startEnd].split(":")
+  return DateTime.fromObject({
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    zone: "America/New_York"
+  }).toMillis();
+}
+
+  // new Date(`${data.date} ${data.open[startEnd]}`).getTime();
   
 function addDay(date: Date) {
   var nd = new Date(date.valueOf());

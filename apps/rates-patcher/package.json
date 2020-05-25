@@ -1,0 +1,14 @@
+{
+  "name": "rates-patcher",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/datastore": "^5.1.0",
+    "@the-coin/utilities": "*"
+  },
+  "scripts": {
+    "dev": "yarn cross-env NODE_ENV=development && yarn build && node --inspect ./build/rates-patcher/index.js",
+    "build": "yarn tsc"
+  }
+}

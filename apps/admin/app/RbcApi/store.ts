@@ -1,0 +1,90 @@
+import { RbcTransaction } from "./types";
+import { DateTime } from "luxon";
+import credentials from './credentials.json';
+import { BaseStore, ConfigStore } from "../store";
+
+const lastSyncKey = 'LastSync';
+
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}> & {
+  incr?: number;
+}
+
+export class RbcStore extends BaseStore<StoredTx>("rbc_data")
+{
+  private static lastSync = new Date(0);
+
+  static async storeTransactions(txs: RbcTransaction[], syncDate: Date) {
+    let counter = 0;
+    let daySwitcher = 0;
+    // We only store if we have actual data
+    // this to avoid potentially storing a lastSyncTime
+    // where we didn't get any values (error or any other reason)
+    if (txs.length > 0)
+    {
+      for (let i = 0; i < txs.length; i++)
+      {
+        const tx = txs[i];
+        const txTime = tx.TransactionDate.toMillis();
+        if (daySwitcher != txTime) {
+          daySwitcher = txTime;
+          counter = 0;
+        }
+
+        try {
+          // The ID is intended to be unique and re-creatable per-document
+          const _id = (txTime + counter++).toString();
+          const doc = {
+            ...tx,
+            TransactionDate: txTime
+          };
+          const upsert = (stored: StoredTx) => {
+            return isSubset(stored, doc)
+              ? false
+              : doc;
+          };
+          await RbcStore.db.upsert<StoredTx>(_id, upsert);
+        }
+        catch (e)
+        {
+          console.error(e);
+        }
+      }
+      // Store the last synced time
+      await ConfigStore.set(lastSyncKey, syncDate.getTime().toString());
+    }
+
+    // We cache the lastSync time so we don't make futher fetches in this session.
+    RbcStore.lastSync = syncDate;
+  }
+
+  static async fetchStoredTransactions(): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
+    const allDocs = await RbcStore.db.allDocs<StoredTx>({include_docs: true});
+    const txs = allDocs.rows.map(doc => mapStoredToTx(doc.doc!));
+
+    // Get last stored sync time, and cache it if newer
+    const lastSyncTime = await ConfigStore.get(lastSyncKey);
+    const lastSync = lastSyncTime
+      ? new Date(parseInt(lastSyncTime))
+      : new Date("2017-01-03");
+
+    if (lastSync > RbcStore.lastSync)
+      RbcStore.lastSync = lastSync;
+
+    return {
+      txs,
+      syncedTill: RbcStore.lastSync
+    }
+  }
+}
+
+const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
+  ...doc,
+  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, credentials.TimeZone)
+})
+
+const isSubset = (superObj: StoredTx, subObj: StoredTx) => {
+  return Object.keys(subObj).every(ele => {
+      return subObj[ele] === superObj[ele]
+  });
+};

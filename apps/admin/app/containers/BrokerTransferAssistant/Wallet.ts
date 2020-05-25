@@ -2,6 +2,7 @@ import { Wallet, Contract } from 'ethers';
 import encrypted from './BrokerTransferAssistantWallet.json';
 import { key } from './secret.json';
 import {TheContract} from '@the-coin/utilities';
+import { GetAccountCode as GetAccountCodeBase } from '@the-coin/utilities/Referrals';
 
 let TCWallet: Wallet|null = null;
 let ConnectedContract: Contract|null = null;
@@ -25,6 +26,13 @@ async function GetContract() : Promise<Contract> {
 			throw "Could not connect to Contract";
 	}
 	return ConnectedContract;
+}
+
+export async function GetAccountCode(address: string)
+{
+  const wallet = await GetWallet();
+  // generate this signers secret key
+  return GetAccountCodeBase(address, wallet);
 }
 
 export { GetWallet, GetContract }

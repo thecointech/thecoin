@@ -12,7 +12,7 @@
 # limitations under the License.
 
 # [START app_yaml]
-runtime: nodejs10
+runtime: nodejs12
 instance_class: F2
 
 env_variables:

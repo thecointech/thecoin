@@ -10,7 +10,7 @@ import { AccountPageProps } from "../Account/types";
 import { TransactionHistory } from "../TransactionHistory";
 import { Popup, Icon } from "semantic-ui-react";
 import styles from "./index.module.css";
-import { calculateProfit } from "./profit";
+import { calculateProfit } from "../Account/profit";
 import { selectFxRate } from "../FxRate/selectors";
 
 
@@ -25,7 +25,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   }, [])
 
   const { rates } = useSelector(selectFxRate);
-  const { buy, fxRate } = getFxRate(rates, Date.now());
+  const { buy, fxRate } = getFxRate(rates, 0);
   const { balance, history, historyLoading } = account;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
