@@ -36,7 +36,7 @@ test('Succesfully Processes Actions', async ()=> {
 
     for (const record of toComplete)
     {
-      expect(record.confirmed).toBeGreaterThan(0);
+      expect(record.confirmation).toBeGreaterThan(0);
     }
   }
   catch(e)

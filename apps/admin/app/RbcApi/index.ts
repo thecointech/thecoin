@@ -2,7 +2,7 @@ import { RbcTransaction, ProgressCallback } from './types';
 import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
 import credentials from './credentials.json';
-import { ETransferPacket, BillPayeePacket } from '@the-coin/types';
+import { ETransferPacket } from '@the-coin/types';
 import { send } from './etransfer';
 import { log } from 'logging';
 
