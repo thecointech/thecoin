@@ -20,6 +20,7 @@ import { Subscribe } from '../Subscribe';
 import styles from './index.module.css';
 import { hasAccount } from '@the-coin/shared/utils/detection';
 import { useAccounts } from '@the-coin/shared/containers/AccountMap';
+import { CustomLayers } from 'containers/AreaReturn';
 
 
 export const HomePage = () => {
@@ -66,6 +67,9 @@ export const HomePage = () => {
         </Grid.Row>
       </Grid>
       <Subscribe />
+
+            <CustomLayers />
+
     </React.Fragment>
   );
 }

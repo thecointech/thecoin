@@ -33,7 +33,8 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
 
-  app.get('sp500_monthly.csv', (req, res) => {
+  app.get('*.csv', (req, res) => {
+    console.log("Sending");
     res.send(sp500string);
   });
 
