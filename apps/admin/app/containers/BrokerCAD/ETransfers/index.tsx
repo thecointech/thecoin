@@ -3,7 +3,7 @@ import { EncryptedList } from "containers/EncryptedList";
 import { ETransferPacket } from "@the-coin/types";
 import { Segment } from "semantic-ui-react";
 import { TransactionData } from "../../TransferList";
-import { RefundButton } from 'containers/Refund';
+import { RefundButton } from 'containers/refund';
 import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 
 const RenderETransfer = (props: TransactionData) => {
