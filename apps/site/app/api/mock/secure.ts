@@ -2,6 +2,8 @@ import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, Googl
 import { buildResponse, delay } from "./network";
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
+import { AccountMap, ACCOUNTMAP_KEY, initialState, accountMapApi } from "@the-coin/shared/containers/AccountMap";
+
 
 let wallets = [
   {
@@ -25,6 +27,12 @@ let wallets = [
 ];
 
 const MockedCode = "MockedCode";
+
+// We automatically insert one of these accounts into our local store
+// This code assumes that our reducer has already been initialized
+const walletToLoad = wallets[1];
+const initReducer = new AccountMap(initialState, initialState);
+initReducer.addAccount(walletToLoad.name, testWallet as any, false);
 
 const checkCode = ({token}: GoogleToken) => {
   if (MockedCode !== token) {
