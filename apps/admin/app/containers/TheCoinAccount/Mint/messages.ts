@@ -15,6 +15,6 @@ export default defineMessages({
   },
   mintingInProgress: {
     id: `${scope}.mintingInProgress`,
-    defaultMessage: 'Mint submitted under hash: ${txHash}',
+    defaultMessage: 'Mint submitted under hash: {txHash}',
   }
 });

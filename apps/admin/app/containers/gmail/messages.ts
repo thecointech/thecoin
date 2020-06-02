@@ -9,13 +9,13 @@ export const scope = 'app.containers.Accounts.Login';
 
 export default defineMessages({
 
-  mintingHeader: {
-    id: `${scope}.mintingHeader`,
-    defaultMessage: 'Processing Purchase.',
+  processingHeader: {
+    id: `${scope}.processingHeader`,
+    defaultMessage: 'Processing Deposit.',
   },
-  mintingInProgress: {
-    id: `${scope}.mintingInProgress`,
-    defaultMessage: 'Purchase step: {step}',
+  processingInProgress: {
+    id: `${scope}.processingInProgress`,
+    defaultMessage: 'Processing deposit: {step} of {total}\n{currentAction}',
   },
   labelAccount: {
     id: `${scope}.labelAccount`,

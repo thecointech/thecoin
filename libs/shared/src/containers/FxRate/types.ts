@@ -10,4 +10,5 @@ export interface IFxRates {
   fetchRateAtDate(date: Date) : Iterator<any>;
 }
 
+export type { FXRate };
 /* --- EXPORTS --- */

@@ -41,4 +41,6 @@ export const signIn = async () =>
 export const now = () => firebase.firestore.Timestamp.now();
 
 export const fromMillis = (millis: number) => firebase.firestore.Timestamp.fromMillis(millis);
+export const toTimestamp = (date: Date) => fromMillis(date.getTime());
+
 // if (IsDebug)

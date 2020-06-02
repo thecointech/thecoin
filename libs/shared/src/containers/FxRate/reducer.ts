@@ -15,7 +15,7 @@ const initialState: FxRatesState = {
 }
 
 // file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
-const EmptyRate: FXRate = {
+export const EmptyRate: FXRate = {
   target: -1,
   buy: 0,
   sell: 0,
@@ -26,10 +26,14 @@ const EmptyRate: FXRate = {
 
 // Always returns an object
 function getFxRate(rates: FXRate[], ts: number): FXRate {
+  if (ts == 0 && rates.length > 0)
+  {
+    return rates.slice(-1)[0];
+  }
   return rates.find((rate: FXRate) => rate.validFrom <= ts && rate.validTill > ts) || EmptyRate
 }
 
-const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date ? date.getTime() : Date.now());
+export const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date?.getTime() ?? 0);
 
 function weBuyAt(rates: FXRate[], date?: Date) {
   const { buy, fxRate } = getRate(rates, date);
@@ -41,13 +45,16 @@ function weSellAt(rates: FXRate[], date?: Date) {
   return sell * fxRate;
 }
 
-async function fetchRates(date: Date): Promise<FXRate | null> {
+export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCodes.CAD;
-  console.log(`fetching fx rate: ${cc} for time ${date.toLocaleTimeString()}`);
+  console.log(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
   const api = new RatesApi();
-  const r = await api.getConversion(cc, date.getTime());
+  const r = await api.getConversion(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {
-    console.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText}`)
+    if (date)
+      console.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText}`)
+    else
+      console.error(`Error fetching latest rate: ${r.statusText}`);
     return null;
   }
   return r.data;
@@ -59,12 +66,13 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
   *fetchRateAtDate(date?: Date): Generator<any> {
     try {
 
-      const updateDate = date ? date : new Date();
-      const ts = updateDate.getTime();
-      if (this.haveRateFor(ts))
-        return;
+      if (date != null) {
+        const ts = date.getTime();
+        if (this.haveRateFor(ts))
+          return;
+      }
 
-      const newFxRate: FXRate|null = (yield call<typeof fetchRates>(fetchRates, updateDate)) as any;
+      const newFxRate: FXRate|null = (yield call<typeof fetchRate>(fetchRate, date)) as any;
       if (newFxRate)
         yield this.storeValues({rates: [newFxRate]});
     }
@@ -74,10 +82,12 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
   }
 
   updateWithValues(newState: Partial<FxRatesState>) {
+    const newRates = [...this.state.rates];
     newState.rates?.forEach(r => {
       if (!this.haveRateFor(r.validFrom))
-        this.draftState.rates.push(r)
+        newRates.push(r)
     })
+    this.draftState.rates = newRates.sort((a, b) => a.validFrom - b.validFrom);
   }
 
   haveRateFor(ts: number): boolean {
@@ -94,6 +104,7 @@ const { actions, reducer, reducerClass } = GetNamedReducer(FxRateReducer, "fxRat
 function* loopFxUpdates() {
 
   let latest = 0;
+  let validFrom = 0;
   let endPolling = false;
   while (!endPolling) {
     const rateAction = yield take(actions.updateWithValues.type);
@@ -102,9 +113,12 @@ function* loopFxUpdates() {
       continue;
 
     latest = rates.reduce((p, r) => Math.max(p, r.validTill), latest)
-    const now = Date.now();
-    // wait at least 5 seconds till update
-    const waitTime = Math.max(latest - now, 5000);
+    validFrom = rates.reduce((p, r) => Math.max(p, r.validFrom), validFrom)
+    // If the clients clock is wrong, we don't wan't to sleep too long
+    const now = Math.max(Date.now(), validFrom);
+
+    // wait at least 10 seconds till update, or 100ms past update time
+    const waitTime = Math.max(100 + latest - now, 120000);
     console.log("Fx fetched - now sleeping mins: " + waitTime / (1000 * 60));
     yield delay(waitTime);
     // Then tell the FxRate to update

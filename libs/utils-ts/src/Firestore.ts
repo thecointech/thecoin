@@ -21,11 +21,13 @@ export type ProcessRecord = {
   processedTimestamp?: Timestamp,
   completedTimestamp?: Timestamp,
   hash: string,
+  hashRefund?: string,
   confirmed: boolean,
   fiatDisbursed: number
+  confirmation?: number;
 }
 
-export type TransferRecord = CertifiedTransfer & ProcessRecord;
+export type CertifiedTransferRecord = CertifiedTransfer & ProcessRecord;
 
 export function isDate(d: Timestamp|Date) : d is Date {
   return (d as Date).getFullYear != undefined;

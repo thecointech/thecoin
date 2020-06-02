@@ -9,15 +9,17 @@ import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 import { ETransfers } from './ETransfers';
+import { Gmail } from 'containers/gmail';
+import { Clients } from './Clients';
 
 type Props = RouteComponentProps;
 
 // Does this work?
 const AccountMap: RouterPath[] = [
   {
-    name: "Balance", 
-    urlFragment: "",  
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} /> ), 
+    name: "Balance",
+    urlFragment: "",
+    creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} /> ),
     exact: true
   },
   {
@@ -39,6 +41,16 @@ const AccountMap: RouterPath[] = [
     name: "Verify",
     urlFragment: "verify",
     creator: (routerProps: AccountPageProps) => ((props: any) => <VerifyAccount {...props} signer={routerProps.account.signer} /> )
+  },
+  {
+    name: "AutoPurchase",
+    urlFragment: "autoPurchase",
+    creator: (routerProps: AccountPageProps) => ((props: any) => <Gmail /> )
+  },
+  {
+    name: "Clients",
+    urlFragment: "clients",
+    creator: (routerProps: AccountPageProps) => ((props: any) => <Clients contract={props.account.contract} /> )
   }
 ]
 
@@ -56,14 +68,14 @@ export const BrokerCAD = (props: Props) =>  {
     accountsApi.setActiveAccount(brokerCAD?.address);
   }, [accountsApi, brokerCAD])
 
-  const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> { 
+  const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const target: any = e.target;
         const data = target.result;
-        resolve({ 
-          wallet: data, 
+        resolve({
+          wallet: data,
           name: AccountName }
         );
       };
@@ -71,7 +83,7 @@ export const BrokerCAD = (props: Props) =>  {
       reader.readAsText(file);
     });
   }, []);
-  
+
   return brokerCAD
     ? <Account account={brokerCAD} accountMap={AccountMap} url={url} />
     : <UploadWallet readFile={onReadFile} />

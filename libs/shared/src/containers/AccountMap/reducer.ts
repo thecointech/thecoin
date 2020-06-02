@@ -10,15 +10,15 @@ import { storeAccount, deleteAccount } from "../../utils/storageSync";
 import { AnySigner, isWallet } from "../../SignerIdent";
 import { composeReducers } from "immer-reducer";
 
-class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapActions {
+export class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapActions {
 
   setActiveAccount(address?: string) {
     if (address) {
       if (!IsValidAddress(address))
         throw new Error("Invalid Address: " + address);
       address = NormalizeAddress(address);
-    } 
-      
+    }
+
     this.draftState.active = address
   }
 
@@ -77,8 +77,11 @@ export const useAccountMapStore = () => {
   useInjectReducer({ key: ACCOUNTMAP_KEY, reducer: combined });
 }
 
-export const accountMapApi = (dispatch: Dispatch) => 
+export const accountMapApi = (dispatch: Dispatch) =>
   bindActionCreators(actions, dispatch) as IAccountMapActions;
-export const useAccountMapApi = () => 
+export const useAccountMapApi = () =>
   accountMapApi( useDispatch());
+
+// For use only in testing, expose reducer for direct access so we can insert test account
+//export { reducer };
 

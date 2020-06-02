@@ -6,6 +6,8 @@ import {createReducer} from './reducers';
 import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
+import { RbcStore } from 'RbcApi/store';
+import { ConfigStore } from 'store/config';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -29,8 +31,10 @@ pathFix();
 import {signIn} from './utils/Firebase';
 signIn();
 
-const initialState = {};
-const store = configureAppStore(createReducer, initialState, history);
+RbcStore.initialize({adapter: "leveldb"});
+ConfigStore.initialize({adapter: "leveldb"});
+
+const store = configureAppStore(createReducer, undefined, history);
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 

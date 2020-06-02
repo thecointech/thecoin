@@ -1,8 +1,8 @@
-require = require("esm")(module/*, options*/)
+// require = require("esm")(module/*, options*/)
 
-const chai = require('chai')
-const should = chai.should()
-const expect = chai.expect
+// const chai = require('chai')
+// const should = chai.should()
+// const expect = chai.expect
 const { TapTx } = require('../tapcap/TapTx');
 const { GetStatus } = require('../tapcap/TapCapStatus')
 const { doTapCapTopUp } = require('../tapcap/DepositWatcher');

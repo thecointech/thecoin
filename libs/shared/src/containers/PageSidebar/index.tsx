@@ -52,7 +52,10 @@ export const PageSidebar: React.FC<Props> = (props) => {
 }
 
 const getAsItem = (item: SidebarMenuItem) => {
-  const url = item.link.to.toString();
+  let url = item.link.to.toString();
+  if (!url.startsWith('/'))
+    url = '/' + url;;
+
   return (
     <React.Fragment key={`Fragment${url}`}>
       <MenuItem
