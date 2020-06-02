@@ -37,7 +37,7 @@ async function create3Box(){
   //console.log("-----SPACEDATA",spaceData,spacePrivateData)
 
   //const profile = await Box.getProfile("0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658")
-  await box.public.set('name', 'Test')
+  await box.public.set('name', 'Marie')
   const profilePublic = await box.public.all()
   console.log("-----PROFILE",profilePublic)
 }
