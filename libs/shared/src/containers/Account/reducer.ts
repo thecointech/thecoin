@@ -13,6 +13,57 @@ import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances } from './history';
 
 
+
+const Box = require('3box')
+const IdentityWallet = require('identity-wallet')
+
+
+async function create3Box(){
+  const provider = await Box.get3idConnectProvider() // recomended provider
+  const box = await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
+
+  //const IdentityWallet = require('identity-wallet')
+  //console.log(IdentityWallet)
+  const space = await box.openSpace('TheCoin')
+  await space.syncDone
+  const spaceList = await Box.listSpaces('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
+  const spaceData = await Box.getSpace('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
+  //console.log("-----SPACELIST",spaceData)
+  //await space.public.set('favorite-nft', '0x123...')
+  //await space.public.set('favorite-nft2', '0x124...')
+  //await space.public.set('favorite-nft3', '0x125...')
+  //const spaceData = await space.public.all()
+  //await space.private.set('item-to-buy', '0x123...')
+  //await space.private.set('number-to-buy', 22)
+  await space.private.set('transferTemplates', '[{"firstName":"John", "lastName":"Doe"},{"firstName":"Anna", "lastName":"Smith"},{"firstName":"Peter", "lastName":"Jones"}]')
+  //await space.private.set('item-to-buy[1]', "<div>content</div>")
+  //const spacePrivateData = await space.private.all()
+
+  //console.log("-----SPACEDATA",spaceData,spacePrivateData)
+
+  //const profile = await Box.getProfile("0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658")
+  await box.public.set('name', 'Test')
+  const profilePublic = await box.public.all()
+  console.log("-----PROFILE",profilePublic)
+}
+
+async function get3Box(){
+  const provider = await Box.get3idConnectProvider() // recomended provider
+  return await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
+}
+
+async function setProfil(){
+
+}
+
+async function getProfile(){
+  return await box.public.all()
+}
+
+
+
+
+
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
