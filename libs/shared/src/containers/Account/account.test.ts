@@ -1,30 +1,30 @@
-//import { GetContract } from "@the-coin/utilities/TheContract";
-import { Wallet } from "ethers";
-//import { Component} from 'react'; // literally anything, don't even have to use it
-
+import { IdentityWallet } from 'identity-wallet';
+import { Box } from '3box';
 
 //import { IsDebug } from "@the-coin/utilities/IsDebug";
 
-
-//const Box = require('3box')
-const IdentityWallet = require('identity-wallet')
 const getConsent = async () => {
-    // For testing purposes a function that just returns
-    // true can be used. In prodicution systems the user
-    // should be prompted for input.
-    return true
-  }
+  return true
+}
 
+const Box = require('3box')
+const IdentityWallet = require('identity-wallet')
 
+test("Wallet 3Box can initialize", async () => {
 
-//beforeAll(async () => {
-  //firestore.init();
-//});
+	  jest.setTimeout(900000);
 
-test("Wallet initilize", async () => {
-    const seed = "execute worth erode bullet donkey source second struggle budget worry network pottery" // a hex encoded seed
-    const idWallet = new IdentityWallet(getConsent, { seed })
-    console.log("IDWALLET",idWallet)
-    console.log(Wallet)
+    let idWallet = new IdentityWallet(getConsent, { seed: "0xaeeeed4f195701688705514b369a1c967d156f3cf4e9eea7ebe3717868fae82a" } )
+    let threeIdProvider = idWallet.get3idProvider()
+    let box = await Box.openBox(null, threeIdProvider)
+    let space = await box.openSpace('TheCoin')
+    //let templates = await space.private.get('transferTemplates')
+
+    //console.log("templates",templates)
 })
 
+
+test("Wallet 3Box can add templates", async () => {
+
+
+})
