@@ -81,7 +81,3 @@ export const accountMapApi = (dispatch: Dispatch) =>
   bindActionCreators(actions, dispatch) as IAccountMapActions;
 export const useAccountMapApi = () =>
   accountMapApi( useDispatch());
-
-// For use only in testing, expose reducer for direct access so we can insert test account
-//export { reducer };
-
