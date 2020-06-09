@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@the-coin/shared/containers/Account/Web3';
 import { FormattedMessage } from 'react-intl';

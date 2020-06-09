@@ -12,22 +12,28 @@ import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances } from './history';
 
-
+const getConsent = async () => {
+  return true
+}
 
 const Box = require('3box')
 const IdentityWallet = require('identity-wallet')
 
 
+/*
 async function create3Box(){
-  const provider = await Box.get3idConnectProvider() // recomended provider
-  const box = await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
+  //const provider = await Box.get3idConnectProvider() // recomended provider
+  //const box = await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
 
+  let idWallet = new IdentityWallet(getConsent, { seed: "0xaeeeed4f195701688705514b369a1c967d156f3cf4e9eea7ebe3717868fae82a" } )
+  let threeIdProvider = idWallet.get3idProvider()
+  let box = await Box.openBox(null, threeIdProvider)
   //const IdentityWallet = require('identity-wallet')
   //console.log(IdentityWallet)
   const space = await box.openSpace('TheCoin')
   await space.syncDone
-  const spaceList = await Box.listSpaces('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
-  const spaceData = await Box.getSpace('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
+  //const spaceList = await Box.listSpaces('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
+  //const spaceData = await Box.getSpace('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
   //console.log("-----SPACELIST",spaceData)
   //await space.public.set('favorite-nft', '0x123...')
   //await space.public.set('favorite-nft2', '0x124...')
@@ -35,7 +41,7 @@ async function create3Box(){
   //const spaceData = await space.public.all()
   //await space.private.set('item-to-buy', '0x123...')
   //await space.private.set('number-to-buy', 22)
-  await space.private.set('transferTemplates', '[{"firstName":"John", "lastName":"Doe"},{"firstName":"Anna", "lastName":"Smith"},{"firstName":"Peter", "lastName":"Jones"}]')
+  //await space.private.set('transferTemplates', '[{"firstName":"John", "lastName":"Doe"},{"firstName":"Anna", "lastName":"Smith"},{"firstName":"Peter", "lastName":"Jones"}]')
   //await space.private.set('item-to-buy[1]', "<div>content</div>")
   //const spacePrivateData = await space.private.all()
 
@@ -57,8 +63,8 @@ async function setProfil(){
 }
 
 async function getProfile(){
-  return await box.public.all()
-}
+  //return await box.public.all()
+}*/
 
 
 
@@ -79,6 +85,18 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       signer,
       contract
     });
+    // Call identity wallet web3 or local account
+    // isWallet = Web3 ; isSigner = local account
+    // etransfert page
+
+    if (signer.hasOwnProperty("signingKey") && signer.signingKey.hasOwnProperty("privateKey")){
+      console.log("---signer",signer.signingKey.privateKey)
+      this.login3Box(signer.signingKey.privateKey, null)
+    } else {
+      console.log("---signer",signer)
+      this.login3Box(null, signer.address)
+    }
+
     yield this.sendValues(this.actions().updateBalance, []);
   }
 
@@ -190,7 +208,29 @@ export class AccountReducer extends TheCoinReducer<AccountState>
         callback(-1);
     }
   }
+
+  *login3Box(privateKey: string, address: string){
+    console.log("----login3BoxIN")
+
+    if (privateKey != null) {
+      let idWallet = new IdentityWallet(getConsent, { seed: privateKey } )
+      let threeIdProvider = idWallet.get3idProvider()
+      let box =  yield Box.openBox(null, threeIdProvider)
+      console.log("--PrivateKey",box)
+      yield box.syncDone
+      yield this.sendValues(this.actions().updateWithValues, { box: box });
+    } else {
+      const provider = yield Box.get3idConnectProvider() // recomended provider
+      const box = yield Box.openBox(address, provider)
+      console.log("--Address",box)
+      yield box.syncDone
+      yield this.sendValues(this.actions().updateWithValues, { box: box });
+    }
+  }
 }
+
+
+
 
 export const getAccountReducer = (address: string) => {
 

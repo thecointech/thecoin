@@ -37,6 +37,8 @@ export type AccountState = {
   history: Transaction[];
   // The currency to display your account value in
   displayCurrency: CurrencyCodes;
+  // 3Box box
+  box: any | null;
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -52,7 +54,8 @@ export const DefaultAccountValues = {
   lastUpdate: new Date(0),
   balance: -1,
   history: [],
-  displayCurrency: CurrencyCodes.CAD
+  displayCurrency: CurrencyCodes.CAD,
+  box: null
 };
 
 export type AccountPageProps = {
@@ -71,5 +74,6 @@ export interface IActions extends ImmerReducer<AccountState> {
   updateHistory(from: Date, until: Date): Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
 
   decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
+  login3Box(privateKey: string, address: string): void;
 }
 
