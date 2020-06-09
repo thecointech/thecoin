@@ -17,7 +17,6 @@ export function buildSagas(address: string) {
     yield takeLatest(actions.updateBalance.type, accountSaga("updateBalance"))
     yield debounce(750, actions.updateHistory.type, accountSaga("updateHistory"))
     yield takeLatest(actions.setSigner.type, accountSaga("setSigner"))
-    yield takeLatest(actions.login3Box.type, accountSaga("login3Box"))
   }
 
   return rootSaga;

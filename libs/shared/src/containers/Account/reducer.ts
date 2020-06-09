@@ -85,16 +85,16 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       signer,
       contract
     });
+
     // Call identity wallet web3 or local account
     // isWallet = Web3 ; isSigner = local account
-    // etransfert page
-
-    if (signer.hasOwnProperty("signingKey") && signer.signingKey.hasOwnProperty("privateKey")){
-      console.log("---signer",signer.signingKey.privateKey)
-      this.login3Box(signer.signingKey.privateKey, null)
+    if (signer.hasOwnProperty("signingKey")){
+      let signingKey = signer.signingKey
+      if (signingKey.hasOwnProperty("privateKey")){
+        yield this.login3Box(signingKey.privateKey, null)
+      }
     } else {
-      console.log("---signer",signer)
-      this.login3Box(null, signer.address)
+      yield this.login3Box(null, signer.address)
     }
 
     yield this.sendValues(this.actions().updateBalance, []);
@@ -209,22 +209,23 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   }
 
-  *login3Box(privateKey: string, address: string){
-    console.log("----login3BoxIN")
+  *login3Box(privateKey: string|null, address: string|null){
 
     if (privateKey != null) {
       let idWallet = new IdentityWallet(getConsent, { seed: privateKey } )
       let threeIdProvider = idWallet.get3idProvider()
       let box =  yield Box.openBox(null, threeIdProvider)
-      console.log("--PrivateKey",box)
       yield box.syncDone
+      console.log("--PrivateKey",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
+      return box
     } else {
       const provider = yield Box.get3idConnectProvider() // recomended provider
       const box = yield Box.openBox(address, provider)
-      console.log("--Address",box)
       yield box.syncDone
+      console.log("--Address",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
+      return box
     }
   }
 }
