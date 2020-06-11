@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "module": "esnext",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "es2017","dom.iterable"],
     "types": ["jest", "node"],
     "build": true,
 

@@ -18,7 +18,8 @@ import { ETransferPacket } from '@the-coin/types';
 type MyProps = {
   account: AccountState;
 };
-
+//useAccountApi myProps this.props.account
+// drop down bill payments: fluidsearch
 type Props = MyProps & FxRatesState;
 
 const initialState = {
@@ -153,6 +154,17 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.setState({ doCancel: true });
   }
 
+  async saveTemplate(account: any) {
+    const form = document.querySelector('form')!
+    const data = new FormData(form);
+    //var valuesFromForm = data.getAll();
+console.log(data)
+    const space = await account.box.openSpace('TheCoin')
+    await space.syncDone
+    //await space.private.set('etransferTemplate', valuesFromForm)
+    //console.log(valuesFromForm)
+  }
+
   render() {
     const { account, rates } = this.props;
     const rate = weBuyAt(rates);
@@ -166,7 +178,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     return (
       <React.Fragment>
         <div className={styles.wrapper}>
-          <Form>
+          <Form id="etransfer">
             <Header as="h1">
               <Header.Content>
                 <FormattedMessage {...messages.header} />
@@ -209,6 +221,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               placeholder="An optional message to the recipient.  Should not include the security answer"
             />
             <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
+            <Form.Button onClick={async () => {await this.saveTemplate(account);} }>Save as Template</Form.Button>
           </Form>
           <ModalOperation
             cancelCallback={this.onCancelTransfer}

@@ -32,6 +32,7 @@ async function create3Box(){
   //console.log(IdentityWallet)
   const space = await box.openSpace('TheCoin')
   await space.syncDone
+  //await space.private.set('item-to-buy', '0x123...')
   //const spaceList = await Box.listSpaces('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
   //const spaceData = await Box.getSpace('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
   //console.log("-----SPACELIST",spaceData)
