@@ -155,13 +155,24 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   }
 
   async saveTemplate(account: any) {
-    const form = document.querySelector('form')!
-    const data = new FormData(form);
+    //const form = document.querySelector('form')!
+    //const data = new FormData(form);
     //var valuesFromForm = data.getAll();
-console.log(data)
+    var f = document.forms[0];
+
+    const templateToSave = {
+      xCAD:f[0].value ,
+      xTHE:f[1].value ,
+      email:f[2].value ,
+      question:f[3].value ,
+      answer:f[4].value ,
+      message:f[5].value ,
+    };
+
     const space = await account.box.openSpace('TheCoin')
     await space.syncDone
-    //await space.private.set('etransferTemplate', valuesFromForm)
+    await space.private.set('etransferTemplate', templateToSave)
+    console.log(await space.private.get('etransferTemplate'))
     //console.log(valuesFromForm)
   }
 
@@ -178,7 +189,7 @@ console.log(data)
     return (
       <React.Fragment>
         <div className={styles.wrapper}>
-          <Form id="etransfer">
+          <Form name="etransfer">
             <Header as="h1">
               <Header.Content>
                 <FormattedMessage {...messages.header} />
@@ -197,24 +208,28 @@ console.log(data)
             />
             <Form.Input
               label="Recipient Email"
+              id="email"
               name="email"
               onChange={this.onInputChanged}
               placeholder="An email address to send the e-Transfer to"
             />
             <Form.Input
               label="Security question"
+              id="question"
               name="question"
               onChange={this.onInputChanged}
               placeholder="No numbers or special characters"
             />
             <Form.Input
               label="Security answer"
+              id="answer"
               name="answer"
               onChange={this.onInputChanged}
               placeholder="No spaces or special characters"
             />
             <Form.Input
               label="Message (optional)"
+              id="message"
               name="message"
               type="text"
               onChange={this.onInputChanged}
