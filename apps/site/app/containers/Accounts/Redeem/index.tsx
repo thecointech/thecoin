@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Header, Dropdown } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
@@ -32,7 +32,7 @@ const initialState = {
   transferMessage: messages.transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
-  doCancel: false,
+  doCancel: false
 };
 
 type StateType = Readonly<typeof initialState>;
@@ -154,13 +154,34 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     this.setState({ doCancel: true });
   }
 
-  async saveTemplate(account: any) {
-    //const form = document.querySelector('form')!
-    //const data = new FormData(form);
-    //var valuesFromForm = data.getAll();
+  async loadTemplate(){
+    const { account } = this.props;
+    const space = await account.box.openSpace('TheCoin')
+    await space.syncDone
+    await space.private.get('etransferTemplate')
+    console.log(await space.private.get('etransferTemplate'))
+    return {}
+  }
+
+  fillTheForm(sell: number, email: string, question: string, answer: string, message: string){
+    this.setState({
+      coinToSell: sell,
+      email: email,
+      question: question,
+      answer: answer,
+      message: message,
+    });
+  }
+
+  // TODO: clean that
+  async saveTemplate() {
+    const { account } = this.props;
     var f = document.forms[0];
+    const space = await account.box.openSpace('TheCoin')
+    await space.syncDone
 
     const templateToSave = {
+      name:f[7].value ,
       xCAD:f[0].value ,
       xTHE:f[1].value ,
       email:f[2].value ,
@@ -169,12 +190,17 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       message:f[5].value ,
     };
 
-    const space = await account.box.openSpace('TheCoin')
-    await space.syncDone
-    await space.private.set('etransferTemplate', templateToSave)
+    let templateAlreadySaved = await space.private.get('etransferTemplate')
+    if (templateAlreadySaved === null) {
+      let templatesToInsert = JSON.stringify(templateToSave)
+      await space.private.set('etransferTemplate', templatesToInsert)
+    } else {
+      let templatesToInsert = templateAlreadySaved+","+JSON.stringify(templateToSave)
+      await space.private.set('etransferTemplate', templatesToInsert)
+    }
     console.log(await space.private.get('etransferTemplate'))
-    //console.log(valuesFromForm)
   }
+  
 
   render() {
     const { account, rates } = this.props;
@@ -236,7 +262,19 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               placeholder="An optional message to the recipient.  Should not include the security answer"
             />
             <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
-            <Form.Button onClick={async () => {await this.saveTemplate(account);} }>Save as Template</Form.Button>
+
+            
+            <Form.Input
+              label="Name of you template"
+              id="name"
+              name="name"
+              type="text"
+              onChange={this.onInputChanged}
+              placeholder="The name of the template you want to save"
+            />
+
+            <Form.Button onClick={async () => {await this.saveTemplate()} }>Save as Template</Form.Button>
+            <Form.Button onClick={async () => {await this.loadTemplate()} }>Load Template</Form.Button>
           </Form>
           <ModalOperation
             cancelCallback={this.onCancelTransfer}
