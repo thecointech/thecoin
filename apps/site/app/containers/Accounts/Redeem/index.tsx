@@ -32,7 +32,9 @@ const initialState = {
   transferMessage: messages.transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
-  doCancel: false
+  doCancel: false,
+  options: null as any | null,
+  isFetching: false,
 };
 
 type StateType = Readonly<typeof initialState>;
@@ -158,8 +160,13 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     const { account } = this.props;
     const space = await account.box.openSpace('TheCoin')
     await space.syncDone
-    await space.private.get('etransferTemplate')
-    console.log(await space.private.get('etransferTemplate'))
+    let compressedTemplates = await space.private.get('etransferTemplate')
+    let tableWithTemplates = compressedTemplates.split("||")
+    console.log(compressedTemplates.split("||"))
+    //JSON.parse(compressedTemplates)
+    tableWithTemplates.forEach(function (value) {
+      console.log(value);
+    });
     return {}
   }
 
@@ -179,7 +186,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     var f = document.forms[0];
     const space = await account.box.openSpace('TheCoin')
     await space.syncDone
-
+    //await space.private.remove('etransferTemplate')
     const templateToSave = {
       name:f[7].value ,
       xCAD:f[0].value ,
@@ -195,15 +202,23 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       let templatesToInsert = JSON.stringify(templateToSave)
       await space.private.set('etransferTemplate', templatesToInsert)
     } else {
-      let templatesToInsert = templateAlreadySaved+","+JSON.stringify(templateToSave)
+      let templatesToInsert = templateAlreadySaved+"||"+JSON.stringify(templateToSave)
       await space.private.set('etransferTemplate', templatesToInsert)
     }
     console.log(await space.private.get('etransferTemplate'))
   }
   
+  fetchOptions = () => {
+    this.setState({ isFetching: true })
+
+    setTimeout(() => {
+      this.setState({ isFetching: false, options: this.loadTemplate() })
+    }, 500)
+  }
 
   render() {
     const { account, rates } = this.props;
+    const { options, isFetching } = this.state
     const rate = weBuyAt(rates);
     const {
       coinToSell,
@@ -272,6 +287,15 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               onChange={this.onInputChanged}
               placeholder="The name of the template you want to save"
             />
+
+          <Dropdown
+            fluid
+            selection
+            options={options}
+            placeholder='Template'
+            disabled={isFetching}
+            loading={isFetching}
+          />
 
             <Form.Button onClick={async () => {await this.saveTemplate()} }>Save as Template</Form.Button>
             <Form.Button onClick={async () => {await this.loadTemplate()} }>Load Template</Form.Button>
