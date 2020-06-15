@@ -248,6 +248,10 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     }, 500)
   }
 
+  async componentDidMount() {
+    //await this.loadTemplate()
+  }
+
   render() {
     const { account, rates } = this.props;
     const { options, isFetching } = this.state
