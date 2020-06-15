@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header, Dropdown } from 'semantic-ui-react';
+import { Form, Header, Dropdown, DropdownItemProps } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
@@ -33,8 +32,10 @@ const initialState = {
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
-  options: null as any | null,
+  options: null as DropdownItemProps[] | null,
   isFetching: false,
+  templates: null as any[] | null,
+  prevState: null
 };
 
 type StateType = Readonly<typeof initialState>;
@@ -162,12 +163,43 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     await space.syncDone
     let compressedTemplates = await space.private.get('etransferTemplate')
     let tableWithTemplates = compressedTemplates.split("||")
-    console.log(compressedTemplates.split("||"))
-    //JSON.parse(compressedTemplates)
-    tableWithTemplates.forEach(function (value) {
-      console.log(value);
+    let templatesList: any[] = []
+    let optionsForDropdown: { key: any; text: any; value: any; }[] = []
+    tableWithTemplates.forEach(function (value: any, index: number) {
+      let template = JSON.parse(value)
+      optionsForDropdown.push({ key: template.name+index, text: template.name, value: template.name+index })
+      templatesList[template.name+index] = template
     });
-    return {}
+    this.setState({
+      options: optionsForDropdown,
+      templates: templatesList
+    });
+  }
+
+
+  handleTemplateChange = (event, {value}: any) => {
+    this.setState({ value })
+    const { options, templates } = this.state
+    if (templates != null){
+      console.log(options, templates[value])
+      let choseTemplate = templates[value]
+      //this.fillTheForm(chosedTemplate.sell, chosedTemplate.email, chosedTemplate.question, chosedTemplate.answer, chosedTemplate.message)
+      if (choseTemplate != undefined){
+        var f = document.forms[0];
+        f[0].value = choseTemplate.xCAD
+        f[1].value = choseTemplate.xTHE
+        f[2].value = choseTemplate.email
+        f[3].value = choseTemplate.question
+        f[4].value = choseTemplate.answer
+        f[5].value = choseTemplate.message
+      }
+    }
+  }
+
+  handleAddTemplate = (e, { value }) => {
+    this.setState((prevState) => ({
+      options: [{ text: value, value }, ...prevState.options],
+    }))
   }
 
   fillTheForm(sell: number, email: string, question: string, answer: string, message: string){
@@ -290,8 +322,12 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
           <Dropdown
             fluid
+            search
             selection
+            allowAdditions
             options={options}
+            onAddItem={this.handleAddTemplate}
+            onChange={this.handleTemplateChange}
             placeholder='Template'
             disabled={isFetching}
             loading={isFetching}
