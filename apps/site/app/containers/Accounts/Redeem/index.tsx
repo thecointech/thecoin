@@ -160,23 +160,29 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
   async loadTemplate(){
     const { account } = this.props;
-    const box = await account.box
-    const space = await box.openSpace('TheCoin')
-
-    await space.syncDone
-    let compressedTemplates = await space.private.get('etransferTemplate')
-    let tableWithTemplates = compressedTemplates.split("||")
     let templatesList: any[] = []
     let optionsForDropdown: { key: any; text: any; value: any; }[] = []
-    tableWithTemplates.forEach(function (value: any, index: number) {
-      let template = JSON.parse(value)
-      optionsForDropdown.push({ key: template.name+index, text: template.name, value: template.name+index })
-      templatesList[template.name+index] = template
-    });
-    this.setState({
-      options: optionsForDropdown,
-      templates: templatesList
-    });
+    //const box = await account.box
+
+      console.log(account )
+      const box = account.box   
+      const space = await box.openSpace('TheCoin')
+
+      await space.syncDone
+      let compressedTemplates = await space.private.get('etransferTemplate')
+      let tableWithTemplates = compressedTemplates.split("||")
+      tableWithTemplates.forEach(function (value: any, index: number) {
+        let template = JSON.parse(value)
+        optionsForDropdown.push({ key: template.name+index, text: template.name, value: template.name+index })
+        templatesList[template.name+index] = template
+      });
+      this.setState({
+        options: optionsForDropdown,
+        templates: templatesList,
+        isFetching: false
+      });
+    
+ 
     return optionsForDropdown
   }
 
@@ -261,9 +267,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
   async componentDidMount() {
 
-    const { account } = this.props;
-    await account.box
-    await this.loadTemplate()
+    //await this.loadTemplate()
   }
 
   render() {
@@ -347,12 +351,11 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
             onAddItem={this.handleAddTemplate}
             onChange={this.handleTemplateChange}
             placeholder='Template'
-            disabled={isFetching}
             loading={isFetching}
           />
 
             <Form.Button onClick={async () => {await this.saveTemplate()} }>Save as Template</Form.Button>
-            <Form.Button onClick={async () => {await this.testFillCAD()} }>Load Template</Form.Button>
+            <Form.Button onClick={async () => {await this.loadTemplate()} }>Load Template</Form.Button>
           </Form>
           <ModalOperation
             cancelCallback={this.onCancelTransfer}

@@ -215,14 +215,15 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     if (privateKey != null) {
       let idWallet = new IdentityWallet(getConsent, { seed: privateKey } )
       let threeIdProvider = idWallet.get3idProvider()
-      let box = Box.openBox(null, threeIdProvider)
+      let box = yield Box.openBox(null, threeIdProvider)
+      console.log(box)
       yield box.syncDone
       console.log("--PrivateKey",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
       return box
     } else {
       const provider = yield Box.get3idConnectProvider() // recomended provider
-      const box = Box.openBox(address, provider)
+      const box = yield Box.openBox(address, provider)
       yield box.syncDone
       console.log("--Address",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
