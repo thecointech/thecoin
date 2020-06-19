@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header, Dropdown, DropdownItemProps } from 'semantic-ui-react';
+import { Form, Header, Dropdown, DropdownProps } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
@@ -27,13 +27,14 @@ const initialState = {
   question: '',
   answer: '',
   message: undefined as string | undefined,
+  nameOfTemplate: "",
   transferInProgress: false,
   transferMessage: messages.transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
-  options: null as DropdownItemProps[] | null,
-  isFetching: false,
+  options: [] as any[] | [],
+  isFetching: true,
   templates: null as any[] | null,
   prevState: null
 };
@@ -131,7 +132,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
         );
       } else
         alert(
-          'Order recieved.\nYou should receive the e-Transfer in 1-2 business days.',
+          'Order received.\nYou should receive the e-Transfer in 1-2 business days.',
         );
     } catch (e) {
       console.error(e);
@@ -159,7 +160,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
   async loadTemplate(){
     const { account } = this.props;
-    const space = await account.box.openSpace('TheCoin')
+    const box = await account.box
+    const space = await box.openSpace('TheCoin')
+
     await space.syncDone
     let compressedTemplates = await space.private.get('etransferTemplate')
     let tableWithTemplates = compressedTemplates.split("||")
@@ -174,31 +177,33 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       options: optionsForDropdown,
       templates: templatesList
     });
+    return optionsForDropdown
   }
 
 
-  handleTemplateChange = (event, {value}: any) => {
-    this.setState({ value })
+  handleTemplateChange = ( {value}: any) => {
+    //this.setState({ value })
     const { options, templates } = this.state
     if (templates != null){
       console.log(options, templates[value])
       let choseTemplate = templates[value]
-      //this.fillTheForm(chosedTemplate.sell, chosedTemplate.email, chosedTemplate.question, chosedTemplate.answer, chosedTemplate.message)
+      
       if (choseTemplate != undefined){
-        var f = document.forms[0];
-        f[0].value = choseTemplate.xCAD
-        f[1].value = choseTemplate.xTHE
-        f[2].value = choseTemplate.email
-        f[3].value = choseTemplate.question
-        f[4].value = choseTemplate.answer
-        f[5].value = choseTemplate.message
+        this.setState({
+          coinToSell: choseTemplate.xCAD,
+          email: choseTemplate.email,
+          question: choseTemplate.question,
+          answer: choseTemplate.answer,
+          message: choseTemplate.message,
+        });
       }
     }
   }
 
-  handleAddTemplate = (e, { value }) => {
+  handleAddTemplate = (event: React.MouseEvent<HTMLElement>, data: DropdownProps) => {
+    console.log(event)
     this.setState((prevState) => ({
-      options: [{ text: value, value }, ...prevState.options],
+      options: [{ text: data, data }, ...prevState.options],
     }))
   }
 
@@ -212,21 +217,27 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     });
   }
 
+  testFillCAD(){
+    this.setState({
+      coinToSell: 236961
+    });
+  }
+
   // TODO: clean that
   async saveTemplate() {
     const { account } = this.props;
-    var f = document.forms[0];
-    const space = await account.box.openSpace('TheCoin')
+    //var f = document.forms[0];
+    const box = await account.box
+    const space = await box.openSpace('TheCoin')
+    await space.private.remove('etransferTemplate')
     await space.syncDone
-    //await space.private.remove('etransferTemplate')
     const templateToSave = {
-      name:f[7].value ,
-      xCAD:f[0].value ,
-      xTHE:f[1].value ,
-      email:f[2].value ,
-      question:f[3].value ,
-      answer:f[4].value ,
-      message:f[5].value ,
+      name:this.state.nameOfTemplate,
+      xCAD:this.state.coinToSell,
+      email:this.state.email,
+      question:this.state.question,
+      answer:this.state.answer,
+      message:this.state.message,
     };
 
     let templateAlreadySaved = await space.private.get('etransferTemplate')
@@ -243,13 +254,16 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   fetchOptions = () => {
     this.setState({ isFetching: true })
 
-    setTimeout(() => {
-      this.setState({ isFetching: false, options: this.loadTemplate() })
+    setTimeout(async () => {
+      this.setState({ isFetching: false, options: await this.loadTemplate() })
     }, 500)
   }
 
   async componentDidMount() {
-    //await this.loadTemplate()
+
+    const { account } = this.props;
+    await account.box
+    await this.loadTemplate()
   }
 
   render() {
@@ -283,6 +297,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               value={coinToSell}
               fxRate={rate}
             />
+            
             <Form.Input
               label="Recipient Email"
               id="email"
@@ -314,7 +329,6 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
             />
             <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
 
-            
             <Form.Input
               label="Name of you template"
               id="name"
@@ -338,7 +352,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
           />
 
             <Form.Button onClick={async () => {await this.saveTemplate()} }>Save as Template</Form.Button>
-            <Form.Button onClick={async () => {await this.loadTemplate()} }>Load Template</Form.Button>
+            <Form.Button onClick={async () => {await this.testFillCAD()} }>Load Template</Form.Button>
           </Form>
           <ModalOperation
             cancelCallback={this.onCancelTransfer}

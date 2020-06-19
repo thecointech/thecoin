@@ -23,9 +23,6 @@ import { useAccounts } from '@the-coin/shared/containers/AccountMap';
 
 
 export const HomePage = () => {
-  //const multicodec = require('multicodec');
-  //const Box = require('3box');
-  //const IdentityWallet = require('identity-wallet')
 
   const accounts = useAccounts();
   const userHasAccount = hasAccount(accounts);
