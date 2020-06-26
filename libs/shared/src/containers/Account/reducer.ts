@@ -19,58 +19,6 @@ const getConsent = async () => {
 const Box = require('3box')
 const IdentityWallet = require('identity-wallet')
 
-
-/*
-async function create3Box(){
-  //const provider = await Box.get3idConnectProvider() // recomended provider
-  //const box = await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
-
-  let idWallet = new IdentityWallet(getConsent, { seed: "0xaeeeed4f195701688705514b369a1c967d156f3cf4e9eea7ebe3717868fae82a" } )
-  let threeIdProvider = idWallet.get3idProvider()
-  let box = await Box.openBox(null, threeIdProvider)
-  //const IdentityWallet = require('identity-wallet')
-  //console.log(IdentityWallet)
-  const space = await box.openSpace('TheCoin')
-  await space.syncDone
-  //await space.private.set('item-to-buy', '0x123...')
-  //const spaceList = await Box.listSpaces('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
-  //const spaceData = await Box.getSpace('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658')
-  //console.log("-----SPACELIST",spaceData)
-  //await space.public.set('favorite-nft', '0x123...')
-  //await space.public.set('favorite-nft2', '0x124...')
-  //await space.public.set('favorite-nft3', '0x125...')
-  //const spaceData = await space.public.all()
-  //await space.private.set('item-to-buy', '0x123...')
-  //await space.private.set('number-to-buy', 22)
-  //await space.private.set('transferTemplates', '[{"firstName":"John", "lastName":"Doe"},{"firstName":"Anna", "lastName":"Smith"},{"firstName":"Peter", "lastName":"Jones"}]')
-  //await space.private.set('item-to-buy[1]', "<div>content</div>")
-  //const spacePrivateData = await space.private.all()
-
-  //console.log("-----SPACEDATA",spaceData,spacePrivateData)
-
-  //const profile = await Box.getProfile("0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658")
-  await box.public.set('name', 'Test')
-  const profilePublic = await box.public.all()
-  console.log("-----PROFILE",profilePublic)
-}
-
-async function get3Box(){
-  const provider = await Box.get3idConnectProvider() // recomended provider
-  return await Box.openBox('0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658', provider)  
-}
-
-async function setProfil(){
-
-}
-
-async function getProfile(){
-  //return await box.public.all()
-}*/
-
-
-
-
-
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
   implements IActions {
@@ -86,18 +34,17 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       signer,
       contract
     });
-
     // Call identity wallet web3 or local account
     // isWallet = Web3 ; isSigner = local account
     if (signer.hasOwnProperty("signingKey")){
       let signingKey = signer.signingKey
       if (signingKey.hasOwnProperty("privateKey")){
         yield this.login3Box(signingKey.privateKey, null)
+        console.log(yield this.login3Box(signingKey.privateKey, null))
       }
     } else {
       yield this.login3Box(null, signer.address)
     }
-
     yield this.sendValues(this.actions().updateBalance, []);
   }
 
@@ -216,24 +163,20 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       let idWallet = new IdentityWallet(getConsent, { seed: privateKey } )
       let threeIdProvider = idWallet.get3idProvider()
       let box = yield Box.openBox(null, threeIdProvider)
-      console.log(box)
       yield box.syncDone
-      console.log("--PrivateKey",box)
+      console.log("--by PrivateKey",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
       return box
     } else {
       const provider = yield Box.get3idConnectProvider() // recomended provider
       const box = yield Box.openBox(address, provider)
       yield box.syncDone
-      console.log("--Address",box)
+      console.log("--by Address",box)
       yield this.sendValues(this.actions().updateWithValues, { box: box });
       return box
     }
   }
 }
-
-
-
 
 export const getAccountReducer = (address: string) => {
 

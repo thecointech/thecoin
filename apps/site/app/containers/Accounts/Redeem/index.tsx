@@ -162,33 +162,31 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     const { account } = this.props;
     let templatesList: any[] = []
     let optionsForDropdown: { key: any; text: any; value: any; }[] = []
-    //const box = await account.box
+    const box = account.box   
+    const space = await box.openSpace('TheCoin')
+    //Sync recommended before we try to read or write something in 3Box
+    await space.syncDone
 
-      console.log(account )
-      const box = account.box   
-      const space = await box.openSpace('TheCoin')
+    // TODO: I was trying to change that in an array (if 3Box allows it)
+    let compressedTemplates = await space.private.get('etransferTemplate')
+    let tableWithTemplates = compressedTemplates.split("||")
+    tableWithTemplates.forEach(function (value: any, index: number) {
+      let template = JSON.parse(value)
+      optionsForDropdown.push({ key: template.name+index, text: template.name, value: template.name+index })
+      templatesList[template.name+index] = template
+    });
+    this.setState({
+      options: optionsForDropdown,
+      templates: templatesList,
+      isFetching: false
+    });
+  
 
-      await space.syncDone
-      let compressedTemplates = await space.private.get('etransferTemplate')
-      let tableWithTemplates = compressedTemplates.split("||")
-      tableWithTemplates.forEach(function (value: any, index: number) {
-        let template = JSON.parse(value)
-        optionsForDropdown.push({ key: template.name+index, text: template.name, value: template.name+index })
-        templatesList[template.name+index] = template
-      });
-      this.setState({
-        options: optionsForDropdown,
-        templates: templatesList,
-        isFetching: false
-      });
-    
- 
     return optionsForDropdown
   }
 
 
   handleTemplateChange = ( {value}: any) => {
-    //this.setState({ value })
     const { options, templates } = this.state
     if (templates != null){
       console.log(options, templates[value])
@@ -207,7 +205,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   }
 
   handleAddTemplate = (event: React.MouseEvent<HTMLElement>, data: DropdownProps) => {
-    console.log(event)
+    // Add on the dropdown: onAddItem={this.handleAddTemplate}
     this.setState((prevState) => ({
       options: [{ text: data, data }, ...prevState.options],
     }))
@@ -229,14 +227,13 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     });
   }
 
-  // TODO: clean that
   async saveTemplate() {
     const { account } = this.props;
-    //var f = document.forms[0];
     const box = await account.box
     const space = await box.openSpace('TheCoin')
-    await space.private.remove('etransferTemplate')
+    //Sync recommended before we try to read or write something in 3Box
     await space.syncDone
+
     const templateToSave = {
       name:this.state.nameOfTemplate,
       xCAD:this.state.coinToSell,
@@ -251,6 +248,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       let templatesToInsert = JSON.stringify(templateToSave)
       await space.private.set('etransferTemplate', templatesToInsert)
     } else {
+      // TODO: I was trying to change that in an array (if 3Box allows it)
       let templatesToInsert = templateAlreadySaved+"||"+JSON.stringify(templateToSave)
       await space.private.set('etransferTemplate', templatesToInsert)
     }
@@ -266,7 +264,8 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
   }
 
   async componentDidMount() {
-
+    // uncomment to try and auto load the templates once 3Box will be stable
+    // a button at the end of the form does just that right now
     //await this.loadTemplate()
   }
 
@@ -348,7 +347,6 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
             selection
             allowAdditions
             options={options}
-            onAddItem={this.handleAddTemplate}
             onChange={this.handleTemplateChange}
             placeholder='Template'
             loading={isFetching}
