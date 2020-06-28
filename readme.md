@@ -1,6 +1,6 @@
 After Checkout:
 
-NOTE: 
+NOTE:
 
 for node-gyp errors on windows, ensure that it's (node-gyp is) looking in the right path for msbuild
 
@@ -10,6 +10,22 @@ https://github.com/nodejs/node-gyp/issues/1753
 yarn install
 cd site
 yarn dev
+
+========================================================================================
+==================================== Firebase ==========================================
+========================================================================================
+
+To run firebase locally for testing & development:
+1) install firebase-cli: https://firebase.google.com/docs/cli#windows-npm
+ > npm install -g firebase-tool
+2) login (any google account)
+ > firebase login
+2) Setup emulator suite (accept all defaults, optionally also EmulatorUI)
+ > firebase init emulators
+3) Once done, start firebase (I had to do this twice to complete UI start)
+ > yarn start:firebase
+4) (optional) Open emulator UI
+ > http://localhost:4000/firestore
 
 ========================================================================================
 ====================================== API =============================================
@@ -29,7 +45,7 @@ The config to run Jest is jest.config.js at the root of the project. It needs to
 For Visual Studio Code:
 Go to Preferences -> Extensions -> Extension settings of the "Jest running" tool used and add the paths to the config file (the field should look like "jest.config.js" depending on you project setup).
 
-If you have an error with json file not being included (like Status.json): check in the jest.config.json that the part bellow is correct and goes to the right tsconfig file. 
+If you have an error with json file not being included (like Status.json): check in the jest.config.json that the part bellow is correct and goes to the right tsconfig file.
     ...
     globals: {
         'ts-jest': {
@@ -39,26 +55,26 @@ If you have an error with json file not being included (like Status.json): check
     ...
 
  ======== Note ========
- "jest-environment-uint8array" is here to remove the "Error: FIRESTORE (7.9.2) INTERNAL ASSERTION FAILED: value must be undefined or Uint8Array". The issue should be fixed in a future version. 
+ "jest-environment-uint8array" is here to remove the "Error: FIRESTORE (7.9.2) INTERNAL ASSERTION FAILED: value must be undefined or Uint8Array". The issue should be fixed in a future version.
 
 On 2nd march 2020: 11 errors are still not fixed:
- - apps/broker-service/src/Buy/eTransfert.test.ts => 
+ - apps/broker-service/src/Buy/eTransfert.test.ts =>
         Error: invalid password
- - apps/broker-service/src/exchange/VerifiedBillPayments.test.ts => 
+ - apps/broker-service/src/exchange/VerifiedBillPayments.test.ts =>
         Error: invalid password
- - apps/broker-service/src/exchange/VerifiedSale.test.ts => 
+ - apps/broker-service/src/exchange/VerifiedSale.test.ts =>
         Error: invalid password
- - apps/broker-service/src/exchange/VerifiedTransfert.test.ts => 
+ - apps/broker-service/src/exchange/VerifiedTransfert.test.ts =>
         Error: expect(received).rejects.toThrow(expected)
         Expected substring: "Insufficient funds"
         Received message:   "invalid password"
     AND
         Error: invalid password
- - apps/rates-service/test/UpdateDb.test.ts => 
+ - apps/rates-service/test/UpdateDb.test.ts =>
         : Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Error:
     AND
         Error: Failed: "Could not retrieve rates"
- - apps/site/app/containers/ReturnProfile/Graph/sp500graph.test.ts => 
+ - apps/site/app/containers/ReturnProfile/Graph/sp500graph.test.ts =>
         4 x Error: ENOENT: no such file or directory, open '.\app\sp500_monthly.csv'
 
 

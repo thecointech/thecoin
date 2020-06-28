@@ -9,6 +9,7 @@ import { NewAccountReferal } from "@the-coin/types";
 
 import "./Firestore.test";
 import { firestore } from "@firebase/testing";
+import { initializeFirestore } from "./Firestore.test";
 
 
 async function ClearExistingUser(address: string) {
@@ -22,7 +23,11 @@ async function ClearExistingUser(address: string) {
 }
 
 test("Referrals work as expected", async () => {
+
   jest.setTimeout(30000);
+  if (!await initializeFirestore())
+    return;
+
   const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
 
   // Create a referrer
