@@ -29,7 +29,7 @@ test('We have valid deposits', async ()=> {
 
   for (const deposit of deposits)
   {
-    console.log('Deposit from: ' + deposit.instruction.name);
+    console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved.toLocaleString()}`);
     const { record} = deposit;
     expect(record.type).toBe(PurchaseType.etransfer);
     expect(record.fiatDisbursed).toBeGreaterThan(0);
