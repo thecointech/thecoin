@@ -6,7 +6,7 @@ import { weSellAt, weBuyAt, FXRate } from "../FxRate";
 const isPurchase = (tx: Transaction) =>
   tx.logEntry.startsWith("Purchase: ")
 
-// What was
+// What was the value of this transaction in fiat?
 export const fiatChange = (tx: Transaction, rates: FXRate[]) =>
   tx.change * (
     (tx.change > 0 && isPurchase(tx))
