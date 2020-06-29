@@ -30,7 +30,7 @@ test('Can fetch Actions', async ()=> {
   expect(instructions.length).toBe(toComplete.length);
 })
 
-test('Succesfully Processes Actions', async ()=> {
+test.skip('Succesfully Processes Actions', async ()=> {
   try {
     const toComplete = await processUnsettledETransfers();
 

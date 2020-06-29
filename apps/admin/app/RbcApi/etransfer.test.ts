@@ -9,10 +9,6 @@ beforeAll(() => {
     RbcStore.initialize({
         adapter: "memory"
     });
-
-    initBrowser({
-      headless: false
-    })
 });
 
 afterAll(() => {
@@ -20,9 +16,13 @@ afterAll(() => {
 });
 
 
-test("Can send e-Transfer", async () => {
+test.skip("Can send e-Transfer", async () => {
   jest.setTimeout(500000);
   try {
+    initBrowser({
+      headless: false
+    })
+
     const confirmation = await send("TestEmail", 5, "test", {
       email: "test@thecoin.io",
       question: "question",

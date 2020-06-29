@@ -140,6 +140,7 @@
     "svg-url-loader": "3.0.0",
     "ts-node": "8.1.0",
     "tsconfig-paths": "3.4.1",
-    "whatwg-fetch": "3.0.0"
+    "whatwg-fetch": "3.0.0",
+    "jest": "*"
   }
 }

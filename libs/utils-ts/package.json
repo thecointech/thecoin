@@ -19,6 +19,9 @@
     "@the-coin/contract": "*",
     "@the-coin/types": "*"
   },
+  "devDependencies": {
+    "jest": "*"
+  },
   "files": [
     "src/**/*"
   ]
