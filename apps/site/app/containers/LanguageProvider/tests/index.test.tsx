@@ -4,7 +4,9 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { Provider } from 'react-redux';
 
 import LanguageProvider from '../index';
-import configureStore from '../../../configureStore';
+
+import createReducer from '../../../reducers';
+import {configureAppStore} from '@the-coin/shared/configureStore';
 
 import { translationMessages } from '../../../i18n';
 import history from '@the-coin/shared/utils/history';
@@ -17,11 +19,13 @@ const messages = defineMessages({
   },
 });
 
+type AppStore = ReturnType<typeof configureAppStore>
+
 describe('<LanguageProvider />', () => {
-  let store;
+  let store: AppStore;
 
   beforeEach(() => {
-    store = configureStore({}, history);
+    store = configureAppStore(createReducer, undefined, history);
   });
 
   it('should render its children', () => {
