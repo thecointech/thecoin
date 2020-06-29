@@ -1,7 +1,4 @@
 import { Controller, Get, Route, Response } from 'tsoa';
-//import { Signup, Confirm, Unsubscribe, Details } from '../newsletter/Newsletter'
-//import { BoolResponse } from '@the-coin/types';
-
 import { updateRates }  from '../update/UpdateDb';
 
 @Route('doUpdate')

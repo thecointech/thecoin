@@ -52,9 +52,9 @@ export class FXRate {
 }
 
 class ExchangeObj {
-    Name: string; 
-    LatestKey: number; 
-    LatestRate: number; 
+    Name: string;
+    LatestKey: number;
+    LatestRate: number;
     constructor(name: string, latestKey: number, latestRate: number){
         this.Name = name;
         this.LatestKey = latestKey;
@@ -64,7 +64,7 @@ class ExchangeObj {
 
 export let Exchanges : ExchangeObj[] = [];
 
-export const getCollectionRates = (type: number) => 
+export const getCollectionRates = (type: number) =>
     GetFirestore().collection("rates"+type);
 
 export async function getRateFromDb(type: number, ts?: number){
@@ -81,22 +81,22 @@ export async function getRateFromDb(type: number, ts?: number){
                               .get();
 
         if (!snapshot.empty){
-            return !snapshot.empty ? 
-            collection.doc(snapshot.docs[0].id) : 
+            return !snapshot.empty ?
+            collection.doc(snapshot.docs[0].id) :
             collection.doc(); // new empty document
         }
-    } 
-    
+    }
+
     // ------- Get Latest -------
     const snapshot = await collection
                             .where('validUntil', '>=', now)
                             .orderBy('validUntil', "desc")
                             .limit(1)
                             .get();
-    return !snapshot.empty ? 
-        collection.doc(snapshot.docs[0].id) : 
+    return !snapshot.empty ?
+        collection.doc(snapshot.docs[0].id) :
         collection.doc(); // new empty document
-    
+
 }
 
 //
@@ -107,7 +107,7 @@ async function getLastRate(code: number, name: string){
         if (doc.exists) {
             let Exchange = new ExchangeObj(name, doc.get("buy"), 0);
             return Exchange;
-        } 
+        }
 		throw new Error("Error getting rate");
     }).catch(function(error) {
 		throw new Error("Error getting rate:" + error);
@@ -152,7 +152,7 @@ export async function getLatestExchangeRate(code: number):Promise<any> {
         // if we have no cached value, read from DB
         let datas = await getRateFromDb(exchange.LatestKey);
         let collection = (await datas.get());
-        
+
         if ((await datas.get()).exists) {
             var latestRate = new ExchangeRate(collection.get("buy"), collection.get("sell"), collection.get("validFrom"), collection.get("validUntil"));
             exchange.LatestRate = latestRate.buy;
@@ -261,7 +261,7 @@ export async function getLatestCoinRate(now: number, latestValidUntil: number) {
             console.error(`Mismatched intervals: previous Until: ${latestValidUntil}, current from: ${validFrom}`);
         }
         // else {
-        //     // This path occurs if the value we retrieve 
+        //     // This path occurs if the value we retrieve
         //     // happens in the past - in this case we want
         //     // our new validity interval simply extend
         //     // past the last one
@@ -349,9 +349,8 @@ export function alignToNextBoundary(timestamp: number, updateInterval: number)
     let hours = tzus(timestamp, "%H", "America/New_York");
     let minutes = tzus(timestamp, "%M", "America/New_York");
     let seconds = tzus(timestamp, "%S", "America/New_York");
-    // TODO: Is this a safe assumption?
-    let ms = timestamp % 1000; 
 
+    let ms = timestamp % 1000;
     // We simply discard ms
     timestamp -= ms;
 
@@ -360,7 +359,7 @@ export function alignToNextBoundary(timestamp: number, updateInterval: number)
     let lastBoundary = tz(timestamp, `-${hours} hours`, `-${minutes} minutes`, `-${seconds} seconds`, "+31 minutes", "+30 seconds");
 
     // Its possible we are updating before 00:31:30, in which case lastBoundary is in the future.
-    // In this case we simply offset it backwards 
+    // In this case we simply offset it backwards
     if (lastBoundary > timestamp)
         lastBoundary -= updateInterval;
     else {
@@ -399,18 +398,18 @@ export async function ensureLatestFXRate(currencyCode: number, now:number) {
 
         // Assume that last interval is still valid (normal operatino)
         let validFrom = lastUntil;
-        // If the value is out of sync, reset the validUntil 
+        // If the value is out of sync, reset the validUntil
         // to be correct again.
         if (validFrom < now) {
             // This can happen on first runs, and possibly if
             // we've had issues and failed a prior update
             // If our last interval expired prematurely, there isn't much we can do
             // However, we want to ensure that our valid until is set to about FXUpdateInterval
-            // in the future, as we assume thats the next time we update. 
+            // in the future, as we assume thats the next time we update.
 
 
         }
-    }            
+    }
     // We reset validFrom to be timestamp (as we can't
     // set a price in the past)
     validFrom = now;
@@ -430,7 +429,7 @@ export async function ensureLatestFXRate(currencyCode: number, now:number) {
     return latest
 }
 
-export function ensureLatestRate(code: number, timestamp:number) 
+export function ensureLatestRate(code: number, timestamp:number)
 {
     if (code == 0)
         return ensureLatestCoinRate(timestamp);
@@ -481,7 +480,7 @@ export function ForceLatestRate(resolve: { (value?: unknown): void; (value?: unk
     ensureLatestRate(code, timestamp).then((rates: ExchangeRate) => {
         if (rates.validUntil > timestamp)
             resolve(rates)
-        else 
+        else
             reject();
     })
     .catch((err: any) => {
@@ -526,7 +525,7 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
         let collection = (await datas.get());
         if (!(await datas.get()).exists){
             reject("Could not retrieve rates 2");
-        } 
+        }
         else if (datas.collection.length == 0){
             console.warn("No currency retrieved for %d at %s, attempting update", currencyCode, tzus(timestamp, "%F %R:%S", "America/New_York"));
             ForceLatestRate(resolve, reject, currencyCode, timestamp);
@@ -542,6 +541,6 @@ export function GetRatesFor(currencyCode: number, timestamp: number) {
         else {
             resolve(collection);
         }
-        
+
     })
 }
