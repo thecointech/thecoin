@@ -8,7 +8,7 @@ const filename = path.join(folder, 'admin.log');
 mkdirSync(folder, { recursive: true });
 
 export const log = bunyan.createLogger({
-  name: 'rates-patcher',
+  name: 'admin',
   streams: [
     {
       level: 'trace',

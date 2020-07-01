@@ -1,26 +1,28 @@
-import { ConfigStore } from '../store/config';
 import { authorize, isValid, finishLogin } from './auth';
-
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+import { ConfigStore } from '../store';
 
 beforeAll(() => {
-	ConfigStore.initialize();
+  ConfigStore.initialize();
 });
-
 afterAll(() => {
   ConfigStore.release();
 });
 
-test("Can login deets", async () => {
+// This test is partly to test whether or not we have Auth, and
+// partly to give a way to actually complete login
+// (note: the complete login part should be extracted to console app)
+test("We have gmail login", async () => {
   jest.setTimeout(500000);
 
   const client = await authorize();
 
   if (!isValid(client))
   {
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
     var code = await readline.question("Enter Code:");
     finishLogin(client, code);
   }

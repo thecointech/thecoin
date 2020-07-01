@@ -1,15 +1,16 @@
+const path = require('path');
+
 module.exports = {
   verbose: true,
   transform: {
-    "^.+\\.(tsx?|json)$": "ts-jest"
+    "^.+\\.tsx?$": "ts-jest"
   },
-  globals: {
-    'ts-jest': {
-      tsConfig: "tsconfig.base.json"
-    }
-  },
-  preset: "ts-jest/presets/js-with-babel",
-  testEnvironment: "jest-environment-uint8array",
+  // globals: {
+  //   'ts-jest': {
+  //     tsConfig: "tsconfig.base.json"
+  //   }
+  // },
+  //testEnvironment: "jest-environment-uint8array",
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   moduleFileExtensions: [
     "ts",
@@ -19,7 +20,8 @@ module.exports = {
     "json",
     "node"
   ],
-  setupFiles: [
-    './mocks/localStorage.js'
-  ]
+  globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js')
+  // setupFiles: [
+  //   './mocks/localStorage.js'
+  // ]
 };

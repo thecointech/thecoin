@@ -1,6 +1,8 @@
-const { GetCalendar, NextOpenTimestamp } = require('./MarketStatus');
+import { GetCalendar, NextOpenTimestamp } from './MarketStatus';
+import { DateTime } from 'luxon';
 
 const jan1st2019 = new Date(1546320600 * 1000);
+
 test("Returns Valid Calendar", async () => {
 
 	const calendar1 = await GetCalendar(jan1st2019);
@@ -20,15 +22,15 @@ test("Returns now if the market is currently open", async () => {
 });
 
 test("Gives valid offset time", async () => {
-	const nts = await NextOpenTimestamp(jan1st2019);
-	const ndate = new Date(nts);
-	expect(ndate.toString()).toMatch("Wed Jan 02 2019 09:32:00 GMT-0500");
+  const nts = await NextOpenTimestamp(jan1st2019);
+  const dt = DateTime.fromMillis(nts).setZone('America/New_York');
+	expect(dt.toString()).toMatch("2019-01-02T09:32:00.000-05:00");
 });
 
 test("Gives valid future time without offset", async () => {
 	const nts = await NextOpenTimestamp(jan1st2019, 0);
-	const ndate = new Date(nts);
-	expect(ndate.toString()).toMatch("Wed Jan 02 2019 09:30:00 GMT-0500");
+	const dt = DateTime.fromMillis(nts).setZone('America/New_York');
+	expect(dt.toString()).toMatch("2019-01-02T09:30:00.000-05:00");
 });
 
 test("Getting next date when month ends on weekend", async () => {

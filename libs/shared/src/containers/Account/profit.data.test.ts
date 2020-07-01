@@ -11,6 +11,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Transfer: 0x0E53b70a831003d3714aeBC36f33c98a5F848872",
     "balance": 730012295, // FIX ME
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     "txHash": "0x0a61b44f94b3b7d32549747ffaddc58fce162464a40fb4e9606ddee5767b9dd5",
@@ -19,6 +20,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
     "balance": 256812144,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     "txHash": "0x0a61b44f94b3b7d32549747ffaddc58fce162464a40fb4e9606ddee5767b9dd5",
@@ -27,6 +29,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Transfer: 0x445758E37F47B44E05e74eE4799F3469De62a2Cb",
     "balance": 256832144,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     "txHash": "0x301cf09ec466a77628fb5d80c7918dfbe0df151ee138a565671950d4a6ff4bb6",
@@ -35,6 +38,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
     "balance": 259373503,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     "txHash": "0x301cf09ec466a77628fb5d80c7918dfbe0df151ee138a565671950d4a6ff4bb6",
@@ -43,6 +47,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Transfer: 0x445758E37F47B44E05e74eE4799F3469De62a2Cb",
     "balance": 259393503,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     "txHash": "0x2cf020d5ff600f484942c02dc6baf16313bb1dd2228dc348239c432dae87ce8b",
@@ -51,6 +56,7 @@ export const ExampleTransactions: Transaction[] = [
     "logEntry": "Purchase: 261.93",
     "balance": 261934862,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   }
 ]
 
@@ -77,6 +83,7 @@ export const SimpleTransactions: Transaction[] = [
     logEntry: "",
     balance: 50000, // Deposit: $5
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     date: new Date(2018, 2),
@@ -84,6 +91,7 @@ export const SimpleTransactions: Transaction[] = [
     logEntry: "",
     balance: 100000, // Deposit: $10
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     date: new Date(2018, 3),  // Withdraw: $5
@@ -91,6 +99,7 @@ export const SimpleTransactions: Transaction[] = [
     logEntry: "",
     balance: 75000,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   },
   {
     date: new Date(2018, 4),  // Withdraw: $2.50
@@ -98,6 +107,7 @@ export const SimpleTransactions: Transaction[] = [
     logEntry: "",
     balance: 50000,
     "counterPartyAddress": "FIXME",
+    "completed": new Date("2019-09-01"),
   }
 ];
 
@@ -141,4 +151,4 @@ export const SimpleRates: FXRate[] = [
   },
 ]
 
-test('Always passes', () => true); // just to stop jest complaining;
+test('Always passes', () => {}); // just to stop jest complaining;

@@ -12,7 +12,8 @@
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
     "build:copy": "cpx \"src/api/*.*\" \"../../build/broker-service/api\"",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "test": "yarn jest"
   },
   "license": "Unlicense",
   "private": true,
@@ -33,7 +34,8 @@
     "@firebase/testing": "^0.16.14",
     "@types/node-mailjet": "^3.3.1",
     "@types/swagger-express-middleware": "^1.0.10",
-    "@types/swagger-ui-express": "^4.1.1"
+    "@types/swagger-ui-express": "^4.1.1",
+    "jest": "*"
   },
   "eslintConfig": {
     "env": {

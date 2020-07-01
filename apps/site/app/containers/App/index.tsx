@@ -15,7 +15,6 @@ import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
-import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import MainPageTransition from 'containers/MainPageTransition';
 import {MainRouter} from 'containers/MainRouter';
 
@@ -23,6 +22,7 @@ import 'semantic-ui-less/semantic.less';
 
 import { usePrismic } from 'containers/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
+import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './index.module.css';
 
 export const App = () => {
