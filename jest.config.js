@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   verbose: true,
   transform: {
@@ -17,7 +19,8 @@ module.exports = {
     "jsx",
     "json",
     "node"
-  ]
+  ],
+  globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js')
   // setupFiles: [
   //   './mocks/localStorage.js'
   // ]
