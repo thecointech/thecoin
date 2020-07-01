@@ -1,8 +1,11 @@
 {
 	"folders": [
-    {
-      "path": "apps\\broker-service"
-    }
-  ],
-  "settings": {}
+		{
+			"path": "apps\\broker-service"
+		},
+		{
+			"path": "libs\\utils-ts"
+		}
+	],
+	"settings": {}
 }
