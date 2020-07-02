@@ -1,9 +1,9 @@
-import { init, describe } from './debug';
+import { init, describe } from './jestutils';
 
 describe('Our testing correctly connects to Firestore', ()=> {
 
   test("Status is valid", async () => {
-    const db = await init();
+    const db = await init('utilities');
     if (!db)
       return;
 

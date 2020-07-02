@@ -1,5 +1,5 @@
 import { IsValidAddress, NormalizeAddress } from ".";
-import { GetFirestore } from './Firestore';
+import { GetFirestore } from './firestore';
 import { ReferralData } from "./Referrals";
 import { Timestamp, DocumentReference } from "@the-coin/types/FirebaseFirestore";
 

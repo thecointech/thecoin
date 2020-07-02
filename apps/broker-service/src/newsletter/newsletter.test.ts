@@ -1,6 +1,6 @@
 
 import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail } from './Newsletter'
-import { init, describe } from '../firestore/debug'
+import { init, describe } from '../../../../libs/utils-ts/src/firestore/debug'
 
 beforeAll(async () => {
   await init()

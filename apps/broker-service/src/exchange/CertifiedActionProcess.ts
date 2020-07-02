@@ -2,7 +2,7 @@ import { CertifiedTransfer} from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { TransferRecord } from "@the-coin/utilities/Firestore";
+import { TransferRecord } from "../../../build/utils-ts/firestore/Firestore";
 import { DocumentReference } from "@the-coin/types/FirebaseFirestore";
 import { Timestamp } from "@google-cloud/firestore";
 

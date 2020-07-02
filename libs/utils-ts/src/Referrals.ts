@@ -1,4 +1,4 @@
-import { GetFirestore } from "./Firestore";
+import { GetFirestore } from "./firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import { NewAccountReferal } from "@the-coin/types";
 //import { base32Encode } from '@ctrl/ts-base32';
@@ -111,7 +111,7 @@ export async function CreateReferree(referral: NewAccountReferal, created: Times
 }
 
 //
-// 
+//
 //
 export async function GetAccountCode(address: string, wallet: Wallet)
 {

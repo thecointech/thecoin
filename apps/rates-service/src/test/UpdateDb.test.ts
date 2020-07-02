@@ -1,4 +1,4 @@
-import * as firestore from '../exchange/Firestore';
+import * as firestore from '../firestore/Firestore';
 import { ExchangeRate, FXUpdateInterval, getRateFromDb, insertRate, getCollectionRates, alignToNextBoundary, getLatestCoinRate, GetMsTillSecsPast, FixCoinValidUntil } from '../update/UpdateDb';
 
 //const assert = require('assert');

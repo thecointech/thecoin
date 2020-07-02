@@ -1,5 +1,5 @@
 import {Firestore} from '@google-cloud/firestore';
-import { SetFirestore } from '@the-coin/utilities/Firestore';
+import { SetFirestore } from './index';
 
 // Create a new client
 

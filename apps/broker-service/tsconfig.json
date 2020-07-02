@@ -13,7 +13,7 @@
     "noImplicitUseStrict": true,
   },
   "include": [
-    "./src/**/*.*"
+    "./src/**/*.*", "../../libs/utils-ts/src/firestore/init.test.ts", "../../libs/utils-ts/src/firestore/debug.ts", "../../libs/utils-ts/src/firestore/release.ts", "../../libs/utils-ts/src/firestore/index.ts", "../../libs/utils-ts/src/firestore/server.ts"
   ],
   "references": [{ "path": "../../libs/utils-ts/", "prepend": false }]
 }
