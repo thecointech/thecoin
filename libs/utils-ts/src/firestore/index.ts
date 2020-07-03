@@ -13,7 +13,7 @@ export function SetFirestore(db: Firestore)
 }
 
 
-export function GetFirestore()
+export function GetFirestore() : Firestore
 {
   if (!global.__thecoin.firestore)
     throw new Error("Firestore not initialized");
