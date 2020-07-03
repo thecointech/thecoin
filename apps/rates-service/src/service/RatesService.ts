@@ -8,7 +8,7 @@ import { GetRatesFor } from '../update/UpdateDb';
  * returns FXRate
  **/
 
-export function getConversion(currencyCode: any, timestamp: number) {
+export function getConversion(currencyCode: number, timestamp: number) {
   return new Promise(function (resolve, reject) {
     const ts = timestamp || Date.now();
     let coinWait = <any> GetRatesFor(0, ts);
