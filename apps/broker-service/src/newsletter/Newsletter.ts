@@ -1,4 +1,4 @@
-import { GetFirestore } from "../../../build/utils-ts/firestore/Firestore";
+import { GetFirestore } from "@the-coin/utilities/firestore";
 import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
 import { SubscriptionDetails } from "@the-coin/types";
 import { Timestamp } from "@google-cloud/firestore";

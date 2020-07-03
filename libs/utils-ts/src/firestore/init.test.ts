@@ -1,4 +1,5 @@
 import { init, describe } from './jestutils';
+import { GetFirestore } from '.';
 
 describe('Our testing correctly connects to Firestore', ()=> {
 
@@ -8,6 +9,8 @@ describe('Our testing correctly connects to Firestore', ()=> {
       return;
 
     expect(db).toBeDefined();
+    var db2 = GetFirestore();
+    expect(db).toEqual(db2);
 
     await db.collection("test").doc("1").set({
       here: true

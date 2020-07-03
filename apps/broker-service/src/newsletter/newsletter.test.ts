@@ -1,16 +1,22 @@
 
 import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail } from './Newsletter'
-import { init, describe } from '../../../../libs/utils-ts/src/firestore/debug'
-
-beforeAll(async () => {
-  await init()
-});
+import { init, describe } from '@the-coin/utilities/firestore/jestutils'
+import { GetFirestore } from '@the-coin/utilities/firestore';
 
 async function getDocId(email: string) {
   return (await SubDoc(email)).id;
 }
 
 describe('Test newsletter actions', () => {
+
+  beforeAll(async () => {
+    await init('broker-cad')
+  });
+
+  test("We have DB", async () => {
+    var db = GetFirestore();
+    expect(db).toBeTruthy();
+  });
 
   //
   // Test email signup

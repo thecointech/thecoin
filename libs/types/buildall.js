@@ -1,4 +1,4 @@
-const { readFileSync, writeFileSync, copyFile } = require('fs');
+const { readFileSync, writeFileSync, copyFile, mkdirSync } = require('fs');
 //const swaggerToTS = require('@manifoldco/swagger-to-ts').default;
 const swaggerToTS = require('./swagger-to-ts').default;
 const yaml = require('js-yaml');
@@ -27,6 +27,7 @@ writeFileSync("./src/index.ts", output);
 // To keep this in sync with our build expectations,
 // we also directly export this as a types file to our build folder
 // This isn't stricly necessary, but it's nice to be consistent
+mkdirSync(outPath, {recursive: true});
 writeFileSync(`${outPath}/index.d.ts`, output);
 
 
