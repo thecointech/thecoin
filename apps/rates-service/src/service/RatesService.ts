@@ -1,4 +1,4 @@
-import { GetRatesFor } from '../update/UpdateDb';
+import { getLatestCombinedRates, getCombinedRates } from '../rates';
 /**
  * Exchange Rate
  * Query exchange rate for THE into the given currency
@@ -7,27 +7,13 @@ import { GetRatesFor } from '../update/UpdateDb';
  * timestamp Integer The timestamp we are requesting valid values for
  * returns FXRate
  **/
+export async function getConversion(_currencyCode: number, timestamp?: number) {
 
-export function getConversion(currencyCode: number, timestamp: number) {
-  return new Promise(function (resolve, reject) {
-    const ts = timestamp || Date.now();
-    let coinWait = <any> GetRatesFor(0, ts);
-    let fxWait = <any> GetRatesFor(currencyCode, ts);
-    Promise.all([coinWait, fxWait])
-      .then(([coinRates, fxRates]) => {
-        let result = {
-          "buy": coinRates.Buy,
-          "sell": coinRates.Sell,
-          "fxRate": fxRates.Rate,
-          "validTill": coinRates.ValidUntil,
-          "validFrom": coinRates.ValidFrom,
-          "target": currencyCode
-        };
-        resolve(result);
-      })
-      .catch((error) => {
-        console.error(error);
-        reject('{ "Error": "Error in fetch" }');
-      });
-  });
+  const ts = Math.min(Date.now(), timestamp ?? Number.MAX_SAFE_INTEGER);
+  let res = getCombinedRates(ts);
+  if (res)
+    return res;
+
+  console.error('No Rates found at {Timestamp}', ts);
+  return getLatestCombinedRates();
 }

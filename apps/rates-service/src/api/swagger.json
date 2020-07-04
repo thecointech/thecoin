@@ -21,11 +21,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "Ok",
-						"schema": {
-							"additionalProperties": true,
-							"type": "object"
-						}
+						"description": "Success"
+					},
+					"204": {
+						"description": "No content"
 					},
 					"405": {
 						"description": "unknown exception"

@@ -9,9 +9,8 @@
   },
   "main": "src/main.ts",
   "scripts": {
-    "deploy": "gcloud app deploy",
-    "prestart": "npm install",
-    "start": "node index.js",
+    "deploy": "gcloud app deploy --project=thecoincore-212314",
+    "start": "node ../../build/rates/index.js",
     "test": "yarn jest",
     "dev": "cross-env NODE_ENV=development && yarn build && node --inspect ../../build/rates-service/main.js",
     "build": "yarn build:api && yarn build:src && yarn build:copy",
