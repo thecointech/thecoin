@@ -4,8 +4,6 @@ import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
 import { ensureLatestRate } from "./UpdateDb";
 import { getRate } from "./db";
 
-
-
 export async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null> {
   console.log("getting rates for %d at %s", key, timestamp);
 

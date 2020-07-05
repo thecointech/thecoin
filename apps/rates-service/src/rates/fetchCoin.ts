@@ -26,7 +26,7 @@ export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate 
     return null;
   }
 
-  const coinRate = getCoinRate(latestValidUntil, data);
+  const coinRate = findRateFor(latestValidUntil, data);
   if (!coinRate) {
     console.error("Cannot find new rate");
     return null;
@@ -36,7 +36,7 @@ export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate 
   return coinRate;
 }
 
-function getCoinRate(lastExpired: number, data: FinnhubData): CoinRate {
+export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 
   const minuteBoundary = (lastExpired - RateOffsetFromMarket) / 1000;
   for (var i = 1; i < 6; i++) {

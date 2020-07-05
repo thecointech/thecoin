@@ -13,6 +13,14 @@ const getRatesCollection = (key: RateKey) =>
 export const getRateDoc = (key: RateKey, ts: number) =>
   getRatesCollection(key).doc(ts.toString())
 
+export const getLatestStored = async (key: RateKey) => {
+  const snapshot = await getRatesCollection(key)
+    .orderBy('validTill', "desc")
+    .limit(1)
+    .get();
+  return snapshot.docs[0].data() as RateType
+}
+
 //
 // Get the stored rate, either encapsulating ts (timestamp) or latest
 //

@@ -5,6 +5,7 @@
 
 import { CoinRate, FxRates, RateKey, RateType } from "./types";
 import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
+import { getLatestStored } from "./db";
 
 //
 // A cached list of all supported exchanges.
@@ -90,4 +91,10 @@ function checkValidity(key: RateKey, newRate: RateType)
       key, newRate.validTill)
 
   return true;
+}
+
+// This should only get called one time, on system initialization
+export const initLatest = async () => {
+  latest.Coin = await getLatestStored("Coin") as CoinRate;
+  latest.FxRates = await getLatestStored("Coin") as FxRates;
 }
