@@ -31,3 +31,5 @@ export async function fetchNewFxRates() {
 //   const [data] = await datastore.get(k)
 //   return data.ValidUntil;
 // }
+
+export * from './types';

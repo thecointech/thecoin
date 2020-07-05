@@ -1,6 +1,5 @@
-import { fetchNewCoinRates } from "FinnHub";
+import { fetchNewCoinRates, FinnhubData } from "../FinnHub";
 import { RateOffsetFromMarket, CoinUpdateInterval, CoinRate } from "./types";
-import { FinnhubData } from "FinnHub/types";
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 
 // var tz = require('timezone/loaded');

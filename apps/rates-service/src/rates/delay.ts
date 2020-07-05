@@ -8,20 +8,22 @@
 
 // How many seconds should we wait after the minute is completed
 // so our data provider has the data ready for us?
-export const BufferSeconds = 5;
+export const BufferMs = 5 * 1000;
 
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// milliseconds until the nearest minute.  May be negative.
-export function msTillMinuteBoundary(time: number) {
+// milliseconds until the nearest minute.  If we have just passed
+// a minute boundary, it will be negative as the nearest minute
+// is -ve milliseconds away
+export function msTillNearestMinute(time: number) {
   const p = 60 * 1000; // milliseconds in an minute
-  return time - Math.round(time / p ) * p;
+  return (Math.round(time / p ) * p) - time;
 }
 
 export async function waitTillBuffer() {
-  let msTillBuffered = BufferSeconds - msTillMinuteBoundary(Date.now());
-  if (msTillBuffered < 5)
+  let msTillBuffered = BufferMs + msTillNearestMinute(Date.now());
+  if (msTillBuffered > 5)
     await sleep(msTillBuffered);
 }

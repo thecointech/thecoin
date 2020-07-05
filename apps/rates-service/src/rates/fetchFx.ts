@@ -1,8 +1,7 @@
+import { CurrencyCode, CurrencyKey } from "@the-coin/utilities/CurrencyCodes";
 import { alignToNextBoundary } from "./fetchUtils";
 import { FXUpdateInterval, FxRates, RatesMapping } from "./types";
-import { fetchNewFxRates } from "FinnHub";
-import { CurrencyCode, CurrencyKey } from "@the-coin/utilities/CurrencyCodes";
-import { FinnhubFxQuotes } from "FinnHub/types";
+import { fetchNewFxRates, FinnhubFxQuotes } from "../FinnHub";
 
 export async function fetchFxRate(now: number, currentValidUntil: number) : Promise<FxRates> {
 

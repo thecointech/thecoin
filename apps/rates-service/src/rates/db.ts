@@ -16,25 +16,30 @@ export const getRateDoc = (key: RateKey, ts: number) =>
 //
 // Get the stored rate, either encapsulating ts (timestamp) or latest
 //
-export async function getRate(key: RateKey, ts?: number) : Promise<RateType|null> {
+export async function getRate(key: RateKey, ts: number) : Promise<RateType|null> {
   const collection = getRatesCollection(key);
   const minValidity = ts ?? Date.now();
-  // Build a query to either get the rate containing ts,
-  // or latest if no ts is supplied.
-  let query = collection.where('validUntil', '>=', minValidity)
-  if (ts != null) {
-    query = query.where('validFrom', '<', ts)
-  }
-  const snapshot = await query.orderBy('validUntil', "desc")
+  // Get the first entry that would be valid after ts
+  let snapshot = await collection.where('validTill', '>', minValidity)
+    .orderBy('validTill', "asc")
     .limit(1)
     .get();
 
   // If we do not have a valid item for this time,
   // we should return the prior valid item (if it exists)
-  return !snapshot.empty
-    ? snapshot.docs[0].data() as RateType
-    : null;
+  if (snapshot.empty)
+    return null;
+
+  const candidate = snapshot.docs[0].data() as RateType
+  // If we have ts, ensure that our entry is not too late
+  if (ts && candidate.validFrom > ts)
+    return null;
+
+  return candidate;
 }
+
+export const getCoinRate = (ts: number) => getRate("Coin", ts);
+export const getFxRates = (ts: number) => getRate("FxRates", ts);
 
 //
 // Set the new rate. Does no validity checking
