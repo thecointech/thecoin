@@ -1,6 +1,7 @@
 import data from './fetch.test.data.json';
 import { findRateFor, findValidUntil } from './fetchCoin';
 import { CoinUpdateInterval } from './types';
+import { alignToNextBoundary } from './fetchUtils';
 
 it('should find a valid rate', () => {
   // Thu Jul 02 2020 13:33:30 GMT-0500 (Central Daylight Time) {}
@@ -9,6 +10,12 @@ it('should find a valid rate', () => {
   expect(rate).toBeTruthy();
   expect(rate.validFrom).toEqual(queryTime);
   expect(rate.validTill).toEqual(queryTime + CoinUpdateInterval);
+})
+
+
+it('Finds an appropriate boundary', () => {
+  // Simple; does it find the right boundary today
+  expect(alignToNextBoundary(1594050770261, CoinUpdateInterval)).toEqual(1594053090000);
 })
 
 
@@ -42,3 +49,4 @@ it('generates an appropriate validTill', async () => {
   expect(b8).toEqual(1594053090000);
 
 });
+
