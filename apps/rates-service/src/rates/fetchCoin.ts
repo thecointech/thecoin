@@ -1,6 +1,7 @@
 import { fetchNewCoinRates, FinnhubData } from "../FinnHub";
 import { RateOffsetFromMarket, CoinUpdateInterval, CoinRate } from "./types";
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
+import { alignToNextBoundary } from "./fetchUtils";
 
 // var tz = require('timezone/loaded');
 // const tzus = tz(require("timezone/America"));
@@ -14,8 +15,7 @@ export function fetchCoinData(latestUntil: number) {
 }
 
 export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate | null> {
-  // So we are legitimately updating.  Fetch
-  // the latest records.
+
   var data = await fetchCoinData(latestValidUntil);
   if (data == null) {
     // Fetch failed (upstream error?)
@@ -32,7 +32,8 @@ export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate 
     return null;
   }
 
-  coinRate.validTill = await findBoundary(coinRate.validTill)
+  // How long should this validity be until?
+  coinRate.validTill = await findValidUntil(Date.now(), latestValidUntil);
   return coinRate;
 }
 
@@ -48,7 +49,7 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
         buy: data.l[idx] / 1000,
         sell: data.h[idx] / 1000,
         validFrom: lastExpired,
-        validTill: lastExpired + CoinUpdateInterval
+        validTill: 0
       }
     }
     //log.debug("Could not find entry for: " + periodStart);
@@ -59,11 +60,33 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
   throw new Error("RateNotFound");
 }
 
-async function findBoundary(validTill: number)
+// When should this rate expire?  It should be after now,
+// it should match our update schedule, and it should only be
+// while the market is open;
+export async function findValidUntil(now: number, lastValidTill: number = 0)
 {
-  const nextOpen = await NextOpenTimestamp(new Date(validTill), 90 * 1000)
-  //log.debug(`NextValid: ${new Date(validTill)} -> ${new Date(nextOpen)}`);
-  return nextOpen;
+  // We offset by OffsetFromMarket.  Ensure that we do not calculate
+  var offset = Math.max(lastValidTill + 1, now + RateOffsetFromMarket)
+  let validTill = alignToNextBoundary(offset, CoinUpdateInterval);
+  // Whats the maximum time we can hold a single validity?
+  let maxValidityWait = validTill + 7 * 24 * 60 * 60 * 1000;
+  while (validTill < maxValidityWait) {
+    // Ensure the market open
+    const nextOpen = await NextOpenTimestamp(new Date(validTill), 0);
+    // If no update, then our value is good as-is
+    if (nextOpen == validTill)
+      return validTill;
+    validTill = nextOpen;
+
+    // Align with our update schedule
+    const nextBoundary = alignToNextBoundary(validTill, CoinUpdateInterval);
+    // If no update, then our value is good as-is
+    if (nextBoundary == validTill)
+      return validTill;
+    validTill = nextBoundary;
+  }
+  //log.error(`NextValid: ${new Date(validTill)} -> ${new Date(nextOpen)}`);
+  return validTill;
 }
 
 // export async function fetchCoinRate(now: number, latestValidUntil: number) : Promise<CoinRate|null> {
