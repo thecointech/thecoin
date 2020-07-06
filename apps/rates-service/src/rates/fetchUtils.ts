@@ -3,7 +3,23 @@ import { RateOffsetFromMarket } from "./types";
 const tz = require('timezone/loaded');
 const tzus = tz(require("timezone/America"));
 
+import {DateTime} from 'luxon';
+
 export function alignToNextBoundary(timestamp: number, updateInterval: number)
+{
+  const initSearchDt = DateTime.fromMillis(timestamp).setZone("America/New_York");
+  // start iterator on the days first boundary
+  let iterator = DateTime.fromObject({
+    // Clone init time, but reset to start-of-day
+    ...initSearchDt.toObject(),
+    // Right now, we hard-code our iterator to start at 0:31:{Offset}
+    hour: 9,
+    minute: 31,
+    millisecond: RateOffsetFromMarket
+  })
+
+}
+export function alignToNextBoundaryOld(timestamp: number, updateInterval: number)
 {
     let hours = tzus(timestamp, "%H", "America/New_York");
     let minutes = tzus(timestamp, "%M", "America/New_York");
