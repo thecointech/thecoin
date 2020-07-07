@@ -2,6 +2,7 @@ import data from './fetch.test.data.json';
 import { findRateFor, findValidUntil } from './fetchCoin';
 import { CoinUpdateInterval } from './types';
 import { alignToNextBoundary } from './fetchUtils';
+import { DateTime } from 'luxon';
 
 it('should find a valid rate', () => {
   // Thu Jul 02 2020 13:33:30 GMT-0500 (Central Daylight Time) {}
@@ -12,10 +13,44 @@ it('should find a valid rate', () => {
   expect(rate.validTill).toEqual(queryTime + CoinUpdateInterval);
 })
 
+const alignDtToNextBoundary = (dt: DateTime) => alignToNextBoundary(dt.toMillis(), CoinUpdateInterval);
 
 it('Finds an appropriate boundary', () => {
   // Simple; does it find the right boundary today
   expect(alignToNextBoundary(1594050770261, CoinUpdateInterval)).toEqual(1594053090000);
+
+  // Complicated: daylight saving
+  const dstDate = DateTime.fromObject({
+    year: 2020,
+    month: 3,
+    day: 8,
+    hour: 2,
+    zone: "America/New_York",
+  });
+
+  // The following tests still fail: DST is hard...
+
+  // Back to midnight
+  const t3 = alignDtToNextBoundary(dstDate.minus({ hours: 2 }));
+  // before DST
+  const t4 = alignDtToNextBoundary(dstDate.minus({ minutes: 30 }));
+  // Exactly on DST
+  const t1 = alignDtToNextBoundary(dstDate);
+  // After DST
+  const t2 = alignDtToNextBoundary(dstDate.plus({ minutes: 5 }));
+  // 6am
+  const t5 = alignDtToNextBoundary(dstDate.plus({ hours: 3 }));
+  // 9am
+  const t6 = alignDtToNextBoundary(dstDate.plus({ hours: 6 }));
+  // End of day
+  const t7 = alignDtToNextBoundary(dstDate.plus({ hours: 21, minutes: 59}));
+  expect(t1).toBe(123);
+  expect(t2).toBe(123);
+  expect(t3).toBe(123);
+  expect(t4).toBe(123);
+  expect(t5).toBe(123);
+  expect(t6).toBe(123);
+  expect(t7).toBe(123);
 })
 
 

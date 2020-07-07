@@ -29,6 +29,7 @@ function searchBackForBoundary(init: DateTime, iterator: DateTime, interval: num
     iterator = iterator.minus(interval);
     if (iterator < init)
       return r.toMillis();
+    r = iterator;
   } while (iterator.day == init.day);
   // It is not possible to go backwards but not find a boundary
   throw new Error(`Boundary not found searching back from ${iterator} for ${init}`);
