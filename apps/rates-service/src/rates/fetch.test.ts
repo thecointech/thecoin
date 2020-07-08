@@ -17,44 +17,63 @@ it('should find a valid rate', async () => {
   expect(rate!.validTill).toEqual(1593718290000);
 })
 
-it('Finds an appropriate boundary', () => {
+it('Finds an appropriate boundary on DST Start', () => {
 
   const alignDtToNextBoundary = (dt: DateTime) => alignToNextBoundary(dt.toMillis(), CoinUpdateInterval);
   // Simple; does it find the right boundary today
   expect(alignToNextBoundary(1594050770261, CoinUpdateInterval)).toEqual(1594053090000);
 
-  // Complicated: daylight saving
-  const dstDate = DateTime.fromObject({
+  const padded = (n: number) => n.toString().padStart(2, "0")
+  const clockTime = (dt: DateTime) => `${padded(dt.hour)}:${padded(dt.minute)}:${padded(dt.second)}`;
+  const testOffset = (dt: DateTime, expected: string) => {
+    const ts = alignDtToNextBoundary(dt);
+    const rdt = DateTime.fromMillis(ts);
+    expect(clockTime(rdt)).toEqual(expected);
+  }
+
+  const TestDstBoundary = (dstDate: DateTime) => {
+    // Back to midnight
+    testOffset(dstDate.minus({ hours: 2 }), "00:31:30")
+    // before DST
+    testOffset(dstDate.minus({ minutes: 30 }), "03:31:30");
+    // Exactly on DST
+    testOffset(dstDate, "03:31:30");
+    // After DST
+    testOffset(dstDate.plus({ minutes: 5 }), "03:31:30");
+    // 6am
+    testOffset(dstDate.plus({ hours: 3 }), "06:31:30");
+    // 9am
+    testOffset(dstDate.plus({ hours: 6 }), "09:31:30");
+  }
+
+  // Complicated: daylight saving start
+  const dstStart = DateTime.fromObject({
     year: 2020,
     month: 3,
     day: 8,
-    hour: 2,
-    zone: "America/New_York",
-  });
-
-  // The following tests still fail: DST is hard...
-
-  // Back to midnight
-  const t3 = alignDtToNextBoundary(dstDate.minus({ hours: 2 }));
-  // before DST
-  const t4 = alignDtToNextBoundary(dstDate.minus({ minutes: 30 }));
-  // Exactly on DST
-  const t1 = alignDtToNextBoundary(dstDate);
-  // After DST
-  const t2 = alignDtToNextBoundary(dstDate.plus({ minutes: 5 }));
-  // 6am
-  const t5 = alignDtToNextBoundary(dstDate.plus({ hours: 3 }));
-  // 9am
-  const t6 = alignDtToNextBoundary(dstDate.plus({ hours: 6 }));
+    hour: 2
+  })
+  TestDstBoundary(dstStart);
   // End of day
-  const t7 = alignDtToNextBoundary(dstDate.plus({ hours: 21, minutes: 59}));
-  expect(t1).toBe(123);
-  expect(t2).toBe(123);
-  expect(t3).toBe(123);
-  expect(t4).toBe(123);
-  expect(t5).toBe(123);
-  expect(t6).toBe(123);
-  expect(t7).toBe(123);
+  const nextDayStart = alignDtToNextBoundary(dstStart.plus({ hours: 20, minutes: 59}));
+  expect(DateTime.fromMillis(nextDayStart).toString()).toEqual("2020-03-09T00:31:30.000-04:00");
+  // After DST
+  testOffset(dstStart.plus({ hours: 1, minutes: 5 }), "06:31:30");
+
+  // Complicated: daylight saving end
+  const dstEnd = DateTime.fromObject({
+    year: 2020,
+    month: 11,
+    day: 3,
+    hour: 2
+  })
+  TestDstBoundary(dstEnd);
+  // After DST
+  testOffset(dstEnd.plus({ hours: 1, minutes: 5 }), "03:31:30");
+
+  // End of day
+  const nextDayEnd = alignDtToNextBoundary(dstEnd.plus({ hours: 20, minutes: 59}));
+  expect(DateTime.fromMillis(nextDayEnd).toString()).toEqual("2020-11-04T00:31:30.000-05:00");
 })
 
 

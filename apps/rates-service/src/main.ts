@@ -3,6 +3,7 @@ import { RegisterRoutes } from './routes/routes';
 //import createMiddleware from 'swagger-express-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
+import './setupLuxon';
 
 const app = express();
 const port = 4000;
