@@ -105,8 +105,8 @@ import { waitTillBuffer } from "./delay";
 
 const fetchNewRate = (key: RateKey, now: number, currentExpires: number) =>
   (key == "Coin")
-    ? fetchCoinRate(currentExpires)
-    : fetchFxRate(now, currentExpires)
+    ? fetchCoinRate(currentExpires, now)
+    : fetchFxRate(currentExpires, now)
 
 export async function ensureLatestRate(key: RateKey, now: number) : Promise<RateType>
 {

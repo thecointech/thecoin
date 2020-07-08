@@ -1,21 +1,25 @@
-import data from './fetch.test.data.json';
-import { findRateFor, findValidUntil } from './fetchCoin';
+import { findValidUntil, fetchCoinRate } from './fetchCoin';
 import { CoinUpdateInterval } from './types';
 import { alignToNextBoundary } from './fetchUtils';
 import { DateTime } from 'luxon';
 
-it('should find a valid rate', () => {
+// Don't go to the server for this
+jest.mock('../FinnHub')
+
+it('should find a valid rate', async () => {
+
   // Thu Jul 02 2020 13:33:30 GMT-0500 (Central Daylight Time) {}
   var queryTime = 1593714810000;
-  const rate = findRateFor(queryTime, data);
+  const rate = await fetchCoinRate(queryTime, queryTime + 10000);
   expect(rate).toBeTruthy();
-  expect(rate.validFrom).toEqual(queryTime);
-  expect(rate.validTill).toEqual(queryTime + CoinUpdateInterval);
+  expect(rate!.validFrom).toEqual(queryTime);
+  // validTill: Thu Jul 02 2020 14:31:30 GMT-0500 (Central Daylight Time) {}
+  expect(rate!.validTill).toEqual(1593718290000);
 })
 
-const alignDtToNextBoundary = (dt: DateTime) => alignToNextBoundary(dt.toMillis(), CoinUpdateInterval);
-
 it('Finds an appropriate boundary', () => {
+
+  const alignDtToNextBoundary = (dt: DateTime) => alignToNextBoundary(dt.toMillis(), CoinUpdateInterval);
   // Simple; does it find the right boundary today
   expect(alignToNextBoundary(1594050770261, CoinUpdateInterval)).toEqual(1594053090000);
 

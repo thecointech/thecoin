@@ -3,7 +3,7 @@ import { alignToNextBoundary } from "./fetchUtils";
 import { FXUpdateInterval, FxRates, RatesMapping } from "./types";
 import { fetchNewFxRates, FinnhubFxQuotes } from "../FinnHub";
 
-export async function fetchFxRate(now: number, currentValidUntil: number) : Promise<FxRates> {
+export async function fetchFxRate(currentValidUntil: number, now: number) : Promise<FxRates> {
 
   // We reset validFrom to be timestamp (as we can't
   // set a price in the past)

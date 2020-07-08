@@ -14,7 +14,7 @@ export function fetchCoinData(latestUntil: number) {
   return fetchNewCoinRates("1", fetchTimestamp, Date.now());
 }
 
-export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate | null> {
+export async function fetchCoinRate(latestValidUntil: number, now: number): Promise<CoinRate | null> {
 
   var data = await fetchCoinData(latestValidUntil);
   if (data == null) {
@@ -33,7 +33,7 @@ export async function fetchCoinRate(latestValidUntil: number): Promise<CoinRate 
   }
 
   // How long should this validity be until?
-  coinRate.validTill = await findValidUntil(Date.now(), latestValidUntil);
+  coinRate.validTill = await findValidUntil(now, latestValidUntil);
   return coinRate;
 }
 
@@ -65,7 +65,8 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 // while the market is open;
 export async function findValidUntil(now: number, lastValidTill: number = 0)
 {
-  // We offset by OffsetFromMarket.  Ensure that we do not calculate
+  // We offset by OffsetFromMarket.  Ensure that we do not calculate a validTill
+  // that is less than the current validUntil
   var offset = Math.max(lastValidTill + 1, now + RateOffsetFromMarket)
   let validTill = alignToNextBoundary(offset, CoinUpdateInterval);
   // Whats the maximum time we can hold a single validity?
