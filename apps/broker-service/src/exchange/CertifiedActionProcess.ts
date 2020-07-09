@@ -2,7 +2,7 @@ import { CertifiedTransfer} from "@the-coin/types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { TransferRecord } from "@the-coin/utilities/Firestore";
+import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 import { DocumentReference } from "@the-coin/types/FirebaseFirestore";
 import { Timestamp } from "@google-cloud/firestore";
 
@@ -17,7 +17,7 @@ async function StoreActionRequest(actionData: CertifiedTransfer, actionType: Use
     const user = actionData.transfer.from;
 
     const actionDoc = GetActionDoc(user, actionType, hash);
-    const data: TransferRecord = {
+    const data: CertifiedTransferRecord = {
         ...actionData,
         recievedTimestamp: Timestamp.now(),
         hash: hash,

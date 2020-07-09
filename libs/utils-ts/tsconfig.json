@@ -9,5 +9,5 @@
 
     "tsBuildInfoFile": "../../build/_obj/utils-ts.buildinfo",
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "types/global.d.ts"]
 }

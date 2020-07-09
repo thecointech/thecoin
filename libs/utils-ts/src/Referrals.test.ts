@@ -6,11 +6,7 @@ import {
 } from "./Referrals";
 import { GetUserDoc } from "./User";
 import { NewAccountReferal } from "@the-coin/types";
-
-import "./Firestore.test";
-import { firestore } from "@firebase/testing";
-import { initializeFirestore } from "./Firestore.test";
-
+import { init, Timestamp } from "./firestore/jestutils";
 
 async function ClearExistingUser(address: string) {
   // Clear it if it exists already
@@ -22,56 +18,59 @@ async function ClearExistingUser(address: string) {
   }
 }
 
-test("Referrals work as expected", async () => {
+describe("Connected DB Referral Tests", () => {
 
-  jest.setTimeout(30000);
-  if (!await initializeFirestore())
-    return;
+  test("Referrals work as expected", async () => {
 
-  const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
+    jest.setTimeout(30000);
+    if (!await init('utilities'))
+      return;
 
-  // Create a referrer
-  const referralId = await CreateReferrer(validAddress, validAddress);
+    const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
 
-  // First, do we get valid referrer address for valid referrer ID
-  let referrerData = await GetReferrerData(referralId);
-  expect(referrerData).not.toBeNull();
-  referrerData = referrerData!;
-  expect(referrerData.address).toMatch(validAddress);
-  //expect(referrerData.signature).st.toMatch(validAddress);
+    // Create a referrer
+    const referralId = await CreateReferrer(validAddress, validAddress);
 
-  // verify it's case insensitive
-  const validIdUC = ("" + referralId).toUpperCase();
-  const verifyUC = await GetReferrerData(validIdUC);
-  expect(verifyUC!.address).toEqual(validAddress);
+    // First, do we get valid referrer address for valid referrer ID
+    let referrerData = await GetReferrerData(referralId);
+    expect(referrerData).not.toBeNull();
+    referrerData = referrerData!;
+    expect(referrerData.address).toMatch(validAddress);
+    //expect(referrerData.signature).st.toMatch(validAddress);
 
-  // verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
-  const junk = "123456";
-  const verifyJunk = await GetReferrerData(junk);
-  expect(verifyJunk).toBeNull();
+    // verify it's case insensitive
+    const validIdUC = ("" + referralId).toUpperCase();
+    const verifyUC = await GetReferrerData(validIdUC);
+    expect(verifyUC!.address).toEqual(validAddress);
 
-  // Running on emulator
-  // Create new account referral
-  const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; //  wallet
-  // Allow any existing to be removed
-  await ClearExistingUser(newAddress);
+    // verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
+    const junk = "123456";
+    const verifyJunk = await GetReferrerData(junk);
+    expect(verifyJunk).toBeNull();
 
-  // Create new referral
-  const referral: NewAccountReferal = {
-    referrerId: junk,
-    newAccount: newAddress
-  };
-  // bad referrer id
-  expect(CreateReferree(referral, firestore.Timestamp.now())).rejects.toThrow("Referrer doesnt exist");
-  // Non-throw is success
-  referral.referrerId = referralId;
-  await CreateReferree(referral, firestore.Timestamp.now());
+    // Running on emulator
+    // Create new account referral
+    const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; //  wallet
+    // Allow any existing to be removed
+    await ClearExistingUser(newAddress);
 
-  // test data store properly
-  const referrer = await GetUsersReferrer(newAddress);
-  expect(referrer).toBeTruthy();
-  expect(referrer!.referrer).toMatch(validAddress);
+    // Create new referral
+    const referral: NewAccountReferal = {
+      referrerId: junk,
+      newAccount: newAddress
+    };
+    // bad referrer id
+    expect(CreateReferree(referral, Timestamp.now())).rejects.toThrow("Referrer doesnt exist");
+    // Non-throw is success
+    referral.referrerId = referralId;
+    await CreateReferree(referral, Timestamp.now());
 
-  // Test re-create fails
-  expect(CreateReferree(referral, firestore.Timestamp.now())).rejects.toThrow("User already exists");
+    // test data store properly
+    const referrer = await GetUsersReferrer(newAddress);
+    expect(referrer).toBeTruthy();
+    expect(referrer!.referrer).toMatch(validAddress);
+
+    // Test re-create fails
+    expect(CreateReferree(referral, Timestamp.now())).rejects.toThrow("User already exists");
+  });
 });

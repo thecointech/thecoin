@@ -1,6 +1,11 @@
 {
   "name": "@the-coin/contract-src",
   "private": true,
+  "workspaces": {
+    "nohoist": [
+      "@openzeppelin/**"
+    ]
+  },
   "version": "2.0.0",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [
@@ -29,8 +34,9 @@
     "contracts/**/*"
   ],
   "devDependencies": {
-    "truffle": "^5.1.12",
     "@openzeppelin/cli": "^2.8.2",
-    "@openzeppelin/upgrades": "^2.8.0"
+    "@openzeppelin/contracts": "^3.1.0",
+    "@openzeppelin/upgrades": "^2.8.0",
+    "truffle": "^5.1.12"
   }
 }

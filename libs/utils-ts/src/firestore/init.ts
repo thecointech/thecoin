@@ -1,6 +1,6 @@
-import { IsDebug } from "@the-coin/utilities/IsDebug";
+import { IsDebug } from '../IsDebug';
 
-export async function init()
+export async function init(project: string)
 {
   if (process.env.GAE_ENV) // Release build, running on server
   {
@@ -11,7 +11,7 @@ export async function init()
   else if (IsDebug) // Debug build, connect to localhost emulator
   {
     const debug = await import('./debug');
-    await debug.init();
+    await debug.init(project);
   }
   else // Release build, running locally (should still talk to server)
   {

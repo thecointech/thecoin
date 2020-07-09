@@ -1,4 +1,4 @@
-export enum CurrencyCodes {
+export enum CurrencyCode {
 	THE = 0,   // THE Currency
 
 	AED = 784, //United Arab Emirates dirham
@@ -181,3 +181,5 @@ export enum CurrencyCodes {
 	ZMW = 967, //Zambian kwacha
 	ZWL = 932, //Zimbabwean dollar
 }
+
+export type CurrencyKey = keyof typeof CurrencyCode;
