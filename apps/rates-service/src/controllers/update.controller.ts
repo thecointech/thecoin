@@ -1,8 +1,8 @@
 import { Controller, Get, Route, Response } from 'tsoa';
-import { updateRates }  from '../internals/rates/UpdateDb';
+import { updateRates }  from '../internals/rates';
 
 @Route('doUpdate')
-export class RatesController extends Controller {
+export class UpdateController extends Controller {
 
     /**
      * Get rates.

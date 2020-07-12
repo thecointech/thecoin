@@ -11,7 +11,7 @@ export { updateRates } from './UpdateDb'
 //
 
 async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null> {
-  console.log("getting rates for %d at %s", key, timestamp);
+  console.log("getting rates for {FxKey} at {Timestamp}", key, timestamp);
 
   // We don't support future times
   if (timestamp > Date.now())
@@ -41,10 +41,15 @@ async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null
   return null;
 }
 
-export async function getCombinedRates(timestamp: number) : Promise<CombinedRates|null>
+export async function getCombinedRates(timestamp?: number) : Promise<CombinedRates|null>
 {
-  const coinWait = getRates("Coin", timestamp);
-  const fxWait = getRates("FxRates", timestamp);
+  // Sanitize our input
+  const cleants = (!timestamp || timestamp > Date.now())
+    ? Date.now()
+    : timestamp;
+
+  const coinWait = getRates("Coin", cleants);
+  const fxWait = getRates("FxRates", cleants);
   var [coin, fx] = await Promise.all([coinWait, fxWait]) as [CoinRate|null, FxRates|null];
 
   if (!coin || !fx)
@@ -76,3 +81,44 @@ export function getLatestCombinedRates() : CombinedRates {
   };
 }
 
+//
+// Get the minimal set of rates covering the times listed in ts
+export async function getManyRates(ts: number[]) : Promise<CombinedRates[]> {
+
+  const r = [] as CombinedRates[];
+  if (ts.length == 0)
+    return r;
+
+  // We don't want to fetch duplicates, so lets ensure we return a minimal amount
+  const sorted = ts.sort();
+  // Only process timestamp requests here: skip 0 and below
+  let lastExpired = 1;
+  for (const ts of sorted)
+  {
+    lastExpired = await maybeInsert(ts, lastExpired, r);
+  }
+  // If we have requested latest (0), then now add it now.  This is because our
+  // prior iteration relies on each ts increasing, and our sorting breaks that;
+  if (sorted[0] <= 0) {
+    await maybeInsert(Date.now(), lastExpired, r);
+  }
+
+
+  return r;
+}
+
+async function maybeInsert(ts: number, lastExpired: number, rates: CombinedRates[]) {
+  if (ts >= lastExpired) {
+    try {
+      const rate = await getCombinedRates(ts);
+      if (rate) {
+        rates.push(rate);
+        return rate.validTill;
+      }
+    }
+    catch (e) {
+      console.exception("Error fetching {Timestamp}", ts, e);
+    }
+  }
+  return lastExpired;
+}
