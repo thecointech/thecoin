@@ -4,7 +4,7 @@ import { CoinRate } from "./types";
 
 describe("DB Connected Tests", () => {
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     jest.setTimeout(10000);
     await init("broker-cad-db-basic");
   })
