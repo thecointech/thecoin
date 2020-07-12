@@ -21,10 +21,13 @@
 				],
 				"responses": {
 					"200": {
-						"description": "Success"
+						"description": "Ok",
+						"schema": {
+							"type": "boolean"
+						}
 					},
 					"204": {
-						"description": "No content"
+						"description": "Success"
 					},
 					"405": {
 						"description": "unknown exception"

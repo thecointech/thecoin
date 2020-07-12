@@ -22,8 +22,9 @@ export function msTillNearestMinute(time: number) {
   return (Math.round(time / p ) * p) - time;
 }
 
-export async function waitTillBuffer() {
-  let msTillBuffered = BufferMs + msTillNearestMinute(Date.now());
-  if (msTillBuffered > 5)
-    await sleep(msTillBuffered);
+export async function waitTillBuffer(minimumWait: number = 0) {
+  const msTillBuffered = BufferMs + msTillNearestMinute(Date.now());
+  const waitTime = Math.max(minimumWait, msTillBuffered);
+  if (waitTime > 5)
+    await sleep(waitTime);
 }

@@ -3,8 +3,13 @@ import { getLatest } from "./latest";
 import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
 import { ensureLatestRate } from "./UpdateDb";
 import { getRate } from "./db";
+export { updateRates } from './UpdateDb'
 
-export async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null> {
+//
+// entry point for anything external to the rates folder
+//
+
+async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null> {
   console.log("getting rates for %d at %s", key, timestamp);
 
   // We don't support future times

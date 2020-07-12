@@ -18,7 +18,9 @@ export const getLatestStored = async (key: RateKey) => {
     .orderBy('validTill', "desc")
     .limit(1)
     .get();
-  return snapshot.docs[0].data() as RateType
+  return snapshot.empty
+   ? null
+   : snapshot.docs[0].data() as RateType
 }
 
 //

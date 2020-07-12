@@ -9,7 +9,7 @@ export class RatesController extends Controller {
      *
      **/
     @Get('')
-    @Response('200', 'Success')
+    @Response('204', 'Success')
     @Response('405', 'unknown exception')
     async doUpdate() {
       try {

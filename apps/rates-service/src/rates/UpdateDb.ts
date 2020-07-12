@@ -11,94 +11,6 @@ import { fetchFxRate } from "./fetchFx";
 import { RateKey, RateOffsetFromMarket, RateType } from "./types";
 import { waitTillBuffer } from "./delay";
 
-//import fetch from "node-fetch";
-//import { ApiKey }  from './ApiKey';
-//import { GetFirestore } from "@the-coin/utilities/Firestore";
-
-//import { ArrayRenderer } from '../../../site/app/containers/HelpDocs/Renderer/ArrayRenderer';
-//import { number } from 'card-validator';
-
-
-
-//
-//  Returns the latest stored rate, or null if none present
-//
-// async function getLastRate(code: number, name: string){
-
-//   const rateDb = await getRateFromDb(code)
-//   const doc = await rateDb.get();
-//   if (doc.exists) {
-//     let Exchange = new ExchangeObj(name, code, doc.data() as any);
-//     return Exchange;
-//   }
-//   return null;
-// }
-
-//
-//  Returns the latest stored rates
-//
-// async function getAllRates(){
-//     // All the supported exchanges
-//     // The Coin Rates
-//     let Exchange0 = await getLastRate(0, "Coin");
-//     if (Exchange0){
-//         Exchanges.splice(0, 0, Exchange0);
-//     }
-//     // The CAD Rates
-//     let Exchange124 = await getLastRate(124, "CAD");
-//     if (Exchange124){
-//         Exchanges.splice(124, 0, Exchange124);
-//     }
-//     return Exchanges;
-// }
-
-//
-//  Returns the latest stored rate, or null if none present
-//
-//export const getLatestRate = (code: number) => exchanges[code].latest;
-//     //let Exchanges = await getAllRates();
-
-//     let exchange = exchanges[code];
-//     if (exchange == null) {
-//         throw new Error("Unsupported Currency");
-//     }
-//     if (exchange.latest != null)
-//         return exchange.latest;
-// }
-
-// export async function setLatestRate(code: number, newRecord: ExchangeRate) {
-//   if (updateLatest(code, newRecord))
-//     await setRate(code, newRecord);
-// }
-
-//////////////////////////////////////////////////////////////////////////
-
-//
-// Gets current rates, and if necessary, generates
-// and stores a new rate.  This function may update
-// the existing rate if it decides that the current
-// rate is still valid (ie - if it decides the market is closed)
-//
-// export async function ensureLatestCoinRate(now: number) {
-//     const latest = getLatestRate(0);
-//     // Quick exit if we are updating again too quickly
-//     // We should only update in the period between
-//     // when the new market values become available
-//     // and when they become our new rates.
-//     if ((latest.validUntil - now) > RateOffsetFromMarket)
-//         return latest;
-
-//     return await updateLatestCoinRate(now, latest.validUntil);
-// }
-
-// export async function updateLatestCoinRate(now: number, latestValidUntil: number) {
-//     let newRecord = await fetchLatestCoinRate(now, latestValidUntil);
-//     if (newRecord){
-//         setLatestRate(0, newRecord);
-//     }
-//     return newRecord;
-// }
-
 /////////////////////////////////////////////////////////////////////////////////
 
 const fetchNewRate = (key: RateKey, now: number, currentExpires: number) =>
@@ -124,8 +36,12 @@ export async function ensureLatestRate(key: RateKey, now: number) : Promise<Rate
     return current;
   }
 
+  // If no previous validity, we have no existing validities and history starts now
+  const currentValidUntil = current.validTill || now;
   // fetch our new rate
-  const newRate = await fetchNewRate(key, now, current.validTill);
+  // TODO: We need to compensate if we have missed some updates.  We can't have
+  // holes in our validity.
+  const newRate = await fetchNewRate(key, now, currentValidUntil);
   console.log("Fetched new rates for {FxKey} with new expiration {ValidUntil}",
     key, newRate?.validTill);
 
@@ -138,39 +54,6 @@ export async function ensureLatestRate(key: RateKey, now: number) : Promise<Rate
   return newRate;
 }
 
-
-// export async function ensureLatestRate(code: number, now:number)
-// {
-//   let latest = getLatestRate(code);
-//   console.log("Updating {FxKey} with latest until {ValidUntil}",
-//     code, latest.validUntil);
-
-//   // Quick exit if we are updating again too quickly
-//   // We should only update in the period between
-//   // when the new market values become available
-//   // and when they become our new rates.
-//   const remainingValidity = latest.validUntil - now;
-//   if (remainingValidity > RateOffsetFromMarket)
-//   {
-//     console.log("Existing {FxKey} has remaining validity {Remaining}, exiting",
-//       code, remainingValidity);
-//     return latest;
-//   }
-
-//   // fetch our new rate
-//   const newRate = await fetchNewRate(code, now, latest.validUntil);
-//   console.log("Fecthed new {FxRate} for code {FxKey}",
-//     newRate, code);
-
-//   // Does the new rate meaningfully update our existing latest rate?
-//   if (!newRate || !updateLatest(code, newRate))
-//     return latest;
-
-//   // If so, then store to DB
-//   await setRate(code, newRate);
-//   return newRate;
-// }
-
 export async function update() {
     try {
       const now = Date.now();
@@ -181,7 +64,7 @@ export async function update() {
       const fxResult = await fxWait;
 
       const minValidity = Math.min(coinResult.validTill, fxResult.validTill);
-      return minValidity;
+      return minValidity > now;
     }
     catch (err) {
         console.error(err);
@@ -190,7 +73,13 @@ export async function update() {
 }
 
 export async function updateRates() {
-  await waitTillBuffer();
-  await update();
+  for (let i = 0; i < 5; i++) {
+    // incremental back-off
+    await waitTillBuffer(i * 5000);
+    // & retry
+    if(await update())
+      return true;
+  }
+  return false;
 }
 
