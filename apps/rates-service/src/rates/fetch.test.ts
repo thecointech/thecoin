@@ -1,21 +1,7 @@
-import { findValidUntil, fetchCoinRate } from './fetchCoin';
+import { findValidUntil } from './fetchCoin';
 import { CoinUpdateInterval } from './types';
 import { alignToNextBoundary } from './fetchUtils';
 import { DateTime } from 'luxon';
-
-// Don't go to the server for this
-jest.mock('../FinnHub')
-
-it('should find a valid rate', async () => {
-
-  // Thu Jul 02 2020 13:33:30 GMT-0500 (Central Daylight Time) {}
-  var queryTime = 1593714810000;
-  const rate = await fetchCoinRate(queryTime, queryTime + 10000);
-  expect(rate).toBeTruthy();
-  expect(rate!.validFrom).toEqual(queryTime);
-  // validTill: Thu Jul 02 2020 14:31:30 GMT-0500 (Central Daylight Time) {}
-  expect(rate!.validTill).toEqual(1593718290000);
-})
 
 it('Finds an appropriate boundary on DST Start', () => {
 
@@ -103,8 +89,5 @@ it('generates an appropriate validTill', async () => {
   // At market open 9:30
   const b7 = await findValidUntil(1594042200000)
   expect(b7).toEqual(1594042290000);
-  const b8 = await findValidUntil(1594042200000, 1594042290000)
-  expect(b8).toEqual(1594053090000);
-
 });
 

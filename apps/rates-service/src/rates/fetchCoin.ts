@@ -11,35 +11,31 @@ export function fetchCoinData(latestUntil: number) {
   return fetchNewCoinRates("1", fetchTimestamp, Date.now());
 }
 
-export async function fetchCoinRate(latestValidUntil: number, now: number): Promise<CoinRate | null> {
+export async function fetchCoinRate(latestValidUntil: number, now: number) {
 
   var data = await fetchCoinData(latestValidUntil);
-  if (data == null) {
-    // Fetch failed (upstream error?)
-    // We can't do much about this, but we should
-    // update current latest rate with new ending time.
-    // TODO!
-    console.error('Could not fetch Coin rates!');
-    return null;
-  }
-
-  const coinRate = findRateFor(latestValidUntil, data);
-  if (!coinRate) {
-    console.error("Cannot find new rate");
-    return null;
+  let nextValid = latestValidUntil;
+  var rates = [] as CoinRate[];
+  while (nextValid < now)
+  {
+    const coinRate = findRateFor(nextValid, data);
+    nextValid = coinRate.validTill = await findValidUntil(nextValid);
+    rates.push(coinRate);
   }
 
   // How long should this validity be until?
-  coinRate.validTill = await findValidUntil(now, latestValidUntil);
-  return coinRate;
+  return rates;
 }
 
 export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 
-  const minuteBoundary = (lastExpired - RateOffsetFromMarket) / 1000;
+  // We have per-minute values.  So round back to the
+  // last minute, then multiply back to seconds
+  const boundary = Math.floor(lastExpired / (60 * 1000)) * 60;
+  //
   for (var i = 1; i < 6; i++) {
     // saerch back 1m at a time
-    const periodStart = minuteBoundary - (i * 60);
+    const periodStart = boundary - (i * 60);
     const idx = data.t.indexOf(periodStart);
     if (idx >= 0) {
       return {
@@ -60,11 +56,11 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 // When should this rate expire?  It should be after now,
 // it should match our update schedule, and it should only be
 // while the market is open;
-export async function findValidUntil(now: number, lastValidTill: number = 0)
+export async function findValidUntil(lastValidTill: number)
 {
   // We offset by OffsetFromMarket.  Ensure that we do not calculate a validTill
   // that is less than the current validUntil
-  var offset = Math.max(lastValidTill + 1, now + RateOffsetFromMarket)
+  var offset = lastValidTill + RateOffsetFromMarket;
   let validTill = alignToNextBoundary(offset, CoinUpdateInterval);
   // Whats the maximum time we can hold a single validity?
   let maxValidityWait = validTill + 7 * 24 * 60 * 60 * 1000;

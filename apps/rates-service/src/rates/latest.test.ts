@@ -1,5 +1,5 @@
 import { initLatest, getLatest } from "./latest"
-import { setRate } from "./db";
+import { setRate, cleanDb } from "./db";
 import { CoinRate, FxRates } from "./types";
 import { init, describe } from "@the-coin/utilities/firestore/jestutils";
 
@@ -7,7 +7,9 @@ describe('we connect', () => {
 
   it('should initialize correctly', async () => {
 
-    await init("broker-cad");
+    await init("broker-cad-init");
+    await cleanDb();
+
     // Insert 5 rates, out of order
     const validTimes = [1000, 9000, 3000, 2000, 6000, 5000];
     var coinRates = validTimes.map(buildCoinRate);

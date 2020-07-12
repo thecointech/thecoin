@@ -42,16 +42,25 @@ function setNewLatest(key: RateKey, newRate: RateType)
     // Only set timeout if we have enough time to wait
     // This is to ensure our switch happens quickly enough,
     // and we do not introduce an unneccessary delay
-    if (waitingPeriod > 5)
-      setTimeout(() => latest[key] = newRate as any, waitingPeriod);
+    if (waitingPeriod > 2)
+      setTimeout(() => completeSetLatest(key, newRate), waitingPeriod);
     else
-      latest[key] = newRate as any;
+      completeSetLatest(key, newRate);
+
     return true;
+}
+
+function completeSetLatest(key: RateKey, newRate: RateType) {
+  console.log("Updating {FxKey} latest cache at {Now}, new expiration: {ValidTill}",
+    key, Date.now(), newRate.validTill);
+
+  latest[key] = newRate as any;
 }
 
 function checkValidity(key: RateKey, newRate: RateType)
 {
   const current = latest[key];
+
   if (newRate.validTill < current.validTill) {
     // Our new rate is no more valid than the current one: bail
     console.error('New rate being set for {FxKey} with validUntil: new {ValidUntil} < current {ValidUntil}',
@@ -65,13 +74,13 @@ function checkValidity(key: RateKey, newRate: RateType)
     // to not overlap and continue
     newRate.validFrom = current.validTill;
   }
-  else if (newRate.validFrom != current.validTill) {
+  else if (newRate.validFrom != current.validTill && current.validTill != 0) {
     console.error('New rate being set for {FxKey} with validity gap: new {ValidFrom} != current {ValidUntil}',
       key, newRate.validFrom, current.validTill);
     // In this case, we have updated too late and the previous rate expired
     // We do not modify the current rate, instead extend the previous rates
     // validity period to meet the new reates validUntil
-    current.validTill = current.validFrom;
+    //current.validTill = current.validFrom;
     // We need to update DB with this valid
   }
 
@@ -87,9 +96,10 @@ function checkValidity(key: RateKey, newRate: RateType)
   // if we don't have at least 5 seconds before the new rate comes into effect, then warn
   // there isn't much we can do about this, but we should be tracking possible errors
   if (newRate.validFrom - Date.now() < 5000)
+  {
     console.warn('New rate for {FxKey} takes effect too quickly: {ValidFrom} - now < 5000',
       key, newRate.validTill)
-
+  }
   return true;
 }
 

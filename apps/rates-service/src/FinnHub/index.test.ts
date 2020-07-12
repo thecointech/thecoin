@@ -25,3 +25,10 @@ it('can fetch fx rates', async () => {
   expect(data.quote.ZAR).toBeGreaterThan(0);
   expect(data.quote.SBD).toBeGreaterThan(0);
 })
+
+it('will throw if cannot fetch', async ()=> {
+  const ts = Date.now();
+  await expect(fetchNewCoinRates("1", ts, ts))
+    .rejects
+    .toThrow("Fetch failed:");
+})

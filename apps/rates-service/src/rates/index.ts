@@ -1,8 +1,9 @@
 import { RateKey, CombinedRates, RateType, CoinRate, FxRates } from "./types";
 import { getLatest } from "./latest";
 import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
-import { ensureLatestRate } from "./UpdateDb";
+import { validFor } from "@the-coin/utilities/FxRates";
 import { getRate } from "./db";
+import { update } from "./UpdateDb";
 export { updateRates } from './UpdateDb'
 
 //
@@ -19,16 +20,25 @@ async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null
   // Double check this is not for the future
   let latest = getLatest(key);
 
-  // If our timestamp is out-of-range for whatever reason, attempt to force update
-  if (latest.validTill <= timestamp) {
-    console.warn("No currency retrieved for {FxKey} at {Timestamp}, attempting update",
-      key, timestamp);
-    return await ensureLatestRate(key, timestamp);
-  }
-  if (latest.validFrom <= timestamp)
+  // If latest matches, return it
+  if (validFor(latest, timestamp)) {
     return latest;
+  }
 
-  return await getRate(key, timestamp);
+  // get from DB
+  let rate = await getRate(key, timestamp);
+  if (rate != null)
+    return rate;
+
+  // Finally, if something has gone really wrong with our updates, try forcing it.
+  // This shouldn't happen, it is most likely an error condition.
+  console.warn("Could not find {FxKey} for {Timestamp}, forcing update",
+    key, timestamp);
+
+  if (await update())
+    return await getRate(key, timestamp);
+  // Nothing doing, return null
+  return null;
 }
 
 export async function getCombinedRates(timestamp: number) : Promise<CombinedRates|null>
