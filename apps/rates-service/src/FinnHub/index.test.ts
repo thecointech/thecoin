@@ -14,5 +14,14 @@ it('can fetch coin rates', async () => {
 
 it('can fetch fx rates', async () => {
   const data = await fetchNewFxRates();
-  expect(data.quote.CAD).toBeTruthy();
+  // Lets ensure that we have normalized to USD
+  expect(data.base).toEqual("USD");
+  expect(data.quote.USD).toBe(1);
+  // Let make our currencies of interest exist
+  expect(data.quote.CAD).toBeGreaterThan(0);
+  expect(data.quote.NZD).toBeGreaterThan(0);
+  expect(data.quote.AUD).toBeGreaterThan(0);
+  expect(data.quote.GBP).toBeGreaterThan(0);
+  expect(data.quote.ZAR).toBeGreaterThan(0);
+  expect(data.quote.SBD).toBeGreaterThan(0);
 })

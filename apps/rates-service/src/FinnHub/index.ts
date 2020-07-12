@@ -1,4 +1,4 @@
-import { FinnhubData, FinnhubFxQuotes, FinnhubRates } from "./types";
+import { FinnhubData, FinnhubRates } from "./types";
 import Axios from 'axios';
 import { finnhub_key } from './secret.json';
 
@@ -14,15 +14,9 @@ export async function fetchNewCoinRates(resolution: string, from: number, to: nu
 
 export async function fetchNewFxRates() {
   //log.trace("Fetching FX rates");
-  var r = await Axios.get<FinnhubRates>(`https://finnhub.io/api/v1/forex/rates?token=${finnhub_key}`);
+  var r = await Axios.get<FinnhubRates>(`https://finnhub.io/api/v1/forex/rates?base=USD&token=${finnhub_key}`);
   //log.debug(`Fetched FX rates: ${r?.statusText} - ${r?.data?.base} base`);
   const { data } = r;
-  const USD = data.quote["USD"];
-  // Map to USD
-  Object.entries(data.quote).forEach(kv => {
-    const key = kv[0] as keyof FinnhubFxQuotes;
-    data.quote[key] = data.quote[key] / USD;
-  })
   return data
 }
 
