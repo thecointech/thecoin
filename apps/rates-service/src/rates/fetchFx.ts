@@ -16,10 +16,10 @@ export async function fetchFxRate(currentValidUntil: number, now: number) : Prom
   // we get as the rate for the next interval
   const {quote} = await fetchNewFxRates();
 
-  // Our currencies come is with string keys.  This loop
+  // Our currencies come in with string keys.  This loop
   // converts them to use the CurrencyCode enum
   var fxRates = {} as RatesMapping;
-  for (let key in Object.keys(quote))
+  for (const key of Object.keys(quote))
   {
     const code = CurrencyCode[key as CurrencyKey];
     if (code) {
