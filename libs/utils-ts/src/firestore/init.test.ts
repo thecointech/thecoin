@@ -1,10 +1,11 @@
-import { init, describe } from './jestutils';
+import { init as debuginit, describe } from './jestutils';
 import { GetFirestore } from '.';
+import { init } from './debug';
 
-describe('Our testing correctly connects to Firestore', ()=> {
+describe('Our testing correctly connects to Firestore', () => {
 
   test("Status is valid", async () => {
-    const db = await init('utilities');
+    const db = await debuginit('utilities');
     if (!db)
       return;
 
@@ -20,5 +21,10 @@ describe('Our testing correctly connects to Firestore', ()=> {
     expect(r.exists).toBeTruthy();
     var data = r.data();
     expect(data!.here).toBeTruthy();
+  })
+
+  it("chooses the right init pathway", async () => {
+    await init("utilities");
+    expect(GetFirestore()).toBeTruthy();
   })
 })

@@ -6,7 +6,7 @@ import swaggerDocument from './api/swagger.json';
 import './setupLuxon';
 import { ServicePorts } from '@the-coin/utilities/ServiceAddresses';
 import { init } from '@the-coin/utilities/firestore';
-import { initLatest } from './rates/latest';
+import { initLatest } from './internals/rates/latest';
 
 const app = express();
 const port = process.env.PORT ?? ServicePorts.THE_CORE;

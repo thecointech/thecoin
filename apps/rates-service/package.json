@@ -19,7 +19,8 @@
     "build:swagger": "yarn tsoa swagger",
     "build:copy": "cpx \"src/api/*.*\" \"../../build/rates-service/api\"",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "test:clean": "rimraf ./coverage",
+    "test:clean": "rimraf ./coverage ",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
     "test": "jest --coverage"
   },
   "engines": {
