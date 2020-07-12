@@ -71,6 +71,10 @@ describe("Inserts all necessary coin rates", () => {
     await cleanDb();
 
     await initCoinLatest(Date.now());
+    // this should throw errors because it will update multiple
+    // so we change the console warn/error fn's to keep output clean
+    console.warn = jest.fn();
+    console.error = jest.fn();
     var didUpdate = await update();
     expect(didUpdate).toBeTruthy();
   });
@@ -82,7 +86,7 @@ async function initCoinLatest(now: number)
     // Search backwards to find an appropriate starting point
     let startValidity = now;
     for (let i = 1; i < 5 && startValidity >= now; i++) {
-      startValidity = await NextOpenTimestamp(new Date(now - (i * 24 * 60 * 60 * 1000)), RateOffsetFromMarket);
+      startValidity = await NextOpenTimestamp(new Date(now - (i * 24 * 60 * 60 * 1000)), 60000 + RateOffsetFromMarket);
     }
     // Fake an initial ts.  This is because the system assumes that there is an initial
     // value (will error if none is found)

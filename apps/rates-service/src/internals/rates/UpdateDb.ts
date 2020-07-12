@@ -13,47 +13,6 @@ import { fetchFxRate } from "./fetchFx";
 
 /////////////////////////////////////////////////////////////////////////////////
 
-// const fetchNewRate = (key: RateKey, currentExpires: number, now: number) =>
-//   (key == "Coin")
-//     ? fetchCoinRate(currentExpires, now)
-//     : fetchFxRate(currentExpires, now)
-
-// export async function ensureLatestRate(key: RateKey, now: number) : Promise<RateType>
-// {
-//   let current = getLatest(key);
-//   console.log("Updating {FxKey} with current expiration {ValidUntil}",
-//     key, current.validTill);
-
-//   // Quick exit if we are updating again too quickly
-//   // We should only update in the period between
-//   // when the new market values become available
-//   // and when they become our new rates.
-//   const remainingValidity = current.validTill - now;
-//   if (remainingValidity > RateOffsetFromMarket)
-//   {
-//     console.log("Existing {FxKey} has remaining validity {Remaining}, exiting",
-//       key, remainingValidity);
-//     return current;
-//   }
-
-//   // If no previous validity, we have no existing validities and history starts 3 days ago
-//   const currentValidUntil = current.validTill;
-//   // fetch our new rate
-//   // TODO: We need to compensate if we have missed some updates.  We can't have
-//   // holes in our validity.
-//   const newRate = await fetchNewRate(key, currentValidUntil, now);
-//   console.log("Fetched new rates for {FxKey} with new expiration {ValidUntil}",
-//     key, newRate?.validTill);
-
-//   // Does the new rate meaningfully update our existing latest rate?
-//   if (!newRate || !updateLatest(key, newRate))
-//     return current;
-
-//   // If so, then store to DB
-//   await setRate(key, newRate);
-//   return newRate;
-// }
-
 //
 // Logs important info, and returns true if we should update.
 function isUpdateRequired(key: RateKey, now: number, current: RateType) {
@@ -129,6 +88,14 @@ export async function ensureLatestFxRate(now: number) {
   const fxRates = await fetchFxRate(current.validTill, now);
   validateNewRate(key, fxRates);
 
+  if (current.validTill < fxRates.validFrom)
+  {
+    // We have a hole in our validity,
+    // update the latest to extend it's validity
+    // until now.
+    current.validTill = fxRates.validFrom;
+    await setRate("FxRates", current);
+  }
   // Insert to DB
   await setRate(key, fxRates);
 

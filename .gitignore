@@ -25,3 +25,4 @@ apps/rates-patcher/data1m.json
 apps/rates-patcher/data5m.json
 secret.json
 **/coverage/**
+!**/summary.txt
