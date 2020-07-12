@@ -1,11 +1,16 @@
-import { init as debuginit, describe } from './jestutils';
-import { GetFirestore } from '.';
-import { init } from './debug';
+jest.mock("./debug");
+jest.mock("./server");
+
+import { init as init_db, describe } from './jestutils';
+import { GetFirestore, init } from '.';
+import { init as init_debug } from './debug';
+import { init as init_server } from './server';
+
 
 describe('Our testing correctly connects to Firestore', () => {
 
   test("Status is valid", async () => {
-    const db = await debuginit('utilities');
+    const db = await init_db('utilities');
     if (!db)
       return;
 
@@ -25,6 +30,12 @@ describe('Our testing correctly connects to Firestore', () => {
 
   it("chooses the right init pathway", async () => {
     await init("utilities");
-    expect(GetFirestore()).toBeTruthy();
+    expect(init_debug).toBeCalled();
+
+    process.env["GAE_ENV"] = "someval";
+    await init("utilities");
+    expect(init_server).toBeCalled();
+
+    //expect(GetFirestore()).toBeTruthy();
   })
 })
