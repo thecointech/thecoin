@@ -1,24 +1,19 @@
 {
   "name": "@the-coin/contract",
-
+  "version": "0.1.1",
+  "description": "The Coin: Solidity contract for The Universal Currency",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "build/contract"
+    "directory": "libs/contract"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-
-  "version": "0.1.0",
-  "description": "The Coin: Solidity contract for The Universal Currency",
-  "keywords": [
-    "THE",
-    "ethereum"
-  ],
-  "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
-  "homepage": "http://thecoin.io",
-  "license": "MIT",
   "scripts": {
     "build": "truffle compile --contracts_build_directory=./build/ && cpx \"zos.*\" ./build/",
     "test": "truffle test",
@@ -30,15 +25,13 @@
     "postinstall.fixme": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
-  "directories": {
-    "contracts": "contracts",
-    "test": "test"
-  },
   "files": [
     "build/**/*"
   ],
-  "main": "./build/TheCoin.json",
-
+  "exports": {
+    ".": "./build/TheCoin.json",
+    "./": "./build/"
+  },
   "devDependencies": {
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contracts": "^3.1.0",
