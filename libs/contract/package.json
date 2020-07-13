@@ -28,6 +28,7 @@
   "files": [
     "build/**/*"
   ],
+  "main": "./build/TheCoin.json",
   "exports": {
     ".": "./build/TheCoin.json",
     "./": "./build/"

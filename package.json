@@ -29,7 +29,6 @@
   "dependencies": {
     "@firebase/testing": "^0.16.14",
     "axios": "^0.19.2",
-    "base32": "^0.0.6",
     "bunyan": "^1.8.12",
     "ethers": "^4.0.46",
     "invariant": "2.2.4",

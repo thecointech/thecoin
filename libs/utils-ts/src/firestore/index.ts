@@ -1,5 +1,4 @@
-import { Firestore, Timestamp } from "@the-coin/types/FirebaseFirestore";
-import { CertifiedTransfer } from "@the-coin/types";
+import { CertifiedTransfer, Firestore, Timestamp } from "@the-coin/types";
 export { init } from "./init";
 
 // Store on global to avoid any weirdities
