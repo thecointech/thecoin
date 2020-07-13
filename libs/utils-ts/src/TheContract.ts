@@ -1,11 +1,12 @@
 import { Wallet, Signer, Contract, ethers } from 'ethers';
 import { SignedMessage } from "@the-coin/types";
 //import { IsDebug } from './IsDebug'
+//import TheCoinSpec from '@the-coin/contract';
 
 type Network = "ropsten"|"mainnet";
 async function BuildContract(network: Network) {
 	const deploy = await import(`@the-coin/contract/zos.${network}.json`);
-	const TheCoinSpec = await import('@the-coin/contract/TheCoin.json');
+	const TheCoinSpec = await import('@the-coin/contract');
 	if (!deploy || !TheCoinSpec)
 		throw new Error('Cannot create contract: missing deployment');
 
@@ -20,7 +21,7 @@ async function BuildContract(network: Network) {
 export const InitialCoinBlock = 4456169;
 
 let _contract: Contract|undefined = undefined;
-export async function GetContract() : Promise<Contract> { 
+export async function GetContract() : Promise<Contract> {
 
 	if (!_contract)
 	{

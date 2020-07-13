@@ -39,7 +39,11 @@
     "declarationMap": true,
 
     "typeRoots": ["./node_modules/@types"],
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "baseUrl": ".",
+    "paths": {
+      "@the-coin/contract": ["./libs/contract/build"]
+    },
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**", "**/*.test.*"]
 }

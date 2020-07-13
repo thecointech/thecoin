@@ -3,11 +3,11 @@
   "compilerOptions": {
 
     "rootDir": "./src",
-    "outDir": "../../build/utils-ts",
+    "outDir": "./build",
 
     "allowSyntheticDefaultImports": true,
 
-    "tsBuildInfoFile": "../../build/_obj/utils-ts.buildinfo",
+    "tsBuildInfoFile": "./build/.buildinfo",
   },
   "include": ["./src/**/*", "types/global.d.ts"]
 }
