@@ -1,4 +1,4 @@
-import { getLatestCombinedRates, getCombinedRates } from '../rates';
+import { getLatestCombinedRates, getCombinedRates } from '../internals/rates';
 /**
  * Exchange Rate
  * Query exchange rate for THE into the given currency

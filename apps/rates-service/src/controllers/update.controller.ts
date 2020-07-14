@@ -1,15 +1,15 @@
 import { Controller, Get, Route, Response } from 'tsoa';
-import { updateRates }  from '../rates/UpdateDb';
+import { updateRates }  from '../internals/rates';
 
 @Route('doUpdate')
-export class RatesController extends Controller {
+export class UpdateController extends Controller {
 
     /**
      * Get rates.
      *
      **/
     @Get('')
-    @Response('200', 'Success')
+    @Response('204', 'Success')
     @Response('405', 'unknown exception')
     async doUpdate() {
       try {

@@ -3,7 +3,13 @@
 	"consumes": [
 		"application/json"
 	],
-	"definitions": {},
+	"definitions": {
+		"CombinedRates": {
+			"properties": {},
+			"type": "object",
+			"additionalProperties": false
+		}
+	},
 	"info": {
 		"title": "@the-coin/rates-service",
 		"version": "0.1.0",
@@ -13,6 +19,86 @@
 		}
 	},
 	"paths": {
+		"/rates/{currencyCode}": {
+			"get": {
+				"operationId": "GetSingle",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/CombinedRates"
+						}
+					},
+					"204": {
+						"description": "Success"
+					},
+					"405": {
+						"description": "unknown exception"
+					}
+				},
+				"description": "Query a single value",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "currencyCode",
+						"required": true,
+						"format": "double",
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "timestamp",
+						"required": false,
+						"format": "double",
+						"type": "number"
+					}
+				]
+			}
+		},
+		"/many": {
+			"get": {
+				"operationId": "GetMany",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"items": {
+								"$ref": "#/definitions/CombinedRates"
+							},
+							"type": "array"
+						}
+					},
+					"204": {
+						"description": "Success"
+					},
+					"405": {
+						"description": "unknown exception"
+					}
+				},
+				"description": "Query many values simultaneously",
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "timestamps",
+						"required": true,
+						"collectionFormat": "multi",
+						"type": "array",
+						"items": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
 		"/doUpdate": {
 			"get": {
 				"operationId": "DoUpdate",
@@ -21,10 +107,13 @@
 				],
 				"responses": {
 					"200": {
-						"description": "Success"
+						"description": "Ok",
+						"schema": {
+							"type": "boolean"
+						}
 					},
 					"204": {
-						"description": "No content"
+						"description": "Success"
 					},
 					"405": {
 						"description": "unknown exception"

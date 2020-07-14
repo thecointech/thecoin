@@ -38,6 +38,11 @@ export type FinnhubFxQuotes = {
     MDL: number,
     MGA: number,
     USD: number,
+
+    AUD: number,
+    NZD: number,
+    ZAR: number,
+    SBD: number,
 }
 export type FinnhubRates = {
     base: keyof FinnhubFxQuotes,

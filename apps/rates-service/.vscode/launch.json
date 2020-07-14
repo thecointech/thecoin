@@ -11,7 +11,9 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/../../build/rates-service/main.js"
+      "preLaunchTask": "build src:rates-service",
+      "program": "${workspaceFolder}/../../build/rates-service/main.js",
+      "envFile": "${workspaceFolder}/../../tools/debug.env"
     },
     {
       "type": "node",

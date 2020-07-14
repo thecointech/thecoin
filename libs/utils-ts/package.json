@@ -10,8 +10,10 @@
   "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
   "homepage": "http://thecoin.io",
   "scripts": {
-    "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest --coverage",
+    "test:clean": "rimraf ./coverage ",
+    "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "license": "MIT",
   "dependencies": {

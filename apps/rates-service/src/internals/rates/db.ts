@@ -1,5 +1,6 @@
 import { GetFirestore } from "@the-coin/utilities/firestore";
 import { RateKey, RateType } from "./types";
+import { IsDebug } from "@the-coin/utilities/IsDebug";
 
 //
 //  All functions connecting to the DB occur in this file
@@ -13,12 +14,14 @@ const getRatesCollection = (key: RateKey) =>
 export const getRateDoc = (key: RateKey, ts: number) =>
   getRatesCollection(key).doc(ts.toString())
 
-export const getLatestStored = async (key: RateKey) => {
+export const getLatestStored = async (key: RateKey) : Promise<RateType|null> => {
   const snapshot = await getRatesCollection(key)
     .orderBy('validTill', "desc")
     .limit(1)
     .get();
-  return snapshot.docs[0].data() as RateType
+  return snapshot.empty
+   ? null
+   : snapshot.docs[0].data() as RateType
 }
 
 //
@@ -52,8 +55,21 @@ export const getFxRates = (ts: number) => getRate("FxRates", ts);
 //
 // Set the new rate. Does no validity checking
 //
-export const setRate = (key: RateKey, rate: RateType) =>
-  getRateDoc(key, rate.validFrom).set(rate, {merge: false});
+export function setRate(key: RateKey, rate: RateType) {
+  console.log("Setting {FxKey} rate with validity {ValidTill}",
+    key, rate.validFrom);
+  return getRateDoc(key, rate.validFrom).set(rate, {merge: false});
+}
+
+// debugging-only function
+export async function cleanDb()
+{
+  if (IsDebug)
+  {
+    await getRatesCollection("Coin").doc().delete();
+    await getRatesCollection("FxRates").doc().delete();
+  }
+}
 
 
 

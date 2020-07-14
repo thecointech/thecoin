@@ -3,7 +3,7 @@ import { alignToNextBoundary } from "./fetchUtils";
 import { FXUpdateInterval, FxRates, RatesMapping } from "./types";
 import { fetchNewFxRates, FinnhubFxQuotes } from "../FinnHub";
 
-export async function fetchFxRate(now: number, currentValidUntil: number) : Promise<FxRates> {
+export async function fetchFxRate(currentValidUntil: number, now: number) : Promise<FxRates> {
 
   // We reset validFrom to be timestamp (as we can't
   // set a price in the past)
@@ -16,10 +16,10 @@ export async function fetchFxRate(now: number, currentValidUntil: number) : Prom
   // we get as the rate for the next interval
   const {quote} = await fetchNewFxRates();
 
-  // Our currencies come is with string keys.  This loop
+  // Our currencies come in with string keys.  This loop
   // converts them to use the CurrencyCode enum
   var fxRates = {} as RatesMapping;
-  for (let key in Object.keys(quote))
+  for (const key of Object.keys(quote))
   {
     const code = CurrencyCode[key as CurrencyKey];
     if (code) {

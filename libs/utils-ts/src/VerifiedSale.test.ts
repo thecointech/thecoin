@@ -6,6 +6,7 @@ import { ETransferPacket } from "@the-coin/types";
 
 test('Can build verified sale', async () => {
 
+  jest.setTimeout(30000);
 	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 

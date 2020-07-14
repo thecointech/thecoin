@@ -11,15 +11,17 @@
   "scripts": {
     "deploy": "gcloud app deploy --project=thecoincore-212314",
     "start": "node ../../build/rates/index.js",
-    "test": "yarn jest",
-    "dev": "cross-env NODE_ENV=development && yarn build && node --inspect ../../build/rates-service/main.js",
+    "dev": "yarn build && node -r dotenv/config --inspect ../../build/rates-service/main.js dotenv_config_path=../../tools/debug.env",
     "build": "yarn build:api && yarn build:src && yarn build:copy",
-    "build:src": "tsc  --build",
+    "build:src": "yarn tsc --build",
     "build:api": "yarn build:routes && yarn build:swagger",
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
     "build:copy": "cpx \"src/api/*.*\" \"../../build/rates-service/api\"",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "test:clean": "rimraf ./coverage ",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "test": "jest --coverage"
   },
   "engines": {
     "node": "12.x.x"
