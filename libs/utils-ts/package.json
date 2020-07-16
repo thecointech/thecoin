@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.2",
+  "version": "0.1.24",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
@@ -12,12 +12,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/contract"
+    "directory": "libs/utils-ts"
   },
   "scripts": {
+    "deploy": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean && cd build && yarn publish",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+
     "build": "yarn tsc",
+    "build:clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
-    "test:clean": "rimraf ./coverage ",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -29,9 +33,12 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/contract": "*",
+    "@google-cloud/firestore": "^2.4.0",
+    "@the-coin/contract": "latest",
     "base32": "^0.0.6",
-    "ethers": "*"
+    "ethers": "^4.0.46",
+    "luxon": "*",
+    "axios": "*"
   },
   "devDependencies": {
     "@the-coin/types": "*",
