@@ -1,6 +1,6 @@
 {
   "name": "@the-coin/utilities",
-  "version": "0.1.24",
+  "version": "0.1.26",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
@@ -20,7 +20,6 @@
     "deploy:clean": "rimraf ./build/.buildinfo",
     "deploy:pre": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
-
     "build": "yarn tsc",
     "build:clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -37,10 +36,10 @@
   "dependencies": {
     "@google-cloud/firestore": "^2.4.0",
     "@the-coin/contract": "latest",
+    "axios": "*",
     "base32": "^0.0.6",
     "ethers": "^4.0.46",
-    "luxon": "*",
-    "axios": "*"
+    "luxon": "*"
   },
   "devDependencies": {
     "@the-coin/types": "*",
