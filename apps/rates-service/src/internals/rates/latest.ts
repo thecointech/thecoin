@@ -89,7 +89,7 @@ function checkValidity(key: RateKey, newRate: RateType)
 
   // Last sanity check, we didn't mess up the new rates validities with this call, did we?
   // We -must- be valid for at least 1 minute
-  if (newRate.validTill - newRate.validFrom < 60)
+  if (newRate.validTill - newRate.validFrom < 60000)
   {
     console.error('New rate being set for {FxKey} with no validity: {ValidFrom} >= {ValidUntil}',
       key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(newRate.validTill));
