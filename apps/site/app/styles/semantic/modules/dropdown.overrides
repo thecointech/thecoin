@@ -4,12 +4,12 @@
 
 
 #createAccountHeader:hover{
-  background-color: #31aabb;
+  background-color: @primaryColor;
   color: white;
 }
 
 #createAccountHeader{
-  background-color: #31aabb;
+  background-color: @primaryColor;
   width: 150px;
   height: 40px;
   line-height: 25px;

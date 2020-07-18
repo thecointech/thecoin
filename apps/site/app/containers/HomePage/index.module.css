@@ -1,7 +1,24 @@
-.mainWrapper .column{
-  margin: 20px;
-  text-align: center;
-  color: #3255A4;
+.landscape {
+  height: 200px;
+  background-image: url('images/1landscapeGreen/sky.svg');
+}
+.landscape .cloudsHigh {
+  position: relative;
+  margin-top: -100px;
+}
+.landscape .cloudsLeft {
+  float: left;
+  position: relative;
+  margin-top: -200px;
+}
+.landscape .cloudsRight {
+  float: right;
+  position: relative;
+  margin-top: -50px;
+}
+.landscape .greenery {
+  position: relative;
+  margin-top: -250px;
 }
 .headingWrapper {
   text-align: left;
@@ -13,86 +30,39 @@
   margin-left: 40px;
   margin-top: 40px;
 }
-.phoneApp img{
-  width: 80%;
-  right: -50px;
-  top: -100px;
-  position: relative;
-  max-width: 200px;
-  max-height: 600px;
+.mainWrapper .column {
+  margin: 20px;
+  text-align: center;
+  color: #3255A4;
 }
-.mainWrapper .column .ui.secondary.button{
-  right: 20px;
-}
-.listHome{
-  margin-top: 40px;
-  margin-left: 20px;
-  margin-bottom: 40px;
-  line-height: 35px;
-  font-size: 15px;
-}
-.h2Home{
-  font-size: 30px;
+.h1Home {
   margin-left: 80px;
   padding-top: 40px;
-  width: 50%;
 }
-#createAccount{
+#createAccount {
   float: right;
 }
-.interac{
-  width: 40px;
-  margin-top: -10px;
-}
-.treeLogo{
-  width: 80px;
-  margin-top: -10px;
-}
-@media only screen and (min-width: 750px) {
-
-  .listHome{
-    font-size: 25px;
-  }
-}
-
-@media only screen and (max-width: 550px) {
-  #phoneZone{
-    display: none;
-  }
-  #infosZone{
-    width: 100% !important;
-  }
-}
 @media only screen and (max-width: 750px) {
-  .h2Home{
+  .h1Home {
     font-size: 25px;
     width: 100%;
     margin-left: 0px;
-  }
-  .listHome{
-    margin-left: 0;
   }
   .headingWrapper {
     margin-left: 0;
     margin-top: 0;
   }
-  .mainWrapper .column{
+  .mainWrapper .column {
     width: 100% !important;
   }
-  .phoneApp img{
-    right: -20px;
-    top: -10px;
+  #subscribeBlock {
+    margin: 0;
   }
-  #subscribeBlock{
-    width: 85%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  #subscribeBlock input{
+  #subscribeBlock input {
     width: 150px;
   }
-  #subscribeBlock button{
-    width: 120px;
-    font-size: 12px;
+  #subscribeBlock button {
+    margin: 0;
   }
 }
+/*# sourceMappingURL=./index.module.css.map */

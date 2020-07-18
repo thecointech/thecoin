@@ -3,31 +3,115 @@
 *******************************/
 
 /*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : #FFFFFF;
+
+@lineHeight          : 1.6em;
+@textColor           : rgba(0, 0, 0, 0.87);
+
+/*-------------------
        Fonts
 --------------------*/
 
-@fontName          : 'Muli';
+@fontName2         : 'Abril Fatface';
+@fontName          : 'Montserrat';
+
+@headerFont        : @fontName2, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+
+/*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+@emSize   : 14px;
+
+/* The size of page text  */
+@fontSize : 14px;
+
 
 /*-------------------
     Brand Colors
 --------------------*/
 
-@primaryColor        : #415DB0;
-@secondaryColor      : #3193A1;
+@primaryColor        : #F18182;
+@secondaryColor      : #20B58D;
 
-@complementaryColor	 : #FFC64A
+@lightPrimaryColor   : @lightBlue;
+@lightSecondaryColor : @lightBlack;
 
-@lightPrimaryColor   : #617AC5;
-@lightSecondaryColor : #51ADBA;
 
-@lightComplementaryColor: #FFDE98
+/*--------------
+  Page Heading
+---------------*/
+
+@headerFontWeight : @bold;
+@headerLineHeight : unit((18 / 14), em);
+
+@h1 : unit((80 / 14), rem);
+@h2 : unit((24 / 14), rem);
+@h3 : unit((18 / 14), rem);
+@h4 : unit((15 / 14), rem);
+@h5 : unit((14 / 14), rem);
+
 
 /*-------------------
-        Page
+       Links
 --------------------*/
 
-@pageBackground      : #F0F0F0;
+@linkColor           : #61C1B8;
+@linkUnderline       : #F18182;
+@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverUnderline  : @linkUnderline;
 
-@lineHeight          : 1.6em;
-@textColor           : rgba(0, 0, 0, 0.87);
+
+/*-------------------
+     Transitions
+--------------------*/
+
+@defaultDuration : 0.1s;
+@defaultEasing   : ease;
+
+
+/*--- Colored Backgrounds ---*/
+@redBackground    : #FFE8E6;
+@orangeBackground : #FFEDDE;
+@yellowBackground : #FFF8DB;
+@oliveBackground  : #FBFDEF;
+@greenBackground  : #E5F9E7;
+@tealBackground   : #E1F7F7;
+@blueBackground   : #DFF0FF;
+@violetBackground : #EAE7FF;
+@purpleBackground : #F6E7FF;
+@pinkBackground   : #FFE3FB;
+@brownBackground  : #F1E2D3;
+
+/*--- Colored Text ---*/
+@redTextColor    : @red;
+@orangeTextColor : @orange;
+@yellowTextColor : #B58105; // Yellow text is difficult to read
+@oliveTextColor  : #8ABC1E; // Olive is difficult to read
+@greenTextColor  : #1EBC30; // Green is difficult to read
+@tealTextColor   : #10A3A3; // Teal text is difficult to read
+@blueTextColor   : @blue;
+@violetTextColor : @violet;
+@purpleTextColor : @purple;
+@pinkTextColor   : @pink;
+@brownTextColor  : @brown;
+
+/*--- Colored Border ---*/
+@redBorderColor    : @redTextColor;
+@orangeBorderColor : @orangeTextColor;
+@yellowBorderColor : @yellowTextColor;
+@oliveBorderColor  : @oliveTextColor;
+@greenBorderColor  : @greenTextColor;
+@tealBorderColor   : @tealTextColor;
+@blueBorderColor   : @blueTextColor;
+@violetBorderColor : @violetTextColor;
+@purpleBorderColor : @purpleTextColor;
+@pinkBorderColor   : @pinkTextColor;
+@brownBorderColor  : @brownTextColor;
 
