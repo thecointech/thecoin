@@ -1,0 +1,15 @@
+{
+  "name": "rates-migration",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/datastore": "^5.1.0",
+    "@the-coin/utilities": "*",
+    "firebase-admin": "^8.13.0"
+  },
+  "scripts": {
+    "dev": "yarn cross-env NODE_ENV=development && yarn build && node --inspect ./build/index.js",
+    "build": "yarn tsc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.apps.json",
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ES2018",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
+    "module": "commonjs",
+    "outDir": "./build",   /* Redirect output structure to the directory. */
+    "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "tsBuildInfoFile": "./build/.buildinfo",         /* Specify file to store incremental compilation information */
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*.*"
+  ],
+  "references": [{ "path": "../../libs/utils-ts/", "prepend": false }]
+}
