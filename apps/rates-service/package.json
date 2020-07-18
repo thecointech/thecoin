@@ -17,7 +17,10 @@
   },
 
   "scripts": {
-    "deploy": "yarn build && gcloud app deploy --project=carbon-theorem-283310",
+    "deploy:copy": "cpx ../../yarn.lock .",
+    "deploy:upload": "gcloud app deploy --project=carbon-theorem-283310",
+    "deploy:clean": "del yarn.lock",
+    "deploy": "yarn build && yarn deploy:copy && yarn deploy:upload && yarn deploy:clean",
     "start": "node ./build/main.js",
     "dev": "yarn build && node -r dotenv/config --inspect ./build/main.js dotenv_config_path=../../tools/debug.env",
     "build": "yarn build:clean && yarn build:api && yarn build:src",

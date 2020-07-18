@@ -3706,6 +3706,18 @@
   resolved "https://registry.yarnpkg.com/@the-coin/contract/-/contract-0.1.1.tgz#fa22f2ae0691b174dd1a8d19a5a292dda24561fc"
   integrity sha512-mljvmHZ3y7/S0U/oUu/CPTzDoZbXL6J+BXEA1V77cbe3DteCnBYs1idlxVYF+iwKamjurxezQDdtOHptkta05w==
 
+"@the-coin/utilities@latest":
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/@the-coin/utilities/-/utilities-0.1.27.tgz#c721857b63d6826869f8771edbedc4959fbc7269"
+  integrity sha512-QIRXkn8lQT9OFziKgNsrY6KqJZEYjSKSJLX2oFf72Z9edAHe808rd7SISRzwogw1ot8dmsYQ0JGvnmL5wcgHAw==
+  dependencies:
+    "@google-cloud/firestore" "^2.4.0"
+    "@the-coin/contract" latest
+    axios "*"
+    base32 "^0.0.6"
+    ethers "^4.0.46"
+    luxon "*"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
