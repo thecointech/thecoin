@@ -3707,9 +3707,9 @@
   integrity sha512-mljvmHZ3y7/S0U/oUu/CPTzDoZbXL6J+BXEA1V77cbe3DteCnBYs1idlxVYF+iwKamjurxezQDdtOHptkta05w==
 
 "@the-coin/utilities@latest":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@the-coin/utilities/-/utilities-0.1.27.tgz#c721857b63d6826869f8771edbedc4959fbc7269"
-  integrity sha512-QIRXkn8lQT9OFziKgNsrY6KqJZEYjSKSJLX2oFf72Z9edAHe808rd7SISRzwogw1ot8dmsYQ0JGvnmL5wcgHAw==
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@the-coin/utilities/-/utilities-0.1.29.tgz#e129812e0b85299a1596ea1c71f5ff69bd3776c3"
+  integrity sha512-tEVD7y1aMBytfbIy84BzAClnY8ZJZx+RV+qn7MHnKxHMykVbZMEvQelwXFV6orL8kxbge83vM9cG/6+ijz+aww==
   dependencies:
     "@google-cloud/firestore" "^2.4.0"
     "@the-coin/contract" latest
@@ -3717,6 +3717,7 @@
     base32 "^0.0.6"
     ethers "^4.0.46"
     luxon "*"
+    typescript "^3.9.7"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -22177,6 +22178,11 @@ typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
+
+typescript@^3.9.7:
+  version "3.9.7"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
+  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
 typical@^2.6.0, typical@^2.6.1:
   version "2.6.1"
