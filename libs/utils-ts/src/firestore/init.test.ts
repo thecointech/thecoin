@@ -2,7 +2,7 @@ jest.mock("./debug");
 jest.mock("./server");
 
 import { init as init_db, describe } from './jestutils';
-import { GetFirestore, init } from '.';
+import { GetFirestore, init, Timestamp } from '.';
 import { init as init_debug } from './debug';
 import { init as init_server } from './server';
 
@@ -26,6 +26,10 @@ describe('Our testing correctly connects to Firestore', () => {
     expect(r.exists).toBeTruthy();
     var data = r.data();
     expect(data!.here).toBeTruthy();
+
+    // Lets check that we can create a Timestamp
+    var ts = Timestamp.now();
+    expect(ts).toBeTruthy();
   })
 
   it("chooses the right init pathway", async () => {

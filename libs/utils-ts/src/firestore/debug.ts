@@ -1,11 +1,12 @@
 
 import * as firebase from '@firebase/testing';
 import "firebase/firestore";
-import { SetFirestore } from './index';
+import { SetFirestore } from './firestore';
+import { Timestamp } from './timestamp';
 
 export const isEmulatorAvailable = process.env.FIRESTORE_EMULATOR != 'false'
 
-export const init = async (projectId: string) => {
+export async function init(projectId: string) {
   if (!isEmulatorAvailable) {
     return null;
   }
@@ -21,9 +22,8 @@ export const init = async (projectId: string) => {
     ssl: false
   });
   SetFirestore(_db as any);
+
+  // Directly link to appropriate Timestamp
+  Timestamp.init(firebase.firestore.Timestamp)
   return _db;
 }
-
-// Directly link to appropriate Timestamp
-const Timestamp = firebase.firestore.Timestamp
-export { Timestamp };

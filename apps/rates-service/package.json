@@ -15,7 +15,7 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "apps/rates-service"
   },
-  "type": "module",
+
   "scripts": {
     "deploy": "yarn build && gcloud app deploy --project=carbon-theorem-283310",
     "start": "node ./build/main.js",

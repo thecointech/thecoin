@@ -92,7 +92,7 @@ async function initCoinLatest(now: number)
     // value (will error if none is found)
     updateLatest("Coin", {
       validTill: startValidity
-    } as CoinRate);
+    } as any as CoinRate);
 
     return startValidity;
 }

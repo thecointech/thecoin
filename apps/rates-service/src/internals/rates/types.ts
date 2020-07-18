@@ -1,4 +1,5 @@
 import {CurrencyCode} from '@the-coin/utilities/CurrencyCodes'
+
 // Rates come into effect 30 seconds afeter the market rate.
 // This to allow us time to update, and give brokers plenty of time
 // to update their local caches before the new rate comes

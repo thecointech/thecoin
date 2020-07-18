@@ -6,7 +6,6 @@ export async function init(project: string)
   {
     const server = await import('./server')
     await server.init();
-
   }
   else if (IsDebug) // Debug build, connect to localhost emulator
   {

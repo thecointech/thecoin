@@ -1,5 +1,5 @@
 import { isEmulatorAvailable } from './debug';
-export { isEmulatorAvailable, init, Timestamp } from './debug';
+export { isEmulatorAvailable, init } from './debug';
 
 ///////////////////////////////////////////////////////////////
 // Firestore helper functions
