@@ -15,9 +15,11 @@
     "directory": "libs/utils-ts"
   },
   "scripts": {
-    "deploy": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean && cd build && yarn publish",
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
     "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
     "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
 
     "build": "yarn tsc",
     "build:clean": "rimraf ./build && rimraf ./coverage",

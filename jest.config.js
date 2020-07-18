@@ -1,4 +1,6 @@
 const path = require('path');
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { compilerOptions } = require('./tsconfig.base.json');
 
 module.exports = {
   verbose: true,
@@ -12,6 +14,8 @@ module.exports = {
   // },
   //testEnvironment: "jest-environment-uint8array",
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
+  modulePathIgnorePatterns: ["build"],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix:"/src/TheCoin/"}),
   moduleFileExtensions: [
     "ts",
     "tsx",

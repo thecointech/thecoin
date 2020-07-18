@@ -20,7 +20,6 @@
   "dependencies": {
     "@google-cloud/firestore": "^2.4.0",
     "cors": "^2.8.5",
-    "ethers": "^4.0.46",
     "express": "^4.16.4",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",

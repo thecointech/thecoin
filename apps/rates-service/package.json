@@ -1,41 +1,47 @@
 {
   "name": "@the-coin/rates-service",
-  "version": "0.1.0",
-  "description": "TheCoin core services.  Published by TheCoin Tech",
-  "author": "TheCoin Tech Inc.",
+  "version": "0.1.1",
+  "private": true,
+  "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://tnadevelopment.visualstudio.com/DefaultCollection/TheCoin/_git/TheCoinCore"
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apps/rates-service"
   },
-  "main": "src/main.ts",
+  "type": "module",
   "scripts": {
-    "deploy": "gcloud app deploy --project=thecoincore-212314",
-    "start": "node ../../build/rates/index.js",
-    "dev": "yarn build && node -r dotenv/config --inspect ../../build/rates-service/main.js dotenv_config_path=../../tools/debug.env",
-    "build": "yarn build:api && yarn build:src && yarn build:copy",
+    "deploy": "yarn build && gcloud app deploy --project=carbon-theorem-283310",
+    "start": "node ./build/main.js",
+    "dev": "yarn build && node -r dotenv/config --inspect ./build/main.js dotenv_config_path=../../tools/debug.env",
+    "build": "yarn build:clean && yarn build:api && yarn build:src",
     "build:src": "yarn tsc --build",
     "build:api": "yarn build:routes && yarn build:swagger",
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
-    "build:copy": "cpx \"src/api/*.*\" \"../../build/rates-service/api\"",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "test:clean": "rimraf ./coverage ",
+    "build:clean": "rimraf ./build && yarn test:clean",
+    "test:clean": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "test": "jest --coverage"
   },
   "engines": {
     "node": "12.x.x"
   },
-  "keywords": [
-    "TheCoin",
-    "Cryptocurrency"
+  "files": [
+    "build/**/*"
   ],
-  "license": "Apache2.0",
-  "private": true,
+  "main": "./build/main.js",
+
   "dependencies": {
-    "@google-cloud/firestore": "^2.4.0",
+    "@the-coin/utilities": "latest",
     "cors": "^2.8.5",
-    "ethers": "^4.0.46",
     "express": "^4.16.4",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",
@@ -45,7 +51,6 @@
     "swagger-express-middleware": "3.0.0-alpha.5",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2",
-    "timezone": "^1.0.23",
     "tsoa": "^2.5.13",
     "axios": "*"
   },

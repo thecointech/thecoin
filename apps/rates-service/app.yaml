@@ -19,7 +19,5 @@ env_variables:
   ENDPOINTS_SERVICE_NAME: thecoincore-212314.appspot.com
   ENDPOINTS_SERVICE_VERSION: 2018-09-15r0
 
-
-
 # TODO: Require secure connection always
 # [END app_yaml]

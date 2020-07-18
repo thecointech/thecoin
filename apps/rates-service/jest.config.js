@@ -5,5 +5,5 @@ module.exports = {
   setupFilesAfterEnv: ['./src/setupLuxon.ts'],
   collectCoverageFrom: [
     'src/internals/**/*.ts'
-  ]
+  ],
 };

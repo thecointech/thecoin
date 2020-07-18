@@ -1,4 +1,3 @@
-
 type FxType = {
   validFrom: number,
   validTill: number

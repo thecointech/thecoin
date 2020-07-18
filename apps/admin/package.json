@@ -129,7 +129,6 @@
     "@the-coin/shared": "*",
     "@types/js-base64": "^2.3.1",
     "@types/puppeteer": "^2.0.1",
-    "base32": "^0.0.6",
     "core-js": "^3.1.4",
     "devtron": "^1.4.0",
     "electron-debug": "^3.0.0",
