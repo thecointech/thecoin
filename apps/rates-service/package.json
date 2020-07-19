@@ -19,6 +19,7 @@
     "deploy:pre": "cpx ../../yarn.lock .",
     "deploy:upload": "gcloud app deploy --project=carbon-theorem-283310",
     "deploy:clean": "del yarn.lock",
+    "deploy:cron": "gcloud app deploy cron.yaml --project=carbon-theorem-283310",
     "deploy": "yarn deploy:pre && yarn build && yarn deploy:upload && yarn deploy:clean",
     "start": "node ./build/main.js",
     "dev": "yarn build && node -r dotenv/config --inspect ./build/main.js dotenv_config_path=../../tools/debug.env",

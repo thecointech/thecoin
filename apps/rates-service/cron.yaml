@@ -1,9 +1,17 @@
 cron:
-- description: "Update exchange rates Daytime"
-  url: /doUpdate
-  schedule: every 3 hours from 09:31 to 23:32
+- description: "Update exchange rates Midnight"
+  url: /api/v1/doUpdate
+  schedule: every day 00:31
   timezone: America/New_York
-- description: "Update exchange rates Early Morning"
-  url: /doUpdate
-  schedule: every 3 hours from 00:31 to 09:00
+- description: "Update exchange rates graveyard shift"
+  url: /api/v1/doUpdate
+  schedule: every day 03:31
+  timezone: America/New_York
+- description: "Update exchange rates first light"
+  url: /api/v1/doUpdate
+  schedule: every day 06:31
+  timezone: America/New_York
+- description: "Update exchange rates Daytime"
+  url: /api/v1/doUpdate
+  schedule: every 3 hours from 09:31 to 23:32
   timezone: America/New_York
