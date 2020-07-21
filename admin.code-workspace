@@ -1,15 +1,18 @@
 {
 	"folders": [
-		{
-			"path": "apps\\admin"
-		},
-		{
-			"path": "libs\\shared"
-		},
-		{
-			"path": "libs\\utils-ts"
-		}
-	],
+    {
+      "path": "apps\\admin"
+    },
+    {
+      "path": "libs\\shared"
+    },
+    {
+      "path": "libs\\utils-ts"
+    },
+    {
+      "path": "libs\\contract"
+    }
+  ],
   "settings": {
     "files.associations": {
       ".babelrc": "jsonc",

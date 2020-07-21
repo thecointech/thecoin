@@ -1,12 +1,11 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es6",
     "baseUrl": "./app/",
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo"
   },
   "include": ["app/**/*", "app/testing/setupTestEnv.js", "app/testing/setupFiles.ts"],
-  "exclude": ["node_modules", "**/*.test.*"],
   "references": [{ "path": "../../libs/shared" }]
 }

@@ -1,10 +1,9 @@
 import { DepositData, BankRecord } from "./types";
-import { fromMillis } from "utils/Firebase";
 import { addNewEntries } from "./process";
 import { PurchaseType } from "autoaction/types";
 import { RbcApi } from "RbcApi";
-import { Timestamp } from "@the-coin/types/FirebaseFirestore";
 import { DateTime } from "luxon";
+import { Timestamp } from "@the-coin/types";
 
 export async function addFromBank(deposits: DepositData[], bankApi: RbcApi) {
   let bankRecords = await parseTransactions(bankApi);
@@ -31,8 +30,8 @@ async function parseTransactions(bankApi: RbcApi) {
   return txs
     .filter(tx => tx.Description1 === "e-Transfer received")
     .map((tx): BankRecord => ({
-      Description: tx.Description1,
-      Amount: tx.CAD,
+      Description: tx.Description1!,
+      Amount: tx.CAD!,
       Details: tx.Description2 || "-- not set --",
       Date: tx.TransactionDate,
     }))
