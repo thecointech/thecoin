@@ -31,6 +31,5 @@
     "types": ["jest", "node"]
   },
   "include": ["app/**/*", "app/testing/setupTestEnv.js", "app/testing/setupFiles.ts"],
-  "exclude": ["node_modules", "**/*.test.*"],
-  "references": [{ "path": "../../libs/shared" }]
+  "exclude": ["node_modules", "**/*.test.*"]
 }

@@ -1,7 +1,7 @@
 import { Wallet, Contract } from 'ethers';
 import encrypted from './BrokerTransferAssistantWallet.json';
 import { key } from './secret.json';
-import {TheContract} from '@the-coin/utilities';
+import {ConnectContract} from '@the-coin/contract';
 import { GetAccountCode as GetAccountCodeBase } from '@the-coin/utilities/Referrals';
 
 let TCWallet: Wallet|null = null;
@@ -21,7 +21,7 @@ async function GetWallet() : Promise<Wallet> {
 async function GetContract() : Promise<Contract> {
 	if (!ConnectedContract) {
 		let wallet = await GetWallet();
-		ConnectedContract = await TheContract.ConnectContract(wallet);
+		ConnectedContract = await ConnectContract(wallet);
 		if (!ConnectedContract)
 			throw "Could not connect to Contract";
 	}

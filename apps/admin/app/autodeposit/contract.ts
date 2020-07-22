@@ -1,7 +1,7 @@
 import { Contract, Wallet } from "ethers";
 import encrypted from './account.json';
 import {key} from './account-secret.json';
-import { TheContract } from "@the-coin/utilities";
+import { ConnectContract } from "@the-coin/contract";
 import { DepositData } from "./types";
 import { log } from "logging";
 
@@ -12,7 +12,7 @@ export async function GetContract() : Promise<Contract> {
   {
     log.debug({address: encrypted.address}, 'Decrypting contract for {address}');
     const TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
-    _contract = await TheContract.ConnectContract(TCWallet);
+    _contract = await ConnectContract(TCWallet);
   }
   return _contract!;
 }

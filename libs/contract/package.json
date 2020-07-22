@@ -15,7 +15,9 @@
     "directory": "libs/contract"
   },
   "scripts": {
-    "build": "truffle compile --contracts_build_directory=./build/ && cpx \"zos.*\" ./build/",
+    "build": "yarn build:contracts && yarn build:tsc",
+    "build:contracts": "truffle compile --contracts_build_directory=./src/deployed && cpx \"zos.*\" ./src/deployed/",
+    "build:tsc": "yarn tsc",
     "test": "truffle test",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
     "zospush": "yarn run zossession && zos push",
@@ -28,15 +30,16 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/TheCoin.json",
+  "main": "./build/index.js",
   "exports": {
-    ".": "./build/TheCoin.json",
+    ".": "./build/index.js",
     "./": "./build/"
   },
   "devDependencies": {
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contracts": "^3.1.0",
     "@openzeppelin/upgrades": "^2.8.0",
-    "truffle": "^5.1.12"
+    "truffle": "^5.1.12",
+    "ethers": "^4.0.46"
   }
 }

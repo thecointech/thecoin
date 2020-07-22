@@ -38,7 +38,6 @@
     "@the-coin/contract": "latest",
     "axios": "*",
     "base32": "^0.0.6",
-    "ethers": "^4.0.46",
     "luxon": "*"
   },
   "devDependencies": {

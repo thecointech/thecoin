@@ -1,4 +1,4 @@
-import { GetContract } from './TheContract'
+import { GetContract } from './index'
 
 const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
 

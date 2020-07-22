@@ -26,3 +26,4 @@ apps/rates-patcher/data5m.json
 secret.json
 **/coverage/**
 !**/summary.txt
+libs/contract/src/deployed/
