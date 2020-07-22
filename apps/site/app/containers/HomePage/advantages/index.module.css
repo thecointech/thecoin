@@ -1,0 +1,13 @@
+.advantages {
+  background-image: url('images/background.svg');
+  max-height: 220px;
+  color: #FFFFFF;
+}
+.advantages h1,
+.advantages h2,
+.advantages h3,
+.advantages h4 {
+  display: inline;
+  margin: 0;
+}
+/*# sourceMappingURL=./index.module.css.map */

@@ -1,3 +1,25 @@
+.landscape {
+  height: 200px;
+  background-image: url('images/sky.svg');
+}
+.landscape .cloudsHigh {
+  position: relative;
+  margin-top: -100px;
+}
+.landscape .cloudsLeft {
+  float: left;
+  position: relative;
+  margin-top: -200px;
+}
+.landscape .cloudsRight {
+  float: right;
+  position: relative;
+  margin-top: -50px;
+}
+.landscape .greenery {
+  position: relative;
+  margin-top: -250px;
+}
 .headingWrapper {
   text-align: left;
   flex-direction: column;
