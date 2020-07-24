@@ -192,18 +192,15 @@ module.exports = options => ({
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
-    plugins: [new TsconfigPathsPlugin({ /*configFile: "./path/to/tsconfig.json" */ })],
+    plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
     alias: {
       '../../theme.config$': path.resolve(
         projectRoot,
         'app/styles/semantic/theme.config',
       ),
-      '@the-coin/shared': path.resolve(
-        systemRoot,
-        'libs',
-        'shared',
-        'src',
-      ),
+      "@the-coin/utilities": "@the-coin/utilities/build",
+      "@the-coin/contract": "@the-coin/contract/build",
+      "@the-coin/shared": "@the-coin/shared/build",
     },
   },
   devtool: options.devtool,

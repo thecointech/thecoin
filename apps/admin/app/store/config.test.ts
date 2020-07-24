@@ -9,7 +9,7 @@ test("Can store KV pairs in Config", async () => {
 
   ConfigStore.initialize({
     adapter: "memory",
-    prefix: null,
+    prefix: undefined,
   });
 
   const key = 'key';

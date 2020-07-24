@@ -5,11 +5,10 @@
     "rootDir": "./src",
     "baseUrl": "./src/",
     "outDir": "./build",
+    "tsBuildInfoFile": "./build/.buildinfo",
 
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
 
-    "tsBuildInfoFile": "./build/.buildinfo",
   },
   "include": ["./src/**/*", "types/global.d.ts"]
 }
