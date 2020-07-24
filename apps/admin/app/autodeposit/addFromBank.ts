@@ -1,9 +1,8 @@
 import { DepositData, BankRecord } from "./types";
-import { fromMillis } from "utils/Firebase";
 import { addNewEntries } from "./process";
 import { PurchaseType } from "autoaction/types";
 import { RbcApi } from "RbcApi";
-import { Timestamp } from "@the-coin/types/FirebaseFirestore";
+import { Timestamp } from "@the-coin/utilities/firestore";
 import { DateTime } from "luxon";
 
 export async function addFromBank(deposits: DepositData[], bankApi: RbcApi) {
@@ -31,8 +30,8 @@ async function parseTransactions(bankApi: RbcApi) {
   return txs
     .filter(tx => tx.Description1 === "e-Transfer received")
     .map((tx): BankRecord => ({
-      Description: tx.Description1,
-      Amount: tx.CAD,
+      Description: tx.Description1!,
+      Amount: tx.CAD!,
       Details: tx.Description2 || "-- not set --",
       Date: tx.TransactionDate,
     }))
@@ -55,7 +54,7 @@ function applyBankRecord(deposit: DepositData, record: BankRecord, allRecords: B
 {
   deposit.bank = record;
   if (!deposit.record.completedTimestamp) {
-    deposit.record.completedTimestamp = fromMillis(record.Date.toMillis());
+    deposit.record.completedTimestamp = Timestamp.fromMillis(record.Date.toMillis());
   }
   if (deposit.record.type === PurchaseType.other) {
     deposit.record.type = PurchaseType.deposit;
@@ -70,7 +69,7 @@ function matchFromTimestamp(deposit: DepositData, bankRecords: BankRecord[]) {
     // This must be it, apply it
     applyBankRecord(deposit, records[0], bankRecords);
   }
-  else {
+  else if (deposit.record.completedTimestamp) {
     // Find the record on the same day as this one
     const record = records.find(compareDateTo(deposit.record.completedTimestamp));
     if (record)
@@ -118,7 +117,7 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
       ? {
           // we cannot be certain that the matched address is/was the one being deposited to
           // (ie, a client may have multiple accounts, and we can't tell which one was intended here)
-          //address: clientData.instruction.address,
+          address: clientData.instruction.address,
           email: clientData.instruction.email,
         }
       : {
@@ -132,8 +131,8 @@ function buildDeposits(bankRecords: BankRecord[], existing: DepositData[]) {
         transfer: {
           value: -1
         },
-        recievedTimestamp: fromMillis(bank.Date.toMillis()),
-        completedTimestamp: fromMillis(bank.Date.toMillis()),
+        recievedTimestamp: Timestamp.fromMillis(bank.Date.toMillis()),
+        completedTimestamp: Timestamp.fromMillis(bank.Date.toMillis()),
         fiatDisbursed: bank.Amount,
         hash: "",
         confirmed: false,

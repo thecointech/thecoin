@@ -1,10 +1,10 @@
 import { IFxRates } from "@the-coin/shared/containers/FxRate";
-import { GetFirestore, CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
+import { GetFirestore, CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 import { decryptTo } from "@the-coin/utilities/Encrypt";
 import { InstructionPacket, GetSigner } from "@the-coin/utilities/VerifiedAction";
 import { UserAction } from "@the-coin/utilities/User";
 
-import { AddSettlementDate, MarkComplete } from "autoaction/utils";
+import { AddSettlementDate, MarkComplete } from "./utils";
 import { log } from "logging";
 
 

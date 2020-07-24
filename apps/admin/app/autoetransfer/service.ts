@@ -1,11 +1,10 @@
-import { CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
-import { now } from "utils/Firebase";
-import { withFiat } from "autoaction/utils";
-import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "autoaction";
-import { getActionPrivateKey } from "autoaction/key";
-import { OfflineFxRates } from "autoaction/fxrates";
-import { log } from "logging";
-import { RbcApi } from "RbcApi";
+import { CertifiedTransferRecord, Timestamp } from "@the-coin/utilities/firestore";
+import { withFiat } from "../autoaction/utils";
+import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "../autoaction";
+import { getActionPrivateKey } from "../autoaction/key";
+import { OfflineFxRates } from "../autoaction/fxrates";
+import { log } from "../logging";
+import { RbcApi } from "../RbcApi";
 import { ETransferPacket } from "@the-coin/types";
 
 export async function processUnsettledETransfers() {
@@ -46,9 +45,9 @@ export async function fetchActionsToComplete()
   const toSettle = await FetchUnsettledRecords('Sell', fxRates);
 
   await fxRates.waitFetches();
-  const ts = now();
+  const ts = Timestamp.now();
   // Filter out all tx's that have not yet settled
-  toSettle.filter(tx => tx.processedTimestamp >= ts)
+  toSettle.filter(tx => tx.processedTimestamp && tx.processedTimestamp >= ts)
   const toComplete = withFiat(toSettle, fxRates.rates);
   log.debug({action: 'Sell'}, `Fetched ${toComplete.length} {action} actions that are ready to complete`);
   return toComplete;

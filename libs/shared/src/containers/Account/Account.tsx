@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { RUrl } from '@the-coin/utilities/RUrl';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
-import { ApplicationBaseState } from "../../types";
+import { ApplicationBaseState } from "types";
 import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
@@ -32,7 +32,7 @@ export const Account = (props: Props) => {
   const { accountMap, account } = props;
   if (!account)
     return <div>No Account Loaded</div>;
-    
+
   const { signer, address } = account;
   const accountActions = useAccountApi(address);
 

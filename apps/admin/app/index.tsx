@@ -6,11 +6,11 @@ import {createReducer} from './reducers';
 import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
-import { RbcStore } from 'RbcApi/store';
-import { ConfigStore } from 'store/config';
+import { RbcStore } from './RbcApi/store';
+import { ConfigStore } from './store/config';
 
 // Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider';
+import LanguageProvider from './containers/LanguageProvider';
 // Import i18n messages
 //import { translationMessages } from './translations/index.js';
 const translationMessages = {
@@ -40,7 +40,7 @@ const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <Provider store={store}>
-    <LanguageProvider messages={translationMessages}>
+    <LanguageProvider locale="en" messages={translationMessages}>
       <ConnectedRouter history={history}>
         <App />
       </ConnectedRouter>

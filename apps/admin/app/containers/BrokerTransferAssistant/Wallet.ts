@@ -9,7 +9,7 @@ let ConnectedContract: Contract|null = null;
 
 async function GetWallet() : Promise<Wallet> {
 	if (!TCWallet) {
-		TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key);
+		TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key, () => {});
 		if (!TCWallet)
 		{
 			throw "Cannot load wallet for some reason";

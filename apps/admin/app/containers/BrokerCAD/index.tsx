@@ -45,12 +45,12 @@ const AccountMap: RouterPath[] = [
   {
     name: "AutoPurchase",
     urlFragment: "autoPurchase",
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Gmail /> )
+    creator: (_routerProps: AccountPageProps) => ((_props: any) => <Gmail /> )
   },
   {
     name: "Clients",
     urlFragment: "clients",
-    creator: (routerProps: AccountPageProps) => ((props: any) => <Clients contract={props.account.contract} /> )
+    creator: (_routerProps: AccountPageProps) => ((props: any) => <Clients contract={props.account.contract} /> )
   }
 ]
 
@@ -65,7 +65,8 @@ export const BrokerCAD = (props: Props) =>  {
     .find(account => account.name === AccountName);
 
   React.useEffect(() => {
-    accountsApi.setActiveAccount(brokerCAD?.address);
+    if (brokerCAD?.address)
+      accountsApi.setActiveAccount(brokerCAD?.address);
   }, [accountsApi, brokerCAD])
 
   const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> {

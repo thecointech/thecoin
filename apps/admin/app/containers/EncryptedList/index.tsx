@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
+import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 import { useFxRatesApi, useFxRates } from "@the-coin/shared/containers/FxRate";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList } from "../TransferList/TransferList";
@@ -67,7 +67,8 @@ export const EncryptedList = ({render, type}: Props) => {
     const record = records[completeIndex];
     await MarkCertComplete(type, record);
     console.log("Record completed: " + completeIndex);
-    setRecords(records => delete records[completeIndex] && records);
+    alert("NOT TESTED: Set breakpoint and then run this");
+    setRecords(records => records.splice(completeIndex));
     setCompleteIndex(-1);
   }, [completeIndex, records]);
 

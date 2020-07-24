@@ -1,9 +1,10 @@
 import { DepositData } from "./types";
-import { RbcApi, ETransferErrorCode } from "RbcApi";
+import { RbcApi, ETransferErrorCode, DepositResult } from "RbcApi";
 import { DepositRecord } from "autoaction/types";
 import { GetActionDoc } from "@the-coin/utilities/User";
 import { GetAccountCode } from "containers/BrokerTransferAssistant/Wallet";
 import { log } from "logging";
+import { IsValidAddress } from "@the-coin/utilities";
 
 
 export function addNewEntries(deposits: DepositData[], moreDeposits: DepositData[])
@@ -12,13 +13,29 @@ export function addNewEntries(deposits: DepositData[], moreDeposits: DepositData
     .sort((a, b) => a.record.recievedTimestamp.seconds - b.record.recievedTimestamp.seconds);
 }
 
-export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) {
-  log.debug(`Attempting deposit of: $${deposit.record.fiatDisbursed}, settled on ${deposit.record.processedTimestamp.toDate().toDateString()}`);
+export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
   const { instruction, record } = deposit;
+  log.debug(`Attempting deposit of: $${record.fiatDisbursed}, settled on ${record.processedTimestamp?.toDate().toDateString()}`);
+  const {address, name, depositUrl} = instruction;
+  if (!address || IsValidAddress(address))
+  {
+    return {
+      message: "Cannot complete deposit without a valid address",
+      code: ETransferErrorCode.InvalidInput
+    }
+  }
+  if (!depositUrl)
+  {
+    return {
+      message: "Cannot complete deposit without a depositUrl",
+      code: ETransferErrorCode.InvalidInput
+    }
+  }
+
   const recieved = record.recievedTimestamp.toDate().toDateString();
-  const code = await GetAccountCode(instruction.address)
-  const prefix = `${instruction.name}/${recieved}`;
-  const result = await rbcApi.depositETransfer(prefix, instruction.depositUrl, code, progressCb);
+  const code = await GetAccountCode(address)
+  const prefix = `${name}/${recieved}`;
+  const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);
   return result;
 }

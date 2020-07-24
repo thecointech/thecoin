@@ -35,12 +35,12 @@
 
     "typeRoots": ["./node_modules/@types"],
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "baseUrl": ".",
+    "baseUrl": "./any/random/path",
     "paths": {
-      "@the-coin/contract/*":   ["./libs/contract/build/*"],
-      "@the-coin/types/*":      ["./libs/types/build/*"],
-      "@the-coin/utilities/*":  ["./libs/utils-ts/build/*"],
-      "@the-coin/shared/*":     ["./libs/shared/build/*"]
+      "@the-coin/contract/*":   ["../../../libs/contract/build/*"],
+      "@the-coin/types/*":      ["../../../libs/types/build/*"],
+      "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
+      "@the-coin/shared/*":     ["../../../libs/shared/build/*"]
     }
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**", "**/*.test.*"]

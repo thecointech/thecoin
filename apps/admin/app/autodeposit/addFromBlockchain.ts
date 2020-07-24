@@ -3,8 +3,8 @@ import { Transaction } from "@the-coin/shared/containers/Account";
 import { weSellAt } from "@the-coin/shared/containers/FxRate";
 import { FXRate } from '@the-coin/pricing'
 import { toHuman, IsValidAddress, NormalizeAddress, toCoin } from "@the-coin/utilities";
-import { fromMillis, toTimestamp } from "utils/Firebase";
-import { PurchaseType } from "autoaction/types";
+import { PurchaseType } from "../autoaction/types";
+import { Timestamp } from "@the-coin/utilities/firestore";
 
 
 export async function addFromBlockchain(deposits: DepositData[], transfers: Transaction[], fxRates: FXRate[])
@@ -107,7 +107,7 @@ function VerifyDeposit(deposit: DepositData, tx: Transaction, allTransfers: Tran
 function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: FXRate[])
 {
   let { address } = deposit.instruction;
-  if (!IsValidAddress(address)) {
+  if (!address || !IsValidAddress(address)) {
     console.error("Cannot process invalid address");
     return;
   }
@@ -116,9 +116,10 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
   const accountTransfers = allTransfers.filter(t => t.counterPartyAddress === address);
 
   // Does the first one match the deposit?
-  if (accountTransfers.length > 0)
+  const processed = deposit.record.processedTimestamp;
+  if (accountTransfers.length > 0 && processed)
   {
-    const dateMatch = accountTransfers.find(t => Math.abs(deposit.record.processedTimestamp.seconds - (t.date.getTime() / 1000)) < 60)
+    const dateMatch = accountTransfers.find(t => Math.abs(processed.seconds - (t.date.getTime() / 1000)) < 60)
     //const dateMatch = accountTransfers.find(t => t.date == deposit.record.processedTimestamp.toDate())
     const tx = dateMatch ?? accountTransfers[0];
     // Now, find one that matches the deposit
@@ -139,11 +140,14 @@ function TryAddHash(deposit: DepositData, allTransfers: Transaction[], fxRates: 
 
 function setTransaction(deposit: DepositData, tx: Transaction, allTransfers: Transaction[])
 {
+  if (!tx.txHash)
+    throw new Error("Cannot set tx without a hash");
+
   deposit.tx = tx;
   deposit.record.hash = tx.txHash;
-  deposit.record.processedTimestamp = fromMillis(tx.date.getTime());
+  deposit.record.processedTimestamp = Timestamp.fromMillis(tx.date.getTime());
   if (!deposit.record.completedTimestamp) {
-    deposit.record.completedTimestamp = fromMillis(tx.date.getTime())
+    deposit.record.completedTimestamp = Timestamp.fromMillis(tx.date.getTime())
   }
   allTransfers.splice(allTransfers.indexOf(tx), 1);
 }
@@ -159,18 +163,22 @@ function buildUnmatchedBCEntries(deposits: DepositData[], allTransfers: Transact
     const deposit = deposits.find(d => d.instruction.address && NormalizeAddress(d.instruction.address) == tx.counterPartyAddress);
     const txValue = toHuman(weSellAt(fxRates, tx.date) * tx.change, true);
 
+    if (!tx.txHash)
+      throw new Error("Cannot create transfer from Tx with missing hash");
+
     const r: DepositData = {
       instruction: {
-        name: deposit?.instruction.name,
-        email: deposit?.instruction.email,
+        name: deposit?.instruction.name ?? "UNDEFINED",
+        email: deposit?.instruction.email ?? "UNDEFINED",
+        address: tx.counterPartyAddress,
       },
       record: {
         transfer: {
           value: tx.change,
         },
-        recievedTimestamp: toTimestamp(tx.date),
-        processedTimestamp: toTimestamp(tx.date),
-        completedTimestamp: toTimestamp(tx.completed),
+        recievedTimestamp: Timestamp.fromDate(tx.date),
+        processedTimestamp: Timestamp.fromDate(tx.date),
+        completedTimestamp: Timestamp.fromDate(tx.completed),
         hash: tx.txHash,
         fiatDisbursed: txValue,
         confirmed: true,

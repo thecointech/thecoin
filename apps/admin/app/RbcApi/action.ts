@@ -68,7 +68,7 @@ export class ApiAction {
     await this.writeStep(stepName);
   }
 
-  async findElementsWithText(elementType: string, searchText) {
+  async findElementsWithText(elementType: string, searchText: string) {
     return this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
   }
 

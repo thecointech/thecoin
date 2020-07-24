@@ -7,8 +7,8 @@ const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
 
 export function BaseStore<T>(name: string) {
   return class BaseStore {
-    protected static db: PouchDB.Database<T>;
-    private static counter: number = 0;
+    static db: PouchDB.Database<T>;
+    static counter: number = 0;
 
     static initialize(options?: PouchDB.Configuration.DatabaseConfiguration) {
       if (BaseStore.db == null) {
@@ -28,7 +28,6 @@ export function BaseStore<T>(name: string) {
       BaseStore.counter = Math.max(0, BaseStore.counter - 1);
       if (0 == BaseStore.counter) {
         await BaseStore.db?.close();
-        BaseStore.db = null;
       }
     }
   }

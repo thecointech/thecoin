@@ -7,7 +7,8 @@ import { NormalizeAddress } from '@the-coin/utilities';
 import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/Referrals';
 import { SetUserVerified } from '@the-coin/utilities/User';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
-import { now } from 'utils/Firebase';
+import { Timestamp } from '@the-coin/utilities/firestore';
+
 
 interface OwnProps {
 	signer: TheSigner,
@@ -21,7 +22,7 @@ const initialState = {
 }
 
 //
-// 
+//
 class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 
 	state = initialState;
@@ -49,8 +50,8 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 			verifiedAccounts: allDocs.docs.map(d => d.data() as VerifiedReferrer)
 		})
   }
-  
-	async verifyAccount(e: React.MouseEvent<HTMLElement>) {
+
+	async verifyAccount(_e: React.MouseEvent<HTMLElement>) {
 
 		const { signer } = this.props;
 		const { account } = this.state;
@@ -61,7 +62,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		const address = NormalizeAddress(account);
 		const signature = await signer.signMessage(address)
 
-		await SetUserVerified(signature, address, now());
+		await SetUserVerified(signature, address, Timestamp.now());
 		await CreateReferrer(signature, address);
 		alert('Done');
 	}
@@ -73,7 +74,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 			return <Message>Please wait, loading</Message>
 		if (verifiedAccounts.length === 0)
 			return <Message>No verified accounts found</Message>
-			
+
 		const verifiedList = verifiedAccounts.map(account => {
 			const code = GetReferrerCode(account.signature);
 			return <List.Item key={account.address}>

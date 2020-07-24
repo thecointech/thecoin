@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { GetFirestore } from "@the-coin/utilities/Firestore";
+import { GetFirestore } from "@the-coin/utilities/firestore";
 import { Contract } from "ethers";
 import { Dictionary } from "lodash";
 import { Transaction } from "@the-coin/shared/containers/Account/types";
