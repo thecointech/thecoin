@@ -1,85 +1,74 @@
 
+.card{
+  background-color: white;
+  margin-left: 30px;
+  border-radius: 15px;
+  border: 0.2px solid #61C1B8;
+  padding: 30px;
+  padding-left: 30px;
+  z-index:10;
+  max-width: 300px;
+}
+
 .landscape{
-  height: 200px;
-  background-image: url('./images/sky.svg');
+
+  .mainWrapper{
+    margin-right: 30px;
+    h1, div{
+      z-index:-1;
+    }
+  }
+  .sky{
+    position: fixed;
+    z-index:-1;
+    top: 100px;
+  }
 
   .cloudsHigh{
-    position: relative;
-    margin-top: -100px;
+    position: fixed;
+    top: 50px;
+    z-index:-1;
   }
   .cloudsLeft{
-    float: left;
-    position: relative;
-    margin-top: -200px;
+    position: fixed;
+    top: 270px;
+    z-index:0;
   }
   .cloudsRight{
-    float: right;
-    position: relative;
-    margin-top: -50px;
+    position: fixed;
+    top: 380px;
+    z-index:-1;
+    right: 10px;
+  }
+  .sun{
+    position: fixed;
+    right: 80px;
+    top: 360px;
+    z-index:4;
+  }
+  .sunAura{
+    position: fixed;
+    right: -200px;
+    top: 40px;
+    opacity: 0.1;
+    z-index:3;
+    -webkit-mask-image:-webkit-gradient(linear, right bottom, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
   }
   .greenery{    
     position: relative;
-    margin-top: -250px;
+    z-index:9;
+    margin-top: -240px;
   }
 
 }
 
-.headingWrapper {
-  text-align: left;
-  flex-direction: column;
-  margin-left: 40px;
-  margin-top: 40px;
-}
-
-.mainWrapper {
-  margin-left: 40px;
-  margin-top: 40px;
-
-
-  .column{
-    margin: 20px;
-    text-align: center;
-    color: #3255A4;
-  }
-
-}
-.h1Home{
-  margin-left: 80px;
-  padding-top: 40px;
-}
-#createAccount{
-  float: right;
-}
 
 @media only screen and (min-width: 750px) {
-
 }
 
 @media only screen and (max-width: 550px) {
-
 }
-@media only screen and (max-width: 750px) {
-  .h1Home{
-    font-size: 25px;
-    width: 100%;
-    margin-left: 0px;
-  }
-  .headingWrapper {
-    margin-left: 0;
-    margin-top: 0;
-  }
-  .mainWrapper .column{
-    width: 100% !important;
-  }
-  #subscribeBlock{
-    margin:0;
-    
-    input{
-      width: 150px;
-    }
 
-    button{
-      margin:0;
-    }
-  }
+@media only screen and (max-width: 750px) {
 }

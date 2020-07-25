@@ -1,11 +1,27 @@
 import * as React from 'react';
+import styles from './index.module.css';
+import { Grid, Button } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
+import plants from "./images/illust_flowers.svg";
 
 export const CreateAccountBig = () => {
 
   return (
     <React.Fragment>
-      CreateBigAccount
+      <Grid textAlign='center' verticalAlign='middle'>
+        <Grid.Row>
+          <Grid.Column>
+            <h3>The benefits of a chequing, savings, and investing account all in one!</h3>
+          </Grid.Column>  
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            <Button as={NavLink} to="/Accounts" content='Create Account' primary size='massive' />
+          </Grid.Column>  
+        </Grid.Row>
+      </Grid>
+
+      <img className={styles.plants} src={plants} />
     </React.Fragment>
   );
 }
-

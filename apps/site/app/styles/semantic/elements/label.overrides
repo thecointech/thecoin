@@ -1,9 +1,3 @@
 /*******************************
          Site Overrides
 *******************************/
-
-.ui.label{
-      background: none;
-      font-size: 10px;
-      padding-left: 8px;
-}

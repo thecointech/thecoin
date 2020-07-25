@@ -10,4 +10,10 @@
   display: inline;
   margin: 0;
 }
+.advantages div.row {
+  padding: 0;
+}
+.advantages hr {
+  color: #ffffff;
+}
 /*# sourceMappingURL=./index.module.css.map */
