@@ -27,41 +27,9 @@ module.exports = options => ({
   module: {
     rules: [
       {
-        test: /\.jsx?$/, // Transform all .js and .jsx files required somewhere with Babel
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: options.babelQuery,
-        },
-      },
-      {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "app"),
         use: options.tsLoaders,
-      },
-      {
-        test: /\.ts(x?)$/,
-        include: path.join(sharedRoot, "src"),
-        loader: 'ts-loader',
-        options: {
-          instance: "shared",
-            configFile: path.join(sharedRoot, 'tsconfig.json'),
-            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-            projectReferences: true,
-            logLevel: 'info',
-        },
-      },
-      {
-        test: /\.ts(x?)$/,
-        include: path.join(utilsRoot, "src"),
-        loader: 'ts-loader',
-        options: {
-          instance: "utils",
-            configFile: path.join(utilsRoot, 'tsconfig.json'),
-            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-            projectReferences: true,
-            logLevel: 'info',
-        },
       },
       {
         // Preprocess our own .css files

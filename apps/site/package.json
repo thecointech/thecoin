@@ -25,8 +25,8 @@
     "build:less": "yarn lessc --include-paths=",
     "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./app/.htaccess\" ./build",
     "build:clean": "rimraf ./build",
-    "dev": "cross-env NODE_ENV=development node server",
-    "dev:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
+    "dev": "yarn cross-env NODE_ENV=development node server",
+    "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start": "yarn test && yarn build && yarn start:server",
     "start:server": "cross-env NODE_ENV=production node server",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
@@ -50,9 +50,6 @@
     "*.{md,json}": [
       "git add --force"
     ]
-  },
-  "resolutions": {
-    "babel-core": "7.0.0-bridge.0"
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",

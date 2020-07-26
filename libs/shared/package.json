@@ -16,8 +16,8 @@
   },
 
   "scripts": {
-    "test": "jest",
-    "build": "tsc -b -v && yarn build:copy",
+    "test": "yarn jest",
+    "build": "yarn tsc -b -v && yarn build:copy",
     "build:copy": "cpx \"./src/**/*.module.css\" ./build/"
   },
 
