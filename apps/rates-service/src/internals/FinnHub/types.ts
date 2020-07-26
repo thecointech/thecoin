@@ -1,4 +1,5 @@
 
+export type FinnhubError = { error: string };
 export type FinnhubData =
 {
     c: number[],
@@ -8,7 +9,7 @@ export type FinnhubData =
     s: string,
     t: number[],
     v: number[]
-}
+};
 
 export type FinnhubFxQuotes = {
     AED: number,
@@ -43,8 +44,14 @@ export type FinnhubFxQuotes = {
     NZD: number,
     ZAR: number,
     SBD: number,
-}
+};
+
 export type FinnhubRates = {
     base: keyof FinnhubFxQuotes,
     quote: FinnhubFxQuotes
+}
+
+
+export function hasError<T>(pet: T|FinnhubError): pet is FinnhubError {
+  return (pet as FinnhubError).error !== undefined;
 }
