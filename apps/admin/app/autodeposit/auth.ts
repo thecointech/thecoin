@@ -37,7 +37,7 @@ export async function authorize() {
   return oAuth2Client
 }
 
-export function isValid(oAuth2Client: OAuth2Client) {
+export function isValid(oAuth2Client: OAuth2Client|null) {
   return !!oAuth2Client?.credentials?.access_token;
 }
 

@@ -1,17 +1,16 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
 import "./ERC20Local.sol";
 import "./LibCertTransfer.sol";
 
-import "openzeppelin-eth/contracts/token/ERC20/ERC20Detailed.sol";
-import "zos-lib/contracts/Initializable.sol";
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
 
-import "openzeppelin-eth/contracts/token/ERC20/IERC20.sol";
-import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 
 
 // ----------------------------------------------------------------------------
-// SpyCoin - A crypto-currency pegged to the SPX (SPY actually)
+// THE:Coin - A crypto-currency pegged to the S&P500
 //
 // Symbol      : SPY
 // Name        : SpyCoin - A cryptocurrency that tracks the S&P500
@@ -22,14 +21,14 @@ import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-// ERC20 Token, with the addition of symbol, name and decimals 
+// ERC20 Token, with the addition of symbol, name and decimals
 //
-// NOTE: 100 SpyCoins is equivalent to 1 share of SPY,
+// NOTE: 100 these is equivalent to 1 share of SPX,
 // or *at time of writing* roughly $2.70 USD
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
+contract TheCoin is Initializable, ERC20Local, LibCertTransfer {
 
     // An account may be subject to a timeout, during which
     // period it is forbidden from transferring its value
@@ -38,9 +37,9 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // A stored list of timestamps that are used to uniquely
     // specify transactions running through paidTransaction.
     // Each tx comes with a timestamp that must be higher than
-    // the last tx timestamp, and (more or less) be in the 
+    // the last tx timestamp, and (more or less) be in the
     // same time as the block being mined.  This ensures
-    // tx authentications are unique, and expire 
+    // tx authentications are unique, and expire
     // relatively shortly after issue
     mapping(address => uint) lastTxTimestamp;
 
@@ -82,10 +81,10 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // Constructor
     // ------------------------------------------------------------------------
     function initialize(address _sender) public
-        initializer() 
+        initializer()
     {
-        ERC20Detailed.initialize("THE: Coin", "THE", 6);
-        
+        ERC20Local.initialize("THE: Coin", "THE", 6);
+
         // Lets just double-check this contract has not
         // yet been initialized.
         require(role_TapCapManager == address(0) && role_Minter == address(0), "System compromised.  Freeze Everything");
@@ -129,8 +128,8 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
         return totalSupply().sub(balanceOf(role_TheCoin));
     }
 
-    // Coins available for sale to the public 
-    function reservedCoins() public view returns (uint balance) 
+    // Coins available for sale to the public
+    function reservedCoins() public view returns (uint balance)
     {
         return balanceOf(role_TheCoin);
     }
@@ -138,23 +137,23 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // ------------------------------------------------------------------------
     // Override standard functions to limit by account freezing
     // ------------------------------------------------------------------------
-    function transfer(address to, uint256 value) public 
-    isTransferable(msg.sender, value) 
-    returns (bool) 
+    function transfer(address to, uint256 value) public override
+    isTransferable(msg.sender, value)
+    returns (bool)
     {
-        return super.transfer(to, value);
+        return ERC20Local.transfer(to, value);
     }
-    function approve(address spender, uint256 value) public 
-    isTransferable(msg.sender, value) 
-    returns (bool) 
+    function approve(address spender, uint256 value) public override
+    isTransferable(msg.sender, value)
+    returns (bool)
     {
-        return super.approve(spender, value);
+        return ERC20Local.approve(spender, value);
     }
-    function increaseAllowance(address spender, uint256 addedValue) public 
-    isTransferable(msg.sender, addedValue) 
-    returns (bool) 
+    function increaseAllowance(address spender, uint256 addedValue) public override
+    isTransferable(msg.sender, addedValue)
+    returns (bool)
     {
-        return super.increaseAllowance(spender, addedValue);
+        return ERC20Local.increaseAllowance(spender, addedValue);
     }
 
     // ------------------------------------------------------------------------
@@ -163,8 +162,8 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // ------------------------------------------------------------------------
 
     function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
-    public 
-    timestampIncreases(from, timestamp) 
+    public
+    timestampIncreases(from, timestamp)
     isTransferable(from, value + fee)
     returns (bool)
     {
@@ -216,16 +215,16 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // Returns the timestamp of when this account will
     // be unfrozen (able to be transacted against)
     // ------------------------------------------------------------------------
-    function accountUnfreezeTime(address account) public 
+    function accountUnfreezeTime(address account) public
     view
-    returns(uint) 
+    returns(uint)
     {
         return freezeUntil[account];
     }
 
 
     // ------------------------------------------------------------------------
-    // Implement escrow 'accounts' for holding amounts in escrow to be used 
+    // Implement escrow 'accounts' for holding amounts in escrow to be used
     // in offline transactions
     // ------------------------------------------------------------------------
 
@@ -269,7 +268,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
         tapCaps[msg.sender].TapCapRefill = amount;
         emit TapCapSetWeekly(msg.sender, amount);
     }
-    
+
     // Clear a users TapCap account.  A user may not directly
     // clear an account, as the user may have a TC debit
     // pending from the spending manager.
@@ -291,12 +290,12 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     function processSpending(address[] memory users, int[] memory amountChange) public
     onlyTapCapManager()
     {
-        uint numChanges = users.length; 
+        uint numChanges = users.length;
         require(numChanges == amountChange.length, "Each entry in users must be matched by an amountChange");
 
         int totalChange = 0;
         int newTotal = 0;
-        for (uint i = 0; i < numChanges; i++) 
+        for (uint i = 0; i < numChanges; i++)
         {
             address user = users[i];
             int delta = amountChange[i];
@@ -346,55 +345,55 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
     // ------------------------------------------------------------------------
     // Don't accept ETH
     // ------------------------------------------------------------------------
-    function () external payable {
+    fallback () external {
         revert("This contract does not run on Ether");
     }
 
     // ------------------------------------------------------------------------
     // Allow updating our key users
     // ------------------------------------------------------------------------
-    function setTapCapManager(address newManager) public 
+    function setTapCapManager(address newManager) public
     onlyTapCapManager
     {
         new_TapCapManager = newManager;
     }
-    function acceptTapCapManager() public 
+    function acceptTapCapManager() public
     {
         require(msg.sender == new_TapCapManager, "Permission Denied");
         role_TapCapManager = new_TapCapManager;
         new_TapCapManager = address(0);
     }
 
-    function setMinter(address newMinter) public 
+    function setMinter(address newMinter) public
     onlyMinter
     {
         new_Minter = newMinter;
     }
-    function acceptMinter() public 
+    function acceptMinter() public
     {
         require(msg.sender == new_Minter, "Permission Denied");
         role_Minter = new_Minter;
         new_Minter = address(0);
     }
 
-    function setTheCoin(address newCoinManager) public 
+    function setTheCoin(address newCoinManager) public
     onlyTheCoin
     {
         new_TheCoin = newCoinManager;
     }
-    function acceptTheCoin() public 
+    function acceptTheCoin() public
     {
         require(msg.sender == new_TheCoin, "Permission Denied");
         role_TheCoin = new_TheCoin;
         new_TheCoin = address(0);
     }
 
-    function setPolice(address newPolice) public 
+    function setPolice(address newPolice) public
     onlyPolice
     {
         new_Police = newPolice;
     }
-    function acceptPolice() public 
+    function acceptPolice() public
     {
         require(msg.sender == new_Police, "Permission Denied");
         role_Police = new_Police;
@@ -444,7 +443,7 @@ contract TheCoin is Initializable, ERC20Detailed, ERC20Local, LibCertTransfer {
         _;
     }
 
-    modifier timestampIncreases(address from, uint256 timestamp) 
+    modifier timestampIncreases(address from, uint256 timestamp)
     {
         require(timestamp > lastTxTimestamp[from], "Provided timestamp is lower than recorded timestamp");
         _;

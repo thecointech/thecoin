@@ -1,20 +1,22 @@
-import PouchDB from 'pouchdb';
 import { ConfigStore } from './config';
+import PouchDB from 'pouchdb';
+import * as fs from 'fs';
 
 beforeAll(() => {
   PouchDB.plugin(require('pouchdb-adapter-memory'));
 });
 
-// afterAll(() => {
-//   ConfigStore.release();
-// });
+afterAll(() => {
+  fs.rmdirSync(tempDbs, {recursive: true});
+})
 
+const tempDbs = '/temp/dbtest';
 
 test("Can store KV pairs in Config", async () => {
 
   ConfigStore.initialize({
     adapter: "memory",
-    prefix: null,
+    prefix: undefined,
   });
 
   const key = 'key';
@@ -38,7 +40,8 @@ test("Can store KV pairs in Config", async () => {
 
 test("Can create DB on disk", async () => {
   jest.setTimeout(5000);
-  const test_prefix = '/temp/dbtest/';
+  const ts = Date.now();
+  const test_prefix = `${tempDbs}/${ts}`;
 
   ConfigStore.initialize({
     prefix: test_prefix,

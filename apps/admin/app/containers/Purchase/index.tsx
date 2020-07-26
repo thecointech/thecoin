@@ -4,27 +4,24 @@ import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import Datetime from 'react-datetime';
 import { Moment } from 'moment';
 
-import { toHuman } from '@the-coin/utilities';
-import { roundPlaces } from '@the-coin/utilities/Conversion';
-
-
 import { getFxRate, FxRatesState, IFxRates, selectFxRate, mapDispatchToProps } from '@the-coin/shared/containers/FxRate';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
 
+
+import { toHuman, roundPlaces } from '@the-coin/utilities';
+import { GetActionDoc } from '@the-coin/utilities/User';
+import { Timestamp } from '@the-coin/utilities/firestore';
+import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
+import { DocumentReference } from '@the-coin/types';
+import { DepositRecord, PurchaseType } from '../../autoaction/types';
+import { GetAccountCode } from '../BrokerTransferAssistant/Wallet';
+
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { GetActionDoc } from '@the-coin/utilities/User';
-import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
-import { GetAccountCode } from 'containers/BrokerTransferAssistant/Wallet';
-import { DocumentReference } from '@the-coin/types/FirebaseFirestore';
-import { DepositRecord, PurchaseType } from 'autoaction/types';
-import { fromMillis } from 'utils/Firebase';
 
-import { now } from 'utils/Firebase';
-//import { firestore } from 'firebase';
 
 type MyProps = AccountState & {
   updateBalance: Function
@@ -58,6 +55,10 @@ class PurchaseClass extends React.PureComponent<Props> {
     const { contract } = this.props;
     const fxRate = this.getSelectedFxRate()
 
+    if (!contract) {
+      alert('No Contract!');
+      return;
+    }
     if (fxRate.fxRate <= 0) {
       alert("Invalid FxRate!")
       return;
@@ -109,8 +110,8 @@ class PurchaseClass extends React.PureComponent<Props> {
         value: coin,
       },
       fiatDisbursed: toHuman(coin * conversionRate, true),
-      recievedTimestamp: fromMillis(recievedDate.getTime()),
-      processedTimestamp: fromMillis(settledDate.getTime()),
+      recievedTimestamp: Timestamp.fromMillis(recievedDate.getTime()),
+      processedTimestamp: Timestamp.fromMillis(settledDate.getTime()),
       confirmed: true,
       hash: 'NONE',
       type,
@@ -136,7 +137,7 @@ class PurchaseClass extends React.PureComponent<Props> {
   async recordTxComplete(purchaseDoc: DocumentReference) {
     try {
       const data: Partial<DepositRecord> = {
-        completedTimestamp: now()
+        completedTimestamp: Timestamp.now()
       }
       await purchaseDoc.update(data);
     }
@@ -235,7 +236,7 @@ class PurchaseClass extends React.PureComponent<Props> {
           <p>Settled: {settledDate.toString()}</p>
           <p>
             FxRate: {roundPlaces(sellRate)} <br />
-            + Valid: {this.renderShortDate(validFrom)} -> {this.renderShortDate(validTill)}<br />
+            + Valid: {this.renderShortDate(validFrom)} -&gt; {this.renderShortDate(validTill)}<br />
             + THE: {fxRate.sell} <br />
             + CAD: {fxRate.fxRate} <br />
           </p>

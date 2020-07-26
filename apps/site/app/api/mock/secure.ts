@@ -2,7 +2,7 @@ import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, Googl
 import { buildResponse, delay } from "./network";
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
-import { AccountMap, ACCOUNTMAP_KEY, initialState, accountMapApi } from "@the-coin/shared/containers/AccountMap";
+import { AccountMap, initialState } from "@the-coin/shared/containers/AccountMap";
 
 
 let wallets = [

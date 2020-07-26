@@ -1,5 +1,3 @@
-
-
 import { ConfigStore } from "../store";
 import { signIn } from "../utils/Firebase";
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
@@ -9,7 +7,6 @@ beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
   ConfigStore.initialize();
-
   await signIn()
 });
 
@@ -22,7 +19,8 @@ test('Can fetch Actions', async ()=> {
   expect(toComplete).not.toBeUndefined();
   for (const record of toComplete)
   {
-    expect(record.fiatDisbursed).toBeTruthy();
+    expect(record).toBeTruthy();
+    expect(record.fiatDisbursed).toBe(0);
   }
 
   const instructions = await getInstructions(toComplete);
@@ -30,7 +28,7 @@ test('Can fetch Actions', async ()=> {
   expect(instructions.length).toBe(toComplete.length);
 })
 
-test('Succesfully Processes Actions', async ()=> {
+test.skip('Succesfully Processes Actions', async ()=> {
   try {
     const toComplete = await processUnsettledETransfers();
 

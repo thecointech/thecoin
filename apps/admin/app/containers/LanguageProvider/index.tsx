@@ -12,9 +12,10 @@ import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
 import { selectLocale } from './selectors';
+import { Dispatch } from 'redux';
 
 export interface ILanguageProviderProps {
-  locale?: string;
+  locale: string;
   messages: { [locale: string]: { [id: string]: string } };
   children?: React.ReactNode;
 }
@@ -35,7 +36,7 @@ export class LanguageProvider extends React.PureComponent<ILanguageProviderProps
 
 const mapStateToProps = selectLocale;
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch) {
   return {
     dispatch: dispatch,
   };

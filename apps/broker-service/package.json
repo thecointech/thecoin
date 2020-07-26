@@ -1,25 +1,42 @@
 {
   "name": "@the-coin/broker-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
-  "main": "src/main.ts",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apps/rates-service"
+  },
   "scripts": {
-    "start": "node ../../build/broker-service/main.js",
-    "dev": "cross-env NODE_ENV=development && yarn build && node --inspect ../../build/broker-service/main.js",
-    "build": "yarn build:api && yarn build:src && yarn build:copy",
-    "build:src": "yarn tsc  --build",
+    "start": "node ./build/main.js",
+    "dev": "cross-env NODE_ENV=development && yarn build && node --inspect ./build/main.js",
+    "build": "yarn build:api && yarn build:src",
+    "build:src": "yarn tsc --build",
     "build:api": "yarn build:routes && yarn build:swagger",
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
-    "build:copy": "cpx \"src/api/*.*\" \"../../build/broker-service/api\"",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "test": "yarn jest --runInBand",
+    "test:coverage": "yarn test --coverage"
   },
-  "license": "Unlicense",
-  "private": true,
+  "engines": {
+    "node": "12.x.x"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/main.js",
   "dependencies": {
-    "@google-cloud/firestore": "^2.4.0",
+    "@the-coin/utilities": "latest",
     "cors": "^2.8.5",
-    "ethers": "^4.0.46",
     "express": "^4.16.4",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",
@@ -30,14 +47,9 @@
     "tsoa": "^2.5.13"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.16.14",
     "@types/node-mailjet": "^3.3.1",
     "@types/swagger-express-middleware": "^1.0.10",
-    "@types/swagger-ui-express": "^4.1.1"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true
-    }
+    "@types/swagger-ui-express": "^4.1.1",
+    "jest": "*"
   }
 }

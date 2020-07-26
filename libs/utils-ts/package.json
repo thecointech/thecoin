@@ -1,25 +1,47 @@
 {
-  "name": "@the-coin/utilities-src",
-  "version": "2.0.0",
+  "name": "@the-coin/utilities",
+  "version": "0.1.27",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
-    "ethereum",
-    "typescript"
+    "ethereum"
   ],
-  "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "scripts": {
-    "test": "jest",
-    "build": "tsc"
-  },
   "license": "MIT",
-  "dependencies": {
-    "@ctrl/ts-base32": "^1.1.4",
-    "@the-coin/contract": "*",
-    "@the-coin/types": "*"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/utils-ts"
+  },
+  "scripts": {
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
+    "build": "yarn tsc",
+    "build:clean": "rimraf ./build && rimraf ./coverage",
+    "test": "jest --coverage",
+    "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
-    "src/**/*"
-  ]
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^2.4.0",
+    "@the-coin/contract": "latest",
+    "axios": "*",
+    "base32": "^0.0.6",
+    "luxon": "*"
+  },
+  "devDependencies": {
+    "@the-coin/types": "*",
+    "jest": "*"
+  }
 }

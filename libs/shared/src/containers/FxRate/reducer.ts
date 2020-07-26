@@ -1,5 +1,5 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
-import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes';
+import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
 import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
@@ -46,7 +46,7 @@ function weSellAt(rates: FXRate[], date?: Date) {
 }
 
 export async function fetchRate(date?: Date): Promise<FXRate | null> {
-  const cc = CurrencyCodes.CAD;
+  const cc = CurrencyCode.CAD;
   console.log(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
   const api = new RatesApi();
   const r = await api.getConversion(cc, date?.getTime() ?? 0);

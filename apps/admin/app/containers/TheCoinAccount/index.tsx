@@ -5,6 +5,7 @@ import { Balance } from '@the-coin/shared/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
+import { ReadFileData, UploadWallet } from '@the-coin/shared/containers/UploadWallet';
 
 
 const AccountMap: RouterPath[] = [
@@ -17,7 +18,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Minting",
     urlFragment: "mint",
-    creator: () => ((props: any) => <Mint />),
+    creator: () => (() => <Mint />),
   },
   {
     name: "Complete Purchase",
@@ -37,9 +38,26 @@ export const TheCoin = (props: RouteComponentProps) => {
     .find(account => account.name === AccountName);
 
   useEffect(() => {
-    accountsApi.setActiveAccount(theCoin?.address);
+    accountsApi.setActiveAccount(theCoin?.address ?? null);
   }, [accountsApi, theCoin])
 
+  const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const target: any = e.target;
+        const data = target.result;
+        resolve({
+          wallet: data,
+          name: AccountName }
+        );
+      };
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  }, []);
 
-  return <Account account={theCoin} accountMap={AccountMap} url={url} />
+  return theCoin
+    ? <Account account={theCoin} accountMap={AccountMap} url={url} />
+    : <UploadWallet readFile={onReadFile} />
 }

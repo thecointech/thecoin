@@ -295,10 +295,10 @@
 	},
 	"info": {
 		"title": "@the-coin/broker-service",
-		"version": "0.1.0",
+		"version": "0.1.1",
 		"description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
 		"license": {
-			"name": "Unlicense"
+			"name": "MIT"
 		}
 	},
 	"paths": {

@@ -1,4 +1,5 @@
 {
   "deepcode.review.results.hideInformationIssues": false,
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "jest.pathToJest": "yarn jest",
+  "jest.debugMode": true
 }

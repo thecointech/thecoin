@@ -8,36 +8,27 @@
     ]
   },
   "version": "2.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "git://github.com/thecointech/thecoin.git"
   },
-  "engines": {
-    "npm": ">=5",
-    "node": ">=8.15.1"
-  },
-  "author": "Max Stoiber",
+  "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "yarn analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
     "extract-intl": "node -r esm ./internals/scripts/extract-intl.js",
-    "npmcheckversion": "node ./internals/scripts/npmcheckversion.js",
-    "preinstall": "yarn npmcheckversion",
     "prebuild": "yarn build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:less": "yarn lessc --include-paths=",
-    "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ../../build/.obj/site && cpx \"./app/.htaccess\" ../../build/.obj/site",
-    "temp": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
-    "build:clean": "rimraf ../../build/site",
-    "start": "cross-env NODE_ENV=development node server",
-    "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
-    "start:production": "yarn test && yarn build && yarn start:prod",
-    "start:prod": "cross-env NODE_ENV=production node server",
-    "setup": "node ./internals/scripts/setup.js",
-    "clean": "shjs ./internals/scripts/clean.js",
+    "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./app/.htaccess\" ./build",
+    "build:clean": "rimraf ./build",
+    "dev": "yarn cross-env NODE_ENV=development node server",
+    "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
+    "start": "yarn test && yarn build && yarn start:server",
+    "start:server": "cross-env NODE_ENV=production node server",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",
@@ -49,8 +40,7 @@
     "test:clean": "rimraf ./coverage",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "prettify": "prettier --write"
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -60,14 +50,6 @@
     "*.{md,json}": [
       "git add --force"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:tslint"
-    }
-  },
-  "resolutions": {
-    "babel-core": "7.0.0-bridge.0"
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
@@ -140,8 +122,8 @@
     "semantic-ui-less": "^2.4.1",
     "shelljs": "0.8.3",
     "svg-url-loader": "3.0.0",
-    "ts-node": "8.1.0",
     "tsconfig-paths": "3.4.1",
-    "whatwg-fetch": "3.0.0"
+    "whatwg-fetch": "3.0.0",
+    "jest": "*"
   }
 }

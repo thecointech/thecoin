@@ -1,13 +1,12 @@
-import { GetFirestore } from "@the-coin/utilities/Firestore";
+import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
 import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
 import { SubscriptionDetails } from "@the-coin/types";
-import { Timestamp } from "@google-cloud/firestore";
 
 interface EmailSubscription extends SubscriptionDetails {
   registerDate: Timestamp,
 }
 
-const GetCollection = () => 
+const GetCollection = () =>
   GetFirestore().collection("newsletter");
 
 const GetDoc = (id: string) =>
@@ -21,8 +20,8 @@ export async function SubDoc(email: string)
                           .where('email', '==', normalized)
                           .limit(1)
                           .get();
-  return !snapshot.empty ? 
-    collection.doc(snapshot.docs[0].id) : 
+  return !snapshot.empty ?
+    collection.doc(snapshot.docs[0].id) :
     collection.doc(); // new empty document
 }
 
@@ -54,7 +53,7 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
   {
     console.log("Invalid email submitted: " + email);
     return false;
-  } 
+  }
   if (details.email) {
     details.email = details.email.toLowerCase();
 
@@ -74,11 +73,11 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
   const userDoc = await SubDoc(String(email));
   await userDoc.set(register, {merge: true});
 
-  return sendMail  
+  return sendMail
     ? await SendTemplate(
-      "newsletter@thecoin.io", 
-      String(email), 
-      TemplateId.WelcomeConfirm, 
+      "newsletter@thecoin.io",
+      String(email),
+      TemplateId.WelcomeConfirm,
       {
         confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(userDoc.id)
       })
@@ -91,10 +90,8 @@ export async function Confirm(details: SubscriptionDetails) : Promise<Subscripti
     return null;
 
   const userDoc = GetDoc(details.id);
-  const res = await userDoc.update(details);
-  if (!res.writeTime)
-    return null;
-  
+  await userDoc.update(details);
+
   const newDetails = await userDoc.get();
   return newDetails.data() as SubscriptionDetails;
 }

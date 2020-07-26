@@ -3,13 +3,13 @@ import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
 import { log } from '../logging';
 import { RbcApi, ETransferErrorCode } from "../RbcApi";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { fromMillis, now } from "../utils/Firebase";
-import { TransferRecord, DepositRecord } from "autoaction/types";
+import { TransferRecord, DepositRecord } from "../autoaction/types";
 import { RatesApi } from '@the-coin/pricing';
 import { depositInBank, storeInDB } from "./process";
-import { toCoin } from "@the-coin/utilities";
+import { toCoin, isPresent } from "@the-coin/utilities";
 import { completeTheTransfer } from "./contract";
 import { DepositData } from "./types";
+import { Timestamp } from "@the-coin/utilities/firestore";
 
 
 export async function FetchDepositEmails()
@@ -31,25 +31,27 @@ export async function FetchDepositEmails()
 export async function setSettlementDate(record: TransferRecord) {
   const recievedAt = record.recievedTimestamp.toDate()
   const nextOpen = await NextOpenTimestamp(recievedAt);
-  record.processedTimestamp = fromMillis(nextOpen);
+  record.processedTimestamp = Timestamp.fromMillis(nextOpen);
   return record.processedTimestamp;
 }
 
-async function setCoinRate(record: DepositRecord)
-{
+async function setCoinRate(record: DepositRecord) {
   const ratesApi = new RatesApi();
   const { processedTimestamp } = record;
+  if (processedTimestamp == null) {
+    log.error("Cannot calculate exchange rate without a processed Timestamp");
+    return;
+  }
   // Ok, lets get an FX result for this
-    const rate = await ratesApi.getConversion(124, processedTimestamp.toMillis());
-    if (rate.status != 200 || !rate.data.sell)
-    {
-      log.error(`Error fetching rate for: ${processedTimestamp.toDate()}`);
-      return false;
-    }
+  const rate = await ratesApi.getConversion(124, processedTimestamp.toMillis());
+  if (rate.status != 200 || !rate.data.sell) {
+    log.error(`Error fetching rate for: ${processedTimestamp.toDate()}`);
+    return false;
+  }
 
-    const { sell, fxRate } = rate.data;
-    const convertAt = sell * fxRate;
-    record.transfer.value = toCoin(record.fiatDisbursed / convertAt);
+  const { sell, fxRate } = rate.data;
+  const convertAt = sell * fxRate;
+  record.transfer.value = toCoin(record.fiatDisbursed / convertAt);
     return true;
 }
 
@@ -59,14 +61,14 @@ async function FillDepositDetails(deposit: DepositData) {
   const { address } = instruction;
 
   try {
-    const ts = now();
+    const ts = Timestamp.now();
 
     log.debug({ address: address, recieved: record.recievedTimestamp.toDate() },
       `Processing deposit for {address}, recieved: {recieved} for ${record.fiatDisbursed}`);
 
     // First, can we process this?
     const processedTimestamp = await setSettlementDate(record);
-    if (processedTimestamp >= ts) {
+    if (processedTimestamp && processedTimestamp >= ts) {
       log.debug(`Deposit cannot be processed: settles at ${processedTimestamp.toDate().toDateString()}`);
       return null;
     }
@@ -92,7 +94,7 @@ export async function GetDepositsToProcess()
   // complete async
   const readyDeposits = await Promise.all(readyDepositsAsync);
   // Remove all deposits that weren't properly filled out
-  return readyDeposits.filter(deposit => !!deposit);
+  return readyDeposits.filter(isPresent);
 }
 
 export async function ProcessUnsettledDeposits()
@@ -107,7 +109,7 @@ export async function ProcessUnsettledDeposits()
     const result = await depositInBank(deposit, rbcApi, log.trace);
     if (result.code != ETransferErrorCode.Success && result.code != ETransferErrorCode.AlreadyDeposited)
     {
-      log.error({address: deposit.instruction.address, errorCode: ETransferErrorCode[result.code]},
+      log.error({address: deposit.instruction.address, errorCode: ETransferErrorCode[result?.code ?? ETransferErrorCode.UnknownError]},
         `Could not process deposit from: {address}, got {errorCode}`);
       continue;
     }
@@ -118,15 +120,16 @@ export async function ProcessUnsettledDeposits()
     // If deposited & transferred, then we mark complete
     if (hash)
     {
-      deposit.record.completedTimestamp = now();
+      deposit.record.completedTimestamp = Timestamp.now();
       deposit.record.confirmed = true;
     }
 
-    await setETransferLabel(deposit.instruction.raw, "deposited");
+    if (deposit.instruction.raw)
+      await setETransferLabel(deposit.instruction.raw, "deposited");
     console.log(hash);
 
     // We must set this, regardless of whether or not the deposit completed (?)
-    var success = await storeInDB(deposit.instruction.address, deposit.record);
+    var success = await storeInDB(deposit.instruction.address!, deposit.record);
 
     deposit.isComplete = success;
   }

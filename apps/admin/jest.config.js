@@ -1,7 +1,6 @@
-const {defaults} = require('../../jest.config');
+const defaults = require('../../jest.config');
 
 module.exports = {
   ...defaults,
-  moduleDirectories: ['node_modules', '../../node_modules', 'app'],
-  preset: "ts-jest/presets/js-with-babel",
+  moduleDirectories: ['node_modules', '../../node_modules', 'app']
 };

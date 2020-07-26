@@ -22,21 +22,11 @@ export default {
             loader: 'ts-loader',
             options: {
               transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-              projectReferences: true,
+              //projectReferences: true,
               logLevel: 'info',
             }
           }
         ]
-      },
-      {
-        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true
-          }
-        }
       }
     ]
   },
@@ -53,7 +43,12 @@ export default {
   resolve: {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.ts', '.tsx', '.json'],
-    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
+    plugins: [new TsconfigPathsPlugin({ configFile: '../../tsconfig.base.json' })],
+    alias: {
+      "@the-coin/utilities": "@the-coin/utilities/build",
+      "@the-coin/contract": "@the-coin/contract/build",
+      "@the-coin/shared": "@the-coin/shared/build",
+    }
   },
 
   plugins: [

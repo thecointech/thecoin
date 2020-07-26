@@ -1,16 +1,10 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    "outDir": "../../build/shared/",
-    "tsBuildInfoFile": "../../build/_obj/shared.buildinfo",
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
-    "baseUrl": "./",
-    "paths": {
-      "*": [
-          "src/*",
-          "declarations/*"
-      ]
-    }
+    "baseUrl": "./src/"
   },
   "include": ["src/**/*", "declarations/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]

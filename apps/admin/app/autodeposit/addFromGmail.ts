@@ -3,12 +3,17 @@ import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
 import { DepositRecord, PurchaseType } from '../autoaction/types';
-import { fromMillis } from 'utils/Firebase';
 import { addNewEntries } from './process';
 import { trimQuotes } from '../utils';
 import { log } from 'logging';
+import { Timestamp } from '@the-coin/utilities/firestore';
 
 let __gmail: gmail_v1.Gmail | null = null;
+const getGmail = () => {
+  if (!__gmail)
+    throw new Error("GMail API not initialized, please call initialiseApi");
+  return __gmail;
+}
 
 const __labels = {
   etransfer: null as string | null,
@@ -27,39 +32,49 @@ export async function initializeApi(auth: OAuth2Client) {
     userId: "me"
   })
   const labels = response.data.labels;
+  if (labels == null)
+    throw new Error("Expected Labels returned from GMail account, check connection");
+
   const keys = Object.keys(__labels);
   for (const label of labels) {
-    const k = keys.find(k => label.name.endsWith(k));
+    const k = keys.find(k => label.name?.endsWith(k));
     if (k) {
-      __labels[k] = label.id;
+      const kf: keyof Labels = k as any;
+      __labels[kf] = label.id ?? null;
     }
   }
   log.trace(`Gmail API initialized`);
 }
 
 export async function addFromGmail(query?: string): Promise<DepositData[]> {
+
+  const gmail = getGmail();
   let result = [] as DepositData[];
   let nextPageToken = undefined;
 
   const q = query ?? 'REDIRECT INTERAC -remember';
   do {
     // Fetch a list of all message id's
-    const response = await __gmail.users.messages.list({
+    const response = await gmail.users.messages.list({
       userId: 'me',
       q
     });
 
     // Fetch the actual email
-    const emailPending = response.data.messages.map(m =>
-      __gmail.users.messages.get({
-        id: m.id,
+    const emailPending = response.data.messages?.map(m =>
+      gmail!.users.messages.get({
+        id: m.id ?? undefined,
         userId: 'me'
       })
     )
-    var emails = await Promise.all(emailPending);
-    result = result.concat(
-      emails.map(r => toDepositEmail(r.data))
-    );
+    if (emailPending)
+    {
+      var emails = await Promise.all(emailPending);
+      var deposits = emails
+        .map(r => toDepositEmail(r.data))
+        .filter(r => !!r);
+      result = result.concat(deposits as DepositData[])
+    }
 
     // TODO: untested, but we could have more than 50 emails in a day
     nextPageToken = response.data.nextPageToken;
@@ -72,7 +87,7 @@ export async function addFromGmail(query?: string): Promise<DepositData[]> {
 }
 
 
-function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
+function toDepositEmail(email: gmail_v1.Schema$Message): DepositData|null {
 
   const subject = getSubject(email);
   if (!subject)
@@ -91,7 +106,7 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
     transfer: {
       value: -1
     },
-    recievedTimestamp: fromMillis(dateRecieved.getTime()),
+    recievedTimestamp: Timestamp.fromMillis(dateRecieved.getTime()),
     hash: "",
     confirmed: false,
     fiatDisbursed: getAmount(body),
@@ -116,48 +131,71 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData {
   }
 }
 
+const findHeader = (email: gmail_v1.Schema$Message, header: string) =>
+  email.payload?.headers?.find(h => h.name === header)?.value;
+
 function getAddressCoin(email: gmail_v1.Schema$Message) {
-  const toField = email.payload.headers.find(h => h.name === "To").value;
-  const match = /<([A-Fx0-9]+)@thecoin.io>\s*$/gi.exec(toField);
-  return (match)
-    ? match[1]
-    : null;
+  const toField = findHeader(email, "To");
+  if (toField) {
+    const match = /<([A-Fx0-9]+)@thecoin.io>\s*$/gi.exec(toField);
+    if (match)
+      return match[1]
+  }
+  return null;
 }
 
 function getUserInfo(email: gmail_v1.Schema$Message) {
   // We use the "Reply-To" header here because some banks (ex-RBC)
   // put their clients email address in this field.
-  const toField = email.payload.headers.find(h => h.name === "Reply-To").value;
-  const match = /<([^<>]+)>$/gi.exec(toField);
-  return {
-    name: trimQuotes(toField.substr(0, match.index).trim()),
-    email: match[1]
+  const toField = findHeader(email, "Reply-To");
+  if (toField) {
+    const match = /<([^<>]+)>$/gi.exec(toField);
+    if (match) {
+      return {
+        name: trimQuotes(toField.substr(0, match.index).trim()) ?? "Error when parsed",
+        email: match[1]
+      }
+    }
   }
+  return {
+    name: "Not found",
+    email: "Not found"
+  };
 }
 
-const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body);
+const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body) ?? -1;
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
-  if (amountRes)
-    return parseFloat(amountRes[1].replace(',', ''))
+  return (amountRes)
+    ? parseFloat(amountRes[1].replace(',', ''))
+    : undefined;
 }
 function getAmountFrancais(body: string) {
   const amountRes = /vous a envoyé un virement de ([0-9,]+) \$ \(CAD\)/.exec(body)
-  if (amountRes)
-    return parseFloat(amountRes[1])
+  return (amountRes)
+    ? parseFloat(amountRes[1])
+    : undefined;
 }
 
 function getDepositUrl(body: string) {
-  return /(https:\/\/etransfer.interac.ca\/[a-z0-9]{8}\/[a-fA-F0-9]{32})\b/i.exec(body)[1];
+  const r = /(https:\/\/etransfer.interac.ca\/[a-z0-9]{8}\/[a-fA-F0-9]{32})\b/i.exec(body);
+  return r
+    ? r[1]
+    : undefined;
 }
 
 function getRecievedDate(email: gmail_v1.Schema$Message) {
-  return new Date(parseInt(email.internalDate));
+  return email.internalDate
+    ? new Date(parseInt(email.internalDate))
+    : new Date();
 }
 
 function getSubject(email: gmail_v1.Schema$Message) {
-  const subject = email.payload.headers.find(h => h.name === "Subject").value;
-  // First, filter an RE emails
+  const subject = findHeader(email, "Subject");
+  // First, ignore any emails with no subject
+  if (!subject)
+    return null;
+  // filter an RE emails
   if (subject.startsWith("Re: [REDIRECT:]"))
     return null;
 
@@ -185,17 +223,31 @@ function getSubjectFrancais(subject: string) {
 }
 
 function getBody(email: gmail_v1.Schema$Message): string {
-  const textPart = email.payload.parts[0]?.parts[0]?.parts[0];
-  const decoded = Base64.decode(textPart.body.data);
+  let mp = email.payload;
+  for (let i = 0; i < 3; i++)
+  {
+    if (!mp || !mp.parts)
+      return "";
+    mp = mp.parts[0]
+  }
+  const tp = mp?.body?.data;
+  if (!tp)
+    return "";
+  //const textPart = email.payload.parts[0].parts[0].parts[0];
+  const decoded = Base64.decode(tp);
   return decoded;
 }
 
 ///////////////////////////////////////////////////////////
 
 export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {
-  const labelId = __labels[labelName]
-  await __gmail.users.messages.modify({
-    id: email.id,
+
+  const labelId = __labels[labelName];
+  if (!labelId)
+    throw new Error("Labels not initialized, please check init");
+
+  await getGmail().users.messages.modify({
+    id: email.id!,
     userId: "me",
     requestBody: {
       addLabelIds: [

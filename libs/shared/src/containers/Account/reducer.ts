@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract } from '@the-coin/utilities/TheContract';
+import { InitialCoinBlock, ConnectContract } from '@the-coin/contract';
 import { Wallet } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { useInjectSaga } from "redux-injectors";

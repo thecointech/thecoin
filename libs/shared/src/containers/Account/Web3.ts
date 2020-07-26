@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
 import { TheSigner, SignerIdent } from '../../SignerIdent'
-import { TheContract } from '@the-coin/utilities';
+import { GetContract } from '@the-coin/contract';
 import { getWeb3Type } from '../../utils/detection';
 
 async function AddTheCoin(ethereum: any) {
-  const contract = await TheContract.GetContract();
+  const contract = await GetContract();
   const tokenAddress = contract.address
   const tokenSymbol = 'THE'
   const tokenDecimals = 6

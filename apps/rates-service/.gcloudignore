@@ -19,5 +19,15 @@
 
 # Node.js dependencies:
 node_modules/
-# Don't send test classes
+
+# No unit test
 test/
+coverage/
+**/__mocks__/
+
+# No source or build artifacts (only build)
+src/
+**/*.d.ts
+.buildinfo
+tsconfig.json
+jest.config.js

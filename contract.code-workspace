@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "libs\\contract"
+		}
+	],
+	"settings": {
+		"javascript.format.semicolons": "insert",
+		"typescript.format.semicolons": "insert",
+		"files.exclude": {
+			"**/build/": true,
+			"**/node_modules/": true,
+			"**/yarn-error.log": true
+		}
+	}
+}
