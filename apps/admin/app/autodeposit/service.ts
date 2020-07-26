@@ -3,7 +3,7 @@ import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
 import { log } from '../logging';
 import { RbcApi, ETransferErrorCode } from "../RbcApi";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { TransferRecord, DepositRecord } from "autoaction/types";
+import { TransferRecord, DepositRecord } from "../autoaction/types";
 import { RatesApi } from '@the-coin/pricing';
 import { depositInBank, storeInDB } from "./process";
 import { toCoin, isPresent } from "@the-coin/utilities";

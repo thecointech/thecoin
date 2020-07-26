@@ -7,7 +7,7 @@ import * as firebase from "firebase/app";
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
-import { SetFirestore } from "@the-coin/utilities/firestore";
+import { SetFirestore, Timestamp } from "@the-coin/utilities/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -34,6 +34,7 @@ export const signIn = async () =>
     _credential = await _auth.signInWithEmailAndPassword("stephen@thecoin.io", "$broPdM4WI4N!N^oL4a6!Kf8rcKq3Xof3#j");
     const _db = firebase.firestore();
     SetFirestore(_db as any);
+    Timestamp.init(firebase.firestore.Timestamp);
   }
 }
 

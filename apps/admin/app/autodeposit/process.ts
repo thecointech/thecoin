@@ -1,9 +1,9 @@
 import { DepositData } from "./types";
-import { RbcApi, ETransferErrorCode, DepositResult } from "RbcApi";
-import { DepositRecord } from "autoaction/types";
+import { RbcApi, ETransferErrorCode, DepositResult } from "../RbcApi";
+import { DepositRecord } from "../autoaction/types";
 import { GetActionDoc } from "@the-coin/utilities/User";
-import { GetAccountCode } from "containers/BrokerTransferAssistant/Wallet";
-import { log } from "logging";
+import { GetAccountCode } from "../containers/BrokerTransferAssistant/Wallet";
+import { log } from "../logging";
 import { IsValidAddress } from "@the-coin/utilities";
 
 

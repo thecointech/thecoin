@@ -23,7 +23,6 @@
       ".eslintignore": "ignore",
       ".flowconfig": "ignore"
     },
-    "typescript.tsdk": "../node_modules/typescript/lib",
     "jest.pathToJest": "./node_modules/.bin/jest",
     "jestrunner.jestPath": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
   }

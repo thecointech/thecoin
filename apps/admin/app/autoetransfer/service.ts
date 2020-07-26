@@ -39,7 +39,7 @@ export async function processUnsettledETransfers() : Promise<CertifiedTransferRe
 }
 
 
-export async function fetchActionsToComplete()
+export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord[]>
 {
   const fxRates = new OfflineFxRates();
   const toSettle = await FetchUnsettledRecords('Sell', fxRates);

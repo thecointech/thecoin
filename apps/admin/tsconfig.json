@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
+    "module": "commonjs",
     "tsBuildInfoFile": "./build/.buildinfo",
     "outDir": "./build/",
     "rootDir": "./app/",
