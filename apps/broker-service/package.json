@@ -24,7 +24,8 @@
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "test": "yarn jest"
+    "test": "yarn jest --runInBand",
+    "test:coverage": "yarn test --coverage"
   },
   "engines": {
     "node": "12.x.x"

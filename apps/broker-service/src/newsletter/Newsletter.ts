@@ -1,7 +1,6 @@
-import { GetFirestore } from "@the-coin/utilities/firestore";
+import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
 import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
 import { SubscriptionDetails } from "@the-coin/types";
-import { Timestamp } from "@google-cloud/firestore";
 
 interface EmailSubscription extends SubscriptionDetails {
   registerDate: Timestamp,
@@ -91,9 +90,7 @@ export async function Confirm(details: SubscriptionDetails) : Promise<Subscripti
     return null;
 
   const userDoc = GetDoc(details.id);
-  const res = await userDoc.update(details);
-  if (!res.writeTime)
-    return null;
+  await userDoc.update(details);
 
   const newDetails = await userDoc.get();
   return newDetails.data() as SubscriptionDetails;

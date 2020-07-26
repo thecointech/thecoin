@@ -23,7 +23,8 @@
       "console": "integratedTerminal",
       "disableOptimisticBPs": true,
       "args": [
-        "-i"
+        "-i",
+        "--runInBand"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "outFiles": [
@@ -58,7 +59,8 @@
       "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
       "args": [
         "--config",
-        "jest.config.js"
+        "jest.config.js",
+        "--runInBand"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
