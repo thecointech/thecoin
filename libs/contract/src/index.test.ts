@@ -5,6 +5,7 @@ const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
 test('Has Contract', async () => {
 
   jest.setTimeout(60000);
+
 	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 

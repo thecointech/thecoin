@@ -24,7 +24,8 @@
     "gen:broker:server": "openapi-generator generate -i apis/broker-cad.yaml -g nodejs-express-server -o apps/broker-service/Generated",
     "copy:broker:api": "cpx \"apps/broker-service/Generated/controllers/*.*\" \"apps/broker-service/src/controllers\" && cpx \"apps/broker-service/Generated/api/*.*\" \"apps/broker-service/src/api",
     "start:site": "cd apps/site && yarn start",
-    "start:firestore": "firebase emulators:start --only firestore"
+    "start:firestore": "firebase emulators:start --only firestore",
+    "test": "lerna run test"
   },
   "dependencies": {
     "axios": "^0.19.2",
