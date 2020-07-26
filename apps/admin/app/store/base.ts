@@ -28,6 +28,7 @@ export function BaseStore<T>(name: string) {
       BaseStore.counter = Math.max(0, BaseStore.counter - 1);
       if (0 == BaseStore.counter) {
         await BaseStore.db?.close();
+        BaseStore.db = null as any;
       }
     }
   }

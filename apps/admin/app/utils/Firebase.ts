@@ -26,8 +26,6 @@ firebase.initializeApp(firebaseConfig);
 
 const _auth = firebase.auth();
 
-
-
 let _credential :firebase.auth.UserCredential|null = null;
 export const signIn = async () =>
 {

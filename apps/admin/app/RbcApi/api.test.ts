@@ -44,7 +44,7 @@ describe('Rbc Puppeteer-based API', () => {
   test("Get's new transactions but no more", async () => {
 
     await initBrowser({
-      headless: false
+      //headless: false
     })
 
     const api = new RbcApi();
