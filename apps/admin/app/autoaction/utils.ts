@@ -1,10 +1,10 @@
 import { IFxRates, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { fromMillis, now } from "../utils/Firebase";
 import { TransferRecord } from "./types";
 import { toHuman, toCoin } from "@the-coin/utilities";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 import { FXRate } from "@the-coin/pricing";
+import { Timestamp } from "@the-coin/utilities/firestore";
 
 export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates) {
   const recievedAt = record.recievedTimestamp.toDate()
@@ -12,7 +12,7 @@ export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates)
   if (nextOpen < Date.now()) {
     fxApi.fetchRateAtDate(new Date(nextOpen));
   }
-  record.processedTimestamp = fromMillis(nextOpen);
+  record.processedTimestamp = Timestamp.fromMillis(nextOpen);
 }
 
 
@@ -54,7 +54,7 @@ export async function MarkComplete(user: string, actionType: UserAction, record:
     throw new Error("Missing required data: " + JSON.stringify(record));
 
   // Mark with the timestamp we finally finish this action
-  record.completedTimestamp = now();
+  record.completedTimestamp = Timestamp.now();
   await actionDoc.set(record);
 
   const ref = GetActionRef(actionType, record.hash);

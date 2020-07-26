@@ -1,11 +1,21 @@
-import { GetFirestore } from "@the-coin/utilities/firestore";
+import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
 import { RateKey, RateType } from "./types";
 import { IsDebug } from "@the-coin/utilities/IsDebug";
+
+// Our data is stored in native Timestamp
+// for easy human-comprehension
+import { DocumentData } from '@the-coin/types';
 
 //
 //  All functions connecting to the DB occur in this file
 // Nobody outside this file should be aware of our storage
 //
+
+
+type DbType = Omit<Omit<RateType, "validFrom">, "validTill"> & {
+  validFrom: Timestamp,
+  validTill: Timestamp,
+};
 
 // Helpers
 const getRatesCollection = (key: RateKey) =>
@@ -14,6 +24,17 @@ const getRatesCollection = (key: RateKey) =>
 export const getRateDoc = (key: RateKey, ts: number) =>
   getRatesCollection(key).doc(ts.toString())
 
+const toRateType = (db: DocumentData): RateType => ({
+  ...db as any,
+  validFrom: db.validFrom.toMillis(),
+  validTill: db.validTill.toMillis(),
+})
+const toDbType = (rt: RateType): DbType => ({
+  ...rt,
+  validFrom: Timestamp.fromMillis(rt.validFrom),
+  validTill: Timestamp.fromMillis(rt.validTill),
+})
+
 export const getLatestStored = async (key: RateKey) : Promise<RateType|null> => {
   const snapshot = await getRatesCollection(key)
     .orderBy('validTill', "desc")
@@ -21,17 +42,17 @@ export const getLatestStored = async (key: RateKey) : Promise<RateType|null> => 
     .get();
   return snapshot.empty
    ? null
-   : snapshot.docs[0].data() as RateType
+   : toRateType(snapshot.docs[0].data())
 }
 
 //
-// Get the stored rate, either encapsulating ts (timestamp) or latest
+// Get the stored rate encapsulating ts (timestamp)
 //
 export async function getRate(key: RateKey, ts: number) : Promise<RateType|null> {
   const collection = getRatesCollection(key);
   const minValidity = ts ?? Date.now();
   // Get the first entry that would be valid after ts
-  let snapshot = await collection.where('validTill', '>', minValidity)
+  let snapshot = await collection.where('validTill', '>', Timestamp.fromMillis(minValidity))
     .orderBy('validTill', "asc")
     .limit(1)
     .get();
@@ -41,7 +62,7 @@ export async function getRate(key: RateKey, ts: number) : Promise<RateType|null>
   if (snapshot.empty)
     return null;
 
-  const candidate = snapshot.docs[0].data() as RateType
+  const candidate = toRateType(snapshot.docs[0].data())
   // If we have ts, ensure that our entry is not too late
   if (ts && candidate.validFrom > ts)
     return null;
@@ -58,7 +79,9 @@ export const getFxRates = (ts: number) => getRate("FxRates", ts);
 export function setRate(key: RateKey, rate: RateType) {
   console.log("Setting {FxKey} rate with validity {ValidTill}",
     key, rate.validFrom);
-  return getRateDoc(key, rate.validFrom).set(rate, {merge: false});
+  const doc = getRateDoc(key, rate.validFrom);
+  const data = toDbType(rate);
+  return doc.set(data, {merge: false});
 }
 
 // debugging-only function

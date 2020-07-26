@@ -27,8 +27,9 @@ it('can fetch fx rates', async () => {
 })
 
 it('will throw if cannot fetch', async ()=> {
+  expect.assertions(1);
   const ts = Date.now();
-  await expect(fetchNewCoinRates("1", ts, ts))
+  await expect(fetchNewCoinRates("throwme", ts, ts))
     .rejects
     .toThrow("Fetch failed:");
 })

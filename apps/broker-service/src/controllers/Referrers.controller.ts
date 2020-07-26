@@ -1,16 +1,16 @@
 import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
 import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
 import { BoolResponse, NewAccountReferal } from '@the-coin/types';
-import { Timestamp } from '@google-cloud/firestore';
+import { Timestamp } from '@the-coin/utilities/firestore';
 
 @Route('referrers')
 export class ReferrersController extends Controller {
 
   /**
   * Returns a boolean indicating whether the passed referrer is valid
-  * 
+  *
   * Referrers ID: This ID must have been previously registered with the system
-  * 
+  *
   **/
   @Get()
   @Response('200', 'Id Valid')
@@ -30,9 +30,9 @@ export class ReferrersController extends Controller {
 
   /**
   * Set referal for new account
-  * 
+  *
   * NewAccountReferal: This referral must have been previously registered with the system
-  * 
+  *
   **/
   @Post()
   @Response('200', 'Referral success')
@@ -46,7 +46,7 @@ export class ReferrersController extends Controller {
       };
     } catch(err) {
       console.error(err);
-      this.setStatus(500); 
+      this.setStatus(500);
       throw new Error('Server Error');
     }
   }

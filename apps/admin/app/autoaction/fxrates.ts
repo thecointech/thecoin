@@ -8,10 +8,11 @@ export class OfflineFxRates implements IFxRates
 
   constructor()
   {
-    this.fetches.push(this.fetchAndStoreRate(null));
+    this.fetches.push(this.fetchAndStoreRate());
   }
 
-  fetchRateAtDate(date: Date): Iterator<any, any, undefined> {
+  *fetchRateAtDate(date: Date) {
+    // No duplicates
     if (getRate(this.rates, date) != EmptyRate)
       return;
 
@@ -22,7 +23,7 @@ export class OfflineFxRates implements IFxRates
       const r = await fetchRate(date);
       this.rates = [
         ...this.rates,
-        r
+        r!
       ].sort((a, b) => a.validFrom - b.validFrom);
   }
 

@@ -6,7 +6,8 @@ import {
 } from "./Referrals";
 import { GetUserDoc } from "./User";
 import { NewAccountReferal } from "@the-coin/types";
-import { init, Timestamp } from "./firestore/jestutils";
+import { init } from "./firestore/jestutils";
+import { Timestamp } from "./firestore";
 
 async function ClearExistingUser(address: string) {
   // Clear it if it exists already

@@ -1,4 +1,4 @@
-import { GetContract } from "./TheContract";
+import { GetContract } from "@the-coin/contract";
 import { Wallet } from "ethers";
 import { BuildVerifiedSale } from "./VerifiedSale";
 import { GetSigner } from "./VerifiedAction";

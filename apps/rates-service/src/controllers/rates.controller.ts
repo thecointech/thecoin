@@ -1,6 +1,6 @@
 import { Controller, Get, Route, Response, Path, Query } from 'tsoa';
 import { getCombinedRates, getLatestCombinedRates, getManyRates } from '../internals/rates';
-import { CombinedRates } from 'internals/rates/types';
+import { CombinedRates } from '../internals/rates/types';
 
 @Route('')
 export class RatesController extends Controller {

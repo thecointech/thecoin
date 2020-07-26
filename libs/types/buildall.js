@@ -14,14 +14,19 @@ console.warn(`
 
 const root = path.resolve(__dirname, "..", "..")
 const yamlPath = path.resolve(root, "apis", "broker-cad.yaml");
-const outPath = path.resolve(root, "build", "types")
+const outPath = path.resolve(__dirname, "build")
 console.log("Writing types to: " + outPath)
 file = readFileSync(yamlPath, 'utf8');
 const input = yaml.safeLoad(file); // Input be any JS object (OpenAPI format)
-const output = swaggerToTS(input, {
+let output = swaggerToTS(input, {
     wrapper: false,
     injectWarning: true,
   }); // Outputs TypeScript defs as a string (to be parsed, or written to a file)
+
+// We add our export on here to include Firestore in the default index
+
+output += "\n\nexport * from './FirebaseFirestore';"
+
 
 writeFileSync("./src/index.ts", output);
 // To keep this in sync with our build expectations,

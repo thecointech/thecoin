@@ -1,15 +1,13 @@
 import { GetWallet } from "./Wallet";
-import { GetContract } from "@the-coin/utilities/TheContract";
 import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
 import status from '../status/Status.json';
-
-import * as firestore from './Firestore'
-import { IsDebug } from "@the-coin/utilities/IsDebug";
+import { GetContract } from "@the-coin/contract";
+import { init, describe } from '@the-coin/utilities/firestore/jestutils';
 
 beforeAll(async () => {
-  firestore.init();
+  init('broker-cad-billpayments');
 });
 
 test("Transfer checks balance", async () => {
@@ -26,33 +24,32 @@ test("Transfer checks fee", async () => {
 	await expect(DoCertifiedTransferWaitable(certTransfer)).rejects.toThrow("Invalid fee present");
 })
 
+describe('Test certified transfer actions', () => {
 
-test("Transfer completes sale properly", async () => {
-	if (!IsDebug) // Running locally only
-		return;
-	
-	jest.setTimeout(180000);
+  test("Transfer completes sale properly", async () => {
+    jest.setTimeout(180000);
 
-	const wallet = await GetWallet();
-	const tc = await GetContract();
-	expect(wallet).toBeDefined();
+    const wallet = await GetWallet();
+    const tc = await GetContract();
+    expect(wallet).toBeDefined();
 
-	// TODO!  Create a testing account to handle this stuff!
-	const myBalance = await tc.balanceOf(wallet.address)
-	expect(myBalance.toNumber()).toBeGreaterThan(0);
+    // TODO!  Create a testing account to handle this stuff!
+    const myBalance = await tc.balanceOf(wallet.address)
+    expect(myBalance.toNumber()).toBeGreaterThan(0);
 
-	const transfer = 100;
-	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, status.certifiedFee);
-	const tx = await DoCertifiedTransferWaitable(certTransfer);
+    const transfer = 100;
+    const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, status.certifiedFee);
+    const tx = await DoCertifiedTransferWaitable(certTransfer);
 
-	expect(tx.hash).toBeTruthy();
+    expect(tx.hash).toBeTruthy();
 
-	// Wait on hash to check it successfully xfer'ed
-	const response = await tc.provider.getTransaction(tx.hash!);
-	const receipt = await response.wait();
-	
-	expect(receipt).toBeTruthy();
+    // Wait on hash to check it successfully xfer'ed
+    const response = await tc.provider.getTransaction(tx.hash!);
+    const receipt = await response.wait();
 
-	//await awaiter;
-	console.log("finished");
+    expect(receipt).toBeTruthy();
+
+    //await awaiter;
+    console.log("finished");
+  })
 })

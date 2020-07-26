@@ -12,7 +12,7 @@ export type AccountDict = Dictionary<AccountState>;
 
 export const initialState = {
   map: readAllAccounts(),
-  active: undefined as string | undefined,
+  active: null as string | null,
 };
 
 export type AccountMapState = Readonly<typeof initialState>;
@@ -21,7 +21,7 @@ export type AccountMapState = Readonly<typeof initialState>;
 
 export interface IAccountMapActions {
   // Set the account we are currently interacting with
-  setActiveAccount(account: string): void;
+  setActiveAccount(account: string|null): void;
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
   addAccount(name: string, signer: AnySigner, store: boolean, unlocked?: Wallet): void;

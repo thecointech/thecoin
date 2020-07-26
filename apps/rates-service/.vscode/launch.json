@@ -12,7 +12,7 @@
         "<node_internals>/**"
       ],
       "preLaunchTask": "build src:rates-service",
-      "program": "${workspaceFolder}/../../build/rates-service/main.js",
+      "program": "${workspaceFolder}/build/main.js",
       "envFile": "${workspaceFolder}/../../tools/debug.env"
     },
     {
@@ -58,9 +58,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
       "args": [
-        "--runInBand",
         "--config",
-        "jest.config.js"
+        "jest.config.js",
+        "--runInBand"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",

@@ -1,2 +1,2 @@
-import "@testing-library/jest-dom/extend-expect"
-import 'regenerator-runtime/runtime'
+require("@testing-library/jest-dom/extend-expect");
+require('regenerator-runtime/runtime');

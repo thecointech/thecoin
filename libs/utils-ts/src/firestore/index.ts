@@ -1,25 +1,7 @@
-import { Firestore, Timestamp } from "@the-coin/types/FirebaseFirestore";
-import { CertifiedTransfer } from "@the-coin/types";
+import { CertifiedTransfer, Timestamp } from "@the-coin/types";
 export { init } from "./init";
-
-// Store on global to avoid any weirdities
-// from importing modules
-global.__thecoin = {
-  firestore: null
-}
-
-export function SetFirestore(db: Firestore)
-{
-  global.__thecoin.firestore = db;
-}
-
-
-export function GetFirestore() : Firestore
-{
-  if (!global.__thecoin.firestore)
-    throw new Error("Firestore not initialized");
-  return global.__thecoin.firestore;
-}
+export * from './timestamp';
+export * from './firestore';
 
 export type ProcessRecord = {
   recievedTimestamp: Timestamp,

@@ -1,21 +1,33 @@
 import { init, describe } from '@the-coin/utilities/firestore/jestutils';
-import { setRate, getCoinRate } from './db';
+import { setRate, getCoinRate, getRateDoc, cleanDb } from './db';
 import { CoinRate } from "./types";
+import { Timestamp } from '@the-coin/utilities/firestore';
 
 describe("DB Connected Tests", () => {
 
   beforeEach(async () => {
     jest.setTimeout(10000);
     await init("broker-cad-db-basic");
+    await cleanDb();
   })
 
   it('can insert rates', async function () {
+
+    let dtnow = Timestamp.now();
+    expect(dtnow.seconds).toBeGreaterThan(0);
 
     // We use a high value now to avoid colliding with the latest test below
     let now = 100000;
     // ------- Create a new rate (expire in 1.5 min) -------
     var rate = buildRate(now);
     await setRate("Coin", rate);
+
+    // Was anything written?
+    const doc = getRateDoc("Coin", now);
+    const data = await doc.get();
+    expect(data.exists).toBeTruthy();
+    // const data = await doc.
+    // const collection = getRate("Coin");
     // ------- Check if the new rate is here -------
     const fetched = await getCoinRate(now) as CoinRate;
     expect(fetched).toBeTruthy();
@@ -65,5 +77,5 @@ const buildRate = (ts: number): CoinRate => ({
   buy: 10,
   sell: 10,
   validFrom: ts,
-  validTill: ts + 1000
+  validTill: ts + 1000,
 })

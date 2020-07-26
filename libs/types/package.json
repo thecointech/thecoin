@@ -1,21 +1,36 @@
 {
-  "name": "@the-coin/types-src",
-  "description": "The Coin: Typescript type information exported from swagger yaml",
-  "version": "2.0.0",
+  "name": "@the-coin/types",
+
+  "private": "true",
+  "version": "0.1.1",
+  "description": "The Coin: Typescript type information exported from swagger yaml.  This package doesn't need to be published",
+  "keywords": ["TheCoin", "OpenAPI"],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract"
+  },
+
   "scripts": {
     "build": "node buildall.js",
     "postinstall": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
+
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.d.ts",
+  "exports": {
+    ".": "./build/index.d.ts",
+    "./": "./build/"
+  },
+
   "devDependencies": {
     "@manifoldco/swagger-to-ts": "^1.1.1",
     "js-yaml": "^3.13.0"
-  },
-  "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
-  "homepage": "http://thecoin.io",
-  "license": "MIT",
-  "main": "src/index.d.ts",
-  "files": [
-    "src/**/*"
-  ]
+  }
 }

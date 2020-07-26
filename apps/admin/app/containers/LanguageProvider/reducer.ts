@@ -6,12 +6,15 @@
 
 import { CHANGE_LOCALE } from './constants';
 import { DEFAULT_LOCALE } from 'translations/index.js';
+import { Action } from 'redux';
 
 export const initialState = {
   locale: DEFAULT_LOCALE,
 };
 
-function languageProviderReducer(state = initialState, action) {
+type ActionType = Action & typeof initialState;
+
+function languageProviderReducer(state = initialState, action: ActionType) {
   switch (action.type) {
     case CHANGE_LOCALE:
       return { locale: action.locale };

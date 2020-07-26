@@ -13,21 +13,12 @@ stdin.on('data', function (chunk) {
 
 stdin.on('end', function () {
 
-  var json = JSON.parse(inputChunks.join(""));
-  json.name = json.name.replace("-src", "");
-  if (json.main) {
-    json.main = json.main.replace("src/", "");
-    json.types = json.main.replace(".js", ".d.ts");
-  }
-  if (json.dependencies)
-  {
-    Object.keys(json.dependencies).forEach(key => {
-      json.dependencies[key] = "*"
-    })
-  }
-  json.files = undefined;
-  json.scripts = undefined;
-  json.devDependencies = undefined;
-  json.directories = undefined;
-  stdout.write(JSON.stringify(json, null, 2));
+  var content = inputChunks.join("");
+  // First, we clean up any globs (repathing can break them)
+  content = content.replace(/build\/\*\*\/\*/g, "**/*");
+  // we are copying into the build folder, so
+  // update the paths in the package.json
+  content = content.replace(/(\.\/)?build\//g, "./");
+
+  stdout.write(content);
 });

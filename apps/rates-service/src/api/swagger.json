@@ -12,10 +12,10 @@
 	},
 	"info": {
 		"title": "@the-coin/rates-service",
-		"version": "0.1.0",
-		"description": "TheCoin core services.  Published by TheCoin Tech",
+		"version": "0.1.1",
+		"description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
 		"license": {
-			"name": "Apache2.0"
+			"name": "MIT"
 		}
 	},
 	"paths": {

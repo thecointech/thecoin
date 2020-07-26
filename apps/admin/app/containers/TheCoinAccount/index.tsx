@@ -18,7 +18,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Minting",
     urlFragment: "mint",
-    creator: () => ((props: any) => <Mint />),
+    creator: () => (() => <Mint />),
   },
   {
     name: "Complete Purchase",
@@ -38,7 +38,7 @@ export const TheCoin = (props: RouteComponentProps) => {
     .find(account => account.name === AccountName);
 
   useEffect(() => {
-    accountsApi.setActiveAccount(theCoin?.address);
+    accountsApi.setActiveAccount(theCoin?.address ?? null);
   }, [accountsApi, theCoin])
 
   const onReadFile = React.useCallback((file: File) : Promise<ReadFileData>=> {
@@ -60,6 +60,4 @@ export const TheCoin = (props: RouteComponentProps) => {
   return theCoin
     ? <Account account={theCoin} accountMap={AccountMap} url={url} />
     : <UploadWallet readFile={onReadFile} />
-
-  return <Account account={theCoin} accountMap={AccountMap} url={url} />
 }

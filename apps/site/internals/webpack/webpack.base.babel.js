@@ -27,41 +27,9 @@ module.exports = options => ({
   module: {
     rules: [
       {
-        test: /\.jsx?$/, // Transform all .js and .jsx files required somewhere with Babel
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: options.babelQuery,
-        },
-      },
-      {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "app"),
         use: options.tsLoaders,
-      },
-      {
-        test: /\.ts(x?)$/,
-        include: path.join(sharedRoot, "src"),
-        loader: 'ts-loader',
-        options: {
-          instance: "shared",
-            configFile: path.join(sharedRoot, 'tsconfig.json'),
-            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-            projectReferences: true,
-            logLevel: 'info',
-        },
-      },
-      {
-        test: /\.ts(x?)$/,
-        include: path.join(utilsRoot, "src"),
-        loader: 'ts-loader',
-        options: {
-          instance: "utils",
-            configFile: path.join(utilsRoot, 'tsconfig.json'),
-            transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-            projectReferences: true,
-            logLevel: 'info',
-        },
       },
       {
         // Preprocess our own .css files
@@ -192,18 +160,15 @@ module.exports = options => ({
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
-    plugins: [new TsconfigPathsPlugin({ /*configFile: "./path/to/tsconfig.json" */ })],
+    plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
     alias: {
       '../../theme.config$': path.resolve(
         projectRoot,
         'app/styles/semantic/theme.config',
       ),
-      '@the-coin/shared': path.resolve(
-        systemRoot,
-        'libs',
-        'shared',
-        'src',
-      ),
+      "@the-coin/utilities": "@the-coin/utilities/build",
+      "@the-coin/contract": "@the-coin/contract/build",
+      "@the-coin/shared": "@the-coin/shared/build",
     },
   },
   devtool: options.devtool,

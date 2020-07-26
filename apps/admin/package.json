@@ -10,7 +10,7 @@
     "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn run start-renderer-dev",
-    "dev-deposit": "yarn build && node ../../build/admin/autodeposit/",
+    "dev-deposit": "yarn build && node ./build/admin/autodeposit/",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-fix": "yarn run --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
@@ -58,7 +58,7 @@
     "productName": "THECoin: Admin",
     "appId": "org.thecoin.admin",
     "files": [
-      "app/dist/",
+      "/build/**/*",
       "app/app.html",
       "app/main.prod.js",
       "app/main.prod.js.map",
@@ -129,7 +129,6 @@
     "@the-coin/shared": "*",
     "@types/js-base64": "^2.3.1",
     "@types/puppeteer": "^2.0.1",
-    "base32": "^0.0.6",
     "core-js": "^3.1.4",
     "devtron": "^1.4.0",
     "electron-debug": "^3.0.0",
@@ -145,8 +144,7 @@
     "pouchdb": "*"
   },
   "devEngines": {
-    "node": ">=10.x",
-    "npm": ">=4.x"
+    "node": ">=12.18"
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"

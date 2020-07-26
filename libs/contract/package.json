@@ -1,23 +1,25 @@
 {
-  "name": "@the-coin/contract-src",
-  "private": true,
-  "workspaces": {
-    "nohoist": [
-      "@openzeppelin/**"
-    ]
-  },
-  "version": "2.0.0",
+  "name": "@the-coin/contract",
+  "version": "0.1.1",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [
-    "THE",
+    "TheCoin",
     "ethereum"
   ],
-  "author": "Stephen Taylor <stephen.taylor.dev@gmail.com>",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract"
+  },
   "scripts": {
-    "build": "truffle compile --contracts_build_directory=../../build/contract && cpx \"zos.*\" ../../build/contract",
-    "test": "truffle test",
+    "build": "yarn build:contracts && yarn build:tsc",
+    "build:contracts": "truffle compile --contracts_build_directory=./src/deployed && cpx \"zos.*\" ./src/deployed/",
+    "build:tsc": "yarn tsc",
+    "test:contract": "truffle test",
+    "test": "yarn jest",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
     "zospush": "yarn run zossession && zos push",
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
@@ -26,17 +28,20 @@
     "postinstall.fixme": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
   },
-  "directories": {
-    "contracts": "contracts",
-    "test": "test"
-  },
   "files": [
-    "contracts/**/*"
+    "build/**/*"
   ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
   "devDependencies": {
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contracts": "^3.1.0",
     "@openzeppelin/upgrades": "^2.8.0",
-    "truffle": "^5.1.12"
+    "truffle": "^5.1.12",
+    "ethers": "^4.0.46",
+    "jest": "*"
   }
 }
