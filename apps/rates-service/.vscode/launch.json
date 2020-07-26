@@ -23,8 +23,7 @@
       "console": "integratedTerminal",
       "disableOptimisticBPs": true,
       "args": [
-        "-i",
-        "--runInBand"
+        "-i"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "outFiles": [

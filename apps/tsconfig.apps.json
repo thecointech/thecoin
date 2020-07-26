@@ -2,8 +2,6 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "target": "es5"
-    //"lib": ["dom", "es2017"],
     //"declaration": false
   }
-  //"references": [{ "path": "../libs/shared/", "prepend": false }]
 }

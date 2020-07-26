@@ -10,7 +10,7 @@ function validate<T>(r: AxiosResponse<T>, testMember: keyof T, testValue: any) {
     throw new Error(`Fetch failed: ${r.statusText} : ${
       hasError(r.data)
         ? r.data.error
-        : r.data[testMember]
+        : JSON.stringify(r.data)
     }`);
   }
 }

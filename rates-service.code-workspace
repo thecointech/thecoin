@@ -8,6 +8,12 @@
 		}
 	],
 	"settings": {
-		"jest.showCoverageOnLoad": true
+		"jest.showCoverageOnLoad": true,
+		"files.exclude": {
+			"**/.vscode": true,
+			"**/build": true,
+			"**/coverage": true,
+			"**/node_modules": true
+		}
 	}
 }

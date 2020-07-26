@@ -14,5 +14,5 @@
   "include": [
     "./src/**/*.*"
   ],
-  "references": [{ "path": "../../libs/utils-ts/", "prepend": false }]
+  "references": [{ "path": "../../libs/utils-ts/" }]
 }
