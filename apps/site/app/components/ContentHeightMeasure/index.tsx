@@ -9,7 +9,7 @@ export const ContentHeightMeasure: React.FC = (props) => {
   const onContentSized = useCallback((contentRect: ContentRect) => {
     const height = contentRect.bounds?.height;
     if (height)
-    actions.setHeight(height, timestamp);
+      actions.setHeight(height, timestamp);
   }, [actions]);
 
   return (

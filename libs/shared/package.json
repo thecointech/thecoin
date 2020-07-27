@@ -1,30 +1,37 @@
 {
-  "name": "@the-coin/shared-src",
-  "version": "2.0.0",
+  "name": "@the-coin/shared",
+  "version": "0.1.0",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
-    "THE",
+    "TheCoin",
     "ethereum"
   ],
-  "author": "Stephen Taylor <stephen@thecoin.com>",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/utils-ts"
+  },
+
   "scripts": {
-    "test": "jest",
-    "build": "tsc -b -v && yarn build:copy",
-    "build:copy": "cpx \"./src/**/*.module.css\" ../../build/shared"
+    "test": "yarn jest",
+    "build": "yarn tsc -b -v && yarn build:copy",
+    "build:copy": "cpx \"./src/**/*.module.css\" ./build/"
   },
-  "directories": {
-    "src": "src"
-  },
+
   "files": [
-    "./src/**/*"
+    "./build/**/*"
   ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
   "dependencies": {
-    "@the-coin/pricing": "*",
-    "@the-coin/types": "*",
-    "@the-coin/utilities": "*",
-    "@the-coin/contract": "*",
+    "@the-coin/pricing": "",
+    "@the-coin/utilities": "",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",
     "immer-reducer": "^0.7.10",
@@ -38,6 +45,7 @@
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
+    "@the-coin/types": "*",
     "jest": "*"
   }
 }

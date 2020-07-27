@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-import { CurrencyCodes } from '@the-coin/utilities/CurrencyCodes'
+import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 
@@ -36,7 +36,7 @@ export type AccountState = {
   // Transaction history
   history: Transaction[];
   // The currency to display your account value in
-  displayCurrency: CurrencyCodes;
+  displayCurrency: CurrencyCode;
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -52,7 +52,7 @@ export const DefaultAccountValues = {
   lastUpdate: new Date(0),
   balance: -1,
   history: [],
-  displayCurrency: CurrencyCodes.CAD
+  displayCurrency: CurrencyCode.CAD
 };
 
 export type AccountPageProps = {

@@ -38,7 +38,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
             ...tx,
             TransactionDate: txTime
           };
-          const upsert = (stored: StoredTx) => {
+          const upsert = (stored: Partial<StoredTx>) => {
             return isSubset(stored, doc)
               ? false
               : doc;
@@ -83,8 +83,9 @@ const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
   TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, credentials.TimeZone)
 })
 
-const isSubset = (superObj: StoredTx, subObj: StoredTx) => {
+const isSubset = (superObj: Partial<StoredTx>, subObj: Partial<StoredTx>) => {
   return Object.keys(subObj).every(ele => {
-      return subObj[ele] === superObj[ele]
+    const k = ele as keyof StoredTx;
+    return subObj[k] === superObj[k]
   });
 };

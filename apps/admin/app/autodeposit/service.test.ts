@@ -17,28 +17,25 @@ afterAll(() => {
   ConfigStore.release();
 });
 
-describe('Fetch and process deposits from Gmail', () => {
+it('Can fetch emails', async () => {
+  const deposits = await FetchDepositEmails();
+  expect(deposits).not.toBeUndefined();
+})
 
-  test('Can fetch emails', async () => {
-    const deposits = await FetchDepositEmails();
-    expect(deposits).not.toBeUndefined();
-  })
+it('We have valid deposits', async () => {
+  const deposits = await GetDepositsToProcess();
+  expect(deposits).not.toBeUndefined();
 
-  test('We have valid deposits', async () => {
-    const deposits = await GetDepositsToProcess();
-    expect(deposits).not.toBeUndefined();
-
-    for (const deposit of deposits) {
-      console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved.toLocaleString()}`);
-      const { record } = deposit;
-      expect(record.type).toBe(PurchaseType.etransfer);
-      expect(record.fiatDisbursed).toBeGreaterThan(0);
-      expect(record.transfer.value).toBeGreaterThan(0);
-      expect(record.recievedTimestamp).toBeTruthy();
-      expect(record.processedTimestamp).toBeTruthy();
-      expect(record.completedTimestamp).toBeUndefined();
-    }
-  })
+  for (const deposit of deposits) {
+    console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved?.toLocaleString()}`);
+    const { record } = deposit;
+    expect(record.type).toBe(PurchaseType.etransfer);
+    expect(record.fiatDisbursed).toBeGreaterThan(0);
+    expect(record.transfer.value).toBeGreaterThan(0);
+    expect(record.recievedTimestamp).toBeTruthy();
+    expect(record.processedTimestamp).toBeTruthy();
+    expect(record.completedTimestamp).toBeUndefined();
+  }
 })
 
 test.skip('we complete all deposits', async () => {

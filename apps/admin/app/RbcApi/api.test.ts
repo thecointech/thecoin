@@ -43,8 +43,8 @@ describe('Rbc Puppeteer-based API', () => {
 
   test("Get's new transactions but no more", async () => {
 
-    await initBrowser({
-      headless: false
+    const browser = await initBrowser({
+      //headless: false
     })
 
     const api = new RbcApi();
@@ -56,7 +56,9 @@ describe('Rbc Puppeteer-based API', () => {
 
     const { txs, syncedTill } = await RbcStore.fetchStoredTransactions();
     expect(txs.length).toBe(txs1.length);
-    expect(syncedTill.getTime() - Date.now()).toBeLessThan(48 * 60 * 60 * 1000)
+    expect(syncedTill.getTime() - Date.now()).toBeLessThan(48 * 60 * 60 * 1000);
+
+    await browser.close();
   });
 })
 

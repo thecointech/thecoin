@@ -23,17 +23,20 @@ export const Mint = () => {
 
   const {rates} = useFxRates();
   const account = useActiveAccount();
-  const accountApi = useAccountApi(account?.address);
+  if (!account)
+    throw new Error("Account Required");
+
+  const accountApi = useAccountApi(account.address);
 
   /////////////////////////////////////////////////////////
   const onMintCoins = useCallback(async () => {
     setStatus(MintStatus.PROCESSING);
     try {
       const { contract } = account;
-      const tx = await contract.mintCoins(toMint);
+      const tx = await contract!.mintCoins(toMint);
       setTxHash(tx.hash);
       await tx.wait();
-      accountApi?.updateBalance();
+      accountApi.updateBalance();
 
     } catch (e) {
       alert(e);

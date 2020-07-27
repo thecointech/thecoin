@@ -27,10 +27,13 @@ function groupDepositsByUser(deposits: DepositData[]) {
   const bucketed: Dictionary<DepositData[]> = {};
   for (let i = 0; i < deposits.length; i++) {
     const dep = deposits[i];
-    if (!bucketed[dep.instruction.address])
-      bucketed[dep.instruction.address] = [dep]
+    const { address} = dep.instruction;
+    if (!address)
+      continue;
+    if (!bucketed[address])
+      bucketed[address] = [dep]
     else
-      bucketed[dep.instruction.address].push(dep);
+      bucketed[address].push(dep);
   }
   return bucketed;
 }
@@ -156,9 +159,9 @@ function buildUnmatchedDBEntries(deposits: DepositData[], db: Dictionary<Deposit
       const newEntries = docs.map((d): DepositData => {
         var deposit: DepositData = {
           instruction: {
-            name: inst.instruction.name,
+            name: inst?.instruction.name ?? "ERROR: Name Missing",
             address,
-            email: inst.instruction.email,
+            email: inst?.instruction.email ?? "ERROR: Email Missing",
           },
           record: {
             type: PurchaseType.other,

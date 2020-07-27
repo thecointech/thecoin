@@ -16,6 +16,8 @@ export enum ETransferErrorCode {
   Success = 0,
   AlreadyDeposited = 2,
   Cancelled = 38,
+  // Custom error codes
+  InvalidInput,
 }
 
 export type DepositResult = {

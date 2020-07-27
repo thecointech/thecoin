@@ -19,7 +19,6 @@ import { RbcApi, ETransferErrorCode } from 'RbcApi';
 import { PurchaseType } from 'autoaction/types';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
-import { Contract } from 'ethers';
 import { storeInDB, depositInBank } from 'autodeposit/process';
 import { completeTheTransfer } from 'autodeposit/contract';
 
@@ -41,27 +40,29 @@ export const Gmail = () => {
     currentAction: "Not Set"
   })
 
-  const [rbcApi, setRbcApi] = useState(null as RbcApi)
+  const [rbcApi, setRbcApi] = useState(null as RbcApi | null)
 
 
   const { rates } = useFxRates();
   const fxApi = useFxRatesApi();
-  const account = useActiveAccount();
+  const account = useActiveAccount()!;
   const accountApi = useAccountApi(account.address);
 
   const onInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setCode(event.currentTarget.value)
   }, [setCode])
 
-  const onBegin = useCallback(async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    // Finish login if necessary
-    await finishLogin(auth, code);
-    // We use the setCode to trigger the second effect below (cheap, I know, but meh)
-    setCode("");
+  const onBegin = useCallback(async (_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (auth) {
+      // Finish login if necessary
+      await finishLogin(auth, code);
+      // We use the setCode to trigger the second effect below (cheap, I know, but meh)
+      setCode("");
+    }
   }, [auth, code, setCode])
 
   //////////////////////////////////////////////////
-  // First, we initiate the login process
+  // Run-once on component load, we initiate the login process
   useEffect(() => {
     // Login to Gmail
     InitiateLogin(setAuth, setText);
@@ -77,11 +78,10 @@ export const Gmail = () => {
 
   //////////////////////////////////////////////////
   // If we have a valid auth, then fetch emails.
-
   useEffect(() => {
     (async () => {
       if (isValid(auth)) {
-        initializeApi(auth);
+        initializeApi(auth!);
         let res = await addFromGmail();
         setEmails(res);
       }
@@ -90,7 +90,7 @@ export const Gmail = () => {
   }, [auth, code, setEmails])
 
   useEffect(() => {
-    if (emails.length > 0) {
+    if (emails.length > 0 && rbcApi) {
       (async () => {
         console.log(`\n---- Starting Processing: ${emails.length} Records ----\n`);
         let r = emails;
@@ -134,6 +134,10 @@ export const Gmail = () => {
   }, [deposits, setDeposits]);
 
   const processSingleDeposit = useCallback(async (deposit: DepositData, index: number, total: number) => {
+
+    if (!rbcApi)
+      throw new Error("We are missing required connections");
+
     const setProgress = (currentAction: string) => {
       console.log(`${deposit.instruction.name} - ${deposit.record.recievedTimestamp.toDate().toDateString()}: ${currentAction}`)
       setMessageValues({
@@ -143,8 +147,8 @@ export const Gmail = () => {
       })
     }
     setProgress("Begin Processing");
-    await processDeposit(deposit, rbcApi, account.contract, setProgress);
-  }, [setIsProcessing, account, rbcApi, setMessageValues]);
+    await processDeposit(deposit, rbcApi, setProgress);
+  }, [setIsProcessing, rbcApi, setMessageValues]);
 
   const processAllDeposits = useCallback(async () => {
     setIsProcessing(true);
@@ -200,7 +204,7 @@ function setComplete(deposit: DepositData[]) {
 //////////////////////////////////////////////////////
 
 
-export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contract: Contract, progressCb: (v: string) => void) {
+export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) {
   // We assume types of 'other' (wages) were successfully deposited
   let wasDeposited = deposit.record.type === PurchaseType.other || !!deposit.bank;
 
@@ -213,26 +217,26 @@ export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contr
     if (!deposit.tx) {
       if (wasDeposited) {
         // Complete this deposit (send $$ to user)
-        deposit.tx = await completeTheTransfer(deposit);
-        deposit.record.hash = deposit.tx.txHash;
+        const tx = await completeTheTransfer(deposit);
+        deposit.tx = tx;
+        deposit.record.hash = tx.txHash;
       }
       else {
         // Remove the completed timestamp
         progressCb('Skipping TheCoin transfer because deposit not completed');
-        deposit.record.completedTimestamp = null;
+        deposit.record.completedTimestamp = undefined;
       }
     }
     else if (!wasDeposited) {
       alert('We have a completed deposit that seems invalid');
-      deposit.record.completedTimestamp = null;
+      deposit.record.completedTimestamp = undefined;
     }
     if (deposit.record.hash) {
       progressCb('Storing Deposit in DB');
       await storeInDB(deposit.instruction.address, deposit.record);
     }
   }
-  if (deposit.instruction.raw)
-  {
+  if (deposit.instruction.raw) {
     await setETransferLabel(deposit.instruction.raw, wasDeposited ? "deposited" : "rejected");
   }
   progressCb('Completed deposit');
@@ -241,13 +245,13 @@ export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, contr
 export async function doDeposit(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) {
   progressCb("Depositing in Bank");
   const response = await depositInBank(deposit, rbcApi, progressCb);
+
   if (response.code !== ETransferErrorCode.Success) {
-    if (response.code === ETransferErrorCode.AlreadyDeposited)
-    {
+    if (response.code === ETransferErrorCode.AlreadyDeposited) {
       console.warn(`Deposit from ${deposit.instruction.name} already deposited, but missing from bank`);
     }
     else {
-      alert("Could not deposit: " + response.message);
+      alert("Could not deposit: " + response?.message);
       return false;
     }
   }

@@ -3,12 +3,21 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { RatesController } from './../controllers/Rates.controller';
+import { RatesController } from './../controllers/rates.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { UpdateController } from './../controllers/update.controller';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  "CombinedRates": {
+    "dataType": "refObject",
+    "properties": {
+    },
+    "additionalProperties": false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const validationService = new ValidationService(models);
 
@@ -19,6 +28,51 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
+  app.get('/api/v1/rates/:currencyCode',
+    function(request: any, response: any, next: any) {
+      const args = {
+        currencyCode: { "in": "path", "name": "currencyCode", "required": true, "dataType": "double" },
+        timestamp: { "in": "query", "name": "timestamp", "dataType": "double" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new RatesController();
+
+
+      const promise = controller.getSingle.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get('/api/v1/many',
+    function(request: any, response: any, next: any) {
+      const args = {
+        timestamps: { "in": "query", "name": "timestamps", "required": true, "dataType": "array", "array": { "dataType": "double" } },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new RatesController();
+
+
+      const promise = controller.getMany.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.get('/api/v1/doUpdate',
     function(request: any, response: any, next: any) {
       const args = {
@@ -33,7 +87,7 @@ export function RegisterRoutes(app: express.Express) {
         return next(err);
       }
 
-      const controller = new RatesController();
+      const controller = new UpdateController();
 
 
       const promise = controller.doUpdate.apply(controller, validatedArgs as any);

@@ -1,20 +1,19 @@
-import { CertifiedTransferRecord } from "@the-coin/utilities/Firestore";
-import { now } from "utils/Firebase";
-import { withFiat } from "autoaction/utils";
-import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "autoaction";
-import { getActionPrivateKey } from "autoaction/key";
-import { OfflineFxRates } from "autoaction/fxrates";
-import { log } from "logging";
-import { RbcApi } from "RbcApi";
+import { CertifiedTransferRecord, Timestamp } from "@the-coin/utilities/firestore";
+import { withFiat } from "../autoaction/utils";
+import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "../autoaction";
+import { getActionPrivateKey } from "../autoaction/key";
+import { OfflineFxRates } from "../autoaction/fxrates";
+import { log } from "../logging";
+import { RbcApi } from "../RbcApi";
 import { ETransferPacket } from "@the-coin/types";
 
-export async function processUnsettledETransfers() {
+export async function processUnsettledETransfers() : Promise<CertifiedTransferRecord[]> {
 
   log.trace('Processing e-Transfer requests');
   const api = new RbcApi();
   const toComplete = await fetchActionsToComplete();
   if (toComplete.length == 0)
-    return;
+    return [];
 
   const instructions = await getInstructions(toComplete);
 
@@ -40,15 +39,15 @@ export async function processUnsettledETransfers() {
 }
 
 
-export async function fetchActionsToComplete()
+export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord[]>
 {
   const fxRates = new OfflineFxRates();
   const toSettle = await FetchUnsettledRecords('Sell', fxRates);
 
   await fxRates.waitFetches();
-  const ts = now();
+  const ts = Timestamp.now();
   // Filter out all tx's that have not yet settled
-  toSettle.filter(tx => tx.processedTimestamp >= ts)
+  toSettle.filter(tx => tx.processedTimestamp && tx.processedTimestamp >= ts)
   const toComplete = withFiat(toSettle, fxRates.rates);
   log.debug({action: 'Sell'}, `Fetched ${toComplete.length} {action} actions that are ready to complete`);
   return toComplete;

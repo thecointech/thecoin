@@ -13,6 +13,7 @@ export async function initBrowser(options?: puppeteer.LaunchOptions) {
   _browser.on('disconnected', initBrowser);
   return _browser;
 }
+
 async function getPage() {
   const browser = _browser ?? await initBrowser();
   return browser.newPage();
@@ -68,7 +69,7 @@ export class ApiAction {
     await this.writeStep(stepName);
   }
 
-  async findElementsWithText(elementType: string, searchText) {
+  async findElementsWithText(elementType: string, searchText: string) {
     return this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
   }
 

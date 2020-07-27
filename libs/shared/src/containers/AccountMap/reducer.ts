@@ -12,7 +12,7 @@ import { composeReducers } from "immer-reducer";
 
 export class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapActions {
 
-  setActiveAccount(address?: string) {
+  setActiveAccount(address: string|null) {
     if (address) {
       if (!IsValidAddress(address))
         throw new Error("Invalid Address: " + address);
@@ -55,7 +55,7 @@ export class AccountMap extends TheCoinReducer<AccountMapState> implements IAcco
     const {signer, address} = account;
     // We don't want active account with an invalid value
     if (this.state.active == address) {
-      this.draftState.active = undefined;
+      this.draftState.active = null;
     }
     // Remove from the list
     delete this.draftState.map[address];

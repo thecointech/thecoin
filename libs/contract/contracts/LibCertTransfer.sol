@@ -1,11 +1,11 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
-import "openzeppelin-eth/contracts/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 //import "./Seriality/Seriality.sol";
 
 contract LibCertTransfer {
 
-	// function uint2str(uint i) 
+	// function uint2str(uint i)
 	// public pure returns (string memory)
 	// {
 	// 	if (i == 0) return "0";
@@ -24,8 +24,8 @@ contract LibCertTransfer {
 	// 	return string(bstr);
 	// }
 
-	// // function address2str(address _addr) 
-	// // public pure returns(string memory) 
+	// // function address2str(address _addr)
+	// // public pure returns(string memory)
 	// // {
 	// // 	bytes32 value = bytes32(uint256(_addr));
 	// // 	bytes memory alphabet = "0123456789abcdef";
@@ -41,7 +41,7 @@ contract LibCertTransfer {
 	// // }
 
 
-	// function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp) 
+	// function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp)
 	// public pure returns(bytes memory)
 	// {
 	// 	// from, "->", to, "\nval", vstr, "\nfee", feestr, "\nts", tstr
@@ -72,9 +72,9 @@ contract LibCertTransfer {
 	// 	// string memory vstr = uint2str(value);
 	// 	// string memory feestr = uint2str(fee);
 	// 	// string memory tstr = uint2str(timestamp);
-		
+
 	// 	// string memory message = string(abi.encodePacked(fstr, "->", tostr, "\nval", vstr, "\nfee", feestr, "\nts", tstr));
-		
+
 	// }
 
 	// function hashMessage(bytes memory message)

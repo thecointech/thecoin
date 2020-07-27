@@ -3,7 +3,7 @@ import { EncryptedList } from "containers/EncryptedList";
 import { ETransferPacket, CertifiedTransferRequest } from "@the-coin/types";
 import { Segment, Button } from "semantic-ui-react";
 import { TransferData } from "autoaction/types";
-import { useActiveAccount } from "../../../../../../libs/shared/src/containers/AccountMap";
+import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { Contract } from "ethers";
 
 const RenderETransfer = (props: TransferData) => {
@@ -14,6 +14,9 @@ const RenderETransfer = (props: TransferData) => {
     const {record} = props;
 
     console.log(`Refunding sale ${record.hash}`);
+    if (!account?.contract)
+      throw new Error("We should always have a contract now.");
+
     RefundTransfer(record.transfer as CertifiedTransferRequest, account.contract)
       .then((hash) => {
         console.log("Amount Refunded");

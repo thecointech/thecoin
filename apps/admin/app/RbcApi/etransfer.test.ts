@@ -19,7 +19,7 @@ afterAll(() => {
 test.skip("Can send e-Transfer", async () => {
   jest.setTimeout(500000);
   try {
-    initBrowser({
+    const browser = await initBrowser({
       headless: false
     })
 
@@ -30,6 +30,8 @@ test.skip("Can send e-Transfer", async () => {
       message: "message",
     });
     expect(confirmation).toBeTruthy();
+
+    await browser.close();
   }
   catch(e) {
     console.error(e);

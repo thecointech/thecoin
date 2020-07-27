@@ -1,16 +1,10 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "../../build/.obj/site.buildinfo",
-    "target": "es6",
+    "rootDir": "./app",
     "baseUrl": "./app",
-    "paths": {
-      "@the-coin/shared/*": [
-        "../../../libs/shared/src/*"
-      ]
-    },
-    "outDir": "../../build/.obj/site/",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo"
   },
-  "include": ["app/**/*", "internals/templates/**/*"]
+  "include": ["app/**/*"]
 }
