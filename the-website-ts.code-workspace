@@ -8,15 +8,21 @@
     },
     {
       "path": "libs/utils-ts"
+    },
+    {
+      "path": "libs/types"
     }
   ],
   "settings": {
-    "deepcode.review.results.hideInformationIssues": false,
-    "typescript.tsdk": "..\\node_modules\\typescript\\lib",
     "typescript.tsserver.pluginPaths": [
       "typescript-plugin-css-modules"
     ],
     "jest.pathToJest": "${workspaceFolder}/../../node_modules/.bin/jest",
-    "jest.debugMode": true
+		"files.exclude": {
+			"**/.vscode": true,
+			"**/build": true,
+			"**/coverage": true,
+			"**/node_modules": true
+		}
   }
 }

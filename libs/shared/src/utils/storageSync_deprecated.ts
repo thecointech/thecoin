@@ -40,8 +40,7 @@ export const Deprecated_GetStored = (raw: string) : AccountState|null => {
     ...DefaultAccountValues,
     address: normalizedAddress,
     name,
-    signer,
-    box: null
+    signer
   };
 
   // Immediately save back using address and remove named version

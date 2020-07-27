@@ -11,13 +11,7 @@ import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances } from './history';
-
-const getConsent = async () => {
-  return true
-}
-
-const Box = require('3box')
-const IdentityWallet = require('identity-wallet')
+import { login3Box } from './3box';
 
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
@@ -34,17 +28,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       signer,
       contract
     });
-    // Call identity wallet web3 or local account
-    // isWallet = Web3 ; isSigner = local account
-    if (signer.hasOwnProperty("signingKey")){
-      let signingKey = signer.signingKey
-      if (signingKey.hasOwnProperty("privateKey")){
-        yield this.login3Box(signingKey.privateKey, null)
-        console.log(yield this.login3Box(signingKey.privateKey, null))
-      }
-    } else {
-      yield this.login3Box(null, signer.address)
-    }
+    yield call(login3Box, signer);
     yield this.sendValues(this.actions().updateBalance, []);
   }
 
@@ -154,26 +138,6 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       console.error(error);
       if (callback)
         callback(-1);
-    }
-  }
-
-  *login3Box(privateKey: string|null, address: string|null){
-
-    if (privateKey != null) {
-      let idWallet = new IdentityWallet(getConsent, { seed: privateKey } )
-      let threeIdProvider = idWallet.get3idProvider()
-      let box = yield Box.openBox(null, threeIdProvider)
-      yield box.syncDone
-      console.log("--by PrivateKey",box)
-      yield this.sendValues(this.actions().updateWithValues, { box: box });
-      return box
-    } else {
-      const provider = yield Box.get3idConnectProvider() // recomended provider
-      const box = yield Box.openBox(address, provider)
-      yield box.syncDone
-      console.log("--by Address",box)
-      yield this.sendValues(this.actions().updateWithValues, { box: box });
-      return box
     }
   }
 }

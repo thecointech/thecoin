@@ -5,7 +5,7 @@ function isThisAManualTest() {
 	return process.env.CI === "vscode-jest-tests";
 }
 
-test("Can send an email", async () => {
+test.skip("Can send an email", async () => {
 
 	// I don't want to spam myself, so only run this test if manually requested
 	if (!isThisAManualTest())

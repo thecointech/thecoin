@@ -54,7 +54,7 @@ export const DefaultAccountValues = {
   lastUpdate: new Date(0),
   balance: -1,
   history: [],
-  box: null
+  box: null,
   displayCurrency: CurrencyCode.CAD
 };
 
@@ -74,6 +74,5 @@ export interface IActions extends ImmerReducer<AccountState> {
   updateHistory(from: Date, until: Date): Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
 
   decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
-  login3Box(privateKey: string, address: string): void;
 }
 
