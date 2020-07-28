@@ -1,3 +1,11 @@
 /*******************************
          Site Overrides
 *******************************/
+
+a{
+    font-size: 12px;
+    font-weight: @bold;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    border-bottom: 2px solid @linkUnderline;
+}
