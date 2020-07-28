@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedHTMLMessage } from 'react-intl';
 import styles from './index.module.css';
 import { Grid, Button } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
@@ -11,7 +12,11 @@ export const CreateAccountBig = () => {
       <Grid textAlign='center' verticalAlign='middle'>
         <Grid.Row>
           <Grid.Column>
-            <h3>The benefits of a chequing, savings, and investing account all in one!</h3>
+            <h3>
+                <FormattedHTMLMessage id="site.homepage.createAccountBig.title"
+                      defaultMessage="The benefits of a chequing, savings, and investing account all in one!"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/></h3>
           </Grid.Column>  
         </Grid.Row>
         <Grid.Row>

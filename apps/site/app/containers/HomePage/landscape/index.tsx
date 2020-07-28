@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
+import { FormattedHTMLMessage } from 'react-intl';
+import { Stickers } from './stickers';
 
 import styles from './index.module.css';
 import sky from './images/sky.svg';
@@ -20,31 +22,30 @@ export const Landscape = () => {
         <Grid.Row className={styles.mainWrapper}>
           <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
-              <h1 className={styles.h1Home}>The future is brighter</h1>
+              <h1 className={styles.h1Home}>
+                <FormattedHTMLMessage id="site.homepage.landscape.title"
+                      defaultMessage="The future is brighter"
+                      description="The future is brighter"
+                      values={{ what: 'react-intl' }}/>
+              </h1>
             </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3} className={styles.mainWrapper}>
           <Grid.Column id={styles.infosZone}>
-              <p>Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.</p>
+              <p>
+                  <FormattedHTMLMessage id="site.homepage.landscape.description"
+                        defaultMessage="Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."
+                        description="Description following the main title"
+                        values={{ what: 'react-intl' }}/>
+              </p>
               <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id='knowMore' />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Grid stackable columns={2}>
-          <Grid.Row columns={3}>
-            <Grid.Column className={styles.card}>
-              <h4>You’re Wealthier</h4>
-              <p>Your money is always earning.  Make it earn for you.</p>
-              <a href="">Learn More</a>
-            </Grid.Column>
-            <Grid.Column className={styles.card}>
-              <h4>Earth’s Healthier</h4>
-              <p>Be part of the solution. We offset our clients’ CO2</p>
-              <a href="">Learn More</a>
-            </Grid.Column>
-          </Grid.Row>
-      </Grid>
+
+      <Stickers />
+
       <div className={styles.landscape}>
         <img className={styles.sky} src={sky} />
         <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />

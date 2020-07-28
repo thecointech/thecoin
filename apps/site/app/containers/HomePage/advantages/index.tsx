@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.module.css';
 
 import { Grid } from 'semantic-ui-react'
+import { FormattedHTMLMessage } from 'react-intl';
 
 export const Advantages = () => {
 
@@ -28,15 +29,24 @@ export const Advantages = () => {
         <Grid columns='equal' textAlign='center' verticalAlign='top'>
           <Grid.Row>
             <Grid.Column width={2}>
-                Monthly Fees
+              <FormattedHTMLMessage id="site.homepage.advantages.monthlyFees"
+                  defaultMessage="Monthly Fees"
+                  description="Monthly Fees"
+                  values={{ what: 'react-intl' }}/>
             </Grid.Column>
             <Grid.Column width={1}></Grid.Column>
             <Grid.Column width={2}>
-                Minimums
+              <FormattedHTMLMessage id="site.homepage.advantages.monthlyFees"
+                  defaultMessage="Minimums"
+                  description="Minimums"
+                  values={{ what: 'react-intl' }}/>
             </Grid.Column>
             <Grid.Column width={1}></Grid.Column>
             <Grid.Column width={3}>
-              Your benefits
+              <FormattedHTMLMessage id="site.homepage.advantages.benefits"
+                  defaultMessage="Your benefits"
+                  description="Your benefits"
+                  values={{ what: 'react-intl' }}/>
             </Grid.Column>
           </Grid.Row>
         </Grid>

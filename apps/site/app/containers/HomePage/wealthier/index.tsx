@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
+import { FormattedHTMLMessage } from 'react-intl';
 
 import coffeePerson from './images/3_illustration.svg';
 import startnow from './images/icon3_01.svg';
@@ -15,22 +16,62 @@ export const Wealthier = () => {
       <Grid>
         <Grid.Row columns={3}>
           <Grid.Column>
-              <h2>You’re Wealthier</h2>
-              <p>Enjoy the benefits of investment growth on every dollar with our online spending account.</p>
+              <h2>
+                <FormattedHTMLMessage id="site.homepage.wealthier.title"
+                      defaultMessage="You’re Wealthier"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/>
+              </h2>
+              <p>
+                <FormattedHTMLMessage id="site.homepage.wealthier.description"
+                      defaultMessage="Enjoy the benefits of investment growth on every dollar with our online spending account."
+                      description="Description"
+                      values={{ what: 'react-intl' }}/>
+              </p>
           </Grid.Column>
 
           <Grid.Column columns={3} >
               <img src={startnow} />
-              <h4>Start Now</h4>
-              <p>The most important ingredient is time. You’re young - maximize your benefit!</p>
-              <a href="">Learn Your Edge</a>
+              <h4>
+                <FormattedHTMLMessage id="site.homepage.wealthier.startnow.title"
+                      defaultMessage="Start Now"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/>
+              </h4>
+              <p>
+                <FormattedHTMLMessage id="site.homepage.wealthier.startnow.description"
+                      defaultMessage="The most important ingredient is time. You’re young - maximize your benefit!"
+                      description="Description"
+                      values={{ what: 'react-intl' }}/>
+              </p>
+              <a href="">
+                <FormattedHTMLMessage id="site.homepage.wealthier.startnow.link"
+                      defaultMessage="Learn Your Edge"
+                      description="Link"
+                      values={{ what: 'react-intl' }}/>
+              </a>
           </Grid.Column>
 
           <Grid.Column columns={3} >
               <img src={investment} />
-              <h4>The Best Investment</h4>
-              <p>Why settle?  Our time-tested strategy has the best long-term results.</p>
-              <a href="">Compare Us</a>
+              <h4>
+                <FormattedHTMLMessage id="site.homepage.wealthier.investment.title"
+                      defaultMessage="The Best Investment"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/>
+              </h4>
+              <p>
+                <FormattedHTMLMessage id="site.homepage.wealthier.investment.description"
+                      defaultMessage="Why settle?<br />Our time-tested strategy has the best long-term results."
+                      description="Description"
+                      values={{ what: 'react-intl' }}/>
+              </p>
+              <a href="">
+                <FormattedHTMLMessage id="site.homepage.wealthier.investment.link"
+                      defaultMessage="Compare Us"
+                      description="Link"
+                      values={{ what: 'react-intl' }}/>
+              </a>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -41,20 +82,49 @@ export const Wealthier = () => {
           
           <Grid.Column columns={3} >
               <img src={growth} />
-              <h4>Maximum Growth</h4>
-              <p>Add $250000 to your retirement - with no money down.</p>
-              <a href="">How Anyone Can Get Rich Slow</a>
+              <h4>
+                <FormattedHTMLMessage id="site.homepage.wealthier.growth.title"
+                      defaultMessage="Maximum Growth"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/>
+              </h4>
+              <p>
+                <FormattedHTMLMessage id="site.homepage.wealthier.growth.description"
+                      defaultMessage="Add $250000 to your retirement - with no money down."
+                      description="Description"
+                      values={{ what: 'react-intl' }}/>
+              </p>
+              <a href="">
+                <FormattedHTMLMessage id="site.homepage.wealthier.growth.link"
+                      defaultMessage="How Anyone Can Get Rich Slow"
+                      description="Link"
+                      values={{ what: 'react-intl' }}/>
+              </a>
           </Grid.Column>
 
           <Grid.Column columns={3} >
               <img src={profits} />
-              <h4>Keep Your Profits</h4>
-              <p>Every dollar earns every day.  As a non-profit, we want you to keep that benefit.</p>
-              <a href="">Who Wins?</a>
+              <h4>
+                <FormattedHTMLMessage id="site.homepage.wealthier.profits.title"
+                      defaultMessage="Keep Your Profits"
+                      description="Title"
+                      values={{ what: 'react-intl' }}/>
+              </h4>
+              <p>
+                <FormattedHTMLMessage id="site.homepage.wealthier.profits.description"
+                      defaultMessage="Every dollar earns every day.  As a non-profit, we want you to keep that benefit."
+                      description="Description"
+                      values={{ what: 'react-intl' }}/>
+              </p>
+              <a href="">
+                <FormattedHTMLMessage id="site.homepage.wealthier.growth.link"
+                      defaultMessage="Who Wins?"
+                      description="Link"
+                      values={{ what: 'react-intl' }}/>
+              </a>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-
     </React.Fragment>
   );
 }
