@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage,FormattedHTMLMessage } from 'react-intl';
 
 import styles from './index.module.css';
 import illustration from './images/5_illustration.svg';
@@ -20,13 +20,13 @@ export const Underwater = () => {
           <Grid.Row centered textAlign='center'>
             <Grid.Column>
               <h2>
-                <FormattedHTMLMessage id="site.homepage.underwater.title"
+                <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
               </h2>
               <p>
-                <FormattedHTMLMessage id="site.homepage.underwater.description"
+                <FormattedMessage id="site.homepage.underwater.description"
                       defaultMessage="You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions."
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
@@ -39,7 +39,7 @@ export const Underwater = () => {
             <Grid.Column columns={3}>
                 <img src={co2} />
                 <h4>
-                  <FormattedHTMLMessage id="site.homepage.underwater.difference.title"
+                  <FormattedMessage id="site.homepage.underwater.difference.title"
                       defaultMessage="Make a Difference"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
@@ -51,7 +51,7 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </p>
                 <a href="">
-                  <FormattedHTMLMessage id="site.homepage.underwater.difference.link"
+                  <FormattedMessage id="site.homepage.underwater.difference.link"
                       defaultMessage="Compare Outcomes"
                       description="Link name for that part"
                       values={{ what: 'react-intl' }}/>
@@ -61,7 +61,7 @@ export const Underwater = () => {
             <Grid.Column columns={3} >
                 <img src={science} />
                 <h4>
-                  <FormattedHTMLMessage id="site.homepage.underwater.science.title"
+                  <FormattedMessage id="site.homepage.underwater.science.title"
                       defaultMessage="Scientifically Verified"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
@@ -73,7 +73,7 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </p>
                 <a href="">
-                  <FormattedHTMLMessage id="site.homepage.underwater.science.link"
+                  <FormattedMessage id="site.homepage.underwater.science.link"
                       defaultMessage="Why We Can Be So Confident"
                       description="Link name for that part"
                       values={{ what: 'react-intl' }}/>
@@ -83,7 +83,7 @@ export const Underwater = () => {
             <Grid.Column columns={3} >
                 <img src={trees} />
                 <h4>
-                  <FormattedHTMLMessage id="site.homepage.underwater.trees.title"
+                  <FormattedMessage id="site.homepage.underwater.trees.title"
                       defaultMessage="We Do More"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
@@ -95,7 +95,7 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </p>
                 <a href="">
-                  <FormattedHTMLMessage id="site.homepage.underwater.trees.link"
+                  <FormattedMessage id="site.homepage.underwater.trees.link"
                       defaultMessage="What We Do"
                       description="Link name for that part"
                       values={{ what: 'react-intl' }}/>

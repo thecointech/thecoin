@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
-import { FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage,FormattedHTMLMessage } from 'react-intl';
 
 import styles from './index.module.css';
 
@@ -11,34 +11,41 @@ export const Stickers = () => {
             <Grid.Row columns={3}>
                 <Grid.Column className={styles.card}>
                 <h4>
-                    <FormattedHTMLMessage id="site.homepage.landscape.stickers.titleleft"
+                    <FormattedMessage id="site.homepage.landscape.stickers.left.title"
                       defaultMessage="You’re Wealthier"
                       description="Title for left sticker"
                       values={{ what: 'react-intl' }}/>
                 </h4>
                 <p>
-                    <FormattedHTMLMessage id="site.homepage.landscape.stickers.descriptionleft"
+                    <FormattedHTMLMessage id="site.homepage.landscape.stickers.left.description"
                       defaultMessage="Your money is always earning.<br />Make it earn for you."
                       description="Description for left sticker"
                       values={{ what: 'react-intl' }}/>
                 </p>
-                <a href="">Learn More</a>
+                <a href="">
+                    <FormattedMessage id="site.homepage.landscape.stickers.left.link"
+                        defaultMessage="Learn More"
+                        description="Link name for left sticker"
+                        values={{ what: 'react-intl' }}/></a>
                 </Grid.Column>
                 <Grid.Column className={styles.card}>
                     <h4>
-                        <FormattedHTMLMessage id="site.homepage.landscape.stickers.titleright"
+                        <FormattedMessage id="site.homepage.landscape.stickers.right.title"
                         defaultMessage="Earth’s Healthier"
                         description="Title for right sticker"
                         values={{ what: 'react-intl' }}/>
                     </h4>
                     <p>
-
-                        <FormattedHTMLMessage id="site.homepage.landscape.stickers.descriptionleft"
-                        defaultMessage="Be part of the solution.<br />We offset our clients’ CO2."
-                        description="Description for left sticker"
-                        values={{ what: 'react-intl' }}/>
+                        <FormattedHTMLMessage id="site.homepage.landscape.stickers.right.description"
+                            defaultMessage="Be part of the solution.<br />We offset our clients’ CO2."
+                            description="Description for left sticker"
+                            values={{ what: 'react-intl' }}/>
                     </p>
-                    <a href="">Learn More</a>
+                    <a href="">
+                        <FormattedMessage id="site.homepage.landscape.stickers.right.link"
+                            defaultMessage="Learn More"
+                            description="Link name for right sticker"
+                            values={{ what: 'react-intl' }}/></a>
                 </Grid.Column>
             </Grid.Row>
         </Grid>
