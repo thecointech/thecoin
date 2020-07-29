@@ -35,7 +35,7 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         <Grid className={styles.content}>
-          <Grid.Row>
+          <Grid.Row columns="3" >
             <Grid.Column>
                 <img src={co2} />
                 <h4>

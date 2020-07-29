@@ -6,7 +6,6 @@ import styles from './index.module.css';
 
 export const Stickers = () => {
   return (
-    <React.Fragment>
         <Grid stackable columns={2}>
             <Grid.Row columns={3}>
                 <Grid.Column className={styles.card}>
@@ -49,6 +48,5 @@ export const Stickers = () => {
                 </Grid.Column>
             </Grid.Row>
         </Grid>
-        </React.Fragment>
     );
 }
