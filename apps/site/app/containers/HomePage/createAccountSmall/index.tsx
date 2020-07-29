@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 export const CreateAccountSmall = () => {
 
   return (
-    <React.Fragment>
       <Grid textAlign='center' verticalAlign='middle'>
         <Grid.Row>
           <Grid.Column>
@@ -23,7 +22,6 @@ export const CreateAccountSmall = () => {
           </Grid.Column>  
         </Grid.Row>
       </Grid>
-    </React.Fragment>
   );
 }
 

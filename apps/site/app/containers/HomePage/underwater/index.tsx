@@ -35,8 +35,8 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         <Grid className={styles.content}>
-          <Grid.Row columns={3}>
-            <Grid.Column columns={3}>
+          <Grid.Row>
+            <Grid.Column>
                 <img src={co2} />
                 <h4>
                   <FormattedMessage id="site.homepage.underwater.difference.title"

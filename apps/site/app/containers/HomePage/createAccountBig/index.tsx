@@ -8,7 +8,7 @@ import plants from "./images/illust_flowers.svg";
 export const CreateAccountBig = () => {
 
   return (
-    <React.Fragment>
+    <>
       <Grid textAlign='center' verticalAlign='middle'>
         <Grid.Row>
           <Grid.Column>
@@ -27,6 +27,6 @@ export const CreateAccountBig = () => {
       </Grid>
 
       <img className={styles.plants} src={plants} />
-    </React.Fragment>
+    </>
   );
 }

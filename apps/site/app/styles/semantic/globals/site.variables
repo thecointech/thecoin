@@ -6,10 +6,7 @@
         Page
 --------------------*/
 
-@pageBackground      : #FFFFFF;
-
-@lineHeight          : 1.6em;
-@textColor           : rgba(0, 0, 0, 0.87);
+@pageBackground      : @white;
 
 /*-------------------
        Fonts
@@ -23,26 +20,11 @@
 
 
 /*-------------------
-      Base Sizes
---------------------*/
-
-/* This is the single variable that controls them all */
-@emSize   : 14px;
-
-/* The size of page text  */
-@fontSize : 14px;
-
-
-/*-------------------
     Brand Colors
 --------------------*/
 
 @primaryColor        : #F18182;
 @secondaryColor      : #20B58D;
-
-@lightPrimaryColor   : @lightBlue;
-@lightSecondaryColor : @lightBlack;
-
 
 /*--------------
   Page Heading
@@ -63,7 +45,7 @@
 --------------------*/
 
 @linkColor           : #61C1B8;
-@linkUnderline       : #F18182;
+@linkUnderline       : @primaryColor;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;
 
