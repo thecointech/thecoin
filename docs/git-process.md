@@ -4,7 +4,7 @@ We are following the git-flow method of working.
 
 We have two main branches, dev and release.
   - `dev` is intended to be the branch shared between developers, and should always be functional with unit tests passing.  As work items are completed, they are merged into the `dev` branch.
-  - The `release` branch is represents the published state of the project.  When we are ready for a release we merge the new features into this branch for final testing and publishing.
+  - The `release` branch represents the published state of the project.  When we are ready for a release we merge the new features into this branch for final testing and publishing.
   - (not done yet, but I would like to have this) We should have CI running on both `dev` and `release`.  PR's that do not pass testing on `dev` will be automatically rejected, and code that is merged into `release` would be automatically deployed.
 
 The main idea is that the `dev` branch is always safe: it should always represent a known-good state.  The `release` branch can be used if we need to do small/emergency fixes to released code base - it is trivial to switch to a state representing the currently running system.
