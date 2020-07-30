@@ -56,3 +56,13 @@
 
 @defaultDuration : 0.1s;
 @defaultEasing   : ease;
+
+
+/*-------------------
+     Screen sizes
+--------------------*/
+
+@small: ~"(max-width: 699px) and (min-width: 520px)";
+@medium: ~"(max-width: 1000px) and (min-width: 700px)";
+@large: ~"(min-width: 1001px)";
+@xlarge: ~"(min-width: 1151px)";

@@ -27,3 +27,5 @@ secret.json
 **/coverage/**
 !**/summary.txt
 libs/contract/src/deployed/
+apps/site/app/containers/HomePage/advantages/index.module.css
+apps/site/app/containers/HomePage/advantages/index.module.css.map
