@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
-import { FormattedMessage,FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import coffeePerson from './images/3_illustration.svg';
 import startnow from './images/icon3_01.svg';
@@ -61,8 +61,8 @@ export const Wealthier = () => {
                       values={{ what: 'react-intl' }}/>
               </h4>
               <p>
-                <FormattedHTMLMessage id="site.homepage.wealthier.investment.description"
-                      defaultMessage="Why settle?<br />Our time-tested strategy has the best long-term results."
+                <FormattedMessage id="site.homepage.wealthier.investment.description"
+                      defaultMessage="Why settle? Our time-tested strategy has the best long-term results."
                       description="Description"
                       values={{ what: 'react-intl' }}/>
               </p>
@@ -111,8 +111,8 @@ export const Wealthier = () => {
                       values={{ what: 'react-intl' }}/>
               </h4>
               <p>
-                <FormattedHTMLMessage id="site.homepage.wealthier.profits.description"
-                      defaultMessage="Every dollar earns every day.<br />As a non-profit, we want you to keep that benefit."
+                <FormattedMessage id="site.homepage.wealthier.profits.description"
+                      defaultMessage="Every dollar earns every day. As a non-profit, we want you to keep that benefit."
                       description="Description"
                       values={{ what: 'react-intl' }}/>
               </p>

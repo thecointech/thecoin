@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
-import { FormattedMessage,FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import styles from './index.module.css';
 
@@ -16,8 +16,8 @@ export const Stickers = () => {
                       values={{ what: 'react-intl' }}/>
                 </h4>
                 <p>
-                    <FormattedHTMLMessage id="site.homepage.landscape.stickers.left.description"
-                      defaultMessage="Your money is always earning.<br />Make it earn for you."
+                    <FormattedMessage id="site.homepage.landscape.stickers.left.description"
+                      defaultMessage="Your money is always earning. Make it earn for you."
                       description="Description for left sticker"
                       values={{ what: 'react-intl' }}/>
                 </p>
@@ -35,8 +35,8 @@ export const Stickers = () => {
                         values={{ what: 'react-intl' }}/>
                     </h4>
                     <p>
-                        <FormattedHTMLMessage id="site.homepage.landscape.stickers.right.description"
-                            defaultMessage="Be part of the solution.<br />We offset our clients’ CO2."
+                        <FormattedMessage id="site.homepage.landscape.stickers.right.description"
+                            defaultMessage="Be part of the solution. We offset our clients’ CO2."
                             description="Description for left sticker"
                             values={{ what: 'react-intl' }}/>
                     </p>

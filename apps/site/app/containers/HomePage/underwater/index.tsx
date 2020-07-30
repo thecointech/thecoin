@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage,FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import styles from './index.module.css';
 import illustration from './images/5_illustration.svg';
@@ -45,8 +45,8 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </h4>
                 <p>
-                  <FormattedHTMLMessage id="site.homepage.underwater.difference.description"
-                      defaultMessage="Offsetting CO2 is effective.<br />Extremely effective!"
+                  <FormattedMessage id="site.homepage.underwater.difference.description"
+                      defaultMessage="Offsetting CO2 is effective. Extremely effective!"
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
                 </p>
@@ -67,8 +67,8 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </h4>
                 <p>
-                  <FormattedHTMLMessage id="site.homepage.underwater.science.description"
-                      defaultMessage="Prove it?<br />We’d love to!"
+                  <FormattedMessage id="site.homepage.underwater.science.description"
+                      defaultMessage="Prove it? We’d love to!"
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
                 </p>
@@ -89,8 +89,8 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
                 </h4>
                 <p>
-                  <FormattedHTMLMessage id="site.homepage.underwater.trees.description"
-                      defaultMessage="It’s not just CO2.<br />The projects we fund are vital to restoring our ecosystem."
+                  <FormattedMessage id="site.homepage.underwater.trees.description"
+                      defaultMessage="It’s not just CO2. The projects we fund are vital to restoring our ecosystem."
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
                 </p>
