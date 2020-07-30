@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import styles from './index.module.css';
@@ -9,12 +9,12 @@ export const Stickers = () => {
         <Grid stackable columns={2}>
             <Grid.Row columns={3}>
                 <Grid.Column className={styles.card}>
-                <h4>
+                <Header as='h4'>
                     <FormattedMessage id="site.homepage.landscape.stickers.left.title"
                       defaultMessage="You’re Wealthier"
                       description="Title for left sticker"
                       values={{ what: 'react-intl' }}/>
-                </h4>
+                </Header>
                 <p>
                     <FormattedMessage id="site.homepage.landscape.stickers.left.description"
                       defaultMessage="Your money is always earning. Make it earn for you."
@@ -28,12 +28,12 @@ export const Stickers = () => {
                         values={{ what: 'react-intl' }}/></a>
                 </Grid.Column>
                 <Grid.Column className={styles.card}>
-                    <h4>
+                    <Header as='h4'>
                         <FormattedMessage id="site.homepage.landscape.stickers.right.title"
                         defaultMessage="Earth’s Healthier"
                         description="Title for right sticker"
                         values={{ what: 'react-intl' }}/>
-                    </h4>
+                    </Header>
                     <p>
                         <FormattedMessage id="site.homepage.landscape.stickers.right.description"
                             defaultMessage="Be part of the solution. We offset our clients’ CO2."

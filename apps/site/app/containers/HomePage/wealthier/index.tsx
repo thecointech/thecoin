@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import coffeePerson from './images/3_illustration.svg';
@@ -16,12 +16,12 @@ export const Wealthier = () => {
       <Grid>
         <Grid.Row columns={3}>
           <Grid.Column>
-              <h2>
+              <Header as='h2'>
                 <FormattedMessage id="site.homepage.wealthier.title"
                       defaultMessage="You’re Wealthier"
                       description="Title"
                       values={{ what: 'react-intl' }}/>
-              </h2>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.wealthier.description"
                       defaultMessage="Enjoy the benefits of investment growth on every dollar with our online spending account."
@@ -32,12 +32,12 @@ export const Wealthier = () => {
 
           <Grid.Column columns={3} >
               <img src={startnow} />
-              <h4>
+              <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.startnow.title"
                       defaultMessage="Start Now"
                       description="Title"
                       values={{ what: 'react-intl' }}/>
-              </h4>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.wealthier.startnow.description"
                       defaultMessage="The most important ingredient is time. You’re young - maximize your benefit!"
@@ -54,12 +54,12 @@ export const Wealthier = () => {
 
           <Grid.Column columns={3} >
               <img src={investment} />
-              <h4>
+              <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.investment.title"
                       defaultMessage="The Best Investment"
                       description="Title"
                       values={{ what: 'react-intl' }}/>
-              </h4>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.wealthier.investment.description"
                       defaultMessage="Why settle? Our time-tested strategy has the best long-term results."
@@ -82,12 +82,12 @@ export const Wealthier = () => {
           
           <Grid.Column columns={3} >
               <img src={growth} />
-              <h4>
+              <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.growth.title"
                       defaultMessage="Maximum Growth"
                       description="Title"
                       values={{ what: 'react-intl' }}/>
-              </h4>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.wealthier.growth.description"
                       defaultMessage="Add $250000 to your retirement - with no money down."
@@ -104,12 +104,12 @@ export const Wealthier = () => {
 
           <Grid.Column columns={3} >
               <img src={profits} />
-              <h4>
+              <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.profits.title"
                       defaultMessage="Keep Your Profits"
                       description="Title"
                       values={{ what: 'react-intl' }}/>
-              </h4>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.wealthier.profits.description"
                       defaultMessage="Every dollar earns every day. As a non-profit, we want you to keep that benefit."

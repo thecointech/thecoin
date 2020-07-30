@@ -8,7 +8,7 @@ import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
 
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 export const Underwater = () => {
 
@@ -19,12 +19,12 @@ export const Underwater = () => {
       <Grid centered textAlign='center'>
           <Grid.Row centered textAlign='center'>
             <Grid.Column>
-              <h2>
+              <Header as='h2'>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
-              </h2>
+              </Header>
               <p>
                 <FormattedMessage id="site.homepage.underwater.description"
                       defaultMessage="You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions."
@@ -38,12 +38,12 @@ export const Underwater = () => {
           <Grid.Row columns="3" >
             <Grid.Column>
                 <img src={co2} />
-                <h4>
+                <Header as='h4'>
                   <FormattedMessage id="site.homepage.underwater.difference.title"
                       defaultMessage="Make a Difference"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
-                </h4>
+                </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.difference.description"
                       defaultMessage="Offsetting CO2 is effective. Extremely effective!"
@@ -60,12 +60,12 @@ export const Underwater = () => {
             
             <Grid.Column columns={3} >
                 <img src={science} />
-                <h4>
+                <Header as='h4'>
                   <FormattedMessage id="site.homepage.underwater.science.title"
                       defaultMessage="Scientifically Verified"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
-                </h4>
+                </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.science.description"
                       defaultMessage="Prove it? We’d love to!"
@@ -82,12 +82,12 @@ export const Underwater = () => {
 
             <Grid.Column columns={3} >
                 <img src={trees} />
-                <h4>
+                <Header as='h4'>
                   <FormattedMessage id="site.homepage.underwater.trees.title"
                       defaultMessage="We Do More"
                       description="Title for that part"
                       values={{ what: 'react-intl' }}/>
-                </h4>
+                </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.trees.description"
                       defaultMessage="It’s not just CO2. The projects we fund are vital to restoring our ecosystem."
