@@ -29,3 +29,11 @@ secret.json
 libs/contract/src/deployed/
 apps/site/app/containers/HomePage/advantages/index.module.css
 apps/site/app/containers/HomePage/advantages/index.module.css.map
+apps/site/app/containers/HomePage/createAccountBig/index.module.css
+apps/site/app/containers/HomePage/createAccountSmall/index.module.css
+apps/site/app/containers/HomePage/landscape/index.module.css
+apps/site/app/containers/HomePage/landscape/index.module.css.map
+apps/site/app/containers/HomePage/landscape/stickers/index.module.css
+apps/site/app/containers/HomePage/landscape/stickers/index.module.css.map
+apps/site/app/containers/HomePage/underwater/index.module.css
+apps/site/app/containers/HomePage/underwater/index.module.css.map
