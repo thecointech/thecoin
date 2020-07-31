@@ -3,31 +3,66 @@
 *******************************/
 
 /*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : @white;
+
+/*-------------------
        Fonts
 --------------------*/
 
-@fontName          : 'Muli';
+@fontName2         : 'Abril Fatface';
+@fontName          : 'Montserrat';
+
+@headerFont        : @fontName2, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
 
 /*-------------------
     Brand Colors
 --------------------*/
 
-@primaryColor        : #415DB0;
-@secondaryColor      : #3193A1;
+@primaryColor        : #F18182;
+@secondaryColor      : #20B58D;
 
-@complementaryColor	 : #FFC64A
+/*--------------
+  Page Heading
+---------------*/
 
-@lightPrimaryColor   : #617AC5;
-@lightSecondaryColor : #51ADBA;
+@headerFontWeight : @bold;
+@headerLineHeight : unit((18 / 14), em);
 
-@lightComplementaryColor: #FFDE98
+@h1 : unit((80 / 14), rem);
+@h2 : unit((64 / 14), rem);
+@h3 : unit((40 / 14), rem);
+@h4 : unit((28 / 14), rem);
+@h5 : unit((14 / 14), rem);
+
 
 /*-------------------
-        Page
+       Links
 --------------------*/
 
-@pageBackground      : #F0F0F0;
+@linkColor           : #61C1B8;
+@linkUnderline       : @primaryColor;
+@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverUnderline  : @linkUnderline;
 
-@lineHeight          : 1.6em;
-@textColor           : rgba(0, 0, 0, 0.87);
 
+/*-------------------
+     Transitions
+--------------------*/
+
+@defaultDuration : 0.1s;
+@defaultEasing   : ease;
+
+
+/*-------------------
+     Screen sizes
+--------------------*/
+
+@small: ~"(max-width: 699px) and (min-width: 520px)";
+@medium: ~"(max-width: 1000px) and (min-width: 700px)";
+@large: ~"(min-width: 1001px)";
+@xlarge: ~"(min-width: 1151px)";

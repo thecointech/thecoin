@@ -1,0 +1,61 @@
+.landscape{
+  .mainWrapper{
+    margin-right: 30px;
+    h1, div{
+      z-index:-1;
+    }
+  }
+  .sky{
+    position: fixed;
+    z-index:-1;
+    top: 100px;
+  }
+
+  .cloudsHigh{
+    position: fixed;
+    top: 50px;
+    z-index:-1;
+  }
+  .cloudsLeft{
+    position: fixed;
+    top: 270px;
+    z-index:0;
+  }
+  .cloudsRight{
+    position: fixed;
+    top: 380px;
+    z-index:-1;
+    right: 10px;
+  }
+  .sun{
+    position: fixed;
+    right: 80px;
+    top: 360px;
+    z-index:4;
+  }
+  .sunAura{
+    position: fixed;
+    right: -200px;
+    top: 40px;
+    opacity: 0.1;
+    z-index:3;
+    -webkit-mask-image:-webkit-gradient(linear, right bottom, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  }
+  .greenery{    
+    position: relative;
+    z-index:9;
+    margin-top: -240px;
+  }
+
+}
+
+
+@media only screen and (min-width: 750px) {
+}
+
+@media only screen and (max-width: 550px) {
+}
+
+@media only screen and (max-width: 750px) {
+}
