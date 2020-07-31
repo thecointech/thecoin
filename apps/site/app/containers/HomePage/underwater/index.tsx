@@ -16,9 +16,7 @@ export const Underwater = () => {
     <React.Fragment>
       <img className={styles.illustration} src={illustration} />
       <div className={styles.landscape}>
-      <Grid centered textAlign='center'>
-          <Grid.Row centered textAlign='center'>
-            <Grid.Column>
+        <div className={styles.header}>
               <Header as='h2'>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
@@ -31,10 +29,8 @@ export const Underwater = () => {
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
               </p>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <Grid className={styles.content}>
+          </div>
+        <Grid className={styles.content} padded doubling>
           <Grid.Row columns="3" >
             <Grid.Column>
                 <img src={co2} />
