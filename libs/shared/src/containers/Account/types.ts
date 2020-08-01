@@ -3,6 +3,7 @@ import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
+import { Dictionary } from 'lodash';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -37,8 +38,16 @@ export type AccountState = {
   history: Transaction[];
   // The currency to display your account value in
   displayCurrency: CurrencyCode;
+
   // 3Box box
   box: any | null;
+  // 3box state data.  Cached here so we don't
+  // have repeated reloads when loading pages
+  boxSpaces: Dictionary<object>;
+  common: {
+    etransferData: any;
+    billPayees: any;
+  }
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -51,7 +60,7 @@ export type AccountState = {
 
 export const DefaultAccountValues = {
   contract: null,
-  lastUpdate: new Date(0),
+  lastUpdate: new Date(0),xvfdf
   balance: -1,
   history: [],
   box: null,
@@ -74,5 +83,10 @@ export interface IActions extends ImmerReducer<AccountState> {
   updateHistory(from: Date, until: Date): Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
 
   decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
+
+  login3box(): Iterator<any, void>;
+  // Refresh a space (load it's data into )
+  loadSpace(name: string): Iterator<any, void>;
+  saveSpace(name: string, data: any): Iterator<any, void>;
 }
 

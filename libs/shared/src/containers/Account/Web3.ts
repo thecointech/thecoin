@@ -3,6 +3,13 @@ import { TheSigner, SignerIdent } from '../../SignerIdent'
 import { GetContract } from '@the-coin/contract';
 import { getWeb3Type } from '../../utils/detection';
 
+export function GetWeb3() {
+  // NOTE!  Browser only!
+  const win: any = window;
+  const { ethereum, web3 } = win;
+  return { ethereum, web3 };
+}
+
 async function AddTheCoin(ethereum: any) {
   const contract = await GetContract();
   const tokenAddress = contract.address
@@ -45,9 +52,7 @@ export async function ConnectWeb3() {
   if (!type)
     throw new Error('Cannot connect');
 
-  // NOTE!  Browser only!
-  const win: any = window;
-  const { ethereum, web3 } = win;
+  const { ethereum, web3 } = GetWeb3();
   if (ethereum) {
     try {
       // Request account access if needed

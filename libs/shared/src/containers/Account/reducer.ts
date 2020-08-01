@@ -11,7 +11,7 @@ import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances } from './history';
-import { login3Box } from './3box';
+//import { login3Box } from '3box-interop';
 
 // The reducer for a single account state
 export class AccountReducer extends TheCoinReducer<AccountState>
@@ -28,7 +28,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       signer,
       contract
     });
-    yield call(login3Box, signer);
+    //yield call(login3Box, this.state);
     yield this.sendValues(this.actions().updateBalance, []);
   }
 
@@ -36,6 +36,12 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   updateWithValues(newState: Partial<AccountState>) {
     Object.assign(this.draftState, newState);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  // Connect with the 3box api
+  *login3box() {
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
