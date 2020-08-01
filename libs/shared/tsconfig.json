@@ -6,6 +6,6 @@
     "rootDir": "./src/",
     "baseUrl": "./src/"
   },
-  "include": ["src/**/*", "declarations/*"],
+  "include": ["src/**/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]
 }

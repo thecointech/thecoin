@@ -14,13 +14,11 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/utils-ts"
   },
-
   "scripts": {
     "test": "yarn jest",
     "build": "yarn tsc -b -v && yarn build:copy",
     "build:copy": "cpx \"./src/**/*.module.css\" ./build/"
   },
-
   "files": [
     "./build/**/*"
   ],
@@ -30,22 +28,24 @@
     "./": "./build/"
   },
   "dependencies": {
+    "3box": "^1.20.3",
     "@the-coin/pricing": "",
     "@the-coin/utilities": "",
+    "axios": "*",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",
+    "identity-wallet": "^1.3.0",
     "immer-reducer": "^0.7.10",
     "react-dates": "^21.5.1",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "1.3.0",
-    "axios": "*"
+    "redux-injectors": "1.3.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.7.7",
+    "@the-coin/types": "*",
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
-    "@the-coin/types": "*",
     "jest": "*"
   }
 }
