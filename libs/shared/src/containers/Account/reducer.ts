@@ -42,6 +42,13 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   *login3box() {
   }
 
+  *loadSpace(_name: string) {
+  }
+
+  *saveSpace(_name: string, _data: any) {
+
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin

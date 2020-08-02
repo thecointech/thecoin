@@ -1,0 +1,5 @@
+{
+  "deepcode.review.results.hideInformationIssues": false,
+  "jest.pathToJest": "yarn jest",
+  "jest.debugMode": true
+}

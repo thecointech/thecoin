@@ -39,7 +39,8 @@
       "@the-coin/contract/*":   ["../../../libs/contract/build/*"],
       "@the-coin/types/*":      ["../../../libs/types/build/*"],
       "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
-      "@the-coin/shared/*":     ["../../../libs/shared/build/*"]
+      "@the-coin/shared/*":     ["../../../libs/shared/build/*"],
+      "@the-coin/utils-testing/*":     ["../../../libs/utils-testing/build/*"]
     }
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**", "**/*.test.*"]

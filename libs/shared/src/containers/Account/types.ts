@@ -44,10 +44,6 @@ export type AccountState = {
   // 3box state data.  Cached here so we don't
   // have repeated reloads when loading pages
   boxSpaces: Dictionary<object>;
-  common: {
-    etransferData: any;
-    billPayees: any;
-  }
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -60,10 +56,11 @@ export type AccountState = {
 
 export const DefaultAccountValues = {
   contract: null,
-  lastUpdate: new Date(0),xvfdf
+  lastUpdate: new Date(0),
   balance: -1,
   history: [],
   box: null,
+  boxSpaces: {} as Dictionary<object>,
   displayCurrency: CurrencyCode.CAD
 };
 

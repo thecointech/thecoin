@@ -9,7 +9,9 @@ const getConsent = async () => {
 
 describe("We connect and can use 3box storage", () => {
   // Basic operations
-  it ("can connect to a local account", () => {})
+  it ("can connect to a local account", () => {
+
+  })
 
   // I'm not sure how we'll handle remote accounts in unit testing:
   // Perhaps this will need to be left for integration testing later.

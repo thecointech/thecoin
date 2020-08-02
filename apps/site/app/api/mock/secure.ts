@@ -1,28 +1,27 @@
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/types";
 import { buildResponse, delay } from "./network";
-import testWallet from './testAccount1.json';
-import Thisismy from './Thisismy.wallet.json';
+import { Account1, Account2 } from '@the-coin/utils-testing/TestAccounts';
 import { AccountMap, initialState } from "@the-coin/shared/containers/AccountMap";
 
 
 let wallets = [
   {
     id: "123",
-    name: "TestAccNoT First.wallet.json",
+    name: Account1.name,
     type: "Type?",
-    wallet: JSON.stringify(testWallet),
+    wallet: JSON.stringify(Account1.wallet),
   },
   {
     id: "345",
-    name: "TestAccNoT Another",
+    name: Account1.name + " Duplicate",
     type: "Type?",
-    wallet: JSON.stringify(testWallet),
+    wallet: JSON.stringify(Account1.wallet),
   },
   {
     id: "789",
-    name: "This is my.wallet.json",
+    name: Account2.name,
     type: "Type?",
-    wallet: JSON.stringify(Thisismy),
+    wallet: JSON.stringify(Account2.wallet),
   }
 ];
 
@@ -30,9 +29,8 @@ const MockedCode = "MockedCode";
 
 // We automatically insert one of these accounts into our local store
 // This code assumes that our reducer has already been initialized
-const walletToLoad = wallets[1];
 const initReducer = new AccountMap(initialState, initialState);
-initReducer.addAccount(walletToLoad.name, testWallet as any, false);
+initReducer.addAccount(Account1.name, Account1.wallet, false);
 
 const checkCode = ({token}: GoogleToken) => {
   if (MockedCode !== token) {

@@ -1,0 +1,38 @@
+{
+  "name": "@the-coin/utils-testing",
+  "version": "0.1.0",
+  "description": "The Coin: Testing-only utilities",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/utils-testing"
+  },
+  "scripts": {
+    "build": "yarn tsc",
+    "build:clean": "rimraf ./build && rimraf ./coverage",
+    "test": "jest --coverage",
+    "test:summary": "jest --coverage > ./coverage/summary.txt"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^2.4.0"
+  },
+  "devDependencies": {
+    "@the-coin/types": "*",
+    "jest": "*"
+  }
+}

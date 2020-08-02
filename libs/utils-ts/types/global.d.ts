@@ -5,3 +5,7 @@ declare namespace NodeJS {
     }
   }
 }
+
+declare module 'base32' {
+  function encode(buffer: Buffer) : string;
+}

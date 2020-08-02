@@ -11,6 +11,9 @@
     },
     {
       "path": "libs/types"
+    },
+    {
+      "path": "libs/utils-testing"
     }
   ],
   "settings": {
