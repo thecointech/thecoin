@@ -12,7 +12,7 @@ afterAll(() => {
 
 const tempDbs = '/temp/dbtest';
 
-test("Can store KV pairs in Config", async () => {
+it("Can store KV pairs in Config", async () => {
 
   ConfigStore.initialize({
     adapter: "memory",
@@ -38,7 +38,7 @@ test("Can store KV pairs in Config", async () => {
   await ConfigStore.release();
 });
 
-test("Can create DB on disk", async () => {
+it("Can create DB on disk", async () => {
   jest.setTimeout(5000);
   const ts = Date.now();
   const test_prefix = `${tempDbs}/${ts}`;

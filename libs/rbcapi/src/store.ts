@@ -1,7 +1,7 @@
 import { RbcTransaction } from "./types";
 import { DateTime } from "luxon";
 import credentials from './credentials.json';
-import { BaseStore, ConfigStore } from "../store";
+import { BaseStore, ConfigStore } from "@the-coin/store";
 
 const lastSyncKey = 'LastSync';
 
@@ -43,7 +43,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
               ? false
               : doc;
           };
-          await RbcStore.db.upsert<StoredTx>(_id, upsert);
+          await this.upsert(_id, upsert);
         }
         catch (e)
         {

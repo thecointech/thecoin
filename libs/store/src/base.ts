@@ -6,9 +6,23 @@ PouchDB.plugin(upsert);
 const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
 
 export function BaseStore<T>(name: string) {
+
+  type UpsertFn =  (val: Partial<T>) => false | T;
+
   return class BaseStore {
     static db: PouchDB.Database<T>;
     static counter: number = 0;
+
+    static merge(key: string, value: T) {
+      return BaseStore.upsert(key, (doc) => ({
+        ...doc,
+        ...value
+      }));
+    }
+
+    static upsert(key: string, upsertfn: UpsertFn) {
+      return this.db.upsert<T>(key, upsertfn);
+    }
 
     static initialize(options?: PouchDB.Configuration.DatabaseConfiguration) {
       if (BaseStore.db == null) {
@@ -19,7 +33,7 @@ export function BaseStore<T>(name: string) {
         };
         console.log(`Initialized DB ${name} at: ${mergeopts.prefix ?? 'localStorage'}`);
 
-        BaseStore.db = new PouchDB(name, mergeopts);
+        BaseStore.db = new PouchDB<T>(name, mergeopts);
       }
       BaseStore.counter++;
     }

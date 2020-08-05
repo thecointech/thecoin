@@ -6,10 +6,7 @@ type DocType = {
 export class ConfigStore extends BaseStore<DocType>("config_data") {
 
   static set(key: string, value: string) {
-    return ConfigStore.db.upsert(key, (doc) => ({
-      ...doc,
-      value
-    }));
+    return ConfigStore.merge(key, {value});
   }
 
   static async get(key: string) : Promise<string|undefined> {
