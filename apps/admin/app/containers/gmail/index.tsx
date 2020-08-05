@@ -219,7 +219,7 @@ export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, progr
         // Complete this deposit (send $$ to user)
         const tx = await completeTheTransfer(deposit);
         deposit.tx = tx;
-        deposit.record.hash = tx.txHash;
+        deposit.record.hash = tx.txHash!;
       }
       else {
         // Remove the completed timestamp

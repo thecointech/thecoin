@@ -7,7 +7,7 @@ import { TransferRecord, DepositRecord } from "../autoaction/types";
 import { RatesApi } from '@the-coin/pricing';
 import { depositInBank, storeInDB } from "./process";
 import { toCoin, isPresent } from "@the-coin/utilities";
-import { completeTheTransfer } from "./contract";
+import { waitTheTransfer, startTheTransfer } from "./contract";
 import { DepositData } from "./types";
 import { Timestamp } from "@the-coin/utilities/firestore";
 
@@ -114,8 +114,18 @@ export async function ProcessUnsettledDeposits()
       continue;
     }
 
+    var tx = await startTheTransfer(deposit);
+    // Store first indication of attempted deposit
+    deposit.record.hash = tx.hash;
+    var success = await storeInDB(deposit.instruction.address!, deposit.record);
+
+    if (!success)
+    {
+      log.error({address: deposit.instruction.address, hash: tx.hash},
+        `Initial store failed for deposit from: {address} with hash {hash}`);
+    }    
     // All is good, finally we try to process the deposit
-    var hash = await completeTheTransfer(deposit);
+    var hash = await waitTheTransfer(tx);
 
     // If deposited & transferred, then we mark complete
     if (hash)

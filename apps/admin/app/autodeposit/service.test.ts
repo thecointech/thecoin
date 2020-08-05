@@ -38,7 +38,10 @@ it('We have valid deposits', async () => {
   }
 })
 
-test.skip('we complete all deposits', async () => {
+it('completes all deposits', async () => {
+  if (process.env.EXPLICIT_RUN !== 'true')
+    return;
+    
   const deposits = await ProcessUnsettledDeposits();
   expect(deposits).not.toBeUndefined();
 
