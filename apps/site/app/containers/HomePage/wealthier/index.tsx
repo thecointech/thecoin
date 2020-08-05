@@ -13,7 +13,7 @@ export const Wealthier = () => {
 
   return (
     <React.Fragment>
-      <Grid>
+      <Grid stackable>
         <Grid.Row columns={3}>
           <Grid.Column>
               <Header as='h2'>
@@ -30,7 +30,7 @@ export const Wealthier = () => {
               </p>
           </Grid.Column>
 
-          <Grid.Column columns={3} >
+          <Grid.Column columns={3}>
               <img src={startnow} />
               <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.startnow.title"
@@ -52,7 +52,7 @@ export const Wealthier = () => {
               </a>
           </Grid.Column>
 
-          <Grid.Column columns={3} >
+          <Grid.Column columns={3}>
               <img src={investment} />
               <Header as='h4'>
                 <FormattedMessage id="site.homepage.wealthier.investment.title"

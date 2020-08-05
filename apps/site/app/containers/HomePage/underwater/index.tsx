@@ -30,7 +30,7 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
               </p>
           </div>
-        <Grid className={styles.content} padded doubling>
+        <Grid className={styles.content} padded doubling stackable>
           <Grid.Row columns="3" >
             <Grid.Column>
                 <img src={co2} />
