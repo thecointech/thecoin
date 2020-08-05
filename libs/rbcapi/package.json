@@ -37,12 +37,14 @@
       "./": "./build/"
     },
     "dependencies": {
-      "axios": "*",
+    "puppeteer": "^2.1.1",
+    "axios": "*",
       "luxon": "*"
     },
     "devDependencies": {
       "@the-coin/types": "*",
-      "jest": "*"
+    "@types/puppeteer": "^2.0.1",
+    "jest": "*"
     }
   }
   
