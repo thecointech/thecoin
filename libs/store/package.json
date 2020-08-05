@@ -33,6 +33,7 @@
     "pouchdb": "*"
   },
   "devDependencies": {
-    "jest": "*"
+    "jest": "*",
+    "pouchdb-adapter-memory": "*"
   }
 }
