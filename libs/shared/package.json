@@ -46,6 +46,7 @@
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
+    "fake-indexeddb": "^3.1.2",
     "jest": "*"
   }
 }

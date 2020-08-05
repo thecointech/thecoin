@@ -27,3 +27,5 @@ secret.json
 **/coverage/**
 !**/summary.txt
 libs/contract/src/deployed/
+libs/shared/ipfs/
+libs/shared/orbitdb/

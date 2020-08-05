@@ -42,7 +42,7 @@ export type AccountState = {
   // 3Box box
   box: any | null;
   // 3box state data.  Cached here so we don't
-  // have repeated reloads when loading pages
+  // have repeated reloads when navigating the site
   boxSpaces: Dictionary<object>;
 
   // cache values to remember the date range we
