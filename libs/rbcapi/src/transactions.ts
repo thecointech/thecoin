@@ -1,12 +1,11 @@
 import { Page } from "puppeteer";
-
 import { DateTime } from "luxon";
-import { trimQuotes } from "../utils";
 import { RbcTransaction } from "./types";
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
 import { RbcStore } from "./store";
-import credentials from './credentials.json';
+
+export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
 
 //
 // Fetch, from storage or from live, all latest transactions
@@ -35,7 +34,7 @@ export async function getTransactions(from: Date, to: Date) : Promise<RbcTransac
   const { page } = act;
 
   // Go to CAD account
-  await act.clickOnLinkText(credentials.accountNo, '#search-transaction');
+  await act.clickOnLinkText(ApiAction.Credentials.accountNo, '#search-transaction');
   // To to download transactions
   await act.clickOnLinkText('Download Transactions', '#ACCOUNT_INFO1');
 
@@ -60,13 +59,13 @@ export async function getTransactions(from: Date, to: Date) : Promise<RbcTransac
   const txs = await downloadTxCsv(act.page);
 
   const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
-  const toDateTime = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", credentials.TimeZone);
+  const toDateTime = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", RbcStore.Options);
 
   const allLines = txs.split('\n');
   return allLines
     .slice(1)
     .map(line => line.split(','))  // Split into component pieces
-    .filter(entry => entry[1] == credentials.accountNo) // Do not accept any line that does not have the right account type
+    .filter(entry => entry[1] == ApiAction.Credentials.accountNo) // Do not accept any line that does not have the right account type
     .map((entry) : RbcTransaction =>  ({
         AccountType: entry[0],
         AccountNumber: entry[1],

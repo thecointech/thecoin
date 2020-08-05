@@ -1,5 +1,5 @@
 import { ApiAction } from "./action";
-import { log } from "logging";
+import { log } from "@the-coin/logging";
 import { ETransferPacket } from "@the-coin/types";
 
 

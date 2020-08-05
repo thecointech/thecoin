@@ -1,5 +1,5 @@
 import { authorize, isValid, finishLogin } from './auth';
-import { ConfigStore } from '../store';
+import { ConfigStore } from '@the-coin/store';
 
 beforeAll(() => {
   ConfigStore.initialize();

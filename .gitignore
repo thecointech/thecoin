@@ -31,3 +31,4 @@ apps/site/app/containers/HomePage/advantages/index.module.css
 apps/site/app/containers/HomePage/advantages/index.module.css.map
 apps/tx-processor/src/account.json
 apps/tx-processor/src/account-secret.json
+*secret.json

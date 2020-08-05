@@ -5,6 +5,13 @@ PouchDB.plugin(upsert);
 
 const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
 
+// Duplicated out of PouchDB-upsert to keep types happy upstream
+type UpsertResponse = {
+  id: PouchDB.Core.DocumentId;
+  rev: PouchDB.Core.RevisionId;
+  updated: boolean;
+}
+
 export function BaseStore<T>(name: string) {
 
   type UpsertFn =  (val: Partial<T>) => false | T;
@@ -20,7 +27,7 @@ export function BaseStore<T>(name: string) {
       }));
     }
 
-    static upsert(key: string, upsertfn: UpsertFn) {
+    static upsert(key: string, upsertfn: UpsertFn) : Promise<UpsertResponse> {
       return this.db.upsert<T>(key, upsertfn);
     }
 

@@ -1,5 +1,4 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import credentials from './credentials.json';
 import fs from 'fs';
 
 ////////////////////////////////////////////////////////////////
@@ -19,8 +18,15 @@ async function getPage() {
   return browser.newPage();
 }
 
+export type Credentials = {
+  password: string;
+  cardNo: string;
+  accountNo: string;
+}
 
 export class ApiAction {
+
+  static Credentials: Credentials;
 
   page!: Page;
   navigationPromise!: Promise<puppeteer.Response>;
@@ -53,8 +59,8 @@ export class ApiAction {
 
   public async login() {
     // Enter user name and passwords
-    await this.page.type('#K1', credentials.cardNo, { delay: 20 });
-    await this.page.type('#Q1', credentials.password, { delay: 20 });
+    await this.page.type('#K1', ApiAction.Credentials.cardNo, { delay: 20 });
+    await this.page.type('#Q1', ApiAction.Credentials.password, { delay: 20 });
     await this.writeStep('Entered Sign-in details');
 
     await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In')

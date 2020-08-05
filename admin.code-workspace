@@ -20,6 +20,9 @@
     },
     {
       "path": "libs\\store"
+    },
+    {
+      "path": "libs\\logging"
     }
   ],
   "settings": {
@@ -34,5 +37,6 @@
     },
     "jest.pathToJest": "./node_modules/.bin/jest",
     "jestrunner.jestPath": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
+    "npm.packageManager": "yarn",
   }
 }

@@ -1,6 +1,5 @@
 import { RbcTransaction } from "./types";
-import { DateTime } from "luxon";
-import credentials from './credentials.json';
+import { DateTime, DateTimeOptions } from "luxon";
 import { BaseStore, ConfigStore } from "@the-coin/store";
 
 const lastSyncKey = 'LastSync';
@@ -13,6 +12,8 @@ type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}> & {
 export class RbcStore extends BaseStore<StoredTx>("rbc_data")
 {
   private static lastSync = new Date(0);
+
+  public static Options: DateTimeOptions;
 
   static async storeTransactions(txs: RbcTransaction[], syncDate: Date) {
     let counter = 0;
@@ -80,7 +81,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
 
 const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
   ...doc,
-  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, credentials.TimeZone)
+  TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, RbcStore.Options)
 })
 
 const isSubset = (superObj: Partial<StoredTx>, subObj: Partial<StoredTx>) => {
