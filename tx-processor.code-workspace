@@ -15,6 +15,9 @@
 		{
 			"name": "utils-ts",
 			"path": "libs\\utils-ts"
+		},
+		{
+			"path": "libs\\store"
 		}
 	],
 	"settings": {},

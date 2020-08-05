@@ -17,6 +17,9 @@
     },
     {
       "path": "libs\\tx-processing"
+    },
+    {
+      "path": "libs\\store"
     }
   ],
   "settings": {

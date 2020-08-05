@@ -18417,7 +18417,7 @@ pouchdb-promise@^6.1.2:
   dependencies:
     lie "3.1.1"
 
-pouchdb-upsert@^2.2.0:
+pouchdb-upsert@*, pouchdb-upsert@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/pouchdb-upsert/-/pouchdb-upsert-2.2.0.tgz#42b15e420848f3b294c35060589fdb51cf7f7f5f"
   integrity sha1-QrFeQghI87KUw1BgWJ/bUc9/f18=
