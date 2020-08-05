@@ -5,7 +5,7 @@ import { InstructionPacket, GetSigner } from "@the-coin/utilities/VerifiedAction
 import { UserAction } from "@the-coin/utilities/User";
 
 import { AddSettlementDate, MarkComplete } from "./utils";
-import { log } from "logging";
+import { log } from "@the-coin/logging";
 
 
 export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {

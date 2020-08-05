@@ -1,10 +1,11 @@
 {
     "name": "@the-coin/tx-processing",
     "version": "0.1.0",
+    "private": true,
     "description": "The Coin: A library for processing coin deposits and etransfers",
     "keywords": [
-    "THECoin"
-],
+      "THECoin"
+    ],
     "author": "Stephen Taylor <stephen@thecoin.io>",
     "homepage": "http://thecoin.io",
     "license": "MIT",
@@ -24,7 +25,10 @@
       "./": "./build/"
     },
     "dependencies": {
-      "@the-coin/rbcapi": "*"
+      "@the-coin/rbcapi": "*",
+      "@the-coin/logging": "*",
+      "@the-coin/shared": "*",
+      "@the-coin/utilities": "*"
     },
     "devDependencies": {
       "jest": "*"
