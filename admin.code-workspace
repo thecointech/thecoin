@@ -11,6 +11,12 @@
     },
     {
       "path": "libs\\contract"
+    },
+    {
+      "path": "libs\\rbcapi"
+    },
+    {
+      "path": "libs\\tx-processing"
     }
   ],
   "settings": {
