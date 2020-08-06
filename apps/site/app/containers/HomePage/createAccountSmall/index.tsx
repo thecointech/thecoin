@@ -2,11 +2,12 @@ import * as React from 'react';
 import { Grid, Button, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import styles from './index.module.css';
 
 export const CreateAccountSmall = () => {
 
   return (
-      <Grid textAlign='center' verticalAlign='middle'>
+      <Grid textAlign='center' verticalAlign='middle' className={styles.content}>
         <Grid.Row>
           <Grid.Column>
             <Header as='h3'>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
+import styles from './index.module.css';
 import coffeePerson from './images/3_illustration.svg';
 import startnow from './images/icon3_01.svg';
 import investment from './images/icon3_02.svg';
@@ -13,7 +14,7 @@ export const Wealthier = () => {
 
   return (
     <React.Fragment>
-      <Grid stackable>
+      <Grid stackable className={styles.content} padded>
         <Grid.Row columns={3}>
           <Grid.Column>
               <Header as='h2'>

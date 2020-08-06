@@ -18,18 +18,37 @@ import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { CreateAccountBig } from './createAccountBig';
 import { Subscribe } from '../Subscribe';
+import { Responsive, Segment } from 'semantic-ui-react';
 
 export const HomePage = () => {
 
   return (
     <React.Fragment>
-      <Landscape />
-      <Advantages />
-      <Wealthier />
-      <CreateAccountSmall />
-      <Underwater />
-      <CreateAccountBig />
-      <Subscribe />
+
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <div>
+          <Landscape />
+          <Advantages />
+          <Wealthier />
+          <CreateAccountSmall />
+          <Underwater />
+          <CreateAccountBig />
+          <Subscribe />
+        </div>
+      </Responsive>
+
+      <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <div id="mobile">
+          <Landscape />
+          <Advantages />
+          <Wealthier />
+          <CreateAccountSmall />
+          <Underwater />
+          <CreateAccountBig />
+          <Subscribe />
+        </div>
+      </Responsive>
+
     </React.Fragment>
   );
 }

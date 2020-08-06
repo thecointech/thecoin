@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Responsive, Segment } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -13,12 +13,13 @@ import landscapeSkyCloudsRight from './images/cloudsRight.svg';
 import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg'
+import landscapeGreenPartMobile from './images/illustration_header_mob.svg'
 
 
 export const Landscape = () => {
   return (
     <React.Fragment>
-      <Grid>
+      <Grid padded doubling stackable>
         <Grid.Row className={styles.mainWrapper}>
           <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
@@ -46,15 +47,21 @@ export const Landscape = () => {
 
       <Stickers />
 
-      <div className={styles.landscape}>
-        <img className={styles.sky} src={sky} />
-        <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
-        <img className={styles.cloudsLeft} src={landscapeSkyCloudsLeft} />
-        <img className={styles.cloudsRight} src={landscapeSkyCloudsRight} />
-        <img className={styles.sunAura} src={SunAura} />
-        <img className={styles.sun} src={Sun} />
-        <img className={styles.greenery} src={landscapeGreenPart} />
-      </div>
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <div className={styles.landscape}>
+          <img className={styles.sky} src={sky} />
+          <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
+          <img className={styles.cloudsLeft} src={landscapeSkyCloudsLeft} />
+          <img className={styles.cloudsRight} src={landscapeSkyCloudsRight} />
+          <img className={styles.sunAura} src={SunAura} />
+          <img className={styles.sun} src={Sun} />
+          <img className={styles.greenery} src={landscapeGreenPart} />
+        </div>
+      </Responsive>
+
+      <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
+      </Responsive>
 
     </React.Fragment>
   );
