@@ -20,7 +20,7 @@ export const Landscape = () => {
   return (
     <React.Fragment>
       <Grid padded doubling stackable>
-        <Grid.Row className={styles.mainWrapper}>
+        <Grid.Row className={styles.mainWrapper} id="mainWrapper">
           <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
               <h1 className={styles.h1Home}>
