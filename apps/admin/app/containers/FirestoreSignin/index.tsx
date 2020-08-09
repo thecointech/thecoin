@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { GetUsername, SetUsername, SetPassword } from "./credentials";
+import { GetUsername, SetUsername, SetPassword } from "@the-coin/store/firestore";
 import { Input, InputOnChangeData, Button } from "semantic-ui-react";
 import { signIn } from "./firestore";
 

@@ -1,6 +1,5 @@
 import React from "react";
-import { TransferData } from "autoaction/types";
-import { DepositData } from "../../autodeposit/types";
+import { TransferData, DepositData } from "@the-coin/tx-processing";
 import { Segment, Select } from "semantic-ui-react";
 
 

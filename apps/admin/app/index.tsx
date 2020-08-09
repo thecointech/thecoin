@@ -6,7 +6,7 @@ import {createReducer} from './reducers';
 import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
-import { RbcStore } from './RbcApi/store';
+import { RbcStore } from "@the-coin/rbcapi/store";
 import { ConfigStore } from '@the-coin/store';
 
 // Import Language Provider

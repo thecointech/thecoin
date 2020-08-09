@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { EncryptedList } from "containers/EncryptedList";
 import { ETransferPacket, CertifiedTransferRequest } from "@the-coin/types";
 import { Segment, Button } from "semantic-ui-react";
-import { TransferData } from "autoaction/types";
+import { TransferData } from "@the-coin/tx-processing";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { Contract } from "ethers";
 

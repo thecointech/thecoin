@@ -1,26 +1,25 @@
-//import {googleSignIn} from './auth'
 import React, { useEffect, useState, useCallback } from 'react';
-import { authorize, finishLogin, isValid } from '../../autodeposit/auth';
+import { authorize, finishLogin, isValid } from '@the-coin/tx-processing/deposit/auth';
 import { Input, Button } from 'semantic-ui-react';
-import { addFromGmail, initializeApi, setETransferLabel } from '../../autodeposit/addFromGmail';
-import { DepositData } from '../../autodeposit/types';
+import { addFromGmail, initializeApi, setETransferLabel } from '@the-coin/tx-processing/deposit/addFromGmail';
+import { DepositData } from '@the-coin/tx-processing/deposit/types';
 import { OAuth2Client } from 'google-auth-library';
 
 import { useFxRates, useFxRatesApi, IFxRates } from '@the-coin/shared/containers/FxRate';
 import { TransferList } from 'containers/TransferList/TransferList';
-import { AddSettlementDate } from 'autoaction/utils';
+import { AddSettlementDate } from '@the-coin/tx-processing/base/utils';
 import { DepositRenderer } from './DepositRenderer';
-import { addFromDB } from '../../autodeposit/addFromDB';
-import { addFromBank } from '../../autodeposit/addFromBank';
-import { addFromBlockchain } from '../../autodeposit/addFromBlockchain';
+import { addFromDB } from '@the-coin/tx-processing/deposit/addFromDB';
+import { addFromBank } from '@the-coin/tx-processing/deposit/addFromBank';
+import { addFromBlockchain } from '@the-coin/tx-processing/deposit/addFromBlockchain';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useAccountApi } from '@the-coin/shared/containers/Account';
-import { RbcApi, ETransferErrorCode } from 'RbcApi';
-import { PurchaseType } from 'autoaction/types';
+import { RbcApi, ETransferErrorCode } from '@the-coin/rbcapi';
+import { PurchaseType } from '@the-coin/tx-processing';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
-import { storeInDB, depositInBank } from 'autodeposit/process';
-import { completeTheTransfer } from 'autodeposit/contract';
+import { storeInDB, depositInBank } from '@the-coin/tx-processing/deposit/process';
+import { completeTheTransfer } from '@the-coin/tx-processing/deposit/contract';
 
 
 export const Gmail = () => {
