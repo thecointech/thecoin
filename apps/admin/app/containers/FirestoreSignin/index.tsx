@@ -1,38 +1,56 @@
-import React, { useState, useCallback } from "react";
-import { GetUsername, SetUsername, SetPassword } from "@the-coin/store/firestore";
-import { Input, InputOnChangeData, Button } from "semantic-ui-react";
-import { signIn } from "./firestore";
+import React, { useState, useCallback, useEffect } from "react";
+import { Input, InputOnChangeData, Button, Form, Segment, Header } from "semantic-ui-react";
+import { signIn, trySignIn } from "./firestore";
 
-export const Firestore = async () => {
+export const FirestoreCheck = () => {
+    const [hasSignIn, setHasSignIn] = useState(false);
 
-    const u = await GetUsername();
-    return u == null
-        ? <FirestoreSignIn />
-        : undefined
+    // Do we need to display?  If we have details, assume no
+    useEffect(() => {
+        () => signIn()
+            .then(setHasSignIn)
+            .catch(console.error);
+    }, []);
+
+    return hasSignIn
+        ? null
+        : <FirestoreSignIn onDone={setHasSignIn} />
 }
 
-export const FirestoreSignIn = () => {
+type SetDone = (done: boolean) => void
+export const FirestoreSignIn = (props: {onDone: SetDone}) => {
+
+    const [signingIn, setIsSigningIn] = useState(false);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
-
-
+    // Try signing in
     const onSignIn = useCallback(() => {
-        SetUsername(name);
-        SetPassword(password);
-        signIn();
+        setIsSigningIn(true)
+        trySignIn(name, password)
+            .then(v => {
+                props.onDone(v);
+                setIsSigningIn(false);
+            }).catch(err => {
+                console.error(err);
+                setIsSigningIn(false)
+            });
     }, [name, password]);
 
     return (
-        <>
-            <Input onChange={OnChangeHook(setName)} value={name} />
-            <Input onChange={OnChangeHook(setPassword)} value={password} />
-            <Button onClick={onSignIn} />
-        </>)
+        <Segment>
+            <Header size="medium">FireStore not Connected!</Header>
+            <Form>
+                <Input disabled={signingIn} placeholder="username" onChange={OnChangeHook(setName)} value={name} /><br />
+                <Input disabled={signingIn} placeholder="password" onChange={OnChangeHook(setPassword)} value={password} /><br />
+                <Button onClick={onSignIn} loading={signingIn}>Sign-In</Button>
+            </Form>
+        </Segment>
+    );
 }
+
 
 const OnChangeHook = (cb: (v: string) => void) =>
     useCallback((event: React.ChangeEvent<HTMLInputElement>, _data: InputOnChangeData) => {
         cb(event.currentTarget.value);
-    },
-        [cb]);
+    }, [cb]);

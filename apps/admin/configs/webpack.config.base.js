@@ -13,7 +13,8 @@ export default {
   externals: [
     "puppeteer",
     "pouchdb",
-    ...Object.keys(dependencies || {})
+    //"firebase",
+    //...Object.keys(dependencies || {})
   ],
 
   module: {

@@ -12,10 +12,11 @@ import { Timestamp } from './timestamp';
 import firebaseConfig from "./password.config.json";
 // Your web app's Firebase configuration
 
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 export const init = async (name: string, password: string) =>
 {
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
 
   const _auth = firebase.auth();
   const cred = await _auth.signInWithEmailAndPassword(name, password);

@@ -10,8 +10,6 @@ export function GenerateAliases() {
 
       r[key] = key + "/build";
     }
-  
-    console.log(r);
     return r;
   }
   
