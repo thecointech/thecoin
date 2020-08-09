@@ -17,7 +17,6 @@ firebase.initializeApp(firebaseConfig);
 
 export const init = async (name: string, password: string) =>
 {
-
   const _auth = firebase.auth();
   const cred = await _auth.signInWithEmailAndPassword(name, password);
   if (cred != null)

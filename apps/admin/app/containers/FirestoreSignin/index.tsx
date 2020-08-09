@@ -7,7 +7,7 @@ export const FirestoreCheck = () => {
 
     // Do we need to display?  If we have details, assume no
     useEffect(() => {
-        () => signIn()
+        signIn()
             .then(setHasSignIn)
             .catch(console.error);
     }, []);
@@ -18,7 +18,7 @@ export const FirestoreCheck = () => {
 }
 
 type SetDone = (done: boolean) => void
-export const FirestoreSignIn = (props: {onDone: SetDone}) => {
+export const FirestoreSignIn = (props: { onDone: SetDone }) => {
 
     const [signingIn, setIsSigningIn] = useState(false);
     const [name, setName] = useState("");
