@@ -1,6 +1,6 @@
 import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
 import { PurchaseType } from "../base/types";
-import { signIn } from "../utils/Firebase";
+import { signIn } from "../firestore";
 import { RbcStore } from '@the-coin/rbcapi';
 import { ConfigStore } from '@the-coin/store';
 
@@ -10,8 +10,10 @@ beforeAll(async () => {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  await signIn()
+  // NOTE: this will fail without a saved username/password
+  await signIn();
 });
+
 afterAll(() => {
   RbcStore.release();
   ConfigStore.release();

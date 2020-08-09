@@ -8,7 +8,7 @@ export const isEmulatorAvailable = process.env.FIRESTORE_EMULATOR != 'false'
 
 export async function init(projectId: string) {
   if (!isEmulatorAvailable) {
-    return null;
+    return false;
   }
 
   const admin = firebase.initializeAdminApp({
@@ -25,5 +25,5 @@ export async function init(projectId: string) {
 
   // Directly link to appropriate Timestamp
   Timestamp.init(firebase.firestore.Timestamp)
-  return _db;
+  return true;
 }

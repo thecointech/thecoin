@@ -3,7 +3,7 @@ import { IsValidAddress } from "@the-coin/utilities";
 import { GetUserDoc } from "@the-coin/utilities/User";
 import { Dictionary } from 'lodash';
 import { addNewEntries } from "./process";
-import { PurchaseType, DepositRecord } from "autoaction/types";
+import { PurchaseType, DepositRecord } from "../base/types";
 
 // Search through all deposits, and match with existing deposits
 export async function addFromDB(deposits: DepositData[]) {

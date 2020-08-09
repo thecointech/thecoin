@@ -1,5 +1,5 @@
 import { ConfigStore } from "@the-coin/store";
-import { signIn } from "../utils/Firebase";
+import { signIn } from "../firestore";
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
 import { log } from "@the-coin/logging";
 

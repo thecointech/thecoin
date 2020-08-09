@@ -7,7 +7,7 @@ import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
 import { RbcStore } from './RbcApi/store';
-import { ConfigStore } from './store/config';
+import { ConfigStore } from '@the-coin/store';
 
 // Import Language Provider
 import LanguageProvider from './containers/LanguageProvider';
@@ -22,14 +22,6 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 //import './app.global.css';
 import 'semantic-ui-css/semantic.min.css'
-
-// We do some hackery with the path.fix to allow
-import {pathFix} from './utils/pathFix';
-pathFix();
-
-// We do some hackery with the path.fix to allow
-import {signIn} from './utils/Firebase';
-signIn();
 
 RbcStore.initialize({adapter: "leveldb"});
 ConfigStore.initialize({adapter: "leveldb"});

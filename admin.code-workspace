@@ -9,12 +9,12 @@
       "path": "libs\\shared"
     },
     {
-      "name": "utils-ts",
-      "path": "libs\\utils-ts"
-    },
-    {
       "name": "tx-processing",
       "path": "libs\\tx-processing"
+    },
+    {
+      "name": "utils-ts",
+      "path": "libs\\utils-ts"
     },
     {
       "name": "rbcapi",
