@@ -1,7 +1,7 @@
 import { DepositData, BankRecord } from "./types";
 import { addNewEntries } from "./process";
-import { PurchaseType } from "autoaction/types";
-import { RbcApi } from "RbcApi";
+import { PurchaseType } from "../base/types";
+import { RbcApi } from "@the-coin/rbcapi";
 import { Timestamp } from "@the-coin/utilities/firestore";
 import { DateTime } from "luxon";
 

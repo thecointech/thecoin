@@ -1,9 +1,9 @@
 import { authorize, isValid } from "./auth";
 import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
-import { log } from '../logging';
-import { RbcApi, ETransferErrorCode } from "../RbcApi";
+import { log } from '@the-coin/logging';
+import { RbcApi, ETransferErrorCode } from "@the-coin/rbcapi";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { TransferRecord, DepositRecord } from "../autoaction/types";
+import { TransferRecord, DepositRecord } from "../base/types";
 import { RatesApi } from '@the-coin/pricing';
 import { depositInBank, storeInDB } from "./process";
 import { toCoin, isPresent } from "@the-coin/utilities";

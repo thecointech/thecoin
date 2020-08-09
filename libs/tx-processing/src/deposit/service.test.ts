@@ -1,8 +1,8 @@
 import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
-import { PurchaseType } from "../autoaction/types";
+import { PurchaseType } from "../base/types";
 import { signIn } from "../utils/Firebase";
-import { RbcStore } from '../RbcApi/store';
-import { ConfigStore } from '../store';
+import { RbcStore } from '@the-coin/rbcapi';
+import { ConfigStore } from '@the-coin/store';
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;

@@ -1,7 +1,7 @@
-import { ConfigStore } from "../store";
+import { ConfigStore } from "@the-coin/store";
 import { signIn } from "../utils/Firebase";
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
-import { log } from "../logging";
+import { log } from "@the-coin/logging";
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;

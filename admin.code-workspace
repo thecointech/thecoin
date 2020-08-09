@@ -1,28 +1,36 @@
 {
 	"folders": [
     {
+      "name": "admin",
       "path": "apps\\admin"
     },
     {
+      "name": "shared",
       "path": "libs\\shared"
     },
     {
+      "name": "utils-ts",
       "path": "libs\\utils-ts"
     },
     {
-      "path": "libs\\contract"
-    },
-    {
-      "path": "libs\\rbcapi"
-    },
-    {
+      "name": "tx-processing",
       "path": "libs\\tx-processing"
     },
     {
+      "name": "rbcapi",
+      "path": "libs\\rbcapi"
+    },
+    {
+      "name": "store",
       "path": "libs\\store"
     },
     {
+      "name": "logging",
       "path": "libs\\logging"
+    },
+    {
+      "name": "contract",
+      "path": "libs\\contract"
     }
   ],
   "settings": {

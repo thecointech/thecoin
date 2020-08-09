@@ -6,6 +6,6 @@
     "rootDir": "./src/",
     "baseUrl": "./src/"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/**/*.json"],
   "references": [{ "path": "../utils-ts/" }]
 }

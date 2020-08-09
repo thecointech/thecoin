@@ -3,7 +3,7 @@ import path from 'path';
 import { mkdirSync } from 'fs';
 
 
-export const log : bunyan = null as any;
+export let log : bunyan = null as any;
 
 export function init(name: string) {
   const folder =`/temp/TheCoin/${name}/logs`;
@@ -11,7 +11,7 @@ export function init(name: string) {
   
   // TODO: Obvs, we can't do this on appengine/browser.
   mkdirSync(folder, { recursive: true });
-  bunyan.createLogger({
+  log = bunyan.createLogger({
     name,
     streams: [
       {

@@ -3,7 +3,7 @@ import { Transaction } from "@the-coin/shared/containers/Account";
 import { weSellAt } from "@the-coin/shared/containers/FxRate";
 import { FXRate } from '@the-coin/pricing'
 import { toHuman, IsValidAddress, NormalizeAddress, toCoin } from "@the-coin/utilities";
-import { PurchaseType } from "../autoaction/types";
+import { PurchaseType } from "../base/types";
 import { Timestamp } from "@the-coin/utilities/firestore";
 
 

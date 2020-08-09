@@ -1,39 +1,38 @@
 import { Contract, Wallet } from "ethers";
-import encrypted from './account.json';
-import {key} from './account-secret.json';
 import { ConnectContract } from "@the-coin/contract";
 import { DepositData } from "./types";
-import { log } from "../logging";
+import { log } from "@the-coin/logging";
 import { Transaction } from "@the-coin/shared/containers/Account/types";
 
-let _contract: Contract|null = null;
+let _contract: Contract;
 
-export async function GetContract() : Promise<Contract> {
+
+export async function InitContract(wallet: Wallet) : Promise<Contract> {
   if (_contract == null)
   {
-    log.debug({address: encrypted.address}, 'Decrypting contract for {address}');
-    const TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key, () => {
-      // Do nothing
-    });
-    _contract = await ConnectContract(TCWallet);
+    //log.debug({address: encrypted.address}, 'Decrypting contract for {address}');
+    // const TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key, () => {
+    //   // Do nothing
+    // });
+    _contract = await ConnectContract(wallet);
   }
-  return _contract!;
+  return _contract;
 }
 
 type EthersTx = {
   hash: string;
   wait: () => Promise<void>;
 }
+
 export async function startTheTransfer(deposit: DepositData)
 {
-  const contract = await GetContract();
   const {record, instruction} = deposit;
   const {address} =instruction;
   if (!record.processedTimestamp)
     throw new Error("Cannot complete transfer without speficying Processed Timestamp")
   log.debug({address}, `Transfering ${record.transfer.value} to {address}`);
 
-  const tx: EthersTx = await contract.coinPurchase(
+  const tx: EthersTx = await _contract.coinPurchase(
     address,
     record.transfer.value,
     0,

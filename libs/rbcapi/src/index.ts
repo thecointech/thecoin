@@ -4,8 +4,8 @@ import { depositETransfer } from './deposit';
 import { ETransferPacket } from '@the-coin/types';
 import { send } from './etransfer';
 import { log } from '@the-coin/logging';
-import { ApiAction, Credentials } from 'action';
-import { RbcStore } from 'store';
+import { ApiAction, Credentials } from './action';
+import { DateTimeOptions } from 'luxon';
 
 export class RbcApi {
 
@@ -18,12 +18,14 @@ export class RbcApi {
 
   // Set timezone of the account.  This is important for ensuring that the
   // transactions being fecthed are assigned to the right day
-  static SetDefaultTimezone(timezone: string) {
-    RbcStore.Options = {
-      ...RbcStore.Options,
-      zone: timezone
-    }
-  }
+  // static SetDefaultTimezone(timezone: string) {
+  //   RbcStore.Options = {
+  //     ...RbcStore.Options,
+  //     zone: timezone
+  //   }
+  // }
+
+  static ApiTimeZone: Pick<DateTimeOptions, "zone">;
 
   depositETransfer = (prefix: string, url: string, code: string, progressCb: ProgressCallback) =>  depositETransfer(prefix, url, code, progressCb);
 
@@ -44,4 +46,5 @@ export class RbcApi {
   }
 }
 
+export { RbcStore } from './store';
 export * from './types';

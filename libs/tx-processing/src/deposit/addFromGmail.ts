@@ -2,11 +2,12 @@ import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { DepositData } from './types';
 import { Base64 } from 'js-base64';
-import { DepositRecord, PurchaseType } from '../autoaction/types';
+import { DepositRecord, PurchaseType } from '../base/types';
 import { addNewEntries } from './process';
-import { trimQuotes } from '../utils';
-import { log } from 'logging';
+import { log } from '@the-coin/logging';
 import { Timestamp } from '@the-coin/utilities/firestore';
+
+export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
 
 let __gmail: gmail_v1.Gmail | null = null;
 const getGmail = () => {

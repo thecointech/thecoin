@@ -17,7 +17,7 @@ import { Timestamp } from '@the-coin/utilities/firestore';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { DocumentReference } from '@the-coin/types';
 import { DepositRecord, PurchaseType } from '../../autoaction/types';
-import { GetAccountCode } from '../BrokerTransferAssistant/Wallet';
+import { GetAccountCode } from '../../../../../libs/tx-processing/src/BrokerTransferAssistant';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"

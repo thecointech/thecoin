@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { ConfigStore } from '@the-coin/store';
 import credentials from './api.test.secret.json';
-
+import { init } from '@the-coin/logging'
 
 beforeAll(() => {
   PouchDB.plugin(require('pouchdb-adapter-memory'));
@@ -16,6 +16,8 @@ beforeAll(() => {
     adapter: "memory"
   })
   jest.setTimeout(500000);
+
+  init("rbcapi");
 });
 
 afterAll(() => {
@@ -46,9 +48,10 @@ describe('Rbc Puppeteer-based API', () => {
   test("Get's new transactions but no more", async () => {
 
     RbcApi.SetCredentials(credentials);
-    RbcApi.SetDefaultTimezone(credentials.TimeZone.zone);
+    RbcApi.ApiTimeZone = credentials.TimeZone;
+    
     const browser = await initBrowser({
-      //headless: false
+      headless: false
     })
 
     const api = new RbcApi();

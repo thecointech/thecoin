@@ -1,5 +1,6 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import fs from 'fs';
+import { log } from '@the-coin/logging';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -22,6 +23,8 @@ export type Credentials = {
   password: string;
   cardNo: string;
   accountNo: string;
+
+  pvq: {question: string, answer: string}[]
 }
 
 export class ApiAction {
@@ -64,7 +67,46 @@ export class ApiAction {
     await this.writeStep('Entered Sign-in details');
 
     await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In')
+  
+    // If we hit PVQ, this is where that happens
+    await this.maybeEnterPVQ();
   }
+
+  public async maybeEnterPVQ() {
+    log.debug("Searching for PVQ questions");
+    var pvqAnswer = await this.page.$("#pvqAnswer");
+    if (pvqAnswer != null) {
+      log.debug("Found PVQ Anwser field");
+
+      const pvQuestion = await this.findPVQuestion(pvqAnswer);
+      if (pvQuestion == null)
+        return;
+
+      const pvq = ApiAction.Credentials.pvq.find(pvq => pvq.question == pvQuestion);
+      if (pvq == null) {
+        log.error({pvq: pvQuestion}, "Cannot match PVQ {pvq} with existing questions");
+        return;
+      }
+
+      await pvqAnswer.type(pvq.answer);
+      await this.writeStep("PVQ");
+
+      await this.clickAndNavigate("#id_btn_continue", "PVQ Passed");
+    }
+  }
+
+  async findPVQuestion(answer: puppeteer.ElementHandle<Element>) {
+    const pvqQuestion = await answer.$x("//INPUT[@id='pvqAnswer']/../../preceding-sibling::TR/TD[2]");
+    if (pvqQuestion == null || pvqQuestion.length == 0) {
+      log.error("Cannot find PVQ question");
+      return null;
+    }
+    const pvq: string = await this.page.evaluate(el => el.innerText, pvqQuestion[0]);
+    log.debug({pvq}, "Found question: {pvq}")
+    return pvq;
+  }
+
+  //////////////////////////////////////////
 
   async clickAndNavigate(selector: string, stepName: string) {
     const navigationWaiter = this.page.waitForNavigation({
@@ -95,7 +137,7 @@ export class ApiAction {
   }
 
   public async writeStep(action: string) {
-    console.log(`step${this.step} - ${action}`);
+    log.debug(`step${this.step} - ${action}`);
     await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
     this.step = this.step + 1;
   }
