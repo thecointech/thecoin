@@ -24,7 +24,9 @@
       "./": "./build/"
     },
     "dependencies": {
-      "@the-coin/rbcapi": "*"
+      "@the-coin/rbcapi": "*",
+      "@the-coin/tx-processing": "*",
+      "@the-coin/logging": "*"
     },
     "devDependencies": {
       "jest": "*"

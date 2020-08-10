@@ -4,7 +4,7 @@ import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "../base
 import { getActionPrivateKey } from "../base/key";
 import { OfflineFxRates } from "../base/fxrates";
 import { log } from "@the-coin/logging";
-import { RbcApi } from "@the-coin/RbcApi";
+import { RbcApi } from "@the-coin/rbcapi";
 import { ETransferPacket } from "@the-coin/types";
 
 export async function processUnsettledETransfers() : Promise<CertifiedTransferRecord[]> {

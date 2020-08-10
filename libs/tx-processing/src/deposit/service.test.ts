@@ -1,8 +1,13 @@
-import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
+import { FetchDepositEmails, GetDepositsToProcess } from './service'
 import { PurchaseType } from "../base/types";
 import { signIn } from "../firestore";
 import { RbcStore } from '@the-coin/rbcapi';
 import { ConfigStore } from '@the-coin/store';
+
+// Don't go to the server for this
+//jest.mock('googleapis');
+jest.mock('@the-coin/rbcapi');
+
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
@@ -27,7 +32,7 @@ it('Can fetch emails', async () => {
 it('We have valid deposits', async () => {
   const deposits = await GetDepositsToProcess();
   expect(deposits).not.toBeUndefined();
-
+  
   for (const deposit of deposits) {
     console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved?.toLocaleString()}`);
     const { record } = deposit;
@@ -37,17 +42,5 @@ it('We have valid deposits', async () => {
     expect(record.recievedTimestamp).toBeTruthy();
     expect(record.processedTimestamp).toBeTruthy();
     expect(record.completedTimestamp).toBeUndefined();
-  }
-})
-
-it('completes all deposits', async () => {
-  if (process.env.EXPLICIT_RUN !== 'true')
-    return;
-    
-  const deposits = await ProcessUnsettledDeposits();
-  expect(deposits).not.toBeUndefined();
-
-  for (const deposit of deposits) {
-    expect(deposit.isComplete).toBeTruthy();
   }
 })

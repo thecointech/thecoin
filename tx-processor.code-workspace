@@ -18,6 +18,12 @@
 		},
 		{
 			"path": "libs\\store"
+		},
+		{
+			"path": "libs\\logging"
+		},
+		{
+			"path": "libs\\contract"
 		}
 	],
 	"settings": {},

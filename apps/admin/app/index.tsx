@@ -11,20 +11,22 @@ import { ConfigStore } from '@the-coin/store';
 
 // Import Language Provider
 import LanguageProvider from './containers/LanguageProvider';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+//import './app.global.css';
+import 'semantic-ui-css/semantic.min.css'
+import { init } from '@the-coin/logging';
+init("admin");
+
+RbcStore.initialize({adapter: "leveldb"});
+ConfigStore.initialize({adapter: "leveldb"});
+
 // Import i18n messages
 //import { translationMessages } from './translations/index.js';
 const translationMessages = {
   "en": {
   }
 }
-
-import "core-js/stable";
-import "regenerator-runtime/runtime";
-//import './app.global.css';
-import 'semantic-ui-css/semantic.min.css'
-
-RbcStore.initialize({adapter: "leveldb"});
-ConfigStore.initialize({adapter: "leveldb"});
 
 const store = configureAppStore(createReducer, undefined, history);
 

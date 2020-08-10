@@ -63,7 +63,7 @@ export async function addFromGmail(query?: string): Promise<DepositData[]> {
 
     // Fetch the actual email
     const emailPending = response.data.messages?.map(m =>
-      gmail!.users.messages.get({
+      gmail.users.messages.get({
         id: m.id ?? undefined,
         userId: 'me'
       })

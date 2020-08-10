@@ -28,7 +28,10 @@ module.exports = {
     "json",
     "node"
   ],
-  globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js')
+  globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js'),
+  setupFiles: [ 
+    path.join(__dirname, 'tools', 'jestTestSetup.js'),
+  ]
   // setupFiles: [
   //   './mocks/localStorage.js'
   // ]

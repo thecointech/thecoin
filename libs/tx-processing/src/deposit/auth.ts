@@ -24,7 +24,8 @@ const TOKEN_KEY = "token.json";
 export async function authorize() {
   const { client_secret, client_id, redirect_uris } = credentials.installed
   const oAuth2Client = new google.auth.OAuth2(
-    client_id, client_secret, redirect_uris[0]);
+    client_id, client_secret, redirect_uris[0]
+  );
 
   // Check if we have previously stored a token.
   const existing = await ConfigStore.get(TOKEN_KEY);
