@@ -17,7 +17,7 @@ export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progre
   const { instruction, record } = deposit;
   log.debug(`Attempting deposit of: $${record.fiatDisbursed}, settled on ${record.processedTimestamp?.toDate().toDateString()}`);
   const {address, name, depositUrl} = instruction;
-  if (!address || IsValidAddress(address))
+  if (!address || !IsValidAddress(address))
   {
     return {
       message: "Cannot complete deposit without a valid address",

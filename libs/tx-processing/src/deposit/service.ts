@@ -105,6 +105,8 @@ export async function ProcessUnsettledDeposits()
   // for each email, we immediately try and deposit it.
   for (const deposit of deposits)
   {
+    //await initiateDeposit(deposit);
+
     // Do the actual deposit
     const result = await depositInBank(deposit, rbcApi, log.trace);
     if (result.code != ETransferErrorCode.Success && result.code != ETransferErrorCode.AlreadyDeposited)
@@ -146,3 +148,10 @@ export async function ProcessUnsettledDeposits()
 
   return deposits;
 }
+
+
+// async function initiateDeposit(deposit: DepositData)
+// {
+//   var success = await storeInDB(deposit.instruction.address!, deposit.record);
+//   return success;
+// }

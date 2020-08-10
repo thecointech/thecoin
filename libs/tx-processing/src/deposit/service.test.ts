@@ -1,25 +1,24 @@
-import { FetchDepositEmails, GetDepositsToProcess } from './service'
+import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
 import { PurchaseType } from "../base/types";
-import { RbcStore } from '@the-coin/rbcapi';
 import { ConfigStore } from '@the-coin/store';
-import { init } from '@the-coin/utilities/firestore/jestutils';
+import { init, describe } from '@the-coin/utilities/firestore/jestutils';
+import { InitContract } from './contract';
 
 // Don't go to the server for this
 //jest.mock('googleapis');
-jest.mock('@the-coin/rbcapi');
-
+//jest.mock('@the-coin/rbcapi');
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
-  RbcStore.initialize();
   ConfigStore.initialize();
 
-  await init("tx-processing");
+  InitContract({} as any);
+
+  await init("broker-cad");
 });
 
 afterAll(() => {
-  RbcStore.release();
   ConfigStore.release();
 });
 
@@ -41,4 +40,12 @@ it('We have valid deposits', async () => {
     expect(record.processedTimestamp).toBeTruthy();
     expect(record.completedTimestamp).toBeUndefined();
   }
+})
+
+describe("E2E testing", () => {
+
+  it("Can complete deposits", async () => {
+
+      await ProcessUnsettledDeposits()
+  })
 })

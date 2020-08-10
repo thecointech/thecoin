@@ -1,6 +1,8 @@
 import emaillist from './emails.list.json';
 import emailget from './emails.get.json';
 
+import {gmail_v1} from "googleapis";
+
 export namespace google {
 
 
@@ -17,6 +19,7 @@ export namespace google {
     }
 
     export function gmail() {
+        console.log("Createing mocked gmail");
         return new gmail_mocked();
     }
 
@@ -52,6 +55,13 @@ export namespace google {
 
                 get(opts: {id: string}) {
                     return emailget.find(e => e.data.id === opts.id)
+                },
+
+                modify(opts: gmail_v1.Params$Resource$Users$Messages$Modify) {
+                    const labelIds = opts.requestBody?.addLabelIds as string[]
+                    emailget
+                        .find(e => e.data.id === opts.id)
+                        ?.data.labelIds.push(...labelIds)
                 }
             }
         }

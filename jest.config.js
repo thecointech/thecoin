@@ -15,6 +15,7 @@ module.exports = {
   //   }
   // },
   //testEnvironment: "jest-environment-uint8array",
+  testEnvironment: "node",
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
@@ -29,7 +30,7 @@ module.exports = {
     "node"
   ],
   globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js'),
-  setupFiles: [ 
+  setupFiles: [
     path.join(__dirname, 'tools', 'jestTestSetup.js'),
   ]
   // setupFiles: [
