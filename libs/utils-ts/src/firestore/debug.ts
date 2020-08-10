@@ -1,6 +1,6 @@
 
 import * as firebase from '@firebase/testing';
-import "firebase/firestore";
+import "firestore-admin";
 import { SetFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 
@@ -13,6 +13,8 @@ export async function init(projectId: string) {
   // we can still run tests that work with TimeStamp
   Timestamp.init(firebase.firestore.Timestamp)
 
+  // Do not attempt to connect if we do not have an
+  // active connection.
   if (!isEmulatorAvailable) {
     return false;
   }
@@ -30,4 +32,8 @@ export async function init(projectId: string) {
   SetFirestore(_db as any);
 
   return true;
+}
+
+export async function release() {
+  await Promise.all(firebase.apps().map(app => app.delete()));
 }

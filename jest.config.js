@@ -9,13 +9,12 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
-  // globals: {
-  //   'ts-jest': {
-  //     tsConfig: "tsconfig.base.json"
-  //   }
-  // },
-  //testEnvironment: "jest-environment-uint8array",
-  testEnvironment: "node",
+
+  // Test environment is required when running jest tests
+  // with firestore emulator connection. See
+  // https://github.com/firebase/firebase-js-sdk/issues/2701
+  testEnvironment: "jest-environment-uint8array",
+
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
@@ -29,11 +28,11 @@ module.exports = {
     "json",
     "node"
   ],
+  // Global setup detects presence of firestore emulator
   globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js'),
+  // local setup initializes logging etc
   setupFiles: [
     path.join(__dirname, 'tools', 'jestTestSetup.js'),
+    //   './mocks/localStorage.js'
   ]
-  // setupFiles: [
-  //   './mocks/localStorage.js'
-  // ]
 };

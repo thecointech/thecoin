@@ -1,4 +1,4 @@
-import { init as init_db, describe } from './jestutils';
+import { init as init_db, describe, release } from './jestutils';
 import { GetFirestore, Timestamp } from '.';
 
 //
@@ -6,33 +6,25 @@ import { GetFirestore, Timestamp } from '.';
 //
 describe('Our testing correctly connects to Firestore', () => {
 
+  afterAll(release);
+
   it("connects", async () => {
 
-    var isValid = await init_db('broker-cad');
+    const key = Date.now().toString();
+    var isValid = await init_db('utilities');
     expect(isValid).toBeTruthy();
 
     const db = GetFirestore();
     expect(db).toBeDefined();
 
-    // try {
-    //   const ival = await db.collection('test').doc("1").get();
-    //   expect(ival).toBeNull();
-    // }
-    // catch(err) {
-    //   console.log(err);
-    // }
+    var r = await db.collection("test").doc(key).get();
+    expect(r.exists).toBeFalsy();
 
-    try {
-      var s = db.collection("test").doc("1").set({
-        here: true
-      });
-      await s;
-    }
-    catch (err) {
-      console.error(err);
-    }
+    await db.collection("test").doc(key).set({
+      here: true
+    });
 
-    var r = await db.collection("test").doc("1").get();
+    var r = await db.collection("test").doc(key).get();
     expect(r.exists).toBeTruthy();
     var data = r.data();
     expect(data!.here).toBeTruthy();
