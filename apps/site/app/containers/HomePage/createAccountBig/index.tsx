@@ -9,7 +9,7 @@ export const CreateAccountBig = () => {
 
   return (
     <>
-      <Grid textAlign='center' verticalAlign='middle'>
+      <Grid textAlign='center' verticalAlign='middle' className={styles.content}>
         <Grid.Row>
           <Grid.Column>
             <Header as='h3'>
@@ -20,7 +20,7 @@ export const CreateAccountBig = () => {
             </Header>
           </Grid.Column>  
         </Grid.Row>
-        <Grid.Row>
+        <Grid.Row className={styles.buttonRow}>
           <Grid.Column>
             <Button as={NavLink} to="/Accounts" content='Create Account' primary size='massive' />
           </Grid.Column>  

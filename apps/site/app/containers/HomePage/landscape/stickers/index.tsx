@@ -6,7 +6,7 @@ import styles from './index.module.css';
 
 export const Stickers = () => {
   return (
-        <Grid stackable columns={2}>
+        <Grid stackable columns={2} id="stickers" className={styles.cardContainer}>
             <Grid.Row columns={3}>
                 <Grid.Column className={styles.card}>
                 <Header as='h4'>

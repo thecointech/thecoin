@@ -7,18 +7,19 @@ import background from './images/full_background.svg';
 import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
+import backgroundMobile from './images/full_background_mobile.svg';
 
-import { Grid, Header } from 'semantic-ui-react';
+import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
 
 export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <img className={styles.illustration} src={illustration} />
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <img className={styles.illustration} src={illustration} />
+      </Responsive>
       <div className={styles.landscape}>
-      <Grid centered textAlign='center'>
-          <Grid.Row centered textAlign='center'>
-            <Grid.Column>
+        <div className={styles.header}>
               <Header as='h2'>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
@@ -31,10 +32,8 @@ export const Underwater = () => {
                       description="Description for that part"
                       values={{ what: 'react-intl' }}/>
               </p>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <Grid className={styles.content}>
+          </div>
+        <Grid className={styles.content} padded doubling stackable>
           <Grid.Row columns="3" >
             <Grid.Column>
                 <img src={co2} />
@@ -104,7 +103,13 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         
-        <img className={styles.water} src={background} />
+        <Responsive as={Segment} {...Responsive.onlyComputer}>
+          <img className={styles.water} src={background} />
+        </Responsive>
+
+        <Responsive as={Segment} {...Responsive.onlyMobile}>
+          <img className={styles.waterMobile} src={backgroundMobile} />
+        </Responsive>
       </div>
     </React.Fragment>
   );
