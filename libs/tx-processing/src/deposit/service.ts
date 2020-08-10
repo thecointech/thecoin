@@ -105,53 +105,81 @@ export async function ProcessUnsettledDeposits()
   // for each email, we immediately try and deposit it.
   for (const deposit of deposits)
   {
-    //await initiateDeposit(deposit);
-
-    // Do the actual deposit
-    const result = await depositInBank(deposit, rbcApi, log.trace);
-    if (result.code != ETransferErrorCode.Success && result.code != ETransferErrorCode.AlreadyDeposited)
-    {
-      log.error({address: deposit.instruction.address, errorCode: ETransferErrorCode[result?.code ?? ETransferErrorCode.UnknownError]},
-        `Could not process deposit from: {address}, got {errorCode}`);
-      continue;
-    }
-
-    var tx = await startTheTransfer(deposit);
-    // Store first indication of attempted deposit
-    deposit.record.hash = tx.hash;
-    var success = await storeInDB(deposit.instruction.address!, deposit.record);
-
-    if (!success)
-    {
-      log.error({address: deposit.instruction.address, hash: tx.hash},
-        `Initial store failed for deposit from: {address} with hash {hash}`);
-    }    
-    // All is good, finally we try to process the deposit
-    var hash = await waitTheTransfer(tx);
-
-    // If deposited & transferred, then we mark complete
-    if (hash)
-    {
-      deposit.record.completedTimestamp = Timestamp.now();
-      deposit.record.confirmed = true;
-    }
-
-    if (deposit.instruction.raw)
-      await setETransferLabel(deposit.instruction.raw, "deposited");
-    console.log(hash);
-
-    // We must set this, regardless of whether or not the deposit completed (?)
-    var success = await storeInDB(deposit.instruction.address!, deposit.record);
-
-    deposit.isComplete = success;
+    deposit.isComplete = await ProcessUnsettledDeposit(deposit, rbcApi);
   }
 
   return deposits;
 }
 
+export async function ProcessUnsettledDeposit(deposit: DepositData, rbcApi: RbcApi)
+{
+  //await initiateDeposit(deposit);
+
+  let success = true;
+
+  // Do the actual deposit
+  if (!await ProcessDepositBank(deposit, rbcApi))
+    return false;
+
+  // Complete transfer to person
+  const processed = ProcessDepositTransfer(deposit);
+  success = processed && success;
+
+  // Mark email as complete
+  if (deposit.instruction.raw)
+    await setETransferLabel(deposit.instruction.raw, "deposited");
+
+  // We must set this, regardless of whether or not the deposit completed (?)
+  const stored = await storeInDB(deposit.instruction.address, deposit.record);
+  return success && stored;
+}
+
+//
+// Put money in the bank.  Should only return true
+// if this transfer was actually completed
+export async function ProcessDepositBank(deposit: DepositData, rbcApi: RbcApi)
+{
+  const result = await depositInBank(deposit, rbcApi, log.trace);
+  if (result.code != ETransferErrorCode.Success)
+  {
+    log.error({address: deposit.instruction.address, errorCode: ETransferErrorCode[result?.code ?? ETransferErrorCode.UnknownError]},
+      `Could not process deposit from: {address}, got {errorCode}`);
+    return false;
+  }
+  return true;
+}
+
+//
+// Transfer the appropriate amount of Coin to client
+export async function ProcessDepositTransfer(deposit: DepositData)
+{
+  log.debug({address: deposit.instruction.address, deposited: deposit.instruction.recieved},
+    `Beginning transfer to satisfy deposit from {address} for date {DepositDate}`);
+
+  var tx = await startTheTransfer(deposit);
+  // Store first indication of attempted deposit
+  deposit.record.hash = tx.hash;
+  var success = await storeInDB(deposit.instruction.address, deposit.record);
+
+  if (!success)
+  {
+    log.error({address: deposit.instruction.address, hash: tx.hash},
+      `Initial store failed for deposit from: {address} with hash {hash}`);
+  }
+  // All is good, finally we try to process the deposit
+  var hash = await waitTheTransfer(tx);
+
+  // If deposited & transferred, then we mark complete
+  if (hash)
+  {
+    deposit.record.completedTimestamp = Timestamp.now();
+    deposit.record.confirmed = true;
+  }
+}
+
 
 // async function initiateDeposit(deposit: DepositData)
 // {
-//   var success = await storeInDB(deposit.instruction.address!, deposit.record);
+//   var success = await storeInDB(deposit.instruction.address, deposit.record);
 //   return success;
 // }

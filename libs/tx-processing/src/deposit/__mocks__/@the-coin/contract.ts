@@ -1,9 +1,9 @@
 
 export class Contract {
 
-    coinPurchase = (address: string, amount: number) => ({
+    coinPurchase = (_address: string, amount: number) => ({
         wait: () => {},
-        hash: `${address}-${amount}`,
+        hash: `${amount}`,
     })
 }
 

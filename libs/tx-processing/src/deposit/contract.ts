@@ -10,10 +10,6 @@ let _contract: Contract;
 export async function InitContract(wallet: Wallet) : Promise<Contract> {
   if (_contract == null)
   {
-    //log.debug({address: encrypted.address}, 'Decrypting contract for {address}');
-    // const TCWallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key, () => {
-    //   // Do nothing
-    // });
     _contract = await ConnectContract(wallet);
   }
   return _contract;
@@ -57,9 +53,9 @@ export async function completeTheTransfer(deposit: DepositData) : Promise<Transa
     txHash: hash,
     balance: 0,
     date: new Date(),
-    change: deposit.record.transfer.value, 
+    change: deposit.record.transfer.value,
     completed: new Date(),
-    counterPartyAddress: deposit.instruction.address, 
+    counterPartyAddress: deposit.instruction.address,
     logEntry: "Manually Added"
   }
   // const contract = await GetContract();

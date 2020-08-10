@@ -9,14 +9,13 @@ describe('Our testing correctly connects to Firestore', () => {
   afterAll(release);
 
   it("connects", async () => {
-
-    const key = Date.now().toString();
-    var isValid = await init_db('utilities');
+    var isValid = await init_db('broker-cad');
     expect(isValid).toBeTruthy();
 
     const db = GetFirestore();
     expect(db).toBeDefined();
 
+    const key = Date.now().toString();
     var r = await db.collection("test").doc(key).get();
     expect(r.exists).toBeFalsy();
 

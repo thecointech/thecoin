@@ -1,8 +1,10 @@
 import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
 import { PurchaseType } from "../base/types";
 import { ConfigStore } from '@the-coin/store';
-import { init, describe } from '@the-coin/utilities/firestore/jestutils';
+import { init, describe, release } from '@the-coin/utilities/firestore/jestutils';
 import { InitContract } from './contract';
+import { GetUserDoc } from "@the-coin/utilities/User";
+
 
 // Don't go to the server for this
 //jest.mock('googleapis');
@@ -15,11 +17,12 @@ beforeAll(async () => {
 
   InitContract({} as any);
 
-  await init("broker-cad");
+  await init('broker-cad');
 });
 
 afterAll(() => {
   ConfigStore.release();
+  release();
 });
 
 it('Can fetch emails', async () => {
@@ -27,9 +30,10 @@ it('Can fetch emails', async () => {
   expect(deposits).not.toBeUndefined();
 })
 it('We have valid deposits', async () => {
+
   const deposits = await GetDepositsToProcess();
   expect(deposits).not.toBeUndefined();
-  
+
   for (const deposit of deposits) {
     console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved?.toLocaleString()}`);
     const { record } = deposit;
@@ -46,6 +50,19 @@ describe("E2E testing", () => {
 
   it("Can complete deposits", async () => {
 
-      await ProcessUnsettledDeposits()
+    jest.setTimeout(900000);
+
+    const deposits = await ProcessUnsettledDeposits();
+    // First, ensure that we have added our users to the DB
+    for (const deposit of deposits) {
+      // seed the deposit so it's visible in our emulator
+      await GetUserDoc(deposit.instruction.address).set({visible: true});
+    }
+
+    for (const deposit of deposits) {
+      if (deposit.record.hash) {
+        expect(deposit.isComplete).toBeTruthy();
+      }
+    }
   })
 })
