@@ -7,6 +7,12 @@ import { Timestamp } from './timestamp';
 export const isEmulatorAvailable = process.env.FIRESTORE_EMULATOR != 'false'
 
 export async function init(projectId: string) {
+
+  // Directly link to appropriate Timestamp
+  // Do this first so even if we don't have a running instance
+  // we can still run tests that work with TimeStamp
+  Timestamp.init(firebase.firestore.Timestamp)
+
   if (!isEmulatorAvailable) {
     return false;
   }
@@ -23,7 +29,5 @@ export async function init(projectId: string) {
   });
   SetFirestore(_db as any);
 
-  // Directly link to appropriate Timestamp
-  Timestamp.init(firebase.firestore.Timestamp)
   return true;
 }

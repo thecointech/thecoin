@@ -1,8 +1,8 @@
 import { FetchDepositEmails, GetDepositsToProcess } from './service'
 import { PurchaseType } from "../base/types";
-import { signIn } from "../firestore";
 import { RbcStore } from '@the-coin/rbcapi';
 import { ConfigStore } from '@the-coin/store';
+import { init } from '@the-coin/utilities/firestore/jestutils';
 
 // Don't go to the server for this
 //jest.mock('googleapis');
@@ -15,8 +15,7 @@ beforeAll(async () => {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  // NOTE: this will fail without a saved username/password
-  await signIn();
+  await init("tx-processing");
 });
 
 afterAll(() => {
@@ -28,7 +27,6 @@ it('Can fetch emails', async () => {
   const deposits = await FetchDepositEmails();
   expect(deposits).not.toBeUndefined();
 })
-
 it('We have valid deposits', async () => {
   const deposits = await GetDepositsToProcess();
   expect(deposits).not.toBeUndefined();
