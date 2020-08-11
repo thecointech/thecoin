@@ -58,15 +58,31 @@ async function completeDeposit(prefix: string, url: string, code: string, progre
 	// Click through to deposit the money
 	await act.clickAndNavigate('#id_btn_confirm', 'All Done');
 
-	// TODO: Confirm deposited amount!
+  // TODO: Confirm deposited amount!
+  const confirmationNumber = await findConfirmationNumber(page);
 
-	return {
-		message: 'All done',
-		code: ETransferErrorCode.Success,
-	};
+  return confirmationNumber
+    ? {
+      message: confirmationNumber,
+      code: ETransferErrorCode.Success,
+    } : {
+      message: "Confirmation not found",
+      code: ETransferErrorCode.UnknownError,
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+async function findConfirmationNumber(page: Page)
+{
+  const xpath = `//TD[.//*[contains(text(),"Confirmation Number")]]/following-sibling::TD`;
+  const confirmationElement = await page.$x(xpath);
+  if (confirmationElement.length > 0)
+  {
+    return await page.evaluate(el => el.textContent, confirmationElement[0]) as string;
+  }
+  return null;
+}
 
 async function findErrorResult(page: Page) {
 

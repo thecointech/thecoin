@@ -62,6 +62,7 @@ describe("E2E testing", () => {
     for (const deposit of deposits) {
       if (deposit.record.hash) {
         expect(deposit.isComplete).toBeTruthy();
+        expect(deposit.record.completedTimestamp).toBeTruthy();
       }
     }
   })

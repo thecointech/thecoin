@@ -243,6 +243,7 @@ function getBody(email: gmail_v1.Schema$Message): string {
 
 export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {
 
+  log.debug("Setting transfer label to: " + labelName);
   const labelId = __labels[labelName];
   if (!labelId)
     throw new Error("Labels not initialized, please check init");

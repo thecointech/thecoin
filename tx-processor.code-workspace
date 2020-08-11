@@ -27,7 +27,11 @@
 		}
 	],
 	"settings": {
-		"jest.enableCodeLens": false
+		"jest.enableCodeLens": false,
+		"files.exclude": {
+			"**/build/**": true,
+			"**/node_modules/": true
+		}
 	},
 	"launch": {
 		"version": "0.2.0",

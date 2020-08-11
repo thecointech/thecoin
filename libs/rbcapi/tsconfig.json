@@ -4,6 +4,7 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
+    "target": "es2018"
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../utils-ts/" }]

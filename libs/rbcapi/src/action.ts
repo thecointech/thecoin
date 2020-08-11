@@ -62,12 +62,13 @@ export class ApiAction {
 
   public async login() {
     // Enter user name and passwords
+    log.debug("Beginning Login");
     await this.page.type('#K1', ApiAction.Credentials.cardNo, { delay: 20 });
     await this.page.type('#Q1', ApiAction.Credentials.password, { delay: 20 });
     await this.writeStep('Entered Sign-in details');
 
     await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In')
-  
+
     // If we hit PVQ, this is where that happens
     await this.maybeEnterPVQ();
   }
@@ -92,6 +93,8 @@ export class ApiAction {
       await this.writeStep("PVQ");
 
       await this.clickAndNavigate("#id_btn_continue", "PVQ Passed");
+
+      await this.maybeClickItWasMe();
     }
   }
 
@@ -104,6 +107,17 @@ export class ApiAction {
     const pvq: string = await this.page.evaluate(el => el.innerText, pvqQuestion[0]);
     log.debug({pvq}, "Found question: {pvq}")
     return pvq;
+  }
+
+  //
+  // Navigate past the "Sign-in Protection Alert"
+  // This may be the response if previous attempts failed
+  async maybeClickItWasMe() {
+    // If there has been a
+    var pvqProtection = await this.page.$("#id_btn_thatwasme");
+    if (pvqProtection != null) {
+      await this.clickAndNavigate("#id_btn_thatwasme", "PVQ Passed");
+    }
   }
 
   //////////////////////////////////////////

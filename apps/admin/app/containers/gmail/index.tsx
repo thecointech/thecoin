@@ -19,7 +19,9 @@ import { PurchaseType } from '@the-coin/tx-processing';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import messages from './messages';
 import { storeInDB, depositInBank } from '@the-coin/tx-processing/deposit/process';
-import { completeTheTransfer } from '@the-coin/tx-processing/deposit/contract';
+import { completeTheTransfer, InitContract } from '@the-coin/tx-processing/deposit/contract';
+import { Wallet } from 'ethers';
+import { Timestamp } from '@the-coin/utilities/firestore';
 
 
 export const Gmail = () => {
@@ -72,6 +74,8 @@ export const Gmail = () => {
     // Initiate RBC Login
     const api = new RbcApi();
     setRbcApi(api);
+
+    InitContract(account.signer as Wallet);
 
   }, [setText]);
 
@@ -217,6 +221,7 @@ export async function processDeposit(deposit: DepositData, rbcApi: RbcApi, progr
       if (wasDeposited) {
         // Complete this deposit (send $$ to user)
         const tx = await completeTheTransfer(deposit);
+        deposit.record.completedTimestamp = Timestamp.now();
         deposit.tx = tx;
         deposit.record.hash = tx.txHash!;
       }

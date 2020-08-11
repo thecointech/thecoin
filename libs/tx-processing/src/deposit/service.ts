@@ -106,6 +106,7 @@ export async function ProcessUnsettledDeposits()
   for (const deposit of deposits)
   {
     deposit.isComplete = await ProcessUnsettledDeposit(deposit, rbcApi);
+    log.debug("Deposit Completed: " + deposit.isComplete);
   }
 
   return deposits;
@@ -122,7 +123,7 @@ export async function ProcessUnsettledDeposit(deposit: DepositData, rbcApi: RbcA
     return false;
 
   // Complete transfer to person
-  const processed = ProcessDepositTransfer(deposit);
+  const processed = await ProcessDepositTransfer(deposit);
   success = processed && success;
 
   // Mark email as complete
@@ -146,12 +147,20 @@ export async function ProcessDepositBank(deposit: DepositData, rbcApi: RbcApi)
       `Could not process deposit from: {address}, got {errorCode}`);
     return false;
   }
+  try {
+    deposit.record.confirmation = parseInt(result.message.trim());
+  }
+  catch (e) {
+    log.error({address: deposit.instruction.address, confirmation: result.message},
+      `Could parse confirmation number for: {address}, got {confirmation}`);
+    return false;
+  }
   return true;
 }
 
 //
 // Transfer the appropriate amount of Coin to client
-export async function ProcessDepositTransfer(deposit: DepositData)
+export async function ProcessDepositTransfer(deposit: DepositData) : Promise<boolean>
 {
   log.debug({address: deposit.instruction.address, deposited: deposit.instruction.recieved},
     `Beginning transfer to satisfy deposit from {address} for date {DepositDate}`);
@@ -175,6 +184,7 @@ export async function ProcessDepositTransfer(deposit: DepositData)
     deposit.record.completedTimestamp = Timestamp.now();
     deposit.record.confirmed = true;
   }
+  return success && !!hash;
 }
 
 

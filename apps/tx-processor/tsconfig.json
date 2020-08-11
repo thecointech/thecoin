@@ -4,7 +4,8 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "module": "commonjs"
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../../libs/tx-processing/" }]

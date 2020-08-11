@@ -25,6 +25,14 @@ export class RbcApi {
   //   }
   // }
 
+  constructor()
+  {
+    if (!ApiAction.Credentials)
+    {
+      throw new Error('Cannot use RbcApi without credentials');
+    }
+  }
+
   static ApiTimeZone: Pick<DateTimeOptions, "zone">;
 
   depositETransfer = (prefix: string, url: string, code: string, progressCb: ProgressCallback) =>  depositETransfer(prefix, url, code, progressCb);

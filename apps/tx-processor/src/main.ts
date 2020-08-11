@@ -1,14 +1,14 @@
-import { ProcessUnsettledDeposits } from "@the-coin/tx-processing";
+import { ProcessUnsettledDeposits, signIn, InitContract } from "@the-coin/tx-processing";
 import { init as LogInit, log } from "@the-coin/logging";
-import { RbcStore } from "@the-coin/rbcapi/store";
+import { RbcStore, RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
-import { InitContract } from "@the-coin/tx-processing/deposit/contract";
 import { GetWallet } from './wallet';
-import { init } from "@the-coin/utilities/firestore";
-
+import { initBrowser } from "@the-coin/rbcapi/action";
+import rbc_secret from './rbc.secret.json';
 async function initialize() {
-  LogInit("TxProcessing");
-  log.debug('Initializing processing');
+
+  LogInit("tx-processor");
+  log.debug(' --- Initializing processing --- ');
 
   RbcStore.initialize();
   ConfigStore.initialize();
@@ -23,16 +23,28 @@ async function initialize() {
     throw new Error("Couldn't initialize contract")
   }
 
-  init({project: "broker-cad"})
+  RbcApi.SetCredentials(rbc_secret);
+  await initBrowser({
+    headless: false
+  })
+
+  await signIn()
 
   log.debug('Init Complete');
 }
 
+//
+// Process deposits: Make 'em Rain!!!
+//
 async function Process() {
 
-  initialize();
+  await initialize();
 
   const deposits = await ProcessUnsettledDeposits();
+  for (let deposit of deposits)
+  {
+    console.log('did something for ' + deposit.instruction.name);
+  }
 }
 
 Process();

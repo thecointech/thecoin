@@ -6,20 +6,15 @@ import {createReducer} from './reducers';
 import { App } from './containers/App';
 import { configureAppStore } from '@the-coin/shared/configureStore';
 import history from '@the-coin/shared/utils/history';
-import { RbcStore } from "@the-coin/rbcapi/store";
-import { ConfigStore } from '@the-coin/store';
-
 // Import Language Provider
 import LanguageProvider from './containers/LanguageProvider';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 //import './app.global.css';
 import 'semantic-ui-css/semantic.min.css'
-import { init } from '@the-coin/logging';
-init("admin");
 
-RbcStore.initialize({adapter: "leveldb"});
-ConfigStore.initialize({adapter: "leveldb"});
+import {Initialize} from './init';
+Initialize();
 
 // Import i18n messages
 //import { translationMessages } from './translations/index.js';
