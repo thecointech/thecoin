@@ -28,6 +28,9 @@ afterAll(() => {
 it('Can fetch emails', async () => {
   const deposits = await FetchDepositEmails();
   expect(deposits).not.toBeUndefined();
+  // ensure these are all test emails;
+  const allTests = deposits.every(d => d.instruction.name.indexOf('TEST') >= 0);
+  expect(allTests).toBe(true);
 })
 it('We have valid deposits', async () => {
 
