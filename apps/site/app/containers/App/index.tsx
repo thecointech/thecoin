@@ -11,7 +11,6 @@ import * as React from 'react';
 import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
-import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
@@ -33,7 +32,6 @@ export const App = () => {
 
   return (
     <>
-      <Header />
       <MainNavigation />
 
       <Container
