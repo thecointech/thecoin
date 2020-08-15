@@ -8,10 +8,11 @@
  */
 
 import * as React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Responsive, Segment } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
+import MainNavigationMobile from 'containers/MainNavigationMobile';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
@@ -32,7 +33,13 @@ export const App = () => {
 
   return (
     <>
-      <MainNavigation />
+
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <MainNavigation />
+      </Responsive>
+      <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <MainNavigationMobile />
+      </Responsive>
 
       <Container
         style={{

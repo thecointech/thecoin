@@ -30,21 +30,20 @@ export const Subscribe = () => {
   return (
     <div className={styles.subscribeBlock}>
       <span className={styles.subContainer}>
-        <p className={styles.subscribeText}>
-          <FormattedMessage
+          <h3><FormattedMessage
             {...messages.subscribe}
             values={{
               bold: <b>{messages.subscribe.description}</b>,
             }}
           />
-        </p>
+          </h3>
       </span>
       <span className={styles.search}>
         <Input
           id='subscribeField'
           onChange={onInputChange}
           action={(
-            <Button onClick={doSubscribe} id='subscribeButton'>
+            <Button onClick={doSubscribe} secondary>
               <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
             </Button>)}
           placeholder="Your email" />

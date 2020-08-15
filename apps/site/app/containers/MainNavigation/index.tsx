@@ -1,16 +1,17 @@
 import React from 'react';
-import { Menu, Container, Responsive, Segment } from 'semantic-ui-react';
+import { Menu, Container, Button } from 'semantic-ui-react';
 import HeaderLink from '../../components/HeaderLink';
 import styles from './index.module.css';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
+import LanguageSwitcher from 'containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logoAndName.svg';
+import { NavLink } from 'react-router-dom';
 
 class Navigation extends React.Component {
   render() {
     return (
       <Container>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
           <div className={styles.navContainer} id="mainMenuContainer">
               <Menu secondary className={styles.mainMenu} >
                 <Menu.Menu position='left'>
@@ -43,39 +44,18 @@ class Navigation extends React.Component {
                       values={{ what: 'react-intl' }}/>
                   </HeaderLink>
                   <Menu.Menu position='right'>
-                    <HeaderLink to="/addAccount">
-                      <FormattedMessage id="site.MainNavigation.login"
-                        defaultMessage="LOG IN"
-                        description="Title for the LOG IN entry in the menu"
-                        values={{ what: 'react-intl' }}/>
-                    </HeaderLink>
-
+                    <Menu.Item>
+                      <AccountSwitcher />
+                    </Menu.Item>
+                    <Menu.Item>            
+                      <Button as={NavLink} to="/Accounts" content='Create Account' primary />
+                    </Menu.Item>
+                    <Menu.Item>        
+                      <LanguageSwitcher />
+                    </Menu.Item>
                   </Menu.Menu>
-                <Responsive as={Segment} {...Responsive.onlyMobile}>
-                </Responsive> 
               </Menu>
-                    <AccountSwitcher />
           </div>
-
-          </Responsive>
-          <Responsive as={Segment} {...Responsive.onlyMobile}>
-            <div className={styles.navContainer} id="mainMenuContainer">
-                <Menu secondary className={styles.mainMenu} >
-                  <Menu.Menu position='left'>
-                      <div>
-                        <img src={Logo} id="logo"/>
-                      </div>
-                  </Menu.Menu>
-                  <HeaderLink to="/addAccount" >
-                    <FormattedMessage id="site.MainNavigation.login"
-                      defaultMessage="LOG IN"
-                      description="Title for the LOG IN entry in the menu"
-                      values={{ what: 'react-intl' }}/>
-                  </HeaderLink>
-                </Menu>
-                <AccountSwitcher />
-              </div>
-          </Responsive> 
       </Container>   
     );
   }

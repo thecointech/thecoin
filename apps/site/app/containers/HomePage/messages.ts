@@ -33,7 +33,7 @@ export default defineMessages({
   subscribe: {
     id: `${scope}.subscribe`,
     defaultMessage:
-      'Join our beta program and maximize your future with {bold}.',
+      'The future is better because of you & us. Subscribe to our newsletter:',
     description: 'TheCoin',
   },
   blurbGrow: {

@@ -22,7 +22,7 @@ export const AccountSwitcher = () => {
 
   const allAccounts = Object.values(map);
   return (
-    <Dropdown button text='My Account' id='createAccountHeader' direction='right'>
+    <Dropdown text='LOG IN'>
       <Dropdown.Menu>
         <Dropdown.Header>My Accounts</Dropdown.Header>
         <ActiveAccount account={activeAccount} />
@@ -43,7 +43,7 @@ export const AccountSwitcher = () => {
             )
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' text='Add an Account' description='' image={{ avatar: false, src: cross }} as={NavLink} to="/addAccount/" />
+        <Dropdown.Item key='add' text='Add an Account' description='' icon='add' as={NavLink} to="/addAccount/" />
       </Dropdown.Menu>
     </Dropdown>
   )
