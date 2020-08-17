@@ -8,7 +8,7 @@ export let log : bunyan = null as any;
 export function init(name: string) {
   const folder =`/temp/TheCoin/${name}/logs`;
   const filename = path.join(folder, `${name}.log`);
-  
+
   // TODO: Obvs, we can't do this on appengine/browser.
   mkdirSync(folder, { recursive: true });
   log = bunyan.createLogger({
@@ -27,7 +27,6 @@ export function init(name: string) {
       }
     ]
   });
-  
+
   log.trace('Logging Initialized to path: ' + filename);
 }
-

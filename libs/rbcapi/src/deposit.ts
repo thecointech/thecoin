@@ -75,7 +75,7 @@ async function completeDeposit(prefix: string, url: string, code: string, progre
 
 async function findConfirmationNumber(page: Page)
 {
-  const xpath = `//TD[.//*[contains(text(),"Confirmation Number")]]/following-sibling::TD`;
+  const xpath = `//TD[contains(text(),"Confirmation Number")]`;
   const confirmationElement = await page.$x(xpath);
   if (confirmationElement.length > 0)
   {
