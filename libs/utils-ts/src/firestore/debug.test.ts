@@ -9,27 +9,27 @@ describe('Our testing correctly connects to Firestore', () => {
   afterAll(release);
 
   it("connects", async () => {
-    var isValid = await init_db('broker-cad');
+    const isValid = await init_db('broker-cad');
     expect(isValid).toBeTruthy();
 
     const db = GetFirestore();
     expect(db).toBeDefined();
 
     const key = Date.now().toString();
-    var r = await db.collection("test").doc(key).get();
+    let r = await db.collection("test").doc(key).get();
     expect(r.exists).toBeFalsy();
 
     await db.collection("test").doc(key).set({
       here: true
     });
 
-    var r = await db.collection("test").doc(key).get();
+    r = await db.collection("test").doc(key).get();
     expect(r.exists).toBeTruthy();
-    var data = r.data();
+    const data = r.data();
     expect(data!.here).toBeTruthy();
 
     // Lets check that we can create a Timestamp
-    var ts = Timestamp.now();
+    const ts = Timestamp.now();
     expect(ts).toBeTruthy();
   });
 });
