@@ -18,10 +18,6 @@ export const CreateAccountBig = () => {
                       description="Title"
                       values={{ what: 'react-intl' }}/>
             </Header>
-          </Grid.Column>  
-        </Grid.Row>
-        <Grid.Row className={styles.buttonRow}>
-          <Grid.Column>
             <Button as={NavLink} to="/Accounts" content='Create Account' primary size='massive' />
           </Grid.Column>  
         </Grid.Row>

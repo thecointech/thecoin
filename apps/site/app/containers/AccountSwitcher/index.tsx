@@ -6,6 +6,7 @@ import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountM
 
 import cross from './images/cross.svg';
 import { AccountState } from "@the-coin/shared/containers/Account/types"
+import { FormattedMessage } from "react-intl"
 
 export const AccountSwitcher = () => {
 
@@ -21,10 +22,22 @@ export const AccountSwitcher = () => {
   }, [dispatch])
 
   const allAccounts = Object.values(map);
+
   return (
-    <Dropdown text='LOG IN'>
+    <Dropdown text="LOG IN" 
+      content={
+        <FormattedMessage id="site.AccountSwitcher.MyAccounts"
+            defaultMessage="My Accounts"
+            description="Title for the My Accounts title in the menu"
+            values={{ what: 'react-intl' }}/>} 
+      >
       <Dropdown.Menu>
-        <Dropdown.Header>My Accounts</Dropdown.Header>
+        <Dropdown.Header>
+          <FormattedMessage id="site.AccountSwitcher.MyAccounts"
+                          defaultMessage="My Accounts"
+                          description="Title for the My Accounts title in the menu"
+                          values={{ what: 'react-intl' }}/>
+        </Dropdown.Header>
         <ActiveAccount account={activeAccount} />
         {
           allAccounts
@@ -43,7 +56,13 @@ export const AccountSwitcher = () => {
             )
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' text='Add an Account' description='' icon='add' as={NavLink} to="/addAccount/" />
+        <Dropdown.Item key='add' description='' icon='add' as={NavLink} to="/addAccount/">
+          <FormattedMessage id="site.AccountSwitcher.addAccount"
+                          defaultMessage="Add an Account"
+                          description="Title for the Add an Account in the menu"
+                          values={{ what: 'react-intl' }}/>
+        </Dropdown.Item>
+        
       </Dropdown.Menu>
     </Dropdown>
   )
@@ -57,9 +76,24 @@ const ActiveAccount = ({account}: ActiveProps) =>
   ? <Dropdown.Item key={name}>
       <Dropdown image={{ avatar: false, src: cross }} text={account.name.substring(0, 14) + '...'}>
         <Dropdown.Menu direction='right'>
-          <Dropdown.Item key="see" text='See' account={name} description='' as={Link} to="/accounts/" />
-          <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" />
-          <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" />
+          <Dropdown.Item key="see" account={name} description='' as={Link} to="/accounts/" >
+              <FormattedMessage id="site.AccountSwitcher.see"
+                          defaultMessage="See"
+                          description="Title for the See in the menu"
+                          values={{ what: 'react-intl' }}/>
+          </Dropdown.Item>
+          <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" >
+              <FormattedMessage id="site.AccountSwitcher.settings"
+                          defaultMessage="Settings"
+                          description="Title for the Settings in the menu"
+                          values={{ what: 'react-intl' }}/>
+          </Dropdown.Item>
+          <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" >
+              <FormattedMessage id="site.AccountSwitcher.signout"
+                          defaultMessage="Sign Out"
+                          description="Title for the Sign Out in the menu"
+                          values={{ what: 'react-intl' }}/>
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Dropdown.Item>
