@@ -2,12 +2,12 @@ import React from "react";
 import { Dropdown } from "semantic-ui-react";
 import _ from "lodash";
 
-const getOptions = (number: number, prefix = 'Choice ') =>
-  _.times(number, (index) => ({
+const getOptions = (id: number, prefix = 'Choice ') =>
+  _.times(id, (index) => ({
     key: index,
     text: `${prefix}${index}`,
     value: index,
-  }))
+  }));
 
 class LanguageSwitcher extends React.Component {
     render() {
@@ -18,7 +18,7 @@ class LanguageSwitcher extends React.Component {
                 <Dropdown.Item key="1" index="FR" text='FR' options={getOptions(1, 'FR')}/>
             </Dropdown.Menu>
         </Dropdown>
-      )
+      );
     }
   }
   

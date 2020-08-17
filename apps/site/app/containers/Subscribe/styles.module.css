@@ -1,37 +1,23 @@
-
-.subscribeBlock{
-  display:flex;
+.subscribeBlock {
+  display: flex;
   flex-direction: column;
   justify-items: center;
+  background-image: url("images/footer_background.svg");
+  color: white;
 }
-
 .subscribe {
   position: absolute;
   left: 2%;
 }
-.subscribeText {
-  font-size: 1.7rem;
-  font-weight: 300;
-  margin-bottom: 50px;
-  color: #002c8e;
-}
 .subContainer {
   margin: auto;
-}
-
-@media only screen and (max-width: 390px) {
-  .subContainer {
-    width: 90%;
-  }
-}
-
-.search input {
-  border: 7px solid #415db0;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  max-width: 1000px;
+  text-align: center;
 }
 .search {
-  margin-bottom: 62px;
   margin-left: auto;
   margin-right: auto;
 }
+/*# sourceMappingURL=./styles.module.css.map */
