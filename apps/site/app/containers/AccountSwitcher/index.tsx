@@ -6,7 +6,8 @@ import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountM
 
 import cross from './images/cross.svg';
 import { AccountState } from "@the-coin/shared/containers/Account/types"
-import { FormattedMessage } from "react-intl"
+import { FormattedMessage, useIntl } from 'react-intl';
+
 
 export const AccountSwitcher = () => {
 
@@ -22,15 +23,13 @@ export const AccountSwitcher = () => {
   }, [dispatch])
 
   const allAccounts = Object.values(map);
+  let intl = useIntl();
+  const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login'});
+
+  console.log(titleMsg)
 
   return (
-    <Dropdown text="LOG IN" 
-      content={
-        <FormattedMessage id="site.AccountSwitcher.MyAccounts"
-            defaultMessage="My Accounts"
-            description="Title for the My Accounts title in the menu"
-            values={{ what: 'react-intl' }}/>} 
-      >
+    <Dropdown text={titleMsg} >
       <Dropdown.Menu>
         <Dropdown.Header>
           <FormattedMessage id="site.AccountSwitcher.MyAccounts"
