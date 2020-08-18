@@ -30,12 +30,9 @@ export const Subscribe = () => {
   return (
     <div className={styles.subscribeBlock}>
       <span className={styles.subContainer}>
-          <h3><FormattedMessage
-            {...messages.subscribe}
-            values={{
-              bold: <b>{messages.subscribe.description}</b>,
-            }}
-          />
+          <h3>
+            <FormattedMessage id="messages.subscribe.description" 
+                              defaultMessage="The future is better because of you & us. Subscribe to our newsletter:" />
           </h3>
       </span>
       <span className={styles.search}>
