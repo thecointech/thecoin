@@ -3,7 +3,6 @@ import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
 import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages'
 
 export const Subscribe = () => {
 

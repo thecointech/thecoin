@@ -17,7 +17,6 @@ import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { CreateAccountBig } from './createAccountBig';
-import { Subscribe } from '../Subscribe';
 import { Responsive, Segment } from 'semantic-ui-react';
 
 export const HomePage = () => {
@@ -33,7 +32,6 @@ export const HomePage = () => {
           <CreateAccountSmall />
           <Underwater />
           <CreateAccountBig />
-          <Subscribe />
         </div>
       </Responsive>
 
@@ -45,7 +43,6 @@ export const HomePage = () => {
           <CreateAccountSmall />
           <Underwater />
           <CreateAccountBig />
-          <Subscribe />
         </div>
       </Responsive>
 
