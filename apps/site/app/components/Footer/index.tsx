@@ -10,7 +10,7 @@ import instagram from './images/instagram.svg';
 export default () => (
   <div id="footer" className={styles.footer}>
     <Subscribe />
-    <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable  className={styles.footerText}>
+    <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
           <Grid.Row>
             <Grid.Column>
 
