@@ -2,6 +2,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
+import { CreateAccountBanner } from '../CreateAccountBanner';
+
 import styles from './styles.module.css';
 
 export function HowItWorks() {
@@ -27,7 +29,7 @@ export function HowItWorks() {
                   description="We invest our clients’ accounts and give them 90% of the profit."/>
             </Grid.Column>
 
-            <Grid.Column>
+            <Grid.Column className={styles.rightColumn}>
               <h2>$100</h2>
               <FormattedMessage id="site.healthier.lifestyle"
                   defaultMessage="It only costs about $100 per person to offset the CO2 for our current lifestyle."
@@ -40,6 +42,7 @@ export function HowItWorks() {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <CreateAccountBanner />
     </div>
   );
 }

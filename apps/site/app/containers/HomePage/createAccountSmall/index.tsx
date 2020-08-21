@@ -13,14 +13,17 @@ export const CreateAccountSmall = () => {
             <Header as='h3'>
                 <FormattedMessage id="site.homepage.createAccountSmall.title"
                       defaultMessage="TheCoin is a revolutionary new kind of account."
-                      description="Title"
-                      values={{ what: 'react-intl' }}/>
+                      description="Title"/>
               </Header>
           </Grid.Column>  
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Button as={NavLink} to="/Accounts" content='Create Account' primary size='massive' />
+            <Button as={NavLink} to="/Accounts" primary size='massive' >
+              <FormattedMessage id="site.homepage.createAccountSmall.button"
+                        defaultMessage="Create Account"
+                        description="Create Account button for the small create account banner for the home pages"/>
+            </Button>
           </Grid.Column>  
         </Grid.Row>
       </Grid>
