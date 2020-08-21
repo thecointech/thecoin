@@ -25,7 +25,7 @@ export function HowItWorks() {
               <FormattedMessage id="site.healthier.majorbanks"
                   defaultMessage="The major banks take an average of $1000 in profits each year from every Canadian."
                   description="The major banks take an average of $1000 in profits each year from every Canadian."/>
-              <hr />
+              <hr align="left" />
               <h2>90%</h2>
               <FormattedMessage id="site.healthier.invest"
                   defaultMessage="We invest our clients’ accounts and give them 90% of the profit."
@@ -37,7 +37,7 @@ export function HowItWorks() {
                 <FormattedMessage id="site.healthier.lifestyle"
                     defaultMessage="It only costs about $100 per person to offset the CO2 for our current lifestyle."
                     description="It only costs about $100 per person to offset the CO2 for our current lifestyle."/>
-                <hr />
+                <hr align="left" />
                 <h2>1/10</h2>
                 <FormattedMessage id="site.healthier.carbon"
                     defaultMessage="The remaining 1/10th is used to pay off our carbon debt"
@@ -62,7 +62,7 @@ export function HowItWorks() {
               <FormattedMessage id="site.healthier.majorbanks"
                   defaultMessage="The major banks take an average of $1000 in profits each year from every Canadian."
                   description="The major banks take an average of $1000 in profits each year from every Canadian."/>
-              <hr />
+              <hr align="left" />
               <h2>90%</h2>
               <FormattedMessage id="site.healthier.invest"
                   defaultMessage="We invest our clients’ accounts and give them 90% of the profit."
@@ -74,7 +74,7 @@ export function HowItWorks() {
                 <FormattedMessage id="site.healthier.lifestyle"
                     defaultMessage="It only costs about $100 per person to offset the CO2 for our current lifestyle."
                     description="It only costs about $100 per person to offset the CO2 for our current lifestyle."/>
-                <hr />
+                <hr align="right" />
                 <h2>1/10</h2>
                 <FormattedMessage id="site.healthier.carbon"
                     defaultMessage="The remaining 1/10th is used to pay off our carbon debt"
