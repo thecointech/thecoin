@@ -1,9 +1,3 @@
-/**
- * How It Works
- *
- * This is the page we show when the user visits a url that doesn't have a route
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
@@ -12,7 +6,7 @@ import styles from './styles.module.css';
 
 export function HowItWorks() {
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} id="healthier">
       <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
         <Header as="h1" className={styles.center}>
             Earth’s Healthier

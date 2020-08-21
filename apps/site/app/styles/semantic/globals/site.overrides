@@ -39,4 +39,7 @@ div.container:nth-child(1){
     margin-top: 260px;
 }
 
-
+#footer div.row:nth-child(1){
+  margin-top: 70px;
+  margin-left: 20px;
+}
