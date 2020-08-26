@@ -1,10 +1,13 @@
-import { ProcessUnsettledDeposits, signIn, InitContract } from "@the-coin/tx-processing";
+import { signIn, InitContract } from "@the-coin/tx-processing";
 import { init as LogInit, log } from "@the-coin/logging";
 import { RbcStore, RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
 import { GetWallet } from './wallet';
 import { initBrowser } from "@the-coin/rbcapi/action";
 import rbc_secret from './rbc.secret.json';
+import { GetDepositsToProcess, ProcessUnsettledDeposit } from "@the-coin/tx-processing/deposit/service";
+
+
 async function initialize() {
 
   LogInit("tx-processor");
@@ -40,11 +43,17 @@ async function Process() {
 
   await initialize();
 
-  const deposits = await ProcessUnsettledDeposits();
-  for (let deposit of deposits)
+  const deposits = await GetDepositsToProcess();
+  const rbcApi = new RbcApi();
+
+  // for each email, we immediately try and deposit it.
+  for (const deposit of deposits)
   {
-    console.log('did something for ' + deposit.instruction.name);
+    deposit.isComplete = await ProcessUnsettledDeposit(deposit, rbcApi);
+    log.debug("Deposit Completed: " + deposit.isComplete);
   }
+
+  return deposits;
 }
 
 Process();
