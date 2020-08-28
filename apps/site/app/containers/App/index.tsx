@@ -23,7 +23,7 @@ import 'semantic-ui-less/semantic.less';
 import { usePrismic } from 'containers/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 export const App = () => {
   usePrismic();

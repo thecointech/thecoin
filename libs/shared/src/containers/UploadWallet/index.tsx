@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages'
 import { useCallback } from 'react';

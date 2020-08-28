@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Container, Dropdown } from 'semantic-ui-react';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
 import LanguageSwitcher from 'containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { Grid, Button, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import plants from "./images/illust_flowers.svg";

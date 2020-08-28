@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Button, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 export const CreateAccountSmall = () => {
 

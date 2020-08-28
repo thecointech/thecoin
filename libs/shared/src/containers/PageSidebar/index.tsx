@@ -3,7 +3,7 @@ import { Sidebar, Menu, MenuItem, Segment, Divider } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
-import styles from "./index.module.css";
+import styles from "./styles.module.css";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";

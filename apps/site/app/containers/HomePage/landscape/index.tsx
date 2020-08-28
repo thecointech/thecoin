@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Stickers } from './stickers';
 
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import sky from './images/sky.svg';
 import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
 import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
