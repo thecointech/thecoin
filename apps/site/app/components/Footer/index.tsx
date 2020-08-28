@@ -8,7 +8,7 @@ import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
 
 export default () => (
-  <div id="footer" className={styles.footer}>
+  <div id={styles.footerContainer} className={styles.footer}>
     <Subscribe />
     <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
           <Grid.Row>

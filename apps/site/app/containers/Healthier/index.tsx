@@ -27,6 +27,7 @@ export function Healthier() {
   return (
     <div className={styles.wrapper} id="healthier">
       <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <img src={illustration} className={styles.illustration} />
         <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
         <Header as="h1" className={styles.center}>
             Earth’s Healthier
@@ -58,9 +59,6 @@ export function Healthier() {
       </Responsive>
 
       <CreateAccountBanner />
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
-        <img src={illustration} className={styles.illustration} />
-      </Responsive>
     </div>
   );
 }
