@@ -24,7 +24,7 @@ export const AccountSwitcher = () => {
 
   const allAccounts = Object.values(map);
   let intl = useIntl();
-  const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login'});
+  const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'});
 
   console.log(titleMsg)
 
