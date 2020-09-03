@@ -165,6 +165,7 @@ function getUserInfo(email: gmail_v1.Schema$Message) {
 }
 
 const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body) ?? -1;
+
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
