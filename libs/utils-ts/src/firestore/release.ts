@@ -7,4 +7,5 @@ export async function init() {
   SetFirestore(db);
 
   Timestamp.init(TimestampRelease);
+  return true;
 }

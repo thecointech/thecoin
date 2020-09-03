@@ -1,5 +1,5 @@
 import { isEmulatorAvailable } from './debug';
-export { isEmulatorAvailable, init } from './debug';
+export { isEmulatorAvailable, init, release } from './debug';
 
 ///////////////////////////////////////////////////////////////
 // Firestore helper functions
@@ -11,6 +11,7 @@ const db_describe = async (name: number | string | Function, fn: () => void | Pr
     console.warn("Cannot connect to firestore, abandoning unit tests");
     return old_describe.skip(name, fn);
   }
+   // Auto-magically cleanup
   return old_describe(name, fn)
 }
 

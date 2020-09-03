@@ -1,14 +1,22 @@
 
 import * as firebase from '@firebase/testing';
-import "firebase/firestore";
+import "firestore-admin";
 import { SetFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 
 export const isEmulatorAvailable = process.env.FIRESTORE_EMULATOR != 'false'
 
 export async function init(projectId: string) {
+
+  // Directly link to appropriate Timestamp
+  // Do this first so even if we don't have a running instance
+  // we can still run tests that work with TimeStamp
+  Timestamp.init(firebase.firestore.Timestamp)
+
+  // Do not attempt to connect if we do not have an
+  // active connection.
   if (!isEmulatorAvailable) {
-    return null;
+    return false;
   }
 
   const admin = firebase.initializeAdminApp({
@@ -23,7 +31,9 @@ export async function init(projectId: string) {
   });
   SetFirestore(_db as any);
 
-  // Directly link to appropriate Timestamp
-  Timestamp.init(firebase.firestore.Timestamp)
-  return _db;
+  return true;
+}
+
+export async function release() {
+  await Promise.all(firebase.apps().map(app => app.delete()));
 }

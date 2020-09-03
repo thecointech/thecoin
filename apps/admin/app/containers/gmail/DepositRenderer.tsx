@@ -1,6 +1,5 @@
 import React from "react";
-import { TransferData } from "autoaction/types";
-import { DepositData } from "../../autodeposit/types";
+import { TransferData, DepositData } from "@the-coin/tx-processing";
 import { Segment, Select } from "semantic-ui-react";
 
 
@@ -13,7 +12,6 @@ export const DepositRenderer = (props: TransferData) => {
     <Segment>
     <div>Name: {instruction.name} - {record.type}</div>
     <div>Address: {instruction.address}</div>
-
     <div>
     {
       deposit.instruction.raw
@@ -21,6 +19,7 @@ export const DepositRenderer = (props: TransferData) => {
         : "Warning: No matching email"
     }
     </div>
+    <div>Completed: {record.completedTimestamp?.toDate().toString()}</div>
     <div>
     {
       deposit.bank

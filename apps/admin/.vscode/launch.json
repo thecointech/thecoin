@@ -17,13 +17,13 @@
       "request": "launch",
       "name": "Electron: Main",
       "protocol": "inspector",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeExecutable": "${admin:workspaceFolder}/node_modules/.bin/electron",
       "runtimeArgs": [
         "--remote-debugging-port=9223",
         "./app/main.dev.babel.js"
       ],
       "windows": {
-        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+        "runtimeExecutable": "${admin:workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "env": {
         "NODE_ENV": "development",
@@ -35,20 +35,20 @@
       "type": "chrome",
       "request": "attach",
       "port": 9223,
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${admin:workspaceFolder}",
       "timeout": 30000
     },
     {
       "type": "node",
       "name": "vscode-jest-tests",
       "request": "launch",
-      "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
+      "program": "${admin:workspaceFolder}/../../node_modules/jest/bin/jest",
       "args": [
         "--runInBand",
         "--config",
         "jest.config.js"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${admin:workspaceFolder}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true
