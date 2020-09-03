@@ -96,26 +96,7 @@
   margin: auto;
 }
 
-
-
-
-@media only screen and (min-width: 1700px) {
-  #backgroundDecor{
-    height: 150%;
-    width: 700px;
-    top: -50px;
-  }
-}
-
-@media only screen and (max-width: 750px) {
-  .mainWrapper .column{
-    width: 100% !important;
-  }
-}
-@media only screen and (max-width: 390px) {
-
-  section{
-    margin-left: 0;
-    margin-right: 0;
-  }
+.ui.container {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import styles from './styles.module.css';
-import Logo from './logo.svg';
+import Logo from './logoAndName.svg';
 import messages from './messages';
 
 export default injectIntl(({ intl }) => (

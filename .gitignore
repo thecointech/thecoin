@@ -21,3 +21,6 @@ libs/contract/src/deployed/
 apps/tx-processor/src/account.json
 libs/tx-processing/src/gmail.json
 libs/tx-processing/src/BrokerTransferAssistant/BrokerTransferAssistantWallet.json
+
+**/*.module.css.map
+**/site/**/HomePage/**/*.module.css
