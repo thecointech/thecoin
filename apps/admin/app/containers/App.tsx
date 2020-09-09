@@ -6,6 +6,11 @@ import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import { useAccountMapStore } from '@the-coin/shared//containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 
+//let locales = {
+//  'en': 'English',
+//  'fr': 'French',
+//}
+
 export const App = hot(() => {
 
   useFxRatesStore();
