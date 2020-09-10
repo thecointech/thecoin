@@ -5,12 +5,17 @@
 import path from 'path';
 import webpack from 'webpack';
 import { dependencies } from '../package.json';
+import { GenerateAliases } from './patchpaths';
 
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 export default {
-  externals: [...Object.keys(dependencies || {})],
+  externals: [
+    "puppeteer",
+    "pouchdb",
+    //"firebase",
+    //...Object.keys(dependencies || {})
+  ],
 
   module: {
     rules: [
@@ -43,12 +48,7 @@ export default {
   resolve: {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.ts', '.tsx', '.json'],
-    plugins: [new TsconfigPathsPlugin({ configFile: '../../tsconfig.base.json' })],
-    alias: {
-      "@the-coin/utilities": "@the-coin/utilities/build",
-      "@the-coin/contract": "@the-coin/contract/build",
-      "@the-coin/shared": "@the-coin/shared/build",
-    }
+    alias: GenerateAliases()
   },
 
   plugins: [

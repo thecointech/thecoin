@@ -38,10 +38,12 @@
     "@the-coin/contract": "latest",
     "axios": "*",
     "base32": "^0.0.6",
+    "firebase": "^7.17.2",
     "luxon": "*"
   },
   "devDependencies": {
     "@the-coin/types": "*",
+    "firestore-admin": "^1.3.0",
     "jest": "*"
   }
 }

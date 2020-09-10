@@ -4,12 +4,24 @@ import {DateTime} from 'luxon';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 
-
 // TODO: Make sure we don't publish this in the website...
 const AccessToken = 'iIAGXtPBcpae7eBS4wXgP8RRUlGT';
 
+type DayData = {
+  open: {
+    start: string,
+    end: string,
+  }
+  date: string
+}
+type Calendar = {
+  days: {
+    day: DayData[];
+  }
+}
+
 // Cache accesses to reduce hits on the API
-let CalendarCache: Dictionary<any> = {};
+let CalendarCache: Dictionary<Calendar> = {};
 
 async function GetCalendar(date: Date) {
   const uriArgs = `month=${date.getMonth() + 1}&year=${date.getFullYear()}`;
@@ -34,7 +46,7 @@ async function GetCalendar(date: Date) {
     console.log("Loaded Calendar for: %i-%i, (%i cached)", date.getMonth()+1, date.getFullYear(), Object.keys(CalendarCache).length)
     const {calendar }= resp.data;
     CalendarCache[uriArgs] = calendar;
-    return calendar;
+    return calendar as Calendar;
   }
   return null;
 }
@@ -42,21 +54,19 @@ async function GetCalendar(date: Date) {
 //////////////////////////////////////////////////////////////////////////
 //  Returns timestamp of next time market will be open
 
-function getAsTS(data: any, startEnd: string) {
+function getAsTS(data: DayData, startEnd: "start"|"end") {
   const [year, month, day] = data.date.split("-");
   const [hour, minute] = data.open[startEnd].split(":")
   return DateTime.fromObject({
-    year,
-    month,
-    day,
-    hour,
-    minute,
+    year: parseInt(year),
+    month: parseInt(month),
+    day: parseInt(day),
+    hour: parseInt(hour),
+    minute: parseInt(minute),
     zone: "America/New_York"
   }).toMillis();
 }
 
-  // new Date(`${data.date} ${data.open[startEnd]}`).getTime();
-  
 function addDay(date: Date) {
   var nd = new Date(date.valueOf());
   nd.setDate(date.getDate() + 1);
@@ -64,7 +74,7 @@ function addDay(date: Date) {
 }
 
 // Returns either 0 for currently open, or timestamp of when it will be open
-// If the market is not open on date, offset will be applied to allow us to 
+// If the market is not open on date, offset will be applied to allow us to
 // move the time well into the market open period (as we can't get instant data)
 // TODO: Support timezones
 async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
@@ -76,6 +86,9 @@ async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
   const ts = date.getTime();
   for (let dt = date, i = 0; i < 100; dt = addDay(dt), i++) {
     const calendar = await GetCalendar(dt);
+    if (calendar == null)
+      continue;
+
     const { day } = calendar.days;
     let data = day[dt.getDate() - 1];
     if (data.open)
@@ -90,7 +103,7 @@ async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
         const cts = getAsTS(data, 'end')
         // We are before close
         if (ts < cts)
-          return ts;  
+          return ts;
       }
     }
   }

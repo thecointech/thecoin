@@ -1,15 +1,35 @@
 {
 	"folders": [
     {
+      "name": "admin",
       "path": "apps\\admin"
     },
     {
+      "name": "shared",
       "path": "libs\\shared"
     },
     {
+      "name": "tx-processing",
+      "path": "libs\\tx-processing"
+    },
+    {
+      "name": "utils-ts",
       "path": "libs\\utils-ts"
     },
     {
+      "name": "rbcapi",
+      "path": "libs\\rbcapi"
+    },
+    {
+      "name": "store",
+      "path": "libs\\store"
+    },
+    {
+      "name": "logging",
+      "path": "libs\\logging"
+    },
+    {
+      "name": "contract",
       "path": "libs\\contract"
     }
   ],
@@ -25,5 +45,6 @@
     },
     "jest.pathToJest": "./node_modules/.bin/jest",
     "jestrunner.jestPath": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
+    "npm.packageManager": "yarn",
   }
 }

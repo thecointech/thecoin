@@ -1,0 +1,37 @@
+{
+    "name": "@the-coin/tx-processing",
+    "version": "0.1.0",
+    "private": true,
+    "description": "The Coin: A library for processing coin deposits and etransfers",
+    "keywords": [
+      "THECoin"
+    ],
+    "author": "Stephen Taylor <stephen@thecoin.io>",
+    "homepage": "http://thecoin.io",
+    "license": "MIT",
+
+    "scripts": {
+      "build": "yarn tsc",
+      "build:clean": "rimraf ./build && rimraf ./coverage",
+      "test": "jest --coverage",
+      "test:summary": "jest --coverage > ./coverage/summary.txt"
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "main": "./build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./": "./build/"
+    },
+    "dependencies": {
+      "@the-coin/rbcapi": "*",
+      "@the-coin/logging": "*",
+      "@the-coin/shared": "*",
+      "@the-coin/utilities": "*"
+    },
+    "devDependencies": {
+      "jest": "*"
+    }
+  }
+  

@@ -5,11 +5,10 @@ import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList } from "../TransferList/TransferList";
 import { UserAction } from "@the-coin/utilities/User";
 import { Confirm } from "semantic-ui-react";
-import { withFiat } from "../../autoaction/utils";
-import { TransferRenderer, InstructionPacket } from "autoaction/types";
-import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "autoaction";
-import { setActionPrivateKey } from "autoaction/key";
-
+import { withFiat } from "@the-coin/tx-processing/base/utils";
+import { TransferRenderer, InstructionPacket,  } from "@the-coin/tx-processing";
+import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "@the-coin/tx-processing/base";
+import { setActionPrivateKey } from "@the-coin/tx-processing/base/key";
 
 type Props = {
   render: TransferRenderer,

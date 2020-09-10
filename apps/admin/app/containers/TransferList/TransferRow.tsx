@@ -1,7 +1,7 @@
 import React from "react";
 import { toHuman } from "@the-coin/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { TransferData, TransferRenderer } from "../../autoaction/types";
+import { TransferData, TransferRenderer } from "@the-coin/tx-processing";
 
 type Props = {
   transfer: TransferData,

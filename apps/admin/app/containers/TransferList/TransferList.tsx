@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { List, Icon } from "semantic-ui-react";
 import { TransferRow } from "./TransferRow";
-import { TransferData, TransferRenderer } from "../../autoaction/types";
+import { TransferData, TransferRenderer } from "@the-coin/tx-processing";
 
 type Props = {
   transfers: TransferData[];
