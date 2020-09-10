@@ -41,7 +41,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "yarn extract '**/*.ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'"
+    "extract": "formatjs extract",
+    "compile": "formatjs compile"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

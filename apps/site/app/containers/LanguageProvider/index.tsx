@@ -14,8 +14,18 @@ import { IntlProvider } from 'react-intl';
 import { makeSelectLocale } from './selectors';
 
 export interface Props {
-  messages: { [locale: string]: { [id: string]: string } };
+  locale: string;
+  messages: { [id: string]: string };
   children?: React.ReactNode;
+}
+
+function loadLocaleData(locale: string) {
+  switch (locale) {
+    case 'fr':
+      return import('./../../compiled-lang/fr.json')
+    default:
+      return import('./../../compiled-lang/en.json')
+  }
 }
 
 const stateSelector = createSelector(
@@ -31,8 +41,8 @@ export default function LanguageProvider(props: Props) {
   return (
     <IntlProvider
       locale={locale}
-      key={locale}
-      messages={props.messages[locale]}
+      defaultLocale="en"
+      messages={props.messages}
     >
       {React.Children.only(props.children)}
     </IntlProvider>

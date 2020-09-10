@@ -40,7 +40,7 @@ export const Subscribe = () => {
           onChange={onInputChange}
           action={(
             <Button onClick={doSubscribe} secondary>
-              <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
+              <FormattedMessage id="site.footer.subscribe.button" defaultMessage="Subscribe" />
             </Button>)}
           placeholder="Your email" />
       </span>

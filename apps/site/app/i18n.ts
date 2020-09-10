@@ -23,7 +23,6 @@ interface Messages {
 }
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const enTranslationMessages: Messages = require('./translations/en.json');
-const frTranslationMessages: Messages = require('./translations/fr.json');
 
 export const DEFAULT_LOCALE = 'en';
 
@@ -49,6 +48,5 @@ export const formatTranslationMessages = (locale: string, messages: Messages) =>
 };
 
 export const translationMessages = {
-  en: formatTranslationMessages('en', enTranslationMessages),
-  fr: formatTranslationMessages('fr', frTranslationMessages)
+  en: formatTranslationMessages('en', enTranslationMessages)
 };

@@ -59,12 +59,12 @@ initTracking();
 // Create redux store with history
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
-
-const render = (messages: any, Component = App) => {
+const locale = "en";
+const render = (messages: any, locale: any, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
+      <LanguageProvider locale={locale} messages={messages}>
         <ConnectedRouter history={history}>
           <Component />
         </ConnectedRouter>
@@ -81,29 +81,11 @@ if (module.hot) {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     // tslint:disable-next-line:max-line-length
     const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translationMessages, refresh);
+    render(translationMessages, locale, refresh);
   });
 }
-// Chunked polyfill for browsers without Intl support
-// if (!window.Intl) {
-//   new Promise(resolve => {
-//     resolve(import('intl'));
-//   })
-//     .then(() =>
-//       Promise.all([
-//         import('intl/locale-data/jsonp/en.js'),
-//         import('intl/locale-data/jsonp/de.js'),
-//       ]),
-//     )
-//     .then(() => render(translationMessages))
-//     .catch(err => {
-//       throw err;
-//     });
-// } else {
-//   render(translationMessages);
-// }
-// TODO: Polyfill via https://polyfill.io/v3/url-builder/ 
-render(translationMessages);
+
+render(translationMessages, locale);
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
