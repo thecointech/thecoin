@@ -38,6 +38,7 @@ import createReducer from './reducers';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
+import { bootstrapApplication } from './containers/LanguageProvider';
 
 import { initTracking } from './utils/reactga';
 initTracking();
@@ -59,7 +60,7 @@ initTracking();
 // Create redux store with history
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
-const locale = "en";
+const locale = "fr";
 const render = (messages: any, locale: any, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
@@ -81,11 +82,14 @@ if (module.hot) {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     // tslint:disable-next-line:max-line-length
     const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
+    console.log(window.navigator.language)
     render(translationMessages, locale, refresh);
+    render(bootstrapApplication,locale,refresh);
   });
 }
-
+console.log(window.navigator.language)
 render(translationMessages, locale);
+render(bootstrapApplication,locale);
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,

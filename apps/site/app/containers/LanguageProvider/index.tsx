@@ -12,12 +12,16 @@ import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
 
 import { makeSelectLocale } from './selectors';
+import ReactDOM from 'react-dom';
+import { App } from 'containers/App';
+
 
 export interface Props {
   locale: string;
   messages: { [id: string]: string };
   children?: React.ReactNode;
 }
+
 
 function loadLocaleData(locale: string) {
   switch (locale) {
@@ -28,23 +32,21 @@ function loadLocaleData(locale: string) {
   }
 }
 
-const stateSelector = createSelector(
-  makeSelectLocale(),
-  locale => ({
-    locale,
-  }),
-);
-
 export default function LanguageProvider(props: Props) {
-  const { locale } = useSelector(stateSelector);
 
   return (
     <IntlProvider
-      locale={locale}
-      defaultLocale="en"
+      locale={props.locale}
+      defaultLocale="fr"
       messages={props.messages}
     >
       {React.Children.only(props.children)}
     </IntlProvider>
   );
+}
+
+export async function bootstrapApplication(locale: string, mainDiv: Element | null) {
+  const messages = await loadLocaleData(locale)
+  console.log(messages);
+  ReactDOM.render(<App locale={locale} messages={messages} />, mainDiv)
 }

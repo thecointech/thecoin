@@ -48,5 +48,6 @@ export const formatTranslationMessages = (locale: string, messages: Messages) =>
 };
 
 export const translationMessages = {
-  en: formatTranslationMessages('en', enTranslationMessages)
+  en: formatTranslationMessages('en', enTranslationMessages),
+  fr: formatTranslationMessages('fr', enTranslationMessages)
 };
