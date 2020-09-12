@@ -30,7 +30,7 @@ var swaggerDoc = jsyaml.safeLoad(spec);
 console.log('Ready to init Middleware');
 
 // Initialize the Swagger middleware
-swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+swaggerTools.initializeMiddleware(swaggerDoc, async (middleware) => {
 
   app.use(cors());
   app.options('*', cors()) // include before other routes
@@ -48,13 +48,12 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Start the server
-  DecryptWallet()
-    .then(() => {
-      http.createServer(app).listen(PORT, function () {
-        console.log('Your server is listening on port %d (http://localhost:%d)', PORT, PORT);
-        console.log('Swagger-ui is available on http://localhost:%d/docs', PORT);
-      });    
-    })
+  await DecryptWallet();
+
+  http.createServer(app).listen(PORT, function () {
+    console.log('Your server is listening on port %d (http://localhost:%d)', PORT, PORT);
+    console.log('Swagger-ui is available on http://localhost:%d/docs', PORT);
+  });
 });
 
 // Start watching for ethereum events

@@ -21,6 +21,7 @@ class TheCoinReducer<T> extends ImmerReducer<T> {
   }
 
   storeValues(values: Partial<T>) {
+    // deepcode ignore UsageOfUndefinedReturnValue: This actually works with the crazy creation code below
     return this.sendValues(this.actions().updateWithValues, values)
   }
 
@@ -28,7 +29,7 @@ class TheCoinReducer<T> extends ImmerReducer<T> {
     Object.assign(this.draftState, newState);
   }
 
-  actions(): any {
+  actions(): { updateWithValues: Action} {
     throw ("This class should not be created directly")
   }
 
@@ -85,7 +86,7 @@ function createNamedReducer<T extends ImmerReducerClass>(immerReducerClass: T) {
   class NamedReducer extends immerReducerClass {
     //static customName: string = name;
   };
-  // We use Object.Assign to clone the prototype as we 
+  // We use Object.Assign to clone the prototype as we
   // need to change the actions() function below and
   // need to ensure that change is local to the NamedReducer class
   Object.getOwnPropertyNames(immerReducerClass.prototype).forEach((key) => {

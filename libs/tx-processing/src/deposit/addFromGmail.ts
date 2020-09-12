@@ -177,6 +177,7 @@ const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
+    // deepcode ignore GlobalReplacementRegex: Is mistakenly detecting replace has containing a regex
     ? parseFloat(amountRes[1].replace(',', ''))
     : undefined;
 }

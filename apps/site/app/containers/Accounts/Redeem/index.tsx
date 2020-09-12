@@ -149,9 +149,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     } as any);
   }
 
-  onCancelTransfer() {
-    this.setState({ doCancel: true });
-  }
+  onCancelTransfer = () => this.setState({ doCancel: true });
 
   render() {
     const { account, rates } = this.props;

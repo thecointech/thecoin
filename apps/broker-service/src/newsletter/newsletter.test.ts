@@ -14,14 +14,14 @@ describe('Test newsletter actions', () => {
   });
 
   test("We have DB", async () => {
-    var db = GetFirestore();
+    let db = GetFirestore();
     expect(db).toBeTruthy();
   });
 
   //
   // Test email signup
   test("Can sign up for email", async () => {
-    var email = "marie@thecoin.io";
+    let email = "marie@thecoin.io";
     await Signup({
       email: email,
       confirmed: true,
@@ -34,25 +34,25 @@ describe('Test newsletter actions', () => {
 
   test("Cannot sign up more than once", async () => {
 
-    var email = "marie@thecoin.io";
+    let email = "marie@thecoin.io";
     await Signup({
-      email: email,
+      email,
       confirmed: true,
     }, false)
 
-    var email = "Marie@thecoin.io";
+    email = "Marie@thecoin.io";
     await Signup({
-      email: email,
+      email,
       confirmed: true,
     }, false)
 
-    var email = "MARIE@thecoin.io";
+    email = "MARIE@thecoin.io";
     await Signup({
-      email: email,
+      email,
       confirmed: true,
     }, false)
 
-    var numberOccurences = await numberOccurrencesEmail(email)
+    let numberOccurences = await numberOccurrencesEmail(email)
     expect(numberOccurences).toBe(1);
 
     // Let's clean after
@@ -65,7 +65,7 @@ describe('Test newsletter actions', () => {
     const email = "yiopieowyi@ghgyu.io";
     await (Signup({ email, confirmed: false, }, false));
 
-    var res = await Confirm({
+    let res = await Confirm({
       id: await getDocId(email),
       confirmed: true,
       firstName: "Stephen",
@@ -91,20 +91,20 @@ describe('Test newsletter actions', () => {
 
   test("Can delete subscription", async () => {
     const email = "sets@dfvs.com";
-    var s = await Signup({
+    let s = await Signup({
       email,
       confirmed: false,
     }, false)
     expect(s).toBeTruthy();
     const id = await getDocId(email);
-    var d = await Unsubscribe(id);
+    let d = await Unsubscribe(id);
     expect(d).toBeTruthy();
 
     // allow unsubscribe non-existent emails
-    var du = await Unsubscribe(id);
+    let du = await Unsubscribe(id);
     expect(du).toBeTruthy();
 
-    var dr = await Unsubscribe("sdfsdf");
+    let dr = await Unsubscribe("sdfsdf");
     expect(dr).toBeTruthy();
   });
 

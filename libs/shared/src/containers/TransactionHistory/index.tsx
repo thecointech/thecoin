@@ -49,22 +49,22 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       console.error('WARNING: Not Tested');
       const startRow = currentPage * maxRowCount;
       transactions = transactions.slice(startRow, startRow + maxRowCount);
-      
+
       return [transactions, (<Table.Footer>
         <Table.Row>
           <Table.HeaderCell colSpan='4'>
             <Menu floated='right' pagination>
-              <Menu.Item as='a' icon>
+              <Menu.Item key={0} as='a' icon>
                 <Icon name='chevron left' />
               </Menu.Item>
-                {Array(pageCount).map((_, index) => <Menu.Item as='a'>{index + 1}</Menu.Item>)}
-              <Menu.Item as='a' icon>
+                {Array(pageCount).map((_, index) => <Menu.Item key={index + 1} as='a'>{index + 1}</Menu.Item>)}
+              <Menu.Item key={pageCount + 1} as='a' icon>
                 <Icon name='chevron right' />
               </Menu.Item>
             </Menu>
           </Table.HeaderCell>
         </Table.Row>
-      </Table.Footer>)]  
+      </Table.Footer>)]
     }
 
     return [transactions, undefined]

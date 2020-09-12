@@ -25,7 +25,8 @@ export const Clients = ({contract}: Props) => {
     firestore.doc("User")
       .listCollections()
       .then(clients => clients.map(c => c.id))
-      .then(setUsers);
+      .then(setUsers)
+      .catch(err => { throw err })
   }, [])
 
   useEffect(() => {
@@ -39,14 +40,15 @@ export const Clients = ({contract}: Props) => {
               [u]: data
             }
           )
-        });
+        })
+        .catch(err => { throw err });
     };
   }, [contract, users])
 
   return (
     <div>hi
       {Object.entries(transactions)
-        .map(([u, data]) => <div>{u} - {data.balance}</div>)}
+        .map(([u, data]) => <div key={u}>{u} - {data.balance}</div>)}
     </div>);
 }
 

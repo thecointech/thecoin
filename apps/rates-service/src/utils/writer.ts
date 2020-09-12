@@ -29,10 +29,7 @@ var writeJson = exports.writeJson = function(response: any, arg1: any, arg2: any
       code = arg1;
     }
   }
-  if(code && arg1) {
-    payload = arg1;
-  }
-  else if(arg1) {
+  if(arg1) {
     payload = arg1;
   }
 
