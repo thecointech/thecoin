@@ -20,7 +20,7 @@ export class RbcApi {
         return {
             message: code.toString(),
             code,
-            confirmation: code == ETransferErrorCode.Success ? this.result : undefined;
+            confirmation: code == ETransferErrorCode.Success ? this.result : undefined,
         }
     }
 }
