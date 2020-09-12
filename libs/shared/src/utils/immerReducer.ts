@@ -29,7 +29,7 @@ class TheCoinReducer<T> extends ImmerReducer<T> {
     Object.assign(this.draftState, newState);
   }
 
-  actions(): { updateWithValues: Action} {
+  actions() : any {
     throw ("This class should not be created directly")
   }
 
