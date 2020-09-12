@@ -35,8 +35,3 @@ div.container:nth-child(1){
     padding: 40px;
 }
 
-#mobile #stickers{
-    margin-top: 260px;
-}
-
-

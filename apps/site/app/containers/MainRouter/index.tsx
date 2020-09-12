@@ -6,7 +6,7 @@ import { HomePage } from 'containers/HomePage/index';
 import { NotFoundPage } from '@the-coin/shared/containers/NotFoundPage';
 import { Accounts } from 'containers/Accounts';
 import { AddAccount } from 'containers/AddAccount';
-import { HowItWorks } from 'containers/HowItWorks';
+import { Healthier } from 'containers/Healthier';
 import { Confirm } from 'containers/Subscribe/Confirm';
 import { GAuth } from 'containers/StoreOnline/Google/gauth';
 import { Learn } from 'containers/Learn';
@@ -21,7 +21,7 @@ export const MainRouter = (props: { location: Location }) => {
       <Route path="/addAccount" component={AddAccount} />
       <Route path="/accounts" component={Accounts} />
       <Route path="/learn" component={Learn} />
-      <Route path="/howItWorks" component={HowItWorks} />
+      <Route path="/healthier" component={Healthier} />
       <Route path="/FAQ" component={HelpDocs} />
       <Route component={NotFoundPage} />
     </Switch>

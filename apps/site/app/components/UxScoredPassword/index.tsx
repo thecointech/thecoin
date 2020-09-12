@@ -2,7 +2,7 @@ import React from 'react';
 import { MessageDescriptor, FormattedMessage } from 'react-intl';
 import { Color } from 'csstype';
 import { Icon } from 'semantic-ui-react';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import messages, { scope as MessageScope } from './messages';
 import { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';

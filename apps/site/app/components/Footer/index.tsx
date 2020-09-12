@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { Subscribe } from '../../containers/Subscribe';
 import { FormattedMessage } from 'react-intl';
 import { Grid } from 'semantic-ui-react';
@@ -8,9 +8,9 @@ import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
 
 export default () => (
-  <div id="footer" className={styles.footer}>
+  <div id={styles.footerContainer} className={styles.footer}>
     <Subscribe />
-    <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable  className={styles.footerText}>
+    <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
           <Grid.Row>
             <Grid.Column>
 
@@ -26,7 +26,7 @@ export default () => (
 
             </Grid.Column>
             <Grid.Column>
-              ©
+              © 
               <FormattedMessage id="site.footer.copyright"
                     defaultMessage="Copyright 2020. TheCoin. All Right Reserved."
                     description="Copyright phrase in footer"/>

@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Stickers } from './stickers';
 
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import sky from './images/sky.svg';
 import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
 import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
@@ -20,7 +20,7 @@ export const Landscape = () => {
   return (
     <React.Fragment>
       <Grid padded doubling stackable>
-        <Grid.Row className={styles.mainWrapper} id="mainWrapper">
+        <Grid.Row className={styles.mainWrapper}>
           <Grid.Column id={styles.infosZone}>
             <div className={styles.headingWrapper}>
               <h1 className={styles.h1Home}>

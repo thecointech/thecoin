@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'components/CopyToClipboard';
 import { Grid } from 'semantic-ui-react';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 interface Props {
   xferRecipient?: string;

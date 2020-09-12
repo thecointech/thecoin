@@ -1,16 +1,10 @@
-/**
- * NotFoundPage
- *
- * This is the page we show when the user visits a url that doesn't have a route
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Header, Grid } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import illustration from './illust_pagenotfound.svg'
 
-export function NotFoundPage() {
+export function ConfirmSubsciption() {
   return (
     <>
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { Grid, Button, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import plants from "./images/illust_flowers.svg";
@@ -18,7 +18,11 @@ export const CreateAccountBig = () => {
                       description="Title"
                       values={{ what: 'react-intl' }}/>
             </Header>
-            <Button as={NavLink} to="/Accounts" content='Create Account' primary size='massive' />
+            <Button as={NavLink} to="/Accounts" primary size='massive' >
+              <FormattedMessage id="site.homepage.createAccountBig.button"
+                        defaultMessage="Create Account"
+                        description="Create Account button for the big create account banner for the home pages"/>
+            </Button>
           </Grid.Column>  
         </Grid.Row>
       </Grid>
