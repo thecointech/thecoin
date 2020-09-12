@@ -21,7 +21,7 @@
     "analyze": "node ./internals/scripts/analyze.js",
     "extract-intl": "node -r esm ./internals/scripts/extract-intl.js",
     "prebuild": "yarn build:clean",
-    "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
+    "build": "yarn cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:less": "yarn lessc --include-paths=",
     "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./app/.htaccess\" ./build",
     "build:clean": "rimraf ./build",
