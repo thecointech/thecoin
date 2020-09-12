@@ -7,10 +7,9 @@ import { log } from "@the-coin/logging";
 import { RbcApi } from "@the-coin/rbcapi";
 import { ETransferPacket } from "@the-coin/types";
 
-export async function processUnsettledETransfers() : Promise<CertifiedTransferRecord[]> {
+export async function processUnsettledETransfers(api: RbcApi): Promise<CertifiedTransferRecord[]> {
 
   log.trace('Processing e-Transfer requests');
-  const api = new RbcApi();
   const toComplete = await fetchActionsToComplete();
   if (toComplete.length == 0)
     return [];

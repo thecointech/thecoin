@@ -10,16 +10,16 @@ export async function send(prefix: string, amount: number, name:string, packet: 
 
   const { message, email, question, answer } = packet;
 
+  // Navigate to old account page
+  await act.clickOnText(ApiAction.Credentials.accountNo, "a");
+
   await act.clickAndNavigate('.leftnav-currentsection > :nth-child(3) > a', 'Payment');
-  //Promise.all([page.click('.leftnav-currentsection > :nth-child(3) > a'), page.waitForNavigation()]);
   await page.type('#amount', amount.toString());
   await page.click('#emtrbccust');
   await act.clickAndNavigate('#id_btn_submit', 'Recipient');
-  //Promise.all([page.click('#id_btn_submit'), page.waitForNavigation()]);
   await page.type('#EMT_NAME_ID', name);
   await page.type('#EMT_EMAILADDRESS_ID', email);
   await act.clickAndNavigate('#id_btn_continue', 'QnA');
-  //Promise.all([page.click('#id_btn_continue'), page.waitForNavigation()]);
   await page.type('#EMT_QUESTION_ID', question);
   await page.type('#EMT_RESPONSE_ID', answer);
   await page.type('#EMT_CONFIRM_RESPONSE_ID', answer);

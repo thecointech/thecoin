@@ -31,6 +31,10 @@ it('Can fetch emails', async () => {
   // ensure these are all test emails;
   const allTests = deposits.every(d => d.instruction.name.indexOf('TEST') >= 0);
   expect(allTests).toBe(true);
+
+  // ensure we have sourceID;
+  const allSources = deposits.every(d => !!d.record.sourceId);
+  expect(allSources).toBe(true);
 })
 it('We have valid deposits', async () => {
 

@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
 import fs from 'fs';
 import { log } from '@the-coin/logging';
 
@@ -67,7 +67,7 @@ export class ApiAction {
     await this.page.type('#Q1', ApiAction.Credentials.password, { delay: 20 });
     await this.writeStep('Entered Sign-in details');
 
-    await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In')
+    await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In', { waitUntil: "networkidle0"})
 
     // If we hit PVQ, this is where that happens
     await this.maybeEnterPVQ();
@@ -122,9 +122,10 @@ export class ApiAction {
 
   //////////////////////////////////////////
 
-  async clickAndNavigate(selector: string, stepName: string) {
+  async clickAndNavigate(selector: string, stepName: string, options?: NavigationOptions) {
     const navigationWaiter = this.page.waitForNavigation({
-      timeout: 90000 // MB internet means this can timeout prematurely
+      timeout: 90000, // MB internet means this can timeout prematurely
+      ...options
     });
     await this.page.click(selector)
     await navigationWaiter;
@@ -135,17 +136,17 @@ export class ApiAction {
     return this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
   }
 
-  async clickOnLinkText(linkText: string, waitElement?: string, stepName?: string) {
-    const [link] = await this.findElementsWithText('a', linkText);
+  async clickOnText(text: string, type: string, waitElement?: string, stepName?: string) {
+    const [link] = await this.findElementsWithText(type, text);
     if (!link)
-      throw (`Could not find link: ${linkText}`)
+      throw (`Could not find element ${type} with text: ${text}`)
 
     await link.click();
     await this.page.waitForNavigation();
     if (waitElement) {
       await this.page.waitForSelector(waitElement);
     }
-    await this.writeStep(stepName ?? linkText);
+    await this.writeStep(stepName ?? text);
 
     return null;
   }
