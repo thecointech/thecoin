@@ -44,7 +44,7 @@
     "extract": "formatjs extract",
     "extract-intl-new": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "formatjs compile",
-    "format-intl": "yarn compile lang/en.json --ast --out-file compiled-lang/en.json --format ./internals/scripts/format-intl.js"
+    "format-intl": "yarn compile lang/en.json --out-file compiled-lang/en.json --format ./internals/scripts/format-intl.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -84,7 +84,7 @@
     "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {
-    "@formatjs/cli": "^2.9.0",
+    "@formatjs/cli": "^2.11.2",
     "@octokit/rest": "16.33.1",
     "@testing-library/jest-dom": "4.0.0",
     "@testing-library/react": "8.0.4",
