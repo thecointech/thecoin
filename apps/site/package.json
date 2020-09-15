@@ -42,7 +42,9 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract",
-    "compile": "formatjs compile"
+    "extract-intl-new": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "formatjs compile",
+    "format-intl": "yarn compile lang/en.json --ast --out-file compiled-lang/en.json --format ./internals/scripts/format-intl.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
