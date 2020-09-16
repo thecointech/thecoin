@@ -19,7 +19,6 @@
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "yarn analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
-    "extract-intl": "node -r esm ./internals/scripts/extract-intl.js",
     "prebuild": "yarn build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:less": "yarn lessc --include-paths=",
@@ -42,7 +41,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract",
-    "extract-intl-new": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "extract-intl": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "formatjs compile",
     "format-intl": "yarn compile lang/en.json --out-file app/translations/en.json --format ./internals/scripts/format-intl.js"
   },
