@@ -7,11 +7,6 @@ import { useAccountMapStore } from '@the-coin/shared//containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import { FirestoreCheck } from './FirestoreSignin';
 
-//let locales = {
-//  'en': 'English',
-//  'fr': 'French',
-//}
-
 export const App = hot(() => {
 
   useFxRatesStore();
