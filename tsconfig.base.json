@@ -37,9 +37,13 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./any/random/path",
     "paths": {
+      "@the-coin/logging/*":    ["../../../libs/logging/build/*"],
       "@the-coin/contract/*":   ["../../../libs/contract/build/*"],
       "@the-coin/types/*":      ["../../../libs/types/build/*"],
+      "@the-coin/store/*":      ["../../../libs/store/build/*"],
+      "@the-coin/rbcapi/*":     ["../../../libs/rbcapi/build/*"],
       "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
+      "@the-coin/tx-processing/*":["../../../libs/tx-processing/build/*"],
       "@the-coin/shared/*":     ["../../../libs/shared/build/*"]
     }
   },

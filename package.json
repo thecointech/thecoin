@@ -13,6 +13,9 @@
       "**/semantic-ui-less"
     ]
   },
+  "engines": {
+    "node": ">=12.18.x"
+  },
   "scripts": {
     "postinstall": "yarn build:apis",
     "gen:rates": "openapi-generator generate -i apis/the-pricing.yaml -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
@@ -24,12 +27,11 @@
     "gen:broker:server": "openapi-generator generate -i apis/broker-cad.yaml -g nodejs-express-server -o apps/broker-service/Generated",
     "copy:broker:api": "cpx \"apps/broker-service/Generated/controllers/*.*\" \"apps/broker-service/src/controllers\" && cpx \"apps/broker-service/Generated/api/*.*\" \"apps/broker-service/src/api",
     "start:site": "cd apps/site && yarn start",
-    "start:firestore": "yarn firebase emulators:start --only firestore",
+    "start:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "test": "lerna run test"
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bunyan": "^1.8.12",
     "ethers": "^4.0.46",
     "invariant": "2.2.4",
     "lodash": "^4.17.15",
@@ -63,7 +65,6 @@
     "@babel/preset-typescript": "^7.8.3",
     "@babel/register": "7.4.4",
     "@firebase/testing": "^0.16.14",
-    "@types/bunyan": "^1.8.6",
     "@types/express": "4.17.1",
     "@types/invariant": "2.2.30",
     "@types/jest": "24.0.18",

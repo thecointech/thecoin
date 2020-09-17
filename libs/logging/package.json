@@ -1,0 +1,35 @@
+{
+  "name": "@the-coin/logging",
+  "version": "0.1.0",
+  "description": "The Coin: Common logging setup",
+  "keywords": [
+    "TheCoin",
+    "logging"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/logging"
+  },
+  "scripts": {
+    "build": "yarn tsc",
+    "build:clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
+  "dependencies": { 
+    "bunyan": "^1.8.12"
+  },
+  "devDependencies": {
+    "@types/bunyan": "^1.8.6"
+  }
+}

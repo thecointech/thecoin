@@ -19,7 +19,7 @@ try {
     //const acMinter = accounts[3];
     // , acPolice, client, ...acRest] = accounts;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       this.project = await TestHelper();
     })
 
@@ -81,7 +81,7 @@ try {
       reservedCoins.should.eq(mintAmount.toString());
     })
 
-    
+
     it('should xfer some coin', async function () {
       const proxy = await buildContract(this.project);
 
@@ -138,7 +138,7 @@ try {
       // Check the signer matches what contract calculates
       const recoveredSigner = await proxy.methods.recoverSigner(eclient, client1, value, fee, timestamp, signature).call();
       recoveredSigner.should.eq(eclient);
-      
+
       let gasAmount = await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, signature)
                                          .estimateGas({gas:5000000, from:eclient})
 
@@ -188,7 +188,7 @@ try {
       parseInt(bal1).should.eq(value * 2);
       parseInt(bal2).should.eq(fee * 2);
       parseInt(ebal).should.eq(purchaseAmount - 2 * (value + fee));
-      
+
     })
   })
 } catch (err) {
