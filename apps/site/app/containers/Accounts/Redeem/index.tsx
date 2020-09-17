@@ -12,7 +12,7 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'api'
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import { ETransferPacket } from '@the-coin/types';
 
 type MyProps = {

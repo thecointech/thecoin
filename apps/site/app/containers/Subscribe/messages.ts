@@ -10,7 +10,7 @@ export const scope = 'app.containers.Subscribe';
 export default defineMessages({
   subscribe: {
     id: `${scope}.subscribe`,
-    defaultMessage: 'Join our beta program and maximize your future with {bold}.',
+    defaultMessage: 'The future is better because of you & us. Subscribe to our newsletter:',
     description: 'TheCoin',
   },
 });

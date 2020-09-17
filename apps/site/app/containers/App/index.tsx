@@ -8,11 +8,11 @@
  */
 
 import * as React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Responsive, Segment } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
-import Header from 'components/Header';
 import MainNavigation from 'containers/MainNavigation';
+import MainNavigationMobile from 'containers/MainNavigationMobile';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
@@ -23,7 +23,7 @@ import 'semantic-ui-less/semantic.less';
 import { usePrismic } from 'containers/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 export const App = () => {
   usePrismic();
@@ -33,8 +33,13 @@ export const App = () => {
 
   return (
     <>
-      <Header />
-      <MainNavigation />
+
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <MainNavigation />
+      </Responsive>
+      <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <MainNavigationMobile />
+      </Responsive>
 
       <Container
         style={{

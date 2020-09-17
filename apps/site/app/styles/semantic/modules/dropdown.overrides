@@ -3,48 +3,6 @@
 *******************************/
 
 
-#createAccountHeader:hover{
-  background-color: @primaryColor;
-  color: white;
-}
-
-#createAccountHeader{
-  background-color: @primaryColor;
-  width: 150px;
-  height: 40px;
-  line-height: 25px;
-  position: fixed;
-  right: 0px;
-  right: 10%;
-  top: 0px;
-  font-size: 14px !important;
-  z-index: 100;
-}
-
-#createAccountHeader .dropdown.icon{
-  float: right;
-  top: -18px;
-  position: relative;
-}
-
-#createAccountHeader .ui.dropdown{
-  min-width: 85%;
-}
-
-#createAccountHeader .item .dropdown.icon{
-  top: 8px;
-}
-
-
-#createAccountHeader img{
-        width: 10px;
-        margin-top: 5px;
-}
-
-#createAccountHeader .menu.transition i .dropdown.icon{
-  top: 4px;
-}
-
 .ui.dropdown .menu > .item .dropdown.icon{
   margin: -0.5em -1em 0em 0em;
 }

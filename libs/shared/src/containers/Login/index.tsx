@@ -7,7 +7,7 @@ import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
 import messages from "./messages";
 
-import styles from "./index.module.css";
+import styles from "./styles.module.css";
 import { useState, useCallback } from "react";
 import { isWallet } from "../../SignerIdent";
 import { AccountState } from "../Account/types";
