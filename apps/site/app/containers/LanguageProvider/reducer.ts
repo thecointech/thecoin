@@ -24,6 +24,7 @@ class LanguageProviderReducer extends TheCoinReducer<ContentState>
       //I don't think I need the timestamps used in ContentHeight: tell me if i am wrong
       // I need to add locale to the drafstate: DONE
       // setLocale needs to be checked/changed/added in index.tsx (TODO) and types.ts (DONE)
+      // Need to check/update selector.ts
       this.draftState.locale = locale;
     }
 }
