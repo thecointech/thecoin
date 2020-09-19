@@ -17,14 +17,11 @@ export const initialState = {
   locale: DEFAULT_LOCALE,
 };
 const CONTENT_KEY : keyof ApplicationRootState = "content";
+export type ContainerState = Readonly<typeof initialState>;
 
-class LanguageProviderReducer extends TheCoinReducer<ContentState>
+export default class LanguageProviderReducer extends TheCoinReducer<ContentState>
   implements IActions {
     setLocale(locale: string) {
-      //I don't think I need the timestamps used in ContentHeight: tell me if i am wrong
-      // I need to add locale to the drafstate: DONE
-      // setLocale needs to be checked/changed/added in index.tsx (TODO) and types.ts (DONE)
-      // Need to check/update selector.ts
       this.draftState.locale = locale;
     }
 }
@@ -35,14 +32,20 @@ export const useLanguageProvider = () => {
   return (bindActionCreators(actions, useDispatch()) as any) as IActions;
 }
 
+
 /*
-----OLD CODE---
+
+export const initialState = {
+  locale: DEFAULT_LOCALE,
+};
 
 export type ContainerState = Readonly<typeof initialState>;
 
 type ActionType = { type: string; payload: string; }
 
-function languageProviderReducer( state = initialState, action: ActionType,
+function languageProviderReducer(
+  state = initialState,
+  action: ActionType,
 ): ContainerState {
   switch (action.type) {
     case ActionTypes.CHANGE_LOCALE:
@@ -56,5 +59,3 @@ function languageProviderReducer( state = initialState, action: ActionType,
 export default languageProviderReducer;
 
 */
-
-

@@ -1,16 +1,15 @@
-import languageProviderReducer from '../reducer';
-import ActionTypes from '../constants';
+import LanguageProviderReducer from '../reducer';
 
-describe('languageProviderReducer', () => {
+describe('LanguageProviderReducer', () => {
   it('returns the initial state', () => {
-    expect(languageProviderReducer(undefined, {} as any)).toEqual({
+    expect(LanguageProviderReducer(undefined, {} as any)).toEqual({
       locale: 'en',
     });
   });
 
   it('changes the locale', () => {
     expect(
-      languageProviderReducer(undefined, {
+      LanguageProviderReducer(undefined, {
         type: ActionTypes.CHANGE_LOCALE,
         payload: 'de',
       }),
