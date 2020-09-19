@@ -23,4 +23,6 @@ export class RbcApi {
             confirmation: code == ETransferErrorCode.Success ? this.result : undefined,
         }
     }
+
+    sendETransfer = ()  => 123;
 }

@@ -3,7 +3,7 @@ import { PurchaseType } from "../base/types";
 import { init, describe, release } from '@the-coin/utilities/firestore/jestutils';
 import { InitContract } from './contract';
 import { GetUserDoc } from "@the-coin/utilities/User";
-
+import { ConfigStore } from '@the-coin/store';
 
 // Don't go to the server for this
 //jest.mock('googleapis');
@@ -12,7 +12,7 @@ import { GetUserDoc } from "@the-coin/utilities/User";
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
-  //ConfigStore.initialize();
+  ConfigStore.initialize();
 
   InitContract({} as any);
 
@@ -20,7 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  //ConfigStore.release();
+  ConfigStore.release();
   release();
 });
 
