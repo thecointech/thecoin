@@ -50,7 +50,6 @@
     "googleapis": "47.0.0",
     "js-yaml": "^3.13.1",
     "node-fetch": "^2.6.0",
-    "node-mailjet": "^3.3.1",
     "swagger-express-middleware": "3.0.0-alpha.5",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2",

@@ -44,7 +44,8 @@
       "@the-coin/rbcapi/*":     ["../../../libs/rbcapi/build/*"],
       "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
       "@the-coin/tx-processing/*":["../../../libs/tx-processing/build/*"],
-      "@the-coin/shared/*":     ["../../../libs/shared/build/*"]
+      "@the-coin/shared/*":     ["../../../libs/shared/build/*"],
+      "@the-coin/email/*":     ["../../../libs/shared/email/*"]
     }
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**"]

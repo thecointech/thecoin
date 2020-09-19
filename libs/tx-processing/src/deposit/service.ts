@@ -12,6 +12,8 @@ import { depositInBank, storeInDB } from "./process";
 import { waitTheTransfer, startTheTransfer } from "./contract";
 import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
 import { DocumentReference } from "@the-coin/types";
+import { SendDepositConfirmation } from "@the-coin/email";
+import { DateTime } from "luxon";
 
 export async function FetchDepositEmails()
 {
@@ -142,6 +144,8 @@ export async function ProcessUnsettledDeposit(deposit: DepositData, rbcApi: RbcA
   if (processed && stored)
   {
     await inProgress.delete();
+    // Finally, email the notification
+    await emailNotification(deposit);
     return true;
   }
   return false;
@@ -215,4 +219,16 @@ async function initiateDeposit(deposit: DepositData)
   inProgress.set(deposit.record);
   //var success = await storeInDB(deposit.instruction.address, deposit.record);
   return inProgress;
+}
+
+
+async function emailNotification(deposit: DepositData)
+{
+  // Convert to DateTime
+  await SendDepositConfirmation(deposit.instruction.email, {
+    tx: `https://ropsten.etherscan.io/tx/${deposit.record.hash}`,
+    SendDate: DateTime.fromMillis(deposit.record.recievedTimestamp.toMillis()),
+    ProcessDate: DateTime.fromMillis(deposit.record.processedTimestamp!.toMillis()),
+    FirstName: deposit.instruction.name
+  })
 }
