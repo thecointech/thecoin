@@ -28,7 +28,6 @@ const stateSelector = createSelector(
 export default function LanguageProvider(props : Props) {
   //const locale =  window.location.search.split('=')[1] ?? useSelector(stateSelector);
   const { locale } = useSelector(stateSelector);
-  //const actions =  setLocale(locale);
 
   return (
     <IntlProvider

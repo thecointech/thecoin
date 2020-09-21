@@ -19,7 +19,7 @@ export const initialState = {
 const CONTENT_KEY : keyof ApplicationRootState = "content";
 export type ContainerState = Readonly<typeof initialState>;
 
-export default class LanguageProviderReducer extends TheCoinReducer<ContentState>
+export class LanguageProviderReducer extends TheCoinReducer<ContentState>
   implements IActions {
     setLocale(locale: string) {
       this.draftState.locale = locale;
