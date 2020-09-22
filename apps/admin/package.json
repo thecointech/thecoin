@@ -127,6 +127,7 @@
     "spectron": "^5.0.0"
   },
   "dependencies": {
+    "@hot-loader/react-dom": "^16.9.0",
     "@the-coin/shared": "*",
     "@the-coin/tx-processing": "*",
     "@the-coin/store": "*",

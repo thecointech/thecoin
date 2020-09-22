@@ -7,8 +7,9 @@ import { useAccountMapStore } from '@the-coin/shared//containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import { FirestoreCheck } from './FirestoreSignin';
 
-export const App = hot(() => {
+export const App = hot(() => <AppRender />)
 
+const AppRender = () => {
   useFxRatesStore();
   useAccountMapStore();
 
@@ -26,4 +27,4 @@ export const App = hot(() => {
       </PageSidebar>
     </React.Fragment>
   );
-})
+}
