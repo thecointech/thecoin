@@ -5,7 +5,7 @@
  */
 //import ActionTypes from './constants';
 import { DEFAULT_LOCALE } from '../../i18n';
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer';
 import { ContentState, IActions } from './types';
 import { ApplicationRootState } from 'types';
 import { useInjectReducer } from 'redux-injectors';
@@ -30,7 +30,7 @@ export const useLanguageProvider = () => {
   const { reducer, actions } = GetNamedReducer(LanguageProviderReducer, CONTENT_KEY, initialState);
   useInjectReducer({ key: CONTENT_KEY, reducer });
   return (bindActionCreators(actions, useDispatch()) as any) as IActions;
-}
+};
 
 
 /*
