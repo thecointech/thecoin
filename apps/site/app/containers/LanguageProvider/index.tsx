@@ -12,6 +12,7 @@ import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
 //import { setLocale } from './reducer';
 import { makeSelectLocale } from './selector';
+import { useLanguageProvider } from './reducer';
 
 export interface Props {
   messages: { [locale: string]: { [id: string]: string } };
@@ -25,10 +26,13 @@ const stateSelector = createSelector(
   }),
 );
 
-export default function LanguageProvider(props : Props) {
+export function LanguageProvider(props : Props) {
   //const locale =  window.location.search.split('=')[1] ?? useSelector(stateSelector);
   const { locale } = useSelector(stateSelector);
 
+  const actions = useLanguageProvider();   
+  actions.setLocale("en");
+  
   return (
     <IntlProvider
       locale={locale}
