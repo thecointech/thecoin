@@ -35,11 +35,13 @@ import 'file-loader?name=.htaccess!./.htaccess';
 
 import {configureAppStore} from '@the-coin/shared/configureStore';
 import createReducer from './reducers';
+import { Message } from './containers/LanguageProvider';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
 
 import { initTracking } from './utils/reactga';
+
 initTracking();
 
 // TODO: We are temporarily removing the web-fonts
@@ -60,7 +62,7 @@ initTracking();
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
-const render = (messages: any, Component = App) => {
+const render = (messages: Message, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>

@@ -14,6 +14,10 @@ import { IntlProvider } from 'react-intl';
 import { makeSelectLocale } from './selector';
 import { useLanguageProvider } from './reducer';
 
+export interface Message {
+  [locale: string]: { [id: string]: string } 
+}
+
 export interface Props {
   messages: { [locale: string]: { [id: string]: string } };
   children?: React.ReactNode;
