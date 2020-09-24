@@ -15,11 +15,11 @@ import { makeSelectLocale } from './selector';
 import { useLanguageProvider } from './reducer';
 
 export interface Message {
-  [locale: string]: { [id: string]: string } 
+  [locale: string]: { [id: string]: string };
 }
 
 export interface Props {
-  messages: { [locale: string]: { [id: string]: string } };
+  messages: Message;
   children?: React.ReactNode;
 }
 

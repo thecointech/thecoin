@@ -29,7 +29,7 @@ export class LanguageProviderReducer extends TheCoinReducer<ContentState>
 export const useLanguageProvider = () => {
   const { reducer, actions } = GetNamedReducer(LanguageProviderReducer, CONTENT_KEY, initialState);
   useInjectReducer({ key: CONTENT_KEY, reducer });
-  return (bindActionCreators(actions, useDispatch()) as any) as IActions;
+  return (bindActionCreators(actions, useDispatch()) as IActions) as IActions;
 };
 
 
