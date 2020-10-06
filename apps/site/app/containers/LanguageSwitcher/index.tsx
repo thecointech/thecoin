@@ -1,30 +1,25 @@
-import React from "react";
-import { Dropdown } from "semantic-ui-react";
+import React, { useState } from "react";
 import _ from "lodash";
+import { Dropdown } from "semantic-ui-react";
 import { useLanguageProvider } from "containers/LanguageProvider/reducer";
+import { DEFAULT_LOCALE } from '../../i18n';
 
-const getOptions = (id: number, prefix = 'Choice ') =>
-  _.times(id, (index) => ({
-    key: index,
-    text: `${prefix}${index}`,
-    value: index,
-  }));
+const options = [
+  { key: 1, text: 'EN', value: "en" },
+  { key: 2, text: 'FR', value: "fr" },
+];
 
-
-
-class LanguageSwitcher extends React.Component {
-
-
-    render() {
-      return (
-        <Dropdown selection compact onChange={useLanguageProvider}>            
-            <Dropdown.Menu>
-                <Dropdown.Item key="0" index="EN" text='EN' options={getOptions(0, 'EN')} />
-                <Dropdown.Item key="1" index="FR" text='FR' options={getOptions(1, 'FR')}/>
-            </Dropdown.Menu>
-        </Dropdown>
-      );
+const LanguageSwitcher = () => {
+    
+    const [ locale, setLocale ] =  useState<string>(DEFAULT_LOCALE);
+    const handleChange = (e: any, { value }: any) => {
+      setLocale({value}.value)
     }
+    useLanguageProvider().setLocale(locale);
+
+    return (
+        <Dropdown selection compact onChange={handleChange} value={locale} options={options} />            
+    )
   }
   
   export default LanguageSwitcher;
