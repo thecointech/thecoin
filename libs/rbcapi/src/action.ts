@@ -64,7 +64,7 @@ export class ApiAction {
     // Enter user name and passwords
     log.debug("Beginning Login");
     await this.page.type('#K1', ApiAction.Credentials.cardNo, { delay: 20 });
-    await this.page.type('#Q1', ApiAction.Credentials.password, { delay: 20 });
+    await this.page.type('#QQ', ApiAction.Credentials.password, { delay: 20 });
     await this.writeStep('Entered Sign-in details');
 
     await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In', { waitUntil: "networkidle0"})
