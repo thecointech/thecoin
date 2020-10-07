@@ -11,6 +11,7 @@ const options = [
 
 const LanguageSwitcher = () => {
     
+    const localeSaved = useLanguageProvider().getLocale();
     const [ locale, setLocale ] =  useState<string>(DEFAULT_LOCALE);
     const handleChange = (e: any, { value }: any) => {
       setLocale({value}.value)
