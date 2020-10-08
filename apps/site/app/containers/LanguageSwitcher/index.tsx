@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import _ from "lodash";
-import { Dropdown } from "semantic-ui-react";
+import React from "react";
+import { Dropdown, DropdownProps } from "semantic-ui-react";
 import { useLanguageProvider } from "containers/LanguageProvider/reducer";
-import { DEFAULT_LOCALE } from '../../i18n';
+import { selectLocale } from 'containers/LanguageProvider/selector';
+import { useSelector } from "react-redux";
 
 const options = [
   { key: 1, text: 'EN', value: "en" },
@@ -11,12 +11,11 @@ const options = [
 
 const LanguageSwitcher = () => {
     
-    const localeSaved = useLanguageProvider().getLocale();
-    const [ locale, setLocale ] =  useState<string>(DEFAULT_LOCALE);
-    const handleChange = (e: any, { value }: any) => {
-      setLocale({value}.value)
+    const { locale } = useSelector(selectLocale);
+    const langProvider = useLanguageProvider();
+    const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+      langProvider.setLocale( data.value as string );
     }
-    useLanguageProvider().setLocale(locale);
 
     return (
         <Dropdown selection compact onChange={handleChange} value={locale} options={options} />            

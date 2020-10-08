@@ -8,11 +8,8 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
-//import { setLocale } from './reducer';
-import { makeSelectLocale } from './selector';
-import { useLanguageProvider } from './reducer';
+import { selectLocale } from './selector';
 
 export interface Message {
   [locale: string]: { [id: string]: string };
@@ -23,18 +20,8 @@ export interface Props {
   children?: React.ReactNode;
 }
 
-const stateSelector = createSelector(
-  makeSelectLocale(),
-  locale => ({
-    locale,
-  }),
-);
-
 export function LanguageProvider(props : Props) {
-  const { locale } = useSelector(stateSelector);
-
-  const actions = useLanguageProvider();   
-  actions.setLocale(locale);
+  const { locale } = useSelector(selectLocale);
   
   return (
     <IntlProvider

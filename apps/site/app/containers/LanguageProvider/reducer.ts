@@ -21,9 +21,6 @@ export type ContainerState = Readonly<typeof initialState>;
 
 export class LanguageProviderReducer extends TheCoinReducer<ContentState>
   implements IActions {
-    getLocale(): string {
-      return this.draftState.locale;
-    }
     setLocale(locale: string) {
       this.draftState.locale = locale;
     }
@@ -32,5 +29,5 @@ export class LanguageProviderReducer extends TheCoinReducer<ContentState>
 export const useLanguageProvider = () => {
   const { reducer, actions } = GetNamedReducer(LanguageProviderReducer, CONTENT_KEY, initialState);
   useInjectReducer({ key: CONTENT_KEY, reducer });
-  return (bindActionCreators(actions, useDispatch()) as any) as IActions;
+  return (bindActionCreators(actions, useDispatch()) as IActions) as IActions;
 };

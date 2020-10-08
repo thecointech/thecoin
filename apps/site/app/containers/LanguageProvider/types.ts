@@ -6,5 +6,4 @@ export interface ContentState {
 /* --- ACTIONS --- */
 export interface IActions {
   setLocale(locale: string): void;
-  getLocale(): string;
 }
