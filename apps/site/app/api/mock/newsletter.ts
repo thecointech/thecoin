@@ -1,8 +1,7 @@
 import { SubscriptionDetails } from "@the-coin/broker-cad";
-import { AxiosPromise } from "axios";
-import { BaseAPI } from "@the-coin/broker-cad/dist/base";
+import { delay } from "redux-saga/effects";
 
-export declare class NewsletterApi extends BaseAPI {
+export class MockNewsletterApi {
     /**
      *
      * @summary Confirm email subscription.
@@ -11,7 +10,13 @@ export declare class NewsletterApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    newsletterConfirm(details: SubscriptionDetails, options?: any): AxiosPromise<SubscriptionDetails>;
+    public async newsletterConfirm(_details: SubscriptionDetails, _options?: any)
+    {
+        await delay(250);
+        return {
+          success: true
+        };
+    }
     /**
      *
      * @summary Get subscription details.
@@ -20,7 +25,12 @@ export declare class NewsletterApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    newsletterDetails(id: string, options?: any): AxiosPromise<SubscriptionDetails>;
+    public async newsletterDetails(_id: string, _options?: any){
+        await delay(250);
+        return {
+          success: true
+        };
+    }
     /**
      *
      * @summary Register an email address for our newsletter.
@@ -29,7 +39,12 @@ export declare class NewsletterApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    newsletterSignup(details: SubscriptionDetails, options?: any): AxiosPromise<boolean>;
+    public async newsletterSignup(_details: SubscriptionDetails, _options?: any){
+        await delay(250);
+        return {
+          success: true
+        };
+    }
     /**
      *
      * @summary Unsubscribe an email address from our newsletter.
@@ -38,5 +53,10 @@ export declare class NewsletterApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    newsletterUnsubscribe(id: string, options?: any): AxiosPromise<boolean>;
+    public async newsletterUnsubscribe(_id: string, _options?: any){
+        await delay(250);
+        return {
+          success: true
+        };
+    }
 } 
