@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './index.module.css';
+import styles from './styles.module.css';
 
 export const Stickers = () => {
   return (
