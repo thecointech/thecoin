@@ -3,6 +3,7 @@ import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
 import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
+//import { Redirect } from 'react-router';
 
 export const Subscribe = () => {
 
@@ -18,11 +19,12 @@ export const Subscribe = () => {
       const result = await api.newsletterSignup({
         email,
         confirmed: false,
-      }) as any;  console.log(result);
+      }) as any;
       if (!result.success) {
         alert('Signup failed: please contact support@thecoin.io');
       } else {
         alert('Signup success!');
+        //return <Redirect to='/login'  />
       }
     }
   }, [email]);
@@ -30,8 +32,9 @@ export const Subscribe = () => {
     <div className={styles.subscribeBlock}>
       <span className={styles.subContainer}>
           <h3>
-            <FormattedMessage id="messages.subscribe.description" 
-                              defaultMessage="The future is better because of you & us. Subscribe to our newsletter:" />
+            <FormattedMessage id="site.subscribe.description" 
+                              defaultMessage="The future is better because of you & us. Subscribe to our newsletter:" 
+                              description="Title for the bottom subscription part for the site" />
           </h3>
       </span>
       <span className={styles.search}>
@@ -40,7 +43,9 @@ export const Subscribe = () => {
           onChange={onInputChange}
           action={(
             <Button onClick={doSubscribe} secondary>
-              <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
+              <FormattedMessage id="site.subscribe.button" 
+                                defaultMessage="Subscribe" 
+                                description="Button for the bottom subscription part for the site" />
             </Button>)}
           placeholder="Your email" />
       </span>
