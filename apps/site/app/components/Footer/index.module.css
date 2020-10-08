@@ -1,9 +1,0 @@
-.footerItems {
-  background-color: transparent;
-}
-
-.footerItems > li {
-  margin-left: 15px;
-  display: inline-block;
-  margin: 10px;
-}

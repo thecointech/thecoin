@@ -3,7 +3,6 @@ import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
 import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages'
 
 export const Subscribe = () => {
 
@@ -30,21 +29,17 @@ export const Subscribe = () => {
   return (
     <div className={styles.subscribeBlock}>
       <span className={styles.subContainer}>
-        <p className={styles.subscribeText}>
-          <FormattedMessage
-            {...messages.subscribe}
-            values={{
-              bold: <b>{messages.subscribe.description}</b>,
-            }}
-          />
-        </p>
+          <h3>
+            <FormattedMessage id="messages.subscribe.description" 
+                              defaultMessage="The future is better because of you & us. Subscribe to our newsletter:" />
+          </h3>
       </span>
       <span className={styles.search}>
         <Input
           id='subscribeField'
           onChange={onInputChange}
           action={(
-            <Button onClick={doSubscribe} id='subscribeButton'>
+            <Button onClick={doSubscribe} secondary>
               <FormattedMessage id="Subscribe.button" defaultMessage="Subscribe" />
             </Button>)}
           placeholder="Your email" />

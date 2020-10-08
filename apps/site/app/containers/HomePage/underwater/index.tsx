@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './index.module.css';
+import styles from './styles.module.css';
 import illustration from './images/5_illustration.svg';
 import background from './images/full_background.svg';
 import co2 from './images/icon_5_1.svg';
