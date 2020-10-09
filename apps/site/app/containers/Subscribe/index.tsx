@@ -1,19 +1,25 @@
-import React from 'react';
-import { Input, Button } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Input, Button, Message } from 'semantic-ui-react';
 import { GetNewsletterApi } from 'api';
 import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
 //import { Redirect } from 'react-router';
 
-export const Subscribe = () => {
 
+export const Subscribe = () => {
+  const [errorinfos, setErrorinfos] = useState(true);
+  const [confirminfos, setConfirminfos] = useState(true);
+  const [validinfos, setValidinfos] = useState(true);
+ 
   const [email, setEmail] = React.useState('');
   const onInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.currentTarget.value), [setEmail]);
   const doSubscribe = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.preventDefault();
 
     if (email.indexOf('@') < 0) {
-      alert('Please enter a valid email');
+      setValidinfos(false);
+      setErrorinfos(true);
+      setConfirminfos(true);
     } else {
       const api = GetNewsletterApi();
       const result = await api.newsletterSignup({
@@ -21,10 +27,13 @@ export const Subscribe = () => {
         confirmed: false,
       }) as any;
       if (!result.success) {
-        alert('Signup failed: please contact support@thecoin.io');
+        setValidinfos(true);
+        setErrorinfos(false);
+        setConfirminfos(true);
       } else {
-        alert('Signup success!');
-        //return <Redirect to='/login'  />
+        setValidinfos(true);
+        setErrorinfos(true);
+        setConfirminfos(false);
       }
     }
   }, [email]);
@@ -38,6 +47,23 @@ export const Subscribe = () => {
           </h3>
       </span>
       <span className={styles.search}>
+        <div>
+          <Message color='orange' hidden={validinfos}>
+            <FormattedMessage id="site.subscribe.email.invalid" 
+                                    defaultMessage="Please enter a valid email" 
+                                    description="Message we give a user when the subscription failed" />
+          </Message>
+          <Message color='red' hidden={errorinfos}>
+            <FormattedMessage id="site.subscribe.email.error" 
+                                    defaultMessage="Signup failed: please contact support@thecoin.io" 
+                                    description="Message we give a user when the subscription failed (already subscribed or server)" />
+          </Message>
+          <Message color='olive' hidden={confirminfos}>
+            <FormattedMessage id="site.subscribe.email.success" 
+                                    defaultMessage="Success: check your emails" 
+                                    description="Message we give a user when the subscription is a success" />
+          </Message>
+        </div>
         <Input
           id='subscribeField'
           onChange={onInputChange}

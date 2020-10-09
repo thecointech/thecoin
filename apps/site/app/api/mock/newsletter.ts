@@ -14,7 +14,8 @@ export class MockNewsletterApi {
     {
         await delay(250);
         return {
-          success: true
+          success: true,
+          data: {}
         };
     }
     /**
