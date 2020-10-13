@@ -24,7 +24,6 @@ import { usePrismic } from 'containers/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
-//import bootstrapApplication from '../LanguageProvider';
 
 export const App = ( ) => {
   usePrismic();
