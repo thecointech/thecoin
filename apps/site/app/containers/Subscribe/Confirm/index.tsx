@@ -56,7 +56,7 @@ export const Confirm = (props: RouteComponentProps) => {
         <Form.Checkbox onChange={onInputChange} label="Yes, I want to connect with The Coin" checked={details.confirmed} name="confirmed" />
       </Form>
       <Button onClick={updateSubscription}>
-        <FormattedMessage id="Subscribe.button" defaultMessage="Update Details!" />
+        <FormattedMessage id="site.subscribe.confirm.button" defaultMessage="Update Details!" />
       </Button>
     </div>)
 };
