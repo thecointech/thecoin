@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { selectLocale } from './selector';
 
-export interface Messages {
+export type Messages = {
   [locale: string]: { [id: string]: string };
 }
 
