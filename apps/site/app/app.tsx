@@ -6,9 +6,8 @@
  */
 
 if (window.location.pathname === "/accounts/gauth") {
-  debugger;
   const newUrl = `/#${window.location.pathname}${window.location.search}`;
-  window.location.replace(newUrl)
+  window.location.replace(newUrl);
 }
 
 import 'react-app-polyfill/ie11';
@@ -27,7 +26,7 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider';
+import { LanguageProvider } from 'containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -35,11 +34,13 @@ import 'file-loader?name=.htaccess!./.htaccess';
 
 import {configureAppStore} from '@the-coin/shared/configureStore';
 import createReducer from './reducers';
+import { Messages } from './containers/LanguageProvider';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
 
 import { initTracking } from './utils/reactga';
+
 initTracking();
 
 // TODO: We are temporarily removing the web-fonts
@@ -60,7 +61,7 @@ initTracking();
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
-const render = (messages: any, Component = App) => {
+const render = (messages: Messages, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
@@ -84,25 +85,7 @@ if (module.hot) {
     render(translationMessages, refresh);
   });
 }
-// Chunked polyfill for browsers without Intl support
-// if (!window.Intl) {
-//   new Promise(resolve => {
-//     resolve(import('intl'));
-//   })
-//     .then(() =>
-//       Promise.all([
-//         import('intl/locale-data/jsonp/en.js'),
-//         import('intl/locale-data/jsonp/de.js'),
-//       ]),
-//     )
-//     .then(() => render(translationMessages))
-//     .catch(err => {
-//       throw err;
-//     });
-// } else {
-//   render(translationMessages);
-// }
-// TODO: Polyfill via https://polyfill.io/v3/url-builder/ 
+
 render(translationMessages);
 
 // Install ServiceWorker and AppCache in the end since

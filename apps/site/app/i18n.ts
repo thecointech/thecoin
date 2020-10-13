@@ -25,7 +25,7 @@ interface Messages {
 const enTranslationMessages: Messages = require('./translations/en.json');
 const frTranslationMessages: Messages = require('./translations/fr.json');
 
-export const DEFAULT_LOCALE = 'fr';
+export const DEFAULT_LOCALE = 'en';
 
 // prettier-ignore
 export const appLocales = [
