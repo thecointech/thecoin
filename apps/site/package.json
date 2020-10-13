@@ -19,7 +19,6 @@
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "yarn analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
-    "extract-intl": "node -r esm ./internals/scripts/extract-intl.js",
     "prebuild": "yarn build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:less": "yarn lessc --include-paths=",
@@ -40,7 +39,11 @@
     "test:clean": "rimraf ./coverage",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "extract": "formatjs extract",
+    "extract-intl": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "formatjs compile",
+    "format-intl": "yarn compile lang/en.json --out-file app/translations/en.json --format ./internals/scripts/format-intl.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -80,6 +83,7 @@
     "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {
+    "@formatjs/cli": "^2.11.2",
     "@octokit/rest": "16.33.1",
     "@testing-library/jest-dom": "4.0.0",
     "@testing-library/react": "8.0.4",
@@ -108,6 +112,7 @@
     "html-webpack-plugin": "3.2.0",
     "image-webpack-loader": "5.0.0",
     "imports-loader": "0.8.0",
+    "jest": "*",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "ngrok": "3.2.1",
@@ -121,7 +126,6 @@
     "shelljs": "0.8.3",
     "svg-url-loader": "3.0.0",
     "tsconfig-paths": "3.4.1",
-    "whatwg-fetch": "3.0.0",
-    "jest": "*"
+    "whatwg-fetch": "3.0.0"
   }
 }

@@ -68,33 +68,3 @@ export default defineMessages({
     defaultMessage: "The entered referrer ID is not recognized",
   },
 });
-
-// });
-
-// interface SimpleMessages {
-//   [id: string]: string;
-// }
-
-// interface FullMessage {
-//   [index: string]: {
-//     id: string;
-//     defaultMessage: string;
-//   };
-// }
-
-// function doDefineMessages<T extends SimpleMessages>(messages: T): T {
-//   const asObj: Messages = {};
-//   for (const key in messages) {
-//     asObj[key as string] = {
-//       id: `${scope}.${key}`,
-//       defaultMessage: messages[key] as any,
-//     };
-//   }
-//   return defineMessages(asObj);
-// }
-
-// export default doDefineMessages({
-//   header: 'Create a New Account',
-//   subHeader:
-//     'Name your account anything you like, and give it a valid password.',
-// });

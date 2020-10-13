@@ -22,7 +22,7 @@ export const Advantages = () => {
             <Grid.Column width={1} only='computer tablet'><hr /></Grid.Column>
             <Grid.Column width={2}>
               <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage id="site.homepage.advantages.monthlyFees"
+              <FormattedMessage id="site.homepage.advantages.minimum"
                   defaultMessage="Minimums"
                   description="Minimums"
                   values={{ what: 'react-intl' }}/>

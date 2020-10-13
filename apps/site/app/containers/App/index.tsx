@@ -25,7 +25,7 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
-export const App = () => {
+export const App = ( ) => {
   usePrismic();
   useFxRatesStore();
   useAccountMapStore();
@@ -33,7 +33,6 @@ export const App = () => {
 
   return (
     <>
-
       <Responsive as={Segment} {...Responsive.onlyComputer}>
         <MainNavigation />
       </Responsive>

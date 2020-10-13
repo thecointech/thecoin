@@ -118,7 +118,7 @@ export const Wealthier = () => {
                       values={{ what: 'react-intl' }}/>
               </p>
               <a href="">
-                <FormattedMessage id="site.homepage.wealthier.growth.link"
+                <FormattedMessage id="site.homepage.wealthier.profits.link"
                       defaultMessage="Who Wins?"
                       description="Link"
                       values={{ what: 'react-intl' }}/>
