@@ -31,7 +31,7 @@ class Navigation extends React.Component {
                       description="Title for the In-depth entry in the menu"
                       values={{ what: 'react-intl' }}/>
                   </HeaderLink>
-                  <HeaderLink to="/FAQ">
+                  <HeaderLink to="/wedomore">
                     <FormattedMessage id="site.MainNavigation.wedomore"
                       defaultMessage="We do more"
                       description="Title for the We do more entry in the menu"

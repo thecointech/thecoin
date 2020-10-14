@@ -4,20 +4,21 @@ import { ColumnWithTwoTitles } from '../Healthier/ColumnWithTwoTitles';
 import styles from './styles.module.css';
 import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
+import { FormattedMessage } from 'react-intl';
 
 export function HealthierMobile() {
-  let majorBanks = {  id:"site.healthier.majorbanks",
+  let majorBanks = {  id:"site.healthier.mobile.majorbanks",
                       defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
                       description:"The major banks take an average of $1000 in profits each year from every Canadian." }
-  let investments = { id:"site.healthier.invest",
+  let investments = { id:"site.healthier.mobile.invest",
                       defaultMessage:"We invest our clients’ accounts and give them 90% of the profit.",
                       description:"We invest our clients’ accounts and give them 90% of the profit." }
   
-  let lifestyle = {  id:"site.healthier.lifestyle",
+  let lifestyle = {  id:"site.healthier.mobile.lifestyle",
                     defaultMessage:"It only costs about $100 per person to offset the CO2 for our current lifestyle.",
                     description:"It only costs about $100 per person to offset the CO2 for our current lifestyle." }
                                         
-  let carbon = { id:"site.healthier.carbon",
+  let carbon = { id:"site.healthier.mobile.carbon",
                   defaultMessage:"The remaining 1/10th is used to pay off our carbon debt",
                   description:"The remaining 1/10th is used to pay off our carbon debt" }
   return (
@@ -26,10 +27,17 @@ export function HealthierMobile() {
     <div className={styles.wrapper} id="healthier">
       <Grid className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
         <Header as="h1">
-            Earth’s Healthier
+            <FormattedMessage 
+                  id="site.healthier.mobile.title" 
+                  defaultMessage="We Do More"
+                  description="Main title for the We Do More mobile page" />
         </Header>
           <p className={styles.center}>
-            Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.
+            <FormattedMessage 
+                  id="site.healthier.mobile.description" 
+                  defaultMessage="Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account."
+                  description="Description underneath title for the We Do More mobile page" />
+            
           </p>
           <Grid.Row>
             <Grid.Column>
