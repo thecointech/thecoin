@@ -28,7 +28,7 @@ export function Healthier() {
   return (
     <>
       <div className={styles.wrapper} id={styles.healthier}>
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
           <img src={illustration} className={styles.illustration} />
           <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
           <Header as="h1" className={styles.center}>
