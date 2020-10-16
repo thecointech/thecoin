@@ -9,7 +9,7 @@ import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
 import backgroundMobile from './images/full_background_mobile.svg';
 
-import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
+import { Grid, Header, Segment } from 'semantic-ui-react';
 import { Media } from 'containers/App';
 
 export const Underwater = () => {

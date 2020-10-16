@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid, Responsive, Segment } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
