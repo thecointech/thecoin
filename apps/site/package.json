@@ -55,6 +55,7 @@
     ]
   },
   "dependencies": {
+    "@artsy/fresnel": "^1.2.2",
     "@formatjs/intl-pluralrules": "^1.4.1",
     "@nivo/line": "^0.61.1",
     "@the-coin/shared": "*",

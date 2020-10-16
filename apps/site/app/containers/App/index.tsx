@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { Container, Responsive, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
@@ -25,6 +25,23 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
+import { createMedia } from "@artsy/fresnel";
+
+const AppMedia = createMedia({
+  breakpoints: {
+    mobile: 320,
+    tablet: 768,
+    computer: 992,
+    largeScreen: 1200,
+    widescreen: 1920
+  }
+});
+
+const mediaStyles = AppMedia.createMediaStyle();
+export const { Media, MediaContextProvider } = AppMedia;
+
+
+
 export const App = ( ) => {
   usePrismic();
   useFxRatesStore();
@@ -33,17 +50,19 @@ export const App = ( ) => {
 
   return (
     <>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+    <MediaContextProvider>
+      <style>{mediaStyles}</style>
+      <Segment as={Media} greaterThan="mobile">
         <MainNavigation />
-      </Responsive>
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
+      </Segment>
+      
+      <Segment as={Media} at="mobile">
         <MainNavigationMobile />
-      </Responsive>
+      </Segment>
 
-      <Container
+      <Container className="appContainer"
         style={{
-          backgroundColor: '#fffff f',
-          width: '100%',
+          width: '100%'
         }}
       >
         <PageSidebar>
@@ -55,6 +74,7 @@ export const App = ( ) => {
         </PageSidebar>
       </Container>
       <Footer />
+    </MediaContextProvider>
     </>
   );
 }

@@ -14,6 +14,7 @@ import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg'
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg'
+import { Media } from 'containers/App';
 
 
 export const Landscape = () => {
@@ -47,7 +48,7 @@ export const Landscape = () => {
 
       <Stickers />
 
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <Segment as={Media} greaterThan="mobile">
         <div className={styles.landscape}>
           <img className={styles.sky} src={sky} />
           <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
@@ -57,11 +58,11 @@ export const Landscape = () => {
           <img className={styles.sun} src={Sun} />
           <img className={styles.greenery} src={landscapeGreenPart} />
         </div>
-      </Responsive>
+      </Segment>
 
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
+      <Segment as={Media} at="mobile">
         <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
-      </Responsive>
+      </Segment>
 
     </React.Fragment>
   );

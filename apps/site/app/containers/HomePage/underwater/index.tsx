@@ -10,14 +10,15 @@ import trees from './images/icon_5_3.svg';
 import backgroundMobile from './images/full_background_mobile.svg';
 
 import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
+import { Media } from 'containers/App';
 
 export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <Segment as={Media} greaterThan="mobile">
         <img className={styles.illustration} src={illustration} />
-      </Responsive>
+      </Segment>
       <div className={styles.landscape}>
         <div className={styles.header}>
               <Header as='h2'>
@@ -103,13 +104,13 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <Segment as={Media} greaterThan="mobile">
           <img className={styles.water} src={background} />
-        </Responsive>
+        </Segment>
 
-        <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <Segment as={Media} at="mobile">
           <img className={styles.waterMobile} src={backgroundMobile} />
-        </Responsive>
+        </Segment>
       </div>
     </React.Fragment>
   );
