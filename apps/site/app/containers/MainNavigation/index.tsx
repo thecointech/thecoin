@@ -12,7 +12,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <Container>
-          <div className={styles.navContainer} id="mainMenuContainer">
+          <div className={styles.navContainer} id={styles.mainMenuContainer}>
               <Menu secondary className={styles.mainMenu} >
                 <Menu.Menu position='left'>
                     <div>
