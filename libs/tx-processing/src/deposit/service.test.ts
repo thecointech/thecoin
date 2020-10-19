@@ -1,6 +1,5 @@
 import { FetchDepositEmails, GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
 import { PurchaseType } from "../base/types";
-import { ConfigStore } from '@the-coin/store';
 import { init, describe, release } from '@the-coin/utilities/firestore/jestutils';
 import { InitContract } from './contract';
 import { GetUserDoc } from "@the-coin/utilities/User";
@@ -13,7 +12,7 @@ import { GetUserDoc } from "@the-coin/utilities/User";
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
-  ConfigStore.initialize();
+  //ConfigStore.initialize();
 
   InitContract({} as any);
 
@@ -21,7 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  ConfigStore.release();
+  //ConfigStore.release();
   release();
 });
 
@@ -31,6 +30,10 @@ it('Can fetch emails', async () => {
   // ensure these are all test emails;
   const allTests = deposits.every(d => d.instruction.name.indexOf('TEST') >= 0);
   expect(allTests).toBe(true);
+
+  // ensure we have sourceID;
+  const allSources = deposits.every(d => !!d.record.sourceId);
+  expect(allSources).toBe(true);
 })
 it('We have valid deposits', async () => {
 

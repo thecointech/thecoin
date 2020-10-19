@@ -23,6 +23,7 @@ export enum ETransferErrorCode {
 export type DepositResult = {
   message: string,
   code: ETransferErrorCode,
+  confirmation?: number,
 }
 
 export type ProgressCallback = (v: string) => void;

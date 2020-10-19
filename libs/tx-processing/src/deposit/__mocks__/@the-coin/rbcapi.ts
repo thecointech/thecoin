@@ -15,10 +15,12 @@ export class RbcApi {
     ];
     result = 0;
     depositETransfer = () : DepositResult => {
-        const code = this.results[(this.result += 1) % this.results.length];
-        return { 
-            message: ETransferErrorCode[code],
+        const code = this.results[this.result % this.results.length];
+        this.result += 1;
+        return {
+            message: code.toString(),
             code,
+            confirmation: code == ETransferErrorCode.Success ? this.result : undefined,
         }
     }
 }

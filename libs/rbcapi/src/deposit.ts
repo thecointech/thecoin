@@ -63,8 +63,9 @@ async function completeDeposit(prefix: string, url: string, code: string, progre
 
   return confirmationNumber
     ? {
-      message: confirmationNumber,
+      message: "Success",
       code: ETransferErrorCode.Success,
+      confirmation: confirmationNumber
     } : {
       message: "Confirmation not found",
       code: ETransferErrorCode.UnknownError,
@@ -77,9 +78,12 @@ async function findConfirmationNumber(page: Page)
 {
   const xpath = `//TD[contains(text(),"Confirmation Number")]/following-sibling::td`;
   const confirmationElement = await page.$x(xpath);
-  if (confirmationElement.length > 0)
-  {
-    return await page.evaluate(el => el.textContent, confirmationElement[0]) as string;
+  const elements = confirmationElement.map(async ce => await page.evaluate(el => el.textContent, ce) as string);
+  const contents = await Promise.all(elements);
+  for (const txt of contents) {
+    const confirm = parseInt(txt);
+    if (!Number.isNaN(confirm))
+      return confirm;
   }
   return null;
 }

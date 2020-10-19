@@ -47,7 +47,7 @@ async function RefundTransfer(transfer: CertifiedTransferRequest, contract: Cont
   console.log(`Transfering value:  sale ${transfer.from}`);
 
   // Send the transfer back
-  // TODO: Refunds should not be
+  // TODO: Refunds should be at todays exchange rate(?)
   const tx = await contract.coinPurchase(
     from,
     value,
