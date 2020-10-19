@@ -24,7 +24,7 @@ export const HomePage = () => {
   return (
     <React.Fragment>
 
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
         <div>
           <Landscape />
           <Advantages />
