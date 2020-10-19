@@ -12,7 +12,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <Container>
-          <div className={styles.navContainer} id="mainMenuContainer">
+          <div className={styles.navContainer} id={styles.mainMenuContainer}>
               <Menu secondary className={styles.mainMenu} >
                 <Menu.Menu position='left'>
                     <div>
@@ -31,7 +31,7 @@ class Navigation extends React.Component {
                       description="Title for the In-depth entry in the menu"
                       values={{ what: 'react-intl' }}/>
                   </HeaderLink>
-                  <HeaderLink to="/FAQ">
+                  <HeaderLink to="/wedomore">
                     <FormattedMessage id="site.MainNavigation.wedomore"
                       defaultMessage="We do more"
                       description="Title for the We do more entry in the menu"

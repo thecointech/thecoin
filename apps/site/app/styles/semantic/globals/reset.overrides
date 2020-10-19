@@ -1,3 +1,26 @@
 /*******************************
          Site Overrides
 *******************************/
+*{
+	margin: 0;
+	padding: 0;
+  border: none;
+  box-shadow: none;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.ui.segments .segment, .ui.container .ui.segment, .ui.container{
+  border: none;
+  box-shadow: none;
+  margin-top: 10px;
+}
+
+.ui.container {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}

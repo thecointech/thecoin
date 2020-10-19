@@ -15,7 +15,7 @@ export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
         <img className={styles.illustration} src={illustration} />
       </Responsive>
       <div className={styles.landscape}>
@@ -103,7 +103,7 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
           <img className={styles.water} src={background} />
         </Responsive>
 

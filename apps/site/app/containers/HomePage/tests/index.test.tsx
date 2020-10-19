@@ -19,6 +19,15 @@ jest.mock('react-redux', () => ({
   })),
 }));
 
+function loadLocaleData(locale: string) {
+  switch (locale) {
+    case 'fr':
+      return import('compiled-lang/fr.json')
+    default:
+      return import('compiled-lang/en.json')
+  }
+}
+
 describe('<HomePage />', () => {
   it('should render and match the snapshot', () => {
     const {

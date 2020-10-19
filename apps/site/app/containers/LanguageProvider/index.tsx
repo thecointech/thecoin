@@ -8,26 +8,21 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
+import { selectLocale } from './selector';
 
-import { makeSelectLocale } from './selectors';
+export type Messages = {
+  [locale: string]: { [id: string]: string };
+}
 
 export interface Props {
-  messages: { [locale: string]: { [id: string]: string } };
+  messages: Messages;
   children?: React.ReactNode;
 }
 
-const stateSelector = createSelector(
-  makeSelectLocale(),
-  locale => ({
-    locale,
-  }),
-);
-
-export default function LanguageProvider(props: Props) {
-  const { locale } = useSelector(stateSelector);
-
+export function LanguageProvider(props : Props) {
+  const { locale } = useSelector(selectLocale);
+  
   return (
     <IntlProvider
       locale={locale}

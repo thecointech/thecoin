@@ -23,15 +23,15 @@ interface Messages {
 }
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const enTranslationMessages: Messages = require('./translations/en.json');
+const frTranslationMessages: Messages = require('./translations/fr.json');
 
 export const DEFAULT_LOCALE = 'en';
 
 // prettier-ignore
 export const appLocales = [
   'en',
+  'fr'
 ];
-
-
 
 export const formatTranslationMessages = (locale: string, messages: Messages) => {
   const defaultFormattedMessages = locale !== DEFAULT_LOCALE
@@ -48,4 +48,5 @@ export const formatTranslationMessages = (locale: string, messages: Messages) =>
 
 export const translationMessages = {
   en: formatTranslationMessages('en', enTranslationMessages),
+  fr: formatTranslationMessages('fr', frTranslationMessages)
 };
