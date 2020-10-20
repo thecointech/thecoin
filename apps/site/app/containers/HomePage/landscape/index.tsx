@@ -47,7 +47,7 @@ export const Landscape = () => {
 
       <Stickers />
 
-      <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
         <div className={styles.landscape}>
           <img className={styles.sky} src={sky} />
           <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />

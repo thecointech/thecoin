@@ -1,62 +1,51 @@
-import React, { useEffect } from 'react';
-import { Button, Form } from 'semantic-ui-react';
-import { GetNewsletterApi } from 'api';
-import { FormattedMessage } from 'react-intl';
-import queryString from 'query-string';
-import { SubscriptionDetails } from '@the-coin/types';
+import React from 'react';
+import { Grid, Header } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router';
-import styles from './styles.module.css';
+import { FormattedMessage } from 'react-intl';
+import { FormSubscribed } from './FormSubscribed/formSubscribed';
 
-function getInitialState(qs: string): SubscriptionDetails {
-  const query = queryString.parse(qs);
-  const id = query.id as string;
-  return {
-    id,
-    confirmed: true
-  };
-}
+import illustration from './images/ill_subscription.svg'
+
 export const Confirm = (props: RouteComponentProps) => {
 
-  const [hasUpdated, setUpdated] = React.useState(false);
-  const [details, setDetails] = React.useState(getInitialState(props.location.search));
-  const onInputChange = React.useCallback((event: React.SyntheticEvent<HTMLInputElement>) => {
-    const { value, name } = event.currentTarget;
-    setDetails({
-      ...details,
-      [name]: value
-    });
-  }, [details, setDetails]);
-
-  const updateSubscription = React.useCallback(async () => {
-    const api = GetNewsletterApi();
-    const result = await api.newsletterConfirm(details);
-    setDetails(result.data);
-    setUpdated(!!result);
-  }, [details]);
-
-  // Trigger immediate confirmation
-  useEffect(() => {
-    updateSubscription();
-  }, []);
-
   return (
-    <div>
-      {
-        hasUpdated ?
-          <h4>Your subscription has been confirmed</h4> :
-          <h4>Please wait - we are confirming your subscription</h4>
-      }
-      We would love to get to know you better!  Would you mind letting us know your details?
-      <Form className={styles.formStyle}>
-        <Form.Input onChange={onInputChange} placeholder="Email" value={details.email} name="email" />
-        <Form.Input onChange={onInputChange} placeholder="First Name" value={details.firstName} name="firstName" />
-        <Form.Input onChange={onInputChange} placeholder="Last Name" value={details.lastName} name="lastName" />
-        <Form.Input onChange={onInputChange} placeholder="Country" value={details.country} name="country" />
-        <Form.Input onChange={onInputChange} placeholder="City" value={details.city} name="city" />
-        <Form.Checkbox onChange={onInputChange} label="Yes, I want to connect with The Coin" checked={details.confirmed} name="confirmed" />
-      </Form>
-      <Button onClick={updateSubscription}>
-        <FormattedMessage id="site.subscribe.confirm.button" defaultMessage="Update Details!" />
-      </Button>
-    </div>)
+    <>
+        <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
+          <Grid.Row>
+            <Grid.Column>
+                <Header as='h5'>
+                  <FormattedMessage id="site.subscribe.confirmation.aboveTheTitle"
+                                  defaultMessage="SUBSCRIPTION"
+                                  description="Text above the title for the 'Thank you for subscribing!' page"/>
+                </Header>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+                <Header as='h3'>
+                  <FormattedMessage id="site.subscribe.confirmation.title"
+                                  defaultMessage="Thank you for subscribing!"
+                                  description="Title for the 'Thank you for subscribing!' page"/>
+                </Header>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+                <img src={illustration} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <FormattedMessage id="site.subscribe.confirmation.description"
+                                  defaultMessage="We would love to get to know you better!  Would you mind letting us know your details?"
+                                  description="Descriton for the 'Thank you for subscribing!' page"/>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <FormSubscribed {...props} />
+            </Grid.Column>
+          </Grid.Row>
+      </Grid>
+    </>)
 };

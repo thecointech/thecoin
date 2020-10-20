@@ -26,8 +26,6 @@ export const AccountSwitcher = () => {
   let intl = useIntl();
   const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'});
 
-  console.log(titleMsg)
-
   return (
     <Dropdown text={titleMsg} >
       <Dropdown.Menu>

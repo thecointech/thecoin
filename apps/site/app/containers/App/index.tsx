@@ -33,7 +33,7 @@ export const App = ( ) => {
 
   return (
     <>
-      <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
+      <Responsive as={Segment} {...Responsive.onlyComputer}>
         <MainNavigation />
       </Responsive>
       <Responsive as={Segment} {...Responsive.onlyMobile}>
