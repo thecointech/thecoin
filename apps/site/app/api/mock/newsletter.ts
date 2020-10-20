@@ -15,7 +15,7 @@ export class MockNewsletterApi {
         await delay(250);
         return {
           success: true,
-          data: {}
+          data: { email: "marie@thecoin.io", firstName: "Marie", lastName: "TheCoin", country: "Canada", city: "Montreal" }
         };
     }
     /**
@@ -29,7 +29,8 @@ export class MockNewsletterApi {
     public async newsletterDetails(_id: string, _options?: any){
         await delay(250);
         return {
-          success: true
+          success: true,
+          data: { email: "marie@thecoin.io", firstName: "Marie", lastName: "TheCoin", country: "Canada", city: "Montreal" }
         };
     }
     /**
@@ -41,7 +42,9 @@ export class MockNewsletterApi {
      * @memberof NewsletterApi
      */
     public async newsletterSignup(_details: SubscriptionDetails, _options?: any){
-        await delay(250);
+        await delay(550);
+        //Redirect to confirm page normally send via email
+        window.location.href = "http://localhost:3000/#/newsletter/confirm?id=PIyts3z2cwVSkAG";
         return {
           success: true
         };

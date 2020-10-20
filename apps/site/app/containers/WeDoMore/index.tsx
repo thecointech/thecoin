@@ -18,7 +18,7 @@ import energy from './images/photo_energy.svg';
 export function WeDoMore() {
   return (
       <>
-        <Responsive as={Segment} {...Responsive.onlyComputer && Responsive.onlyTablet}>
+        <Responsive as={Segment} {...Responsive.onlyComputer}>
           <div className={styles.wrapper} id={styles.wedomore}>
               <Grid className={styles.content} columns='equal' textAlign='center' stackable>
                 <Grid.Row>
