@@ -18,7 +18,7 @@ import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { CreateAccountBig } from './createAccountBig';
 import { Segment } from 'semantic-ui-react';
-import { Media } from 'containers/App';
+import { Media } from 'containers/ResponsiveTool'; 
 
 export const HomePage = () => {
 

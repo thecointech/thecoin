@@ -14,7 +14,7 @@ import tree from './images/photo_tree.svg';
 import smallPlant from './images/photo_smallPlant.svg';
 import water from './images/photo_water.svg';
 import energy from './images/photo_energy.svg';
-import { Media } from 'containers/App';
+import { Media } from 'containers/ResponsiveTool'; 
 
 export function WeDoMore() {
   return (

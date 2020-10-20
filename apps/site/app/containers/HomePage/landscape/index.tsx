@@ -12,9 +12,9 @@ import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
 import landscapeSkyCloudsRight from './images/cloudsRight.svg';
 import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
-import landscapeGreenPart from './images/landscape.svg'
-import landscapeGreenPartMobile from './images/illustration_header_mob.svg'
-import { Media } from 'containers/App';
+import landscapeGreenPart from './images/landscape.svg';
+import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
+import { Media } from 'containers/ResponsiveTool'; 
 
 
 export const Landscape = () => {

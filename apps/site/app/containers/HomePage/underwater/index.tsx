@@ -10,7 +10,7 @@ import trees from './images/icon_5_3.svg';
 import backgroundMobile from './images/full_background_mobile.svg';
 
 import { Grid, Header, Segment } from 'semantic-ui-react';
-import { Media } from 'containers/App';
+import { Media } from 'containers/ResponsiveTool'; 
 
 export const Underwater = () => {
 

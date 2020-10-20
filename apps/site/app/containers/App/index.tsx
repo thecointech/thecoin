@@ -25,21 +25,7 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
-import { createMedia } from "@artsy/fresnel";
-
-const AppMedia = createMedia({
-  breakpoints: {
-    mobile: 320,
-    tablet: 768,
-    computer: 992,
-    largeScreen: 1200,
-    widescreen: 1920
-  }
-});
-
-const mediaStyles = AppMedia.createMediaStyle();
-export const { Media, MediaContextProvider } = AppMedia;
-
+import { Media, MediaContextProvider, mediaStyles } from 'containers/ResponsiveTool'; 
 
 
 export const App = ( ) => {
