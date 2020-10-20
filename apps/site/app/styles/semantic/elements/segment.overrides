@@ -7,4 +7,6 @@
 }
 .ui.segment{
     margin-top: 0;
+    border: none;
+    box-shadow: none;
 }

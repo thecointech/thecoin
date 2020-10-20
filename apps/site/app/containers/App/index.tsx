@@ -52,13 +52,15 @@ export const App = ( ) => {
     <>
     <MediaContextProvider>
       <style>{mediaStyles}</style>
-      <Segment as={Media} greaterThan="mobile">
-        <MainNavigation />
-      </Segment>
-      
-      <Segment as={Media} at="mobile">
-        <MainNavigationMobile />
-      </Segment>
+      <div id={styles.headerDecoration}>
+        <Segment as={Media} greaterThan="mobile">
+          <MainNavigation />
+        </Segment>
+        
+        <Segment as={Media} at="mobile">
+          <MainNavigationMobile />
+        </Segment>
+      </div>
 
       <Container className="appContainer"
         style={{
