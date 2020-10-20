@@ -1,6 +1,6 @@
 import { createMedia } from "@artsy/fresnel";
 
-export const AppMedia = createMedia({
+export const appMedia = createMedia({
     breakpoints: {
       mobile: 320,
       tablet: 768,
@@ -9,6 +9,6 @@ export const AppMedia = createMedia({
       widescreen: 1920
     }
   });
-export const mediaStyles = AppMedia.createMediaStyle();
+export const mediaStyles = appMedia.createMediaStyle();
   
-export const { Media, MediaContextProvider } = AppMedia;
+export const { Media, MediaContextProvider } = appMedia;
