@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Grid, Header, Segment } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 import { CreateAccountBanner } from '../CreateAccountBanner';
 import { HealthierMobile } from '../HealthierMobile';
 import { ColumnWithTwoTitles } from './ColumnWithTwoTitles';
 import illustration from './images/healthier-illustration.svg';
-import { Media } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 import styles from './styles.module.css';
 
@@ -28,7 +28,7 @@ export function Healthier() {
   return (
     <>
       <div className={styles.wrapper} id={styles.healthier}>
-        <Segment as={Media} greaterThan="mobile">
+        <GreaterThanMobileSegment>
           <img src={illustration} className={styles.illustration} />
           <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
           <Header as="h1" className={styles.center}>
@@ -54,11 +54,11 @@ export function Healthier() {
                 </Grid.Column>
             </Grid.Row>
           </Grid>
-        </Segment>
+        </GreaterThanMobileSegment>
 
-        <Segment as={Media} at="mobile">
+        <MobileSegment>
           <HealthierMobile />
-        </Segment>
+        </MobileSegment>
       </div>
 
         <CreateAccountBanner />

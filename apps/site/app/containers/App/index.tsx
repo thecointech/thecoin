@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
@@ -25,7 +25,7 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
-import { Media, MediaContextProvider, mediaStyles } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles, MobileSegment } from 'containers/ResponsiveTool'; 
 
 export const App = ( ) => {
   usePrismic();
@@ -38,13 +38,13 @@ export const App = ( ) => {
     <MediaContextProvider>
       <style>{mediaStyles}</style>
       <div id={styles.headerDecoration}>
-        <Segment as={Media} greaterThan="mobile">
+        <GreaterThanMobileSegment>
           <MainNavigation />
-        </Segment>
+        </GreaterThanMobileSegment>
         
-        <Segment as={Media} at="mobile">
+        <MobileSegment>
           <MainNavigationMobile />
-        </Segment>
+        </MobileSegment>
       </div>
 
       <Container className="appContainer"

@@ -18,6 +18,6 @@ export const { Media, MediaContextProvider } = appMedia;
 export const MobileSegment : React.FC = (props) =>
   <Segment as={Media} at="mobile">{props.children}</Segment>;
 
-export const LargerThanMobileSegment : React.FC = (props) => 
-  <Segment as={Media} largerThan="mobile" >{props.children}</Segment>; 
+export const GreaterThanMobileSegment : React.FC = (props) => 
+  <Segment as={Media} greaterThan="mobile">{props.children}</Segment>; 
 
