@@ -15,11 +15,11 @@ export const mediaStyles = appMedia.createMediaStyle();
   
 export const { Media, MediaContextProvider } = appMedia;
 
-export const MobileSegment : FC = (props: {children?: React.ReactNode}) => 
+export const mobileSegment : FC = (props: {children?: React.ReactNode}) => 
   { 
     return <Segment as {...Media} at="mobile" >{props.children}</Segment>; 
-  }
-export const LargerThanMobileSegment : FC = (props: {children?: React.ReactNode}) =>  
+  };
+export const largerThanMobileSegment : FC = (props: {children?: React.ReactNode}) =>  
   { 
     return <Segment as {...Media} largerThan="mobile" >{props.children}</Segment>; 
-  }
+  };
