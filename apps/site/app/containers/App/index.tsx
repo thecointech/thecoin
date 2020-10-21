@@ -27,7 +27,6 @@ import styles from './styles.module.css';
 
 import { Media, MediaContextProvider, mediaStyles } from 'containers/ResponsiveTool'; 
 
-
 export const App = ( ) => {
   usePrismic();
   useFxRatesStore();
