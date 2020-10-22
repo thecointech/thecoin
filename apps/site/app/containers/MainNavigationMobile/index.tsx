@@ -51,6 +51,12 @@ class MainNavigationMobile extends React.Component {
                           description="Title for the Your benefits entry in the menu"
                           values={{ what: 'react-intl' }}/>
                       </Dropdown.Item>
+                      <Dropdown.Item as={ NavLink } to='/compare'>
+                        <FormattedMessage id="site.MainNavigation.compare"
+                          defaultMessage="How much will you make?"
+                          description="Title for the How much will you make? entry in the menu"
+                          values={{ what: 'react-intl' }}/>
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   </Menu.Item>
