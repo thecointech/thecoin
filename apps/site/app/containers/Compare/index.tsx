@@ -17,16 +17,14 @@ export function Compare() {
   const [starting, setStarting] = useState("0");
 
   const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-    //setDuration( data.value );
-    console.log(data.name === "starting")
     if (data.name === "starting"){
       setStarting(data.value);
     } else {
       setDuration(data.value);
     }
-  }
+  };
 
-  let intl = useIntl();
+  const intl = useIntl();
   const labelStartingValue = intl.formatMessage({ id: 'site.compare.label.rangeStarting', defaultMessage:'Starting value:'});
   const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CA$'});
   const labelDurationValue = intl.formatMessage({ id: 'site.compare.label.rangeDuration', defaultMessage:'Duration:'});
