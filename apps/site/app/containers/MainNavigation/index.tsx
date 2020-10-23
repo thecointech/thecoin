@@ -37,16 +37,10 @@ class Navigation extends React.Component {
                       description="Title for the We do more entry in the menu"
                       values={{ what: 'react-intl' }}/>
                   </HeaderLink>
-                  <HeaderLink to="/healthier">
+                  <HeaderLink to="/compare">
                     <FormattedMessage id="site.MainNavigation.yourbenefits"
                       defaultMessage="Your benefits"
                       description="Title for the Your benefits entry in the menu"
-                      values={{ what: 'react-intl' }}/>
-                  </HeaderLink>
-                  <HeaderLink to="/compare">
-                    <FormattedMessage id="site.MainNavigation.compare"
-                      defaultMessage="How much will you make?"
-                      description="Title for the How much will you make? entry in the menu"
                       values={{ what: 'react-intl' }}/>
                   </HeaderLink>
                   <Menu.Menu position='right'>

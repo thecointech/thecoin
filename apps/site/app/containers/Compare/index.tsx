@@ -9,6 +9,9 @@ import { CreateAccountBanner } from 'containers/CreateAccountBanner';
 import styles from './styles.module.css';
 import { useState } from 'react';
 
+//TODO: replace by the real graph
+import Graph from './images/Group576.svg';
+
 export function Compare() {
   const [duration, setDuration] = useState("0");
   const [starting, setStarting] = useState("0");
@@ -57,11 +60,23 @@ export function Compare() {
 
               <Grid columns={3} stackable>
                 <Grid.Row stretched>
-                  <Grid.Column textAlign='center'>
+                  <Grid.Column textAlign='center' width={5} floated='right'>
                     <div id={styles.variablesContainer}>
+                          <div className={styles.variablesLabelContainer}>{labelStartingValue}</div>
+                          <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
+                            <Grid.Row>
+                              <Grid.Column>
+                              </Grid.Column>
+                              <Grid.Column>
+                              </Grid.Column>
+                              <Grid.Column className={styles.variablesLabelValueContainer}>
+                                {`${starting} `+labelStartingValueCurrency}
+                              </Grid.Column>
+                            </Grid.Row>
+                          </Grid>
+
                           <Form.Input id="rangeStarting"
-                              label={labelStartingValue+` ${starting} `+labelStartingValueCurrency}
-                              min={100}
+                              min={1000}
                               max={100000}
                               name='starting'
                               onChange={handleChange}
@@ -69,26 +84,69 @@ export function Compare() {
                               type='range'
                               value={starting}
                             />
+                            <div className={styles.variablesScaleContainer}>
+                                <Grid columns='equal' textAlign='center'>
+                                  <Grid.Row>
+                                    <Grid.Column>
+                                      1.000
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                      5.000
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                      100.000
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                </Grid>
+                            </div>
+                          <div className={styles.variablesLabelContainer}>{labelDurationValue}</div>
+                          <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
+                            <Grid.Row>
+                              <Grid.Column>
+                                
+                              </Grid.Column>
+                              <Grid.Column>
+                                
+                              </Grid.Column>
+                              <Grid.Column className={styles.variablesLabelValueContainer}>
+                                {`${duration} `+labelDurationYear}
+                              </Grid.Column>
+                            </Grid.Row>
+                          </Grid>
                           <Form.Input id="rangeDuration"
-                              label={labelDurationValue+` ${duration} `+labelDurationYear}
                               min={1}
-                              max={60}
+                              max={80}
                               name='duration'
                               onChange={handleChange}
                               step={1}
                               type='range'
                               value={duration}
                             />
+                            <div className={styles.variablesScaleContainer}>
+                                <Grid columns='equal' textAlign='center'>
+                                  <Grid.Row>
+                                    <Grid.Column>
+                                      1
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                      40
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                      80
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                </Grid>
+                            </div>
 
-                            <Button secondary>
+                            <Button secondary className={styles.buttonContainer}>
                               <FormattedMessage id="site.compare.button" 
                                                 defaultMessage="Show Me" 
                                                 description="Button for the graph page" />
                             </Button>
                     </div>
                   </Grid.Column>
-                  <Grid.Column textAlign='left'>
-                    <div id={styles.graphContainer}>
+                  <Grid.Column textAlign='left' width={10} floated='left' >
+                    <div className={styles.graphContainer}>
                       <Header as="h4">
                           <FormattedMessage 
                                 id="site.compare.graph.title" 
@@ -99,8 +157,8 @@ export function Compare() {
                                 id="site.compare.graph.description" 
                                 defaultMessage="There is a 95% chance you're return will be in that area."
                                 description="Graph description for the How much will you make? graph page" />
-                                
-                        <img src="./images/Group576.png" />
+                               <br /> <br /> <br /> 
+                        <img src={Graph} />
                       </div>
                     </Grid.Column>
                   </Grid.Row>
