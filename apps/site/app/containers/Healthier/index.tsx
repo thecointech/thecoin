@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 import { CreateAccountBanner } from '../CreateAccountBanner';
 import { HealthierMobile } from '../HealthierMobile';
 import { ColumnWithTwoTitles } from './ColumnWithTwoTitles';
 import illustration from './images/healthier-illustration.svg';
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 import styles from './styles.module.css';
 
@@ -28,20 +28,14 @@ export function Healthier() {
   return (
     <>
       <div className={styles.wrapper} id={styles.healthier}>
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <GreaterThanMobileSegment>
           <img src={illustration} className={styles.illustration} />
           <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
           <Header as="h1" className={styles.center}>
-              <FormattedMessage 
-                    id="site.healthier.title" 
-                    defaultMessage="Earth’s Healthier"
-                    description="Main title for the Earth’s Healthier page" />
+              Earth’s Healthier
           </Header>
             <p className={styles.center}>
-              <FormattedMessage 
-                    id="site.healthier.description" 
-                    defaultMessage="Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account."
-                    description="Description underneath title for the We Do More page" />
+              Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.
             </p>
             <Grid.Row>
               <Grid.Column>
@@ -60,14 +54,14 @@ export function Healthier() {
                 </Grid.Column>
             </Grid.Row>
           </Grid>
-        </Responsive>
+        </GreaterThanMobileSegment>
 
-        <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <MobileSegment>
           <HealthierMobile />
-        </Responsive>
-
+        </MobileSegment>
       </div>
-      <CreateAccountBanner />
-    </>
+
+        <CreateAccountBanner />
+      </>
   );
 }

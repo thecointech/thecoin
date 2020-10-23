@@ -41,3 +41,8 @@ div.container:nth-child(1){
     padding: 40px;
 }
 
+.ui.segment.fresnel-container, .ui.container.fresnel-container{
+  border: none;
+  box-shadow: none;
+}
+

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid, Responsive, Segment } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -12,8 +12,9 @@ import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
 import landscapeSkyCloudsRight from './images/cloudsRight.svg';
 import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
-import landscapeGreenPart from './images/landscape.svg'
-import landscapeGreenPartMobile from './images/illustration_header_mob.svg'
+import landscapeGreenPart from './images/landscape.svg';
+import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 
 export const Landscape = () => {
@@ -47,7 +48,7 @@ export const Landscape = () => {
 
       <Stickers />
 
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <GreaterThanMobileSegment>
         <div className={styles.landscape}>
           <img className={styles.sky} src={sky} />
           <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
@@ -57,11 +58,11 @@ export const Landscape = () => {
           <img className={styles.sun} src={Sun} />
           <img className={styles.greenery} src={landscapeGreenPart} />
         </div>
-      </Responsive>
+      </GreaterThanMobileSegment>
 
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
+      <MobileSegment>
         <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
-      </Responsive>
+      </MobileSegment>
 
     </React.Fragment>
   );

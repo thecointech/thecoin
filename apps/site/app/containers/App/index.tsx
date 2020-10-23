@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { Container, Responsive, Segment } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
@@ -25,6 +25,8 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
+import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles, MobileSegment } from 'containers/ResponsiveTool'; 
+
 export const App = ( ) => {
   usePrismic();
   useFxRatesStore();
@@ -33,17 +35,21 @@ export const App = ( ) => {
 
   return (
     <>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
-        <MainNavigation />
-      </Responsive>
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
-        <MainNavigationMobile />
-      </Responsive>
+    <MediaContextProvider>
+      <style>{mediaStyles}</style>
+      <div id={styles.headerDecoration}>
+        <GreaterThanMobileSegment>
+          <MainNavigation />
+        </GreaterThanMobileSegment>
+        
+        <MobileSegment>
+          <MainNavigationMobile />
+        </MobileSegment>
+      </div>
 
-      <Container
+      <Container className="appContainer"
         style={{
-          backgroundColor: '#fffff f',
-          width: '100%',
+          width: '100%'
         }}
       >
         <PageSidebar>
@@ -55,6 +61,7 @@ export const App = ( ) => {
         </PageSidebar>
       </Container>
       <Footer />
+    </MediaContextProvider>
     </>
   );
 }
