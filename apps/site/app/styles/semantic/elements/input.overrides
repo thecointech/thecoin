@@ -2,10 +2,19 @@
          Site Overrides
 *******************************/
 
+label[for*="range"], label[htmlfor*="range"]
+{   
+    display: block;
+}
+
+.ui.input > input[type=range]{
+  border: none;
+}
+
 input[type=range] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
   width: 100%; /* Specific width is required for Firefox. */
-  background: transparent; /* Otherwise white in Chrome */
+  background: transparent !important; /* Otherwise white in Chrome */
 }
 
 input[type=range]::-webkit-slider-thumb {
