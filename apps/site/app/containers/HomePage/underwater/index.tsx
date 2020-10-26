@@ -9,15 +9,16 @@ import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
 import backgroundMobile from './images/full_background_mobile.svg';
 
-import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <GreaterThanMobileSegment>
         <img className={styles.illustration} src={illustration} />
-      </Responsive>
+      </GreaterThanMobileSegment>
       <div className={styles.landscape}>
         <div className={styles.header}>
               <Header as='h2'>
@@ -103,13 +104,13 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
         
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <GreaterThanMobileSegment>
           <img className={styles.water} src={background} />
-        </Responsive>
+        </GreaterThanMobileSegment>
 
-        <Responsive as={Segment} {...Responsive.onlyMobile}>
+        <MobileSegment>
           <img className={styles.waterMobile} src={backgroundMobile} />
-        </Responsive>
+        </MobileSegment>
       </div>
     </React.Fragment>
   );

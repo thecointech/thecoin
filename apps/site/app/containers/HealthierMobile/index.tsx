@@ -40,7 +40,7 @@ export function HealthierMobile() {
             
           </p>
           <Grid.Row>
-            <Grid.Column>
+            <Grid.Column textAlign='left'>
               <ColumnWithTwoTitles 
                 FirstTitle = "$1000"
                 FirstHeaderMessage = { majorBanks }

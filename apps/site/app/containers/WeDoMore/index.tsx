@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Grid, Header, Responsive, Segment } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { WeDoMoreMobile } from 'containers/WeDoMoreMobile';
 import { CreateAccountBanner } from 'containers/CreateAccountBanner';
 
@@ -14,11 +14,12 @@ import tree from './images/photo_tree.svg';
 import smallPlant from './images/photo_smallPlant.svg';
 import water from './images/photo_water.svg';
 import energy from './images/photo_energy.svg';
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 export function WeDoMore() {
   return (
       <>
-        <Responsive as={Segment} {...Responsive.onlyComputer}>
+        <GreaterThanMobileSegment>
           <div className={styles.wrapper} id={styles.wedomore}>
               <Grid className={styles.content} columns='equal' textAlign='center' stackable>
                 <Grid.Row>
@@ -115,11 +116,10 @@ export function WeDoMore() {
                   </Grid.Row>
               </Grid>
           </div>
-      </Responsive>
-
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
+      </GreaterThanMobileSegment>
+      <MobileSegment>
         <WeDoMoreMobile />
-      </Responsive>
+      </MobileSegment>
       <CreateAccountBanner />
     </>
   );

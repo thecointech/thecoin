@@ -17,14 +17,14 @@ import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { CreateAccountBig } from './createAccountBig';
-import { Responsive, Segment } from 'semantic-ui-react';
+import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
 
 export const HomePage = () => {
 
   return (
     <React.Fragment>
 
-      <Responsive as={Segment} {...Responsive.onlyComputer}>
+      <GreaterThanMobileSegment>
         <div>
           <Landscape />
           <Advantages />
@@ -33,9 +33,9 @@ export const HomePage = () => {
           <Underwater />
           <CreateAccountBig />
         </div>
-      </Responsive>
+      </GreaterThanMobileSegment>
 
-      <Responsive as={Segment} {...Responsive.onlyMobile}>
+      <MobileSegment>
         <div id="mobile">
           <Landscape />
           <Advantages />
@@ -44,7 +44,7 @@ export const HomePage = () => {
           <Underwater />
           <CreateAccountBig />
         </div>
-      </Responsive>
+      </MobileSegment>
 
     </React.Fragment>
   );

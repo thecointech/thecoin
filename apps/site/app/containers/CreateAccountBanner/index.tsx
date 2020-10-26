@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 
 export const CreateAccountBanner = () => {
   return (
-    <Grid className={styles.content} id={styles.createaccountbanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
+    <Grid className={styles.content} id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
         <Grid.Row>
             <Grid.Column>
                 <Header as='h3'>
