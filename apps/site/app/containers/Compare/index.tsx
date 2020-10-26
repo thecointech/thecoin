@@ -7,11 +7,10 @@ import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 import { CreateAccountBanner } from 'containers/CreateAccountBanner';
 import { FormCompare } from './FormCompare';
+import { GraphCompare } from './GraphCompare';
 
 import styles from './styles.module.css';
 
-//TODO: replace by the real graph
-import Graph from './images/Group576.svg';
 
 export function Compare() {
 
@@ -46,20 +45,7 @@ export function Compare() {
                     <FormCompare />
                   </Grid.Column>
                   <Grid.Column textAlign='left' width={10} floated='left' >
-                    <div className={styles.graphContainer}>
-                      <Header as="h4">
-                          <FormattedMessage 
-                                id="site.compare.graph.title" 
-                                defaultMessage="Your possible benefits"
-                                description="Graph title for the How much will you make? graph page" />
-                        </Header>
-                        <FormattedMessage 
-                                id="site.compare.graph.description" 
-                                defaultMessage="There is a 95% chance you're return will be in that area."
-                                description="Graph description for the How much will you make? graph page" />
-                               <br /> <br /> <br /> 
-                        <img src={Graph} />
-                      </div>
+                      <GraphCompare />
                     </Grid.Column>
                   </Grid.Row>
             </Grid>
