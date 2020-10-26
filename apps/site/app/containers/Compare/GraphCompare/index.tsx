@@ -25,4 +25,4 @@ export const GraphCompare = () => {
           <img src={Graph} />
       </div>
     );
-}
+};

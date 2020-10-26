@@ -108,4 +108,4 @@ export const FormCompare = () => {
         </Button>
       </div>
     );
-}
+};

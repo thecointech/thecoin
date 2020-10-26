@@ -5,12 +5,12 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
-import { CreateAccountBanner } from 'containers/CreateAccountBanner';
+
 import { FormCompare } from './FormCompare';
 import { GraphCompare } from './GraphCompare';
+import { CreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import styles from './styles.module.css';
-
 
 export function Compare() {
 
@@ -26,7 +26,6 @@ export function Compare() {
                               defaultMessage="How much will you make?"
                               description="Main title for the How much will you make? graph page" />
                     </Header>
-
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
