@@ -5,18 +5,18 @@ import styles from './styles.module.css';
 import illustration from './images/healthier-illustration.svg';
 
 export function HealthierGreaterThanMobile() {
-  let majorBanks = {  id:"site.healthier.majorbanks",
+  const majorBanks = {  id:"site.healthier.majorbanks",
                       defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
                       description:"The major banks take an average of $1000 in profits each year from every Canadian." }
-  let investments = { id:"site.healthier.invest",
+  const investments = { id:"site.healthier.invest",
                       defaultMessage:"We invest our clients’ accounts and give them 90% of the profit.",
                       description:"We invest our clients’ accounts and give them 90% of the profit." }
   
-  let lifestyle = {  id:"site.healthier.lifestyle",
+  const lifestyle = {  id:"site.healthier.lifestyle",
                     defaultMessage:"It only costs about $100 per person to offset the CO2 for our current lifestyle.",
                     description:"It only costs about $100 per person to offset the CO2 for our current lifestyle." }
                                         
-  let carbon = { id:"site.healthier.carbon",
+  const carbon = { id:"site.healthier.carbon",
                   defaultMessage:"The remaining 1/10th is used to pay off our carbon debt",
                   description:"The remaining 1/10th is used to pay off our carbon debt" }
   return (
