@@ -17,7 +17,7 @@ import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { CreateAccountBig } from './createAccountBig';
-import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
 export const HomePage = () => {
 

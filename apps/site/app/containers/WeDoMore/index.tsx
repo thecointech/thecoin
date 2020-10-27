@@ -5,7 +5,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
-import { WeDoMoreMobile } from 'containers/WeDoMoreMobile';
+import { WeDoMoreMobile } from 'containers/WeDoMore/WeDoMoreMobile';
 import { CreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import wwf from './images/logo-wwf.svg';
@@ -14,7 +14,7 @@ import tree from './images/photo_tree.svg';
 import smallPlant from './images/photo_smallPlant.svg';
 import water from './images/photo_water.svg';
 import energy from './images/photo_energy.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
 export function WeDoMore() {
   return (

@@ -12,7 +12,7 @@ import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
-import MainNavigationMobile from 'containers/MainNavigationMobile';
+import MainNavigationMobile from 'containers/MainNavigation/MainNavigationMobile';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import MainPageTransition from 'containers/MainPageTransition';
@@ -25,7 +25,7 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.css';
 
-import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles, MobileSegment } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles, MobileSegment } from 'components/ResponsiveTool'; 
 
 export const App = ( ) => {
   usePrismic();

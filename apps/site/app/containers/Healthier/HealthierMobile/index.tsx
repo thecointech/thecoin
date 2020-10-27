@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { ColumnWithTwoTitles } from '../Healthier/ColumnWithTwoTitles';
+import { ColumnWithTwoTitles } from '../ColumnWithTwoTitles';
 import styles from './styles.module.css';
 import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
@@ -23,15 +23,15 @@ export function HealthierMobile() {
                   description:"The remaining 1/10th is used to pay off our carbon debt" }
   return (
     <>
-    <img src={illustrationRight} className={styles.illustrationRight} />
-    <div className={styles.wrapper} id="healthier">
-      <Grid className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
-        <Header as="h1">
-            <FormattedMessage 
-                  id="site.healthier.mobile.title" 
-                  defaultMessage="We Do More"
-                  description="Main title for the We Do More mobile page" />
-        </Header>
+      <img src={illustrationRight} className={styles.illustrationRight} />
+      <div className={styles.wrapper} id="healthier">
+        <Grid className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
+          <Header as="h1">
+              <FormattedMessage 
+                    id="site.healthier.mobile.title" 
+                    defaultMessage="We Do More"
+                    description="Main title for the We Do More mobile page" />
+          </Header>
           <p className={styles.center}>
             <FormattedMessage 
                   id="site.healthier.mobile.description" 

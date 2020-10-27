@@ -14,7 +14,7 @@ import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg';
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
 
 export const Landscape = () => {

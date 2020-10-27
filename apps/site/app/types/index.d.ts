@@ -1,6 +1,6 @@
 import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
-import { ContainerState as LanguageProviderState } from 'containers/LanguageProvider/reducer';
+import { ContainerState as LanguageProviderState } from 'components/LanguageProvider/reducer';
 import { ContentState } from 'components/ContentHeightMeasure/types';
 import { Saga, Task } from 'redux-saga';
 import { ApplicationBaseState } from '@the-coin/shared/types';
