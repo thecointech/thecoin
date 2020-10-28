@@ -3,6 +3,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import { ColumnWithTwoTitles } from '../ColumnWithTwoTitles';
 import styles from './styles.module.css';
 import illustration from './images/healthier-illustration.svg';
+import { FormattedMessage } from 'react-intl';
 
 export function HealthierGreaterThanMobile() {
   const majorBanks = {  id:"site.healthier.majorbanks",
@@ -24,10 +25,16 @@ export function HealthierGreaterThanMobile() {
       <img src={illustration} className={styles.illustration} />
       <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
       <Header as="h1" className={styles.center}>
-          Earth’s Healthier
+          <FormattedMessage 
+                    id="site.healthier.title" 
+                    defaultMessage="Earth’s Healthier"
+                    description="Main title for the Earth’s Healthier page" />
       </Header>
         <p className={styles.center}>
-          Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.
+        <FormattedMessage 
+                  id="site.healthier.description" 
+                  defaultMessage="Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account."
+                  description="Description underneath title for the We Do More mobile page" />
         </p>
         <Grid.Row>
           <Grid.Column>

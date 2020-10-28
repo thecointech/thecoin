@@ -29,8 +29,8 @@ export function HealthierMobile() {
           <Header as="h1">
               <FormattedMessage 
                     id="site.healthier.mobile.title" 
-                    defaultMessage="We Do More"
-                    description="Main title for the We Do More mobile page" />
+                    defaultMessage="Earth’s Healthier"
+                    description="Main title for the Earth’s Healthier page" />
           </Header>
           <p className={styles.center}>
             <FormattedMessage 
