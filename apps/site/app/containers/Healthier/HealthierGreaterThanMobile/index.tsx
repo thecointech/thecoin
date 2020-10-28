@@ -23,13 +23,13 @@ export function HealthierGreaterThanMobile() {
   return (
     <>
       <img src={illustration} className={styles.illustration} />
-      <Grid className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
-      <Header as="h1" className={styles.center}>
-          <FormattedMessage 
-                    id="site.healthier.title" 
-                    defaultMessage="Earth’s Healthier"
-                    description="Main title for the Earth’s Healthier page" />
-      </Header>
+      <Grid id={styles.healthierContent} className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
+        <Header as="h1" className={styles.center}>
+            <FormattedMessage 
+                      id="site.healthier.title" 
+                      defaultMessage="Earth’s Healthier"
+                      description="Main title for the Earth’s Healthier page" />
+        </Header>
         <p className={styles.center}>
         <FormattedMessage 
                   id="site.healthier.description" 
@@ -42,14 +42,16 @@ export function HealthierGreaterThanMobile() {
               FirstTitle = "$1000"
               FirstHeaderMessage = { majorBanks }
               SecondTitle= "90%"
-              SecondHeaderMessage = { investments }/>
+              SecondHeaderMessage = { investments }
+              CssForSeparator = { undefined } />
           </Grid.Column>
           <Grid.Column className={styles.rightColumn} textAlign='left'>
             <ColumnWithTwoTitles 
                 FirstTitle = "$100"
                 FirstHeaderMessage = { lifestyle }
                 SecondTitle= "1/10"
-                SecondHeaderMessage = { carbon }/>
+                SecondHeaderMessage = { carbon }
+                CssForSeparator = { undefined }/>
             </Grid.Column>
         </Grid.Row>
       </Grid>

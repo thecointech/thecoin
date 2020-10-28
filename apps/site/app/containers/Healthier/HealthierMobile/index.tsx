@@ -6,6 +6,17 @@ import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
 import { FormattedMessage } from 'react-intl';
 
+const styleLeft: React.CSSProperties = {
+  float: 'left',
+  left: '0px',
+};
+
+const styleRight: React.CSSProperties = {
+  float: 'right',
+  right: '0px',
+};
+
+
 export function HealthierMobile() {
   let majorBanks = {  id:"site.healthier.mobile.majorbanks",
                       defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
@@ -25,7 +36,7 @@ export function HealthierMobile() {
     <>
       <img src={illustrationRight} className={styles.illustrationRight} />
       <div className={styles.wrapper} id="healthier">
-        <Grid className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
+        <Grid id={styles.healthierContent} className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
           <Header as="h1">
               <FormattedMessage 
                     id="site.healthier.mobile.title" 
@@ -45,14 +56,16 @@ export function HealthierMobile() {
                 FirstTitle = "$1000"
                 FirstHeaderMessage = { majorBanks }
                 SecondTitle= "90%"
-                SecondHeaderMessage = { investments }/>
+                SecondHeaderMessage = { investments }
+                CssForSeparator = { styleLeft } />
             </Grid.Column>
             <Grid.Column textAlign='right'>
               <ColumnWithTwoTitles 
                   FirstTitle = "$100"
                   FirstHeaderMessage = { lifestyle }
                   SecondTitle= "1/10"
-                  SecondHeaderMessage = { carbon }/>
+                  SecondHeaderMessage = { carbon }
+                  CssForSeparator = { styleRight } />
               </Grid.Column>
           </Grid.Row>
         </Grid>
