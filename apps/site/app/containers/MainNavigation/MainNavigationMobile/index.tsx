@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
 
-class MainNavigationMobile extends React.Component {
+export class MainNavigationMobile extends React.Component {
   render() {
     return (
       <Container>
@@ -61,5 +61,3 @@ class MainNavigationMobile extends React.Component {
     );
   }
 }
-
-export default MainNavigationMobile;

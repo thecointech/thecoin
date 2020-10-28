@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { usePrismicActions } from "containers/Prismic/reducer";
+import { usePrismicActions } from "components/Prismic/reducer";
 import { useSidebar } from "@the-coin/shared/containers/PageSidebar/actions";
 import { SidebarMenuItem } from "@the-coin/shared/containers/PageSidebar/types";
 import { ApplicationRootState } from "types";
@@ -8,7 +8,7 @@ import { Switch, Route, RouteComponentProps } from "react-router";
 import { FAQs } from "./FAQs";
 import { RUrl } from "@the-coin/utilities/RUrl";
 import { Dictionary } from "lodash";
-import { FAQDocument, PrismicState } from "containers/Prismic/types";
+import { FAQDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
 
 const FAQS_KEY = "faqItems";

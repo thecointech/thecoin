@@ -4,7 +4,7 @@ import { ContainerState as LanguageProviderState } from 'components/LanguageProv
 import { ContentState } from 'components/ContentHeightMeasure/types';
 import { Saga, Task } from 'redux-saga';
 import { ApplicationBaseState } from '@the-coin/shared/types';
-import { PrismicState } from 'containers/Prismic/types';
+import { PrismicState } from 'components/Prismic/types';
 
 // Your root reducer type, which is your redux state types also
 export interface ApplicationRootState extends ApplicationBaseState {

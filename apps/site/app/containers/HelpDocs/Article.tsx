@@ -1,5 +1,5 @@
 import React from "react";
-import { ArticleDocument } from "containers/Prismic/types";
+import { ArticleDocument } from "components/Prismic/types";
 import { Segment } from "semantic-ui-react";
 import { Renderer } from "./Renderer/Renderer";
 

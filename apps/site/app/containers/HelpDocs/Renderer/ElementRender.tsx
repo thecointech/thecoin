@@ -1,5 +1,5 @@
 import React from "react";
-import { RenderableType } from "containers/Prismic/types"
+import { RenderableType } from "components/Prismic/types"
 
 export const ElementRender = ({type, text}: RenderableType) => {
 

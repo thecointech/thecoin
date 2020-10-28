@@ -1,5 +1,5 @@
 import React from "react";
-import { RenderableType } from "containers/Prismic/types";
+import { RenderableType } from "components/Prismic/types";
 import { ArrayRenderer } from "./ArrayRenderer";
 
 type Props = {

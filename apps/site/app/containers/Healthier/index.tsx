@@ -22,6 +22,6 @@ export function Healthier() {
       </div>
 
         <CreateAccountBanner />
-      </>
+    </>
   );
 }
