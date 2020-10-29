@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { CreateAccountBanner } from '../CreateAccountBanner';
+import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 import { HealthierMobile } from './HealthierMobile';
 import { HealthierGreaterThanMobile } from './HealthierGreaterThanMobile/index';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
@@ -21,7 +21,7 @@ export function Healthier() {
         </MobileSegment>
       </div>
 
-      <CreateAccountBanner />
+      <CreateAccountBanner Type={ TypeCreateAccountBanner.People } />
     </>
   );
 }
