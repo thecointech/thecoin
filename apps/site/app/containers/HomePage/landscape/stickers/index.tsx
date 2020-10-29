@@ -4,9 +4,19 @@ import { FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.css';
 
-export const Stickers = () => {
+export type Props = {
+    Mobile: Boolean;
+} 
+
+export const Stickers = (props: Props) => {
+
+    let classForSticker = styles.cardContainer;
+    if (props.Mobile == true) {
+        classForSticker = styles.cardContainerMobile;
+    }
+
   return (
-        <Grid stackable columns={2} id={styles.stickers} className={styles.cardContainer}>
+        <Grid stackable columns={2} id={styles.stickers} className={classForSticker}>
             <Grid.Row columns={3}>
                 <Grid.Column className={styles.card}>
                 <Header as='h4'>
