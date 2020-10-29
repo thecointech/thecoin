@@ -10,6 +10,7 @@ import sky from './images/sky.svg';
 import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
 import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
 import landscapeSkyCloudsRight from './images/cloudsRight.svg';
+import Birds from './images/birds.svg';
 import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg';
@@ -50,6 +51,7 @@ export const Landscape = () => {
 
       <GreaterThanMobileSegment>
         <div className={styles.landscape}>
+          <img className={styles.birds} src={Birds} />
           <img className={styles.sky} src={sky} />
           <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
           <img className={styles.cloudsLeft} src={landscapeSkyCloudsLeft} />
