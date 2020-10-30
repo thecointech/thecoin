@@ -2,8 +2,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.css';
-import illustration from './images/5_illustration.svg';
-import background from './images/full_background.svg';
 import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
@@ -12,16 +10,12 @@ import illustrationDeco from './images/smallillustration_right.svg';
 
 
 import { Grid, Header } from 'semantic-ui-react';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
-export const Underwater = () => {
+export const UnderwaterMobile = () => {
 
   return (
-    <React.Fragment>
-      <GreaterThanMobileSegment>
-        <img className={styles.illustration} src={illustration} />
-      </GreaterThanMobileSegment>
-      <div className={styles.landscape}>
+    <>
+      <div className={styles.landscapeUnderwater}>
         <div className={styles.header}>
               <Header as='h2' id={styles.titleUnderwater}>
                 <FormattedMessage id="site.homepage.underwater.title"
@@ -36,8 +30,8 @@ export const Underwater = () => {
                       values={{ what: 'react-intl' }}/>
               </p>
           </div>
-        <Grid className={styles.content} padded doubling stackable>
-          <Grid.Row columns="3" >
+        <Grid className={styles.content} padded doubling stackable textAlign="center">
+          <Grid.Row columns="3" className={styles.mobileLine} >
             <Grid.Column>
                 <img src={co2} />
                 <Header as='h4'>
@@ -60,7 +54,7 @@ export const Underwater = () => {
                 </a>
             </Grid.Column>
             
-            <Grid.Column columns={3} >
+            <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={science} />
                 <Header as='h4'>
                   <FormattedMessage id="site.homepage.underwater.science.title"
@@ -82,7 +76,7 @@ export const Underwater = () => {
                 </a>
             </Grid.Column>
 
-            <Grid.Column columns={3} >
+            <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={trees} />
                 <Header as='h4'>
                   <FormattedMessage id="site.homepage.underwater.trees.title"
@@ -106,18 +100,10 @@ export const Underwater = () => {
           </Grid.Row>
         </Grid>
          
-        
-        <GreaterThanMobileSegment>
-          <img className={styles.water} src={background} />
-          <img src={illustrationDeco} className={styles.illustrationDeco}/>
-        </GreaterThanMobileSegment>
-
-        <MobileSegment>
           <img className={styles.waterMobile} src={backgroundMobile} />
           <img src={illustrationDeco} className={styles.illustrationDecoMobile}/>
-        </MobileSegment>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

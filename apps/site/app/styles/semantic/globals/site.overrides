@@ -10,6 +10,23 @@ a{
     border-bottom: 2px solid @linkUnderline;
 }
 
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+
 div.container:nth-child(1){
     width: 100%;
 }
@@ -23,7 +40,6 @@ div.container:nth-child(1){
   max-width: @maxContentWidth;
   margin: auto;
 }
-
 
 #app > div:nth-child(1) {
   border-bottom: 1px solid @linkColor !important;

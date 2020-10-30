@@ -16,6 +16,7 @@ import { Advantages } from './advantages';
 import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
+import { UnderwaterMobile } from './underwaterMobile';
 //import { CreateAccountBig } from './createAccountBig';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
@@ -42,7 +43,7 @@ export const HomePage = () => {
           <Advantages />
           <Wealthier />
           <CreateAccountSmall />
-          <Underwater />
+          <UnderwaterMobile />
           <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />
         </div>
       </MobileSegment>

@@ -33,7 +33,7 @@ export class MainNavigationMobile extends React.Component {
                           defaultMessage="Home"
                           description="Title for the Home entry in the menu"
                           values={{ what: 'react-intl' }}/></Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/howItWorks'>
+                      <Dropdown.Item as={ NavLink } to='/healthier'>
                         <FormattedMessage id="site.MainNavigation.indepth"
                           defaultMessage="In-depth"
                           description="Title for the In-depth entry in the menu"
