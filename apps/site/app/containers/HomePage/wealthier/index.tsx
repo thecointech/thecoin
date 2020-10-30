@@ -8,6 +8,7 @@ import startnow from './images/icon3_01.svg';
 import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
 
 
 export const Wealthier = () => {
@@ -78,7 +79,12 @@ export const Wealthier = () => {
         <Grid.Row columns={3}>
 
           <Grid.Column columns={3}>
-            <img src={coffeePerson} />
+            <GreaterThanMobileSegment>
+                <img src={coffeePerson} className={styles.illustration} />
+            </GreaterThanMobileSegment>
+            <MobileSegment>
+              <img src={coffeePerson} className={styles.illustrationMobile} />
+            </MobileSegment>
           </Grid.Column>
           
           <Grid.Column columns={3} >

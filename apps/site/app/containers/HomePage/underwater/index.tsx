@@ -8,6 +8,8 @@ import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
 import backgroundMobile from './images/full_background_mobile.svg';
+import illustrationDeco from './images/smallillustration_right.svg';
+
 
 import { Grid, Header } from 'semantic-ui-react';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
@@ -21,7 +23,7 @@ export const Underwater = () => {
       </GreaterThanMobileSegment>
       <div className={styles.landscape}>
         <div className={styles.header}>
-              <Header as='h2'>
+              <Header as='h2' id={styles.titleUnderwater}>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"
@@ -103,11 +105,13 @@ export const Underwater = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+         
         
         <GreaterThanMobileSegment>
           <img className={styles.water} src={background} />
         </GreaterThanMobileSegment>
 
+        <img src={illustrationDeco} className={styles.illustrationDeco}/>
         <MobileSegment>
           <img className={styles.waterMobile} src={backgroundMobile} />
         </MobileSegment>
