@@ -1,7 +1,7 @@
 import React from 'react';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
-import { MainNavigationMobile } from './MainNavigationMobile';
-import { MainNavigationGreaterThanMobile } from './MainNavigationGreaterThanMobile';
+import {MainNavigationMobile} from './MainNavigationMobile';
+import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
 
 class Navigation extends React.Component {
   render() {

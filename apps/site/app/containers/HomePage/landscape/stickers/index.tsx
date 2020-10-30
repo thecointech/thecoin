@@ -5,13 +5,13 @@ import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.css';
 
 export type Props = {
-    Mobile: Boolean;
+    Mobile: boolean;
 } 
 
 export const Stickers = (props: Props) => {
 
     let classForSticker = styles.cardContainer;
-    if (props.Mobile == true) {
+    if (props.Mobile === true) {
         classForSticker = styles.cardContainerMobile;
     }
 
