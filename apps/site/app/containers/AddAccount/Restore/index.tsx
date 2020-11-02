@@ -51,7 +51,7 @@ export const Restore = () => {
     || state === UploadState.Complete;
 
   return (
-    <div id="formCreateAccountStep1">
+    <div>
       <Header as="h1">
         <Header.Content>
           <FormattedMessage {...messages.header} />

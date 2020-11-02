@@ -58,7 +58,7 @@ export const Generate = (props: RouteComponentProps) => {
 
   return (
     <React.Fragment>
-      <Form id="formCreateAccountStep1">
+      <Form>
         <Header as="h1">
           <Header.Content>
             <FormattedMessage {...messages.header} />

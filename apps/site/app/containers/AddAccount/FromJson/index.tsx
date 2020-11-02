@@ -22,7 +22,7 @@ function readFile(file: File): Promise<ReadFileData> {
 export const FromJson = () => {
   
   return (
-    <Container id="formCreateAccountStep1">
+    <Container>
       <UploadWallet readFile={readFile}/>
       <ExistsSwitcher filter="upload" />
     </Container>

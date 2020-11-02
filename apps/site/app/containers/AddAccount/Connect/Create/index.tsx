@@ -16,7 +16,7 @@ export const Create = () => {
   const web3Type = getWeb3Type();
 
   return (
-    <Container id="formCreateAccountStep1">
+    <Container>
       <Header as="h1">
         <Header.Content>
           <FormattedMessage {...messages.header} />

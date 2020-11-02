@@ -96,7 +96,7 @@ export const Login = (props: Props) => {
   return (
     <React.Fragment>
       <div className={styles.wrapper}>
-        <Form id="formCreateAccountStep1">
+        <Form>
           <Header as="h1">
             <Header.Content>
               <FormattedMessage
