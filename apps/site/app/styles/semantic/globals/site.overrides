@@ -74,3 +74,8 @@ div.container:nth-child(1){
     font-size: @h2Mobile;
   }
 }
+
+h5.ui.header{
+  margin-top: 30px;
+  font-weight:lighter;
+}

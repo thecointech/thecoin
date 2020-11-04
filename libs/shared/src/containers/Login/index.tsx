@@ -96,13 +96,14 @@ export const Login = (props: Props) => {
   return (
     <>
       <div className={styles.wrapper}>
-      <Header as='h5'>
+        <Header as='h5'>
           <FormattedMessage 
               id="site.login.aboveTheTitle"
               defaultMessage="WELCOME BACK TO THE COIN"
               description="Text above the title for the login page"/>
         </Header>
         <Form>
+          <div className={styles.titleLogin}>
           <Header as="h3">
             <FormattedMessage     
               id = "site.login.title"
@@ -116,6 +117,7 @@ export const Login = (props: Props) => {
           <Header as="h3">
             { account.name }
           </Header>
+          </div>
           <UxPassword
             uxChange={onPasswordChange}
             intlLabel={messages.labelPassword}
