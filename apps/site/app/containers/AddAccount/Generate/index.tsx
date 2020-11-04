@@ -70,7 +70,7 @@ export const Generate = (props: RouteComponentProps) => {
         <NameInput forceValidate={forceValidate} setName={setName}/>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onGenerate} id="buttonCreateAccountStep1">
+        <Button onClick={onGenerate}>
           <FormattedMessage {...messages.buttonCreate} />
         </Button>
       </Form>

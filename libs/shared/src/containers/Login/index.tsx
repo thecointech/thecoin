@@ -94,21 +94,27 @@ export const Login = (props: Props) => {
   const message = getMessage(loginState);
 
   return (
-    <React.Fragment>
+    <>
       <div className={styles.wrapper}>
+      <Header as='h5'>
+          <FormattedMessage 
+              id="site.login.aboveTheTitle"
+              defaultMessage="WELCOME BACK TO THE COIN"
+              description="Text above the title for the login page"/>
+        </Header>
         <Form>
-          <Header as="h1">
-            <Header.Content>
-              <FormattedMessage
-                {...messages.header}
-                values={{
-                  walletName: account.name
-                }}
-              />
-            </Header.Content>
-            <Header.Subheader>
-              <FormattedMessage {...messages.subHeader} />
-            </Header.Subheader>
+          <Header as="h3">
+            <FormattedMessage     
+              id = "site.login.title"
+              defaultMessage = "Log into"
+              description="Main title for the login page before the account name"
+              values={{
+                walletName: account.name
+              }}
+            />
+          </Header>
+          <Header as="h3">
+            { account.name }
           </Header>
           <UxPassword
             uxChange={onPasswordChange}
@@ -118,8 +124,13 @@ export const Login = (props: Props) => {
             isValid={isValid}
             forceValidate={forceValidate}
           />
-          <Button onClick={onDecryptWallet}>
-            <FormattedMessage {...messages.buttonLogin} />
+          <Button onClick={onDecryptWallet} primary size='huge'> 
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <FormattedMessage 
+                id="site.login.button"
+                defaultMessage="Log In"
+                description="Text of the button for the login page"/>
+              &nbsp;&nbsp;&nbsp;&nbsp;
           </Button>
         </Form>
         <ModalOperation
@@ -130,7 +141,7 @@ export const Login = (props: Props) => {
           progressPercent={percentComplete}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -51,7 +51,8 @@ export class AccountMap extends TheCoinReducer<AccountMapState> implements IAcco
   }
 
   // Remove the given account from list & storage
-  deleteAccount(account: AccountState): void {
+  //Changed type of account fron AccountState to any to fix the error TS2790: The operand of a 'delete' operator must be optional. on delete account.contract and delete account.signer;
+  deleteAccount(account: any): void {
     const {signer, address} = account;
     // We don't want active account with an invalid value
     if (this.state.active == address) {
