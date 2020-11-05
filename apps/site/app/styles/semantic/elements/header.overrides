@@ -12,6 +12,7 @@
 }
 
 h5.ui.header{
+  letter-spacing: 5px;
   padding-top: 20px;
   font-weight:lighter;
 }

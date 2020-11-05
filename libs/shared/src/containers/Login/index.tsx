@@ -7,11 +7,13 @@ import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
 import messages from "./messages";
 
-import styles from "./styles.module.css";
 import { useState, useCallback } from "react";
 import { isWallet } from "../../SignerIdent";
 import { AccountState } from "../Account/types";
 import { useAccountApi } from "../Account/reducer";
+
+import illustrationPlant from './images/illust_flowers.svg';
+import styles from "./styles.module.css";
 
 interface OwnProps {
   account: AccountState;
@@ -93,6 +95,9 @@ export const Login = (props: Props) => {
   );
   const message = getMessage(loginState);
 
+  //let intl = useIntl();
+  //const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'});
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -134,6 +139,14 @@ export const Login = (props: Props) => {
                 description="Text of the button for the login page"/>
               &nbsp;&nbsp;&nbsp;&nbsp;
           </Button>
+
+          <div className={styles.textAtTheBottom}>
+            <FormattedMessage     
+              id = "site.login.textAtTheBottom"
+              defaultMessage = "Or select a different account from the account switcher. You can find it at the top menu."
+              description="Text at the bottom for the login page before the account name"
+            />
+          </div>
         </Form>
         <ModalOperation
           cancelCallback={onCancel}
@@ -143,6 +156,7 @@ export const Login = (props: Props) => {
           progressPercent={percentComplete}
         />
       </div>
+      <img src={ illustrationPlant } />
     </>
   );
 }
