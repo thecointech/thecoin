@@ -8,14 +8,6 @@ import { defineMessages } from "react-intl";
 export const scope = "app.containers.Accounts.Login";
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: "Log into {walletName}"
-  },
-  subHeader: {
-    id: `${scope}.subHeader`,
-    defaultMessage: "We just need your password to make sure it's you."
-  },
   decryptHeader: {
     id: `${scope}.decryptHeader`,
     defaultMessage: "Logging into your account."
@@ -37,13 +29,5 @@ export default defineMessages({
     id: `${scope}.decryptInProgress`,
     defaultMessage:
       "Please wait, We are {percentComplete}% done opening your account."
-  },
-  labelPassword: {
-    id: `${scope}.labelPassword`,
-    defaultMessage: "Password"
-  },
-  buttonLogin: {
-    id: `${scope}.buttonLogin`,
-    defaultMessage: "Login"
   }
 });
