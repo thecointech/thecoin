@@ -8,6 +8,7 @@ a{
     text-transform: uppercase;
     padding-bottom: 10px;
     border-bottom: 2px solid @linkUnderline;
+    line-height: 50px;
 }
 
 a:link {
