@@ -10,6 +10,10 @@ import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
 
+
+import illustration from './images/illust_flowers.svg';
+import styles from './styles.module.css';
+
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
@@ -58,21 +62,32 @@ export const Generate = (props: RouteComponentProps) => {
 
   return (
     <React.Fragment>
-      <Form>
-        <Header as="h1">
-          <Header.Content>
-            <FormattedMessage {...messages.header} />
-          </Header.Content>
-          <Header.Subheader>
-            <FormattedMessage {...messages.subHeader} />
-          </Header.Subheader>
+      <Form className={styles.content}>
+        <Header as="h5">
+            <FormattedMessage 
+              id="site.Account.create.form.aboveTheTitle"
+              defaultMessage="Create Account: Step 1"
+              description="Title above the main Title for the create account form page"
+             />
+        </Header>
+        <Header as="h2">
+          <FormattedMessage 
+              id="site.Account.create.form.title"
+              defaultMessage="Create your Account"
+              description="Title above the main Title for the create account form page" />
         </Header>
         <NameInput forceValidate={forceValidate} setName={setName}/>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onGenerate}>
-          <FormattedMessage {...messages.buttonCreate} />
+        <Button onClick={onGenerate} primary size="big">
+          <FormattedMessage 
+              id="site.Account.create.form.button"
+              defaultMessage="Create Account"
+              description="Button for the create account form page"  />
         </Button>
+        <div className={styles.illustration}>
+          <img src={illustration} />
+        </div>
       </Form>
       <ModalOperation
         cancelCallback={setCancelled}

@@ -3,7 +3,7 @@ import { Header, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
-import illustration from './images/illust_flowers.svg';
+import illustration from '../images/illust_flowers.svg';
 import styles from './styles.module.css';
 
 
