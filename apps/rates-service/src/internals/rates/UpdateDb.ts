@@ -114,11 +114,10 @@ export async function update() {
       // backoff/retry logic.  If the ensure
       // is called again it won't matter because it's already
       // up to date.
-      const coinWait = ensureLatestCoinRate(now);
-      const fxWait = ensureLatestFxRate(now);
-
-      await coinWait;
-      await fxWait;
+      await Promise.all([
+        ensureLatestCoinRate(now),
+        ensureLatestFxRate(now),
+      ]);
       return true;
     }
     catch (err) {

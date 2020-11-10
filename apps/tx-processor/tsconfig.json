@@ -7,6 +7,5 @@
     "baseUrl": "./src/",
     "module": "commonjs"
   },
-  "include": ["src/**/*"],
-  "references": [{ "path": "../../libs/tx-processing/" }]
+  "include": ["src/**/*"]
 }

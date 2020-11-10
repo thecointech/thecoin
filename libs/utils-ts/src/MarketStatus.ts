@@ -1,4 +1,4 @@
-import { default as axios, AxiosRequestConfig } from 'axios';
+import { default as axios } from 'axios';
 import { Dictionary } from 'lodash';
 import {DateTime} from 'luxon';
 
@@ -23,28 +23,36 @@ type Calendar = {
 // Cache accesses to reduce hits on the API
 let CalendarCache: Dictionary<Calendar> = {};
 
+async function QueryCalendar(url: string) {
+  try {
+    const r = await axios.get(url, {
+      headers: {
+        Authorization: AccessToken,
+        Accept: 'application/json'
+      }
+    });
+    if (r.status == 200) {
+      return r.data;
+    }
+    console.error(r.statusText);
+  } catch (err) {
+    console.error(err);
+  }
+  return null;
+}
+
+
 async function GetCalendar(date: Date) {
   const uriArgs = `month=${date.getMonth() + 1}&year=${date.getFullYear()}`;
   const exists = CalendarCache[uriArgs];
   if (exists)
     return exists;
 
-  const options: AxiosRequestConfig = {
-    headers: {
-      Authorization: AccessToken,
-      Accept: 'application/json'
-    }
-  };
-  const url = `${ENDPOINT}?${uriArgs}`
+  const data = await QueryCalendar(`${ENDPOINT}?${uriArgs}`);
 
-
-  const resp = await axios.get(url, options);
-  if (resp.status != 200) {
-    console.error(resp.statusText);
-  }
-  else {
+  if (data) {
     console.log("Loaded Calendar for: %i-%i, (%i cached)", date.getMonth()+1, date.getFullYear(), Object.keys(CalendarCache).length)
-    const {calendar }= resp.data;
+    const {calendar }= data;
     CalendarCache[uriArgs] = calendar;
     return calendar as Calendar;
   }

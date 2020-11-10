@@ -6,5 +6,5 @@
     "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "tsBuildInfoFile": "./build/_obj/rates-patcher.buildinfo"         /* Specify file to store incremental compilation information */
   },
-  "references": [{ "path": "../../libs/utils-ts/" }]
+  "include": ["./src/**/*.*"]
 }

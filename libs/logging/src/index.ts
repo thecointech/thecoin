@@ -1,32 +1,43 @@
-import bunyan from 'bunyan';
-import path from 'path';
+import bunyan, { Stream } from 'bunyan';
 import { mkdirSync } from 'fs';
 
-
 export let log : bunyan = null as any;
+const LogLocation = '/temp/TheCoin/logs/';
+const areWeTestingWithJest = () => process.env.JEST_WORKER_ID !== undefined;
 
-export function init(name: string) {
-  const folder =`/temp/TheCoin/${name}/logs`;
-  const filename = path.join(folder, `${name}.log`);
-
-  // TODO: Obvs, we can't do this on appengine/browser.
-  mkdirSync(folder, { recursive: true });
-  log = bunyan.createLogger({
-    name,
-    streams: [
-      {
-        level: 'trace',
-        stream: process.stdout            // log INFO and above to stdout
-      },
-      {
-        level: 'debug',
-        type: 'rotating-file',
-        path: filename,
-        period: '1d',   // daily rotation
-        count: 3        // keep 3 back copies
-      }
-    ]
+const getFileStream = (name: string) : Stream => (
+  {
+    level: 'debug',
+    type: 'rotating-file',
+    path: `${LogLocation}/${name}.log`,
+    period: '1d',   // daily rotation
+    count: 3        // keep 3 back copies
   });
 
-  log.trace('Logging Initialized to path: ' + filename);
+const getConsoleStream = () : Stream => (
+  {
+    level: 'trace',
+    stream: process.stdout            // log INFO and above to stdout
+  }
+)
+
+const getStreams = (filename: string) =>
+  areWeTestingWithJest()
+    ? [
+        getConsoleStream()
+      ]
+    : [
+        getConsoleStream(),
+        getFileStream(filename)
+      ]
+
+export function init(name: string) {
+  // TODO: Obvs, we can't do this on appengine/browser.
+  mkdirSync(LogLocation, { recursive: true });
+  log = bunyan.createLogger({
+    name,
+    streams: getStreams(name)
+  });
+
+  log.trace('Logging Initialized');
 }

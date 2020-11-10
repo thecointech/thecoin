@@ -24,7 +24,7 @@
     "start": "node ./build/main.js",
     "dev": "yarn build && node -r dotenv/config --inspect ./build/main.js dotenv_config_path=../../tools/debug.env",
     "build": "yarn build:clean && yarn build:api && yarn build:src",
-    "build:src": "yarn tsc --build",
+    "build:src": "yarn tsc -b -v tsconfig.build.json",
     "build:api": "yarn build:routes && yarn build:swagger",
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",

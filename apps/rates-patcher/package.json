@@ -9,6 +9,6 @@
   },
   "scripts": {
     "dev": "yarn cross-env NODE_ENV=development && yarn build && node --inspect ./build/rates-patcher/index.js",
-    "build": "yarn tsc"
+    "build": "yarn tsc -b -v tsconfig.build.json"
   }
 }

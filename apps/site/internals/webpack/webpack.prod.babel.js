@@ -26,6 +26,7 @@ module.exports = require('./webpack.base.babel')({
     {
       loader: 'ts-loader',
       options: {
+        configFile: path.join(__dirname, '..', '..', 'tsconfig.build.json'),
         transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
         logLevel: 'info',
         projectReferences: true,

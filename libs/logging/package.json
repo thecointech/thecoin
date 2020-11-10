@@ -15,7 +15,7 @@
     "directory": "libs/logging"
   },
   "scripts": {
-    "build": "yarn tsc",
+    "build": "yarn tsc --project tsconfig.build.json",
     "build:clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -26,7 +26,7 @@
     ".": "./build/index.js",
     "./": "./build/"
   },
-  "dependencies": { 
+  "dependencies": {
     "bunyan": "^1.8.12"
   },
   "devDependencies": {
