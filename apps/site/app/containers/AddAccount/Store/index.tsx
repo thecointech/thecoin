@@ -7,6 +7,9 @@ import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { onDownload } from "containers/Accounts/Settings/download";
+import { StoreDropbox } from "containers/StoreOnline/Dropbox";
+import { StoreMicrosoft } from "containers/StoreOnline/Microsoft";
+import { StoreLocaly } from "containers/StoreOnline/Localy";
 
 import manually from "./images/manually.svg";
 import google from "./images/google.svg";
@@ -57,26 +60,28 @@ export const Store = () => {
       <Grid stackable columns='equal' centered>
         <Grid.Row>
           <Grid.Column>
+            <StoreLocaly>
               <img src={ manually } />
+            </StoreLocaly>
           </Grid.Column>
           <Grid.Column>
               <img src={ google } />
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete} />
           </Grid.Column>
           <Grid.Column>
+            <StoreMicrosoft>
               <img src={ microsoft } />
+            </StoreMicrosoft>
           </Grid.Column>
           <Grid.Column>
-              <img src={ dropbox } />
+              <StoreDropbox>
+                <img src={ dropbox } />
+              </StoreDropbox>
           </Grid.Column>
         </Grid.Row>
       </Grid>
       
       <Segment>
-
-        <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
-          <FormattedMessage {...messages.gotoAccount} />
-        </Button>
 
         <div>
           <FormattedMessage 
@@ -91,9 +96,18 @@ export const Store = () => {
             defaultMessage="Be sure you have access to your local files later." 
             description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
             <p>
-              <a onClick={onDownloadClicked}>download</a>
+              <a onClick={onDownloadClicked}>
+                <FormattedMessage 
+                  id="site.Account.create.store.button.download" 
+                  defaultMessage="Download" 
+                  description = "The button to download the account for the store your account page" />
+           </a>
             </p>
         </div>
+
+        <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
+          <FormattedMessage {...messages.gotoAccount} />
+        </Button>
 
         <div className={styles.illustration} >
           <img src={illustration} />

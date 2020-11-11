@@ -17,7 +17,7 @@ export async function fetchGAuthUrl() {
       return gauth.data.url;
     }
     else {
-      throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));
+      throw new Error('Oups: ' + JSON.stringify(gauth));
     }
   } catch (err) {
     console.error(JSON.stringify(err));
