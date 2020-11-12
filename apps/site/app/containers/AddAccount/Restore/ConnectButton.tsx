@@ -16,7 +16,7 @@ export const ConnectButton = (props: Props) => {
   }, [props.onClick]);
   return isVisible
     ? <Form>
-      <Button onClick={onClick} disabled={disabled} loading={loading} >
+      <Button onClick={onClick} primary disabled={disabled} loading={loading} >
         Restore from Google
       </Button>
     </Form>

@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Header, Divider } from 'semantic-ui-react';
+import { Header, Grid, Button } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@the-coin/types';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { ExistsSwitcher } from '../ExistsSwitcher';
 import { GetSecureApi } from 'api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
 import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from 'containers/StoreOnline/Google/googleUtils';
+
+import manually from "./images/manually.svg";
+import google from "./images/google.svg";
+import microsoft from "./images/microsoft.svg";
+import dropbox from "./images/dropbox.svg";
+import illustration from "./images/illust_flowers.svg";
+
+import styles from './styles.module.css';
+import { Link } from 'react-router-dom';
 
 
 export const Restore = () => {
@@ -51,19 +58,90 @@ export const Restore = () => {
     || state === UploadState.Complete;
 
   return (
-    <div>
-      <Header as="h1">
-        <Header.Content>
-          <FormattedMessage {...messages.header} />
-        </Header.Content>
-        <Header.Subheader>
-          <FormattedMessage {...messages.subHeader} />
-        </Header.Subheader>
+    <div className={styles.content}>
+      <Header as="h5">
+          <FormattedMessage 
+            id="site.account.restore.aboveTheTitle"
+            defaultMessage="Restore Account"
+            description="The above the title text for the restore account page"/>
       </Header>
-      <Divider />
-      <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
-      <AccountList wallets={wallets} />
-      <ExistsSwitcher filter="restore" />
+      <Header as="h2">
+          <FormattedMessage 
+            id="site.account.restore.title"
+            defaultMessage="Welcome back to TheCoin!"
+            description="The main title for the restore account page" />
+      </Header>
+
+      <Grid stackable centered columns={4} id={styles.choices}>
+        <Grid.Row centered>
+          <Grid.Column centered>
+              <img src={ manually } />
+              <br />
+              <FormattedMessage 
+                  id="site.account.restore.manualy" 
+                  defaultMessage="Upload manualy" 
+                  description = "Locale link for the restore your account page" />
+          </Grid.Column>
+          <Grid.Column centered>
+              <img src={ google } />
+              <br />
+              <AccountList wallets={wallets} />
+              <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
+          </Grid.Column>
+          <Grid.Column centered>
+              <img src={ microsoft } />
+              <br />
+              <FormattedMessage 
+                  id="site.account.restore.microsoft" 
+                  defaultMessage="Restore from  Microsoft OneDrive" 
+                  description = "Locale link for the restore your account page" />
+          </Grid.Column>
+          <Grid.Column centered>
+                <img src={ dropbox } />
+                <br />
+                <FormattedMessage 
+                  id="site.account.restore.dropbox" 
+                  defaultMessage="Restore from Dropbox" 
+                  description = "Dropbox link for the restore your account page" />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
+      <div className={styles.ethereum}>
+        <b>
+        <FormattedMessage 
+            id="site.account.restore.otherEthereum.explanation" 
+            defaultMessage="Also you can log into your account using an existing Ethereum account." 
+            description = "The link to redirect to use your existing ethereum for the restore your account page" />
+        </b> 
+      </div>
+
+      <div className={styles.help}>
+        <FormattedMessage 
+            id="site.account.restore.help" 
+            defaultMessage="If you have any problems with restoring your account, contact us for help." 
+            description = "The text before the button to redirect to the create an account page for the restore your account page" />
+         
+      </div>
+
+
+      <div className={styles.createAccountContent} >
+          <FormattedMessage 
+            id="site.account.restore.createAccount.explanation" 
+            defaultMessage="Don’t have an account?" 
+            description = "The text before the button to redirect to the create an account page for the restore your account page" />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <Button as={Link} to="/addAccount" primary size='medium' >
+            <FormattedMessage 
+              id="site.account.restore.createAccount.button" 
+              defaultMessage="Create Account" 
+              description = "The button to redirect to the create an account page for the restore your account page" />
+          </Button>
+        </div>
+
+      <div className={styles.illustration} >
+          <img src={illustration} />
+        </div>
     </div>
   );
 }
