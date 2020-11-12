@@ -101,11 +101,9 @@ export const StoreGoogle = (props: MyProps) => {
     ? messages.buttonSuccess
     : messages.buttonConnect
   return (
-    <>
-      <Button onClick={onConnectClick} disabled={disabled} primary loading={loading}>
-          <FormattedMessage {...message } />
-      </Button>
-    </>
+    <Button onClick={onConnectClick} disabled={disabled} primary loading={loading}>
+        <FormattedMessage {...message } />
+    </Button>
   );
 }
 

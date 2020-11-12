@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Header, Segment, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
-import messages from "./messages";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage";
 import { Link } from "react-router-dom";
@@ -9,7 +8,6 @@ import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { onDownload } from "containers/Accounts/Settings/download";
 import { StoreDropbox } from "containers/StoreOnline/Dropbox";
 import { StoreMicrosoft } from "containers/StoreOnline/Microsoft";
-import { StoreLocaly } from "containers/StoreOnline/Localy";
 
 import manually from "./images/manually.svg";
 import google from "./images/google.svg";
@@ -57,25 +55,33 @@ export const Store = () => {
       </Header>
       <MaybeMessage {...feedback} />
       
-      <Grid stackable columns='equal' centered>
-        <Grid.Row>
-          <Grid.Column>
-            <StoreLocaly>
+      <Grid stackable centered columns={4} id={styles.choices}>
+        <Grid.Row centered>
+          <Grid.Column centered>
               <img src={ manually } />
-            </StoreLocaly>
+              <br />
+              <a onClick={onDownloadClicked}>
+                <FormattedMessage 
+                  id="site.Account.create.store.button.download" 
+                  defaultMessage="Download" 
+                  description = "The button to download the account for the store your account page" />
+              </a>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column centered>
               <img src={ google } />
+              <br />
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete} />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column centered>
             <StoreMicrosoft>
               <img src={ microsoft } />
+              <br />
             </StoreMicrosoft>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column centered>
               <StoreDropbox>
                 <img src={ dropbox } />
+                <br />
               </StoreDropbox>
           </Grid.Column>
         </Grid.Row>
@@ -83,30 +89,24 @@ export const Store = () => {
       
       <Segment>
 
-        <div>
+        <div className={styles.underneathTheChoices}>
           <FormattedMessage 
             id="site.Account.create.store.secureExplain" 
             defaultMessage="To benefit from our guarantee of “the most secure account in the world”, you need to save it offline." 
             description = "The text underneath the button to explain what is the most secured for the store your account page" />
-        </div>
-
-        <div>
+          <br />
           <FormattedMessage 
             id="site.Account.create.store.download" 
             defaultMessage="Be sure you have access to your local files later." 
             description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
-            <p>
-              <a onClick={onDownloadClicked}>
-                <FormattedMessage 
-                  id="site.Account.create.store.button.download" 
-                  defaultMessage="Download" 
-                  description = "The button to download the account for the store your account page" />
-           </a>
-            </p>
         </div>
 
         <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
-          <FormattedMessage {...messages.gotoAccount} />
+          <FormattedMessage 
+                  id="site.Account.create.store.button.goToAccount" 
+                  defaultMessage="Go To Account" 
+                  description = "The button to be redirected to the account for the store your account page"
+           />
         </Button>
 
         <div className={styles.illustration} >
