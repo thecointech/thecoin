@@ -77,10 +77,12 @@ export const Restore = () => {
           <Grid.Column centered>
               <img src={ manually } />
               <br />
-              <FormattedMessage 
-                  id="site.account.restore.manualy" 
-                  defaultMessage="Upload manualy" 
-                  description = "Locale link for the restore your account page" />
+              <Button as={Link} to="/addAccount/upload/" primary id={styles.knowMore} >
+                <FormattedMessage 
+                    id="site.account.restore.manualy" 
+                    defaultMessage="Upload manualy" 
+                    description = "Locale link for the restore your account page" />
+              </Button>
           </Grid.Column>
           <Grid.Column centered>
               <img src={ google } />
@@ -123,8 +125,6 @@ export const Restore = () => {
             description = "The text before the button to redirect to the create an account page for the restore your account page" />
          
       </div>
-
-
       <div className={styles.createAccountContent} >
           <FormattedMessage 
             id="site.account.restore.createAccount.explanation" 
@@ -139,7 +139,7 @@ export const Restore = () => {
           </Button>
         </div>
 
-      <div className={styles.illustration} >
+        <div className={styles.illustration} >
           <img src={illustration} />
         </div>
     </div>

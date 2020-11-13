@@ -31,7 +31,6 @@ export const ExistsSwitcher = (props: Props) => {
 
   return (
     <>
-      <Divider text="Or" />
       <Dropdown text={intl.formatMessage(messages.existTransfer)} className={styles.dropdown}>
         <Dropdown.Menu>
           {
