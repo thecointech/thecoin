@@ -1,5 +1,5 @@
 import React from "react"
-import { Divider, Dropdown } from "semantic-ui-react"
+import { Dropdown } from "semantic-ui-react"
 import { Link } from "react-router-dom"
 import styles from './styles.module.css'
 import messages from './messages'

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Header, Segment, Button, Grid, Container } from "semantic-ui-react";
+import { Header, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage";
@@ -13,9 +13,9 @@ import manually from "./images/manually.svg";
 import google from "./images/google.svg";
 import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
-import illustration from "./images/illust_flowers.svg";
 
 import styles from './styles.module.css';
+import { Decoration } from "components/Decoration";
 
 export const Store = () => {
 
@@ -87,32 +87,26 @@ export const Store = () => {
         </Grid.Row>
       </Grid>
       
-      <Segment>
+      <div className={styles.underneathTheChoices}>
+        <FormattedMessage 
+          id="site.Account.create.store.secureExplain" 
+          defaultMessage="To benefit from our guarantee of “the most secure account in the world”, you need to save it offline." 
+          description = "The text underneath the button to explain what is the most secured for the store your account page" />
+        <br />
+        <FormattedMessage 
+          id="site.Account.create.store.download" 
+          defaultMessage="Be sure you have access to your local files later." 
+          description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
+      </div>
 
-        <div className={styles.underneathTheChoices}>
-          <FormattedMessage 
-            id="site.Account.create.store.secureExplain" 
-            defaultMessage="To benefit from our guarantee of “the most secure account in the world”, you need to save it offline." 
-            description = "The text underneath the button to explain what is the most secured for the store your account page" />
-          <br />
-          <FormattedMessage 
-            id="site.Account.create.store.download" 
-            defaultMessage="Be sure you have access to your local files later." 
-            description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
-        </div>
-
-        <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
-          <FormattedMessage 
-                  id="site.Account.create.store.button.goToAccount" 
-                  defaultMessage="Go To Account" 
-                  description = "The button to be redirected to the account for the store your account page"
-           />
-        </Button>
-
-        <div className={styles.illustration} >
-          <img src={illustration} />
-        </div>
-      </Segment>
+      <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
+        <FormattedMessage 
+                id="site.Account.create.store.button.goToAccount" 
+                defaultMessage="Go To Account" 
+                description = "The button to be redirected to the account for the store your account page"
+          />
+      </Button>
+      <Decoration />
     </Container>
   )
 }

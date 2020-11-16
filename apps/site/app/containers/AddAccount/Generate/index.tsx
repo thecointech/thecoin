@@ -10,9 +10,8 @@ import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
 
-
-import illustration from './images/illust_flowers.svg';
 import styles from './styles.module.css';
+import { Decoration } from 'components/Decoration';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -85,9 +84,7 @@ export const Generate = (props: RouteComponentProps) => {
               defaultMessage="Create Account"
               description="Button for the create account form page"  />
         </Button>
-        <div className={styles.illustration}>
-          <img src={illustration} />
-        </div>
+        <Decoration />
       </Form>
       <ModalOperation
         cancelCallback={setCancelled}

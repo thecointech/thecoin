@@ -11,10 +11,10 @@ import manually from "./images/manually.svg";
 import google from "./images/google.svg";
 import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
-import illustration from "./images/illust_flowers.svg";
 
 import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
+import { Decoration } from 'components/Decoration';
 
 
 export const Restore = () => {
@@ -139,9 +139,7 @@ export const Restore = () => {
           </Button>
         </div>
 
-        <div className={styles.illustration} >
-          <img src={illustration} />
-        </div>
+        <Decoration />
     </div>
   );
 }

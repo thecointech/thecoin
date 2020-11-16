@@ -3,7 +3,7 @@ import { Button, Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { isWeb3Enabled } from '@the-coin/shared/utils/detection';
 import styles from './styles.module.css';
-import illustration from './images/illust_flowers.svg';
+import { Decoration } from 'components/Decoration';
 
 type Props = {
   url: string
@@ -30,7 +30,7 @@ export const CreateExistingSwitch = (props: Props) => {
         <Divider horizontal>Or</Divider>
         <Button as={NavLink} to={existingUrl} content='I already have an Account' primary className={styles.button}/>
       </div>
-      <img src={ illustration } />
+      <Decoration />
     </>
   )
 }
