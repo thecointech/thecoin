@@ -1,7 +1,15 @@
 import bunyan, { Stream } from 'bunyan';
 import { mkdirSync } from 'fs';
 
-export let log : bunyan = null as any;
+// NOTE: our log is declared as type 'bunyan', but then
+// explicitly initialized to null (a violation of that type).
+// We do this because we treat logging as an omni-present
+// service (ie, no null checks) but require the client app
+// to manually initialize us.  In other words, we are replacing
+// the compilers guarantee with one we manage manually.  If this
+// variable is null, that means logging hasn't been init'ed (yet).
+export let log : bunyan = null! as bunyan;
+
 const LogLocation = '/temp/TheCoin/logs/';
 const areWeTestingWithJest = () => process.env.JEST_WORKER_ID !== undefined;
 
