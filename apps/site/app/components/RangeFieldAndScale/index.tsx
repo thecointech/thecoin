@@ -1,25 +1,31 @@
 import * as React from 'react';
 import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
-import { useIntl } from 'react-intl';
 import { useState } from 'react';
-
 import styles from './styles.module.css';
 
-export const DurationLine = () => {
 
-    const [duration, setDuration] = useState("0");
+export type Props = {
+ labelValue: string;
+ labelValueCurrency: string;
+ minRange: number; 
+ maxRange: number;
+ stepRange: number;
+ minRangeScale: string; 
+ medRangeScale: string;
+ maxRangeScale: string;
+} 
+
+export const RangeFieldAndScale = (props: Props) => {
+
+    const [starting, setStarting] = useState("0");
   
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setDuration(data.value);
+      setStarting(data.value); 
     };
-  
-    const intl = useIntl();
-    const labelDurationValue = intl.formatMessage({ id: 'site.compare.label.rangeDuration', defaultMessage:'Duration:'});
-    const labelDurationYear = intl.formatMessage({ id: 'site.compare.label.rangeDurationYear', defaultMessage:'Years'});  
-        
+    
     return (
-      <>     
-        <div className={styles.variablesLabelContainer}>{labelDurationValue}</div>
+      <>
+        <div className={styles.variablesLabelContainer}>{props.labelValue}</div>
         <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
           <Grid.Row>
             <Grid.Column>
@@ -27,30 +33,31 @@ export const DurationLine = () => {
             <Grid.Column>
             </Grid.Column>
             <Grid.Column className={styles.variablesLabelValueContainer}>
-              {`${duration} `+labelDurationYear}
+              {`${starting} `+props.labelValueCurrency}
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Form.Input id="rangeDuration"
-            min={1}
-            max={80}
-            name='duration'
+
+        <Form.Input id="rangeStarting"
+            min={props.minRange}
+            max={props.maxRange}
+            name='starting'
             onChange={handleChange}
-            step={1}
+            step={props.stepRange}
             type='range'
-            value={duration}
+            value={starting}
           />
         <div className={styles.variablesScaleContainer}>
             <Grid columns='equal' textAlign='center'>
               <Grid.Row>
                 <Grid.Column>
-                  1
+                  {props.minRangeScale}
                 </Grid.Column>
                 <Grid.Column>
-                  40
+                  {props.medRangeScale}
                 </Grid.Column>
                 <Grid.Column>
-                  80
+                  {props.maxRangeScale}
                 </Grid.Column>
               </Grid.Row>
             </Grid>
