@@ -2,25 +2,27 @@ import * as React from 'react';
 import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
 import { useState } from 'react';
 import styles from './styles.module.css';
+import { FormattedNumber } from 'react-intl';
 
 
 export type Props = {
  labelValue: string;
  labelValueCurrency: string;
+ scaleType?: "decimal" | "percent" | "currency" | "unit" | undefined;
  minRange: number; 
  maxRange: number;
  stepRange: number;
- minRangeScale: string; 
- medRangeScale: string;
- maxRangeScale: string;
+ minRangeScale: number; 
+ medRangeScale: number;
+ maxRangeScale: number;
 } 
 
 export const RangeFieldAndScale = (props: Props) => {
 
-    const [starting, setStarting] = useState("0");
+    const [starting, setStarting] = useState(0);
   
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setStarting(data.value); 
+      setStarting(parseInt(data.value)); 
     };
     
     return (
@@ -33,7 +35,7 @@ export const RangeFieldAndScale = (props: Props) => {
             <Grid.Column>
             </Grid.Column>
             <Grid.Column className={styles.variablesLabelValueContainer}>
-              {`${starting} `+props.labelValueCurrency}
+              <FormattedNumber value={starting} localeMatcher="best fit" unitDisplay="narrow" style={props.scaleType} currency={ props.labelValueCurrency } />
             </Grid.Column>
           </Grid.Row>
         </Grid>

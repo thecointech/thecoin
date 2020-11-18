@@ -21,13 +21,13 @@ export const UnderwaterMobile = () => {
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"
-                      values={{ what: 'react-intl' }}/>
+                />
               </Header>
               <p>
                 <FormattedMessage id="site.homepage.underwater.description"
                       defaultMessage="You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions."
                       description="Description for that part"
-                      values={{ what: 'react-intl' }}/>
+                />
               </p>
           </div>
         <Grid className={styles.content} padded doubling stackable textAlign="center">
@@ -38,19 +38,19 @@ export const UnderwaterMobile = () => {
                   <FormattedMessage id="site.homepage.underwater.difference.title"
                       defaultMessage="Make a Difference"
                       description="Title for that part"
-                      values={{ what: 'react-intl' }}/>
+                   />
                 </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.difference.description"
                       defaultMessage="Offsetting CO2 is effective. Extremely effective!"
                       description="Description for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </p>
                 <a href="">
                   <FormattedMessage id="site.homepage.underwater.difference.link"
                       defaultMessage="Compare Outcomes"
                       description="Link name for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </a>
             </Grid.Column>
             
@@ -60,19 +60,19 @@ export const UnderwaterMobile = () => {
                   <FormattedMessage id="site.homepage.underwater.science.title"
                       defaultMessage="Scientifically Verified"
                       description="Title for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.science.description"
                       defaultMessage="Prove it? We’d love to!"
                       description="Description for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </p>
                 <a href="">
                   <FormattedMessage id="site.homepage.underwater.science.link"
                       defaultMessage="Why We Can Be So Confident"
                       description="Link name for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </a>
             </Grid.Column>
 
@@ -82,19 +82,19 @@ export const UnderwaterMobile = () => {
                   <FormattedMessage id="site.homepage.underwater.trees.title"
                       defaultMessage="We Do More"
                       description="Title for that part"
-                      values={{ what: 'react-intl' }}/>
+                   />
                 </Header>
                 <p>
                   <FormattedMessage id="site.homepage.underwater.trees.description"
                       defaultMessage="It’s not just CO2. The projects we fund are vital to restoring our ecosystem."
                       description="Description for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </p>
                 <a href="">
                   <FormattedMessage id="site.homepage.underwater.trees.link"
                       defaultMessage="What We Do"
                       description="Link name for that part"
-                      values={{ what: 'react-intl' }}/>
+                  />
                 </a>
             </Grid.Column>
           </Grid.Row>

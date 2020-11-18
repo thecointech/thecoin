@@ -28,13 +28,13 @@ export const Landscape = () => {
                 <FormattedMessage id="site.homepage.landscape.title"
                       defaultMessage="The future is brighter"
                       description="The future is brighter"
-                      values={{ what: 'react-intl' }}/>
+                />
               </h1>
               <p>
                   <FormattedMessage id="site.homepage.landscape.description"
                         defaultMessage="Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."
                         description="Description following the main title"
-                        values={{ what: 'react-intl' }}/>
+                  />
               </p>
               <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id={styles.knowMore} />
           </Grid.Column>

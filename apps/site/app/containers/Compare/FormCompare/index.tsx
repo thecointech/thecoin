@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
+import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
 
 import styles from './styles.module.css';
 
@@ -10,22 +10,24 @@ export const FormCompare = () => {
  
     const intl = useIntl();
     const labelStartingValue = intl.formatMessage({ id: 'site.compare.label.rangeStarting', defaultMessage:'Starting value:'});
-    const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CA$'});
+    const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CAD'});
+    const scaleStartingType = "currency";
     const minRangeStartingValue = 1000; 
     const maxRangeStartingValue = 100000;
     const stepRangeStartingValue = 100;
-    const minRangeScaleStartingValue = "1.000"; 
-    const medRangeScaleStartingValue = "5.000";
-    const maxRangeScaleStartingValue = "100.000";
+    const minRangeScaleStartingValue = 1000; 
+    const medRangeScaleStartingValue = 5000;
+    const maxRangeScaleStartingValue = 100000;
 
     const labelDurationValue = intl.formatMessage({ id: 'site.compare.label.rangeDuration', defaultMessage:'Duration:'});
-    const labelDurationYear = intl.formatMessage({ id: 'site.compare.label.rangeDurationYear', defaultMessage:'Years'});  
+    const labelDurationYear = intl.formatMessage({ id: 'site.compare.label.rangeDurationYear', defaultMessage:' Years'});  
+    const scaleDurationType = "unit";
     const minRangeDurationValue = 1; 
     const maxRangeDurationValue = 80;
     const stepRangeDurationValue = 1;
-    const minRangeScaleDurationValue = "1"; 
-    const medRangeScaleDurationValue = "40";
-    const maxRangeScaleDurationValue = "80";
+    const minRangeScaleDurationValue = 1; 
+    const medRangeScaleDurationValue = 40;
+    const maxRangeScaleDurationValue = 80;
 
     return (
       <div id={styles.variablesContainer}>
@@ -33,6 +35,7 @@ export const FormCompare = () => {
         <RangeFieldAndScale 
             labelValue={labelStartingValue}
             labelValueCurrency={labelStartingValueCurrency}
+            scaleType={scaleStartingType}
             minRange={minRangeStartingValue}
             maxRange={maxRangeStartingValue}
             stepRange={stepRangeStartingValue}
@@ -43,6 +46,7 @@ export const FormCompare = () => {
         <RangeFieldAndScale 
             labelValue={labelDurationValue}
             labelValueCurrency={labelDurationYear}
+            scaleType={scaleDurationType}
             minRange={minRangeDurationValue}
             maxRange={maxRangeDurationValue}
             stepRange={stepRangeDurationValue}
