@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, DropdownProps } from "semantic-ui-react";
-import { useLanguageProvider } from "containers/LanguageProvider/reducer";
-import { selectLocale } from 'containers/LanguageProvider/selector';
+import { useLanguageProvider } from "components/LanguageProvider/reducer";
+import { selectLocale } from 'components/LanguageProvider/selector';
 import { useSelector } from "react-redux";
 
 const options = [

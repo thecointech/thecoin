@@ -10,6 +10,23 @@ a{
     border-bottom: 2px solid @linkUnderline;
 }
 
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+
 div.container:nth-child(1){
     width: 100%;
 }
@@ -24,7 +41,6 @@ div.container:nth-child(1){
   margin: auto;
 }
 
-
 #app > div:nth-child(1) {
   border-bottom: 1px solid @linkColor !important;
   box-shadow: 0px 5px grey;
@@ -37,7 +53,7 @@ div.container:nth-child(1){
 
 #stickers > div:nth-child(1),#stickers > div:nth-child(2){
     margin-left: 10px;
-     margin-top: 10px;
+    margin-top: 10px;
     padding: 40px;
 }
 
@@ -46,3 +62,15 @@ div.container:nth-child(1){
   box-shadow: none;
 }
 
+.ui.container.appContainer{
+  margin: 0 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: @h1Mobile;
+  }
+  h2, h2.ui.header {
+    font-size: @h2Mobile;
+  }
+}

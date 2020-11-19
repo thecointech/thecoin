@@ -1,6 +1,6 @@
 import React from "react";
 import { FAQ } from "./FAQ";
-import { FAQDocument } from "containers/Prismic/types";
+import { FAQDocument } from "components/Prismic/types";
 import { Item } from "semantic-ui-react";
 
 type Props = {

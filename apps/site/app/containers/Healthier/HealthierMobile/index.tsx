@@ -1,10 +1,21 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { ColumnWithTwoTitles } from '../Healthier/ColumnWithTwoTitles';
+import { ColumnWithTwoTitles } from '../ColumnWithTwoTitles';
 import styles from './styles.module.css';
 import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
 import { FormattedMessage } from 'react-intl';
+
+const styleLeft: React.CSSProperties = {
+  float: 'left',
+  left: '0px',
+};
+
+const styleRight: React.CSSProperties = {
+  float: 'right',
+  right: '0px',
+};
+
 
 export function HealthierMobile() {
   let majorBanks = {  id:"site.healthier.mobile.majorbanks",
@@ -23,15 +34,15 @@ export function HealthierMobile() {
                   description:"The remaining 1/10th is used to pay off our carbon debt" }
   return (
     <>
-    <img src={illustrationRight} className={styles.illustrationRight} />
-    <div className={styles.wrapper} id="healthier">
-      <Grid className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
-        <Header as="h1">
-            <FormattedMessage 
-                  id="site.healthier.mobile.title" 
-                  defaultMessage="We Do More"
-                  description="Main title for the We Do More mobile page" />
-        </Header>
+      <img src={illustrationRight} className={styles.illustrationRight} />
+      <div className={styles.wrapper} id="healthier">
+        <Grid id={styles.healthierContent} className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
+          <Header as="h1">
+              <FormattedMessage 
+                    id="site.healthier.mobile.title" 
+                    defaultMessage="Earth’s Healthier"
+                    description="Main title for the Earth’s Healthier page" />
+          </Header>
           <p className={styles.center}>
             <FormattedMessage 
                   id="site.healthier.mobile.description" 
@@ -45,14 +56,16 @@ export function HealthierMobile() {
                 FirstTitle = "$1000"
                 FirstHeaderMessage = { majorBanks }
                 SecondTitle= "90%"
-                SecondHeaderMessage = { investments }/>
+                SecondHeaderMessage = { investments }
+                CssForSeparator = { styleLeft } />
             </Grid.Column>
             <Grid.Column textAlign='right'>
               <ColumnWithTwoTitles 
                   FirstTitle = "$100"
                   FirstHeaderMessage = { lifestyle }
                   SecondTitle= "1/10"
-                  SecondHeaderMessage = { carbon }/>
+                  SecondHeaderMessage = { carbon }
+                  CssForSeparator = { styleRight } />
               </Grid.Column>
           </Grid.Row>
         </Grid>

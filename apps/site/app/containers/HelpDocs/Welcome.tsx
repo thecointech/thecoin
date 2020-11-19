@@ -1,5 +1,5 @@
 import React from "react";
-import { FAQDocument } from "containers/Prismic/types";
+import { FAQDocument } from "components/Prismic/types";
 import { Header, Segment } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import messages from "./messages";

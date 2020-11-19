@@ -10,11 +10,12 @@ import sky from './images/sky.svg';
 import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
 import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
 import landscapeSkyCloudsRight from './images/cloudsRight.svg';
+import Birds from './images/birds.svg';
 import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg';
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'containers/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
 
 export const Landscape = () => {
@@ -22,34 +23,29 @@ export const Landscape = () => {
     <React.Fragment>
       <Grid padded doubling stackable>
         <Grid.Row className={styles.mainWrapper}>
-          <Grid.Column id={styles.infosZone}>
-            <div className={styles.headingWrapper}>
+          <Grid.Column id={styles.headingWrapper}>
               <h1 className={styles.h1Home}>
                 <FormattedMessage id="site.homepage.landscape.title"
                       defaultMessage="The future is brighter"
                       description="The future is brighter"
-                      values={{ what: 'react-intl' }}/>
+                />
               </h1>
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row columns={3} className={styles.mainWrapper}>
-          <Grid.Column id={styles.infosZone}>
               <p>
                   <FormattedMessage id="site.homepage.landscape.description"
                         defaultMessage="Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."
                         description="Description following the main title"
-                        values={{ what: 'react-intl' }}/>
+                  />
               </p>
-              <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id='knowMore' />
+              <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id={styles.knowMore} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
 
-      <Stickers />
 
       <GreaterThanMobileSegment>
+        <Stickers Mobile={false} />
         <div className={styles.landscape}>
+          <img className={styles.birds} src={Birds} />
           <img className={styles.sky} src={sky} />
           <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
           <img className={styles.cloudsLeft} src={landscapeSkyCloudsLeft} />
@@ -61,6 +57,7 @@ export const Landscape = () => {
       </GreaterThanMobileSegment>
 
       <MobileSegment>
+        <Stickers Mobile={true} />
         <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
       </MobileSegment>
 
