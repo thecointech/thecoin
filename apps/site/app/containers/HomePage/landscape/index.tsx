@@ -22,7 +22,7 @@ export const Landscape = () => {
   return (
     <React.Fragment>
       <Grid padded doubling stackable>
-        <Grid.Row className={styles.mainWrapper}>
+        <Grid.Row className="x4spaceBefore x6spaceAfter">
           <Grid.Column id={styles.headingWrapper}>
               <h1 className={styles.h1Home}>
                 <FormattedMessage id="site.homepage.landscape.title"
@@ -36,7 +36,7 @@ export const Landscape = () => {
                         description="Description following the main title"
                   />
               </p>
-              <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id={styles.knowMore} />
+              <Button className="x4spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
           </Grid.Column>
         </Grid.Row>
       </Grid>

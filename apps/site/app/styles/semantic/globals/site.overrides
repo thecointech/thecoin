@@ -74,3 +74,18 @@ div.container:nth-child(1){
     font-size: @h2Mobile;
   }
 }
+
+@selectors: range(1, 10, 1);
+@space: 5px;
+
+each(@selectors, {
+  .x@{value}spaceBefore {
+    margin-top: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceAfter {
+    margin-bottom: @value * @space !important;
+  }
+});
