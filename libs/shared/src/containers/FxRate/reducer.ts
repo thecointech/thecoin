@@ -9,7 +9,7 @@ import { buildSaga, sendValues } from '../../utils/sagas';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
-// TODO: We are going to convert this into a live link to the Firestore DB directly
+// TODO: We are going to convert this into a live link to the Firestore DB
 // The initial state of the App
 const initialState: FxRatesState = {
   rates: []
