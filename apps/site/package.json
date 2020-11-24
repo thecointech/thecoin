@@ -73,6 +73,7 @@
     "prismic-reactjs": "^1.2.0",
     "query-string": "^6.9.0",
     "react-animate-height": "^2.0.18",
+    "react-confetti": "^6.0.0",
     "react-ga": "^2.7.0",
     "react-helmet": "6.0.0-beta",
     "react-measure": "^2.3.0",
