@@ -75,7 +75,7 @@ div.container:nth-child(1){
   }
 }
 
-@selectors: range(1, 10, 1);
+@selectors: range(1, 20, 1);
 @space: 5px;
 
 each(@selectors, {
@@ -87,5 +87,17 @@ each(@selectors, {
 each(@selectors, {
   .x@{value}spaceAfter {
     margin-bottom: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceLeft {
+    margin-left: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceRight {
+    margin-right: @value * @space !important;
   }
 });
