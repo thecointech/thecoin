@@ -12,10 +12,10 @@ export type Props = {
 export const ColumnWithTwoTitles = (props: Props) => {
     return (
         <>
-            <h2>{ props.FirstTitle }</h2>
+            <h2 className={ `x6spaceBefore` }>{ props.FirstTitle }</h2>
             <div><FormattedMessage {...props.FirstHeaderMessage} /></div>
-            <hr style={ props.CssForSeparator } />
-            <h2>{ props.SecondTitle }</h2>
+            <hr style={ props.CssForSeparator } className={ `x12spaceBefore x10spaceAfter` } />
+            <h2 className={ `x24spaceBefore` }>{ props.SecondTitle }</h2>
             <div><FormattedMessage {...props.SecondHeaderMessage} /></div>
         </>
     )

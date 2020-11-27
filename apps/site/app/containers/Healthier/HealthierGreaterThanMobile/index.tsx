@@ -24,7 +24,7 @@ export function HealthierGreaterThanMobile() {
     <>
       <img src={illustration} className={styles.illustration} />
       <Grid id={styles.healthierContent} className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
-        <Header as="h1" className={styles.center}>
+        <Header as="h1" className={ `${styles.center} x6spaceBefore`  }>
             <FormattedMessage 
                       id="site.healthier.title" 
                       defaultMessage="Earth’s Healthier"

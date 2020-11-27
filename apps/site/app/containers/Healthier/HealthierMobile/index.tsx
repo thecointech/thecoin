@@ -35,15 +35,15 @@ export function HealthierMobile() {
   return (
     <>
       <img src={illustrationRight} className={styles.illustrationRight} />
-      <div className={styles.wrapper} id="healthier">
+      <div className={ `${styles.wrapper} x5spaceAfter` } id="healthier">
         <Grid id={styles.healthierContent} className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
-          <Header as="h1">
+          <Header as="h1" className={ `x2spaceBefore` }>
               <FormattedMessage 
                     id="site.healthier.mobile.title" 
                     defaultMessage="Earth’s Healthier"
                     description="Main title for the Earth’s Healthier page" />
           </Header>
-          <p className={styles.center}>
+          <p className={ `${styles.center} x6spaceBefore`}>
             <FormattedMessage 
                   id="site.healthier.mobile.description" 
                   defaultMessage="Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account."

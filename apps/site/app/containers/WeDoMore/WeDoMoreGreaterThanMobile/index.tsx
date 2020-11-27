@@ -16,7 +16,7 @@ import energy from './images/photo_energy.svg';
 export function WeDoMoreGreaterThanMobile() {
   return (
       <div className={styles.wrapper} id={styles.wedomore}>
-        <Grid className={styles.content} columns='equal' textAlign='center' stackable>
+        <Grid className={ `x10spaceBefore`} columns='equal' textAlign='center' stackable>
           <Grid.Row>
             <Grid.Column>
                 <Header as="h2">
@@ -43,7 +43,7 @@ export function WeDoMoreGreaterThanMobile() {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column textAlign='right' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
                     <FormattedMessage 
                       id="site.wedomore.tree.title" 
                       defaultMessage="Re-forestation"
@@ -63,7 +63,7 @@ export function WeDoMoreGreaterThanMobile() {
                 <img src={smallPlant} className={styles.morephotos} />
               </Grid.Column>
               <Grid.Column textAlign='left' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
                     <FormattedMessage 
                       id="site.wedomore.smallPlant.title" 
                       defaultMessage="Better Farming"
@@ -77,7 +77,7 @@ export function WeDoMoreGreaterThanMobile() {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column textAlign='right' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
                     <FormattedMessage 
                       id="site.wedomore.water.title" 
                       defaultMessage="Clean Water"
@@ -97,7 +97,7 @@ export function WeDoMoreGreaterThanMobile() {
                 <img src={energy} className={styles.morephotos} />
               </Grid.Column>
               <Grid.Column textAlign='left' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
                     <FormattedMessage 
                       id="site.wedomore.energy.title" 
                       defaultMessage="Clean Energy"

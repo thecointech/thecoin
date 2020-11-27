@@ -12,13 +12,13 @@ export class MainNavigationMobile extends React.Component {
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
-              <Menu secondary className={styles.mainMenu} >
+              <Menu secondary className={ `${styles.mainMenu} x2spaceAfter` } >
                 <Menu.Menu position='left'>
                   <div>
-                    <img src={Logo} id={styles.logo}/>
+                    <img src={Logo} id={styles.logo} className={ `x2spaceBefore` }/>
                   </div>
                 </Menu.Menu>
-              <Menu.Menu position='right'>
+                <Menu.Menu position='right'>
                   <Menu.Item>
                     <AccountSwitcher />
                   </Menu.Item>

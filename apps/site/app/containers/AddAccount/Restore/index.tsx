@@ -109,7 +109,7 @@ export const Restore = () => {
         </Grid.Row>
       </Grid>
 
-      <div className={styles.ethereum}>
+      <div className={ `x8spaceBefore` }>
         <b>
         <FormattedMessage 
             id="site.account.restore.otherEthereum.explanation" 
@@ -118,7 +118,7 @@ export const Restore = () => {
         </b> 
       </div>
 
-      <div className={styles.help}>
+      <div className={ `x4spaceBefore x8spaceBefore` }>
         <FormattedMessage 
             id="site.account.restore.help" 
             defaultMessage="If you have any problems with restoring your account, contact us for help." 

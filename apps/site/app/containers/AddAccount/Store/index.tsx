@@ -87,7 +87,7 @@ export const Store = () => {
         </Grid.Row>
       </Grid>
       
-      <div className={styles.underneathTheChoices}>
+      <div className={ `x6spaceBefore x8spaceAfter` }>
         <FormattedMessage 
           id="site.Account.create.store.secureExplain" 
           defaultMessage="To benefit from our guarantee of “the most secure account in the world”, you need to save it offline." 

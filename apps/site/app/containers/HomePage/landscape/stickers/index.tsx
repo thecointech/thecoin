@@ -18,7 +18,7 @@ export const Stickers = (props: Props) => {
   return (
         <Grid stackable columns={2} id={styles.stickers} className={classForSticker}>
             <Grid.Row columns={3}>
-                <Grid.Column className={styles.card}>
+                <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
                 <Header as='h4'>
                     <FormattedMessage id="site.homepage.landscape.stickers.left.title"
                       defaultMessage="You’re Wealthier"
@@ -37,7 +37,7 @@ export const Stickers = (props: Props) => {
                         description="Link name for left sticker"
                     /></a>
                 </Grid.Column>
-                <Grid.Column className={styles.card}>
+                <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
                     <Header as='h4'>
                         <FormattedMessage id="site.homepage.landscape.stickers.right.title"
                             defaultMessage="Earth’s Healthier"

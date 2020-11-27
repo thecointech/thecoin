@@ -10,7 +10,7 @@ import { Decoration } from "components/Decoration";
 export const Congratulations = () => {
   return (
     <Container>
-        <div className={styles.content}>
+        <div className={`${styles.content} x6spaceBefore x10spaceAfter` }>
             <Confetti className={styles.confetti}
                 width={1000}
                 height={800}
