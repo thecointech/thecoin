@@ -6,6 +6,7 @@ import { HomePage } from 'containers/HomePage/index';
 import { NotFoundPage } from '@the-coin/shared/containers/NotFoundPage';
 import { Accounts } from 'containers/Accounts';
 import { AddAccount } from 'containers/AddAccount';
+import { Congratulations } from 'containers/AddAccount/Congratulations';
 import { Healthier } from 'containers/Healthier';
 import { WeDoMore } from 'containers/WeDoMore';
 import { Compare } from 'containers/Compare';
@@ -22,6 +23,7 @@ export const MainRouter = (props: { location: Location }) => {
       <Route path="/newsletter/confirm" exact  component={Confirm} />
       <Route path="/addAccount" component={AddAccount} />
       <Route path="/accounts" component={Accounts} />
+      <Route path="/congratulations" component={Congratulations} />
       <Route path="/learn" component={Learn} />
       <Route path="/healthier" component={Healthier} />
       <Route path="/wedomore" component={WeDoMore} />

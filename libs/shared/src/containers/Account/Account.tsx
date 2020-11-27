@@ -44,7 +44,10 @@ export const Account = (props: Props) => {
 
   const sidebar = useSidebar();
   useEffect(() => {
-    sidebar.addGenerator(account.name, sidebarCb);
+    if (!isWallet(signer)) {
+      if (signer !== null)
+            sidebar.addGenerator(account.name, sidebarCb);
+    }
 
     // Is this a remote account?
     if (signer && !isWallet(signer) && !signer.provider) {

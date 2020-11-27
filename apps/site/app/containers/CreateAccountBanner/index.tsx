@@ -32,7 +32,7 @@ export const CreateAccountBanner = (props: Props) => {
                             defaultMessage="The benefits of a chequing, savings, and investing account all in one!"
                             description="The benefits of a chequing, savings, and investing account all in one!"/>
                     </Header>
-                    <Button as={NavLink} to="/Accounts" content='' primary size='massive' >
+                    <Button as={NavLink} to="/addAccount" content='' primary size='massive' >
                         <FormattedMessage id="site.createAccountBanner.button"
                             defaultMessage="Create Account"
                             description="Create Account button for the create account banner for interior pages"/>

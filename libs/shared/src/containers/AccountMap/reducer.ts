@@ -65,8 +65,6 @@ export class AccountMap extends TheCoinReducer<AccountMapState> implements IAcco
     if (isWallet(signer)) {
       delete (signer as any).privateKey;
     }
-    delete account.contract;
-    delete account.signer;
   }
 }
 

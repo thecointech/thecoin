@@ -1,3 +1,25 @@
 /*******************************
          Site Overrides
 *******************************/
+
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: @h1Mobile;
+  }
+  h2, h2.ui.header {
+    font-size: @h2Mobile;
+    padding-bottom: 20px;
+  }
+}
+
+
+h2, h2.ui.header {
+  padding-bottom: 30px;
+}
+
+h5.ui.header{
+  letter-spacing: 5px;
+  padding-top: 20px;
+  font-weight:lighter;
+  text-transform: uppercase;
+}

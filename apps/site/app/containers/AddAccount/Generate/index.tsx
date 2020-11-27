@@ -10,6 +10,9 @@ import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
 
+import styles from './styles.module.css';
+import { Decoration } from 'components/Decoration';
+
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
@@ -58,21 +61,30 @@ export const Generate = (props: RouteComponentProps) => {
 
   return (
     <React.Fragment>
-      <Form id="formCreateAccountStep1">
-        <Header as="h1">
-          <Header.Content>
-            <FormattedMessage {...messages.header} />
-          </Header.Content>
-          <Header.Subheader>
-            <FormattedMessage {...messages.subHeader} />
-          </Header.Subheader>
+      <Form className={styles.content}>
+        <Header as="h5">
+            <FormattedMessage 
+              id="site.Account.create.form.aboveTheTitle"
+              defaultMessage="Create Account: Step 1"
+              description="Title above the main Title for the create account form page"
+             />
+        </Header>
+        <Header as="h2">
+          <FormattedMessage 
+              id="site.Account.create.form.title"
+              defaultMessage="Create your Account"
+              description="Title above the main Title for the create account form page" />
         </Header>
         <NameInput forceValidate={forceValidate} setName={setName}/>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onGenerate} id="buttonCreateAccountStep1">
-          <FormattedMessage {...messages.buttonCreate} />
+        <Button onClick={onGenerate} primary size="big">
+          <FormattedMessage 
+              id="site.Account.create.form.button"
+              defaultMessage="Create Account"
+              description="Button for the create account form page"  />
         </Button>
+        <Decoration />
       </Form>
       <ModalOperation
         cancelCallback={setCancelled}
