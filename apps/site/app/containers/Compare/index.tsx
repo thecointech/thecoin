@@ -17,7 +17,7 @@ export function Compare() {
   return (
     <>
       <div className={styles.wrapper}>
-          <Grid className={styles.content} columns='equal' textAlign='center' stackable>
+          <Grid className={`x6spaceBefore`} columns='equal' textAlign='center' stackable>
             <Grid.Row>
               <Grid.Column>
                   <Header as="h2">
