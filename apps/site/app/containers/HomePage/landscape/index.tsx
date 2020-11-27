@@ -36,7 +36,7 @@ export const Landscape = () => {
                         description="Description following the main title"
                   />
               </p>
-              <Button className="x4spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
+              <Button className="x6spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
           </Grid.Column>
         </Grid.Row>
       </Grid>

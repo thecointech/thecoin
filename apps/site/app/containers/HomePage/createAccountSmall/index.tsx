@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 export const CreateAccountSmall = () => {
 
   return (
-      <Grid textAlign='center' verticalAlign='middle' padded className={styles.content}>
+      <Grid textAlign='center' verticalAlign='middle' padded className={ `${styles.content} x10spaceBefore x6spaceLeft` }>
         <Grid.Row>
           <Grid.Column>
             <Header as='h3'>

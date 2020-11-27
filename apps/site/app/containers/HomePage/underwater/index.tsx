@@ -19,11 +19,11 @@ export const Underwater = () => {
   return (
     <React.Fragment>
       <GreaterThanMobileSegment>
-        <img className={styles.illustration} src={illustration} />
+        <img className={ `${styles.illustration} x8spaceBefore` } src={illustration} />
       </GreaterThanMobileSegment>
-      <div className={styles.landscape}>
-        <div className={styles.header}>
-              <Header as='h2' id={styles.titleUnderwater}>
+      <div className={ `${styles.landscape} x10spaceBefore` }>
+        <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
+              <Header as='h2' id={ `x32spaceBefore` }>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"

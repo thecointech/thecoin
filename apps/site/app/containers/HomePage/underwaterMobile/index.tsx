@@ -16,8 +16,8 @@ export const UnderwaterMobile = () => {
   return (
     <>
       <div className={styles.landscapeUnderwater}>
-        <div className={styles.header}>
-              <Header as='h2' id={styles.titleUnderwater}>
+        <div className={ `${styles.header} x6spaceBefore x8spaceAfter` }>
+              <Header as='h2' className={ `x30spaceBefore x8spaceAfter` }>
                 <FormattedMessage id="site.homepage.underwater.title"
                       defaultMessage="Earths’ Healthier"
                       description="Title for that part"
@@ -30,7 +30,7 @@ export const UnderwaterMobile = () => {
                 />
               </p>
           </div>
-        <Grid className={styles.content} padded doubling stackable textAlign="center">
+        <Grid className={ `${styles.content}` } padded doubling stackable textAlign="center">
           <Grid.Row columns="3" className={styles.mobileLine} >
             <Grid.Column>
                 <img src={co2} />
@@ -101,7 +101,7 @@ export const UnderwaterMobile = () => {
         </Grid>
          
           <img className={styles.waterMobile} src={backgroundMobile} />
-          <img src={illustrationDeco} className={styles.illustrationDecoMobile}/>
+          <img src={illustrationDeco} className={ `${styles.illustrationDecoMobile} x2spaceBefore` }/>
       </div>
     </>
   );

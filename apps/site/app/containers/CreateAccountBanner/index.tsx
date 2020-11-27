@@ -24,7 +24,7 @@ export const CreateAccountBanner = (props: Props) => {
     }
 
     return (
-        <Grid className={styles.content} id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
+        <Grid className={ `${styles.content} x20spaceBefore` } id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
             <Grid.Row>
                 <Grid.Column>
                     <Header as='h3'>

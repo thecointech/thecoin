@@ -75,7 +75,7 @@ div.container:nth-child(1){
   }
 }
 
-@selectors: range(1, 20, 1);
+@selectors: range(1, 40, 1);
 @space: 5px;
 
 each(@selectors, {

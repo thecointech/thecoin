@@ -17,7 +17,6 @@ import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
 import { UnderwaterMobile } from './underwaterMobile';
-//import { CreateAccountBig } from './createAccountBig';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
