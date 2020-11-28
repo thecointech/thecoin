@@ -12,6 +12,15 @@ import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateA
 
 import styles from './styles.module.css';
 
+
+const title = { id:"site.compare.title", 
+                defaultMessage:"How much will you make?",
+                description:"Main title for the How much will you make? graph page"};
+
+const description = { id:"site.compare.description", 
+                      defaultMessage:"Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
+                      description:"Main description for the How much will you make? graph page"};
+
 export function Compare() {
 
   return (
@@ -21,19 +30,13 @@ export function Compare() {
             <Grid.Row>
               <Grid.Column>
                   <Header as="h2">
-                      <FormattedMessage 
-                            id="site.compare.title" 
-                            defaultMessage="How much will you make?"
-                            description="Main title for the How much will you make? graph page" />
+                      <FormattedMessage {...title} />
                   </Header>
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                      <FormattedMessage 
-                            id="site.compare.description" 
-                            defaultMessage="Your chequing account will be with you longer than your retirement savings will. This is what that could look like."
-                            description="Main description for the How much will you make? graph page" />
+                      <FormattedMessage  {...description} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
