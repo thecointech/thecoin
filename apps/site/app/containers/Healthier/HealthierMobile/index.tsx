@@ -16,39 +16,37 @@ const styleRight: React.CSSProperties = {
   right: '0px',
 };
 
+const title = { id:"site.healthier.mobile.title",
+                defaultMessage:"Earth’s Healthier",
+                description:"Main title for the Earth’s Healthier page" };
+const description = { id:"site.healthier.mobile.description",
+                      defaultMessage:"Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
+                      description:"Description underneath title for the We Do More mobile page" };
+const majorBanks = {  id:"site.healthier.mobile.majorbanks",
+                      defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
+                      description:"The major banks take an average of $1000 in profits each year from every Canadian." };
+const investments = { id:"site.healthier.mobile.invest",
+                      defaultMessage:"We invest our clients’ accounts and give them 90% of the profit.",
+                      description:"We invest our clients’ accounts and give them 90% of the profit." };
+const lifestyle = { id:"site.healthier.mobile.lifestyle",
+                    defaultMessage:"It only costs about $100 per person to offset the CO2 for our current lifestyle.",
+                    description:"It only costs about $100 per person to offset the CO2 for our current lifestyle." };
+const carbon = {  id:"site.healthier.mobile.carbon",
+                  defaultMessage:"The remaining 1/10th is used to pay off our carbon debt",
+                  description:"The remaining 1/10th is used to pay off our carbon debt" };
 
 export function HealthierMobile() {
-  let majorBanks = {  id:"site.healthier.mobile.majorbanks",
-                      defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
-                      description:"The major banks take an average of $1000 in profits each year from every Canadian." }
-  let investments = { id:"site.healthier.mobile.invest",
-                      defaultMessage:"We invest our clients’ accounts and give them 90% of the profit.",
-                      description:"We invest our clients’ accounts and give them 90% of the profit." }
-  
-  let lifestyle = {  id:"site.healthier.mobile.lifestyle",
-                    defaultMessage:"It only costs about $100 per person to offset the CO2 for our current lifestyle.",
-                    description:"It only costs about $100 per person to offset the CO2 for our current lifestyle." }
-                                        
-  let carbon = { id:"site.healthier.mobile.carbon",
-                  defaultMessage:"The remaining 1/10th is used to pay off our carbon debt",
-                  description:"The remaining 1/10th is used to pay off our carbon debt" }
+
   return (
     <>
       <img src={illustrationRight} className={styles.illustrationRight} />
       <div className={ `${styles.wrapper} x5spaceAfter` } id="healthier">
         <Grid id={styles.healthierContent} className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
           <Header as="h1" className={ `x2spaceBefore` }>
-              <FormattedMessage 
-                    id="site.healthier.mobile.title" 
-                    defaultMessage="Earth’s Healthier"
-                    description="Main title for the Earth’s Healthier page" />
+              <FormattedMessage {...title} />
           </Header>
           <p className={ `${styles.center} x6spaceBefore`}>
-            <FormattedMessage 
-                  id="site.healthier.mobile.description" 
-                  defaultMessage="Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account."
-                  description="Description underneath title for the We Do More mobile page" />
-            
+            <FormattedMessage {...description}/>
           </p>
           <Grid.Row>
             <Grid.Column textAlign='left'>

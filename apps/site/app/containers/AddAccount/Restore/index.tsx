@@ -16,7 +16,6 @@ import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 
-
 const aboveTheTitle = { id:"site.account.restore.aboveTheTitle", 
                         defaultMessage:"Restore Account",
                         description:"The above the title text for the restore account page"};
