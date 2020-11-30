@@ -17,6 +17,12 @@ import landscapeGreenPart from './images/landscape.svg';
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
 import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
 
+const title = { id:"site.homepage.landscape.title", 
+                defaultMessage:"The future is brighter",
+                description:"The title for the homepage"};
+const description = { id:"site.homepage.landscape.description", 
+                      defaultMessage:"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
+                      description:"Description following the main title"};
 
 export const Landscape = () => {
   return (
@@ -25,23 +31,15 @@ export const Landscape = () => {
         <Grid.Row className="x4spaceBefore x6spaceAfter">
           <Grid.Column id={styles.headingWrapper}>
               <h1 className={styles.h1Home}>
-                <FormattedMessage id="site.homepage.landscape.title"
-                      defaultMessage="The future is brighter"
-                      description="The future is brighter"
-                />
+                <FormattedMessage {...title} />
               </h1>
               <p>
-                  <FormattedMessage id="site.homepage.landscape.description"
-                        defaultMessage="Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."
-                        description="Description following the main title"
-                  />
+                  <FormattedMessage {...description} />
               </p>
               <Button className="x6spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-
-
       <GreaterThanMobileSegment>
         <Stickers Mobile={false} />
         <div className={styles.landscape}>

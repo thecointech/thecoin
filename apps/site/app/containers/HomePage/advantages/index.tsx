@@ -4,6 +4,18 @@ import styles from './styles.module.css';
 import { Grid } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl';
 
+
+const monthlyFees = { id:"site.homepage.advantages.monthlyFees", 
+                defaultMessage:"Monthly Fees",
+                description:"Monthly Fees"};
+const minimum = { id:"site.homepage.advantages.minimum", 
+                  defaultMessage:"Minimums",
+                  description:"Minimums"};
+const benefits = { id:"site.homepage.advantages.benefits", 
+                  defaultMessage:"Your benefits",
+                  description:"Your benefits"};
+
+
 export const Advantages = () => {
 
   return (
@@ -13,26 +25,17 @@ export const Advantages = () => {
           <Grid.Row>
             <Grid.Column width={2}>
               <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage id="site.homepage.advantages.monthlyFees"
-                  defaultMessage="Monthly Fees"
-                  description="Monthly Fees"
-               />
+              <FormattedMessage {...monthlyFees} />
             </Grid.Column>
             <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
             <Grid.Column width={2}>
               <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage id="site.homepage.advantages.minimum"
-                  defaultMessage="Minimums"
-                  description="Minimums"
-              />
+              <FormattedMessage {...minimum} />
             </Grid.Column>
             <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
             <Grid.Column width={3}>
               <h2>100</h2><h4>%</h4><br />
-              <FormattedMessage id="site.homepage.advantages.benefits"
-                  defaultMessage="Your benefits"
-                  description="Your benefits"
-              />
+              <FormattedMessage {...benefits} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

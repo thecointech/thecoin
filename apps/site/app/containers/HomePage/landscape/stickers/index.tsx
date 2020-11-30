@@ -8,6 +8,27 @@ export type Props = {
     Mobile: boolean;
 } 
 
+const titleLeft = { id:"site.homepage.landscape.stickers.left.title", 
+                    defaultMessage:"You’re Wealthier",
+                    description:"The title for the homepage landscape left sticker"};
+const descriptionLeft = {   id:"site.homepage.landscape.stickers.left.description", 
+                            defaultMessage:"Your money is always earning. Make it earn for you.",
+                            description:"Description for sticker for the homepage landscape left sticker"};
+const linkLeft = {  id:"site.homepage.landscape.stickers.left.link", 
+                    defaultMessage:"Learn More",
+                    description:"Link name for sticker for the homepage landscape left sticker"};
+
+const titleRight = { id:"site.homepage.landscape.stickers.right.title", 
+                    defaultMessage:"Earth’s Healthier",
+                    description:"The title for the homepage landscape right sticker"};
+const descriptionRight = {   id:"site.homepage.landscape.stickers.right.description", 
+                            defaultMessage:"Be part of the solution. We offset our clients’ CO2.",
+                            description:"Description for sticker for the homepage landscape right sticker"};
+const linkRight = {  id:"site.homepage.landscape.stickers.right.link", 
+                    defaultMessage:"Learn More",
+                    description:"Link name for sticker for the homepage landscape right sticker"};
+
+
 export const Stickers = (props: Props) => {
 
     let classForSticker = styles.cardContainer;
@@ -20,41 +41,21 @@ export const Stickers = (props: Props) => {
             <Grid.Row columns={3}>
                 <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
                 <Header as='h4'>
-                    <FormattedMessage id="site.homepage.landscape.stickers.left.title"
-                      defaultMessage="You’re Wealthier"
-                      description="Title for left sticker"
-                    />
+                    <FormattedMessage {...titleLeft} />
                 </Header>
                 <p>
-                    <FormattedMessage id="site.homepage.landscape.stickers.left.description"
-                      defaultMessage="Your money is always earning. Make it earn for you."
-                      description="Description for left sticker"
-                    />
+                    <FormattedMessage {...descriptionLeft} />
                 </p>
-                <a href="">
-                    <FormattedMessage id="site.homepage.landscape.stickers.left.link"
-                        defaultMessage="Learn More"
-                        description="Link name for left sticker"
-                    /></a>
+                <a href=""><FormattedMessage {...linkLeft} /></a>
                 </Grid.Column>
                 <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
                     <Header as='h4'>
-                        <FormattedMessage id="site.homepage.landscape.stickers.right.title"
-                            defaultMessage="Earth’s Healthier"
-                            description="Title for right sticker"
-                        />
+                        <FormattedMessage {...titleRight} />
                     </Header>
                     <p>
-                        <FormattedMessage id="site.homepage.landscape.stickers.right.description"
-                            defaultMessage="Be part of the solution. We offset our clients’ CO2."
-                            description="Description for left sticker"
-                        />
+                        <FormattedMessage {...descriptionRight} />
                     </p>
-                    <a href="">
-                        <FormattedMessage id="site.homepage.landscape.stickers.right.link"
-                            defaultMessage="Learn More"
-                            description="Link name for right sticker"
-                        /></a>
+                    <a href=""><FormattedMessage {...linkRight} /></a>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

@@ -7,6 +7,19 @@ import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
 
+const home = { id:"site.MainNavigation.home", 
+                defaultMessage:"Home",
+                description:"Title for the Home entry in the menu"};
+const indepth = { id:"site.MainNavigation.indepth", 
+                  defaultMessage:"In-depth",
+                  description:"Title for the In-depth entry in the menu"};
+const wedomore = {  id:"site.MainNavigation.wedomore", 
+                    defaultMessage:"We do more",
+                    description:"Title for the We do more entry in the menu"};
+const yourbenefits = {  id:"site.MainNavigation.yourbenefits", 
+                    defaultMessage:"Your benefits",
+                    description:"Title for the Your benefits entry in the menu"};
+
 export class MainNavigationMobile extends React.Component {
   render() {
     return (
@@ -29,27 +42,16 @@ export class MainNavigationMobile extends React.Component {
                   <Dropdown icon='content' className='icon'>
                     <Dropdown.Menu>
                       <Dropdown.Item as={ NavLink } to='/'>
-                        <FormattedMessage id="site.MainNavigation.home"
-                          defaultMessage="Home"
-                          description="Title for the Home entry in the menu"
-                        /></Dropdown.Item>
+                        <FormattedMessage {...home} />
+                      </Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/healthier'>
-                        <FormattedMessage id="site.MainNavigation.indepth"
-                          defaultMessage="In-depth"
-                          description="Title for the In-depth entry in the menu"
-                        />
+                        <FormattedMessage {...indepth} />
                       </Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/wedomore'>
-                        <FormattedMessage id="site.MainNavigation.wedomore"
-                          defaultMessage="We do more"
-                          description="Title for the We do more entry in the menu"
-                        />
+                        <FormattedMessage {...wedomore} />
                       </Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/compare'>
-                        <FormattedMessage id="site.MainNavigation.yourbenefits"
-                          defaultMessage="Your benefits"
-                          description="Title for the Your benefits entry in the menu"
-                        />
+                        <FormattedMessage {...yourbenefits} />
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

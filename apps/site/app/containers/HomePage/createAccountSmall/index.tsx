@@ -4,6 +4,15 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.css';
 
+
+const title = { id:"site.homepage.createAccountSmall.title", 
+                defaultMessage:"TheCoin is a revolutionary new kind of account.",
+                description:"Title / content for the small create account banner"};
+const button = {  id:"site.homepage.createAccountSmall.button", 
+                  defaultMessage:"Create Account",
+                  description:"Create Account button for the small create account banner for the home pages"};
+
+
 export const CreateAccountSmall = () => {
 
   return (
@@ -11,18 +20,14 @@ export const CreateAccountSmall = () => {
         <Grid.Row>
           <Grid.Column>
             <Header as='h3'>
-                <FormattedMessage id="site.homepage.createAccountSmall.title"
-                      defaultMessage="TheCoin is a revolutionary new kind of account."
-                      description="Title"/>
+                <FormattedMessage {...title} />
               </Header>
           </Grid.Column>  
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
             <Button as={NavLink} to="/addAccount" primary size='massive' >
-              <FormattedMessage id="site.homepage.createAccountSmall.button"
-                        defaultMessage="Create Account"
-                        description="Create Account button for the small create account banner for the home pages"/>
+              <FormattedMessage {...button} />
             </Button>
           </Grid.Column>  
         </Grid.Row>
