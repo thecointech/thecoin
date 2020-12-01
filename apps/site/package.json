@@ -27,7 +27,7 @@
     "dev": "yarn cross-env NODE_ENV=development node server",
     "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start": "yarn test && yarn build && yarn start:server",
-    "start:server": "cross-env NODE_ENV=production node server",
+    "start:server": "yarn cross-env NODE_ENV=production node server",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",

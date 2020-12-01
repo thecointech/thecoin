@@ -1,4 +1,4 @@
-import { selectLanguage } from '../selectors';
+import { selectLocale } from '../selector';
 
 describe('selectLanguage', () => {
   it('should select the global state', () => {
@@ -6,6 +6,6 @@ describe('selectLanguage', () => {
     const mockedState: any = {
       language: globalState,
     };
-    expect(selectLanguage(mockedState)).toEqual(globalState);
+    expect(selectLocale(mockedState)).toEqual(globalState);
   });
 });

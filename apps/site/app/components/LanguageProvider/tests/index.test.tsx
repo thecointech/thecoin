@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Provider } from 'react-redux';
 
-import LanguageProvider from '../index';
+import {LanguageProvider} from '../index';
 
 import createReducer from '../../../reducers';
 import {configureAppStore} from '@the-coin/shared/configureStore';
