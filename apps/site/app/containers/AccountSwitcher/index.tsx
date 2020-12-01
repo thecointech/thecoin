@@ -9,6 +9,24 @@ import { AccountState } from "@the-coin/shared/containers/Account/types"
 import { FormattedMessage, useIntl } from 'react-intl';
 
 
+const titleMsg = { id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'};
+const myAccounts = {  id:"site.AccountSwitcher.myAccounts", 
+                      defaultMessage:"My Accounts",
+                      description:"Title for the My Accounts title in the menu"};
+const addAccount = {  id:"site.AccountSwitcher.addAccount", 
+                      defaultMessage:"Add an Account",
+                      description:"Title for the Add an Account in the menu"};
+const see = {   id:"site.AccountSwitcher.see", 
+                defaultMessage:"See",
+                description:"Title for the See in the menu"};
+const settings = {    id:"site.AccountSwitcher.settings", 
+                      defaultMessage:"Settings",
+                      description:"Title for the Settings in the menu"};
+const signout = {   id:"site.AccountSwitcher.signout", 
+                    defaultMessage:"Sign Out",
+                    description:"Title for the Sign Out in the menu"};
+
+
 export const AccountSwitcher = () => {
 
   const {active, map} = useAccounts();
@@ -23,17 +41,15 @@ export const AccountSwitcher = () => {
   }, [dispatch])
 
   const allAccounts = Object.values(map);
-  let intl = useIntl();
-  const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'});
+
+  const intl = useIntl();
+  const titleMsgUsed = intl.formatMessage(titleMsg);
 
   return (
-    <Dropdown text={titleMsg} >
+    <Dropdown text={titleMsgUsed} >
       <Dropdown.Menu>
         <Dropdown.Header>
-          <FormattedMessage id="site.AccountSwitcher.MyAccounts"
-                          defaultMessage="My Accounts"
-                          description="Title for the My Accounts title in the menu"
-          />
+          <FormattedMessage {...myAccounts}/>
         </Dropdown.Header>
         <ActiveAccount account={activeAccount} />
         {
@@ -54,12 +70,8 @@ export const AccountSwitcher = () => {
         }
         <Dropdown.Divider />
         <Dropdown.Item key='add' description='' icon='add' as={NavLink} to="/addAccount/">
-          <FormattedMessage id="site.AccountSwitcher.addAccount"
-                          defaultMessage="Add an Account"
-                          description="Title for the Add an Account in the menu"
-          />
+          <FormattedMessage {...addAccount} />
         </Dropdown.Item>
-        
       </Dropdown.Menu>
     </Dropdown>
   )
@@ -74,22 +86,13 @@ const ActiveAccount = ({account}: ActiveProps) =>
       <Dropdown image={{ avatar: false, src: cross }} text={account.name.substring(0, 14) + '...'}>
         <Dropdown.Menu direction='right'>
           <Dropdown.Item key="see" account={name} description='' as={Link} to="/accounts/" >
-              <FormattedMessage id="site.AccountSwitcher.see"
-                          defaultMessage="See"
-                          description="Title for the See in the menu"
-               />
+              <FormattedMessage {...see} />
           </Dropdown.Item>
           <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" >
-              <FormattedMessage id="site.AccountSwitcher.settings"
-                          defaultMessage="Settings"
-                          description="Title for the Settings in the menu"
-              />
+              <FormattedMessage {...settings} />
           </Dropdown.Item>
           <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" >
-              <FormattedMessage id="site.AccountSwitcher.signout"
-                          defaultMessage="Sign Out"
-                          description="Title for the Sign Out in the menu"
-              />
+              <FormattedMessage {...signout} />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

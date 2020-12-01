@@ -11,7 +11,7 @@ export function Healthier() {
 
   return (
     <>
-      <div className={styles.wrapper} id={styles.healthier}>
+      <div className={ `${styles.wrapper} x10spaceBefore x20spaceAfter` }>
         <GreaterThanMobileSegment>
           <HealthierGreaterThanMobile />
         </GreaterThanMobileSegment>

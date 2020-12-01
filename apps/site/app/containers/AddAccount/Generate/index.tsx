@@ -16,6 +16,16 @@ import { Decoration } from 'components/Decoration';
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
+const aboveTheTitle = { id:"site.Account.create.form.aboveTheTitle",
+                        defaultMessage:"First Step",
+                        description:"Title above the main Title for the create account form page"};
+const title = { id:"site.Account.create.form.title",
+                defaultMessage:"Create your Account",
+                description:"Title above the main Title for the create account form page"};
+const buttonCreate = {  id:"site.Account.create.form.button",
+                        defaultMessage:"Create Account",
+                        description:"Button for the create account form page"};
+
 export const Generate = (props: RouteComponentProps) => {
 
   const [name, setName] = useState(undefined as MaybeString);
@@ -63,26 +73,16 @@ export const Generate = (props: RouteComponentProps) => {
     <React.Fragment>
       <Form className={styles.content}>
         <Header as="h5">
-            <FormattedMessage
-              id="site.Account.create.form.aboveTheTitle"
-              defaultMessage="Create Account: Step 1"
-              description="Title above the main Title for the create account form page"
-             />
+            <FormattedMessage {...aboveTheTitle} />
         </Header>
         <Header as="h2">
-          <FormattedMessage
-              id="site.Account.create.form.title"
-              defaultMessage="Create your Account"
-              description="Title above the main Title for the create account form page" />
+          <FormattedMessage {...title} />
         </Header>
         <NameInput forceValidate={forceValidate} setName={setName}/>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         <Button onClick={onGenerate} primary size="big">
-          <FormattedMessage
-              id="site.Account.create.form.button"
-              defaultMessage="Create Account"
-              description="Button for the create account form page"  />
+          <FormattedMessage {...buttonCreate} />
         </Button>
         <Decoration />
       </Form>
@@ -97,7 +97,6 @@ export const Generate = (props: RouteComponentProps) => {
     </React.Fragment>
   );
 }
-
 
 const generateNewWallet = async (password: string, setProgress: (v: number) => void) => {
   // Generate a new wallet.  TODO: Detect if MetaMask is installed or active

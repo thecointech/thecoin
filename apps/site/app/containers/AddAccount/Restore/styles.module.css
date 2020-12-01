@@ -5,21 +5,10 @@
   text-align: left;
   float: left;
 }
-.content .underneathTheChoices {
-  margin-top: 30px;
-  margin-bottom: 40px;
-}
 .content #choices div {
   text-align: center;
 }
 .content .createAccountContent {
   float: right;
-}
-.content .ethereum {
-  margin-top: 40px;
-}
-.content .help {
-  margin-top: 20px;
-  margin-bottom: 40px;
 }
 /*# sourceMappingURL=./styles.module.css.map */

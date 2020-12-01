@@ -22,8 +22,8 @@ export const CreateExistingSwitch = (props: Props) => {
 
   return (
     <>
-      <div id={styles.buttonsContainer}>
-        <Header as="h1">
+      <div id={ `${styles.buttonsContainer}` } className={` x4spaceBefore `}>
+        <Header as="h1" className={` x8spaceAfter `}>
             Lets Get Started
         </Header>
         <Button as={NavLink} to={createUrl} content='I want to create a new Account' secondary className={styles.button}/>

@@ -16,26 +16,29 @@ export type Props = {
     Type: TypeCreateAccountBanner;
 }
 
+const title = { id:"site.createAccountBanner.title", 
+                defaultMessage:"The benefits of a chequing, savings, and investing account all in one!",
+                description:"The benefits of a chequing, savings, and investing account all in one!"};
+
+const buttonCreate = { id:"site.createAccountBanner.button", 
+                        defaultMessage:"Create Account",
+                        description:"Create Account button for the create account banner for interior pages"};
+
 export const CreateAccountBanner = (props: Props) => {
 
     let illustration = illustrationPlant;
     if (props.Type === 0) {
         illustration = illustrationPeople;
     }
-
-    return (
-        <Grid className={styles.content} id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
+   return (
+        <Grid className={ `${styles.content} x20spaceBefore` } id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
             <Grid.Row>
                 <Grid.Column>
                     <Header as='h3'>
-                        <FormattedMessage id="site.createAccountBanner.title"
-                            defaultMessage="The benefits of a chequing, savings, and investing account all in one!"
-                            description="The benefits of a chequing, savings, and investing account all in one!"/>
+                        <FormattedMessage {...title} />
                     </Header>
                     <Button as={NavLink} to="/addAccount" content='' primary size='massive' >
-                        <FormattedMessage id="site.createAccountBanner.button"
-                            defaultMessage="Create Account"
-                            description="Create Account button for the create account banner for interior pages"/>
+                        <FormattedMessage {...buttonCreate} />
                     </Button>
                 </Grid.Column>
             </Grid.Row>
