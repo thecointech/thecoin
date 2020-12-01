@@ -50,7 +50,7 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                       <AccountSwitcher />
                     </Menu.Item>
                     <Menu.Item>            
-                      <Button as={NavLink} to="/Accounts" content='Create Account' primary />
+                      <Button as={NavLink} to="/addAccount" content='Create Account' primary />
                     </Menu.Item>
                     <Menu.Item>        
                       <LanguageSwitcher />

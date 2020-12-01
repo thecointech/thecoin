@@ -89,7 +89,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
     const { isPassword } = this.state;
 
     return (
-      <Container> 
+      <Container id={styles.containerPasswordField}> 
         <div onClick={this.toggleMask} id={styles.togglePassword} unselectable="on"> 
           <p style={ isPassword ? showStyle : hideStyle }><Icon name='hide' />&nbsp;Show Password</p>
           <p style={ isPassword ? hideStyle : showStyle }><Icon name='unhide' />&nbsp;Hide Password</p>

@@ -36,7 +36,7 @@ export const Landscape = () => {
                         description="Description following the main title"
                   />
               </p>
-              <Button as={NavLink} to="/Accounts" content='Start Now' primary size='massive' id={styles.knowMore} />
+              <Button as={NavLink} to="/addAccount" content='Start Now' primary size='massive' id={styles.knowMore} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

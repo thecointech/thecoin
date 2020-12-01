@@ -19,7 +19,7 @@ export const CreateAccountSmall = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Button as={NavLink} to="/Accounts" primary size='massive' >
+            <Button as={NavLink} to="/addAccount" primary size='massive' >
               <FormattedMessage id="site.homepage.createAccountSmall.button"
                         defaultMessage="Create Account"
                         description="Create Account button for the small create account banner for the home pages"/>

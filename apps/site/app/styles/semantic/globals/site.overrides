@@ -8,6 +8,7 @@ a{
     text-transform: uppercase;
     padding-bottom: 10px;
     border-bottom: 2px solid @linkUnderline;
+    line-height: 50px;
 }
 
 a:link {
@@ -64,13 +65,4 @@ div.container:nth-child(1){
 
 .ui.container.appContainer{
   margin: 0 !important;
-}
-
-@media only screen and (max-width: 768px) {
-  h1 {
-    font-size: @h1Mobile;
-  }
-  h2, h2.ui.header {
-    font-size: @h2Mobile;
-  }
 }

@@ -3,10 +3,11 @@ import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@the-coin/utilities';
 import styles from './styles.module.css';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages'
 import { useCallback } from 'react';
 import { useAccountMapApi } from '../AccountMap';
 import { useHistory } from 'react-router';
+
+import illustration from "./images/illust_flowers.svg";
 
 export type ReadFileData = {
   wallet: string;
@@ -42,27 +43,38 @@ export const UploadWallet = (props: Props) => {
   }, [accountMapApi, history])
 
   return (
-    <Container>
-      <Header as="h1">
-        <Header.Content>
-          <FormattedMessage {...messages.header} />
-        </Header.Content>
-        <Header.Subheader>
-          <FormattedMessage {...messages.subHeader} />
-        </Header.Subheader>
+    <Container className={styles.content}>
+      <Header as="h5">
+          <FormattedMessage 
+            id="site.account.uploadWallet.aboveTheTitle"
+            defaultMessage="Restore Account" 
+            description="The above the title title for the upload your account page" />
       </Header>
-      <Container>
-        <Label width="4" as="label" htmlFor={id} size="huge" className={styles.dropzone}>
-          <Grid>
-            <Grid.Row columns={1}>
-              <Grid.Column verticalAlign="middle">
-                <p>Drag 'n' drop a wallet file here, or click to browse</p>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Label>
-        <input id={id} hidden type="file" accept=".json" onChange={onRecieveFile} />
-      </Container>
+      <Header as="h2">
+          <FormattedMessage 
+            id="site.account.uploadWallet.title"
+            defaultMessage="Load an Account" 
+            description="The title for the upload your account page" />
+      </Header>
+      <Label width="4" as="label" htmlFor={id} size="huge" id={styles.dropzone}>
+        <Grid>
+          <Grid.Row columns={1}>
+            <Grid.Column verticalAlign="middle">
+              <p>
+                <FormattedMessage 
+                  id="site.account.uploadWallet.dropZone"
+                  defaultMessage="Drag 'n' drop a wallet file here, or click to browse" 
+                  description="The title for the drop zone on the upload your account page" />
+              </p>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Label>
+      <input id={id} hidden type="file" accept=".json" onChange={onRecieveFile} />
+
+      <div className={styles.illustration} >
+          <img src={illustration} />
+      </div>
     </Container>
   );
 }
