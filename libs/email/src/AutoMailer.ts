@@ -55,11 +55,12 @@ async function SendTemplate(to: string, template: number, variables: object)
   try {
     const mj = await connect();
     const response = await mj.post('send', { version: 'v3.1' }).request(options);
-    var body = response.body as Email.PostResponseData;
+    const body = response.body as Email.PostResponseData;
     return body.Messages.every(m => m.Status === 'success')
   }
   catch (e)
   {
+    // TODO: Proper logging here!
     console.error(e)
   }
   return false;
