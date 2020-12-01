@@ -27,7 +27,7 @@ export const RangeFieldAndScale = (props: Props) => {
     
     return (
       <>
-        <div className={ `${styles.variablesLabelContainer} x10spaceBefore x6spaceAfter` }>{props.labelValue}</div>
+       <div className={ `${styles.variablesLabelContainer} x10spaceBefore x6spaceAfter` }>{props.labelValue}</div>
         <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
           <Grid.Row>
             <Grid.Column>
