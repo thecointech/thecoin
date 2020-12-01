@@ -6,7 +6,7 @@ import { GetNewsletterApi } from 'api';
 import { RouteComponentProps } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useEffect } from 'react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 function getInitialState(qs: string): SubscriptionDetails {
     const query = queryString.parse(qs);
@@ -46,7 +46,7 @@ export const FormSubscribed = (props: RouteComponentProps) => {
     const countryField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.country', defaultMessage:'Country'});
     const cityField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.city', defaultMessage:'City'});
     const subCheckbox = intl.formatMessage({ id: 'site.subscribe.confirmation.form.subcheckbox', defaultMessage:'I want to receive the newsletter'});
-        
+
     return (
         <>
             <Form className={styles.formStyle}>
@@ -56,12 +56,12 @@ export const FormSubscribed = (props: RouteComponentProps) => {
                 <Form.Input onChange={onInputChange} placeholder={countryField} value={details.country} name="country" />
                 <Form.Input onChange={onInputChange} placeholder={cityField} value={details.city} name="city" />
                 <Form.Checkbox onChange={onInputChange} label={subCheckbox} checked={details.confirmed} name="confirmed" />
-              
+
                 <Button onClick={updateSubscription}>
                   <FormattedMessage id="site.subscribe.confirmation.button" defaultMessage="Update Details!" />
-                </Button> 
+                </Button>
               </Form>
-            
+
         </>
     );
 }

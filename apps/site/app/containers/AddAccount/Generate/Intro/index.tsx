@@ -3,7 +3,7 @@ import { Header, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
 
 
@@ -12,20 +12,20 @@ export const Intro = () => {
     <Container className={styles.content}>
 
       <Header as='h5'>
-        <FormattedMessage 
+        <FormattedMessage
           id="site.account.generate.aboveTheTitle"
           defaultMessage="WHY ARE WE DIFFERRENT?"
           description="Description for the information page before the create account form"
             />
       </Header>
       <Header as="h2">
-          <FormattedMessage 
+          <FormattedMessage
             id="site.account.generate.header"
             defaultMessage="Welcome to TheCoin"
             description="Title for the information page before the create account form"
              />
       </Header>
-        <p><FormattedMessage 
+        <p><FormattedMessage
             id="site.account.generate.info"
             defaultMessage="Accounts with TheCoin are a little different to your regular bank. We are built on the blockchain, which means that we don't store your account keys - you do!
               If you've never used a blockchain account, some of these differences can seem a bit strange. We encourage you to read the short intro articles below if you would like to learn more."
@@ -36,7 +36,7 @@ export const Intro = () => {
           <Grid.Row>
             <Grid.Column>
               <Link to="/FAQ/my-account" target="_blank">
-                <FormattedMessage 
+                <FormattedMessage
                   id="site.account.generate.button.goodPassword"
                   defaultMessage="How to make a good password"
                   description="Description for the information page before the create account form"
@@ -45,7 +45,7 @@ export const Intro = () => {
             </Grid.Column>
             <Grid.Column>
               <Link to="/FAQ/my-account" target="_blank">
-                <FormattedMessage 
+                <FormattedMessage
                   id="site.account.generate.button.accountStored"
                   defaultMessage="Where is my account stored?"
                   description="Description for the information page before the create account form"
@@ -55,7 +55,7 @@ export const Intro = () => {
           </Grid.Row>
         </Grid>
         <p>
-          <FormattedMessage 
+          <FormattedMessage
                 id="site.account.generate.proud"
                 defaultMessage="We are very proud to combine the cutting-edge security and  performance of blockchain\
                 with the the conveniences of traditional banking."
@@ -63,7 +63,7 @@ export const Intro = () => {
             />
         </p>
       <Button as={Link} to="/addAccount/generate" primary size="huge">
-        <FormattedMessage 
+        <FormattedMessage
                 id="site.account.generate.button.go"
                 defaultMessage="Create a New Account"
                 description="The create account button for the information page before the create account form"

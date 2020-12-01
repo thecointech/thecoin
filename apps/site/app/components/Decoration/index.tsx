@@ -3,7 +3,7 @@ import { Container } from "semantic-ui-react";
 
 import illustration from "./images/illust_flowers.svg";
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 
 export const Decoration = () => {

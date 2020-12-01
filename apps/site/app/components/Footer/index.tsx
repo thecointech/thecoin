@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Subscribe } from '../../containers/Subscribe';
 import { FormattedMessage } from 'react-intl';
 import { Grid } from 'semantic-ui-react';
@@ -17,7 +17,7 @@ export default () => (
               <FormattedMessage id="site.footer.registered"
                     defaultMessage="The Coin Collaborative Canada is a registered non-profit"
                     description="Registered Non profit phrase in footer"/>
-            
+
             </Grid.Column>
             <Grid.Column>
               <img src={facebook} />
@@ -26,11 +26,11 @@ export default () => (
 
             </Grid.Column>
             <Grid.Column>
-              © 
+              ©
               <FormattedMessage id="site.footer.copyright"
                     defaultMessage="Copyright 2020. TheCoin. All Right Reserved."
                     description="Copyright phrase in footer"/>
-            
+
             </Grid.Column>
           </Grid.Row>
         </Grid>

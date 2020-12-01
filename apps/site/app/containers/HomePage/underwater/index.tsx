@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import illustration from './images/5_illustration.svg';
 import background from './images/full_background.svg';
 import co2 from './images/icon_5_1.svg';
@@ -12,7 +12,7 @@ import illustrationDeco from './images/smallillustration_right.svg';
 
 
 import { Grid, Header } from 'semantic-ui-react';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
 
 export const Underwater = () => {
 
@@ -59,7 +59,7 @@ export const Underwater = () => {
                   />
                 </a>
             </Grid.Column>
-            
+
             <Grid.Column columns={3} >
                 <img src={science} />
                 <Header as='h4'>
@@ -105,8 +105,8 @@ export const Underwater = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-         
-        
+
+
         <GreaterThanMobileSegment>
           <img className={styles.water} src={background} />
           <img src={illustrationDeco} className={styles.illustrationDeco}/>

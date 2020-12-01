@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'components/CopyToClipboard';
 import { Grid } from 'semantic-ui-react';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 interface Props {
   xferRecipient?: string;
@@ -16,7 +16,7 @@ interface Props {
 export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
 {
   const {xferRecipient, xferSecret} = props;
-  return (xferSecret && xferRecipient) ? 
+  return (xferSecret && xferRecipient) ?
   (
     <ModalOperation
       isOpen={props.showDlg}

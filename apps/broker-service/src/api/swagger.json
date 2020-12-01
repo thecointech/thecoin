@@ -353,7 +353,7 @@
 						"description": "Invalid input"
 					}
 				},
-				"description": "Request eTransfer    \nCalled by the client to exchange coin for CAD and send via eTransfer\n\nrequest CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket\nreturns CertifiedTransferResponse",
+				"description": "Request eTransfer\nCalled by the client to exchange coin for CAD and send via eTransfer\n\nrequest CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket\nreturns CertifiedTransferResponse",
 				"security": [],
 				"parameters": [
 					{

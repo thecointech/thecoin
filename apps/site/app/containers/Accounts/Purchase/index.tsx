@@ -15,7 +15,7 @@ import { GetETransferApi } from '../../../api';
 import messages from './messages';
 import InteraceTransfer from './Interac-eTransfer.png';
 import InteraceOnline from './Interac-online.png';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { ETransferModal } from './eTransferModal';
 
 interface MyProps {

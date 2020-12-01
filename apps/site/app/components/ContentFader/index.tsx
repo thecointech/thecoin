@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Location } from 'history';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { TransitionDuration } from 'styles/constants';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 interface OwnProps {
   location: Location;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import coffeePerson from './images/3_illustration.svg';
 import startnow from './images/icon3_01.svg';
 import investment from './images/icon3_02.svg';
@@ -86,7 +86,7 @@ export const Wealthier = () => {
               <img src={coffeePerson} className={styles.illustrationMobile} />
             </MobileSegment>
           </Grid.Column>
-          
+
           <Grid.Column columns={3} >
               <img src={growth} />
               <Header as='h4'>
