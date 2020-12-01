@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Button, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 
 const title = { id:"site.homepage.createAccountSmall.title", 
@@ -22,14 +22,14 @@ export const CreateAccountSmall = () => {
             <Header as='h3'>
                 <FormattedMessage {...title} />
               </Header>
-          </Grid.Column>  
+          </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
             <Button as={NavLink} to="/addAccount" primary size='massive' >
               <FormattedMessage {...button} />
             </Button>
-          </Grid.Column>  
+          </Grid.Column>
         </Grid.Row>
       </Grid>
   );

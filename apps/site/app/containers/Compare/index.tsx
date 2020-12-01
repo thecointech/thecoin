@@ -10,7 +10,7 @@ import { FormCompare } from './FormCompare';
 import { GraphCompare } from './GraphCompare';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 
 const title = { id:"site.compare.title", 

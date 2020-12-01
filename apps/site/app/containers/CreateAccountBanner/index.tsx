@@ -4,17 +4,17 @@ import { Grid, Header, Button } from 'semantic-ui-react';
 import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { NavLink } from 'react-router-dom';
 
 export enum TypeCreateAccountBanner {
     People,
     Plants
-}   
+}
 
 export type Props = {
     Type: TypeCreateAccountBanner;
-} 
+}
 
 const title = { id:"site.createAccountBanner.title", 
                 defaultMessage:"The benefits of a chequing, savings, and investing account all in one!",

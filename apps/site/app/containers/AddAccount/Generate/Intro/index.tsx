@@ -3,7 +3,7 @@ import { Header, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
 
 const aboveTheTitle = { id:"site.account.generate.aboveTheTitle", 

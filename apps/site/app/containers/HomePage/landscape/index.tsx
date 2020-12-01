@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Stickers } from './stickers';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import sky from './images/sky.svg';
 import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
 import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
@@ -15,7 +15,7 @@ import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg';
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool'; 
+import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
 
 const title = { id:"site.homepage.landscape.title", 
                 defaultMessage:"The future is brighter",

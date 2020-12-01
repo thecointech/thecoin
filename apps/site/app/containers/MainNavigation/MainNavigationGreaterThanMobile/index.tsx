@@ -8,7 +8,7 @@ import HeaderLink from 'components/HeaderLink';
 import LanguageSwitcher from 'containers/LanguageSwitcher';
 
 import Logo from './logoAndName.svg';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 const home = { id:"site.MainNavigation.home", 
                 defaultMessage:"Home",
@@ -58,13 +58,13 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                           <FormattedMessage {...titleButton} />
                       </Button>
                     </Menu.Item>
-                    <Menu.Item>        
+                    <Menu.Item>
                       <LanguageSwitcher />
                     </Menu.Item>
                   </Menu.Menu>
               </Menu>
           </div>
-      </Container>  
+      </Container>
     );
   }
 }

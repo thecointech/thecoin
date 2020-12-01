@@ -82,6 +82,29 @@ module.exports = options => ({
         ],
       },
       {
+        // The rest of the less files
+        test: /.*\.module\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
         use: 'file-loader',
       },

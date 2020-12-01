@@ -14,7 +14,7 @@ import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 type MyProps = {
   account: AccountState;

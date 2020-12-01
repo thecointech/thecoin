@@ -14,7 +14,7 @@ import google from "./images/google.svg";
 import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
 
 
@@ -66,9 +66,10 @@ export const Store = () => {
       </Header>
       <Header as="h2">
           <FormattedMessage {...title} />
+
       </Header>
       <MaybeMessage {...feedback} />
-      
+
       <Grid stackable centered columns={4} id={styles.choices}>
         <Grid.Row centered>
           <Grid.Column centered>

@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
 import wwf from './images/logo-wwf.svg';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import tree from './images/photo_tree.svg';
 import smallPlant from './images/photo_smallPlant.svg';
 import water from './images/photo_water.svg';

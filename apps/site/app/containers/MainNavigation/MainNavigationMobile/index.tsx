@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Container, Dropdown } from 'semantic-ui-react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
 import LanguageSwitcher from 'containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
@@ -35,10 +35,10 @@ export class MainNavigationMobile extends React.Component {
                   <Menu.Item>
                     <AccountSwitcher />
                   </Menu.Item>
-                  <Menu.Item>        
+                  <Menu.Item>
                     <LanguageSwitcher />
                   </Menu.Item>
-                  <Menu.Item>        
+                  <Menu.Item>
                   <Dropdown icon='content' className='icon'>
                     <Dropdown.Menu>
                       <Dropdown.Item as={ NavLink } to='/'>
@@ -59,7 +59,7 @@ export class MainNavigationMobile extends React.Component {
                 </Menu.Menu>
               </Menu>
             </div>
-      </Container>   
+      </Container>
     );
   }
 }

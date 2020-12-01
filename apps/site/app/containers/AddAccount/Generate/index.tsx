@@ -10,7 +10,7 @@ import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
 
 let _isCancelled = false;
@@ -34,7 +34,7 @@ export const Generate = (props: RouteComponentProps) => {
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
-  
+
   ////////////////////////////////
   // Callback to actually generate the account
   const accountMapApi = useAccountMapApi();
@@ -63,7 +63,7 @@ export const Generate = (props: RouteComponentProps) => {
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)
-  //   ? setCancelled 
+  //   ? setCancelled
   //   : undefined;
   // const cbOk = cbCancel
   //   ? undefined
@@ -115,15 +115,15 @@ const generateNewWallet = async (password: string, setProgress: (v: number) => v
   });
 
   // If cancelled, do not store generated account
-  if (_isCancelled) 
+  if (_isCancelled)
     return false;
 
   // Add to wallet, this makes it available to user on this site
   // We set the wallet in encrypted format, as we wish to force
   // the user to decrypt the account (to protect against misspelled
   // passwords)
-  return { 
+  return {
     wallet: JSON.parse(asStr),
     decrypted: newWallet,
-  } 
+  }
 }

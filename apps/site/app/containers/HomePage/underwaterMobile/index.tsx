@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
@@ -74,7 +74,7 @@ export const UnderwaterMobile = () => {
                 </p>
                 <a href=""><FormattedMessage {...differenceLink} /></a>
             </Grid.Column>
-            
+
             <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={science} />
                 <Header as='h4'>
@@ -98,7 +98,7 @@ export const UnderwaterMobile = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-         
+
           <img className={styles.waterMobile} src={backgroundMobile} />
           <img src={illustrationDeco} className={ `${styles.illustrationDecoMobile} x2spaceBefore` }/>
       </div>

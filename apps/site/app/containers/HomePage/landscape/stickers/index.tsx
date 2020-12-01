@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export type Props = {
     Mobile: boolean;
-} 
+}
 
 const titleLeft = { id:"site.homepage.landscape.stickers.left.title", 
                     defaultMessage:"You’re Wealthier",

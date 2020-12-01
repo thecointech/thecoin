@@ -1,7 +1,7 @@
 import React, { useState, FunctionComponent } from 'react';
 import {Clipboard} from 'ts-clipboard';
 import { Icon, Message } from 'semantic-ui-react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 interface Props {
   payload: string;

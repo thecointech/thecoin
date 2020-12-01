@@ -1,4 +1,7 @@
 import React from 'react';
+
+import styles from './styles.module.less';
+
 import { Subscribe } from '../../containers/Subscribe';
 import { FormattedMessage } from 'react-intl';
 import { Container, Grid } from 'semantic-ui-react';
@@ -7,9 +10,7 @@ import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
 
-import styles from './styles.module.css';
-
-
+  
 const registered = {  id:"site.footer.registered", 
                       defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
                       description:"Registered Non profit phrase in footer"};

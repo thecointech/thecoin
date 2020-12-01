@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { ColumnWithTwoTitles } from '../ColumnWithTwoTitles';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import illustration from './images/healthier-illustration.svg';
 import { FormattedMessage } from 'react-intl';
 
@@ -38,7 +38,7 @@ export function HealthierGreaterThanMobile() {
         </p>
         <Grid.Row>
           <Grid.Column>
-            <ColumnWithTwoTitles 
+            <ColumnWithTwoTitles
               FirstTitle = "$1000"
               FirstHeaderMessage = { majorBanks }
               SecondTitle= "90%"
@@ -46,7 +46,7 @@ export function HealthierGreaterThanMobile() {
               CssForSeparator = { undefined } />
           </Grid.Column>
           <Grid.Column className={styles.rightColumn} textAlign='left'>
-            <ColumnWithTwoTitles 
+            <ColumnWithTwoTitles
                 FirstTitle = "$100"
                 FirstHeaderMessage = { lifestyle }
                 SecondTitle= "1/10"

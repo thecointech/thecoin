@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
 import { useState } from 'react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { FormattedNumber } from 'react-intl';
 
 
@@ -9,22 +9,22 @@ export type Props = {
  labelValue: string;
  labelValueCurrency: string;
  scaleType?: "decimal" | "percent" | "currency" | "unit" | undefined;
- minRange: number; 
+ minRange: number;
  maxRange: number;
  stepRange: number;
- minRangeScale: number; 
+ minRangeScale: number;
  medRangeScale: number;
  maxRangeScale: number;
-} 
+}
 
 export const RangeFieldAndScale = (props: Props) => {
 
     const [starting, setStarting] = useState(0);
-  
+
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setStarting(parseInt(data.value)); 
+      setStarting(parseInt(data.value));
     };
-    
+
     return (
       <>
        <div className={ `${styles.variablesLabelContainer} x10spaceBefore x6spaceAfter` }>{props.labelValue}</div>
