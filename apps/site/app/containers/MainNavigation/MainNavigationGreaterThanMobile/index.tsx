@@ -23,7 +23,7 @@ const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
 
-let intl = useIntl();
+const intl = useIntl();
 const titleButton = intl.formatMessage({ id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'});
 
 export class MainNavigationGreaterThanMobile extends React.Component {
