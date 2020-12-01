@@ -22,11 +22,11 @@ const wedomore = {  id:"site.MainNavigation.wedomore",
 const yourbenefits = {  id:"site.MainNavigation.yourbenefits", 
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
+const titleButton = { id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'};
 
-const intl = useIntl();
-const titleButton = intl.formatMessage({ id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'});
 
 export class MainNavigationGreaterThanMobile extends React.Component {
+
   render() {
     return (
       <Container>
@@ -54,7 +54,9 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                       <AccountSwitcher />
                     </Menu.Item>
                     <Menu.Item>            
-                      <Button as={NavLink} to="/addAccount" content={titleButton} primary />
+                      <Button as={NavLink} to="/addAccount" primary >
+                          <FormattedMessage {...titleButton} />
+                      </Button>
                     </Menu.Item>
                     <Menu.Item>        
                       <LanguageSwitcher />

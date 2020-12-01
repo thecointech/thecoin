@@ -9,8 +9,7 @@ import { AccountState } from "@the-coin/shared/containers/Account/types"
 import { FormattedMessage, useIntl } from 'react-intl';
 
 
-let intl = useIntl();
-const titleMsg = intl.formatMessage({ id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'});
+const titleMsg = { id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'};
 const myAccounts = {  id:"site.AccountSwitcher.myAccounts", 
                       defaultMessage:"My Accounts",
                       description:"Title for the My Accounts title in the menu"};
@@ -43,8 +42,11 @@ export const AccountSwitcher = () => {
 
   const allAccounts = Object.values(map);
 
+  const intl = useIntl();
+  const titleMsgUsed = intl.formatMessage(titleMsg);
+
   return (
-    <Dropdown text={titleMsg} >
+    <Dropdown text={titleMsgUsed} >
       <Dropdown.Menu>
         <Dropdown.Header>
           <FormattedMessage {...myAccounts}/>
