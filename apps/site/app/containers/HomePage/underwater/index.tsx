@@ -104,7 +104,6 @@ export const Underwater = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-
         <GreaterThanMobileSegment>
           <img className={styles.water} src={background} />
           <img src={illustrationDeco} className={styles.illustrationDeco}/>
