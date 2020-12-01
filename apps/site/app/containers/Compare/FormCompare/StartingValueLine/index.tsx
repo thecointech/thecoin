@@ -2,20 +2,20 @@ import * as React from 'react';
 import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { useState } from 'react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export const StartingValueLine = () => {
 
     const [starting, setStarting] = useState("0");
-  
+
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setStarting(data.value); 
+      setStarting(data.value);
     };
-  
+
     const intl = useIntl();
     const labelStartingValue = intl.formatMessage({ id: 'site.compare.label.rangeStarting', defaultMessage:'Starting value:'});
     const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CA$'});
-        
+
     return (
       <>
         <div className={styles.variablesLabelContainer}>{labelStartingValue}</div>

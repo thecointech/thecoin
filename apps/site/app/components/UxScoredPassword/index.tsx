@@ -2,7 +2,7 @@ import React from 'react';
 import { MessageDescriptor, FormattedMessage } from 'react-intl';
 import { Color } from 'csstype';
 import { Icon } from 'semantic-ui-react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import messages, { scope as MessageScope } from './messages';
 import { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
@@ -78,13 +78,13 @@ state = initialState;
           id: `${MessageScope}.Tooltip`,
           defaultMessage: `This password requires ${stats.crack_times_display.offline_slow_hashing_1e4_per_second} to crack`
         },
-        message: hasWarning 
+        message: hasWarning
           ? {
               id: `${MessageScope}.Warning`,
               defaultMessage: stats.feedback.warning
-            } 
-          : isValid 
-            ? undefined 
+            }
+          : isValid
+            ? undefined
             : messages.PasswordRequired
       };
       this.setState(newState);
@@ -134,7 +134,7 @@ state = initialState;
 
     return (
       <UxPassword
-        intlLabel={intlLabel} 
+        intlLabel={intlLabel}
         id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}

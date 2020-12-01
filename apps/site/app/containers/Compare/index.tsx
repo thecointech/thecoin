@@ -10,7 +10,7 @@ import { FormCompare } from './FormCompare';
 import { GraphCompare } from './GraphCompare';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export function Compare() {
 
@@ -21,8 +21,8 @@ export function Compare() {
             <Grid.Row>
               <Grid.Column>
                   <Header as="h2">
-                      <FormattedMessage 
-                            id="site.compare.title" 
+                      <FormattedMessage
+                            id="site.compare.title"
                             defaultMessage="How much will you make?"
                             description="Main title for the How much will you make? graph page" />
                   </Header>
@@ -30,8 +30,8 @@ export function Compare() {
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                      <FormattedMessage 
-                            id="site.compare.description" 
+                      <FormattedMessage
+                            id="site.compare.description"
                             defaultMessage="Your chequing account will be with you longer than your retirement savings will. This is what that could look like."
                             description="Main description for the How much will you make? graph page" />
                 </Grid.Column>

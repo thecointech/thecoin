@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 import { Grid } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl';

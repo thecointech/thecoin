@@ -8,7 +8,7 @@ import HeaderLink from 'components/HeaderLink';
 import LanguageSwitcher from 'containers/LanguageSwitcher';
 
 import Logo from './logoAndName.svg';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export class MainNavigationGreaterThanMobile extends React.Component {
   render() {
@@ -49,16 +49,16 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                     <Menu.Item>
                       <AccountSwitcher />
                     </Menu.Item>
-                    <Menu.Item>            
+                    <Menu.Item>
                       <Button as={NavLink} to="/addAccount" content='Create Account' primary />
                     </Menu.Item>
-                    <Menu.Item>        
+                    <Menu.Item>
                       <LanguageSwitcher />
                     </Menu.Item>
                   </Menu.Menu>
               </Menu>
           </div>
-      </Container>  
+      </Container>
     );
   }
 }

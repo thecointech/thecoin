@@ -10,7 +10,7 @@ import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import messages from '../messages';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
 
 let _isCancelled = false;
@@ -24,7 +24,7 @@ export const Generate = (props: RouteComponentProps) => {
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
-  
+
   ////////////////////////////////
   // Callback to actually generate the account
   const accountMapApi = useAccountMapApi();
@@ -53,7 +53,7 @@ export const Generate = (props: RouteComponentProps) => {
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)
-  //   ? setCancelled 
+  //   ? setCancelled
   //   : undefined;
   // const cbOk = cbCancel
   //   ? undefined
@@ -63,14 +63,14 @@ export const Generate = (props: RouteComponentProps) => {
     <React.Fragment>
       <Form className={styles.content}>
         <Header as="h5">
-            <FormattedMessage 
+            <FormattedMessage
               id="site.Account.create.form.aboveTheTitle"
               defaultMessage="Create Account: Step 1"
               description="Title above the main Title for the create account form page"
              />
         </Header>
         <Header as="h2">
-          <FormattedMessage 
+          <FormattedMessage
               id="site.Account.create.form.title"
               defaultMessage="Create your Account"
               description="Title above the main Title for the create account form page" />
@@ -79,7 +79,7 @@ export const Generate = (props: RouteComponentProps) => {
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         <Button onClick={onGenerate} primary size="big">
-          <FormattedMessage 
+          <FormattedMessage
               id="site.Account.create.form.button"
               defaultMessage="Create Account"
               description="Button for the create account form page"  />
@@ -116,15 +116,15 @@ const generateNewWallet = async (password: string, setProgress: (v: number) => v
   });
 
   // If cancelled, do not store generated account
-  if (_isCancelled) 
+  if (_isCancelled)
     return false;
 
   // Add to wallet, this makes it available to user on this site
   // We set the wallet in encrypted format, as we wish to force
   // the user to decrypt the account (to protect against misspelled
   // passwords)
-  return { 
+  return {
     wallet: JSON.parse(asStr),
     decrypted: newWallet,
-  } 
+  }
 }
