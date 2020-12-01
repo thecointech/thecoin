@@ -2,84 +2,92 @@ import React, { useEffect, useState } from "react";
 
 import { GetFirestore } from "@the-coin/utilities/firestore";
 import { Contract } from "ethers";
-import { Dictionary } from "lodash";
-import { Transaction } from "@the-coin/shared/containers/Account/types";
-import { loadAndMergeHistory } from "@the-coin/shared/containers/Account/history";
+import { BigNumber } from "ethers/utils/bignumber";
+import { List } from "semantic-ui-react";
+import { Firestore } from "@the-coin/types";
+import { Client, BaseClientData } from "./Client";
+import { NormalizeAddress } from "@the-coin/utilities";
+import { authorize, isValid } from "@the-coin/tx-processing/build/deposit/auth";
+import { addFromGmail, initializeApi } from "@the-coin/tx-processing/build/deposit/addFromGmail";
 
 type Props = {
-  contract: Contract
+  contract: Contract|null
 };
 
-type UserData = {
-  balance: number;
-  transactions: Transaction[];
-}
 export const Clients = ({contract}: Props) => {
 
   const firestore = GetFirestore();
-  const [users, setUsers] = useState([] as string[]);
-  const [transactions, setTransactions] = useState({} as Dictionary<UserData>);
+  const [users, setUsers] = useState([] as BaseClientData[]);
+  const [active, setActive] = useState(-1);
 
-
+  // Fetch all users with balance
   useEffect(() => {
-    firestore.doc("User")
-      .listCollections()
-      .then(clients => clients.map(c => c.id))
+    getUsers(contract, firestore)
       .then(setUsers)
-      .catch(err => { throw err })
-  }, [])
-
-  useEffect(() => {
-
-    for (const u of users) {
-      getTransactions(u, contract)
-        .then(data => {
-          setTransactions(
-            {
-              ...transactions,
-              [u]: data
-            }
-          )
-        })
-        .catch(err => { throw err });
-    };
-  }, [contract, users])
+      .catch(alert)
+  }, [contract, firestore])
 
   return (
-    <div>hi
-      {Object.entries(transactions)
-        .map(([u, data]) => <div key={u}>{u} - {data.balance}</div>)}
-    </div>);
-}
-
-async function getTransactions(user: string, contract: Contract)
-{
-  const fromBlock = 0;
-  var balance = await contract.balanceOf(user);
-  var transactions = await loadAndMergeHistory(user, fromBlock, contract, []);
-
-  return {
-    balance,
-    transactions
+    <List divided relaxed>
+    {
+      users
+        .filter(u => !!u.balance)
+        .map((u, index) => (
+        <List.Item key={index}>
+          <List.Content>
+            <Client
+              {...u}
+              active={active === index}
+              setActive={() => setActive(index)}
+             />
+        </List.Content>
+      </List.Item>
+    ))
   }
+  </List>);
 }
 
-// async function getAllTransactions(users: string[], contract: Contract) {
+async function getUsers(contract: Contract|null, firestore: Firestore) : Promise<BaseClientData[]>
+{
+  if (!contract)
+    return [];
 
-//   var allTxs = users.map(u => (
-//     loadAndMergeHistory(u, fromBlock, contract, [])
-//   ));
+  const emails = await getUserEmails();
+  const qs = await firestore.collection("User").get();
 
-//   var allBalances = users.map(u =>
-//     contract.balanceOf(u)
-//   )
+  const addresses = Array.from(new Set([
+    ...emails.map(u => NormalizeAddress(u.instruction.address)),
+    ...qs.docs.map(c => NormalizeAddress(c.id)),
+  ]));
 
-//   var transactions = await Promise.all(allTxs);
-//   var balances = await Promise.all(allBalances);
+  const rawBalances = await Promise.all(addresses.map(id => getBalance(id, contract)));
+  return addresses.map((id, i) => ({
+    address: id,
+    balance: rawBalances[i],
+    name: emails.find(d => NormalizeAddress(d.instruction.address) === id)?.instruction.name ?? "Not Found",
+  }));
+}
 
-//   //transactions.zip(balances).map()
-//   return {
-//     balances,
-//     transactions
-//   }
-// }
+async function getBalance(user: string, contract: Contract)
+{
+  const balance = await contract.balanceOf(user) as BigNumber;
+  return balance.toNumber()
+}
+
+async function getUserEmails()
+{
+  try {
+    // First, connect and fetch new deposit emails.
+    const auth = await authorize();
+    if (isValid(auth))
+    {
+      await initializeApi(auth);
+      // fetch all deposits
+      return await addFromGmail('redirect interac -remember -expired -label:etransfer-rejected');
+    }
+  }
+  catch(error) {
+    console.log("Couldn't load emails: " + error);
+  }
+  return [];
+}

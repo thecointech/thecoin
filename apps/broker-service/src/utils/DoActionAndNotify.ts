@@ -1,5 +1,5 @@
 import { CertifiedTransfer, CertifiedTransferResponse } from "@the-coin/types";
-import { SendMail } from "../exchange/AutoMailer";
+import { SendMail } from "@the-coin/email";
 import { VerifiedActionResult } from "../exchange/CertifiedActionProcess";
 import { success, failure } from "../exchange/VerifiedTransfer";
 
