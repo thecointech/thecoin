@@ -9,7 +9,7 @@ import { Generate } from './Generate';
 import { Intro } from './Generate/Intro';
 import { FromJson } from './FromJson';
 import { Store } from './Store';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export const AddAccount = () => {
 
