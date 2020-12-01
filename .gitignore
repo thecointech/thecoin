@@ -24,3 +24,4 @@ libs/tx-processing/src/BrokerTransferAssistant/BrokerTransferAssistantWallet.jso
 
 **/*.module.css.map
 **/site/**/HomePage/**/*.module.css
+.dccache
