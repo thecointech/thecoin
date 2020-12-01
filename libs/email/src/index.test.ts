@@ -2,11 +2,13 @@
 import { DateTime } from 'luxon';
 import { SendMail, SendDepositConfirmation } from '.'
 
-test("Can send an email", async () => {
+
+const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
+
+it("Can send an email", async () => {
 
 	// I don't want to spam myself, so only run this test if manually requested
-  let doThis = false;
-  if (!doThis)
+  if (!IsManualRun)
     return;
 
 	await SendMail("This is a test mail", "You should be seeing this!")
@@ -14,8 +16,7 @@ test("Can send an email", async () => {
 
 it('correctly sends confirmation', async () => {
 
-  let doThis = false;
-  if (!doThis)
+  if (!IsManualRun)
     return;
 
   const confirmation = await SendDepositConfirmation("stephen.taylor.dev@gmail.com", {
