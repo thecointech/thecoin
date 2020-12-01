@@ -17,6 +17,26 @@ import dropbox from "./images/dropbox.svg";
 import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
 
+
+const aboveTheTitle = { id:"site.Account.create.store.aboveTheTitle", 
+                        defaultMessage:"Save your account",
+                        description:"The above the main title title for the store your account page"};
+const title = { id:"site.Account.create.store.title", 
+                defaultMessage:"Ensure your safety",
+                description:"The main title for the store your account page"};
+const download = {  id:"site.Account.create.store.button.download",
+                    defaultMessage:"Download",
+                    description:"The button to download the account for the store your account page"};
+const explain = { id:"site.Account.create.store.secureExplain",
+                  defaultMessage:"To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.", 
+                  description:"The text underneath the button to explain what is the most secured for the store your account page"};
+const explainDownload = { id:"site.Account.create.store.explainDownload",
+                          defaultMessage:"Be sure you have access to your local files later.", 
+                          description:"The text underneath the button to explain that the client need to have access to this file for the store your account page"};
+const congratulation = {  id:"site.Account.create.store.button.congratulations", 
+                          defaultMessage:"Next Step",
+                          description:"The button to be redirected to the congratulations page for the store your account page"};
+
 export const Store = () => {
 
   const [feedback, setFeedback] = useState({} as MessageProps)
@@ -42,16 +62,11 @@ export const Store = () => {
   return (
     <Container className={styles.content}>
       <Header as="h5">
-          <FormattedMessage
-            id="site.Account.create.store.aboveTheTitle"
-            defaultMessage="Save your account"
-            description = "The above the main title title for the store your account page"/>
+          <FormattedMessage {...aboveTheTitle} />
       </Header>
       <Header as="h2">
-          <FormattedMessage
-            id="site.Account.create.store.title"
-            defaultMessage="Ensure your safety"
-            description = "The main title for the store your account page" />
+          <FormattedMessage {...title} />
+
       </Header>
       <MaybeMessage {...feedback} />
 
@@ -61,10 +76,7 @@ export const Store = () => {
               <img src={ manually } />
               <br />
               <a onClick={onDownloadClicked}>
-                <FormattedMessage
-                  id="site.Account.create.store.button.download"
-                  defaultMessage="Download"
-                  description = "The button to download the account for the store your account page" />
+                <FormattedMessage {...download} />
               </a>
           </Grid.Column>
           <Grid.Column centered>
@@ -86,25 +98,15 @@ export const Store = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-
-      <div className={styles.underneathTheChoices}>
-        <FormattedMessage
-          id="site.Account.create.store.secureExplain"
-          defaultMessage="To benefit from our guarantee of “the most secure account in the world”, you need to save it offline."
-          description = "The text underneath the button to explain what is the most secured for the store your account page" />
+      
+      <div className={ `x6spaceBefore x8spaceAfter` }>
+        <FormattedMessage {...explain} />
         <br />
-        <FormattedMessage
-          id="site.Account.create.store.download"
-          defaultMessage="Be sure you have access to your local files later."
-          description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
+        <FormattedMessage {...explainDownload} />
       </div>
 
       <Button as={Link} to="/congratulations" disabled={!backedUp} primary size="big">
-        <FormattedMessage
-                id="site.Account.create.store.button.congratulations"
-                defaultMessage="Next Step"
-                description = "The button to be redirected to the congratulations page for the store your account page"
-          />
+        <FormattedMessage {...congratulation} />
       </Button>
       <Decoration />
     </Container>

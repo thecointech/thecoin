@@ -54,9 +54,9 @@ export const FormCompare = () => {
             medRangeScale={medRangeScaleDurationValue}
             maxRangeScale={maxRangeScaleDurationValue}/>
 
-        <Button secondary className={styles.buttonContainer}>
-          <FormattedMessage id="site.compare.button"
-                            defaultMessage="Show Me"
+        <Button secondary className={ `${styles.buttonContainer} x16spaceBefore` }>
+          <FormattedMessage id="site.compare.button" 
+                            defaultMessage="Show Me" 
                             description="Button for the graph page" />
         </Button>
       </div>

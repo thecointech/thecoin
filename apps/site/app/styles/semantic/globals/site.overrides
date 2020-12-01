@@ -8,7 +8,6 @@ a{
     text-transform: uppercase;
     padding-bottom: 10px;
     border-bottom: 2px solid @linkUnderline;
-    line-height: 50px;
 }
 
 a:link {
@@ -66,3 +65,39 @@ div.container:nth-child(1){
 .ui.container.appContainer{
   margin: 0 !important;
 }
+
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: @h1Mobile;
+  }
+  h2, h2.ui.header {
+    font-size: @h2Mobile;
+  }
+}
+
+@selectors: range(1, 40, 1);
+@space: 5px;
+
+each(@selectors, {
+  .x@{value}spaceBefore {
+    margin-top: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceAfter {
+    margin-bottom: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceLeft {
+    margin-left: @value * @space !important;
+  }
+});
+
+each(@selectors, {
+  .x@{value}spaceRight {
+    margin-right: @value * @space !important;
+  }
+});

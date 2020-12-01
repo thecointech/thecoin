@@ -39,7 +39,7 @@ export const Subscribe = () => {
   }, [email]);
   return (
     <div className={styles.subscribeBlock}>
-      <span className={styles.subContainer}>
+      <span className={ `${styles.subContainer} x10spaceBefore x6spaceAfter` }>
           <h3>
             <FormattedMessage id="site.subscribe.description" 
                               defaultMessage="The future is better because of you & us. Subscribe to our newsletter:" 

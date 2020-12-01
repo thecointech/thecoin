@@ -13,17 +13,50 @@ import smallPlant from './images/photo_smallPlant.svg';
 import water from './images/photo_water.svg';
 import energy from './images/photo_energy.svg';
 
+
+const title = { id:"site.wedomore.title", 
+                defaultMessage:"We Do More",
+                description:"Title for the We Do More page"};
+const description = { id:"site.wedomore.description", 
+                      defaultMessage:"We do more than just offset CO2.  The projects we fund are the WWF’s gold standard, the highest global standard for maximum impact.",
+                      description:"Title for the We Do More page"};
+
+const treeTitle = { id:"site.wedomore.tree.title", 
+                    defaultMessage:"Re-forestation",
+                    description:"Title for the tree photo for the We Do More page"};
+const treeDescription = {  id:"site.wedomore.tree.description", 
+                            defaultMessage:"We help to restore the planet’s ecosystem",
+                            description:"Title for the tree photo for the We Do More page"};
+
+const smallPlantTitle = { id:"site.wedomore.smallPlant.title", 
+                          defaultMessage:"Better Farming",
+                          description:"Title for the smallPlant photo for the We Do More page"};
+const smallPlantDescription = {  id:"site.wedomore.smallPlant.description", 
+                                defaultMessage:"Prevent soil damage and erosion and improve peoples lives",
+                                description:"Title for the smallPlant photo for the We Do More page"};
+
+const waterTitle = { id:"site.wedomore.water.title", 
+                    defaultMessage:"Clean Water",
+                    description:"Title for the water photo for the We Do More page"};
+const waterDescription = {  id:"site.wedomore.water.description", 
+                            defaultMessage:"Safe drinking water without boiling protects people and forests",
+                            description:"Title for the water photo for the We Do More page"};
+
+const energyTitle = { id:"site.wedomore.energy.title", 
+                    defaultMessage:"Clean Energy",
+                    description:"Title for the energy photo for the We Do More page"};
+const energyDescription = {  id:"site.wedomore.energy.description", 
+                            defaultMessage:"We fund clean energy projects to replace dirty coal power",
+                            description:"Title for the energy photo for the We Do More page"};
+
 export function WeDoMoreGreaterThanMobile() {
   return (
       <div className={styles.wrapper} id={styles.wedomore}>
-        <Grid className={styles.content} columns='equal' textAlign='center' stackable>
+        <Grid className={ `x10spaceBefore`} columns='equal' textAlign='center' stackable>
           <Grid.Row>
             <Grid.Column>
                 <Header as="h2">
-                    <FormattedMessage
-                          id="site.wedomore.title"
-                          defaultMessage="We Do More"
-                          description="Main title for the We Do More page" />
+                    <FormattedMessage {...title} />
                 </Header>
               </Grid.Column>
             </Grid.Row>
@@ -32,27 +65,16 @@ export function WeDoMoreGreaterThanMobile() {
                   <img src={wwf} className={styles.illustration} />
               </Grid.Column>
               <Grid.Column textAlign='left'>
-                <FormattedMessage
-                      id="site.wedomore.description"
-                      defaultMessage="We do more than just offset CO2.  The projects we fund
-                      are the WWF’s gold standard, the highest global standard
-                      for maximum impact."
-                      description="Description underneath title for the We Do More page" />
+                <FormattedMessage {...description} />
               </Grid.Column>
               <Grid.Column></Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column textAlign='right' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
-                    <FormattedMessage
-                      id="site.wedomore.tree.title"
-                      defaultMessage="Re-forestation"
-                      description="Title for the tree photo for the We Do More page" />
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
+                    <FormattedMessage {...treeTitle} />
                   </Header>
-                  <FormattedMessage
-                      id="site.wedomore.tree.description"
-                      defaultMessage="We help to restore the planet’s ecosystem"
-                      description="Description for the tree photo for the We Do More page"  />
+                  <FormattedMessage {...treeDescription} />
               </Grid.Column>
               <Grid.Column textAlign='left' verticalAlign='middle'>
                 <img src={tree} className={styles.morephotos} />
@@ -63,30 +85,18 @@ export function WeDoMoreGreaterThanMobile() {
                 <img src={smallPlant} className={styles.morephotos} />
               </Grid.Column>
               <Grid.Column textAlign='left' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
-                    <FormattedMessage
-                      id="site.wedomore.smallPlant.title"
-                      defaultMessage="Better Farming"
-                      description="Title for the smallPlant photo for the We Do More page" />
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
+                    <FormattedMessage {...smallPlantTitle} />
                   </Header>
-                  <FormattedMessage
-                      id="site.wedomore.smallPlant.description"
-                      defaultMessage="Prevent soil damage and erosion and improve peoples lives"
-                      description="Description for the smallPlant photo for the We Do More page"  />
+                  <FormattedMessage {...smallPlantDescription}  />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column textAlign='right' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
-                    <FormattedMessage
-                      id="site.wedomore.water.title"
-                      defaultMessage="Clean Water"
-                      description="Title for the water photo for the We Do More page" />
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
+                    <FormattedMessage {...waterTitle} />
                   </Header>
-                  <FormattedMessage
-                      id="site.wedomore.water.description"
-                      defaultMessage="Safe drinking water without boiling protects people and forests"
-                      description="Description for the water photo for the We Do More page"  />
+                  <FormattedMessage {...waterDescription} />
               </Grid.Column>
               <Grid.Column textAlign='left'>
                 <img src={water} className={styles.morephotos} />
@@ -97,16 +107,10 @@ export function WeDoMoreGreaterThanMobile() {
                 <img src={energy} className={styles.morephotos} />
               </Grid.Column>
               <Grid.Column textAlign='left' verticalAlign='middle'>
-                <Header as="h4" className={styles.titlePhotos}>
-                    <FormattedMessage
-                      id="site.wedomore.energy.title"
-                      defaultMessage="Clean Energy"
-                      description="Title for the energy photo for the We Do More page" />
+                <Header as="h4" className={ `${styles.titlePhotos} x4spaceAfter`}>
+                    <FormattedMessage {...energyTitle} />
                   </Header>
-                  <FormattedMessage
-                      id="site.wedomore.energy.description"
-                      defaultMessage="We fund clean energy projects  to replace dirty coal power"
-                      description="Description for the energy photo for the We Do More page"  />
+                  <FormattedMessage {...energyDescription} />
               </Grid.Column>
             </Grid.Row>
         </Grid>
