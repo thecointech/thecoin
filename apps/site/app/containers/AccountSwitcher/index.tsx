@@ -33,7 +33,7 @@ export const AccountSwitcher = () => {
           <FormattedMessage id="site.AccountSwitcher.MyAccounts"
                           defaultMessage="My Accounts"
                           description="Title for the My Accounts title in the menu"
-                          values={{ what: 'react-intl' }}/>
+          />
         </Dropdown.Header>
         <ActiveAccount account={activeAccount} />
         {
@@ -57,7 +57,7 @@ export const AccountSwitcher = () => {
           <FormattedMessage id="site.AccountSwitcher.addAccount"
                           defaultMessage="Add an Account"
                           description="Title for the Add an Account in the menu"
-                          values={{ what: 'react-intl' }}/>
+          />
         </Dropdown.Item>
         
       </Dropdown.Menu>
@@ -77,19 +77,19 @@ const ActiveAccount = ({account}: ActiveProps) =>
               <FormattedMessage id="site.AccountSwitcher.see"
                           defaultMessage="See"
                           description="Title for the See in the menu"
-                          values={{ what: 'react-intl' }}/>
+               />
           </Dropdown.Item>
           <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" >
               <FormattedMessage id="site.AccountSwitcher.settings"
                           defaultMessage="Settings"
                           description="Title for the Settings in the menu"
-                          values={{ what: 'react-intl' }}/>
+              />
           </Dropdown.Item>
           <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" >
               <FormattedMessage id="site.AccountSwitcher.signout"
                           defaultMessage="Sign Out"
                           description="Title for the Sign Out in the menu"
-                          values={{ what: 'react-intl' }}/>
+              />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

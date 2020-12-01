@@ -99,11 +99,11 @@ export const Store = () => {
           description = "The text underneath the button to explain that the client need to have access to this file for the store your account page" />
       </div>
 
-      <Button as={Link} to="/accounts" disabled={!backedUp} primary size="big">
+      <Button as={Link} to="/congratulations" disabled={!backedUp} primary size="big">
         <FormattedMessage
-                id="site.Account.create.store.button.goToAccount"
-                defaultMessage="Go To Account"
-                description = "The button to be redirected to the account for the store your account page"
+                id="site.Account.create.store.button.congratulations"
+                defaultMessage="Next Step"
+                description = "The button to be redirected to the congratulations page for the store your account page"
           />
       </Button>
       <Decoration />

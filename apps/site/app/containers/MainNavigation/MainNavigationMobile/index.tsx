@@ -32,24 +32,24 @@ export class MainNavigationMobile extends React.Component {
                         <FormattedMessage id="site.MainNavigation.home"
                           defaultMessage="Home"
                           description="Title for the Home entry in the menu"
-                          values={{ what: 'react-intl' }}/></Dropdown.Item>
+                        /></Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/healthier'>
                         <FormattedMessage id="site.MainNavigation.indepth"
                           defaultMessage="In-depth"
                           description="Title for the In-depth entry in the menu"
-                          values={{ what: 'react-intl' }}/>
+                        />
                       </Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/wedomore'>
                         <FormattedMessage id="site.MainNavigation.wedomore"
                           defaultMessage="We do more"
                           description="Title for the We do more entry in the menu"
-                          values={{ what: 'react-intl' }}/>
+                        />
                       </Dropdown.Item>
                       <Dropdown.Item as={ NavLink } to='/compare'>
                         <FormattedMessage id="site.MainNavigation.yourbenefits"
                           defaultMessage="Your benefits"
                           description="Title for the Your benefits entry in the menu"
-                          values={{ what: 'react-intl' }}/>
+                        />
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

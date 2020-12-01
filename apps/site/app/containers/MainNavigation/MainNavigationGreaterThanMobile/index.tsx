@@ -25,25 +25,25 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                     <FormattedMessage id="site.MainNavigation.home"
                       defaultMessage="Home"
                       description="Title for the Home entry in the menu"
-                      values={{ what: 'react-intl' }}/>
+                    />
                   </HeaderLink>
                   <HeaderLink to="/healthier">
                     <FormattedMessage id="site.MainNavigation.indepth"
                       defaultMessage="In-depth"
                       description="Title for the In-depth entry in the menu"
-                      values={{ what: 'react-intl' }}/>
+                    />
                   </HeaderLink>
                   <HeaderLink to="/wedomore">
                     <FormattedMessage id="site.MainNavigation.wedomore"
                       defaultMessage="We do more"
                       description="Title for the We do more entry in the menu"
-                      values={{ what: 'react-intl' }}/>
+                    />
                   </HeaderLink>
                   <HeaderLink to="/compare">
                     <FormattedMessage id="site.MainNavigation.yourbenefits"
                       defaultMessage="Your benefits"
                       description="Title for the Your benefits entry in the menu"
-                      values={{ what: 'react-intl' }}/>
+                    />
                   </HeaderLink>
                   <Menu.Menu position='right'>
                     <Menu.Item>

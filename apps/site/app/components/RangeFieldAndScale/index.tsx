@@ -1,24 +1,33 @@
 import * as React from 'react';
 import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
-import { useIntl } from 'react-intl';
 import { useState } from 'react';
 import styles from './styles.module.less';
+import { FormattedNumber } from 'react-intl';
 
-export const StartingValueLine = () => {
 
-    const [starting, setStarting] = useState("0");
+export type Props = {
+ labelValue: string;
+ labelValueCurrency: string;
+ scaleType?: "decimal" | "percent" | "currency" | "unit" | undefined;
+ minRange: number;
+ maxRange: number;
+ stepRange: number;
+ minRangeScale: number;
+ medRangeScale: number;
+ maxRangeScale: number;
+}
+
+export const RangeFieldAndScale = (props: Props) => {
+
+    const [starting, setStarting] = useState(0);
 
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setStarting(data.value);
+      setStarting(parseInt(data.value));
     };
-
-    const intl = useIntl();
-    const labelStartingValue = intl.formatMessage({ id: 'site.compare.label.rangeStarting', defaultMessage:'Starting value:'});
-    const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CA$'});
 
     return (
       <>
-        <div className={styles.variablesLabelContainer}>{labelStartingValue}</div>
+        <div className={styles.variablesLabelContainer}>{props.labelValue}</div>
         <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
           <Grid.Row>
             <Grid.Column>
@@ -26,17 +35,17 @@ export const StartingValueLine = () => {
             <Grid.Column>
             </Grid.Column>
             <Grid.Column className={styles.variablesLabelValueContainer}>
-              {`${starting} `+labelStartingValueCurrency}
+              <FormattedNumber value={starting} localeMatcher="best fit" unitDisplay="narrow" style={props.scaleType} currency={ props.labelValueCurrency } />
             </Grid.Column>
           </Grid.Row>
         </Grid>
 
         <Form.Input id="rangeStarting"
-            min={1000}
-            max={100000}
+            min={props.minRange}
+            max={props.maxRange}
             name='starting'
             onChange={handleChange}
-            step={100}
+            step={props.stepRange}
             type='range'
             value={starting}
           />
@@ -44,13 +53,13 @@ export const StartingValueLine = () => {
             <Grid columns='equal' textAlign='center'>
               <Grid.Row>
                 <Grid.Column>
-                  1.000
+                  {props.minRangeScale}
                 </Grid.Column>
                 <Grid.Column>
-                  5.000
+                  {props.medRangeScale}
                 </Grid.Column>
                 <Grid.Column>
-                  100.000
+                  {props.maxRangeScale}
                 </Grid.Column>
               </Grid.Row>
             </Grid>
