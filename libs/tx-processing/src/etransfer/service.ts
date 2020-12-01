@@ -7,10 +7,9 @@ import { log } from "@the-coin/logging";
 import { RbcApi } from "@the-coin/rbcapi";
 import { ETransferPacket } from "@the-coin/types";
 
-export async function processUnsettledETransfers() : Promise<CertifiedTransferRecord[]> {
+export async function processUnsettledETransfers(api: RbcApi): Promise<CertifiedTransferRecord[]> {
 
   log.trace('Processing e-Transfer requests');
-  const api = new RbcApi();
   const toComplete = await fetchActionsToComplete();
   if (toComplete.length == 0)
     return [];
@@ -21,6 +20,9 @@ export async function processUnsettledETransfers() : Promise<CertifiedTransferRe
   for (let i = 0; i != toComplete.length; i++)
   {
     const record = toComplete[i];
+    if (record.fiatDisbursed == 0)
+      continue;
+
     const instruction = instructions[i] as ETransferPacket;
 
     // first, let's do the transfer
@@ -56,6 +58,7 @@ export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord
 
 export async function getInstructions(toComplete: CertifiedTransferRecord[])
 {
+  console.log("getInstructions");
   const privateKey = await getActionPrivateKey();
   if (!privateKey)
   {

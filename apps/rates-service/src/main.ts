@@ -14,7 +14,7 @@ const port = process.env.PORT ?? ServicePorts.THE_CORE;
 RegisterRoutes(app);
 
 (async () => {
-  await init("broker-cad");
+  await init({project: "broker-cad"});
   await initLatest();
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

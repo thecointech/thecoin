@@ -37,6 +37,7 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
     res.send(sp500string);
   });
 
+  // deepcode ignore NoRateLimitingForExpensiveWebOperation: not valid for devserver
   app.get('*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'index.html'), (err, file) => {
       if (err) {

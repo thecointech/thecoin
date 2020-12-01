@@ -2,6 +2,8 @@ import { RbcStore } from './store';
 import * as PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { send } from './etransfer';
+import { RbcApi } from '.';
+import credentials from './api.test.secret.json';
 
 
 beforeAll(() => {
@@ -19,6 +21,8 @@ afterAll(() => {
 test.skip("Can send e-Transfer", async () => {
   jest.setTimeout(500000);
   try {
+    RbcApi.SetCredentials(credentials);
+
     const browser = await initBrowser({
       headless: false
     })

@@ -28,6 +28,7 @@
     "copy:broker:api": "cpx \"apps/broker-service/Generated/controllers/*.*\" \"apps/broker-service/src/controllers\" && cpx \"apps/broker-service/Generated/api/*.*\" \"apps/broker-service/src/api",
     "start:site": "cd apps/site && yarn start",
     "start:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
+    "build": "lerna run build",
     "test": "lerna run test"
   },
   "dependencies": {
@@ -110,6 +111,7 @@
     "express": "4.17.1",
     "file-loader": "4.0.0",
     "firebase-tools": "^8.6.0",
+    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock",
     "husky": "3.0.0",
     "install": "^0.13.0",
     "jest": "24.9.0",

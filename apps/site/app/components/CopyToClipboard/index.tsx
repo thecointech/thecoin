@@ -12,7 +12,7 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
   const [className, setClassName] = useState(styles.ToastBox);
   const [timeout, setTimeoutCB] = useState(0);
 
-  const onClick = () => {
+  const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     Clipboard.copy(props.payload);
     setClassName(styles.ShowToastBox);
     if (timeout) {
@@ -22,7 +22,7 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
       setClassName(styles.ToastBox);
     }, 1500);
     setTimeoutCB(newTimeout);
-    return false;
+    event.stopPropagation();
   };
 
   return (

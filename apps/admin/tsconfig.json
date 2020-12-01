@@ -7,5 +7,6 @@
     "rootDir": "./app/",
     "baseUrl": "./app/"
   },
-  "include": ["./app/**/*"]
+  "include": ["./app/**/*"],
+  "references": [{ "path": "../../libs/shared/tsconfig.build.json" }]
 }

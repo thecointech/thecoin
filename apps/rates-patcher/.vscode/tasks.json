@@ -8,7 +8,9 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"problemMatcher": [],
+			"problemMatcher": [
+				"$tsc"
+			],
 			"label": "npm: build",
 			"detail": "yarn tsc"
 		}

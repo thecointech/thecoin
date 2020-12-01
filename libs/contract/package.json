@@ -17,7 +17,7 @@
   "scripts": {
     "build": "yarn build:contracts && yarn build:tsc",
     "build:contracts": "truffle compile --contracts_build_directory=./src/deployed && cpx \"zos.*\" ./src/deployed/",
-    "build:tsc": "yarn tsc",
+    "build:tsc": "yarn tsc --project tsconfig.build.json",
     "test:contract": "truffle test",
     "test": "yarn jest",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",

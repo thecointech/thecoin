@@ -1,5 +1,5 @@
 import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
-import { SendTemplate, TemplateId } from "../exchange/AutoMailer";
+import { SendWelcomeEmail } from "@the-coin/email";
 import { SubscriptionDetails } from "@the-coin/types";
 
 interface EmailSubscription extends SubscriptionDetails {
@@ -41,7 +41,7 @@ export async function isAlreadySubscribed(email: string) {
 }
 
 export function validateEmail(email: string) {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
@@ -49,7 +49,7 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
 {
   const { email } = details;
   // Check it email is OK
-  if (!validateEmail(String(email)))
+  if (!email || !validateEmail(email))
   {
     console.log("Invalid email submitted: " + email);
     return false;
@@ -70,17 +70,11 @@ export async function Signup(details: SubscriptionDetails, sendMail: boolean)
     registerDate: Timestamp.now()
   };
 
-  const userDoc = await SubDoc(String(email));
+  const userDoc = await SubDoc(email);
   await userDoc.set(register, {merge: true});
 
   return sendMail
-    ? await SendTemplate(
-      "newsletter@thecoin.io",
-      String(email),
-      TemplateId.WelcomeConfirm,
-      {
-        confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(userDoc.id)
-      })
+    ? await SendWelcomeEmail(email, userDoc)
     : true;
   }
 

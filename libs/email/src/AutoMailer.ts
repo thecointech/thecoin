@@ -1,13 +1,14 @@
-
-import { Mailjet } from './AutoMailer.secret.json';
+import { Email } from "node-mailjet";
 
 async function connect() {
+  const secret = process.env.TC_SENDGRID_API_KEY;
+  if (secret == null)
+    throw new Error('Cannot create MailJet without setting MAILJET_API_KEY')
   const mailjet = (await import('node-mailjet')).default;
-  return mailjet.connect("7ae2f3b83905fca0cb618a5027409495", Mailjet)
+  return mailjet.connect("7ae2f3b83905fca0cb618a5027409495", secret)
 }
 
 async function SendMail(subject: string, message: string) {
-
 	const options = {
 		Messages: [
 			{
@@ -25,28 +26,20 @@ async function SendMail(subject: string, message: string) {
 			},
 		],
   };
-  
+
   const mj = await connect();
 	const response = await mj.post('send', { version: 'v3.1' }).request(options);
-	
+
 	console.log(response.body);
 	// Render the index route on success
 	return response.body;
 }
 
-enum TemplateId {
-  WelcomeConfirm = 1029944
-}
-
-async function SendTemplate(from: string, to: string, template: TemplateId, variables: object)
+async function SendTemplate(to: string, template: number, variables: object)
 {
   const options = {
 		Messages: [
 			{
-				From: {
-					Email: from,
-					Name: 'The Coin',
-				},
 				To: [
 					{
 						Email: to,
@@ -58,18 +51,19 @@ async function SendTemplate(from: string, to: string, template: TemplateId, vari
 			},
 		],
   };
-  
+
   try {
     const mj = await connect();
     const response = await mj.post('send', { version: 'v3.1' }).request(options);
-    console.log(response.body);
+    const body = response.body as Email.PostResponseData;
+    return body.Messages.every(m => m.Status === 'success')
   }
   catch (e)
   {
+    // TODO: Proper logging here!
     console.error(e)
-    return false;
   }
-  return true;
+  return false;
 }
 
-export { SendMail, SendTemplate, TemplateId }
+export { SendMail, SendTemplate }

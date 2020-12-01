@@ -8,7 +8,6 @@
     "tsBuildInfoFile": "./build/.buildinfo",
 
     "allowSyntheticDefaultImports": true,
-
   },
   "include": ["./src/**/*", "./src/**/*.json", "types/global.d.ts"]
 }
