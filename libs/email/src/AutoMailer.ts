@@ -1,3 +1,4 @@
+import { Email } from "node-mailjet";
 
 async function connect() {
   const secret = process.env.TC_SENDGRID_API_KEY;
@@ -54,15 +55,14 @@ async function SendTemplate(to: string, template: number, variables: object)
   try {
     const mj = await connect();
     const response = await mj.post('send', { version: 'v3.1' }).request(options);
-    console.log(response.body);
-    return (response.body as any).Messages.every((m: any) => m.Status === 'success')
+    var body = response.body as Email.PostResponseData;
+    return body.Messages.every(m => m.Status === 'success')
   }
   catch (e)
   {
     console.error(e)
-    return false;
   }
-  return true;
+  return false;
 }
 
 export { SendMail, SendTemplate }

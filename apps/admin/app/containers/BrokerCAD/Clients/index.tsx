@@ -52,15 +52,15 @@ async function getUsers(contract: Contract|null, firestore: Firestore) : Promise
   if (!contract)
     return [];
 
-  var emails = await getUserEmails();
-  var qs = await firestore.collection("User").get();
+  const emails = await getUserEmails();
+  const qs = await firestore.collection("User").get();
 
-  var addresses = Array.from(new Set([
+  const addresses = Array.from(new Set([
     ...emails.map(u => NormalizeAddress(u.instruction.address)),
     ...qs.docs.map(c => NormalizeAddress(c.id)),
   ]));
 
-  var rawBalances = await Promise.all(addresses.map(id => getBalance(id, contract)));
+  const rawBalances = await Promise.all(addresses.map(id => getBalance(id, contract)));
   return addresses.map((id, i) => ({
     address: id,
     balance: rawBalances[i],
@@ -70,7 +70,7 @@ async function getUsers(contract: Contract|null, firestore: Firestore) : Promise
 
 async function getBalance(user: string, contract: Contract)
 {
-  var balance = await contract.balanceOf(user) as BigNumber;
+  const balance = await contract.balanceOf(user) as BigNumber;
   return balance.toNumber()
 }
 
