@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import HeaderLink from 'components/HeaderLink';
 

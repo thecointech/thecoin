@@ -21,6 +21,10 @@ import { ETransferModal } from './eTransferModal';
 interface MyProps {
   signer: TheSigner;
 }
+interface ActiveElement {
+  key: string;
+  active: string;
+}
 
 const initialState = {
   cadPurchase: null as number | null,
@@ -164,7 +168,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
                     </div>
                   </Accordion.Title>
                 ),
-                content: (_, { key, active }) => (
+                content: (_: string, { key, active }: ActiveElement) => (
                   <div key={key} className={styles.PaymentMethod}>
                     <AnimateHeight
                       animateOpacity
