@@ -10,7 +10,7 @@ export class MockNewsletterApi {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public async newsletterConfirm(_details: SubscriptionDetails, _options?: any)
+    async newsletterConfirm(_details: SubscriptionDetails, _options?: any)
     {
         await delay(250);
         return {
@@ -26,7 +26,7 @@ export class MockNewsletterApi {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public async newsletterDetails(_id: string, _options?: any){
+    async newsletterDetails(_id: string, _options?: any){
         await delay(250);
         return {
           success: true,
@@ -41,7 +41,7 @@ export class MockNewsletterApi {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public async newsletterSignup(_details: SubscriptionDetails, _options?: any){
+    async newsletterSignup(_details: SubscriptionDetails, _options?: any){
         await delay(550);
         //Redirect to confirm page normally send via email
         window.location.href = "http://localhost:3000/#/newsletter/confirm?id=PIyts3z2cwVSkAG";
@@ -57,10 +57,10 @@ export class MockNewsletterApi {
      * @throws {RequiredError}
      * @memberof NewsletterApi
      */
-    public async newsletterUnsubscribe(_id: string, _options?: any){
+    async newsletterUnsubscribe(_id: string, _options?: any){
         await delay(250);
         return {
           success: true
         };
     }
-} 
+}

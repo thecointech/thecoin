@@ -20,14 +20,14 @@ export type ArticleResult = {
   content: RenderableType[]|null;
   author: RenderableType[]|null;
 }
-export type FAQDocument = 
-  Omit<Document, "data"> & 
+export type FAQDocument =
+  Omit<Document, "data"> &
   {
     data: FAQResult
   }
 
-export type ArticleDocument = 
-  Omit<Document, "data"> & 
+export type ArticleDocument =
+  Omit<Document, "data"> &
   {
     data: ArticleResult
   }
@@ -39,5 +39,5 @@ export const initialState = {
 export type PrismicState = typeof initialState;
 
 export interface IActions {
-  fetchFaqs() : Iterator<any>;
+  fetchFaqs() : Iterator<void>;
 }

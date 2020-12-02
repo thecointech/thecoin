@@ -34,9 +34,9 @@ type State = Readonly<typeof initState>;
 
 export class Returns extends React.PureComponent<Props, State> {
 
-  public state = initState;
+  state = initState;
 
-  // public const handleValueChange = e => {
+  // const handleValueChange = e => {
   //   let value = parseInt(e.target.value);
   //   if (!value) {
   //     value = 0;
@@ -53,7 +53,7 @@ export class Returns extends React.PureComponent<Props, State> {
     }
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     const qs = this.props.location.search;
     const query = queryString.parse(qs);
     this.maybePullQuery(query, 'age');
@@ -67,7 +67,7 @@ export class Returns extends React.PureComponent<Props, State> {
     }, 5000) as any;
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     if (this.initialTimer) {
       clearTimeout(this.initialTimer);
     }
@@ -111,7 +111,7 @@ export class Returns extends React.PureComponent<Props, State> {
   private monthsToMinimum = (months: number) =>
     (months < 120) ? -0.5 : undefined
 
-  public sliderSettings = () => (
+  sliderSettings = () => (
     {
       start: this.state.sliderValue,
       min: 1,
@@ -173,7 +173,7 @@ export class Returns extends React.PureComponent<Props, State> {
             <Dropdown placeholder="Compare" fluid multiple selection options={options} />
           </Grid.Column>
           */
-  public render() {
+  render() {
     const {amount, rawData, age } = this.state;
     const months = this.sliderValueToMonths();
     const minimum = this.monthsToMinimum(months);

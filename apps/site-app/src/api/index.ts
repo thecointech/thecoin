@@ -4,13 +4,11 @@ import {
   ReferrersApi,
   TransferApi,
   SecureApi,
-  NewsletterApi,
   ETransferApi,
 } from '@the-coin/broker-cad';
 import { ServiceAddress, ServicePorts } from '@the-coin/utilities/ServiceAddresses';
 import { MockReferrersApi } from './mock/referrers';
 import { MockSecureApi } from './mock/secure';
-import { MockNewsletterApi } from './mock/newsletter';
 
 const BrokerCADAddress = ServiceAddress(ServicePorts.BROKER_PORT);
 
@@ -33,8 +31,3 @@ export const GetSecureApi = () =>
   NoDatabase
     ? new MockSecureApi()
     : new SecureApi(undefined, BrokerCADAddress);
-
-export const GetNewsletterApi = () =>
-  NoDatabase
-    ? new MockNewsletterApi()
-    : new NewsletterApi(undefined, BrokerCADAddress);

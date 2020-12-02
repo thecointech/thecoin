@@ -36,19 +36,19 @@ type StateType = Readonly<typeof initialState>;
 type Props = MyProps & FxRatesState;
 
 class PurchaseClass extends React.PureComponent<Props, StateType> {
-  public state = initialState;
+  state = initialState;
 
-  public onSubmit = () => {
+  onSubmit = () => {
     alert('NOT IMPLEMENTED');
   };
 
-  public onValueChange = (value: number) => {
+  onValueChange = (value: number) => {
     this.setState({
       cadPurchase: value,
     });
   };
 
-  public accordionClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, titleProps: AccordionTitleProps) => {
+  accordionClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, titleProps: AccordionTitleProps) => {
     const { index } = titleProps;
     const { activeAccordion } = this.state;
     const newIndex = activeAccordion === index
@@ -60,12 +60,12 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     this.setState({ activeAccordion: newIndex });
   };
 
-  public onCloseDlg = () => this.setState({ showDlg: false });
-  public onGenerateRecipient = () => {
+  onCloseDlg = () => this.setState({ showDlg: false });
+  onGenerateRecipient = () => {
     this.generateRecipient();
   };
 
-  public async generateRecipient() {
+  async generateRecipient() {
     this.setState({
       showDlg: true,
     });
@@ -85,7 +85,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     });
   }
 
-  public render() {
+  render() {
     const { rates } = this.props;
     const rate = weSellAt(rates);
 

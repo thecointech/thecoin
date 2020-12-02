@@ -5,7 +5,7 @@ import Thisismy from './Thisismy.wallet.json';
 import { AccountMap, initialState } from "@the-coin/shared/containers/AccountMap";
 
 
-let wallets = [
+const wallets = [
   {
     id: "123",
     name: "TestAccNoT First.wallet.json",
