@@ -164,7 +164,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
                     </div>
                   </Accordion.Title>
                 ),
-                content: (_, { key, active }) => (
+                content: (_: any, { key, active }: any) => (
                   <div key={key} className={styles.PaymentMethod}>
                     <AnimateHeight
                       animateOpacity
