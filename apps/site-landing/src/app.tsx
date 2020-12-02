@@ -26,7 +26,7 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider } from 'components/LanguageProvider';
+import { LanguageProvider, Messages } from '@the-coin/site-base/components/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -34,7 +34,6 @@ import 'file-loader?name=.htaccess!./.htaccess';
 
 import {configureAppStore} from '@the-coin/shared/configureStore';
 import createReducer from './reducers';
-import { Messages } from './components/LanguageProvider';
 
 // Import i18n messages
 import { translationMessages } from './i18n';

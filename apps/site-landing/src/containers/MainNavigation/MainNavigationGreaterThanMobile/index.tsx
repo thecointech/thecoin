@@ -3,7 +3,7 @@ import { Menu, Container, Button } from 'semantic-ui-react';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
-import HeaderLink from 'components/HeaderLink';
+import HeaderLink from '@the-coin/site-base/components/HeaderLink';
 
 import LanguageSwitcher from 'containers/LanguageSwitcher';
 

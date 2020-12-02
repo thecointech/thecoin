@@ -24,7 +24,7 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.less';
 
-import { MediaContextProvider, mediaStyles } from 'components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
 
 export const App = ( ) => {
   usePrismic();

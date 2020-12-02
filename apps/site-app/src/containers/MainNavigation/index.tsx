@@ -1,5 +1,5 @@
 import React from 'react';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 import {MainNavigationMobile} from './MainNavigationMobile';
 import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
 
@@ -10,10 +10,10 @@ class Navigation extends React.Component {
         <GreaterThanMobileSegment>
           <MainNavigationGreaterThanMobile />
         </GreaterThanMobileSegment>
-        
+
         <MobileSegment>
           <MainNavigationMobile />
-        </MobileSegment>  
+        </MobileSegment>
       </>
     );
   }

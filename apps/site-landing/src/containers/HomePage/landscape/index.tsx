@@ -15,12 +15,12 @@ import Sun from './images/sun.svg';
 import SunAura from './images/sunAura.svg';
 import landscapeGreenPart from './images/landscape.svg';
 import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
-const title = { id:"site.homepage.landscape.title", 
+const title = { id:"site.homepage.landscape.title",
                 defaultMessage:"The future is brighter",
                 description:"The title for the homepage"};
-const description = { id:"site.homepage.landscape.description", 
+const description = { id:"site.homepage.landscape.description",
                       defaultMessage:"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
                       description:"Description following the main title"};
 

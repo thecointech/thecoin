@@ -1,9 +1,9 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { ApplicationRootState } from 'SiteBaseStore';
+import { SiteBaseStore } from 'SiteBaseStore';
 import { Location } from 'history';
 
 
-export const selectRoute = (state: ApplicationRootState) => state.router;
+export const selectRoute = (state: SiteBaseStore) => state.router;
 
 export const makeSelectLocation = () =>
   createSelector(selectRoute, routeState => routeState.location);
@@ -13,7 +13,7 @@ interface LocationStoreState {
   location: Location;
 }
 
-export const mapLocationStateToProps = createStructuredSelector<ApplicationRootState, LocationStoreState>({
+export const mapLocationStateToProps = createStructuredSelector<SiteBaseStore, LocationStoreState>({
   // All the keys and values are type-safe
   location: makeSelectLocation()
 });

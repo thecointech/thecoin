@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, DropdownProps } from "semantic-ui-react";
-import { useLanguageProvider } from "components/LanguageProvider/reducer";
-import { selectLocale } from 'components/LanguageProvider/selector';
+import { useLanguageProvider } from "@the-coin/site-base/components/LanguageProvider/reducer";
+import { selectLocale } from '@the-coin/site-base/components/LanguageProvider/selector';
 import { useSelector } from "react-redux";
 
 const options = [
@@ -10,7 +10,7 @@ const options = [
 ];
 
 const LanguageSwitcher = () => {
-    
+
     const { locale } = useSelector(selectLocale);
     const langProvider = useLanguageProvider();
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
@@ -18,8 +18,8 @@ const LanguageSwitcher = () => {
     }
 
     return (
-        <Dropdown selection compact onChange={handleChange} value={locale} options={options} />            
+        <Dropdown selection compact onChange={handleChange} value={locale} options={options} />
     )
   }
-  
+
   export default LanguageSwitcher;

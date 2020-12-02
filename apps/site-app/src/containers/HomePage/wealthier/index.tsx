@@ -8,53 +8,53 @@ import startnow from './images/icon3_01.svg';
 import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
 
-const title = { id:"site.homepage.wealthier.title", 
+const title = { id:"site.homepage.wealthier.title",
                 defaultMessage:"You’re Wealthier",
                 description:"The title for the homepage wealthier"};
-const description = { id:"site.homepage.wealthier.description", 
+const description = { id:"site.homepage.wealthier.description",
                 defaultMessage:"Enjoy the benefits of investment growth on every dollar with our online spending account.",
                 description:"The description for the homepage wealthier"};
 
-const startnowTitle = { id:"site.homepage.wealthier.startnow.title", 
+const startnowTitle = { id:"site.homepage.wealthier.startnow.title",
                         defaultMessage:"Start Now",
                         description:"The title for the star now for the homepage wealthier"};
-const startnowDescription = { id:"site.homepage.wealthier.startnow.description", 
+const startnowDescription = { id:"site.homepage.wealthier.startnow.description",
                         defaultMessage:"The most important ingredient is time. You’re young - maximize your benefit!",
                         description:"The description for the star now for the homepage wealthier"};
-const startnowLink = { id:"site.homepage.wealthier.startnow.link", 
+const startnowLink = { id:"site.homepage.wealthier.startnow.link",
                         defaultMessage:"Learn Your Edge",
                         description:"The link for the star now for the homepage wealthier"};
 
-const investmentTitle = { id:"site.homepage.wealthier.investment.title", 
+const investmentTitle = { id:"site.homepage.wealthier.investment.title",
                           defaultMessage:"The Best Investment",
                           description:"The title for the investment for the homepage wealthier"};
-const investmentDescription = { id:"site.homepage.wealthier.investment.description", 
+const investmentDescription = { id:"site.homepage.wealthier.investment.description",
                                 defaultMessage:"Why settle? Our time-tested strategy has the best long-term results.",
                                 description:"The description for the investment for the homepage wealthier"};
-const investmentLink = {  id:"site.homepage.wealthier.investment.link", 
+const investmentLink = {  id:"site.homepage.wealthier.investment.link",
                           defaultMessage:"Compare Us",
                           description:"The link for the investment for the homepage wealthier"};
 
-const growthTitle = { id:"site.homepage.wealthier.growth.title", 
+const growthTitle = { id:"site.homepage.wealthier.growth.title",
                       defaultMessage:"Maximum Growth",
                       description:"The title for the growth for the homepage wealthier"};
-const growthDescription = { id:"site.homepage.wealthier.growth.description", 
+const growthDescription = { id:"site.homepage.wealthier.growth.description",
                             defaultMessage:"Add $250000 to your retirement - with no money down.",
                             description:"The description for the growth for the homepage wealthier"};
-const growthLink = {  id:"site.homepage.wealthier.growth.link", 
+const growthLink = {  id:"site.homepage.wealthier.growth.link",
                       defaultMessage:"How Anyone Can Get Rich Slow",
                       description:"The link for the growth for the homepage wealthier"};
 
-const profitsTitle = { id:"site.homepage.wealthier.profits.title", 
+const profitsTitle = { id:"site.homepage.wealthier.profits.title",
                           defaultMessage:"Keep Your Profits",
                           description:"The title for the profits for the homepage wealthier"};
-const profitsDescription = { id:"site.homepage.wealthier.profits.description", 
+const profitsDescription = { id:"site.homepage.wealthier.profits.description",
                                 defaultMessage:"Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
                                 description:"The description for the profits for the homepage wealthier"};
-const profitsLink = {  id:"site.homepage.wealthier.profits.link", 
+const profitsLink = {  id:"site.homepage.wealthier.profits.link",
                           defaultMessage:"Who Wins?",
                           description:"The link for the profits for the homepage wealthier"};
 

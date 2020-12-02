@@ -12,7 +12,7 @@ import illustrationDeco from './images/smallillustration_right.svg';
 
 
 import { Grid, Header } from 'semantic-ui-react';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
 
 const title = { id:"site.homepage.underwater.title",

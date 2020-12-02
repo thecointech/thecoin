@@ -7,7 +7,7 @@
 import { DEFAULT_LOCALE } from '../../i18n';
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer';
 import { ContentState, IActions } from './types';
-import { ApplicationRootState } from 'SiteBaseStore';
+import { SiteBaseStore } from 'SiteBaseStore';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux';
 export const initialState = {
   locale: DEFAULT_LOCALE,
 };
-const CONTENT_KEY : keyof ApplicationRootState = "language";
+const CONTENT_KEY : keyof SiteBaseStore = "language";
 export type ContainerState = Readonly<typeof initialState>;
 
 export class LanguageProviderReducer extends TheCoinReducer<ContentState>

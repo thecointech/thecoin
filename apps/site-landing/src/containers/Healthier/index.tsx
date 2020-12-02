@@ -3,7 +3,7 @@ import * as React from 'react';
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 import { HealthierMobile } from './HealthierMobile';
 import { HealthierGreaterThanMobile } from './HealthierGreaterThanMobile/index';
-import { GreaterThanMobileSegment, MobileSegment } from 'components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
 import styles from './styles.module.less';
 

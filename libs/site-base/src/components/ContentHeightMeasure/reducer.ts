@@ -1,12 +1,12 @@
 
 import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
 import { ContentState, IActions } from './types';
-import { ApplicationRootState } from 'SiteBaseStore';
+import { SiteBaseStore } from 'SiteBaseStore';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const CONTENT_KEY : keyof ApplicationRootState = "content";
+const CONTENT_KEY : keyof SiteBaseStore = "content";
 
 // The initial state of the App
 export const initialState: ContentState = {

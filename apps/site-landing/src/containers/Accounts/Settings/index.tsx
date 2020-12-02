@@ -3,7 +3,7 @@ import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { Download } from './download';
 import { Container, Divider, Header } from "semantic-ui-react"
 import { isWallet } from '@the-coin/shared/SignerIdent';
-import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage"
+import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage"
 import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google';
 
 interface MyProps {
@@ -12,7 +12,7 @@ interface MyProps {
 
 export function Settings({account}: MyProps) {
   const isLocal = isWallet(account.signer);
-  
+
   const [feedback, setFeedback] = useState({} as MessageProps)
   const onStateChange = useCallback((_state: UploadState, message: MessageProps) => {
     setFeedback(message);
