@@ -28,7 +28,7 @@ module.exports = options => ({
     rules: [
       {
         test: /\.ts(x?)$/,
-        include: path.join(projectRoot, "app"),
+        include: path.join(projectRoot, "src"),
         use: options.tsLoaders,
       },
       {
@@ -180,14 +180,14 @@ module.exports = options => ({
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
   resolve: {
-    modules: ['node_modules', 'app'],
+    modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
     plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
     alias: {
       '../../theme.config$': path.resolve(
         projectRoot,
-        'app/styles/semantic/theme.config',
+        'src/styles/semantic/theme.config',
       ),
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",

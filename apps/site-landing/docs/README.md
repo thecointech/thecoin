@@ -51,7 +51,7 @@
 
     - Add a Github username to see Redux and Redux Sagas in action: effortless
       async state updates and side effects are now yours :)
-    - Edit the file at `./app/components/Header/index.js` so that the text of
+    - Edit the file at `./src/components/Header/index.js` so that the text of
       the `<Button>` component reads "Features!!!"... [Hot Module Reloading](https://webpack.js.org/guides/hot-module-replacement/) gives
       you a feedback loop with your UI so smooth it's almost conversational!
     - Click your (newly emphatic) Features button to see React Router in action...
@@ -80,7 +80,7 @@ Run `npm start` to see your app at `localhost:3000`
 
 ### Structure
 
-The [`app/`](../../../tree/master/app) directory contains your entire application code, including CSS,
+The [`src/`](../../../tree/master/src) directory contains your entire application code, including CSS,
 JavaScript, HTML and tests.
 
 The rest of the folders and files only exist to make your life easier, and

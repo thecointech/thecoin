@@ -50,7 +50,7 @@ In any case, here's the TL;DR:
 - Configuration, generators and templates are in the `internals` folder.
 - The `server` folder contains development and production server configuration files.
 
-### `app/`
+### `src/`
 
 We use the [container/component architecture](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.4rmjqneiw). `containers/` contains React components which are connected to the redux store. `components/` contains dumb React components which depend on containers for data. **Container components care about how things work, while components care about how things look.**
 
@@ -82,7 +82,7 @@ You can launch the example app by running `npm start`. To fully understand its i
 
 ### How does the application boot up?
 
-Like any other webpage your app starts with the [`app/index.html`](https://github.com/react-boilerplate/react-boilerplate/blob/master/app/index.html) file. React will render your application into `div#app` .
+Like any other webpage your app starts with the [`src/index.html`](https://github.com/react-boilerplate/react-boilerplate/blob/master/src/index.html) file. React will render your application into `div#app` .
 
 But how do we include all of your react components into a single HTML file? That's where webpack comes into the picture. webpack will literally pack your application into small javascript files. These files will be injected into the `index.html` as `<script>` tags.
 

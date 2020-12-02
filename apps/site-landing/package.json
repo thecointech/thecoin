@@ -22,7 +22,7 @@
     "prebuild": "yarn build:clean",
     "build": "yarn cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:less": "yarn lessc --include-paths=",
-    "build:copy": "cpx \"./app/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./app/.htaccess\" ./build",
+    "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./src/.htaccess\" ./build",
     "build:clean": "rimraf ./build",
     "dev": "yarn cross-env NODE_ENV=development node server",
     "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
@@ -31,7 +31,7 @@
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",
-    "lint:css": "stylelint './app/**/*.{js,ts}'",
+    "lint:css": "stylelint './src/**/*.{js,ts}'",
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
@@ -41,9 +41,9 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract",
-    "extract-intl": "yarn extract 'app/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "extract-intl": "yarn extract 'src/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "formatjs compile",
-    "format-intl": "yarn compile lang/en.json --out-file app/translations/en.json --format ./internals/scripts/format-intl.js"
+    "format-intl": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

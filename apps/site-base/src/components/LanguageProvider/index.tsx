@@ -3,7 +3,7 @@
  * LanguageProvider
  *
  * this component connects the redux state language locale to the
- * IntlProvider component and i18n messages (loaded from `app/translations`)
+ * IntlProvider component and i18n messages (loaded from `src/translations`)
  */
 
 import React from 'react';
@@ -22,7 +22,7 @@ export interface Props {
 
 export function LanguageProvider(props : Props) {
   const { locale } = useSelector(selectLocale);
-  
+
   return (
     <IntlProvider
       locale={locale}

@@ -15,38 +15,38 @@ process.stdout.write('Cleanup started...');
 
 // Reuse existing LanguageProvider and i18n tests
 shell.mv(
-  'app/containers/LanguageProvider/tests',
+  'src/containers/LanguageProvider/tests',
   'internals/templates/containers/LanguageProvider',
 );
-shell.cp('app/tests/i18n.test.js', 'internals/templates/tests/i18n.test.js');
+shell.cp('src/tests/i18n.test.js', 'internals/templates/tests/i18n.test.js');
 
 // Cleanup components/
-shell.rm('-rf', 'app/components/*');
+shell.rm('-rf', 'src/components/*');
 
 // Handle containers/
-shell.rm('-rf', 'app/containers');
+shell.rm('-rf', 'src/containers');
 shell.mv('internals/templates/containers', 'app');
 
 // Handle tests/
 shell.mv('internals/templates/tests', 'app');
 
 // Handle translations/
-shell.rm('-rf', 'app/translations');
+shell.rm('-rf', 'src/translations');
 shell.mv('internals/templates/translations', 'app');
 
 // Handle utils/
-shell.rm('-rf', 'app/utils');
+shell.rm('-rf', 'src/utils');
 shell.mv('internals/templates/utils', 'app');
 
-// Replace the files in the root app/ folder
-shell.cp('internals/templates/app.tsx', 'app/app.tsx');
-shell.cp('internals/templates/global-styles.ts', 'app/global-styles.ts');
-shell.cp('internals/templates/i18n.ts', 'app/i18n.ts');
-shell.cp('internals/templates/index.html', 'app/index.html');
-shell.cp('internals/templates/reducers.ts', 'app/reducers.ts');
-shell.cp('internals/templates/configureStore.ts', 'app/configureStore.ts');
+// Replace the files in the root src/ folder
+shell.cp('internals/templates/app.tsx', 'src/app.tsx');
+shell.cp('internals/templates/global-styles.ts', 'src/global-styles.ts');
+shell.cp('internals/templates/i18n.ts', 'src/i18n.ts');
+shell.cp('internals/templates/index.html', 'src/index.html');
+shell.cp('internals/templates/reducers.ts', 'src/reducers.ts');
+shell.cp('internals/templates/configureStore.ts', 'src/configureStore.ts');
 
-shell.cp('internals/templates/types/index.d.ts', 'app/types/index.d.ts');
+shell.cp('internals/templates/types/index.d.ts', 'src/types/index.d.ts');
 
 // Remove the templates folder
 shell.rm('-rf', 'internals/templates');

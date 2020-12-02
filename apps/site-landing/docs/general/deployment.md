@@ -59,7 +59,7 @@ _Step 1:_ Configure webpack to inject necessary environment variables into the a
 
 _Step 2:_ add `basename` to the history
 
-- Changes below are made to `app/utils/history.js` file.
+- Changes below are made to `src/utils/history.js` file.
 
 ```diff
 - const history = createHistory();

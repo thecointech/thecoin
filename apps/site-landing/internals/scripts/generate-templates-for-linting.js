@@ -103,7 +103,7 @@ function reportErrors(reason) {
 function runLintingOnDirectory(relativePath) {
   return new Promise((resolve, reject) => {
     shell.exec(
-      `npm run lint:eslint "app/${relativePath}/**/**.js"`,
+      `npm run lint:eslint "src/${relativePath}/**/**.js"`,
       {
         silent: true,
       },
@@ -146,7 +146,7 @@ function runLintingOnFile(filePath) {
 function removeDir(relativePath) {
   return new Promise((resolve, reject) => {
     try {
-      rimraf(path.join(__dirname, '/../../app/', relativePath), err => {
+      rimraf(path.join(__dirname, '/../../src/', relativePath), err => {
         if (err) throw err;
       });
       resolve(relativePath);
