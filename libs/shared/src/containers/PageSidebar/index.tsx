@@ -3,7 +3,7 @@ import { Sidebar, Menu, MenuItem, Segment, Divider } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
-import styles from "./styles.module.css";
+import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
@@ -88,7 +88,7 @@ const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
 
 const buildSubMenuArray = (item: SidebarMenuItem) => {
   const { subItems } = item;
-  return subItems 
+  return subItems
     ? <Menu.Menu>{buildMenuArray(subItems)}</Menu.Menu>
     : undefined;
 }

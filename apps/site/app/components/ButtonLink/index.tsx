@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, ButtonProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 interface ButtonLinkProps extends ButtonProps {
   to: string;

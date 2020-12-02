@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { isWeb3Enabled } from '@the-coin/shared/utils/detection';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
 
 type Props = {

@@ -6,7 +6,7 @@ import { Wallet } from "ethers";
 import { NormalizeAddress } from "@the-coin/utilities";
 import { Dictionary } from "lodash";
 import { useHistory } from "react-router";
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 type Props = {
   wallets: GoogleWalletItem[],

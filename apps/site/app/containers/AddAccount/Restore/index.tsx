@@ -12,34 +12,34 @@ import google from "./images/google.svg";
 import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 
-const aboveTheTitle = { id:"site.account.restore.aboveTheTitle", 
+const aboveTheTitle = { id:"site.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
                         description:"The above the title text for the restore account page"};
-const title = { id:"site.account.restore.title", 
+const title = { id:"site.account.restore.title",
                 defaultMessage:"Welcome back to TheCoin!",
                 description:"The main title for the restore account page"};
-const manualy = { id:"site.account.restore.manualy", 
+const manualy = { id:"site.account.restore.manualy",
                   defaultMessage:"Upload manualy",
                   description:"Locale link for the restore your account page"};
-const microsoftLink = { id:"site.account.restore.microsoft", 
+const microsoftLink = { id:"site.account.restore.microsoft",
                         defaultMessage:"Restore from  Microsoft OneDrive",
                         description:"Microsoft link for the restore your account page"};
-const dropboxLink = { id:"site.account.restore.dropbox", 
+const dropboxLink = { id:"site.account.restore.dropbox",
                       defaultMessage:"Restore from Dropbox",
                       description:"Dropbox link for the restore your account page"};
-const otherEthereum = { id:"site.account.restore.otherEthereum.explanation", 
+const otherEthereum = { id:"site.account.restore.otherEthereum.explanation",
                         defaultMessage:"Also you can log into your account using an existing Ethereum account.",
                         description:"The link to redirect to use your existing ethereum for the restore your account page"};
-const restoreHelp = { id:"site.account.restore.help", 
-                      defaultMessage:"If you have any problems with restoring your account, contact us for help.", 
+const restoreHelp = { id:"site.account.restore.help",
+                      defaultMessage:"If you have any problems with restoring your account, contact us for help.",
                       description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const explanation = { id:"site.account.restore.createAccount.explanation", 
+const explanation = { id:"site.account.restore.createAccount.explanation",
                       defaultMessage:"Don’t have an account?",
-                      description:"The text before the button to redirect to the create an account page for the restore your account page"};                 
+                      description:"The text before the button to redirect to the create an account page for the restore your account page"};
 const buttonCreateAccount = { id:"site.account.restore.button.createAccount",
                               defaultMessage:"Create Account",
                               description:"The button to redirect to the create an account page for the restore your account page"};
@@ -83,7 +83,7 @@ export const Restore = () => {
     || state === UploadState.Uploading;
   const disabled = state === UploadState.Invalid
     || state === UploadState.Complete;
-                    
+
   return (
     <div className={styles.content}>
       <Header as="h5">
@@ -123,7 +123,7 @@ export const Restore = () => {
       <div className={ `x8spaceBefore` }>
         <b>
         <FormattedMessage {...otherEthereum} />
-        </b> 
+        </b>
       </div>
       <div className={ `x4spaceBefore x8spaceBefore` }>
         <FormattedMessage {...restoreHelp} />
@@ -237,7 +237,7 @@ async function fetchStoredWallets(token: string) {
 //     const gauth = await secureApi.googleAuthUrl();
 //     if (gauth?.data?.url) {
 //       setUrl(gauth.data.url);
-//     } 
+//     }
 //     else {
 //       throw new Error('Oh No, wtf: ' + JSON.stringify(gauth));
 //     }

@@ -20,7 +20,7 @@ import { BillPayeePacket } from '@the-coin/types';
 import { GetStatusApi, GetBillPaymentsApi } from 'api';
 import { UxInput } from '@the-coin/shared/components/UxInput';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
 import messages from './messages';
 

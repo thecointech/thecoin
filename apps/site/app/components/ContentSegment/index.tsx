@@ -4,7 +4,7 @@ import * as React from 'react';
 // import ContentHeightAnimate from 'components/ContentHeightAnimate';
 // import { Location } from 'history';
 
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 
 export const ContentSegment: React.FunctionComponent = (props) => (
   <div className={styles.contentSegment}>
