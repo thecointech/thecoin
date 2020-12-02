@@ -18,7 +18,7 @@
   "scripts": {
     "prebuild": "yarn build:clean",
     "build": "yarn tsc -b -v tsconfig.build.json && yarn build:copy",
-    "build:copy": "cpx \"./src/**/*.module.less\" ./build/ && cpx \"./src/**/*.svg\" ./build/",
+    "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build",
     "build:clean": "rimraf ./build",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
     "lint": "yarn lint:src && yarn lint:css",

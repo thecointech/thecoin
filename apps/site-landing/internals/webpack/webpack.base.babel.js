@@ -192,6 +192,7 @@ module.exports = options => ({
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",
       "@the-coin/shared": "@the-coin/shared/build",
+      "@the-coin/site-base": "@the-coin/site-base/build",
     },
   },
   devtool: options.devtool,
