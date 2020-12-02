@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/*.test.tsx?", "**/__mocks__/**", "**/tests/"],
+  "references": [{ "path": "../../libs/shared/tsconfig.build.json" }]
+}

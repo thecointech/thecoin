@@ -1,0 +1,27 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+
+.ui.vertical.menu > .active.item:first-child {
+    font-size: 1.1rem;
+}
+
+.ui.vertical.menu .menu .item {
+  background: none;
+  padding: 1.3rem 2rem;
+  font-size: 1.1rem;
+  color: rgb(22, 68, 172);
+}
+
+.ui.vertical.menu .menu .item:hover {
+
+}
+
+.ui.vertical.ui.push.left.visible.sidebar{
+    font-size: 1.1rem;
+}
+.ui.vertical.ui.push.left.visible.sidebar a:hover{
+      background: #3193A1;
+  color:white;
+}

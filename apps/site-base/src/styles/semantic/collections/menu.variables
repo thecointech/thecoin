@@ -1,0 +1,16 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@itemTextColor: @primaryColor;
+
+@hoverItemBackground: transparent;
+@hoverItemTextColor: inherit;
+
+@activeItemBackground: transparent;
+@activeItemTextColor: inherit;
+@activeItemFontWeight: inherit;
+
+/* Active Hovered Item */
+@activeHoverItemBackground: @activeItemBackground;
+@activeHoverItemColor: @activeItemTextColor;
