@@ -15,7 +15,7 @@ const classStyles = {
   exitActive: styles.fadeExitActive,
 };
 
-class ContentFader extends React.PureComponent<Props, {}, null> {
+export class ContentFader extends React.PureComponent<Props, {}, null> {
   render() {
     const { location } = this.props;
 
@@ -32,5 +32,3 @@ class ContentFader extends React.PureComponent<Props, {}, null> {
     );
   }
 }
-
-export default ContentFader;

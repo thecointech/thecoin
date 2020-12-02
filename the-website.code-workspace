@@ -5,12 +5,12 @@
       "path": "apps\\site-landing"
     },
     {
-      "name": "site-base",
-      "path": "apps\\site-base"
-    },
-    {
       "name": "site-app",
       "path": "apps\\site-app"
+    },
+    {
+      "name": "site-base",
+      "path": "libs\\site-base"
     },
     {
       "name": "shared",
