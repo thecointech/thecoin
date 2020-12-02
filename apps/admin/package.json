@@ -121,7 +121,6 @@
     "jest": "*",
     "mini-css-extract-plugin": "^0.7.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "react-test-renderer": "^16.8.6",
     "realpath": "^1.1.0",
     "spectron": "^5.0.0"
   },

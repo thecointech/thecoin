@@ -1,6 +1,6 @@
 {
-  "name": "@the-coin/site",
-  "productName": "THECoin: Website",
+  "name": "@the-coin/site-landing",
+  "productName": "THECoin: Website - Landing",
   "private": true,
   "workspaces": {
     "nohoist": [

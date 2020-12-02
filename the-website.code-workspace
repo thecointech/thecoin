@@ -1,13 +1,20 @@
 {
 	"folders": [
     {
-      "path": "apps/site"
+      "name": "site-landing",
+      "path": "apps\\site-landing"
     },
     {
-      "path": "libs/shared"
+      "name": "site-base",
+      "path": "apps\\site-base"
     },
     {
-      "path": "libs/utils-ts"
+      "name": "shared",
+      "path": "libs\\shared"
+    },
+    {
+      "name": "utils-ts",
+      "path": "libs\\utils-ts"
     }
   ],
   "settings": {
