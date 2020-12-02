@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@the-coin/shared/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { Props as MessageProps } from 'components/MaybeMessage';
+import { Props as MessageProps } from '@the-coin/site-base/components/MaybeMessage';
 
 
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
@@ -32,12 +32,12 @@ export const StoreGoogle = (props: MyProps) => {
   ////////////////////////////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
   useEffect(() => {
-    
+
     if (!wallet) {
       setState(UploadState.Invalid);
       onStateChange && onStateChange(
         UploadState.Invalid,
-        { 
+        {
           header: messages.messageErrorRemoteHeader,
           content: messages.messageErrorRemoteMessage,
           negative: true,
@@ -138,7 +138,7 @@ async function completeStore(token: string, address: string) {
   return false;
 }
 
-function fetchAndVerifyWallet(address: string) { 
+function fetchAndVerifyWallet(address: string) {
   const account = getStoredAccountData(address);
   if (account == null) {
     alert("Could not find local account - if you are seeing this, contact support@thecoin.io");

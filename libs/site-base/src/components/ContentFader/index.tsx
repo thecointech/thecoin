@@ -4,7 +4,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { TransitionDuration } from 'styles/constants';
 import styles from './styles.module.less';
 
-interface OwnProps {
+type OwnProps = {
   location: Location;
 }
 type Props = OwnProps;

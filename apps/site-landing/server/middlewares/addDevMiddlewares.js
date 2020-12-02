@@ -15,7 +15,7 @@ function createWebpackMiddleware(compiler, publicPath) {
 
 console.log(__dirname);
 
-const csvpath = path.resolve(__dirname, '..', '..', 'app', 'sp500_monthly.csv');
+const csvpath = path.resolve(__dirname, '..', '..', 'src', 'sp500_monthly.csv');
 const sp500buffer = fsSystem.readFileSync(csvpath);
 const sp500string = sp500buffer.toString();
 

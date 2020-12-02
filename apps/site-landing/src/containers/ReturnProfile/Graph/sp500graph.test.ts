@@ -5,7 +5,7 @@ const readfile = util.promisify(fs.readFile);
 
 // CWD == c:\src\TheCoin\site
 async function getData() {
-  const buffer = await readfile('.\\app\\sp500_monthly.csv');
+  const buffer = await readfile('.\\src\\sp500_monthly.csv');
   return parseData(buffer.toString().slice(1));
 }
 

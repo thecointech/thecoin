@@ -1,4 +1,4 @@
-import { SiteBaseStore } from 'SiteBaseStore';
+import { SiteBaseStore } from '../../SiteBaseStore';
 import { initialState } from './reducer';
 
 /**

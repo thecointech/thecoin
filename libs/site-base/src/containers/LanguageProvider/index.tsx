@@ -10,13 +10,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { selectLocale } from './selector';
+import { Languages } from './types';
 
-export type Messages = {
-  [locale: string]: { [id: string]: string };
-}
+export * from './types';
 
 export interface Props {
-  messages: Messages;
+  languages: Languages;
   children?: React.ReactNode;
 }
 
@@ -27,7 +26,7 @@ export function LanguageProvider(props : Props) {
     <IntlProvider
       locale={locale}
       key={locale}
-      messages={props.messages[locale]}
+      messages={props.languages[locale]}
     >
       {React.Children.only(props.children)}
     </IntlProvider>

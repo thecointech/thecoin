@@ -26,7 +26,7 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Messages } from '@the-coin/site-base/components/LanguageProvider';
+import { LanguageProvider, Languages } from '@the-coin/site-base/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -36,8 +36,7 @@ import {configureAppStore} from '@the-coin/shared/configureStore';
 import createReducer from './reducers';
 
 // Import i18n messages
-import { translationMessages } from './i18n';
-
+import { translations } from './translations';
 import { initTracking } from './utils/reactga';
 
 initTracking();
@@ -60,11 +59,11 @@ initTracking();
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
-const render = (messages: Messages, Component = App) => {
+const render = (languages: Languages, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
+      <LanguageProvider languages={languages}>
         <ConnectedRouter history={history}>
           <Component />
         </ConnectedRouter>
@@ -77,15 +76,15 @@ const render = (messages: Messages, Component = App) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const module: any;
 if (module.hot) {
-  module.hot.accept(['./i18n', './containers/App'], () => {
+  module.hot.accept(['./containers/App'], () => {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     // tslint:disable-next-line:max-line-length
     const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translationMessages, refresh);
+    render(translations, refresh);
   });
 }
 
-render(translationMessages);
+render(translations);
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
