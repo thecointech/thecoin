@@ -9,6 +9,10 @@
       "path": "apps\\site-base"
     },
     {
+      "name": "site-app",
+      "path": "apps\\site-app"
+    },
+    {
       "name": "shared",
       "path": "libs\\shared"
     },
@@ -24,6 +28,12 @@
       "typescript-plugin-css-modules"
     ],
     "jest.pathToJest": "${workspaceFolder}/../../node_modules/.bin/jest",
-    "jest.debugMode": true
+    "jest.debugMode": true,
+    "files.exclude": {
+      ".firebase/": true,
+      ".vscode/": true,
+      "build/": true,
+      "node_modules/": true
+    }
   }
 }

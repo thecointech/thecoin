@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should render and match the snapshot 1`] = `
+<React.Fragment>
+  <injectIntl(Component) />
+  <Navigation />
+  <Container
+    style={
+      Object {
+        "backgroundColor": "#fffff f",
+        "width": "100%",
+      }
+    }
+  >
+    <Unknown>
+      <MainPageTransition>
+        <section>
+          <MainRouter />
+        </section>
+      </MainPageTransition>
+    </Unknown>
+  </Container>
+  <Unknown />
+</React.Fragment>
+`;

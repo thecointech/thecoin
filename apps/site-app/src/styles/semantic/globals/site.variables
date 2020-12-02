@@ -1,0 +1,61 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+/*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : @white;
+@maxContentWidth: 1440px;
+
+/*-------------------
+       Fonts
+--------------------*/
+
+@fontName2         : 'Abril Fatface';
+@fontName          : 'Montserrat';
+
+@headerFont        : @fontName2, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor        : #F18182;
+@secondaryColor      : #20B58D;
+
+/*--------------
+  Page Heading
+---------------*/
+
+@headerFontWeight : @bold;
+@headerLineHeight : unit((18 / 14), em);
+
+@h1 : unit((80 / 14), rem);
+@h1Mobile : unit((70 / 14), rem);
+@h2 : unit((64 / 14), rem);
+@h2Mobile : unit((54 / 14), rem);
+@h3 : unit((40 / 14), rem);
+@h4 : unit((28 / 14), rem);
+@h5 : unit((14 / 14), rem);
+
+
+/*-------------------
+       Links
+--------------------*/
+
+@linkColor           : #61C1B8;
+@linkUnderline       : @primaryColor;
+@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverUnderline  : @linkUnderline;
+
+
+/*-------------------
+     Transitions
+--------------------*/
+
+@defaultDuration : 0.1s;
+@defaultEasing   : ease;
