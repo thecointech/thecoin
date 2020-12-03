@@ -4,13 +4,12 @@
   "version": "2.0.0",
   "description": "A Desktop application to run back-end functionality for THECoin",
   "scripts": {
-    "build": "concurrently \"yarn run build-main\" \"yarn run build-renderer\"",
+    "build": "yarn concurrently \"yarn run build-main\" \"yarn run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
     "build-e2e": "cross-env E2E_BUILD=true yarn run build",
     "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn run start-renderer-dev",
-    "dev-deposit": "yarn build && node ./build/admin/autodeposit/",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-fix": "yarn run --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
@@ -122,11 +121,11 @@
     "jest": "*",
     "mini-css-extract-plugin": "^0.7.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "react-test-renderer": "^16.8.6",
     "realpath": "^1.1.0",
     "spectron": "^5.0.0"
   },
   "dependencies": {
+    "@hot-loader/react-dom": "^16.9.0",
     "@the-coin/shared": "*",
     "@the-coin/tx-processing": "*",
     "@the-coin/store": "*",

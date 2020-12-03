@@ -6,12 +6,13 @@
     "configurations": [
         {
             "type": "node",
+            "preLaunchTask": "npm: build",
             "request": "launch",
             "name": "Launch Program",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\build\\rates-patcher\\index.js",
+            "program": "${workspaceFolder}/build/index.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

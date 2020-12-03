@@ -5,3 +5,5 @@ declare namespace NodeJS {
     }
   }
 }
+
+declare module 'firestore-jest-mock';

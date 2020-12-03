@@ -6,6 +6,5 @@
     "rootDir": "./src/",
     "target": "es2018"
   },
-  "include": ["src/**/*"],
-  "references": [{ "path": "../utils-ts/" }]
+  "include": ["src/**/*"]
 }

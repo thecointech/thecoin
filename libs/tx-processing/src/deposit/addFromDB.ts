@@ -45,11 +45,7 @@ async function fetchDBRecords(deposits: Dictionary<DepositData[]>) {
     const allBuys = await user.collection("Buy").get();
     const dbRecords = allBuys.docs
       .map(d => d.data() as DepositRecord)
-      .sort((a, b) =>
-        a.recievedTimestamp < b.recievedTimestamp
-          ? -1
-          : 1
-      )
+      .sort((a, b) => a.recievedTimestamp.toMillis() - b.recievedTimestamp.toMillis());
     db[address] = dbRecords;
   }
   return db;

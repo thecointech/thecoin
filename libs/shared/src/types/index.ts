@@ -5,6 +5,7 @@ import { FxRatesState } from '../containers/FxRate/types';
 import { Saga, Task } from 'redux-saga';
 
 // Your root reducer type, which is your redux state types also
+// TODO: Rename to AccountsBaseStore (more accurate name)
 export interface ApplicationBaseState {
   readonly sidebar: SidebarGenerators;
   readonly accounts: AccountMapState;

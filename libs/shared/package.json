@@ -17,8 +17,8 @@
 
   "scripts": {
     "test": "yarn jest",
-    "build": "yarn tsc -b -v && yarn build:copy",
-    "build:copy": "cpx \"./src/**/*.module.css\" ./build/ && cpx \"./src/**/*.svg\" ./build/"
+    "build": "yarn tsc -b -v tsconfig.build.json && yarn build:copy",
+    "build:copy": "cpx \"./src/**/*.module.less\" ./build/ && cpx \"./src/**/*.svg\" ./build/"
   },
 
   "files": [

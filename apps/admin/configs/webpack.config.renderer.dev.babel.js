@@ -85,44 +85,29 @@ export default merge.smart(baseConfig, {
           }
         ]
       },
-      // SASS support - compile all .global.scss files and pipe it to style.css
+      // LESS module files
       {
-        test: /\.global\.(scss|sass)$/,
+        // The rest of the less files
+        test: /.*\.module\.less$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader'
-          }
-        ]
-      },
-      // SASS support - compile all other .scss files and pipe it to style.css
-      {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
-            }
+              sourceMap: true,
+              modules: true,
+            },
           },
           {
-            loader: 'sass-loader'
-          }
-        ]
+            loader: 'less-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
       },
       // WOFF Font
       {
@@ -180,7 +165,11 @@ export default merge.smart(baseConfig, {
       }
     ]
   },
-
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
   plugins: [
     requiredByDLLConfig
       ? null

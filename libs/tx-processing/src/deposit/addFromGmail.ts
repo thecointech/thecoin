@@ -103,6 +103,13 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData|null {
   if (!address)
     return null;
 
+  var url = getDepositUrl(body);
+  if (!url)
+  {
+    log.error({url, subject}, "No url or invalid url found: {url} for email: {subject}");
+    return null;
+  }
+
   const record: DepositRecord = {
     transfer: {
       value: -1
@@ -112,13 +119,14 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData|null {
     confirmed: false,
     fiatDisbursed: getAmount(body),
     type: PurchaseType.etransfer,
+    sourceId: getSourceId(url),
   }
 
   return {
     record,
 
     instruction: {
-      depositUrl: getDepositUrl(body),
+      depositUrl: url.toString(),
       address: address,
       recieved: dateRecieved,
       ...getUserInfo(email),
@@ -169,6 +177,7 @@ const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
+    // deepcode ignore GlobalReplacementRegex: Is mistakenly detecting replace has containing a regex
     ? parseFloat(amountRes[1].replace(',', ''))
     : undefined;
 }
@@ -182,7 +191,7 @@ function getAmountFrancais(body: string) {
 function getDepositUrl(body: string) {
   const r = /(https:\/\/etransfer.interac.ca\/[a-z0-9]{8}\/[a-fA-F0-9]{32})\b/i.exec(body);
   return r
-    ? r[1]
+    ? new URL(r[1])
     : undefined;
 }
 
@@ -240,6 +249,10 @@ function getBody(email: gmail_v1.Schema$Message): string {
   return decoded;
 }
 
+// Get a unique identifier for this deposit
+function getSourceId(url: URL) {
+  return url.searchParams.get("pID") ?? url.pathname.split("/").slice(-2)[0];
+}
 ///////////////////////////////////////////////////////////
 
 export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {

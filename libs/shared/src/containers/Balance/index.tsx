@@ -1,15 +1,13 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { Button } from "semantic-ui-react";
-import { Grid } from "semantic-ui-react";
+import { Button, Grid, Popup, Icon } from "semantic-ui-react";
 
 import { toHuman } from "@the-coin/utilities";
 import { getFxRate } from "../FxRate/reducer";
 import { AccountPageProps } from "../Account/types";
 
 import { TransactionHistory } from "../TransactionHistory";
-import { Popup, Icon } from "semantic-ui-react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.less";
 import { calculateProfit } from "../Account/profit";
 import { selectFxRate } from "../FxRate/selectors";
 

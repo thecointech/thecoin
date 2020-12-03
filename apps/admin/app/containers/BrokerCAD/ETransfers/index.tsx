@@ -5,6 +5,7 @@ import { Segment, Button } from "semantic-ui-react";
 import { TransferData } from "@the-coin/tx-processing";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { Contract } from "ethers";
+import { log } from "@the-coin/logging";
 
 const RenderETransfer = (props: TransferData) => {
   const eTransfer = props.instruction as ETransferPacket;
@@ -22,7 +23,12 @@ const RenderETransfer = (props: TransferData) => {
         console.log("Amount Refunded");
         props.record.hashRefund = hash;
       })
-    //console.log("hi");
+      .catch((err: Error) => {
+        log.fatal(err, {hash: record.hash},
+          "Failed to issue refund on transaction {hash}");
+        throw err
+      });
+
   }, [props, account])
   return (
     <Segment>
@@ -47,7 +53,7 @@ async function RefundTransfer(transfer: CertifiedTransferRequest, contract: Cont
   console.log(`Transfering value:  sale ${transfer.from}`);
 
   // Send the transfer back
-  // TODO: Refunds should not be
+  // TODO: Refunds should be at todays exchange rate(?)
   const tx = await contract.coinPurchase(
     from,
     value,

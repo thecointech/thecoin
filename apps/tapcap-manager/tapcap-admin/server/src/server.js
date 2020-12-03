@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { GetTransactions } = require('./datastore/GetTx')
 
+// deepcode ignore DisablePoweredBy: Unused code (remove this disable though if we ever use this), file deepcode ignore UseCsurfForExpress: <please specify a reason of ignoring this>
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.get('/api/tx/getAll', async (req, res) => {
 
 app.post('/api/world', (req, res) => {
   console.log(req.body);
+  // deepcode ignore XSS: Currently unused code (not sure when it would be re-created)
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.post}`,
   );
