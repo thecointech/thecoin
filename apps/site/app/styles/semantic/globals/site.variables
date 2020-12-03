@@ -27,6 +27,9 @@
 @primaryColor        : #F18182;
 @secondaryColor      : #20B58D;
 
+@darkGreen           : #138175;
+@veryDarkGreen       : #2B5250;
+
 /*--------------
   Page Heading
 ---------------*/

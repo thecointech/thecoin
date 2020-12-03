@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
 import { AccountSwitcher } from 'containers/AccountSwitcher';
 import { FormattedMessage } from 'react-intl';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import HeaderLink from 'components/HeaderLink';
 
 import LanguageSwitcher from 'containers/LanguageSwitcher';
@@ -31,10 +31,12 @@ export class MainNavigationGreaterThanMobile extends React.Component {
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
-              <Menu secondary className={styles.mainMenu} >
+              <Menu text className={styles.mainMenu} >
                 <Menu.Menu position='left'>
                     <div>
-                      <img src={Logo} id="logo"/>
+                      <Link to="/" id={styles.logoLink}>
+                        <img src={Logo} id={styles.logo} />
+                      </Link>
                     </div>
                   </Menu.Menu>
                   <HeaderLink to="/" exact>
