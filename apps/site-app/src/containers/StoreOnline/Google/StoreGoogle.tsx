@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@the-coin/shared/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { Props as MessageProps } from 'components/MaybeMessage';
+import { Props as MessageProps } from '@the-coin/site-base/components/MaybeMessage';
 
 
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;

@@ -11,6 +11,7 @@ const projectRoot = path.resolve(__dirname, '..', '..');
 const systemRoot = path.resolve(projectRoot, '..', '..');
 const sharedRoot = path.resolve(systemRoot, 'libs', 'shared');
 const utilsRoot = path.resolve(systemRoot, 'libs', 'utils-ts');
+const siteBaseRoot = path.resolve(systemRoot, 'libs', 'site-base');
 
 module.exports = options => ({
   mode: options.mode,
@@ -71,11 +72,12 @@ module.exports = options => ({
             loader: 'less-loader',
             options: {
               sourceMap: true,
-              // paths: [
-              //   path.join(projectRoot, 'app', 'styles', 'semantic', 'na', 'na')
-              // ]
+              paths: [
+                path.join(siteBaseRoot, 'src', 'styles', 'semantic', 'na', 'na'),
+                path.join(siteBaseRoot, 'node_modules')
+              ],
               modifyVars: {
-                project_root: `"${projectRoot}"`,
+                project_root: `"${siteBaseRoot}"`,
               },
             },
           },
@@ -192,6 +194,7 @@ module.exports = options => ({
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",
       "@the-coin/shared": "@the-coin/shared/build",
+      "@the-coin/site-base": "@the-coin/site-base/build",
     },
   },
   devtool: options.devtool,

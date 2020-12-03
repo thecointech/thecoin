@@ -2,7 +2,6 @@ import React from 'react';
 
 import styles from './styles.module.less';
 
-import { Subscribe } from '../../containers/Subscribe';
 import { FormattedMessage } from 'react-intl';
 import { Container, Grid } from 'semantic-ui-react';
 
@@ -21,7 +20,6 @@ const copyright = {   id:"site.footer.copyright",
 
 export default () => (
   <Container id={styles.footerContainer}>
-      <Subscribe />
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
         <Grid.Row>
           <Grid.Column>

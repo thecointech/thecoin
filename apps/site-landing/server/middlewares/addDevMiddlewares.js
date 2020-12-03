@@ -13,12 +13,6 @@ function createWebpackMiddleware(compiler, publicPath) {
   });
 }
 
-console.log(__dirname);
-
-const csvpath = path.resolve(__dirname, '..', '..', 'src', 'sp500_monthly.csv');
-const sp500buffer = fsSystem.readFileSync(csvpath);
-const sp500string = sp500buffer.toString();
-
 module.exports = function addDevMiddlewares(app, webpackConfig) {
   const compiler = webpack(webpackConfig);
   const middleware = createWebpackMiddleware(
@@ -32,10 +26,6 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
-
-  app.get('sp500_monthly.csv', (req, res) => {
-    res.send(sp500string);
-  });
 
   // deepcode ignore NoRateLimitingForExpensiveWebOperation: not valid for devserver
   app.get('*', (req, res) => {

@@ -10,24 +10,18 @@
 import * as React from 'react';
 import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
-
 import MainNavigation from 'containers/MainNavigation';
 import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
-import MainPageTransition from 'components/MainPageTransition';
+import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
 import {MainRouter} from 'containers/MainRouter';
-
-import 'semantic-ui-less/semantic.less';
-
-import { usePrismic } from 'components/Prismic/reducer';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import styles from './styles.module.less';
-
 import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
 
+import '@the-coin/site-base/styles/semantic.less';
+import styles from './styles.module.less';
 export const App = ( ) => {
-  usePrismic();
   useFxRatesStore();
   useAccountMapStore();
   const location = useLocation();

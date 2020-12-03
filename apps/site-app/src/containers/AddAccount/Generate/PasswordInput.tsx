@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
-import { UxScoredPassword } from "components/UxScoredPassword";
+import { UxScoredPassword } from "@the-coin/site-base/components/UxScoredPassword";
 
 type Props = {
   disabled?: boolean;
@@ -25,7 +25,7 @@ export const PasswordInput = (props: Props) => {
   const onChange = useCallback((value: string, score: number) => {
     const newState = validatePassword(value, score);
     setState(newState);
-    setPassword(newState.isValid 
+    setPassword(newState.isValid
       ? newState.value
       : undefined);
 

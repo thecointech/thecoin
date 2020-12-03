@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Header, Button, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
-import { Props as MessageProps, MaybeMessage } from "components/MaybeMessage";
+import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 import { onDownload } from "containers/Accounts/Settings/download";

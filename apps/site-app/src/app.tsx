@@ -26,7 +26,7 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider } from 'components/LanguageProvider';
+import { LanguageProvider, Languages } from '@the-coin/site-base/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -34,13 +34,9 @@ import 'file-loader?name=.htaccess!./.htaccess';
 
 import {configureAppStore} from '@the-coin/shared/configureStore';
 import createReducer from './reducers';
-import { Messages } from './components/LanguageProvider';
-
-// Import i18n messages
-import { translationMessages } from './i18n';
+import { translations } from './translations';
 
 import { initTracking } from './utils/reactga';
-
 initTracking();
 
 // TODO: We are temporarily removing the web-fonts
@@ -61,11 +57,11 @@ initTracking();
 const store = configureAppStore(createReducer, undefined, history);
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
-const render = (messages: Messages, Component = App) => {
+const render = (languages: Languages, Component = App) => {
   ReactDOM.render(
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
+      <LanguageProvider languages={languages}>
         <ConnectedRouter history={history}>
           <Component />
         </ConnectedRouter>
@@ -82,11 +78,11 @@ if (module.hot) {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     // tslint:disable-next-line:max-line-length
     const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translationMessages, refresh);
+    render(translations, refresh);
   });
 }
 
-render(translationMessages);
+render(translations);
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
