@@ -18,7 +18,7 @@ export function getUrlParameterByName(name: string, url?: string) {
 export function getCookie(name: string) {
   const value = "; " + document.cookie;
   const parts = value.split("; " + name + "=");
-	return (parts.length == 2) ?
+	return (parts.length === 2) ?
 		decodeURI(parts.pop()!.split(";").shift()!) :
 		'';
 }

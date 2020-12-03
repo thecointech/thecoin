@@ -32,12 +32,12 @@ export const StoreGoogle = (props: MyProps) => {
   ////////////////////////////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
   useEffect(() => {
-    
+
     if (!wallet) {
       setState(UploadState.Invalid);
       onStateChange && onStateChange(
         UploadState.Invalid,
-        { 
+        {
           header: messages.messageErrorRemoteHeader,
           content: messages.messageErrorRemoteMessage,
           negative: true,
@@ -129,7 +129,7 @@ async function completeStore(token: string, address: string) {
   try {
     const res = await secureApi.googlePut(request);
     console.log("got: " + JSON.stringify(res));
-    return res.status == 200 && res.data;
+    return res.status === 200 && res.data;
   }
   catch (e) {
     console.error(JSON.stringify(e));
@@ -138,7 +138,7 @@ async function completeStore(token: string, address: string) {
   return false;
 }
 
-function fetchAndVerifyWallet(address: string) { 
+function fetchAndVerifyWallet(address: string) {
   const account = getStoredAccountData(address);
   if (account == null) {
     alert("Could not find local account - if you are seeing this, contact support@thecoin.io");
