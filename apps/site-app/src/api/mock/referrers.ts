@@ -30,7 +30,7 @@ export class MockReferrersApi
     {
       await delay(250);
       return buildResponse({
-        success: true
+        success: _referrer.length === 6
       });
     }
 }

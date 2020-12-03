@@ -1,6 +1,5 @@
 import React from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
-import { AccountSwitcher } from 'containers/AccountSwitcher';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import HeaderLink from '@the-coin/site-base/components/HeaderLink';
@@ -24,7 +23,7 @@ const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     description:"Title for the Your benefits entry in the menu"};
 const titleButton = { id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'};
 
-
+// TODO: Fix Login button
 export class MainNavigationGreaterThanMobile extends React.Component {
 
   render() {
@@ -51,7 +50,7 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                   </HeaderLink>
                   <Menu.Menu position='right'>
                     <Menu.Item>
-                      <AccountSwitcher />
+                      Login
                     </Menu.Item>
                     <Menu.Item>
                       <Button as={NavLink} to="/addAccount" primary >

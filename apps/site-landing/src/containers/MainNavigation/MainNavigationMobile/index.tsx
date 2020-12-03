@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu, Container, Dropdown } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { AccountSwitcher } from 'containers/AccountSwitcher';
 import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
@@ -33,7 +32,7 @@ export class MainNavigationMobile extends React.Component {
                 </Menu.Menu>
                 <Menu.Menu position='right'>
                   <Menu.Item>
-                    <AccountSwitcher />
+                    Login
                   </Menu.Item>
                   <Menu.Item>
                     <LanguageSwitcher />

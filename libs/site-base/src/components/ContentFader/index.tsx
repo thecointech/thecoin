@@ -17,6 +17,8 @@ const classStyles = {
 
 export class ContentFader extends React.PureComponent<Props, {}, null> {
   render() {
+    // TODO: Can we remove this location? Check once fading has been
+    // implemented on the landing site
     const { location } = this.props;
 
     return (

@@ -20,16 +20,12 @@ import {MainRouter} from 'containers/MainRouter';
 import 'semantic-ui-less/semantic.less';
 
 import { usePrismic } from 'components/Prismic/reducer';
-import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
-import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import styles from './styles.module.less';
 
 import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
 
 export const App = ( ) => {
   usePrismic();
-  useFxRatesStore();
-  useAccountMapStore();
   const location = useLocation();
 
   return (
@@ -48,7 +44,7 @@ export const App = ( ) => {
         <PageSidebar>
           <MainPageTransition location={location}>
             <section id={styles.mainContent} className={styles.pageMainInner}>
-              <MainRouter location={location} />
+              <MainRouter />
             </section>
           </MainPageTransition>
         </PageSidebar>
