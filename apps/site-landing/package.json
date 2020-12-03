@@ -2,11 +2,6 @@
   "name": "@the-coin/site-landing",
   "productName": "THECoin: Website - Landing",
   "private": true,
-  "workspaces": {
-    "nohoist": [
-      "semantic-ui-less"
-    ]
-  },
   "version": "2.0.0",
   "description": "THECoin: Future-proof currency",
   "repository": {
@@ -81,7 +76,6 @@
     "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
-    "semantic-ui-less": "^2.4.1",
     "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {

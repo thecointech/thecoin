@@ -16,13 +16,15 @@ import Footer from 'components/Footer';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
 import {MainRouter} from 'containers/MainRouter';
-
-import 'semantic-ui-less/semantic.less';
-
 import { usePrismic } from 'components/Prismic/reducer';
-import styles from './styles.module.less';
-
 import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
+
+// Our CSS version isn't building correctly yet, but once it does
+// we can save a bit of compile time by referring to it directly
+// instead of the LESS files
+//import '@the-coin/site-base/styles/semantic.css';
+import '@the-coin/site-base/styles/semantic.less';
+import styles from './styles.module.less';
 
 export const App = ( ) => {
   usePrismic();

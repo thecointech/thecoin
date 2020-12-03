@@ -17,9 +17,10 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn build:clean",
-    "build": "yarn tsc -b -v tsconfig.build.json && yarn build:copy",
+    "build": "yarn tsc -b -v tsconfig.build.json && yarn build:copy && yarn build:semantic",
     "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build",
     "build:clean": "rimraf ./build",
+    "build:semantic": "yarn lessc --global-var=\"project_root=/src/TheCoin/libs/site-base\" --include-path=./src/styles/semantic/na/na node_modules/semantic-ui-less/semantic.less ./build/styles/semantic.css",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
