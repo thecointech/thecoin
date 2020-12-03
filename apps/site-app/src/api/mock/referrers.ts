@@ -11,7 +11,7 @@ export class MockReferrersApi
      * @throws {RequiredError}
      * @memberof ReferrersApi
      */
-    public async referralCreate(_referral: NewAccountReferal, _options?: any)
+    async referralCreate(_referral: NewAccountReferal, _options?: any)
     {
       await delay(250);
       return buildResponse({
@@ -26,7 +26,7 @@ export class MockReferrersApi
      * @throws {RequiredError}
      * @memberof ReferrersApi
      */
-    public async referrerValid(_referrer: string, _options?: any)
+    async referrerValid(_referrer: string, _options?: any)
     {
       await delay(250);
       return buildResponse({

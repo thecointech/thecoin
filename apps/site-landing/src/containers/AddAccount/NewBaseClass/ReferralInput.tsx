@@ -31,9 +31,9 @@ export const ReferralInput = (props: Props) => {
     setReferral(newState.isValid
       ? newState.value
       : undefined);
-      
+
   }, [setState, setReferral]);
-  
+
   return (
     <UxInput
       uxChange={onChange}
@@ -54,21 +54,21 @@ export const registerReferral = async (address: string, code: string) => {
     referrerId: code,
   });
 
-  if (!isRegistered.data?.success) {
+  if (!isRegistered.data) {
     alert(
       'Registering this account failed. Please contact support@thecoin.io',
     );
     return false;
-  }  
+  }
   return true;
 }
 
 const isLegalReferral = async (code: string) => {
-  
+
   const api = GetReferrersApi()
   // Weird issue: typescript not recognizing the return type
   const isValid = await api.referrerValid(code);
-  return isValid.data?.success;
+  return isValid.data;
 }
 
 const validateReferral = async (value: string) : Promise<State> => {
