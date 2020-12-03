@@ -45,7 +45,8 @@
       "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
       "@the-coin/tx-processing/*":["../../../libs/tx-processing/build/*"],
       "@the-coin/shared/*":     ["../../../libs/shared/build/*"],
-      "@the-coin/email/*":     ["../../../libs/shared/email/*"]
+      "@the-coin/email/*":     ["../../../libs/email/build/*"],
+      "@the-coin/site-base/*":     ["../../../libs/site-base/build/*"]
     }
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**"]

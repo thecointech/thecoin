@@ -1,0 +1,39 @@
+{
+	"folders": [
+    {
+      "name": "site-landing",
+      "path": "apps\\site-landing"
+    },
+    {
+      "name": "site-app",
+      "path": "apps\\site-app"
+    },
+    {
+      "name": "site-base",
+      "path": "libs\\site-base"
+    },
+    {
+      "name": "shared",
+      "path": "libs\\shared"
+    },
+    {
+      "name": "utils-ts",
+      "path": "libs\\utils-ts"
+    }
+  ],
+  "settings": {
+    "deepcode.review.results.hideInformationIssues": false,
+    "typescript.tsdk": "..\\node_modules\\typescript\\lib",
+    "typescript.tsserver.pluginPaths": [
+      "typescript-plugin-css-modules"
+    ],
+    "jest.pathToJest": "${workspaceFolder}/../../node_modules/.bin/jest",
+    "jest.debugMode": true,
+    "files.exclude": {
+      ".firebase/": true,
+      ".vscode/": true,
+      "build/": true,
+      "node_modules/": true
+    }
+  }
+}
