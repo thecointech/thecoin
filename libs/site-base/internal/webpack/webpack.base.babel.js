@@ -7,11 +7,10 @@ const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const projectRoot = path.resolve(__dirname, '..', '..');
-const systemRoot = path.resolve(projectRoot, '..', '..');
-const sharedRoot = path.resolve(systemRoot, 'libs', 'shared');
-const utilsRoot = path.resolve(systemRoot, 'libs', 'utils-ts');
-const siteBaseRoot = path.resolve(systemRoot, 'libs', 'site-base');
+const projectRoot = process.cwd();
+const siteBaseRoot = path.resolve(__dirname, '..', '..');
+const sharedRoot = path.resolve(siteBaseRoot, '..', 'shared');
+const utilsRoot = path.resolve(siteBaseRoot, '..', 'utils-ts');
 
 module.exports = options => ({
   mode: options.mode,
@@ -30,7 +29,28 @@ module.exports = options => ({
       {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "src"),
-        use: options.tsLoaders,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: path.join(projectRoot, 'tsconfig.build.json'),
+            transpileOnly: true,
+            logLevel: 'info',
+            experimentalWatchApi: true,
+          },
+        },
+      },
+      {
+        test: /\.ts(x?)$/,
+        include: path.join(siteBaseRoot, "src"),
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: path.join(siteBaseRoot, 'tsconfig.build.json'),
+            transpileOnly: true,
+            logLevel: 'info',
+            experimentalWatchApi: true,
+          },
+        },
       },
       {
         // Preprocess our own .css files
@@ -194,7 +214,7 @@ module.exports = options => ({
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",
       "@the-coin/shared": "@the-coin/shared/build",
-      "@the-coin/site-base": "@the-coin/site-base/build",
+      "@the-coin/site-base": "@the-coin/site-base/src",
     },
   },
   devtool: options.devtool,
