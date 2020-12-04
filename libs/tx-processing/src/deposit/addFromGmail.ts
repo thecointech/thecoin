@@ -29,7 +29,7 @@ export async function initializeApi(auth: OAuth2Client) {
 
   __gmail = google.gmail({ version: 'v1', auth });
 
-  var response = await __gmail.users.labels.list({
+  let response = await __gmail.users.labels.list({
     userId: "me"
   })
   const labels = response.data.labels;
@@ -70,8 +70,8 @@ export async function addFromGmail(query?: string): Promise<DepositData[]> {
     )
     if (emailPending)
     {
-      var emails = await Promise.all(emailPending);
-      var deposits = emails
+      let emails = await Promise.all(emailPending);
+      let deposits = emails
         .map(r => toDepositEmail(r.data))
         .filter(r => !!r);
       result = result.concat(deposits as DepositData[])
