@@ -6,8 +6,12 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const process = require('process');
 
-const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
+const projectRoot = process.cwd();
+const siteBaseRoot = path.resolve(__dirname, '..', '..');
+const sharedRoot = path.resolve(siteBaseRoot, '..', 'shared');
+const utilsRoot = path.resolve(siteBaseRoot, '..', 'utils-ts');
 
 // 1. import default from the plugin module
 //const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
@@ -54,12 +58,21 @@ module.exports = require('./webpack.base.babel')({
     }),
   ],
 
+  // tranpile-only, fork-ts-checker-webpack-plugin is used for type checking
   tsLoaders: [
     {
       loader: 'ts-loader',
       options: {
-        configFile: path.join(__dirname, '..', '..', 'tsconfig.build.json'),
-        transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
+        configFile: path.join(projectRoot, 'tsconfig.build.json'),
+        transpileOnly: true,
+        logLevel: 'info',
+      },
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        configFile: path.join(siteBaseRoot, 'tsconfig.build.json'),
+        transpileOnly: true,
         projectReferences: true,
         logLevel: 'info',
       },
