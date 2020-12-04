@@ -12,7 +12,7 @@ import { AccountState } from "../Account/types";
 import { useAccountApi } from "../Account/reducer";
 
 import illustrationPlant from './images/illust_flowers.svg';
-import styles from "./styles.module.css";
+import styles from "./styles.module.less";
 
 interface OwnProps {
   account: AccountState;
@@ -66,17 +66,17 @@ export const Login = (props: Props) => {
     if (__cancel) {
       setLoginState(LoginState.Cancelled);
       return false;
-    } 
+    }
     else if (percent === -1) {
       // Invalid password?
       if (!__cancel) {
         setLoginState(LoginState.Failed);
       }
       return false;
-    } 
+    }
     else if (percent === 100) {
       setLoginState(LoginState.Complete);
-    } 
+    }
     else {
       setPercentComplete(percent);
     }
@@ -113,7 +113,7 @@ export const Login = (props: Props) => {
     <>
       <div className={styles.wrapper}>
         <Header as='h5'>
-          <FormattedMessage 
+          <FormattedMessage
               id="site.login.aboveTheTitle"
               defaultMessage="WELCOME BACK TO THE COIN"
               description="Text above the title for the login page"/>
@@ -121,7 +121,7 @@ export const Login = (props: Props) => {
         <Form>
           <div className={styles.titleLogin}>
           <Header as="h3">
-            <FormattedMessage     
+            <FormattedMessage
               id = "site.login.title"
               defaultMessage = "Log into"
               description="Main title for the login page before the account name"
@@ -142,9 +142,9 @@ export const Login = (props: Props) => {
             isValid={isValid}
             forceValidate={forceValidate}
           />
-          <Button onClick={onDecryptWallet} primary size='huge'> 
+          <Button onClick={onDecryptWallet} primary size='huge'>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <FormattedMessage 
+            <FormattedMessage
                 id="site.login.button"
                 defaultMessage="Log In"
                 description="Text of the button for the login page"/>
@@ -152,7 +152,7 @@ export const Login = (props: Props) => {
           </Button>
 
           <div className={styles.textAtTheBottom}>
-            <FormattedMessage     
+            <FormattedMessage
               id = "site.login.textAtTheBottom"
               defaultMessage = "Or select a different account from the account switcher. You can find it at the top menu."
               description="Text at the bottom for the login page before the account name"

@@ -1,5 +1,5 @@
 import React from 'react';
-import moment, { Moment } from 'moment'
+import moment, { Moment } from 'moment/moment'
 
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css';

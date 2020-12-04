@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Label, Input, Message } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import styles from './styles.module.css';
+import styles from './styles.module.less';
 import { Props as MyProps, initialState } from './types';
 
 type State = Readonly<typeof initialState>;

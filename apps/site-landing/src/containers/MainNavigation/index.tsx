@@ -1,0 +1,22 @@
+import React from 'react';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import {MainNavigationMobile} from './MainNavigationMobile';
+import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
+
+class Navigation extends React.Component {
+  render() {
+    return (
+      <>
+        <GreaterThanMobileSegment>
+          <MainNavigationGreaterThanMobile />
+        </GreaterThanMobileSegment>
+
+        <MobileSegment>
+          <MainNavigationMobile />
+        </MobileSegment>
+      </>
+    );
+  }
+}
+
+export default Navigation;

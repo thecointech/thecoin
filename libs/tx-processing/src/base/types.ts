@@ -37,7 +37,7 @@ export enum PurchaseType {
 }
 export type DepositRecord = {
   type: PurchaseType; // One of eTransfer, directDeposit, other, etc
-
+  sourceId?: string; // A unique identifier of the source data
 } & TransferRecord;
 
 export type TransferRenderer = (transfer: TransferData) => JSX.Element;

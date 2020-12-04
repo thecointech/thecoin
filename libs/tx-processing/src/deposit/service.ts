@@ -1,16 +1,19 @@
 import { authorize, isValid } from "./auth";
-import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
 import { log } from '@the-coin/logging';
 import { RbcApi, ETransferErrorCode } from "@the-coin/rbcapi";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { TransferRecord, DepositRecord } from "../base/types";
 import { RatesApi } from '@the-coin/pricing';
-import { depositInBank, storeInDB } from "./process";
 import { toCoin, isPresent } from "@the-coin/utilities";
-import { waitTheTransfer, startTheTransfer } from "./contract";
-import { DepositData } from "./types";
 import { Timestamp } from "@the-coin/utilities/firestore";
-
+import { GetActionDoc } from "@the-coin/utilities/User";
+import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import { DepositData } from "./types";
+import { TransferRecord, DepositRecord } from "../base/types";
+import { depositInBank, storeInDB } from "./process";
+import { waitTheTransfer, startTheTransfer } from "./contract";
+import { initializeApi, addFromGmail, setETransferLabel } from "./addFromGmail";
+import { DocumentReference } from "@the-coin/types";
+import { SendDepositConfirmation } from "@the-coin/email";
+import { DateTime } from "luxon";
 
 export async function FetchDepositEmails()
 {
@@ -114,17 +117,22 @@ export async function ProcessUnsettledDeposits()
 
 export async function ProcessUnsettledDeposit(deposit: DepositData, rbcApi: RbcApi)
 {
-  //await initiateDeposit(deposit);
-
-  let success = true;
+  const inProgress = await initiateDeposit(deposit);
+  if (!inProgress)
+    return false;
 
   // Do the actual deposit
   if (!await ProcessDepositBank(deposit, rbcApi))
     return false;
 
+  // Update inProgress with progress
+  await inProgress.set(deposit.record);
+
   // Complete transfer to person
-  const processed = await ProcessDepositTransfer(deposit);
-  success = processed && success;
+  const processed = await ProcessDepositTransfer(deposit, inProgress);
+
+  // Update inProgress with progress
+  await inProgress.set(deposit.record);
 
   // Mark email as complete
   if (deposit.instruction.raw)
@@ -132,7 +140,15 @@ export async function ProcessUnsettledDeposit(deposit: DepositData, rbcApi: RbcA
 
   // We must set this, regardless of whether or not the deposit completed (?)
   const stored = await storeInDB(deposit.instruction.address, deposit.record);
-  return success && stored;
+
+  if (processed && stored)
+  {
+    await inProgress.delete();
+    // Finally, email the notification
+    await emailNotification(deposit);
+    return true;
+  }
+  return false;
 }
 
 //
@@ -147,34 +163,23 @@ export async function ProcessDepositBank(deposit: DepositData, rbcApi: RbcApi)
       `Could not process deposit from: {address}, got {errorCode}`);
     return false;
   }
-  try {
-    deposit.record.confirmation = parseInt(result.message.trim());
-  }
-  catch (e) {
-    log.error({address: deposit.instruction.address, confirmation: result.message},
-      `Could parse confirmation number for: {address}, got {confirmation}`);
-    return false;
-  }
+  deposit.record.confirmation = result.confirmation;
   return true;
 }
 
 //
 // Transfer the appropriate amount of Coin to client
-export async function ProcessDepositTransfer(deposit: DepositData) : Promise<boolean>
+export async function ProcessDepositTransfer(deposit: DepositData, inProgress: DocumentReference) : Promise<boolean>
 {
   log.debug({address: deposit.instruction.address, deposited: deposit.instruction.recieved},
     `Beginning transfer to satisfy deposit from {address} for date {DepositDate}`);
 
   var tx = await startTheTransfer(deposit);
+
   // Store first indication of attempted deposit
   deposit.record.hash = tx.hash;
-  var success = await storeInDB(deposit.instruction.address, deposit.record);
+  await inProgress.set(deposit.record);
 
-  if (!success)
-  {
-    log.error({address: deposit.instruction.address, hash: tx.hash},
-      `Initial store failed for deposit from: {address} with hash {hash}`);
-  }
   // All is good, finally we try to process the deposit
   var hash = await waitTheTransfer(tx);
 
@@ -183,13 +188,47 @@ export async function ProcessDepositTransfer(deposit: DepositData) : Promise<boo
   {
     deposit.record.completedTimestamp = Timestamp.now();
     deposit.record.confirmed = true;
+    await inProgress.set(deposit.record);
   }
-  return success && !!hash;
+  return !!hash;
 }
 
 
-// async function initiateDeposit(deposit: DepositData)
-// {
-//   var success = await storeInDB(deposit.instruction.address, deposit.record);
-//   return success;
-// }
+async function initiateDeposit(deposit: DepositData)
+{
+  // First, add the eTransfer tag to the email
+  await setETransferLabel(deposit.instruction.raw!, "etransfer");
+
+  // verify we have id
+  if (!deposit.record.sourceId)
+  {
+    log.error("Cannot process deposit from {date} without Source ID", deposit.instruction.recieved);
+    return false;
+  }
+
+  // Next, add an inProgress
+  const {address} = deposit.instruction;
+  const inProgress = GetActionDoc(address, "Buy", "inProgress");
+  var existing = await inProgress.get();
+  if (existing.exists)
+  {
+    log.error("Cannot process deposits for {address} when already in progress", address);
+    return false;
+  }
+
+  inProgress.set(deposit.record);
+  //var success = await storeInDB(deposit.instruction.address, deposit.record);
+  return inProgress;
+}
+
+
+async function emailNotification(deposit: DepositData)
+{
+  // Convert to DateTime
+  await SendDepositConfirmation(deposit.instruction.email, {
+    tx: `https://ropsten.etherscan.io/tx/${deposit.record.hash}`,
+    SendDate: DateTime.fromMillis(deposit.record.recievedTimestamp.toMillis()),
+    ProcessDate: DateTime.fromMillis(deposit.record.processedTimestamp!.toMillis()),
+    FirstName: deposit.instruction.name
+  })
+}

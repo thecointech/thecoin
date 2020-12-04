@@ -9,7 +9,7 @@ async function BuildContract(network: Network) {
 
 	const { address } = deploy.proxies["the-contract/TheCoin"][0];
 	const { abi } = TheCoinSpec;
-	const provider = ethers.getDefaultProvider(network);
+	const provider = new ethers.providers.InfuraProvider(network, "54e16af940e445f4ad38ab9e2cd4cab6");
 	return new ethers.Contract(address, abi, provider);
 }
 

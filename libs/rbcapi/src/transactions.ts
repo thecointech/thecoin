@@ -34,9 +34,9 @@ export async function getTransactions(from: Date, to: Date) : Promise<RbcTransac
   const { page } = act;
 
   // Go to CAD account
-  await act.clickOnLinkText(ApiAction.Credentials.accountNo, '#search-transaction');
+  await act.clickOnText(ApiAction.Credentials.accountNo, 'a', '#search-transaction');
   // To to download transactions
-  await act.clickOnLinkText('Download Transactions', '#ACCOUNT_INFO1');
+  await act.clickOnText('Download Transactions', 'a', '#ACCOUNT_INFO1');
 
   // Select the right format
   await page.click('#EXCEL');

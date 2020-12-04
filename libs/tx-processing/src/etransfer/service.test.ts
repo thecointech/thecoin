@@ -1,26 +1,28 @@
-import { ConfigStore } from "@the-coin/store";
-import { signIn } from "../firestore";
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
-import { log } from "@the-coin/logging";
+import { init } from '@the-coin/utilities/firestore/mock';
+import { RbcApi } from "@the-coin/rbcapi";
+import data from './service.test.mockdb.json';
+import { ConfigStore } from '@the-coin/store';
 
-beforeAll(async () => {
-  const timeout = 30 * 60 * 1000;
-  jest.setTimeout(timeout);
+beforeAll(() => {
+  jest.setTimeout(90000000);
   ConfigStore.initialize();
-  await signIn()
-});
-
+})
 afterAll(() => {
-    ConfigStore.release();
+  ConfigStore.release();
+})
+beforeEach(async () => {
+  await init(data);
 });
 
-test.skip('Can fetch Actions', async ()=> {
+it('Can fetch Actions', async ()=> {
   const toComplete = await fetchActionsToComplete();
   expect(toComplete).not.toBeUndefined();
   for (const record of toComplete)
   {
     expect(record).toBeTruthy();
-    expect(record.fiatDisbursed).toBe(0);
+    expect(record.confirmation).toBeUndefined();
+    expect(record.completedTimestamp).toBeUndefined();
   }
 
   const instructions = await getInstructions(toComplete);
@@ -28,18 +30,12 @@ test.skip('Can fetch Actions', async ()=> {
   expect(instructions.length).toBe(toComplete.length);
 })
 
-test.skip('Succesfully Processes Actions', async ()=> {
-  try {
-    const toComplete = await processUnsettledETransfers();
+it('Succesfully Processes Actions', async ()=> {
+  const toComplete = await processUnsettledETransfers(new RbcApi());
 
-    for (const record of toComplete)
-    {
-      expect(record.confirmation).toBeGreaterThan(0);
-    }
-  }
-  catch(e)
+  for (const record of toComplete)
   {
-    log.error(e)
-    fail();
+    expect(record.confirmation).toBeGreaterThan(0);
+    expect(record.fiatDisbursed).toBeGreaterThan(0);
   }
 })

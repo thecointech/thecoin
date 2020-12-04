@@ -245,6 +245,7 @@ function parse(spec, options = {}) {
       const interfaceType = getType(value, newID);
 
       if (typeof value.description === 'string') {
+        // deepcode ignore ReplacementRegex: not my code
         output.push(`/**\n* ${value.description.replace(/\n$/, '').replace(/\n/g, '\n* ')}\n*/`);
       }
 

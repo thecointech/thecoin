@@ -1,0 +1,69 @@
+import React from 'react';
+import { Menu, Container, Button } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
+import { Link, NavLink } from 'react-router-dom';
+import HeaderLink from '@the-coin/site-base/components/HeaderLink';
+
+import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
+
+import Logo from './logoAndName.svg';
+import styles from './styles.module.less';
+
+const home = { id:"site.MainNavigation.home",
+                defaultMessage:"Home",
+                description:"Title for the Home entry in the menu"};
+const indepth = { id:"site.MainNavigation.indepth",
+                  defaultMessage:"In-depth",
+                  description:"Title for the In-depth entry in the menu"};
+const wedomore = {  id:"site.MainNavigation.wedomore",
+                    defaultMessage:"We do more",
+                    description:"Title for the We do more entry in the menu"};
+const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
+                    defaultMessage:"Your benefits",
+                    description:"Title for the Your benefits entry in the menu"};
+const titleButton = { id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'};
+
+// TODO: Fix Login button
+export class MainNavigationGreaterThanMobile extends React.Component {
+
+  render() {
+    return (
+      <Container>
+          <div className={styles.navContainer} id={styles.mainMenuContainer}>
+              <Menu text className={styles.mainMenu} >
+                <Menu.Menu position='left'>
+                    <Link to="/" id={styles.logoLink}>
+                        <img src={Logo} id={styles.logo} />
+                    </Link>
+                  </Menu.Menu>
+                  <HeaderLink to="/" exact>
+                    <FormattedMessage {...home} />
+                  </HeaderLink>
+                  <HeaderLink to="/healthier">
+                    <FormattedMessage {...indepth} />
+                  </HeaderLink>
+                  <HeaderLink to="/wedomore">
+                    <FormattedMessage {...wedomore} />
+                  </HeaderLink>
+                  <HeaderLink to="/compare">
+                    <FormattedMessage {...yourbenefits} />
+                  </HeaderLink>
+                  <Menu.Menu position='right'>
+                    <Menu.Item>
+                      Login
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Button as={NavLink} to="/addAccount" primary >
+                          <FormattedMessage {...titleButton} />
+                      </Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <LanguageSwitcher />
+                    </Menu.Item>
+                  </Menu.Menu>
+              </Menu>
+          </div>
+      </Container>
+    );
+  }
+}

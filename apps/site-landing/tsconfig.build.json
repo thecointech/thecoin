@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/*.test.ts", "**/__mocks__/**"],
+  "references": [{ "path": "../../libs/site-base/tsconfig.build.json" }],
+  "composite": true
+}

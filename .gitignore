@@ -26,3 +26,4 @@ libs/tx-processing/src/BrokerTransferAssistant/BrokerTransferAssistantWallet.jso
 **/site/**/HomePage/**/*.module.css
 libs/shared/ipfs/
 libs/shared/orbitdb/
+.dccache
