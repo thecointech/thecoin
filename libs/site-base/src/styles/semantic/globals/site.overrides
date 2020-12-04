@@ -2,6 +2,7 @@
          Site Overrides
 *******************************/
 
+
 a{
     font-size: 12px;
     font-weight: @bold;
@@ -26,15 +27,10 @@ a:active {
   text-decoration: none;
 }
 
-
 div.container:nth-child(1){
     width: 100%;
 }
 
-#logo{
-    width: 150px;
-    padding: 15px
-}
 
 #app{
   max-width: @maxContentWidth;
