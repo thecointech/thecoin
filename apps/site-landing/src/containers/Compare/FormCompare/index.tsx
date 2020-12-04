@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
+import { RangeFieldAndScale } from '@the-coin/site-base/components/RangeFieldAndScale';
 
 import styles from './styles.module.less';
 
