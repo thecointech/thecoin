@@ -22,18 +22,6 @@ module.exports = require('./webpack.base.babel')({
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
 
-  tsLoaders: [
-    {
-      loader: 'ts-loader',
-      options: {
-        configFile: path.join(__dirname, '..', '..', 'tsconfig.build.json'),
-        transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
-        logLevel: 'info',
-        projectReferences: true,
-      },
-    },
-  ],
-
   optimization: {
     minimize: true,
     minimizer: [

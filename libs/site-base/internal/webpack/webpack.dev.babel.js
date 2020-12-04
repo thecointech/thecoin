@@ -58,27 +58,6 @@ module.exports = require('./webpack.base.babel')({
     }),
   ],
 
-  // tranpile-only, fork-ts-checker-webpack-plugin is used for type checking
-  tsLoaders: [
-    {
-      loader: 'ts-loader',
-      options: {
-        configFile: path.join(projectRoot, 'tsconfig.build.json'),
-        transpileOnly: true,
-        logLevel: 'info',
-      },
-    },
-    {
-      loader: 'ts-loader',
-      options: {
-        configFile: path.join(siteBaseRoot, 'tsconfig.build.json'),
-        transpileOnly: true,
-        projectReferences: true,
-        logLevel: 'info',
-      },
-    },
-  ],
-
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool
   devtool: 'cheap-module-source-map',

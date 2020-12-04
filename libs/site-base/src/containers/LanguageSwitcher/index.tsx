@@ -6,7 +6,7 @@ import { selectLocale } from '../LanguageProvider/selector';
 import { Locale } from "../LanguageProvider/types";
 
 const options = [
-  { key: 1, text: 'ENpen', value: "en" },
+  { key: 1, text: 'EN', value: "en" },
   { key: 2, text: 'FR', value: "fr" },
 ];
 
