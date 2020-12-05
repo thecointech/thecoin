@@ -36,7 +36,7 @@ export const Landscape = () => {
               <p>
                   <FormattedMessage {...description} />
               </p>
-              <Button className="x6spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
+              <Button className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
           </Grid.Column>
         </Grid.Row>
       </Grid>

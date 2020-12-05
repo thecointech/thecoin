@@ -1,5 +1,9 @@
 #headingWrapper{
   margin-left: 8%;
+  .overTheLandscape{
+    position: inherit;
+    z-index: 9;
+  }
 }
 
 .landscape{
@@ -11,7 +15,7 @@
   .sky{
     position: fixed;
     z-index:-1;
-    top: 100px;
+    top: 80px;
   }
 
   .cloudsHigh{
@@ -22,34 +26,34 @@
   }
   .cloudsLeft{
     position: fixed;
-    top: 270px;
+    top: 230px;
     z-index:0;
   }
   .cloudsRight{
     position: fixed;
-    top: 380px;
+    top: 340px;
     z-index:-1;
     right: 0px;
   }
   .sun{
     position: fixed;
     right: 8%;
-    top: 390px;
+    top: 350px;
     z-index:4;
   }
   .sunAura{
+    filter: invert(var(--value, 100%));
     position: fixed;
-    right: -8%;
+    right: -10%;
     top: 15px;
     opacity: 0.1;
-    z-index:3;
-    -webkit-mask-image:-webkit-gradient(linear, right bottom, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+    z-index:0;
   }
+
   .greenery{    
     position: relative;
     z-index:9;
-    margin-top: -240px;
+    margin-top: -280px;
     right: -10%;
     float: right;
   }
