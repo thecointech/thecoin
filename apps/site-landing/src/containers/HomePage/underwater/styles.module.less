@@ -31,5 +31,15 @@
 .illustrationDeco{
   position: absolute;
   right: 20px;
-  margin-top: -100px;
+}
+/* Chrome */
+@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  .illustrationDeco{
+    margin-top: -200px;
+  } 
+}
+@-moz-document url-prefix() {
+  .illustrationDeco{
+    margin-top: 0px;
+  } 
 }
