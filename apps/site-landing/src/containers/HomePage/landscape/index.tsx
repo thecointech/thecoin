@@ -26,7 +26,7 @@ const description = { id:"site.homepage.landscape.description",
 
 export const Landscape = () => {
   return (
-    <React.Fragment>
+    <div className={styles.landscapeContent}>
       <Grid padded doubling stackable>
         <Grid.Row className="x4spaceBefore x6spaceAfter">
           <Grid.Column id={styles.headingWrapper}>
@@ -59,7 +59,7 @@ export const Landscape = () => {
         <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
       </MobileSegment>
 
-    </React.Fragment>
+    </div>
   );
 }
 

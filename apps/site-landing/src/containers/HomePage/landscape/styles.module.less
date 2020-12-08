@@ -1,21 +1,27 @@
 #headingWrapper{
   margin-left: 8%;
+  z-index: 9;
   .overTheLandscape{
     position: inherit;
     z-index: 9;
   }
 }
+.landscapeContent{
+  min-height: 680px;
+}
 
 .landscape{
+  position: relative;
   .birds{
     position: fixed;
-    top: 150px;
-    right: 10%;
+    top: 120px;
+    right: 20%;
+    z-index:0;
   }
   .sky{
     position: fixed;
     z-index:-1;
-    top: 80px;
+    top: 30px;
   }
 
   .cloudsHigh{
@@ -37,23 +43,25 @@
   }
   .sun{
     position: fixed;
-    right: 8%;
-    top: 350px;
-    z-index:4;
+    right: 2%;
+    top: 230px;
+    z-index:0;
+    width: 40%;
   }
   .sunAura{
     filter: invert(var(--value, 100%));
     position: fixed;
     right: -10%;
-    top: 15px;
+    top: 20px;
     opacity: 0.1;
     z-index:0;
+    width: 75%;
   }
 
   .greenery{    
-    position: relative;
+    position: fixed;
     z-index:9;
-    margin-top: -280px;
+    top: 250px;
     right: -10%;
     float: right;
   }
