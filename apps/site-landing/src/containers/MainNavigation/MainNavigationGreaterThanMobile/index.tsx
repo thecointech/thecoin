@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import HeaderLink from '@the-coin/site-base/components/HeaderLink';
 
 import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
@@ -30,11 +30,11 @@ export class MainNavigationGreaterThanMobile extends React.Component {
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
-              <Menu secondary className={styles.mainMenu} >
+              <Menu text className={styles.mainMenu} >
                 <Menu.Menu position='left'>
-                    <div>
-                      <img src={Logo} id="logo"/>
-                    </div>
+                    <Link to="/" id={styles.logoLink}>
+                        <img src={Logo} id={styles.logo} />
+                    </Link>
                   </Menu.Menu>
                   <HeaderLink to="/" exact>
                     <FormattedMessage {...home} />

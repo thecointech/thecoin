@@ -26,7 +26,7 @@ const description = { id:"site.homepage.landscape.description",
 
 export const Landscape = () => {
   return (
-    <React.Fragment>
+    <div className={styles.landscapeContent}>
       <Grid padded doubling stackable>
         <Grid.Row className="x4spaceBefore x6spaceAfter">
           <Grid.Column id={styles.headingWrapper}>
@@ -36,7 +36,7 @@ export const Landscape = () => {
               <p>
                   <FormattedMessage {...description} />
               </p>
-              <Button className="x6spaceBefore" as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
+              <Button className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -59,7 +59,7 @@ export const Landscape = () => {
         <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
       </MobileSegment>
 
-    </React.Fragment>
+    </div>
   );
 }
 

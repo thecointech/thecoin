@@ -31,10 +31,7 @@ div.container:nth-child(1){
     width: 100%;
 }
 
-#logo{
-    width: 150px;
-    padding: 15px
-}
+
 
 #app{
   max-width: @maxContentWidth;
