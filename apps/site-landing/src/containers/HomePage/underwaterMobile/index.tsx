@@ -55,7 +55,7 @@ export const UnderwaterMobile = () => {
     <>
       <div className={styles.landscapeUnderwater}>
         <div className={ `${styles.header} x6spaceBefore x8spaceAfter` }>
-              <Header as='h2' className={ `x30spaceBefore x8spaceAfter` }>
+              <Header as='h2' className={ `x30spaceBefore x4spaceAfter` }>
                 <FormattedMessage {...title} />
               </Header>
               <p>
@@ -100,7 +100,7 @@ export const UnderwaterMobile = () => {
         </Grid>
 
           <img className={styles.waterMobile} src={backgroundMobile} />
-          <img src={illustrationDeco} className={ `${styles.illustrationDecoMobile} x2spaceBefore` }/>
+          <img src={illustrationDeco} className={ `${styles.illustrationDecoMobile}` }/>
       </div>
     </>
   );
