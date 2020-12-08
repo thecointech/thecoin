@@ -34,33 +34,38 @@ module.exports = options => ({
           options: {
             configFile: path.join(projectRoot, 'tsconfig.build.json'),
             transpileOnly: true,
-            logLevel: 'info',
             experimentalWatchApi: true,
             projectReferences: true,
           },
         },
       },
       {
-        // Preprocess our own .css files
-        // This is the place to add your own loaders (e.g. sass/less etc.)
-        // for a list of loaders, see https://webpack.js.org/loaders/#styling
-        test: /\.css$/,
-        exclude: /node_modules/,
+        // Default CSS processing (anything not named *.module.css)
+        test: /(?<!module)\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        // CSS/LESS module matching
+        test: /.*\.module\.(le|c)ss$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+          },
           {
             loader: 'css-loader',
             options: {
+              importLoaders: 1,
+              sourceMap: true,
               modules: true,
             },
           },
+          {
+            loader: 'less-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
-      },
-      {
-        // Preprocess 3rd party .css files located in node_modules
-        test: /\.css$/,
-        include: /node_modules/,
-        use: ['style-loader', 'css-loader'],
       },
       {
         // Explicitly process Semantics LESS files
@@ -91,29 +96,7 @@ module.exports = options => ({
           },
         ],
       },
-      {
-        // The rest of the less files
-        test: /.*\.module\.less$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-              modules: true,
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
+
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
         use: 'file-loader',
