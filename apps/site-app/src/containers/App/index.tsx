@@ -19,7 +19,8 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
 
-import '@the-coin/site-base/styles/semantic.less';
+import '@the-coin/site-base/styles/semantic.css';
+//import '@the-coin/site-base/styles/semantic.less';
 import styles from './styles.module.less';
 export const App = ( ) => {
   useFxRatesStore();
