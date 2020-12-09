@@ -4,7 +4,7 @@ import styles from './styles.module.less';
 import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",
@@ -26,9 +26,9 @@ export class MainNavigationMobile extends React.Component {
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
               <Menu secondary className={ `${styles.mainMenu} x2spaceAfter` } >
                 <Menu.Menu position='left'>
-                  <div>
+                  <Link to="/" id={styles.logoLink}>
                     <img src={Logo} id={styles.logo} className={ `x2spaceBefore` }/>
-                  </div>
+                  </Link>
                 </Menu.Menu>
                 <Menu.Menu position='right'>
                   <Menu.Item>

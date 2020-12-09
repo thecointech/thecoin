@@ -43,6 +43,7 @@
 @h2 : unit((64 / 14), rem);
 @h2Mobile : unit((54 / 14), rem);
 @h3 : unit((40 / 14), rem);
+@h3Mobile : unit((36 / 14), rem);
 @h4 : unit((28 / 14), rem);
 @h5 : unit((14 / 14), rem);
 

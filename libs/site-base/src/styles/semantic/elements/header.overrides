@@ -10,6 +10,10 @@
     font-size: @h2Mobile;
     padding-bottom: 20px;
   }
+  h3, h3.ui.header {
+    font-size: @h3Mobile;
+    padding-bottom: 20px;
+  }
 }
 
 

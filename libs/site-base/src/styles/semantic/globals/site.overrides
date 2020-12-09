@@ -10,6 +10,11 @@ a{
     padding-bottom: 10px;
     border-bottom: 2px solid @linkUnderline;
 }
+.left.menu{
+  a {
+    border-bottom: none;
+  }
+}
 
 a:link {
   text-decoration: none;
@@ -47,12 +52,6 @@ div.container:nth-child(1){
   box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);  
 }
 
-#stickers > div:nth-child(1),#stickers > div:nth-child(2){
-    margin-left: 10px;
-    margin-top: 10px;
-    padding: 40px;
-}
-
 .ui.segment.fresnel-container, .ui.container.fresnel-container{
   border: none;
   box-shadow: none;
@@ -62,14 +61,6 @@ div.container:nth-child(1){
   margin: 0 !important;
 }
 
-@media only screen and (max-width: 768px) {
-  h1 {
-    font-size: @h1Mobile;
-  }
-  h2, h2.ui.header {
-    font-size: @h2Mobile;
-  }
-}
 
 @selectors: range(1, 40, 1);
 @space: 5px;
