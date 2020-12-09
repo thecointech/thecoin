@@ -53,6 +53,7 @@
     "@formatjs/intl-pluralrules": "^1.4.1",
     "@nivo/line": "^0.61.1",
     "@the-coin/shared": "*",
+    "@the-coin/site-base": "*",
     "@the-coin/utilities": "*",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
