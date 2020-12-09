@@ -22,8 +22,8 @@ import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/component
 // Our CSS version isn't building correctly yet, but once it does
 // we can save a bit of compile time by referring to it directly
 // instead of the LESS files
-//import '@the-coin/site-base/styles/semantic.css';
-import '@the-coin/site-base/styles/semantic.less';
+import '@the-coin/site-base/styles/semantic.css';
+//import '@the-coin/site-base/styles/semantic.less';
 import styles from './styles.module.less';
 
 export const App = ( ) => {
