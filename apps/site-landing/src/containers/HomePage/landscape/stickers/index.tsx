@@ -39,7 +39,7 @@ export const Stickers = (props: Props) => {
   return (
         <Grid stackable columns={2} id={styles.stickers} className={classForSticker}>
             <Grid.Row columns={3}>
-                <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
+                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
                 <Header as='h4'>
                     <FormattedMessage {...titleLeft} />
                 </Header>
@@ -48,7 +48,7 @@ export const Stickers = (props: Props) => {
                 </p>
                 <a href=""><FormattedMessage {...linkLeft} /></a>
                 </Grid.Column>
-                <Grid.Column className={ `${styles.card} x10spaceBefore x6spaceLeft` }>
+                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
                     <Header as='h4'>
                         <FormattedMessage {...titleRight} />
                     </Header>
