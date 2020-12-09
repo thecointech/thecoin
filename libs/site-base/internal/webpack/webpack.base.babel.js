@@ -6,11 +6,9 @@ const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const less_loaders = require('./webpack.less')
 
 const projectRoot = process.cwd();
-const siteBaseRoot = path.resolve(__dirname, '..', '..');
-const sharedRoot = path.resolve(siteBaseRoot, '..', 'shared');
-const utilsRoot = path.resolve(siteBaseRoot, '..', 'utils-ts');
 
 module.exports = options => ({
   mode: options.mode,
@@ -44,58 +42,16 @@ module.exports = options => ({
         test: /(?<!module)\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      {
-        // CSS/LESS module matching
-        test: /.*\.module\.(le|c)ss$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-              modules: true,
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-      {
-        // Explicitly process Semantics LESS files
-        test: /semantic\.less$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-              paths: [
-                path.join(siteBaseRoot, 'src', 'styles', 'semantic', 'na', 'na'),
-                path.join(siteBaseRoot, 'node_modules')
-              ],
-              modifyVars: {
-                project_root: `"${siteBaseRoot}"`,
-              },
-            },
-          },
-        ],
-      },
+
+      ////////////////////////////////////////////////////////////////
+      // Loaders shared with storybookjs
+
+      // Explicitly process Semantics Less files.
+      less_loaders.semantic_less_loader,
+      // Loaders for module files
+      less_loaders.css_module_loader,
+
+      ////////////////////////////////////////////////////////////////
 
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
@@ -178,10 +134,6 @@ module.exports = options => ({
     mainFields: ['browser', 'jsnext:main', 'main'],
     plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
     alias: {
-      '../../theme.config$': path.resolve(
-        projectRoot,
-        'src/styles/semantic/theme.config',
-      ),
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",
       "@the-coin/shared": "@the-coin/shared/build",

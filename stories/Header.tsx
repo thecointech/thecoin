@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from './Button';
+import { Button } from 'semantic-ui-react';
 import './header.css';
 
 export interface HeaderProps {
