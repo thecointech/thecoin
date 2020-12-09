@@ -24,7 +24,7 @@
     "build:less": "yarn lessc --include-paths=",
     "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./src/.htaccess\" ./build",
     "build:clean": "rimraf ./build",
-    "dev": "yarn cross-env NODE_ENV=development node ../../libs/site-base/internal/server",
+    "dev": "yarn cross-env NODE_ENV=development node internals/server",
     "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start": "yarn test && yarn build && yarn start:server",
     "start:server": "yarn cross-env NODE_ENV=production node server",
