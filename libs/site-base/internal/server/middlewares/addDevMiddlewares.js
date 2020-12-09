@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const fsSystem = require('fs');
+const nocache = require('nocache')
 
 function createWebpackMiddleware(compiler, publicPath) {
   return webpackDevMiddleware(compiler, {
@@ -22,6 +22,8 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
+  // disable caching completely on development builds
+  app.use(nocache());
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead

@@ -12,51 +12,63 @@ const ngrok =
     ? require('ngrok')
     : false;
 const { resolve } = require('path');
-const app = express();
 
-// If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+function run(clientSetup)
+{
+  const app = express();
 
-// In production we need to pass these values in instead of relying on webpack
-setup(app, {
-  outputPath: resolve(process.cwd(), 'build'),
-  publicPath: '/',
-});
-
-// get the intended host and port number, use localhost and port 3000 if not provided
-const customHost = argv.host || process.env.HOST;
-const host = customHost || null; // Let http.Server use its default IPv6/4 host
-const prettyHost = customHost || 'localhost';
-
-// use the gzipped bundle
-app.get('*.js', (req, res, next) => {
-  req.url = req.url + '.gz'; // eslint-disable-line
-  res.set('Content-Encoding', 'gzip');
-  next();
-});
-
-app.get('*.js.map', (req, res, next) => {
-  req.url = req.url + '.gz'; // eslint-disable-line
-  res.set('Content-Encoding', 'gzip');
-  next();
-});
-
-// Start your app.
-app.listen(port, host, async err => {
-  if (err) {
-    return logger.error(err.message);
+  // if any client setup, do it before the default below overrides all paths
+  if (clientSetup) {
+    clientSetup(app);
   }
 
-  // Connect to ngrok in dev mode
-  if (ngrok) {
-    let url;
-    try {
-      url = await ngrok.connect(port);
-    } catch (e) {
-      return logger.error(e);
+  // In production we need to pass these values in instead of relying on webpack
+  setup(app, {
+    outputPath: resolve(process.cwd(), 'build'),
+    publicPath: '/',
+  });
+
+  // get the intended host and port number, use localhost and port 3000 if not provided
+  const customHost = argv.host || process.env.HOST;
+  const host = customHost || null; // Let http.Server use its default IPv6/4 host
+  const prettyHost = customHost || 'localhost';
+
+  // use the gzipped bundle
+  app.get('*.js', (req, res, next) => {
+    req.url = req.url + '.gz'; // eslint-disable-line
+    res.set('Content-Encoding', 'gzip');
+    next();
+  });
+
+  app.get('*.js.map', (req, res, next) => {
+    req.url = req.url + '.gz'; // eslint-disable-line
+    res.set('Content-Encoding', 'gzip');
+    next();
+  });
+
+  // Start your app.
+  app.listen(port, host, async err => {
+    if (err) {
+      return logger.error(err.message);
     }
-    logger.appStarted(port, prettyHost, url);
-  } else {
-    logger.appStarted(port, prettyHost);
-  }
-});
+
+    // Connect to ngrok in dev mode
+    if (ngrok) {
+      let url;
+      try {
+        url = await ngrok.connect(port);
+      } catch (e) {
+        return logger.error(e);
+      }
+      logger.appStarted(port, prettyHost, url);
+    } else {
+      logger.appStarted(port, prettyHost);
+    }
+  });
+}
+
+
+// return app, this allows clients to inject their own requests
+module.exports = {
+  run
+}
