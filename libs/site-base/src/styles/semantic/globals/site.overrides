@@ -7,7 +7,7 @@ a{
     font-size: 12px;
     font-weight: @bold;
     text-transform: uppercase;
-    padding-bottom: 10px;
+    padding-bottom: 6px;
     border-bottom: 2px solid @linkUnderline;
 }
 .left.menu{
