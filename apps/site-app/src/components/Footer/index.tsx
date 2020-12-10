@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './styles.module.less';
 
 import { FormattedMessage } from 'react-intl';
-import { Container, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';
@@ -19,7 +19,7 @@ const copyright = {   id:"site.footer.copyright",
                       description:"Copyright phrase in footer"};
 
 export default () => (
-  <Container id={styles.footerContainer}>
+  <div id={styles.footerContainer}>
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
         <Grid.Row>
           <Grid.Column>
@@ -35,5 +35,5 @@ export default () => (
           </Grid.Column>
         </Grid.Row>
       </Grid>
-  </Container>
+  </div>
 );
