@@ -5,7 +5,7 @@ import { Header, Container, Message, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { getWeb3Type } from "@the-coin/shared/utils/detection";
 import { Decoration } from "components/Decoration";
-import styles from './styles.module.less';
+import styles from '../styles.module.less';
 
 
 const aboveTheTitle = { id:"site.Account.connect.create.aboveTheTitle",

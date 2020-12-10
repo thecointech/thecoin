@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { Header, Container, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Decoration } from "components/Decoration";
-import styles from './styles.module.less';
+import styles from '../styles.module.less';
 
 
 const aboveTheTitle = { id:"site.Account.connect.existing.aboveTheTitle",
