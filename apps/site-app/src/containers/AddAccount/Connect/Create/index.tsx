@@ -80,6 +80,7 @@ export const Create = () => {
             <FormattedMessage {...buttonCreateAccount} />
           </Button>
       </div>
+      <Decoration />
     </Container>
   );
 }
