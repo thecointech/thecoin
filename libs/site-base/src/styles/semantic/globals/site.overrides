@@ -9,6 +9,7 @@ a{
     text-transform: uppercase;
     padding-bottom: 6px;
     border-bottom: 2px solid @linkUnderline;
+    line-height: 30px;
 }
 .left.menu{
   a {
