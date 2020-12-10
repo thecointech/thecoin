@@ -8,12 +8,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const process = require('process');
 
-const projectRoot = process.cwd();
-const siteBaseRoot = path.resolve(__dirname, '..', '..');
-const sharedRoot = path.resolve(siteBaseRoot, '..', 'shared');
-const utilsRoot = path.resolve(siteBaseRoot, '..', 'utils-ts');
-
-
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
 module.exports = require('./webpack.base.babel')({
