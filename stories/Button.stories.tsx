@@ -10,30 +10,31 @@ export default {
   component: Button,
   argTypes: {
     primary: { control: 'boolean' },
+    content: { control: 'text' }
   },
 } as Meta;
 
 const Template: Story<StrictButtonProps> = (args) => <Button {...args} />;
 
+export const Basic = Template.bind({});
+Basic.args = {
+  content: 'Button',
+  active: false,
+  disabled: false,
+};
+
 export const Primary = Template.bind({});
 Primary.args = {
   primary: true,
-  label: 'Button',
+  content: 'Button',
+  active: false,
+  disabled: false,
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Button',
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
-  label: 'Button',
+  secondary: true,
+  content: 'Button',
+  active: false,
+  disabled: false,
 };

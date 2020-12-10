@@ -52,7 +52,6 @@ module.exports = {
           sourceMap: true,
           paths: [
             path.join(siteBaseRoot, 'src', 'styles', 'semantic', 'na', 'na'),
-            path.join(siteBaseRoot, 'node_modules')
           ],
           modifyVars: {
             project_root: `"${siteBaseRoot}"`,

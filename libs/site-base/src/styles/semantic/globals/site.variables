@@ -21,6 +21,18 @@
 
 
 /*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+@emSize   : 16px;
+
+/* The size of page text  */
+@fontSize : 16px;
+
+
+
+/*-------------------
     Brand Colors
 --------------------*/
 
@@ -34,9 +46,6 @@
 /*--------------
   Page Heading
 ---------------*/
-
-@headerFontWeight : @bold;
-@headerLineHeight : unit((18 / 14), em);
 
 @h1 : unit((80 / 14), rem);
 @h1Mobile : unit((70 / 14), rem);
@@ -53,7 +62,8 @@
 --------------------*/
 
 @linkColor           : #61C1B8;
-@linkUnderline       : @primaryColor;
+@linkUnderline       : none;
+@linkUnderlineColor  : @primaryColor;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;
 
