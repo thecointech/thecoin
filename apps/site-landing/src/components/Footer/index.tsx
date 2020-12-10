@@ -20,7 +20,7 @@ const copyright = {   id:"site.footer.copyright",
                       description:"Copyright phrase in footer"};
 
 export default () => (
-  <Container id={styles.footerContainer}>
+  <div id={styles.footerContainer}>
       <Subscribe />
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
         <Grid.Row>
@@ -37,5 +37,5 @@ export default () => (
           </Grid.Column>
         </Grid.Row>
       </Grid>
-  </Container>
+  </div>
 );
