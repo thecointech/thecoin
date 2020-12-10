@@ -40,7 +40,7 @@ export const Connect = () => {
       <Form>
         <NameInput forceValidate={forceValidate} setName={setName} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onConnect} id="buttonCreateAccountStep1">
+        <Button onClick={onConnect} primary size="big">
           <FormattedMessage {...messages.buttonCreate} />
         </Button>
       </Form>

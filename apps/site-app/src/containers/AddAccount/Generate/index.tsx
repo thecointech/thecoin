@@ -78,10 +78,10 @@ export const Generate = (props: RouteComponentProps) => {
         <Header as="h2">
           <FormattedMessage {...title} />
         </Header>
-        <NameInput forceValidate={forceValidate} setName={setName}/>
+        <div className={`container ui`}><NameInput forceValidate={forceValidate} setName={setName}/></div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
-        <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onGenerate} primary size="big">
+        <div className={`container ui`}><ReferralInput forceValidate={forceValidate} setReferral={setReferral} /></div>
+        <Button className={`x8spaceBefore`} onClick={onGenerate} primary size="big">
           <FormattedMessage {...buttonCreate} />
         </Button>
         <Decoration />
