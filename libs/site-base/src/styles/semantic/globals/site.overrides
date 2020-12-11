@@ -2,6 +2,10 @@
          Site Overrides
 *******************************/
 
+// Import fonts
+@import "~fontsource-abril-fatface/latin-400.css";
+@import "~fontsource-montserrat/latin-400-normal.css";
+@import "~fontsource-montserrat/latin-700-normal.css";
 
 a{
     font-size: 12px;

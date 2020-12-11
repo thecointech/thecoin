@@ -13,36 +13,93 @@
        Fonts
 --------------------*/
 
-@fontName2         : 'Abril Fatface';
-@fontName          : 'Montserrat';
+@fontName          : Montserrat;
+@headerFont        : 'Abril Fatface', Georgia, serif;
+@pageFont          : Montserrat, Verdana, sans-serif;
 
-@headerFont        : @fontName2, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// Hosting our own fonts is faster and more reliable
+// See site.overrides for our new import statement
+@importGoogleFonts : false;
 
+/*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+@emSize   : 16px;
+
+/* The size of page text  */
+@fontSize : 16px;
+
+
+/*-------------------
+      Site Colors
+--------------------*/
+
+// Colors sourced from illustrations
+/*---  Colors  ---*/
+@red              : #F18182;
+@orange           : #FFAB2F;
+@yellow           : #FECCA1;
+@olive            : #138175;
+@green            : #20B58D;
+@teal             : #61C1B8;
+@blue             : #65A4C5;
+@violet           : @blue; // no violet
+@purple           : @blue; // no purple
+@pink             : @red;  // no pink
+@brown            : #6F6571;
+@grey             : @brown; // odd, but this is the Text_Grey color!
+@black            : @darkOlive; // no actual blacks on our site
+
+/*---  Light Colors  ---*/
+@lightRed         : #F99D9E;
+@lightOrange      : @yellow;
+@lightYellow      : #FDE9C2;
+@lightOlive       : #61C1B8;
+@lightGreen       : #60CA8E;
+@lightTeal        : #8ED8D1;
+@lightBlue        : @lightOlive;
+@lightViolet      : @lightBlue;
+@lightPurple      : @lightBlue;
+@lightPink        : @lightRed;
+@lightBrown       : @lightYellow;
+@lightGrey        : #DCDDDE; // TODO: do we really have no greys?
+@lightBlack       : #545454; // as above
+
+@darkGreen: #034B3E;
+@darkRed: #E4696A;
+@darkTeal: #4EAEA5;
+@darkOlive: #2B5250;
 
 /*-------------------
     Brand Colors
 --------------------*/
 
-@primaryColor        : #F18182;
-@secondaryColor      : #20B58D;
+@primaryColor        : @red;
+@primaryColorHover   : @lightRed;
+@primaryColorActive   : @darkRed;
 
+@secondaryColor      : @olive;
+
+// TODO: normalize these with color palette above
 @darkGreen           : #138175;
 @veryDarkGreen       : #2B5250;
 
+@textColor: @black;
 
 /*--------------
   Page Heading
 ---------------*/
 
-@h1 : unit((80 / 14), rem);
-@h1Mobile : unit((70 / 14), rem);
-@h2 : unit((64 / 14), rem);
-@h2Mobile : unit((54 / 14), rem);
-@h3 : unit((40 / 14), rem);
-@h3Mobile : unit((36 / 14), rem);
-@h4 : unit((28 / 14), rem);
-@h5 : unit((14 / 14), rem);
+@h1 : unit((72 / @emSize), rem);
+@h1Mobile : unit((56 / @emSize), rem);
+@h2 : unit((56 / @emSize), rem);
+@h2Mobile : unit((40 / @emSize), rem);
+@h3 : unit((40 / @emSize), rem);
+@h3Mobile : unit((28 / @emSize), rem);
+@h4 : unit((28 / @emSize), rem);
+@h5 : 1rem;
 
 
 /*-------------------
