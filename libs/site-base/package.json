@@ -42,7 +42,8 @@
     "@the-coin/shared": "*",
     "@the-coin/utilities": "*",
     "connected-react-router": "^6.6.1",
-    "fontfaceobserver": "2.1.0",
+    "fontsource-abril-fatface": "3.1.5",
+    "fontsource-montserrat": "3.1.5",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",
     "react-ga": "^2.7.0",
@@ -54,7 +55,6 @@
     "semantic-ui-less": "^2.4.1"
   },
   "devDependencies": {
-    "@types/fontfaceobserver": "0.0.6",
     "@types/intl": "^1.2.0",
     "@types/react-helmet": "5.0.9",
     "@types/react-measure": "^2.0.5",
