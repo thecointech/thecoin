@@ -4,7 +4,7 @@ import styles from './styles.module.less';
 
 import { Subscribe } from '../../containers/Subscribe';
 import { FormattedMessage } from 'react-intl';
-import { Container, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';

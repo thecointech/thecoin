@@ -7,12 +7,13 @@ import { Link, LinkProps } from './Link';
 export default {
   title: 'SemanticUI/Link',
   component: Link,
-  argTypes: {
-    text: { control: 'text', default: 'This is a link' }
-  },
+  args: {
+    text: "This is a link",
+    onClick: () => {}
+  }
 } as Meta;
 
 const Template: Story<LinkProps> = (args) => <Link {...args} />;
 
 export const Basic = Template.bind({});
-Basic.args =  {}
+Basic.args = {}
