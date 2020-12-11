@@ -51,7 +51,6 @@
 
 @linkColor           : #61C1B8;
 @linkUnderline       : none;
-@linkUnderlineColor  : @primaryColor;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;
 

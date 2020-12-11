@@ -20,31 +20,10 @@ div.container:nth-child(1){
     width: 100%;
 }
 
-
-#app{
-  max-width: @maxContentWidth;
-  margin: auto;
-}
-
-#app > div:nth-child(1) {
-  border-bottom: 1px solid @linkColor !important;
-  box-shadow: 0px 5px grey;
-  width: 100%;
-
-  -webkit-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-  -moz-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-  box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-}
-
 .ui.segment.fresnel-container, .ui.container.fresnel-container{
   border: none;
   box-shadow: none;
 }
-
-.ui.container.appContainer{
-  margin: 0 !important;
-}
-
 
 @selectors: range(1, 40, 1);
 @space: 5px;
