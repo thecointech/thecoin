@@ -14,8 +14,8 @@
 --------------------*/
 
 @fontName          : Montserrat;
-@headerFont        : 'Abril Fatface', serif;
-@pageFont          : Montserrat, sans-serif;
+@headerFont        : 'Abril Fatface', Palatino, serif;
+@pageFont          : Montserrat, Verdana, sans-serif;
 
 // Hosting our own fonts is faster and more reliable
 // See site.overrides for our new import statement
@@ -59,7 +59,6 @@
 @lightOlive       : #61C1B8;
 @lightGreen       : #60CA8E;
 @lightTeal        : #8ED8D1;
-
 @lightBlue        : @lightOlive;
 @lightViolet      : @lightBlue;
 @lightPurple      : @lightBlue;
