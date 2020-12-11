@@ -14,7 +14,7 @@
 --------------------*/
 
 @fontName          : Montserrat;
-@headerFont        : 'Abril Fatface', Palatino, serif;
+@headerFont        : 'Abril Fatface', Georgia, serif;
 @pageFont          : Montserrat, Verdana, sans-serif;
 
 // Hosting our own fonts is faster and more reliable
