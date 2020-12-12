@@ -62,7 +62,7 @@
 @lightRed         : #F99D9E;
 @lightOrange      : @yellow;
 @lightYellow      : #FDE9C2;
-@lightOlive       : #61C1B8;
+@lightOlive       : #138175;
 @lightGreen       : #60CA8E;
 @lightTeal        : #8ED8D1;
 @lightBlue        : @lightOlive;
