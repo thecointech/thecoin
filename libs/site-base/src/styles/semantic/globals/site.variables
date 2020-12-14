@@ -43,6 +43,17 @@
 @headerLineHeight: 1.143;
 
 /*-------------------
+    Border Radius
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
+
+@borderColor         : @olive;
+@solidBorderColor    : @olive;
+@focusedFormBorderColor: @darkOlive;
+
+/*-------------------
       Site Colors
 --------------------*/
 
@@ -111,6 +122,25 @@
 @h3Mobile : unit((28 / @emSize), rem);
 @h4 : unit((28 / @emSize), rem);
 @h5 : 1rem;
+
+
+/*--------------
+   Form Input
+---------------*/
+
+/* This adjusts the default form input across all elements */
+//@inputBackground        : @white;
+//@inputVerticalPadding   : @relative11px;
+//@inputHorizontalPadding : @relative14px;
+//@inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
+
+/* Input Text Color */
+@inputColor: @darkOlive;
+@inputPlaceholderColor: @grey;
+@inputPlaceholderFocusColor: @olive;
+
+/* Line Height Default For Inputs in Browser (Descenders are 17px at 14px base em) */
+@inputLineHeight: 1;
 
 
 /*-------------------
