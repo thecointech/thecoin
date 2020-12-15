@@ -27,3 +27,4 @@ libs/tx-processing/src/BrokerTransferAssistant/BrokerTransferAssistantWallet.jso
 libs/shared/ipfs/
 libs/shared/orbitdb/
 .dccache
+apps/admin/app/containers/gmail/credentials.json
