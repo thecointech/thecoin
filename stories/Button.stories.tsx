@@ -1,16 +1,17 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { ButtonPrimary, ButtonSecondary, ButtonTertiary } from '../libs/site-base/src/components/Buttons';
-
-
+import "@the-coin/site-base/build/styles/semantic.less";
 import { Button, StrictButtonProps } from 'semantic-ui-react';
 import "@the-coin/site-base/build/styles/semantic.less";
 
 export default {
   title: 'SemanticUI/Button',
-  component: Button,
+  component: Button, ButtonSecondary,
   argTypes: {
-    content: { control: 'text' }
+    content: { control: 'text' },
+    active: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
 } as Meta;
 
@@ -40,7 +41,7 @@ Secondary.args = {
   disabled: false,
 };
 
-export const Tertiary = TemplateTertiary.bind({});
+export const Tertiary = Template.bind({});
 Tertiary.args = {
   content: 'Button',
   active: false,
