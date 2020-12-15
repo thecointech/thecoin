@@ -37,6 +37,12 @@
 @fontSizeBig    : unit((20 / @emSize), rem);
 @fontSizeSmall  : unit((12 / @emSize), rem);
 
+/*-------------------
+    Border Radius
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
 @lineHeight     : 1.5;
 @lineHeightBig  : 1.6;
 @lineHeightSmall: 2;
@@ -66,7 +72,7 @@
 @lightRed         : #F99D9E;
 @lightOrange      : @yellow;
 @lightYellow      : #FDE9C2;
-@lightOlive       : #61C1B8;
+@lightOlive       : #138175;
 @lightGreen       : #60CA8E;
 @lightTeal        : #8ED8D1;
 @lightBlue        : @lightOlive;
@@ -88,10 +94,19 @@
 
 @primaryColor        : @red;
 @primaryColorHover   : @lightRed;
-@primaryColorActive   : @darkRed;
+@primaryColorActive  : @darkRed;
 
 @secondaryColor      : @olive;
 
+@lightPrimaryColor   : #F99D9E;
+@lightSecondaryColor : #8ED8D1;
+
+// TODO: normalize these with color palette above
+@darkGreen           : #138175;
+@veryDarkGreen       : #2B5250;
+
+@textColor: @grey;
+@textDarkColor: @darkOlive;
 // this is somewhat confusing (to resolve with Marie)
 // We define primary as red, because our primary
 // buttons are red.  However, the dominant color on
@@ -116,6 +131,60 @@
 @hoveredTextColor: @textColor;
 @selectedTextColor: @textColor;
 @negativeTextColor: @red;
+
+/*******************************
+             States
+*******************************/
+
+/*-------------------
+      Disabled
+--------------------*/
+
+@disabledOpacity: 0.50;
+
+/*-------------------
+    Down (:active)
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorDown        : @darkRed;
+@secondaryColorDown      : @darkTeal;
+@lightPrimaryColorDown   : darken(@lightPrimaryColor, 10);
+@lightSecondaryColorDown : lighten(@lightSecondaryColor, 10);
+
+/*-------------------
+        Active
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorActive        : saturate(darken(@primaryColor, 5), 15, relative);
+@secondaryColorActive      : saturate(lighten(@secondaryColor, 5), 15, relative);
+
+@lightPrimaryColorActive   : saturate(darken(@lightPrimaryColor, 5), 15, relative);
+@lightSecondaryColorActive : saturate(lighten(@lightSecondaryColor, 5), 15, relative);
+
+/*-------------------
+        Focus
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorFocus        : saturate(darken(@primaryColor, 8), 20, relative);
+@secondaryColorFocus      : saturate(lighten(@teal, 8), 20, relative);
+
+@lightPrimaryColorFocus   : saturate(darken(@lightPrimaryColor, 8), 20, relative);
+@lightSecondaryColorFocus : saturate(lighten(@lightSecondaryColor, 8), 20, relative);
+
+/*-------------------
+        Hover
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorHover        : saturate(lighten(@primaryColor, 5), 10, relative);
+@secondaryColorHover      : saturate(lighten(@teal, 5), 10, relative);
+
+@lightPrimaryColorHover   : saturate(darken(@lightPrimaryColor, 5), 10, relative);
+@lightSecondaryColorHover : saturate(lighten(@lightSecondaryColor, 5), 10, relative);
+
 
 /*--------------
   Page Heading

@@ -2,7 +2,17 @@
          Site Overrides
 *******************************/
 
-button.ui{
-    margin-top: 20px;
-    margin-bottom: 20px;
+.ui.olive.inverted.button{
+    border-width: 0px;
+    box-shadow: 0px 0px 0px 1px @olive inset !important;
+    font-weight: normal;
+    &:hover{
+        box-shadow: 0px 0px 0px 2px @olive inset !important;
+        color: @olive;
+        background-color: transparent;
+    }
+    &:active, &:target{
+        background-color: @olive;
+    }
 }
+
