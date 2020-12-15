@@ -107,6 +107,30 @@
 
 @textColor: @grey;
 @textDarkColor: @darkOlive;
+// this is somewhat confusing (to resolve with Marie)
+// We define primary as red, because our primary
+// buttons are red.  However, the dominant color on
+// the site is green, and we have many references to
+// primary1 & primary2.  So for now, we are going
+// to include named primary1 & primary2 consistent
+// with the design and resolve naming next conversation.
+//
+// Also note: these colors are not at all
+// what actually use for hover/active
+@primaryColor1: @olive;
+@primaryColor1Hover: @lightOlive;
+@primaryColor1Active: @darkOlive;
+@primaryColor2: @teal;
+@primaryColor2Hover: @lightTeal;
+@primaryColor2Active: @darkTeal;
+
+// This is the most common definition in our CSS,
+// not the most common usage on our site
+@textColor: @darkOlive;
+@textLightColor: @grey;
+@hoveredTextColor: @textColor;
+@selectedTextColor: @textColor;
+@negativeTextColor: @red;
 
 /*******************************
              States
@@ -175,12 +199,44 @@
 @h4 : unit((28 / @emSize), rem);
 @h5 : 1rem;
 
+/*-------------------
+    Borders
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
+
+@borderColor         : @primaryColor2;
+@focusBorderColor    : @primaryColor1;
+@focusedFormBorderColor: @primaryColor1;
+@hoverBorderColor    : @primaryColor2Hover;
+
+@hoverBoxShadow      : 0px 0px 2px @primaryColor2;
+@focusBoxShadow      : 0px 0px 2px #00827E;
+//@errorBoxShadow      : none; // only shadow on focus
+
+
+/*--------------
+   Form Input
+---------------*/
+
+/* This adjusts the default form input across all elements */
+@inputVerticalPadding   : @relative15px;
+@inputHorizontalPadding : @relative15px;
+
+/* Input Text Color */
+@inputPlaceholderColor: @grey;
+@inputPlaceholderFocusColor: @primaryColor1;
+
+/* Line Height Default For Inputs in Browser */
+@inputLineHeight: 1.5;
+
 
 /*-------------------
        Links
 --------------------*/
 
-@linkColor           : #61C1B8;
+@linkColor           : @primaryColor1;
 @linkUnderline       : none;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;
