@@ -17,6 +17,9 @@
 @headerFont        : 'Abril Fatface', Georgia, serif;
 @pageFont          : Montserrat, Verdana, sans-serif;
 
+@bold: 700;
+@light: 400;
+
 // Hosting our own fonts is faster and more reliable
 // See site.overrides for our new import statement
 @importGoogleFonts : false;
@@ -26,10 +29,13 @@
 --------------------*/
 
 /* This is the single variable that controls them all */
-@emSize   : 16px;
+@emSize         : 16px;
 
 /* The size of page text  */
-@fontSize : 16px;
+@fontSize       : 16px;
+
+@fontSizeBig    : unit((20 / @emSize), rem);
+@fontSizeSmall  : unit((12 / @emSize), rem);
 
 /*-------------------
     Border Radius
@@ -37,6 +43,10 @@
 
 @relativeBorderRadius: @relative10px;
 @absoluteBorderRadius: @10px;
+@lineHeight     : 1.5;
+@lineHeightBig  : 1.6;
+@lineHeightSmall: 2;
+@headerLineHeight: 1.143;
 
 /*-------------------
       Site Colors
@@ -95,7 +105,8 @@
 @darkGreen           : #138175;
 @veryDarkGreen       : #2B5250;
 
-@textColor: @black;
+@textColor: @grey;
+@textDarkColor: @darkOlive;
 
 /*******************************
              States

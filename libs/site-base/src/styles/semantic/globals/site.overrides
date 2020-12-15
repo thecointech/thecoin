@@ -7,6 +7,29 @@
 @import "~fontsource-montserrat/latin-400-normal.css";
 @import "~fontsource-montserrat/latin-700-normal.css";
 
+/////////////////////////////////////////////////////////////
+// Basic font variations
+
+.font-black {
+  font-weight: @bold;
+  color: @textDarkColor;
+}
+
+.font-big {
+  font-size: @fontSizeBig;
+  line-height: @lineHeightBig;
+  color: @textDarkColor;
+}
+
+.font-small {
+  font-size: @fontSizeSmall;
+  font-weight: @bold;
+  color: @textDarkColor;
+}
+
+/////////////////////////////////////////////////////////////
+// Links
+
 a{
     font-size: 12px;
     font-weight: @bold;
@@ -20,6 +43,10 @@ a{
   }
 }
 
+/////////////////////////////////////////////////////////////
+// Sets header container sizing.  TODO: Will be refactored out when
+// storybook-ing the header
+
 div.container:nth-child(1){
     width: 100%;
 }
@@ -28,6 +55,9 @@ div.container:nth-child(1){
   border: none;
   box-shadow: none;
 }
+
+/////////////////////////////////////////////////////////////
+// Generic margin/padding classes.
 
 @selectors: range(1, 40, 1);
 @space: 5px;
