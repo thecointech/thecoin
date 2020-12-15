@@ -3,26 +3,36 @@
 *******************************/
 
 // Semantic has no "hover" options
-.ui.input > input {
+// We add the type attribute here to boost
+// our specificity, otherwise the form
+// definition could override this one
+.ui.input {
 
-  &:hover {
-     border: @hoverBorderWidth solid @hoverBorderColor;
-     box-shadow: @hoverBoxShadow;
+  & > input {
+    font-weight: @bold;
+
+    &:hover {
+       border-color: @hoverBorderColor;
+       box-shadow: @hoverBoxShadow !important;
+    }
+
+    &:focus {
+      border-color: @focusBorderColor;
+    }
+
+    &::placeholder {
+      font-weight: @normal;
+    }
   }
 
-  &:focus {
-    border: 2px solid @darkOlive;
-  }
+  &.error > input {
 
-  //   /* browsers require these rules separate */
-  //   // ::-webkit-input-placeholder {
-  //   //   color: @placeholderColor;
-  //   // }
-  //   // ::-moz-placeholder {
-  //   //   color: @placeholderColor;
-  //   // }
-  //   // ::-ms-input-placeholder {
-  //   //   color: @placeholderColor;
-  //   // }
-  // }
+    &:hover {
+      border-color: @lightRed;
+      box-shadow: 0px 0px 2px @red !important;
+    }
+    &:focus {
+      border-color: @darkRed;
+    }
+  }
 }

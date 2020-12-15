@@ -10,21 +10,25 @@
 /////////////////////////////////////////////////////////////
 // Basic font variations
 
+body {
+  color: @textLightColor;
+}
+
 .font-black {
   font-weight: @bold;
-  color: @textDarkColor;
+  color: @textColor;
 }
 
 .font-big {
   font-size: @fontSizeBig;
   line-height: @lineHeightBig;
-  color: @textDarkColor;
+  color: @textColor;
 }
 
 .font-small {
   font-size: @fontSizeSmall;
   font-weight: @bold;
-  color: @textDarkColor;
+  color: @textColor;
 }
 
 /////////////////////////////////////////////////////////////

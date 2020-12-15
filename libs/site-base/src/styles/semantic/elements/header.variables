@@ -6,5 +6,3 @@
 // we ensure ensure these value round down to be consistent in all browsers
 // https://stackoverflow.com/questions/17281017/round-up-line-height
 @lineHeights: 1.112, 1.143, 1.20, 1.143, 2;
-
-@textColor: @textDarkColor;

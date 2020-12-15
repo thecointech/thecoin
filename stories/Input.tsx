@@ -3,13 +3,14 @@ import { Header, Form, Label, Input as SemanticInput, StrictInputProps } from 's
 import "@the-coin/site-base/build/styles/semantic.less"
 
 export interface InputProps extends StrictInputProps {
-  label: string
+  label: string,
+  error?: boolean,
 }
 export const Input: React.FC<InputProps> = (props) => {
   const { label, ...rest } = props;
   return (
     <>
-      <Header as="H5">In Form</Header>
+      <Header as="h5">In Form</Header>
       <Form>
         <Form.Field>
           <Label>{label}</Label>
@@ -18,7 +19,7 @@ export const Input: React.FC<InputProps> = (props) => {
       </Form>
       <br />
       <hr />
-      <Header as="H5">Raw</Header>
+      <Header as="h5">Raw</Header>
       <div>
         <Label>{label}</Label><br />
         <SemanticInput {...rest} />

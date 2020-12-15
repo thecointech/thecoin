@@ -99,11 +99,23 @@
 // primary1 & primary2.  So for now, we are going
 // to include named primary1 & primary2 consistent
 // with the design and resolve naming next conversation.
+//
+// Also note: these colors are not at all
+// what actually use for hover/active
 @primaryColor1: @olive;
+@primaryColor1Hover: @lightOlive;
+@primaryColor1Active: @darkOlive;
 @primaryColor2: @teal;
+@primaryColor2Hover: @lightTeal;
+@primaryColor2Active: @darkTeal;
 
-@textColor: @grey;
-@textDarkColor: @darkOlive;
+// This is the most common definition in our CSS,
+// not the most common usage on our site
+@textColor: @darkOlive;
+@textLightColor: @grey;
+@hoveredTextColor: @textColor;
+@selectedTextColor: @textColor;
+@negativeTextColor: @red;
 
 /*--------------
   Page Heading
@@ -128,30 +140,27 @@
 @borderColor         : @primaryColor2;
 @focusBorderColor    : @primaryColor1;
 @focusedFormBorderColor: @primaryColor1;
+@hoverBorderColor    : @primaryColor2Hover;
 
-@focusBoxShadow      : none;
+@hoverBoxShadow      : 0px 0px 2px @primaryColor2;
+@focusBoxShadow      : 0px 0px 2px #00827E;
+//@errorBoxShadow      : none; // only shadow on focus
 
-@hoverBorderWidth    : 1px;
-@hoverBorderColor    : @focusBorderColor;
-@hoverBoxShadow      : 0px 0px 2px #00827E;
 
 /*--------------
    Form Input
 ---------------*/
 
 /* This adjusts the default form input across all elements */
-//@inputBackground        : @white;
-//@inputVerticalPadding   : @relative11px;
-//@inputHorizontalPadding : @relative14px;
-//@inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
+@inputVerticalPadding   : @relative15px;
+@inputHorizontalPadding : @relative15px;
 
 /* Input Text Color */
-@inputColor: @darkOlive;
 @inputPlaceholderColor: @grey;
 @inputPlaceholderFocusColor: @primaryColor1;
 
-/* Line Height Default For Inputs in Browser (Descenders are 17px at 14px base em) */
-@inputLineHeight: 1;
+/* Line Height Default For Inputs in Browser */
+@inputLineHeight: 1.5;
 
 
 /*-------------------
