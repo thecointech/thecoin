@@ -40,3 +40,12 @@ Secondary.args = {
   active: false,
   disabled: false,
 };
+
+
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+  secondary: true,
+  content: 'Button',
+  active: false,
+  disabled: false,
+};
