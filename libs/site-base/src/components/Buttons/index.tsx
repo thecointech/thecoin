@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button } from 'semantic-ui-react';
-import styles from './styles.module.less';
 
 type ArgsButton = {
   active: boolean,
@@ -10,7 +9,7 @@ type ArgsButton = {
 
 export const ButtonPrimary : React.FC<ArgsButton> = (args) =>{
   return (
-    <Button {...args} primary className={styles.theCoinSecondary}>
+    <Button {...args} primary >
       {args.children}
     </Button>
   );
@@ -18,7 +17,7 @@ export const ButtonPrimary : React.FC<ArgsButton> = (args) =>{
 
 export const ButtonSecondary : React.FC<ArgsButton> = (args) =>{
   return (
-    <Button {...args} inverted color="olive" className={styles.theCoinSecondary}>
+    <Button {...args} inverted color="olive" >
       {args.children}
     </Button>
   );
@@ -26,7 +25,7 @@ export const ButtonSecondary : React.FC<ArgsButton> = (args) =>{
 
 export const ButtonTertiary : React.FC<ArgsButton> = (args) =>{
   return (
-    <Button {...args} secondary className={styles.theCoinSecondary}>
+    <Button {...args} secondary >
       {args.children}
     </Button>
   );
