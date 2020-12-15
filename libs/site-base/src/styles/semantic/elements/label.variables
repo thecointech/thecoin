@@ -4,7 +4,7 @@
 
 @textTransform: uppercase;
 @fontWeight: @bold;
-@color: @textDarkColor;
+@color: @textColor;
 @backgroundColor: transparent;
 // This padding seems a little low.  Check this and come back
 @horizontalPadding: 0;

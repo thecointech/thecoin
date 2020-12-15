@@ -1,3 +1,8 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+// error box shadow is overridden in default theme input.variables
+@errorBorderColorHover    : @lightRed;
+@errorBoxShadowHover      : 0px 0px 2px @red;
+@errorFocusBorderColor    : @darkRed
