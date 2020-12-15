@@ -2,129 +2,27 @@
          Site Overrides
 *******************************/
 
-label[for*="range"], label[htmlfor*="range"]
-{   
-    display: block;
-}
+// Semantic has no "hover" options
+.ui.input > input {
 
-.ui.input > input[type=range]{
-  border: none;
-}
+  &:hover {
+     border: @hoverBorderWidth solid @hoverBorderColor;
+     box-shadow: @hoverBoxShadow;
+  }
 
-input[type=range] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: transparent !important; /* Otherwise white in Chrome */
-}
+  &:focus {
+    border: 2px solid @darkOlive;
+  }
 
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-
-
-input[type=range] {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  cursor: pointer;
-
-  /* Hides the slider so custom styles can be added */
-  background: transparent; 
-  border-color: transparent;
-  color: transparent;
-}
-
-
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: 4px solid #FFFFFF;
-  height: 24px;
-  width: 24px;
-  border-radius: 24px;
-  background: #20B58D;
-  cursor: pointer;
-  margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
-}
-
-/* All the same stuff for Firefox */
-input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-  border: 4px solid #FFFFFF;
-  height: 16px;
-  width: 16px;
-  border-radius: 20px;
-  background: #20B58D;
-  cursor: pointer;
-}
-
-/* All the same stuff for IE */
-input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-  border: 4px solid #FFFFFF;
-  height: 16px;
-  width: 16px;
-  border-radius: 20px;
-  background: #20B58D;
-  cursor: pointer;
-}
-
-
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-  background: #20B58D;
-  border-radius: 5px;
-  border: 0.2px solid #20B58D;
-}
-
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
-}
-
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-  background: #20B58D;
-  border-radius: 5px;
-  border: 0.2px solid #20B58D;
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  border-width: 16px 0;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #2a6495;
-  border: 0.2px solid #20B58D;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #20B58D;
-}
-input[type=range]::-ms-fill-upper {
-  background: #20B58D;
-  border: 0.2px solid #20B58D;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px #20B58D, 0px 0px 1px #0d0d0d;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #367ebd;
+  //   /* browsers require these rules separate */
+  //   // ::-webkit-input-placeholder {
+  //   //   color: @placeholderColor;
+  //   // }
+  //   // ::-moz-placeholder {
+  //   //   color: @placeholderColor;
+  //   // }
+  //   // ::-ms-input-placeholder {
+  //   //   color: @placeholderColor;
+  //   // }
+  // }
 }

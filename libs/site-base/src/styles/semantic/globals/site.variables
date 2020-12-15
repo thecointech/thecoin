@@ -43,17 +43,6 @@
 @headerLineHeight: 1.143;
 
 /*-------------------
-    Border Radius
---------------------*/
-
-@relativeBorderRadius: @relative10px;
-@absoluteBorderRadius: @10px;
-
-@borderColor         : @olive;
-@solidBorderColor    : @olive;
-@focusedFormBorderColor: @darkOlive;
-
-/*-------------------
       Site Colors
 --------------------*/
 
@@ -103,9 +92,15 @@
 
 @secondaryColor      : @olive;
 
-// TODO: normalize these with color palette above
-@darkGreen           : #138175;
-@veryDarkGreen       : #2B5250;
+// this is somewhat confusing (to resolve with Marie)
+// We define primary as red, because our primary
+// buttons are red.  However, the dominant color on
+// the site is green, and we have many references to
+// primary1 & primary2.  So for now, we are going
+// to include named primary1 & primary2 consistent
+// with the design and resolve naming next conversation.
+@primaryColor1: @olive;
+@primaryColor2: @teal;
 
 @textColor: @grey;
 @textDarkColor: @darkOlive;
@@ -123,6 +118,22 @@
 @h4 : unit((28 / @emSize), rem);
 @h5 : 1rem;
 
+/*-------------------
+    Borders
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
+
+@borderColor         : @primaryColor2;
+@focusBorderColor    : @primaryColor1;
+@focusedFormBorderColor: @primaryColor1;
+
+@focusBoxShadow      : none;
+
+@hoverBorderWidth    : 1px;
+@hoverBorderColor    : @focusBorderColor;
+@hoverBoxShadow      : 0px 0px 2px #00827E;
 
 /*--------------
    Form Input
@@ -137,7 +148,7 @@
 /* Input Text Color */
 @inputColor: @darkOlive;
 @inputPlaceholderColor: @grey;
-@inputPlaceholderFocusColor: @olive;
+@inputPlaceholderFocusColor: @primaryColor1;
 
 /* Line Height Default For Inputs in Browser (Descenders are 17px at 14px base em) */
 @inputLineHeight: 1;
@@ -147,7 +158,7 @@
        Links
 --------------------*/
 
-@linkColor           : #61C1B8;
+@linkColor           : @primaryColor1;
 @linkUnderline       : none;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;

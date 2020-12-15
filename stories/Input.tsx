@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Label, Input as SemanticInput, StrictInputProps } from 'semantic-ui-react'
+import { Header, Form, Label, Input as SemanticInput, StrictInputProps } from 'semantic-ui-react'
 import "@the-coin/site-base/build/styles/semantic.less"
 
 export interface InputProps extends StrictInputProps {
@@ -8,11 +8,21 @@ export interface InputProps extends StrictInputProps {
 export const Input: React.FC<InputProps> = (props) => {
   const { label, ...rest } = props;
   return (
-    <Form>
-      <Form.Field>
-        <Label>{label}</Label>
+    <>
+      <Header as="H5">In Form</Header>
+      <Form>
+        <Form.Field>
+          <Label>{label}</Label>
+          <SemanticInput {...rest} />
+        </Form.Field>
+      </Form>
+      <br />
+      <hr />
+      <Header as="H5">Raw</Header>
+      <div>
+        <Label>{label}</Label><br />
         <SemanticInput {...rest} />
-      </Form.Field>
-    </Form>
+      </div>
+    </>
   )
 }

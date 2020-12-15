@@ -11,6 +11,6 @@ const Template: Story<InputProps> = (args) => <Input {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {
-  label: "This is an input",
+  label: "input label",
   placeholder: "placeholder text"
 };
