@@ -91,7 +91,10 @@
 /*-------------------
     Brand Colors
 --------------------*/
-@theCoinPaletteGreen0     : #61C1B8;
+@theCoinPalettePaleGreen1     : #8ED8D1;
+@theCoinPalettePaleGreen2     : #61C1B8;
+@theCoinPalettePaleGreen3     : #4EAEA5;
+
 @theCoinPaletteGreen1     : #95DC8F;
 @theCoinPaletteGreen2     : #60CA8E;
 @theCoinPaletteGreen3     : #20B58D;
@@ -116,17 +119,17 @@
 @theCoinPaletteGreenGradient2     : linear-gradient(0.38deg, @theCoinPaletteGreen3 21.77%, @theCoinPaletteGreen2 63.66%, @theCoinPaletteGreen4 109.03%);
 @theCoinPaletteGreenGradient3     : linear-gradient(179.98deg, @theCoinPaletteGreen4 50.82%, @theCoinPaletteGreen5 110.16%);
 
-@theCoinPrimaryRedNeutral     : #F18182;
-@theCoinPrimaryRedPale        : #F99D9E;
-@theCoinPrimaryRedDark        : #E4696A;
+@theCoinPrimaryRedPale        : @theCoinPaletteRed1;
+@theCoinPrimaryRedNeutral     : @theCoinPaletteRed2;
+@theCoinPrimaryRedDark        : @theCoinPaletteRed3;
 
 @theCoinPrimaryGreenPale        : @theCoinPaletteGreen0;
 @theCoinPrimaryGreenNeutral     : @theCoinPaletteGreen4;
 @theCoinPrimaryGreenDark        : @theCoinPaletteGreen5;
 
-@theCoinSecondaryGreenPale        : #8ED8D1;
+@theCoinSecondaryGreenPale        : @theCoinPalettePaleGreen1;
 @theCoinSecondaryGreenNeutral     : @theCoinPaletteGreen0;
-@theCoinSecondaryGreenDark        : #4EAEA5;
+@theCoinSecondaryGreenDark        : @theCoinPalettePaleGreen3;
 
 
 @primaryColor        : @red;
