@@ -91,6 +91,43 @@
 /*-------------------
     Brand Colors
 --------------------*/
+@theCoinPaletteGreen0     : #61C1B8;
+@theCoinPaletteGreen1     : #95DC8F;
+@theCoinPaletteGreen2     : #60CA8E;
+@theCoinPaletteGreen3     : #20B58D;
+@theCoinPaletteGreen4     : #138175;
+@theCoinPaletteGreen5     : #2B5250;
+@theCoinPaletteGreen6     : #034B3E;
+
+@theCoinPaletteGray1     : #6F6571;
+
+@theCoinPaletteGold1     : #FDE9C2;
+@theCoinPaletteGold2     : #FECCA1;
+@theCoinPaletteGold3     : #FECCA1;
+@theCoinPaletteGold4     : #FFAB2F;
+
+@theCoinPaletteRed1     : #F99D9E;
+@theCoinPaletteRed2     : #F18182;
+@theCoinPaletteRed3     : #E4696A;
+
+@theCoinPaletteBlue1    : #65A4C5;
+
+@theCoinPaletteGreenGradient1     : linear-gradient(359.64deg, @theCoinPaletteGreen4 35.26%, @theCoinPaletteGreen3 87.06%, @theCoinPaletteGreen4 109.26%);
+@theCoinPaletteGreenGradient2     : linear-gradient(0.38deg, @theCoinPaletteGreen3 21.77%, @theCoinPaletteGreen2 63.66%, @theCoinPaletteGreen4 109.03%);
+@theCoinPaletteGreenGradient3     : linear-gradient(179.98deg, @theCoinPaletteGreen4 50.82%, @theCoinPaletteGreen5 110.16%);
+
+@theCoinPrimaryRedNeutral     : #F18182;
+@theCoinPrimaryRedPale        : #F99D9E;
+@theCoinPrimaryRedDark        : #E4696A;
+
+@theCoinPrimaryGreenPale        : @theCoinPaletteGreen0;
+@theCoinPrimaryGreenNeutral     : @theCoinPaletteGreen4;
+@theCoinPrimaryGreenDark        : @theCoinPaletteGreen5;
+
+@theCoinSecondaryGreenPale        : #8ED8D1;
+@theCoinSecondaryGreenNeutral     : @theCoinPaletteGreen0;
+@theCoinSecondaryGreenDark        : #4EAEA5;
+
 
 @primaryColor        : @red;
 @primaryColorHover   : @lightRed;

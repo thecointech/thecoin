@@ -25,7 +25,7 @@ export const ButtonSecondary : React.FC<ArgsButton> = (args) =>{
 
 export const ButtonTertiary : React.FC<ArgsButton> = (args) =>{
   return (
-    <Button {...args} secondary >
+    <Button {...args} secondary>
       {args.children}
     </Button>
   );
