@@ -4,8 +4,8 @@ import { ButtonPrimary, ButtonSecondary, ButtonTertiary, ArgsButton } from '../l
 import "@the-coin/site-base/build/styles/semantic.less";
 
 export default {
-  title: 'Button',
-  component: ButtonPrimary,ButtonSecondary,ButtonTertiary,
+  title: 'SemanticUI/Button',
+  component: ButtonPrimary,
   argTypes: {
     content: { control: 'text' },
     active: { control: 'boolean' },
