@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'semantic-ui-react';
 
-type ArgsButton = {
+export type ArgsButton = {
   active: boolean,
   disabled: boolean,
   content: string,

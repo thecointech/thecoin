@@ -189,30 +189,22 @@
 /*---  Colors  ---*/
 @primaryColorDown        : @darkRed;
 @secondaryColorDown      : @darkTeal;
-@lightPrimaryColorDown   : darken(@lightPrimaryColor, 10);
-@lightSecondaryColorDown : lighten(@lightSecondaryColor, 10);
 
 /*-------------------
         Active
 --------------------*/
 
 /*---  Colors  ---*/
-@primaryColorActive        : saturate(darken(@primaryColor, 5), 15, relative);
-@secondaryColorActive      : saturate(lighten(@secondaryColor, 5), 15, relative);
-
-@lightPrimaryColorActive   : saturate(darken(@lightPrimaryColor, 5), 15, relative);
-@lightSecondaryColorActive : saturate(lighten(@lightSecondaryColor, 5), 15, relative);
+@primaryColorActive        : saturate(darken(@darkRed, 5), 6, relative); //#e44f50
+@secondaryColorActive      : saturate(lighten(@secondaryColor, 5), 6, relative);
 
 /*-------------------
-        Focus
+        Focus   
 --------------------*/
 
 /*---  Colors  ---*/
 @primaryColorFocus        : saturate(darken(@primaryColor, 8), 20, relative);
 @secondaryColorFocus      : saturate(lighten(@teal, 8), 20, relative);
-
-@lightPrimaryColorFocus   : saturate(darken(@lightPrimaryColor, 8), 20, relative);
-@lightSecondaryColorFocus : saturate(lighten(@lightSecondaryColor, 8), 20, relative);
 
 /*-------------------
         Hover
@@ -221,9 +213,6 @@
 /*---  Colors  ---*/
 @primaryColorHover        : saturate(lighten(@primaryColor, 5), 10, relative);
 @secondaryColorHover      : saturate(lighten(@teal, 5), 10, relative);
-
-@lightPrimaryColorHover   : saturate(darken(@lightPrimaryColor, 5), 10, relative);
-@lightSecondaryColorHover : saturate(lighten(@lightSecondaryColor, 5), 10, relative);
 
 
 /*--------------
