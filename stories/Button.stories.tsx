@@ -1,14 +1,11 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
-import { Button, StrictButtonProps } from 'semantic-ui-react';
+import { ButtonPrimary, ButtonSecondary, ButtonTertiary, ArgsButton } from '../libs/site-base/src/components/Buttons';
 import "@the-coin/site-base/build/styles/semantic.less";
-import { ButtonSecondary } from '../libs/site-base/src/components/ButtonSecondary/index';
-
 
 export default {
   title: 'SemanticUI/Button',
-  component: Button, ButtonSecondary,
+  component: ButtonPrimary,
   argTypes: {
     content: { control: 'text' },
     active: { control: 'boolean' },
@@ -16,19 +13,13 @@ export default {
   },
 } as Meta;
 
-const Template: Story<StrictButtonProps> = (args) => <Button {...args} />;
-const TemplateSecondary: Story<StrictButtonProps> = (args) => <ButtonSecondary {...args} />;
+const TemplatePrimary: Story<ArgsButton> = (args) => <ButtonPrimary {...args} />;
+const TemplateSecondary: Story<ArgsButton> = (args) => <ButtonSecondary {...args} />;
+const TemplateTertiary: Story<ArgsButton> = (args) => <ButtonTertiary {...args} />;
 
-export const Basic = Template.bind({});
-Basic.args = {
-  content: 'Button',
-  active: false,
-  disabled: false,
-};
 
-export const Primary = Template.bind({});
+export const Primary = TemplatePrimary.bind({});
 Primary.args = {
-  primary: true,
   content: 'Button',
   active: false,
   disabled: false,
@@ -41,10 +32,8 @@ Secondary.args = {
   disabled: false,
 };
 
-
-export const Tertiary = Template.bind({});
+export const Tertiary = TemplateTertiary.bind({});
 Tertiary.args = {
-  secondary: true,
   content: 'Button',
   active: false,
   disabled: false,
