@@ -54,39 +54,34 @@
 
 // Colors sourced from illustrations
 /*---  Colors  ---*/
-@red              : #F18182;
-@orange           : #FFAB2F;
-@yellow           : #FECCA1;
-@olive            : #138175;
-@green            : #20B58D;
-@teal             : #61C1B8;
-@blue             : #65A4C5;
+@red              : @theCoinPaletteRed2;
+@orange           : @theCoinPaletteGold4;
+@yellow           : @theCoinPaletteGold3;
+@olive            : @theCoinPaletteGreen4;
+@green            : @theCoinPaletteGreen1;
+@teal             : @theCoinPalettePaleGreen2;
+@blue             : @theCoinPaletteBlue1;
 @violet           : @blue; // no violet
 @purple           : @blue; // no purple
 @pink             : @red;  // no pink
 @brown            : #6F6571;
-@grey             : @brown; // odd, but this is the Text_Grey color!
-@black            : @darkOlive; // no actual blacks on our site
+@grey             : @theCoinPaletteGray1
+@black            : @theCoinPaletteGreen5; // no actual blacks on our site
 
 /*---  Light Colors  ---*/
-@lightRed         : #F99D9E;
-@lightOrange      : @yellow;
-@lightYellow      : #FDE9C2;
-@lightOlive       : #138175;
-@lightGreen       : #60CA8E;
-@lightTeal        : #8ED8D1;
-@lightBlue        : @lightOlive;
+@lightRed         : @theCoinPaletteRed1;
+@lightOrange      : @theCoinPaletteGold3;
+@lightYellow      : @theCoinPaletteGold2;
+@lightOlive       : @theCoinPaletteGreen3;
+@lightGreen       : @theCoinPrimaryGreenPale;
+@lightTeal        : @theCoinPalettePaleGreen1;
+@lightBlue        : @blue;
 @lightViolet      : @lightBlue;
 @lightPurple      : @lightBlue;
 @lightPink        : @lightRed;
 @lightBrown       : @lightYellow;
-@lightGrey        : #DCDDDE; // TODO: do we really have no greys?
-@lightBlack       : #545454; // as above
-
-@darkGreen: #034B3E;
-@darkRed: #E4696A;
-@darkTeal: #4EAEA5;
-@darkOlive: #2B5250;
+@lightGrey        : @theCoinPaletteGray1
+@lightBlack       : #545454;
 
 /*-------------------
     Brand Colors
@@ -132,45 +127,32 @@
 @theCoinSecondaryGreenDark        : @theCoinPalettePaleGreen3;
 
 
-@primaryColor        : @red;
-@primaryColorHover   : @lightRed;
-@primaryColorActive  : @darkRed;
+@primaryColor        : @theCoinPrimaryRedPale;
+@primaryColorHover   : @theCoinPrimaryRedNeutral;
+@primaryColorActive  : @theCoinPrimaryRedDark;
 
-@secondaryColor      : @olive;
+@secondaryColor      : @theCoinPaletteGreen4;
 
-@lightPrimaryColor   : #F99D9E;
-@lightSecondaryColor : #8ED8D1;
+@lightPrimaryColor   : @theCoinPaletteRed1;
+@lightSecondaryColor : @theCoinPalettePaleGreen1;
 
-// TODO: normalize these with color palette above
-@darkGreen           : #138175;
-@veryDarkGreen       : #2B5250;
+@textColor           : @grey;
+@textDarkColor       : @theCoinPaletteGreen5;
 
-@textColor: @grey;
-@textDarkColor: @darkOlive;
-// this is somewhat confusing (to resolve with Marie)
-// We define primary as red, because our primary
-// buttons are red.  However, the dominant color on
-// the site is green, and we have many references to
-// primary1 & primary2.  So for now, we are going
-// to include named primary1 & primary2 consistent
-// with the design and resolve naming next conversation.
-//
-// Also note: these colors are not at all
-// what actually use for hover/active
-@primaryColor1: @olive;
-@primaryColor1Hover: @lightOlive;
-@primaryColor1Active: @darkOlive;
-@primaryColor2: @teal;
-@primaryColor2Hover: @lightTeal;
-@primaryColor2Active: @darkTeal;
+@primaryColor1              : @theCoinPaletteGreen4;
+@primaryColor1Hover         : @lightOlive;
+@primaryColor1Active        : @theCoinPaletteGreen5;
+@primaryColor2              : @theCoinPalettePaleGreen2;
+@primaryColor2Hover         : @theCoinPalettePaleGreen1;
+@primaryColor2Active        : @theCoinPalettePaleGreen3;
 
 // This is the most common definition in our CSS,
 // not the most common usage on our site
-@textColor: @darkOlive;
-@textLightColor: @grey;
-@hoveredTextColor: @textColor;
-@selectedTextColor: @textColor;
-@negativeTextColor: @red;
+@textColor                  : @theCoinPaletteGreen5;
+@textLightColor             : @grey;
+@hoveredTextColor           : @textColor;
+@selectedTextColor          : @textColor;
+@negativeTextColor          : @red;
 
 /*******************************
              States
@@ -187,16 +169,26 @@
 --------------------*/
 
 /*---  Colors  ---*/
-@primaryColorDown        : @darkRed;
-@secondaryColorDown      : @darkTeal;
+@primaryColorDown        : @theCoinPaletteRed3;
+@secondaryColorDown      : @theCoinPalettePaleGreen3;
+
+@redDown                 : darken(@red, 10);
+@oliveDown               : darken(@olive, 10);
+@greenDown               : darken(@green, 10);
+@tealDown                : darken(@teal, 10);
 
 /*-------------------
         Active
 --------------------*/
 
 /*---  Colors  ---*/
-@primaryColorActive        : saturate(darken(@darkRed, 5), 6, relative); //#e44f50
+@primaryColorActive        : saturate(darken(@theCoinPaletteRed3, 5), 6, relative); //#e44f50
 @secondaryColorActive      : saturate(lighten(@secondaryColor, 5), 6, relative);
+
+@redActive                 : saturate(darken(@red, 5), 6, relative);
+@oliveActive               : saturate(darken(@olive, 5), 6, relative);
+@greenActive               : saturate(darken(@green, 5), 6, relative);
+@tealActive                : @theCoinPalettePaleGreen3;
 
 /*-------------------
         Focus   
@@ -204,7 +196,12 @@
 
 /*---  Colors  ---*/
 @primaryColorFocus        : saturate(darken(@primaryColor, 8), 20, relative);
-@secondaryColorFocus      : saturate(lighten(@teal, 8), 20, relative);
+@secondaryColorFocus      : saturate(lighten(@theCoinPalettePaleGreen2, 8), 20, relative);
+
+@redFocus                 : saturate(darken(@red, 8), 20, relative);
+@oliveFocus               : saturate(darken(@olive, 8), 20, relative);
+@greenFocus               : saturate(darken(@green, 8), 20, relative);
+@tealFocus                : saturate(darken(@teal, 8), 20, relative);
 
 /*-------------------
         Hover
@@ -212,7 +209,12 @@
 
 /*---  Colors  ---*/
 @primaryColorHover        : saturate(lighten(@primaryColor, 5), 10, relative);
-@secondaryColorHover      : saturate(lighten(@teal, 5), 10, relative);
+@secondaryColorHover      : saturate(lighten(@theCoinPalettePaleGreen2, 5), 10, relative);
+
+@redHover                 : saturate(lighten(@red, 5), 6, relative);
+@oliveHover               : saturate(lighten(@olive, 5), 6, relative);
+@greenHover               : saturate(lighten(@green, 5), 6, relative);
+@tealHover                : @theCoinPalettePaleGreen1;
 
 
 /*--------------
