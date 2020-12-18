@@ -4,7 +4,7 @@
 .ui.checkbox input:checked ~ .box:after, .ui.checkbox input:checked ~ label:after{
     background-color: @theCoinPaletteGreen4 !important;
     border-radius: @5px;
-    color: #FFFFFF;
+    color: @white;
 }
 
 .ui.checkbox input.hidden + label:hover{
