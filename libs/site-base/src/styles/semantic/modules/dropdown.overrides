@@ -3,10 +3,12 @@
 *******************************/
 
 .ui.dropdown{
+  &:not(.button) > .default.text{
+    color: @theCoinPaletteGreen4;
+  }
   &.menu > .item .dropdown.icon{
     margin: -0.5em -1em 0em 0em;
   }
-
   &.selection{
     min-height: auto;
     border-color: @theCoinPaletteGreen4;
@@ -17,18 +19,10 @@
       border-color: @theCoinPaletteGreen4;
     }
   }
-
   .menu .item:hover{
     background: fade(@theCoinPalettePaleGreen2, 30%);
   }
   .menu .selected.item{
       background: fade(@theCoinPalettePaleGreen2, 10%);
   }
-}
-
-
-
-
-.ui.dropdown:not(.button) > .default.text{
-  color: @theCoinPaletteGreen4;
 }
