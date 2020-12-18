@@ -1,3 +1,12 @@
 /*******************************
          Site Overrides
 *******************************/
+.ui.checkbox input:checked ~ .box:after, .ui.checkbox input:checked ~ label:after{
+    background-color: @theCoinPaletteGreen4 !important;
+    border-radius: @5px;
+    color: @white;
+}
+
+.ui.checkbox input.hidden + label:hover{
+    color: @theCoinPaletteGreen4 !important;
+}

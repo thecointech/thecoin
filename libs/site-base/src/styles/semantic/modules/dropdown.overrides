@@ -2,7 +2,27 @@
         User Overrides
 *******************************/
 
+.ui.dropdown{
+  &:not(.button) > .default.text{
+    color: @theCoinPaletteGreen4;
+  }
+  &.menu > .item .dropdown.icon{
+    margin: -0.5em -1em 0em 0em;
+  }
+  &.selection{
+    min-height: auto;
+    border-color: @theCoinPaletteGreen4;
+    color: @theCoinPaletteGreen4;
 
-.ui.dropdown .menu > .item .dropdown.icon{
-  margin: -0.5em -1em 0em 0em;
+    &:hover{
+      box-shadow: 0px 0px 0px 1px @theCoinPaletteGreen4 inset !important;
+      border-color: @theCoinPaletteGreen4;
+    }
+  }
+  .menu .item:hover{
+    background: fade(@theCoinPalettePaleGreen2, 30%);
+  }
+  .menu .selected.item{
+      background: fade(@theCoinPalettePaleGreen2, 10%);
+  }
 }
