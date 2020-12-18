@@ -15,15 +15,7 @@ const Template: Story<StrictCheckboxProps> = (args) => <Checkbox {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {
-  label: "input label",
+  label: "Checkbox label",
   error: false,
-  disabled: false,
-};
-
-
-export const Error = Template.bind({});
-Error.args = {
-  label: "Label",
-  error: true,
   disabled: false,
 };
