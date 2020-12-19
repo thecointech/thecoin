@@ -26,3 +26,13 @@
       background: fade(@theCoinPalettePaleGreen2, 10%);
   }
 }
+
+.ui.menu .ui.dropdown .menu > .item{
+  border-radius: 0 !important;
+  &.active{
+    background: fade(@theCoinPalettePaleGreen2, 10%) !important;
+  }
+  &:hover{
+    background: fade(@theCoinPalettePaleGreen2, 30%) !important;
+  }
+}

@@ -8,6 +8,7 @@ import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher'
 
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
+import sharedStyles from '../styles.module.less';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",
@@ -22,6 +23,9 @@ const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
 const titleButton = { id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'};
+const loginLink = {  id:"site.MainNavigation.loginLink",
+                    defaultMessage:"LOG IN",
+                    description:"Title for the Login entry in the menu"};
 
 // TODO: Fix Login button
 export class MainNavigationGreaterThanMobile extends React.Component {
@@ -50,7 +54,9 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                   </HeaderLink>
                   <Menu.Menu position='right'>
                     <Menu.Item>
-                      Login
+                      <Link to="/" className={sharedStyles.loginLink}>
+                        <FormattedMessage {...loginLink} />
+                      </Link>
                     </Menu.Item>
                     <Menu.Item>
                       <Button as={NavLink} to="/addAccount" primary >
