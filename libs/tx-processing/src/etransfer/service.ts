@@ -24,6 +24,11 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
       continue;
 
     const instruction = instructions[i] as ETransferPacket;
+    if (!isValid(instruction))
+    {
+      log.error({hash: record.hash}, "e-Transfer packet for {hash} is invalid: requires manual resolution");
+      continue;
+    }
 
     // first, let's do the transfer
     const address = record.transfer.from;
@@ -38,6 +43,14 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
     }
   }
   return toComplete;
+}
+
+function isValid(packet: ETransferPacket) {
+  return packet &&
+    packet.question?.length > 0 &&
+    packet.answer?.length > 0 &&
+    packet.email?.length > 3 &&
+    packet.email?.includes("@");
 }
 
 
@@ -58,7 +71,6 @@ export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord
 
 export async function getInstructions(toComplete: CertifiedTransferRecord[])
 {
-  console.log("getInstructions");
   const privateKey = await getActionPrivateKey();
   if (!privateKey)
   {
