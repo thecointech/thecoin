@@ -7,6 +7,8 @@ jest.unmock("googleapis")
 
 jest.disableAutomock()
 
+const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
+
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
@@ -20,10 +22,18 @@ afterAll(() => {
 });
 
 it('Can fetch emails', async () => {
+
+  if (!IsManualRun)
+    return;
+
   const deposits = await FetchDepositEmails();
   expect(deposits).not.toBeUndefined();
 })
+
 it('We have valid deposits', async () => {
+
+  if (!IsManualRun)
+    return;
 
   const deposits = await GetDepositsToProcess();
   expect(deposits).not.toBeUndefined();

@@ -65,5 +65,6 @@ async function Process() {
   const rbcApi = new RbcApi();
   await ProcessDeposits(rbcApi);
   await ProcessETransfers(rbcApi);
+  log.debug(` --- Completed processing --- `);
 }
 Process();

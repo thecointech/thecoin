@@ -6,8 +6,9 @@ import { DepositRecord, PurchaseType } from '../base/types';
 import { addNewEntries } from './process';
 import { log } from '@the-coin/logging';
 import { Timestamp } from '@the-coin/utilities/firestore';
+import { isPresent } from '@the-coin/utilities';
 
-export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
+export const trimQuotes = (s?: string) => s?.replace(/(^")|("$)/g, '');
 
 let __gmail: gmail_v1.Gmail | null = null;
 const getGmail = () => {
@@ -47,39 +48,57 @@ export async function initializeApi(auth: OAuth2Client) {
   log.trace(`Gmail API initialized`);
 }
 
+// Query gmail for emails matching q query string
+async function fetchEmailIds(options: gmail_v1.Params$Resource$Users$Messages$List) {
+  console.log(`*** Page Token: ${options.pageToken} ***`);
+  const gmail = getGmail();
+  const response = await gmail.users.messages.list({
+    userId: 'me',
+    ...options,
+  });
+  return {
+    ids: response.data.messages?.map(list => list.id).filter(isPresent) ?? [],
+    nextPageToken: response.data.nextPageToken || undefined
+  }
+}
+
+// Convert the email Ids to emails
+async function fetchEmails(ids: (string|undefined|null)[]) {
+  const gmail = getGmail();
+  const emailPending = ids
+    .filter(isPresent)
+    .map(id => gmail.users.messages.get({
+        id: id,
+        userId: 'me',
+      })
+  )
+  const emails = await Promise.all(emailPending);
+  return emails.map(email => email.data);
+}
+
 export async function addFromGmail(query?: string): Promise<DepositData[]> {
 
-  const gmail = getGmail();
   let result = [] as DepositData[];
-  let nextPageToken = undefined;
+  let pageToken: string|undefined = undefined;
 
   const q = query ?? 'REDIRECT INTERAC -remember';
+
   do {
     // Fetch a list of all message id's
-    const response = await gmail.users.messages.list({
-      userId: 'me',
-      q
-    });
+    const { ids, nextPageToken } = await fetchEmailIds({q, pageToken});
 
-    // Fetch the actual email
-    const emailPending = response.data.messages?.map(m =>
-      gmail.users.messages.get({
-        id: m.id ?? undefined,
-        userId: 'me'
-      })
-    )
-    if (emailPending)
-    {
-      let emails = await Promise.all(emailPending);
-      let deposits = emails
-        .map(r => toDepositEmail(r.data))
-        .filter(r => !!r);
-      result = result.concat(deposits as DepositData[])
-    }
+    // Convert to emails
+    const emails = await fetchEmails(ids);
+
+    // find deposit emails from the list
+    const deposits  = emails.map(toDepositEmail)
+      .filter(isPresent);
 
     // TODO: untested, but we could have more than 50 emails in a day
-    nextPageToken = response.data.nextPageToken;
-  } while (nextPageToken !== undefined)
+    result = result.concat(deposits)
+    pageToken = nextPageToken as any; // crazy compiler bug!  Somehow became circular type dep no matter how much explicit typing
+
+  } while (pageToken !== undefined)
 
   log.debug(`fetched ${result.length} raw emails`);
 
@@ -88,7 +107,7 @@ export async function addFromGmail(query?: string): Promise<DepositData[]> {
 }
 
 
-function toDepositEmail(email: gmail_v1.Schema$Message): DepositData|null {
+function toDepositEmail(email: gmail_v1.Schema$Message): DepositData | null {
 
   const subject = getSubject(email);
   if (!subject)
@@ -104,9 +123,8 @@ function toDepositEmail(email: gmail_v1.Schema$Message): DepositData|null {
     return null;
 
   var url = getDepositUrl(body);
-  if (!url)
-  {
-    log.error({url, subject}, "No url or invalid url found: {url} for email: {subject}");
+  if (!url) {
+    log.error({ url, subject }, "No url or invalid url found: {url} for email: {subject}");
     return null;
   }
 
@@ -235,8 +253,7 @@ function getSubjectFrancais(subject: string) {
 
 function getBody(email: gmail_v1.Schema$Message): string {
   let mp = email.payload;
-  for (let i = 0; i < 3; i++)
-  {
+  for (let i = 0; i < 3; i++) {
     if (!mp || !mp.parts)
       return "";
     mp = mp.parts[0]
