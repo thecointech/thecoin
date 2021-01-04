@@ -279,3 +279,44 @@
 
 @defaultDuration : 0.1s;
 @defaultEasing   : ease;
+
+/*--------------
+   Form Input
+---------------*/
+
+/* Input Text Color */
+@inputColor: @olive;
+@inputPlaceholderColor: @black;
+@inputPlaceholderFocusColor: @black;
+
+/* Line Height Default For Inputs in Browser (Descenders are 17px at 14px base em) */
+@inputLineHeight: unit((17 / 14), em);
+
+/*-------------------
+    Focused Input
+--------------------*/
+
+/* Used on inputs, textarea etc */
+@focusedFormBorderColor: @olive;
+
+/* Used on dropdowns, other larger blocks */
+@focusedFormMutedBorderColor: @olive;
+
+
+
+/*-------------------
+    Derived Values
+--------------------*/
+
+/* Positive / Negative Dupes */
+@successBackgroundColor : @positiveBackgroundColor;
+@successColor           : @positiveColor;
+@successBorderColor     : @positiveBorderColor;
+@successHeaderColor     : @positiveHeaderColor;
+@successTextColor       : @positiveTextColor;
+
+@errorBackgroundColor   : @primaryColor;
+@errorColor             : @primaryColor;
+@errorBorderColor       : @primaryColor;
+@errorHeaderColor       : @primaryColor;
+@errorTextColor         : @primaryColor;
