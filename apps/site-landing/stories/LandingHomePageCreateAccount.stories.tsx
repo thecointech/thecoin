@@ -14,7 +14,7 @@ import {createReducer} from '../../admin/app/reducers';
 const store = configureAppStore(createReducer, undefined, history);
 
 export default {
-  title: 'Landing/Homepage/CreateAccount',
+  title: 'Landing/CreateAccountBanners',
   component: CreateAccountSmall,
   decorators: [(Story) => <Provider store={store}><MemoryRouter><Story/></MemoryRouter></Provider>],
   argTypes: {}
