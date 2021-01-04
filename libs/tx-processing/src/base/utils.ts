@@ -10,8 +10,9 @@ export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates)
   const recievedAt = record.recievedTimestamp.toDate()
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
-    const r = fxApi.fetchRateAtDate(new Date(nextOpen));
-    r.next();
+    const r = fxApi.fetchRateAtDate(new Date(nextOpen)) as any;
+    if (r?.next)
+      r.next();
   }
   record.processedTimestamp = Timestamp.fromMillis(nextOpen);
 }

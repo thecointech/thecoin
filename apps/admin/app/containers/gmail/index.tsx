@@ -99,6 +99,8 @@ export const Gmail = () => {
         let r = emails;
         r = await addFromDB(r);
         r = await addFromBank(r, rbcApi);
+        // Filter e-transfers turning up before our actual time
+        r = r.filter(d => new Date(d.record.recievedTimestamp.seconds * 1000).getFullYear() >= 2019)
         r = await addSettlementDate(r, fxApi);
         setStep2(r)
       })()
