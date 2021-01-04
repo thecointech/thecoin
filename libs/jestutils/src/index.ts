@@ -4,10 +4,11 @@
 // Replaces the default describe function with a version that can
 // be automatically skipped.  This is useful for ignoring tests that
 // might otherwise fail for reasons that don't indicate failure in the code
+// if the callback is false or returns false,
 const old_describe = describe;
-const db_describe = async (name: number | string | Function, test: boolean|(() => boolean), fn: () => void | Promise<void>) => {
+const skippable_describe = async (name: number | string | Function, fn: () => void | Promise<void>, allowRun?: boolean|(() => boolean)) => {
 
-  if (!test || (typeof test === 'function' && !test())) {
+  if (allowRun === false || (typeof allowRun === 'function' && allowRun() === false)) {
     return old_describe.skip(name, fn);
   }
   return old_describe(name, fn)
@@ -19,4 +20,4 @@ const db_describe = async (name: number | string | Function, test: boolean|(() =
 // (for example, heavy CPU work, billed resources, or sending emails etc)
 const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
 
-export { db_describe as describe, IsManualRun }
+export { skippable_describe as describe, IsManualRun }
