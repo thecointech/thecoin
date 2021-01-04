@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "apps\\reconciliation"
+		},
+		{
+			"path": "libs\\tx-gmail"
+		}
+	],
+	"settings": {}
+}

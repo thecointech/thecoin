@@ -227,6 +227,9 @@ function getSubject(email: gmail_v1.Schema$Message) {
   // filter an RE emails
   if (subject.startsWith("Re: [REDIRECT:]"))
     return null;
+  // Filter expired notifications
+  if (subject.endsWith("expired."))
+    return null;
 
   const parsed = getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
   if (!parsed)
