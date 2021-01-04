@@ -189,7 +189,7 @@ function getAmountFrancais(body: string) {
 }
 
 function getDepositUrl(body: string) {
-  const r = /(https:\/\/etransfer.interac.ca\/[a-z0-9]{8}\/[a-fA-F0-9]{32})\b/i.exec(body);
+  const r = /(https:\/\/etransfer.interac.ca\/[a-z0-9]{8}\/[a-f0-9]+)\b/i.exec(body);
   return r
     ? new URL(r[1])
     : undefined;
