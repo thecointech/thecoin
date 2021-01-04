@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@the-coin/types": "*",
+    "@the-coin/jestutils": "*",
     "firestore-admin": "^1.3.0",
     "jest": "*"
   }
