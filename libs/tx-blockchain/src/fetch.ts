@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import { Transaction } from "./types";
-import { Contract } from "ethers";
+import { Contract, EventFilter } from "ethers";
 import { toHuman } from "@the-coin/utilities";
 import { Log } from "ethers/providers";
 import { DateTime } from "luxon";
@@ -56,8 +56,8 @@ async function transferToTransaction(toWallet: boolean, ethersLog: Log, contract
   const { from, to, value } = res.values;
   var r: Transaction = {
     txHash: ethersLog.transactionHash,
-    date: new DateTime(),
-    completed: new DateTime(),
+    date: DateTime.local(),
+    completed: DateTime.local(),
     change: toWallet ? value.toNumber() : -value.toNumber(),
     logEntry: "---",
     balance: -1,
@@ -72,12 +72,7 @@ async function transferToTransaction(toWallet: boolean, ethersLog: Log, contract
   return r;
 }
 
-async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: Contract, history: Transaction[]) {
-  // construct filter to get tx either from or to
-  const args = to ? [null, account] : [account, null];
-  let filter: any = contract.filters.Transfer(...args);
-  filter.fromBlock = fromBlock || 0;
-
+export async function readTransfers(contract: Contract, filter: EventFilter, to:boolean) {
   // Retrieve logs
   const txLogs = await contract.provider.getLogs(filter)
   // Convert logs to our transactions
@@ -86,6 +81,17 @@ async function readAndMergeTransfers(account: string, to: boolean, fromBlock: nu
     const tx = await transferToTransaction(to, txLogs[i], contract);
     txs.push(tx);
   }
+  return txs;
+}
+
+async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: Contract, history: Transaction[]) {
+  // construct filter to get tx either from or to
+  const args = to ? [null, account] : [account, null];
+  let filter = contract.filters.Transfer(...args);
+  (filter as any).fromBlock = fromBlock || 0;
+
+  const txs = await readTransfers(contract, filter, to);
+
   // merge and remove duplicates for complete array
   return mergeTransactions(history, txs);
 }

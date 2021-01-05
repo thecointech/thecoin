@@ -1,8 +1,8 @@
 import { eTransferData } from "@the-coin/tx-gmail/types";
-import { BankRecord } from "@the-coin/tx-processing/deposit/types";
 import { Transaction as BlockchainRecord } from "@the-coin/shared/containers/Account";
 import { TransferRecord } from "@the-coin/tx-processing/base/types";
 import { UserAction } from "@the-coin/utilities/User";
+import { DateTime } from "luxon";
 
 export type TransactionRecord = {
 

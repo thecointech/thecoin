@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "libs\\jestutils"
+		},
+		{
+			"path": "libs\\tx-blockchain"
 		}
 	],
 	"settings": {}
