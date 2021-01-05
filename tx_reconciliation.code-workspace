@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "libs\\tx-gmail"
+		},
+		{
+			"path": "libs\\tx-firestore"
+		},
+		{
+			"path": "libs\\jestutils"
 		}
 	],
 	"settings": {}

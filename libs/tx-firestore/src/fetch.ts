@@ -1,88 +1,30 @@
-import { google, gmail_v1 } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
-import { log } from '@the-coin/logging';
-import { isPresent } from '@the-coin/utilities';
+import { Dictionary } from "lodash";
+import { GetUserDoc } from "@the-coin/utilities/User";
+import { BaseTransactionRecord, UserAction, DepositRecord, CertifiedTransferRecord } from "./types";
+import { fetchAllUsers } from "./users";
 
-let __gmail: gmail_v1.Gmail | null = null;
-const getGmail = () => {
-  if (!__gmail)
-    throw new Error("GMail API not initialized, please call initialiseApi");
-  return __gmail;
-}
-
-const __labels = {
-  etransfer: null as string | null,
-  deposited: null as string | null,
-  rejected: null as string | null,
-};
-type Labels = typeof __labels;
-
-export async function initializeApi(auth: OAuth2Client) {
-  if (__gmail)
-    return;
-
-  __gmail = google.gmail({ version: 'v1', auth });
-
-  let response = await __gmail.users.labels.list({
-    userId: "me"
-  })
-  const labels = response.data.labels;
-  if (labels == null)
-    throw new Error("Expected Labels returned from GMail account, check connection");
-
-  const keys = Object.keys(__labels);
-  for (const label of labels) {
-    const k = keys.find(k => label.name?.endsWith(k));
-    if (k) {
-      const kf: keyof Labels = k as any;
-      __labels[kf] = label.id ?? null;
+export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: UserAction) {
+  const db: Dictionary<T[]> = {};
+  for (const address of users) {
+    const user = GetUserDoc(address);
+    const allBuys = await user.collection(type).get();
+    if (allBuys.docs.length > 0) {
+      const dbRecords = allBuys.docs
+        .map(d => d.data() as T)
+        .sort((a, b) => a.recievedTimestamp.toMillis() - b.recievedTimestamp.toMillis());
+      db[address] = dbRecords;
     }
   }
-  log.trace(`Gmail API initialized`);
+  return db;
 }
 
-// Query gmail for emails matching q query string
-export async function fetchEmailIds(options: gmail_v1.Params$Resource$Users$Messages$List) {
-  console.log(`*** Page Token: ${options.pageToken} ***`);
-  const gmail = getGmail();
-  const response = await gmail.users.messages.list({
-    userId: 'me',
-    ...options,
-  });
-  return {
-    ids: response.data.messages?.map(list => list.id).filter(isPresent) ?? [],
-    nextPageToken: response.data.nextPageToken || undefined
+export async function getAllFromFirestore() {
+
+  const users = await fetchAllUsers();
+  const everything = {
+    buy: await fetchDBRecords<DepositRecord>(users, "Buy"),
+    sell: await fetchDBRecords<CertifiedTransferRecord>(users, "Sell"),
+    bill: await fetchDBRecords<CertifiedTransferRecord>(users, "Bill"),
   }
-}
-
-// Convert the email Ids to emails
-export async function fetchEmails(ids: (string | undefined | null)[]) {
-  const gmail = getGmail();
-  const emailPending = ids
-    .filter(isPresent)
-    .map(id => gmail.users.messages.get({
-      id: id,
-      userId: 'me',
-    })
-    )
-  const emails = await Promise.all(emailPending);
-  return emails.map(email => email.data);
-}
-
-export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {
-
-  log.debug("Setting transfer label to: " + labelName);
-  const labelId = __labels[labelName];
-  if (!labelId)
-    throw new Error("Labels not initialized, please check init");
-
-  await getGmail().users.messages.modify({
-    id: email.id!,
-    userId: "me",
-    requestBody: {
-      addLabelIds: [
-        labelId,
-      ]
-    }
-  })
+  return everything;
 }

@@ -29,3 +29,4 @@ libs/shared/orbitdb/
 .dccache
 apps/admin/app/containers/gmail/credentials.json
 libs/tx-processing/src/deposit/gmail.json
+.env
