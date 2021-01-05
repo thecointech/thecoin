@@ -53,7 +53,7 @@ export const UnderwaterMobile = () => {
 
   return (
     <>
-      <div className={styles.landscapeUnderwater}>
+      <div id={styles.underwaterPart} className={styles.landscapeUnderwater}>
         <div className={ `${styles.header} x6spaceBefore x8spaceAfter` }>
               <Header as='h2' className={ `x30spaceBefore x4spaceAfter` }>
                 <FormattedMessage {...title} />

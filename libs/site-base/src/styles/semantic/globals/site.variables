@@ -108,6 +108,10 @@
 
 @theCoinPaletteBlue1    : #65A4C5;
 
+@theCoinPaletteDarkBlue1    : #5396E5;
+@theCoinPaletteDarkBlue2    : #4174B0;
+@theCoinPaletteDarkBlue3    : #396394;
+
 @theCoinPaletteGray1     : #6F6571;
 
 @theCoinPaletteGreenGradient1     : linear-gradient(359.64deg, @theCoinPaletteGreen4 35.26%, @theCoinPaletteGreen3 87.06%, @theCoinPaletteGreen4 109.26%);

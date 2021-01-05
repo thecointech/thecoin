@@ -59,7 +59,7 @@ export const Underwater = () => {
       <GreaterThanMobileSegment>
         <img className={ `${styles.illustration} x8spaceBefore` } src={illustration} />
       </GreaterThanMobileSegment>
-      <div className={ `${styles.landscape} x10spaceBefore` }>
+      <div id={styles.underwaterPart} className={ `${styles.landscape} x10spaceBefore` }>
         <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
               <Header as='h2' id={ `x32spaceBefore` }>
                 <FormattedMessage {...title} />
@@ -104,15 +104,8 @@ export const Underwater = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <GreaterThanMobileSegment>
-          <img className={styles.water} src={background} />
-          <img src={illustrationDeco} className={styles.illustrationDeco}/>
-        </GreaterThanMobileSegment>
-
-        <MobileSegment>
-          <img className={styles.waterMobile} src={backgroundMobile} />
-          <img src={illustrationDeco} className={styles.illustrationDecoMobile}/>
-        </MobileSegment>
+        <img className={styles.water} src={background} />
+        <img src={illustrationDeco} className={styles.illustrationDeco}/>
       </div>
     </React.Fragment>
   );

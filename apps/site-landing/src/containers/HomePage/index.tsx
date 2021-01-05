@@ -16,7 +16,7 @@ import { Advantages } from './advantages';
 import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater';
-import { UnderwaterMobile } from './underwaterMobile';
+import { UnderwaterMobile } from './underwater/underwaterMobile';
 import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
