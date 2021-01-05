@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { Underwater } from '../src/containers/HomePage/underwater';
-import { UnderwaterMobile } from '../src/containers/HomePage/underwaterMobile';
+import { UnderwaterMobile } from '../src/containers/HomePage/underwater/underwaterMobile';
 
 import { MemoryRouter } from 'react-router';
 import { Provider, ProviderProps } from 'react-redux';

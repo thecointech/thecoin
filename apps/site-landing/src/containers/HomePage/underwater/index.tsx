@@ -7,12 +7,11 @@ import background from './images/full_background.svg';
 import co2 from './images/icon_5_1.svg';
 import science from './images/icon_5_2.svg';
 import trees from './images/icon_5_3.svg';
-import backgroundMobile from './images/full_background_mobile.svg';
 import illustrationDeco from './images/smallillustration_right.svg';
 
 
 import { Grid, Header } from 'semantic-ui-react';
-import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import { GreaterThanMobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
 
 const title = { id:"site.homepage.underwater.title",
