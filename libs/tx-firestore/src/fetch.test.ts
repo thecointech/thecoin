@@ -6,8 +6,9 @@ beforeAll(async () => {
 });
 
 it('Can fetch all transactions', async () => {
+  jest.setTimeout(30000);
   const users = await getAllFromFirestore();
 
-  // There should be (at least) 41 entries
+  // Not sure what we can test for here other than the code functions!
   expect(users).toBeTruthy();
 })
