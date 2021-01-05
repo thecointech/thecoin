@@ -1,14 +1,17 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 #stickers{
   margin-left: 5%;
   &.cardContainer{
     padding-left: 10px;
   }
   &.cardContainerMobile{
-    top: 650px;
-    position: fixed;
+    top: 50%;
+    position: absolute;
     padding-left: 5%;
+    padding-right: 5%;
     .card{
-      max-width: 95%;
+      max-width: 100%;
       padding: 30px !important;
       margin-top: 25px !important; 
     }
@@ -16,9 +19,9 @@
 }
  
 .card{
-  background-color: white;
+  background-color: @white;
   border-radius: 15px;
-  border: 0.2px solid #61C1B8;
+  border: 0.2px solid @theCoinPalettePaleGreen2;
   padding: 40px;
   z-index:10;
   max-width: 300px;

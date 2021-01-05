@@ -1,21 +1,9 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
-import { Button } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import { Stickers } from './stickers';
+import { useIntl } from 'react-intl';
 
-import styles from './styles.module.less';
-import sky from './images/sky.svg';
-import landscapeSkyCloudsHigh from './images/cloudsBackgroundHigh.svg';
-import landscapeSkyCloudsLeft from './images/cloudsLeft.svg';
-import landscapeSkyCloudsRight from './images/cloudsRight.svg';
-import Birds from './images/birds.svg';
-import Sun from './images/sun.svg';
-import SunAura from './images/sunAura.svg';
-import landscapeGreenPart from './images/landscape.svg';
-import landscapeGreenPartMobile from './images/illustration_header_mob.svg';
 import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import { LandscapeGreaterThanMobile } from './LandscapeGreaterThanMobile';
+import { LandscapeMobile } from './LandscapeMobile';
 
 const title = { id:"site.homepage.landscape.title",
                 defaultMessage:"The future is brighter",
@@ -25,41 +13,20 @@ const description = { id:"site.homepage.landscape.description",
                       description:"Description following the main title"};
 
 export const Landscape = () => {
+
+const intl = useIntl();
+const titleTranslated = intl.formatMessage(title);
+const descriptionTranslated = intl.formatMessage(description);
   return (
-    <div className={styles.landscapeContent}>
-      <Grid padded doubling stackable>
-        <Grid.Row className="x4spaceBefore x6spaceAfter">
-          <Grid.Column id={styles.headingWrapper}>
-              <h1 className={styles.h1Home}>
-                <FormattedMessage {...title} />
-              </h1>
-              <p>
-                  <FormattedMessage {...description} />
-              </p>
-              <Button className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-      <GreaterThanMobileSegment>
-        <Stickers Mobile={false} />
-        <div className={styles.landscape}>
-          <img className={styles.birds} src={Birds} />
-          <img className={styles.sky} src={sky} />
-          <img className={styles.cloudsHigh} src={landscapeSkyCloudsHigh} />
-          <img className={styles.cloudsLeft} src={landscapeSkyCloudsLeft} />
-          <img className={styles.cloudsRight} src={landscapeSkyCloudsRight} />
-          <img className={styles.sunAura} src={SunAura} />
-          <img className={styles.sun} src={Sun} />
-          <img className={styles.greenery} src={landscapeGreenPart} />
-        </div>
-      </GreaterThanMobileSegment>
+      <>
+        <GreaterThanMobileSegment>
+          <LandscapeGreaterThanMobile mainTitle={titleTranslated} mainDescription={descriptionTranslated} />
+        </GreaterThanMobileSegment>
 
-      <MobileSegment>
-        <Stickers Mobile={true} />
-        <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
-      </MobileSegment>
-
-    </div>
+        <MobileSegment>
+          <LandscapeMobile mainTitle={titleTranslated} mainDescription={descriptionTranslated} />
+        </MobileSegment>
+      </>
   );
 }
 
