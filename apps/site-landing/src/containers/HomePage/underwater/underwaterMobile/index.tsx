@@ -2,11 +2,12 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
-import co2 from './images/icon_5_1.svg';
-import science from './images/icon_5_2.svg';
-import trees from './images/icon_5_3.svg';
-import backgroundMobile from './images/full_background_mobile.svg';
-import illustrationDeco from './images/smallillustration_right.svg';
+import sharedStyles from '../styles.module.less';
+import co2 from '../images/icon_5_1.svg';
+import science from '../images/icon_5_2.svg';
+import trees from '../images/icon_5_3.svg';
+import backgroundMobile from '../images/full_background_mobile.svg';
+import illustrationDeco from '../images/smallillustration_right.svg';
 
 import { Grid, Header } from 'semantic-ui-react';
 
@@ -53,9 +54,9 @@ export const UnderwaterMobile = () => {
 
   return (
     <>
-      <div id={styles.underwaterPart} className={styles.landscapeUnderwater}>
-        <div className={ `${styles.header} x6spaceBefore x8spaceAfter` }>
-              <Header as='h2' className={ `x30spaceBefore x4spaceAfter` }>
+      <div id={sharedStyles.underwaterPart} className={styles.landscapeUnderwater}>
+        <div className={ `${styles.header} x30spaceBefore` }>
+              <Header as='h2' className={ `x1spaceAfter` }>
                 <FormattedMessage {...title} />
               </Header>
               <p>
@@ -66,7 +67,7 @@ export const UnderwaterMobile = () => {
           <Grid.Row columns="3" className={styles.mobileLine} >
             <Grid.Column>
                 <img src={co2} />
-                <Header as='h4'>
+                <Header as='h4'className={ `x1spaceAfter` }>
                   <FormattedMessage {...differenceTitle} />
                 </Header>
                 <p>
@@ -77,7 +78,7 @@ export const UnderwaterMobile = () => {
 
             <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={science} />
-                <Header as='h4'>
+                <Header as='h4'className={ `x1spaceAfter` }>
                   <FormattedMessage {...scienceTitle} />
                 </Header>
                 <p>
@@ -88,7 +89,7 @@ export const UnderwaterMobile = () => {
 
             <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={trees} />
-                <Header as='h4'>
+                <Header as='h4'className={ `x1spaceAfter` }>
                   <FormattedMessage {...treesTitle} />
                 </Header>
                 <p>
