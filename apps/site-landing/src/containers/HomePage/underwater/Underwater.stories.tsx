@@ -1,14 +1,15 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { Underwater } from '../src/containers/HomePage/underwater';
-import { UnderwaterMobile } from '../src/containers/HomePage/underwater/underwaterMobile';
+import { Underwater } from './UnderwaterGreaterThanMobile';
+import { UnderwaterMobile } from './UnderwaterMobile';
 
 import { MemoryRouter } from 'react-router';
 import { Provider, ProviderProps } from 'react-redux';
 import history from '@the-coin/shared/build/utils/history';
 import {configureAppStore} from '@the-coin/shared/build/configureStore';
-import {createReducer} from '../../admin/app/reducers';
+import createReducer from '../../../reducers';
+import { AnyAction } from 'redux';
 
 
 const store = configureAppStore(createReducer, undefined, history);
@@ -23,8 +24,8 @@ export default {
 const Template: Story<ProviderProps> = () => <Underwater />;
 const TemplateMobile: Story<ProviderProps> = () => <UnderwaterMobile />;
 
-export const Desktop = Template.bind({});
+export const Desktop: Story<ProviderProps<AnyAction>> = Template.bind({});
 Desktop.args = {};
 
-export const Mobile = TemplateMobile.bind({});
+export const Mobile: Story<ProviderProps<AnyAction>> = TemplateMobile.bind({});
 Mobile.args = {};

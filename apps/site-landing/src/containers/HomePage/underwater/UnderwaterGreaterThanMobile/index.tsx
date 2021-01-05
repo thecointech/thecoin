@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import styles from './styles.module.less';
-import illustration from './images/5_illustration.svg';
-import background from './images/full_background.svg';
-import co2 from './images/icon_5_1.svg';
-import science from './images/icon_5_2.svg';
-import trees from './images/icon_5_3.svg';
-import illustrationDeco from './images/smallillustration_right.svg';
+import styles from '../styles.module.less';
+import illustration from '../images/5_illustration.svg';
+import background from '../images/full_background.svg';
+import co2 from '../images/icon_5_1.svg';
+import science from '../images/icon_5_2.svg';
+import trees from '../images/icon_5_3.svg';
+import illustrationDeco from '../images/smallillustration_right.svg';
 
 
 import { Grid, Header } from 'semantic-ui-react';
