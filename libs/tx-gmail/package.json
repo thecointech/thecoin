@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@the-coin/logging": "*",
-    "@the-coin/shared": "*",
     "@the-coin/utilities": "*"
   },
   "devDependencies": {

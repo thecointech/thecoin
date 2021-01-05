@@ -1,8 +1,8 @@
 {
-  "name": "@the-coin/tx-gmail",
+  "name": "@the-coin/tx-firestore",
   "version": "0.1.0",
   "private": true,
-  "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
+  "description": "The Coin: Re/store transactions in firestore DB ",
   "keywords": [
     "THECoin"
   ],
@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@the-coin/logging": "*",
-    "@the-coin/shared": "*",
     "@the-coin/utilities": "*"
   },
   "devDependencies": {
