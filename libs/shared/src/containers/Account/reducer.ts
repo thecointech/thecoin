@@ -10,7 +10,7 @@ import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
-import { loadAndMergeHistory, calculateTxBalances } from './history';
+import { loadAndMergeHistory, calculateTxBalances } from '@the-coin/tx-blockchain';
 
 
 // The reducer for a single account state
