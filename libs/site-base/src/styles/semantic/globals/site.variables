@@ -225,6 +225,8 @@
   Page Heading
 ---------------*/
 
+@headerFontWeight : @light;
+
 @h1 : unit((72 / @emSize), rem);
 @h1Mobile : unit((56 / @emSize), rem);
 @h2 : unit((56 / @emSize), rem);
