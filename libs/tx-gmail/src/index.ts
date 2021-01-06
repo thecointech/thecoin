@@ -3,7 +3,10 @@ import { isPresent } from "@the-coin/utilities";
 import { fetchEmailIds, fetchEmails, initializeApi } from "./fetch";
 import { toDepositData } from "./convert";
 import { eTransferData } from "./types";
-import { authorize, isValid } from "auth";
+import { authorize, isValid } from "./auth";
+
+export * from './types';
+export { setETransferLabel } from './fetch'
 
 export async function fetchETransfers(query?: string): Promise<eTransferData[]> {
 

@@ -1,22 +1,18 @@
-import { DepositData } from "./types";
+
 import { RbcApi, ETransferErrorCode, DepositResult } from "@the-coin/rbcapi";
-import { DepositRecord } from "../base/types";
+
 import { GetActionDoc } from "@the-coin/utilities/User";
 import { GetAccountCode } from "../BrokerTransferAssistant";
 import { log } from "@the-coin/logging";
 import { IsValidAddress } from "@the-coin/utilities";
+import { eTransferData } from "@the-coin/tx-gmail";
+import { DepositRecord } from "@the-coin/tx-firestore";
 
+export async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
 
-export function addNewEntries(deposits: DepositData[], moreDeposits: DepositData[])
-{
-  return [...deposits, ...moreDeposits]
-    .sort((a, b) => a.record.recievedTimestamp.seconds - b.record.recievedTimestamp.seconds);
-}
+  const {address, name, depositUrl, cad, recieved } = etransfer;
+  log.debug(`Attempting deposit of: $${cad}, recieved on ${recieved.toSQLDate()}`);
 
-export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
-  const { instruction, record } = deposit;
-  log.debug(`Attempting deposit of: $${record.fiatDisbursed}, settled on ${record.processedTimestamp?.toDate().toDateString()}`);
-  const {address, name, depositUrl} = instruction;
   if (!address || !IsValidAddress(address))
   {
     return {
@@ -32,9 +28,8 @@ export async function depositInBank(deposit: DepositData, rbcApi: RbcApi, progre
     }
   }
 
-  const recieved = record.recievedTimestamp.toDate().toDateString();
   const code = await GetAccountCode(address)
-  const prefix = `${name}/${recieved}`;
+  const prefix = `${name}/${recieved.toSQLDate()}`;
   const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);
   return result;

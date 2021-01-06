@@ -1,7 +1,7 @@
-import { FetchDepositEmails, GetDepositsToProcess } from './service'
-import { PurchaseType } from "../base/types";
+import { GetDepositsToProcess } from './service'
 import { ConfigStore } from '@the-coin/store';
 import { init, release } from '@the-coin/utilities/firestore/jestutils';
+import { PurchaseType } from '@the-coin/tx-firestore';
 
 jest.unmock("googleapis")
 
@@ -21,15 +21,6 @@ afterAll(() => {
   release();
 });
 
-it('Can fetch emails', async () => {
-
-  if (!IsManualRun)
-    return;
-
-  const deposits = await FetchDepositEmails();
-  expect(deposits).not.toBeUndefined();
-})
-
 it('We have valid deposits', async () => {
 
   if (!IsManualRun)
@@ -39,7 +30,7 @@ it('We have valid deposits', async () => {
   expect(deposits).not.toBeUndefined();
 
   for (const deposit of deposits) {
-    console.log(`Deposit from: ${deposit.instruction.name} - ${deposit.instruction.recieved?.toLocaleString()}`);
+    console.log(`Deposit from: ${deposit.etransfer.name} - ${deposit.etransfer.recieved?.toSQLDate()}`);
     const { record } = deposit;
     expect(record.type).toBe(PurchaseType.etransfer);
     expect(record.fiatDisbursed).toBeGreaterThan(0);

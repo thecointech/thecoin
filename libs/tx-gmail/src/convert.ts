@@ -33,6 +33,7 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
   }
 
   return {
+    raw: email,
     recieved: dateRecieved,
     id: getSourceId(url),
     depositUrl: url.toString(),

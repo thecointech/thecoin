@@ -2,9 +2,7 @@
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.ts", "**/__mocks__/**"],
   "references": [
-    { "path": "../utils-ts/tsconfig.build.json" },
-    { "path": "../rbcapi/tsconfig.build.json" },
-    { "path": "../email/tsconfig.build.json" }
+    { "path": "../utils-ts/tsconfig.build.json" }
   ]
 }
 

@@ -1,12 +1,12 @@
 import { IFxRates, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { TransferRecord } from "./types";
 import { toHuman, toCoin } from "@the-coin/utilities";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 import { FXRate } from "@the-coin/pricing";
 import { Timestamp } from "@the-coin/utilities/firestore";
+import { BaseTransactionRecord } from "@the-coin/tx-firestore"
 
-export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates) {
+export async function AddSettlementDate(record: BaseTransactionRecord, fxApi: IFxRates) {
   const recievedAt = record.recievedTimestamp.toDate()
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
@@ -18,21 +18,21 @@ export async function AddSettlementDate(record: TransferRecord, fxApi: IFxRates)
 }
 
 
-export function toFiat<T extends TransferRecord>(record: T, rates: FXRate[])  {
+export function toFiat<T extends BaseTransactionRecord>(record: T, rates: FXRate[])  {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
   const rate = weBuyAt(rates, fxDate);
   return toHuman(rate * record.transfer.value, true);
 }
 
-export function withFiat<T extends TransferRecord>(records: T[], rates: FXRate[]) : T[] {
+export function withFiat<T extends BaseTransactionRecord>(records: T[], rates: FXRate[]) : T[] {
   return records.map(r => ({
     ...r,
     fiatDisbursed: toFiat(r, rates)
   }))
 }
 
-export function calcCoin(record: TransferRecord, rates: FXRate[]) {
+export function calcCoin(record: BaseTransactionRecord, rates: FXRate[]) {
   const processed = record.processedTimestamp;
   const fxDate = !processed || processed.toDate() > new Date() ? undefined : processed.toDate();
   const rate = weSellAt(rates, fxDate);
@@ -44,7 +44,7 @@ export function calcCoin(record: TransferRecord, rates: FXRate[]) {
 }
 
 // Update DB with completion
-export async function MarkComplete(user: string, actionType: UserAction, record: TransferRecord) {
+export async function MarkComplete(user: string, actionType: UserAction, record: BaseTransactionRecord) {
 
   const actionDoc = GetActionDoc(user, actionType, record.hash);
   const action = await actionDoc.get();

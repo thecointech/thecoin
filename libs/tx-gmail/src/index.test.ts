@@ -14,6 +14,8 @@ it('Can fetch new emails (mocked)', async () => {
   // ensure these are all test emails;
   const allTests = deposits.every(d => d.name.indexOf('TEST') >= 0);
   expect(allTests).toBe(true);
+  const allRaw = deposits.every(d => d.raw != undefined);
+  expect(allRaw).toBe(true);
 
   // ensure we have sourceID;
   const allSources = deposits.every(d => !!d.id);
