@@ -20,7 +20,7 @@ export const Advantages = () => {
 
   return (
     <React.Fragment>
-      <div id={styles.advantages}>
+      <div id={styles.advantages} className={ `x2spaceBefore` }>
         <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable id={styles.advantageContent}>
           <Grid.Row>
             <Grid.Column width={2}>
