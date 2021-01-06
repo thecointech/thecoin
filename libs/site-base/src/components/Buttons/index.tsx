@@ -1,14 +1,18 @@
 import * as React from 'react';
-import { Button } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
+import { Button, ButtonProps } from 'semantic-ui-react';
+
 //import styles from './styles.module.less';
 
 export type ArgsButton = {
   active: boolean,
   disabled: boolean,
   content: string,
+  className: string,
+  as: NavLink,
 }
 
-export const ButtonPrimary : React.FC<ArgsButton> = (args) =>{
+export const ButtonPrimary : React.FC<ButtonProps> = (args) =>{
   return (
     <Button {...args} color='red'>
       {args.children}
@@ -16,7 +20,7 @@ export const ButtonPrimary : React.FC<ArgsButton> = (args) =>{
   );
 }
 
-export const ButtonSecondary : React.FC<ArgsButton> = (args) =>{
+export const ButtonSecondary : React.FC<ButtonProps> = (args) =>{
   return (
     <Button {...args} inverted color='olive'>
       {args.children}
@@ -24,7 +28,7 @@ export const ButtonSecondary : React.FC<ArgsButton> = (args) =>{
   );
 }
 
-export const ButtonTertiary : React.FC<ArgsButton> = (args) =>{
+export const ButtonTertiary : React.FC<ButtonProps> = (args) =>{
   return (
     <Button {...args} color='teal'>
       {args.children}
