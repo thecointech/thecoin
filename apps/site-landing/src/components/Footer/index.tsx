@@ -19,7 +19,7 @@ const copyright = {   id:"site.footer.copyright",
                       defaultMessage:"© Copyright 2020. TheCoin. All Right Reserved.",
                       description:"Copyright phrase in footer"};
 
-export default () => (
+export const Footer = () => (
   <div id={styles.footerContainer}>
       <Subscribe />
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
