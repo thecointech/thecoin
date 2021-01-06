@@ -21,9 +21,9 @@ export default {
   argTypes: {}
 } as Meta;
 
-const Template: Story<ProviderProps> = () => <CreateAccountSmall />;
-const TemplateBigPeople: Story<ProviderProps> = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.People } />;
-const TemplateBigPlant: Story<ProviderProps> = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />;
+const Template = () => <CreateAccountSmall />;
+const TemplateBigPeople = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.People } />;
+const TemplateBigPlant = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />;
 
 export const Small: Story<ProviderProps<AnyAction>> = Template.bind({});
 Small.args = {};

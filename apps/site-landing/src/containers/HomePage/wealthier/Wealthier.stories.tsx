@@ -20,7 +20,7 @@ export default {
   argTypes: {}
 } as Meta;
 
-const Template: Story<ProviderProps> = () => <Wealthier />;
+const Template = () => <Wealthier />;
 
 export const Both: Story<ProviderProps<AnyAction>> = Template.bind({});
 Both.args = {};
