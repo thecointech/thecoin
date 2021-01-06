@@ -7,10 +7,11 @@ import { Contract, EventFilter } from "ethers";
 import { toHuman } from "@the-coin/utilities";
 import { Log } from "ethers/providers";
 import { DateTime } from "luxon";
+import { BigNumber } from "ethers/utils";
 
 
 // Load account history and merge with local
-function mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
+export function mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
   const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.txHash === tx.txHash))
   if (uniqueItems.length) {
     history = history.concat(uniqueItems);
@@ -139,19 +140,28 @@ export async function loadAndMergeHistory(address: string, fromBlock: number, co
   return history;
 }
 
-export function calculateTxBalances(currentBalance: number, history: Transaction[]) {
-  var lastBalance = currentBalance;
-  history.reverse().forEach(tx => {
-    if (tx.balance >= 0) {
-      if (lastBalance != tx.balance)
-        console.error('Invalid balance detected: ', lastBalance, history, tx);
-      lastBalance = tx.balance;
-    }
-    else {
-      // tx balance records the balance after the action
-      // is finished (so the last action records current balance)
-      tx.balance = lastBalance;
-    }
-    lastBalance = lastBalance -= tx.change;
-  });
+export function calculateTxBalances(currentBalance: BigNumber, history: Transaction[]) {
+  //let lastBalance = currentBalance;
+  // history.reverse().forEach(tx => {
+  //   // if (tx.balance >= 0) {
+  //   //   if (lastBalance != tx.balance)
+  //   //     console.error('Invalid balance detected: ', lastBalance, history, tx);
+  //   //   lastBalance = tx.balance;
+  //   // }
+  //   // else {
+  //     // tx balance records the balance after the action
+  //     // is finished (so the last action records current balance)
+
+  //   //}
+  //   tx.balance = lastBalance.toNumber();
+  //   lastBalance = lastBalance.sub(tx.change);
+  // });
+
+  // history is sorted - oldest first.
+  let balance = currentBalance;
+  for (let i = history.length - 1; i >= 0; i--) {
+    const tx = history[i];
+    tx.balance = balance.toNumber();
+    balance = balance.sub(tx.change);
+  }
 }
