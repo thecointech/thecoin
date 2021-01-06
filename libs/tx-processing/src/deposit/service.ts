@@ -97,15 +97,15 @@ export async function GetDepositsToProcess()
   return deposits.filter(isPresent);
 }
 
-export async function ProcessUnsettledDeposits()
+export async function ProcessUnsettledDeposits(rbcApi?: RbcApi)
 {
   const deposits = await GetDepositsToProcess();
-  const rbcApi = new RbcApi();
+  const bank = rbcApi ?? new RbcApi();
 
   // for each email, we immediately try and deposit it.
   for (const deposit of deposits)
   {
-    deposit.isComplete = await ProcessUnsettledDeposit(deposit, rbcApi);
+    deposit.isComplete = await ProcessUnsettledDeposit(deposit, bank);
     log.debug("Deposit Completed: " + deposit.isComplete);
   }
 
