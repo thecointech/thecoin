@@ -20,8 +20,8 @@ export default {
   argTypes: {}
 } as Meta;
 
-const Template: Story<ProviderProps> = () => <LandscapeGreaterThanMobile mainTitle={"The future is brighter"} mainDescription={"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."} />;
-const TemplateMobile: Story<ProviderProps> = () => <LandscapeMobile mainTitle={"The future is brighter"} mainDescription={"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."} />;
+const Template = () => <LandscapeGreaterThanMobile mainTitle={"The future is brighter"} mainDescription={"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."} />;
+const TemplateMobile = () => <LandscapeMobile mainTitle={"The future is brighter"} mainDescription={"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet."} />;
 
 export const Desktop: Story<ProviderProps<AnyAction>> = Template.bind({});
 Desktop.args = {};
