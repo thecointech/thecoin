@@ -11,7 +11,6 @@ import {configureAppStore} from '@the-coin/shared/build/configureStore';
 import createReducer from '../../../reducers';
 import { AnyAction } from 'redux';
 
-
 const store = configureAppStore(createReducer, undefined, history);
 
 export default {
@@ -21,8 +20,8 @@ export default {
   argTypes: {}
 } as Meta;
 
-const Template: Story<ProviderProps> = () => <Underwater />;
-const TemplateMobile: Story<ProviderProps> = () => <UnderwaterMobile />;
+const Template = () => <Underwater />;
+const TemplateMobile = () => <UnderwaterMobile />;
 
 export const Desktop: Story<ProviderProps<AnyAction>> = Template.bind({});
 Desktop.args = {};

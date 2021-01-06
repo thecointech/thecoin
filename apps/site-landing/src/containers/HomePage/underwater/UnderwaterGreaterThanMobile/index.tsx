@@ -9,9 +9,7 @@ import science from '../images/icon_5_2.svg';
 import trees from '../images/icon_5_3.svg';
 import illustrationDeco from '../images/smallillustration_right.svg';
 
-
 import { Grid, Header } from 'semantic-ui-react';
-import { GreaterThanMobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
 
 
 const title = { id:"site.homepage.underwater.title",
@@ -55,9 +53,7 @@ export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <GreaterThanMobileSegment>
-        <img className={ `${styles.illustration} x8spaceBefore` } src={illustration} />
-      </GreaterThanMobileSegment>
+      <img className={ `${styles.illustration} x8spaceBefore` } src={illustration} />
       <div id={styles.underwaterPart} className={ `${styles.landscape} x10spaceBefore` }>
         <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
               <Header as='h2' id={ `x32spaceBefore` }>
