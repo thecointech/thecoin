@@ -1,16 +1,7 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import { Button, ButtonProps } from 'semantic-ui-react';
 
 //import styles from './styles.module.less';
-
-export type ArgsButton = {
-  active: boolean,
-  disabled: boolean,
-  content: string,
-  className: string,
-  as: NavLink,
-}
 
 export const ButtonPrimary : React.FC<ButtonProps> = (args) =>{
   return (
