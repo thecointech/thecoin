@@ -57,7 +57,6 @@ function isValid(packet: ETransferPacket) {
     !packet.message?.match(invalidChars)
 }
 
-
 export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord[]>
 {
   const fxRates = new OfflineFxRates();
@@ -71,7 +70,6 @@ export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord
   log.debug({action: 'Sell'}, `Fetched ${toComplete.length} {action} actions that are ready to complete`);
   return toComplete;
 }
-
 
 export async function getInstructions(toComplete: CertifiedTransferRecord[])
 {

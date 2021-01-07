@@ -4,7 +4,7 @@ import { IsValidAddress } from '@the-coin/utilities';
 
 it('Can fetch new all users', async () => {
 
-  await init({});
+  await init();
   const users = await fetchAllUsers();
 
   // There should be (at least) 41 entries
