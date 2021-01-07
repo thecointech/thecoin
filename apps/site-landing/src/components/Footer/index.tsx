@@ -16,15 +16,15 @@ const registered = {  id:"site.footer.registered",
                       description:"Registered Non profit phrase in footer"};
 
 const copyright = {   id:"site.footer.copyright",
-                      defaultMessage:"© Copyright 2020. TheCoin. All Right Reserved.",
+                      defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
                       description:"Copyright phrase in footer"};
 
 export const Footer = () => (
   <div id={styles.footerContainer}>
       <Subscribe />
-      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
+      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable className={ `x5spaceBefore` }>
         <Grid.Row>
-          <Grid.Column>
+          <Grid.Column className={ styles.registered }>
             <FormattedMessage {...registered} />
           </Grid.Column>
           <Grid.Column>
@@ -32,8 +32,8 @@ export const Footer = () => (
             <img src={twitter} />
             <img src={instagram} />
           </Grid.Column>
-          <Grid.Column>
-            <FormattedMessage {...copyright} />
+          <Grid.Column className={ styles.copyright }>
+            &#169; &nbsp;<FormattedMessage {...copyright} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
