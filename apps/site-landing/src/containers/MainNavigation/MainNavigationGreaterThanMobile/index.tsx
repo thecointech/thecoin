@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Container, Button } from 'semantic-ui-react';
+import { Menu, Container } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 import HeaderLink from '@the-coin/site-base/components/HeaderLink';
@@ -9,6 +9,7 @@ import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher'
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",
@@ -59,9 +60,9 @@ export class MainNavigationGreaterThanMobile extends React.Component {
                       </Link>
                     </Menu.Item>
                     <Menu.Item>
-                      <Button as={NavLink} to="/addAccount" primary >
+                      <ButtonPrimary as={NavLink} to="/addAccount" >
                           <FormattedMessage {...titleButton} />
-                      </Button>
+                      </ButtonPrimary>
                     </Menu.Item>
                     <Menu.Item>
                       <LanguageSwitcher />

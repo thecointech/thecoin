@@ -27,7 +27,7 @@ export const CreateAccountSmall = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <ButtonPrimary as={NavLink} to="/addAccount" primary size='large' >
+            <ButtonPrimary as={NavLink} to="/addAccount" size='large' >
               <FormattedMessage {...button} />
             </ButtonPrimary>
           </Grid.Column>

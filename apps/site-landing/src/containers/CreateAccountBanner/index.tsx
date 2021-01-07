@@ -38,7 +38,7 @@ export const CreateAccountBanner = (props: Props) => {
                     <Header as='h3'>
                         <FormattedMessage {...title} />
                     </Header>
-                    <ButtonPrimary as={NavLink} to="/addAccount" content='' primary size='large' >
+                    <ButtonPrimary as={NavLink} to="/addAccount" content='' size='large' >
                         <FormattedMessage {...buttonCreate} />
                     </ButtonPrimary>
                 </Grid.Column>
