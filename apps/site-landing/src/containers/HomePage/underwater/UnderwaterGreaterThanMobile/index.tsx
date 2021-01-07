@@ -53,15 +53,15 @@ export const Underwater = () => {
 
   return (
     <React.Fragment>
-      <img className={ `${styles.illustration} x8spaceBefore` } src={illustration} />
+      <img className={ `${styles.illustration} x4spaceBefore` } src={illustration} />
       <div id={styles.underwaterPart} className={ `${styles.landscape} x10spaceBefore` }>
         <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
               <Header as='h2' id={ `x32spaceBefore` }>
                 <FormattedMessage {...title} />
+                <Header.Subheader>
+                  <FormattedMessage {...description} />
+                </Header.Subheader>
               </Header>
-              <p>
-                <FormattedMessage {...description} />
-              </p>
           </div>
         <Grid className={styles.content} padded doubling stackable>
           <Grid.Row columns="3" >

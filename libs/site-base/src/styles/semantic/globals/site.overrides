@@ -27,9 +27,12 @@ body {
 
 .font-small {
   font-size: @fontSizeSmall;
-  font-weight: @bold;
-  color: @textColor;
 }
+
+.font-bold {
+  font-weight: @bold;
+}
+
 
 /////////////////////////////////////////////////////////////
 // Links

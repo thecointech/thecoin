@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
 import { Input, Button, Message } from 'semantic-ui-react';
-import { GetNewsletterApi } from 'api';
+import { GetNewsletterApi } from '../../api';
 import styles from './styles.module.less';
 import { FormattedMessage } from 'react-intl';
 //import { Redirect } from 'react-router';
+
+
+const description = {  id:"site.subscribe.description",
+                      defaultMessage:"The future is better because of you & us. Subscribe to our newsletter",
+                      description:"Title for the bottom subscription part for the site"};
+const button = {  id:"site.subscribe.button",
+                      defaultMessage:"Subscribe",
+                      description:"Button for the bottom subscription part for the site"};
+
+const invalidEmail = {  id:"site.subscribe.email.invalid",
+                      defaultMessage:"Please enter a valid email",
+                      description:"Message we give a user when the subscription failed"};
+const errorEmail = {  id:"site.subscribe.email.error",
+                      defaultMessage:"Signup failed: please contact support@thecoin.io",
+                      description:"Message we give a user when the subscription failed (already subscribed or server)"};
+const successEmail = {  id:"site.subscribe.email.success",
+                      defaultMessage:"Success: check your emails",
+                      description:"Message we give a user when the subscription is a success"};
 
 
 export const Subscribe = () => {
@@ -39,41 +57,31 @@ export const Subscribe = () => {
   }, [email]);
   return (
     <div className={styles.subscribeBlock}>
-      <span className={ `${styles.subContainer} x10spaceBefore x6spaceAfter` }>
+      <span className={ `${styles.subContainer} x2spaceBefore x6spaceAfter` }>
           <h3>
-            <FormattedMessage id="site.subscribe.description"
-                              defaultMessage="The future is better because of you & us. Subscribe to our newsletter:"
-                              description="Title for the bottom subscription part for the site" />
+            <FormattedMessage {...description} />
           </h3>
       </span>
       <span className={styles.search}>
         <div>
           <Message color='orange' hidden={validInfos}>
-            <FormattedMessage id="site.subscribe.email.invalid"
-                                    defaultMessage="Please enter a valid email"
-                                    description="Message we give a user when the subscription failed" />
+            <FormattedMessage {...invalidEmail}/>
           </Message>
           <Message color='red' hidden={errorInfos}>
-            <FormattedMessage id="site.subscribe.email.error"
-                                    defaultMessage="Signup failed: please contact support@thecoin.io"
-                                    description="Message we give a user when the subscription failed (already subscribed or server)" />
+            <FormattedMessage {...errorEmail} />
           </Message>
           <Message color='olive' hidden={confirmInfos}>
-            <FormattedMessage id="site.subscribe.email.success"
-                                    defaultMessage="Success: check your emails"
-                                    description="Message we give a user when the subscription is a success" />
+            <FormattedMessage {...successEmail} />
           </Message>
         </div>
         <Input
           id='subscribeField'
           onChange={onInputChange}
-          action={(
-            <Button onClick={doSubscribe} secondary>
-              <FormattedMessage id="site.subscribe.button"
-                                defaultMessage="Subscribe"
-                                description="Button for the bottom subscription part for the site" />
-            </Button>)}
           placeholder="Your email" />
+
+        <Button onClick={doSubscribe} secondary className={ `x4spaceLeft` }>
+          <FormattedMessage {...button} />
+        </Button>
       </span>
     </div>
   );

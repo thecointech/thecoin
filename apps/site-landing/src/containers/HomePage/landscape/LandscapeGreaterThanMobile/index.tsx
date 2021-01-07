@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Grid, Header } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 import { Stickers } from '../stickers';
@@ -13,8 +13,10 @@ import Birds from '../images/birds.svg';
 import Sun from '../images/sun.svg';
 import SunAura from '../images/sunAura.svg';
 import landscapeGreenPart from '../images/landscape.svg';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
-export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; } ) => {
+
+export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode;  } ) => {
   return (
     <div className={styles.landscapeContent}>
       <Grid padded doubling stackable>
@@ -22,11 +24,13 @@ export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode;
           <Grid.Column id={styles.headingWrapper}>
               <Header as="h1">
                 {Props.mainTitle}
+                <Header.Subheader>
+                  {Props.mainDescription}
+                </Header.Subheader>
               </Header>
-              <p>
-                {Props.mainDescription}
-              </p>
-              <Button className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" content='Start Now' primary size='massive' />
+              <ButtonPrimary className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" size='large'>
+                {Props.mainButton}
+              </ButtonPrimary>
           </Grid.Column>
         </Grid.Row>
       </Grid>

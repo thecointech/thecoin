@@ -1,8 +1,28 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 #footerContainer{
+  padding: 50px;
   background-image: url("./images/footer_background.svg");
   width: 100%;
+  color: @white;
+  font-weight: @light;
+
+  img{
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .registered{
+    text-align: left;
+  }
+  .copyright{
+    text-align: right;
+  }
   .footerItems > li {
     display: inline-block;
+  }
+  button{
+    background-color: @theCoinPaletteGreen3;
   }
 }    
 .footerText{

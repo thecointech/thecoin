@@ -68,10 +68,10 @@ export const Wealthier = () => {
           <Grid.Column>
               <Header as='h2'>
                 <FormattedMessage {...title} />
+                <Header.Subheader>
+                  <FormattedMessage {...description} />
+                </Header.Subheader>
               </Header>
-              <p>
-                <FormattedMessage {...description} />
-              </p>
           </Grid.Column>
 
           <Grid.Column columns={3}>

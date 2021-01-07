@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Grid, Button, Header } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 
 const title = { id:"site.homepage.createAccountSmall.title", 
@@ -26,9 +27,9 @@ export const CreateAccountSmall = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Button as={NavLink} to="/addAccount" primary size='large' >
+            <ButtonPrimary as={NavLink} to="/addAccount" size='large' >
               <FormattedMessage {...button} />
-            </Button>
+            </ButtonPrimary>
           </Grid.Column>
         </Grid.Row>
       </Grid>

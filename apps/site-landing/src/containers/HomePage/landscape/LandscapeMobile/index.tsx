@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { Button, Grid, Header } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 import { Stickers } from '../stickers';
 
 import styles from '../styles.module.less';
 import landscapeGreenPartMobile from '../images/illustration_header_mob.svg';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 
-export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; }) => {
+export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode; }) => {
   return (
     <div className={styles.landscapeContent} >
       <Grid padded doubling stackable className={ `x8spaceBefore` }>
@@ -20,7 +21,9 @@ export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescrip
               <p>
                 {Props.mainDescription}
               </p>
-              <Button className={`${styles.overTheLandscape} x2spaceBefore` } as={NavLink} to="/Accounts" content='Start Now' primary size='large' />
+              <ButtonPrimary className={`${styles.overTheLandscape} x2spaceBefore` } as={NavLink} to="/Accounts" size='large'> 
+                {Props.mainButton}
+              </ButtonPrimary>
           </Grid.Column>
         </Grid.Row>
       </Grid>
