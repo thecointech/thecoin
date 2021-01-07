@@ -12,12 +12,19 @@ import { BigNumber } from "ethers/utils";
 
 // Load account history and merge with local
 export function mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
-  const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.txHash === tx.txHash))
-  if (uniqueItems.length) {
-    history = history.concat(uniqueItems);
-    history.sort((tx1, tx2) => tx1.date.valueOf() - tx2.date.valueOf())
-  }
-  return history;
+  const mergedHistory = history.concat(moreHistory);
+  mergedHistory.sort((tx1, tx2) => tx1.date.valueOf() - tx2.date.valueOf());
+  return mergedHistory;
+
+  // NOTE - this old implementation gave us bad results on sending tx's to yourself, but
+  // I don't remember why it was implemetned this way in the first place.
+
+  // const uniqueItems = moreHistory.filter((tx) => !history.find((htx) => htx.txHash === tx.txHash))
+  // if (uniqueItems.length) {
+  //   history = history.concat(uniqueItems);
+  //   history.sort((tx1, tx2) => tx1.date.valueOf() - tx2.date.valueOf())
+  // }
+  // return history;
 }
 
 async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, contract: Contract): Promise<boolean> {

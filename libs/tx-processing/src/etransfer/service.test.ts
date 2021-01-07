@@ -1,8 +1,9 @@
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
-import { init } from '@the-coin/utilities/firestore/mock';
+import { init } from '@the-coin/utilities/firestore';
 import { RbcApi } from "@the-coin/rbcapi";
-import data from './service.test.mockdb.json';
 import { ConfigStore } from '@the-coin/store';
+
+import data from './service.test.mockdb.json';
 
 beforeAll(() => {
   jest.setTimeout(90000000);
@@ -12,10 +13,13 @@ afterAll(() => {
   ConfigStore.release();
 })
 beforeEach(async () => {
-  await init(data);
+
 });
 
 it('Can fetch Actions', async ()=> {
+
+  await init(data);
+
   const toComplete = await fetchActionsToComplete();
   expect(toComplete).not.toBeUndefined();
   for (const record of toComplete)
@@ -31,6 +35,8 @@ it('Can fetch Actions', async ()=> {
 })
 
 it('Succesfully Processes Actions', async ()=> {
+
+  await init(data);
   const toComplete = await processUnsettledETransfers(new RbcApi());
 
   for (const record of toComplete)
