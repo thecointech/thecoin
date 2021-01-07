@@ -1,0 +1,23 @@
+///////////////////////////////////////////////////////////////
+// Jest utility functions
+
+// Replaces the default describe function with a version that can
+// be automatically skipped.  This is useful for ignoring tests that
+// might otherwise fail for reasons that don't indicate failure in the code
+// if the callback is false or returns false,
+const old_describe = describe;
+const skippable_describe = async (name: number | string | Function, fn: () => void | Promise<void>, allowRun?: boolean|(() => boolean)) => {
+
+  if (allowRun === false || (typeof allowRun === 'function' && allowRun() === false)) {
+    return old_describe.skip(name, fn);
+  }
+  return old_describe(name, fn)
+}
+
+// Simple test to test if the test is currently being explicitly run (eg
+// by using the jest plugin for VS Code).  This can be useful if you have
+// integration tests that have significant side-effects that are not desired on every run
+// (for example, heavy CPU work, billed resources, or sending emails etc)
+const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
+
+export { skippable_describe as describe, IsManualRun }
