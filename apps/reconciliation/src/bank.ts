@@ -1,12 +1,6 @@
 import { RbcApi } from "@the-coin/rbcapi";
-import { DateTime } from "luxon";
+import { BankRecord } from "./types";
 
-export type BankRecord = {
-  Date: DateTime,
-	Description: string,
-	Details: string,
-	Amount: number
-}
 
 export async function fetchBankTransactions(bankApi: RbcApi) {
   const txs = await bankApi.fetchLatestTransactions();
