@@ -1,5 +1,5 @@
-import { isEmulatorAvailable } from './debug';
-export { isEmulatorAvailable, init, release } from './debug';
+import { isEmulatorAvailable } from './init';
+export { init, release } from './debug';
 import { describe } from "@the-coin/jestutils"
 
 ///////////////////////////////////////////////////////////////
@@ -16,4 +16,4 @@ const filterByEmulator = () => {
 const db_describe = async (name: number | string | Function, tests: () => void | Promise<void>) =>
   describe(name, tests, filterByEmulator);
 
-export { db_describe as describe }
+export { db_describe as describe, isEmulatorAvailable }
