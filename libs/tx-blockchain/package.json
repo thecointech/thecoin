@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/tx-contract",
+  "name": "@the-coin/tx-blockchain",
   "version": "0.1.0",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "keywords": [

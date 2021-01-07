@@ -1,6 +1,6 @@
 import { Dictionary } from "lodash";
 import { GetUserDoc } from "@the-coin/utilities/User";
-import { BaseTransactionRecord, UserAction, DepositRecord, CertifiedTransferRecord } from "./types";
+import { BaseTransactionRecord, UserAction, DepositRecord, CertifiedTransferRecord, DbRecords } from "./types";
 import { fetchAllUsers } from "./users";
 
 export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: UserAction) {
@@ -18,13 +18,13 @@ export async function fetchDBRecords<T extends BaseTransactionRecord>(users: str
   return db;
 }
 
-export async function getAllFromFirestore() {
+export async function getAllFromFirestore() : Promise<DbRecords> {
 
   const users = await fetchAllUsers();
   const everything = {
-    buy: await fetchDBRecords<DepositRecord>(users, "Buy"),
-    sell: await fetchDBRecords<CertifiedTransferRecord>(users, "Sell"),
-    bill: await fetchDBRecords<CertifiedTransferRecord>(users, "Bill"),
+    Buy: await fetchDBRecords<DepositRecord>(users, "Buy"),
+    Sell: await fetchDBRecords<CertifiedTransferRecord>(users, "Sell"),
+    Bill: await fetchDBRecords<CertifiedTransferRecord>(users, "Bill"),
   }
   return everything;
 }

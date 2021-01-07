@@ -6,6 +6,7 @@
 
 import { CertifiedTransfer } from '@the-coin/types';
 import { ProcessRecord } from '@the-coin/utilities/firestore';
+import { Dictionary } from 'lodash';
 
 export type UserAction = "Buy"|"Sell"|"Bill";
 
@@ -30,3 +31,10 @@ export type DepositRecord = {
 } & BaseTransactionRecord;
 
 export type CertifiedTransferRecord = CertifiedTransfer & ProcessRecord;
+
+// Note: these entries should match the UserActions above
+export type DbRecords = {
+  Buy: Dictionary<DepositRecord[]>,
+  Sell: Dictionary<CertifiedTransferRecord[]>,
+  Bill: Dictionary<CertifiedTransferRecord[]>,
+}
