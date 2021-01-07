@@ -1,4 +1,4 @@
-import { isEmulatorAvailable } from './init';
+import { isEmulatorAvailable } from './types';
 export { init, release } from './debug';
 import { describe } from "@the-coin/jestutils"
 
@@ -6,7 +6,7 @@ import { describe } from "@the-coin/jestutils"
 // Firestore helper functions
 
 const filterByEmulator = () => {
-  if (!isEmulatorAvailable) {
+  if (!isEmulatorAvailable()) {
     console.warn("Cannot connect to firestore, abandoning unit tests");
     return false;
   }

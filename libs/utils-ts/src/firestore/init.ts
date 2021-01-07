@@ -1,42 +1,15 @@
 import {log} from '@the-coin/logging';
+import { InitParams, isMockedDb, isEmulatorAvailable } from './types';
 
-// Do not attempt to connect if we do not have an
-// active connection.
-export const isEmulatorAvailable = process.env.FIRESTORE_EMULATOR != 'false'
-
-export type MockedDocument = {
-  id: string,
-  _collections: {
-    [name: string]: MockedDocument[],
-  }
-  [param: string]: any,
-}
-
-// Mocked db may be used by our unit tests to supply test data
-type MockedDb = {
-  // Can our DB connection be established to a live
-  // db if available?  This is useful for mocked tests
-  // that may also be run against live data.  When set,
-  // the data will be made immutable to ensure that a test
-  // will not modify the live DB.  This is useful for
-  // tests that should always run but may be beneficial
-  // to run against live data.  Eg tests that verify that
-  // input data is correct are also nice-to-run against live data.
-  live?: boolean,
-} & {
-  [name: string]: MockedDocument[]
-}
-
-
-
-type ConnectionParams = { project?: string; username?: string; password?: string; };
-
-type InitParams = ConnectionParams|MockedDb;
-
-const isMockedDb = (t?: InitParams) : t is MockedDb =>
-  t != undefined && Object.entries(t).every(kv => kv[0] == "readonly" || kv[1].id)
-
-// OUr process is:
+// Connect to a firestore instance.  This function is intended to be used
+// any/everywhere that firestore can be accessed, including jest tests.  The
+// goal is to provide a consistent experience that degrades gracefully without
+// introducing unwanted sideeffects.  The basic logic is this:
+// If we have data, we either want:
+//    exactly this data, or
+//    this is backup data to allow tests in environments without live connection
+//
+// a running instance.  Some tests may not have
 export async function init(params?: InitParams)
 {
   // If we explicitly only want a mocked db, return that
@@ -44,35 +17,42 @@ export async function init(params?: InitParams)
     const mock = await import('./mock');
     return await mock.init(params);
   }
-
-  if (process.env.GAE_ENV) // Release build, running on server
+  // Release build, running on server
+  else if (process.env.GAE_ENV)
   {
     const server = await import('./server')
     return await server.init();
   }
-  else if (params?.password && params?.username) // client build, running in electron
+  // client build, running in electron
+  else if (!isMockedDb(params) && params?.password && params?.username)
   {
     const pwd = await import('./password');
     return await pwd.init(params.username, params.password);
   }
-  else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) // Release build, running locally (should still talk to server)
+  // Release build, running locally.  May have data, but prefer live connection
+  else if (process.env.GOOGLE_APPLICATION_CREDENTIALS)
   {
     const release = await import('./release')
     return await release.init();
   }
-  else if(isEmulatorAvailable) // no way to connect online, try connecting to localhost emulator
+  // no way to connect online, if we have emulator attempt that connection
+  else if(isEmulatorAvailable())
   {
     log.debug('No connection parameters supplied, attempting to connect to emulator');
-    if (!connection?.project)
+    const project = params?.project;
+    if (!project || typeof project != "string")
       throw new Error('Cannot connect to emulator without specifying a project');
     const debug = await import('./debug');
-    return await debug.init(connection.project);
+    return await debug.init(project);
+  }
+  // no online db, create a mocked DB with sample data if present or empty DB if not.
+  else if (isMockedDb(params)) {
+    log.debug('No connection parameters supplied, attempting to connect to emulator');
+    const debug = await import('./mock');
+    return debug.init(params, params.live);
   }
   else {
-    log.debug('No connection parameters supplied, attempting to connect to emulator');
-    if (!connection?.project)
-      throw new Error('Cannot connect to emulator without specifying a project');
-    const debug = await import('./debug');
-    return await debug.init(connection.project);
+    // No connection.  Better to throw than let the app continue
+    throw new Error('No firestore connection possible');
   }
 }
