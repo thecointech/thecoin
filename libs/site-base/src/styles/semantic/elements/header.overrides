@@ -8,6 +8,16 @@ each(@lineHeights, {
   }
 });
 
+.ui.header
+{
+  .sub.header{
+    margin-top: 20px;
+    font-family: @pageFont;
+    font-size: @fontSizeBig;
+    line-height: 30px;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   h1.ui.header {
     font-size: @h1Mobile;

@@ -58,10 +58,10 @@ export const UnderwaterMobile = () => {
         <div className={ `${styles.header} x30spaceBefore` }>
               <Header as='h2' className={ `x1spaceAfter` }>
                 <FormattedMessage {...title} />
+                <Header.Subheader>
+                  <FormattedMessage {...description} />
+                </Header.Subheader>
               </Header>
-              <p>
-                <FormattedMessage {...description} />
-              </p>
           </div>
         <Grid className={ `${styles.content}` } padded doubling stackable textAlign="center">
           <Grid.Row columns="3" className={styles.mobileLine} >
