@@ -1,7 +1,5 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { GetNewsletterApi } from 'api';
-const api = GetNewsletterApi();
 
 import { Footer } from '.';
 
