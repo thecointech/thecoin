@@ -37,6 +37,7 @@ export const Footer = () => {
   let centerColumn = socialLinksContent;
   let rightColumn = copyrightContent;
   let classForContainer = styles.desktopContent;
+  let mobileForSubscribe = false;
 
   // If Small Screen / Mobile
   if (windowDimension.width <= breakpointTablet){
@@ -47,11 +48,12 @@ export const Footer = () => {
     centerColumn = registeredContent;
     rightColumn = copyrightContent;
     classForContainer = styles.mobileContent;
+    mobileForSubscribe = true;
   }
 
   return (
     <div id={styles.footerContainer} className={classForContainer}>
-        <Subscribe />
+        <Subscribe Mobile={mobileForSubscribe} />
         <Grid columns='equal' centered verticalAlign='top' stackable className={ `x5spaceBefore` }>
           <Grid.Row>
             <Grid.Column textAlign={alignForLeftColumn as StrictGridColumnProps["textAlign"]}>
