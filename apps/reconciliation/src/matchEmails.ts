@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { AllData } from "types";
+import { AllData } from "./types";
 
 export function findName(data: AllData, address: string) {
   return data.eTransfers.find(et => et.address === address)?.name;
@@ -7,8 +7,9 @@ export function findName(data: AllData, address: string) {
 
 export function  spliceEmail(data: AllData, address: string, amount: number, date: DateTime, id?: string) {
   const email = findEmail(data, address, amount, date, id);
-  if (email) data.eTransfers.splice(data.eTransfers.indexOf(email));
-  return email;
+  if (email)
+    return data.eTransfers.splice(data.eTransfers.indexOf(email), 1)[0];
+  return null;
 }
 export function findEmail(data: AllData, address: string, amount: number, date: DateTime, id?: string) {
 

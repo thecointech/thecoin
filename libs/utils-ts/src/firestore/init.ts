@@ -14,24 +14,28 @@ export async function init(params?: InitParams)
 {
   // If we explicitly only want a mocked db, return that
   if (isMockedDb(params) && !params.live) {
+    log.debug('Initializing a mutable mocked db');
     const mock = await import('./mock');
     return await mock.init(params);
   }
   // Release build, running on server
   else if (process.env.GAE_ENV)
   {
+    log.debug('Connecting server-side db running locally');
     const server = await import('./server')
     return await server.init();
   }
   // client build, running in electron
   else if (!isMockedDb(params) && params?.password && params?.username)
   {
+    log.debug('Connecting client-side db with user/password');
     const pwd = await import('./password');
     return await pwd.init(params.username, params.password);
   }
   // Release build, running locally.  May have data, but prefer live connection
   else if (process.env.GOOGLE_APPLICATION_CREDENTIALS)
   {
+    log.debug('Connecting server-side db with credentials');
     const release = await import('./release')
     return await release.init();
   }
@@ -40,6 +44,7 @@ export async function init(params?: InitParams)
   {
     log.debug('No connection parameters supplied, attempting to connect to emulator');
     const project = params?.project;
+    // todo: can we drop the project requirement?
     if (!project || typeof project != "string")
       throw new Error('Cannot connect to emulator without specifying a project');
     const debug = await import('./debug');
@@ -47,11 +52,17 @@ export async function init(params?: InitParams)
   }
   // no online db, create a mocked DB with sample data if present or empty DB if not.
   else if (isMockedDb(params)) {
-    log.debug('No connection parameters supplied, attempting to connect to emulator');
+    log.debug('Initializing an immutable mocked db')
     const debug = await import('./mock');
     return debug.init(params, params.live);
   }
   else {
+    // If this is a test, better to put in a default than to fail.
+    if (process.env.JEST_WORKER_ID) {
+      log.debug('Initializing to empty mutable mocked db')
+      const debug = await import('./mock');
+      return debug.init({}, false);
+    }
     // No connection.  Better to throw than let the app continue
     throw new Error('No firestore connection possible');
   }

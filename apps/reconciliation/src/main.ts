@@ -1,15 +1,16 @@
 import { init as LogInit, log } from "@the-coin/logging";
+import { RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
-import { signIn } from "./firestore/init";
+import { writeCache } from "./cache";
+import { fetchAllRecords } from "./fetch";
+import { matchAll, writeMatched } from "./match";
 
 async function initialize() {
 
   LogInit("fetch-transactions");
-  log.debug(' --- Initializing transactions  --- ');
+  log.debug(' --- Initializing matching  --- ');
 
   ConfigStore.initialize();
-
-  await signIn()
 
   log.debug('Init Complete');
 }
@@ -52,6 +53,12 @@ async function initialize() {
 
 async function Process() {
   await initialize();
-  await getAllTransactions();
+  const rbc = new RbcApi();
+  const data = await fetchAllRecords(rbc);
+
+  writeCache(data);
+  const match = matchAll(data);
+
+  writeMatched(match);
 }
 Process();
