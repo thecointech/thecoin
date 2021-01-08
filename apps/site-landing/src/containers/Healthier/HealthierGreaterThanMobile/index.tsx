@@ -30,13 +30,13 @@ export function HealthierGreaterThanMobile() {
     <>
       <img src={illustration} className={styles.illustration} />
       <Grid id={styles.healthierContent} className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
-        <Header as="h1" className={ `${styles.center} x6spaceBefore`  }>
+        <Header as="h2" className={ `${styles.center} x6spaceBefore`  }>
           <FormattedMessage {...title} />
             <Header.Subheader>
               <FormattedMessage  {...description} />
             </Header.Subheader>
         </Header>
-        <Grid.Row>
+        <Grid.Row className={ `${styles.numberContent}`  }>
           <Grid.Column>
             <ColumnWithTwoTitles
               FirstTitle = "$1000"

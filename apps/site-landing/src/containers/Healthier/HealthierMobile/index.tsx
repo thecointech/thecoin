@@ -40,15 +40,15 @@ export function HealthierMobile() {
   return (
     <>
       <img src={illustrationRight} className={styles.illustrationRight} />
-      <div className={ `${styles.wrapper} x5spaceAfter` } id="healthier">
+      <div className={ `${styles.wrapper} x5spaceAfter` }>
         <Grid id={styles.healthierContent} className={styles.content}  columns='equal' textAlign='left' verticalAlign='middle' stackable>
-          <Header as="h1" className={ `x2spaceBefore` }>
+          <Header as="h2" className={ `x2spaceBefore` }>
               <FormattedMessage {...title} />
               <Header.Subheader>
                 <FormattedMessage  {...description} />
               </Header.Subheader>
           </Header>
-          <Grid.Row>
+          <Grid.Row className={ `${styles.numberContent}`  }>
             <Grid.Column textAlign='left'>
               <ColumnWithTwoTitles
                 FirstTitle = "$1000"

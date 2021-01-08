@@ -52,7 +52,7 @@ const energyDescription = {  id:"site.wedomore.energy.description",
 export function WeDoMoreMobile() {
   return (
     <div className={styles.wrapper} id={styles.wedomore}>
-      <Header as="h1" className={ `x10spaceBefore`}>
+      <Header as="h2" className={ `x10spaceBefore`}>
           <FormattedMessage {...title}/>
           <Header.Subheader>
             <Grid>
