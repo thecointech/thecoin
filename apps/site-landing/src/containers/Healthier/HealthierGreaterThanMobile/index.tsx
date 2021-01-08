@@ -32,10 +32,10 @@ export function HealthierGreaterThanMobile() {
       <Grid id={styles.healthierContent} className={styles.content} columns='equal' textAlign='left' verticalAlign='middle' stackable>
         <Header as="h1" className={ `${styles.center} x6spaceBefore`  }>
           <FormattedMessage {...title} />
+            <Header.Subheader>
+              <FormattedMessage  {...description} />
+            </Header.Subheader>
         </Header>
-        <p className={styles.center}>
-          <FormattedMessage {...description} />
-        </p>
         <Grid.Row>
           <Grid.Column>
             <ColumnWithTwoTitles

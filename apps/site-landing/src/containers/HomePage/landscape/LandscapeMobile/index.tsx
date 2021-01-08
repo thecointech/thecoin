@@ -17,10 +17,10 @@ export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescrip
           <Grid.Column id={styles.headingWrapper}>
               <Header as="h1">
                 {Props.mainTitle}
+                <Header.Subheader>
+                  {Props.mainDescription}
+                </Header.Subheader>
               </Header>
-              <p>
-                {Props.mainDescription}
-              </p>
               <ButtonPrimary className={`${styles.overTheLandscape} x2spaceBefore` } as={NavLink} to="/Accounts" size='large'> 
                 {Props.mainButton}
               </ButtonPrimary>

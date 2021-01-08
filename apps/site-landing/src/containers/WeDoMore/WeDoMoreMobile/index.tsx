@@ -52,23 +52,21 @@ const energyDescription = {  id:"site.wedomore.energy.description",
 export function WeDoMoreMobile() {
   return (
     <div className={styles.wrapper} id={styles.wedomore}>
-      <Grid className={ `x4spaceBefore`} columns='equal' textAlign='center'>
-        <Grid.Row>
-          <Grid.Column>
-              <Header as="h2">
-                  <FormattedMessage {...title}/>
-              </Header>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column textAlign='right' width={3}>
-                <img src={wwf} className={styles.bear} />
-            </Grid.Column>
-            <Grid.Column textAlign='left'  width={9}>
-              <FormattedMessage {...description} />
-            </Grid.Column>
-          </Grid.Row>
-      </Grid>
+      <Header as="h1" className={ `x10spaceBefore`}>
+          <FormattedMessage {...title}/>
+          <Header.Subheader>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column textAlign='right' width={4} verticalAlign="middle">
+                  <img src={wwf} className={styles.illustration} />
+                </Grid.Column>
+                <Grid.Column textAlign='left' width={9}>
+                  <FormattedMessage  {...description} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Header.Subheader>
+      </Header>
       <Grid className={styles.content} columns='equal' textAlign='center' stackable>
           <Grid.Row>
             <Grid.Column textAlign='left' verticalAlign='middle'>
