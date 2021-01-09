@@ -29,13 +29,14 @@ export function  spliceEmail(data: AllData, address: string, amount: number, dat
   return data.eTransfers.splice(data.eTransfers.indexOf(email), 1)[0];
 }
 
-type Dateable<T> = {
-  [P in keyof T]: DateTime
-};
-function compareByClosestTo<T extends Dateable<T>>(key: keyof T, date: DateTime) {
-  return (l: T, r: T) => Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds)
-}
+const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>
+  (l: Record<K, DateTime>, r: Record<K, DateTime>) =>
+    Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds)
 
+function sortByClosest<K extends string>(data: Record<K, DateTime>[], key: K, date: DateTime): void {
+  data.sort((l, r) =>
+    Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds))
+}
 
 export function findEmail(data: AllData, address: string, amount: number, date: DateTime, id?: string) {
 
@@ -46,10 +47,12 @@ export function findEmail(data: AllData, address: string, amount: number, date: 
   let candidates = data.eTransfers.filter(et => et.address === address);
   candidates = candidates.filter(et => et.cad.eq(amount));
 
-  // sort by closest to date
-  candidates.sort(
-    compareByClosestTo<eTransferData>("recieved", date))
-  );  //(l, r) => Math.abs(l.recieved.toMillis() - r.recieved.toMillis())).reverse();
+  sortByClosest(candidates, "recieved", date);
+  // sortByClosest(candidates, "id", date);
+  // // sort by closest to date
+  candidates.sort(compareByClosestTo("recieved", date));
+
+  // );  //(l, r) => Math.abs(l.recieved.toMillis() - r.recieved.toMillis())).reverse();
   // Do we have an exact match?
   if (candidates[0]?.recieved.equals(date))
     return candidates[0];
