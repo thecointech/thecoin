@@ -1,9 +1,11 @@
 import { init as LogInit, log } from "@the-coin/logging";
-import { RbcApi } from "@the-coin/rbcapi";
+import { RbcApi, RbcStore } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
-import { writeCache } from "./cache";
+import { init } from "@the-coin/utilities/firestore";
+import { readCache, writeCache } from "./cache";
 import { fetchAllRecords } from "./fetch";
 import { matchAll, writeMatched } from "./match";
+import rbc_secret from './rbc.secret.json';
 
 async function initialize() {
 
@@ -11,6 +13,9 @@ async function initialize() {
   log.debug(' --- Initializing matching  --- ');
 
   ConfigStore.initialize();
+  RbcStore.initialize();
+  RbcApi.SetCredentials(rbc_secret);
+  await init();
 
   log.debug('Init Complete');
 }
@@ -54,11 +59,14 @@ async function initialize() {
 async function Process() {
   await initialize();
   const rbc = new RbcApi();
-  const data = await fetchAllRecords(rbc);
+  let forceReInit = false;
+  let data = forceReInit ? null: readCache();
+  if (!data) {
+    data = await fetchAllRecords(rbc);
+    writeCache(data);
+  }
 
-  writeCache(data);
   const match = matchAll(data);
-
   writeMatched(match);
 }
 Process();

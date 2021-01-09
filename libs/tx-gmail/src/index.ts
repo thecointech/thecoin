@@ -1,14 +1,25 @@
 import { log } from "@the-coin/logging";
 import { isPresent } from "@the-coin/utilities";
-import { fetchEmailIds, fetchEmails, initializeApi } from "./fetch";
+import { fetchEmailIds, fetchEmails, initializeApi, setETransferLabel } from "./fetch";
 import { toDepositData } from "./convert";
 import { eTransferData } from "./types";
 import { authorize, isValid } from "./auth";
 
 export * from './types';
-export { setETransferLabel } from './fetch'
+export { setETransferLabel };
+
+async function initialize() {
+  // First, connect and fetch new deposit emails.
+  const auth = await authorize();
+  if (!isValid(auth))
+    throw new Error("Cannot run service without auth.  Please login from the UI first");
+
+  await initializeApi(auth);
+}
 
 export async function fetchETransfers(query?: string): Promise<eTransferData[]> {
+
+  await initialize();
 
   let result = [] as eTransferData[];
   let pageToken: string | undefined = undefined;
@@ -37,17 +48,10 @@ export async function fetchETransfers(query?: string): Promise<eTransferData[]> 
   return result.filter(deposit => !!deposit);
 }
 
+// fetch new deposits
 export async function FetchNewDepositEmails()
 {
   log.trace(`fetching from gmail`);
-  // First, connect and fetch new deposit emails.
-  const auth = await authorize();
-  if (!isValid(auth))
-    throw new Error("Cannot run service without auth.  Please login from the UI first");
-
-  await initializeApi(auth);
-
-  // fetch new deposits
   const emails = await fetchETransfers('redirect interac -remember -expired -label:etransfer-deposited -label:etransfer-rejected');
   log.debug(`fetching emails: got ${emails.length} results`);
   return emails;

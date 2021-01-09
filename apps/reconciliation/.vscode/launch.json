@@ -12,7 +12,9 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "pwa-node"
+      "type": "pwa-node",
+      "envFile": "${workspaceFolder}/../../tools/credentials.env",
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
     },
 	]
 }

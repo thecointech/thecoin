@@ -65,7 +65,6 @@ async function transferToTransaction(toWallet: boolean, ethersLog: Log, contract
   var r: Transaction = {
     txHash: ethersLog.transactionHash,
     date: DateTime.local(),
-    completed: DateTime.local(),
     change: toWallet ? value.toNumber() : -value.toNumber(),
     logEntry: "---",
     balance: -1,

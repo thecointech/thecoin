@@ -43,7 +43,6 @@ export async function initializeApi(auth: OAuth2Client) {
 
 // Query gmail for emails matching q query string
 export async function fetchEmailIds(options: gmail_v1.Params$Resource$Users$Messages$List) {
-  console.log(`*** Page Token: ${options.pageToken} ***`);
   const gmail = getGmail();
   const response = await gmail.users.messages.list({
     userId: 'me',

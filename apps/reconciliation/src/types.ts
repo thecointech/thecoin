@@ -9,7 +9,7 @@ import { Transaction } from "@the-coin/tx-blockchain/";
 export type BankRecord = {
   Date: DateTime,
 	Description: string,
-	Details: string,
+	Details?: string,
 	Amount: number
 }
 

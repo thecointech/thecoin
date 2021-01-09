@@ -30,3 +30,5 @@ libs/shared/orbitdb/
 apps/admin/app/containers/gmail/credentials.json
 libs/tx-processing/src/deposit/gmail.json
 .env
+apps/reconciliation/src/data/data.cache.json
+tools/credentials.env

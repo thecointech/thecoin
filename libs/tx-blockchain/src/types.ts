@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 export type Transaction = {
   txHash?: string;
   date: DateTime;
-  completed: DateTime;
+  completed?: DateTime;
   change: number;
   logEntry: string;
   balance: number;
