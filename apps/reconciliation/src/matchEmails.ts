@@ -1,13 +1,6 @@
-import { eTransferData } from "@the-coin/tx-gmail/";
 import { DateTime } from "luxon";
+import { filterCandidates } from "./utils";
 import { AllData } from "./types";
-
-// function mode(arr: string[]){
-//   return arr.sort((a,b) =>
-//         arr.filter(v => v===a).length
-//       - arr.filter(v => v===b).length
-//   ).pop();
-// }
 
 // Find the most common name associated with an
 export function findNames(data: AllData, address: string) {
@@ -19,26 +12,17 @@ export function findNames(data: AllData, address: string) {
   return Array.from(unique);
 }
 
-export function  spliceEmail(data: AllData, address: string, amount: number, date: DateTime, names: string[], id?: string) {
-  const email = findEmail(data, address, amount, date, id);
+export function  spliceEmail(data: AllData, address: string, amount: number, date: DateTime, maxDays: number, id?: string) {
+  const email = findEmail(data, address, amount, date, maxDays, id);
   if (!email) {
-    console.warn(`No e-transfer found for recorded deposit of ${amount} to ${names}`);
-    debugger;
+    //console.warn(`No e-transfer found for recorded deposit of ${amount} to ${names}`);
+    //debugger;
     return null;
   }
   return data.eTransfers.splice(data.eTransfers.indexOf(email), 1)[0];
 }
 
-const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>
-  (l: Record<K, DateTime>, r: Record<K, DateTime>) =>
-    Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds)
-
-function sortByClosest<K extends string>(data: Record<K, DateTime>[], key: K, date: DateTime): void {
-  data.sort((l, r) =>
-    Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds))
-}
-
-export function findEmail(data: AllData, address: string, amount: number, date: DateTime, id?: string) {
+export function findEmail(data: AllData, address: string, amount: number, date: DateTime, maxDays: number, id?: string) {
 
   if (id)
     return data.eTransfers.find(et => et.id == id);
@@ -47,25 +31,25 @@ export function findEmail(data: AllData, address: string, amount: number, date: 
   let candidates = data.eTransfers.filter(et => et.address === address);
   candidates = candidates.filter(et => et.cad.eq(amount));
 
-  sortByClosest(candidates, "recieved", date);
-  // sortByClosest(candidates, "id", date);
-  // // sort by closest to date
-  candidates.sort(compareByClosestTo("recieved", date));
-
-  // );  //(l, r) => Math.abs(l.recieved.toMillis() - r.recieved.toMillis())).reverse();
-  // Do we have an exact match?
-  if (candidates[0]?.recieved.equals(date))
+  candidates = filterCandidates(candidates, "recieved", date, maxDays);
+  if (candidates.length == 1 || (maxDays == 0 && candidates.length > 0))
     return candidates[0];
 
-  // not exact, lets get fuzzy!  First, make sure our closest match is on the right side of history
-  candidates = candidates.filter(et => et.recieved.minus({days: 1}) <= date);
+  return null;
 
-  // If we have only one option, and it's reasonably close, lets take it.
-  if (candidates.length == 1)
-  {
-    const candidate = candidates[0];
-    if (candidate.recieved.diff(date).get("days") < 5)
-      return candidate;
-  }
-  return undefined;
+
+  // if (candidates[0]?.recieved.equals(date))
+  //   return candidates[0];
+
+  // // not exact, lets get fuzzy!  First, make sure our closest match is on the right side of history
+  // candidates = candidates.filter(et => et.recieved.minus({days: 1}) <= date);
+
+  // // If we have only one option, and it's reasonably close, lets take it.
+  // if (candidates.length == 1)
+  // {
+  //   const candidate = candidates[0];
+  //   if (candidate.recieved.diff(date).get("days") < 5)
+  //     return candidate;
+  // }
+  // return undefined;
 }

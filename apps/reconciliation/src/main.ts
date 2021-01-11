@@ -30,6 +30,12 @@ async function Process() {
     writeCache(data);
   }
 
+  // remove duplicates
+  const {eTransfers} = data;
+  data.eTransfers = eTransfers.filter((et, index) =>
+    eTransfers.findIndex(etd => etd.id == et.id) === index
+  )
+
   const match = matchAll(data);
   writeMatched(match);
 }

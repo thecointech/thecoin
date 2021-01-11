@@ -3,14 +3,15 @@ import { UserAction } from "@the-coin/utilities/User";
 import { DateTime } from "luxon";
 import { DbRecords, BaseTransactionRecord } from "@the-coin/tx-firestore";
 import { Transaction } from "@the-coin/tx-blockchain/";
+import { FXRate } from "@the-coin/pricing";
 
 ////////////////////////////////
 // input types
 export type BankRecord = {
-  Date: DateTime,
-	Description: string,
-	Details?: string,
-	Amount: number
+  Date: DateTime;
+	Description: string;
+	Details?: string;
+  Amount: number;
 }
 
 export type AllData = {
@@ -18,26 +19,27 @@ export type AllData = {
   dbs: DbRecords;
   bank: BankRecord[];
   blockchain: Transaction[];
+  rates: FXRate[];
 }
 
 ////////////////////////////////
 // ouput type
 
-export type TransactionRecord = {
-  action: UserAction,
-  data: BaseTransactionRecord, // final/database data.  Can be set directly to db
+export type ReconciledRecord = {
+  action: UserAction;
+  data: BaseTransactionRecord; // final/database data.  Can be set directly to db
 
-  database: BaseTransactionRecord|null, // current database record
-  email: eTransferData|null, // data from e-transfers
-  bank: BankRecord|null, // data from bank
-  blockchain: Transaction|null, // data from blockchain
+  database: BaseTransactionRecord|null; // current database record
+  email: eTransferData|null; // data from e-transfers
+  bank: BankRecord|null; // data from bank
+  blockchain: Transaction|null; // data from blockchain
 }
 
-type UserTransactions = {
-  name: string,
-  address: string,
-  transctions: TransactionRecord[],
+type UserReconciled = {
+  names: string[];
+  address: string;
+  transactions: ReconciledRecord[];
 }
 
-export type AllTransactions = UserTransactions[]
+export type Reconciliations = UserReconciled[];
 

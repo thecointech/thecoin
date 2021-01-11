@@ -6,6 +6,8 @@ import { fetchBankTransactions } from './bank';
 import { AllData } from 'types';
 import { NormalizeAddress } from '@the-coin/utilities';
 
+import { RatesApi } from "@the-coin/pricing";
+
 export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 
   let eTransfers = await fetchAndCleanETransfers();
@@ -13,11 +15,15 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
   let bank = await fetchBankTransactions(rbcApi);
   let blockchain = await fetchAndCleanCoinHistory();
 
+  const fxRates = new RatesApi();
+  const fetchRates = blockchain.map(tx => fxRates.getConversion(124, tx.date.toMillis()));
+  const rates = await Promise.all(fetchRates);
   return {
     eTransfers,
     dbs,
     bank,
     blockchain,
+    rates: rates.map(r => r.data)
   }
 }
 

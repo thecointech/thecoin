@@ -1,0 +1,12 @@
+[
+  {
+    "action": "Buy",
+    "type": "etransfer",
+    "hash": "0xa2159d29d6758557b5df553ea6562b78a8057de2b92c80cb1695fd44593859e0",
+    "address": "0x7a8b466c4abe76ed32f8d934607b0dedd24d2ea6",
+    "id": "CAKfc7Ek",
+    "amount": 177.65,
+    "date": "Thu, 2 Apr 2020 13:27:41 -0700 (PDT)",
+    "notes": "Original email must have been deleted, however backup exists"
+  }
+]
