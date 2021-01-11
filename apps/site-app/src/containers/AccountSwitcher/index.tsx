@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { Dropdown, DropdownItemProps } from "semantic-ui-react"
 import { NavLink, Link } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap"
+import { accountMapApi, activeAccountSelector, useAccounts } from "@the-coin/shared/containers/AccountMap"
 
 import cross from './images/cross.svg';
 import { AccountState } from "@the-coin/shared/containers/Account/types"
@@ -45,6 +45,8 @@ export const AccountSwitcher = () => {
   const intl = useIntl();
   const titleMsgUsed = intl.formatMessage(titleMsg);
 
+  console.log("ACCOUNT: ", activeAccount)
+
   return (
     <Dropdown text={titleMsgUsed} >
       <Dropdown.Menu>
@@ -61,7 +63,6 @@ export const AccountSwitcher = () => {
                 key={account.address} 
                 text={account.name}
                 address={account.address}
-                description='' 
                 as={Link} 
                 onClick={doSetActive} 
                 to="/accounts/" />
@@ -69,7 +70,7 @@ export const AccountSwitcher = () => {
             )
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' description='' icon='add' as={NavLink} to="/addAccount/">
+        <Dropdown.Item key='add' as={NavLink} to="/addAccount/">
           <FormattedMessage {...addAccount} />
         </Dropdown.Item>
       </Dropdown.Menu>
@@ -85,13 +86,13 @@ const ActiveAccount = ({account}: ActiveProps) =>
   ? <Dropdown.Item key={name}>
       <Dropdown image={{ avatar: false, src: cross }} text={account.name.substring(0, 14) + '...'}>
         <Dropdown.Menu direction='right'>
-          <Dropdown.Item key="see" account={name} description='' as={Link} to="/accounts/" >
+          <Dropdown.Item key="see" account={name} as={Link} to="/accounts/" >
               <FormattedMessage {...see} />
           </Dropdown.Item>
-          <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" >
+          <Dropdown.Item key="sett" text='Settings' as={NavLink} to="/accounts/settings" >
               <FormattedMessage {...settings} />
           </Dropdown.Item>
-          <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" >
+          <Dropdown.Item key="sout" text='Sign Out' as={NavLink} to="/accounts/signout" >
               <FormattedMessage {...signout} />
           </Dropdown.Item>
         </Dropdown.Menu>
