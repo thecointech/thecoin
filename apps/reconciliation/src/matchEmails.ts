@@ -1,6 +1,6 @@
-import { DateTime } from "luxon";
-import { filterCandidates } from "./utils";
-import { AllData } from "./types";
+import { filterCandidates, toDateTime } from "./utils";
+import { AllData, ReconciledRecord, User } from "./types";
+import { DepositRecord } from "@the-coin/tx-firestore";
 
 // Find the most common name associated with an
 export function findNames(data: AllData, address: string) {
@@ -12,26 +12,27 @@ export function findNames(data: AllData, address: string) {
   return Array.from(unique);
 }
 
-export function  spliceEmail(data: AllData, address: string, amount: number, date: DateTime, maxDays: number, id?: string) {
-  const email = findEmail(data, address, amount, date, maxDays, id);
-  if (!email) {
-    //console.warn(`No e-transfer found for recorded deposit of ${amount} to ${names}`);
-    //debugger;
-    return null;
+export function spliceEmail(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
+  const email = record.action == "Buy"
+    ? findEmail(data, user, record.data as DepositRecord, maxDays)
+    : null;
+
+  if (email) {
+    return data.eTransfers.splice(data.eTransfers.indexOf(email), 1)[0];
   }
-  return data.eTransfers.splice(data.eTransfers.indexOf(email), 1)[0];
+  return null;
 }
 
-export function findEmail(data: AllData, address: string, amount: number, date: DateTime, maxDays: number, id?: string) {
-
-  if (id)
-    return data.eTransfers.find(et => et.id == id);
+export function findEmail(data: AllData, user: User, deposit: DepositRecord, maxDays: number) {
+  const { sourceId, recievedTimestamp, fiatDisbursed } = deposit;
+  if (sourceId)
+    return data.eTransfers.find(et => et.id == sourceId);
 
   // basic requirements
-  let candidates = data.eTransfers.filter(et => et.address === address);
-  candidates = candidates.filter(et => et.cad.eq(amount));
+  let candidates = data.eTransfers.filter(et => et.address === user.address);
+  candidates = candidates.filter(et => et.cad.eq(fiatDisbursed));
 
-  candidates = filterCandidates(candidates, "recieved", date, maxDays);
+  candidates = filterCandidates(candidates, "recieved", toDateTime(recievedTimestamp), maxDays);
   if (candidates.length == 1 || (maxDays == 0 && candidates.length > 0))
     return candidates[0];
 

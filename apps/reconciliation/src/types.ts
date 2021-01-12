@@ -33,13 +33,17 @@ export type ReconciledRecord = {
   email: eTransferData|null; // data from e-transfers
   bank: BankRecord|null; // data from bank
   blockchain: Transaction|null; // data from blockchain
+
+  refund: Transaction|null; // If this tx was refunded, fill this out
 }
 
-type UserReconciled = {
+export type User = {
   names: string[];
   address: string;
-  transactions: ReconciledRecord[];
 }
+type UserReconciled = {
+  transactions: ReconciledRecord[];
+} & User;
 
 export type Reconciliations = UserReconciled[];
 

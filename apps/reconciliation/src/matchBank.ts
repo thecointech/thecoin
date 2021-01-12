@@ -1,25 +1,31 @@
-import { DateTime } from "luxon";
-import { filterCandidates } from "./utils";
-import { AllData } from "./types";
+import { filterCandidates, toDateTime } from "./utils";
+import { AllData, ReconciledRecord, User } from "./types";
+import { BaseTransactionRecord } from "@the-coin/tx-firestore";
+import { UserAction } from "@the-coin/utilities/User";
 
 // Next, the tx hash should match blockchain
-export function spliceBank(data: AllData, amount: number, completed: DateTime|undefined, maxDays: number, names: string[], description?: string) {
-  let tx = findBank(data, amount, completed, maxDays, names, description);
+export function spliceBank(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
+  let tx = findBank(data, user, record.data, record.action, maxDays);
   if (tx)
     data.bank.splice(data.bank.indexOf(tx), 1);
   return tx;
 }
 
-function findBank(data: AllData, amount: number, completed: DateTime|undefined, maxDays: number, names: string[], description?: string) {
+function findBank(data: AllData, user: User, record: BaseTransactionRecord, action: UserAction, maxDays: number) {
+
+  const amount = record.fiatDisbursed * (action == "Buy" ? 1 : -1);
   // raw filter
   let candidates = data.bank.filter(tx => tx.Amount === amount);
 
-  if (description)
-    candidates =candidates.filter(tx => tx.Description === description)
-  if (names.length > 0)
-    candidates = candidates.filter(tx => !tx.Details || names.includes(tx.Details));
+  candidates = action == "Buy"
+    ? candidates.filter(tx => tx.Description === 'e-Transfer received')
+    : candidates.filter(tx => tx.Description === 'e-Transfer sent');
+
+  if (user.names.length > 0)
+    candidates = candidates.filter(tx => !tx.Details || user.names.includes(tx.Details));
 
   // Filter by date
+  const completed = toDateTime(record.completedTimestamp);
   if (completed)
     candidates = filterCandidates(candidates, "Date", completed, maxDays);
 
