@@ -1,4 +1,42 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 .wrapper{
   max-width: 700px;
   margin: auto;
+}
+    
+.illustration{
+  position: absolute;
+  right: -50%;
+  width: 300px;
+  top: 250px;
+}
+ 
+.illustrationLeft{
+  position: absolute;
+  bottom: 125px;
+  left: 0px;
+}
+.illustrationRight{
+  position: absolute;
+  right: 0px;
+  top: 420px;
+}
+
+#healthierContent{
+  margin: auto;
+  text-align: center;
+  .numberContent{
+    h2{
+      color: @theCoinPaletteGreen4;
+    }
+  }
+  hr{
+      border: 5px solid @theCoinPaletteRed2;
+      border-radius: 25px;
+      width: 150px;
+  }
+  .column{
+    max-width: 100px;
+  }
 }
