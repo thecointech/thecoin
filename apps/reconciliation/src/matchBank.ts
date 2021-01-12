@@ -21,7 +21,7 @@ function findBank(data: AllData, user: User, record: BaseTransactionRecord, acti
     ? candidates.filter(tx => tx.Description === 'e-Transfer received')
     : candidates.filter(tx => tx.Description === 'e-Transfer sent');
 
-  if (user.names.length > 0)
+  if (user.names.length > 0 && action == "Buy")
     candidates = candidates.filter(tx => !tx.Details || user.names.includes(tx.Details));
 
   // Filter by date

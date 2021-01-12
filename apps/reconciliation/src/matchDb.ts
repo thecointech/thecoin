@@ -4,6 +4,7 @@ import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { AllData, Reconciliations } from "./types";
 import { spliceBank } from "./matchBank";
+import { matchManual } from "./matchManual";
 
 
 // Match all DB entries with raw data
@@ -11,21 +12,24 @@ export function matchDB(data: AllData) {
 
   // First, initialize with database records
   let r: Reconciliations = convertBaseTransactions(data, "Buy");
+  const bills = convertBaseTransactions(data, "Bill");
+  const sales = convertBaseTransactions(data, "Sell");
+  addReconciled(r, bills);
+  addReconciled(r, sales);
+
+  matchManual(r, data);
+
   for (let i = 0; i < 30; i++) {
     matchTransactions(data, r, i);
   }
 
-  const bills = convertBaseTransactions(data, "Bill");
-  for (let i = 0; i < 30; i++) {
-    matchTransactions(data, bills, i);
-  }
-  addReconciled(r, bills);
+  // for (let i = 0; i < 30; i++) {
+  //   matchTransactions(data, bills, i);
+  // }
 
-  const sales = convertBaseTransactions(data, "Sell");
-  for (let i = 0; i < 30; i++) {
-    matchTransactions(data, sales, i);
-  }
-  addReconciled(r, sales);
+  // for (let i = 0; i < 30; i++) {
+  //   matchTransactions(data, sales, i);
+  // }
 
 
   //r = filterZeroValueRecords(r, data);
@@ -159,7 +163,10 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
 const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) => ({
   action: type,
   database: record,
-  data: {...record},
+  data: {
+    ...record,
+    hash: record.hash.trim(),
+  },
 
   email: null,
   bank: null,
