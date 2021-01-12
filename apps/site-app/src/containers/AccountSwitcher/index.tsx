@@ -43,6 +43,7 @@ export const AccountSwitcher = () => {
 
   const allAccounts = Object.values(map);
 
+  // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
   let titleMsgUsed = intl.formatMessage(titleMsg);
   let trigger = (
