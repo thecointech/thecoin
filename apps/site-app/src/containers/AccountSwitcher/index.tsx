@@ -46,9 +46,7 @@ export const AccountSwitcher = () => {
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
   const trigger = activeAccount
-      ? <span>
-          <img src={avatar} className={styles.avatars}/> {activeAccount.name.substring(0, 10);}
-        </span>
+      ? <span><img src={avatar} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
       : <span>{intl.formatMessage(titleMsg)}</span>
 
   return (
