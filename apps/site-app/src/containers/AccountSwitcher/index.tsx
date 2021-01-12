@@ -1,12 +1,13 @@
-import React, { useCallback } from "react"
-import { Dropdown, DropdownItemProps } from "semantic-ui-react"
-import { NavLink, Link } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap"
+import React, { useCallback } from "react";
+import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import { NavLink, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap";
+import avatar from './images/avatars/16user_avatar16.svg';
 
-import cross from './images/cross.svg';
-import { AccountState } from "@the-coin/shared/containers/Account/types"
+import { AccountState } from "@the-coin/shared/containers/Account/types";
 import { FormattedMessage, useIntl } from 'react-intl';
+import styles from './styles.module.less';
 
 
 const titleMsg = { id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'};
@@ -42,11 +43,14 @@ export const AccountSwitcher = () => {
 
   const allAccounts = Object.values(map);
 
+  // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
-  const titleMsgUsed = intl.formatMessage(titleMsg);
+  const trigger = activeAccount
+      ? <span><img src={avatar} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
+      : <span>{intl.formatMessage(titleMsg)}</span>
 
   return (
-    <Dropdown text={titleMsgUsed} >
+    <Dropdown trigger={trigger}  >
       <Dropdown.Menu>
         <Dropdown.Header>
           <FormattedMessage {...myAccounts}/>
@@ -58,10 +62,10 @@ export const AccountSwitcher = () => {
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
               <Dropdown.Item 
+                trigger={trigger}
                 key={account.address} 
-                text={account.name}
                 address={account.address}
-                description='' 
+                text={account.name}
                 as={Link} 
                 onClick={doSetActive} 
                 to="/accounts/" />
@@ -69,7 +73,7 @@ export const AccountSwitcher = () => {
             )
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' description='' icon='add' as={NavLink} to="/addAccount/">
+        <Dropdown.Item key='add' as={NavLink} to="/addAccount/">
           <FormattedMessage {...addAccount} />
         </Dropdown.Item>
       </Dropdown.Menu>
@@ -82,16 +86,16 @@ type ActiveProps = {
 }
 const ActiveAccount = ({account}: ActiveProps) =>
   account
-  ? <Dropdown.Item key={name}>
-      <Dropdown image={{ avatar: false, src: cross }} text={account.name.substring(0, 14) + '...'}>
+  ? <Dropdown.Item key={account.name}>
+      <Dropdown trigger={<span><img src={avatar} className={styles.avatars}/> {account.name.substring(0, 14) + '...'}</span>}>
         <Dropdown.Menu direction='right'>
-          <Dropdown.Item key="see" account={name} description='' as={Link} to="/accounts/" >
+          <Dropdown.Item key="see" account={account.name} as={Link} to="/accounts/" >
               <FormattedMessage {...see} />
           </Dropdown.Item>
-          <Dropdown.Item key="sett" text='Settings' description='' as={NavLink} to="/accounts/settings" >
+          <Dropdown.Item key="sett" as={NavLink} to="/accounts/settings" >
               <FormattedMessage {...settings} />
           </Dropdown.Item>
-          <Dropdown.Item key="sout" text='Sign Out' description='' as={NavLink} to="/accounts/signout" >
+          <Dropdown.Item key="sout" as={NavLink} to="/accounts/signout" >
               <FormattedMessage {...signout} />
           </Dropdown.Item>
         </Dropdown.Menu>

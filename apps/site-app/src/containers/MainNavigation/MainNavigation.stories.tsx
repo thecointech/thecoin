@@ -6,7 +6,7 @@ import { ProviderProps } from 'react-redux';
 import { AnyAction } from 'redux';
 
 export default {
-  title: 'Landing/MainNavigation',
+  title: 'App/MainNavigation',
   component: MainNavigation,
   argTypes: {}
 } as Meta;

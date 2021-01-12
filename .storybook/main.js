@@ -3,8 +3,9 @@ var shared_loaders = require('@the-coin/site-base/internal/webpack/webpack.less'
 module.exports = {
   stories: [
     "../stories/**/*.stories.mdx",
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
-    "../apps/site-landing/**/*.stories.@(js|jsx|ts|tsx)"
+    "../stories/**/*.stories.@(ts|tsx)",
+    "../libs/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
+    "../apps/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-links",
