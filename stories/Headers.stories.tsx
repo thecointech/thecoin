@@ -9,11 +9,11 @@ export default {
   title: 'SemanticUI/Headers',
   component: Header,
   args: {
-    content: "The future is brighter",
+    content: "The future is brighter"
   }
 } as Meta;
 
-const Template: Story<StrictHeaderProps> = (args) => <Header {...args} />;
+const Template: Story<StrictHeaderProps> = (args) => <Header as={args.as} >{args.content}<Header.Subheader>{args.content}</Header.Subheader></Header>;
 
 export const H1 = Template.bind({});
 H1.args = {
