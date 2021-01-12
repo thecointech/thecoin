@@ -23,36 +23,9 @@ export function matchDB(data: AllData) {
     matchTransactions(data, r, i);
   }
 
-  // for (let i = 0; i < 30; i++) {
-  //   matchTransactions(data, bills, i);
-  // }
-
-  // for (let i = 0; i < 30; i++) {
-  //   matchTransactions(data, sales, i);
-  // }
-
-
-  //r = filterZeroValueRecords(r, data);
-
-  // All purchases should be matched
-  const unMatched = r.map(r => ({
-    ...r,
-    transactions: r.transactions.filter(tx =>
-      (tx.action == "Buy" && tx.email == null) ||
-      (tx.refund == null && tx.bank == null) ||
-      tx.blockchain == null)
-  })).filter(um => um.transactions.length > 0);
-  for (const um of unMatched) {
-    for (const umtx of um.transactions) {
-      const email = umtx.email || umtx.action != "Buy" ? "" : " Email";
-      const blockchain = umtx.blockchain ? "" : " blockchain";
-      const bank = umtx.bank ? "" : " bank";
-      console.log(`${umtx.data.recievedTimestamp.toDate()} ${umtx.action} ${um.names} - ${umtx.data.fiatDisbursed}, missing ${email}${blockchain}${bank}`)
-    }
-  }
 
   // Pure debugging purpose fn's
-  matchTransactions(data, unMatched, 100);
+  //matchTransactions(data, unMatched, 100);
   console.log(`Matched`);
   return r;
 }

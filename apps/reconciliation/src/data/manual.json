@@ -1,52 +1,61 @@
-[
-  {
-    "do": "insert",
-    "where": "email",
-    "type": "etransfer",
-    "hash": "0xa2159d29d6758557b5df553ea6562b78a8057de2b92c80cb1695fd44593859e0",
-    "sourceId": "CAKfc7Ek",
-    "amount": 177.65,
-    "date": "2020-04-02T15:27:41.015-05:00",
-    "notes": "Original email must have been deleted, however backup exists"
-  },
-  {
-    "do": "insert",
-    "where": "email",
-    "type": "etransfer",
-    "hash": "0xdfb7b3eb07764e83321270c8d214d07053043ca073318dde1a2cd5e66b93e8f0",
-    "sourceId": "CAeHg5p7",
-    "amount": 900,
-    "date": "2019-01-01T00:00:00.000-05:00",
-    "notes": "Initial purchase routed through private account"
-  },
-  {
-    "do": "connect",
-    "where": "bank",
-    "action": "Sell",
-    "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
-    "amount": 3000,
-    "date": "2019-09-29T23:00:00.000-05:00",
-    "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
-    "sourceId": "1234"
-  },
-  {
-    "do": "connect",
-    "where": "bank",
-    "action": "Sell",
-    "hash": "0x99c0d07a454c26cf2bcf21121759be9a016877cc4e278f2d01d41702a06244a0",
-    "amount": 3000,
-    "date": "2019-09-29T23:00:00.000-05:00",
-    "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
-    "sourceId": "1234"
-  },
-  {
-    "do": "connect",
-    "where": "bank",
-    "action": "Sell",
-    "hash": "0x49363d3ee9673ff01a08d9a44c24d7b69d4ba8ebb7f8221c33b26cb57b58bb0c",
-    "amount": 2988.05,
-    "date": "2019-10-02T23:00:00.000-05:00",
-    "notes": "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones",
-    "sourceId": "1234"
-  }
-]
+{
+  "insert": [
+    {
+      "where": "email",
+      "type": "etransfer",
+      "hash": "0xa2159d29d6758557b5df553ea6562b78a8057de2b92c80cb1695fd44593859e0",
+      "sourceId": "CAKfc7Ek",
+      "amount": 177.65,
+      "date": "2020-04-02T15:27:41.015-05:00",
+      "notes": "Original email must have been deleted, however backup exists"
+    },
+    {
+      "where": "email",
+      "type": "etransfer",
+      "hash": "0xdfb7b3eb07764e83321270c8d214d07053043ca073318dde1a2cd5e66b93e8f0",
+      "sourceId": "CAeHg5p7",
+      "amount": 900,
+      "date": "2019-01-01T00:00:00.000-05:00",
+      "notes": "Initial purchase routed through private account"
+    }
+  ],
+  "connect": [
+    {
+      "do": "connect",
+      "where": "bank",
+      "action": "Sell",
+      "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
+      "amount": 3000,
+      "date": "2019-09-29T23:00:00.000-05:00",
+      "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
+      "sourceId": "1234"
+    },
+    {
+      "do": "connect",
+      "where": "bank",
+      "action": "Sell",
+      "hash": "0x99c0d07a454c26cf2bcf21121759be9a016877cc4e278f2d01d41702a06244a0",
+      "amount": 3000,
+      "date": "2019-09-29T23:00:00.000-05:00",
+      "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
+      "sourceId": "1234"
+    },
+    {
+      "do": "connect",
+      "where": "bank",
+      "action": "Sell",
+      "hash": "0x49363d3ee9673ff01a08d9a44c24d7b69d4ba8ebb7f8221c33b26cb57b58bb0c",
+      "amount": 2988.05,
+      "date": "2019-10-02T23:00:00.000-05:00",
+      "notes": "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones",
+      "sourceId": "1234"
+    }
+  ],
+  "skip": [
+    {
+      "type": "email",
+      "id": "CAA9BhWD",
+      "reason": "Deposited"
+    }
+  ]
+}
