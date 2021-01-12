@@ -1,5 +1,20 @@
 import { DateTime } from "luxon";
 
+export type Credentials = {
+  password: string;
+  cardNo: string;
+  accountNo: string;
+
+  pvq: {question: string, answer: string}[]
+}
+
+export type AuthOptions = Credentials|{
+  authFile: string // A JSON file where credentials are stored
+};
+
+export const isCredentials = (options?: AuthOptions): options is Credentials =>
+  !!(options as Credentials)?.password;
+
 export type RbcTransaction = {
   AccountType: string;
   AccountNumber: string;

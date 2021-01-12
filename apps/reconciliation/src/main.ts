@@ -5,7 +5,6 @@ import { init } from "@the-coin/utilities/firestore";
 import { readCache, writeCache } from "./cache";
 import { fetchAllRecords } from "./fetch";
 import { matchAll, writeMatched } from "./match";
-import rbc_secret from './rbc.secret.json';
 
 async function initialize() {
 
@@ -14,7 +13,6 @@ async function initialize() {
 
   ConfigStore.initialize();
   RbcStore.initialize();
-  RbcApi.SetCredentials(rbc_secret);
   await init();
 
   log.debug('Init Complete');
