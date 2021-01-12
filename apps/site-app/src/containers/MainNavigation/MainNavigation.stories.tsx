@@ -18,7 +18,7 @@ export default {
   argTypes: {}
 } as Meta;
 
-const Template: Story<ProviderProps> = (args) => <MainNavigation {...args} />;
+const Template = () => <MainNavigation />;
 
 export const Basic: Story<ProviderProps<AnyAction>> = Template.bind({});
 Basic.args = {};
