@@ -45,15 +45,17 @@ export const AccountSwitcher = () => {
 
   const intl = useIntl();
   let titleMsgUsed = intl.formatMessage(titleMsg);
+  let trigger = (
+    <span>{titleMsgUsed}</span>
+  );
   if( activeAccount ){
     titleMsgUsed = activeAccount.name.substring(0, 10);  
+    trigger = (
+      <span>
+        <img src={avatar} className={styles.avatars}/> {titleMsgUsed}
+      </span>
+    );
   }
-
-  const trigger = (
-    <span>
-      <img src={avatar} className={styles.avatars}/> {titleMsgUsed}
-    </span>
-  )
 
   return (
     <Dropdown trigger={trigger}  >
