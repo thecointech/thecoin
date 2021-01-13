@@ -17,6 +17,14 @@
       "amount": 900,
       "date": "2019-01-01T00:00:00.000-05:00",
       "notes": "Initial purchase routed through private account"
+    },
+    {
+      "where": "bank",
+      "type": "deposit",
+      "hash": "0xe8bbc077adee00d9d060f0ed5be036dee9e342f8af407fd73ab834cee4cc1657",
+      "amount": 5000,
+      "date": "2020-04-07T07:36:43.000-05:00",
+      "notes": "USD direct deposit"
     }
   ],
   "connect": [
@@ -57,5 +65,21 @@
       "id": "CAA9BhWD",
       "reason": "Deposited"
     }
+  ],
+  "builtInAccounts": [
+    ["TestAccNoAc", "445758e37f47b44e05e74ee4799f3469de62a2cb"],
+    ["Old TestAcc", "0x0C327B7FCC6FF94F606B3D31D534F25B5604A0D1"],
+    ["Old TestAcc", "0xD0C3C0E7E94969B78EFF6BD531DBD6D0E90769F0"],
+
+    ["BrokerTransferAsst", "51e1153ee05efcf473d581c15b3f7b760ca5ddb3"],
+    ["Old BrokerCAD", "0x38DE1B6515663DBE145CC54179ADDCB963BB606A"],
+    ["BrokerCAD", "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"],
+    ["The Coin", "4f107b6633a4b3385c9e20945144c59ce4ff2def"]
+  ],
+  "combineAccounts": [
+
+  ],
+  "confirmedFailures": [
+    ["asdf/asdf", "Cannot find any trace of this sale.  Is this a good idea?"]
   ]
 }

@@ -22,7 +22,7 @@ const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
   switch(action) {
     case "Bill": return tx => tx.Description.startsWith('Online Banking payment');
     case "Sell": return tx => tx.Description === 'e-Transfer sent';
-    case "Buy": return tx => tx.Description === 'e-Transfer received';
+    case "Buy": return tx => tx.Description === 'e-Transfer received' || tx.Description === 'e-Transfer - Request Money';
   }
 }
 

@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import { DbRecords, BaseTransactionRecord } from "@the-coin/tx-firestore";
 import { Transaction } from "@the-coin/tx-blockchain/";
 import { FXRate } from "@the-coin/pricing";
+import { ObsoleteRecords } from '@the-coin/tx-firestore/obsolete';
 
 ////////////////////////////////
 // input types
@@ -20,6 +21,7 @@ export type AllData = {
   bank: BankRecord[];
   blockchain: Transaction[];
   rates: FXRate[];
+  obsolete: ObsoleteRecords;
 }
 
 ////////////////////////////////

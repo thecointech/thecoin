@@ -47,6 +47,7 @@
       "@the-coin/tx-processing/*":["../../../libs/tx-processing/build/*"],
       "@the-coin/tx-gmail/*":   ["../../../libs/tx-gmail/build/*"],
       "@the-coin/tx-blockchain/*":["../../../libs/tx-blockchain/build/*"],
+      "@the-coin/tx-firestore/*":["../../../libs/tx-firestore/build/*"],
       "@the-coin/shared/*":     ["../../../libs/shared/build/*"],
       "@the-coin/email/*":      ["../../../libs/email/build/*"],
       "@the-coin/site-base/*":     ["../../../libs/site-base/build/*"]

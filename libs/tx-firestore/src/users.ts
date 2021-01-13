@@ -1,4 +1,4 @@
-import { GetFirestore } from "../../utils-ts/build/firestore";
+import { GetFirestore } from "@the-coin/utilities/firestore";
 //
 // Functions relating to users
 //

@@ -53,6 +53,14 @@ export function readCache() {
     convertDB(asJson.dbs.Sell);
     convertDB(asJson.dbs.Bill);
 
+    Object.values(asJson.obsolete).forEach((txs: any) => {
+      txs.forEach((tx: any) => {
+        tx.completed = convertTimestamp(tx.completed) ?? convertTimestamp(tx.completedTimestamp);
+        tx.recieved = convertTimestamp(tx.recieved) ?? convertTimestamp(tx.recievedTimestamp);
+        tx.settled = convertTimestamp(tx.settled) ?? convertTimestamp(tx.processedTimestamp);
+      })
+    })
+
     return asJson as AllData;
   }
   return null;
@@ -61,37 +69,3 @@ export function readCache() {
 export function writeResults() {
 
 }
-/*
-function sanitize(data: AllData) {
-  return {
-    bank: sanitizeBank(data.bank),
-    blockchain: sanitizeBlockchain(data.blockchain),
-    dbs: sanitizeDbs(data.dbs),
-  }
-}
-
-function sanitizeBank(bank: BankRecord[]) {
-  return bank.map(bank => ({
-    ...bank,
-    Date: bank.Date.toMillis()
-    }));
-}
-
-function sanitizeBlockchain(blockchain: Transaction[]) {
-  return blockchain.map(tx => ({
-    ...tx,
-    date: tx.date.toMillis()
-  }))
-}
-
-function sanitizeDBs(dbs: DbRecords) {
-  return {
-    Buy: {
-      ...dbs.Buy,
-
-    dbs.map(tx => ({
-    ...tx,
-    date: tx.date.toMillis()
-  }))
-}
-*/

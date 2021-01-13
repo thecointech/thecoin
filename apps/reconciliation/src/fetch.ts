@@ -1,5 +1,6 @@
 import { fetchETransfers } from '@the-coin/tx-gmail';
 import { getAllFromFirestore } from "@the-coin/tx-firestore";
+import { getAllFromFirestoreObsolete } from "@the-coin/tx-firestore/obsolete";
 import { RbcApi } from '@the-coin/rbcapi';
 import { fetchCoinHistory } from '@the-coin/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
@@ -15,6 +16,8 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
   let bank = await fetchBankTransactions(rbcApi);
   let blockchain = await fetchAndCleanCoinHistory();
 
+  let obsolete = await getAllFromFirestoreObsolete();
+
   const fxRates = new RatesApi();
   const fetchRates = blockchain.map(tx => fxRates.getConversion(124, tx.date.toMillis()));
   const rates = await Promise.all(fetchRates);
@@ -23,6 +26,7 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
     dbs,
     bank,
     blockchain,
+    obsolete,
     rates: rates.map(r => r.data)
   }
 }

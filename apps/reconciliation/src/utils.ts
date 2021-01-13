@@ -1,5 +1,6 @@
 import { Timestamp } from "@the-coin/types/";
 import { DateTime } from "luxon"
+import { Reconciliations } from "types";
 
 export const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>
   (l: Record<K, DateTime>, r: Record<K, DateTime>) =>
@@ -20,4 +21,18 @@ export function toDateTime(ts: Timestamp|undefined) : DateTime|undefined;
   return ts
     ? DateTime.fromMillis(ts.toMillis())
     : undefined;
+}
+
+export const getOrCreateUser = (users: Reconciliations, address: string) => {
+  let user = users.find(u => u.address === address);
+  if (user == undefined) {
+    console.warn("No user found for address: " + address);
+    user = {
+      names: [],
+      address,
+      transactions: [],
+    };
+    users.push(user);
+  }
+  return user;
 }

@@ -1,10 +1,11 @@
-import { BaseTransactionRecord } from "@the-coin/tx-firestore";
+import { BaseTransactionRecord, DepositRecord, PurchaseType } from "@the-coin/tx-firestore";
 import { UserAction } from "@the-coin/utilities/User";
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { AllData, Reconciliations } from "./types";
 import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
+import { Obsolete } from "@the-coin/tx-firestore/obsolete";
 
 
 // Match all DB entries with raw data
@@ -17,12 +18,14 @@ export function matchDB(data: AllData) {
   addReconciled(r, bills);
   addReconciled(r, sales);
 
+  const obsolete = convertObsolete(data);
+  addReconciled(r, obsolete);
+
   matchManual(r, data);
 
   for (let i = 0; i < 30; i++) {
     matchTransactions(data, r, i);
   }
-
 
   // Pure debugging purpose fn's
   //matchTransactions(data, unMatched, 100);
@@ -30,37 +33,24 @@ export function matchDB(data: AllData) {
   return r;
 }
 
-function addReconciled(data: Reconciliations, more: Reconciliations) {
+export function addReconciled(data: Reconciliations, more: Reconciliations) {
   for (const record of more) {
     const src = data.find(d => d.address == record.address);
+
+    // any invalid hashes?
+    if (record.transactions.find(tx => !tx.data.hash.startsWith("0x")))
+    {
+      console.error("Invalid hash here");
+    }
     if (!src) data.push(record);
-    else src.transactions.push(...record.transactions)
+    else {
+      const srcHashes = src.transactions.map(tx => tx.data.hash);
+      const unique = record.transactions.filter(tx => !srcHashes.includes(tx.data.hash));
+      src.transactions.push(...unique);
+      //src.transactions.sort((l, r) => l.data.recievedTimestamp.toMillis() - r.data.recievedTimestamp.toMillis())
+    }
   }
 }
-
-// Remove eronneous transactions
-// function filterZeroValueRecords(r: Reconciliations, data: AllData) {
-//   // Debugging info
-//   const zvr = r.map(user => ({
-//     ...user,
-//     transactions: user.transactions.filter(tx => tx.data.fiatDisbursed === 0),
-//   })).filter(user => user.transactions.length !== 0);
-
-//   // Fix any transactions that actually shifted some value
-//   for (const user of zvr) {
-//     for (const tx of user.transactions) {
-//       if (tx.data.transfer.value > 0) {
-//         const bc = block
-//       }
-//     }
-//   }
-//   return r;
-//   // console.log(`${zvr.length} users had a total of ${zvr.reduce((tot, user) => tot + user.transactions.length, 0)} zero-sized transactions`);
-//   // return r.map(user => ({
-//   //   ...user,
-//   //   transactions: user.transactions.filter(tx => tx.data.fiatDisbursed !== 0),
-//   // }));
-// }
 
 export function convertBaseTransactions(data: AllData, action: UserAction) {
   const deposits = Object.entries(data.dbs[action]).map(([address, deposits]) => {
@@ -89,49 +79,10 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
       record.bank = record.bank ?? spliceBank(data, user, record, maxDays);
 
       if (record.data.hashRefund)
-        record.refund = record.blockchain ?? spliceBlockchain(data, user, record, record.data.hashRefund);
+        record.refund = record.refund ?? spliceBlockchain(data, user, record, record.data.hashRefund);
     }
   }
 }
-
-// function matchBills(data: AllData, reconciled: Reconciliations, maxDays: number) {
-//   for (const rec of reconciled) {
-//     const bills = rec.transactions;
-//     for (const record of bills) {
-//       const { fiatDisbursed, completedTimestamp } = record.data as DepositRecord;
-//       record.blockchain = record.blockchain ?? spliceBlockchain(data, record.data.hash);
-//       record.bank = record.bank ?? spliceBank(data, -fiatDisbursed, toDateTime(completedTimestamp), maxDays, []);
-//     }
-//   }
-// }
-
-// function matchPurchase(data: AllData, deposit: DepositRecord, address: string, names: string[]) {
-
-//   // first, find the eTransfer that initiated this transaction
-//   if (!deposit.type || deposit.type == 'etransfer')
-//     record.email = spliceEmail(data, address, amount, recieved, names, deposit.sourceId);
-
-//   const record = convertBaseTransactionRecord(deposit, 'Buy');
-
-//   const recieved = toDateTime(deposit.recievedTimestamp);
-//   const completed = deposit.completedTimestamp ? toDateTime(deposit.completedTimestamp) : null;
-//   const amount = deposit.fiatDisbursed;
-//   // first, find the eTransfer that initiated this transaction
-//   if (!deposit.type || deposit.type == 'etransfer')
-//     record.email = spliceEmail(data, address, amount, recieved, names, deposit.sourceId);
-
-//   // Next, the tx hash should match blockchain
-//   record.blockchain = spliceBlockchain(data, record.data.hash);
-//   // Finally, can we find the bank deposit?
-//   record.bank = spliceBank(data, amount, completed, names);
-
-//   // Warn about mis-matched names
-//   if (record.bank?.Details && !names.includes(record.bank?.Details)) {
-//     console.warn(`Mismatched (or potentially multiple) names - ${names} : ${record.bank.Details} for account`);
-//     debugger;
-//   }
-//   return record;
-// }
 
 const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) => ({
   action: type,
@@ -145,3 +96,47 @@ const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserA
   bank: null,
   blockchain: null,
 });
+
+function convertObsolete(data: AllData) {
+  return Object.entries(data.obsolete).map(([address, txs]) => {
+    // find the bank record that matches this purchase
+    const names = findNames(data, address);
+    const transactions =  txs.map(tx => {
+      const ob = tx as Obsolete;
+      const dp = tx as DepositRecord;
+      const recievedTimestamp = ob.recieved ?? dp.recievedTimestamp;
+      const completedTimestamp = ob.completed ?? dp.completedTimestamp;
+      const processedTimestamp = ob.settled ?? dp.processedTimestamp;
+      const value = ob.coin ?? dp.transfer.value;
+      const fiat = ob.fiat ?? dp.fiatDisbursed;
+      const hash = ob.txHash ?? dp.hash;
+      const type = PurchaseType.etransfer;
+      const record :DepositRecord = {
+        type,
+        confirmed: true,
+        hash,
+        fiatDisbursed: fiat,
+        recievedTimestamp,
+        completedTimestamp,
+        processedTimestamp,
+        transfer: { value }
+      };
+      return record;
+    })
+    .map(deposit => ({
+      action: "Buy" as UserAction,
+      data: deposit,
+      database: null,
+      blockchain: null,
+      email: null,
+      bank: null,
+      refund: null,
+    }))
+
+    return {
+      names,
+      address,
+      transactions,
+    }
+  })
+};

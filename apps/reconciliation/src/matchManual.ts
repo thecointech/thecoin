@@ -25,16 +25,26 @@ function findRecord(r: Reconciliations, hash: string) {
 
 function doInsert(entry: InsertEntry, r: Reconciliations) {
   const { user, record } = findRecord(r, entry.hash);
-  if (entry.where == 'email') {
-    record.email = {
-      name: user.names[0],
-      id: (entry as any).sourceId,
-      cad: new Decimal(entry.amount),
-      address: user.address,
-      recieved: DateTime.fromISO(entry.date),
-      email: "Manual Entry - not set",
-      depositUrl: "Manual Entry - not set",
-    }
+  switch (entry.where) {
+    case 'email':
+      record.email = {
+        name: user.names[0],
+        id: (entry as any).sourceId,
+        cad: new Decimal(entry.amount),
+        address: user.address,
+        recieved: DateTime.fromISO(entry.date),
+        email: "Manual Entry - not set",
+        depositUrl: "Manual Entry - not set",
+      }
+      break;
+    case 'bank':
+      (record.data as any).type = 'deposit';
+      record.bank = {
+        Amount: entry.amount,
+        Description: "Manual Entry",
+        Details: "USD",
+        Date: DateTime.fromISO(entry.date),
+      }
   }
 }
 
