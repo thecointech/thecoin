@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Account.Exist';
+export const scope = 'app.containers.account.Exist';
 
 export default defineMessages({
   existTransfer: {

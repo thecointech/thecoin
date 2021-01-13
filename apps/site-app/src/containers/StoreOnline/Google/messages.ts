@@ -5,7 +5,7 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Accounts.Settings.GAuth';
+export const scope = 'app.containers.accounts.Settings.GAuth';
 
 export default defineMessages({
   tokenSuccess: {

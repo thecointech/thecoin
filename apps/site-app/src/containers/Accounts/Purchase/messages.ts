@@ -5,7 +5,7 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Accounts.Login';
+export const scope = 'app.containers.accounts.Login';
 
 export default defineMessages({
   header: {

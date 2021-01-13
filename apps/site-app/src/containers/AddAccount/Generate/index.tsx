@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Wallet } from 'ethers';
-import { Button, Header, Form } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
@@ -12,17 +12,18 @@ import messages from '../messages';
 
 import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
-const aboveTheTitle = { id:"site.Account.create.form.aboveTheTitle",
+const aboveTheTitle = { id:"app.account.create.form.aboveTheTitle",
                         defaultMessage:"First Step",
                         description:"Title above the main Title for the create account form page"};
-const title = { id:"site.Account.create.form.title",
+const title = { id:"app.account.create.form.title",
                 defaultMessage:"Create your Account",
                 description:"Title above the main Title for the create account form page"};
-const buttonCreate = {  id:"site.Account.create.form.button",
+const buttonCreate = {  id:"app.account.create.form.button",
                         defaultMessage:"Create Account",
                         description:"Button for the create account form page"};
 
@@ -81,9 +82,9 @@ export const Generate = (props: RouteComponentProps) => {
         <div className={`container ui`}><NameInput forceValidate={forceValidate} setName={setName}/></div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <div className={`container ui`}><ReferralInput forceValidate={forceValidate} setReferral={setReferral} /></div>
-        <Button className={`x8spaceBefore`} onClick={onGenerate} primary size="big">
+        <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="big">
           <FormattedMessage {...buttonCreate} />
-        </Button>
+        </ButtonPrimary>
         <Decoration />
       </Form>
       <ModalOperation

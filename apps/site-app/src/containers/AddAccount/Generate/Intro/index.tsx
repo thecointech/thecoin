@@ -1,30 +1,31 @@
 import React from "react";
-import { Header, Button, Grid, Container } from "semantic-ui-react";
+import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
 import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
+import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
 
-const aboveTheTitle = { id:"site.account.generate.aboveTheTitle",
+const aboveTheTitle = { id:"app.account.generate.aboveTheTitle",
                         defaultMessage:"WHY ARE WE DIFFERRENT?",
                         description:"Description for the information page before the create account form"};
-const title = { id:"site.account.generate.title",
+const title = { id:"app.account.generate.title",
                 defaultMessage:"Welcome to TheCoin",
                 description:"Title for the information page before the create account form"};
-const description = { id:"site.account.generate.description",
+const description = { id:"app.account.generate.description",
                       defaultMessage:"Accounts with TheCoin are a little different to your regular bank. We are built on the blockchain, which means that we don't store your account keys - you do! If you've never used a blockchain account, some of these differences can seem a bit strange. We encourage you to read the short intro articles below if you would like to learn more.",
                       description:"Description for the information page before the create account form"};
-const buttonGoodPass = { id:"site.account.generate.button.goodPassword",
+const buttonGoodPass = { id:"app.account.generate.button.goodPassword",
                 defaultMessage:"How to make a good password",
                 description:"Description for the information page before the create account form"};
-const buttonAccountStored = { id:"site.account.generate.button.accountStored",
+const buttonAccountStored = { id:"app.account.generate.button.accountStored",
                 defaultMessage:"Where is my account stored?",
                 description:"Description for the information page before the create account form"};
-const proud = { id:"site.account.generate.proud",
+const proud = { id:"app.account.generate.proud",
                 defaultMessage:"We are very proud to combine the cutting-edge security and  performance of blockchain with the the conveniences of traditional banking.",
                 description:"Text underneath the buttons for the information page before the create account form"};
-const buttonGo = {  id:"site.account.generate.button.go",
+const buttonGo = {  id:"app.account.generate.button.go",
                     defaultMessage:"Create a New Account",
                     description:"The create account button for the information page before the create account form"};
 
@@ -57,9 +58,9 @@ export const Intro = () => {
         <p>
           <FormattedMessage {...proud} />
         </p>
-      <Button as={Link} to="/addAccount/generate" primary size="huge">
+      <ButtonPrimary as={Link} to="/addAccount/generate" size="huge">
         <FormattedMessage {...buttonGo} />
-      </Button>
+      </ButtonPrimary>
       <Decoration />
     </Container>
   )

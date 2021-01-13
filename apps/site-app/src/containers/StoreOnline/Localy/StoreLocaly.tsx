@@ -7,7 +7,7 @@ export const StoreLocaly : React.FC = (props) => {
       <a href="google.com">
         {props.children}
         <FormattedMessage 
-            id="site.storeOnline.localy.link"
+            id="app.storeOnline.localy.link"
             defaultMessage="Localy"
             description=""/>
       </a>

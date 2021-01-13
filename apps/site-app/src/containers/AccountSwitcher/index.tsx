@@ -10,20 +10,20 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 
 
-const titleMsg = { id: 'site.AccountSwitcher.login', defaultMessage:'LOG IN'};
-const myAccounts = {  id:"site.AccountSwitcher.myAccounts", 
+const titleMsg = { id: 'app.accountSwitcher.login', defaultMessage:'LOG IN'};
+const myAccounts = {  id:"app.accountSwitcher.myAccounts", 
                       defaultMessage:"My Accounts",
                       description:"Title for the My Accounts title in the menu"};
-const addAccount = {  id:"site.AccountSwitcher.addAccount", 
+const addAccount = {  id:"app.accountSwitcher.addAccount", 
                       defaultMessage:"Add an Account",
                       description:"Title for the Add an Account in the menu"};
-const see = {   id:"site.AccountSwitcher.see", 
+const see = {   id:"app.accountSwitcher.see", 
                 defaultMessage:"See",
                 description:"Title for the See in the menu"};
-const settings = {    id:"site.AccountSwitcher.settings", 
+const settings = {    id:"app.accountSwitcher.settings", 
                       defaultMessage:"Settings",
                       description:"Title for the Settings in the menu"};
-const signout = {   id:"site.AccountSwitcher.signout", 
+const signout = {   id:"app.accountSwitcher.signout", 
                     defaultMessage:"Sign Out",
                     description:"Title for the Sign Out in the menu"};
 

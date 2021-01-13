@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Header, Button, Grid, Container } from "semantic-ui-react";
+import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage";
@@ -16,24 +16,25 @@ import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
+import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
 
 
-const aboveTheTitle = { id:"site.Account.create.store.aboveTheTitle",
+const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
                         defaultMessage:"Save your account",
                         description:"The above the main title title for the store your account page"};
-const title = { id:"site.Account.create.store.title",
+const title = { id:"app.account.create.store.title",
                 defaultMessage:"Ensure your safety",
                 description:"The main title for the store your account page"};
-const download = {  id:"site.Account.create.store.button.download",
+const download = {  id:"app.account.create.store.button.download",
                     defaultMessage:"Download",
                     description:"The button to download the account for the store your account page"};
-const explain = { id:"site.Account.create.store.secureExplain",
+const explain = { id:"app.account.create.store.secureExplain",
                   defaultMessage:"To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.",
                   description:"The text underneath the button to explain what is the most secured for the store your account page"};
-const explainDownload = { id:"site.Account.create.store.explainDownload",
+const explainDownload = { id:"app.account.create.store.explainDownload",
                           defaultMessage:"Be sure you have access to your local files later.",
                           description:"The text underneath the button to explain that the client need to have access to this file for the store your account page"};
-const congratulation = {  id:"site.Account.create.store.button.congratulations",
+const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
 
@@ -104,9 +105,9 @@ export const Store = () => {
         <FormattedMessage {...explainDownload} />
       </div>
 
-      <Button as={Link} to="/congratulations" disabled={!backedUp} primary size="big">
+      <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="big">
         <FormattedMessage {...congratulation} />
-      </Button>
+      </ButtonPrimary>
       <Decoration />
     </Container>
   )
