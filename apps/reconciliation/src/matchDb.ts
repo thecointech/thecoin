@@ -1,11 +1,34 @@
-import { BaseTransactionRecord, DepositRecord } from "@the-coin/tx-firestore";
+import { BaseTransactionRecord } from "@the-coin/tx-firestore";
 import { UserAction } from "@the-coin/utilities/User";
-import { toDateTime } from "./utils";
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { AllData, Reconciliations } from "./types";
 import { spliceBank } from "./matchBank";
+import { matchManual } from "./matchManual";
 
+
+// Match all DB entries with raw data
+export function matchDB(data: AllData) {
+
+  // First, initialize with database records
+  let r: Reconciliations = convertBaseTransactions(data, "Buy");
+  const bills = convertBaseTransactions(data, "Bill");
+  const sales = convertBaseTransactions(data, "Sell");
+  addReconciled(r, bills);
+  addReconciled(r, sales);
+
+  matchManual(r, data);
+
+  for (let i = 0; i < 30; i++) {
+    matchTransactions(data, r, i);
+  }
+
+
+  // Pure debugging purpose fn's
+  //matchTransactions(data, unMatched, 100);
+  console.log(`Matched`);
+  return r;
+}
 
 function addReconciled(data: Reconciliations, more: Reconciliations) {
   for (const record of more) {
@@ -14,46 +37,30 @@ function addReconciled(data: Reconciliations, more: Reconciliations) {
     else src.transactions.push(...record.transactions)
   }
 }
-export function matchDB(data: AllData) {
 
-  // First, initialize with database records
-  const r: Reconciliations = convertBaseTransactions(data, "Buy");
-  for (let i = 0; i < 30; i++) {
-    matchTransactions(data, r, "Buy", i);
-  }
+// Remove eronneous transactions
+// function filterZeroValueRecords(r: Reconciliations, data: AllData) {
+//   // Debugging info
+//   const zvr = r.map(user => ({
+//     ...user,
+//     transactions: user.transactions.filter(tx => tx.data.fiatDisbursed === 0),
+//   })).filter(user => user.transactions.length !== 0);
 
-  const bills = convertBaseTransactions(data, "Bill");
-  for (let i = 0; i < 30; i++) {
-    matchTransactions(data, bills, "Bill", i);
-  }
-  addReconciled(r, bills);
-
-  const sales = convertBaseTransactions(data, "Sell");
-  for (let i = 0; i < 30; i++) {
-    matchTransactions(data, sales, "Sell", i);
-  }
-  addReconciled(r, sales);
-
-  // All purchases should be matched
-  const unMatched = r.map(r => ({
-    ...r,
-    transactions: r.transactions.filter(tx =>
-      (tx.action == "Buy" && tx.email == null) || tx.bank == null || tx.blockchain == null)
-  })).filter(um => um.transactions.length > 0);
-  for (const um of unMatched) {
-    for (const umtx of um.transactions) {
-      const email = umtx.email || umtx.action != "Buy" ? "" : " Email";
-      const blockchain = umtx.blockchain ? "" : " blockchain";
-      const bank = umtx.bank ? "" : " bank";
-      console.log(`${umtx.data.recievedTimestamp.toDate()} ${umtx.action} ${um.names} - ${umtx.data.fiatDisbursed}, missing ${email}${blockchain}${bank}`)
-    }
-  }
-
-  // Pure debugging purpose fn's
-  matchTransactions(data, unMatched, "Buy", 100);
-  console.log(`Matched`)
-  return r;
-}
+//   // Fix any transactions that actually shifted some value
+//   for (const user of zvr) {
+//     for (const tx of user.transactions) {
+//       if (tx.data.transfer.value > 0) {
+//         const bc = block
+//       }
+//     }
+//   }
+//   return r;
+//   // console.log(`${zvr.length} users had a total of ${zvr.reduce((tot, user) => tot + user.transactions.length, 0)} zero-sized transactions`);
+//   // return r.map(user => ({
+//   //   ...user,
+//   //   transactions: user.transactions.filter(tx => tx.data.fiatDisbursed !== 0),
+//   // }));
+// }
 
 export function convertBaseTransactions(data: AllData, action: UserAction) {
   const deposits = Object.entries(data.dbs[action]).map(([address, deposits]) => {
@@ -72,25 +79,17 @@ export function convertBaseTransactions(data: AllData, action: UserAction) {
 }
 
 
-function matchTransactions(data: AllData, reconciled: Reconciliations, action: UserAction, maxDays: number) {
-  for (const rec of reconciled) {
+function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: number) {
+  for (const user of reconciled) {
 
-    const purchases = rec.transactions;
-    for (const record of purchases) {
-      const { fiatDisbursed, recievedTimestamp, completedTimestamp, sourceId } = record.data as DepositRecord;
-      let amount = fiatDisbursed;
-      let details = undefined;
-      let names: string[] = [];
-      if (action == "Buy") {
-        names = rec.names;
-        details = "e-Transfer received";
-        record.email = record.email ?? spliceEmail(data, rec.address, amount, toDateTime(recievedTimestamp), maxDays, sourceId);
-      } else {
-        amount = -amount;
-      }
+    for (const record of user.transactions) {
 
-      record.blockchain = record.blockchain ?? spliceBlockchain(data, record.data.hash);
-      record.bank = record.bank ?? spliceBank(data, amount, toDateTime(completedTimestamp), maxDays, names, details);
+      record.email = record.email ?? spliceEmail(data, user, record, maxDays);
+      record.blockchain = record.blockchain ?? spliceBlockchain(data, user, record, record.data.hash);
+      record.bank = record.bank ?? spliceBank(data, user, record, maxDays);
+
+      if (record.data.hashRefund)
+        record.refund = record.blockchain ?? spliceBlockchain(data, user, record, record.data.hashRefund);
     }
   }
 }
@@ -137,7 +136,10 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, action: U
 const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) => ({
   action: type,
   database: record,
-  data: {...record},
+  data: {
+    ...record,
+    hash: record.hash.trim(),
+  },
 
   email: null,
   bank: null,

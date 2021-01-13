@@ -2,6 +2,7 @@ import { init as LogInit, log } from "@the-coin/logging";
 import { RbcApi, RbcStore } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
 import { init } from "@the-coin/utilities/firestore";
+import { verify } from "./verify";
 import { readCache, writeCache } from "./cache";
 import { fetchAllRecords } from "./fetch";
 import { matchAll, writeMatched } from "./match";
@@ -35,6 +36,7 @@ async function Process() {
   )
 
   const match = matchAll(data);
+  verify(match, data);
   writeMatched(match);
 }
 Process();
