@@ -3,20 +3,12 @@ import { Story, Meta } from '@storybook/react';
 
 import { Advantages } from '.';
 
-import { MemoryRouter } from 'react-router';
-import { Provider, ProviderProps } from 'react-redux';
-import history from '@the-coin/shared/build/utils/history';
-import {configureAppStore} from '@the-coin/shared/build/configureStore';
-import createReducer from '../../../reducers';
+import { ProviderProps } from 'react-redux';
 import { AnyAction } from 'redux';
-
-
-const store = configureAppStore(createReducer, undefined, history);
 
 export default {
   title: 'Landing/Homepage/Advantages',
   component: Advantages,
-  decorators: [(Story) => <Provider store={store}><MemoryRouter><Story/></MemoryRouter></Provider>],
   argTypes: {}
 } as Meta;
 
