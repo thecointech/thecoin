@@ -1,6 +1,6 @@
 // Import any system variables
 const path = require('path');
-const dotenvpath = path.resolve(__dirname, '..', '.env');
+const dotenvpath = path.resolve(__dirname, 'credentials.env');
 require('dotenv').config({ path: dotenvpath });
 
 const net = require('net');
