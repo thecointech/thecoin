@@ -5,4 +5,5 @@
 // No built-in variable for line-height in labels
 .ui.label {
   line-height: @lineHeight;
+  float: left;
 }

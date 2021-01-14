@@ -11,9 +11,12 @@ type Props = {
   url: string
 }
 
-const title = { id:"app.account.create.title",
+const aboveTheTitle = { id:"app.account.create.aboveTheTitle",
                 defaultMessage:"First Step",
                 description:"Title above the main Title for the create account form page"};
+const title = { id:"app.account.create.title",
+                defaultMessage:"Create you account",
+                description:"Title for the create account form page"};
 const buttonNewAccount = {  id:"app.account.create.button.newAccount",
                             defaultMessage:"I want to create a new Account",
                             description:"Button redirect people to create a new account on the let's get started page"};
@@ -36,16 +39,19 @@ export const CreateExistingSwitch = (props: Props) => {
   return (
     <>
       <div id={ `${styles.buttonsContainer}` } className={` x4spaceBefore `}>
-        <Header as="h1" className={` x8spaceAfter `}>
+        <Header as="h5">
+          <FormattedMessage {...aboveTheTitle} />
+        </Header>
+        <Header as="h1" className={` x12spaceAfter`}>
           <FormattedMessage {...title} />
         </Header>
-        <ButtonSecondary as={NavLink} to={createUrl} className={styles.button}>
+        <ButtonPrimary as={NavLink} to={createUrl} className={styles.button}>
           <FormattedMessage {...buttonNewAccount} />
-        </ButtonSecondary>
-        <Divider horizontal>Or</Divider>
-        <ButtonPrimary as={NavLink} to={existingUrl} className={styles.button}>
-          <FormattedMessage {...buttonAccount} />  
         </ButtonPrimary>
+        <Divider horizontal>Or</Divider>
+        <ButtonSecondary as={NavLink} to={existingUrl} className={styles.button}>
+          <FormattedMessage {...buttonAccount} />  
+        </ButtonSecondary>
       </div>
       <Decoration />
     </>

@@ -72,7 +72,7 @@ export const Generate = (props: RouteComponentProps) => {
 
   return (
     <React.Fragment>
-      <Form className={styles.content}>
+      <Form className={`${styles.content} x8spaceBefore `}>
         <Header as="h5">
             <FormattedMessage {...aboveTheTitle} />
         </Header>
@@ -82,7 +82,7 @@ export const Generate = (props: RouteComponentProps) => {
         <div className={`container ui`}><NameInput forceValidate={forceValidate} setName={setName}/></div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <div className={`container ui`}><ReferralInput forceValidate={forceValidate} setReferral={setReferral} /></div>
-        <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="big">
+        <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="medium">
           <FormattedMessage {...buttonCreate} />
         </ButtonPrimary>
         <Decoration />

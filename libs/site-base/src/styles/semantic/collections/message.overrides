@@ -1,3 +1,9 @@
 /*******************************
         Site Overrides
 *******************************/
+.ui.attached.message{
+}
+
+.ui.error.message{
+        background-color: transparent;
+}

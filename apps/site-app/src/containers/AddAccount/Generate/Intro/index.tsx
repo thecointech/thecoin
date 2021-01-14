@@ -31,8 +31,7 @@ const buttonGo = {  id:"app.account.generate.button.go",
 
 export const Intro = () => {
   return (
-    <Container className={styles.content}>
-
+    <Container className={`${styles.content} x8spaceBefore `}>
       <Header as='h5'>
         <FormattedMessage {...aboveTheTitle} />
       </Header>
@@ -55,10 +54,10 @@ export const Intro = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <p>
+        <p className={ `x4spaceBefore` }>
           <FormattedMessage {...proud} />
         </p>
-      <ButtonPrimary as={Link} to="/addAccount/generate" size="huge">
+      <ButtonPrimary as={Link} to="/addAccount/generate" size="medium" className={ `x4spaceBefore` }>
         <FormattedMessage {...buttonGo} />
       </ButtonPrimary>
       <Decoration />
