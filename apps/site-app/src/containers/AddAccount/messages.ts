@@ -8,15 +8,6 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.account.Create';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'Create a New Account',
-  },
-  subHeader: {
-    id: `${scope}.subHeader`,
-    defaultMessage:
-      'Name your account anything you like, and give it a valid password.',
-  },
   labelName: {
     id: `${scope}.labelName`,
     defaultMessage: 'Account Name',
@@ -32,14 +23,6 @@ export default defineMessages({
   buttonCreate: {
     id: `${scope}.buttonCreate`,
     defaultMessage: 'CREATE ACCOUNT',
-  },
-  whileCreatingHeader: {
-    id: `${scope}.whileCreatingHeader`,
-    defaultMessage: 'Creating Account...',
-  },
-  whileCreatingMessage: {
-    id: `${scope}.whileCreatingMessage`,
-    defaultMessage: "We are {percentComplete}% done cooking your brand-new account."
   },
 
   errorNameTooShort: {

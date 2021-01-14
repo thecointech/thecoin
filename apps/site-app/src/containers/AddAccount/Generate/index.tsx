@@ -8,7 +8,6 @@ import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import messages from '../messages';
 
 import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
@@ -26,6 +25,11 @@ const title = { id:"app.account.create.form.title",
 const buttonCreate = {  id:"app.account.create.form.button",
                         defaultMessage:"Create Account",
                         description:"Button for the create account form page"};
+
+const whileCreatingHeader = { id: `app.account.create.whileCreatingHeader`,
+                              defaultMessage: 'Creating Account...',};
+const whileCreatingMessage = { id: `app.account.create.whileCreatingMessage`,
+                                defaultMessage: "We are {percentComplete}% done cooking your brand-new account."};
 
 export const Generate = (props: RouteComponentProps) => {
 
@@ -71,17 +75,21 @@ export const Generate = (props: RouteComponentProps) => {
   //   : onComplete
 
   return (
-    <React.Fragment>
-      <Form className={`${styles.content} x8spaceBefore `}>
-        <Header as="h5">
-            <FormattedMessage {...aboveTheTitle} />
-        </Header>
-        <Header as="h2">
-          <FormattedMessage {...title} />
-        </Header>
-        <div className={`container ui`}><NameInput forceValidate={forceValidate} setName={setName}/></div>
+    <div className={`${styles.wrapper}`}>
+      <Header as="h5" className={`x8spaceBefore `}>
+          <FormattedMessage {...aboveTheTitle} />
+      </Header>
+      <Header as="h2">
+        <FormattedMessage {...title} />
+      </Header>
+      <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
+        <div className={`container ui`}>
+          <NameInput forceValidate={forceValidate} setName={setName}/>
+        </div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
-        <div className={`container ui`}><ReferralInput forceValidate={forceValidate} setReferral={setReferral} /></div>
+        <div className={`container ui ${styles.createAccountFormReferral}`} id={styles.createAccountFormReferral}>
+          <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
+        </div>
         <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="medium">
           <FormattedMessage {...buttonCreate} />
         </ButtonPrimary>
@@ -91,11 +99,11 @@ export const Generate = (props: RouteComponentProps) => {
         cancelCallback={setCancelled}
         //okCallback={cbOk}
         isOpen={progress !== undefined}
-        header={messages.whileCreatingHeader}
+        header={whileCreatingHeader}
         progressPercent={progress!}
-        progressMessage={messages.whileCreatingMessage}
+        progressMessage={whileCreatingMessage}
       />
-    </React.Fragment>
+    </div>
   );
 }
 
