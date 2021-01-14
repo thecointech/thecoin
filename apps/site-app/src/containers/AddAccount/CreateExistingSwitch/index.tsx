@@ -15,7 +15,7 @@ const aboveTheTitle = { id:"app.account.create.aboveTheTitle",
                 defaultMessage:"First Step",
                 description:"Title above the main Title for the create account form page"};
 const title = { id:"app.account.create.title",
-                defaultMessage:"Create you account",
+                defaultMessage:"Create your account",
                 description:"Title for the create account form page"};
 const buttonNewAccount = {  id:"app.account.create.button.newAccount",
                             defaultMessage:"I want to create a new Account",

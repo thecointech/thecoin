@@ -41,7 +41,7 @@ a{
     font-size: 12px;
     font-weight: @bold;
     text-transform: uppercase;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     border-bottom: 2px solid @primaryColor;
 }
 .left.menu{
@@ -66,7 +66,7 @@ div.container:nth-child(1){
 /////////////////////////////////////////////////////////////
 // Generic margin/padding classes.
 
-@selectors: range(1, 40, 1);
+@selectors: range(0, 40, 1);
 @space: 5px;
 
 each(@selectors, {

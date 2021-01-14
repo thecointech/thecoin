@@ -17,7 +17,7 @@ export function NotFoundPage() {
           <Grid.Row>
             <Grid.Column>
                 <Header as='h5'>
-                  <FormattedMessage id="site.NotFoundPage.aboveTheTitle"
+                  <FormattedMessage id="shared.NotFoundPage.aboveTheTitle"
                                   defaultMessage="PAGE NOT FOUND"
                                   description="Text above the title for the 404 page"/>
                 </Header>
@@ -26,7 +26,7 @@ export function NotFoundPage() {
           <Grid.Row>
             <Grid.Column>
                 <Header as='h3'>
-                  <FormattedMessage id="site.NotFoundPage.title"
+                  <FormattedMessage id="shared.NotFoundPage.title"
                                   defaultMessage="Sorry, we couldn’t find the page you are looking for"
                                   description="Title for the 404 page"/>
                 </Header>
@@ -35,7 +35,7 @@ export function NotFoundPage() {
           <Grid.Row>
             <Grid.Column>
                 <Button as={NavLink} to="/" content='' primary size='massive' >
-                    <FormattedMessage id="site.NotFoundPage.button"
+                    <FormattedMessage id="shared.NotFoundPage.button"
                         defaultMessage="Home"
                         description="Go back to homepage button for the 404 page"/>
                 </Button>

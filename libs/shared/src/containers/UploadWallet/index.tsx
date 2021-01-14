@@ -46,13 +46,13 @@ export const UploadWallet = (props: Props) => {
     <Container className={styles.content}>
       <Header as="h5">
           <FormattedMessage
-            id="site.account.uploadWallet.aboveTheTitle"
+            id="shared.account.uploadWallet.aboveTheTitle"
             defaultMessage="Restore Account"
             description="The above the title title for the upload your account page" />
       </Header>
       <Header as="h2">
           <FormattedMessage
-            id="site.account.uploadWallet.title"
+            id="shared.account.uploadWallet.title"
             defaultMessage="Load an Account"
             description="The title for the upload your account page" />
       </Header>
@@ -62,7 +62,7 @@ export const UploadWallet = (props: Props) => {
             <Grid.Column verticalAlign="middle">
               <p>
                 <FormattedMessage
-                  id="site.account.uploadWallet.dropZone"
+                  id="shared.account.uploadWallet.dropZone"
                   defaultMessage="Drag 'n' drop a wallet file here, or click to browse"
                   description="The title for the drop zone on the upload your account page" />
               </p>

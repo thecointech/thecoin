@@ -18,7 +18,7 @@ let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
 const aboveTheTitle = { id:"app.account.create.form.aboveTheTitle",
-                        defaultMessage:"First Step",
+                        defaultMessage:"Second Step",
                         description:"Title above the main Title for the create account form page"};
 const title = { id:"app.account.create.form.title",
                 defaultMessage:"Create your Account",
