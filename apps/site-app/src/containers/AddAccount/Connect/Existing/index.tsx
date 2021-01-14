@@ -25,7 +25,7 @@ export const Existing = () => {
   
   return (
     <Container className={styles.content}>
-    <Header as="h5">
+    <Header as="h5" className={`x8spaceBefore`}>
         <FormattedMessage {...aboveTheTitle} />
     </Header>
       <Header as="h2">

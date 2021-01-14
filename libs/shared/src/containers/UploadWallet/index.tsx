@@ -9,6 +9,17 @@ import { useHistory } from 'react-router';
 
 import illustration from "./images/illust_flowers.svg";
 
+
+const aboveTheTitle = { id:"shared.account.uploadWallet.aboveTheTitle",
+                        defaultMessage:"Restore Account",
+                        description:"The above the title title for the upload your account page"};
+const title = { id:"shared.account.uploadWallet.title",
+                defaultMessage:"Load an Account",
+                description:"Title for the upload your account page"};
+const dropZone = {  id:"shared.account.uploadWallet.dropZone",
+                    defaultMessage:"Drag 'n' drop a wallet file here, or click to browse",
+                    description:"The title for the drop zone on the upload your account page"};
+
 export type ReadFileData = {
   wallet: string;
   name: string|undefined;
@@ -44,27 +55,18 @@ export const UploadWallet = (props: Props) => {
 
   return (
     <Container className={styles.content}>
-      <Header as="h5">
-          <FormattedMessage
-            id="shared.account.uploadWallet.aboveTheTitle"
-            defaultMessage="Restore Account"
-            description="The above the title title for the upload your account page" />
+      <Header as="h5" className={`x8spaceBefore`}>
+          <FormattedMessage {...aboveTheTitle} />
       </Header>
-      <Header as="h2">
-          <FormattedMessage
-            id="shared.account.uploadWallet.title"
-            defaultMessage="Load an Account"
-            description="The title for the upload your account page" />
+      <Header as="h2" className={`x12spaceAfter`}>
+          <FormattedMessage {...title} />
       </Header>
-      <Label width="4" as="label" htmlFor={id} size="huge" id={styles.dropzone}>
+      <Label width="4" as="label" htmlFor={id} size="huge" id={styles.dropzone} className={`x10spaceAfter`} >
         <Grid>
           <Grid.Row columns={1}>
             <Grid.Column verticalAlign="middle">
               <p>
-                <FormattedMessage
-                  id="shared.account.uploadWallet.dropZone"
-                  defaultMessage="Drag 'n' drop a wallet file here, or click to browse"
-                  description="The title for the drop zone on the upload your account page" />
+                <FormattedMessage {...dropZone} />
               </p>
             </Grid.Column>
           </Grid.Row>

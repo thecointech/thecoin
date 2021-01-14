@@ -38,8 +38,8 @@ export const CreateExistingSwitch = (props: Props) => {
 
   return (
     <>
-      <div id={ `${styles.buttonsContainer}` } className={` x4spaceBefore `}>
-        <Header as="h5">
+      <div id={ `${styles.buttonsContainer}` }>
+        <Header as="h5" className={`x8spaceBefore`}>
           <FormattedMessage {...aboveTheTitle} />
         </Header>
         <Header as="h1" className={` x12spaceAfter`}>
