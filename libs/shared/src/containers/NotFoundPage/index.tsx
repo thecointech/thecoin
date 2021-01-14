@@ -16,7 +16,7 @@ export function NotFoundPage() {
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
           <Grid.Row>
             <Grid.Column>
-                <Header as='h5'>
+                <Header as='h5'className={ `x8spaceBefore` }>
                   <FormattedMessage id="shared.NotFoundPage.aboveTheTitle"
                                   defaultMessage="PAGE NOT FOUND"
                                   description="Text above the title for the 404 page"/>

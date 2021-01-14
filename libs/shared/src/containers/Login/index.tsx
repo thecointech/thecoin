@@ -139,13 +139,11 @@ export const Login = (props: Props) => {
         <Header as='h5' className={ `x8spaceBefore` }>
           <FormattedMessage {...aboveTheTitle}/>
         </Header>
-        <Form>
-          <div className={ `x4spaceBefore` }>
-            <Header as="h2">
-              <FormattedMessage {...title} /> <br />
-                { account.name }
-            </Header>
-          </div>
+        <Header as="h2" className={ `x4spaceBefore` }>
+          <FormattedMessage {...title} /> <br />
+            { account.name }
+        </Header>
+        <Form id={styles.loginForm}>
           <UxPassword
             uxChange={onPasswordChange}
             intlLabel={passwordLabel}
@@ -160,7 +158,7 @@ export const Login = (props: Props) => {
               &nbsp;&nbsp;&nbsp;&nbsp;
           </ButtonPrimary>
 
-          <div className={ `${styles.textAtTheBottom} x10spaceBefore` } >
+          <div className={ `x10spaceBefore` } >
             <FormattedMessage {...textAtTheBottom} />
           </div>
         </Form>
