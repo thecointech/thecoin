@@ -49,10 +49,10 @@ export const Create = () => {
 
   return (
     <Container className={styles.content}>
-      <Header as="h5">
+      <Header as="h5" className={`x8spaceBefore`}>
           <FormattedMessage {...aboveTheTitle} />
       </Header>
-      <Header as="h2">
+      <Header as="h2" className={`x8spaceAfter`}>
           <FormattedMessage {...title} />
       </Header>
 

@@ -62,10 +62,10 @@ export const Store = () => {
 
   return (
     <Container className={styles.content}>
-      <Header as="h5">
+      <Header as="h5" className={`x8spaceBefore`}>
           <FormattedMessage {...aboveTheTitle} />
       </Header>
-      <Header as="h2">
+      <Header as="h2" className={`x8spaceAfter`}>
           <FormattedMessage {...title} />
       </Header>
       <MaybeMessage {...feedback} />
@@ -105,7 +105,7 @@ export const Store = () => {
         <FormattedMessage {...explainDownload} />
       </div>
 
-      <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="big">
+      <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="medium">
         <FormattedMessage {...congratulation} />
       </ButtonPrimary>
       <Decoration />

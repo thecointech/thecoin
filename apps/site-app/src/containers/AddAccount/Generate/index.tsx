@@ -87,7 +87,7 @@ export const Generate = (props: RouteComponentProps) => {
           <NameInput forceValidate={forceValidate} setName={setName}/>
         </div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
-        <div className={`container ui ${styles.createAccountFormReferral}`} id={styles.createAccountFormReferral}>
+        <div className={`container ui`}>
           <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         </div>
         <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="medium">
