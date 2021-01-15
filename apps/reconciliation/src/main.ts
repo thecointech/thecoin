@@ -6,6 +6,7 @@ import { verify } from "./verify";
 import { readCache, writeCache } from "./cache";
 import { fetchAllRecords } from "./fetch";
 import { matchAll, writeMatched } from "./match";
+import { AllData } from "types";
 
 async function initialize() {
 
@@ -35,8 +36,9 @@ async function Process() {
     eTransfers.findIndex(etd => etd.id == et.id) === index
   )
 
+  const original = JSON.parse(JSON.stringify(data)) as AllData
   const match = matchAll(data);
-  verify(match, data);
+  verify(match, data, original);
   writeMatched(match);
 }
 Process();

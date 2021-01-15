@@ -10,14 +10,16 @@ import { Timestamp } from "@the-coin/utilities/firestore";
 import { spliceEmail } from "./matchEmails";
 import { toHuman } from "@the-coin/utilities";
 import { getOrCreateUser } from "./utils";
-export function reconcileExternal(data: AllData, reconciled: Reconciliations) {
+
+export function reconcileExternal(data: AllData) {
 
   // First, we review blockchain transactions to see if we can match any to email/bank
-  reconcileBlockchain(data, reconciled);
+  const newEntries = reconcileBlockchain(data);
+  return newEntries;
 }
 
-function reconcileBlockchain(data: AllData, reconciled: Reconciliations) {
-  data.blockchain.forEach(bc => {
+function reconcileBlockchain(data: AllData) {
+  return data.blockchain.reduce((r, bc) => {
     // What was this transactions value in CAD
     const action: UserAction = bc.change > 0 ? "Sell" : "Buy";
     const cad = toHuman(bc.change * (
@@ -26,7 +28,7 @@ function reconcileBlockchain(data: AllData, reconciled: Reconciliations) {
         : weBuyAt(data.rates, bc.date.toJSDate())
       )
     , true);
-    const user = getOrCreateUser(reconciled, bc.counterPartyAddress);
+    const user = getOrCreateUser(r, bc.counterPartyAddress);
 
     const dt = Timestamp.fromMillis(bc.date.toMillis());
     const record: ReconciledRecord = {
@@ -46,7 +48,7 @@ function reconcileBlockchain(data: AllData, reconciled: Reconciliations) {
     record.email = spliceEmail(data, user, record, 30);
 
     user.transactions.push(record);
-  });
-
+    return r;
+  }, []as Reconciliations);
 }
 

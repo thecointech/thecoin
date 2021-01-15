@@ -13,9 +13,7 @@ export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
 export async function fetchLatestTransactions()
 {
   const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions();
-  // newest possible date is yesterday
   const toDate = new Date();
-  toDate.setDate(toDate.getDate()-1);
 
   if (!sameDay(syncedTill, toDate))
   {
@@ -32,6 +30,12 @@ export async function fetchLatestTransactions()
 export async function getTransactions(from: Date, to: Date) : Promise<RbcTransaction[]> {
   const act = await ApiAction.New('getTransactions', true);
   const { page } = act;
+
+  // newest possible date is yesterday
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate()-1);
+  to.setTime(Math.min(to.getTime(), maxDate.getTime()));
+
 
   // Go to CAD account
   await act.clickOnText(ApiAction.Credentials.accountNo, 'a', '#search-transaction');

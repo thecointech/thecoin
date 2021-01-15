@@ -79,7 +79,22 @@
   "combineAccounts": [
 
   ],
-  "confirmedFailures": [
-    ["asdf/asdf", "Cannot find any trace of this sale.  Is this a good idea?"]
+  "knownIssues": [
+    {
+      "hash": "0x2cf020d5ff600f484942c02dc6baf16313bb1dd2228dc348239c432dae87ce8b",
+      "notes": "To Fix - purchase missing from bank - part of external builk deposit"
+    },
+    {
+      "hash": "1588609939423",
+      "notes": "Uncompleted transaction - fine to ignore"
+    },
+    {
+      "hash": "1588181608371",
+      "notes": "Uncompleted transaction - repeated tx w/ insufficient balance"
+    },
+    {
+      "hash": "1588181619360",
+      "notes": "Uncompleted transaction - repeated tx w/ insufficient balance"
+    }
   ]
 }

@@ -3,11 +3,12 @@ import { join } from "path";
 import { reconcileExternal } from "./reconcileExternal";
 import { matchDB } from "./matchDb";
 import { AllData } from "./types";
+import { addReconciled } from "./utils";
 
 export function matchAll(data: AllData) {
   const txs = matchDB(data);
-
-  reconcileExternal(data, txs);
+  const ext = reconcileExternal(data);
+  addReconciled(txs, ext);
   return txs;
 }
 

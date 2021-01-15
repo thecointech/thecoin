@@ -6,6 +6,7 @@ import { AllData, Reconciliations } from "./types";
 import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
 import { Obsolete } from "@the-coin/tx-firestore/obsolete";
+import { addReconciled } from "./utils";
 
 
 // Match all DB entries with raw data
@@ -31,25 +32,6 @@ export function matchDB(data: AllData) {
   //matchTransactions(data, unMatched, 100);
   console.log(`Matched`);
   return r;
-}
-
-export function addReconciled(data: Reconciliations, more: Reconciliations) {
-  for (const record of more) {
-    const src = data.find(d => d.address == record.address);
-
-    // any invalid hashes?
-    if (record.transactions.find(tx => !tx.data.hash.startsWith("0x")))
-    {
-      console.error("Invalid hash here");
-    }
-    if (!src) data.push(record);
-    else {
-      const srcHashes = src.transactions.map(tx => tx.data.hash);
-      const unique = record.transactions.filter(tx => !srcHashes.includes(tx.data.hash));
-      src.transactions.push(...unique);
-      //src.transactions.sort((l, r) => l.data.recievedTimestamp.toMillis() - r.data.recievedTimestamp.toMillis())
-    }
-  }
 }
 
 export function convertBaseTransactions(data: AllData, action: UserAction) {
