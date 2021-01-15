@@ -3,7 +3,6 @@ import { UserAction } from "@the-coin/utilities/User";
 import { DateTime } from "luxon";
 import { DbRecords, BaseTransactionRecord } from "@the-coin/tx-firestore";
 import { Transaction } from "@the-coin/tx-blockchain/";
-import { FXRate } from "@the-coin/pricing";
 import { ObsoleteRecords } from '@the-coin/tx-firestore/obsolete';
 
 ////////////////////////////////
@@ -20,7 +19,7 @@ export type AllData = {
   dbs: DbRecords;
   bank: BankRecord[];
   blockchain: Transaction[];
-  rates: FXRate[];
+
   obsolete: ObsoleteRecords;
 }
 

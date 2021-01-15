@@ -2,18 +2,18 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { reconcileExternal } from "./reconcileExternal";
 import { matchDB } from "./matchDb";
-import { AllData } from "./types";
+import { AllData, Reconciliations } from "./types";
 import { addReconciled } from "./utils";
 
-export function matchAll(data: AllData) {
+export async function matchAll(data: AllData) {
   const txs = matchDB(data);
-  const ext = reconcileExternal(data);
+  const ext = await reconcileExternal(data);
   addReconciled(txs, ext);
   return txs;
 }
 
-type Matched = ReturnType<typeof matchAll>
-export function writeMatched(matched: Matched) {
+
+export function writeMatched(matched: Reconciliations) {
   writeFileSync(
     join(__dirname, 'matched.json'),
     JSON.stringify(matched)

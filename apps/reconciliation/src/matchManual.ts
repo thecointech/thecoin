@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import Decimal from "decimal.js-light";
 import { spliceBank } from "./matchBank";
 import { Timestamp } from "@the-coin/utilities/firestore";
+import { buildNewUserRecord } from "./reconcileExternal";
 
 type InsertEntry = typeof manual["insert"][0];
 type ConnectEntry = typeof manual["connect"][0];
@@ -15,12 +16,17 @@ export function matchManual(r: Reconciliations, data: AllData) {
   manual.skip.forEach(entry => doSkip(entry, data));
 }
 
-function findRecord(r: Reconciliations, hash: string) {
+function findRecord(r: Reconciliations, hash: string, data?: AllData) {
   for (const user of r)
     for (const record of user.transactions)
       if (record.data.hash == hash)
         return { user, record };
-  throw new Error('Cannot match hash');
+
+  // Create new entry from blockchain
+  const bc = data?.blockchain.find(bc => bc.txHash == hash);
+  if (bc)
+    return buildNewUserRecord(r, bc);
+  throw new Error('Cannot find entry');
 }
 
 function doInsert(entry: InsertEntry, r: Reconciliations) {
@@ -50,7 +56,7 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
 
 function doConnect(entry: ConnectEntry, data: AllData, r: Reconciliations) {
   // Force connecting to a given record
-  const { user, record } = findRecord(r, entry.hash);
+  const { user, record } = findRecord(r, entry.hash, data);
   if (entry.where == "bank") {
     record.bank = spliceBank(data, user, {
       data: {

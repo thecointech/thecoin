@@ -29,7 +29,6 @@
   ],
   "connect": [
     {
-      "do": "connect",
       "where": "bank",
       "action": "Sell",
       "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
@@ -39,7 +38,6 @@
       "sourceId": "1234"
     },
     {
-      "do": "connect",
       "where": "bank",
       "action": "Sell",
       "hash": "0x99c0d07a454c26cf2bcf21121759be9a016877cc4e278f2d01d41702a06244a0",
@@ -49,7 +47,6 @@
       "sourceId": "1234"
     },
     {
-      "do": "connect",
       "where": "bank",
       "action": "Sell",
       "hash": "0x49363d3ee9673ff01a08d9a44c24d7b69d4ba8ebb7f8221c33b26cb57b58bb0c",
@@ -57,6 +54,14 @@
       "date": "2019-10-02T23:00:00.000-05:00",
       "notes": "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones",
       "sourceId": "1234"
+    },
+    {
+      "where": "bank",
+      "action": "Sell",
+      "hash": "0xc8c23a1912d5cf733274ad7b3db93665cf4b742838459edf6ff799b240f1639b",
+      "amount": 350,
+      "date": "2020-12-17T00:00:00.000-06:00",
+      "notes": "e-Transfer manually completed for direct transfer to our address (ie - not submitted as e-Transfer)",
     }
   ],
   "skip": [
