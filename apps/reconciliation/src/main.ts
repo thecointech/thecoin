@@ -36,6 +36,7 @@ async function Process() {
     eTransfers.findIndex(etd => etd.id == et.id) === index
   )
 
+  globalThis.source = data;
   globalThis.original = convertFromJson(JSON.parse(JSON.stringify(data)));
   console.log(original.bank.length);
 

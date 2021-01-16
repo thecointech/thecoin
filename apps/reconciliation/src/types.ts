@@ -54,6 +54,8 @@ declare global {
   type Reconciliations = UserReconciled[];
 
   var original: AllData;
+  var source: AllData;
 }
 
+globalThis.source = {} as any;
 globalThis.original = {} as any;
