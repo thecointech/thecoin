@@ -46,7 +46,7 @@ async function printUnmatched(r: Reconciliations) {
     for (const umtx of um.transactions) {
       const email = umtx.email || umtx.action != "Buy" ? "" : " Email";
       const blockchain = umtx.blockchain ? "" : " blockchain";
-      const bank = umtx.bank ? "" : " bank";
+      const bank = umtx.bank.length % 2 == 1 ? "" : " bank";
       const db = umtx.database ? "" : " db";
 
       const fiat = await getFiat(umtx);

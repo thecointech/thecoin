@@ -4,6 +4,7 @@ import Decimal from "decimal.js-light";
 import { spliceBank } from "./matchBank";
 import { Timestamp } from "@the-coin/utilities/firestore";
 import { buildNewUserRecord } from "./reconcileExternal";
+import { UserAction } from '@the-coin/utilities/User';
 
 type InsertEntry = typeof manual["insert"][0];
 type ConnectEntry = typeof manual["connect"][0];
@@ -29,27 +30,57 @@ function findRecord(r: Reconciliations, hash: string, data?: AllData) {
 }
 
 function doInsert(entry: InsertEntry, r: Reconciliations) {
-  const { user, record } = findRecord(r, entry.hash);
+  const dt = DateTime.fromISO(entry.date)
   switch (entry.where) {
-    case 'email':
+    case 'email': {
+      const { user, record } = findRecord(r, entry.hash);
       record.email = {
         name: user.names[0],
         id: (entry as any).sourceId,
         cad: new Decimal(entry.amount),
         address: user.address,
-        recieved: DateTime.fromISO(entry.date),
+        recieved: dt,
         email: "Manual Entry - not set",
         depositUrl: "Manual Entry - not set",
       }
       break;
-    case 'bank':
+    }
+    case 'bank': {
+      const { record } = findRecord(r, entry.hash);
       (record.data as any).type = 'deposit';
       record.bank = [{
         Amount: entry.amount,
         Description: "Manual Entry",
         Details: "USD",
-        Date: DateTime.fromISO(entry.date),
+        Date: dt,
       }]
+      break;
+    }
+    case "blockchain": {
+      const user = r.find(u => u.address === entry.hash);
+      user!.transactions.push({
+        action: entry.type as UserAction,
+        data: {
+          confirmed: true,
+          fiatDisbursed: entry.cad ?? 0,
+          hash: `CLOSE ACCOUNT:${entry.hash}`,
+          recievedTimestamp: Timestamp.fromMillis(dt.toMillis()),
+          completedTimestamp: Timestamp.fromMillis(dt.toMillis()),
+          transfer: { value: entry.amount },
+        },
+        bank: [],
+        database: null,
+        email: null,
+        blockchain: {
+          txHash: `CLOSE ACCOUNT:${entry.hash}`,
+          balance: 0,
+          change: -entry.amount,
+          date: dt,
+          counterPartyAddress: entry.hash,
+          logEntry: entry.notes,
+        }
+      })
+    }
   }
 }
 

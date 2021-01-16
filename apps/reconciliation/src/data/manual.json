@@ -25,6 +25,15 @@
       "amount": 5000,
       "date": "2020-04-07T07:36:43.000-05:00",
       "notes": "USD direct deposit"
+    },
+    {
+      "where": "blockchain",
+      "type": "sale",
+      "hash": "0xD86C97292B9BE3A91BD8279F114752248B80E8C5",
+      "amount": 67813471,
+      "cad": 321.34,
+      "date": "2020-11-18T00:00:00.000-06:00",
+      "notes": "Manual transfer to close out account"
     }
   ],
   "connect": [
@@ -91,7 +100,15 @@
     },
     {
       "hash": "1588609939423",
-      "notes": "Uncompleted transaction - fine to ignore"
+      "notes": "Uncompleted transaction - fine to ignore (perhaps check balance at moment)"
+    },
+    {
+      "hash": "1601663492623",
+      "notes": "Uncompleted transaction - fine to ignore (perhaps check balance at moment)"
+    },
+    {
+      "hash": "1600363393368",
+      "notes": "Uncompleted transaction - fine to ignore (perhaps check balance at moment)"
     },
     {
       "hash": "1588181608371",
