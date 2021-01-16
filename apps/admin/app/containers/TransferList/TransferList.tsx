@@ -1,10 +1,20 @@
+import { BaseTransactionRecord } from "@the-coin/tx-firestore/";
+import { eTransferData } from "@the-coin/tx-gmail/";
+import { InstructionPacket } from "@the-coin/utilities/VerifiedAction";
 import React, { useState } from "react";
 import { List, Icon } from "semantic-ui-react";
 import { TransferRow } from "./TransferRow";
-import { TransferData, TransferRenderer } from "@the-coin/tx-processing";
+
+export type TransactionData = {
+  record: BaseTransactionRecord,
+  instruction: InstructionPacket|eTransferData,
+  isComplete?: boolean,
+}
+export type TransferRenderer = (transfer: TransactionData) => JSX.Element;
+
 
 type Props = {
-  transfers: TransferData[];
+  transfers: TransactionData[];
   render: TransferRenderer,
   markComplete: (index: number) => void,
 }

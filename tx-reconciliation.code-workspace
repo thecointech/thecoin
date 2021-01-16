@@ -1,18 +1,23 @@
 {
 	"folders": [
     {
-      "path": "apps\\reconciliation"
+      "name": "tx-reconciliation",
+      "path": "libs\\tx-reconciliation"
     },
     {
+      "name": "tx-gmail",
       "path": "libs\\tx-gmail"
     },
     {
+      "name": "tx-firestore",
       "path": "libs\\tx-firestore"
     },
     {
+      "name": "tx-blockchain",
       "path": "libs\\tx-blockchain"
     },
     {
+      "name": "rbcapi",
       "path": "libs\\rbcapi"
     }
   ],

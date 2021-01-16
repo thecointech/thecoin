@@ -1,26 +1,26 @@
 import React from "react";
-import { TransferData, DepositData } from "@the-coin/tx-processing";
-import { Segment, Select } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
+import { TransactionData } from "containers/TransferList/TransferList";
+import { DepositRecord } from "@the-coin/tx-firestore";
+import { eTransferData } from "@the-coin/tx-gmail/";
 
+export const DepositRenderer = (props : TransactionData) => {
 
-export const DepositRenderer = (props: TransferData) => {
-  const deposit = props as DepositData;
-  const { instruction, record } = deposit;
-
-
+  const record = props.record as DepositRecord;
+  const instructions = props.instruction as eTransferData;
   return (
     <Segment>
-    <div>Name: {instruction.name} - {record.type}</div>
-    <div>Address: {instruction.address}</div>
+    <div>Name: {instructions.name} - {record.type}</div>
+    <div>Address: {instructions.address}</div>
     <div>
     {
-      deposit.instruction.raw
-        ? `Email Recieved on: ${deposit.instruction.recieved?.toDateString()}`
+      instructions.raw
+        ? `Email Recieved on: ${instructions.recieved?.toSQLDate()}`
         : "Warning: No matching email"
     }
     </div>
     <div>Completed: {record.completedTimestamp?.toDate().toString()}</div>
-    <div>
+    {/* <div>
     {
       deposit.bank
         ? `Deposited on: ${deposit.bank.Date.toFormat("DD")}`
@@ -33,37 +33,36 @@ export const DepositRenderer = (props: TransferData) => {
         ? `Tx Hash: ${deposit.tx.txHash}`
         : "Warning: No hash present"
     }
-    </div>
-    <TxSelect deposit={deposit} />
+    </div> */}
   </Segment>
   )
 }
 
-type TxSelectProps = {
-  deposit: DepositData;
-}
-const TxSelect = ({deposit}: TxSelectProps) => {
-  const {db} = deposit;
-  if (Array.isArray(db)) {
-    const options = db.map((dep, index) => (
-      {
-        key: dep.hash,
-        value: index,
-        text: `$${dep.fiatDisbursed} - ${dep.processedTimestamp?.toDate().toDateString()}`
-      }))
-    return db.length > 0
-      ? <Select placeholder="Select a TX" options={options} />
-      : null;
-  }
-  else {
-    return (
-      <div>
-      {
-        db
-        ? `Db Stored: ${db.hash}`
-        : "Warning: No DB found"
-      }
-      </div>
-    )
-  }
-}
+// type TxSelectProps = {
+//   deposit: DepositData;
+// }
+// const TxSelect = ({deposit}: TxSelectProps) => {
+//   const {db} = deposit;
+//   if (Array.isArray(db)) {
+//     const options = db.map((dep, index) => (
+//       {
+//         key: dep.hash,
+//         value: index,
+//         text: `$${dep.fiatDisbursed} - ${dep.processedTimestamp?.toDate().toDateString()}`
+//       }))
+//     return db.length > 0
+//       ? <Select placeholder="Select a TX" options={options} />
+//       : null;
+//   }
+//   else {
+//     return (
+//       <div>
+//       {
+//         db
+//         ? `Db Stored: ${db.hash}`
+//         : "Warning: No DB found"
+//       }
+//       </div>
+//     )
+//   }
+// }

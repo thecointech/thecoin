@@ -1,0 +1,51 @@
+{
+  "manifest": {
+    "name": "@the-coin/logging",
+    "version": "0.1.0",
+    "description": "The Coin: Common logging setup",
+    "keywords": [
+      "TheCoin",
+      "logging"
+    ],
+    "author": {
+      "name": "Stephen Taylor",
+      "email": "stephen@thecoin.io"
+    },
+    "homepage": "http://thecoin.io/",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/thecointech/thecoin.git",
+      "directory": "libs/logging"
+    },
+    "scripts": {
+      "build": "yarn tsc --project tsconfig.build.json",
+      "build:clean": "rimraf ./build && rimraf ./coverage"
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "main": "./build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./": "./build/"
+    },
+    "dependencies": {
+      "bunyan": "^1.8.12"
+    },
+    "devDependencies": {
+      "@types/bunyan": "^1.8.6"
+    },
+    "_registry": "npm",
+    "_loc": "C:\\Users\\kiwi_\\AppData\\Local\\Yarn\\Cache\\v6\\npm-@the-coin-logging-0.1.0-a255abf4-0e9b-482f-a6d0-32b218d17ddf-1610836742206\\node_modules\\@the-coin\\logging\\package.json"
+  },
+  "artifacts": [],
+  "remote": {
+    "type": "copy",
+    "registry": "npm",
+    "hash": "a255abf4-0e9b-482f-a6d0-32b218d17ddf-1610836742206",
+    "reference": "C:\\src\\TheCoin\\node_modules\\@the-coin\\logging"
+  },
+  "registry": "npm",
+  "hash": "a255abf4-0e9b-482f-a6d0-32b218d17ddf-1610836742206"
+}

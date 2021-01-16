@@ -6,21 +6,22 @@ import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
 
-const rootpath = join(__dirname, "..", "src", "data");
-const filepath = join(rootpath, 'data.cache.json');
+const cacheFilename = 'data.cache.json';
 
-export function writeCache(data: AllData) {
+export function writeCache(data: AllData, cacheFolder: string) {
   //const sanitized = sanitize(data);
-  if (!existsSync(rootpath)) {
-    mkdirSync(rootpath);
+  if (!existsSync(cacheFolder)) {
+    mkdirSync(cacheFolder);
   }
+  const filepath = join(cacheFolder,cacheFilename);
   writeFileSync(
     filepath,
     JSON.stringify(data)
   );
 }
 
-export function readCache() {
+export function readCache(cacheFolder: string) {
+  const filepath = join(cacheFolder,cacheFilename);
   if (existsSync(filepath)) {
     const asText = readFileSync(filepath, 'utf8');
     const asJson = JSON.parse(asText);
@@ -67,9 +68,5 @@ export function convertFromJson(asJson: any) {
   })
 
   return asJson as AllData;
-
-}
-
-export function writeResults() {
 
 }

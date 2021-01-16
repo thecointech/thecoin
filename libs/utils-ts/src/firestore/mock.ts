@@ -18,4 +18,6 @@ export function init(database: MockedDb, immutable?: boolean) {
   // Import the mocked db, and assign.
   Timestamp.init(mocks.FakeFirestore.Timestamp);
   SetFirestore(db);
+
+  return true;
 }

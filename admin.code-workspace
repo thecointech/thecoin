@@ -9,6 +9,10 @@
       "path": "libs\\shared"
     },
     {
+      "name": "tx-reconciliation",
+      "path": "libs\\tx-reconciliation"
+    },
+    {
       "name": "tx-processing",
       "path": "libs\\tx-processing"
     },

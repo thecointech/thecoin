@@ -2,13 +2,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 import { useFxRatesApi, useFxRates } from "@the-coin/shared/containers/FxRate";
 import { PrivateKeyButton } from "./PrivateKeyButton";
-import { TransferList } from "../TransferList/TransferList";
+import { TransferList, TransferRenderer } from "../TransferList/TransferList";
 import { UserAction } from "@the-coin/utilities/User";
 import { Confirm } from "semantic-ui-react";
 import { withFiat } from "@the-coin/tx-processing/base/utils";
-import { TransferRenderer, InstructionPacket,  } from "@the-coin/tx-processing";
 import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "@the-coin/tx-processing/base";
 import { setActionPrivateKey } from "@the-coin/tx-processing/base/key";
+import { InstructionPacket } from "@the-coin/utilities/VerifiedAction";
 
 type Props = {
   render: TransferRenderer,
