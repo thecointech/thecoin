@@ -1,5 +1,4 @@
 import { filterCandidates, toDateTime } from "./utils";
-import { AllData, ReconciledRecord, User } from "./types";
 import { DepositRecord } from "@the-coin/tx-firestore";
 
 // Find the most common name associated with an

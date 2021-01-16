@@ -1,6 +1,5 @@
 import { Timestamp } from "@the-coin/types";
 import { DateTime } from "luxon"
-import { Reconciliations } from "./types";
 import { knownIssues } from './data/manual.json';
 
 export const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>
@@ -24,6 +23,14 @@ export function toDateTime(ts: Timestamp|undefined) : DateTime|undefined;
     : undefined;
 }
 
+// export function toDstArray<T>(src: T[], dst: T[], item?: T) {
+//   if (item) {
+//     src.splice(src.indexOf(item), 1);
+//     dst.push(item);
+//     return true;
+//   }
+//   return false;
+// }
 
 export const getOrCreateUser = (users: Reconciliations, address: string) => {
   let user = users.find(u => u.address === address);

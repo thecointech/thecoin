@@ -36,9 +36,11 @@ async function Process() {
     eTransfers.findIndex(etd => etd.id == et.id) === index
   )
 
-  const original = convertFromJson(JSON.parse(JSON.stringify(data)))
+  globalThis.original = convertFromJson(JSON.parse(JSON.stringify(data)));
+  console.log(original.bank.length);
+
   const match = await matchAll(data);
-  await verify(match, data, original);
+  await verify(match, data);
   writeMatched(match);
 }
 Process();

@@ -1,15 +1,14 @@
 import { findBank } from "./matchBank";
-import { AllData, Reconciliations } from "./types";
 import { builtInAccounts, knownIssues } from './data/manual.json';
 import { NormalizeAddress } from "@the-coin/utilities/Address";
 import { getFiat } from "./fxrates";
 
-export async function verify(r: Reconciliations, data: AllData, original: AllData) {
+export async function verify(r: Reconciliations, data: AllData) {
   for (const user of r) {
     user.transactions.sort((l, r) => r.data.recievedTimestamp.toMillis() - l.data.recievedTimestamp.toMillis());
   }
 
-  await printUnmatched(r, original);
+  await printUnmatched(r);
   matchLooseEmails(r, data);
 
 }
@@ -28,7 +27,7 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
   })
 }
 
-async function printUnmatched(r: Reconciliations, _original: AllData) {
+async function printUnmatched(r: Reconciliations) {
   const skipAccounts = builtInAccounts.map(pair => NormalizeAddress(pair[1]));
   // All purchases should be matched
   const unMatched = r
@@ -39,7 +38,7 @@ async function printUnmatched(r: Reconciliations, _original: AllData) {
         .filter(tx => !knownIssues.find(ki => ki.hash == tx.data.hash))
         .filter(tx =>
           (tx.action == "Buy" && tx.email == null) ||
-          (tx.refund == null && tx.bank == null) ||
+          (tx.refund == null && tx.bank.length % 2 == 0) ||
           tx.blockchain == null)
     })).filter(um => um.transactions.length > 0);
 

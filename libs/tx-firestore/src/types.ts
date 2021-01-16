@@ -17,6 +17,7 @@ export type BaseTransactionRecord = {
   transfer: {
     value: number
   }
+  sourceId?: string; // A unique identifier of the source data
 } & ProcessRecord;
 
 export enum PurchaseType {
@@ -27,7 +28,6 @@ export enum PurchaseType {
 
 export type DepositRecord = {
   type: PurchaseType; // One of eTransfer, directDeposit, other, etc
-  sourceId?: string; // A unique identifier of the source data
 } & BaseTransactionRecord;
 
 export type CertifiedTransferRecord = CertifiedTransfer & ProcessRecord;

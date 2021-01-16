@@ -2,7 +2,6 @@ import { BaseTransactionRecord, DepositRecord, PurchaseType } from "@the-coin/tx
 import { UserAction } from "@the-coin/utilities/User";
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
-import { AllData, Reconciliations } from "./types";
 import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
 import { Obsolete } from "@the-coin/tx-firestore/obsolete";
@@ -58,15 +57,21 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
 
       record.email = record.email ?? spliceEmail(data, user, record, maxDays);
       record.blockchain = record.blockchain ?? spliceBlockchain(data, user, record, record.data.hash);
-      record.bank = record.bank ?? spliceBank(data, user, record, maxDays);
+      record.bank = spliceBank(data, user, record, maxDays);
 
-      if (record.data.hashRefund)
-        record.refund = record.refund ?? spliceBlockchain(data, user, record, record.data.hashRefund);
+      if (record.data.hashRefund && !record.refund)
+        record.refund = spliceBlockchain(data, user, record, record.data.hashRefund) ?? undefined;
+
+      // if (record.action == "Sell" && record.bank) {
+      //   // was this an e-transfer, and was it cancelled?
+      //   const confirmation = (record.data as any).confirmation;
+      //   record.cancelled = findCancellation(data, record.bank.Amount, record.bank.Date, confirmation)
+      // }
     }
   }
 }
 
-const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) => ({
+const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) : ReconciledRecord => ({
   action: type,
   database: record,
   data: {
@@ -75,7 +80,7 @@ const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserA
   },
 
   email: null,
-  bank: null,
+  bank: [],
   blockchain: null,
 });
 
@@ -111,8 +116,7 @@ function convertObsolete(data: AllData) {
       database: null,
       blockchain: null,
       email: null,
-      bank: null,
-      refund: null,
+      bank: [],
     }))
 
     return {

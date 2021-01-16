@@ -4,7 +4,6 @@ import { getAllFromFirestoreObsolete } from "@the-coin/tx-firestore/obsolete";
 import { RbcApi } from '@the-coin/rbcapi';
 import { fetchCoinHistory } from '@the-coin/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
-import { AllData } from 'types';
 import { NormalizeAddress } from '@the-coin/utilities';
 
 export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
@@ -23,6 +22,7 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
     blockchain,
     obsolete,
 
+    cancellations: new Map()
   }
 }
 

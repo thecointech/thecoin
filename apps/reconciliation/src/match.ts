@@ -2,7 +2,6 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { reconcileExternal } from "./reconcileExternal";
 import { matchDB } from "./matchDb";
-import { AllData, Reconciliations } from "./types";
 import { addReconciled } from "./utils";
 
 export async function matchAll(data: AllData) {

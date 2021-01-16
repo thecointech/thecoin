@@ -1,4 +1,3 @@
-import { AllData, Reconciliations } from "./types";
 import manual from './data/manual.json';
 import { DateTime } from "luxon";
 import Decimal from "decimal.js-light";
@@ -45,12 +44,12 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
       break;
     case 'bank':
       (record.data as any).type = 'deposit';
-      record.bank = {
+      record.bank = [{
         Amount: entry.amount,
         Description: "Manual Entry",
         Details: "USD",
         Date: DateTime.fromISO(entry.date),
-      }
+      }]
   }
 }
 
@@ -63,6 +62,7 @@ function doConnect(entry: ConnectEntry, data: AllData, r: Reconciliations) {
         fiatDisbursed: entry.amount,
         completedTimestamp: Timestamp.fromMillis(DateTime.fromISO(entry.date).toMillis()),
       },
+      bank: [],
       action: entry.action,
     } as any, 1);
   }

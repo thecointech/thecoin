@@ -1,6 +1,5 @@
 import { Transaction } from "@the-coin/tx-blockchain/";
 import { BaseTransactionRecord } from "@the-coin/tx-firestore";
-import { AllData, ReconciledRecord, User } from "./types";
 
 // Next, the tx hash should match blockchain
 export function spliceBlockchain(data: AllData, user: User, record: ReconciledRecord, hash: string) {

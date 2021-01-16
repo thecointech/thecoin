@@ -1,8 +1,6 @@
 //
 // Reconcile transactions from external sources.
 //
-
-import { AllData, ReconciledRecord, Reconciliations } from "types";
 import { spliceBank } from "./matchBank";
 import { UserAction } from "@the-coin/utilities/User";
 import { Timestamp } from "@the-coin/utilities/firestore";
@@ -55,6 +53,7 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
       transfer: { value: bc.change },
     },
     blockchain: bc,
+    bank: [] as BankRecord[],
   } as ReconciledRecord;
   user.transactions.push(record);
   return { user, record };
