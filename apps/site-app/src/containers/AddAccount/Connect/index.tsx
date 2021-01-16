@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@the-coin/shared/containers/Account/Web3';
 import { FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
@@ -9,6 +9,7 @@ import messages from '../messages';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
 import { IAccountMapActions, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
 import { useHistory } from 'react-router';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 export const Connect = () => {
 
@@ -40,9 +41,9 @@ export const Connect = () => {
       <Form>
         <NameInput forceValidate={forceValidate} setName={setName} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
-        <Button onClick={onConnect} primary size="big">
+        <ButtonPrimary onClick={onConnect} size="medium">
           <FormattedMessage {...messages.buttonCreate} />
-        </Button>
+        </ButtonPrimary>
       </Form>
     </>
   );

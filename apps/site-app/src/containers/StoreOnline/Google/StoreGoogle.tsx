@@ -1,7 +1,6 @@
 //import {GetStoredWallet} from '@the-coin/shared/containers/Account/storageSync';
 import { GetSecureApi } from 'api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from 'semantic-ui-react';
 import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
@@ -9,6 +8,7 @@ import { isWallet } from '@the-coin/shared/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { Props as MessageProps } from '@the-coin/site-base/components/MaybeMessage';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
@@ -101,9 +101,9 @@ export const StoreGoogle = (props: MyProps) => {
     ? messages.buttonSuccess
     : messages.buttonConnect
   return (
-    <Button onClick={onConnectClick} disabled={disabled} primary loading={loading}>
+    <ButtonPrimary onClick={onConnectClick} disabled={disabled} loading={loading}>
         <FormattedMessage {...message } />
-    </Button>
+    </ButtonPrimary>
   );
 }
 

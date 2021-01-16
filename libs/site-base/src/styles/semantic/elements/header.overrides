@@ -10,7 +10,6 @@ each(@lineHeights, {
 
 
   h1.ui.header .sub.header, h2.ui.header .sub.header, h3.ui.header .sub.header{
-    margin-top: 20px;
     font-family: @pageFont;
     font-size: @fontSizeBig;
     line-height: 30px;
@@ -23,17 +22,10 @@ each(@lineHeights, {
   }
   h2, h2.ui.header {
     font-size: @h2Mobile;
-    padding-bottom: 20px;
   }
   h3, h3.ui.header {
     font-size: @h3Mobile;
-    padding-bottom: 20px;
   }
-}
-
-// TODO: verify these padding values
-h2, h2.ui.header {
-  padding-bottom: 30px;
 }
 
 h5.ui.header{

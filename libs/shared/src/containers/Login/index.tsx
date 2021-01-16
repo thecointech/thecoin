@@ -1,7 +1,8 @@
 import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useHistory } from "react-router";
-import { Button, Form, Header } from "semantic-ui-react";
+import { Form, Header } from "semantic-ui-react";
+import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
 
 import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
@@ -12,6 +13,7 @@ import { AccountState } from "../Account/types";
 import { useAccountApi } from "../Account/reducer";
 
 import illustrationPlant from './images/illust_flowers.svg';
+
 import styles from "./styles.module.less";
 
 interface OwnProps {
@@ -26,6 +28,31 @@ enum LoginState {
   Cancelled,
   Complete
 }
+
+
+const aboveTheTitle = { id:"shared.login.aboveTheTitle",
+                        defaultMessage:"WELCOME BACK TO THE COIN",
+                        description:"Title above the main Title for the create account form page"};
+const title = { id:"shared.login.title",
+                defaultMessage:"Log into",
+                description:"Title for the create account form page"};
+const button = { id:"shared.login.button",
+                defaultMessage:"Log In",
+                description:"Text of the button for the login page"};
+const textAtTheBottom = { id:"shared.login.textAtTheBottom",
+                          defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
+                          description:"Text at the bottom for the login page before the account name"};
+const placeholderPassword = { id: 'shared.login.placeholder.wallet', 
+                              defaultMessage:'Wallet Password',
+                              description:"PLaceholder for the Passford field in the create account form"};
+
+const passwordLabel = { id: 'shared.login.passwordLabel', defaultMessage:'Password'};
+const decryptHeader = { id: 'shared.login.decryptHeader', defaultMessage:'Logging into your account.'};
+const decryptIncorrectPwd = { id: 'shared.login.decryptIncorrectPwd', defaultMessage:'Unlock failed: Please check your password and try again.'};
+//const decryptCancelled = { id: 'shared.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
+//const decryptSuccess = { id: 'shared.login.decryptSuccess', defaultMessage:'Unlock successful!  Please wait while we load your account info'};
+const decryptInProgress = { id: 'shared.login.decryptInProgress', defaultMessage:'Please wait, We are {percentComplete}% done opening your account.'};
+
 
 let __cancel = false;
 const onCancel = () => __cancel = true;
@@ -42,6 +69,9 @@ export const Login = (props: Props) => {
     history.push('/accounts/');
   }
 
+  const intl = useIntl();
+  const placeholderPasswordTranslated = intl.formatMessage(placeholderPassword);
+ 
   /////////////////////////////////
   const onPasswordChange = useCallback((value: string) => {
     setPassword(value);
@@ -95,12 +125,6 @@ export const Login = (props: Props) => {
   let message = undefined;
   //getMessage(loginState);
 
-  const passwordLabel = { id: 'site.login.passwordLabel', defaultMessage:'Password'};
-  const decryptHeader = { id: 'site.login.decryptHeader', defaultMessage:'Logging into your account.'};
-  const decryptIncorrectPwd = { id: 'site.login.decryptIncorrectPwd', defaultMessage:'Unlock failed: Please check your password and try again.'};
-  //const decryptCancelled = { id: 'site.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
-  //const decryptSuccess = { id: 'site.login.decryptSuccess', defaultMessage:'Unlock successful!  Please wait while we load your account info'};
-  const decryptInProgress = { id: 'site.login.decryptInProgress', defaultMessage:'Please wait, We are {percentComplete}% done opening your account.'};
 
   switch (loginState) {
     //case LoginState.Cancelled:
@@ -112,51 +136,30 @@ export const Login = (props: Props) => {
   return (
     <>
       <div className={styles.wrapper}>
-        <Header as='h5'>
-          <FormattedMessage
-              id="site.login.aboveTheTitle"
-              defaultMessage="WELCOME BACK TO THE COIN"
-              description="Text above the title for the login page"/>
+        <Header as='h5' className={ `x8spaceBefore` }>
+          <FormattedMessage {...aboveTheTitle}/>
         </Header>
-        <Form>
-          <div className={styles.titleLogin}>
-          <Header as="h3">
-            <FormattedMessage
-              id = "site.login.title"
-              defaultMessage = "Log into"
-              description="Main title for the login page before the account name"
-              values={{
-                walletName: account.name
-              }}
-            />
-          </Header>
-          <Header as="h3">
+        <Header as="h2" className={ `x4spaceBefore` }>
+          <FormattedMessage {...title} /> <br />
             { account.name }
-          </Header>
-          </div>
+        </Header>
+        <Form id={styles.loginForm}>
           <UxPassword
             uxChange={onPasswordChange}
             intlLabel={passwordLabel}
-            placeholder="Wallet Password"
+            placeholder={placeholderPasswordTranslated}
             message={message}
             isValid={isValid}
             forceValidate={forceValidate}
           />
-          <Button onClick={onDecryptWallet} primary size='huge'>
+          <ButtonPrimary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <FormattedMessage
-                id="site.login.button"
-                defaultMessage="Log In"
-                description="Text of the button for the login page"/>
+            <FormattedMessage {...button} />
               &nbsp;&nbsp;&nbsp;&nbsp;
-          </Button>
+          </ButtonPrimary>
 
-          <div className={styles.textAtTheBottom}>
-            <FormattedMessage
-              id = "site.login.textAtTheBottom"
-              defaultMessage = "Or select a different account from the account switcher. You can find it at the top menu."
-              description="Text at the bottom for the login page before the account name"
-            />
+          <div className={ `x10spaceBefore` } >
+            <FormattedMessage {...textAtTheBottom} />
           </div>
         </Form>
         <ModalOperation

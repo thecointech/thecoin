@@ -1,5 +1,6 @@
-import { Form, Button } from "semantic-ui-react"
+import { Form } from "semantic-ui-react"
 import React, { useCallback } from "react"
+import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
 
 type Props = {
   disabled: boolean,
@@ -16,9 +17,9 @@ export const ConnectButton = (props: Props) => {
   }, [props.onClick]);
   return isVisible
     ? <Form>
-      <Button onClick={onClick} primary disabled={disabled} loading={loading} >
+      <ButtonPrimary onClick={onClick} disabled={disabled} loading={loading} >
         Restore from Google
-      </Button>
+      </ButtonPrimary>
     </Form>
     : null;
 }

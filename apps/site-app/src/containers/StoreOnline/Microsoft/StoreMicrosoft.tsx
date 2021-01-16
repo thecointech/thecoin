@@ -7,7 +7,7 @@ export const StoreMicrosoft : React.FC = (props) => {
       <a href="">
         {props.children}
         <FormattedMessage 
-            id="site.storeOnline.microsoft.link"
+            id="app.storeOnline.microsoft.link"
             defaultMessage="Microsoft"
             description=""/>
       </a>

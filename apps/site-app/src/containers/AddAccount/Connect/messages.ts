@@ -5,7 +5,7 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Account.Connect';
+export const scope = 'app.containers.account.Connect';
 
 export default defineMessages({
 
