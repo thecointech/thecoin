@@ -10,11 +10,11 @@ import getWindowDimensions from '../../components/WindowDimensions';
 import { breakpointsValues } from '../../components/ResponsiveTool';
 
 
-const registered = {  id:"shared.footer.registered",
+const registered = {  id:"base.footer.registered",
                       defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
                       description:"Registered Non profit phrase in footer"};
 
-const copyright = {   id:"shared.footer.copyright",
+const copyright = {   id:"base.footer.copyright",
                       defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
                       description:"Copyright phrase in footer"};
 
