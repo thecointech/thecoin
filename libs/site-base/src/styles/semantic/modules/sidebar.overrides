@@ -2,26 +2,27 @@
          Site Overrides
 *******************************/
 
-
-.ui.vertical.menu > .active.item:first-child {
-    font-size: 1.1rem;
+.ui.sidebar{
+  border-radius: @absoluteBorderRadius !important;
+  &.menu .item{
+    color: @theCoinPaletteGray1;
+    padding: 20px;
+    &.active{
+      background-color: @theCoinPalettePaleGreen2;
+      color: @theCoinPaletteGreen4;
+      font-weight: bold;
+    }
+    &:hover{
+      color: @theCoinPaletteGreen4;
+    }
+  }
 }
 
-.ui.vertical.menu .menu .item {
-  background: none;
-  padding: 1.3rem 2rem;
-  font-size: 1.1rem;
-  color: rgb(22, 68, 172);
+.ui.left.visible.sidebar, .ui.right.visible.sidebar{
+  box-shadow: 5px 10px 10px 0px @grey;
 }
 
-.ui.vertical.menu .menu .item:hover {
-
-}
-
-.ui.vertical.ui.push.left.visible.sidebar{
-    font-size: 1.1rem;
-}
-.ui.vertical.ui.push.left.visible.sidebar a:hover{
-      background: #3193A1;
-  color:white;
+.pushable{
+  height: auto;
+  margin: 20px;
 }
