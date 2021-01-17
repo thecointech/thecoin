@@ -3,6 +3,7 @@ import { join } from "path";
 import { reconcileExternal } from "./reconcileExternal";
 import { matchDB } from "./matchDb";
 import { addReconciled } from "./utils";
+import { AllData, Reconciliations } from "./types";
 
 export async function matchAll(data: AllData) {
   const txs = matchDB(data);
@@ -10,7 +11,6 @@ export async function matchAll(data: AllData) {
   addReconciled(txs, ext);
   return txs;
 }
-
 
 export function writeMatched(matched: Reconciliations) {
   writeFileSync(

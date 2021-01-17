@@ -2,6 +2,7 @@ import { findBank } from "./matchBank";
 import { builtInAccounts, knownIssues } from './data/manual.json';
 import { NormalizeAddress } from "@the-coin/utilities/Address";
 import { getFiat } from "./fxrates";
+import { Reconciliations, AllData } from "./types";
 
 export async function verify(r: Reconciliations, data: AllData) {
   for (const user of r) {

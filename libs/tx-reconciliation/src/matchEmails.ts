@@ -1,5 +1,6 @@
 import { filterCandidates, toDateTime } from "./utils";
 import { DepositRecord } from "@the-coin/tx-firestore";
+import { AllData, User, ReconciledRecord } from "types";
 
 // Find the most common name associated with an
 export function findNames(data: AllData, address: string) {

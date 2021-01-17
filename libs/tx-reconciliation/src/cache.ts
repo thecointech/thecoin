@@ -5,6 +5,7 @@ import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
+import { AllData } from "./types";
 
 const cacheFilename = 'data.cache.json';
 

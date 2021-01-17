@@ -10,6 +10,7 @@ import { NormalizeAddress } from "@the-coin/utilities";
 import { builtInAccounts } from './data/manual.json';
 import { Transaction } from "@the-coin/tx-blockchain/";
 import { getFiat } from "./fxrates";
+import { AllData, Reconciliations, ReconciledRecord, BankRecord } from "types";
 
 export function reconcileExternal(data: AllData) {
 

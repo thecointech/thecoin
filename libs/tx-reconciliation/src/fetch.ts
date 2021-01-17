@@ -5,6 +5,7 @@ import { RbcApi } from '@the-coin/rbcapi';
 import { fetchCoinHistory } from '@the-coin/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
 import { NormalizeAddress } from '@the-coin/utilities';
+import { AllData } from './types';
 
 export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 

@@ -1,6 +1,7 @@
 import { filterCandidates, toDateTime } from "./utils";
 import { UserAction } from "@the-coin/utilities/User";
 import { DateTime } from "luxon";
+import { AllData, User, ReconciledRecord, BankRecord } from "types";
 
 type BankFilter = ReturnType<typeof getFilter>;
 // Next, the tx hash should match blockchain

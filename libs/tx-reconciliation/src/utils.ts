@@ -1,5 +1,6 @@
 import { Timestamp } from "@the-coin/types";
 import { DateTime } from "luxon"
+import { Reconciliations } from "types";
 import { knownIssues } from './data/manual.json';
 
 export const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>

@@ -5,6 +5,7 @@ import { spliceBank } from "./matchBank";
 import { Timestamp } from "@the-coin/utilities/firestore";
 import { buildNewUserRecord } from "./reconcileExternal";
 import { UserAction } from '@the-coin/utilities/User';
+import { Reconciliations, AllData } from 'types';
 
 type InsertEntry = typeof manual["insert"][0];
 type ConnectEntry = typeof manual["connect"][0];

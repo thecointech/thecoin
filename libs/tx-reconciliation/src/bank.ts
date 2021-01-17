@@ -1,4 +1,5 @@
 import { RbcApi } from "@the-coin/rbcapi";
+import { BankRecord } from "./types";
 
 export async function fetchBankTransactions(bankApi: RbcApi) {
   const txs = await bankApi.getTransactions(new Date(2014, 5), new Date());

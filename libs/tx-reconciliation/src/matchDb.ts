@@ -6,6 +6,7 @@ import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
 import { Obsolete } from "@the-coin/tx-firestore/obsolete";
 import { addReconciled } from "./utils";
+import { AllData, Reconciliations, ReconciledRecord } from "types";
 
 
 // Match all DB entries with raw data

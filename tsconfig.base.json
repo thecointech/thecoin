@@ -45,6 +45,7 @@
       "@the-coin/utilities/*":  ["../../../libs/utils-ts/build/*"],
       "@the-coin/jestutils/*":  ["../../../libs/jestutils/build/*"],
       "@the-coin/tx-processing/*":["../../../libs/tx-processing/build/*"],
+      "@the-coin/tx-reconciliation/*":["../../../libs//tx-reconciliation/build/*"],
       "@the-coin/tx-gmail/*":   ["../../../libs/tx-gmail/build/*"],
       "@the-coin/tx-blockchain/*":["../../../libs/tx-blockchain/build/*"],
       "@the-coin/tx-firestore/*":["../../../libs/tx-firestore/build/*"],
