@@ -17,6 +17,14 @@
       "path": "libs\\tx-processing"
     },
     {
+      "name": "tx-gmail",
+      "path": "libs\\tx-gmail"
+    },
+    {
+      "name": "tx-firestore",
+      "path": "libs\\tx-firestore"
+    },
+    {
       "name": "utils-ts",
       "path": "libs\\utils-ts"
     },

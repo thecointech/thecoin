@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { Transaction } from '../Account/types'
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
+import { Transaction } from '@the-coin/tx-blockchain';
+import { DateTime } from 'luxon';
 
 type MyProps = {
   transactions: Transaction[];
@@ -75,16 +76,17 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
     const { transactions, transactionLoading, rates } = this.props;
     const { fromDate, untilDate } = this.state;
 
-    let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
+    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
     let txJsxRows = txOutput.map((tx, index) => {
       const change = fiatChange(tx, rates);
-      const balance = tx.balance *  weBuyAt(rates, tx.date);
+      const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
       const changeCad = toHuman(change, true);
       const balanceCad = toHuman(balance, true);
+      const localeDate = tx.date.toLocaleString(DateTime.DATE_MED);
       return (
         <Table.Row key={index}>
-          <Table.Cell>{tx.date.toDateString()}</Table.Cell>
+          <Table.Cell>{localeDate}</Table.Cell>
           <Table.Cell>{tx.logEntry}</Table.Cell>
           <Table.Cell>${changeCad}</Table.Cell>
           <Table.Cell>${balanceCad}</Table.Cell>

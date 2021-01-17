@@ -7,8 +7,7 @@ import { List } from "semantic-ui-react";
 import { Firestore } from "@the-coin/types";
 import { Client, BaseClientData } from "./Client";
 import { NormalizeAddress } from "@the-coin/utilities";
-import { authorize, isValid } from "@the-coin/tx-processing/build/deposit/auth";
-import { addFromGmail, initializeApi } from "@the-coin/tx-processing/build/deposit/addFromGmail";
+import { fetchETransfers } from "@the-coin/tx-gmail";
 
 type Props = {
   contract: Contract|null
@@ -56,7 +55,7 @@ async function getUsers(contract: Contract|null, firestore: Firestore) : Promise
   const qs = await firestore.collection("User").get();
 
   const addresses = Array.from(new Set([
-    ...emails.map(u => NormalizeAddress(u.instruction.address)),
+    ...emails.map(u => NormalizeAddress(u.address)),
     ...qs.docs.map(c => NormalizeAddress(c.id)),
   ]));
 
@@ -64,7 +63,7 @@ async function getUsers(contract: Contract|null, firestore: Firestore) : Promise
   return addresses.map((id, i) => ({
     address: id,
     balance: rawBalances[i],
-    name: emails.find(d => NormalizeAddress(d.instruction.address) === id)?.instruction.name ?? "Not Found",
+    name: emails.find(d => NormalizeAddress(d.address) === id)?.name ?? "Not Found",
   }));
 }
 
@@ -77,14 +76,7 @@ async function getBalance(user: string, contract: Contract)
 async function getUserEmails()
 {
   try {
-    // First, connect and fetch new deposit emails.
-    const auth = await authorize();
-    if (isValid(auth))
-    {
-      await initializeApi(auth);
-      // fetch all deposits
-      return await addFromGmail('redirect interac -remember -expired -label:etransfer-rejected');
-    }
+    return await fetchETransfers('redirect interac -remember -expired -label:etransfer-rejected');
   }
   catch(error) {
     console.log("Couldn't load emails: " + error);

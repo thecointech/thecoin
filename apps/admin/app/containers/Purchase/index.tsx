@@ -16,11 +16,12 @@ import { GetActionDoc } from '@the-coin/utilities/User';
 import { Timestamp } from '@the-coin/utilities/firestore';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { DocumentReference } from '@the-coin/types';
-import { DepositRecord, PurchaseType } from '@the-coin/tx-processing';
+import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
 import { GetAccountCode } from '@the-coin/tx-processing/BrokerTransferAssistant';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
+
 
 
 type MyProps = AccountState & {

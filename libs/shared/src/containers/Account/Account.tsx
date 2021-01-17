@@ -45,7 +45,7 @@ export const Account = (props: Props) => {
   const sidebar = useSidebar();
   useEffect(() => {
     //if (!isWallet(signer)) {
-      if (signer !== null)
+    //  if (signer !== null)
             sidebar.addGenerator(account.name, sidebarCb);
     //}
 

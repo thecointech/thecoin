@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
 import { useFxRatesApi, useFxRates } from "@the-coin/shared/containers/FxRate";
 import { PrivateKeyButton } from "./PrivateKeyButton";
-import { TransferList, TransferRenderer } from "../TransferList/TransferList";
+import { TransferList, TransferRenderer } from "../TransferList";
 import { UserAction } from "@the-coin/utilities/User";
 import { Confirm } from "semantic-ui-react";
 import { withFiat } from "@the-coin/tx-processing/base/utils";

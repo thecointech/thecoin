@@ -1,6 +1,6 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
-import { TransactionData } from "containers/TransferList/TransferList";
+import { TransactionData } from "containers/TransferList";
 import { DepositRecord } from "@the-coin/tx-firestore";
 import { eTransferData } from "@the-coin/tx-gmail/";
 
