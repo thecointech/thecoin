@@ -21,7 +21,6 @@ export type AllData = {
   blockchain: Transaction[];
 
   obsolete: ObsoleteRecords;
-  cancellations: Map<BankRecord, BankRecord>;
 }
 
 ////////////////////////////////

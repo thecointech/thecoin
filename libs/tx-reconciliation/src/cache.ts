@@ -1,34 +1,49 @@
-// import { Transaction } from "@the-coin/tx-blockchain";
-// import { DbRecords } from "@the-coin/tx-firestore";
 import { Timestamp } from "@the-coin/utilities/firestore";
 import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
 import { AllData } from "./types";
+import {log} from '@the-coin/logging';
 
-const cacheFilename = 'data.cache.json';
+export const cacheFullPath = (path?: string) =>
+  path ?? process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
+export const cacheFilePath = (folder: string, name?: string) =>
+  join(folder, name ?? 'data.cache.json');
 
-export function writeCache(data: AllData, cacheFolder: string) {
+export function writeCache(data: AllData, cacheName?: string, path?: string) {
   //const sanitized = sanitize(data);
-  if (!existsSync(cacheFolder)) {
-    mkdirSync(cacheFolder);
+  const cachePath = cacheFullPath(path);
+  if (!existsSync(cachePath)) {
+    try {
+      mkdirSync(cachePath, { recursive: true });
+    }
+    catch(err) {
+      log.error(err);
+      return false;
+    }
   }
-  const filepath = join(cacheFolder,cacheFilename);
+  const filePath = cacheFilePath(cachePath, cacheName);
   writeFileSync(
-    filepath,
+    filePath,
     JSON.stringify(data)
   );
+  log.debug(`Wrote cache to ${filePath}`);
+  return true;
 }
 
-export function readCache(cacheFolder: string) {
-  const filepath = join(cacheFolder,cacheFilename);
-  if (existsSync(filepath)) {
-    const asText = readFileSync(filepath, 'utf8');
+export function readCache(cacheName?: string, path?: string) {
+  const cachePath = cacheFullPath(path);
+  const filePath = cacheFilePath(cachePath, cacheName);
+  if (existsSync(filePath)) {
+    const asText = readFileSync(filePath, 'utf8');
     const asJson = JSON.parse(asText);
+
+    log.debug(`Read cache from ${filePath}`);
 
     return convertFromJson(asJson)
   }
+  log.debug(`Cache not found at: ${filePath}`);
   return null;
 }
 

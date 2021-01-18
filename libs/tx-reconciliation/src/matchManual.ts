@@ -27,7 +27,7 @@ function findRecord(r: Reconciliations, hash: string, data?: AllData) {
   const bc = data?.blockchain.find(bc => bc.txHash == hash);
   if (bc)
     return buildNewUserRecord(r, bc);
-  throw new Error('Cannot find entry');
+  throw new Error(`Cannot find entry: ${hash}`);
 }
 
 function doInsert(entry: InsertEntry, r: Reconciliations) {

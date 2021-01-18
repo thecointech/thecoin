@@ -2,7 +2,8 @@ import { Contract, Wallet } from "ethers";
 import { ConnectContract } from "@the-coin/contract";
 import { Deposit } from "./types";
 import { log } from "@the-coin/logging";
-import { Transaction } from "@the-coin/shared/containers/Account/types";
+import { Transaction } from "@the-coin/tx-blockchain";
+import { DateTime } from "luxon";
 
 let _contract: Contract;
 
@@ -52,9 +53,9 @@ export async function completeTheTransfer(deposit: Deposit) : Promise<Transactio
   return {
     txHash: hash,
     balance: 0,
-    date: new Date(),
+    date: new DateTime(),
     change: deposit.record.transfer.value,
-    completed: new Date(),
+    completed: new DateTime(),
     counterPartyAddress: deposit.etransfer.address,
     logEntry: "Manually Added"
   }

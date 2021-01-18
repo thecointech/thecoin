@@ -11,7 +11,6 @@
   "scripts": {
     "build": "yarn tsc -b -v tsconfig.build.json",
     "build:clean": "rimraf ./build && rimraf ./coverage",
-    "dev": "yarn build && node --inspect ./build/main.js",
     "test": "jest --coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },

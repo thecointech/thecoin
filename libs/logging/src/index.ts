@@ -1,5 +1,7 @@
 import bunyan, { Stream } from 'bunyan';
+import debug_stream from 'bunyan-debug-stream';
 import { mkdirSync } from 'fs';
+import { join } from 'path';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -10,6 +12,7 @@ import { mkdirSync } from 'fs';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : bunyan = null! as bunyan;
 
+const basepath = join(__dirname, "..", "..", "..");
 const LogLocation = '/temp/TheCoin/logs/';
 const areWeTestingWithJest = () => process.env.JEST_WORKER_ID !== undefined;
 
@@ -25,7 +28,10 @@ const getFileStream = (name: string) : Stream => (
 const getConsoleStream = () : Stream => (
   {
     level: 'trace',
-    stream: process.stdout            // log INFO and above to stdout
+    stream: debug_stream({
+      basepath,
+      forceColor: true,
+    })
   }
 )
 

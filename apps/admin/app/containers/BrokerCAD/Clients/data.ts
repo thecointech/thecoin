@@ -14,12 +14,11 @@ export async function getAllUserData(fxRates: FXRate[]) {
 }
 
 async function getRawData() {
-  const cachePath = process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
-  let data = readCache(cachePath);
+  let data = readCache();
   if (data == null) {
     const api = new RbcApi();
     data = await fetchAllRecords(api)
-    writeCache(data, cachePath);
+    writeCache(data);
   }
   return data;
 }
