@@ -17,7 +17,7 @@ import { Timestamp } from '@the-coin/utilities/firestore';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { DocumentReference } from '@the-coin/types';
 import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
-import { GetAccountCode } from '@the-coin/tx-processing/BrokerTransferAssistant';
+import { GetAccountCode } from '@the-coin/utilities/Referrals';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
@@ -201,9 +201,8 @@ class PurchaseClass extends React.PureComponent<Props> {
     this.resetInputs();
   }
 
-
   async updateCode(account: string) {
-    const code = await GetAccountCode(account);
+    const code = await GetAccountCode(account, "BrokerTransferAssistant");
     this.setState({
       purchaserCode: code,
      });

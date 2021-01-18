@@ -5,6 +5,7 @@ import base32 from 'base32';
 import { utils, Wallet } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
 import { Timestamp, CollectionReference, DocumentReference } from "@the-coin/types";
+import { getWallet } from "./Wallets";
 
 export function GetReferrersCollection() : CollectionReference {
   return GetFirestore().collection("Referrers");
@@ -112,11 +113,14 @@ export async function CreateReferree(referral: NewAccountReferal, created: Times
 //
 //
 //
-export async function GetAccountCode(address: string, wallet: Wallet)
+export async function GetAccountCode(address: string, wallet: Wallet|string)
 {
   // generate this signers secret key
   const rhash = GetHash(address.toLowerCase());
-  const rsign = await wallet.signMessage(rhash);
+  const signer = (typeof wallet === "string")
+    ? await getWallet(wallet)
+    : wallet;
+  const rsign = await signer.signMessage(rhash);
   return GetReferrerCode(rsign);
 }
 

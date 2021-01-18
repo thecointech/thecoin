@@ -1,85 +1,105 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { GetFirestore } from "@the-coin/utilities/firestore";
 import { Contract } from "ethers";
 import { BigNumber } from "ethers/utils/bignumber";
-import { List } from "semantic-ui-react";
-import { Firestore } from "@the-coin/types";
-import { Client, BaseClientData } from "./Client";
-import { NormalizeAddress } from "@the-coin/utilities";
-import { fetchETransfers } from "@the-coin/tx-gmail";
+import { DropdownProps, Select } from "semantic-ui-react";
+import { Client } from "./Client";
+import { toHuman } from "@the-coin/utilities";
+import { fetchAllRecords, matchAll, readCache, Reconciliations, writeCache } from "@the-coin/tx-reconciliation";
+import { RbcApi } from "@the-coin/rbcapi";
+import { app } from 'electron';
+import { GetContract } from "@the-coin/contract";
+import { FXRate, useFxRates, weBuyAt } from "@the-coin/shared/containers/FxRate";
+import { UserState } from "./types";
 
-type Props = {
-  contract: Contract|null
-};
+export const Clients = () => {
 
-export const Clients = ({contract}: Props) => {
-
-  const firestore = GetFirestore();
-  const [users, setUsers] = useState([] as BaseClientData[]);
-  const [active, setActive] = useState(-1);
+  const [users, setUsers] = useState([] as UserState[]);
+  const [active, setActive] = useState(undefined as UserState|undefined);
+  const fxRates = useFxRates();
 
   // Fetch all users with balance
   useEffect(() => {
-    getUsers(contract, firestore)
+    getUserData(fxRates.rates)
       .then(setUsers)
       .catch(alert)
-  }, [contract, firestore])
+  }, [fxRates])
+
+  const onChange = useCallback((_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+    console.log('status');
+    setActive(data.something);
+  }, []);
 
   return (
-    <List divided relaxed>
-    {
-      users
-        .filter(u => !!u.balance)
-        .map((u, index) => (
-        <List.Item key={index}>
-          <List.Content>
-            <Client
-              {...u}
-              active={active === index}
-              setActive={() => setActive(index)}
-             />
-        </List.Content>
-      </List.Item>
-    ))
+    <>
+      <Select
+        placeholder='Select Country'
+        fluid
+        search
+        selection
+        onChange={onChange}
+        loading={users.length == 0}
+        options={buildOptions(users)}
+      />
+      {
+        active
+          ? <Client {...active} />
+          : <div>Select a client</div>
+      }
+
+    </>
+  );
+}
+
+const buildOptions = (users: UserState[]) =>
+  users.map(user => ({
+    key: user.address,
+    value: user.address,
+    icon: 'attention',
+    text: `${user.names} ${user.balanceCad}`,
+    data: user
+  }))
+
+async function getUserData(fxRates: FXRate[]) {
+  const rawData = await getRawData();
+  const reconciled = await matchAll(rawData);
+  return await addBalances(reconciled, fxRates);
+}
+
+async function getRawData() {
+  const cachePath = app.getPath("userData");
+  let data = readCache(cachePath);
+  if (data == null) {
+    const api = new RbcApi();
+    data = await fetchAllRecords(api)
+    writeCache(data, cachePath);
   }
-  </List>);
+  return data;
 }
 
-async function getUsers(contract: Contract|null, firestore: Firestore) : Promise<BaseClientData[]>
-{
-  if (!contract)
-    return [];
-
-  const emails = await getUserEmails();
-  const qs = await firestore.collection("User").get();
-
-  const addresses = Array.from(new Set([
-    ...emails.map(u => NormalizeAddress(u.address)),
-    ...qs.docs.map(c => NormalizeAddress(c.id)),
-  ]));
-
-  const rawBalances = await Promise.all(addresses.map(id => getBalance(id, contract)));
-  return addresses.map((id, i) => ({
-    address: id,
-    balance: rawBalances[i],
-    name: emails.find(d => NormalizeAddress(d.address) === id)?.name ?? "Not Found",
-  }));
+async function addBalances(users: Reconciliations, fxRates: FXRate[]): Promise<UserState[]> {
+  const contract = await GetContract();
+  const balanceCoin = await addBalanceCoin(users, contract);
+  return addBalanceCad(balanceCoin, fxRates);
 }
 
-async function getBalance(user: string, contract: Contract)
-{
-  const balance = await contract.balanceOf(user) as BigNumber;
+const addBalanceCoin = async (users: Reconciliations, contract: Contract) => Promise.all(
+  users.map(async (user) => ({
+    ...user,
+    balanceCoin: await getBalance(user.address, contract)
+  })
+  )
+)
+
+type UnPromisify<T> = T extends Promise<infer U> ? U : T;
+type Coined = UnPromisify<ReturnType<typeof addBalanceCoin>>;
+const addBalanceCad = (users: Coined, fxRates: FXRate[]) =>
+  users.map(user => ({
+    ...user,
+    balanceCad: toHuman(user.balanceCoin * weBuyAt(fxRates), true)
+  }))
+
+async function getBalance(address: string, contract: Contract) {
+  const balance = await contract.balanceOf(address) as BigNumber;
   return balance.toNumber()
-}
-
-async function getUserEmails()
-{
-  try {
-    return await fetchETransfers('redirect interac -remember -expired -label:etransfer-rejected');
-  }
-  catch(error) {
-    console.log("Couldn't load emails: " + error);
-  }
-  return [];
 }

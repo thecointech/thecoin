@@ -2,7 +2,7 @@
 import { RbcApi, ETransferErrorCode, DepositResult } from "@the-coin/rbcapi";
 
 import { GetActionDoc } from "@the-coin/utilities/User";
-import { GetAccountCode } from "../BrokerTransferAssistant";
+import { GetAccountCode } from "@the-coin/utilities/Referrals";
 import { log } from "@the-coin/logging";
 import { IsValidAddress } from "@the-coin/utilities";
 import { eTransferData } from "@the-coin/tx-gmail";
@@ -28,7 +28,7 @@ export async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, pr
     }
   }
 
-  const code = await GetAccountCode(address)
+  const code = await GetAccountCode(address, "BrokerTransferAssistant")
   const prefix = `${name}/${recieved.toSQLDate()}`;
   const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);

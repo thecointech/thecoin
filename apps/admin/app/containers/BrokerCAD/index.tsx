@@ -50,7 +50,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Clients",
     urlFragment: "clients",
-    creator: (_routerProps: AccountPageProps) => ((_props: any) => <Clients contract={_routerProps.account.contract} /> )
+    creator: (_routerProps: AccountPageProps) => ((_props: any) => <Clients /> )
   }
 ]
 
