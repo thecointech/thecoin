@@ -20,7 +20,7 @@ import { DefinePlugin } from 'webpack'
 
 CheckNodeEnv('development');
 
-const env_path = path.join(__dirname, '..', '..', '..', 'tools', 'credentials.env');
+const env_path = path.join(__dirname, '..', '..', '..', 'secrets', 'credentials.env');
 const env_vars= dotenv.config({ path: env_path });
 
 const port = process.env.PORT || 1212;

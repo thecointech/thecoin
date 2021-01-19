@@ -4,7 +4,6 @@ import { ETransferPacket, CertifiedTransferRequest } from "@the-coin/types";
 import { Segment, Button } from "semantic-ui-react";
 import { TransactionData } from "../../TransferList";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
-import { Contract } from "ethers";
 import { log } from "@the-coin/logging";
 
 const RenderETransfer = (props: TransactionData) => {
@@ -44,24 +43,3 @@ const RenderETransfer = (props: TransactionData) => {
 
 export const ETransfers = () =>
   <EncryptedList render={RenderETransfer} type="Sell" />
-
-async function RefundTransfer(transfer: CertifiedTransferRequest, contract: Contract)
-{
-  // First, reverse the tx
-  // const signer = GetSigner(props.record.transfer as any);
-  const {value, from} = transfer;
-  console.log(`Transfering value:  sale ${transfer.from}`);
-
-  // Send the transfer back
-  // TODO: Refunds should be at todays exchange rate(?)
-  const tx = await contract.coinPurchase(
-    from,
-    value,
-    0,
-    Math.floor(transfer.timestamp / 1000)
-  );
-
-  console.log('Reversing Transfer: ' + tx.hash);
-  await tx.wait();
-  return tx.hash;
-}

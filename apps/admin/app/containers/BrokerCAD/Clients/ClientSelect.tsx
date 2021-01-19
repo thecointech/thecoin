@@ -9,7 +9,7 @@ import { getAllUserData } from "./data";
 export const ClientSelect = () => {
 
   const [users, setUsers] = useState([] as UserState[]);
-  const [active, setActive] = useState(undefined as UserState | undefined);
+  const [address, setAddress] = useState(undefined as string | undefined);
   const fxRates = useFxRates();
 
   // Fetch all users with balance
@@ -20,10 +20,10 @@ export const ClientSelect = () => {
   }, [fxRates])
 
   const onChange = useCallback((_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-    console.log('status');
-    setActive(data.something);
-  }, []);
+    setAddress(data.value?.toString());
+  }, [setAddress]);
 
+  const active = users.find(u => u.address == address);
   return (
     <>
       <Select
