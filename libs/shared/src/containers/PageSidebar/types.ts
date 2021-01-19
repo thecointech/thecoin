@@ -2,11 +2,13 @@ import { ImmerReducer } from 'immer-reducer';
 import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
 import { RUrl } from '@the-coin/utilities/RUrl';
+import { SemanticICONS } from 'semantic-ui-react';
 
 /* --- STATE --- */
 export interface SidebarMenuLink {
   name: string;
   to: RUrl | false;
+  icon?: SemanticICONS;
 }
 
 export interface SidebarMenuItem {
@@ -52,19 +54,20 @@ const stripTrailingSlash = (str: string) : string => {
 
 export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
   let surl = stripTrailingSlash(url);
-  return item.map(element => {
+  return item.map(element => { 
     if (element.link.to !== false) {
       const mapped: SidebarMenuItem = {
         link: {
           ...element.link,
           to: new RUrl(surl, element.link.to.toString()),
+          icon: element.link.icon
         },
         subItems: element.subItems
           ? MapMenuItems(element.subItems, surl)
           : undefined
-      };
+      }; console.log("mapped",mapped)
       return mapped;
-    }
+    } console.log("element",element)
     return element;
   });
 }

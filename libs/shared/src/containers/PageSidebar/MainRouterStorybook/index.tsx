@@ -17,25 +17,36 @@ export const MainRouterStorybook = () => {
     {
       link: {
         name: "Home",
-        to: new RUrl("/")
+        to: new RUrl("/"),
+        icon: "home",
       }
     },
     {
       link: {
         name: "Top up Balance",
-        to: new RUrl("/broker")
+        to: new RUrl("/broker"),
+        icon: "arrow circle up",
       }
     },
     {
       link: {
         name: "Make a payment",
-        to: new RUrl("/thecoin")
+        to: new RUrl("/thecoin"),
+        icon: "arrow circle right",
       }
     },
     {
       link: {
-        name: "BrokerCAD",
-        to: new RUrl("/broker")
+        name: "Settings",
+        to: new RUrl("/brokersss"),
+        icon: "setting",
+      }
+    },
+    {
+      link: {
+        name: "Help",
+        to: new RUrl("/brokersss"),
+        icon: "life ring",
       }
     }
   ];
@@ -50,7 +61,6 @@ export const MainRouterStorybook = () => {
       sidebar.addGenerator(SIDEBAR_KEY, generateSidebarItems);
       return () => sidebar.removeGenerator(SIDEBAR_KEY);
     }, [sidebar])
-
 
   return (
     <Switch>

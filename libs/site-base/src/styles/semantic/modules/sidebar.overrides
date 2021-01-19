@@ -11,11 +11,22 @@
       background-color: @theCoinPalettePaleGreen2;
       color: @theCoinPaletteGreen4;
       font-weight: bold;
+      i.icon{
+        color: @theCoinPaletteGreen4;
+      }
     }
     &:hover{
       color: @theCoinPaletteGreen4;
+      i.icon{
+        color: @theCoinPaletteGreen4;
+      }
     }
   }
+}
+
+.ui.vertical.menu .item > i.icon{
+  float: left;
+  margin-right: 5px;
 }
 
 .ui.left.visible.sidebar, .ui.right.visible.sidebar{

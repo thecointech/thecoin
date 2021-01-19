@@ -18,7 +18,7 @@ export default {
   title: 'SemanticUI/Sidebar',
   component: PageSidebar,
   args: {
-    text: "This is a link",
+    text: "This is the content",
     visible: true,
     minimize: false,
     inverted: false
