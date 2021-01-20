@@ -16,7 +16,6 @@ import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import dotenv from 'dotenv'
-import { DefinePlugin } from 'webpack'
 
 CheckNodeEnv('development');
 
