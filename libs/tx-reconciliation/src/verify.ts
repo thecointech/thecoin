@@ -29,7 +29,7 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
 }
 
 export const isComplete = (tx: ReconciledRecord) =>
-  !knownIssues.find(ki => ki.hash == tx.data.hash) &&
+  knownIssues.find(ki => ki.hash == tx.data.hash) ||
   !(
     (tx.action == "Buy" && tx.email == null) ||
     (tx.refund == null && tx.bank.length % 2 == 0) ||

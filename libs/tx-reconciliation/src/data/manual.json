@@ -1,4 +1,5 @@
 {
+  "theCoin": "0x38de1b6515663dbe145cc54179addcb963bb606a",
   "insert": [
     {
       "where": "email",
@@ -16,7 +17,7 @@
       "sourceId": "CAeHg5p7",
       "amount": 900,
       "date": "2019-01-01T00:00:00.000-05:00",
-      "notes": "Initial purchase routed through private account"
+      "notes": "Missing bank - initial purchase routed through private account"
     },
     {
       "where": "bank",
@@ -36,50 +37,49 @@
       "notes": "Manual transfer to close out account"
     }
   ],
-  "connect": [
-    {
-      "where": "bank",
-      "action": "Sell",
-      "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
-      "amount": 3000,
-      "date": "2019-09-29T23:00:00.000-05:00",
-      "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
-      "sourceId": "1234"
-    },
-    {
-      "where": "bank",
-      "action": "Sell",
-      "hash": "0x99c0d07a454c26cf2bcf21121759be9a016877cc4e278f2d01d41702a06244a0",
-      "amount": 3000,
-      "date": "2019-09-29T23:00:00.000-05:00",
-      "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
-      "sourceId": "1234"
-    },
-    {
-      "where": "bank",
-      "action": "Sell",
-      "hash": "0x49363d3ee9673ff01a08d9a44c24d7b69d4ba8ebb7f8221c33b26cb57b58bb0c",
-      "amount": 2988.05,
-      "date": "2019-10-02T23:00:00.000-05:00",
-      "notes": "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones",
-      "sourceId": "1234"
-    },
-    {
-      "where": "bank",
-      "action": "Sell",
-      "hash": "0xc8c23a1912d5cf733274ad7b3db93665cf4b742838459edf6ff799b240f1639b",
-      "amount": 350,
-      "date": "2020-12-17T00:00:00.000-06:00",
-      "notes": "e-Transfer manually completed for direct transfer to our address (ie - not submitted as e-Transfer)"
-    }
-  ],
-  "skip": [
-    {
-      "type": "email",
-      "id": "CAA9BhWD",
-      "reason": "Deposited"
-    }
-  ],
+  "connect": {
+    "bank": [
+      {
+        "action": "Sell",
+        "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
+        "amount": 3000,
+        "date": "2019-09-29T23:00:00.000-05:00",
+        "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
+        "sourceId": "1234"
+      },
+      {
+        "action": "Sell",
+        "hash": "0x99c0d07a454c26cf2bcf21121759be9a016877cc4e278f2d01d41702a06244a0",
+        "amount": 3000,
+        "date": "2019-09-29T23:00:00.000-05:00",
+        "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src",
+        "sourceId": "1234"
+      },
+      {
+        "action": "Sell",
+        "hash": "0x49363d3ee9673ff01a08d9a44c24d7b69d4ba8ebb7f8221c33b26cb57b58bb0c",
+        "amount": 2988.05,
+        "date": "2019-10-02T23:00:00.000-05:00",
+        "notes": "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones",
+        "sourceId": "1234"
+      },
+      {
+        "action": "Sell",
+        "hash": "0xc8c23a1912d5cf733274ad7b3db93665cf4b742838459edf6ff799b240f1639b",
+        "amount": 350,
+        "date": "2020-12-17T00:00:00.000-06:00",
+        "notes": "e-Transfer manually completed for direct transfer to our address (ie - not submitted as e-Transfer)"
+      }
+    ],
+    "blockchain": [
+      {
+        "action": "Refund",
+        "hash": "0xab38262081326e427e8d1532c1d2bbedfe4b157f77b3a1210f22c85ac73597a8",
+        "refund": "0xfae8af589e8bfeb21915922330ca1f506f16d9a42b78728ce92376fe111029b5",
+        "notes": "Refund put here temporarily while we run the DB updating portion"
+      }
+    ]
+  },
   "builtInAccounts": [
     ["TestAccNoAc", "445758e37f47b44e05e74ee4799f3469de62a2cb"],
     ["Old TestAcc", "0x0C327B7FCC6FF94F606B3D31D534F25B5604A0D1"],
@@ -89,9 +89,6 @@
     ["Old BrokerCAD", "0x38DE1B6515663DBE145CC54179ADDCB963BB606A"],
     ["BrokerCAD", "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"],
     ["The Coin", "4f107b6633a4b3385c9e20945144c59ce4ff2def"]
-  ],
-  "combineAccounts": [
-
   ],
   "knownIssues": [
     {

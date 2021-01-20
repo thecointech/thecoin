@@ -75,10 +75,6 @@ export async function issueRefund(transfer: CertifiedTransferRequest, contract: 
 // Todo; move this (and all get/set functions) into tx-firestore
 async function updateDb(user: string, hash: string, record: Partial<ProcessRecord>) {
   const actionDoc = GetActionDoc(user, "Sell", hash);
-  const action = await actionDoc.get();
-  if (!action.exists)
-    throw new Error(`Cannot update User/${user}/Sell/${record.hash}, record does not exist`);
-
   await actionDoc.set(record, {merge: true});
   log.info({ user, action: 'Sell', hash, record }, "Updated user {user} {action} for {hash} with {record}");
 }

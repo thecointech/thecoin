@@ -27,7 +27,7 @@ async function fetchFiat(coin: number, action: string, date: Date) {
   await updateRate(date);
   return toHuman(coin * (
     action == "Buy"
-      ? weSellAt(rates, date) * -1
+      ? weSellAt(rates, date)
       : weBuyAt(rates, date)
     )
   , true)

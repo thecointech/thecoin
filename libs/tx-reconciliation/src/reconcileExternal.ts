@@ -7,10 +7,11 @@ import { Timestamp } from "@the-coin/utilities/firestore";
 import { spliceEmail } from "./matchEmails";
 import { getOrCreateUser } from "./utils";
 import { NormalizeAddress } from "@the-coin/utilities";
-import { builtInAccounts } from './data/manual.json';
+import { builtInAccounts, theCoin } from './data/manual.json';
 import { Transaction } from "@the-coin/tx-blockchain/";
 import { getFiat } from "./fxrates";
 import { AllData, Reconciliations, ReconciledRecord, BankRecord } from "types";
+import { CertifiedTransferRequest } from "@the-coin/types";
 
 export function reconcileExternal(data: AllData) {
 
@@ -49,9 +50,9 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
       confirmed: true,
       hash: bc.txHash!,
       recievedTimestamp: dt,
-      completedTimestamp: dt,
+      //completedTimestamp: dt,
       fiatDisbursed: 0,
-      transfer: { value: bc.change },
+      transfer: buildTransfer(action, bc)
     },
     blockchain: bc,
     bank: [] as BankRecord[],
@@ -59,3 +60,21 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
   user.transactions.push(record);
   return { user, record };
 }
+
+const buildTransfer = (action: UserAction, bc: Transaction) =>
+  action == "Buy"
+    ? buildBuyXfer(bc)
+    : buildSellXfer(bc);
+
+const buildBuyXfer = (bc: Transaction) => ({
+  value: -bc.change,
+})
+
+const buildSellXfer = (bc: Transaction) : CertifiedTransferRequest => ({
+  fee: 0,
+  from: bc.counterPartyAddress,
+  to: theCoin,  // We assume all sell xFers are being sold to us.
+  signature: "",
+  value: bc.change,
+  timestamp: bc.date.toMillis(),
+})

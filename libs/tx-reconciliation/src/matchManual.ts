@@ -5,16 +5,17 @@ import { spliceBank } from "./matchBank";
 import { Timestamp } from "@the-coin/utilities/firestore";
 import { buildNewUserRecord } from "./reconcileExternal";
 import { UserAction } from '@the-coin/utilities/User';
-import { Reconciliations, AllData } from 'types';
+import { Reconciliations, AllData } from './types';
+import { spliceBlockchain } from './matchBlockchain';
 
 type InsertEntry = typeof manual["insert"][0];
-type ConnectEntry = typeof manual["connect"][0];
-type SkipEntry = typeof manual["skip"][0];
+type ConnectBankEntry = typeof manual["connect"]["bank"][0];
+type ConnectBlockchainEntry = typeof manual["connect"]["blockchain"][0];
 
 export function matchManual(r: Reconciliations, data: AllData) {
-  manual.connect.forEach(entry => doConnect(entry, data, r));
+  manual.connect.bank.forEach(entry => doConnectBank(entry, data, r));
+  manual.connect.blockchain.forEach(entry => doConnectBlockchain(entry, data, r));
   manual.insert.forEach(entry => doInsert(entry, r));
-  manual.skip.forEach(entry => doSkip(entry, data));
 }
 
 function findRecord(r: Reconciliations, hash: string, data?: AllData) {
@@ -85,20 +86,22 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
   }
 }
 
-function doConnect(entry: ConnectEntry, data: AllData, r: Reconciliations) {
+function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliations) {
   // Force connecting to a given record
   const { user, record } = findRecord(r, entry.hash, data);
-  if (entry.where == "bank") {
-    record.bank = spliceBank(data, user, {
-      data: {
-        fiatDisbursed: entry.amount,
-        completedTimestamp: Timestamp.fromMillis(DateTime.fromISO(entry.date).toMillis()),
-      },
-      bank: [],
-      action: entry.action,
-    } as any, 1);
-  }
+  record.bank = spliceBank(data, user, {
+    data: {
+      fiatDisbursed: entry.amount,
+      completedTimestamp: Timestamp.fromMillis(DateTime.fromISO(entry.date).toMillis()),
+    },
+    bank: [],
+    action: entry.action,
+  } as any, 1);
 }
 
-function doSkip(_entry: SkipEntry, _data: AllData) {
+function doConnectBlockchain(entry: ConnectBlockchainEntry, data: AllData, r: Reconciliations) {
+  // Force connecting to a given record
+  const { user, record } = findRecord(r, entry.hash, data);
+  record.refund = spliceBlockchain(data, user, record, entry.refund) ?? undefined;
+  record.data.hashRefund = entry.refund;
 }

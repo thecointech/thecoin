@@ -14,7 +14,7 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
     const amount = record.data.fiatDisbursed * (record.action == "Buy" ? 1 : -1);
     const names = record.action == "Buy" ? user.names : undefined;
     // Find most recent completion attempt
-    const completed = record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp);
+    const completed = getCompleted(record)
     const filter = getFilter(record.action);
     let tx = findBank(data, maxDays, amount, completed, filter, names);
     if (tx) {
@@ -23,17 +23,24 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
 
       // was this cancelled?
       const confirmation = (record.data as any).confirmation;
-      const cancelled = findCancellation(data, amount, completed, confirmation);
-      if (cancelled) {
-        data.bank.splice(data.bank.indexOf(cancelled), 1);
-        r.push(cancelled);
+      if (completed) {
+        const cancelled = findCancellation(data, amount, completed, confirmation);
+        if (cancelled) {
+          data.bank.splice(data.bank.indexOf(cancelled), 1);
+          r.push(cancelled);
+        }
       }
     }
   }
   return r;
 }
 
+// Compiler error: somehow TS loses the possibility that this date might be undefined
+const getCompleted = (record: ReconciledRecord) : DateTime|undefined =>
+  record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp);
+
 export const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
+
 {
   switch(action) {
     case "Bill": return tx => tx.Description.startsWith('Online Banking payment');
