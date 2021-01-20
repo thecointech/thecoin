@@ -11,6 +11,7 @@
     padding-bottom: 25px;
     opacity: 0.7;
     &.active{
+      opacity: 1;
       background-color: @theCoinPalettePaleGreen1;
       color: @theCoinPaletteGreen4;
       font-weight: bold;
