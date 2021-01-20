@@ -74,14 +74,15 @@ const getAsItem = (item: SidebarMenuItem) => {
 }
 
 const getAsHeader = (item: SidebarMenuItem) => 
-  <div className={styles.headerSidebar}>
-    <Header as="h5" key={`Header${item.link.name}`} className={ `appTitles x4spaceBefore` } >
+  <div className={styles.headerSidebar} key={`Header${item.link.name}`}>
+    <Header as="h5" className={ `appTitles x4spaceBefore` } >
       {item.link.name}
     </Header>
     <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
     <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
       <span>{item.link.header?.primaryDescription}</span>
     </div>
+    <Icon name="caret right" disabled size='tiny' id={ `${styles.moreToSee}` } />
     <div className={ `${styles.secondaryDescriptionSidebar} x2spaceBefore` }><span>{item.link.header?.secondaryDescription}</span></div>
   </div>
 
