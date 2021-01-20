@@ -12,8 +12,7 @@ export const MainRouterStorybook = () => {
       link: {
         to: false,
         name: 'Profile',
-        header: { title:"TEst", 
-                  avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
+        header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
                   primaryDescription: "The quick brown fox jumps over the lazy dog.", 
                   secondaryDescription: "Description2" },
       },

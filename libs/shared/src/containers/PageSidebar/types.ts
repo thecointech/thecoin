@@ -9,7 +9,7 @@ export interface SidebarMenuLink {
   name: string;
   to: RUrl | false;
   icon?: SemanticICONS;
-  header?: { title: string, avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
 }
 
 export interface SidebarMenuItem {
@@ -66,9 +66,9 @@ export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuI
         subItems: element.subItems
           ? MapMenuItems(element.subItems, surl)
           : undefined
-      }; console.log("mapped",mapped)
+      };
       return mapped;
-    } console.log("element",element)
+    }
     return element;
   });
 }
