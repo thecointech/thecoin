@@ -3,27 +3,24 @@ import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
-import { AllData } from "./types";
+import { AllData, Reconciliations } from "./types";
 import {log} from '@the-coin/logging';
 
 export const cacheFullPath = (path?: string) =>
   path ?? process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
-export const cacheFilePath = (folder: string, name?: string) =>
-  join(folder, name ?? 'data.cache.json');
+const DATA_CACHE_NAME = 'data.cache.json';
+const RECONCILED_CACHE_NAME = 'reconciled.cache.json';
 
-export function writeCache(data: AllData, cacheName?: string, path?: string) {
+
+export const writeDataCache = (data: AllData, cacheName?: string, path?: string) =>
+  writeCache(data, cacheName ?? DATA_CACHE_NAME, path);
+export const writeReconciledCache = (data: Reconciliations, cacheName?: string, path?: string) =>
+  writeCache(data, cacheName ?? RECONCILED_CACHE_NAME, path);
+
+function writeCache(data: AllData|Reconciliations, cacheName: string, path?: string) {
   //const sanitized = sanitize(data);
-  const cachePath = cacheFullPath(path);
-  if (!existsSync(cachePath)) {
-    try {
-      mkdirSync(cachePath, { recursive: true });
-    }
-    catch(err) {
-      log.error(err);
-      return false;
-    }
-  }
-  const filePath = cacheFilePath(cachePath, cacheName);
+  const cachePath = mkCachePath(path);
+  const filePath = join(cachePath, cacheName);
   writeFileSync(
     filePath,
     JSON.stringify(data)
@@ -32,57 +29,108 @@ export function writeCache(data: AllData, cacheName?: string, path?: string) {
   return true;
 }
 
-export function readCache(cacheName?: string, path?: string) {
+/////////////////////////////////////////////////////////
+
+export const readDataCache = (cacheName?: string, path?: string) =>
+  readCache(convertDataFromJson, cacheName ?? DATA_CACHE_NAME, path);
+export const readReconciledCache = (cacheName?: string, path?: string) =>
+  readCache(convertReconciledFromJson, cacheName ?? RECONCILED_CACHE_NAME, path);
+
+function readCache<T>(conversion: (json: any) => T, cacheName: string, path?: string) {
   const cachePath = cacheFullPath(path);
-  const filePath = cacheFilePath(cachePath, cacheName);
+  const filePath = join(cachePath, cacheName);
   if (existsSync(filePath)) {
     const asText = readFileSync(filePath, 'utf8');
     const asJson = JSON.parse(asText);
-
     log.debug(`Read cache from ${filePath}`);
-
-    return convertFromJson(asJson)
+    return conversion(asJson)
   }
   log.debug(`Cache not found at: ${filePath}`);
   return null;
 }
 
-export function convertFromJson(asJson: any) {
-  asJson.eTransfers.forEach((et: any) => {
-    et.cad = new Decimal(et.cad);
-    et.recieved = DateTime.fromISO(et.recieved);
-  })
-  asJson.bank.forEach((tx: any) => {
-    tx.Date = DateTime.fromISO(tx.Date);
-  })
-  asJson.blockchain.forEach((tx: any) => {
-    tx.date = DateTime.fromISO(tx.date);
-    tx.completed = tx.completed ? DateTime.fromISO(tx.completed) : undefined;
-  })
+export function convertDataFromJson(asJson: any) {
+  asJson.eTransfers.forEach(convertETransfer)
+  asJson.bank.forEach(convertBank)
+  asJson.blockchain.forEach(convertBlockchain)
 
-  const convertTimestamp = (obj: any) =>
-    obj
-      ? Timestamp.fromMillis(obj._seconds * 1000 + obj._nanoseconds / 100000)
-      : undefined;
-  const convertDB = (col: any) => Object.values(col).forEach((txs: any) => {
-    txs.forEach((tx: any) => {
-      tx.recievedTimestamp = convertTimestamp(tx.recievedTimestamp)
-      tx.processedTimestamp = convertTimestamp(tx.processedTimestamp)
-      tx.completedTimestamp = convertTimestamp(tx.completedTimestamp)
-    })
-  });
-  convertDB(asJson.dbs.Buy);
-  convertDB(asJson.dbs.Sell);
-  convertDB(asJson.dbs.Bill);
+  const convertAction = (col: any) =>
+    Object.values(col).forEach(
+      (txs: any) => txs.forEach(convertTimestamps)
+    );
+
+  convertAction(asJson.dbs.Buy);
+  convertAction(asJson.dbs.Sell);
+  convertAction(asJson.dbs.Bill);
 
   Object.values(asJson.obsolete).forEach((txs: any) => {
-    txs.forEach((tx: any) => {
-      tx.completed = convertTimestamp(tx.completed) ?? convertTimestamp(tx.completedTimestamp);
-      tx.recieved = convertTimestamp(tx.recieved) ?? convertTimestamp(tx.recievedTimestamp);
-      tx.settled = convertTimestamp(tx.settled) ?? convertTimestamp(tx.processedTimestamp);
-    })
+    txs.forEach(convertTimestamps)
   })
 
   return asJson as AllData;
+}
 
+export function convertReconciledFromJson(asJson: any) {
+  const asReconciled = asJson as Reconciliations;
+  for (const user of asReconciled) {
+    for (const tx of user.transactions) {
+      convertTimestamps(tx.data);
+      convertTimestamps(tx.database);
+      convertETransfer(tx.email);
+      convertBank(tx.bank);
+      convertBlockchain(tx.blockchain)
+      convertBlockchain(tx.refund);
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////
+
+const mkCachePath = (path?: string) => {
+  const cachePath = cacheFullPath(path);
+  if (!existsSync(cachePath)) {
+    try {
+      mkdirSync(cachePath, { recursive: true });
+    }
+    catch(err) {
+      log.error(err);
+      throw err;
+    }
+  }
+  return cachePath;
+}
+
+const convertTimestamp = (obj: any) =>
+  obj
+    ? Timestamp.fromMillis(obj._seconds * 1000 + obj._nanoseconds / 100000)
+    : undefined;
+const convertTimestamps = (tx: any) => {
+  if (tx) {
+    Object.entries(tx).forEach(([s, v]) => {
+      console.log(s);
+      const maybeTs : any = v;
+      if (!!maybeTs?._seconds)
+        tx[s] = convertTimestamp(maybeTs)
+    })
+    // tx.recievedTimestamp = convertTimestamp(tx.recievedTimestamp)
+    // tx.processedTimestamp = convertTimestamp(tx.processedTimestamp)
+    // tx.completedTimestamp = convertTimestamp(tx.settled) ?? convertTimestamp(tx.completedTimestamp)
+  }
+}
+
+const convertETransfer = (et: any) => {
+  if (et) {
+    et.cad = new Decimal(et.cad);
+    et.recieved = DateTime.fromISO(et.recieved);
+  }
+}
+const convertBank = (tx: any) => {
+  if (tx)
+    tx.Date = DateTime.fromISO(tx.Date);
+}
+const convertBlockchain = (tx: any) => {
+  if (tx) {
+    tx.date = DateTime.fromISO(tx.date);
+    tx.completed = tx.completed ? DateTime.fromISO(tx.completed) : undefined;
+  }
 }
