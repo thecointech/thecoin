@@ -37,7 +37,7 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
 
 // Compiler error: somehow TS loses the possibility that this date might be undefined
 const getCompleted = (record: ReconciledRecord) : DateTime|undefined =>
-  record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp);
+  record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp) ?? toDateTime(record.data.processedTimestamp);
 
 export const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
 

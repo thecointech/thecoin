@@ -114,6 +114,10 @@
     {
       "hash": "1588181619360",
       "notes": "Uncompleted transaction - repeated tx w/ insufficient balance"
+    },
+    {
+      "hash": "0xe8bbc077adee00d9d060f0ed5be036dee9e342f8af407fd73ab834cee4cc1657",
+      "notes": "Direct xfer, no email exists (db seems missing too!)"
     }
   ]
 }

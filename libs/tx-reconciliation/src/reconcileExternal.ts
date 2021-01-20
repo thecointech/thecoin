@@ -44,13 +44,18 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
   const user = getOrCreateUser(users, bc.counterPartyAddress);
   const action: UserAction = bc.change > 0 ? "Sell" : "Buy";
   const dt = Timestamp.fromMillis(bc.date.toMillis());
+  // Normally, our transactions are sent at the date of processing.
+  // However, our blockchain transactions can include transactions where
+  // the user directly transfers coin directly to us.  In these cases,
+  // the date is the date of the transfer, not when it can be processed
+  const processedTimestamp = (action == "Buy") ? dt : undefined;
   const record: ReconciledRecord = {
     action,
     data: {
       confirmed: true,
       hash: bc.txHash!,
       recievedTimestamp: dt,
-      //completedTimestamp: dt,
+      processedTimestamp,
       fiatDisbursed: 0,
       transfer: buildTransfer(action, bc)
     },
