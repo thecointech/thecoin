@@ -2,36 +2,46 @@ import React, { useCallback, useState } from "react";
 import { log } from "@the-coin/logging";
 import { CertifiedTransferRecord } from "@the-coin/tx-firestore";
 import { CertifiedTransferRequest } from "@the-coin/types";
-import { ProcessRecord } from "@the-coin/utilities/src/firestore";
-import { GetActionDoc } from "@the-coin/utilities/src/User";
+import { ProcessRecord } from "@the-coin/utilities/firestore";
+import { GetActionDoc } from "@the-coin/utilities/User";
 import { Contract } from "ethers/contract";
 import { DateTime } from "luxon";
 import { Button } from "semantic-ui-react";
+import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
 
 type Props = {
-  user: string, record: CertifiedTransferRecord, contract: Contract
+  record: CertifiedTransferRecord,
+  onComplete?: (refundHash: string) => void;
 }
 export const RefundButton = (props: Props) => {
 
   const [inProcess, setInProcess] = useState(false);
-  const onClick = useCallback(() => {
+  const account = useActiveAccount();
+  const doRefund = useCallback(() => {
     setInProcess(true);
-    refund(props)
+    refund(props.record, account!.contract!)
       .then(() => setInProcess(false))
       .catch(() => setInProcess(false))
+  }, [setInProcess, account])
 
-  }, [setInProcess])
-
-  return <Button disabled={inProcess} loading={inProcess} onClick={onClick} />
+  const disabled = inProcess && !!account?.contract;
+  return <Button
+    compact
+    disabled={disabled}
+    loading={inProcess}
+    onClick={doRefund}
+    content="Refund"
+    />
 }
 
-export async function refund({user, record, contract }: Props) {
+export async function refund(record: CertifiedTransferRecord, contract: Contract) {
+  const user = record.transfer.from;
   log.debug({ hash: record.hash }, `Refunding sale {hash}`);
   try {
     // First send the stuff back
     const hashRefund = await issueRefund(record.transfer, contract)
     // record this info in the database
-    await updateDb(user, record.hash, {hashRefund});
+    await updateDb(record.transfer.from, record.hash, {hashRefund});
     // Now we need to let the rest of the world know it's all done
     record.hashRefund = hashRefund;
   }

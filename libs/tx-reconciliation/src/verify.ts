@@ -44,7 +44,7 @@ async function printUnmatched(r: Reconciliations) {
     .map(r => ({
       ...r,
       transactions: r.transactions
-        .filter(isComplete)
+        .filter(tx => !isComplete(tx))
     })).filter(um => um.transactions.length > 0);
 
   for (const um of unMatched) {

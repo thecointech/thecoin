@@ -4,7 +4,6 @@ import { RbcStore, RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
 import { GetWallet } from './wallet';
 import { initBrowser } from "@the-coin/rbcapi/action";
-import rbc_secret from './rbc.secret.json';
 import { ProcessUnsettledDeposits } from "@the-coin/tx-processing/deposit/service";
 import { processUnsettledETransfers } from "@the-coin/tx-processing/etransfer/service";
 
@@ -26,7 +25,6 @@ async function initialize() {
     throw new Error("Couldn't initialize contract")
   }
 
-  RbcApi.SetCredentials(rbc_secret);
   await initBrowser({
     headless: false
   })

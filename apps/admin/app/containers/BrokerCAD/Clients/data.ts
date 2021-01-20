@@ -10,7 +10,11 @@ import { UserState } from "./types";
 export async function getAllUserData(fxRates: FXRate[]) {
   const rawData = await getRawData();
   const reconciled = await matchAll(rawData);
-  return await addBalances(reconciled, fxRates);
+  const full = await addBalances(reconciled, fxRates);
+  full.forEach(user => user.transactions.sort(
+    (a, b) => a.data.recievedTimestamp.seconds - b.data.recievedTimestamp.seconds
+  ));
+  return full;
 }
 
 async function getRawData() {

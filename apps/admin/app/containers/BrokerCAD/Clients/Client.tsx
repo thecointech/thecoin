@@ -9,6 +9,9 @@ export const Client = (props: Props) =>
     <>
     <Header as='h4'>
       {props.names} - {props.balanceCad}
+      <Header.Subheader>
+        {props.address}
+      </Header.Subheader>
     </Header>
     <List>
       {props?.transactions.map(ClientTransaction)}
