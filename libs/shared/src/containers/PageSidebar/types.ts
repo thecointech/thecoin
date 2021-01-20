@@ -9,6 +9,7 @@ export interface SidebarMenuLink {
   name: string;
   to: RUrl | false;
   icon?: SemanticICONS;
+  header?: { title: string, avatar: any, primaryDescription: string, secondaryDescription: string };
 }
 
 export interface SidebarMenuItem {

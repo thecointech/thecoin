@@ -11,7 +11,11 @@ export const MainRouterStorybook = () => {
     {
       link: {
         to: false,
-        name: 'Divider',
+        name: 'Profile',
+        header: { title:"TEst", 
+                  avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
+                  primaryDescription: "Description", 
+                  secondaryDescription: "Description2" },
       },
     },
     {
@@ -24,28 +28,28 @@ export const MainRouterStorybook = () => {
     {
       link: {
         name: "Top up Balance",
-        to: new RUrl("/broker"),
+        to: new RUrl("/balance"),
         icon: "arrow circle up",
       }
     },
     {
       link: {
-        name: "Make a payment",
-        to: new RUrl("/thecoin"),
+        name: "Make a Payment",
+        to: new RUrl("/payment"),
         icon: "arrow circle right",
       }
     },
     {
       link: {
         name: "Settings",
-        to: new RUrl("/brokersss"),
+        to: new RUrl("/settings"),
         icon: "setting",
       }
     },
     {
       link: {
         name: "Help",
-        to: new RUrl("/brokersss"),
+        to: new RUrl("/help"),
         icon: "life ring",
       }
     }

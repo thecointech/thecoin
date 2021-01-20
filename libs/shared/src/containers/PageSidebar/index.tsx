@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Sidebar, Menu, MenuItem, Segment, Divider, Icon, SemanticICONS } from "semantic-ui-react";
+import { Sidebar, Menu, MenuItem, Segment, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
@@ -73,6 +73,15 @@ const getAsItem = (item: SidebarMenuItem) => {
   )
 }
 
+const getAsHeader = (item: SidebarMenuItem) => 
+  <div className={styles.headerSidebar}>
+    <Header as="h5" key={`Header${item.link.name}`} className={ `appTitles x4spaceBefore` } >
+      {item.link.name}
+    </Header>
+    <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
+    <div className={ `${styles.primaryDescriptionSidebar} x2spaceBefore font-big` }>{item.link.header?.primaryDescription}</div>
+    <div className={ `${styles.secondaryDescriptionSidebar} x2spaceBefore` }>{item.link.header?.secondaryDescription}</div>
+  </div>
 
 
 const getAsDivider = (item: SidebarMenuItem) =>
@@ -83,8 +92,18 @@ const getAsDivider = (item: SidebarMenuItem) =>
 // Utility function builds a list of menu items
 // from the props set to this components store state
 const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
-  return items.map(item =>
-    item.link.to !== false ? getAsItem(item) : getAsDivider(item)
+  return items.map(item => {
+    //item.link.to !== false ? getAsItem(item) : getAsDivider(item)
+      if (item.link.header !== undefined ){
+        return getAsHeader(item);
+      }
+      else if (item.link.to === false){
+        return getAsDivider(item);
+      } 
+      else {
+        return getAsItem(item);
+      }
+    }
   );
 }
 

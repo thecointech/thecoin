@@ -15,7 +15,7 @@ export type SidebardProps = {
   }
 
 export default {
-  title: 'SemanticUI/Sidebar',
+  title: 'App/Sidebar',
   component: PageSidebar,
   args: {
     text: "This is the content",
@@ -29,6 +29,8 @@ const Template: Story<SidebardProps> = (args) =>
   <PageSidebar visible={args.visible} inverted={args.inverted}>
     <MainRouterStorybook /> {args.text}
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br />
   </PageSidebar>;
 
 export const Basic = Template.bind({});

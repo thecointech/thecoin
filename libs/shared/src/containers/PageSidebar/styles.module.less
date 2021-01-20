@@ -1,3 +1,5 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 /* -at-value TransitionDuration, SidebarWidth from "styles/constants.css"; 
   TODO: Fix global variables
   They have (for now) been dereferenced into this file
@@ -12,9 +14,28 @@
 }
 
 .mainPageSidebar {
+  max-width: 200px !important;
 }
 
 .mainPagePusherOut {
   transform: translate3d(230px, 0, 0) !important;
   width: calc(100% - 230px);
+}
+
+.headerSidebar{
+  text-align: center;
+  .avatarSidebar{
+    max-width: 110px;
+    max-height: 110px;
+    clip-path: circle(40px at center);
+  }
+  .primaryDescriptionSidebar{
+    color: @theCoinPaletteGreen5;
+  }
+  .secondaryDescriptionSidebar{
+    color: @theCoinPalettePaleGreen2;
+    font-weight: bold;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 1px -2px @theCoinPaletteGray1;
+  }
 }
