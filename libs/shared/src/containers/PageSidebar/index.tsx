@@ -79,8 +79,10 @@ const getAsHeader = (item: SidebarMenuItem) =>
       {item.link.name}
     </Header>
     <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
-    <div className={ `${styles.primaryDescriptionSidebar} x2spaceBefore font-big` }>{item.link.header?.primaryDescription}</div>
-    <div className={ `${styles.secondaryDescriptionSidebar} x2spaceBefore` }>{item.link.header?.secondaryDescription}</div>
+    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
+      <span>{item.link.header?.primaryDescription}</span>
+    </div>
+    <div className={ `${styles.secondaryDescriptionSidebar} x2spaceBefore` }><span>{item.link.header?.secondaryDescription}</span></div>
   </div>
 
 

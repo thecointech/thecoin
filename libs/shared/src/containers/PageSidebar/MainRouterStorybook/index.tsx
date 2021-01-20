@@ -14,7 +14,7 @@ export const MainRouterStorybook = () => {
         name: 'Profile',
         header: { title:"TEst", 
                   avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
-                  primaryDescription: "Description", 
+                  primaryDescription: "The quick brown fox jumps over the lazy dog.", 
                   secondaryDescription: "Description2" },
       },
     },
