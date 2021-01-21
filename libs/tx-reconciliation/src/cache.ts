@@ -50,24 +50,25 @@ function readCache<T>(conversion: (json: any) => T, cacheName: string, path?: st
 }
 
 export function convertDataFromJson(asJson: any) {
-  asJson.eTransfers.forEach(convertETransfer)
-  asJson.bank.forEach(convertBank)
-  asJson.blockchain.forEach(convertBlockchain)
+  const asData = asJson as AllData;
+  asData.eTransfers.forEach(convertETransfer)
+  asData.bank.forEach(convertBank)
+  asData.blockchain.forEach(convertBlockchain)
 
   const convertAction = (col: any) =>
     Object.values(col).forEach(
       (txs: any) => txs.forEach(convertTimestamps)
     );
 
-  convertAction(asJson.dbs.Buy);
-  convertAction(asJson.dbs.Sell);
-  convertAction(asJson.dbs.Bill);
+  convertAction(asData.dbs.Buy);
+  convertAction(asData.dbs.Sell);
+  convertAction(asData.dbs.Bill);
 
-  Object.values(asJson.obsolete).forEach((txs: any) => {
+  Object.values(asData.obsolete).forEach((txs: any) => {
     txs.forEach(convertTimestamps)
   })
 
-  return asJson as AllData;
+  return asData;
 }
 
 export function convertReconciledFromJson(asJson: any) {
@@ -82,6 +83,7 @@ export function convertReconciledFromJson(asJson: any) {
       convertBlockchain(tx.refund);
     }
   }
+  return asReconciled;
 }
 
 /////////////////////////////////////////////////////////
@@ -107,14 +109,10 @@ const convertTimestamp = (obj: any) =>
 const convertTimestamps = (tx: any) => {
   if (tx) {
     Object.entries(tx).forEach(([s, v]) => {
-      console.log(s);
       const maybeTs : any = v;
       if (!!maybeTs?._seconds)
         tx[s] = convertTimestamp(maybeTs)
     })
-    // tx.recievedTimestamp = convertTimestamp(tx.recievedTimestamp)
-    // tx.processedTimestamp = convertTimestamp(tx.processedTimestamp)
-    // tx.completedTimestamp = convertTimestamp(tx.settled) ?? convertTimestamp(tx.completedTimestamp)
   }
 }
 
