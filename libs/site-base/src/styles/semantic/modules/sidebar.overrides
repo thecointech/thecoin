@@ -5,6 +5,7 @@
 .ui.sidebar{
   border-radius: @absoluteBorderRadius !important;
   height: auto !important;
+  margin-left: 2% !important;
   &.menu .item{
     color: @theCoinPaletteGray1;
     padding: 10px;
