@@ -78,7 +78,7 @@ export function convertReconciledFromJson(asJson: any) {
       convertTimestamps(tx.data);
       convertTimestamps(tx.database);
       convertETransfer(tx.email);
-      convertBank(tx.bank);
+      tx.bank.forEach(convertBank);
       convertBlockchain(tx.blockchain)
       convertBlockchain(tx.refund);
     }
