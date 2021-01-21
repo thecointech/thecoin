@@ -7,6 +7,8 @@ import { Wallet, Contract } from 'ethers';
 import {ConnectContract} from '@the-coin/contract';
 import { existsSync, readFileSync } from 'fs';
 import { ProgressCallback } from 'ethers/utils';
+import { setGlobal } from './globals';
+import { log } from '@the-coin/logging';
 
 let ConnectedContract: Contract|null = null;
 
@@ -21,7 +23,7 @@ function loadEncrypted(name: string) {
 
   if (!wallet)
   {
-    const path = process.env[`${name}_PATH`];
+    const path = process.env[`THECOIN_${name}_PATH`];
     if (path && existsSync(path))
       wallet = readFileSync(path, 'utf8');
   }
@@ -32,7 +34,7 @@ function loadEncrypted(name: string) {
 }
 
 function getKey(name: string) {
-  const key = process.env[`${name}_KEY`];
+  const key = process.env[`THECOIN_${name}_KEY`];
   if (!key)
     throw new Error(`Could not load wallet key: ${name}`);
 
@@ -42,14 +44,14 @@ function getKey(name: string) {
 async function loadWallet(name: string, callback?: ProgressCallback) {
   const encrypted = loadEncrypted(name);
   const key = getKey(name);
-  const wallet = await Wallet.fromEncryptedJson(JSON.stringify(encrypted), key, callback);
-  globalThis.__thecoin = {
-    ...globalThis.__thecoin,
+  const wallet = await Wallet.fromEncryptedJson(encrypted, key, callback);
+  log.info(`${name} wallet loaded`);
+  setGlobal({
     wallets: {
-      ...globalThis.__thecoin?.wallets,
+      ...globalThis.__thecoin.wallets,
       [name]: wallet,
     }
-  }
+  })
   return wallet;
 }
 

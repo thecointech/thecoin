@@ -203,18 +203,18 @@ async function initiateDeposit(deposit: Deposit)
   // verify we have id
   if (!etransfer.id)
   {
-    log.error("Cannot process deposit from {date} without Source ID", etransfer.recieved);
+    log.error({date:  etransfer.recieved}, "Cannot process deposit from {date} without Source ID");
     return false;
   }
 
   // Next, add an inProgress
-  const {address} = etransfer;
+  const {address, id} = etransfer;
   const inProgress = GetActionDoc(address, "Buy", "inProgress");
   var existing = await inProgress.get();
   if (existing.exists)
   {
-    log.error("Cannot process deposits for {address} when already in progress", address);
-    return false;
+    log.warn({address, id}, "Attempting process of deposit {id} for {address} when already in progress");
+    //return false;
   }
 
   inProgress.set(deposit.record);
