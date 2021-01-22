@@ -6,10 +6,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Header, Grid } from 'semantic-ui-react';
+import { Header, Grid, Button } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import illustration from './illust_pagenotfound.svg'
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
 
 const aboveTheTitle = { id:"shared.NotFoundPage.aboveTheTitle",
                         defaultMessage:"Page Not Found",
@@ -41,9 +40,9 @@ export function NotFoundPage() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-                <ButtonPrimary as={NavLink} to="/" primary size='big' >
+                <Button primary as={NavLink} to="/" size='big' >
                     <FormattedMessage {...button} />
-                </ButtonPrimary>
+                </Button>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
