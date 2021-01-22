@@ -1,8 +1,7 @@
 import * as React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useHistory } from "react-router";
-import { Form, Header } from "semantic-ui-react";
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { Button, Form, Header } from "semantic-ui-react";
 
 import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
@@ -152,11 +151,11 @@ export const Login = (props: Props) => {
             isValid={isValid}
             forceValidate={forceValidate}
           />
-          <ButtonPrimary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
+          <Button primary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
             &nbsp;&nbsp;&nbsp;&nbsp;
             <FormattedMessage {...button} />
               &nbsp;&nbsp;&nbsp;&nbsp;
-          </ButtonPrimary>
+          </Button>
 
           <div className={ `x10spaceBefore` } >
             <FormattedMessage {...textAtTheBottom} />
