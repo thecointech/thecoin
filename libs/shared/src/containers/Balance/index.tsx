@@ -35,25 +35,6 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   return (
     <React.Fragment>
       <div className={styles.wrapper}>
-<<<<<<< Updated upstream
-        <Grid columns={2} stackable>
-          <Grid.Row>
-            <Grid.Column>
-              <p className={styles.have}>
-                You have:{" "}
-                <span className={styles.balance}>${cadBalance}</span>{" "}
-                <Popup
-                  trigger={<Icon name="chart line" className={styles.bankIcon} />}
-                  content={profitDisplay}
-                  position="top left"
-                />
-              </p>
-            </Grid.Column>
-            <Grid.Column width={2}></Grid.Column>
-          </Grid.Row>
-        </Grid>
-
-=======
         <p className={styles.have}>
           You have:{" "}
           <span className={styles.balance}>${cadBalance}</span>{" "}
@@ -63,7 +44,6 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
             position="top left"
           />
         </p>
->>>>>>> Stashed changes
         <Button onClick={doUpdateBalance}>Update Balance</Button>
 
         <TransactionHistory
