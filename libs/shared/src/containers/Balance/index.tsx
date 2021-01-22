@@ -35,9 +35,9 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   return (
     <React.Fragment>
       <div className={styles.wrapper}>
-        <Grid columns={2} stackable>
+        <Grid columns={2} rows={1} stackable>
           <Grid.Row>
-            <Grid.Column>
+            <Grid.Column width={12}>
               <p className={styles.have}>
                 You have:{" "}
                 <span className={styles.balance}>${cadBalance}</span>{" "}
@@ -47,19 +47,26 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
                   position="top left"
                 />
               </p>
+              <Button onClick={doUpdateBalance}>Update Balance</Button>
+
+              <TransactionHistory
+                transactions={history}
+                rates={rates}
+                transactionLoading={historyLoading}
+                onRangeChange={actions.updateHistory}
+              />
             </Grid.Column>
-            <Grid.Column width={2}></Grid.Column>
+            <Grid.Column width={4}>
+                <Grid.Row>
+                  <div>Balance<br /><br /></div>
+                </Grid.Row>
+                <Grid.Row>
+                  <div>Climate Impact<br /><br /></div>
+                </Grid.Row>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
 
-        <Button onClick={doUpdateBalance}>Update Balance</Button>
-
-        <TransactionHistory
-          transactions={history}
-          rates={rates}
-          transactionLoading={historyLoading}
-          onRangeChange={actions.updateHistory}
-        />
       </div>
     </React.Fragment>
   );
