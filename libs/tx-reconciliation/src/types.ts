@@ -48,11 +48,3 @@ export type UserReconciled = {
 } & User;
 
 export type Reconciliations = UserReconciled[];
-
-declare global {
-  export var original: AllData;
-  export var source: AllData;
-}
-
-globalThis.source = {} as any;
-globalThis.original = {} as any;
