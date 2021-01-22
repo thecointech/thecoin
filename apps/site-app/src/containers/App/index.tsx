@@ -22,6 +22,9 @@ import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/component
 import '@the-coin/site-base/styles/semantic.css';
 //import '@the-coin/site-base/styles/semantic.less';
 import styles from './styles.module.less';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+
 export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
@@ -37,16 +40,17 @@ export const App = ( ) => {
 
       <Container className="appContainer"
         style={{
-          width: '100%'
+          width: '100%', 
         }}
       >
-        <PageSidebar>
           <MainPageTransition location={location}>
+          <PageSidebar/>
+          <ColumnRightTop />
             <section id={styles.mainContent} className={styles.pageMainInner}>
               <MainRouter location={location} />
             </section>
+          <ColumnRightBottom />
           </MainPageTransition>
-        </PageSidebar>
       </Container>
       <Footer />
     </MediaContextProvider>

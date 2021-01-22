@@ -1,5 +1,9 @@
 import React, { useMemo } from "react";
+<<<<<<< Updated upstream
 import { Sidebar, Menu, MenuItem, Segment, Divider } from "semantic-ui-react";
+=======
+import { Sidebar, Menu, MenuItem, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
+>>>>>>> Stashed changes
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
@@ -29,10 +33,8 @@ export const PageSidebar: React.FC<Props> = (props) => {
   }, [appState, generators])
 
   const isVisible = visible ?? (menuItems && menuItems.length > 0);
-  const pusherClass = isVisible ? styles.mainPagePusherOut : undefined;
 
   return (
-    <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
       <Sidebar
         as={Menu}
         animation="push"
@@ -44,10 +46,6 @@ export const PageSidebar: React.FC<Props> = (props) => {
       >
         {menuItems}
       </Sidebar>
-      <Sidebar.Pusher className={pusherClass}>
-        {props.children}
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
   );
 }
 

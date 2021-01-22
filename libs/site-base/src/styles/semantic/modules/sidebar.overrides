@@ -2,9 +2,40 @@
          Site Overrides
 *******************************/
 
+<<<<<<< Updated upstream
 
 .ui.vertical.menu > .active.item:first-child {
     font-size: 1.1rem;
+=======
+.ui.sidebar{
+  border-radius: @absoluteBorderRadius !important;
+  height: auto !important;
+  margin-left: 2% !important;
+  margin-top: 89px !important;
+  &.menu .item{
+    color: @theCoinPaletteGray1;
+    padding: 10px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    opacity: 0.7;
+    &.active{
+      opacity: 1;
+      background-color: @theCoinPalettePaleGreen1;
+      color: @theCoinPaletteGreen4;
+      font-weight: bold;
+      i.icon{
+        color: @theCoinPaletteGreen4;
+      }
+    }
+    &:hover{
+      opacity: 1;
+      color: @theCoinPaletteGreen4;
+      i.icon{
+        color: @theCoinPaletteGreen4;
+      }
+    }
+  }
+>>>>>>> Stashed changes
 }
 
 .ui.vertical.menu .menu .item {
