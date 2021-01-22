@@ -69,6 +69,13 @@
         "amount": 350,
         "date": "2020-12-17T00:00:00.000-06:00",
         "notes": "e-Transfer manually completed for direct transfer to our address (ie - not submitted as e-Transfer)"
+      },
+      {
+        "action": "Sell",
+        "hash": "0xd918c1b0559a68a78a8d398fd00bcb481470d221105228fdea2a4bd798b5f6f2",
+        "amount": 400,
+        "date": "2020-12-17T00:00:00.000-06:00",
+        "notes": "e-Transfer manually completed following NFDG Reversal"
       }
     ],
     "blockchain": [
