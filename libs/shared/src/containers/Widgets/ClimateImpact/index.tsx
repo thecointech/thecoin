@@ -12,10 +12,18 @@ import styles from "./styles.module.less";
 export const ClimateImpact = () => {
   //const { locale } = useSelector(selectLocale);
   return (
-    <div className={ `${styles.climateImpact} ${styles.wind}` }>
+    <div className={ `${styles.climateImpact} ${styles.earth}` }>
         <Header as="h5">
             Climate Impact
         </Header>
+        <Header as="h3">
+            80
+        </Header> &nbsp;
+        <Header as="h4">
+            Trees
+        </Header>
+        <br  />
+        Some text here maybe
     </div>
   )
 }
