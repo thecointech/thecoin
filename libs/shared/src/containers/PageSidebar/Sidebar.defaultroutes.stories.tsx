@@ -1,8 +1,8 @@
 import { RUrl } from '@the-coin/utilities/RUrl';
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { useSidebar } from '../actions';
-import { MapMenuItems, SidebarMenuItem } from '../types';
+import { useSidebar } from './actions';
+import { MapMenuItems, SidebarMenuItem } from './types';
 
 export const MainRouterStorybook = () => {
   
