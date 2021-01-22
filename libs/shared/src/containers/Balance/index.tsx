@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { Button, Grid, Popup, Icon, Header } from "semantic-ui-react";
+import { Button, Grid, Popup, Icon } from "semantic-ui-react";
 
 import { toHuman } from "@the-coin/utilities";
 import { getFxRate } from "../FxRate/reducer";
@@ -11,6 +11,7 @@ import styles from "./styles.module.less";
 import { calculateProfit } from "../Account/profit";
 import { selectFxRate } from "../FxRate/selectors";
 
+import { BalanceAndProfit } from "../Widgets/BalanceAndProfit";
 import { ClimateImpact } from "../Widgets/ClimateImpact";
 
 
@@ -60,7 +61,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
             </Grid.Column>
             <Grid.Column width={4}>
                 <Grid.Row>
-                  <div><Header as="h5">Balance</Header><br /><br /></div>
+                  <BalanceAndProfit />
                 </Grid.Row>
                 <Grid.Row>
                   <ClimateImpact />
