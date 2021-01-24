@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { ConfigStore } from '@the-coin/store';
 import { init } from '@the-coin/logging'
+import { describe } from '@the-coin/jestutils';
 
 beforeAll(() => {
   PouchDB.plugin(require('pouchdb-adapter-memory'));
@@ -61,5 +62,29 @@ describe('Rbc Puppeteer-based API', () => {
 
     await browser.close();
   });
-})
+
+  test("Gets CAD transactions", async () => {
+
+    const browser = await initBrowser()
+
+    const api = new RbcApi();
+    const txsusd = await api.getTransactions(new Date(2014, 5));
+
+    expect(txsusd.length).toBeGreaterThan(0);
+
+    await browser.close();
+  });
+
+  test("Gets USD transactions", async () => {
+
+    const browser = await initBrowser()
+
+    const api = new RbcApi();
+    const txsusd = await api.getTransactions(new Date(2014, 5), new Date(), process.env.RBCAPI_CREDENTIALS_USD_ACC);
+
+    expect(txsusd.length).toBeGreaterThan(0);
+
+    await browser.close();
+  });
+}, !!process.env.RBCAPI_CREDENTIALS_USD_ACC)
 

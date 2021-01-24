@@ -1,14 +1,13 @@
-import { RbcTransaction, ProgressCallback, isCredentials, AuthOptions } from './types';
+import { log } from '@the-coin/logging';
+import { readFileSync } from 'fs';
+import { RbcStore } from './store';
+import { ApiAction } from './action';
+import { ProgressCallback, isCredentials, AuthOptions } from './types';
+
 import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
 import { ETransferPacket } from '@the-coin/types';
 import { send } from './etransfer';
-import { log } from '@the-coin/logging';
-import { DateTimeOptions } from 'luxon';
-import { ApiAction } from './action';
-import { readFileSync } from 'fs';
-import { RbcStore } from './store';
-
 
 export class RbcApi {
 
@@ -19,13 +18,9 @@ export class RbcApi {
     this.initialize(options);
   }
 
-  static ApiTimeZone: Pick<DateTimeOptions, "zone">;
-
-  depositETransfer = (prefix: string, url: string, code: string, progressCb: ProgressCallback) =>  depositETransfer(prefix, url, code, progressCb);
-
-  fetchLatestTransactions = () => fetchLatestTransactions();
-
-  getTransactions = (from: Date, to: Date) : Promise<RbcTransaction[]> => getTransactions(from, to);
+  depositETransfer = depositETransfer;
+  fetchLatestTransactions = fetchLatestTransactions;
+  getTransactions = getTransactions;
 
   sendETransfer = async (prefix: string, amount: number, name: string, packet: ETransferPacket, progressCb: ProgressCallback) => {
     try {
