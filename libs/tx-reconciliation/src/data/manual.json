@@ -25,11 +25,12 @@
       "hash": "0xe8bbc077adee00d9d060f0ed5be036dee9e342f8af407fd73ab834cee4cc1657",
       "amount": 5000,
       "date": "2020-04-07T07:36:43.000-05:00",
-      "notes": "USD direct deposit"
+      "notes": "USD direct deposit",
+      "currency": "USD"
     },
     {
       "where": "blockchain",
-      "type": "sale",
+      "type": "Sell",
       "hash": "0xD86C97292B9BE3A91BD8279F114752248B80E8C5",
       "amount": 67813471,
       "cad": 321.34,
@@ -76,7 +77,15 @@
         "amount": 400,
         "date": "2020-12-17T00:00:00.000-06:00",
         "notes": "e-Transfer manually completed following NFDG Reversal"
+      },
+      {
+        "action": "Sell",
+        "hash": "0xde9bdc9d009b8a37d9a979db70ff8a19f35dec1af5d60b3321a2a50dab4a1283",
+        "amount": 193.88,
+        "date": "2021-01-22T00:00:00.000-06:00",
+        "notes": "e-Transfer manually completed to fix expired xfer of May 8th"
       }
+
     ],
     "blockchain": [
       {
