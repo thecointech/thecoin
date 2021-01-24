@@ -49,11 +49,11 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
     }
     case 'bank': {
       const { record } = findRecord(r, entry.hash);
-      (record.data as any).type = 'deposit';
+      (record.data as any).type = entry.type;
       record.bank = [{
         Amount: entry.amount,
         Description: "Manual Entry",
-        Details: "USD",
+        Details: entry.currency,
         Date: dt,
       }]
       break;

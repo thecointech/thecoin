@@ -74,9 +74,11 @@ export function findBank(data: AllData, maxDays: number, amount: number, date?: 
 
 export function findCancellation(data: AllData, amount: number, date: DateTime, id?: string) {
 
-  let candidates = data.bank
-    .filter(b => b.Amount == -amount)
-    .filter(b => b.Description.startsWith('INTERAC e-Transfer cancel'))
+  let candidates = data.bank.filter(b => b.Amount == -amount);
+  candidates = candidates.filter(b =>
+    b.Description.startsWith('INTERAC e-Transfer cancel')||
+    b.Description== 'Expired INTERAC e-Transfer credit'
+)
 
   // early-exit optimization
   if (candidates.length == 0)
@@ -89,8 +91,8 @@ export function findCancellation(data: AllData, amount: number, date: DateTime, 
   if (index >= 0)
     return candidates[index];
 
-  // match by date
-  candidates = filterCandidates(candidates, "Date", date.minus({days: 15}), 30);
+  // only those that occured within the next 40 days
+  candidates = filterCandidates(candidates, "Date", date.plus({days: 20}), 40);
   if (candidates.length == 1)
     return candidates[0];
   else if (candidates.length > 1) {
