@@ -7,6 +7,8 @@ import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
+import getWindowDimensions from '@the-coin/site-base/components/WindowDimensions';
+import { breakpointsValues } from '@the-coin/site-base/components/ResponsiveTool';
 
 type Props = {
   visible?: boolean;
@@ -28,7 +30,15 @@ export const PageSidebar: React.FC<Props> = (props) => {
     return buildMenuArray(items);
   }, [appState, generators])
 
-  const isVisible = visible ?? (menuItems && menuItems.length > 0);
+  let isVisible = visible ?? (menuItems && menuItems.length > 0);
+  
+  const windowDimension = getWindowDimensions();
+  const breakpointTablet = breakpointsValues.tablet;
+  
+  // If Small Screen / Mobile
+  if (windowDimension.width <= breakpointTablet){
+    isVisible = false;
+  }
 
   return (
       <Sidebar
