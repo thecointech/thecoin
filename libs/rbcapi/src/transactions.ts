@@ -4,19 +4,16 @@ import { RbcTransaction } from "./types";
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
 import { RbcStore } from "./store";
-
-export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
+import csv from "csvtojson";
 
 //
 // Fetch, from storage or from live, all latest transactions
 //
-export async function fetchLatestTransactions()
-{
-  const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions();
+export async function fetchLatestTransactions() {
+  const { txs, syncedTill } = await RbcStore.fetchStoredTransactions();
   const toDate = new Date();
 
-  if (!sameDay(syncedTill, toDate))
-  {
+  if (!sameDay(syncedTill, toDate)) {
     const newTxs = await getTransactions(syncedTill, toDate);
     await RbcStore.storeTransactions(newTxs, toDate);
     return [...txs, ...newTxs];
@@ -27,13 +24,13 @@ export async function fetchLatestTransactions()
 //
 // Get all transactions between from & to from bank acc
 //
-export async function getTransactions(from: Date, to=new Date(), accountNo=ApiAction.Credentials.accountNo) : Promise<RbcTransaction[]> {
+export async function getTransactions(from: Date, to = new Date(), accountNo = ApiAction.Credentials.accountNo): Promise<RbcTransaction[]> {
   const act = await ApiAction.New('getTransactions', true);
   const { page } = act;
 
   // newest possible date is yesterday
   const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate()-1);
+  maxDate.setDate(maxDate.getDate() - 1);
   to.setTime(Math.min(to.getTime(), maxDate.getTime()));
 
   // Go to CAD account
@@ -61,26 +58,30 @@ export async function getTransactions(from: Date, to=new Date(), accountNo=ApiAc
   if (!downloadButton)
     throw new Error('We have no download button');
 
-  const txs = await downloadTxCsv(act.page);
+  const asString = await downloadTxCsv(act.page);
 
   const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
   const toDateTime = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", RbcStore.Options);
+  const obj = await csv({
+    ignoreEmpty: true,
+    ignoreColumns: /field9/,
+    colParser: {
+      ["Transaction Date"]: toDateTime,
+      ["Cheque Number"]: maybeParse,
+      ["CAD$"]: maybeParse,
+      ["USD$"]: maybeParse,
+    }
+  }).fromString(asString);
 
-  const allLines = txs.trim().split('\n');
-  return allLines
-    .slice(1)
-    .map(line => line.split(','))  // Split into component pieces
-    .map((entry) : RbcTransaction =>  ({
-        AccountType: entry[0],
-        AccountNumber: entry[1],
-        TransactionDate: toDateTime(entry[2]),
-        ChequeNumber: maybeParse(entry[3]),
-        Description1: trimQuotes(entry[4]),
-        Description2: trimQuotes(entry[5]),
-        CAD: maybeParse(entry[6]),
-        USD: maybeParse(entry[7]),
-      })
-    )
+  // Remove spaces and '$' from names
+  const cleanName = (name: string) => name.replace(' ', '').replace('$', '')
+  return obj.map(o =>
+    Object.entries(o)
+      .reduce((r, et) => ({
+        ...r,
+        [cleanName(et[0])]: et[1]
+      }), {} as any)
+  )
 }
 
 /////////////////////////////////////////////////////////////
