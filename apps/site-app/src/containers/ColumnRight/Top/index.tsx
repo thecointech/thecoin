@@ -7,17 +7,19 @@ import styles from "./styles.module.less";
 export const ColumnRightTop = () => {
   
   let classForColumn = styles.columnRightTop;
+  let mobileMode = false;
   const windowDimension = getWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
   
   // If Small Screen / Mobile
   if (windowDimension.width <= breakpointTablet){
     classForColumn = styles.columnRightTopMobile;
+    mobileMode = true;
   }
 
   return (
     <div className={classForColumn}>
-        <BalanceAndProfit />
+        <BalanceAndProfit Mobile={mobileMode} />
     </div>
   )
 }

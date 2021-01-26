@@ -8,11 +8,19 @@ import styles from "./styles.module.less";
   { key: 3, class: 'FR', toTranslate: "fr" },
   { key: 4, class: 'FR', toTranslate: "fr" },
 ];*/
+export type Props = {
+  Mobile: boolean;
+}
 
-export const ClimateImpact = () => {
+
+export const ClimateImpact = (props:Props) => {
+  let classForContainer = "";
+  if (props.Mobile === true){
+    classForContainer = styles.mobile;
+  }
   //const { locale } = useSelector(selectLocale);
   return (
-    <div className={ `${styles.climateImpact} ${styles.earth}` }>
+    <div className={ `${styles.climateImpact} ${classForContainer} ${styles.water}` }>
         <Header as="h5">
             Climate Impact
         </Header>

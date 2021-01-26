@@ -7,17 +7,19 @@ import styles from "./styles.module.less";
 export const ColumnRightBottom = () => {
 
   let classForColumn = styles.columnRightBottom;
+  let mobileMode = false;
   const windowDimension = getWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
   
   // If Small Screen / Mobile
   if (windowDimension.width <= breakpointTablet){
     classForColumn = styles.columnRightBottomMobile;
+    mobileMode = true;
   }
 
   return (
     <div className={classForColumn}>
-        <ClimateImpact />
+        <ClimateImpact Mobile={mobileMode} />
     </div>
   )
 }
