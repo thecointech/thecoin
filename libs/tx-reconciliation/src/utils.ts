@@ -3,6 +3,9 @@ import { DateTime } from "luxon"
 import { Reconciliations } from "./types";
 import { knownIssues } from './data/manual.json';
 
+export const compareByDate = <K extends PropertyKey>(key: K) =>
+  (l: Record<K, DateTime>, r: Record<K, DateTime>) => l[key].toMillis() - r[key].toMillis();
+
 export const compareByClosestTo = <K extends PropertyKey>(key: K, date: DateTime) =>
   (l: Record<K, DateTime>, r: Record<K, DateTime>) =>
     Math.abs(l[key].diff(date).milliseconds) - Math.abs(r[key].diff(date).milliseconds)
