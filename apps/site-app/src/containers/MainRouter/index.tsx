@@ -9,8 +9,8 @@ import { Accounts } from 'containers/Accounts';
 import { AddAccount } from 'containers/AddAccount';
 import { Congratulations } from 'containers/AddAccount/Congratulations';
 import { GAuth } from 'containers/StoreOnline/Google/gauth';
-import { MapMenuItems, SidebarMenuItem } from '@the-coin/shared/containers/PageSidebar/types';
 import { RUrl } from '@the-coin/utilities/RUrl';
+import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
 
 export const MainRouter = (props: { location: Location }) => {
 
@@ -73,9 +73,6 @@ export const MainRouter = (props: { location: Location }) => {
       sidebar.addGenerator(SIDEBAR_KEY, generateSidebarItems);
       return () => sidebar.removeGenerator(SIDEBAR_KEY);
     }, [sidebar])
-
-
-
 
   return (
     <Switch location={props.location}>
