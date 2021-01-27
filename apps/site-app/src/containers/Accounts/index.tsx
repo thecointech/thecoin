@@ -31,31 +31,31 @@ const AccountRoutes: RouterPath[] = [
     name: 'Deposit Instructions',
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
-    icon: "home",
+    icon: "arrow circle up",
   },
   {
     name: 'Send an e-Transfer',
     urlFragment: 'redeem',
     creator: (routerProps: AccountPageProps) => ((props) => <Redeem {...props} account={routerProps.account} />),
-    icon: "home",
+    icon: "arrow circle right",
   },
   {
     name: 'Transfer',
     urlFragment: 'transfer',
     creator: (routerProps: AccountPageProps) => ((props) => <Transfer {...props} account={routerProps.account} />),
-    icon: "home",
+    icon: "arrow circle right",
   },
   {
     name: 'Pay Bills',
     urlFragment: 'billPay',
     creator: (routerProps: AccountPageProps) => ((props) => <BillPayments {...props} account={routerProps.account} />),
-    icon: "home",
+    icon: "arrow circle right",
   },
   {
     name: 'Settings',
     urlFragment: 'settings',
     creator: (routerProps: AccountPageProps) => ((props) => <Settings {...props} account={routerProps.account} />),
-    icon: "home",
+    icon: "setting",
   },
 ];
 
