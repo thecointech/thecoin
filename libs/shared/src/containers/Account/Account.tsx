@@ -11,10 +11,12 @@ import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
 import { isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@the-coin/utilities";
+import { SemanticICONS } from "semantic-ui-react";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
   name: string;
+  icon?: SemanticICONS;
   urlFragment: string;
   creator: PageCreator;
   exact?: boolean;
@@ -43,12 +45,8 @@ export const Account = (props: Props) => {
   );
 
   const sidebar = useSidebar();
-  useEffect(() => {
-    if (!isWallet(signer)) {
-      if (signer !== null)
-            sidebar.addGenerator(account.name, sidebarCb);
-    }
-
+  useEffect(() => { 
+    sidebar.addGenerator(account.name, sidebarCb);
     // Is this a remote account?
     if (signer && !isWallet(signer) && !signer.provider) {
       connectSigner(account, accountActions);
@@ -78,7 +76,7 @@ export const Account = (props: Props) => {
     account: account,
     actions: accountActions
   };
-
+  
   return (
     <Switch>
       {accountMap.map(item => {
@@ -125,7 +123,8 @@ const generateSubItems = (
       {
         link: {
           name: item.name,
-          to: BuildLink(item, url)
+          to: BuildLink(item, url),
+          icon: item.icon
         }
       })
     );

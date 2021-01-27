@@ -12,44 +12,56 @@ import { BillPayments } from './BillPayments';
 
 const AccountRoutes: RouterPath[] = [
   {
-    name: 'Balance',
+    name: 'Profile',
+    icon: "home",
+    urlFragment: '',
+    creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
+  },
+  {
+    name: 'Home',
     urlFragment: '',
     creator: (routerProps: AccountPageProps) => ((props) => <Balance {...props} {...routerProps} />),
     exact: true,
+    icon: "home",
   },
   {
     name: 'Deposit Instructions',
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
+    icon: "home",
   },
   {
     name: 'Send an e-Transfer',
     urlFragment: 'redeem',
     creator: (routerProps: AccountPageProps) => ((props) => <Redeem {...props} account={routerProps.account} />),
+    icon: "home",
   },
   {
     name: 'Transfer',
     urlFragment: 'transfer',
     creator: (routerProps: AccountPageProps) => ((props) => <Transfer {...props} account={routerProps.account} />),
+    icon: "home",
   },
   {
     name: 'Pay Bills',
     urlFragment: 'billPay',
     creator: (routerProps: AccountPageProps) => ((props) => <BillPayments {...props} account={routerProps.account} />),
+    icon: "home",
   },
   {
     name: 'Settings',
     urlFragment: 'settings',
     creator: (routerProps: AccountPageProps) => ((props) => <Settings {...props} account={routerProps.account} />),
+    icon: "home",
   },
 ];
 
 export const Accounts = (props: RouteComponentProps) => {
-    const activeAccount = useActiveAccount();
-    const { match } = props;
-    const { url } = match;
-
-    return (!activeAccount)
-      ? <Redirect to="/addAccount" />
-      : <Account account={activeAccount} accountMap={AccountRoutes} url={url} />;
+  const activeAccount = useActiveAccount();
+  const { match } = props;
+  const { url } = match;
+  
+  return (!activeAccount)
+    ? <Redirect to="/addAccount" />
+    : <Account account={activeAccount} accountMap={AccountRoutes} url={url} />;
 }
