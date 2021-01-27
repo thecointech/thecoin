@@ -11,10 +11,9 @@ export const MainRouter = (props: { location: Location }) => {
   return (
     <Switch location={props.location}>
       <Route path="/gauth" component={GAuth} />
-      <Route path="/" exact component={Accounts} />
       <Route path="/addAccount" component={AddAccount} />
-      <Route path="/accounts" component={Accounts} />
       <Route path="/congratulations" component={Congratulations} />
+      <Route path="/" component={Accounts} />
     </Switch>
   )
 }
