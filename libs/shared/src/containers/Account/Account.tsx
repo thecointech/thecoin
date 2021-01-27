@@ -16,10 +16,11 @@ import { SemanticICONS } from "semantic-ui-react";
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
   name: string;
-  icon?: SemanticICONS;
-  urlFragment: string;
+  urlFragment?: string;
   creator: PageCreator;
   exact?: boolean;
+  icon?: SemanticICONS;
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
 };
 
 interface Props {
@@ -76,20 +77,24 @@ export const Account = (props: Props) => {
     account: account,
     actions: accountActions
   };
-  
+  console.log(account)
   return (
     <Switch>
       {accountMap.map(item => {
         const component = item.creator(accountArgs);
-        const targetUrl = BuildLink(item, props.url).toString();
-        return (
-          <Route
-            path={targetUrl}
-            key={targetUrl}
-            render={component}
-            exact={item.exact}
-          />
-        );
+        if (item.urlFragment){
+          const targetUrl = BuildLink(item, props.url).toString();
+          return (
+            <Route
+              path={targetUrl}
+              key={targetUrl}
+              render={component}
+              exact={item.exact}
+            />
+          );
+        } else {
+          return "";
+        }
       })}
       <Route component={NotFoundPage} />
     </Switch>
@@ -108,8 +113,12 @@ const connectSigner = async (accountState: AccountState, accountActions: IAction
   }
 }
 
-const BuildLink = (item: RouterPath, url: string) =>
-  new RUrl(url, item.urlFragment);
+const BuildLink = (item: RouterPath, url: string) => {
+  if (item.urlFragment){
+    return new RUrl(url, item.urlFragment);
+  }
+  return false;
+}
 
 const generateSubItems = (
   props: Props,
@@ -123,8 +132,9 @@ const generateSubItems = (
       {
         link: {
           name: item.name,
-          to: BuildLink(item, url),
-          icon: item.icon
+          to: BuildLink(item, url)  ? BuildLink(item, url)  : false,
+          icon: item.icon,
+          header: item.header,
         }
       })
     );

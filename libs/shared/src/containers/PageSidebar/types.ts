@@ -7,7 +7,7 @@ import { SemanticICONS } from 'semantic-ui-react';
 /* --- STATE --- */
 export interface SidebarMenuLink {
   name: string;
-  to: RUrl | false;
+  to: RUrl | boolean;
   icon?: SemanticICONS;
   header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
 }
@@ -15,6 +15,8 @@ export interface SidebarMenuLink {
 export interface SidebarMenuItem {
   link: SidebarMenuLink;
   subItems?: SidebarMenuItem[];
+  icon?: SemanticICONS;
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
 }
 
 // Sidebar does not directly recieve state: instead;
