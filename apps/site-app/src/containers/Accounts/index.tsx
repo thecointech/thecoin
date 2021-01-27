@@ -12,15 +12,6 @@ import { BillPayments } from './BillPayments';
 
 const AccountRoutes: RouterPath[] = [
   {
-    name: 'Profile',
-    icon: "home",
-    urlFragment: '',
-    header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
-                  primaryDescription: "The quick brown fox jumps over the lazy dog.", 
-                  secondaryDescription: "Description2" },
-    creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
-  },
-  {
     name: 'Home',
     urlFragment: '/',
     creator: (routerProps: AccountPageProps) => ((props) => <Balance {...props} {...routerProps} />),
@@ -63,7 +54,27 @@ export const Accounts = (props: RouteComponentProps) => {
   const activeAccount = useActiveAccount();
   const { match } = props;
   const { url } = match;
-  
+
+  if (activeAccount){
+    if (!AccountRoutes[0].header){
+      AccountRoutes.unshift(
+        {
+          name: 'Profile',
+          icon: "home",
+          urlFragment: '',
+          header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
+                    primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
+                    secondaryDescription: "Description2" },
+          creator: (routerProps: AccountPageProps) => ((props) => <Balance {...props} {...routerProps} />),
+      });
+    } else {
+      AccountRoutes[0].header = { 
+        avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
+        primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
+        secondaryDescription: "Description2" };
+    }
+  }
+
   return (!activeAccount)
     ? <Redirect to="/addAccount" />
     : <Account account={activeAccount} accountMap={AccountRoutes} url={url} />;
