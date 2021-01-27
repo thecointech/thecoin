@@ -66,7 +66,7 @@ export const Accounts = (props: RouteComponentProps) => {
       });
     } else {
       AccountRoutes[0].header = { 
-        avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
+        avatar: "http://cdn.akc.org/content/hero/pyr_pup_hero.jpg", 
         primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
         secondaryDescription: "Description2" };
     }
