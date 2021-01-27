@@ -60,12 +60,9 @@ export const Accounts = (props: RouteComponentProps) => {
       AccountRoutes.unshift(
         {
           name: 'Profile',
-          icon: "home",
-          urlFragment: '',
           header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
                     primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
                     secondaryDescription: "Description2" },
-          creator: (routerProps: AccountPageProps) => ((props) => <Balance {...props} {...routerProps} />),
       });
     } else {
       AccountRoutes[0].header = { 

@@ -17,7 +17,7 @@ export type PageCreator = (props: AccountPageProps) => (props: any) => React.Rea
 export type RouterPath = {
   name: string;
   urlFragment?: string;
-  creator: PageCreator;
+  creator?: PageCreator;
   exact?: boolean;
   icon?: SemanticICONS;
   header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
@@ -77,12 +77,11 @@ export const Account = (props: Props) => {
     account: account,
     actions: accountActions
   };
-  console.log(account)
   return (
     <Switch>
       {accountMap.map(item => {
-        const component = item.creator(accountArgs);
-        if (item.urlFragment){
+        if (item.urlFragment && item.creator){
+          const component = item.creator(accountArgs);
           const targetUrl = BuildLink(item, props.url).toString();
           return (
             <Route
