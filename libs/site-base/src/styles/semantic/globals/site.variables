@@ -8,6 +8,11 @@
 
 @pageBackground      : @white;
 @maxContentWidth: 1440px;
+/* --- Same values than ResponsiveTool --- */
+@smallerThanComputer: 768;
+@computer: 1024;
+@largeScreen: 1192;
+@widescreen: 1920;
 
 /*-------------------
        Fonts
