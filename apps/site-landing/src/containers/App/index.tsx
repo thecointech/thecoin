@@ -13,7 +13,6 @@ import { useLocation } from 'react-router';
 
 import MainNavigation from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
-import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
 import { usePrismic } from 'components/Prismic/reducer';
@@ -39,13 +38,11 @@ export const App = () => {
         </div>
 
         <Container className={styles.appContainer}>
-          <PageSidebar>
-            <MainPageTransition location={location}>
-              <section id={styles.mainContent} className={styles.pageMainInner}>
-                <MainRouter />
-              </section>
-            </MainPageTransition>
-          </PageSidebar>
+          <MainPageTransition location={location}>
+            <section id={styles.mainContent} className={styles.pageMainInner}>
+              <MainRouter />
+            </section>
+          </MainPageTransition>
         </Container>
         <Footer />
       </MediaContextProvider>
