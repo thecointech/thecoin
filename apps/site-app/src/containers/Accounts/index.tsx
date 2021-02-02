@@ -3,7 +3,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Account, RouterPath } from '@the-coin/shared/containers/Account';
 import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { HomePage } from '../HomePage';
 import { Redeem } from './Redeem';
 import { Transfer } from './Transfer';
 import { Settings } from './Settings';
@@ -14,7 +14,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: 'Home',
     urlFragment: '/',
-    creator: (routerProps: AccountPageProps) => ((props) => <Balance {...props} {...routerProps} />),
+    creator: (routerProps: AccountPageProps) => ((props) => <HomePage {...props} {...routerProps} />),
     exact: true,
     icon: "home",
   },
