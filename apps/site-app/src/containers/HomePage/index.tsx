@@ -9,25 +9,18 @@
  * the linting exception.
  */
 import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
 import { BenefitsGraph } from 'containers/BenefitsGraph';
 
 import * as React from 'react';
-import { Header } from 'semantic-ui-react';
-import styles from "./styles.module.less";
 
 
 export const HomePage = (props: any, routerProps:AccountPageProps) => {
 
   return (
     <React.Fragment>
-        <div>
-          <BenefitsGraph />
-          <div className={styles.recentOperations}>
-            <Header as="h5">Recent Operations</Header>
-              <Balance {...props} {...routerProps} />
-          </div>
-        </div>
+      <BenefitsGraph />
+      <RecentTransactions {...props} {...routerProps} />
     </React.Fragment>
   );
 }

@@ -7,7 +7,7 @@ export const BenefitsGraph = () => {
 
   return (
     <React.Fragment>
-        <div className={ `x6spaceBefore ${styles.graphBackground}` }>
+        <div className={ ` ${styles.graphBackground}` }>
           <Header as="h5">
             Graph
           </Header>
