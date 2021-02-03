@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { Button, Header } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { AccountPageProps } from "../Account/types";
 import { TransactionHistory } from "../TransactionHistory";
 import { selectFxRate } from "../FxRate/selectors";
@@ -28,7 +28,6 @@ export const RecentTransactions = ({ account, actions }: AccountPageProps) => {
     <React.Fragment>
       <div className={ `x6spaceBefore x6spaceAfter appContainer`}>
         <Header as="h5"><FormattedMessage {...title} /></Header>
-        <Button onClick={doUpdateBalance}>Update Balance</Button>
 
         <TransactionHistory
           transactions={history}

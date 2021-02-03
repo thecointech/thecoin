@@ -132,8 +132,8 @@ export const Login = (props: Props) => {
 
   return (
     <>
-      <div className={`${styles.wrapper} appContainer x6spaceAfter x6spaceBefore`}>
-        <Header as='h5' className={ `x8spaceBefore` }>
+      <div className={`${styles.wrapper} appContainer x6spaceAfter`}>
+        <Header as='h5' className={ `x4spaceBefore` }>
           <FormattedMessage {...aboveTheTitle}/>
         </Header>
         <Header as="h2" className={ `x4spaceBefore` }>
