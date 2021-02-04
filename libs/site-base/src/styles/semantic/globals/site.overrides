@@ -33,6 +33,10 @@ body {
   font-weight: @bold;
 }
 
+.write-vertical{
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
 
 /////////////////////////////////////////////////////////////
 // Links

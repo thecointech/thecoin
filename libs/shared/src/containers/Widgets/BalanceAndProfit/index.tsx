@@ -54,7 +54,7 @@ export const BalanceAndProfit = (props:Props) => {
 
 
   return (
-    <div className={ `${styles.balanceAndProfit} ${classForContainer} x2spaceAfter` }>
+    <div className={ `${styles.balanceAndProfit} ${classForContainer} x2spaceAfter appContainer` }>
         <Header as="h5">
             Balance
         </Header>

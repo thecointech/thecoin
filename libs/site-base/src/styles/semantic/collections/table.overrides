@@ -2,7 +2,17 @@
          Site Overrides
 *******************************/
 
-
-.ui.table tr td{
-    border: 1px solid red !important;
+.ui[class*="very basic"].table:not(.sortable):not(.striped) th, .ui[class*="very basic"].table:not(.sortable):not(.striped), .ui.table tr{
+    border: 1px solid @theCoinPalettePaleGreen2 !important;
+    border-radius: 2px;
+    td {
+        &.moneyNegative{
+            color: @theCoinPaletteRed2 !important;
+            font-size: @fontSizeBig !important;
+        }
+        &.moneyPositive{
+            color: @theCoinPalettePaleGreen2 !important;
+            font-size: @fontSizeBig !important;
+        }
+    }
 }
