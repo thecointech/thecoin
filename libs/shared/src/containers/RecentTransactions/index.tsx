@@ -5,7 +5,7 @@ import { AccountPageProps } from "../Account/types";
 import { TransactionHistory } from "../TransactionHistory";
 import { selectFxRate } from "../FxRate/selectors";
 import { FormattedMessage } from "react-intl";
-
+import styles from './styles.module.less';
 
 const title = { id:"shared.balance.title",
                 defaultMessage:"Recent Operations",
@@ -26,7 +26,7 @@ export const RecentTransactions = ({ account, actions }: AccountPageProps) => {
 
   return (
     <React.Fragment>
-      <div className={ `x6spaceBefore x6spaceAfter appContainer`}>
+      <div className={ `x6spaceBefore x6spaceAfter appContainer ${styles.recentTransactionsContainer}`}>
         <Header as="h5"><FormattedMessage {...title} /></Header>
 
         <TransactionHistory

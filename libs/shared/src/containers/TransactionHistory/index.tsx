@@ -11,6 +11,7 @@ import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconBank from "./images/icon_bank.svg";
 
+import styles from './styles.module.less';
 
 type MyProps = {
   transactions: Transaction[];
@@ -103,15 +104,28 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       const monthTodisplay = tx.date.toLocaleString(this.locale, { month: 'short' });
       const yearToDisplay = tx.date.getUTCFullYear();
       const dayToDisplay = tx.date.getUTCDate();
+      const timeToDisplay = tx.date.toLocaleTimeString(this.locale,{ hour: '2-digit', minute: '2-digit' }); 
       //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
       //{tx.logEntry}
       return (
         <Table.Row key={index}>
-          <Table.Cell width={2} textAlign='center'><span className={"font-small"}>{yearToDisplay}</span><br /><span className={"font-bold"}>{monthTodisplay}</span><br /><span className={"font-big"}>{dayToDisplay}</span></Table.Cell>
+          <Table.Cell width={2} textAlign='center'>
+            <div className={`${styles.dateInTable}`}>
+              <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
+              <div className={"font-bold"}>{monthTodisplay}</div>
+              <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
+            </div>
+          </Table.Cell>
           <Table.Cell width={1}><img src={imgForLine} /></Table.Cell>
-          <Table.Cell width={6}>{contentForComment}</Table.Cell>
-          <Table.Cell width={4} textAlign='right' className={classForMoneyCell}>{changeCad} $</Table.Cell>
-          <Table.Cell width={4}>${balanceCad}</Table.Cell>
+          <Table.Cell width={8}>
+            <div>{contentForComment}</div>
+            <span className={`font-small font-green font-bold`}>To</span> <span className={`font-grey-06`}>Test content</span>
+          </Table.Cell>
+          <Table.Cell width={3} textAlign='right' className={classForMoneyCell}>
+            <div>{changeCad} $</div>
+            <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
+          </Table.Cell>
+          <Table.Cell width={3}>${balanceCad}</Table.Cell>
         </Table.Row>
     )});
 
