@@ -1,7 +1,7 @@
 import { GetContract } from "@the-coin/contract";
 import { RbcApi } from "@the-coin/rbcapi";
 import { FXRate, weBuyAt } from "@the-coin/shared/containers/FxRate";
-import { matchAll, readCache, fetchAllRecords, writeCache, Reconciliations } from "@the-coin/tx-reconciliation";
+import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@the-coin/tx-reconciliation";
 import { toHuman } from "@the-coin/utilities";
 import { Contract } from "ethers";
 import { BigNumber } from "ethers/utils";
@@ -18,11 +18,11 @@ export async function getAllUserData(fxRates: FXRate[]) {
 }
 
 async function getRawData() {
-  let data = readCache();
+  let data = readDataCache();
   if (data == null) {
     const api = new RbcApi();
     data = await fetchAllRecords(api)
-    writeCache(data);
+    writeDataCache(data);
   }
   return data;
 }
