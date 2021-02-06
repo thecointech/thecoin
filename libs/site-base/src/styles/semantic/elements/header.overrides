@@ -43,5 +43,8 @@ h5.ui.header.appTitles{
 
 h5.ui.header .sub.header{
     text-transform: none;
-    letter-spacing: auto;
+    letter-spacing: normal;
+    color: @theCoinPaletteGray1;
+    font-size: @fontSize;
+    margin-top: 20px;
 }
