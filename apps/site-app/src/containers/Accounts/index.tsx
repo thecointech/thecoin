@@ -4,11 +4,9 @@ import { Account, RouterPath } from '@the-coin/shared/containers/Account';
 import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { HomePage } from '../HomePage';
-import { Redeem } from './Redeem';
-import { Transfer } from './Transfer';
 import { Settings } from './Settings';
 import { Purchase } from './Purchase';
-import { BillPayments } from './BillPayments';
+import { MakePayments } from 'containers/MakePayments';
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -19,27 +17,15 @@ const AccountRoutes: RouterPath[] = [
     icon: "home",
   },
   {
-    name: 'Deposit Instructions',
+    name: 'Top up balance',
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
     icon: "arrow circle up",
   },
   {
-    name: 'Send an e-Transfer',
-    urlFragment: 'redeem',
-    creator: (routerProps: AccountPageProps) => ((props) => <Redeem {...props} account={routerProps.account} />),
-    icon: "arrow circle right",
-  },
-  {
-    name: 'Transfer',
-    urlFragment: 'transfer',
-    creator: (routerProps: AccountPageProps) => ((props) => <Transfer {...props} account={routerProps.account} />),
-    icon: "arrow circle right",
-  },
-  {
-    name: 'Pay Bills',
-    urlFragment: 'billPay',
-    creator: (routerProps: AccountPageProps) => ((props) => <BillPayments {...props} account={routerProps.account} />),
+    name: 'Make payments',
+    urlFragment: 'makepayments',
+    creator: (routerProps: AccountPageProps) => ((props) => <MakePayments {...props} {...routerProps} />),
     icon: "arrow circle right",
   },
   {
