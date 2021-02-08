@@ -19,7 +19,7 @@ export type ObsoleteRecords = Dictionary<ObsoleteRecord[]>;
 export async function getAllFromFirestoreObsolete() : Promise<ObsoleteRecords>{
 
   const users = await fetchAllUsers();
-  const everything = await fetchDBRecords(users, "Purchase" as any);
+  const everything = await fetchDBRecords(users, "Purchase");
   return everything;
 }
 

@@ -1,3 +1,5 @@
+// file deepcode ignore no-namespace: must match src API
+
 import emaillist from './emails.list.json';
 import emailget from './emails.get.json';
 
@@ -8,7 +10,7 @@ export namespace google {
 
   export namespace auth {
     export class OAuth2 {
-      public credentials: any;
+      public credentials: object|undefined;
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {

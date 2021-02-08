@@ -23,7 +23,7 @@ export async function initializeApi(auth: OAuth2Client) {
 
   __gmail = google.gmail({ version: 'v1', auth });
 
-  let response = await __gmail.users.labels.list({
+  const response = await __gmail.users.labels.list({
     userId: "me"
   })
   const labels = response.data.labels;
@@ -34,7 +34,7 @@ export async function initializeApi(auth: OAuth2Client) {
   for (const label of labels) {
     const k = keys.find(k => label.name?.endsWith(k));
     if (k) {
-      const kf: keyof Labels = k as any;
+      const kf = k as keyof Labels;
       __labels[kf] = label.id ?? null;
     }
   }
@@ -55,12 +55,12 @@ export async function fetchEmailIds(options: gmail_v1.Params$Resource$Users$Mess
 }
 
 // Convert the email Ids to emails
-export async function fetchEmails(ids: (string | undefined | null)[]) {
+export async function fetchEmails(ids: Array<string | undefined | null>) {
   const gmail = getGmail();
   const emailPending = ids
     .filter(isPresent)
     .map(id => gmail.users.messages.get({
-      id: id,
+      id,
       userId: 'me',
     })
     )

@@ -6,6 +6,8 @@ import { join } from "path";
 import { AllData, Reconciliations } from "./types";
 import {log} from '@the-coin/logging';
 
+// file deepcode ignore no-any: JSON processing is basically all 'any'
+
 export const cacheFullPath = (path?: string) =>
   path ?? process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
 const DATA_CACHE_NAME = 'data.cache.json';

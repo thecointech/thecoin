@@ -10,7 +10,7 @@ export async function AddSettlementDate(record: BaseTransactionRecord, fxApi: IF
   const recievedAt = record.recievedTimestamp.toDate()
   const nextOpen = await NextOpenTimestamp(recievedAt);
   if (nextOpen < Date.now()) {
-    const r = fxApi.fetchRateAtDate(new Date(nextOpen)) as any;
+    const r = fxApi.fetchRateAtDate(new Date(nextOpen));
     if (r?.next)
       r.next();
   }

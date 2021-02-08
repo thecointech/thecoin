@@ -21,7 +21,7 @@ export async function fetchETransfers(query?: string): Promise<eTransferData[]> 
 
   await initialize();
 
-  let result = [] as eTransferData[];
+  const result = [] as eTransferData[];
   let pageToken: string | undefined = undefined;
 
   const q = query ?? 'REDIRECT INTERAC -remember';
@@ -38,7 +38,8 @@ export async function fetchETransfers(query?: string): Promise<eTransferData[]> 
       .filter(isPresent);
 
     result.push(...deposits)
-    pageToken = nextPageToken as any; // crazy compiler bug!  Somehow became circular type dep no matter how much explicit typing
+    //  deepcode ignore no-any: crazy compiler bug!  Somehow became circular type dep no matter how much explicit typing
+    pageToken = nextPageToken as any;
 
   } while (pageToken !== undefined)
 

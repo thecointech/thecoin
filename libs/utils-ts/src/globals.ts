@@ -1,13 +1,15 @@
+import { Firestore } from '@the-coin/types';
 import { Wallet } from 'ethers';
 
 type TheCoinGlobals = {
-  firestore: any;
+  firestore: Firestore|null;
   wallets: {
     [name: string]: Wallet;
   }
 }
 declare global {
   namespace globalThis {
+    //  deepcode ignore no-var-keyword: var is necessary for this typing to work
     var __thecoin: TheCoinGlobals
   }
 }
