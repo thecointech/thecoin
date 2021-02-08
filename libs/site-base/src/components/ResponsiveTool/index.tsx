@@ -2,14 +2,17 @@ import { createMedia } from "@artsy/fresnel";
 import React from "react";
 import { Segment } from "semantic-ui-react";
 
+export const breakpointsValues = {
+  mobile: 0,
+  tablet: 768,
+  computer: 1024,
+  largeScreen: 1192,
+  widescreen: 1920
+};
+
+
 export const appMedia = createMedia({
-    breakpoints: {
-      mobile: 320,
-      tablet: 768,
-      computer: 992,
-      largeScreen: 1200,
-      widescreen: 1920
-    }
+    breakpoints: breakpointsValues
   });
 export const mediaStyles = appMedia.createMediaStyle();
   

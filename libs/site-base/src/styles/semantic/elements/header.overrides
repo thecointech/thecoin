@@ -8,26 +8,32 @@ each(@lineHeights, {
   }
 });
 
+
+  h1.ui.header .sub.header, h2.ui.header .sub.header, h3.ui.header .sub.header{
+    font-family: @pageFont;
+    font-size: @fontSizeBig;
+    line-height: 30px;
+  }
+  
+
 @media only screen and (max-width: 768px) {
   h1.ui.header {
     font-size: @h1Mobile;
   }
   h2, h2.ui.header {
     font-size: @h2Mobile;
-    padding-bottom: 20px;
   }
   h3, h3.ui.header {
     font-size: @h3Mobile;
-    padding-bottom: 20px;
   }
 }
 
-// TODO: verify these padding values
-h2, h2.ui.header {
-  padding-bottom: 30px;
-}
-
 h5.ui.header{
+  font-family: @pageFont;
   letter-spacing: 0.33em;
   text-transform: uppercase; // not set as a variable because only applies to H5
+}
+
+h5.ui.header.appTitles{
+  color: @theCoinPalettePaleGreen2;
 }

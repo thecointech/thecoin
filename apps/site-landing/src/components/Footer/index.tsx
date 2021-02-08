@@ -1,41 +1,30 @@
 import React from 'react';
 
+import { Subscribe } from '../../containers/Subscribe';
+import { FooterShared } from '@the-coin/site-base/containers/FooterShared';
+import getWindowDimensions from '@the-coin/site-base/components/WindowDimensions';
+import { breakpointsValues } from '@the-coin/site-base/components/ResponsiveTool';
+
 import styles from './styles.module.less';
 
-import { Subscribe } from '../../containers/Subscribe';
-import { FormattedMessage } from 'react-intl';
-import { Grid } from 'semantic-ui-react';
+export const Footer = () => {
 
-import facebook from './images/facebook.svg';
-import twitter from './images/twitter.svg';
-import instagram from './images/instagram.svg';
+  const windowDimension = getWindowDimensions();
+  const breakpointTablet = breakpointsValues.tablet;
 
+  let classForContainer = styles.desktopContent;
+  let mobileForSubscribe = false;
 
-const registered = {  id:"site.footer.registered",
-                      defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
-                      description:"Registered Non profit phrase in footer"};
+  // If Small Screen / Mobile
+  if (windowDimension.width <= breakpointTablet){
+    classForContainer = styles.mobileContent;
+    mobileForSubscribe = true;
+  }
 
-const copyright = {   id:"site.footer.copyright",
-                      defaultMessage:"© Copyright 2020. TheCoin. All Right Reserved.",
-                      description:"Copyright phrase in footer"};
-
-export default () => (
-  <div id={styles.footerContainer}>
-      <Subscribe />
-      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable >
-        <Grid.Row>
-          <Grid.Column>
-            <FormattedMessage {...registered} />
-          </Grid.Column>
-          <Grid.Column>
-            <img src={facebook} />
-            <img src={twitter} />
-            <img src={instagram} />
-          </Grid.Column>
-          <Grid.Column>
-            <FormattedMessage {...copyright} />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-  </div>
-);
+  return (
+    <div id={styles.footerContainer} className={classForContainer}>
+        <Subscribe Mobile={mobileForSubscribe} />
+        <FooterShared />
+    </div>
+  );
+}

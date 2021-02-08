@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Wallet } from 'ethers';
-import { Button, Header, Form } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
@@ -8,23 +8,28 @@ import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
 import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import messages from '../messages';
 
 import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
-const aboveTheTitle = { id:"site.Account.create.form.aboveTheTitle",
-                        defaultMessage:"First Step",
+const aboveTheTitle = { id:"app.account.create.form.aboveTheTitle",
+                        defaultMessage:"Second Step",
                         description:"Title above the main Title for the create account form page"};
-const title = { id:"site.Account.create.form.title",
+const title = { id:"app.account.create.form.title",
                 defaultMessage:"Create your Account",
                 description:"Title above the main Title for the create account form page"};
-const buttonCreate = {  id:"site.Account.create.form.button",
+const buttonCreate = {  id:"app.account.create.form.button",
                         defaultMessage:"Create Account",
                         description:"Button for the create account form page"};
+
+const whileCreatingHeader = { id: `app.account.create.whileCreatingHeader`,
+                              defaultMessage: 'Creating Account...',};
+const whileCreatingMessage = { id: `app.account.create.whileCreatingMessage`,
+                                defaultMessage: "We are {percentComplete}% done cooking your brand-new account."};
 
 export const Generate = (props: RouteComponentProps) => {
 
@@ -70,31 +75,35 @@ export const Generate = (props: RouteComponentProps) => {
   //   : onComplete
 
   return (
-    <React.Fragment>
-      <Form className={styles.content}>
-        <Header as="h5">
-            <FormattedMessage {...aboveTheTitle} />
-        </Header>
-        <Header as="h2">
-          <FormattedMessage {...title} />
-        </Header>
-        <div className={`container ui`}><NameInput forceValidate={forceValidate} setName={setName}/></div>
+    <div className={`${styles.wrapper}`}>
+      <Header as="h5" className={`x8spaceBefore `}>
+          <FormattedMessage {...aboveTheTitle} />
+      </Header>
+      <Header as="h2">
+        <FormattedMessage {...title} />
+      </Header>
+      <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
+        <div className={`container ui`}>
+          <NameInput forceValidate={forceValidate} setName={setName}/>
+        </div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
-        <div className={`container ui`}><ReferralInput forceValidate={forceValidate} setReferral={setReferral} /></div>
-        <Button className={`x8spaceBefore`} onClick={onGenerate} primary size="big">
+        <div className={`container ui`}>
+          <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
+        </div>
+        <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="medium">
           <FormattedMessage {...buttonCreate} />
-        </Button>
+        </ButtonPrimary>
         <Decoration />
       </Form>
       <ModalOperation
         cancelCallback={setCancelled}
         //okCallback={cbOk}
         isOpen={progress !== undefined}
-        header={messages.whileCreatingHeader}
+        header={whileCreatingHeader}
         progressPercent={progress!}
-        progressMessage={messages.whileCreatingMessage}
+        progressMessage={whileCreatingMessage}
       />
-    </React.Fragment>
+    </div>
   );
 }
 

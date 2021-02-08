@@ -2,7 +2,7 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 
 
-const dropbox = { id:"site.storeOnline.dropbox.link", 
+const dropbox = { id:"app.storeOnline.dropbox.link", 
                 defaultMessage:"Dropbox",
                 description:"Title for Dropbox"};
 

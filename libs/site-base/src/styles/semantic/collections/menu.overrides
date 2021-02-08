@@ -2,6 +2,7 @@
          Site Overrides
 *******************************/
 .ui.text.menu{
+    margin:0;
     .item:not(button){
         border: none;
         margin-left: 10px;

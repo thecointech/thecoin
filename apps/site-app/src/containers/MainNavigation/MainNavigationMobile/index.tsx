@@ -1,22 +1,22 @@
 import React from 'react';
 import { Menu, Container, Dropdown } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { AccountSwitcher } from 'containers/AccountSwitcher';
+import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
 
-const home = { id:"site.MainNavigation.home",
+const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
-const indepth = { id:"site.MainNavigation.indepth",
+const indepth = { id:"app.MainNavigation.indepth",
                   defaultMessage:"In-depth",
                   description:"Title for the In-depth entry in the menu"};
-const wedomore = {  id:"site.MainNavigation.wedomore",
+const wedomore = {  id:"app.MainNavigation.wedomore",
                     defaultMessage:"We do more",
                     description:"Title for the We do more entry in the menu"};
-const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
+const yourbenefits = {  id:"app.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
 

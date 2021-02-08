@@ -371,237 +371,237 @@
   "sWeByE": {
     "defaultMessage": "We cannot detect a compatible account in this browser. If you would like to use an external account provider, we recommend installing Metamask or using the Opera Browser"
   },
-  "site.AccountSwitcher.MyAccounts": {
+  "app.accountSwitcher.MyAccounts": {
     "defaultMessage": "My Accounts",
     "description": "Title for the My Accounts title in the menu"
   },
-  "site.AccountSwitcher.addAccount": {
+  "app.accountSwitcher.addAccount": {
     "defaultMessage": "Add an Account",
     "description": "Title for the Add an Account in the menu"
   },
-  "site.AccountSwitcher.login": {
+  "app.accountSwitcher.login": {
     "defaultMessage": "LOG IN"
   },
-  "site.AccountSwitcher.see": {
+  "app.accountSwitcher.see": {
     "defaultMessage": "See",
     "description": "Title for the See in the menu"
   },
-  "site.AccountSwitcher.settings": {
+  "app.accountSwitcher.settings": {
     "defaultMessage": "Settings",
     "description": "Title for the Settings in the menu"
   },
-  "site.AccountSwitcher.signout": {
+  "app.accountSwitcher.signout": {
     "defaultMessage": "Sign Out",
     "description": "Title for the Sign Out in the menu"
   },
-  "site.MainNavigation.home": {
+  "app.MainNavigation.home": {
     "defaultMessage": "Home",
     "description": "Title for the Home entry in the menu"
   },
-  "site.MainNavigation.indepth": {
+  "app.MainNavigation.indepth": {
     "defaultMessage": "In-depth",
     "description": "Title for the In-depth entry in the menu"
   },
-  "site.MainNavigation.wedomore": {
+  "app.MainNavigation.wedomore": {
     "defaultMessage": "We do more",
     "description": "Title for the We do more entry in the menu"
   },
-  "site.MainNavigation.yourbenefits": {
+  "app.MainNavigation.yourbenefits": {
     "defaultMessage": "Your benefits",
     "description": "Title for the Your benefits entry in the menu"
   },
-  "site.NotFoundPage.aboveTheTitle": {
+  "app.NotFoundPage.aboveTheTitle": {
     "defaultMessage": "PAGE NOT FOUND",
     "description": "Text above the title for the 404 page"
   },
-  "site.NotFoundPage.button": {
+  "app.NotFoundPage.button": {
     "defaultMessage": "Home",
     "description": "Go back to homepage button for the 404 page"
   },
-  "site.NotFoundPage.title": {
+  "app.NotFoundPage.title": {
     "defaultMessage": "Sorry, we couldn’t find the page you are looking for",
     "description": "Title for the 404 page"
   },
-  "site.createAccountBanner.button": {
+  "app.createAccountBanner.button": {
     "defaultMessage": "Create Account",
     "description": "Create Account button for the create account banner for interior pages"
   },
-  "site.createAccountBanner.title": {
+  "app.createAccountBanner.title": {
     "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
     "description": "The benefits of a chequing, savings, and investing account all in one!"
   },
-  "site.footer.copyright": {
+  "app.footer.copyright": {
     "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
     "description": "Copyright phrase in footer"
   },
-  "site.footer.registered": {
+  "app.footer.registered": {
     "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
     "description": "Registered Non profit phrase in footer"
   },
-  "site.footer.subscribe.button": {
+  "app.footer.subscribe.button": {
     "defaultMessage": "Subscribe"
   },
-  "site.homepage.advantages.benefits": {
+  "app.homepage.advantages.benefits": {
     "defaultMessage": "Your benefits",
     "description": "Your benefits"
   },
-  "site.homepage.advantages.minimum": {
+  "app.homepage.advantages.minimum": {
     "defaultMessage": "Minimums",
     "description": "Minimums"
   },
-  "site.homepage.advantages.monthlyFees": {
+  "app.homepage.advantages.monthlyFees": {
     "defaultMessage": "Monthly Fees",
     "description": "Monthly Fees"
   },
-  "site.homepage.createAccountBig.button": {
+  "app.homepage.createAccountBig.button": {
     "defaultMessage": "Create Account",
     "description": "Create Account button for the big create account banner for the home pages"
   },
-  "site.homepage.createAccountBig.title": {
+  "app.homepage.createAccountBig.title": {
     "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
     "description": "Title"
   },
-  "site.homepage.createAccountSmall.button": {
+  "app.homepage.createAccountSmall.button": {
     "defaultMessage": "Create Account",
     "description": "Create Account button for the small create account banner for the home pages"
   },
-  "site.homepage.createAccountSmall.title": {
+  "app.homepage.createAccountSmall.title": {
     "defaultMessage": "TheCoin is a revolutionary new kind of account.",
     "description": "Title"
   },
-  "site.homepage.landscape.description": {
+  "app.homepage.landscape.description": {
     "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
     "description": "Description following the main title"
   },
-  "site.homepage.landscape.stickers.left.description": {
+  "app.homepage.landscape.stickers.left.description": {
     "defaultMessage": "Your money is always earning. Make it earn for you.",
     "description": "Description for left sticker"
   },
-  "site.homepage.landscape.stickers.left.link": {
+  "app.homepage.landscape.stickers.left.link": {
     "defaultMessage": "Learn More",
     "description": "Link name for left sticker"
   },
-  "site.homepage.landscape.stickers.left.title": {
+  "app.homepage.landscape.stickers.left.title": {
     "defaultMessage": "You’re Wealthier",
     "description": "Title for left sticker"
   },
-  "site.homepage.landscape.stickers.right.description": {
+  "app.homepage.landscape.stickers.right.description": {
     "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
     "description": "Description for left sticker"
   },
-  "site.homepage.landscape.stickers.right.link": {
+  "app.homepage.landscape.stickers.right.link": {
     "defaultMessage": "Learn More",
     "description": "Link name for right sticker"
   },
-  "site.homepage.landscape.stickers.right.title": {
+  "app.homepage.landscape.stickers.right.title": {
     "defaultMessage": "Earth’s Healthier",
     "description": "Title for right sticker"
   },
-  "site.homepage.landscape.title": {
+  "app.homepage.landscape.title": {
     "defaultMessage": "The future is brighter",
     "description": "The future is brighter"
   },
-  "site.homepage.underwater.description": {
+  "app.homepage.underwater.description": {
     "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
     "description": "Description for that part"
   },
-  "site.homepage.underwater.difference.description": {
+  "app.homepage.underwater.difference.description": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
     "description": "Description for that part"
   },
-  "site.homepage.underwater.difference.link": {
+  "app.homepage.underwater.difference.link": {
     "defaultMessage": "Compare Outcomes",
     "description": "Link name for that part"
   },
-  "site.homepage.underwater.difference.title": {
+  "app.homepage.underwater.difference.title": {
     "defaultMessage": "Make a Difference",
     "description": "Title for that part"
   },
-  "site.homepage.underwater.science.description": {
+  "app.homepage.underwater.science.description": {
     "defaultMessage": "Prove it? We’d love to!",
     "description": "Description for that part"
   },
-  "site.homepage.underwater.science.link": {
+  "app.homepage.underwater.science.link": {
     "defaultMessage": "Why We Can Be So Confident",
     "description": "Link name for that part"
   },
-  "site.homepage.underwater.science.title": {
+  "app.homepage.underwater.science.title": {
     "defaultMessage": "Scientifically Verified",
     "description": "Title for that part"
   },
-  "site.homepage.underwater.title": {
+  "app.homepage.underwater.title": {
     "defaultMessage": "Earths’ Healthier",
     "description": "Title for that part"
   },
-  "site.homepage.underwater.trees.description": {
+  "app.homepage.underwater.trees.description": {
     "defaultMessage": "It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
     "description": "Description for that part"
   },
-  "site.homepage.underwater.trees.link": {
+  "app.homepage.underwater.trees.link": {
     "defaultMessage": "What We Do",
     "description": "Link name for that part"
   },
-  "site.homepage.underwater.trees.title": {
+  "app.homepage.underwater.trees.title": {
     "defaultMessage": "We Do More",
     "description": "Title for that part"
   },
-  "site.homepage.wealthier.description": {
+  "app.homepage.wealthier.description": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
     "description": "Description"
   },
-  "site.homepage.wealthier.growth.description": {
+  "app.homepage.wealthier.growth.description": {
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
     "description": "Description"
   },
-  "site.homepage.wealthier.growth.link": {
+  "app.homepage.wealthier.growth.link": {
     "defaultMessage": "How Anyone Can Get Rich Slow",
     "description": "Link"
   },
-  "site.homepage.wealthier.growth.title": {
+  "app.homepage.wealthier.growth.title": {
     "defaultMessage": "Maximum Growth",
     "description": "Title"
   },
-  "site.homepage.wealthier.investment.description": {
+  "app.homepage.wealthier.investment.description": {
     "defaultMessage": "Why settle? Our time-tested strategy has the best long-term results.",
     "description": "Description"
   },
-  "site.homepage.wealthier.investment.link": {
+  "app.homepage.wealthier.investment.link": {
     "defaultMessage": "Compare Us",
     "description": "Link"
   },
-  "site.homepage.wealthier.investment.title": {
+  "app.homepage.wealthier.investment.title": {
     "defaultMessage": "The Best Investment",
     "description": "Title"
   },
-  "site.homepage.wealthier.profits.description": {
+  "app.homepage.wealthier.profits.description": {
     "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
     "description": "Description"
   },
-  "site.homepage.wealthier.profits.link": {
+  "app.homepage.wealthier.profits.link": {
     "defaultMessage": "Who Wins?",
     "description": "Link"
   },
-  "site.homepage.wealthier.profits.title": {
+  "app.homepage.wealthier.profits.title": {
     "defaultMessage": "Keep Your Profits",
     "description": "Title"
   },
-  "site.homepage.wealthier.startnow.description": {
+  "app.homepage.wealthier.startnow.description": {
     "defaultMessage": "The most important ingredient is time. You’re young - maximize your benefit!",
     "description": "Description"
   },
-  "site.homepage.wealthier.startnow.link": {
+  "app.homepage.wealthier.startnow.link": {
     "defaultMessage": "Learn Your Edge",
     "description": "Link"
   },
-  "site.homepage.wealthier.startnow.title": {
+  "app.homepage.wealthier.startnow.title": {
     "defaultMessage": "Start Now",
     "description": "Title"
   },
-  "site.homepage.wealthier.title": {
+  "app.homepage.wealthier.title": {
     "defaultMessage": "You’re Wealthier",
     "description": "Title"
   },
-  "site.subscribe.confirm.button": {
+  "app.subscribe.confirm.button": {
     "defaultMessage": "Update Details!"
   },
   "tFFMkF": {

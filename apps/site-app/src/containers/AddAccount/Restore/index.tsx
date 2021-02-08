@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Header, Grid, Button } from 'semantic-ui-react';
+import { Header, Grid } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@the-coin/types';
 import { FormattedMessage } from 'react-intl';
 import { GetSecureApi } from 'api';
@@ -15,32 +15,33 @@ import dropbox from "./images/dropbox.svg";
 import styles from './styles.module.less';
 import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
-const aboveTheTitle = { id:"site.account.restore.aboveTheTitle",
+const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
                         description:"The above the title text for the restore account page"};
-const title = { id:"site.account.restore.title",
+const title = { id:"app.account.restore.title",
                 defaultMessage:"Welcome back to TheCoin!",
                 description:"The main title for the restore account page"};
-const manualy = { id:"site.account.restore.manualy",
+const manualy = { id:"app.account.restore.manualy",
                   defaultMessage:"Upload manualy",
                   description:"Locale link for the restore your account page"};
-const microsoftLink = { id:"site.account.restore.microsoft",
+const microsoftLink = { id:"app.account.restore.microsoft",
                         defaultMessage:"Restore from  Microsoft OneDrive",
                         description:"Microsoft link for the restore your account page"};
-const dropboxLink = { id:"site.account.restore.dropbox",
+const dropboxLink = { id:"app.account.restore.dropbox",
                       defaultMessage:"Restore from Dropbox",
                       description:"Dropbox link for the restore your account page"};
-const otherEthereum = { id:"site.account.restore.otherEthereum.explanation",
+const otherEthereum = { id:"app.account.restore.otherEthereum.explanation",
                         defaultMessage:"Also you can log into your account using an existing Ethereum account.",
                         description:"The link to redirect to use your existing ethereum for the restore your account page"};
-const restoreHelp = { id:"site.account.restore.help",
+const restoreHelp = { id:"app.account.restore.help",
                       defaultMessage:"If you have any problems with restoring your account, contact us for help.",
                       description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const explanation = { id:"site.account.restore.createAccount.explanation",
+const explanation = { id:"app.account.restore.createAccount.explanation",
                       defaultMessage:"Don’t have an account?",
                       description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const buttonCreateAccount = { id:"site.account.restore.button.createAccount",
+const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
                               defaultMessage:"Create Account",
                               description:"The button to redirect to the create an account page for the restore your account page"};
 
@@ -86,10 +87,10 @@ export const Restore = () => {
 
   return (
     <div className={styles.content}>
-      <Header as="h5">
+      <Header as="h5" className={`x8spaceBefore`}>
           <FormattedMessage {...aboveTheTitle} />
       </Header>
-      <Header as="h2">
+      <Header as="h2" className={`x8spaceAfter`}>
           <FormattedMessage {...title} />
       </Header>
 
@@ -98,9 +99,9 @@ export const Restore = () => {
           <Grid.Column centered>
               <img src={ manually } />
               <br />
-              <Button as={Link} to="/addAccount/upload/" primary id={styles.knowMore} >
+              <ButtonPrimary as={Link} to="/addAccount/upload/" id={styles.knowMore} >
                 <FormattedMessage {...manualy} />
-              </Button>
+              </ButtonPrimary>
           </Grid.Column>
           <Grid.Column centered>
               <img src={ google } />
@@ -131,9 +132,9 @@ export const Restore = () => {
       <div className={styles.createAccountContent} >
           <FormattedMessage {...explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <Button as={Link} to="/addAccount" primary size='medium' >
+          <ButtonPrimary as={Link} to="/addAccount" size='medium' >
             <FormattedMessage {...buttonCreateAccount} />
-          </Button>
+          </ButtonPrimary>
         </div>
         <Decoration />
     </div>

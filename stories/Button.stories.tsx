@@ -1,6 +1,8 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { ButtonPrimary, ButtonSecondary, ButtonTertiary, ArgsButton } from '../libs/site-base/src/components/Buttons';
+import { ButtonPrimary, ButtonSecondary, ButtonTertiary } from '../libs/site-base/src/components/Buttons';
+import { ButtonProps } from 'semantic-ui-react';
+
 import "@the-coin/site-base/build/styles/semantic.less";
 
 export default {
@@ -13,9 +15,9 @@ export default {
   },
 } as Meta;
 
-const TemplatePrimary: Story<ArgsButton> = (args) => <ButtonPrimary {...args} />;
-const TemplateSecondary: Story<ArgsButton> = (args) => <ButtonSecondary {...args} />;
-const TemplateTertiary: Story<ArgsButton> = (args) => <ButtonTertiary {...args} />;
+const TemplatePrimary: Story<ButtonProps> = (args) => <ButtonPrimary {...args} />;
+const TemplateSecondary: Story<ButtonProps> = (args) => <ButtonSecondary {...args} />;
+const TemplateTertiary: Story<ButtonProps> = (args) => <ButtonTertiary {...args} />;
 
 
 export const Primary = TemplatePrimary.bind({});
