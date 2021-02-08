@@ -17,6 +17,8 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import dotenv from 'dotenv'
 
+import shared_loaders  from '@the-coin/site-base/internal/webpack/webpack.less';
+
 CheckNodeEnv('development');
 
 const env_path = path.join(__dirname, '..', '..', '..', 'secrets', 'credentials.env');
@@ -77,42 +79,10 @@ export default merge.smart(baseConfig, {
           }
         ]
       },
-      {
-        test: /\.module\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true
-            }
-          }
-        ]
-      },
-      // LESS module files
-      {
-        // The rest of the less files
-        test: /.*\.module\.less$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-              modules: true,
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
+
+      shared_loaders.css_module_loader,
+      shared_loaders.semantic_less_loader,
+
       // WOFF Font
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
