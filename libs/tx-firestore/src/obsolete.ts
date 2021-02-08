@@ -1,4 +1,5 @@
 import { Timestamp } from "@the-coin/types";
+import { IsValidAddress } from "@the-coin/utilities";
 import { GetUserDoc } from "@the-coin/utilities/User";
 import { Dictionary } from "lodash";
 import { DepositRecord } from "./types";
@@ -25,6 +26,9 @@ export async function getAllFromFirestoreObsolete() : Promise<ObsoleteRecords>{
 export async function fetchDBRecords(users: string[], type: string) {
   const db: Dictionary<ObsoleteRecord[]> = {};
   for (const address of users) {
+    // deepcode suggestion: avoid prototype pollution
+    if (!IsValidAddress(address))
+      continue;
     const user = GetUserDoc(address);
     const allBuys = await user.collection(type).get();
     if (allBuys.docs.length > 0) {
