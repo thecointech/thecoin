@@ -6,7 +6,6 @@ import { IsValidAddress } from "@the-coin/utilities";
 
 export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: UserAction) {
   const db: Dictionary<T[]> = {};
-  // deepcode suggestion: avoid prototype pollution
   for (const address of users.filter(IsValidAddress)) {
     const user = GetUserDoc(address);
     const allBuys = await user.collection(type).get();
@@ -14,13 +13,14 @@ export async function fetchDBRecords<T extends BaseTransactionRecord>(users: str
       const dbRecords = allBuys.docs
         .map(d => d.data() as T)
         .sort((a, b) => a.recievedTimestamp.toMillis() - b.recievedTimestamp.toMillis());
+      //  deepcode ignore PrototypePollutionFunctionParams: Validation occurs in IsValidAddress
       db[address] = dbRecords;
     }
   }
   return db;
 }
 
-export async function getAllFromFirestore() : Promise<DbRecords> {
+export async function getAllFromFirestore(): Promise<DbRecords> {
 
   const users = await fetchAllUsers();
   const everything = {

@@ -23,7 +23,7 @@ test("We have gmail login", async () => {
       output: process.stdout
     });
 
-    var code = await readline.question("Enter Code:");
+    const code = await readline.question("Enter Code:");
     finishLogin(client, code);
     await readline.destroy();
   }

@@ -26,7 +26,7 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
   const amount = getAmount(body);
   if (!amount)
     return null;
-  var url = getDepositUrl(body);
+  const url = getDepositUrl(body);
   if (!url) {
     log.error({ url, subject }, "No url or invalid url found: {url} for email: {subject}");
     return null;
@@ -37,7 +37,7 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
     recieved: dateRecieved,
     id: getSourceId(url),
     depositUrl: url.toString(),
-    address: address,
+    address,
     cad: new Decimal(amount),
     ...userInfo
   }
@@ -81,13 +81,13 @@ function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
     // deepcode ignore GlobalReplacementRegex: Is mistakenly detecting replace has containing a regex
-    ? parseFloat(amountRes[1].replace(',', ''))
+    ? Number(amountRes[1].replace(',', ''))
     : undefined;
 }
 function getAmountFrancais(body: string) {
   const amountRes = /vous a envoyé un virement de ([0-9,]+) \$ \(CAD\)/.exec(body)
   return (amountRes)
-    ? parseFloat(amountRes[1])
+    ? Number(amountRes[1])
     : undefined;
 }
 
@@ -100,7 +100,7 @@ function getDepositUrl(body: string) {
 
 function getRecievedDate(email: gmail_v1.Schema$Message) {
   return email.internalDate
-    ? DateTime.fromMillis(parseInt(email.internalDate))
+    ? DateTime.fromMillis(Number(email.internalDate))
     : null;
 }
 

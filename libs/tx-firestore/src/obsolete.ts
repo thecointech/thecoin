@@ -14,9 +14,9 @@ export type Obsolete = {
   settled: Timestamp,
   txHash: string
 }
-type ObsoleteRecord = DepositRecord|Obsolete;
+type ObsoleteRecord = DepositRecord | Obsolete;
 export type ObsoleteRecords = Dictionary<ObsoleteRecord[]>;
-export async function getAllFromFirestoreObsolete() : Promise<ObsoleteRecords>{
+export async function getAllFromFirestoreObsolete(): Promise<ObsoleteRecords> {
 
   const users = await fetchAllUsers();
   const everything = await fetchDBRecords(users, "Purchase");
@@ -25,15 +25,14 @@ export async function getAllFromFirestoreObsolete() : Promise<ObsoleteRecords>{
 
 export async function fetchDBRecords(users: string[], type: string) {
   const db: Dictionary<ObsoleteRecord[]> = {};
-  for (const address of users) {
-    // deepcode suggestion: avoid prototype pollution
-    if (!IsValidAddress(address))
-      continue;
+  // deepcode suggestion: avoid prototype pollution
+  for (const address of users.filter(IsValidAddress)) {
     const user = GetUserDoc(address);
     const allBuys = await user.collection(type).get();
     if (allBuys.docs.length > 0) {
       const dbRecords = allBuys.docs
         .map(d => d.data() as ObsoleteRecord);
+      //  deepcode ignore PrototypePollutionFunctionParams: Validation occurs in IsValidAddress
       db[address] = dbRecords;
     }
   }

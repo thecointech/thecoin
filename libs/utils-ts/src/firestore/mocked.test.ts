@@ -7,9 +7,9 @@ test('basic creation', async () => {
 
   init(data);
 
-  var db = GetFirestore();
+  const db = GetFirestore();
   const userCollection = db.collection('users');
-  var userDocs = await db.collection('users').get();
+  const userDocs = await db.collection('users').get();
   // write assertions here
   expect(userDocs.docs.length).toBe(2);
 
@@ -24,7 +24,7 @@ test('basic creation', async () => {
   });
 
   // Have we correctly initialized a timestamp?
-  var ts = Timestamp.now();
+  const ts = Timestamp.now();
   expect(ts).toBeDefined();
 })
 
@@ -32,7 +32,7 @@ test('immutability', async () => {
 
   init(data, true);
 
-  var db = GetFirestore();
+  const db = GetFirestore();
 
   // assert that mutations throw
   const shouldThrow = () => db.collection('users').doc('any').set({
