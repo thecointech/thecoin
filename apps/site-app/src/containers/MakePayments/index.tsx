@@ -19,7 +19,7 @@ import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 
 const title = { id:"app.makepayments.title",
@@ -28,15 +28,28 @@ const title = { id:"app.makepayments.title",
 const description = { id:"app.makepayments.description",
                       defaultMessage:"You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
                       description:"Description for the Make a payment page in the app" };
+const etransfert = { id:"app.makepayments.tabs.etransfert",
+                defaultMessage:"e-Transfert",
+                description:"Title for the tabs the Make a payment page in the app" };
+const bills = { id:"app.makepayments.tabs.bills",
+                defaultMessage:"Bills",
+                description:"Title for the tabs the Make a payment page in the app" };
+const anotherCoin = { id:"app.makepayments.tabs.anotherCoin",
+                defaultMessage:"Another Coin Account",
+                description:"Title for the tabs the Make a payment page in the app" };
+const templates = { id:"app.makepayments.tabs.templates",
+                defaultMessage:"Templates",
+                description:"Title for the tabs the Make a payment page in the app" };
 
 //<Redeem {...props} account={routerProps.account} />
 export const MakePayments = (props: any, routerProps:AccountPageProps) => {
+  const intl = useIntl();
   const account = props.account;
   const panes = [
-    { menuItem: 'e-Transfert', render: () => <div className={"appContainer topRightFlat"}><Redeem {...props} account={account} /></div> },
-    { menuItem: 'Bills', render: () => <div className={"appContainer topRightFlat"}><BillPayments {...props} account={account} /></div> },
-    { menuItem: 'Another Coin Account', render: () => <div className={"appContainer topRightFlat"}><Transfer {...props} account={account} /></div> },
-    { menuItem: 'Templates', render: () => <div className={"appContainer topRightFlat"}>Templates</div> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <div className={"appContainer topRightFlat"}><Redeem {...props} account={account} /></div> },
+    { menuItem: intl.formatMessage({...bills}), render: () => <div className={"appContainer topRightFlat"}><BillPayments {...props} account={account} /></div> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <div className={"appContainer topRightFlat"}><Transfer {...props} account={account} /></div> },
+    { menuItem: intl.formatMessage({...templates}), render: () => <div className={"appContainer topRightFlat"}>Templates</div> },
   ]
   return (
     <React.Fragment>
