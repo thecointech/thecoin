@@ -18,4 +18,7 @@
     padding: 30px;
     background-color: @white;
     box-shadow: 0px 0px 10px 0px @theCoinPaletteGray3;
+    &.topRightFlat{
+        border-top-left-radius: initial;
+    }
 }
