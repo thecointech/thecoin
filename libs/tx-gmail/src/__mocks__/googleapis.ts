@@ -22,10 +22,10 @@ export namespace google {
 
   export function gmail() {
     console.log("Createing mocked gmail");
-    return new gmail_mocked();
+    return new GmailMocked();
   }
 
-  class gmail_mocked {
+  class GmailMocked {
     users = {
       labels: {
         async list() {
