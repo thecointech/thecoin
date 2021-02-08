@@ -4,8 +4,8 @@
 
 
 .ui.tabular.menu .item{
-        background-color: fade(#61C1B8, 30%);   // Return @color with 30% opacity in rgba;
-        color: #61C1B8;
+        background-color: fade(@theCoinPalettePaleGreen2, 30%);   // Return @color with 30% opacity in rgba;
+        color: @theCoinPalettePaleGreen2;
         border-radius: 0.625rem 0.625rem 0px 0px !important;
         margin-right: 5px;
         font-weight: bold;
@@ -13,12 +13,12 @@
         padding-right: 25px;
         padding-left: 25px;
         &:hover{
-                color: #138175;
-                background-color: fade(#61C1B8, 30%); 
+                color: @theCoinPaletteGreen4;
+                background-color: fade(@theCoinPalettePaleGreen2, 30%); 
         }
 }
 
 .ui.tabular.menu .active.item{
-        background-color: #138175;
-        color: white;
+        background-color: @theCoinPaletteGreen4;
+        color: @white;
 }
