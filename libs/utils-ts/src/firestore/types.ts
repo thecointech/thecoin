@@ -1,7 +1,7 @@
 
 // Do not attempt to connect if we do not have an
 // active connection.
-export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR != 'false'
+export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR !== 'false'
 
 // Mocked DB structure
 export type MockedDocument = {
@@ -9,7 +9,7 @@ export type MockedDocument = {
   _collections?: {
     [name: string]: MockedDocument[],
   }
-  [param: string]: any,
+  [param: string]: unknown,
 }
 
 // Mocked db may be used by our unit tests to supply test data
@@ -36,7 +36,7 @@ export type ConnectionParams = { project?: string; username?: string; password?:
 export type InitParams = ConnectionParams|MockedDb;
 
 export const isMockedDb = (t?: InitParams) : t is MockedDb =>
-  t != undefined && Object.entries(t).every(kv => (
-    kv[0] == "live" ||
+  t !== undefined && Object.entries(t).every(kv => (
+    kv[0] === "live" ||
     (Array.isArray(kv[1]) && kv[1].every((doc: MockedDocument) => doc.id))
   ))

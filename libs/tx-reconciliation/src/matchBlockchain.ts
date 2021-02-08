@@ -16,10 +16,10 @@ function findBlockchain(blockchain: Transaction[], user: User, tx: BaseTransacti
     return bc;
 
   // Some blockchain transactions were recorded without hash!
-  let candidates = blockchain.filter(bc => bc.counterPartyAddress == user.address);
+  let candidates = blockchain.filter(bc => bc.counterPartyAddress === user.address);
   candidates = candidates.filter(bc => bc.change === tx.transfer.value);
 
-  if (candidates.length == 1)
+  if (candidates.length === 1)
     return candidates[0];
 
   return null;

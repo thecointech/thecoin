@@ -26,7 +26,7 @@ const updateRate = async (date: Date) => {
 async function fetchFiat(coin: number, action: string, date: Date) {
   await updateRate(date);
   return toHuman(coin * (
-    action == "Buy"
+    action === "Buy"
       ? weSellAt(rates, date)
       : weBuyAt(rates, date)
     )

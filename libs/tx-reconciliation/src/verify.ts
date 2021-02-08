@@ -20,7 +20,7 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
     const bank = findBank(data, 40, et.cad.toNumber(), et.recieved);
     if (bank) {
       // can we find a block chain for this?
-      const blockchain = data.blockchain.filter(bc => bc.counterPartyAddress == et.address);
+      const blockchain = data.blockchain.filter(bc => bc.counterPartyAddress === et.address);
       console.log(blockchain.length);
       console.log("BUILD THE REST OF YO SHIT!");
     }
@@ -29,11 +29,11 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
 }
 
 export const isComplete = (tx: ReconciledRecord) =>
-  knownIssues.find(ki => ki.hash == tx.data.hash) ||
+  knownIssues.find(ki => ki.hash === tx.data.hash) ||
   !(
-    (tx.action == "Buy" && tx.email == null) ||
-    (tx.refund == null && tx.bank.length % 2 == 0) ||
-    tx.blockchain == null
+    (tx.action === "Buy" && tx.email === null) ||
+    (tx.refund === null && tx.bank.length % 2 === 0) ||
+    tx.blockchain === null
   )
 
 async function printUnmatched(r: Reconciliations) {
@@ -49,9 +49,9 @@ async function printUnmatched(r: Reconciliations) {
 
   for (const um of unMatched) {
     for (const umtx of um.transactions) {
-      const email = umtx.email || umtx.action != "Buy" ? "" : " Email";
+      const email = umtx.email || umtx.action !== "Buy" ? "" : " Email";
       const blockchain = umtx.blockchain ? "" : " blockchain";
-      const bank = umtx.bank.length % 2 == 1 ? "" : " bank";
+      const bank = umtx.bank.length % 2 === 1 ? "" : " bank";
       const db = umtx.database ? "" : " db";
 
       const fiat = await getFiat(umtx);

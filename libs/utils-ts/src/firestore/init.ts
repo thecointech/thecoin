@@ -16,28 +16,28 @@ export async function init(params?: InitParams)
   if (isMockedDb(params) && !params.live) {
     log.debug('Initializing a mutable mocked db');
     const mock = await import('./mock');
-    return await mock.init(params);
+    return mock.init(params);
   }
   // Release build, running on server
   else if (process.env.GAE_ENV)
   {
     log.debug('Connecting server-side db running locally');
     const server = await import('./server')
-    return await server.init();
+    return server.init();
   }
   // client build, running in electron
   else if (!isMockedDb(params) && params?.password && params?.username)
   {
     log.debug('Connecting client-side db with user/password');
     const pwd = await import('./password');
-    return await pwd.init(params.username, params.password);
+    return pwd.init(params.username, params.password);
   }
   // Release build, running locally.  May have data, but prefer live connection
   else if (process.env.GOOGLE_APPLICATION_CREDENTIALS)
   {
     log.debug('Connecting server-side db with credentials');
     const release = await import('./release')
-    return await release.init();
+    return release.init();
   }
   // no way to connect online, if we have emulator attempt that connection
   else if(isEmulatorAvailable())
@@ -45,10 +45,10 @@ export async function init(params?: InitParams)
     log.debug('No connection parameters supplied, attempting to connect to emulator');
     const project = params?.project;
     // todo: can we drop the project requirement?
-    if (!project || typeof project != "string")
+    if (!project || typeof project !== "string")
       throw new Error('Cannot connect to emulator without specifying a project');
     const debug = await import('./debug');
-    return await debug.init(project);
+    return debug.init(project);
   }
   // no online db, create a mocked DB with sample data if present or empty DB if not.
   else if (isMockedDb(params)) {

@@ -21,11 +21,11 @@ export function matchManual(r: Reconciliations, data: AllData) {
 function findRecord(r: Reconciliations, hash: string, data?: AllData) {
   for (const user of r)
     for (const record of user.transactions)
-      if (record.data.hash == hash)
+      if (record.data.hash === hash)
         return { user, record };
 
   // Create new entry from blockchain
-  const bc = data?.blockchain.find(bc => bc.txHash == hash);
+  const bc = data?.blockchain.find(bc => bc.txHash === hash);
   if (bc)
     return buildNewUserRecord(r, bc);
   throw new Error(`Cannot find entry: ${hash}`);
@@ -82,7 +82,10 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
           logEntry: entry.notes,
         }
       })
+      break;
     }
+    default:
+      throw new Error('unknown insertion type');
   }
 }
 
@@ -96,6 +99,7 @@ function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliation
     },
     bank: [],
     action: entry.action,
+    //  deepcode ignore no-any: Back-end code - non-trivial fix
   } as any, 1);
 }
 

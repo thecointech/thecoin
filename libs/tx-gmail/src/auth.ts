@@ -62,7 +62,7 @@ async function getNewToken(oAuth2Client: OAuth2Client) {
 
 function openurl(url: string)
 {
-  var start = (process.platform == 'darwin'? 'open': process.platform == 'win32'? 'start': 'xdg-open');
+  const start = (process.platform == 'darwin'? 'open': process.platform === 'win32'? 'start': 'xdg-open');
   require('child_process').exec(start + ' ' + url);
 }
 
@@ -73,7 +73,7 @@ export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
   }
   else
   {
-    var response = await oAuth2Client.getToken(code)
+    const response = await oAuth2Client.getToken(code)
     await ConfigStore.set(TOKEN_KEY, JSON.stringify(response.tokens))
     oAuth2Client.setCredentials(response.tokens);
   }

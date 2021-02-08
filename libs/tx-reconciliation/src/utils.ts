@@ -38,7 +38,7 @@ export function toDateTime(ts: Timestamp|undefined) : DateTime|undefined;
 
 export const getOrCreateUser = (users: Reconciliations, address: string) => {
   let user = users.find(u => u.address === address);
-  if (user == undefined) {
+  if (user === undefined) {
     console.warn("No user found for address: " + address);
     user = {
       names: [],
@@ -52,12 +52,12 @@ export const getOrCreateUser = (users: Reconciliations, address: string) => {
 
 export function addReconciled(data: Reconciliations, more: Reconciliations) {
   for (const record of more) {
-    const src = data.find(d => d.address == record.address);
+    const src = data.find(d => d.address === record.address);
 
     // any invalid hashes?
     record.transactions
       .filter(tx => !tx.data.hash.startsWith("0x"))
-      .filter(tx => !knownIssues.find(ki => ki.hash == tx.data.hash))
+      .filter(tx => !knownIssues.find(ki => ki.hash === tx.data.hash))
       .forEach(tx => {
         console.error("Invalid hash here: " + tx.data.hash);
       });

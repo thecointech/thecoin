@@ -71,7 +71,7 @@ describe('Rbc Puppeteer-based API', () => {
     const txscad = await api.getTransactions(new Date(2014, 5));
 
     expect(txscad.length).toBeGreaterThan(0);
-    expect(txscad.every(tx => typeof tx.CAD == 'number')).toBeTruthy();
+    expect(txscad.every(tx => typeof tx.CAD === 'number')).toBeTruthy();
 
     await browser.close();
   });
@@ -84,7 +84,7 @@ describe('Rbc Puppeteer-based API', () => {
     const txsusd = await api.getTransactions(new Date(2014, 5), new Date(), process.env.RBCAPI_CREDENTIALS_USD_ACC);
 
     expect(txsusd.length).toBeGreaterThan(0);
-    expect(txsusd.every(tx => typeof tx.USD == 'number')).toBeTruthy();
+    expect(txsusd.every(tx => typeof tx.USD === 'number')).toBeTruthy();
 
     await browser.close();
   });

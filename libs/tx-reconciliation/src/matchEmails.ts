@@ -13,7 +13,7 @@ export function findNames(data: AllData, address: string) {
 }
 
 export function spliceEmail(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
-  const email = record.action == "Buy"
+  const email = record.action === "Buy"
     ? findEmail(data, user, record.data as DepositRecord, maxDays)
     : null;
 
@@ -26,14 +26,14 @@ export function spliceEmail(data: AllData, user: User, record: ReconciledRecord,
 export function findEmail(data: AllData, user: User, deposit: DepositRecord, maxDays: number) {
   const { sourceId, recievedTimestamp, fiatDisbursed } = deposit;
   if (sourceId)
-    return data.eTransfers.find(et => et.id == sourceId);
+    return data.eTransfers.find(et => et.id === sourceId);
 
   // basic requirements
   let candidates = data.eTransfers.filter(et => et.address === user.address);
   candidates = candidates.filter(et => et.cad.eq(fiatDisbursed));
 
   candidates = filterCandidates(candidates, "recieved", toDateTime(recievedTimestamp), maxDays);
-  if (candidates.length == 1 || (maxDays == 0 && candidates.length > 0))
+  if (candidates.length === 1 || (maxDays === 0 && candidates.length > 0))
     return candidates[0];
 
   return null;

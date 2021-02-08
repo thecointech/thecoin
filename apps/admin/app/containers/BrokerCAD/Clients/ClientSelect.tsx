@@ -23,7 +23,7 @@ export const ClientSelect = () => {
     setAddress(data.value?.toString());
   }, [setAddress]);
 
-  const active = users.find(u => u.address == address);
+  const active = users.find(u => u.address === address);
   return (
     <>
       <Select
@@ -32,7 +32,7 @@ export const ClientSelect = () => {
         search
         selection
         onChange={onChange}
-        loading={users.length == 0}
+        loading={users.length === 0}
         options={buildOptions(users)}
       />
       {

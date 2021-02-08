@@ -48,7 +48,7 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
   // However, our blockchain transactions can include transactions where
   // the user directly transfers coin directly to us.  In these cases,
   // the date is the date of the transfer, not when it can be processed
-  const processedTimestamp = (action == "Buy") ? dt : undefined;
+  const processedTimestamp = (action === "Buy") ? dt : undefined;
   const record: ReconciledRecord = {
     action,
     data: {
@@ -67,7 +67,7 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
 }
 
 const buildTransfer = (action: UserAction, bc: Transaction) =>
-  action == "Buy"
+  action === "Buy"
     ? buildBuyXfer(bc)
     : buildSellXfer(bc);
 

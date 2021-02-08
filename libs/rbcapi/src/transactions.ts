@@ -74,15 +74,22 @@ export async function getTransactions(from: Date, to = new Date(), accountNo = A
   }).fromString(asString);
 
   // Remove spaces and '$' from names
-  const cleanName = (name: string) => name.replace(' ', '').replace('$', '')
-  return obj.map(o =>
-    Object.entries(o)
-      .reduce((r, et) => ({
-        ...r,
-        [cleanName(et[0])]: et[1]
-      }), {} as any)
-  )
+  return obj.map(cleanTransaction);
 }
+
+const newTransaction  = (): RbcTransaction => ({
+  AccountType: "DEFAULT_VALUE",
+  AccountNumber: "DEFAULT_VALUE",
+  TransactionDate: DateTime.fromMillis(0)
+})
+const cleanName = (name: string) => name.replace(/[\s\$]/g, '');
+const cleanTransaction = (obj: object) : RbcTransaction =>
+  Object.entries(obj)
+    .reduce((r, et) => ({
+      ...r,
+      [cleanName(et[0])]: et[1]
+    }), newTransaction())
+
 
 /////////////////////////////////////////////////////////////
 // Utilities
