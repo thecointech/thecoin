@@ -97,7 +97,7 @@ const cleanTransaction = (obj: object) : RbcTransaction =>
 const selectAccount = async (page: Page, accountNo: string) => {
   await page.evaluate((selectId, accountNo) => {
     const options = Array.from(document.querySelectorAll(selectId + ' option'));
-    for (let option of options) {
+    for (const option of options) {
       if (option.textContent?.includes(accountNo)) {
         // @ts-ignore: ts type error but cannot put type assertions in this code
         option.selected = true;

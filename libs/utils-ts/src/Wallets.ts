@@ -62,10 +62,10 @@ export async function getWallet(name: string, callback?: ProgressCallback) : Pro
 
 export async function getContract(name: string, callback?: ProgressCallback) : Promise<Contract> {
 	if (!ConnectedContract) {
-		let wallet = await getWallet(name, callback);
+		const wallet = await getWallet(name, callback);
 		ConnectedContract = await ConnectContract(wallet);
 		if (!ConnectedContract)
-			throw "Could not connect to Contract";
+			throw new Error("Could not connect to Contract");
 	}
 	return ConnectedContract;
 }

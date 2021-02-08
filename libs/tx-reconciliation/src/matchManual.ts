@@ -8,6 +8,8 @@ import { UserAction } from '@the-coin/utilities/User';
 import { Reconciliations, AllData } from './types';
 import { spliceBlockchain } from './matchBlockchain';
 
+// file deepcode ignore no-any: backend code, with non-trivial fix
+
 type InsertEntry = typeof manual["insert"][0];
 type ConnectBankEntry = typeof manual["connect"]["bank"][0];
 type ConnectBlockchainEntry = typeof manual["connect"]["blockchain"][0];
@@ -99,7 +101,6 @@ function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliation
     },
     bank: [],
     action: entry.action,
-    //  deepcode ignore no-any: Back-end code - non-trivial fix
   } as any, 1);
 }
 

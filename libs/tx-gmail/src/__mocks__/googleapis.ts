@@ -10,7 +10,7 @@ export namespace google {
 
   export namespace auth {
     export class OAuth2 {
-      public credentials: object|undefined;
+      credentials: object|undefined;
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {

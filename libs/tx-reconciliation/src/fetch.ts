@@ -12,16 +12,16 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 
   log.debug('Fetching all raw data');
 
-  let bank = await fetchBankTransactions(rbcApi);
+  const bank = await fetchBankTransactions(rbcApi);
   log.trace('Fetched raw banking data');
-  let eTransfers = await fetchAndCleanETransfers();
+  const eTransfers = await fetchAndCleanETransfers();
   log.trace('Fetched raw e-Transfer mails');
-  let dbs = await getAllFromFirestore();
+  const dbs = await getAllFromFirestore();
   log.trace('Fetched database info');
-  let blockchain = await fetchAndCleanCoinHistory();
+  const blockchain = await fetchAndCleanCoinHistory();
   log.trace('Fetched raw blockchain info');
 
-  let obsolete = await getAllFromFirestoreObsolete();
+  const obsolete = await getAllFromFirestoreObsolete();
   log.trace('Fetched obsolete firestore info');
 
   log.debug('Fetch complete');
@@ -35,14 +35,14 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 }
 
 async function fetchAndCleanETransfers() {
-  let eTransfers = await fetchETransfers();
+  const eTransfers = await fetchETransfers();
   return eTransfers.map(et => ({
     ...et,
     address: NormalizeAddress(et.address)
   }));
 }
 async function fetchAndCleanCoinHistory() {
-  let coinHistory = await fetchCoinHistory();
+  const coinHistory = await fetchCoinHistory();
   return coinHistory.map(et => ({
     ...et,
     counterPartyAddress: NormalizeAddress(et.counterPartyAddress)

@@ -62,7 +62,7 @@ async function getNewToken(oAuth2Client: OAuth2Client) {
 
 function openurl(url: string)
 {
-  const start = (process.platform == 'darwin'? 'open': process.platform === 'win32'? 'start': 'xdg-open');
+  const start = (process.platform === 'darwin'? 'open': process.platform === 'win32'? 'start': 'xdg-open');
   require('child_process').exec(start + ' ' + url);
 }
 

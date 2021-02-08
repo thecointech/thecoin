@@ -6,7 +6,7 @@ import { MockedDb } from './types';
 export function init(database: MockedDb, immutable?: boolean) {
 
   // Clone the DB (not modifying the source)
-  let clone = JSON.parse(JSON.stringify(database));
+  const clone = JSON.parse(JSON.stringify(database));
   const db = new mocks.FakeFirestore(clone);
 
   // If this is a test is allowed to ping the live

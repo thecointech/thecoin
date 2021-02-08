@@ -5,7 +5,7 @@ export type Credentials = {
   cardNo: string;
   accountNo: string;
 
-  pvq: {question: string, answer: string}[],
+  pvq: Array<{question: string, answer: string}>,
   timezone: Pick<DateTimeOptions, "zone">;
 }
 

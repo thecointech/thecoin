@@ -13,7 +13,7 @@ import { AllData, Reconciliations, ReconciledRecord } from "types";
 export function matchDB(data: AllData) {
 
   // First, initialize with database records
-  let r: Reconciliations = convertBaseTransactions(data, "Buy");
+  const r: Reconciliations = convertBaseTransactions(data, "Buy");
   const bills = convertBaseTransactions(data, "Bill");
   const sales = convertBaseTransactions(data, "Sell");
   addReconciled(r, bills);
