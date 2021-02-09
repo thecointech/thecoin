@@ -65,7 +65,7 @@ export const Login = (props: Props) => {
   const { account } = props;
   const { signer, address }= account;
   if (!isWallet(signer) || signer.privateKey) {
-    history.push('/accounts/');
+    history.push('/');
   }
 
   const intl = useIntl();

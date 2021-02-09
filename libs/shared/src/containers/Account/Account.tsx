@@ -11,13 +11,16 @@ import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
 import { isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@the-coin/utilities";
+import { SemanticICONS } from "semantic-ui-react";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
   name: string;
-  urlFragment: string;
-  creator: PageCreator;
+  urlFragment?: string;
+  creator?: PageCreator;
   exact?: boolean;
+  icon?: SemanticICONS;
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
 };
 
 interface Props {
@@ -43,11 +46,8 @@ export const Account = (props: Props) => {
   );
 
   const sidebar = useSidebar();
-  useEffect(() => {
-    //if (!isWallet(signer)) {
-    //  if (signer !== null)
-            sidebar.addGenerator(account.name, sidebarCb);
-    //}
+  useEffect(() => { 
+    sidebar.addGenerator(account.name, sidebarCb);
 
     // Is this a remote account?
     if (signer && !isWallet(signer) && !signer.provider) {
@@ -78,20 +78,23 @@ export const Account = (props: Props) => {
     account: account,
     actions: accountActions
   };
-
   return (
     <Switch>
       {accountMap.map(item => {
-        const component = item.creator(accountArgs);
-        const targetUrl = BuildLink(item, props.url).toString();
-        return (
-          <Route
-            path={targetUrl}
-            key={targetUrl}
-            render={component}
-            exact={item.exact}
-          />
-        );
+        if (item.urlFragment && item.creator){
+          const component = item.creator(accountArgs);
+          const targetUrl = BuildLink(item, props.url).toString();
+          return (
+            <Route
+              path={targetUrl}
+              key={targetUrl}
+              render={component}
+              exact={item.exact}
+            />
+          );
+        } else {
+          return "";
+        }
       })}
       <Route component={NotFoundPage} />
     </Switch>
@@ -110,8 +113,12 @@ const connectSigner = async (accountState: AccountState, accountActions: IAction
   }
 }
 
-const BuildLink = (item: RouterPath, url: string) =>
-  new RUrl(url, item.urlFragment);
+const BuildLink = (item: RouterPath, url: string) => {
+  if (item.urlFragment){
+    return new RUrl(url, item.urlFragment);
+  }
+  return false;
+}
 
 const generateSubItems = (
   props: Props,
@@ -125,7 +132,9 @@ const generateSubItems = (
       {
         link: {
           name: item.name,
-          to: BuildLink(item, url)
+          to: BuildLink(item, url)  ? BuildLink(item, url)  : false,
+          icon: item.icon,
+          header: item.header,
         }
       })
     );

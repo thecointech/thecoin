@@ -18,7 +18,7 @@
   "scripts": {
     "prebuild": "yarn build:clean",
     "build": "yarn tsc -b -v tsconfig.build.json && yarn build:link && yarn build:semantic",
-    "build:link": "node ../../tools/link-assets.mjs \"**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
+    "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
     "build:clean": "rimraf ./build",
     "build:semantic": "node ./internal/buildSemantic.js",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
