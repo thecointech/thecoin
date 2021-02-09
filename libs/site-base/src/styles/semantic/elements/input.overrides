@@ -36,3 +36,15 @@
     }
   }
 }
+
+.field.half{
+  width: 49%;
+  float: left;
+  clear: initial !important;
+  &.left{
+    margin-right: 1% !important;
+  }
+  &.right{
+    margin-left: 1% !important;
+  }
+}

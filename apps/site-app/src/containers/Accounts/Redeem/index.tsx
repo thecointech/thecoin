@@ -12,7 +12,6 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'api'
-import styles from './styles.module.less';
 import { ETransferPacket } from '@the-coin/types';
 
 type MyProps = {
@@ -163,12 +162,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     } = this.state;
     return (
       <React.Fragment>
-        <div className={styles.wrapper}>
+        <div>
           <Form>
             <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
               <Header.Subheader>
                 <FormattedMessage {...messages.subHeader} />
               </Header.Subheader>
@@ -188,12 +184,14 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               placeholder="An email address to send the e-Transfer to"
             />
             <Form.Input
+              className={"half left"}
               label="Security question"
               name="question"
               onChange={this.onInputChanged}
               placeholder="No numbers or special characters"
             />
             <Form.Input
+              className={"half right"}
               label="Security answer"
               name="answer"
               onChange={this.onInputChanged}
