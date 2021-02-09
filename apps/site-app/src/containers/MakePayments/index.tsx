@@ -41,7 +41,6 @@ const templates = { id:"app.makepayments.tabs.templates",
                 defaultMessage:"Templates",
                 description:"Title for the tabs the Make a payment page in the app" };
 
-//<Redeem {...props} account={routerProps.account} />
 export const MakePayments = (props: any, routerProps:AccountPageProps) => {
   const intl = useIntl();
   const account = props.account;
