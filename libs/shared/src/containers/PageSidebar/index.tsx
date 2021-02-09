@@ -82,7 +82,9 @@ const getAsHeader = (item: SidebarMenuItem) =>
     <Header as="h5" className={ `appTitles x4spaceBefore` } >
       {item.link.name}
     </Header>
-    <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
+    <div className={`${styles.containerAvatar}` }>
+      <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
+    </div>
     <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
       <span>{item.link.header?.primaryDescription}</span>
     </div>

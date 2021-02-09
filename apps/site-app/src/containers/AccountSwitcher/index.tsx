@@ -68,7 +68,7 @@ export const AccountSwitcher = () => {
                 text={account.name}
                 as={Link} 
                 onClick={doSetActive} 
-                to="/accounts/" />
+                to="/" />
               )
             )
         }
@@ -89,13 +89,13 @@ const ActiveAccount = ({account}: ActiveProps) =>
   ? <Dropdown.Item key={account.name}>
       <Dropdown trigger={<span><img src={avatar} className={styles.avatars}/> {account.name.substring(0, 14) + '...'}</span>}>
         <Dropdown.Menu direction='right'>
-          <Dropdown.Item key="see" account={account.name} as={Link} to="/accounts/" >
+          <Dropdown.Item key="see" account={account.name} as={Link} to="/" >
               <FormattedMessage {...see} />
           </Dropdown.Item>
-          <Dropdown.Item key="sett" as={NavLink} to="/accounts/settings" >
+          <Dropdown.Item key="sett" as={NavLink} to="settings" >
               <FormattedMessage {...settings} />
           </Dropdown.Item>
-          <Dropdown.Item key="sout" as={NavLink} to="/accounts/signout" >
+          <Dropdown.Item key="sout" as={NavLink} to="signout" >
               <FormattedMessage {...signout} />
           </Dropdown.Item>
         </Dropdown.Menu>
