@@ -8,5 +8,8 @@
     "baseUrl": "./app/"
   },
   "include": ["./app/**/*"],
-  "references": [{ "path": "../../libs/shared/tsconfig.build.json" }]
+  "references": [
+    { "path": "../../libs/shared/tsconfig.build.json" },
+    { "path": "../../libs/tx-reconciliation/tsconfig.build.json" }
+  ]
 }

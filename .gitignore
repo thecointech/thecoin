@@ -15,6 +15,7 @@ apps/admin/app/autodeposit/account.json
 apps/rates-patcher/data1m.json
 apps/rates-patcher/data5m.json
 **/*secret.json
+/secrets
 
 !**/summary.txt
 libs/contract/src/deployed/
@@ -29,5 +30,8 @@ libs/shared/orbitdb/
 .dccache
 apps/admin/app/containers/gmail/credentials.json
 libs/tx-processing/src/deposit/gmail.json
+.env
+apps/reconciliation/src/data/data.cache.json
+tools/credentials.env
 .DS_Store
 apps/.DS_Store

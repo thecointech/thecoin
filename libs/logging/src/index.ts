@@ -1,5 +1,7 @@
 import bunyan, { Stream } from 'bunyan';
+import debug_stream from 'bunyan-debug-stream';
 import { mkdirSync } from 'fs';
+import { join } from 'path';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -10,14 +12,14 @@ import { mkdirSync } from 'fs';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : bunyan = null! as bunyan;
 
-const LogLocation = '/temp/TheCoin/logs/';
+const basepath = join(__dirname, "..", "..", "..");
 const areWeTestingWithJest = () => process.env.JEST_WORKER_ID !== undefined;
 
-const getFileStream = (name: string) : Stream => (
+const getFileStream = (filepath: string, rotate: boolean) : Stream => (
   {
     level: 'debug',
-    type: 'rotating-file',
-    path: `${LogLocation}/${name}.log`,
+    type: rotate ? 'rotating-file' : 'file',
+    path: filepath,
     period: '1d',   // daily rotation
     count: 3        // keep 3 back copies
   });
@@ -25,26 +27,30 @@ const getFileStream = (name: string) : Stream => (
 const getConsoleStream = () : Stream => (
   {
     level: 'trace',
-    stream: process.stdout            // log INFO and above to stdout
+    stream: debug_stream({
+      basepath,
+      forceColor: true,
+    })
   }
 )
 
-const getStreams = (filename: string) =>
+const getStreams = (filepath: string, rotate: boolean) =>
   areWeTestingWithJest()
     ? [
         getConsoleStream()
       ]
     : [
         getConsoleStream(),
-        getFileStream(filename)
+        getFileStream(filepath, rotate)
       ]
 
-export function init(name: string) {
+export function init(name: string, folder='/temp/TheCoin/logs/', rotate=true) {
   // TODO: Obvs, we can't do this on appengine/browser.
-  mkdirSync(LogLocation, { recursive: true });
+  mkdirSync(folder, { recursive: true });
+  const filepath = `${folder}/${name}.log`
   log = bunyan.createLogger({
     name,
-    streams: getStreams(name)
+    streams: getStreams(filepath, rotate)
   });
 
   log.trace('Logging Initialized');

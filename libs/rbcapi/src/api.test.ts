@@ -3,8 +3,8 @@ import { RbcStore } from './store';
 import PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { ConfigStore } from '@the-coin/store';
-import credentials from './api.test.secret.json';
 import { init } from '@the-coin/logging'
+import { describe } from '@the-coin/jestutils';
 
 beforeAll(() => {
   PouchDB.plugin(require('pouchdb-adapter-memory'));
@@ -47,12 +47,7 @@ describe('Rbc Puppeteer-based API', () => {
 
   test("Get's new transactions but no more", async () => {
 
-    RbcApi.SetCredentials(credentials);
-    RbcApi.ApiTimeZone = credentials.TimeZone;
-    
-    const browser = await initBrowser({
-      headless: false
-    })
+    const browser = await initBrowser()
 
     const api = new RbcApi();
     const txs1 = await api.fetchLatestTransactions();
@@ -67,5 +62,31 @@ describe('Rbc Puppeteer-based API', () => {
 
     await browser.close();
   });
-})
+
+  test("Gets CAD transactions", async () => {
+
+    const browser = await initBrowser()
+
+    const api = new RbcApi();
+    const txscad = await api.getTransactions(new Date(2014, 5));
+
+    expect(txscad.length).toBeGreaterThan(0);
+    expect(txscad.every(tx => typeof tx.CAD === 'number')).toBeTruthy();
+
+    await browser.close();
+  });
+
+  test("Gets USD transactions", async () => {
+
+    const browser = await initBrowser()
+
+    const api = new RbcApi();
+    const txsusd = await api.getTransactions(new Date(2014, 5), new Date(), process.env.RBCAPI_CREDENTIALS_USD_ACC);
+
+    expect(txsusd.length).toBeGreaterThan(0);
+    expect(txsusd.every(tx => typeof tx.USD === 'number')).toBeTruthy();
+
+    await browser.close();
+  });
+}, !!process.env.RBCAPI_CREDENTIALS_USD_ACC)
 

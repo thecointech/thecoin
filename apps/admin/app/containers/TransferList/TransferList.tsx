@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { List, Icon } from "semantic-ui-react";
 import { TransferRow } from "./TransferRow";
-import { TransferData, TransferRenderer } from "@the-coin/tx-processing";
+import { TransactionData, TransferRenderer } from "./types";
+
 
 type Props = {
-  transfers: TransferData[];
+  transfers: TransactionData[];
   render: TransferRenderer,
   markComplete: (index: number) => void,
 }

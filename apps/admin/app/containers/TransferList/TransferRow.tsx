@@ -1,10 +1,10 @@
 import React from "react";
 import { toHuman } from "@the-coin/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { TransferData, TransferRenderer } from "@the-coin/tx-processing";
+import { TransferRenderer, TransactionData } from "./types";
 
 type Props = {
-  transfer: TransferData,
+  transfer: TransactionData,
   setActive: () => void,
   markComplete: () => void,
   render: TransferRenderer;

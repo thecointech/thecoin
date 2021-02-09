@@ -1,4 +1,4 @@
-import { Transaction } from "./types";
+import { Transaction } from "@the-coin/tx-blockchain";
 import { weSellAt, weBuyAt, FXRate } from "../FxRate";
 
 // What is the CAD value of the money coming into the account?
@@ -10,8 +10,8 @@ const isPurchase = (tx: Transaction) =>
 export const fiatChange = (tx: Transaction, rates: FXRate[]) =>
   tx.change * (
     (tx.change > 0 && isPurchase(tx))
-    ? weSellAt(rates, tx.date)
-    : weBuyAt(rates, tx.date)
+    ? weSellAt(rates, tx.date.toJSDate())
+    : weBuyAt(rates, tx.date.toJSDate())
   )
 
 export const filterFeesFiatChange = (tx: Transaction, rates: FXRate[]) =>

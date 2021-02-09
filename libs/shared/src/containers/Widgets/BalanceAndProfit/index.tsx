@@ -3,17 +3,10 @@ import { Header, Icon } from "semantic-ui-react";
 import illustration from "./images/illust_balance.svg";
 import styles from "./styles.module.less";
 
-export type Props = {
-  Mobile: boolean;
-}
+export const BalanceAndProfit = () => {
 
-export const BalanceAndProfit = (props:Props) => {
-  let classForContainer = "";
-  if (props.Mobile === true){
-    classForContainer = styles.mobile;
-  }
   return (
-    <div className={ `${styles.balanceAndProfit} ${classForContainer} x2spaceAfter` }>
+    <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
         <Header as="h5">
             Balance
         </Header>

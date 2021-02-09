@@ -1,5 +1,3 @@
-import secret from './secret.json';
-import { RbcApi } from '@the-coin/rbcapi';
 import { init } from '@the-coin/logging';
 import { RbcStore } from "@the-coin/rbcapi/store";
 import { ConfigStore } from '@the-coin/store';
@@ -14,7 +12,6 @@ export function Initialize()
   ConfigStore.initialize({adapter: "leveldb"});
 
   init("admin");
-  RbcApi.SetCredentials(secret)
 
   initBrowser({headless: false});
 }
