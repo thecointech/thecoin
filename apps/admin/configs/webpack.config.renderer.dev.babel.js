@@ -15,8 +15,14 @@ import merge from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
+import dotenv from 'dotenv'
+
+import shared_loaders  from '@the-coin/site-base/internal/webpack/webpack.less';
 
 CheckNodeEnv('development');
+
+const env_path = path.join(__dirname, '..', '..', '..', 'secrets', 'credentials.env');
+const env_vars= dotenv.config({ path: env_path });
 
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
@@ -73,42 +79,10 @@ export default merge.smart(baseConfig, {
           }
         ]
       },
-      {
-        test: /\.module\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true
-            }
-          }
-        ]
-      },
-      // LESS module files
-      {
-        // The rest of the less files
-        test: /.*\.module\.less$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              sourceMap: true,
-              modules: true,
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
+
+      shared_loaders.css_module_loader,
+      shared_loaders.semantic_less_loader,
+
       // WOFF Font
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -198,12 +172,13 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development'
+      NODE_ENV: 'development',
+      ...env_vars,
     }),
 
     new webpack.LoaderOptionsPlugin({
       debug: true
-    })
+    }),
   ],
 
   node: {

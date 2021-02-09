@@ -8,8 +8,8 @@
       "type": "node",
       "request": "launch",
       "name": "Electron: Launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "dev"],
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
       "port": 15454
     },
     {

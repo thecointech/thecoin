@@ -3,20 +3,10 @@ import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
+import { Transaction } from '@the-coin/tx-blockchain';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
-
-/* --- STATE --- */
-export type Transaction = {
-  txHash?: string;
-  date: Date;
-  completed: Date;
-  change: number;
-  logEntry: string;
-  balance: number;
-  counterPartyAddress: string;
-}
 
 // An account state holds all relevant info
 // for an account, including loaded transactions etc

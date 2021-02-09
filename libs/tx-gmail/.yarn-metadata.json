@@ -1,0 +1,49 @@
+{
+  "manifest": {
+    "name": "@the-coin/tx-gmail",
+    "version": "0.1.0",
+    "private": true,
+    "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
+    "keywords": [
+      "THECoin"
+    ],
+    "author": {
+      "name": "Stephen Taylor",
+      "email": "stephen@thecoin.io"
+    },
+    "homepage": "http://thecoin.io/",
+    "license": "MIT",
+    "scripts": {
+      "build": "yarn tsc -b -v tsconfig.build.json",
+      "build:clean": "rimraf ./build && rimraf ./coverage",
+      "test": "jest --coverage",
+      "test:summary": "jest --coverage > ./coverage/summary.txt"
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "main": "./build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./": "./build/"
+    },
+    "dependencies": {
+      "@the-coin/logging": "*",
+      "@the-coin/utilities": "*"
+    },
+    "devDependencies": {
+      "jest": "*"
+    },
+    "_registry": "npm",
+    "_loc": "C:\\Users\\kiwi_\\AppData\\Local\\Yarn\\Cache\\v6\\npm-@the-coin-tx-gmail-0.1.0-a7eee108-cbd6-4870-8d4b-e8fcaac32839-1610836742203\\node_modules\\@the-coin\\tx-gmail\\package.json"
+  },
+  "artifacts": [],
+  "remote": {
+    "type": "copy",
+    "registry": "npm",
+    "hash": "a7eee108-cbd6-4870-8d4b-e8fcaac32839-1610836742203",
+    "reference": "C:\\src\\TheCoin\\node_modules\\@the-coin\\tx-gmail"
+  },
+  "registry": "npm",
+  "hash": "a7eee108-cbd6-4870-8d4b-e8fcaac32839-1610836742203"
+}

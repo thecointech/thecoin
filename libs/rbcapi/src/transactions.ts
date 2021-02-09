@@ -4,21 +4,16 @@ import { RbcTransaction } from "./types";
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
 import { RbcStore } from "./store";
-
-export const trimQuotes = (s?: string) => s?.replace (/(^")|("$)/g, '');
+import csv from "csvtojson";
 
 //
 // Fetch, from storage or from live, all latest transactions
 //
-export async function fetchLatestTransactions()
-{
-  const { txs, syncedTill}  = await RbcStore.fetchStoredTransactions();
-  // newest possible date is yesterday
+export async function fetchLatestTransactions() {
+  const { txs, syncedTill } = await RbcStore.fetchStoredTransactions();
   const toDate = new Date();
-  toDate.setDate(toDate.getDate()-1);
 
-  if (!sameDay(syncedTill, toDate))
-  {
+  if (!sameDay(syncedTill, toDate)) {
     const newTxs = await getTransactions(syncedTill, toDate);
     await RbcStore.storeTransactions(newTxs, toDate);
     return [...txs, ...newTxs];
@@ -29,21 +24,28 @@ export async function fetchLatestTransactions()
 //
 // Get all transactions between from & to from bank acc
 //
-export async function getTransactions(from: Date, to: Date) : Promise<RbcTransaction[]> {
+export async function getTransactions(from: Date, to = new Date(), accountNo = ApiAction.Credentials.accountNo): Promise<RbcTransaction[]> {
   const act = await ApiAction.New('getTransactions', true);
   const { page } = act;
 
+  // newest possible date is yesterday
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() - 1);
+  to.setTime(Math.min(to.getTime(), maxDate.getTime()));
+
   // Go to CAD account
-  await act.clickOnText(ApiAction.Credentials.accountNo, 'a', '#search-transaction');
+  await act.clickOnText(accountNo, 'a', '#search-transaction');
   // To to download transactions
   await act.clickOnText('Download Transactions', 'a', '#ACCOUNT_INFO1');
 
   // Select the right format
   await page.click('#EXCEL');
   await act.writeStep('Excel');
+
   // Select the right account
-  await page.select('#ACCOUNT_INFO1', 'C001');
+  await selectAccount(page, accountNo);
   await act.writeStep('Select Account');
+
   // Select date range
   await page.click('#fromRange > input');
 
@@ -56,31 +58,53 @@ export async function getTransactions(from: Date, to: Date) : Promise<RbcTransac
   if (!downloadButton)
     throw new Error('We have no download button');
 
-  const txs = await downloadTxCsv(act.page);
+  const asString = await downloadTxCsv(act.page);
 
   const maybeParse = (s?: string) => s ? parseFloat(s) : undefined;
   const toDateTime = (date: string) => DateTime.fromFormat(date, "L/d/yyyy", RbcStore.Options);
+  const obj = await csv({
+    ignoreEmpty: true,
+    ignoreColumns: /field9/,
+    colParser: {
+      ["Transaction Date"]: toDateTime,
+      ["Cheque Number"]: maybeParse,
+      ["CAD$"]: maybeParse,
+      ["USD$"]: maybeParse,
+    }
+  }).fromString(asString);
 
-  const allLines = txs.split('\n');
-  return allLines
-    .slice(1)
-    .map(line => line.split(','))  // Split into component pieces
-    .filter(entry => entry[1] == ApiAction.Credentials.accountNo) // Do not accept any line that does not have the right account type
-    .map((entry) : RbcTransaction =>  ({
-        AccountType: entry[0],
-        AccountNumber: entry[1],
-        TransactionDate: toDateTime(entry[2]),
-        ChequeNumber: maybeParse(entry[3]),
-        Description1: trimQuotes(entry[4]),
-        Description2: trimQuotes(entry[5]),
-        CAD: maybeParse(entry[6]),
-        USD: maybeParse(entry[7]),
-      })
-    )
+  // Remove spaces and '$' from names
+  return obj.map(cleanTransaction);
 }
+
+const newTransaction  = (): RbcTransaction => ({
+  AccountType: "DEFAULT_VALUE",
+  AccountNumber: "DEFAULT_VALUE",
+  TransactionDate: DateTime.fromMillis(0)
+})
+const cleanName = (name: string) => name.replace(/[\s\$]/g, '');
+const cleanTransaction = (obj: object) : RbcTransaction =>
+  Object.entries(obj)
+    .reduce((r, et) => ({
+      ...r,
+      [cleanName(et[0])]: et[1]
+    }), newTransaction())
+
 
 /////////////////////////////////////////////////////////////
 // Utilities
+
+const selectAccount = async (page: Page, accountNo: string) => {
+  await page.evaluate((selectId, accountNo) => {
+    const options = Array.from(document.querySelectorAll(selectId + ' option'));
+    for (const option of options) {
+      if (option.textContent?.includes(accountNo)) {
+        // @ts-ignore: ts type error but cannot put type assertions in this code
+        option.selected = true;
+      }
+    }
+  }, '#ACCOUNT_INFO1', accountNo)
+}
 
 const selectTxDate = async (page: Page, fromTo: string, date: Date) => {
   // Select month
