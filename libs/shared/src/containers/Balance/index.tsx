@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { Button, Grid, Popup, Icon } from "semantic-ui-react";
+import { Button, Popup, Icon } from "semantic-ui-react";
 
 import { toHuman } from "@the-coin/utilities";
 import { getFxRate } from "../FxRate/reducer";
@@ -35,23 +35,15 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   return (
     <React.Fragment>
       <div className={styles.wrapper}>
-        <Grid columns={2} stackable>
-          <Grid.Row>
-            <Grid.Column>
-              <p className={styles.have}>
-                You have:{" "}
-                <span className={styles.balance}>${cadBalance}</span>{" "}
-                <Popup
-                  trigger={<Icon name="chart line" className={styles.bankIcon} />}
-                  content={profitDisplay}
-                  position="top left"
-                />
-              </p>
-            </Grid.Column>
-            <Grid.Column width={2}></Grid.Column>
-          </Grid.Row>
-        </Grid>
-
+        <p className={styles.have}>
+          You have:{" "}
+          <span className={styles.balance}>${cadBalance}</span>{" "}
+          <Popup
+            trigger={<Icon name="chart line" className={styles.bankIcon} />}
+            content={profitDisplay}
+            position="top left"
+          />
+        </p>
         <Button onClick={doUpdateBalance}>Update Balance</Button>
 
         <TransactionHistory

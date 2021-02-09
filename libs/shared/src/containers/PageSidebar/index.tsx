@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Sidebar, Menu, MenuItem, Segment, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
+import { Sidebar, Menu, MenuItem, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
@@ -7,6 +7,8 @@ import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
+import getWindowDimensions from '@the-coin/site-base/components/WindowDimensions';
+import { breakpointsValues } from '@the-coin/site-base/components/ResponsiveTool';
 
 type Props = {
   visible?: boolean;
@@ -28,11 +30,17 @@ export const PageSidebar: React.FC<Props> = (props) => {
     return buildMenuArray(items);
   }, [appState, generators])
 
-  const isVisible = visible ?? (menuItems && menuItems.length > 0);
-  const pusherClass = isVisible ? styles.mainPagePusherOut : undefined;
+  let isVisible = visible ?? (menuItems && menuItems.length > 0);
+  
+  const windowDimension = getWindowDimensions();
+  const breakpointTablet = breakpointsValues.tablet;
+  
+  // If Small Screen / Mobile
+  if (windowDimension.width <= breakpointTablet){
+    isVisible = false;
+  }
 
   return (
-    <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
       <Sidebar
         as={Menu}
         animation="push"
@@ -45,10 +53,6 @@ export const PageSidebar: React.FC<Props> = (props) => {
       >
         {menuItems}
       </Sidebar>
-      <Sidebar.Pusher className={pusherClass}>
-        {props.children}
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
   );
 }
 
