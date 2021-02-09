@@ -5,7 +5,7 @@ import styles from "./styles.module.less";
 
 export const BalanceAndProfit = () => {
   return (
-    <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
+    <div className={ `${styles.balanceAndProfit} x2spaceAfter appContainer` }>
         <Header as="h5">
             Balance
         </Header>
