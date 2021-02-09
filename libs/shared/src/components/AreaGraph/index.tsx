@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
 import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
-import { getData, getAllReturns,calculateAvgAndArea, DataFormat } from 'containers/ReturnProfile/Data'
+//import { getData, getAllReturns,calculateAvgAndArea, DataFormat } from 'containers/ReturnProfile/Data'
 import range from 'lodash/range'
 
 //const data: Serie[] = generateDrinkStats(18) as any;
