@@ -6,8 +6,8 @@ const tsconfig = JSON.parse(fs.readFileSync('./tsconfig.json'));
 
 const {rootDir, outDir} = tsconfig.compilerOptions;
 const typesGlob = process.argv[2];
-
-for (const f of glob.sync(rootDir + typesGlob))
+console.log('Linking from: ' + process.cwd());
+for (const f of glob.sync(path.join(rootDir, typesGlob)))
 {
   const {base, dir} = path.parse(f);
   const rpath = path.relative(rootDir, dir);
