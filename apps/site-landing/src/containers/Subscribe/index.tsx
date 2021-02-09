@@ -57,7 +57,7 @@ export const Subscribe = () => {
 
 
   return (
-    <div className={styles.subscribeBlock} id={styles.subscribeBlock}>
+    <div id={styles.subscribeBlock}>
       <span className={ `${styles.subContainer} x2spaceBefore x6spaceAfter` }>
           <h3>
             <FormattedMessage {...description} />
