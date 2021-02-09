@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { Transaction } from '../Account/types'
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
@@ -10,8 +9,8 @@ import { fiatChange } from '../Account/profit';
 //import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconBank from "./images/icon_bank.svg";
-
 import styles from './styles.module.less';
+import { Transaction } from '@the-coin/tx-blockchain';
 
 type MyProps = {
   transactions: Transaction[];
@@ -84,11 +83,11 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
     const { transactions, transactionLoading, rates } = this.props;
     const { fromDate, untilDate } = this.state;
 
-    let filteredTx = transactions.filter((tx) => tx.date >= fromDate && tx.date <= untilDate)
+    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
     let txJsxRows = txOutput.map((tx, index) => {
       const change = fiatChange(tx, rates);
-      const balance = tx.balance *  weBuyAt(rates, tx.date);
+      const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
       const changeCad = toHuman(change, true);
       const balanceCad = toHuman(balance, true);
 
@@ -101,10 +100,10 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
         contentForComment = "OUT";
       }
 
-      const monthTodisplay = tx.date.toLocaleString(this.locale, { month: 'short' });
-      const yearToDisplay = tx.date.getUTCFullYear();
-      const dayToDisplay = tx.date.getUTCDate();
-      const timeToDisplay = tx.date.toLocaleTimeString(this.locale,{ hour: '2-digit', minute: '2-digit' }); 
+      const monthTodisplay = tx.date.monthShort;
+      const yearToDisplay = tx.date.year; 
+      const dayToDisplay = tx.date.day;
+      const timeToDisplay = tx.date.hour+":"+tx.date.minute; 
       //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
       //{tx.logEntry}
       return (

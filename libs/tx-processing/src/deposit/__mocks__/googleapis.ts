@@ -2,13 +2,13 @@ import emaillist from './emails.list.json';
 import emailget from './emails.get.json';
 
 import { gmail_v1 } from "googleapis";
-
+// file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
 
 
   export namespace auth {
     export class OAuth2 {
-      public credentials: any;
+      credentials: any;
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {
@@ -20,10 +20,10 @@ export namespace google {
 
   export function gmail() {
     console.log("Createing mocked gmail");
-    return new gmail_mocked();
+    return new GmailMocked();
   }
 
-  class gmail_mocked {
+  class GmailMocked {
     users = {
       labels: {
         async list() {

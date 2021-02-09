@@ -1,9 +1,8 @@
 import { shell } from 'electron';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-
-import credentials from '../gmail.json';
 import { ConfigStore } from '@the-coin/store';
+import { readFileSync } from 'fs';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -22,7 +21,7 @@ const TOKEN_KEY = "token.json";
  * @param {function} callback The callback to call with the authorized client.
  */
 export async function authorize() {
-  const { client_secret, client_id, redirect_uris } = credentials.installed
+  const { client_secret, client_id, redirect_uris } = getCredentials();
   const oAuth2Client = new google.auth.OAuth2(
     client_id, client_secret, redirect_uris[0]
   );
@@ -36,6 +35,15 @@ export async function authorize() {
     await getNewToken(oAuth2Client);
   }
   return oAuth2Client
+}
+
+// Load credentials from disk
+function getCredentials() {
+  const credentialsPath = process.env['GMAIL_CREDENTIALS_PATH'];
+  if (!credentialsPath)
+    throw new Error('Cannot run gmail API without GMAIL_CREDENTIALS_PATH');
+  const credentials = readFileSync(credentialsPath, 'utf8');
+  return JSON.parse(credentials)
 }
 
 export function isValid(oAuth2Client: OAuth2Client|null) {
