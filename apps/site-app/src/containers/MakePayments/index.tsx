@@ -7,6 +7,7 @@ import { Transfer } from 'containers/Accounts/Transfer';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
+import {AppContainerForTabs} from 'components/AppContainers';
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -35,10 +36,10 @@ export const MakePayments = (props: {account: AccountState;}, routerProps:Accoun
   const intl = useIntl();
   const account = props.account;
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <div className={"appContainer topRightFlat"}><Redeem {...props} account={account} /></div> },
-    { menuItem: intl.formatMessage({...bills}), render: () => <div className={"appContainer topRightFlat"}><BillPayments {...props} account={account} /></div> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <div className={"appContainer topRightFlat"}><Transfer {...props} account={account} /></div> },
-    { menuItem: intl.formatMessage({...templates}), render: () => <div className={"appContainer topRightFlat"}>Templates</div> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem {...props} account={account} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments {...props} account={account} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer {...props} account={account} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (
     <React.Fragment>

@@ -26,7 +26,7 @@ export const RecentTransactions = ({ account, actions }: AccountPageProps) => {
 
   return (
     <React.Fragment>
-      <div className={ `x6spaceBefore x6spaceAfter appContainer ${styles.recentTransactionsContainer}`}>
+      <div className={ `x6spaceBefore x6spaceAfter ${styles.recentTransactionsContainer}`}>
         <Header as="h5"><FormattedMessage {...title} /></Header>
 
         <TransactionHistory
