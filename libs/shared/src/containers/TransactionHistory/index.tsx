@@ -92,11 +92,11 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       const balanceCad = toHuman(balance, true);
 
       let imgForLine = iconThecoin;
-      let classForMoneyCell = "moneyPositive";
+      let classForMoneyCell = styles.moneyPositive;
       let contentForComment = "IN";
       if (changeCad < 0){
         imgForLine = iconBank;
-        classForMoneyCell = "moneyNegative";
+        classForMoneyCell = styles.moneyNegative;
         contentForComment = "OUT";
       }
 
@@ -120,8 +120,8 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
             <div>{contentForComment}</div>
             <span className={`font-small font-green font-bold`}>To</span> <span className={`font-grey-06`}>Test content</span>
           </Table.Cell>
-          <Table.Cell width={3} textAlign='right' className={classForMoneyCell}>
-            <div>{changeCad} $</div>
+          <Table.Cell width={3} textAlign='right'>
+            <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
           </Table.Cell>
           <Table.Cell width={3}>${balanceCad}</Table.Cell>
@@ -136,7 +136,7 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
           <Dimmer active={transactionLoading}>Loading...</Dimmer>
         </Dimmer.Dimmable>
 
-        <Table basic='very' singleLine>
+        <Table basic='very' singleLine >
           <Table.Body>
             {...txJsxRows}
           </Table.Body>
