@@ -4,13 +4,13 @@ import { call } from 'redux-saga/effects';
 import { useInjectSaga } from "redux-injectors";
 import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { useDispatch } from 'react-redux';
-import { AccountState, DecryptCallback, IActions, Transaction } from './types';
+import { AccountState, DecryptCallback, IActions } from './types';
 import { buildSagas, bindActions } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
-import { loadAndMergeHistory, calculateTxBalances } from './history';
+import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
 
 
 // The reducer for a single account state
@@ -93,7 +93,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     // Ensure we have fx value for each tx in this list
     for (var i = 0; i < newHistory.length; i++)
     {
-      yield this.sendValues(FxActions.fetchRateAtDate, newHistory[i].date);
+      yield this.sendValues(FxActions.fetchRateAtDate, newHistory[i].date.toJSDate());
     }
   }
 

@@ -1,6 +1,7 @@
 @import "~@the-coin/site-base/styles/variables.less";
 
 .balanceAndProfit{
+    background-color: @white;
     width:171px;
     text-align: center;
     padding: 10px;
@@ -12,10 +13,7 @@
     hr{
         color: @theCoinPalettePaleGreen2;
     }
-
-    &.mobile{
+    .smallerThanDesktop({
         width:auto;
-        background-color: @white;
-    }
+    });
 }
-

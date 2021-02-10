@@ -2,43 +2,47 @@ import { RbcStore } from './store';
 import * as PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { send } from './etransfer';
-import { RbcApi } from '.';
-import credentials from './api.test.secret.json';
+import { describe, IsManualRun } from '@the-coin/jestutils';
 
 
-beforeAll(() => {
+// Note, this test will send real money from a real account.
+// So ya probably want to leave it disabled except for manual runs.
+describe("Live tests on live account", () => {
+
+  beforeAll(() => {
     PouchDB.plugin(require('pouchdb-adapter-memory'));
     RbcStore.initialize({
         adapter: "memory"
     });
-});
+  });
 
-afterAll(() => {
+  afterAll(() => {
     RbcStore.release();
-});
+  });
 
+  test("Can send e-Transfer", async () => {
+    jest.setTimeout(500000);
+    try {
 
-test.skip("Can send e-Transfer", async () => {
-  jest.setTimeout(500000);
-  try {
-    RbcApi.SetCredentials(credentials);
+      // Always display browser for manual test
+      const browser = await initBrowser({
+        headless: false
+      })
 
-    const browser = await initBrowser({
-      headless: false
-    })
+      const confirmation = await send("TestEmail", 5, "test", {
+        email: "test@thecoin.io",
+        question: "question",
+        answer: "tgb",
+        message: "message",
+      });
+      expect(confirmation).toBeTruthy();
 
-    const confirmation = await send("TestEmail", 5, "test", {
-      email: "test@thecoin.io",
-      question: "question",
-      answer: "tgb",
-      message: "message",
-    });
-    expect(confirmation).toBeTruthy();
+      await browser.close();
+    }
+    catch(e) {
+      console.error(e);
+      fail(e);
+    }
+  });
+}, IsManualRun);
 
-    await browser.close();
-  }
-  catch(e) {
-    console.error(e);
-    fail(e);
-  }
-});

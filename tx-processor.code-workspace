@@ -9,6 +9,14 @@
 			"path": "libs\\tx-processing"
 		},
 		{
+			"name": "tx-firestore",
+			"path": "libs\\tx-firestore"
+		},
+		{
+			"name": "tx-gmail",
+			"path": "libs\\tx-gmail"
+		},
+		{
 			"name": "rbcapi",
 			"path": "libs\\rbcapi"
 		},
@@ -17,12 +25,15 @@
 			"path": "libs\\utils-ts"
 		},
 		{
+			"name": "store",
 			"path": "libs\\store"
 		},
 		{
+			"name": "logging",
 			"path": "libs\\logging"
 		},
 		{
+			"name": "contract",
 			"path": "libs\\contract"
 		}
 	],

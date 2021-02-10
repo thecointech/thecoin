@@ -181,7 +181,9 @@ contract TheCoin is Initializable, ERC20Local, LibCertTransfer {
 
     // Users purchase coin from brokers.  This function is used to declare
     // a transfer with a precise timestamp to ensure we can reconstruct the fx price
-    // of this transaction later
+    // of this transaction later.
+    // NOTE: timestamp is in seconds
+    // TODO: Convert timestamp to ms for consistency before mainnet publish
     function coinPurchase(address purchaser, uint amount, uint timeout, uint timestamp) public
     isTransferable(msg.sender, amount)
     {

@@ -10,7 +10,7 @@ import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
 import { ETransfers } from './ETransfers';
 import { Gmail } from 'containers/gmail';
-import { Clients } from './Clients';
+import { ClientSelect } from './Clients/ClientSelect';
 
 type Props = RouteComponentProps;
 
@@ -50,7 +50,7 @@ const AccountMap: RouterPath[] = [
   {
     name: "Clients",
     urlFragment: "clients",
-    creator: (_routerProps: AccountPageProps) => ((_props: any) => <Clients contract={_routerProps.account.contract} /> )
+    creator: (_routerProps: AccountPageProps) => ((_props: any) => <ClientSelect /> )
   }
 ]
 

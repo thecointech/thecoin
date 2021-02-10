@@ -1,6 +1,7 @@
 import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
 import fs from 'fs';
 import { log } from '@the-coin/logging';
+import { Credentials } from './types';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -17,14 +18,6 @@ export async function initBrowser(options?: puppeteer.LaunchOptions) {
 async function getPage() {
   const browser = _browser ?? await initBrowser();
   return browser.newPage();
-}
-
-export type Credentials = {
-  password: string;
-  cardNo: string;
-  accountNo: string;
-
-  pvq: {question: string, answer: string}[]
 }
 
 export class ApiAction {
