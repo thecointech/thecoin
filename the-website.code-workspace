@@ -2,28 +2,28 @@
 	"folders": [
     {
       "name": "site-landing",
-      "path": "apps\\site-landing"
+      "path": "apps/site-landing"
     },
     {
       "name": "site-app",
-      "path": "apps\\site-app"
+      "path": "apps/site-app"
     },
     {
       "name": "site-base",
-      "path": "libs\\site-base"
+      "path": "libs/site-base"
     },
     {
       "name": "shared",
-      "path": "libs\\shared"
+      "path": "libs/shared"
     },
     {
       "name": "utils-ts",
-      "path": "libs\\utils-ts"
+      "path": "libs/utils-ts"
     }
   ],
   "settings": {
     "deepcode.review.results.hideInformationIssues": false,
-    "typescript.tsdk": "..\\node_modules\\typescript\\lib",
+    "typescript.tsdk": "../node_modules/typescript/lib",
     "typescript.tsserver.pluginPaths": [
       "typescript-plugin-css-modules"
     ],
