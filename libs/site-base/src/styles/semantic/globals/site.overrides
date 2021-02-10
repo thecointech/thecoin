@@ -33,6 +33,23 @@ body {
   font-weight: @bold;
 }
 
+.font-green {
+  color: @theCoinPaletteGreen4;
+}
+
+.font-grey {
+  color: @theCoinPaletteGray1;
+}
+
+.font-grey-06 {
+  color: @theCoinPaletteGray1;
+  opacity: 0.6;
+}
+
+.write-vertical{
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
 
 /////////////////////////////////////////////////////////////
 // Links

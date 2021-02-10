@@ -1,3 +1,8 @@
 /*******************************
          Site Overrides
 *******************************/
+
+.ui[class*="very basic"].table:not(.sortable):not(.striped) th, .ui[class*="very basic"].table:not(.sortable):not(.striped), .ui.table tr{
+    border: 1px solid @theCoinPalettePaleGreen2;
+    border-radius: 2px;
+}

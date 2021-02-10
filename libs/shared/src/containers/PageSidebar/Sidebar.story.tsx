@@ -1,4 +1,4 @@
-import {MainRouterStorybook} from './Sidebar.defaultroutes.stories';
+import {MainRouterStorybook} from './Sidebar.defaultroutes.story';
 import "@the-coin/site-base/build/styles/semantic.less";
 import React from 'react';
 import { Story, Meta } from '@storybook/react';

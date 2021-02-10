@@ -11,8 +11,6 @@ import { isWallet } from "../../SignerIdent";
 import { AccountState } from "../Account/types";
 import { useAccountApi } from "../Account/reducer";
 
-import illustrationPlant from './images/illust_flowers.svg';
-
 import styles from "./styles.module.less";
 
 interface OwnProps {
@@ -134,8 +132,8 @@ export const Login = (props: Props) => {
 
   return (
     <>
-      <div className={styles.wrapper}>
-        <Header as='h5' className={ `x8spaceBefore` }>
+      <div className={`${styles.wrapper} appContainer x6spaceAfter`}>
+        <Header as='h5' className={ `x4spaceBefore` }>
           <FormattedMessage {...aboveTheTitle}/>
         </Header>
         <Header as="h2" className={ `x4spaceBefore` }>
@@ -157,7 +155,7 @@ export const Login = (props: Props) => {
               &nbsp;&nbsp;&nbsp;&nbsp;
           </Button>
 
-          <div className={ `x10spaceBefore` } >
+          <div className={ `x10spaceBefore x8spaceAfter` } >
             <FormattedMessage {...textAtTheBottom} />
           </div>
         </Form>
@@ -169,7 +167,6 @@ export const Login = (props: Props) => {
           progressPercent={percentComplete}
         />
       </div>
-      <img src={ illustrationPlant } />
     </>
   );
 }
