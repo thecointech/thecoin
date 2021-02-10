@@ -7,7 +7,7 @@ import { Transfer } from 'containers/Accounts/Transfer';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
-import {AppContainerForTabs} from 'components/AppContainers';
+import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -58,8 +58,10 @@ export const MakePayments = (props: {account: AccountState;}, routerProps:Accoun
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Tab panes={panes} renderActiveOnly={true}/>
-      <RecentTransactions {...props} {...routerProps} />
+      <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
+      <AppContainerWithShadow>
+        <RecentTransactions {...props} {...routerProps} />
+      </AppContainerWithShadow>
     </React.Fragment>
   );
 }
