@@ -1,11 +1,3 @@
-/*
- * This file is part of the nivo project.
- *
- * Copyright 2016-present, Raphaël Benitte.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 import React from 'react'
 import { Story, Meta } from '@storybook/react';
 import { GraphHistory } from '.';
@@ -17,24 +9,25 @@ export default {
   title: 'Shared/GraphHistory',
   component: GraphHistory,
   argTypes: {
-    content: { control: 'text' },
-    active: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    lineColor: { control: 'color' }
   },
 } as Meta;
 
 const defaultArgs = {
   numDays: 30,
+  lineColor: '#61C1B8'
 }
-const template: Story<typeof defaultArgs> = (args) => <GraphHistory data={genData(args.numDays)} />;
 
-export const Default = template.bind(defaultArgs);
+const template: Story<typeof defaultArgs> = (args) =>
+  <GraphHistory data={genData(args.numDays)} lineColor={args.lineColor} />;
 
+export const Default = template.bind({});
+Default.args = defaultArgs;
 
 const genData = (num = 30) => {
   let balance = 100;
-  return new Array(num).map((_, index): Transaction => {
-    const change = Math.max((Math.random() - 0.5) * 100, 0);
+  return Array.from({length: num}).map((_, index): Transaction => {
+    const change = Math.max((Math.random() - 0.45) * 100, -balance);
     balance += change;
     return {
       balance,

@@ -66,7 +66,7 @@
 @purple           : @blue; // no purple
 @pink             : @red;  // no pink
 @brown            : #6F6571;
-@grey             : @theCoinPaletteGray1
+@grey             : @theCoinPaletteGray1;
 @black            : @theCoinPaletteGreen5; // no actual blacks on our site
 
 /*---  Light Colors  ---*/
@@ -81,7 +81,7 @@
 @lightPurple      : @lightBlue;
 @lightPink        : @lightRed;
 @lightBrown       : @lightYellow;
-@lightGrey        : @theCoinPaletteGray1
+@lightGrey        : @theCoinPaletteGray1;
 @lightBlack       : #545454;
 
 /*-------------------
@@ -196,7 +196,7 @@
 @tealActive                : @theCoinPalettePaleGreen3;
 
 /*-------------------
-        Focus   
+        Focus
 --------------------*/
 
 /*---  Colors  ---*/
