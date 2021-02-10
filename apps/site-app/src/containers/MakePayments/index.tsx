@@ -17,6 +17,7 @@ import { Transfer } from 'containers/Accounts/Transfer';
 //import { Redeem } from 'containers/Accounts/Redeem';
 import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
+import { AccountState } from '@the-coin/shared/containers/Account/types';
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -41,7 +42,7 @@ const templates = { id:"app.makepayments.tabs.templates",
                 defaultMessage:"Templates",
                 description:"Title for the tabs the Make a payment page in the app" };
 
-export const MakePayments = (props: any, routerProps:AccountPageProps) => {
+export const MakePayments = (props: {account: AccountState;}, routerProps:AccountPageProps) => {
   const intl = useIntl();
   const account = props.account;
   const panes = [
