@@ -1,21 +1,3 @@
 /*******************************
          Site Overrides
 *******************************/
-
-
-.appBorders{
-    border-radius: 10px;
-    border-color: @theCoinPalettePaleGreen2;
-}
-
-.appShadow{
-    box-shadow: 0px 0px 10px 0px @theCoinPaletteGray3;
-}
-
-.appContainer{
-    border-radius: 10px;
-    border: 1px solid @theCoinPalettePaleGreen2;
-    padding: 30px;
-    background-color: @white;
-    box-shadow: 0px 0px 10px 0px @theCoinPaletteGray3;
-}

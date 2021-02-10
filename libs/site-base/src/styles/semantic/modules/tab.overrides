@@ -1,3 +1,24 @@
 /*******************************
         User Overrides
 *******************************/
+
+
+.ui.tabular.menu .item{
+        background-color: fade(@theCoinPalettePaleGreen2, 30%);   // Return @color with 30% opacity in rgba;
+        color: @theCoinPalettePaleGreen2;
+        border-radius: 0.625rem 0.625rem 0px 0px !important;
+        margin-right: 5px;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding-right: 25px;
+        padding-left: 25px;
+        &:hover{
+                color: @theCoinPaletteGreen4;
+                background-color: fade(@theCoinPalettePaleGreen2, 30%); 
+        }
+}
+
+.ui.tabular.menu .active.item{
+        background-color: @theCoinPaletteGreen4;
+        color: @white;
+}
