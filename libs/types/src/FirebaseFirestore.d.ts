@@ -1112,7 +1112,7 @@
      * @return {Promise<DocumentReference[]>} The list of documents in this
      * collection.
      */
-    //listDocuments(): Promise<DocumentReference[]>;
+    listDocuments(): Promise<DocumentReference[]>;
 
     /**
      * Get a `DocumentReference` for a randomly-named document within this

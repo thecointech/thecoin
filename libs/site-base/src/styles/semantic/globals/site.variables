@@ -8,6 +8,7 @@
 
 @pageBackground      : @white;
 @maxContentWidth: 1440px;
+.smallerThanDesktop(@rules) { @media only screen and (max-width: @tabletBreakpoint) { @rules(); } }
 
 /*-------------------
        Fonts

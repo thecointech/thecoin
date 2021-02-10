@@ -1,8 +1,13 @@
-.subscribeBlock{
+@import "~@the-coin/site-base/styles/variables.less";
+
+#subscribeBlock{
     display:flex;
     flex-direction: column;
     justify-items: center;
     color: white;
+    button{
+      margin-left: 20px;
+    }
   }
   
   .subscribe {
@@ -20,16 +25,25 @@
     margin-right: auto;
   }
 
-  #mobileContainer{
+
+
+
+  .smallerThanDesktop({  
+    #subscribeBlock {
       div.ui.input{
         display: block;
+        width: 100%;
         input{
           width: 100%;
           display: block;
         }
-      }
-      button{
-        width: 100%;
-        display: block;
-      }
-  }  
+    }
+    button{
+      margin-left: 0;
+      margin-top: 20px;
+      width: 100%;
+      display: block;
+    }
+  }    
+
+});

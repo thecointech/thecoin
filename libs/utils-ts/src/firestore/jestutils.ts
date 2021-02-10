@@ -1,12 +1,12 @@
-import { isEmulatorAvailable } from './debug';
-export { isEmulatorAvailable, init, release } from './debug';
+import { isEmulatorAvailable } from './types';
+export { init, release } from './debug';
 import { describe } from "@the-coin/jestutils"
 
 ///////////////////////////////////////////////////////////////
 // Firestore helper functions
 
 const filterByEmulator = () => {
-  if (!isEmulatorAvailable) {
+  if (!isEmulatorAvailable()) {
     console.warn("Cannot connect to firestore, abandoning unit tests");
     return false;
   }
@@ -16,4 +16,4 @@ const filterByEmulator = () => {
 const db_describe = async (name: number | string | Function, tests: () => void | Promise<void>) =>
   describe(name, tests, filterByEmulator);
 
-export { db_describe as describe }
+export { db_describe as describe, isEmulatorAvailable }

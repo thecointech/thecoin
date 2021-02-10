@@ -4,9 +4,6 @@ import { GetNewsletterApi } from '../../api';
 import styles from './styles.module.less';
 import { FormattedMessage } from 'react-intl';
 
-export type Props = {
-  Mobile: boolean;
-}
 
 const description = {  id:"site.subscribe.description",
                       defaultMessage:"The future is better because of you & us. Subscribe to our newsletter",
@@ -26,7 +23,7 @@ const successEmail = {  id:"site.subscribe.email.success",
                       description:"Message we give a user when the subscription is a success"};
 
 
-export const Subscribe = (props: Props) => {
+export const Subscribe = () => {
   const [errorInfos, setErrorInfos] = useState(true);
   const [confirmInfos, setConfirmInfos] = useState(true);
   const [validInfos, setValidInfos] = useState(true);
@@ -58,15 +55,9 @@ export const Subscribe = (props: Props) => {
     }
   }, [email]);
 
-  let idForContainer = styles.desktopContainer;
-  let classForButton = "x4spaceLeft";
-  if (props.Mobile){
-    idForContainer = styles.mobileContainer;
-    classForButton = "x4spaceBefore";
-  }
 
   return (
-    <div className={styles.subscribeBlock} id={idForContainer}>
+    <div id={styles.subscribeBlock}>
       <span className={ `${styles.subContainer} x2spaceBefore x6spaceAfter` }>
           <h3>
             <FormattedMessage {...description} />
@@ -88,7 +79,7 @@ export const Subscribe = (props: Props) => {
           onChange={onInputChange}
           placeholder="Your email" />
 
-        <Button onClick={doSubscribe} secondary className={ classForButton }>
+        <Button onClick={doSubscribe} secondary>
           <FormattedMessage {...button} />
         </Button>
       </span>
