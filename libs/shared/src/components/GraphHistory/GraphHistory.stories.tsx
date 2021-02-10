@@ -3,79 +3,78 @@ import { Story, Meta } from '@storybook/react';
 import { GraphHistory } from '.';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
+import { FXRate } from 'containers/FxRate/types';
 
 
 export default {
   title: 'Shared/GraphHistory',
   component: GraphHistory,
   argTypes: {
-    lineColor: { control: 'color' }
+    lineColor: { control: 'color' },
+    from: { control: 'date' },
+    to: { control: 'date' }
   },
 } as Meta;
 
+const days = 24 * 60 * 60 * 1000;
 const defaultArgs = {
-  numDays: 30,
-  lineColor: '#61C1B8'
+  //numDays: 30,
+  lineColor: '#61C1B8',
+  from: Date.now() - (30 * days),
+  to: Date.now(),
+  txFrequency: 5,
 }
 
 const template: Story<typeof defaultArgs> = (args) =>
-  <GraphHistory data={genData(args.numDays)} lineColor={args.lineColor} />;
+  <GraphHistory
+    txs={genTxs(args)}
+    fxRates={genFxRates(args)}
+    lineColor={args.lineColor}
+    from={DateTime.fromMillis(args.from)}
+    to={DateTime.fromMillis(args.to)}
+  />;
 
 export const Default = template.bind({});
 Default.args = defaultArgs;
 
-const genData = (num = 30) => {
+const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   let balance = 100;
-  return Array.from({length: num}).map((_, index): Transaction => {
+  let now = to + 10 * days; // Add more time just to ensure limits work
+  let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
+  const incr = Math.max(0.5, txFrequency) * days;
+  const r : Transaction[] = [];
+  while (date < now) {
     const change = Math.max((Math.random() - 0.45) * 100, -balance);
-    balance += change;
-    return {
+    r.push({
       balance,
       change,
-      date: DateTime.fromObject({year: 2020, month: 1, day: index}),
+      date: DateTime.fromMillis(date),
       logEntry: "Transaction",
       counterPartyAddress: "0x12345",
-    }
-  })
+    })
+    balance += change;
+    // Increment at random increment
+    date += Math.random() * incr;
+  }
+  return r;
 }
 
-// stories.add('area gradients', () => (
-//   <Line
-//       {...commonProperties}
-//       enableArea={true}
-//       yScale={{
-//           type: 'linear',
-//           stacked: true,
-//       }}
-//       curve={select('curve', curveOptions, 'linear')}
-//       defs={[
-//           linearGradientDef('gradientA', [
-//               { offset: 0, color: 'inherit' },
-//               { offset: 100, color: 'inherit', opacity: 0 },
-//           ]),
-//       ]}
-//       fill={[{ match: '*', id: 'gradientA' }]}
-//   />
-// ))
-
-
-// type CustomSymbolProps = {
-//   size: number,
-//   color: string,
-//   borderWidth: number,
-//   borderColor: string,
-// }
-// const CustomSymbol = ({ size, color, borderWidth, borderColor }: CustomSymbolProps) => (
-//     <g>
-//         <circle fill="#fff" r={size / 2} strokeWidth={borderWidth} stroke={borderColor} />
-//         <circle
-//             r={size / 5}
-//             strokeWidth={borderWidth}
-//             stroke={borderColor}
-//             fill={color}
-//             fillOpacity={0.35}
-//         />
-//     </g>
-// )
-
-// const stories = storiesOf('Line', module)
+const genFxRates = ({from, to}: typeof defaultArgs) => {
+  let now = to + 10 * days; // Add more time just to ensure limits work
+  let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
+  const r : FXRate[] = [];
+  const incr = days / 4; // roughly 4 updates per day
+  while (date < now) {
+    // Up to 0.1 % change per day
+    const ex = 1 + (0.1 * (Math.random() - 0.45))
+    r.push({
+      buy: ex - 0.01,
+      sell: ex + 0.01,
+      fxRate: 1,
+      validFrom: date,
+      validTill: date + incr,
+    })
+    date = date + incr;
+  }
+  return r;
+}

@@ -44,7 +44,7 @@
         "request": "launch",
         "type": "pwa-chrome",
         "url": "http://localhost:6006",
-        "webRoot": "${workspaceFolder:shared}",
+        "webRoot": "${workspaceFolder:shared}/../..",
         "sourceMaps": true,
         "outFiles": [
           "**/build/**/*.js",
