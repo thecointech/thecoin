@@ -1,14 +1,13 @@
 import React from "react";
 //import { Bar } from "@nivo/bar";
 import { linearGradientDef } from '@nivo/core'
-import { Serie, Datum, ResponsiveLine, LineSvgProps } from '@nivo/line'
+import { Serie, ResponsiveLine, LineSvgProps, PointTooltip } from '@nivo/line'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { FXRate, weSellAt } from "../../containers/FxRate";
 import { fiatChange } from "../../containers/Account/profit";
 import { StepLineLayer } from "./StepLineLayer";
-import { Tooltip } from "./Tooltip";
-import { TxDatum } from "./types";
+import { TooltipWidget, TxDatum } from "./types";
 
 
 const commonProperties: Partial<LineSvgProps> = {
@@ -62,7 +61,6 @@ const thingsToDisplayProperties: Partial<LineSvgProps> = {
 
   useMesh: true,
   enableSlices: false,
-  tooltip: Tooltip,
 }
 export type GraphHistoryProps = {
   txs: Transaction[],
@@ -70,6 +68,7 @@ export type GraphHistoryProps = {
   lineColor: string,
   dotColor: string,
   height: number,
+  tooltip?: TooltipWidget,
   from?: DateTime,
   to?: DateTime,
 }
@@ -80,6 +79,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
       <ResponsiveLine
         data={getAccountSerie(props)}
         colors={[props.lineColor, props.dotColor]}
+        tooltip={props.tooltip as PointTooltip}
 
         // Basic properties
         {...commonProperties}

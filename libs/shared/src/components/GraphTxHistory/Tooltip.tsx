@@ -1,22 +1,19 @@
 import { PointTooltipProps } from "@nivo/line";
 import React from "react";
+import { TxDatum } from "./types";
+import styles from './styles.module.less';
 
-export const Tooltip = ({ point }: PointTooltipProps) => (
-  <div
-    style={{
-      background: 'white',
-      padding: '9px 12px',
-      border: '1px solid #ccc',
-    }}
-  >
-    <div>x: {point.data.xFormatted}</div>
-    <div
-      style={{
-        color: point.serieColor,
-        padding: '3px 0',
-      }}
-    >
-      <strong>{point.serieId}</strong> [{point.data.yFormatted}]
+export const Tooltip = (className?: string) => ({ point }: PointTooltipProps) => {
+  const data = point.data as unknown as TxDatum;
+  return (
+    <div className={`${className ?? styles.tooltip}`}>
+      <div className="profit">Profit: {data.y - data.costBasis}</div>
+      <div className="base">Base: {data.costBasis}</div>
+      {
+        data.txs.length
+          ? <div>{data.txs.length} txs</div>
+          : undefined
+      }
     </div>
-  </div>
-)
+  )
+}

@@ -26,7 +26,7 @@ const defaultArgs = {
 
 const template: Story<typeof defaultArgs> = (args) =>
   <GraphTxHistory
-    height={300}
+    height={350}
     txs={genTxs(args)}
     fxRates={genFxRates(args)}
     lineColor={args.lineColor}
