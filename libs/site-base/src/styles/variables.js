@@ -1,1 +1,3 @@
-export * as variables from '!!../../../../../tools/less-var-loader!@./variables.less'
+import variables from '!!../../../../tools/less-var-loader!./variables.less'
+
+export { variables };
