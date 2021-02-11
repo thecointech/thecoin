@@ -1,65 +1,91 @@
 import React from "react";
 //import { Bar } from "@nivo/bar";
 import { linearGradientDef } from '@nivo/core'
-import { Line, Serie, Datum } from '@nivo/line'
+import { Serie, Datum, ResponsiveLine, LineSvgProps } from '@nivo/line'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { FXRate, weSellAt } from "../../containers/FxRate";
 import { fiatChange } from "../../containers/Account/profit";
 import { StepLineLayer } from "./StepLineLayer";
+import { Tooltip } from "./Tooltip";
 
-//import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
 
-const commonProperties = {
-  width: 900,
-  height: 400,
+const commonProperties: Partial<LineSvgProps> = {
   margin: { top: 20, right: 20, bottom: 60, left: 80 },
   animate: true,
   enableArea: true,
   enableGridX: false,
-
-  //enableSlices: 'x',
+  curve: "monotoneX"
 }
 
+const axisProperties: Partial<LineSvgProps> = {
+  yScale: {
+    type: 'linear',
+  },
+  xScale: {
+    type: 'time',
+    format: '%Y-%m-%d',
+    useUTC: false,
+    precision: 'day',
+  },
+  axisBottom: {
+    format: '%b %d',
+    tickValues: 'every 2 days',
+    legendOffset: -12,
+  },
+  xFormat: "time:%Y-%m-%d"
+}
+
+const colorProperties: Partial<LineSvgProps> = {
+  defs: [
+    linearGradientDef('gradientA', [
+      { offset: 30, color: 'inherit' },
+      { offset: 100, color: 'inherit', opacity: 0 },
+    ]),
+  ],
+  fill: [{ match: '*', id: 'gradientA' }]
+}
+
+const thingsToDisplayProperties: Partial<LineSvgProps> = {
+  layers: [
+    "grid",
+    "markers",
+    "axes",
+    "areas",
+    "crosshair",
+    "lines",
+    'mesh',
+    "legends",
+    StepLineLayer,
+  ],
+
+  useMesh: true,
+  enableSlices: false,
+  tooltip: Tooltip,
+}
 export type GraphHistoryProps = {
   txs: Transaction[],
   fxRates: FXRate[],
   lineColor: string,
+  height: number,
   from?: DateTime,
   to?: DateTime,
 }
 
 export const GraphTxHistory = (props: GraphHistoryProps) => {
   return (
-    <Line
-      data={getAccountSerie(props)}
-      {...commonProperties}
-      yScale={{
-        type: 'linear',
-      }}
-      xScale={{
-        type: 'time',
-        format: '%Y-%m-%d',
-        useUTC: false,
-        precision: 'day',
-      }}
-      axisBottom={{
-        format: '%b %d',
-        tickValues: 'every 2 days',
-        legendOffset: -12,
-      }}
-      xFormat="time:%Y-%m-%d"
-      colors={[props.lineColor]}
-      curve="monotoneX"
-      defs={[
-        linearGradientDef('gradientA', [
-          { offset: 30, color: 'inherit' },
-          { offset: 100, color: 'inherit', opacity: 0 },
-        ]),
-      ]}
-      layers={["grid", "axes", "lines", "areas", StepLineLayer(props.lineColor), "markers", "legends"]}
-      fill={[{ match: '*', id: 'gradientA' }]}
-    />
+    <div style={{ height: props.height }}>
+      <ResponsiveLine
+        data={getAccountSerie(props)}
+        colors={props.lineColor}
+
+        // Basic properties
+        {...commonProperties}
+        {...axisProperties}
+        {...colorProperties}
+        {...thingsToDisplayProperties}
+      />
+    </div>
   );
 }
 

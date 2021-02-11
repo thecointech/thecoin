@@ -5,7 +5,6 @@ import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { FXRate } from 'containers/FxRate/types';
 
-
 export default {
   title: 'Shared/GraphTxHistory',
   component: GraphTxHistory,
@@ -26,6 +25,7 @@ const defaultArgs = {
 
 const template: Story<typeof defaultArgs> = (args) =>
   <GraphTxHistory
+    height={300}
     txs={genTxs(args)}
     fxRates={genFxRates(args)}
     lineColor={args.lineColor}
