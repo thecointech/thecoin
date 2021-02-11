@@ -38,7 +38,7 @@ export const App = ( ) => {
         <MainNavigation />
       </div>
 
-      <Container className={styles.appContainer}
+      <Container
         style={{
           width: '100%',
         }}

@@ -4,7 +4,6 @@ import illustration from "./images/illust_balance.svg";
 import styles from "./styles.module.less";
 
 export const BalanceAndProfit = () => {
-
   return (
     <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
         <Header as="h5">

@@ -5,8 +5,12 @@ import { FXRate } from '@the-coin/pricing';
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
+//import { useSelector } from 'react-redux';
+//import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
+import iconThecoin from "./images/icon_thecoin.svg";
+import iconBank from "./images/icon_bank.svg";
+import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
-import { DateTime } from 'luxon';
 
 type MyProps = {
   transactions: Transaction[];
@@ -26,11 +30,13 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
     fromDate: new Date(),
     untilDate: new Date()
   }
+  locale: string;
 
   constructor(props: MyProps) {
     super(props);
 
     this.onDateRangeChange = this.onDateRangeChange.bind(this);
+    this.locale = "en";
   }
 
   onDateRangeChange(from: Date, until: Date) {
@@ -40,6 +46,7 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
     });
 
     this.props.onRangeChange(from, until)
+    //this.locale = useSelector(selectLocale) as unknown as string;
   }
 
   buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
@@ -83,13 +90,41 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
       const changeCad = toHuman(change, true);
       const balanceCad = toHuman(balance, true);
-      const localeDate = tx.date.toLocaleString(DateTime.DATE_MED);
+
+      let imgForLine = iconThecoin;
+      let classForMoneyCell = styles.moneyPositive;
+      let contentForComment = "IN";
+      if (changeCad < 0){
+        imgForLine = iconBank;
+        classForMoneyCell = styles.moneyNegative;
+        contentForComment = "OUT";
+      }
+
+      const monthTodisplay = tx.date.monthShort;
+      const yearToDisplay = tx.date.year; 
+      const dayToDisplay = tx.date.day;
+      const timeToDisplay = tx.date.hour+":"+tx.date.minute; 
+      //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
+      //{tx.logEntry}
       return (
         <Table.Row key={index}>
-          <Table.Cell>{localeDate}</Table.Cell>
-          <Table.Cell>{tx.logEntry}</Table.Cell>
-          <Table.Cell>${changeCad}</Table.Cell>
-          <Table.Cell>${balanceCad}</Table.Cell>
+          <Table.Cell width={2} textAlign='center'>
+            <div className={`${styles.dateInTable}`}>
+              <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
+              <div className={"font-bold"}>{monthTodisplay}</div>
+              <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
+            </div>
+          </Table.Cell>
+          <Table.Cell width={1}><img src={imgForLine} /></Table.Cell>
+          <Table.Cell width={8}>
+            <div>{contentForComment}</div>
+            <span className={`font-small font-green font-bold`}>To</span> <span className={`font-grey-06`}>Test content</span>
+          </Table.Cell>
+          <Table.Cell width={3} textAlign='right'>
+            <div className={classForMoneyCell}>{changeCad} $</div>
+            <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
+          </Table.Cell>
+          <Table.Cell width={3}>${balanceCad}</Table.Cell>
         </Table.Row>
     )});
 
@@ -97,28 +132,17 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       <React.Fragment>
         <DateRangeSelect onDateRangeChange={this.onDateRangeChange} />
 
-        <Dimmer.Dimmable as={Table} celled striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Date</Table.HeaderCell>
-              <Table.HeaderCell>Address</Table.HeaderCell>
-              <Table.HeaderCell>Change</Table.HeaderCell>
-              <Table.HeaderCell>Balance</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        <Dimmer.Dimmable>
+          <Dimmer active={transactionLoading}>Loading...</Dimmer>
+        </Dimmer.Dimmable>
+
+        <Table basic='very' singleLine >
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>
-                <Dimmer active={transactionLoading}>Loading...</Dimmer>
-              </Table.Cell>
-              <Table.Cell></Table.Cell>
-              <Table.Cell></Table.Cell>
-              <Table.Cell></Table.Cell>
-            </Table.Row>
             {...txJsxRows}
           </Table.Body>
           {jsxFooter}
-        </Dimmer.Dimmable>
+        </Table>
+
       </React.Fragment>
     );
   }

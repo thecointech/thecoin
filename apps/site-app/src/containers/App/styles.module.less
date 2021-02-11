@@ -1,20 +1,19 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 .appContainer{
   background-color: #F2F2F2;
 }
 
-
 #mainContent{
-  width: 62%;
+  padding: 20px;
+  padding-left: 50px;
+  width: 55%;
   margin: auto;
 }
 
 .pageMainInner {
   min-height: 450px;
   padding: 0em;
-}
-
-.pageMainInner > div {
-  height: inherit;
 }
 
 #headerDecoration{
@@ -26,3 +25,12 @@
   -moz-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
   box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);  
 }
+
+.smallerThanDesktop({  
+  #mainContent{
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    margin: auto;
+  }
+});
