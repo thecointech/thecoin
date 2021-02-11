@@ -37,6 +37,17 @@
   }
 }
 
+.field{
+  &.borderTop{
+    border-top: 1px solid @theCoinPaletteGreen4Faded;
+    padding-top: 10px;
+  }
+  &.borderBottom{
+    border-bottom: 1px solid @theCoinPaletteGreen4Faded;
+    padding-bottom: 15px;
+  }
+}
+
 .field.half{
   width: 49%;
   float: left;

@@ -99,6 +99,8 @@
 @theCoinPaletteGreen5     : #2B5250;
 @theCoinPaletteGreen6     : #034B3E;
 
+@theCoinPaletteGreen4Faded     : fade(@theCoinPaletteGreen4, 30%);
+
 @theCoinPaletteGold1     : #FDE9C2;
 @theCoinPaletteGold2     : #FECCA1;
 @theCoinPaletteGold3     : #FECCA1;
