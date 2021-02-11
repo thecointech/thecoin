@@ -29,10 +29,10 @@ export type GraphHistoryProps = {
   to?: DateTime,
 }
 
-export const GraphHistory = (args: GraphHistoryProps) => {
+export const GraphHistory = (props: GraphHistoryProps) => {
   return (
     <Line
-      data={getAccountSerie(args)}
+      data={getAccountSerie(props)}
       {...commonProperties}
       yScale={{
         type: 'linear',
@@ -49,7 +49,7 @@ export const GraphHistory = (args: GraphHistoryProps) => {
         legendOffset: -12,
       }}
       xFormat="time:%Y-%m-%d"
-      colors={[args.lineColor]}
+      colors={[props.lineColor]}
       curve="monotoneX"
       defs={[
         linearGradientDef('gradientA', [
@@ -57,7 +57,7 @@ export const GraphHistory = (args: GraphHistoryProps) => {
           { offset: 100, color: 'inherit', opacity: 0 },
         ]),
       ]}
-      layers={["grid", "axes", "lines", "areas", StepLineLayer, "markers", "legends"]}
+      layers={["grid", "axes", "lines", "areas", StepLineLayer(props.lineColor), "markers", "legends"]}
       fill={[{ match: '*', id: 'gradientA' }]}
     />
   );
@@ -99,20 +99,18 @@ function getAccountSerie(data: GraphHistoryProps): Serie[] {
     // any transactions this day?
     const daysTxs = txs.filter(tx => tx.date.toISODate() == date.toISODate());
 
-    //costBasis = updateCostBasis(daysTxs, fxRates, costBasis, costBasisDatum)
-    //balance = updateAccountValue(date.plus(eodOffset), daysTxs, fxRates, balance, accountValues);
-
     // update balance to the last balance of the day
     balance = lastItem(daysTxs)?.balance ?? balance;
     costBasis += getChangeInFiat(daysTxs, fxRates);
     // Get the days FX rate at EOD (or now, if EOD is in the future)
     // We do not offset date itself, because we want it to be
     // in the same timezone of the input date (which we assume is the users tz)
-    const exRate = weSellAt(fxRates, date.toJSDate());
+    const exRate = weSellAt(fxRates, date.plus(eodOffset).toJSDate());
     accountValuesDatum.push({
       x: date.toISODate(),
       y: exRate * balance,
       costBasis,
+      txs: daysTxs,
     })
 
   }
@@ -123,65 +121,7 @@ function getAccountSerie(data: GraphHistoryProps): Serie[] {
       id: "AccountValue",
       data: accountValuesDatum
     },
-    // {
-    //   id: "CostBasis",
-    //   data: ensureInitEntry(costBasisDatum, from, initCostBasis),
-    // }
   ]
 }
-
-// function ensureInitEntry(arr: Datum[], from: DateTime, initValue: number) {
-//   return (arr[0]?.x != from.toSQLDate())
-//     ? [
-//       {
-//         x: from.toSQLDate(),
-//         y: initValue,
-//       },
-//       ...arr
-//     ]
-//     : arr;
-// }
-
-// function updateCostBasis(daysTxs: Transaction[], fxRates: FXRate[], fiatCost: number, data: Datum[]) {
-//   if (daysTxs.length > 0) {
-
-//     fiatCost += getChangeInFiat(daysTxs, fxRates);
-//     // Update our cost basis line
-//     data.push({
-//       x: daysTxs[0].date.toISODate(),
-//       y: fiatCost,
-//     })
-//   }
-//   return fiatCost;
-// }
-
-// function updateAccountValue(date: DateTime, daysTxs: Transaction[], fxRates: FXRate[], balance: number, costBasis: number, data: Datum[]) {
-//   // update balance to the last balance of the day
-//   balance = lastItem(daysTxs)?.balance ?? balance;
-//   costBasis += getChangeInFiat(daysTxs, fxRates);
-//   // Get the days FX rate at EOD (or now, if EOD is in the future)
-//   // We do not offset date itself, because we want it to be
-//   // in the same timezone of the input date (which we assume is the users tz)
-//   const exRate = weSellAt(fxRates, date.toJSDate());
-//   data.push({
-//     x: date.toISODate(),
-//     y: exRate * balance,
-//     costBasis,
-//   })
-//   return balance;
-// }
-// const toDatum = (tx: Transaction): Datum => ({
-//   x: tx.date.toISODate(),
-//   y: tx.balance
-// })
-
-// function reduceDuplicates(r: Datum[], val: Datum) {
-//   const last = r[r.length - 1];
-//   if (last?.x == val.x)
-//     last.y = val.y;
-//   else
-//     r.push(val);
-//   return r;
-// }
 
 function lastItem<T>(arr: T[]): T { return arr[arr.length - 1] }

@@ -2,10 +2,10 @@ import { CustomLayerProps } from "@nivo/line";
 import { curveStepAfter, line } from "d3-shape";
 import React from "react";
 
-export const StepLineLayer = ({ series, xScale, yScale }: CustomLayerProps) => {
+export const StepLineLayer = (color: string) => ({ series, xScale, yScale }: CustomLayerProps) => {
   const lineGenerator = line()
     .x(dat => xScale(dat[0]))
-    .y(dat => yScale(dat[1]))
+    .y(dat => yScale(Math.max(dat[1], 0)))
     .curve(curveStepAfter)
 
   const datum = series[0].data.map(d => [d.data.x, d.data.costBasis]);
@@ -15,7 +15,9 @@ export const StepLineLayer = ({ series, xScale, yScale }: CustomLayerProps) => {
       <path
         d={d}
         fill="none"
-        stroke={"green"}
+        stroke={color}
+        opacity="0.6"
+        strokeWidth={2}
         style={{ pointerEvents: "none" }}
       />
       {/* {bars.map(bar => (
