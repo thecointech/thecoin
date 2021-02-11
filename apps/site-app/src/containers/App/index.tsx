@@ -17,7 +17,7 @@ import MainPageTransition from '@the-coin/site-base/components/MainPageTransitio
 import {MainRouter} from 'containers/MainRouter';
 import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
 
 import '@the-coin/site-base/styles/semantic.css';
 //import '@the-coin/site-base/styles/semantic.less';
@@ -40,7 +40,7 @@ export const App = ( ) => {
 
       <Container className={styles.appContainer}
         style={{
-          width: '100%', 
+          width: '100%',
         }}
       >
           <MainPageTransition location={location}>
