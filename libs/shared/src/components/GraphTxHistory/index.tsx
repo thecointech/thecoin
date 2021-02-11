@@ -29,7 +29,7 @@ export type GraphHistoryProps = {
   to?: DateTime,
 }
 
-export const GraphHistory = (props: GraphHistoryProps) => {
+export const GraphTxHistory = (props: GraphHistoryProps) => {
   return (
     <Line
       data={getAccountSerie(props)}

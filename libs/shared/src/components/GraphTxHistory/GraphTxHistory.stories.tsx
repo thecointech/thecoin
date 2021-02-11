@@ -1,14 +1,14 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react';
-import { GraphHistory } from '.';
+import { GraphTxHistory } from '.';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { FXRate } from 'containers/FxRate/types';
 
 
 export default {
-  title: 'Shared/GraphHistory',
-  component: GraphHistory,
+  title: 'Shared/GraphTxHistory',
+  component: GraphTxHistory,
   argTypes: {
     lineColor: { control: 'color' },
     from: { control: 'date' },
@@ -18,7 +18,6 @@ export default {
 
 const days = 24 * 60 * 60 * 1000;
 const defaultArgs = {
-  //numDays: 30,
   lineColor: '#61C1B8',
   from: Date.now() - (30 * days),
   to: Date.now(),
@@ -26,7 +25,7 @@ const defaultArgs = {
 }
 
 const template: Story<typeof defaultArgs> = (args) =>
-  <GraphHistory
+  <GraphTxHistory
     txs={genTxs(args)}
     fxRates={genFxRates(args)}
     lineColor={args.lineColor}
