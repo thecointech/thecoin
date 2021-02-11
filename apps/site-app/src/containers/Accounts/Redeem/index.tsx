@@ -13,12 +13,40 @@ import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@the-coin/types';
+import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
 
 type MyProps = {
   account: AccountState;
 };
 
 type Props = MyProps & FxRatesState;
+
+const errorMessage = { id:"app.accounts.redeem.errorMessage",
+                defaultMessage:"We have encountered an error.\nDon't worry, your money is safe, but please still contact support@thecoin.io",
+                description:"Error Message for the make a payment page / etransfert tab" };
+const successMessage = { id:"app.accounts.redeem.successMessage",
+                defaultMessage:"Order recieved.\nYou should receive the e-Transfer in 1-2 business days.",
+                description:"Success Message for the make a payment page / etransfert tab" };
+const description = { id:"app.accounts.redeem.description",
+                defaultMessage:"Email money to anyone with an interac e-Transfer.",
+                description:"Description for the make a payment page / etransfert tab" };
+const email = { id:"app.accounts.redeem.form.email",
+                defaultMessage:"Recipient email",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const question = { id:"app.accounts.redeem.form.question",
+                defaultMessage:"Security question",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const answer= { id:"app.accounts.redeem.form.answer",
+                defaultMessage:"Security answer",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const message= { id:"app.accounts.redeem.form.message",
+                defaultMessage:"Message (optional)",
+                description:"Label for the form the make a payment page / etransfert tab" };
+
+const button = { id:"app.accounts.redeem.button",
+                defaultMessage:"Send",
+                description:"For the button in the make a payment page / etransfert tab" };
+
 
 const initialState = {
   coinToSell: null as number | null,
@@ -121,13 +149,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     try {
       const results = await this.doSale();
       if (!results) {
-        alert(
-          "We have encountered an error.\nDon't worry, your money is safe, but please still contact support@thecoin.io",
-        );
+        alert(<FormattedMessage {...errorMessage} />);
       } else
-        alert(
-          'Order recieved.\nYou should receive the e-Transfer in 1-2 business days.',
-        );
+        alert(<FormattedMessage {...successMessage} />);
     } catch (e) {
       console.error(e);
       alert(e);
@@ -164,9 +188,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       <React.Fragment>
         <div>
           <Form>
-            <Header as="h1">
+            <Header as="h5">
               <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
+                <FormattedMessage {...description} />
               </Header.Subheader>
             </Header>
 
@@ -178,33 +202,35 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
               fxRate={rate}
             />
             <Form.Input
-              label="Recipient Email"
+              className={"borderTop borderBottom"}
+              label={<FormattedMessage {...email} />}
               name="email"
               onChange={this.onInputChanged}
               placeholder="An email address to send the e-Transfer to"
             />
             <Form.Input
               className={"half left"}
-              label="Security question"
+              label={<FormattedMessage {...question} />}
               name="question"
               onChange={this.onInputChanged}
               placeholder="No numbers or special characters"
             />
             <Form.Input
               className={"half right"}
-              label="Security answer"
+              label={<FormattedMessage {...answer} />}
               name="answer"
               onChange={this.onInputChanged}
               placeholder="No spaces or special characters"
             />
             <Form.Input
-              label="Message (optional)"
+              className={"borderTop"}
+              label={<FormattedMessage {...message} />}
               name="message"
               type="text"
               onChange={this.onInputChanged}
               placeholder="An optional message to the recipient.  Should not include the security answer"
             />
-            <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
+            <ButtonPrimary onClick={this.onSubmit}><FormattedMessage {...button} /></ButtonPrimary>
           </Form>
           <ModalOperation
             cancelCallback={this.onCancelTransfer}
