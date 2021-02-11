@@ -1,5 +1,5 @@
 import React from 'react';
-import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/shared/components/ResponsiveTool';
 import {MainNavigationMobile} from './MainNavigationMobile';
 import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
 
