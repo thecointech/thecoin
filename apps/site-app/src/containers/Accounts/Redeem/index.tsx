@@ -10,7 +10,6 @@ import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
-import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@the-coin/types';
 import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
@@ -22,7 +21,7 @@ type MyProps = {
 type Props = MyProps & FxRatesState;
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
-                defaultMessage:"We have encountered an error.\nDon't worry, your money is safe, but please still contact support@thecoin.io",
+                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
                 description:"Error Message for the make a payment page / etransfert tab" };
 const successMessage = { id:"app.accounts.redeem.successMessage",
                 defaultMessage:"Order recieved.\nYou should receive the e-Transfer in 1-2 business days.",
@@ -43,6 +42,18 @@ const message= { id:"app.accounts.redeem.form.message",
                 defaultMessage:"Message (optional)",
                 description:"Label for the form the make a payment page / etransfert tab" };
 
+const step1= { id:"app.accounts.redeem.step1",
+                defaultMessage:"Step 1 of 3: Checking order availability..." };
+const step2= { id:"app.accounts.redeem.step2",
+                defaultMessage:"Step 2 of 3: Sending sell order to our servers..." };
+const step3= { id:"app.accounts.redeem.step3",
+                defaultMessage:"Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})..." };
+
+const transferOutHeader= { id:"app.accounts.redeem.transferOutHeader",
+                defaultMessage:"Processing Transfer out..." };
+const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
+                defaultMessage:"Please wait, we are sending your order to our servers..." };
+
 const button = { id:"app.accounts.redeem.button",
                 defaultMessage:"Send",
                 description:"For the button in the make a payment page / etransfert tab" };
@@ -55,7 +66,7 @@ const initialState = {
   answer: '',
   message: undefined as string | undefined,
   transferInProgress: false,
-  transferMessage: messages.transferOutProgress,
+  transferMessage: transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
@@ -68,7 +79,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
   async doSale() {
     // Init messages
-    this.setState({ transferMessage: messages.step1, percentComplete: 0.0 });
+    this.setState({ transferMessage: {...step1}, percentComplete: 0.0 });
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
@@ -102,7 +113,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       return false;
 
     // Send the command to the server
-    this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
+    this.setState({ transferMessage: {...step2}, percentComplete: 0.25 });
     const response = await eTransferApi.eTransfer(command);
 
     if (!response.data?.txHash) {
@@ -122,7 +133,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       ),
     };
     this.setState({
-      transferMessage: messages.step3,
+      transferMessage: step3,
       percentComplete: 0.5,
       transferValues,
     });
@@ -235,7 +246,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
           <ModalOperation
             cancelCallback={this.onCancelTransfer}
             isOpen={transferInProgress}
-            header={messages.transferOutHeader}
+            header={transferOutHeader}
             progressMessage={transferMessage}
             progressPercent={percentComplete}
             messageValues={transferValues}
