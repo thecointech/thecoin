@@ -1,22 +1,24 @@
-import { useActiveAccount } from "@the-coin/shared/containers/AccountMap/selectors";
 import React from "react";
+import { useActiveAccount } from "@the-coin/shared/containers/AccountMap/selectors";
 import { Container } from "semantic-ui-react";
-import styles from './styles.module.less';
 import { GraphTxHistory } from '@the-coin/shared/components/GraphTxHistory'
-import { useFxRates } from "@the-coin/shared/containers/FxRate/selectors";
 import { variables } from "@the-coin/site-base/styles/variables";
+import { DateTime } from "luxon";
+import styles from './styles.module.less';
 
 export const HistoryGraph = () => {
   const account = useActiveAccount();
   const txs = account?.history ?? [];
-  const fxRates = useFxRates();
 
+  //const to = DateTime.local();
+  const color = "red"; //variables.theCoinPrimaryGreenPale;
+  const from = DateTime.local().minus({months: 1});
   return (
-    <Container className={styles.background}>
+    <Container className={styles.graphBackground}>
       <GraphTxHistory
-        fxRates={fxRates.rates}
         txs={txs}
-        lineColor={variables.theCoinPrimaryGreenPale}
+        from={from}
+        lineColor={color}
         dotColor={variables.theCoinPrimaryGreenPale}
         height={325}
       />

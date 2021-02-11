@@ -4,10 +4,11 @@ import { linearGradientDef } from '@nivo/core'
 import { Serie, ResponsiveLine, LineSvgProps, PointTooltip } from '@nivo/line'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
-import { FXRate, weSellAt } from "../../containers/FxRate";
+import { FXRate, useFxRates, useFxRatesApi, weSellAt } from "../../containers/FxRate";
 import { fiatChange } from "../../containers/Account/profit";
 import { StepLineLayer } from "./StepLineLayer";
 import { TooltipWidget, TxDatum } from "./types";
+import { toHuman } from "@the-coin/utilities";
 
 
 const commonProperties: Partial<LineSvgProps> = {
@@ -64,7 +65,6 @@ const thingsToDisplayProperties: Partial<LineSvgProps> = {
 }
 export type GraphHistoryProps = {
   txs: Transaction[],
-  fxRates: FXRate[],
   lineColor: string,
   dotColor: string,
   height: number,
@@ -95,7 +95,9 @@ const getDateVals = ({ txs, from, to }: GraphHistoryProps) => {
   to = to ?? DateTime.local();
   from = from ?? txs[0].date;
   // We query the fxrates at 4pm (end-of-day) or now, if day is today.
-  const eodOffset = 16 - from.setZone("America/New_York").get("hour");
+  const eodOffset = {
+    hours: 16 - from.setZone("America/New_York").get("hour")
+  };
   //from = from.plus({hours: eodOffset});
   return { from, to, eodOffset }
 }
@@ -108,14 +110,19 @@ const getInitialBalance = ({ txs, from }: GraphHistoryProps) =>
     : 0;
 
 const getChangeInFiat = (txs: Transaction[], fxRates: FXRate[]) =>
-  txs.reduce((tot, tx) => tot + fiatChange(tx, fxRates), 0)
+  toHuman(txs.reduce((tot, tx) => tot + fiatChange(tx, fxRates), 0), true);
+
 
 function getAccountSerie(data: GraphHistoryProps): Serie[] {
+
+  const {rates} = useFxRates();
+  const ratesApi = useFxRatesApi();
+
   const { from, to, eodOffset } = getDateVals(data);
-  const { fxRates, txs } = data;
+  const { txs } = data;
   const numDays = to.diff(from).as("days");
   let balance = getInitialBalance(data);
-  const initCostBasis = getChangeInFiat(txs.filter(tx => tx.date < from), fxRates);
+  const initCostBasis = getChangeInFiat(txs.filter(tx => tx.date < from), rates);
   let costBasis = initCostBasis;
 
   // day-to-day value
@@ -129,14 +136,17 @@ function getAccountSerie(data: GraphHistoryProps): Serie[] {
 
     // update balance to the last balance of the day
     balance = lastItem(daysTxs)?.balance ?? balance;
-    costBasis += getChangeInFiat(daysTxs, fxRates);
+    costBasis += getChangeInFiat(daysTxs, rates);
     // Get the days FX rate at EOD (or now, if EOD is in the future)
     // We do not offset date itself, because we want it to be
     // in the same timezone of the input date (which we assume is the users tz)
-    const exRate = weSellAt(fxRates, date.plus(eodOffset).toJSDate());
+    const eod = date.plus(eodOffset).toJSDate();
+    // If not already present, fetch this rate
+    ratesApi.fetchRateAtDate(eod)
+    const exRate = weSellAt(rates, eod);
     accountValuesDatum.push({
       x: date.toISODate(),
-      y: exRate * balance,
+      y: toHuman(exRate * balance),
       costBasis,
       txs: daysTxs,
     })
