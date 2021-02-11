@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/shared/components/ResponsiveTool';
 import { LandscapeGreaterThanMobile } from './LandscapeGreaterThanMobile';
 import { LandscapeMobile } from './LandscapeMobile';
 
@@ -11,7 +11,7 @@ const title = { id:"site.homepage.landscape.title",
 const description = { id:"site.homepage.landscape.description",
                       defaultMessage:"Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
                       description:"Description following the main title"};
-const button = {  id:"site.homepage.landscape.button", 
+const button = {  id:"site.homepage.landscape.button",
                   defaultMessage:"Start Now",
                   description:"Button label for the landscape"};
 

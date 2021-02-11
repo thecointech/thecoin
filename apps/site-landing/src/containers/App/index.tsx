@@ -16,7 +16,7 @@ import {Footer} from 'components/Footer';
 import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
 import { usePrismic } from 'components/Prismic/reducer';
-import { MediaContextProvider, mediaStyles } from '@the-coin/site-base/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
 
 // Our CSS version isn't building correctly yet, but once it does
 // we can save a bit of compile time by referring to it directly

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
-import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/site-base/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment, breakpointsValues } from '@the-coin/shared/components/ResponsiveTool';
 
 import { Grid, Header, StrictGridColumnProps } from 'semantic-ui-react';
 import { ColumnWithTwoTitles } from './ColumnWithTwoTitles';
@@ -12,8 +12,7 @@ import illustration from './images/healthier-illustration.svg';
 import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
 
-import getWindowDimensions from '@the-coin/site-base/components/WindowDimensions';
-import { breakpointsValues } from '@the-coin/site-base/components/ResponsiveTool';
+import getWindowDimensions from '@the-coin/shared/components/WindowDimensions';
 
 import styles from './styles.module.less';
 
