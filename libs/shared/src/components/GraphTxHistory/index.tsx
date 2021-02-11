@@ -8,6 +8,7 @@ import { FXRate, weSellAt } from "../../containers/FxRate";
 import { fiatChange } from "../../containers/Account/profit";
 import { StepLineLayer } from "./StepLineLayer";
 import { Tooltip } from "./Tooltip";
+import { TxDatum } from "./types";
 
 
 const commonProperties: Partial<LineSvgProps> = {
@@ -67,6 +68,7 @@ export type GraphHistoryProps = {
   txs: Transaction[],
   fxRates: FXRate[],
   lineColor: string,
+  dotColor: string,
   height: number,
   from?: DateTime,
   to?: DateTime,
@@ -77,7 +79,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
     <div style={{ height: props.height }}>
       <ResponsiveLine
         data={getAccountSerie(props)}
-        colors={props.lineColor}
+        colors={[props.lineColor, props.dotColor]}
 
         // Basic properties
         {...commonProperties}
@@ -117,7 +119,7 @@ function getAccountSerie(data: GraphHistoryProps): Serie[] {
   let costBasis = initCostBasis;
 
   // day-to-day value
-  const accountValuesDatum: Datum[] = [];
+  const accountValuesDatum: TxDatum[] = [];
   // fiat cost: cost of the current account
   //let costBasisDatum: Datum[] = [];
   for (let i = 0; i < numDays; i++) {

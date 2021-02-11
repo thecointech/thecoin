@@ -18,6 +18,7 @@ export default {
 const days = 24 * 60 * 60 * 1000;
 const defaultArgs = {
   lineColor: '#61C1B8',
+  dotColor: "#138175",
   from: Date.now() - (30 * days),
   to: Date.now(),
   txFrequency: 5,
@@ -29,6 +30,7 @@ const template: Story<typeof defaultArgs> = (args) =>
     txs={genTxs(args)}
     fxRates={genFxRates(args)}
     lineColor={args.lineColor}
+    dotColor={args.dotColor}
     from={DateTime.fromMillis(args.from)}
     to={DateTime.fromMillis(args.to)}
   />;
