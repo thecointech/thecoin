@@ -6,7 +6,7 @@ import { GraphTxHistory } from '@the-coin/shared/components/GraphTxHistory'
 import { useFxRates } from "@the-coin/shared/containers/FxRate/selectors";
 import { variables } from "@the-coin/site-base/styles/variables";
 
-export const AccountHistoryGraph = () => {
+export const HistoryGraph = () => {
   const account = useActiveAccount();
   const txs = account?.history ?? [];
   const fxRates = useFxRates();
