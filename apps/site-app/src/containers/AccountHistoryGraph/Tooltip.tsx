@@ -1,6 +1,6 @@
 import { PointTooltipProps } from "@nivo/line";
 import React from "react";
-import { TxDatum } from "./types";
+import { TxDatum } from "@the-coin/shared/src/components/GraphTxHistory/types";
 import styles from './styles.module.less';
 
 export const Tooltip = (className?: string) => ({ point }: PointTooltipProps) => {

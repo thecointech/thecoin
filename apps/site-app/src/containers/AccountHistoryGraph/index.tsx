@@ -17,6 +17,8 @@ export const AccountHistoryGraph = () => {
         fxRates={fxRates.rates}
         txs={txs}
         lineColor={variables.theCoinPrimaryGreenPale}
+        dotColor={variables.theCoinPrimaryGreenPale}
+        height={325}
       />
     </Container>
   )
