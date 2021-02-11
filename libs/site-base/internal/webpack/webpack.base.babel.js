@@ -25,6 +25,11 @@ module.exports = options => ({
   module: {
     rules: [
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+      {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "src"),
         use: {
