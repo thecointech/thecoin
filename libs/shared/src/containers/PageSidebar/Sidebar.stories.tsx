@@ -1,4 +1,4 @@
-import {MainRouterStorybook} from './Sidebar.defaultroutes.story';
+import {MainRouterStorybook} from './Sidebar.defaultroutes.stories';
 import "@the-coin/site-base/build/styles/semantic.less";
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
@@ -25,7 +25,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<SidebardProps> = (args) => 
+const Template: Story<SidebardProps> = (args) =>
 <div>
   <PageSidebar visible={args.visible} inverted={args.inverted} />
     <MainRouterStorybook /> {args.text}

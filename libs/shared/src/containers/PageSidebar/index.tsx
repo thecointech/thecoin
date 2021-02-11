@@ -7,8 +7,8 @@ import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
-import getWindowDimensions from 'components/WindowDimensions';
-import { breakpointsValues } from 'components/ResponsiveTool';
+import getWindowDimensions from '../../components/WindowDimensions';
+import { breakpointsValues } from '../../components/ResponsiveTool';
 
 type Props = {
   visible?: boolean;
