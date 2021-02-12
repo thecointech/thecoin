@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react';
 import { GraphTxHistory } from '.';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
-import { FXRate } from 'containers/FxRate/types';
+//import { FXRate } from 'containers/FxRate/types';
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -60,22 +60,22 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   return r;
 }
 
-const genFxRates = ({from, to}: typeof defaultArgs) => {
-  let now = to + 10 * days; // Add more time just to ensure limits work
-  let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
-  const r : FXRate[] = [];
-  const incr = days / 4; // roughly 4 updates per day
-  while (date < now) {
-    // Up to 0.1 % change per day
-    const ex = 1 + (0.1 * (Math.random() - 0.45))
-    r.push({
-      buy: ex - 0.01,
-      sell: ex + 0.01,
-      fxRate: 1,
-      validFrom: date,
-      validTill: date + incr,
-    })
-    date = date + incr;
-  }
-  return r;
-}
+// const genFxRates = ({from, to}: typeof defaultArgs) => {
+//   let now = to + 10 * days; // Add more time just to ensure limits work
+//   let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
+//   const r : FXRate[] = [];
+//   const incr = days / 4; // roughly 4 updates per day
+//   while (date < now) {
+//     // Up to 0.1 % change per day
+//     const ex = 1 + (0.1 * (Math.random() - 0.45))
+//     r.push({
+//       buy: ex - 0.01,
+//       sell: ex + 0.01,
+//       fxRate: 1,
+//       validFrom: date,
+//       validTill: date + incr,
+//     })
+//     date = date + incr;
+//   }
+//   return r;
+// }
