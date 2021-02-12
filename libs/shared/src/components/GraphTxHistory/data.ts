@@ -3,18 +3,26 @@ import { FXRate } from "@the-coin/pricing";
 import { Transaction } from "@the-coin/tx-blockchain";
 import { toHuman } from "@the-coin/utilities";
 import { fiatChange } from "../../containers/Account/profit";
-import { useFxRates, useFxRatesApi, weSellAt } from "../../containers/FxRate";
+import { IFxRates, weSellAt } from "../../containers/FxRate";
 import { DateTime } from "luxon";
 import { GraphHistoryProps } from ".";
 import { TxDatum } from "./types";
 
-const getDateVals = ({ txs, from, to }: GraphHistoryProps) => {
+export const MarketTZ = "America/New_York";
+
+
+export const getDateVals = ({ txs, from, to }: Pick<GraphHistoryProps, "txs"|"from"|"to">) => {
   to = to ?? DateTime.local();
   from = from ?? txs[0].date;
   // We query the fxrates at 4pm (end-of-day) or now, if day is today.
-  const eodOffset = {
-    hours: 16 - from.setZone("America/New_York").get("hour")
-  };
+  const eod = from.setZone(MarketTZ).set({
+    hour: 16,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  })
+  // offset to EOD today (may be in the future)
+  const eodOffset = eod.diff(from);
   //from = from.plus({hours: eodOffset});
   return { from, to, eodOffset }
 }
@@ -30,10 +38,7 @@ const getChangeInFiat = (txs: Transaction[], fxRates: FXRate[]) =>
   toHuman(txs.reduce((tot, tx) => tot + fiatChange(tx, fxRates), 0), true);
 
 
-export function getAccountSerie(data: GraphHistoryProps): Serie[] {
-
-  const {rates} = useFxRates();
-  const ratesApi = useFxRatesApi();
+export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesApi?: IFxRates): Serie[] {
 
   const { from, to, eodOffset } = getDateVals(data);
   const { txs } = data;
@@ -57,9 +62,12 @@ export function getAccountSerie(data: GraphHistoryProps): Serie[] {
     // Get the days FX rate at EOD (or now, if EOD is in the future)
     // We do not offset date itself, because we want it to be
     // in the same timezone of the input date (which we assume is the users tz)
-    const eod = date.plus(eodOffset).toJSDate();
+    let eod = date.plus(eodOffset).toJSDate();
+    if (eod.getTime() > Date.now())
+      eod = new Date();
+
     // If not already present, fetch this rate
-    ratesApi.fetchRateAtDate(eod)
+    ratesApi?.fetchRateAtDate(eod)
     const exRate = weSellAt(rates, eod);
     accountValuesDatum.push({
       x: date.toISODate(),
