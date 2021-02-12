@@ -233,6 +233,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
                   <input type="radio" id="banks" name="payeeType" value="banks" checked />
                 <label htmlFor="banks">
                   <img src={banks} />
+                  <br />
                   <span>Banks</span>
                 </label>
             </div>
@@ -240,6 +241,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
                 <input id="visa" type="radio" name="payeeType" value="all" />
                 <label htmlFor="visa">
                   <img src={banks} />
+                  <br />
                   <span>Banks</span>
                 </label>
             </div>
