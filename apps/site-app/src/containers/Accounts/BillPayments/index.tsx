@@ -234,47 +234,50 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
             </Header.Subheader>
           </Header>
 
-          <div className={styles.selectableCards}>
-                <input id="all" type="radio" name="payeeType" value="all" defaultChecked />
-                <label htmlFor="all">
-                  <img src={all} />
-                  <br />
-                  <span>All</span>
-                </label>
-            </div>
-            <div className={styles.selectableCards}>
-                  <input id="banks" type="radio" name="payeeType" value="banks" />
-                <label htmlFor="banks">
-                  <img src={banks} />
-                  <br />
-                  <span>Banks</span>
-                </label>
-            </div>
-            <div className={styles.selectableCards}>
-                <input id="visa" type="radio" name="payeeType" value="visa" />
-                <label htmlFor="visa">
-                  <img src={visa} />
-                  <br />
-                  <span>Visa Card</span>
-                </label>
-            </div>
-            <div className={styles.selectableCards}>
-                <input id="taxes" type="radio" name="payeeType" value="taxes" />
-                <label htmlFor="taxes">
-                  <img src={taxes} />
-                  <br />
-                  <span>Taxes</span>
-                </label>
-            </div>
-            <div className={styles.selectableCards}>
-                <input id="other" type="radio" name="payeeType" value="other" />
-                <label htmlFor="other">
-                  <img src={other} />
-                  <br />
-                  <span>Other</span>
-                </label>
-            </div>
-
+          <div className={styles.app}>
+            <ul className={styles.hs}>
+              <li className={ `${styles.item} ${styles.selectableCards}` }>
+                  <input id="all" type="radio" name="payeeType" value="all" defaultChecked />
+                  <label htmlFor="all">
+                    <img src={all} />
+                    <br />
+                    <span>All</span>
+                  </label>
+              </li>
+              <li className={ `${styles.item} ${styles.selectableCards}` }>
+                    <input id="banks" type="radio" name="payeeType" value="banks" />
+                  <label htmlFor="banks">
+                    <img src={banks} />
+                    <br />
+                    <span>Banks</span>
+                  </label>
+              </li>
+              <li className={ `${styles.item} ${styles.selectableCards}` }>
+                  <input id="visa" type="radio" name="payeeType" value="visa" />
+                  <label htmlFor="visa">
+                    <img src={visa} />
+                    <br />
+                    <span>Visa Card</span>
+                  </label>
+              </li>
+              <li className={ `${styles.item} ${styles.selectableCards}` }>
+                  <input id="taxes" type="radio" name="payeeType" value="taxes" />
+                  <label htmlFor="taxes">
+                    <img src={taxes} />
+                    <br />
+                    <span>Taxes</span>
+                  </label>
+              </li>
+              <li className={ `${styles.item} ${styles.selectableCards}` }>
+                  <input id="other" type="radio" name="payeeType" value="other" />
+                  <label htmlFor="other">
+                    <img src={other} />
+                    <br />
+                    <span>Other</span>
+                  </label>
+              </li>
+            </ul>
+          </div>
           <Dropdown
             placeholder="Select Payee"
             fluid
