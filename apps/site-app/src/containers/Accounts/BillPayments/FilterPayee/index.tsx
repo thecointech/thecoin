@@ -1,57 +1,49 @@
-import React from "react"
+import React from "react";
 import styles from './styles.module.less';
 
-import banks from './images/icon_bank_big.svg';
-import visa from './images/icon_visa_big.svg';
-import taxes from './images/icon_taxes_big.svg';
-import other from './images/icon_other_big.svg';
-import all from './images/icon_all_big.svg';
+import iconbanks from './images/icon_bank_big.svg';
+import iconvisa from './images/icon_visa_big.svg';
+import icontaxes from './images/icon_taxes_big.svg';
+import iconother from './images/icon_other_big.svg';
+import iconall from './images/icon_all_big.svg';
+import { StyledChoice } from "../StyledChoice";
+
+const all = { id:"app.accounts.billPayments.filterPayee.all",
+                defaultMessage:"All categories",
+                description:"Label for the filter payee for the form the make a payment page / bill payment tab" }; 
+const banks = { id:"app.accounts.billPayments.filterPayee.banks",
+                defaultMessage:"Banks",
+                description:"Label for the filter payee for the form the make a payment page / bill payment tab" };
+const visa = { id:"app.accounts.billPayments.filterPayee.visa",
+                defaultMessage:"Visa Card",
+                description:"Label for the filter payee for the form the make a payment page / bill payment tab" };
+const taxes = { id:"app.accounts.billPayments.filterPayee.taxes",
+                defaultMessage:"Taxes",
+                description:"Label for the filter payee for the form the make a payment page / bill payment tab" };
+const other = { id:"app.accounts.billPayments.filterPayee.other",
+                defaultMessage:"Other",
+                description:"Label for the filter payee for the form the make a payment page / bill payment tab" };
 
 export const FilterPayee = () => {
     return (
         <div className={styles.app}>
-        <ul className={styles.hs}>
-        <li className={ `${styles.item} ${styles.selectableCards}` }>
-            <input id="all" type="radio" name="payeeType" value="all" defaultChecked={true} />
-            <label htmlFor="all">
-                <img src={all} />
-                <br />
-                <span>All</span>
-            </label>
-        </li>
-        <li className={ `${styles.item} ${styles.selectableCards}` }>
-                <input id="banks" type="radio" name="payeeType" value="banks" />
-            <label htmlFor="banks">
-                <img src={banks} />
-                <br />
-                <span>Banks</span>
-            </label>
-        </li>
-        <li className={ `${styles.item} ${styles.selectableCards}` }>
-            <input id="visa" type="radio" name="payeeType" value="visa" />
-            <label htmlFor="visa">
-                <img src={visa} />
-                <br />
-                <span>Visa Card</span>
-            </label>
-        </li>
-        <li className={ `${styles.item} ${styles.selectableCards}` }>
-            <input id="taxes" type="radio" name="payeeType" value="taxes" />
-            <label htmlFor="taxes">
-                <img src={taxes} />
-                <br />
-                <span>Taxes</span>
-            </label>
-        </li>
-        <li className={ `${styles.item} ${styles.selectableCards}` }>
-            <input id="other" type="radio" name="payeeType" value="other" />
-            <label htmlFor="other">
-                <img src={other} />
-                <br />
-                <span>Other</span>
-            </label>
-        </li>
-        </ul>
-    </div>
+            <ul className={styles.hs}>
+                <li className={ `${styles.item}` }>
+                    <StyledChoice id="all" name="payeeType" value="all" img={iconall} defaultChecked={true} message={all} />
+                </li>
+                <li className={ `${styles.item}` }>
+                    <StyledChoice id="banks" name="payeeType" value="banks" img={iconbanks} defaultChecked={false} message={banks} />
+                </li>
+                <li className={ `${styles.item}` }>
+                    <StyledChoice id="visa" name="payeeType" value="visa" img={iconvisa} defaultChecked={false} message={visa} />
+                </li>
+                <li className={ `${styles.item}` }>
+                    <StyledChoice id="taxes" name="payeeType" value="taxes" img={icontaxes} defaultChecked={false} message={taxes} />
+                </li>
+                <li className={ `${styles.item}` }>
+                    <StyledChoice id="other" name="payeeType" value="other" img={iconother} defaultChecked={false} message={other} />
+                </li>
+            </ul>
+        </div>
     );
 }
