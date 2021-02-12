@@ -7,8 +7,8 @@ import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
-import getWindowDimensions from '@the-coin/site-base/components/WindowDimensions';
-import { breakpointsValues } from '@the-coin/site-base/components/ResponsiveTool';
+import getWindowDimensions from '../../components/WindowDimensions';
+import { breakpointsValues } from '../../components/ResponsiveTool';
 
 type Props = {
   visible?: boolean;
@@ -31,10 +31,10 @@ export const PageSidebar: React.FC<Props> = (props) => {
   }, [appState, generators])
 
   let isVisible = visible ?? (menuItems && menuItems.length > 0);
-  
+
   const windowDimension = getWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
-  
+
   // If Small Screen / Mobile
   if (windowDimension.width <= breakpointTablet){
     isVisible = false;
@@ -77,7 +77,7 @@ const getAsItem = (item: SidebarMenuItem) => {
   )
 }
 
-const getAsHeader = (item: SidebarMenuItem) => 
+const getAsHeader = (item: SidebarMenuItem) =>
   <div className={styles.headerSidebar} key={`Header${item.link.name}`}>
     <Header as="h5" className={ `appTitles x4spaceBefore` } >
       {item.link.name}
@@ -108,7 +108,7 @@ const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
       }
       else if (item.link.to === false){
         return getAsDivider(item);
-      } 
+      }
       else {
         return getAsItem(item);
       }
