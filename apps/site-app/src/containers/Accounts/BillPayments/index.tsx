@@ -6,7 +6,6 @@ import {
   Dropdown,
   DropdownProps,
   InputOnChangeData,
-  Grid,
 } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
@@ -230,30 +229,20 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
               <FormattedMessage {...description} />
             </Header.Subheader>
           </Header>
-          <Grid padded columns={5} textAlign='center'>
-            <Grid.Row>
-              <Grid.Column className={styles.selectableCards}>
-                <img src={banks} />
-                Banks
-              </Grid.Column>
-              <Grid.Column className={styles.selectableCards}>
-                <img src={banks} />
-                Banks
-              </Grid.Column>
-              <Grid.Column className={styles.selectableCards}>
-                <img src={banks} />
-                Banks
-              </Grid.Column>
-              <Grid.Column className={styles.selectableCards}>
-                <img src={banks} />
-                Banks
-              </Grid.Column>
-              <Grid.Column className={styles.selectableCards}>
-                <img src={banks} />
-                Banks
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+            <div className={styles.selectableCards}>
+                  <input type="radio" id="banks" name="payeeType" value="banks" checked />
+                <label htmlFor="banks">
+                  <img src={banks} />
+                  <span>Banks</span>
+                </label>
+            </div>
+            <div className={styles.selectableCards}>
+                <input id="visa" type="radio" name="payeeType" value="all" />
+                <label htmlFor="visa">
+                  <img src={banks} />
+                  <span>Banks</span>
+                </label>
+            </div>
 
           <Dropdown
             placeholder="Select Payee"

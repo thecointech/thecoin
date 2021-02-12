@@ -1,8 +1,35 @@
 @import "~@the-coin/site-base/styles/variables.less";
 
 .selectableCards{
-  border: 1px solid @theCoinPaletteGreen4Faded;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  border-radius: 10px;
+  display: inline;
+  width: 20%;
+  img{
+    margin-bottom: 10px;
+  }
+  /* HIDE RADIO */
+  [type=radio] { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* IMAGE STYLES */
+  [type=radio] + label {
+    cursor: pointer;
+    border: 1px solid @theCoinPaletteGreen4Faded;
+    padding: 30px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  /* CHECKED STYLES */
+  [type=radio]:checked + label {
+    outline: 2px solid @theCoinPaletteGreen4;
+    background-color: @theCoinPalettePaleGreen2;
+    border: 1px solid @theCoinPaletteGreen4Faded;
+    padding: 30px;
+    border-radius: 10px;
+  }
 }
+
