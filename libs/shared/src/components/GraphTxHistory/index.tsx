@@ -1,14 +1,14 @@
-import React from "react";
-//import { Bar } from "@nivo/bar";
-import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
+import React, { useEffect, useState } from "react";
+import { ResponsiveLine, PointTooltip, LineSvgProps, Serie } from '@nivo/line'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { TooltipWidget } from "./types";
-
 import { Theme } from "@nivo/core";
 import { linearGradientDef } from "@nivo/core";
 import { StepLineLayer } from "./StepLineLayer";
 import { getAccountSerie } from "./data";
+import { Placeholder } from "semantic-ui-react";
+import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
 
 // Easy access to theme definition
 export type { Theme };
@@ -25,25 +25,54 @@ export type GraphHistoryProps = {
 }
 
 export const GraphTxHistory = (props: GraphHistoryProps) => {
+  const serie = useCalcLimitedFetchSerie(props)
   return (
     <div style={{ height: props.height }}>
-      <ResponsiveLine
-        data={getAccountSerie(props)}
-        colors={[props.lineColor, props.dotColor]}
-        tooltip={props.tooltip as PointTooltip}
-        theme={props.theme}
+      {serie.length == 0
+      ? <Placeholder>
+          <Placeholder.Image />
+        </Placeholder>
+      : <ResponsiveLine
+          data={serie}
+          colors={[props.lineColor, props.dotColor]}
+          tooltip={props.tooltip as PointTooltip}
+          theme={props.theme}
 
-        // Basic properties
-        {...commonProperties}
-        {...axisProperties}
-        {...colorProperties}
-        {...thingsToDisplayProperties}
-      />
+          // Basic properties
+          {...commonProperties}
+          {...axisProperties}
+          {...colorProperties}
+          {...thingsToDisplayProperties}
+        />
+        }
     </div>
   );
 }
 
+// ----------------------------------------------------------------
+// Update-limiting function. Try to ensure we only fetch our fx data once.
+const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
+  const {rates} = useFxRates();
+  const ratesApi = useFxRatesApi();
 
+  const [serie, setSerie] = useState([] as Serie[])
+  // Run once on page load.  Pass in ratesApi to allow querying missing rates
+  useEffect(() => {
+    const d = getAccountSerie(props, rates, ratesApi);
+    setSerie(d);
+  }, []);
+  // On subsequent runs, do not pass in ratesApi
+  // so we do not re-query the same rates
+  useEffect(() => {
+    const d = getAccountSerie(props, rates);
+    setSerie(d);
+  }, [rates.length]);
+
+  return serie;
+}
+
+// ----------------------------------------------------------------
+// graph settings below
 const commonProperties: Partial<LineSvgProps> = {
   margin: { top: 20, right: 20, bottom: 20, left: 80 },
   animate: true,
