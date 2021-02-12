@@ -237,7 +237,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
           <div className={styles.app}>
             <ul className={styles.hs}>
               <li className={ `${styles.item} ${styles.selectableCards}` }>
-                  <input id="all" type="radio" name="payeeType" value="all" defaultChecked />
+                  <input id="all" type="radio" name="payeeType" value="all" defaultChecked={true} />
                   <label htmlFor="all">
                     <img src={all} />
                     <br />
