@@ -31,6 +31,14 @@ module.exports = require('./webpack.base.babel')({
     },
   },
 
+  rules: [
+    {
+      test: /\.js$/,
+      enforce: 'pre',
+      use: ['source-map-loader'],
+    },
+  ],
+
   // Add development plugins
   plugins: [
     new ErrorOverlayPlugin(),

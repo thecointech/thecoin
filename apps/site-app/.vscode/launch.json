@@ -9,7 +9,6 @@
       "request": "launch",
       "type": "pwa-chrome",
       "url": "http://localhost:3001",
-      "webRoot": "${workspaceFolder}/../..",
       "sourceMaps": true,
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
     },

@@ -24,11 +24,7 @@ module.exports = options => ({
   optimization: options.optimization,
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      },
+      ...options.rules,
       {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "src"),
