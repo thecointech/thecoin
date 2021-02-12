@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
@@ -12,7 +12,8 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@the-coin/types';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import interact from './images/icon_payment_big.svg';
 
 type MyProps = {
   account: AccountState;
@@ -54,8 +55,8 @@ const transferOutHeader= { id:"app.accounts.redeem.transferOutHeader",
 const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
                 defaultMessage:"Please wait, we are sending your order to our servers..." };
 
-const button = { id:"app.accounts.redeem.button",
-                defaultMessage:"Send",
+const button = { id:"app.accounts.redeem.form.button",
+                defaultMessage:"Send e-Transfert",
                 description:"For the button in the make a payment page / etransfert tab" };
 
 
@@ -197,61 +198,68 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     } = this.state;
     return (
       <React.Fragment>
-        <div>
-          <Form>
-            <Header as="h5">
-              <Header.Subheader>
-                <FormattedMessage {...description} />
-              </Header.Subheader>
-            </Header>
+        <Form>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Header as="h5">
+                  <Header.Subheader>
+                    <FormattedMessage {...description} />
+                  </Header.Subheader>
+                </Header>
+              </Grid.Column>
+              <Grid.Column floated='right' width={4}>
+                <img src={interact} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
 
-            <DualFxInput
-              onChange={this.onValueChange}
-              asCoin={true}
-              maxValue={account.balance}
-              value={coinToSell}
-              fxRate={rate}
-            />
-            <Form.Input
-              className={"borderTop borderBottom"}
-              label={<FormattedMessage {...email} />}
-              name="email"
-              onChange={this.onInputChanged}
-              placeholder="An email address to send the e-Transfer to"
-            />
-            <Form.Input
-              className={"half left"}
-              label={<FormattedMessage {...question} />}
-              name="question"
-              onChange={this.onInputChanged}
-              placeholder="No numbers or special characters"
-            />
-            <Form.Input
-              className={"half right"}
-              label={<FormattedMessage {...answer} />}
-              name="answer"
-              onChange={this.onInputChanged}
-              placeholder="No spaces or special characters"
-            />
-            <Form.Input
-              className={"borderTop"}
-              label={<FormattedMessage {...message} />}
-              name="message"
-              type="text"
-              onChange={this.onInputChanged}
-              placeholder="An optional message to the recipient.  Should not include the security answer"
-            />
-            <ButtonPrimary onClick={this.onSubmit}><FormattedMessage {...button} /></ButtonPrimary>
-          </Form>
-          <ModalOperation
-            cancelCallback={this.onCancelTransfer}
-            isOpen={transferInProgress}
-            header={transferOutHeader}
-            progressMessage={transferMessage}
-            progressPercent={percentComplete}
-            messageValues={transferValues}
+          <DualFxInput
+            onChange={this.onValueChange}
+            asCoin={true}
+            maxValue={account.balance}
+            value={coinToSell}
+            fxRate={rate}
           />
-        </div>
+          <Form.Input
+            className={"borderTop borderBottom"}
+            label={<FormattedMessage {...email} />}
+            name="email"
+            onChange={this.onInputChanged}
+            placeholder="An email address to send the e-Transfer to"
+          />
+          <Form.Input
+            className={"half left"}
+            label={<FormattedMessage {...question} />}
+            name="question"
+            onChange={this.onInputChanged}
+            placeholder="No numbers or special characters"
+          />
+          <Form.Input
+            className={"half right"}
+            label={<FormattedMessage {...answer} />}
+            name="answer"
+            onChange={this.onInputChanged}
+            placeholder="No spaces or special characters"
+          />
+          <Form.Input
+            className={"borderTop"}
+            label={<FormattedMessage {...message} />}
+            name="message"
+            type="text"
+            onChange={this.onInputChanged}
+            placeholder="An optional message to the recipient.  Should not include the security answer"
+          />
+          <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={this.onSubmit}><FormattedMessage {...button} /></ButtonTertiary>
+        </Form>
+        <ModalOperation
+          cancelCallback={this.onCancelTransfer}
+          isOpen={transferInProgress}
+          header={transferOutHeader}
+          progressMessage={transferMessage}
+          progressPercent={percentComplete}
+          messageValues={transferValues}
+        />
       </React.Fragment>
     );
   }
