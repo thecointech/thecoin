@@ -23,6 +23,10 @@ import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
 import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 
 import banks from './images/icon_bank_big.svg';
+import visa from './images/icon_visa_big.svg';
+import taxes from './images/icon_taxes_big.svg';
+import other from './images/icon_other_big.svg';
+import all from './images/icon_all_big.svg';
 
 import styles from './styles.module.less';
 
@@ -229,8 +233,17 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
               <FormattedMessage {...description} />
             </Header.Subheader>
           </Header>
+
+          <div className={styles.selectableCards}>
+                <input id="all" type="radio" name="payeeType" value="all" defaultChecked />
+                <label htmlFor="all">
+                  <img src={all} />
+                  <br />
+                  <span>All</span>
+                </label>
+            </div>
             <div className={styles.selectableCards}>
-                  <input type="radio" id="banks" name="payeeType" value="banks" checked />
+                  <input id="banks" type="radio" name="payeeType" value="banks" />
                 <label htmlFor="banks">
                   <img src={banks} />
                   <br />
@@ -238,11 +251,27 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
                 </label>
             </div>
             <div className={styles.selectableCards}>
-                <input id="visa" type="radio" name="payeeType" value="all" />
+                <input id="visa" type="radio" name="payeeType" value="visa" />
                 <label htmlFor="visa">
-                  <img src={banks} />
+                  <img src={visa} />
                   <br />
-                  <span>Banks</span>
+                  <span>Visa Card</span>
+                </label>
+            </div>
+            <div className={styles.selectableCards}>
+                <input id="taxes" type="radio" name="payeeType" value="taxes" />
+                <label htmlFor="taxes">
+                  <img src={taxes} />
+                  <br />
+                  <span>Taxes</span>
+                </label>
+            </div>
+            <div className={styles.selectableCards}>
+                <input id="other" type="radio" name="payeeType" value="other" />
+                <label htmlFor="other">
+                  <img src={other} />
+                  <br />
+                  <span>Other</span>
                 </label>
             </div>
 
