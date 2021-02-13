@@ -35,6 +35,7 @@ module.exports = options => ({
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
+            compilerOptions: options.tsCompilerOptions,
           },
         },
       },

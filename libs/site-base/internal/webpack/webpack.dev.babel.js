@@ -39,6 +39,13 @@ module.exports = require('./webpack.base.babel')({
     },
   ],
 
+  // Disable unused vars for debug builds.
+  // Costs too much time when debugging
+  tsCompilerOptions: {
+    noUnusedLocals: false,
+    noUnusedParameters: false,
+  },
+
   // Add development plugins
   plugins: [
     new ErrorOverlayPlugin(),

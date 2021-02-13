@@ -40,7 +40,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Launch Chrome",
+        "name": "Storybook: Launch Chrome",
         "request": "launch",
         "type": "pwa-chrome",
         "url": "http://localhost:6006",

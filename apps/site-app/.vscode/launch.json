@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Chrome: App",
+      "name": "App: Launch Chrome",
       "request": "launch",
       "type": "pwa-chrome",
       "url": "http://localhost:3001",
