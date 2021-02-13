@@ -3,7 +3,7 @@ import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { DateTime } from 'luxon';
 import { TooltipWidget, TxDatum } from "./types";
-import { Theme } from "@nivo/core";
+import { Theme as NivoTheme } from "@nivo/core";
 import { linearGradientDef } from "@nivo/core";
 import { StepLineLayer } from "./StepLineLayer";
 import { getAccountSerie } from "./data";
@@ -12,12 +12,13 @@ import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
 import { Decimal } from 'decimal.js-light';
 
 // Easy access to theme definition
-export type { Theme };
+export type Theme = {
+  lineColors?: [string, string],
+  dotColor: string,
+} & NivoTheme;
 
 export type GraphHistoryProps = {
   txs: Transaction[],
-  lineColor: string,
-  dotColor: string,
   height: number,
   theme?: Theme,
   tooltip?: TooltipWidget,
@@ -38,7 +39,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
               id: "AccountValue",
               data: datum
             }]}
-            colors={[props.lineColor, props.dotColor]}
+            colors={props.theme?.lineColors}
             tooltip={props.tooltip as PointTooltip}
             theme={props.theme}
 
@@ -50,9 +51,9 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 
             // Basic properties
             {...commonProperties}
-            // {...axisProperties}
-            // {...colorProperties}
-            // {...thingsToDisplayProperties}
+            {...axisProperties}
+            {...colorProperties}
+            {...thingsToDisplayProperties}
           />
       }
     </div>
@@ -121,6 +122,7 @@ const axisProperties: Partial<LineSvgProps> = {
   axisBottom: {
     format: '%b %d',
     tickValues: 'every 2 days',
+    tickSize: 0,
     legendOffset: -12,
   },
   axisLeft: {

@@ -13,7 +13,7 @@ type PointData = Point["data"];
 interface TxPoint extends Point {
   data: PointData & TxDatum;
 }
-interface TooltipWidgetProps extends PointTooltipProps {
+export interface TooltipWidgetProps extends PointTooltipProps {
   point: TxPoint
 }
 

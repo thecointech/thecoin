@@ -10,7 +10,20 @@ import { Duration, DurationButtons } from "./DurationButtons";
 
 const theme: Theme = {
   fontSize: 10,
-  textColor: "#FFF" // LessVar does not include built-in vars, unfortunately
+  textColor: "#FFF", // LessVar does not include built-in vars, unfortunately
+  lineColors: [
+    LessVars.theCoinPrimaryGreenNeutral,
+    LessVars.theCoinPrimaryGreenPale
+  ],
+  dotColor: LessVars.theCoinPrimaryGreenNeutral,
+  // axis: {
+  //   domain: {
+  //     line: {
+  //       stroke: 'blue',
+  //       strokeWidth: 2,
+  //     }
+  //   }
+  // }
 };
 
 export const HistoryGraph = () => {
@@ -18,8 +31,6 @@ export const HistoryGraph = () => {
 
   const account = useActiveAccount();
   const txs = account?.history ?? [];
-  const lineColor = LessVars.theCoinPrimaryGreenPale;
-  const dotColor = LessVars.theCoinPrimaryGreenNeutral;
   const from = duration
     ? DateTime.local().minus({days: duration})
     : undefined;
@@ -30,8 +41,6 @@ export const HistoryGraph = () => {
       <GraphTxHistory
         txs={txs}
         from={from}
-        lineColor={lineColor}
-        dotColor={dotColor}
         theme={theme}
         height={275}
         tooltip={Tooltip}
