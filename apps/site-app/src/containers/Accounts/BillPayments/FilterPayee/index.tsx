@@ -26,7 +26,7 @@ const other = { id:"app.accounts.billPayments.filterPayee.other",
 
 export const FilterPayee = () => {
     return (
-        <div className={styles.app}>
+        <div className={styles.swipeZone}>
             <ul className={styles.hs}>
                 <li className={ `${styles.item}` }>
                     <StyledChoice id="all" name="payeeType" value="all" img={iconall} defaultChecked={true} message={all} />

@@ -14,7 +14,6 @@ import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import messages from './messages';
-import styles from './styles.module.less';
 
 type MyProps = {
   account: AccountState;
@@ -161,40 +160,35 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     } = this.state;
     return (
       <React.Fragment>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
+        <Form>
+          <Header as="h5">
+            <Header.Subheader>
+              <FormattedMessage {...messages.subHeader} />
+            </Header.Subheader>
+          </Header>
 
-            <DualFxInput
-              onChange={this.onValueChange}
-              asCoin={true}
-              maxValue={account.balance}
-              value={coinTransfer}
-              fxRate={rate}
-            />
-            <UxAddress
-              uxChange={this.onAccountValue}
-              forceValidate={forceValidate}
-              placeholder="Destination Address"
-            />
-            <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
-          </Form>
-          <ModalOperation
-            cancelCallback={this.onCancelTransfer}
-            isOpen={transferInProgress}
-            header={messages.transferOutHeader}
-            progressMessage={transferMessage}
-            progressPercent={percentComplete}
-            messageValues={transferValues}
+          <DualFxInput
+            onChange={this.onValueChange}
+            asCoin={true}
+            maxValue={account.balance}
+            value={coinTransfer}
+            fxRate={rate}
           />
-        </div>
+          <UxAddress
+            uxChange={this.onAccountValue}
+            forceValidate={forceValidate}
+            placeholder="Destination Address"
+          />
+          <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
+        </Form>
+        <ModalOperation
+          cancelCallback={this.onCancelTransfer}
+          isOpen={transferInProgress}
+          header={messages.transferOutHeader}
+          progressMessage={transferMessage}
+          progressPercent={percentComplete}
+          messageValues={transferValues}
+        />
       </React.Fragment>
     );
   }
