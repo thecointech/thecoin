@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react';
-import { Buttons, Duration } from './';
-
-//import "@the-coin/site-base/styles/semantic.css";
+import { DurationButtons, Duration } from '.';
 
 export default {
-  title: 'App/GraphButton',
-  component: Buttons,
+  title: 'App/DurationButtons',
+  component: DurationButtons,
   parameters: {
     backgrounds: {
       default: 'graphColor',
@@ -19,7 +17,7 @@ export default {
 
 const template: Story<{text: string}> = () => {
   const [duration, setDuration] = useState(31 as Duration)
-  return <Buttons duration={duration} setDuration={setDuration} />;
+  return <DurationButtons duration={duration} setDuration={setDuration} />;
 }
 
 export const Default = template.bind({});

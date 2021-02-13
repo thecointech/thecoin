@@ -18,26 +18,27 @@
     border-radius: 5px;
     margin-left: 16px;
 
-    // We need to override the inverted button
-    //box-shadow: 0px 0px 0px 1px @white inset !important;
-
     &:focus {
       color: @theCoinPaletteGray1;
     }
     &:hover {
       color: @theCoinPaletteGray1;
+      // Box-shadow is set with !important in SemanticUI
       box-shadow: 0px 0px 0px 2px @theCoinPaletteGreen4 inset !important;
     }
   }
 
   :global(.active) {
     opacity: 1;
+    color: @white;
     background-color: @theCoinPaletteGreen5;
     box-shadow: 0px 0px 0px 1px @theCoinPaletteGreen4 inset !important;
 
     &:hover {
       color: @white;
     }
+    &:focus {
+      color: @white;
+    }
   }
-
 }

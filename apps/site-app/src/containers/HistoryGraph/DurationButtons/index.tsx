@@ -31,7 +31,7 @@ export type GraphButtonsProps = {
   setDuration: (duration: Duration) => void;
 }
 
-export const Buttons = (props: GraphButtonsProps) => {
+export const DurationButtons = (props: GraphButtonsProps) => {
   const onClick = useCallback((_event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
     props.setDuration(parseInt(data.days) as Duration);
   }, []);
@@ -39,7 +39,7 @@ export const Buttons = (props: GraphButtonsProps) => {
     <div id={styles.buttons}>
       {
         Object.entries(Durations).map(([days, message]) => (
-          <GraphButton days={days} active={props.duration == parseInt(days)} onClick={onClick}>
+          <GraphButton key={days} days={days} active={props.duration == parseInt(days)} onClick={onClick}>
             <FormattedMessage {...message} />
           </GraphButton>
         ))

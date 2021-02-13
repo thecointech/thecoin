@@ -1,4 +1,3 @@
-import { Serie } from "@nivo/line";
 import { FXRate } from "@the-coin/pricing";
 import { Transaction } from "@the-coin/tx-blockchain";
 import { toHuman } from "@the-coin/utilities";
@@ -37,9 +36,7 @@ const getInitialBalance = ({ txs, from }: GraphHistoryProps) =>
 const getChangeInFiat = (txs: Transaction[], fxRates: FXRate[]) =>
   toHuman(txs.reduce((tot, tx) => tot + fiatChange(tx, fxRates), 0), true);
 
-
-export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesApi?: IFxRates): Serie[] {
-
+export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesApi?: IFxRates) {
   const { from, to, eodOffset } = getDateVals(data);
   const { txs } = data;
   const numDays = to.diff(from).as("days");
@@ -47,6 +44,7 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
   const initCostBasis = getChangeInFiat(txs.filter(tx => tx.date < from), rates);
   let costBasis = initCostBasis;
 
+  let haveAllValues = true;
   // day-to-day value
   const accountValuesDatum: TxDatum[] = [];
   // fiat cost: cost of the current account
@@ -69,6 +67,8 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
     // If not already present, fetch this rate
     ratesApi?.fetchRateAtDate(eod)
     const exRate = weSellAt(rates, eod);
+    if (!exRate)
+      haveAllValues = false;
     accountValuesDatum.push({
       x: date.toISODate(),
       y: toHuman(exRate * balance),
@@ -79,12 +79,9 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
   }
 
   // ensure we have an opening entry on cost basis
-  return [
-    {
-      id: "AccountValue",
-      data: accountValuesDatum
-    },
-  ]
+  return haveAllValues
+    ? accountValuesDatum
+    : [];
 }
 
 function lastItem<T>(arr: T[]): T { return arr[arr.length - 1] }

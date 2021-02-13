@@ -1,7 +1,8 @@
 @import "~@the-coin/site-base/styles/variables.less";
 
 .graphBackground{
-    border-radius: 10px;
+    border-radius: @absoluteBorderRadius;
+    // position: relative;
     padding: 30px;
     height: 350px;
     margin: auto;
@@ -13,14 +14,7 @@
     }
 }
 
-.buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding: 10px;
+.tooltip {
+  border-radius: @absoluteBorderRadius;
+  padding: @relative5px;
 }
-// .background {
-//   background-image: url('./background.svg');
-//   background-repeat: no-repeat;
-//   background-size: cover;
-// }
