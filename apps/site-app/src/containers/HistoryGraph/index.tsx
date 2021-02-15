@@ -5,7 +5,7 @@ import { GraphTxHistory, Theme } from '@the-coin/shared/components/GraphTxHistor
 import { LessVars } from "@the-coin/site-base/styles/variables";
 import { DateTime } from "luxon";
 import styles from './styles.module.less';
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./Tooltip/Tooltip";
 import { Duration, DurationButtons } from "./DurationButtons";
 
 const theme: Theme = {
@@ -31,7 +31,7 @@ export const HistoryGraph = () => {
 
   const account = useActiveAccount();
   const txs = account?.history ?? [];
-  const from = duration
+  const from = Number.isFinite(duration)
     ? DateTime.local().minus({days: duration})
     : undefined;
 

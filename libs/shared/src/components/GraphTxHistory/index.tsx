@@ -65,12 +65,9 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 // Update-limiting function. Try to ensure we only fetch our fx data once.
 const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
-  return [];
-
+  const [datum, setDatum] = useState([] as TxDatum[]);
   const {rates, fetching} = useFxRates();
   const ratesApi = useFxRatesApi();
-
-  const [datum, setDatum] = useState([] as TxDatum[]);
 
   // Run once on page load.  Pass in ratesApi to allow querying missing rates
   useEffect(() => {
@@ -85,10 +82,9 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     setDatum(d);
   }, [rates.length]);
 
-
-  // return fetching > 0
-  //   ? []
-  //   : datum;
+  return fetching > 0
+    ? []
+    : datum;
 }
 
 const calcMinMax = (datum: TxDatum[]) => {
