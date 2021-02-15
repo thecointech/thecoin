@@ -10,6 +10,7 @@ import { getAccountSerie } from "./data";
 import { Placeholder } from "semantic-ui-react";
 import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
 import { Decimal } from 'decimal.js-light';
+import styles from './styles.module.less';
 
 // Easy access to theme definition
 export type Theme = {
@@ -31,7 +32,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
   return (
     <div style={{ height: props.height }}>
       {datum.length == 0
-        ? <Placeholder>
+        ? <Placeholder id={styles.placeholder}>
             <Placeholder.Image />
           </Placeholder>
         : <ResponsiveLine
@@ -63,7 +64,10 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 // ----------------------------------------------------------------
 // Update-limiting function. Try to ensure we only fetch our fx data once.
 const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
-  const { rates } = useFxRates();
+
+  return [];
+
+  const {rates, fetching} = useFxRates();
   const ratesApi = useFxRatesApi();
 
   const [datum, setDatum] = useState([] as TxDatum[]);
@@ -73,6 +77,7 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     const d = getAccountSerie(props, rates, ratesApi);
     setDatum(d);
   }, [props.from?.toMillis()]);
+
   // On subsequent runs, do not pass in ratesApi
   // so we do not re-query the same rates
   useEffect(() => {
@@ -80,7 +85,10 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     setDatum(d);
   }, [rates.length]);
 
-  return datum;
+
+  // return fetching > 0
+  //   ? []
+  //   : datum;
 }
 
 const calcMinMax = (datum: TxDatum[]) => {

@@ -3,6 +3,7 @@ import { FXRate } from '@the-coin/pricing'
 /* --- STATE --- */
 export type FxRatesState = {
   rates: FXRate[];
+  fetching: number;
 }
 
 /* --- ACTIONS --- */
