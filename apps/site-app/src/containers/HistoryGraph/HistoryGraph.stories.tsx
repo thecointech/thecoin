@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { HistoryGraph } from '.';
-import { Tooltip as GraphTooltip, TooltipProps } from './Tooltip';
+import { Tooltip as GraphTooltip } from './Tooltip';
 
 export default {
   title: 'App/HistoryGraph',
