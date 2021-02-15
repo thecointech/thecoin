@@ -5,8 +5,8 @@ import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { HomePage } from '../HomePage';
 import { Settings } from './Settings';
-import { Purchase } from './Purchase';
 import { MakePayments } from 'containers/MakePayments';
+import { Topup } from 'containers/TopUp';
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -19,7 +19,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: 'Top up balance',
     urlFragment: 'transferIn',
-    creator: (routerProps: AccountPageProps) => ((props) => <Purchase {...props} signer={routerProps.account.signer!} />),
+    creator: (routerProps: AccountPageProps) => ((props) => <Topup {...props} {...routerProps} />),
     icon: "arrow circle up",
   },
   {

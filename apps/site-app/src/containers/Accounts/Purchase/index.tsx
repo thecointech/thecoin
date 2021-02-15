@@ -93,13 +93,22 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
     const { rates } = this.props;
     const rate = weSellAt(rates);
 
-    const { activeAccordion } = this.state;
-    // const ImgeTransfer = <img src={InteraceTransfer} alt='logo' />
-    const paymentMethods = [
-      {
-        logo: InteraceTransfer,
-        title: 'Interac e-Transfer',
-        content: (
+    return (
+      <>
+        <div className={styles.wrapper}>
+          <Form>
+            <Header as="h5">
+              <Header.Subheader>
+                <FormattedMessage {...messages.subHeader} />
+              </Header.Subheader>
+            </Header>
+
+            <DualFxInput
+              onChange={this.onValueChange}
+              maxValue={3000}
+              value={this.state.cadPurchase}
+              fxRate={rate}
+            />
           <List divided relaxed>
             <List.Item>Sign into your finacial institution</List.Item>
             <List.Item>
@@ -118,69 +127,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
               account within 2 working days.
             </List.Item>
           </List>
-        ),
-      },
-      {
-        logo: InteraceOnline, // <img className={styles.LogoImage} src={InteraceOnline} alt='logo' />,
-        title: 'Interac Online',
-        content: <p>Direct payment via Interac Online is coming soon!</p>,
-      },
-    ];
-
-    return (
-      <>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
-
-            <DualFxInput
-              onChange={this.onValueChange}
-              maxValue={3000}
-              value={this.state.cadPurchase}
-              fxRate={rate}
-            />
-
-            <Accordion
-              fluid
-              styled
-              activeIndex={activeAccordion}
-              onTitleClick={this.accordionClick}
-              panels={paymentMethods.map((item, index) => ({
-                key: index,
-                title: (
-                  <Accordion.Title>
-                    <div className={styles.HeaderContainer}>
-                      <Icon name="dropdown" />
-                      {item.title}
-                      <img
-                        src={item.logo}
-                        className={styles.LogoImage}
-                        alt="logo"
-                      />
-                      <div style={{ clear: 'both' }} />
-                    </div>
-                  </Accordion.Title>
-                ),
-                content: (_: string, { key, active }: ActiveElement) => (
-                  <div key={key} className={styles.PaymentMethod}>
-                    <AnimateHeight
-                      animateOpacity
-                      duration={300}
-                      height={active ? 'auto' : 0}
-                    >
-                      {item.content}
-                    </AnimateHeight>
-                  </div>
-                ),
-              }))}
-            />
+            
           </Form>
           <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
         </div>
