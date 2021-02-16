@@ -52,7 +52,7 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
   for (let i = 0; i < numDays; i++) {
     const date = from.plus({ days: i });
     // any transactions this day?
-    const daysTxs = txs.filter(tx => tx.date.toISODate() == date.toISODate());
+    const daysTxs = txs.filter(tx => tx.date.toISODate() === date.toISODate());
 
     // update balance to the last balance of the day
     balance = lastItem(daysTxs)?.balance ?? balance;
