@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { TheCoin, AccountName as TheCoinName } from 'containers/TheCoinAccount'
 import { BrokerCAD, AccountName as BrokerName } from 'containers/BrokerCAD'
-import { NotFoundPage } from './NotFoundPage';
+import { NotFoundPage } from '../NotFoundPage';
 import {RUrl} from '@the-coin/utilities/RUrl';
 import { useSidebar } from '@the-coin/shared/containers/PageSidebar/actions';
 import { SidebarMenuItem, MapMenuItems } from '@the-coin/shared/containers/PageSidebar/types';
 
-const ConstantSidebarItems: SidebarMenuItem[] = 
+const ConstantSidebarItems: SidebarMenuItem[] =
 [
 	{
 		link: {
@@ -29,11 +29,11 @@ const ConstantSidebarItems: SidebarMenuItem[] =
 	}
 ];
 
-const generateSidebarItems = () : SidebarMenuItem[] => 
+const generateSidebarItems = () : SidebarMenuItem[] =>
   MapMenuItems(ConstantSidebarItems, "/");
 
 const SIDEBAR_KEY = "RootItems"
-  
+
 export const Routes = () => {
 
   const sidebar = useSidebar();

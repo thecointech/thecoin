@@ -1,0 +1,44 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
+
+#buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: 21px;
+  padding-right: 31px;
+
+  .button {
+    opacity: 60%;
+    font-size: @fontSizeSmall;
+    font-weight: @bold;
+    line-height: 15px;
+    text-transform: uppercase;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    margin-left: 16px;
+
+    &:focus {
+      color: @theCoinPaletteGray1;
+    }
+    &:hover {
+      color: @theCoinPaletteGray1;
+      // Box-shadow is set with !important in SemanticUI
+      box-shadow: 0px 0px 0px 2px @theCoinPaletteGreen4 inset !important;
+    }
+  }
+
+  :global(.active) {
+    opacity: 1;
+    color: @white;
+    background-color: @theCoinPaletteGreen5;
+    box-shadow: 0px 0px 0px 1px @theCoinPaletteGreen4 inset !important;
+
+    &:hover {
+      color: @white;
+    }
+    &:focus {
+      color: @white;
+    }
+  }
+}

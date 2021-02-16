@@ -24,6 +24,7 @@ module.exports = options => ({
   optimization: options.optimization,
   module: {
     rules: [
+      ...options.rules,
       {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "src"),
@@ -34,6 +35,7 @@ module.exports = options => ({
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
+            compilerOptions: options.tsCompilerOptions,
           },
         },
       },

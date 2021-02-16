@@ -1,5 +1,7 @@
 import Papa from 'papaparse';
-import { memoize } from 'lodash';
+
+// US abandoned gold standard in April 1933
+export const FDRNewDeal = new Date(1933, 3);
 
 export interface DataFormat {
   Date: Date;
@@ -13,6 +15,15 @@ export interface DataFormat {
   Dividend: number;
   Earnings: number;
   CAPE: string;
+}
+
+
+export type CoinReturns = {
+  lowerBound: number;
+  upperBound: number;
+  mean: number;
+  median: number;
+  values: number[];
 }
 
 function transformDate(value: string) {
@@ -32,22 +43,19 @@ export function parseData(data: string) {
     header: true,
     transform: transformData,
   });
-  // if (csv.errors.length > 0) {
-  //   console.error(JSON.stringify(csv.errors));
-  // }
 
   return csv.data as DataFormat[];
 }
 
 export async function getData() {
   const data = await fetch('/sp500_monthly.csv');
-  return parseData(await data.text());
+  const text = await data.text();
+  return parseData(text);
 }
 
 ///////////////////////////////////
 
-export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], maxFee: number) {
-  console.log("FIX MAXFEE: " + maxFee);
+export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], _maxFee: number) {
   let shares = 1;
   for (let i = startIdx + 1; i <= endIdx; i++) {
     const month = data[i];
@@ -73,16 +81,25 @@ export function getIdx(date: Date, data: any[]) {
   return Math.min(yearIdx + monthIdx, data.length);
 }
 
+// Calculates an array of every possible period of length monthCount in between start and end
+// Note - start and end are inclusive, because when calculating return for month 0, we don't know
+// what it is until month 1
 export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: Date, monthCount: number, fee: number) {
   const start = getIdx(startDate, data);
   let end = getIdx(endDate, data);
-  end = Math.min(end, data.length - monthCount);
-  if (end <= start) {
+  // Do not read past the end of the array
+  end = Math.min(end, data.length - 1);
+  // The number of periods available between max-min
+  // In a year, we have 12 periods of size 1.
+  // (we subtract 1 from monthCount here because this actually
+  // means we count from jan->jan)
+  const numDatum = end - start - (monthCount - 1);
+  if (numDatum <= 0) {
     return [];
   }
 
-  const numDatum = end - start;
-  const periods = Array(numDatum);
+  // For each period of length monthCount, find the total return
+  const periods: number[] = Array(numDatum);
   for (let i = 0; i < numDatum; i++) {
     const s = i + start;
     periods[i] = calcReturns(s, s + monthCount, data, fee);
@@ -90,113 +107,159 @@ export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: D
   return periods;
 }
 
-export function arrayMin(arr: number[]) {
-  let len = arr.length;
-  let min = Infinity;
-  while (len--) {
-    if (arr[len] < min) {
-      min = arr[len];
+export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number)
+{
+  // We only want to count the data since FDR's "new deal"
+  const startDate = FDRNewDeal;
+  // Include all the most recent data (todo: update that CSV)
+  const endDate = new Date();
+
+  // we generate from 1 month through till 60 years
+  const minMonths = 1;
+  const allReturns: number[][] = new Array(maxMonths);
+
+  for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
+  {
+    var periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, fee);
+    allReturns[monthCount - 1] = periodReturns;
+  }
+  return allReturns.map(returns => {
+    return returns.sort((a, b) => a - b);
+  });
+}
+
+export function calculateAvgAndArea(allReturns: number[][], percentile: number)
+{
+  return allReturns.map(returns => {
+    let sum = 0;
+    for (let i = 0; i < returns.length; i++) {
+      sum += returns[i];
     }
-  }
-  return min;
+    const midIndex = returns.length / 2;
+    const lowerBoundIdx = midIndex - midIndex * percentile;
+    const upperBoundIdx = midIndex - 1 + midIndex * percentile;
+    var r: CoinReturns = {
+      mean: sum / returns.length,
+      median: returns[Math.round(midIndex)],
+      lowerBound: returns[Math.round(lowerBoundIdx)],
+      upperBound: returns[Math.round(upperBoundIdx)],
+      values: returns
+    };
+    return r;
+  });
 }
 
-export function arrayMax(arr: number[]) {
-  let len = arr.length;
-  let max = -Infinity;
-  while (len--) {
-    if (arr[len] > max) {
-      max = arr[len];
-    }
-  }
-  return max;
-}
+// // export function arrayMin(arr: number[]) {
+// //   let len = arr.length;
+// //   let min = Infinity;
+// //   while (len--) {
+// //     if (arr[len] < min) {
+// //       min = arr[len];
+// //     }
+// //   }
+// //   return min;
+// // }
 
-export function calcBucketShape(minValue: number, maxValue: number, numBuckets: number) {
-  const spread = maxValue - minValue;
+// // export function arrayMax(arr: number[]) {
+// //   let len = arr.length;
+// //   let max = -Infinity;
+// //   while (len--) {
+// //     if (arr[len] > max) {
+// //       max = arr[len];
+// //     }
+// //   }
+// //   return max;
+// // }
 
-  // what would even buckets look like?
-  const minBucketSize = spread / numBuckets;
-  const roundBucketSizes = [0.01, 0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 30, 50, 100, 200];
-  const bucketSize = roundBucketSizes.find(v => v > minBucketSize) || roundBucketSizes[roundBucketSizes.length - 1];
+// // export function calcBucketShape(minValue: number, maxValue: number, numBuckets: number) {
+// //   const spread = maxValue - minValue;
 
-  // calculate round bucket size for min/max
-  const minBucket = Math.floor(minValue / bucketSize) * bucketSize;
-  const maxBucket = Math.ceil(maxValue / bucketSize) * bucketSize;
-  return {
-    min: minBucket,
-    max: maxBucket,
-    size: bucketSize,
-  };
-}
+// //   // what would even buckets look like?
+// //   const minBucketSize = spread / numBuckets;
+// //   const roundBucketSizes = [0.01, 0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 30, 50, 100, 200];
+// //   const bucketSize = roundBucketSizes.find(v => v > minBucketSize) || roundBucketSizes[roundBucketSizes.length - 1];
 
-
-export interface CoinReturns {
-  min: number;
-  max: number;
-  size: number;
-  average: number;
-  values: number[];
-  count: number;
-  // averageMarker: number;
-  // averageLegend: string;
-}
-
-export const CalcIndex = (min: number, max: number, v: number, count: number) =>
-  Math.ceil(count * (v - min) / (max - min));
-
-export function bucketValues(values: number[], numBuckets: number, startingValue?: number): CoinReturns {
-  const minValue = (startingValue === undefined) ? arrayMin(values) : startingValue;
-  const maxValue = arrayMax(values);
-
-  // Spread
-  const { min, max, size } = calcBucketShape(minValue, maxValue, numBuckets);
-
-  const count = Math.round((max - min) / size);
-  const bucketCount = Math.max(count + 1, numBuckets);
-  const buckets: number[] = Array(bucketCount).fill(0);
-  let total = 0;
-  for (const v of values) {
-    const idx = CalcIndex(min, max, v, count);
-    buckets[idx] = buckets[idx] + 1;
-    total += v;
-  }
-  const average = total / values.length;
-
-  return {
-    min,
-    max,
-    size,
-    average,
-    values: buckets,
-    count: values.length,
-  };
-}
+// //   // calculate round bucket size for min/max
+// //   const minBucket = Math.floor(minValue / bucketSize) * bucketSize;
+// //   const maxBucket = Math.ceil(maxValue / bucketSize) * bucketSize;
+// //   return {
+// //     min: minBucket,
+// //     max: maxBucket,
+// //     size: bucketSize,
+// //   };
+// // }
 
 
-export const NullData: CoinReturns = {
-  values: [],
-  average: 0,
-  size: 1,
-  min: 0,
-  max: 0,
-  count: 1,
-};
+// // export const CalcIndex = (min: number, max: number, v: number, count: number) =>
+// //   Math.ceil(count * (v - min) / (max - min));
 
-export function CalcPlotData(monthCount: number, data: DataFormat[], minimumValue?: number): CoinReturns {
-  if (data.length === 0 || !monthCount) {
-    return NullData;
-  }
+// // export function bucketValues(values: number[], numBuckets: number, startingValue?: number): CoinReturns {
+// //   const minValue = (startingValue === undefined) ? arrayMin(values) : startingValue;
+// //   const maxValue = arrayMax(values);
 
-  const startDate = new Date(1932, 0);
-  const returns = calcPeriodReturn(data, startDate, new Date(), monthCount, 0);
-  return bucketValues(returns, 20, minimumValue);
-}
+// //   // Spread
+// //   const { min, max, size } = calcBucketShape(minValue, maxValue, numBuckets);
 
-export const GetPlotData = memoize(CalcPlotData, (m: number, d: DataFormat[]) => d.length + m);
+// //   const count = Math.round((max - min) / size);
+// //   const bucketCount = Math.max(count + 1, numBuckets);
+// //   const buckets: number[] = Array(bucketCount).fill(0);
+// //   let total = 0;
+// //   for (const v of values) {
+// //     const idx = CalcIndex(min, max, v, count);
+// //     buckets[idx] = buckets[idx] + 1;
+// //     total += v;
+// //   }
+// //   const mean = total / values.length;
 
-export const CalcAverageReturn = (multiplier: number, average: number) =>
-  (multiplier * (1 + average)).toFixed(2);
+// //   return {
+// //     min,
+// //     max,
+// //     size,
+// //     mean,
+// //     values: buckets,
+// //     count: values.length,
+// //   };
+// // }
 
-export const CalcRoundedAverageReturn = (multiplier: number, data: CoinReturns) =>
-  (multiplier * (1 + Math.round(data.average / data.size) * data.size)).toFixed(2);
+// //
+// // This function calculates a 2D array of all possible returns for
+// // a range of months from 1 to maxNumMonths
+// //
+// export function calcPlotData(maximumNumMonths: number, data: DataFormat[]): number[][] {
+//   if (data.length === 0 || !maximumNumMonths) {
+//     return [];
+//   }
+
+//   const startDate = new Date(1932, 0);
+
+//   return range(1, maximumNumMonths)
+//     .map(numMonths => calcPeriodReturn(data, startDate, new Date(), numMonths, 0))
+// }
+
+// // export function calcMinMaxmean(data: number[][]) : CoinReturns[] {
+// //   return data.map(forMonthX => {
+// //     const orderedValues = forMonthX.sort();
+// //     const nVals = orderedValues.length;
+// //     return {
+// //       min: orderedValues[0],
+// //       max: orderedValues[nVals - 1],
+// //       mean: orderedValues.reduce((total, val) => total + val) / nVals,
+// //       // The following 3 values don't really make sense in this context;
+// //       size: nVals,
+// //       values: orderedValues,
+// //       count: nVals
+// //     }
+// //   });
+// // }
+
+// function calcBucketData(_maximumNumMonths: number, _data: DataFormat[], _minimum?: number) : CoinReturns {
+//   throw new Error("fixme");
+// }
+
+// export const GetPlotData = memoize(calcBucketData, (m: number, d: DataFormat[]) => d.length + m);
+
+// export const CalcmeanReturn = (multiplier: number, mean: number) =>
+//   (multiplier * (1 + mean)).toFixed(2);
+
+// export const CalcRoundedmeanReturn = (multiplier: number, data: CoinReturns) =>
+//   (multiplier * (1 + Math.round(data.mean / data.size) * data.size)).toFixed(2);

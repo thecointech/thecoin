@@ -9,8 +9,6 @@
 @backgroundColor: @primaryColor;
 @textColor: #FFFFFF;
 
-
-
 @transition:
   opacity 0.3s @defaultEasing,
   background-color 0.3s @defaultEasing,
@@ -31,3 +29,4 @@
 @activeBackgroundColor: #ffffff;
 @activeColor: #FFEF98;
 
+@invertedBorderSize: 1px;

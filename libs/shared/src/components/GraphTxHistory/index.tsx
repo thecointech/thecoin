@@ -1,0 +1,164 @@
+import React, { useEffect, useState } from "react";
+import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
+import { Transaction } from '@the-coin/tx-blockchain';
+import { DateTime } from 'luxon';
+import { TooltipWidget, TxDatum } from "./types";
+import { Theme as NivoTheme } from "@nivo/core";
+import { linearGradientDef } from "@nivo/core";
+import { StepLineLayer } from "./StepLineLayer";
+import { getAccountSerie } from "./data";
+import { Placeholder } from "semantic-ui-react";
+import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
+import { Decimal } from 'decimal.js-light';
+
+// Easy access to theme definition
+export type Theme = {
+  lineColors?: [string, string],
+  dotColor: string,
+} & NivoTheme;
+
+export type GraphHistoryProps = {
+  txs: Transaction[],
+  height: number,
+  theme?: Theme,
+  tooltip?: TooltipWidget,
+  from?: DateTime,
+  to?: DateTime,
+}
+
+export const GraphTxHistory = (props: GraphHistoryProps) => {
+  const datum = useCalcLimitedFetchSerie(props)
+  return (
+    <div style={{ height: props.height }}>
+      {datum.length == 0
+        ? <Placeholder>
+            <Placeholder.Image />
+          </Placeholder>
+        : <ResponsiveLine
+            data={[{
+              id: "AccountValue",
+              data: datum
+            }]}
+            colors={props.theme?.lineColors}
+            tooltip={props.tooltip as PointTooltip}
+            theme={props.theme}
+
+            yScale={{
+              type: 'linear',
+              stacked: false,
+              ...calcMinMax(datum),
+            }}
+
+            // Basic properties
+            {...commonProperties}
+            {...axisProperties}
+            {...colorProperties}
+            {...thingsToDisplayProperties}
+          />
+      }
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------
+// Update-limiting function. Try to ensure we only fetch our fx data once.
+const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
+  const { rates } = useFxRates();
+  const ratesApi = useFxRatesApi();
+
+  const [datum, setDatum] = useState([] as TxDatum[]);
+
+  // Run once on page load.  Pass in ratesApi to allow querying missing rates
+  useEffect(() => {
+    const d = getAccountSerie(props, rates, ratesApi);
+    setDatum(d);
+  }, [props.from?.toMillis()]);
+  // On subsequent runs, do not pass in ratesApi
+  // so we do not re-query the same rates
+  useEffect(() => {
+    const d = getAccountSerie(props, rates);
+    setDatum(d);
+  }, [rates.length]);
+
+  return datum;
+}
+
+const calcMinMax = (datum: TxDatum[]) => {
+  let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis), 0) ?? 100;
+  let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
+
+  // max / min should have minimum size - $100
+  let diff = Math.max(100, max - min);
+  // have some padding - 10% each way
+  const padding = diff * 0.1;
+  min = min - padding;
+  max = max + padding;
+  // and round to reasonable sig figs.
+  // The sig figs are based on diff
+  const sigFigs = Math.max(new Decimal(diff).exponent(), 2)
+  min = new Decimal(min).toSignificantDigits(sigFigs).toNumber();
+  max = new Decimal(max).toSignificantDigits(sigFigs).toNumber();
+  return {min, max};
+}
+
+// ----------------------------------------------------------------
+// graph settings below
+const commonProperties: Partial<LineSvgProps> = {
+  margin: { top: 20, right: 20, bottom: 20, left: 60 },
+  animate: true,
+  enableArea: true,
+  enableGridX: false,
+  enableGridY: false,
+  curve: "monotoneX"
+}
+
+const axisProperties: Partial<LineSvgProps> = {
+  xScale: {
+    type: 'time',
+    format: '%Y-%m-%d',
+    useUTC: false,
+    precision: 'day',
+  },
+  axisBottom: {
+    format: '%b %d',
+    tickValues: 'every 2 days',
+    tickSize: 0,
+    legendOffset: -12,
+  },
+  axisLeft: {
+    format: value => Number(value).toLocaleString(),
+    tickValues: 5,
+    tickSize: 0,
+    tickPadding: 10
+  },
+  gridYValues: 3,
+  xFormat: "time:%Y-%m-%d"
+}
+
+const colorProperties: Partial<LineSvgProps> = {
+  defs: [
+    linearGradientDef('gradientA', [
+      { offset: 0, color: '#fff' },
+      { offset: 10, color: '#fff', opacity: 0 },
+    ]),
+  ],
+  fill: [{ match: '*', id: 'gradientA' }]
+}
+
+const thingsToDisplayProperties: Partial<LineSvgProps> = {
+  layers: [
+    //"grid",
+    "markers",
+    "axes",
+    "areas",
+    "crosshair",
+    "lines",
+    //"slices",
+    //"points",
+    'mesh',
+    "legends",
+    StepLineLayer,
+  ],
+  useMesh: true,
+  enableSlices: false,
+}
