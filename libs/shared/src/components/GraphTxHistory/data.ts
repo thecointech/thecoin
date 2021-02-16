@@ -44,7 +44,6 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
   const initCostBasis = getChangeInFiat(txs.filter(tx => tx.date < from), rates);
   let costBasis = initCostBasis;
 
-  let haveAllValues = true;
   // day-to-day value
   const accountValuesDatum: TxDatum[] = [];
   // fiat cost: cost of the current account
@@ -67,8 +66,6 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
     // If not already present, fetch this rate
     ratesApi?.fetchRateAtDate(eod)
     const exRate = weSellAt(rates, eod);
-    if (!exRate)
-      haveAllValues = false;
     accountValuesDatum.push({
       x: date.toISODate(),
       y: toHuman(exRate * balance),
@@ -79,9 +76,7 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
   }
 
   // ensure we have an opening entry on cost basis
-  return haveAllValues
-    ? accountValuesDatum
-    : [];
+  return accountValuesDatum;
 }
 
 function lastItem<T>(arr: T[]): T { return arr[arr.length - 1] }

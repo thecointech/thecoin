@@ -10,6 +10,7 @@ import { getAccountSerie } from "./data";
 import { Placeholder } from "semantic-ui-react";
 import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
 import { Decimal } from 'decimal.js-light';
+import styles from './styles.module.less';
 
 // Easy access to theme definition
 export type Theme = {
@@ -27,11 +28,12 @@ export type GraphHistoryProps = {
 }
 
 export const GraphTxHistory = (props: GraphHistoryProps) => {
-  const datum = useCalcLimitedFetchSerie(props)
+  const datum = useCalcLimitedFetchSerie(props);
+  const minMax = calcMinMax(datum)
   return (
     <div style={{ height: props.height }}>
       {datum.length === 0
-        ? <Placeholder>
+        ? <Placeholder id={styles.placeholder}>
             <Placeholder.Image />
           </Placeholder>
         : <ResponsiveLine
@@ -43,16 +45,10 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
             tooltip={props.tooltip as PointTooltip}
             theme={props.theme}
 
-            yScale={{
-              type: 'linear',
-              stacked: false,
-              ...calcMinMax(datum),
-            }}
-
             // Basic properties
             {...commonProperties}
-            {...axisProperties}
-            {...colorProperties}
+            {...axisProperties(minMax, datum.length)}
+            {...colorProperties(minMax)}
             {...thingsToDisplayProperties}
           />
       }
@@ -63,16 +59,17 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 // ----------------------------------------------------------------
 // Update-limiting function. Try to ensure we only fetch our fx data once.
 const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
-  const { rates } = useFxRates();
-  const ratesApi = useFxRatesApi();
 
   const [datum, setDatum] = useState([] as TxDatum[]);
+  const {rates, fetching} = useFxRates();
+  const ratesApi = useFxRatesApi();
 
   // Run once on page load.  Pass in ratesApi to allow querying missing rates
   useEffect(() => {
     const d = getAccountSerie(props, rates, ratesApi);
     setDatum(d);
   }, [props.from?.toMillis()]);
+
   // On subsequent runs, do not pass in ratesApi
   // so we do not re-query the same rates
   useEffect(() => {
@@ -80,9 +77,12 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     setDatum(d);
   }, [rates.length]);
 
-  return datum;
+  return fetching > 0
+    ? []
+    : datum;
 }
 
+type MinMax = ReturnType<typeof calcMinMax>;
 const calcMinMax = (datum: TxDatum[]) => {
   let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis), 0) ?? 100;
   let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
@@ -104,7 +104,7 @@ const calcMinMax = (datum: TxDatum[]) => {
 // ----------------------------------------------------------------
 // graph settings below
 const commonProperties: Partial<LineSvgProps> = {
-  margin: { top: 20, right: 20, bottom: 20, left: 60 },
+  margin: { top: 0, right: 0, bottom: 20, left: 40 },
   animate: true,
   enableArea: true,
   enableGridX: false,
@@ -112,16 +112,29 @@ const commonProperties: Partial<LineSvgProps> = {
   curve: "monotoneX"
 }
 
-const axisProperties: Partial<LineSvgProps> = {
+const getTickSpacing = (count: number) => {
+  if (count <= 10) return "every day";
+  if (count <= 50) return "every 2 days";
+  // Aprox 20 entries
+  if (count <= 600) return "every month";
+  // Try to cap at < 15 entries
+  else return `every ${Math.ceil(count / 600)} months`;
+}
+const axisProperties = (minMax: MinMax, count: number) : Partial<LineSvgProps> => ({
   xScale: {
     type: 'time',
     format: '%Y-%m-%d',
     useUTC: false,
     precision: 'day',
   },
+  yScale: {
+    type: 'linear',
+    stacked: false,
+    ...minMax,
+  },
   axisBottom: {
     format: '%b %d',
-    tickValues: 'every 2 days',
+    tickValues: getTickSpacing(count),
     tickSize: 0,
     legendOffset: -12,
   },
@@ -133,17 +146,17 @@ const axisProperties: Partial<LineSvgProps> = {
   },
   gridYValues: 3,
   xFormat: "time:%Y-%m-%d"
-}
+})
 
-const colorProperties: Partial<LineSvgProps> = {
+const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
   defs: [
     linearGradientDef('gradientA', [
       { offset: 0, color: '#fff' },
-      { offset: 10, color: '#fff', opacity: 0 },
+      { offset: 100 - (100 * min / max), color: '#fff', opacity: 0 },
     ]),
   ],
   fill: [{ match: '*', id: 'gradientA' }]
-}
+})
 
 const thingsToDisplayProperties: Partial<LineSvgProps> = {
   layers: [

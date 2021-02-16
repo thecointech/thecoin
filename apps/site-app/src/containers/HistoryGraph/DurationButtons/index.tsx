@@ -19,7 +19,7 @@ const Durations = {
     defaultMessage:"Year",
     description:"button for Duration of 1 year"
   },
-  0: {
+  [Number.POSITIVE_INFINITY]: {
     id:"app.historyGraph.All",
     defaultMessage:"All",
     description:"button for Show entire history"

@@ -12,7 +12,8 @@ const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 // TODO: We are going to convert this into a live link to the Firestore DB
 // The initial state of the App
 const initialState: FxRatesState = {
-  rates: []
+  rates: [],
+  fetching: 0,
 }
 
 // file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
@@ -65,30 +66,48 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
   implements IFxRates {
 
   *fetchRateAtDate(date?: Date): Generator<any> {
+
+    // early exit.
+    if (date != null) {
+      const ts = date.getTime();
+      if (this.haveRateFor(ts))
+        return;
+    }
+
+    // We can modify the draft state up until the first yield
+    yield this.storeValues({fetching: +1});
+    console.log(`We are now running ${this.state.fetching + 1} fetches`);
+    const newState = {
+      fetching: -1,
+      rates: [] as FXRate[]
+    }
     try {
-
-      if (date != null) {
-        const ts = date.getTime();
-        if (this.haveRateFor(ts))
-          return;
-      }
-
       const newFxRate: FXRate|null = (yield call<typeof fetchRate>(fetchRate, date)) as any;
       if (newFxRate)
-        yield this.storeValues({rates: [newFxRate]});
+        newState.rates = [newFxRate];
     }
     catch (err) {
       console.error(err);
     }
+    // Even in the case of the throw, try to decrement our counter
+    yield this.storeValues(newState);
   }
 
+  // Overwrites the default update to ensure we save no duplicates;
   updateWithValues(newState: Partial<FxRatesState>) {
-    const newRates = [...this.state.rates];
-    newState.rates?.forEach(r => {
-      if (!this.haveRateFor(r.validFrom))
-        newRates.push(r)
-    })
-    this.draftState.rates = newRates.sort((a, b) => a.validFrom - b.validFrom);
+    // Insert new rates into the old, keeping sorted
+    if (newState.rates?.length) {
+      const newRates = [...this.state.rates];
+      newState.rates?.forEach(r => {
+        if (!this.haveRateFor(r.validFrom))
+          newRates.push(r)
+      })
+      this.draftState.rates = newRates.sort((a, b) => a.validFrom - b.validFrom);
+    }
+
+    // If we have completed a fetch, remove the counter
+    this.draftState.fetching = this.state.fetching + (newState.fetching ?? 0);
+    console.log(`We are still running ${this.draftState.fetching} fetches`);
   }
 
   haveRateFor(ts: number): boolean {
