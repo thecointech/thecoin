@@ -1,4 +1,4 @@
-import { calculateProfit, fiatChange, totalCad, currentValue, filterFeesFiatChange } from "./profit";
+import { calculateProfit, fiatChange, totalCad, currentValue, filterFees } from "./profit";
 import { toHuman } from "@the-coin/utilities";
 import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
 
@@ -14,14 +14,14 @@ test("Calculate simple profit correctly", () => {
   // What is the total CAD we have put into this account?
   // 5 + 10 - 5 - 2.5 = 7.5
   const totalCAD = totalCad(SimpleTransactions, SimpleRates);
-  expect(toHuman(totalCAD)).toBe(7.5);
+  expect(totalCAD).toBe(7.5);
 
   const currentCoin = SimpleTransactions[3].balance;
   const balanceCAD = currentValue(currentCoin, SimpleRates);
-  expect(toHuman(balanceCAD)).toBe(12.5);
+  expect(balanceCAD).toBe(12.5);
 
   const profitCAD = calculateProfit(currentCoin, SimpleTransactions, SimpleRates)
-  expect(toHuman(profitCAD)).toBe(5);
+  expect(profitCAD).toBe(5);
 });
 
 test('calculate real profit correctly', () => {
@@ -32,7 +32,8 @@ test('calculate real profit correctly', () => {
   const {balance} = txs[0];
 
   var txInFiat = txs
-    .map(tx => filterFeesFiatChange(tx, rates))
+    .filter(filterFees)
+    .map(tx => fiatChange(tx, rates))
     .map(fiat => toHuman(fiat, true));
 
   // Initial deposit, $1000
@@ -58,18 +59,17 @@ test('calculate real profit correctly', () => {
   // cost basis = (in - out) $2818.66 - $20 = 2798.66
   const costBasisA = txInFiat.reduce((a, b) => a + b, 0);
   expect(costBasisA).toBe(2798.66);
-  const costBasisB = toHuman(totalCad(txs, rates), true);
+  const costBasisB = totalCad(txs, rates);
   expect(costBasisA).toEqual(costBasisB);
 
   // Whats the current balance?
-  const balanceCAD = toHuman(currentValue(balance, rates), true);
+  const balanceCAD = currentValue(balance, rates);
   expect(balanceCAD).toBe(2859.91);
 
 
   // profit = balance - costBasis = 2859.91 - 2798.66 = 61.25
   const profit = calculateProfit(balance, txs, rates);
-  const cadProfit = toHuman(profit, true);
-  expect(cadProfit).toBe(61.25);
+  expect(profit).toBe(61.25);
 
 });
 

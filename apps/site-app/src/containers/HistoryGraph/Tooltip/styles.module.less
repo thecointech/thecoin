@@ -1,0 +1,22 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
+#tooltip {
+  color: @white;
+  font-size: @fontSizeSmall;
+  background-color: @theCoinPrimaryGreenPale;
+  border-radius: @absoluteBorderRadius;
+  padding: @relative5px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  padding: 5px 10px;
+
+  table {
+    border-width: 0px;
+    background-color: transparent;
+    > tr {
+      padding: 0;
+      > td {
+        padding: 5px;
+      }
+    }
+  }
+}

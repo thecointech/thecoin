@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap/selectors";
-import { Container } from "semantic-ui-react";
 import { GraphTxHistory, Theme } from '@the-coin/shared/components/GraphTxHistory'
 import { LessVars } from "@the-coin/site-base/styles/variables";
 import { DateTime } from "luxon";
 import styles from './styles.module.less';
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./Tooltip/Tooltip";
 import { Duration, DurationButtons } from "./DurationButtons";
+import { AppContainer } from "components/AppContainers";
 
 const theme: Theme = {
   fontSize: 10,
@@ -31,12 +31,12 @@ export const HistoryGraph = () => {
 
   const account = useActiveAccount();
   const txs = account?.history ?? [];
-  const from = duration
+  const from = Number.isFinite(duration)
     ? DateTime.local().minus({days: duration})
     : undefined;
 
   return (
-    <Container className={styles.graphBackground}>
+    <AppContainer className={styles.graphBackground}>
       <DurationButtons duration={duration} setDuration={setDuration} />
       <GraphTxHistory
         txs={txs}
@@ -45,6 +45,6 @@ export const HistoryGraph = () => {
         height={275}
         tooltip={Tooltip}
       />
-    </Container>
+    </AppContainer>
   )
 }
