@@ -74,8 +74,8 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 		let viTHE = (vTHE === null) ? "" : roundPlaces(vTHE);
 		return (
 			<React.Fragment>
-				<Form.Input id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={viCAD} type="number" onChange={this.onChange} />
-				<Form.Input id="xTHE" placeholder="value in THE" label='THE ₡' step="any" value={viTHE} type="number" onChange={this.onChange} />
+				<Form.Input className={"half left"} id="xCAD" placeholder="value in CAD" label='CAD $' step="any" value={viCAD} type="number" onChange={this.onChange} />
+				<Form.Input className={"half right"} id="xTHE" placeholder="value in THE" label='THE ₡' step="any" value={viTHE} type="number" onChange={this.onChange} />
 			</React.Fragment>
 		)
 	}

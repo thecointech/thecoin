@@ -1,0 +1,53 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
+
+:root {
+  --gutter: 5px;
+}
+
+.swipeZone {
+  text-align: center;
+  padding: var(--gutter) 0;
+  display: grid;
+  grid-gap: var(--gutter) 0;
+  grid-template-columns: var(--gutter) 1fr var(--gutter);
+  align-content: start;
+  width: 100%;
+  overflow-y: scroll;
+  & > * {
+    grid-column: 2 / -2;
+  }
+  & > .full {
+    grid-column: 1 / -1;
+  }
+  img {
+      margin-bottom: 5px;
+  }
+}
+
+.hs {
+  display: grid;
+  grid-gap: 25px;
+  grid-template-columns: repeat(5, 140px);
+  grid-template-rows: minmax(150px, 1fr);
+  
+  overflow-x: scroll;
+  scroll-snap-type: x proximity;
+  padding-bottom: calc(.75 * var(--gutter));
+  margin-bottom: calc(-.25 * var(--gutter));
+
+  &  > li, .item {
+    scroll-snap-align: center;
+    padding: calc(var(--gutter) / 2 * 1.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}

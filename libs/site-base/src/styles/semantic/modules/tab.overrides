@@ -17,6 +17,10 @@
                 background-color: fade(@theCoinPalettePaleGreen2, 30%); 
         }
 }
+.ui.attached.tabular.menu{
+        overflow-x: auto;
+        overflow-y: hidden;
+}
 
 .ui.tabular.menu .active.item{
         background-color: @theCoinPaletteGreen4;

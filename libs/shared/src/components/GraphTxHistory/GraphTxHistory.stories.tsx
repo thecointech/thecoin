@@ -17,11 +17,13 @@ export default {
 
 const days = 24 * 60 * 60 * 1000;
 const defaultArgs = {
-  lineColor: '#61C1B8',
-  dotColor: "#138175",
   from: Date.now() - (30 * days),
   to: Date.now(),
   txFrequency: 5,
+  theme: {
+    colors: ['#61C1B8'],
+    dotColor: "#138175"
+  }
 }
 
 const template: Story<typeof defaultArgs> = (args) =>
@@ -30,6 +32,7 @@ const template: Story<typeof defaultArgs> = (args) =>
     txs={genTxs(args)}
     from={DateTime.fromMillis(args.from)}
     to={DateTime.fromMillis(args.to)}
+    theme={args.theme}
   />;
 
 export const Default = template.bind({});
@@ -37,7 +40,7 @@ Default.args = defaultArgs;
 
 const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   let balance = 100;
-  let now = to + 10 * days; // Add more time just to ensure limits work
+  const now = to + 10 * days; // Add more time just to ensure limits work
   let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
   const incr = Math.max(0.5, txFrequency) * days;
   const r : Transaction[] = [];
@@ -57,6 +60,7 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   return r;
 }
 
+// TODO: Move this commented code into a mocked fxRates store
 // const genFxRates = ({from, to}: typeof defaultArgs) => {
 //   let now = to + 10 * days; // Add more time just to ensure limits work
 //   let date = from - 10 * days;  // Add 10 days warm up to ensure randomness

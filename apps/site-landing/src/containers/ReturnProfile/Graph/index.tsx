@@ -45,7 +45,7 @@ export class Graph extends React.PureComponent {
 
   // private getPlotData = memoize(this.calcPlotData, (m: number, d: DataFormat[]) => d.length + m);
 
-  public render() {
+  render() {
     return <div>disabled</div>
     //const {data, multiplier} = this.props;
     // const {values, size, min, count} = data;

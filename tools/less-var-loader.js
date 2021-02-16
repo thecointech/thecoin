@@ -29,7 +29,7 @@ module.exports = function(source) {
         }
         return value;
       }
-      entries(vars).map((entry) => {
+      entries(vars).forEach((entry) => {
         const key = entry[0];
         const value = entry[1];
         vars[key] = followVar(value);

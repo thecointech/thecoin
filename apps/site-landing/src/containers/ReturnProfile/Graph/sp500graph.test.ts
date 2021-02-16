@@ -74,7 +74,7 @@ test('Build array of all returns by all periods', async () => {
 
   for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
   {
-    var periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
+    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
     expect(periodReturns.length).toBe(totalMonthsAvailable - (monthCount - 1));
     allReturns[monthCount - 1] = periodReturns;
   }
@@ -99,7 +99,7 @@ test('Build output all return data', async () => {
 
   for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
   {
-    var periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
+    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
     allReturns[monthCount - 1] = periodReturns;
   }
 

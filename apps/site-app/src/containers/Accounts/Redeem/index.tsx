@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
@@ -10,16 +10,55 @@ import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
-import messages from './messages';
 import { GetStatusApi, GetETransferApi } from 'api'
-import styles from './styles.module.less';
 import { ETransferPacket } from '@the-coin/types';
+import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import interact from './images/icon_payment_big.svg';
 
 type MyProps = {
   account: AccountState;
 };
 
 type Props = MyProps & FxRatesState;
+
+const errorMessage = { id:"app.accounts.redeem.errorMessage",
+                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
+                description:"Error Message for the make a payment page / etransfert tab" };
+const successMessage = { id:"app.accounts.redeem.successMessage",
+                defaultMessage:"Order recieved.\nYou should receive the e-Transfer in 1-2 business days.",
+                description:"Success Message for the make a payment page / etransfert tab" };
+const description = { id:"app.accounts.redeem.description",
+                defaultMessage:"Email money to anyone with an interac e-Transfer.",
+                description:"Description for the make a payment page / etransfert tab" };
+const email = { id:"app.accounts.redeem.form.email",
+                defaultMessage:"Recipient email",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const question = { id:"app.accounts.redeem.form.question",
+                defaultMessage:"Security question",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const answer= { id:"app.accounts.redeem.form.answer",
+                defaultMessage:"Security answer",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const message= { id:"app.accounts.redeem.form.message",
+                defaultMessage:"Message (optional)",
+                description:"Label for the form the make a payment page / etransfert tab" };
+
+const step1= { id:"app.accounts.redeem.step1",
+                defaultMessage:"Step 1 of 3: Checking order availability..." };
+const step2= { id:"app.accounts.redeem.step2",
+                defaultMessage:"Step 2 of 3: Sending sell order to our servers..." };
+const step3= { id:"app.accounts.redeem.step3",
+                defaultMessage:"Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})..." };
+
+const transferOutHeader= { id:"app.accounts.redeem.transferOutHeader",
+                defaultMessage:"Processing Transfer out..." };
+const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
+                defaultMessage:"Please wait, we are sending your order to our servers..." };
+
+const button = { id:"app.accounts.redeem.form.button",
+                defaultMessage:"Send e-Transfert",
+                description:"For the button in the make a payment page / etransfert tab" };
+
 
 const initialState = {
   coinToSell: null as number | null,
@@ -28,7 +67,7 @@ const initialState = {
   answer: '',
   message: undefined as string | undefined,
   transferInProgress: false,
-  transferMessage: messages.transferOutProgress,
+  transferMessage: transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
@@ -41,7 +80,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
 
   async doSale() {
     // Init messages
-    this.setState({ transferMessage: messages.step1, percentComplete: 0.0 });
+    this.setState({ transferMessage: {...step1}, percentComplete: 0.0 });
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
@@ -75,7 +114,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       return false;
 
     // Send the command to the server
-    this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
+    this.setState({ transferMessage: {...step2}, percentComplete: 0.25 });
     const response = await eTransferApi.eTransfer(command);
 
     if (!response.data?.txHash) {
@@ -95,7 +134,7 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       ),
     };
     this.setState({
-      transferMessage: messages.step3,
+      transferMessage: step3,
       percentComplete: 0.5,
       transferValues,
     });
@@ -122,13 +161,9 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     try {
       const results = await this.doSale();
       if (!results) {
-        alert(
-          "We have encountered an error.\nDon't worry, your money is safe, but please still contact support@thecoin.io",
-        );
+        alert(<FormattedMessage {...errorMessage} />);
       } else
-        alert(
-          'Order recieved.\nYou should receive the e-Transfer in 1-2 business days.',
-        );
+        alert(<FormattedMessage {...successMessage} />);
     } catch (e) {
       console.error(e);
       alert(e);
@@ -163,60 +198,68 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     } = this.state;
     return (
       <React.Fragment>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
+        <Form>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Header as="h5">
+                  <Header.Subheader>
+                    <FormattedMessage {...description} />
+                  </Header.Subheader>
+                </Header>
+              </Grid.Column>
+              <Grid.Column floated='right' width={4}>
+                <img src={interact} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
 
-            <DualFxInput
-              onChange={this.onValueChange}
-              asCoin={true}
-              maxValue={account.balance}
-              value={coinToSell}
-              fxRate={rate}
-            />
-            <Form.Input
-              label="Recipient Email"
-              name="email"
-              onChange={this.onInputChanged}
-              placeholder="An email address to send the e-Transfer to"
-            />
-            <Form.Input
-              label="Security question"
-              name="question"
-              onChange={this.onInputChanged}
-              placeholder="No numbers or special characters"
-            />
-            <Form.Input
-              label="Security answer"
-              name="answer"
-              onChange={this.onInputChanged}
-              placeholder="No spaces or special characters"
-            />
-            <Form.Input
-              label="Message (optional)"
-              name="message"
-              type="text"
-              onChange={this.onInputChanged}
-              placeholder="An optional message to the recipient.  Should not include the security answer"
-            />
-            <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
-          </Form>
-          <ModalOperation
-            cancelCallback={this.onCancelTransfer}
-            isOpen={transferInProgress}
-            header={messages.transferOutHeader}
-            progressMessage={transferMessage}
-            progressPercent={percentComplete}
-            messageValues={transferValues}
+          <DualFxInput
+            onChange={this.onValueChange}
+            asCoin={true}
+            maxValue={account.balance}
+            value={coinToSell}
+            fxRate={rate}
           />
-        </div>
+          <Form.Input
+            className={"borderTop borderBottom"}
+            label={<FormattedMessage {...email} />}
+            name="email"
+            onChange={this.onInputChanged}
+            placeholder="An email address to send the e-Transfer to"
+          />
+          <Form.Input
+            className={"half left"}
+            label={<FormattedMessage {...question} />}
+            name="question"
+            onChange={this.onInputChanged}
+            placeholder="No numbers or special characters"
+          />
+          <Form.Input
+            className={"half right"}
+            label={<FormattedMessage {...answer} />}
+            name="answer"
+            onChange={this.onInputChanged}
+            placeholder="No spaces or special characters"
+          />
+          <Form.Input
+            className={"borderTop"}
+            label={<FormattedMessage {...message} />}
+            name="message"
+            type="text"
+            onChange={this.onInputChanged}
+            placeholder="An optional message to the recipient.  Should not include the security answer"
+          />
+          <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={this.onSubmit}><FormattedMessage {...button} /></ButtonTertiary>
+        </Form>
+        <ModalOperation
+          cancelCallback={this.onCancelTransfer}
+          isOpen={transferInProgress}
+          header={transferOutHeader}
+          progressMessage={transferMessage}
+          progressPercent={percentComplete}
+          messageValues={transferValues}
+        />
       </React.Fragment>
     );
   }

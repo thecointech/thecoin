@@ -17,7 +17,7 @@ const commonProperties = {
 
 const AreaLayer = (props: CustomLayerProps) => {
   const { data, xScale, yScale } = props;
-  const innerHeight: number = (props as any).innerHeight;
+  const innerHeight: number = props.innerHeight;
   const areaGenerator = area<Datum>()
     .x(d => xScale(d.x as DatumValue))
     .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
@@ -79,6 +79,10 @@ export const CustomLayers = () => {
   useEffect(() => {
     getData()
     .then(setRawData)
+    .catch(err => {
+      console.error(err);
+      setRawData(undefined)
+    })
   }, [setRawData])
 
   // Next, calculate total returns for all values
@@ -100,7 +104,7 @@ export const CustomLayers = () => {
   // Finally, filter AllDatum so we have a reasonable amount of data on our screen
   useEffect(() => {
     // Early-exit if we have no data yet
-    if (allDatum.length == 0)
+    if (allDatum.length === 0)
       return;
     // We generate an initial value of 1 to prepend to our data
     // as the data does not include time 0
@@ -111,7 +115,7 @@ export const CustomLayers = () => {
       y: 1,
     }
     // Naive approach, we just take the rough number of elements
-    var delta = Math.floor( allDatum.length / maxGraphPoints);
+    const delta = Math.floor( allDatum.length / maxGraphPoints);
     const filtered = range(1, maxGraphPoints + 1).map(idx => allDatum[(idx * delta) - 1]);
     // Create a series using the filtered datum
     setSerie([
