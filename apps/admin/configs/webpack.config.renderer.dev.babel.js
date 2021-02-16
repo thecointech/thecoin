@@ -66,6 +66,11 @@ export default merge.smart(baseConfig, {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+      {
         test: /^((?!\.module).)*\.css$/,
         use: [
           {

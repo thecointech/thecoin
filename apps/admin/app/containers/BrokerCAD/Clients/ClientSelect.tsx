@@ -27,7 +27,7 @@ export const ClientSelect = () => {
   return (
     <>
       <Select
-        placeholder='Select Country'
+        placeholder='Select Client'
         fluid
         search
         selection

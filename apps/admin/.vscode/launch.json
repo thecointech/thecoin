@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Admin: Attach to Chrome",
+      "port": 9223,
+      "request": "attach",
+      "type": "pwa-chrome",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Electron: Launch",

@@ -2,7 +2,19 @@ import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
 
-const tsconfig = JSON.parse(fs.readFileSync('./tsconfig.json'));
+function readTsConfig() {
+  const cfgString = fs.readFileSync('./tsconfig.json');
+  try {
+    return JSON.parse(cfgString);
+  }
+  catch (err) {
+    console.error(`Cannot parse:\n ${cfgString}`);
+    throw err;
+  }
+}
+
+
+var tsconfig = readTsConfig();
 
 const {rootDir, outDir} = tsconfig.compilerOptions;
 const typesGlob = process.argv[2];
@@ -21,3 +33,5 @@ for (const f of glob.sync(path.join(rootDir, typesGlob)))
   const absf = path.join(process.cwd(), f);
   fs.symlinkSync(absf, outpath);
 }
+
+

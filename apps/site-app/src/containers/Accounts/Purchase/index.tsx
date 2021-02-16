@@ -1,35 +1,37 @@
 import * as React from 'react';
-import { Form, Header, Accordion, Icon, List, Button, AccordionTitleProps } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import AnimateHeight from 'react-animate-height';
-
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { weSellAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { AnySigner } from '@the-coin/shared/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';
-import messages from './messages';
-import InteraceTransfer from './Interac-eTransfer.png';
-import InteraceOnline from './Interac-online.png';
-import styles from './styles.module.less';
 import { ETransferModal } from './eTransferModal';
+import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import illustration from './images/img_interaclogo.svg';
+import styles from './styles.module.less';
 
 interface MyProps {
-  signer: TheSigner;
+  signer: AnySigner;
 }
-interface ActiveElement {
-  key: string;
-  active: string;
-}
+
+const signin = { id:"app.purchase.signin",
+                defaultMessage:"Sign into your finacial institution. Navigate to where you can send an Interac Email Transfer",
+                description:"Content for the purchase list explanation page in the app" };
+const buttonGenerate = { id:"app.makepayments.button",
+                defaultMessage:"Generate",
+                description:"Name for the button Generate in the purchase list explanation page in the app" };
+const generate = { id:"app.makepayments.generate",
+                defaultMessage:"Generate your personalized e-Transfer recipient ",
+                description:"Content for the purchase list explanation page in the app" };
+const newRecipient = { id:"app.makepayments.newRecipient",
+                defaultMessage:"Create a new recipient in your financial institution with the given details",
+                description:"Content for the purchase list explanation page in the app" };
+const deposit = { id:"app.makepayments.deposit",
+                defaultMessage:"Send the amount you wish to deposit. It will be credited to your account within 2 working days.",
+                description:"Content for the purchase list explanation page in the app" };
 
 const initialState = {
-  cadPurchase: null as number | null,
-  activeAccordion: undefined as number|undefined,
-
   // Transfer code vars
   showDlg: false,
   xferRecipient: undefined as string | undefined,
@@ -37,32 +39,10 @@ const initialState = {
 };
 
 type StateType = Readonly<typeof initialState>;
-type Props = MyProps & FxRatesState;
+type Props = MyProps;
 
 class PurchaseClass extends React.PureComponent<Props, StateType> {
   state = initialState;
-
-  onSubmit = () => {
-    alert('NOT IMPLEMENTED');
-  };
-
-  onValueChange = (value: number) => {
-    this.setState({
-      cadPurchase: value,
-    });
-  };
-
-  accordionClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, titleProps: AccordionTitleProps) => {
-    const { index } = titleProps;
-    const { activeAccordion } = this.state;
-    const newIndex = activeAccordion === index
-      ? undefined
-      : typeof(index) === 'string'
-        ? parseInt(index)
-        : index;
-
-    this.setState({ activeAccordion: newIndex });
-  };
 
   onCloseDlg = () => this.setState({ showDlg: false });
   onGenerateRecipient = () => {
@@ -90,101 +70,25 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
   }
 
   render() {
-    const { rates } = this.props;
-    const rate = weSellAt(rates);
-
-    const { activeAccordion } = this.state;
-    // const ImgeTransfer = <img src={InteraceTransfer} alt='logo' />
-    const paymentMethods = [
-      {
-        logo: InteraceTransfer,
-        title: 'Interac e-Transfer',
-        content: (
-          <List divided relaxed>
-            <List.Item>Sign into your finacial institution</List.Item>
-            <List.Item>
-              Navigate to where you can send an Interac Email Transfer
-            </List.Item>
-            <List.Item>
-              <Button onClick={this.onGenerateRecipient}>Generate</Button>
-              your personalized e-Transfer recipient
-            </List.Item>
-            <List.Item>
-              Create a new recipient in your financial institution with the
-              given details
-            </List.Item>
-            <List.Item>
-              Send the amount you wish to deposit. It will be credited to your
-              account within 2 working days.
-            </List.Item>
-          </List>
-        ),
-      },
-      {
-        logo: InteraceOnline, // <img className={styles.LogoImage} src={InteraceOnline} alt='logo' />,
-        title: 'Interac Online',
-        content: <p>Direct payment via Interac Online is coming soon!</p>,
-      },
-    ];
-
     return (
-      <>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
-
-            <DualFxInput
-              onChange={this.onValueChange}
-              maxValue={3000}
-              value={this.state.cadPurchase}
-              fxRate={rate}
-            />
-
-            <Accordion
-              fluid
-              styled
-              activeIndex={activeAccordion}
-              onTitleClick={this.accordionClick}
-              panels={paymentMethods.map((item, index) => ({
-                key: index,
-                title: (
-                  <Accordion.Title>
-                    <div className={styles.HeaderContainer}>
-                      <Icon name="dropdown" />
-                      {item.title}
-                      <img
-                        src={item.logo}
-                        className={styles.LogoImage}
-                        alt="logo"
-                      />
-                      <div style={{ clear: 'both' }} />
-                    </div>
-                  </Accordion.Title>
-                ),
-                content: (_: string, { key, active }: ActiveElement) => (
-                  <div key={key} className={styles.PaymentMethod}>
-                    <AnimateHeight
-                      animateOpacity
-                      duration={300}
-                      height={active ? 'auto' : 0}
-                    >
-                      {item.content}
-                    </AnimateHeight>
-                  </div>
-                ),
-              }))}
-            />
-          </Form>
-          <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
-        </div>
-      </>
+      <div id={styles.appList}>
+        <ol className={"ui list"}>
+          <li>
+            <FormattedMessage {...signin} /><img src={illustration} />
+          </li>
+          <li>
+            <FormattedMessage {...generate} /><br />
+            <ButtonTertiary onClick={this.onGenerateRecipient}><FormattedMessage {...buttonGenerate} /></ButtonTertiary>
+          </li>
+          <li>
+            <FormattedMessage {...newRecipient} />
+          </li>
+          <li>
+            <FormattedMessage {...deposit} />
+          </li>
+        </ol>
+        <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
+      </div>
     );
   }
 }

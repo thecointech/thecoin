@@ -5,7 +5,8 @@
     "tsBuildInfoFile": "./build/.buildinfo",
     "outDir": "./build/",
     "rootDir": "./app/",
-    "baseUrl": "./app/"
+    "baseUrl": "./app/",
+    "skipLibCheck": true
   },
   "include": ["./app/**/*"],
   "references": [

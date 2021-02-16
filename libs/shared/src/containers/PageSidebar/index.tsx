@@ -13,6 +13,7 @@ import { breakpointsValues } from '../../components/ResponsiveTool';
 type Props = {
   visible?: boolean;
   inverted?: boolean;
+  width?: 'very thin' | 'thin' | 'wide' | 'very wide';
 }
 
 export const PageSidebar: React.FC<Props> = (props) => {
@@ -49,7 +50,7 @@ export const PageSidebar: React.FC<Props> = (props) => {
         visible={isVisible}
         className={styles.mainPageSidebar}
         inverted={inverted}
-        width="wide"
+        width={props.width}
       >
         {menuItems}
       </Sidebar>

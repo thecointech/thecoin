@@ -13,5 +13,5 @@ export function Initialize()
 
   init("admin");
 
-  initBrowser({headless: false});
+  initBrowser({headless: true});
 }
