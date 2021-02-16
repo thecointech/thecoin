@@ -27,7 +27,7 @@ export const Topup = (routerProps:AccountPageProps) => {
   const intl = useIntl();
   const activeAccount = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Purchase {...activeAccount} signer={activeAccount.signer!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Purchase {...activeAccount} signer={activeAccount!.signer!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
   ]
   return (
