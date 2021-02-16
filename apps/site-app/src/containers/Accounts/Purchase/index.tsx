@@ -2,8 +2,6 @@ import * as React from 'react';
 import { List } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
 
@@ -34,9 +32,6 @@ const deposit = { id:"app.makepayments.deposit",
                 description:"Content for the purchase list explanation page in the app" };
 
 const initialState = {
-  cadPurchase: null as number | null,
-  activeAccordion: undefined as number|undefined,
-
   // Transfer code vars
   showDlg: false,
   xferRecipient: undefined as string | undefined,
@@ -44,7 +39,7 @@ const initialState = {
 };
 
 type StateType = Readonly<typeof initialState>;
-type Props = MyProps & FxRatesState;
+type Props = MyProps;
 
 class PurchaseClass extends React.PureComponent<Props, StateType> {
   state = initialState;
