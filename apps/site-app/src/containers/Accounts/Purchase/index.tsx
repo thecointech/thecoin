@@ -49,10 +49,6 @@ type Props = MyProps & FxRatesState;
 class PurchaseClass extends React.PureComponent<Props, StateType> {
   state = initialState;
 
-  onSubmit = () => {
-    alert('NOT IMPLEMENTED');
-  };
-
   onCloseDlg = () => this.setState({ showDlg: false });
   onGenerateRecipient = () => {
     this.generateRecipient();
