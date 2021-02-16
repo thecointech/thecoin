@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { List } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { AnySigner } from '@the-coin/shared/SignerIdent';
 
 import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';
 import { ETransferModal } from './eTransferModal';
 import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import illustration from './images/img_interaclogo.svg';
+import styles from './styles.module.less';
 
 interface MyProps {
-  signer: TheSigner;
+  signer: AnySigner;
 }
 
 const signin = { id:"app.purchase.signin",
@@ -71,24 +71,24 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
 
   render() {
     return (
-      <>
-        <List ordered>
-          <List.Item>
+      <div id={styles.appList}>
+        <ol className={"ui list"}>
+          <li>
             <FormattedMessage {...signin} /><img src={illustration} />
-          </List.Item>
-          <List.Item>
+          </li>
+          <li>
             <FormattedMessage {...generate} /><br />
             <ButtonTertiary onClick={this.onGenerateRecipient}><FormattedMessage {...buttonGenerate} /></ButtonTertiary>
-          </List.Item>
-          <List.Item>
+          </li>
+          <li>
             <FormattedMessage {...newRecipient} />
-          </List.Item>
-          <List.Item>
+          </li>
+          <li>
             <FormattedMessage {...deposit} />
-          </List.Item>
-        </List>
+          </li>
+        </ol>
         <ETransferModal {...this.state} onCloseDlg={this.onCloseDlg} />
-      </>
+      </div>
     );
   }
 }

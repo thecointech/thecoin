@@ -1,6 +1,5 @@
 import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
 import * as React from 'react';
 import illustration from './images/icon_topup_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
@@ -8,6 +7,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Purchase } from 'containers/Accounts/Purchase';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 
 
 const title = { id:"app.topup.title",
@@ -23,12 +23,11 @@ const interact = { id:"app.topup.tabs.interact",
                 defaultMessage:"Interac Online",
                 description:"Title for the tabs the topup page in the app" };
 
-export const Topup = (props: {account: AccountState;}, routerProps:AccountPageProps) => {
+export const Topup = (routerProps:AccountPageProps) => {
   const intl = useIntl();
-  const account = props.account;
-  console.log(account.signer)
+  const activeAccount = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Purchase {...props} signer={account.signer!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Purchase {...activeAccount} signer={activeAccount.signer!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
   ]
   return (
@@ -50,7 +49,7 @@ export const Topup = (props: {account: AccountState;}, routerProps:AccountPagePr
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...props} {...routerProps} />
+        <RecentTransactions {...activeAccount} {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
   );
