@@ -1,5 +1,5 @@
 import React from 'react';
-import "@the-coin/site-base/build/styles/semantic.less"
+import "@the-coin/site-base/styles/semantic.less"
 
 export type LinkProps = {
   text: string

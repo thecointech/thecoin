@@ -27,7 +27,7 @@
     "typescript.tsserver.pluginPaths": [
       "typescript-plugin-css-modules"
     ],
-    "jest.pathToJest": "${workspaceFolder}/../../node_modules/.bin/jest",
+    "jest.pathToJest": "${workspaceFolder:shared}/../../node_modules/.bin/jest",
     "jest.debugMode": true,
     "files.exclude": {
       ".firebase/": true,
@@ -35,5 +35,22 @@
       "build/": true,
       "node_modules/": true
     }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Storybook: Launch Chrome",
+        "request": "launch",
+        "type": "pwa-chrome",
+        "url": "http://localhost:6006",
+        "webRoot": "${workspaceFolder:shared}/../..",
+        "sourceMaps": true,
+        "outFiles": [
+          "**/build/**/*.js",
+          "!**/node_modules/**"
+        ]
+      }
+    ]
   }
 }

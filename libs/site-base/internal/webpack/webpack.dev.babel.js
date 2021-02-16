@@ -31,6 +31,21 @@ module.exports = require('./webpack.base.babel')({
     },
   },
 
+  rules: [
+    {
+      test: /\.js$/,
+      enforce: 'pre',
+      use: ['source-map-loader'],
+    },
+  ],
+
+  // Disable unused vars for debug builds.
+  // Costs too much time when debugging
+  tsCompilerOptions: {
+    noUnusedLocals: false,
+    noUnusedParameters: false,
+  },
+
   // Add development plugins
   plugins: [
     new ErrorOverlayPlugin(),

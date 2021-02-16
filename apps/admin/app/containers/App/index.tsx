@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
-import { Container } from 'semantic-ui-react';
+import { Container, Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
 import { useAccountMapStore } from '@the-coin/shared//containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import { FirestoreCheck } from './FirestoreSignin';
+import { FirestoreCheck } from '../FirestoreSignin';
+import styles from './styles.module.less';
 
 const AppRender = () => {
   useFxRatesStore();
@@ -16,14 +17,15 @@ const AppRender = () => {
   };
 
   return (
-    <React.Fragment>
-      <PageSidebar visible={true} inverted>
+    <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
+      <PageSidebar visible={true} inverted width='thin' />
+      <Sidebar.Pusher className={styles.minHeight}>
         <Container style={divStyle}>
           <FirestoreCheck />
           <Routes />
         </Container>
-      </PageSidebar>
-    </React.Fragment>
+      </Sidebar.Pusher>
+    </Sidebar.Pushable>
   );
 }
 

@@ -1,25 +1,12 @@
 @import "~@the-coin/site-base/styles/variables.less";
 
-/* -at-value TransitionDuration, SidebarWidth from "styles/constants.css"; 
+/* -at-value TransitionDuration, SidebarWidth from "styles/constants.css";
   TODO: Fix global variables
   They have (for now) been dereferenced into this file
 */
-.mainPageContainer {
-  border-radius: 0 !important;
-  border-bottom-width: 0 !important;
-}
-
-.mainPageContainer > div {
-  transition-duration: 300ms !important;
-}
 
 .mainPageSidebar {
   max-width: 200px !important;
-}
-
-.mainPagePusherOut {
-  transform: translate3d(230px, 0, 0) !important;
-  width: calc(100% - 230px);
 }
 
 .headerSidebar{
@@ -30,7 +17,7 @@
   .avatarSidebar{
     width: 100px;
     height: 100px;
-    clip-path: circle(40px at center);    
+    clip-path: circle(40px at center);
     margin-top: -20px;
     object-fit: cover;
   }

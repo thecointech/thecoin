@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { ButtonPrimary, ButtonSecondary, ButtonTertiary } from '../libs/site-base/src/components/Buttons';
-import { ButtonProps } from 'semantic-ui-react';
+import { Button, ButtonProps } from 'semantic-ui-react';
 
 import "@the-coin/site-base/build/styles/semantic.less";
 
@@ -18,6 +18,8 @@ export default {
 const TemplatePrimary: Story<ButtonProps> = (args) => <ButtonPrimary {...args} />;
 const TemplateSecondary: Story<ButtonProps> = (args) => <ButtonSecondary {...args} />;
 const TemplateTertiary: Story<ButtonProps> = (args) => <ButtonTertiary {...args} />;
+
+const TemplateInverted: Story<ButtonProps> = (args) => <Button inverted {...args} />;
 
 
 export const Primary = TemplatePrimary.bind({});
@@ -36,6 +38,13 @@ Secondary.args = {
 
 export const Tertiary = TemplateTertiary.bind({});
 Tertiary.args = {
+  content: 'Button',
+  active: false,
+  disabled: false,
+};
+
+export const Inverted = TemplateInverted.bind({});
+Inverted.args = {
   content: 'Button',
   active: false,
   disabled: false,
