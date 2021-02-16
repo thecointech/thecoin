@@ -13,8 +13,7 @@ import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
-import messages from './messages';
-import styles from './styles.module.less';
+import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 
 type MyProps = {
   account: AccountState;
@@ -22,13 +21,36 @@ type MyProps = {
 
 type Props = MyProps & FxRatesState;
 
+const description = { id:"app.accounts.transfert.description",
+                defaultMessage:"Transfer directly to another account with TheCoin.",
+                description:"Description for the make a payment page / transfert tab" };
+const transferOutHeader = { id:"app.accounts.transfert.transferHeader",
+                defaultMessage:"Processing Transfer...",
+                description:"transferHeader for the make a payment page / transfert tab" };
+const step1 = { id:"app.accounts.transfert.step1",
+                defaultMessage:"Step 1 of 3: Checking transfer availability...",
+                description:"Message for step1 for the make a payment page / transfert tab" };
+const step2 = { id:"app.accounts.transfert.step2",
+                defaultMessage:"Step 2 of 3: Sending transfer command to our servers...",
+                description:"Message for step2 for the make a payment page / transfert tab" };
+const step3 = { id:"app.accounts.transfert.step3",
+                defaultMessage:"Step 3 of 3: Waiting for the transfer to be accepted\n(check progress {link})...",
+                description:"Message for step3 for the make a payment page / transfert tab" };
+const transferOutProgress = { id:"app.accounts.transfert.transferOutProgress",
+                defaultMessage:"Please wait, we are sending your order to our servers...",
+                description:"transferOutProgress for the make a payment page / transfert tab" };
+
+const button = { id:"app.accounts.transfert.form.button",
+                defaultMessage:"Transfert",
+                description:"Label for the form the make a payment page / transfert tab" };
+
 const initialState = {
   coinTransfer: null as number | null,
   toAddress: '',
   forceValidate: false,
 
   transferInProgress: false,
-  transferMessage: messages.transferOutProgress,
+  transferMessage: transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
@@ -49,7 +71,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
   async doTransfer() {
     // Init messages
-    this.setState({ transferMessage: messages.step1, percentComplete: 0.0 });
+    this.setState({ transferMessage: step1, percentComplete: 0.0 });
     // First, get the brokers fee
     const statusApi = new StatusApi(); //undefined, "http://localhost:8080"
     var status = await statusApi.status();
@@ -76,7 +98,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     if (this.state.doCancel) return false;
 
     // Send the command to the server
-    this.setState({ transferMessage: messages.step2, percentComplete: 0.25 });
+    this.setState({ transferMessage: step2, percentComplete: 0.25 });
     const response = await transferApi.transfer(transferCommand);
 
     console.log(`TxResponse: ${response.data.message}`);
@@ -97,7 +119,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
       ),
     };
     this.setState({
-      transferMessage: messages.step3,
+      transferMessage: step3,
       percentComplete: 0.5,
       transferValues,
     });
@@ -161,40 +183,37 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     } = this.state;
     return (
       <React.Fragment>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
+        <Form>
+          <Header as="h5">
+            <Header.Subheader>
+              <FormattedMessage {...description} />
+            </Header.Subheader>
+          </Header>
 
-            <DualFxInput
-              onChange={this.onValueChange}
-              asCoin={true}
-              maxValue={account.balance}
-              value={coinTransfer}
-              fxRate={rate}
-            />
-            <UxAddress
-              uxChange={this.onAccountValue}
-              forceValidate={forceValidate}
-              placeholder="Destination Address"
-            />
-            <Form.Button onClick={this.onSubmit}>SEND</Form.Button>
-          </Form>
-          <ModalOperation
-            cancelCallback={this.onCancelTransfer}
-            isOpen={transferInProgress}
-            header={messages.transferOutHeader}
-            progressMessage={transferMessage}
-            progressPercent={percentComplete}
-            messageValues={transferValues}
+          <DualFxInput
+            onChange={this.onValueChange}
+            asCoin={true}
+            maxValue={account.balance}
+            value={coinTransfer}
+            fxRate={rate}
           />
-        </div>
+          <UxAddress
+            uxChange={this.onAccountValue}
+            forceValidate={forceValidate}
+            placeholder="Destination Address"
+          />
+          <ButtonTertiary onClick={this.onSubmit}>
+              <FormattedMessage {...button} />
+          </ButtonTertiary>
+        </Form>
+        <ModalOperation
+          cancelCallback={this.onCancelTransfer}
+          isOpen={transferInProgress}
+          header={transferOutHeader}
+          progressMessage={transferMessage}
+          progressPercent={percentComplete}
+          messageValues={transferValues}
+        />
       </React.Fragment>
     );
   }

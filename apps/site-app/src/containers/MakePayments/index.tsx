@@ -9,6 +9,7 @@ import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
 
+
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 

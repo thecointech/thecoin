@@ -36,3 +36,26 @@
     }
   }
 }
+
+.field{
+  &.borderTop{
+    border-top: 1px solid @theCoinPaletteGreen4Faded;
+    padding-top: 10px;
+  }
+  &.borderBottom{
+    border-bottom: 1px solid @theCoinPaletteGreen4Faded;
+    padding-bottom: 15px;
+  }
+}
+
+.field.half{
+  width: 49%;
+  float: left;
+  clear: initial !important;
+  &.left{
+    margin-right: 1% !important;
+  }
+  &.right{
+    margin-left: 1% !important;
+  }
+}
