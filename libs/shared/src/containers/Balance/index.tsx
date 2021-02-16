@@ -26,8 +26,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
   const { balance, history, historyLoading } = account;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
-  const rawProfit = calculateProfit(balance, history, rates);
-  const profit = toHuman(rawProfit, true);
+  const profit = calculateProfit(balance, history, rates);
 
   const profitDisplay = "Current Profit: " + (profit < 1 ? "< .1%" : profit.toString())
 

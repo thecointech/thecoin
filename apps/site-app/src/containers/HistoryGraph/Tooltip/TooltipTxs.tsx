@@ -1,9 +1,10 @@
 import React from "react";
 import { Transaction } from "@the-coin/tx-blockchain/";
 import { FormattedMessage, MessageDescriptor } from "react-intl";
-import { sum } from "lodash";
 import { Table } from "semantic-ui-react";
-import { Currency, useCoinConverter } from "@the-coin/site-base/components/Currency";
+import { Currency } from "@the-coin/site-base/components/Currency";
+import { useFxRates } from "@the-coin/shared/containers/FxRate";
+import { totalCad } from '@the-coin/shared/containers/Account/profit';
 
 const msgTxsIn = { id:"app.historygraph.tooltip.in",
                       defaultMessage:"In",
@@ -24,14 +25,15 @@ type TooltipTxsRowProps = {
   txs: Transaction[]
 }
 const TooltipTxsRow = ({msg, txs}: TooltipTxsRowProps) => {
-  const converter = useCoinConverter();
+  const { rates } = useFxRates();
+  const total = totalCad(txs, rates)
   return txs.length
     ? <Table.Row>
         <Table.Cell>
           <FormattedMessage {...msg} />
         </Table.Cell>
         <Table.Cell>
-          <Currency value={sum(txs.map(converter))} />
+          <Currency value={total} />
         </Table.Cell>
       </Table.Row>
     : null;

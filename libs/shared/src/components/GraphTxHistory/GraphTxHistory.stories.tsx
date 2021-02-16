@@ -28,9 +28,6 @@ const template: Story<typeof defaultArgs> = (args) =>
   <GraphTxHistory
     height={350}
     txs={genTxs(args)}
-    //fxRates={genFxRates(args)}
-    lineColor={args.lineColor}
-    dotColor={args.dotColor}
     from={DateTime.fromMillis(args.from)}
     to={DateTime.fromMillis(args.to)}
   />;
