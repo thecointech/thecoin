@@ -4,7 +4,8 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "skipLibCheck": true,
   },
   "include": ["src/**/*", "declarations/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]
