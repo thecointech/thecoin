@@ -28,7 +28,8 @@ export type GraphHistoryProps = {
 }
 
 export const GraphTxHistory = (props: GraphHistoryProps) => {
-  const datum = useCalcLimitedFetchSerie(props)
+  const datum = useCalcLimitedFetchSerie(props);
+  const minMax = calcMinMax(datum)
   return (
     <div style={{ height: props.height }}>
       {datum.length == 0
@@ -44,16 +45,10 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
             tooltip={props.tooltip as PointTooltip}
             theme={props.theme}
 
-            yScale={{
-              type: 'linear',
-              stacked: false,
-              ...calcMinMax(datum),
-            }}
-
             // Basic properties
             {...commonProperties}
-            {...axisProperties}
-            {...colorProperties}
+            {...axisProperties(minMax, datum.length)}
+            {...colorProperties(minMax)}
             {...thingsToDisplayProperties}
           />
       }
@@ -87,6 +82,7 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     : datum;
 }
 
+type MinMax = ReturnType<typeof calcMinMax>;
 const calcMinMax = (datum: TxDatum[]) => {
   let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis), 0) ?? 100;
   let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
@@ -116,16 +112,29 @@ const commonProperties: Partial<LineSvgProps> = {
   curve: "monotoneX"
 }
 
-const axisProperties: Partial<LineSvgProps> = {
+const getTickSpacing = (count: number) => {
+  if (count <= 10) return "every day";
+  if (count <= 50) return "every 2 days";
+  // Aprox 20 entries
+  if (count <= 600) return "every month";
+  // Try to cap at < 15 entries
+  else return `every ${Math.ceil(count / 600)} months`;
+}
+const axisProperties = (minMax: MinMax, count: number) : Partial<LineSvgProps> => ({
   xScale: {
     type: 'time',
     format: '%Y-%m-%d',
     useUTC: false,
     precision: 'day',
   },
+  yScale: {
+    type: 'linear',
+    stacked: false,
+    ...minMax,
+  },
   axisBottom: {
     format: '%b %d',
-    tickValues: 'every 2 days',
+    tickValues: getTickSpacing(count),
     tickSize: 0,
     legendOffset: -12,
   },
@@ -137,17 +146,17 @@ const axisProperties: Partial<LineSvgProps> = {
   },
   gridYValues: 3,
   xFormat: "time:%Y-%m-%d"
-}
+})
 
-const colorProperties: Partial<LineSvgProps> = {
+const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
   defs: [
     linearGradientDef('gradientA', [
       { offset: 0, color: '#fff' },
-      { offset: 10, color: '#fff', opacity: 0 },
+      { offset: 100 - (100 * min / max), color: '#fff', opacity: 0 },
     ]),
   ],
   fill: [{ match: '*', id: 'gradientA' }]
-}
+})
 
 const thingsToDisplayProperties: Partial<LineSvgProps> = {
   layers: [
