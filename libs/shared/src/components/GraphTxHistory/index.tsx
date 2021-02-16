@@ -104,7 +104,7 @@ const calcMinMax = (datum: TxDatum[]) => {
 // ----------------------------------------------------------------
 // graph settings below
 const commonProperties: Partial<LineSvgProps> = {
-  margin: { top: 20, right: 20, bottom: 20, left: 60 },
+  margin: { top: 0, right: 0, bottom: 20, left: 40 },
   animate: true,
   enableArea: true,
   enableGridX: false,
