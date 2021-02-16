@@ -5,7 +5,6 @@ import * as React from 'react';
 import illustration from './images/icon_topup_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
 
-
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Purchase } from 'containers/Accounts/Purchase';

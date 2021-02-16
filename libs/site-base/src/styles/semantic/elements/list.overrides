@@ -1,3 +1,26 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.ordered.list > .item{
+    line-height: 35px;
+    margin-left: 70px;
+    min-height: 90px;
+}
+
+.ui.ordered.list > .item::before{
+    left: -50px;
+    text-align: center;
+    font-size: @fontSizeVeryBig;
+    font-family: @headerFont;
+    color: @theCoinPaletteGreen4;
+    line-height: 40px;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    border-radius: 50%;
+    background: @theCoinPaletteGreen4Faded15;
+    border: 5px solid @theCoinPaletteGreen4Faded14;
+    box-shadow: 0 0 1px 4px @theCoinPaletteGreen4Faded10;
+    z-index: 10;
+}
