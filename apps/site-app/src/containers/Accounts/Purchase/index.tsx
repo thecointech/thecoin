@@ -11,6 +11,7 @@ import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';
 import { ETransferModal } from './eTransferModal';
 import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import illustration from './images/img_interaclogo.svg';
 
 interface MyProps {
   signer: TheSigner;
@@ -82,7 +83,7 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
       <>
         <List ordered>
           <List.Item>
-            <FormattedMessage {...signin} />
+            <FormattedMessage {...signin} /><img src={illustration} />
           </List.Item>
           <List.Item>
             <FormattedMessage {...generate} /><br />

@@ -8,15 +8,6 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.accounts.Login';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'Deposit Instructions',
-  },
-  subHeader: {
-    id: `${scope}.subHeader`,
-    defaultMessage: 'Transfer funds from your Canadian bank to your account.',
-  },
-
 
   getTransferCodeHeader: {
     id: `${scope}.getTransferCodeHeader`,
