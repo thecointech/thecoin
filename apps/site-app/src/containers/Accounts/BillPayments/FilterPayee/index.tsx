@@ -29,19 +29,19 @@ export const FilterPayee = () => {
         <div className={styles.swipeZone}>
             <ul className={styles.hs}>
                 <li className={ `${styles.item}` }>
-                    <StyledChoice id="all" name="payeeType" value="all" img={iconall} defaultChecked={true} message={all} />
+                    <StyledChoice id="all" name="payeeType" value="all" img={iconall} message={all} />
                 </li>
                 <li className={ `${styles.item}` }>
-                    <StyledChoice id="banks" name="payeeType" value="banks" img={iconbanks} defaultChecked={false} message={banks} />
+                    <StyledChoice id="banks" name="payeeType" value="banks" img={iconbanks} message={banks} />
                 </li>
                 <li className={ `${styles.item}` }>
-                    <StyledChoice id="visa" name="payeeType" value="visa" img={iconvisa} defaultChecked={false} message={visa} />
+                    <StyledChoice id="visa" name="payeeType" value="visa" img={iconvisa} message={visa} />
                 </li>
                 <li className={ `${styles.item}` }>
-                    <StyledChoice id="taxes" name="payeeType" value="taxes" img={icontaxes} defaultChecked={false} message={taxes} />
+                    <StyledChoice id="taxes" name="payeeType" value="taxes" img={icontaxes} message={taxes} />
                 </li>
                 <li className={ `${styles.item}` }>
-                    <StyledChoice id="other" name="payeeType" value="other" img={iconother} defaultChecked={false} message={other} />
+                    <StyledChoice id="other" name="payeeType" value="other" img={iconother} message={other} />
                 </li>
             </ul>
         </div>
