@@ -35,3 +35,4 @@ apps/reconciliation/src/data/data.cache.json
 tools/credentials.env
 .DS_Store
 apps/.DS_Store
+libs/shared/src/containers/Widgets/.DS_Store

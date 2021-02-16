@@ -167,7 +167,7 @@ export class Returns extends React.PureComponent {
             <Dropdown placeholder="Compare" fluid multiple selection options={options} />
           </Grid.Column>
           */
-  public render() {
+  render() {
     return <div>disabled</div>;
   //   const {amount, rawData, age } = this.state;
   //   const months = this.sliderValueToMonths();

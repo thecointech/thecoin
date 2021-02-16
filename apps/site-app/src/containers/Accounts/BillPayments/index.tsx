@@ -19,16 +19,40 @@ import { payees, validate } from './payees';
 import { BillPayeePacket } from '@the-coin/types';
 import { GetStatusApi, GetBillPaymentsApi } from 'api';
 import { UxInput } from '@the-coin/shared/components/UxInput';
-
-import styles from './styles.module.less';
 import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
-import messages from './messages';
+import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { FilterPayee } from './FilterPayee';
 
 type MyProps = {
   account: AccountState;
 };
 
 type Props = MyProps & FxRatesState;
+
+const description = { id:"app.accounts.billPayments.description",
+                defaultMessage:"You can pay your bills directly from The Coin. Select payee:",
+                description:"Description for the make a payment page / bill payment tab" };
+/* This class will need to be changed in order to use that translation
+const payee = { id:"app.accounts.billPayments.form.payee",
+                defaultMessage:"Select Payee",
+                description:"Label for the form the make a payment page / bill payment tab" };*/
+const accountNumer = { id:"app.accounts.billPayments.form.accNumber",
+                defaultMessage:"Payee Account Number",
+                description:"Label for the form the make a payment page / bill payment tab" }; 
+const button = { id:"app.accounts.billPayments.form.button",
+                defaultMessage:"Send payment",
+                description:"Label for the form the make a payment page / bill payment tab" };
+
+const transferOutHeader= { id:"app.accounts.billPayments.transferOutHeader",
+                defaultMessage:"Processing Bill Payment..." };
+const step1= { id:"app.accounts.billPayments.step1",
+                defaultMessage:"Step 1 of 3: Checking payment availability..." };
+const step2= { id:"app.accounts.billPayments.step2",
+                defaultMessage:"Step 2 of 3: Sending bill payment to our servers..." };
+const step3= { id:"app.accounts.billPayments.step3",
+                defaultMessage:"Step 3 of 3: Waiting for the bill payment to be accepted (check progress {link})..." };
+const transferOutProgress = { id:"app.accounts.billPayments.transferOutProgress",
+                defaultMessage:"Please wait, we are sending your order to our servers..." };
 
 const initialState = {
   coinToSell: null as number | null,
@@ -42,7 +66,7 @@ const initialState = {
   forceValidate: false,
 
   transferInProgress: false,
-  paymentMessage: messages.transferOutProgress,
+  paymentMessage: transferOutProgress,
   transferValues: undefined as any,
   percentComplete: 0,
   doCancel: false,
@@ -76,7 +100,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
   };
   async doBillPayment() {
     // Init messages
-    this.setState({ paymentMessage: messages.step1, percentComplete: 0.0 });
+    this.setState({ paymentMessage: step1, percentComplete: 0.0 });
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
@@ -110,7 +134,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     if (this.state.doCancel) return false;
 
     // Send the command to the server
-    this.setState({ paymentMessage: messages.step2, percentComplete: 0.25 });
+    this.setState({ paymentMessage: step2, percentComplete: 0.25 });
     const response = await billPayApi.billPayment(billPayCommand);
     const txHash = response.data?.txHash;
     if (!txHash) {
@@ -130,7 +154,7 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
       ),
     };
     this.setState({
-      paymentMessage: messages.step3,
+      paymentMessage: step3,
       percentComplete: 0.5,
       transferValues,
     });
@@ -196,55 +220,50 @@ class BillPaymentsClass extends React.PureComponent<Props, StateType> {
     const canSubmit = isValid && coinToSell;
     return (
       <React.Fragment>
-        <div className={styles.wrapper}>
-          <Form>
-            <Header as="h1">
-              <Header.Content>
-                <FormattedMessage {...messages.header} />
-              </Header.Content>
-              <Header.Subheader>
-                <FormattedMessage {...messages.subHeader} />
-              </Header.Subheader>
-            </Header>
-
-            <Dropdown
-              placeholder="Select Payee"
-              fluid
-              search
-              selection
-              allowAdditions
-              options={payees}
-              onChange={this.onPayeeSelect}
-            />
-            <UxInput
-              intlLabel={messages.accountNumer}
-              uxChange={this.onAccountNumber}
-              isValid={isValid}
-              forceValidate={forceValidate}
-              message={validationMessage}
-              placeholder="Payee account number"
-            />
-            {/*<Form.Input label="Bill Name" onChange={this.onNameChange} placeholder="An optional name to remember this payee by" /> */}
-            <DualFxInput
-              onChange={this.onValueChange}
-              asCoin={true}
-              maxValue={account.balance}
-              value={coinToSell}
-              fxRate={rate}
-            />
-            <Form.Button onClick={this.onSubmit} disabled={!canSubmit}>
-              SEND
-            </Form.Button>
-          </Form>
-          <ModalOperation
-            cancelCallback={this.onCancelTransfer}
-            isOpen={transferInProgress}
-            header={messages.transferOutHeader}
-            progressMessage={paymentMessage}
-            progressPercent={percentComplete}
-            messageValues={transferValues}
+        <Form>
+          <Header as="h5">
+            <Header.Subheader>
+              <FormattedMessage {...description} />
+            </Header.Subheader>
+          </Header>
+          <FilterPayee />
+          <Dropdown
+            placeholder="Select Payee"
+            fluid
+            search
+            selection
+            allowAdditions
+            options={payees}
+            onChange={this.onPayeeSelect}
           />
-        </div>
+          <UxInput
+            intlLabel={accountNumer}
+            uxChange={this.onAccountNumber}
+            isValid={isValid}
+            forceValidate={forceValidate}
+            message={validationMessage}
+            placeholder="Payee account number"
+          />
+          {/*<Form.Input label="Bill Name" onChange={this.onNameChange} placeholder="An optional name to remember this payee by" /> */}
+          <DualFxInput
+            onChange={this.onValueChange}
+            asCoin={true}
+            maxValue={account.balance}
+            value={coinToSell}
+            fxRate={rate}
+          />
+          <ButtonTertiary onClick={this.onSubmit} disabled={!canSubmit}>
+              <FormattedMessage {...button} />
+          </ButtonTertiary>
+        </Form>
+        <ModalOperation
+          cancelCallback={this.onCancelTransfer}
+          isOpen={transferInProgress}
+          header={transferOutHeader}
+          progressMessage={paymentMessage}
+          progressPercent={percentComplete}
+          messageValues={transferValues}
+        />
       </React.Fragment>
     );
   }

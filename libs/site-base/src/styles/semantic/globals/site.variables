@@ -9,6 +9,7 @@
 @pageBackground      : @white;
 @maxContentWidth: 1440px;
 .smallerThanDesktop(@rules) { @media only screen and (max-width: @tabletBreakpoint) { @rules(); } }
+.biggerThanSmallComputer(@rules) { @media only screen and (min-width: @computerBreakpoint) { @rules(); } }
 
 /*-------------------
        Fonts
@@ -97,6 +98,9 @@
 @theCoinPaletteGreen4     : #138175;
 @theCoinPaletteGreen5     : #2B5250;
 @theCoinPaletteGreen6     : #034B3E;
+
+@theCoinPaletteGreen2Faded     : fade(@theCoinPaletteGreen2, 30%);
+@theCoinPaletteGreen4Faded     : fade(@theCoinPaletteGreen4, 30%);
 
 @theCoinPaletteGold1     : #FDE9C2;
 @theCoinPaletteGold2     : #FECCA1;

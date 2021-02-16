@@ -1,9 +1,8 @@
 import * as React from "react";
-import { useSelector } from "react-redux";
 import { Header } from "semantic-ui-react";
 import { AccountPageProps } from "../Account/types";
 import { TransactionHistory } from "../TransactionHistory";
-import { selectFxRate } from "../FxRate/selectors";
+import { useFxRates } from "../FxRate/selectors";
 import { FormattedMessage } from "react-intl";
 import styles from './styles.module.less';
 
@@ -13,15 +12,11 @@ const title = { id:"shared.balance.title",
 
 export const RecentTransactions = ({ account, actions }: AccountPageProps) => {
 
-  const doUpdateBalance = React.useCallback((e?: React.MouseEvent<HTMLElement>) => {
-    e?.preventDefault();
-    actions.updateBalance();
-  }, [actions]);
   React.useEffect(() => {
-    doUpdateBalance();
-  }, [])
+    actions.updateBalance();
+  }, [actions])
 
-  const { rates } = useSelector(selectFxRate);
+  const { rates } = useFxRates();
   const { history, historyLoading } = account;
 
   return (

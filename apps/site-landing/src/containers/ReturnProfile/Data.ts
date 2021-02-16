@@ -120,7 +120,7 @@ export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number
 
   for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
   {
-    var periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, fee);
+    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, fee);
     allReturns[monthCount - 1] = periodReturns;
   }
   return allReturns.map(returns => {
@@ -138,7 +138,7 @@ export function calculateAvgAndArea(allReturns: number[][], percentile: number)
     const midIndex = returns.length / 2;
     const lowerBoundIdx = midIndex - midIndex * percentile;
     const upperBoundIdx = midIndex - 1 + midIndex * percentile;
-    var r: CoinReturns = {
+    const r: CoinReturns = {
       mean: sum / returns.length,
       median: returns[Math.round(midIndex)],
       lowerBound: returns[Math.round(lowerBoundIdx)],

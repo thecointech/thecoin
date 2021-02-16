@@ -1,0 +1,41 @@
+{
+  "x": "2020-05-15T05:00:00.000Z",
+  "y": 6473.736274547386,
+  "costBasis": 5396.259999999999,
+  "txs": [
+    {
+      "txHash": "0x5069336099751879cb6fc842fefe3f9da553d21283016430c705afad367e6159",
+      "date": "2020-05-15T11:40:58.000-05:00",
+      "change": -100205468,
+      "logEntry": "Transfer: 0x38DE1B6515663DbE145CC54179AdDcB963Bb606A",
+      "balance": 2482209451,
+      "counterPartyAddress": "0x38DE1B6515663DbE145CC54179AdDcB963Bb606A"
+    },
+    {
+      "txHash": "0x5069336099751879cb6fc842fefe3f9da553d21283016430c705afad367e6159",
+      "date": "2020-05-15T11:40:58.000-05:00",
+      "change": -5000,
+      "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
+      "balance": 2482204451,
+      "counterPartyAddress": "0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3"
+    },
+    {
+      "txHash": "0xcbb31ea0dacb4b349a936076c5d0aab706f9b2a0700a039be1f8ef210c8207d3",
+      "date": "2020-05-15T11:47:40.000-05:00",
+      "change": -876797847,
+      "logEntry": "Transfer: 0x38DE1B6515663DbE145CC54179AdDcB963Bb606A",
+      "balance": 1605406604,
+      "counterPartyAddress": "0x38DE1B6515663DbE145CC54179AdDcB963Bb606A"
+    },
+    {
+      "txHash": "0xcbb31ea0dacb4b349a936076c5d0aab706f9b2a0700a039be1f8ef210c8207d3",
+      "date": "2020-05-15T11:47:40.000-05:00",
+      "change": -5000,
+      "logEntry": "Transfer: 0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3",
+      "balance": 1605401604,
+      "counterPartyAddress": "0x51e1153eE05efCf473d581c15b3F7B760CA5Ddb3"
+    }
+  ],
+  "xFormatted": "2020-05-15",
+  "yFormatted": 6473.736274547386
+}
