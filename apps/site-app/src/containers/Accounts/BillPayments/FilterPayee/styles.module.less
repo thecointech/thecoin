@@ -35,19 +35,19 @@
   scroll-snap-type: x proximity;
   padding-bottom: calc(.75 * var(--gutter));
   margin-bottom: calc(-.25 * var(--gutter));
+
+  &  > li, .item {
+    scroll-snap-align: center;
+    padding: calc(var(--gutter) / 2 * 1.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+  }
 }
 
 ul {
   list-style: none;
   padding: 0;
-}
-
-.hs > li, .item {
-  scroll-snap-align: center;
-  padding: calc(var(--gutter) / 2 * 1.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: #fff;
-  border-radius: 8px;
 }
