@@ -5,23 +5,23 @@ import styles from "./styles.module.less";
 
 const Durations = {
   7: {
-    id:"site.GraphHistoryButtons.Week",
-    defaultMessage:"WEEK",
+    id:"app.historyGraph.Week",
+    defaultMessage:"Week",
     description:"button for Duration of 1 week"
   },
   31: {
-    id:"site.GraphHistoryButtons.Month",
-    defaultMessage:"MONTH",
+    id:"app.historyGraph.Month",
+    defaultMessage:"Month",
     description:"button for Duration of 1 month"
   },
   365: {
-    id:"site.GraphHistoryButtons.Year",
-    defaultMessage:"YEAR",
+    id:"app.historyGraph.Year",
+    defaultMessage:"Year",
     description:"button for Duration of 1 year"
   },
   0: {
-    id:"site.GraphHistoryButtons.All",
-    defaultMessage:"ALL",
+    id:"app.historyGraph.All",
+    defaultMessage:"All",
     description:"button for Show entire history"
   }
 }

@@ -30,7 +30,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
   const datum = useCalcLimitedFetchSerie(props)
   return (
     <div style={{ height: props.height }}>
-      {datum.length == 0
+      {datum.length === 0
         ? <Placeholder>
             <Placeholder.Image />
           </Placeholder>
@@ -88,7 +88,7 @@ const calcMinMax = (datum: TxDatum[]) => {
   let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
 
   // max / min should have minimum size - $100
-  let diff = Math.max(100, max - min);
+  const diff = Math.max(100, max - min);
   // have some padding - 10% each way
   const padding = diff * 0.1;
   min = min - padding;
