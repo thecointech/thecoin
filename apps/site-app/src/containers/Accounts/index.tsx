@@ -4,9 +4,9 @@ import { Account, RouterPath } from '@the-coin/shared/containers/Account';
 import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { HomePage } from '../HomePage';
-import { Settings } from './Settings';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
+import { Settings } from 'containers/Settings';
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -31,7 +31,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: 'Settings',
     urlFragment: 'settings',
-    creator: (routerProps: AccountPageProps) => ((props) => <Settings {...props} account={routerProps.account} />),
+    creator: () => (() => <Settings />),
     icon: "setting",
   },
 ];

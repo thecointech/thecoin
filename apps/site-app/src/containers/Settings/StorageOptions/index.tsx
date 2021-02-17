@@ -10,7 +10,7 @@ interface MyProps {
   account: AccountState;
 }
 
-export function Settings({account}: MyProps) {
+export function StorageOptions({account}: MyProps) {
   const isLocal = isWallet(account.signer);
 
   const [feedback, setFeedback] = useState({} as MessageProps)
