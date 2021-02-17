@@ -31,15 +31,13 @@ export const PageSidebar: React.FC<Props> = (props) => {
     return buildMenuArray(items);
   }, [appState, generators])
 
-  let isVisible = visible ?? (menuItems && menuItems.length > 0);
-
+  // If Small Screen / Mobile
   const windowDimension = getWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
-
-  // If Small Screen / Mobile
-  if (windowDimension.width <= breakpointTablet){
-    isVisible = false;
-  }
+  let isVisible = visible ?? (
+    menuItems && menuItems.length > 0 &&
+    windowDimension.width > breakpointTablet
+  );
 
   return (
       <Sidebar

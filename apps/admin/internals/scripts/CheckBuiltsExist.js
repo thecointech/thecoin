@@ -10,7 +10,7 @@ function CheckBuildsExist() {
     '..',
     '..',
     'app',
-    'dist',
+    'build',
     'renderer.prod.js'
   );
 
