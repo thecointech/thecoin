@@ -5,7 +5,7 @@ import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
-import { onDownload } from "containers/Accounts/Settings/download";
+import { onDownload } from "containers/Settings/StorageOptions/download";
 import { StoreDropbox } from "containers/StoreOnline/Dropbox";
 import { StoreMicrosoft } from "containers/StoreOnline/Microsoft";
 
