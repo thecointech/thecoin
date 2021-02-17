@@ -36,6 +36,15 @@
       "cad": 321.34,
       "date": "2020-11-18T00:00:00.000-06:00",
       "notes": "Manual transfer to close out account"
+    },
+    {
+      "where": "blockchain",
+      "type": "Sell",
+      "hash": "0x1198AACEF87B53CA5610C68FD83DF9577D54CC0C",
+      "amount": 91112934,
+      "cad": 454.6,
+      "date": "2021-02-16T15:00:00.000-06:00",
+      "notes": "Manual transfer to close out account"
     }
   ],
   "connect": {
