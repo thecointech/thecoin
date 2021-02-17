@@ -1,17 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { Download } from './download';
 import { Container, Divider, Header } from "semantic-ui-react"
 import { isWallet } from '@the-coin/shared/SignerIdent';
 import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage"
 import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 
-interface MyProps {
-  account: AccountState;
-}
+export function StorageOptions() {
 
-export function StorageOptions({account}: MyProps) {
-  const isLocal = isWallet(account.signer);
+  const activeAccount = useActiveAccount();
+  const isLocal = isWallet(activeAccount!.signer);
 
   const [feedback, setFeedback] = useState({} as MessageProps)
   const onStateChange = useCallback((_state: UploadState, message: MessageProps) => {
@@ -26,7 +24,7 @@ export function StorageOptions({account}: MyProps) {
           Save Locally
         </Header>
       </Divider>
-      <Download address={account.address} />
+      <Download address={activeAccount!.address} />
       <Divider horizontal>
         <Header as='h4'>
           Save Online

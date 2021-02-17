@@ -1,7 +1,8 @@
 import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, Radio } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
+import styles from './styles.module.less';
 
 const title = { id:"app.settings.personaldetails.title",
                 defaultMessage:"Personal Details",
@@ -68,22 +69,15 @@ export const PersonalDetails = () => {
             </Header.Subheader>
       </Header>
           
-        <Form.Field>
-          <Radio
-            label='CAD'
-            name='currency'
-            value='cad'
-          /> &nbsp;&nbsp;&nbsp;&nbsp;
-          <Radio
-            label='THE'
-            name='currency'
-            value='the'
-          />
-          </Form.Field>
-
+        <div className={styles.currencyChoices}>
+          <input type="radio" id="cad" name="currency" value="CAD" /><label htmlFor="cad">CAD</label>
+          <input type="radio" id="the" name="currency" value="THE" /><label htmlFor="the">THE</label>
+        </div>
+        <div className={"x6spaceBefore"}>
           <ButtonTertiary>
               <FormattedMessage {...button} />
           </ButtonTertiary>
+        </div>
       </Form>
     </div>
   );

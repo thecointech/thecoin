@@ -3,7 +3,6 @@ import {AppContainerForTabs} from 'components/AppContainers';
 
 import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
 
@@ -20,11 +19,10 @@ const storage = { id:"app.settings.tabs.storage",
 
 export const Settings = () => {
   const intl = useIntl();
-  const activeAccount = useActiveAccount();
   const panes = [
     { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs>Coming Soon</AppContainerForTabs> },
     { menuItem: intl.formatMessage({...personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions account={activeAccount!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
   ]
   return (
     <React.Fragment>
