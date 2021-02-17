@@ -6,7 +6,7 @@ import { UserState } from './types';
 export type Props = UserState;
 
 export const Client = (props: Props) =>
-    <>
+  <>
     <Header as='h4'>
       {props.names} - {props.balanceCad}
       <Header.Subheader>
@@ -16,4 +16,4 @@ export const Client = (props: Props) =>
     <List>
       {props?.transactions.map(ClientTransaction)}
     </List>
-    </>
+  </>
