@@ -2,10 +2,18 @@ import React, { useState, FunctionComponent } from 'react';
 import {Clipboard} from 'ts-clipboard';
 import { Icon, Message } from 'semantic-ui-react';
 import styles from './styles.module.less';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
   payload: string;
 }
+
+const link = { id:"base.copyToClipboard.link",
+                defaultMessage:"Copy",
+                description:"Link for the button for the copy to clipboard tool" };
+const messageSuccess = { id:"base.copyToClipboard.messageSuccess",
+                defaultMessage:"Copied to your clipboard",
+                description:"Success message for the button for the copy to clipboard tool" };
 
 export const CopyToClipboard: FunctionComponent<Props> = (props) => {
 
@@ -32,8 +40,13 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
         <a onClick={onClick} className={styles.Link}>{props.children}</a> :
         undefined
     }
-      <Message as="span" floating className={className}>Link Copied</Message>
-      <Icon name="copy" onClick={onClick} />
+      <Message as="span" floating className={className}>
+        <FormattedMessage {...messageSuccess} />
+      </Message>
+      <span className={styles.Link} onClick={onClick}>
+        <Icon name="copy" />
+        <FormattedMessage {...link} />
+      </span>
     </>
   );
 };

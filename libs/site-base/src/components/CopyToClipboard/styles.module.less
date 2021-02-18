@@ -1,16 +1,28 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 .Link {
-	cursor: pointer
+	cursor: pointer;
+	font-size: @fontSizeSmall !important;
+	color: @theCoinPalettePaleGreen2;
+	text-transform: uppercase;
+	Icon{
+		color: @theCoinPalettePaleGreen2;
+	}
 }
 .ToastBox {
-	position: absolute;
+	position: relative;
+	top: 20px;
 	opacity: 0.0;
 	transition: opacity 0.9s;
 	cursor: pointer;
+	font-size: @fontSizeSmall !important;
 }
 
 .ShowToastBox {
-	position: absolute;
+	position: relative;
+	top: 20px;
 	opacity: 0.9;
 	transition: opacity .3s;
 	cursor: pointer;
+	font-size: @fontSizeSmall !important;
 }

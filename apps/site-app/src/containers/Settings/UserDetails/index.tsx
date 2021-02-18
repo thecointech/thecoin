@@ -2,7 +2,10 @@ import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AccountVerified } from '../Verified';
-
+import { Avatars } from '@the-coin/shared/components/Avatars';
+import { Grid } from 'semantic-ui-react';
+import styles from './styles.module.less';
+import { CopyToClipboard } from '@the-coin/site-base/components/CopyToClipboard';
 
 const accountName = { id:"app.settings.userDetails.name",
                 defaultMessage:"Account name",
@@ -23,11 +26,22 @@ export const UserDetails = () => {
   console.log(activeAccount)
   return (
     <React.Fragment>
-        <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...accountName}/></div>
-        <div className={"font-big x4spaceAfter"}>{activeAccount?.name}</div>
+        <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >
+          <Grid.Row>
+            <Grid.Column width={4} textAlign="center" verticalAlign="middle">
+              <Avatars thecoin="15"/>
+            </Grid.Column>
+            <Grid.Column width={12} verticalAlign="middle">
+              <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...accountName}/></div>
+              <div className={"font-big x4spaceAfter"}>{activeAccount?.name}</div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <AccountVerified verified={false} />
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...address}/></div>
-        <div className={"font-big x4spaceAfter"}>{activeAccount?.address}</div>
+        <div className={"font-big x4spaceAfter"}>
+          {activeAccount?.address} <CopyToClipboard payload={activeAccount?.address!} />
+        </div>
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...code}/></div>
         <div className={"x4spaceAfter"}><FormattedMessage {...codeInfos}/></div>
     </React.Fragment>
