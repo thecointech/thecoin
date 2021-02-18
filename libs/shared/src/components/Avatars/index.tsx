@@ -69,6 +69,9 @@ export const Avatars = (props: PropsAvatar) => {
         case "16":
             avatar = thecoin16;
             break;
+        default:
+            avatar = thecoin01;
+            break
     }
   return (
     <div>
