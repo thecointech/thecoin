@@ -5,7 +5,7 @@
  * code.
  */
 
-if (window.location.pathname === "/accounts/gauth") {
+if (window.location.pathname === "/gauth") {
   const newUrl = `/#${window.location.pathname}${window.location.search}`;
   window.location.replace(newUrl);
 }

@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
-import { Button } from 'semantic-ui-react';
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { isWallet } from '@the-coin/shared/SignerIdent';
+import { ButtonSecondary } from '@the-coin/site-base/components/Buttons';
 
 
 type MyProps = {
@@ -44,8 +44,8 @@ export const Download = (props: MyProps) => {
   ////////////////////////////////
 
   return (
-    <Button onClick={onClick} >
+    <ButtonSecondary onClick={onClick} >
       <FormattedMessage {...messages.buttonText} />
-    </Button>
+    </ButtonSecondary>
   )
 }

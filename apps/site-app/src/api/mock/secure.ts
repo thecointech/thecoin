@@ -58,7 +58,7 @@ export class MockSecureApi {
     await delay(2500);
 
     return buildResponse<GoogleAuthUrl>({
-      url: `${window.location.origin}/#/accounts/gauth?code=${MockedCode}`
+      url: `${window.location.origin}/#/gauth?code=${MockedCode}`
     });
   }
   /**
