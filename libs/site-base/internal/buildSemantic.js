@@ -1,6 +1,6 @@
 const less = require('less')
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 const glob = require('glob');
 
 const f = async () => {
@@ -14,7 +14,7 @@ const f = async () => {
   var outputFilename = path.join(outputFolder, "semantic.css")
 
   try {
-    const content = (await fs.readFile(semanticLess)).toString();
+    const content = fs.readFileSync(semanticLess).toString();
     const {css} = await less.render(content, {
       filename: path.resolve(semanticLess),
       paths: [themeRoot],
@@ -33,7 +33,8 @@ const f = async () => {
       const r = path.relative(semanticRoot, src);
       const dest = path.join(outputFolder, "semantic", r);
       const outdir = path.dirname(dest);
-      fs.ensureDirSync(outdir)
+      if (!fs.existsSync(outdir))
+        fs.mkdirSync(outdir, {recursive: true})
       fs.copyFileSync(src, dest)
     });
   }
