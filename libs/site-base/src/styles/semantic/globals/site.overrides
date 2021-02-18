@@ -19,6 +19,13 @@ body {
   color: @textColor;
 }
 
+.font-label {
+  font-weight: @bold;
+  color: @textColor;
+  text-transform: uppercase;
+  font-size: @fontSizeSmall;
+}
+
 .font-big {
   font-size: @fontSizeBig;
   line-height: @lineHeightBig;
@@ -49,6 +56,17 @@ body {
 .write-vertical{
   writing-mode: vertical-rl;
   text-orientation: upright;
+}
+/////////////////////////////////////////////////////////////
+// Borders
+.border-top-green4{
+  border-top: 1px solid @theCoinPaletteGreen4Faded;
+  padding-top: 20px;
+}
+
+.border-bottom-green4{
+  border-bottom: 1px solid @theCoinPaletteGreen4Faded;
+  padding-bottom: 20px;
 }
 
 /////////////////////////////////////////////////////////////

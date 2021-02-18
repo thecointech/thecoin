@@ -23,15 +23,13 @@ export const UserDetails = () => {
   console.log(activeAccount)
   return (
     <React.Fragment>
-        <div><FormattedMessage {...accountName}/></div>
-        <div>{activeAccount?.name}</div>
+        <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...accountName}/></div>
+        <div className={"font-big x4spaceAfter"}>{activeAccount?.name}</div>
         <AccountVerified verified={false} />
-        <hr />
-        <div><FormattedMessage {...address}/></div>
-        <div>{activeAccount?.address}</div>
-        <hr />
-        <div><FormattedMessage {...code}/></div>
-        <div><FormattedMessage {...codeInfos}/></div>
+        <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...address}/></div>
+        <div className={"font-big x4spaceAfter"}>{activeAccount?.address}</div>
+        <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...code}/></div>
+        <div className={"x4spaceAfter"}><FormattedMessage {...codeInfos}/></div>
     </React.Fragment>
   );
 }
