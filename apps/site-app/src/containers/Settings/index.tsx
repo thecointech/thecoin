@@ -5,6 +5,7 @@ import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
+import { UserDetails } from './UserDetails';
 
 
 const main = { id:"app.settings.tabs.main",
@@ -20,7 +21,7 @@ const storage = { id:"app.settings.tabs.storage",
 export const Settings = () => {
   const intl = useIntl();
   const panes = [
-    { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs>Coming Soon</AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs><UserDetails /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
   ]
