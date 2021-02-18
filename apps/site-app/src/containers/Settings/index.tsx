@@ -5,7 +5,7 @@ import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
-
+import { IdxTester } from '@the-coin/shared/containers/IDX';
 
 const main = { id:"app.settings.tabs.main",
                 defaultMessage:"User Settings",
@@ -16,6 +16,9 @@ const personaldetails = { id:"app.settings.tabs.interact",
 const storage = { id:"app.settings.tabs.storage",
                 defaultMessage:"Account Storage",
                 description:"Title for the tabs the setting page in the app" };
+const idx = { id:"app.settings.tabs.test",
+                defaultMessage:"Test IDX",
+                description:"Title for the tabs the setting page in the app" };
 
 export const Settings = () => {
   const intl = useIntl();
@@ -23,6 +26,7 @@ export const Settings = () => {
     { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs>Coming Soon</AppContainerForTabs> },
     { menuItem: intl.formatMessage({...personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...idx}), render: () => <AppContainerForTabs><IdxTester /></AppContainerForTabs> },
   ]
   return (
     <React.Fragment>

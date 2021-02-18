@@ -7,6 +7,6 @@
     "baseUrl": "./src/",
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "declarations/*"],
+  "include": ["src/**/*", "src/**/*.json", "declarations/*"],
   "references": [{ "path": "../utils-ts/", "prepend": false }]
 }
