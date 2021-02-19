@@ -6,12 +6,12 @@ import { HistoryGraph } from 'containers/HistoryGraph';
 import * as React from 'react';
 
 
-export const HomePage = (props: any, routerProps:AccountPageProps) => {
+export const HomePage = (routerProps:AccountPageProps) => {
 
   return (
     <React.Fragment>
       <HistoryGraph />
-      <AppContainerWithShadow><RecentTransactions {...props} {...routerProps} /></AppContainerWithShadow>
+      <AppContainerWithShadow><RecentTransactions {...routerProps} /></AppContainerWithShadow>
     </React.Fragment>
   );
 }

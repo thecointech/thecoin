@@ -23,7 +23,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
 
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
-  const { balance, history, historyLoading } = account;
+  const { balance, history } = account;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
   const profit = calculateProfit(balance, history, rates);
@@ -45,9 +45,7 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
         <Button onClick={doUpdateBalance}>Update Balance</Button>
 
         <TransactionHistory
-          transactions={history}
           rates={rates}
-          transactionLoading={historyLoading}
           onRangeChange={actions.updateHistory}
         />
       </div>

@@ -11,14 +11,13 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
 
 type MyProps = {
-  transactions: Transaction[];
   rates: FXRate[];
   onRangeChange: OnChangeCallback;
-  transactionLoading?: boolean;
 }
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
@@ -58,7 +57,10 @@ export const TransactionHistory = (props: MyProps) => {
     const { locale } = useSelector(selectLocale);
 
     const maxRowCount = 50;
-    const { transactions, transactionLoading, rates } = props;
+    const { rates } = props;
+    const account = useActiveAccount();
+    const transactions = account!.history;
+    const transactionLoading = account?.historyLoading;
 
     let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);

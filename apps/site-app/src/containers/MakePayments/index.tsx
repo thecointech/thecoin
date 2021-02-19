@@ -3,7 +3,6 @@ import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactio
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
-//import { Redeem } from 'containers/Accounts/Redeem';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
@@ -11,6 +10,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 
 
 const title = { id:"app.makepayments.title",
@@ -34,11 +34,11 @@ const templates = { id:"app.makepayments.tabs.templates",
 
 export const MakePayments = (props: {account: AccountState;}, routerProps:AccountPageProps) => {
   const intl = useIntl();
-  const account = props.account;
+  const account = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem {...props} account={account} /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments {...props} account={account} /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer {...props} account={account} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem {...props} account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments {...props} account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer {...props} account={account!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (
@@ -60,7 +60,7 @@ export const MakePayments = (props: {account: AccountState;}, routerProps:Accoun
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...props} {...routerProps} />
+        <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
   );
