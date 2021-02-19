@@ -34,7 +34,7 @@ export const PageSidebar: React.FC<Props> = (props) => {
   // If Small Screen / Mobile
   const windowDimension = getWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
-  let isVisible = visible ?? (
+  const isVisible = visible ?? (
     menuItems && menuItems.length > 0 &&
     windowDimension.width > breakpointTablet
   );
