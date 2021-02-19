@@ -5,12 +5,14 @@ import { FXRate } from '@the-coin/pricing';
 import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
-//import { useSelector } from 'react-redux';
-//import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconBank from "./images/icon_bank.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
+import { useState } from 'react';
+
+import { useSelector } from 'react-redux';
+import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
 
 type MyProps = {
   transactions: Transaction[];
@@ -19,72 +21,54 @@ type MyProps = {
   transactionLoading?: boolean;
 }
 
-type MyState = {
-  fromDate: Date,
-  untilDate: Date
+function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
+{
+  const pageCount = Math.ceil(transactions.length / maxRowCount);
+  currentPage = Math.min(currentPage, pageCount - 1);
+  if (pageCount > 1) {
+    console.error('WARNING: Not Tested');
+    const startRow = currentPage * maxRowCount;
+    transactions = transactions.slice(startRow, startRow + maxRowCount);
+
+    return [transactions, (<Table.Footer>
+      <Table.Row>
+        <Table.HeaderCell colSpan='4'>
+          <Menu floated='right' pagination>
+            <Menu.Item key={0} as='a' icon>
+              <Icon name='chevron left' />
+            </Menu.Item>
+              {Array(pageCount).map((_, index) => <Menu.Item key={index + 1} as='a'>{index + 1}</Menu.Item>)}
+            <Menu.Item key={pageCount + 1} as='a' icon>
+              <Icon name='chevron right' />
+            </Menu.Item>
+          </Menu>
+        </Table.HeaderCell>
+      </Table.Row>
+    </Table.Footer>)]
+  }
+
+  return [transactions, undefined]
 }
 
-class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
 
-  state = {
-    fromDate: new Date(),
-    untilDate: new Date()
-  }
-  locale: string;
+export const TransactionHistory = (props: MyProps) => { 
 
-  constructor(props: MyProps) {
-    super(props);
+    const [fromDate, setFromDate] = useState(new Date());
+    const [untilDate, setUntilDate] = useState(new Date());
+    const { locale } = useSelector(selectLocale);
 
-    this.onDateRangeChange = this.onDateRangeChange.bind(this);
-    this.locale = "en";
-  }
-
-  onDateRangeChange(from: Date, until: Date) {
-    this.setState({
-      fromDate: from,
-      untilDate: until
-    });
-
-    this.props.onRangeChange(from, until)
-    //this.locale = useSelector(selectLocale) as unknown as string;
-  }
-
-  buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
-  {
-    const pageCount = Math.ceil(transactions.length / maxRowCount);
-    currentPage = Math.min(currentPage, pageCount - 1);
-    if (pageCount > 1) {
-      console.error('WARNING: Not Tested');
-      const startRow = currentPage * maxRowCount;
-      transactions = transactions.slice(startRow, startRow + maxRowCount);
-
-      return [transactions, (<Table.Footer>
-        <Table.Row>
-          <Table.HeaderCell colSpan='4'>
-            <Menu floated='right' pagination>
-              <Menu.Item key={0} as='a' icon>
-                <Icon name='chevron left' />
-              </Menu.Item>
-                {Array(pageCount).map((_, index) => <Menu.Item key={index + 1} as='a'>{index + 1}</Menu.Item>)}
-              <Menu.Item key={pageCount + 1} as='a' icon>
-                <Icon name='chevron right' />
-              </Menu.Item>
-            </Menu>
-          </Table.HeaderCell>
-        </Table.Row>
-      </Table.Footer>)]
-    }
-
-    return [transactions, undefined]
-  }
-  // On load, update balance
-  render() {
     const maxRowCount = 50;
-    const { transactions, transactionLoading, rates } = this.props;
-    const { fromDate, untilDate } = this.state;
+    const { transactions, transactionLoading, rates } = props;
 
     let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
-    let [ txOutput, jsxFooter ] = this.buildPagination(filteredTx, maxRowCount, 0);
+    let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
+
+    function onDateRangeChange(from: Date, until: Date) {
+        setFromDate(from);
+        setUntilDate(until);      
+        props.onRangeChange(from, until)
+      }
+
     let txJsxRows = txOutput.map((tx, index) => {
       const change = fiatChange(tx, rates);
       const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
@@ -99,11 +83,10 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
         classForMoneyCell = styles.moneyNegative;
         contentForComment = "OUT";
       }
-
-      const monthTodisplay = tx.date.monthShort;
-      const yearToDisplay = tx.date.year; 
-      const dayToDisplay = tx.date.day;
-      const timeToDisplay = tx.date.hour+":"+tx.date.minute; 
+      const monthTodisplay = tx.date.setLocale(locale).monthShort;
+      const yearToDisplay = tx.date.setLocale(locale).year; 
+      const dayToDisplay = tx.date.setLocale(locale).day;
+      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute; 
       //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
       //{tx.logEntry}
       return (
@@ -130,7 +113,7 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
 
     return (
       <React.Fragment>
-        <DateRangeSelect onDateRangeChange={this.onDateRangeChange} />
+        <DateRangeSelect onDateRangeChange={onDateRangeChange} />
 
         <Dimmer.Dimmable>
           <Dimmer active={transactionLoading}>Loading...</Dimmer>
@@ -145,7 +128,6 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
 
       </React.Fragment>
     );
-  }
 }
 
-export { TransactionHistory }
+
