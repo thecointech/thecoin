@@ -3,7 +3,6 @@ import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactio
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
 import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
@@ -32,13 +31,13 @@ const templates = { id:"app.makepayments.tabs.templates",
                 defaultMessage:"Templates",
                 description:"Title for the tabs the Make a payment page in the app" };
 
-export const MakePayments = (props: {account: AccountState;}, routerProps:AccountPageProps) => {
+export const MakePayments = (routerProps:AccountPageProps) => {
   const intl = useIntl();
   const account = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem {...props} account={account!} /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments {...props} account={account!} /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer {...props} account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer account={account!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (
