@@ -46,14 +46,14 @@ export const Accounts = (props: RouteComponentProps) => {
       AccountRoutes.unshift(
         {
           name: 'Profile',
-          header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
-                    primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
+          header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg",
+                    primaryDescription: activeAccount?.name ?? "Unknown",
                     secondaryDescription: "Description2" },
       });
     } else {
-      AccountRoutes[0].header = { 
-        avatar: "http://cdn.akc.org/content/hero/pyr_pup_hero.jpg", 
-        primaryDescription: activeAccount?.name ? activeAccount?.name : "Unknown", 
+      AccountRoutes[0].header = {
+        avatar: "http://cdn.akc.org/content/hero/pyr_pup_hero.jpg",
+        primaryDescription: activeAccount?.name ?? "Unknown",
         secondaryDescription: "Description2" };
     }
   }

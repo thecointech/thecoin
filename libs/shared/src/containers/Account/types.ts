@@ -4,6 +4,8 @@ import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 import { Transaction } from '@the-coin/tx-blockchain';
+import { DIDProvider } from '3id-connect';
+import { AccountDetails } from 'containers/AccountDetails/types';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -15,7 +17,7 @@ export type AccountState = {
   name: string;
   // A normalized version of the accounts address
   address: string;
-  // Possibly encrypted raw ethers wallet
+  // Possibly encrypted raw ethers wallet or metamask account
   signer: AnySigner;
   // Contract connected to this wallet as a signer
   contract: Contract | null;
@@ -25,8 +27,14 @@ export type AccountState = {
   balance: number;
   // Transaction history
   history: Transaction[];
-  // The currency to display your account value in
-  displayCurrency: CurrencyCode;
+
+
+  // IDX vars
+  did?: DIDProvider;
+
+  // Private details
+  details: AccountDetails;
+  // Public profile (?)
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -42,7 +50,11 @@ export const DefaultAccountValues = {
   lastUpdate: new Date(0),
   balance: -1,
   history: [],
-  displayCurrency: CurrencyCode.CAD
+
+  details: {
+    displayCurrency: CurrencyCode.CAD,
+    language: "EN", // TODO:
+  }
 };
 
 export type AccountPageProps = {

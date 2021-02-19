@@ -44,7 +44,6 @@
     "@nivo/bar": "^0.67.0",
     "@nivo/line": "^0.67.0",
     "@nivo/tooltip": "^0.67.0",
-    "3id-connect": "https://github.com/ceramicstudio/3id-connect.git#ead99c7",
     "@ceramicnetwork/common": "^0.15.8",
     "@ceramicnetwork/http-client": "^0.9.5",
     "@ceramicstudio/idx": "^0.7.0",

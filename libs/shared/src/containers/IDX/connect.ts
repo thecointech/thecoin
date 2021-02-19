@@ -1,8 +1,9 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '3id-connect/src'
+import { ThreeIdConnect, EthereumAuthProvider } from '3id-connect'
 import { Wallet as EthereumWallet } from 'ethers/wallet'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'
 import type { DIDProvider } from 'dids'
+import { isWallet, TheSigner } from 'SignerIdent'
 
 class EthereumProvider extends EventEmitter {
   wallet: EthereumWallet
@@ -30,12 +31,22 @@ class EthereumProvider extends EventEmitter {
   }
 }
 
-// @ts-ignore
-export const threeID = new ThreeIdConnect()
+// Singleton
+declare module globalThis {
+  let __threeID: ThreeIdConnect;
+}
+// 3ID Connect uses an iframe to connect.  Does this mean
+// we cannot have multiple active accounts simultaneously?
+// TODO: Test account switching!
+globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(wallet: EthereumWallet): Promise<DIDProvider> {
+export async function getProvider(wallet: TheSigner): Promise<DIDProvider> {
   const { address } = wallet;
-  const ethProvider = new EthereumProvider(wallet);
-  await threeID.connect(new EthereumAuthProvider(ethProvider, address))
-  return threeID.getDidProvider()
+  const ethProvider = isWallet(wallet)
+    ? new EthereumProvider(wallet)
+    : null;
+  if (!ethProvider) throw new Error('Unsupported wallet type (fix me!!!)');
+  // Also - how do we connect to multiple accounts at the same time?!?
+  await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
+  return globalThis.__threeID.getDidProvider()
 }

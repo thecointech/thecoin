@@ -11,6 +11,7 @@ import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
+import { getProvider } from '../IDX/connect';
 
 
 // The reducer for a single account state
@@ -24,9 +25,13 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   *setSigner(signer: TheSigner) {
     // Connect to the contract
     const contract = yield call(ConnectContract, signer);
+    // Connect to IDX
+    const did = yield call(getProvider, signer)
+
     yield this.storeValues({
       signer,
-      contract
+      contract,
+      did,
     });
     yield this.sendValues(this.actions().updateBalance, []);
   }

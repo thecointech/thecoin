@@ -1,18 +1,20 @@
 import { CeramicApi } from "@ceramicnetwork/common";
 import { IDX } from "@ceramicstudio/idx";
 import { Wallet } from "ethers/wallet"
-import { createCeramic } from "./ceramic"
+import { Ceramic } from "./ceramic"
 import { getProvider } from "./connect"
 import { createIDX } from "./idx"
 import { BasicProfile } from '@ceramicstudio/idx-constants';
 
+// TODO: Adapt all 'o this to
 let ceramic: CeramicApi;
 const sampleProfile = {
   name: "Mr McGee",
   description: "A suave puppet of the night",
 }
+
 beforeAll(async () => {
-  ceramic = await createCeramic()
+  ceramic = Ceramic();
 })
 
 const authenticate = async (wallet: Wallet) => {
