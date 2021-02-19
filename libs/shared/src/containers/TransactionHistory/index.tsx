@@ -89,8 +89,7 @@ export const TransactionHistory = (props: MyProps) => {
       const yearToDisplay = tx.date.setLocale(locale).year; 
       const dayToDisplay = tx.date.setLocale(locale).day;
       const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute; 
-      //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
-      //{tx.logEntry}
+
       return (
         <Table.Row key={index}>
           <Table.Cell width={2} textAlign='center'>
