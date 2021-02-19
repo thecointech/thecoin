@@ -20,6 +20,14 @@ type MyProps = {
   onRangeChange: OnChangeCallback;
 }
 
+const [fromDate, setFromDate] = useState(new Date());
+const [untilDate, setUntilDate] = useState(new Date());
+
+function onDateRangeChange(from: Date, until: Date) {
+  setFromDate(from);
+  setUntilDate(until); 
+}
+
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
   const pageCount = Math.ceil(transactions.length / maxRowCount);
@@ -45,15 +53,12 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
       </Table.Row>
     </Table.Footer>)]
   }
-
   return [transactions, undefined]
 }
 
 
 export const TransactionHistory = (props: MyProps) => { 
 
-    const [fromDate, setFromDate] = useState(new Date());
-    const [untilDate, setUntilDate] = useState(new Date());
     const { locale } = useSelector(selectLocale);
 
     const maxRowCount = 50;
@@ -64,12 +69,6 @@ export const TransactionHistory = (props: MyProps) => {
 
     let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
-
-    function onDateRangeChange(from: Date, until: Date) {
-        setFromDate(from);
-        setUntilDate(until);      
-        props.onRangeChange(from, until)
-      }
 
     let txJsxRows = txOutput.map((tx, index) => {
       const change = fiatChange(tx, rates);
