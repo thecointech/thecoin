@@ -298,6 +298,12 @@
 @defaultDuration : 0.1s;
 @defaultEasing   : ease;
 
+/*-------------------
+     Page variables
+--------------------*/
+@pageTransitionDuration: 300;
+@SidebarWidth: 230px;
+
 /*--------------
    Form Input
 ---------------*/

@@ -5,7 +5,7 @@
 //
 
 const path = require('path');
-const siteBaseRoot = path.resolve(__dirname, '..', '..');
+const siteBaseRoot = path.resolve(__dirname, '..');
 
 module.exports = {
   css_module_loader: {
@@ -54,7 +54,7 @@ module.exports = {
         options: {
           sourceMap: true,
           paths: [
-            path.join(siteBaseRoot, 'src', 'styles', 'semantic', 'na', 'na'),
+            path.join(siteBaseRoot, 'src', 'semantic', 'na', 'na'),
           ],
           modifyVars: {
             project_root: `"${siteBaseRoot}"`,

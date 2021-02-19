@@ -7,10 +7,10 @@ const f = async () => {
   const projectRoot = path.join(__dirname, "..")
   const semanticRoot = path.join(projectRoot, "node_modules", "semantic-ui-less");
   const semanticLess = path.join(semanticRoot, "semantic.less");
-  const stylesRoot = path.join(projectRoot, "src", "styles");
+  const stylesRoot = path.join(projectRoot, "src");
   const themeRoot = path.join(stylesRoot, "semantic", "na", "na");
 
-  const outputFolder = path.join(projectRoot, "build", "styles");
+  const outputFolder = path.join(projectRoot, "build");
   var outputFilename = path.join(outputFolder, "semantic.css")
 
   try {
@@ -24,6 +24,10 @@ const f = async () => {
         project_root: `'${projectRoot}'`
       }
     })
+    console.log(`checking: ${outputFolder}`);
+    if (!fs.existsSync(outputFolder))
+      fs.mkdirSync(outputFolder);
+
     fs.writeFileSync(outputFilename, css);
     console.log("CSS written to " + outputFilename);
 
