@@ -4,7 +4,7 @@ import { Color } from 'csstype';
 import { Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import messages, { scope as MessageScope } from './messages';
-import { ZXCVBNResult } from 'zxcvbn';
+import type { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
 import { UxPassword } from '@the-coin/shared/components/UxPassword';
 
@@ -44,7 +44,7 @@ state = initialState;
       return;
 
     try {
-      UxScoredPassword.zxcvbn = (await import("./zxcvbn")).default;
+      UxScoredPassword.zxcvbn = (await import("zxcvbn")).default;
     }
     catch (e) {
       console.error("Error loading PasswordVerifier: ", e);
