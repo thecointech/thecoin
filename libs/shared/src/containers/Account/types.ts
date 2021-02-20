@@ -67,16 +67,16 @@ export type AccountPageProps = {
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(signer: TheSigner): Iterator<any>;
+  setSigner(signer: TheSigner): Iterator<object>;
 
   // Save/load private details
-  loadDetails(): Iterator<any, void, any>;
-  setDetails(newDetails: AccountDetails): Iterator<any>;
+  loadDetails(): Iterator<object>;
+  setDetails(newDetails: AccountDetails): Iterator<object>;
 
   // Get the balance of the account in Coin
-  updateBalance(newBalance?: number): Iterator<any>;
-  updateHistory(from: Date, until: Date): Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
+  updateBalance(newBalance?: number): Iterator<object>;
+  updateHistory(from: Date, until: Date): Generator<object>;
 
-  decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
+  decrypt(password: string, callback: DecryptCallback | undefined): Iterator<object>;
 }
 
