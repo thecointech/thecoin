@@ -24,7 +24,7 @@ test("Calculate simple profit correctly", () => {
   expect(profitCAD).toBe(5);
 });
 
-const roundDecimalPlaces = (number: number) => Math.round(number * 100) / 100;
+const roundDecimalPlaces = (val: number) => Math.round(val * 100) / 100;
 test('calculate real profit correctly', () => {
 
   const txs = ExampleTransactions;
