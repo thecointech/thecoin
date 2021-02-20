@@ -3,28 +3,26 @@ const path = require('path');
 const fs = require('fs-extra');
 const glob = require('glob');
 
+const {paths, modifyVars} = require('./vars');
+
 const f = async () => {
   const projectRoot = path.join(__dirname, "..")
   const semanticRoot = path.join(projectRoot, "node_modules", "semantic-ui-less");
   const semanticLess = path.join(semanticRoot, "semantic.less");
-  const stylesRoot = path.join(projectRoot, "src");
-  const themeRoot = path.join(stylesRoot, "semantic", "na", "na");
 
-  const outputFolder = path.join(projectRoot, "build");
+  const outputFolder = modifyVars.siteFolder.replace(/"/g, '');
   var outputFilename = path.join(outputFolder, "semantic.css")
 
   try {
     const content = (await fs.readFile(semanticLess)).toString();
     const {css} = await less.render(content, {
       filename: path.resolve(semanticLess),
-      paths: [themeRoot],
+      paths,
       rootpath: "semantic/",
       rewriteUrls: 'local',
-      globalVars: {
-        project_root: `'${projectRoot}'`
-      }
+      globalVars: modifyVars,
     })
-    console.log(`checking: ${outputFolder}`);
+
     if (!fs.existsSync(outputFolder))
       fs.mkdirSync(outputFolder);
 

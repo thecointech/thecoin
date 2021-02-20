@@ -18,6 +18,7 @@
   "main": "./build/semantic.css",
   "exports": {
     "./*" : "./src/*",
+    "./build": "./internal/buildSemantic.js",
     "./webpack.less": "./internal/webpack.less.js",
     "./variables.less": "./src/variables.less"
   },
