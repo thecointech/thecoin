@@ -3,27 +3,29 @@ const path = require('path');
 const fs = require('fs');
 const glob = require('glob');
 
+const {paths, modifyVars} = require('./vars');
+
 const f = async () => {
   const projectRoot = path.join(__dirname, "..")
   const semanticRoot = path.join(projectRoot, "node_modules", "semantic-ui-less");
   const semanticLess = path.join(semanticRoot, "semantic.less");
-  const stylesRoot = path.join(projectRoot, "src", "styles");
-  const themeRoot = path.join(stylesRoot, "semantic", "na", "na");
 
-  const outputFolder = path.join(projectRoot, "build", "styles");
+  const outputFolder = modifyVars.siteFolder.replace(/"/g, '');
   var outputFilename = path.join(outputFolder, "semantic.css")
 
   try {
     const content = fs.readFileSync(semanticLess).toString();
     const {css} = await less.render(content, {
       filename: path.resolve(semanticLess),
-      paths: [themeRoot],
+      paths,
       rootpath: "semantic/",
       rewriteUrls: 'local',
-      globalVars: {
-        project_root: `'${projectRoot}'`
-      }
+      globalVars: modifyVars,
     })
+
+    if (!fs.existsSync(outputFolder))
+      fs.mkdirSync(outputFolder);
+
     fs.writeFileSync(outputFilename, css);
     console.log("CSS written to " + outputFilename);
 

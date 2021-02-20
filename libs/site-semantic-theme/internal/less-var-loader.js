@@ -1,11 +1,12 @@
 'use strict';
 
 // Taken from: https://github.com/joscha/less-vars-loader
-// because yarn is being bitchy
+// with a few improvements to support automatically casting to number etc
 const lessToJs = require('less-vars-to-js');
 const camelcase = require('camelcase');
 const loaderUtils = require('loader-utils');
 const entries = require('object.entries');
+const fs = require('fs');
 
 module.exports = function(source) {
   this.cacheable && this.cacheable();
@@ -13,7 +14,6 @@ module.exports = function(source) {
   const camelCaseKeys = !!(query.camelCase || query.camelcase);
   const resolveVariables = query.resolveVariables === false || true; //!!(query.resolveVariables || query.resolvevariables);
 
-  console.log('Resolving Variables: ', resolveVariables);
   const varRgx = /^@/;
   const vars = lessToJs(source);
   const keys = Object.keys(vars);
@@ -45,7 +45,8 @@ module.exports = function(source) {
   }
 
   const cleanedVars = keys.reduce((prev, key) => {
-    prev[transformKey(key)] = vars[key];
+    const val = Number(vars[key]) || vars[key];
+    prev[transformKey(key)] = val;
     return prev;
   }, {});
 

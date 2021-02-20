@@ -36,3 +36,7 @@ tools/credentials.env
 .DS_Store
 apps/.DS_Store
 libs/shared/src/containers/Widgets/.DS_Store
+apps/site-app/src/semantic/semantic
+apps/site-app/src/semantic/semantic.css
+apps/site-landing/src/semantic/semantic
+apps/site-landing/src/semantic/semantic.css

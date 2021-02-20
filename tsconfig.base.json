@@ -4,7 +4,7 @@
     "incremental": true,
 
     "jsx": "react",
-    "allowJs": true,
+    //"allowJs": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
@@ -54,7 +54,8 @@
       "@the-coin/tx-firestore/*":["../../../libs/tx-firestore/build/*"],
       "@the-coin/shared/*":     ["../../../libs/shared/build/*"],
       "@the-coin/email/*":      ["../../../libs/email/build/*"],
-      "@the-coin/site-base/*":     ["../../../libs/site-base/build/*"]
+      "@the-coin/site-base/*":     ["../../../libs/site-base/build/*"],
+      "@the-coin/site-semantic-theme/*":     ["../../../libs/site-semantic-theme/build/*"]
     }
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**"]

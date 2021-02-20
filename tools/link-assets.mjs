@@ -3,20 +3,25 @@ import glob from 'glob';
 import path from 'path';
 
 function readTsConfig() {
-  const cfgString = fs.readFileSync('./tsconfig.json');
   try {
-    return JSON.parse(cfgString);
+    if (fs.existsSync('./tsconfig.json')) {
+      const cfgString = fs.readFileSync('./tsconfig.json');
+      return JSON.parse(cfgString).compilerOptions;
+    }
   }
   catch (err) {
     console.error(`Cannot parse:\n ${cfgString}`);
     throw err;
   }
+  // if no tsconfig we just make our best guess
+  return {
+    rootDir: './src',
+    outDir: './build',
+  }
 }
 
 
-var tsconfig = readTsConfig();
-
-const {rootDir, outDir} = tsconfig.compilerOptions;
+const {rootDir, outDir} = readTsConfig();
 const typesGlob = process.argv[2];
 for (const f of glob.sync(path.join(rootDir, typesGlob)))
 {

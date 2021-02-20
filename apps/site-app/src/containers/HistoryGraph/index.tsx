@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useActiveAccount } from "@the-coin/shared/containers/AccountMap/selectors";
 import { GraphTxHistory, Theme } from '@the-coin/shared/components/GraphTxHistory'
-import { LessVars } from "@the-coin/site-base/styles/variables";
+import { LessVars } from "@the-coin/site-semantic-theme/variables";
 import { DateTime } from "luxon";
 import styles from './styles.module.less';
 import { Tooltip } from "./Tooltip/Tooltip";
