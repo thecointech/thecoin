@@ -14,8 +14,8 @@ class EthereumProvider extends EventEmitter {
   }
 
   send(
-    request: { method: string; params: any[] },
-    callback: (err: Error | null | undefined, res?: any) => void
+    request: { method: string; params: unknown[] },
+    callback: (err: Error | null | undefined, res?: unknown) => void
   ) {
     if (request.method === 'eth_chainId') {
       callback(null, { result: '1' })
