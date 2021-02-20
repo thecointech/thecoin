@@ -4,14 +4,15 @@ import { call } from 'redux-saga/effects';
 import { useInjectSaga } from "redux-injectors";
 import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
 import { useDispatch } from 'react-redux';
-import { AccountState, DecryptCallback, IActions } from './types';
+import { AccountState, DecryptCallback, DefaultAccountValues, IActions } from './types';
 import { buildSagas, bindActions } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
-import { getProvider } from '../IDX/connect';
+import { connectIDX } from '../IDX';
+import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
 
 
 // The reducer for a single account state
@@ -26,19 +27,36 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     // Connect to the contract
     const contract = yield call(ConnectContract, signer);
     // Connect to IDX
-    const did = yield call(getProvider, signer)
+    const idx = yield call(connectIDX, signer)
 
     yield this.storeValues({
       signer,
       contract,
-      did,
+      idx,
     });
-    yield this.sendValues(this.actions().updateBalance, []);
+    // Load necessary info from remote stores
+    yield this.sendValues(this.actions().updateBalance);
+    yield this.sendValues(this.actions().loadDetails);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  updateWithValues(newState: Partial<AccountState>) {
-    Object.assign(this.draftState, newState);
+  // Save/load private details
+
+  *loadDetails() {
+    if (this.state.idx) {
+      yield this.storeValues({idxIO: true});
+      const payload = yield loadDetails(this.state.idx);
+      const details = payload?.data || DefaultAccountValues.details;
+      yield this.storeValues({details, idxIO: false});
+    }
+  };
+
+  *setDetails(details: AccountDetails) {
+    yield this.storeValues({details, idxIO: true});
+    if (this.state.idx) {
+      yield call(setDetails, this.state.idx, details);
+      yield this.storeValues({idxIO: false});
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +69,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     try {
       const { address }= signer;
       const balance = yield call(contract.balanceOf, address);
-      yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber() });
+      yield this.storeValues({ balance: balance.toNumber() });
     } catch (err) {
       console.error(err);
     }
@@ -70,7 +88,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     const address = yield call(signer.getAddress.bind(signer));
     const balance = yield call(contract.balanceOf, address);
 
-    yield this.sendValues(this.actions().updateWithValues, { balance: balance.toNumber(), historyLoading: true });
+    yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
     // allow a 500 ms delay so we don't update too quickly
@@ -86,7 +104,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     // Get the current block (save it so we know where we were up to in the future.)
     const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 
-    yield this.sendValues(this.actions().updateWithValues, {
+    yield this.storeValues({
       history: newHistory,
       historyLoading: false,
       historyStart: new Date(0),

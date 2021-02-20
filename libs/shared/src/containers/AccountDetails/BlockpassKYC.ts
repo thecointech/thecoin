@@ -61,7 +61,8 @@ export type BlockpassKYC = {
   }
 }
 
-// The stored/passed data.  This must always be kept in string
+// The signed data passed back from our servers.
+// This must always be kept in string
 // form to ensure that signatures match.
 export type SerializedKYC = {
   // The serialized BlockpassKYC data.  This is of

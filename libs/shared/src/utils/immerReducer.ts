@@ -13,7 +13,7 @@ class TheCoinReducer<T> extends ImmerReducer<T> {
   //
   // The following functions ease working with saga's
 
-  sendValues(command: Action, values: any) {
+  sendValues(command: Action, values?: any) {
     return put({
       type: command.type,
       payload: values

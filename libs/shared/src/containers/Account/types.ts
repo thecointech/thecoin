@@ -4,8 +4,8 @@ import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
 import { PutEffect, CallEffect } from 'redux-saga/effects';
 import { Transaction } from '@the-coin/tx-blockchain';
-import { DIDProvider } from '3id-connect';
-import { AccountDetails } from 'containers/AccountDetails/types';
+import { AccountDetails } from '../AccountDetails';
+import { IDX } from '@ceramicstudio/idx';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -30,7 +30,9 @@ export type AccountState = {
 
 
   // IDX vars
-  did?: DIDProvider;
+  idx?: IDX;
+  // Are we saving/loading something from IDX?
+  idxIO?: boolean;
 
   // Private details
   details: AccountDetails;
@@ -53,7 +55,6 @@ export const DefaultAccountValues = {
 
   details: {
     displayCurrency: CurrencyCode.CAD,
-    language: "EN", // TODO:
   }
 };
 
@@ -67,6 +68,10 @@ export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
   setSigner(signer: TheSigner): Iterator<any>;
+
+  // Save/load private details
+  loadDetails(): Iterator<any, void, any>;
+  setDetails(newDetails: AccountDetails): Iterator<any>;
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): Iterator<any>;

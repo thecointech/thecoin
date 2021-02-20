@@ -53,6 +53,11 @@ export type AccountDetails = {
   //----------------------------------------------
   // unsigned (not-legally-important) details
 
+  // Where have we persisted this account to?
+  storedOnGoogle?: boolean,
+  storedOnDropbox?: boolean,
+  storedOnOneDrive?: boolean,
+
   // Which currency to display by default
   displayCurrency: CurrencyCode;
 

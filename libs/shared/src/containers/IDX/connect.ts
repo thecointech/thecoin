@@ -3,7 +3,7 @@ import { Wallet as EthereumWallet } from 'ethers/wallet'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'
 import type { DIDProvider } from 'dids'
-import { isWallet, TheSigner } from 'SignerIdent'
+import { AnySigner, isWallet } from '../../SignerIdent'
 
 class EthereumProvider extends EventEmitter {
   wallet: EthereumWallet
@@ -40,7 +40,7 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(wallet: TheSigner): Promise<DIDProvider> {
+export async function getProvider(wallet: AnySigner): Promise<DIDProvider> {
   const { address } = wallet;
   const ethProvider = isWallet(wallet)
     ? new EthereumProvider(wallet)
