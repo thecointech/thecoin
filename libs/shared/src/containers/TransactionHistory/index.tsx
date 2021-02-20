@@ -20,13 +20,6 @@ type MyProps = {
   onRangeChange: OnChangeCallback;
 }
 
-const [fromDate, setFromDate] = useState(new Date());
-const [untilDate, setUntilDate] = useState(new Date());
-
-function onDateRangeChange(from: Date, until: Date) {
-  setFromDate(from);
-  setUntilDate(until); 
-}
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
@@ -59,6 +52,13 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 
 export const TransactionHistory = (props: MyProps) => { 
 
+  const [fromDate, setFromDate] = useState(new Date());
+  const [untilDate, setUntilDate] = useState(new Date());
+  
+    function onDateRangeChange(from: Date, until: Date) {
+      setFromDate(from);
+      setUntilDate(until); 
+    }
     const { locale } = useSelector(selectLocale);
 
     const maxRowCount = 50;
