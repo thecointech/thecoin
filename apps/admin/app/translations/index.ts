@@ -3,5 +3,5 @@ import { formatTranslations } from "@the-coin/shared/containers/LanguageProvider
 
 export const translations = formatTranslations({
   en: require('./en.json'),
-  fr: require('./fr.json')
+  fr: {} // Todo; how can we share translations with site/etc?
 });

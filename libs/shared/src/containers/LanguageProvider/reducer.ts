@@ -3,21 +3,20 @@
  * LanguageProvider reducer
  *
  */
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer';
+import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ContentState, DEFAULT_LOCALE, IActions, Locale } from './types';
-import { SiteBaseStore } from '../../SiteBaseStore';
+import { LanguageProviderState, DEFAULT_LOCALE, IActions, Locale } from './types';
+import { ApplicationBaseState } from '../../types';
 
-export const initialState = {
+export const initialState: LanguageProviderState = {
   locale: DEFAULT_LOCALE as Locale,
 };
 
-const LANGUAGE_KEY : keyof SiteBaseStore = "language";
-export type ContainerState = Readonly<typeof initialState>;
+const LANGUAGE_KEY : keyof ApplicationBaseState = "language";
 
-export class LanguageProviderReducer extends TheCoinReducer<ContentState>
+export class LanguageProviderReducer extends TheCoinReducer<LanguageProviderState>
   implements IActions {
     setLocale(locale: Locale) {
       this.draftState.locale = locale;
