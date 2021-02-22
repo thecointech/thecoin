@@ -2,7 +2,6 @@ import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
-import { PutEffect, CallEffect } from 'redux-saga/effects';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { AccountDetails } from '../AccountDetails';
 import { IDX } from '@ceramicstudio/idx';

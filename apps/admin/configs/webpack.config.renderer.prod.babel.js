@@ -12,7 +12,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
-import shared_loaders  from '@@the-coin/site-semantic-theme/webpack.less';
+import shared_loaders  from '@the-coin/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('production');
 export default merge.smart(baseConfig, {

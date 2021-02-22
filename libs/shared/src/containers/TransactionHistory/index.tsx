@@ -13,7 +13,7 @@ import { useState } from 'react';
 
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useSelector } from 'react-redux';
-import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
+import { selectLocale } from '@the-coin/shared/containers/LanguageProvider/selector';
 
 type MyProps = {
   rates: FXRate[];
