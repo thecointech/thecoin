@@ -23,6 +23,7 @@ Environments:
     * mocked inter-service calls
     * mocked ethereum connection
     * Site includes unlocked account
+    * Deployment: No deployment step
  - dev:live - local machine env
     All projects assumed to be live and running on localhost.  Requires
     firestore emulator, ethereum emulator, ceramic daemon running.
@@ -30,6 +31,7 @@ Environments:
     * semi-permanent data persistence
     * live inter-service calls
     * emulated ethereum connection
+    * Deployment: Base level yarn script to start all dependencies
  - testing
     System-wide deployment to sandbox projects in GAE.  All projects are
     automatically updated on successful merge to dev.  Read/write access
@@ -37,6 +39,7 @@ Environments:
     * permanent data persistence
     * live inter-service calls
     * testnet ethereum connection
+    * Deployment: merge to 'dev'
  - prod:staging
     System-wide deployment to projects in GAE.  Automatically
     deployed on merge to 'main'.  Live data with live $$$.
@@ -46,10 +49,12 @@ Environments:
     * live system
     * mainnet ethereum connection
     * no live traffic.
+    * Deployment: merge to 'release'
  - prod
     Once prod:staging has been tested & verified, we update default version
     on GAE to direct public traffic to this version.  No actual deployment happens
     Reverting an update happens by moving live version back one step.
+    * Deployment: yarn script to update all versions to latest.
 
 How it works:
 
