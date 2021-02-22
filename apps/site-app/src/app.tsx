@@ -25,7 +25,7 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@the-coin/site-base/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@the-coin/shared/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
