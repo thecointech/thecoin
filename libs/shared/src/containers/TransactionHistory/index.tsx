@@ -101,9 +101,9 @@ class TransactionHistory extends React.PureComponent<MyProps, {}, MyState> {
       }
 
       const monthTodisplay = tx.date.monthShort;
-      const yearToDisplay = tx.date.year; 
+      const yearToDisplay = tx.date.year;
       const dayToDisplay = tx.date.day;
-      const timeToDisplay = tx.date.hour+":"+tx.date.minute; 
+      const timeToDisplay = tx.date.hour+":"+tx.date.minute;
       //const dateToDisplay = `${yearToDisplay}<br />${monthTodisplay}<br />${dayToDisplay}`;
       //{tx.logEntry}
       return (
