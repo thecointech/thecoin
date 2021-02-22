@@ -33,9 +33,6 @@ interface Props {
 export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
-  if (!account)
-    return <div>No Account Loaded</div>;
-
   const { signer, address } = account;
   const accountActions = useAccountApi(address);
 
@@ -46,7 +43,7 @@ export const Account = (props: Props) => {
   );
 
   const sidebar = useSidebar();
-  useEffect(() => { 
+  useEffect(() => {
     sidebar.addGenerator(account.name, sidebarCb);
 
     // Is this a remote account?

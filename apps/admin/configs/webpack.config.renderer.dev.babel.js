@@ -17,7 +17,7 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import dotenv from 'dotenv'
 
-import shared_loaders  from '@the-coin/site-base/internal/webpack/webpack.less';
+import shared_loaders  from '@the-coin/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('development');
 
@@ -25,7 +25,6 @@ const env_path = path.join(__dirname, '..', '..', '..', 'secrets', 'credentials.
 const env_vars= dotenv.config({ path: env_path });
 
 const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/dist`;
 const dll = path.join(__dirname, '..', 'dll');
 const manifest = path.resolve(dll, 'renderer.json');
 const requiredByDLLConfig = module.parent.filename.includes(
@@ -59,7 +58,8 @@ export default merge.smart(baseConfig, {
   ],
 
   output: {
-    publicPath: `http://localhost:${port}/dist/`,
+    path: path.resolve(__dirname, '..', 'build'),
+    publicPath: `http://localhost:${port}/build/`,
     filename: 'renderer.dev.js'
   },
 
@@ -92,11 +92,11 @@ export default merge.smart(baseConfig, {
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff'
-          }
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'application/font-woff'
+            }
         }
       },
       // WOFF2 Font
@@ -106,7 +106,27 @@ export default merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
+            mimetype: 'application/font-woff',
+            // outputPath: (url, resourcePath, context) => {
+            //   // `resourcePath` is original absolute path to asset
+            //   // `context` is directory where stored asset (`rootContext`) or `context` option
+
+            //   // To get relative path you can use
+            //   // const relativePath = path.relative(context, resourcePath);
+
+            //   // if (/my-custom-image\.png/.test(resourcePath)) {
+            //   //   return `other_output_path/${url}`;
+            //   // }
+
+            //   // if (/images/.test(context)) {
+            //   //   return `image_output_path/${url}`;
+            //   //}
+            //   console.log(`url: ${url}`);
+            //   console.log(`resourcePath: ${resourcePath}`);
+            //   console.log(`context: ${context}`);
+
+            //   return path.join('..', 'build', url);
+            // },
           }
         }
       },
@@ -193,7 +213,6 @@ export default merge.smart(baseConfig, {
 
   devServer: {
     port,
-    publicPath,
     compress: true,
     noInfo: true,
     stats: 'errors-only',
@@ -201,7 +220,7 @@ export default merge.smart(baseConfig, {
     lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, '..', 'build'),
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,

@@ -21,15 +21,13 @@ const codeInfos = { id:"app.settings.userDetails.codeInfos",
                 description:"Infos for the info for the tab User details in the setting page in the app" };
 
 export const UserDetails = () => {
-
   const activeAccount = useActiveAccount();
-  console.log(activeAccount)
   return (
     <React.Fragment>
         <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >
           <Grid.Row>
             <Grid.Column width={4} textAlign="center" verticalAlign="middle">
-              <Avatars thecoin="15"/>
+              <Avatars index="14" />
             </Grid.Column>
             <Grid.Column width={12} verticalAlign="middle">
               <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...accountName}/></div>

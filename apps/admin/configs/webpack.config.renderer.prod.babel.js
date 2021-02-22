@@ -12,7 +12,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
-import shared_loaders  from '@the-coin/site-base/internal/webpack/webpack.less';
+import shared_loaders  from '@@the-coin/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('production');
 export default merge.smart(baseConfig, {
@@ -25,8 +25,8 @@ export default merge.smart(baseConfig, {
   entry: path.join(__dirname, '..', 'app/index'),
 
   output: {
-    path: path.join(__dirname, '..', 'app/dist'),
-    publicPath: './dist/',
+    path: path.join(__dirname, '..', 'build'),
+    publicPath: './',
     filename: 'renderer.prod.js'
   },
 

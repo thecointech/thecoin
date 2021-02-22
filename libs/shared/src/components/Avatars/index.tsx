@@ -17,65 +17,11 @@ import thecoin14 from './images/user_avatar14.svg';
 import thecoin15 from './images/user_avatar15.svg';
 import thecoin16 from './images/user_avatar16.svg';
 
-type PropsAvatar={
-    thecoin: "01" | "02" | "03" | "04" | "05" | "06" | "07" | "08" | "09" | "10" | "11" | "12" | "13" | "14" | "15" | "16";
-}
+const avatars = [thecoin01, thecoin02, thecoin03, thecoin04, thecoin05, thecoin06, thecoin07, thecoin08, thecoin09, thecoin10, thecoin11, thecoin12, thecoin13, thecoin14, thecoin15, thecoin16] as const;
+type AvatarIdx = keyof Omit<typeof avatars, keyof (string)[]>;
 
-export const Avatars = (props: PropsAvatar) => {
-    let avatar = thecoin01;
-    switch (props.thecoin) {
-        case "02":
-            avatar = thecoin02;
-            break;
-        case "03":
-            avatar = thecoin03;
-            break;
-        case "04":
-            avatar = thecoin04;
-            break;
-        case "05":
-            avatar = thecoin05;
-            break;
-        case "06":
-            avatar = thecoin06;
-            break;
-        case "07":
-            avatar = thecoin07;
-            break;
-        case "08":
-            avatar = thecoin08;
-            break;
-        case "09":
-            avatar = thecoin09;
-            break;
-        case "10":
-            avatar = thecoin10;
-            break;
-        case "11":
-            avatar = thecoin11;
-            break;
-        case "12":
-            avatar = thecoin12;
-            break;
-        case "13":
-            avatar = thecoin13;
-            break;
-        case "14":
-            avatar = thecoin14;
-            break;
-        case "15":
-            avatar = thecoin15;
-            break;
-        case "16":
-            avatar = thecoin16;
-            break;
-        default:
-            avatar = thecoin01;
-            break
-    }
-  return (
-    <div>
-        <img src={avatar} title="Avatar"/>
+export const Avatars = ({index}: { index: AvatarIdx }) => (
+   <div>
+        <img src={avatars[index]} title="Avatar"/>
     </div>
   )
-}

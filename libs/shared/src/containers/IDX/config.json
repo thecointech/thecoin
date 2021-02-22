@@ -1,0 +1,8 @@
+{
+  "definitions": {
+    "privateDetails": "kjzl6cwe1jw146zmitlipp71bqv59ih0f9t12bqr8ovh1uza6l4xgj73xh7xwep"
+  },
+  "schemas": {
+    "jwe": "ceramic://k3y52l7qbv1fryg30uefsmgy2nxfamfrnak373s1azhqz890nvo9hu0ym0kkbo9og"
+  }
+}
