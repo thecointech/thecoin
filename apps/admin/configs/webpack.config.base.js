@@ -4,7 +4,6 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import { dependencies } from '../package.json';
 import { GenerateAliases } from './patchpaths';
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -13,8 +12,6 @@ export default {
   externals: [
     "puppeteer",
     "pouchdb",
-    //"firebase",
-    //...Object.keys(dependencies || {})
   ],
 
   module: {

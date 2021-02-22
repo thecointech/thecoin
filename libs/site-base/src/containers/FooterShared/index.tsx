@@ -6,7 +6,7 @@ import { Grid, StrictGridColumnProps } from 'semantic-ui-react';
 import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
-import getWindowDimensions from '@the-coin/shared/components/WindowDimensions';
+import { useWindowDimensions } from '@the-coin/shared/components/WindowDimensions';
 import { breakpointsValues } from '@the-coin/shared/components/ResponsiveTool';
 
 
@@ -21,7 +21,7 @@ const copyright = {   id:"base.footer.copyright",
 
 export const FooterShared = () => {
 
-  const windowDimension = getWindowDimensions();
+  const windowDimension = useWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
   const registeredContent = <FormattedMessage {...registered} />;
   const socialLinksContent = <><img src={facebook} /><img src={twitter} /><img src={instagram} /></>;

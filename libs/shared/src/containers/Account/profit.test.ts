@@ -24,6 +24,7 @@ test("Calculate simple profit correctly", () => {
   expect(profitCAD).toBe(5);
 });
 
+const roundDecimalPlaces = (val: number) => Math.round(val * 100) / 100;
 test('calculate real profit correctly', () => {
 
   const txs = ExampleTransactions;
@@ -40,7 +41,7 @@ test('calculate real profit correctly', () => {
   let tx1 = fiatChange(txs[5], rates);
   tx1 = toHuman(tx1, true);
   expect(tx1).toBe(1000);
-  expect(tx1).toBe(txInFiat[5]);
+  expect(tx1).toBe(txInFiat[3]);
 
   // Next two withdraw $10 each (tx 3 & 1 are 10c fee and ignored here)
   let tx2 = fiatChange(txs[4], rates);
@@ -60,15 +61,16 @@ test('calculate real profit correctly', () => {
   const costBasisA = txInFiat.reduce((a, b) => a + b, 0);
   expect(costBasisA).toBe(2798.66);
   const costBasisB = totalCad(txs, rates);
-  expect(costBasisA).toEqual(costBasisB);
+  // We _need_ to port to decimal
+  expect(costBasisA).toEqual(roundDecimalPlaces(costBasisB));
 
   // Whats the current balance?
-  const balanceCAD = currentValue(balance, rates);
+  const balanceCAD = roundDecimalPlaces(currentValue(balance, rates));
   expect(balanceCAD).toBe(2859.91);
 
 
   // profit = balance - costBasis = 2859.91 - 2798.66 = 61.25
-  const profit = calculateProfit(balance, txs, rates);
+  const profit = roundDecimalPlaces(calculateProfit(balance, txs, rates));
   expect(profit).toBe(61.25);
 
 });
