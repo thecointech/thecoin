@@ -1,16 +1,28 @@
+@import "~@the-coin/site-base/styles/variables.less";
+
 .Link {
-	cursor: pointer
+	cursor: pointer;
+	//We don't want those styles to change depending on the container they are in: they need to be always the same
+	font-size: @fontSizeSmall !important;
+	color: @theCoinPalettePaleGreen2;
+	text-transform: uppercase;
 }
 .ToastBox {
-	position: absolute;
+	position: relative;
+	top: 20px;
 	opacity: 0.0;
 	transition: opacity 0.9s;
 	cursor: pointer;
+	//We don't want those styles to change depending on the container they are in: they need to be always the same
+	font-size: @fontSizeSmall !important;
 }
 
 .ShowToastBox {
-	position: absolute;
+	position: relative;
+	top: 20px;
 	opacity: 0.9;
 	transition: opacity .3s;
 	cursor: pointer;
+	//We don't want those styles to change depending on the container they are in: they need to be always the same
+	font-size: @fontSizeSmall !important;
 }
