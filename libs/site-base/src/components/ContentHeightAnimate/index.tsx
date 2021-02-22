@@ -8,8 +8,6 @@ import styles from './styles.module.less';
 export const ContentHeightAnimate: React.FC = (props)=> {
 
   const mainHeightDivStyle = useSelector(selectContent);
-  const vars = LessVars;
-  console.log(vars);
   return (
     <AnimateHeight duration={LessVars.pageTransitionDuration} height={mainHeightDivStyle.height}>
       <div className={styles.mainHeightDivStyle} style={mainHeightDivStyle}>
