@@ -1,5 +1,5 @@
 /*******************************
-     User Global Variables
+     TheCoin Global Variables
 *******************************/
 
 /*-------------------
@@ -88,6 +88,9 @@
 
 /*-------------------
     Brand Colors
+    We use an accented analogous color
+    scheme with green as the dominant
+    color, and red as the accent
 --------------------*/
 @theCoinPalettePaleGreen1     : #8ED8D1;
 @theCoinPalettePaleGreen2     : #61C1B8;
@@ -301,6 +304,12 @@
 
 @defaultDuration : 0.1s;
 @defaultEasing   : ease;
+
+/*-------------------
+     Page variables
+--------------------*/
+@pageTransitionDuration: 300;
+@SidebarWidth: 230px;
 
 /*--------------
    Form Input

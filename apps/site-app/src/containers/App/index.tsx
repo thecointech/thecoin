@@ -19,8 +19,12 @@ import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
 import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
 import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
 
-import '@the-coin/site-base/styles/semantic.css';
-//import '@the-coin/site-base/styles/semantic.less';
+// Either import CSS or LESS;
+// - LESS is slower, but offers on-save hot-reload
+// - CSS is faster, but requires manual recompile
+//import '../../semantic/semantic.css';
+import '@the-coin/site-semantic-theme/semantic.less';
+
 import styles from './styles.module.less';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';

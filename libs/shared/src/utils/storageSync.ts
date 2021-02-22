@@ -1,4 +1,4 @@
-import { AccountState } from '../containers/Account/types';
+import { AccountState, DefaultAccountValues } from '../containers/Account/types';
 import { AccountDict } from '../containers/AccountMap/types';
 import { isSigner, SignerIdent } from '../SignerIdent';
 import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
@@ -28,7 +28,6 @@ export function storeAccount(account: AccountState) {
   localStorage[address] = JSON.stringify(toStore);
 }
 
-
 export function getStoredAccountData(address: string): AccountState | null {
 
   if (!IsValidAddress(address))
@@ -45,8 +44,12 @@ export function getStoredAccountData(address: string): AccountState | null {
   const storedItem = localStorage.getItem(normAddress);
 
   if (storedItem !== null) {
-    const r = JSON.parse(storedItem) as AccountState
-    r.address = normAddress;
+    const r: AccountState = {
+      ...DefaultAccountValues,
+      ...JSON.parse(storedItem),
+      address: normAddress,
+    }
+
     if (NormalizeAddress(r.signer.address) === normAddress) {
       return r;
     }
@@ -62,9 +65,7 @@ export function readAllAccounts(): AccountDict {
     if (!raw)
       continue;
 
-
-
-    let account = 
+    let account =
       getStoredAccountData(raw) ??
       Deprecated_GetStored(raw);
 

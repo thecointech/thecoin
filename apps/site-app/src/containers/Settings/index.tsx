@@ -7,7 +7,6 @@ import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
 import { UserDetails } from './UserDetails';
 
-
 const main = { id:"app.settings.tabs.main",
                 defaultMessage:"User Settings",
                 description:"Title for the tabs the setting page in the app" };

@@ -1,0 +1,76 @@
+/*******************************
+        Import Directives
+*******************************/
+
+/*------------------
+       IMPORTANT:
+  this file has been duplicated from the Semantic-ui-less package.
+  it is the file that controls what variables are imported prior
+  to importing the actual less of the component.  However, the
+  original expected that all themes would be in the same folder.
+  Our setup puts our theme into our own folder.  This file could
+  be removed and just use the default if we were to move our
+  theme into the Semantic UI folder themes folder.
+
+  The major change has been the introduction of the 'packageFolder'
+  variable to allow separating our theme from the built-in stuff
+-------------------*/
+
+/*------------------
+       Theme
+-------------------*/
+
+@theme: @@element;
+
+/*--------------------
+   Site Variables
+---------------------*/
+
+/* Default site.variables */
+// NOTE: This is redirected to NPM package
+@import "@{packageFolder}/default/globals/site.variables";
+
+/* Packaged site.variables */
+@import "@{themesFolder}/@{site}/globals/site.variables";
+
+/* Component's site.variables */
+@import (optional) "@{themesFolder}/@{theme}/globals/site.variables";
+
+/* Site theme site.variables */
+@import (optional) "@{siteFolder}/globals/site.variables";
+
+
+/*-------------------
+ Component Variables
+---------------------*/
+
+/* Default */
+@import "@{packageFolder}/default/@{type}s/@{element}.variables";
+
+/* Packaged Theme */
+@import (optional) "@{themesFolder}/@{theme}/@{type}s/@{element}.variables";
+
+/* Site Theme */
+@import (optional) "@{siteFolder}/@{type}s/@{element}.variables";
+
+
+/*******************************
+             Mix-ins
+*******************************/
+
+/*------------------
+       Fonts
+-------------------*/
+
+.loadFonts() when (@importGoogleFonts) {
+  @import (css) url('@{googleProtocol}fonts.googleapis.com/css?family=@{googleFontRequest}');
+}
+
+/*------------------
+     Overrides
+-------------------*/
+
+.loadUIOverrides() {
+  @import (optional) "@{themesFolder}/@{theme}/@{type}s/@{element}.overrides";
+  @import (optional) "@{siteFolder}/@{type}s/@{element}.overrides";
+}
