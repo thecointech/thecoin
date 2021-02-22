@@ -27,7 +27,7 @@ export const UserDetails = () => {
         <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >
           <Grid.Row>
             <Grid.Column width={4} textAlign="center" verticalAlign="middle">
-              <Avatars thecoin="15"/>
+              <Avatars index="14" />
             </Grid.Column>
             <Grid.Column width={12} verticalAlign="middle">
               <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...accountName}/></div>
