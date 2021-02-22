@@ -18,7 +18,7 @@ import thecoin15 from './images/user_avatar15.svg';
 import thecoin16 from './images/user_avatar16.svg';
 
 const avatars = [thecoin01, thecoin02, thecoin03, thecoin04, thecoin05, thecoin06, thecoin07, thecoin08, thecoin09, thecoin10, thecoin11, thecoin12, thecoin13, thecoin14, thecoin15, thecoin16] as const;
-type AvatarIdx = keyof Omit<typeof avatars, keyof Array<string>>;
+type AvatarIdx = keyof Omit<typeof avatars, keyof (string)[]>;
 
 export const Avatars = ({index}: { index: AvatarIdx }) => (
    <div>
