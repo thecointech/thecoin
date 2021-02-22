@@ -8,7 +8,8 @@ import { isWallet } from '@the-coin/shared/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { Props as MessageProps } from '@the-coin/site-base/components/MaybeMessage';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonSecondary } from '@the-coin/site-base/components/Buttons';
+import { Checkbox } from 'semantic-ui-react';
 
 
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
@@ -16,6 +17,7 @@ export type StoreCallback = (state: UploadState, message: MessageProps) => void;
 type MyProps = {
   onStateChange?: StoreCallback;
   disabled?: boolean;
+  toggle?: boolean;
 }
 
 export const StoreGoogle = (props: MyProps) => {
@@ -100,10 +102,15 @@ export const StoreGoogle = (props: MyProps) => {
   const message = state === UploadState.Complete
     ? messages.buttonSuccess
     : messages.buttonConnect
+
+  const connectVia = (props.toggle) 
+    ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} /> 
+    : <ButtonSecondary onClick={onConnectClick} disabled={disabled} loading={loading}><FormattedMessage {...message } /></ButtonSecondary>;
+  
   return (
-    <ButtonPrimary onClick={onConnectClick} disabled={disabled} loading={loading}>
-        <FormattedMessage {...message } />
-    </ButtonPrimary>
+    <div>
+      {connectVia}
+    </div>
   );
 }
 
