@@ -21,9 +21,7 @@ const codeInfos = { id:"app.settings.userDetails.codeInfos",
                 description:"Infos for the info for the tab User details in the setting page in the app" };
 
 export const UserDetails = () => {
-
   const activeAccount = useActiveAccount();
-  console.log(activeAccount)
   return (
     <React.Fragment>
         <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >
