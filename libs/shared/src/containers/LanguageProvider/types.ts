@@ -7,7 +7,7 @@ export type Languages = {
 
 export const DEFAULT_LOCALE: Locale = "en";
 
-export interface ContentState {
+export interface LanguageProviderState {
   readonly locale: Locale;
 }
 
