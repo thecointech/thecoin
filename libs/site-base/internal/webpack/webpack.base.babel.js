@@ -6,7 +6,7 @@ const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const less_loaders = require('./webpack.less')
+const less_loaders = require('@the-coin/site-semantic-theme/webpack.less')
 
 const projectRoot = process.cwd();
 
@@ -139,6 +139,7 @@ module.exports = options => ({
       "@the-coin/utilities": "@the-coin/utilities/build",
       "@the-coin/contract": "@the-coin/contract/build",
       "@the-coin/shared": "@the-coin/shared/build",
+      "@the-coin/site-semantic-theme": "@the-coin/site-semantic-theme/build",
       "@the-coin/site-base": "@the-coin/site-base/build",
     },
   },

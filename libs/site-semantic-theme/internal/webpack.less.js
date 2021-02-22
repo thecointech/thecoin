@@ -1,11 +1,9 @@
 //////////////////////////////////////////////////////////////
 //
-// This file defines the loaders common to our site build and
+// This file defines the LESS loaders common to our site build and
 // to our storybook webpack based at the root
 //
-
-const path = require('path');
-const siteBaseRoot = path.resolve(__dirname, '..', '..');
+const { paths, modifyVars } = require('./vars');
 
 module.exports = {
   css_module_loader: {
@@ -27,9 +25,7 @@ module.exports = {
         loader: 'less-loader',
         options: {
           sourceMap: true,
-          modifyVars: {
-            project_root: `"${siteBaseRoot}"`,
-          },
+          modifyVars,
         },
       },
     ],
@@ -53,12 +49,8 @@ module.exports = {
         loader: 'less-loader',
         options: {
           sourceMap: true,
-          paths: [
-            path.join(siteBaseRoot, 'src', 'styles', 'semantic', 'na', 'na'),
-          ],
-          modifyVars: {
-            project_root: `"${siteBaseRoot}"`,
-          },
+          paths,
+          modifyVars,
         },
       },
     ],

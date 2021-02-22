@@ -18,11 +18,11 @@ import { MainRouter } from 'containers/MainRouter';
 import { usePrismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
 
-// Our CSS version isn't building correctly yet, but once it does
-// we can save a bit of compile time by referring to it directly
-// instead of the LESS files
-import '@the-coin/site-base/styles/semantic.css';
-//import '@the-coin/site-base/styles/semantic.less';
+// Either import CSS or LESS;
+// - LESS is slower, but offers on-save hot-reload
+// - CSS is faster, but requires manual recompile
+import '../../semantic/semantic.css';
+//import '@the-coin/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
 export const App = () => {
