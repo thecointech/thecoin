@@ -24,7 +24,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/logging": "*",
+    "@the-coin/tx-gmail": "*",
+    "@the-coin/tx-firestore": "*",
     "@the-coin/rbcapi": "*",
     "@the-coin/shared": "*",
     "@the-coin/utilities": "*"

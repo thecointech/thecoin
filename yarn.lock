@@ -7579,24 +7579,6 @@
     "@babel/runtime" "^7.4.5"
     "@testing-library/dom" "^5.0.0"
 
-"@the-coin/contract@latest":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@the-coin/contract/-/contract-0.1.1.tgz#fa22f2ae0691b174dd1a8d19a5a292dda24561fc"
-  integrity sha512-mljvmHZ3y7/S0U/oUu/CPTzDoZbXL6J+BXEA1V77cbe3DteCnBYs1idlxVYF+iwKamjurxezQDdtOHptkta05w==
-
-"@the-coin/utilities@latest":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@the-coin/utilities/-/utilities-0.1.29.tgz#e129812e0b85299a1596ea1c71f5ff69bd3776c3"
-  integrity sha512-tEVD7y1aMBytfbIy84BzAClnY8ZJZx+RV+qn7MHnKxHMykVbZMEvQelwXFV6orL8kxbge83vM9cG/6+ijz+aww==
-  dependencies:
-    "@google-cloud/firestore" "^2.4.0"
-    "@the-coin/contract" latest
-    axios "*"
-    base32 "^0.0.6"
-    ethers "^4.0.46"
-    luxon "*"
-    typescript "^3.9.7"
-
 "@tokenizer/token@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.1.1.tgz#f0d92c12f87079ddfd1b29f614758b9696bc29e3"
@@ -38047,11 +38029,6 @@ typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
-
-typescript@^3.9.7:
-  version "3.9.7"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
-  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
 typescript@^4.0:
   version "4.0.2"

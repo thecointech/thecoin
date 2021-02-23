@@ -4,7 +4,6 @@
   "references": [
     { "path": "../tx-gmail/tsconfig.build.json" },
     { "path": "../tx-firestore/tsconfig.build.json" },
-    { "path": "../utils-ts/tsconfig.build.json" },
     { "path": "../rbcapi/tsconfig.build.json" },
     { "path": "../email/tsconfig.build.json" }
   ]

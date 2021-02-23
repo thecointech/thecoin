@@ -42,7 +42,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@the-coin/utilities": "latest",
+    "@the-coin/utilities": "*",
     "axios": "*",
     "cors": "^2.8.5",
     "express": "^4.16.4",

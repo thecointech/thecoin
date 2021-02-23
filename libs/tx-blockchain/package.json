@@ -23,6 +23,7 @@
     "./": "./build/"
   },
   "dependencies": {
+    "@the-coin/utilities": "*",
     "@the-coin/contract": "*"
   },
   "devDependencies": {
