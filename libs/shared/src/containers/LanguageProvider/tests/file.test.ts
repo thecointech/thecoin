@@ -1,8 +1,9 @@
+import {} from 'jest'
 import path from 'path';
-import fs from 'fs';
+const fs = require('fs');
 
-let translationFR = path.join(__dirname, `./fr.json`);
-let translationEN = path.join(__dirname, `./en.json`);
+let translationFR = path.join(__dirname, `../../../translations/fr.json`);
+let translationEN = path.join(__dirname, `../../../translations/en.json`);
 
 test("Check that the translation file FR is here", async () => {
     expect(fs.existsSync(translationFR)).toBe(true);

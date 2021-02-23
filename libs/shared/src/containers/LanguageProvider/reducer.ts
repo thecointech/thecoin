@@ -3,7 +3,7 @@
  * LanguageProvider reducer
  *
  */
-import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
+import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';

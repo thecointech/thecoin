@@ -1,42 +1,45 @@
-import { init } from '@the-coin/utilities/firestore';
-import { setRate, getCoinRate, toDbType } from './db';
+import { init, describe } from '@the-coin/utilities/firestore/jestutils';
+import { setRate, getCoinRate, getRateDoc, cleanDb } from './db';
 import { CoinRate } from "./types";
 import { Timestamp } from '@the-coin/utilities/firestore';
-import { describe } from '@the-coin/utilities/firestore/jestutils';
-import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
-// Insertion can be tested with mocks
-it('can insert rates', async function () {
-
-  await init({});
-
-  let dtnow = Timestamp.now();
-  expect(dtnow.seconds).toBeGreaterThan(0);
-
-  // We use a high value now to avoid colliding with the latest test below
-  let now = 100000;
-  // ------- Create a new rate (expire in 1.5 min) -------
-  var rate = buildRate(now);
-  await setRate("Coin", rate);
-
-  // Was anything written?
-  expect(mockSet).toBeCalledWith(
-      expect.objectContaining(toDbType(rate)),
-      {"merge": false}
-    )
-});
-
-describe("DB Tests to run on emulator", () => {
+describe("DB Connected Tests", () => {
 
   beforeEach(async () => {
     jest.setTimeout(10000);
+    await init("broker-cad-db-basic");
+    await cleanDb();
   })
+
+  it('can insert rates', async function () {
+
+    let dtnow = Timestamp.now();
+    expect(dtnow.seconds).toBeGreaterThan(0);
+
+    // We use a high value now to avoid colliding with the latest test below
+    let now = 100000;
+    // ------- Create a new rate (expire in 1.5 min) -------
+    var rate = buildRate(now);
+    await setRate("Coin", rate);
+
+    // Was anything written?
+    const doc = getRateDoc("Coin", now);
+    const data = await doc.get();
+    expect(data.exists).toBeTruthy();
+    // const data = await doc.
+    // const collection = getRate("Coin");
+    // ------- Check if the new rate is here -------
+    const fetched = await getCoinRate(now) as CoinRate;
+    expect(fetched).toBeTruthy();
+    expect(fetched.validFrom).toEqual(rate.validFrom);
+    expect(fetched.validTill).toEqual(rate.validTill);
+    expect(fetched.buy).toEqual(10);
+  });
 
   it('should return searched rate', async function () {
 
     // Insert 5 rates, out of order
-    var rates = [1000, 9000, 3000, 2000, 6000, 5000].map(buildRate)
-    await init({});
+    var rates = [1000, 9000, 3000, 2000, 6000, 5000].map(buildRate);
     await Promise.all(rates.map(r => setRate("Coin", r)));
 
     var latest = await getCoinRate(9999);

@@ -31,5 +31,5 @@ it('will throw if cannot fetch', async ()=> {
   const ts = Date.now();
   await expect(fetchNewCoinRates("throwme", ts, ts))
     .rejects
-    .toThrow("Fetch failed: Unprocessable Entity : Wrong resolution. Please check the documentation for further details.");
+    .toThrow("Fetch failed:");
 })

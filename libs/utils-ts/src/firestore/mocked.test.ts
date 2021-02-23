@@ -1,8 +1,7 @@
-import { init } from './mock'
+import {init } from './mock'
 import { GetFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import data from './mock.data.json';
-import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
 test('basic creation', async () => {
 
@@ -23,8 +22,6 @@ test('basic creation', async () => {
     ...doc.data(),
     mutated: true,
   });
-
-  expect(mockSet).toBeCalled();
 
   // Have we correctly initialized a timestamp?
   const ts = Timestamp.now();

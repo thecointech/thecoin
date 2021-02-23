@@ -3,9 +3,9 @@ import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
 import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
-import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
+import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
 import { FxRatesState, IFxRates } from './types';
-import { buildSaga, sendValues } from '../../store/sagas';
+import { buildSaga, sendValues } from '../../utils/sagas';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 

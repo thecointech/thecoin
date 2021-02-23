@@ -23,7 +23,9 @@
     "./variables.less": "./src/variables.less"
   },
   "scripts": {
-    "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
+    "build": "yarn build:semantic && yarn build:link",
+    "build:semantic": "node ./internal/buildSemantic.js",
+    "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
     "clean": "rimraf ./build"
   },
   "dependencies": {

@@ -1,6 +1,5 @@
 {
   "packages": [
-    "submodules/*",
     "libs/*",
     "apps/*",
     "apis/**/*"

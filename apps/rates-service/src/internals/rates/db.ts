@@ -21,7 +21,7 @@ type DbType = Omit<Omit<RateType, "validFrom">, "validTill"> & {
 const getRatesCollection = (key: RateKey) =>
   GetFirestore().collection(key.toString());
 
-const getRateDoc = (key: RateKey, ts: number) =>
+export const getRateDoc = (key: RateKey, ts: number) =>
   getRatesCollection(key).doc(ts.toString())
 
 const toRateType = (db: DocumentData): RateType => ({
@@ -29,7 +29,7 @@ const toRateType = (db: DocumentData): RateType => ({
   validFrom: db.validFrom.toMillis(),
   validTill: db.validTill.toMillis(),
 })
-export const toDbType = (rt: RateType): DbType => ({
+const toDbType = (rt: RateType): DbType => ({
   ...rt,
   validFrom: Timestamp.fromMillis(rt.validFrom),
   validTill: Timestamp.fromMillis(rt.validTill),

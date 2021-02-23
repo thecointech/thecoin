@@ -4,7 +4,7 @@ import { Wallet } from "ethers";
 import { useDispatch } from "react-redux";
 import { IsValidAddress, NormalizeAddress } from "@the-coin/utilities";
 import { ACCOUNTMAP_KEY, initialState, AccountMapState, IAccountMapActions } from "./types";
-import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from "../../store/immerReducer";
+import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from "../../utils/immerReducer";
 import { AccountState, DefaultAccountValues } from "../Account/types";
 import { storeAccount, deleteAccount } from "../../utils/storageSync";
 import { AnySigner, isWallet } from "../../SignerIdent";

@@ -1,4 +1,4 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '@the-coin/3id-connect'
+import { ThreeIdConnect, EthereumAuthProvider } from '3id-connect'
 import { Wallet as EthereumWallet } from 'ethers/wallet'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'

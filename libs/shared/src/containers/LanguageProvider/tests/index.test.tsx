@@ -1,30 +1,31 @@
-import '@testing-library/jest-dom/extend-expect';
-import * as React from 'react';
+import React from 'react';
 import { render } from '@testing-library/react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { Provider } from 'react-redux';
 
 import {LanguageProvider} from '../index';
-import {configureAppStore} from '../../../store';
-import { Languages } from '../types';
 
-const TestId = 'some.id'
-const languages: Languages = {
-  en: {
-    [TestId]: 'The message in english',
+import createReducer from '../../../reducers';
+import {configureAppStore} from '@the-coin/shared/configureStore';
+
+import { translationMessages } from '../../../i18n';
+import history from '@the-coin/shared/utils/history';
+
+const messages = defineMessages({
+  someMessage: {
+    id: 'some.id',
+    defaultMessage: 'This is some default message',
+    en: 'This is some en message',
   },
-  fr: {
-    [TestId]: 'Le message en francaise',
-  }
-};
+});
 
 type AppStore = ReturnType<typeof configureAppStore>
 
-describe('LanguageProvider', () => {
+describe('<LanguageProvider />', () => {
   let store: AppStore;
 
   beforeEach(() => {
-    store = configureAppStore(undefined);
+    store = configureAppStore(createReducer, undefined, history);
   });
 
   it('should render its children', () => {
@@ -33,7 +34,7 @@ describe('LanguageProvider', () => {
     const { queryByText } = render(
       // tslint:disable-next-line: jsx-wrap-multiline
       <Provider store={store}>
-        <LanguageProvider languages={languages}>
+        <LanguageProvider messages={messages}>
           {children}
         </LanguageProvider>
       </Provider>,
@@ -45,13 +46,13 @@ describe('LanguageProvider', () => {
     const { queryByText } = render(
       // tslint:disable-next-line: jsx-wrap-multiline
       <Provider store={store}>
-        <LanguageProvider languages={languages}>
-          <FormattedMessage id={TestId} />
+        <LanguageProvider messages={translationMessages}>
+          <FormattedMessage {...messages.someMessage} />
         </LanguageProvider>
       </Provider>,
     );
     expect(
-      queryByText(languages.en[TestId]),
+      queryByText(messages.someMessage.defaultMessage),
     ).toBeInTheDocument();
   });
 });

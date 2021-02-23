@@ -3,7 +3,7 @@ import { IActions } from './types';
 import { takeLatest, debounce } from 'redux-saga/effects'
 import { getAccountReducer } from './reducer';
 import { makeAccountSelector } from './selectors';
-import { buildSaga } from '../../store/sagas';
+import { buildSaga } from '../../utils/sagas';
 
 
 export function buildSagas(address: string) {

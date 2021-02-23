@@ -1,5 +1,5 @@
 import ReactGA from 'react-ga';
-import { history } from '@the-coin/shared/store/history';
+import history from '@the-coin/shared/utils/history';
 
 
 function recordLocation(location: { pathname: string }) {
