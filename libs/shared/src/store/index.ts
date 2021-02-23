@@ -2,18 +2,19 @@
  * Create the store with dynamic reducers
  */
 
-//import { configureStore, getDefaultMiddleware, StoreEnhancer } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
-import { createInjectorsEnhancer } from 'redux-injectors';
+import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { ApplicationBaseState } from './types';
-import { History } from 'history';
+import { ApplicationBaseState } from '../types';
+import { history } from './history';
 import { createStore, compose, applyMiddleware } from 'redux';
 
-//declare var module: any;
+import { createReducer} from './reducers';
+export { history };
+
 declare var window: any;
 
-export function configureAppStore(createReducer: () => any, initialState: ApplicationBaseState | undefined = undefined, history: History<any>) {
+export function configureAppStore(initialState: ApplicationBaseState | undefined = undefined) {
   const reduxSagaMonitorOptions = {};
 
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
@@ -39,20 +40,13 @@ export function configureAppStore(createReducer: () => any, initialState: Applic
     doCompose(...enhancers)
    )
 
-  // const store = configureStore({
-  //   reducer: createReducer(),
-  //   preloadedState: initialState,
-  //   middleware: [...getDefaultMiddleware(), ...middlewares],
-  //   enhancers,
-  // });
-
   // Make reducers hot reloadable, see http://mxs.is/googmo
   /* istanbul ignore next */
-  // if (module.hot) {
-  //   module.hot.accept('./reducers', () => {
-  //     forceReducerReload(store);
-  //   });
-  // }
+  if (module.hot) {
+    module.hot.accept('./reducers', () => {
+      forceReducerReload(store);
+    });
+  }
 
   return store;
 }

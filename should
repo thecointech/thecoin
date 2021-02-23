@@ -1,0 +1,19 @@
+jest-haste-map: duplicate manual mock found: emails.get
+  The following files share their name; please delete one of them:
+    * <rootDir>\libs\tx-gmail\src\__mocks__\emails.get.json
+    * <rootDir>\libs\tx-processing\src\deposit\__mocks__\emails.get.json
+
+jest-haste-map: duplicate manual mock found: emails.list
+  The following files share their name; please delete one of them:
+    * <rootDir>\libs\tx-gmail\src\__mocks__\emails.list.json
+    * <rootDir>\libs\tx-processing\src\deposit\__mocks__\emails.list.json
+
+jest-haste-map: duplicate manual mock found: googleapis
+  The following files share their name; please delete one of them:
+    * <rootDir>\libs\tx-gmail\src\__mocks__\googleapis.ts
+    * <rootDir>\libs\tx-processing\src\deposit\__mocks__\googleapis.ts
+
+  console.log tools/jestTestSetup.js:5
+    C:\src\TheCoin
+
+2021-02-23T13:18:41.990Z TheCoin-jest[11360] TRACE: [90mLogging Initialized[39m

@@ -1,5 +1,5 @@
 
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/store/immerReducer'
 import { ContentState, IActions } from './types';
 import { SiteBaseStore } from 'SiteBaseStore';
 import { useInjectReducer } from 'redux-injectors';

@@ -2,18 +2,17 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer, ReducersMapObject } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-import history from '@the-coin/shared/utils/history';
-//import { LanguageProviderReducer } from 'containers/LanguageProvider/reducer';
+import { history } from './history';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
-export default function createReducer(injectedReducers = {}) {
+export function createReducer(injectedReducers: ReducersMapObject = {}) : Reducer {
   const rootReducer = combineReducers({
-    router: connectRouter(history),
+    router: connectRouter(history) as Reducer,
     ...injectedReducers,
   });
 
