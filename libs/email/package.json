@@ -21,7 +21,8 @@
     "deploy:pre": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
     "build": "yarn tsc --project tsconfig.build.json",
-    "build:clean": "rimraf ./build && rimraf ./coverage"
+    "test": "yarn jest",
+    "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
     "build/**/*"
