@@ -5,7 +5,6 @@ export { UxPassword } from './components/UxPassword';
 
 // Export all react containers
 export { Balance } from './containers/Balance';
-export { RecentTransactions } from './containers/RecentTransactions';
 export { Account } from './containers/Account';
 export { Login } from './containers/Login';
 export { ModalOperation } from './containers/ModalOperation';

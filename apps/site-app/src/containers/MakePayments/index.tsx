@@ -1,4 +1,3 @@
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
@@ -31,7 +30,7 @@ const templates = { id:"app.makepayments.tabs.templates",
                 defaultMessage:"Templates",
                 description:"Title for the tabs the Make a payment page in the app" };
 
-export const MakePayments = (routerProps:AccountPageProps) => {
+export const MakePayments = () => {
   const intl = useIntl();
   const account = useActiveAccount();
   const panes = [
@@ -59,7 +58,7 @@ export const MakePayments = (routerProps:AccountPageProps) => {
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...routerProps} />
+        <RecentTransactions />
       </AppContainerWithShadow>
     </React.Fragment>
   );

@@ -1,4 +1,3 @@
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
 import * as React from 'react';
 import illustration from './images/icon_topup_big.svg';
@@ -23,7 +22,7 @@ const interact = { id:"app.topup.tabs.interact",
                 defaultMessage:"Interac Online",
                 description:"Title for the tabs the topup page in the app" };
 
-export const Topup = (routerProps:AccountPageProps) => {
+export const Topup = () => {
   const intl = useIntl();
   const activeAccount = useActiveAccount();
   const panes = [
@@ -49,7 +48,7 @@ export const Topup = (routerProps:AccountPageProps) => {
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...routerProps} />
+        <RecentTransactions />
       </AppContainerWithShadow>
     </React.Fragment>
   );

@@ -5,10 +5,10 @@ import { toHuman } from "@the-coin/utilities";
 import { getFxRate } from "../FxRate/reducer";
 import { AccountPageProps } from "../Account/types";
 
-import { TransactionList } from "../TransactionList";
 import styles from "./styles.module.less";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
+import { TransactionList } from "containers/TransactionList";
 
 
 export const Balance = ({ account, actions }: AccountPageProps) => {
