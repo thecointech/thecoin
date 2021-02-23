@@ -16,10 +16,10 @@
   },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:pre": "yarn build:clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
     "build": "yarn tsc -b -v tsconfig.build.json",
-    "build:clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
