@@ -18,21 +18,19 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import history from '@the-coin/shared/utils/history';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@the-coin/site-base/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@the-coin/shared/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import {configureAppStore} from '@the-coin/shared/configureStore';
-import createReducer from './reducers';
+import {configureAppStore, history } from '@the-coin/shared/store';
 
 // Import i18n messages
 import { translations } from './translations';
@@ -41,7 +39,7 @@ import { initTracking } from './utils/reactga';
 initTracking();
 
 // Create redux store with history
-const store = configureAppStore(createReducer, undefined, history);
+const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (languages: Languages, Component = App) => {

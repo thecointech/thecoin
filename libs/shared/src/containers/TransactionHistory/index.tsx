@@ -11,9 +11,9 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { useActiveAccount } from '../../containers/AccountMap';
 import { useSelector } from 'react-redux';
-import { selectLocale } from '@the-coin/site-base/containers/LanguageProvider/selector';
+import { selectLocale } from '../../containers/LanguageProvider/selector';
 
 type MyProps = {
   rates: FXRate[];

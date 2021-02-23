@@ -103,10 +103,10 @@ export const StoreGoogle = (props: MyProps) => {
     ? messages.buttonSuccess
     : messages.buttonConnect
 
-    let connectVia = <ButtonSecondary onClick={onConnectClick} disabled={disabled} loading={loading}><FormattedMessage {...message } /></ButtonSecondary>;
-  if (props.toggle){
-    connectVia = <Checkbox toggle disabled={disabled} onClick={onConnectClick} />;
-  }
+  const connectVia = (props.toggle) 
+    ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} /> 
+    : <ButtonSecondary onClick={onConnectClick} disabled={disabled} loading={loading}><FormattedMessage {...message } /></ButtonSecondary>;
+  
   return (
     <div>
       {connectVia}

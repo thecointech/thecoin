@@ -7,7 +7,7 @@ import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
 import { useSidebar } from "./reducer";
-import getWindowDimensions from '../../components/WindowDimensions';
+import { useWindowDimensions } from '../../components/WindowDimensions';
 import { breakpointsValues } from '../../components/ResponsiveTool';
 
 type Props = {
@@ -31,23 +31,14 @@ export const PageSidebar: React.FC<Props> = (props) => {
     return buildMenuArray(items);
   }, [appState, generators])
 
-  let isVisible = visible ?? (menuItems && menuItems.length > 0);
-
-  const windowDimension = getWindowDimensions();
-  const breakpointTablet = breakpointsValues.tablet;
-
-  // If Small Screen / Mobile
-  if (windowDimension.width <= breakpointTablet){
-    isVisible = false;
-  }
-
+  const { width } = useWindowDimensions();
   return (
       <Sidebar
         as={Menu}
         animation="push"
         direction="left"
         vertical
-        visible={isVisible}
+        visible={isVisible(menuItems, width, visible)}
         className={styles.mainPageSidebar}
         inverted={inverted}
         width={props.width}
@@ -77,6 +68,13 @@ const getAsItem = (item: SidebarMenuItem) => {
     </React.Fragment>
   )
 }
+
+  // Display if requested, or if not Small Screen / Mobile
+const isVisible = (menuItems: unknown[], pageWidth: number, visible?: boolean): boolean =>
+  visible ?? (
+    (menuItems && menuItems.length > 0) &&
+    pageWidth > breakpointsValues.tablet
+  );
 
 const getAsHeader = (item: SidebarMenuItem) =>
   <div className={styles.headerSidebar} key={`Header${item.link.name}`}>

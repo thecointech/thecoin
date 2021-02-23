@@ -1,0 +1,36 @@
+{
+  "name": "@the-coin/site-semantic-theme",
+  "productName": "THECoin: Website - Semantic THeme",
+  "private": true,
+  "workspaces": {
+    "nohoist": [
+      "semantic-ui-less"
+    ]
+  },
+  "version": "2.0.0",
+  "description": "THECoin: Future-proof currency: Semantic theme for websites",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thecointech/thecoin.git"
+  },
+  "author": "Stephen Taylor",
+  "license": "MIT",
+  "main": "./build/semantic.css",
+  "exports": {
+    "./*" : "./src/*",
+    "./build": "./internal/buildSemantic.js",
+    "./webpack.less": "./internal/webpack.less.js",
+    "./variables.less": "./src/variables.less"
+  },
+  "scripts": {
+    "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
+    "clean": "rimraf ./build"
+  },
+  "dependencies": {
+    "fontsource-abril-fatface": "3.1.5",
+    "fontsource-montserrat": "3.1.5"
+  },
+  "devDependencies": {
+    "semantic-ui-less": "^2.4.1"
+  }
+}

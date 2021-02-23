@@ -2,8 +2,9 @@ import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
-import { PutEffect, CallEffect } from 'redux-saga/effects';
 import { Transaction } from '@the-coin/tx-blockchain';
+import { AccountDetails } from '../AccountDetails';
+import { IDX } from '@ceramicstudio/idx';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -15,7 +16,7 @@ export type AccountState = {
   name: string;
   // A normalized version of the accounts address
   address: string;
-  // Possibly encrypted raw ethers wallet
+  // Possibly encrypted raw ethers wallet or metamask account
   signer: AnySigner;
   // Contract connected to this wallet as a signer
   contract: Contract | null;
@@ -25,8 +26,16 @@ export type AccountState = {
   balance: number;
   // Transaction history
   history: Transaction[];
-  // The currency to display your account value in
-  displayCurrency: CurrencyCode;
+
+
+  // IDX vars
+  idx?: IDX;
+  // Are we saving/loading something from IDX?
+  idxIO?: boolean;
+
+  // Private details
+  details: AccountDetails;
+  // Public profile (?)
 
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
@@ -42,7 +51,10 @@ export const DefaultAccountValues = {
   lastUpdate: new Date(0),
   balance: -1,
   history: [],
-  displayCurrency: CurrencyCode.CAD
+
+  details: {
+    displayCurrency: CurrencyCode.CAD,
+  }
 };
 
 export type AccountPageProps = {
@@ -54,12 +66,16 @@ export type AccountPageProps = {
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(signer: TheSigner): Iterator<any>;
+  setSigner(signer: TheSigner): Iterator<object>;
+
+  // Save/load private details
+  loadDetails(): Iterator<object>;
+  setDetails(newDetails: AccountDetails): Iterator<object>;
 
   // Get the balance of the account in Coin
-  updateBalance(newBalance?: number): Iterator<any>;
-  updateHistory(from: Date, until: Date): Generator<CallEffect | PutEffect<{ type: any; payload: any; }>, void, Transaction[]>;
+  updateBalance(newBalance?: number): Iterator<object>;
+  updateHistory(from: Date, until: Date): Generator<object>;
 
-  decrypt(password: string, callback: DecryptCallback | undefined): Iterator<any>;
+  decrypt(password: string, callback: DecryptCallback | undefined): Iterator<object>;
 }
 

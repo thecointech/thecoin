@@ -12,7 +12,7 @@ import illustration from './images/healthier-illustration.svg';
 import illustrationLeft from './images/illust_graph_left.svg';
 import illustrationRight from './images/illust_graph_right.svg';
 
-import getWindowDimensions from '@the-coin/shared/components/WindowDimensions';
+import { useWindowDimensions } from '@the-coin/shared/components/WindowDimensions';
 
 import styles from './styles.module.less';
 
@@ -48,7 +48,7 @@ const styleRight: React.CSSProperties = {
 
 export function Healthier() {
 
-  const windowDimension = getWindowDimensions();
+  const windowDimension = useWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
 
   let cssForSeparatorRight = undefined;

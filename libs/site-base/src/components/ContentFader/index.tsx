@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Location } from 'history';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { TransitionDuration } from 'styles/constants';
+import { LessVars } from '@the-coin/site-semantic-theme/variables';
 import styles from './styles.module.less';
 
 type OwnProps = {
@@ -26,7 +26,7 @@ export class ContentFader extends React.PureComponent<Props, {}, null> {
         <CSSTransition
           key={location.key}
           classNames={classStyles}
-          timeout={TransitionDuration}
+          timeout={LessVars.pageTransitionDuration}
         >
           {this.props.children}
         </CSSTransition>

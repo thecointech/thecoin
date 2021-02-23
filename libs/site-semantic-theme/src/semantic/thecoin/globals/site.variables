@@ -1,0 +1,353 @@
+/*******************************
+     TheCoin Global Variables
+*******************************/
+
+/*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : @white;
+@maxContentWidth: 1440px;
+.smallerThanDesktop(@rules) { @media only screen and (max-width: @tabletBreakpoint) { @rules(); } }
+.biggerThanSmallComputer(@rules) { @media only screen and (min-width: @computerBreakpoint) { @rules(); } }
+
+/*-------------------
+       Fonts
+--------------------*/
+
+@fontName          : Montserrat;
+@headerFont        : 'Abril Fatface', Georgia, serif;
+@pageFont          : Montserrat, Verdana, sans-serif;
+
+@bold: 700;
+@light: 400;
+
+// Hosting our own fonts is faster and more reliable
+// See site.overrides for our new import statement
+@importGoogleFonts : false;
+
+/*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+@emSize         : 16px;
+
+/* The size of page text  */
+@fontSize       : 16px;
+
+@fontSizeVeryBig    : unit((24 / @emSize), rem);
+@fontSizeBig    : unit((20 / @emSize), rem);
+@fontSizeSmall  : unit((12 / @emSize), rem);
+
+/*-------------------
+    Border Radius
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
+@lineHeight     : 1.5;
+@lineHeightBig  : 1.6;
+@lineHeightSmall: 2;
+@headerLineHeight: 1.143;
+
+/*-------------------
+      Site Colors
+--------------------*/
+
+// Colors sourced from illustrations
+/*---  Colors  ---*/
+@red              : @theCoinPaletteRed2;
+@orange           : @theCoinPaletteGold4;
+@yellow           : @theCoinPaletteGold3;
+@olive            : @theCoinPaletteGreen4;
+@green            : @theCoinPaletteGreen1;
+@teal             : @theCoinPalettePaleGreen2;
+@blue             : @theCoinPaletteBlue1;
+@violet           : @blue; // no violet
+@purple           : @blue; // no purple
+@pink             : @red;  // no pink
+@brown            : #6F6571;
+@grey             : @theCoinPaletteGray1;
+@black            : @theCoinPaletteGreen5; // no actual blacks on our site
+
+/*---  Light Colors  ---*/
+@lightRed         : @theCoinPaletteRed1;
+@lightOrange      : @theCoinPaletteGold3;
+@lightYellow      : @theCoinPaletteGold2;
+@lightOlive       : @theCoinPaletteGreen3;
+@lightGreen       : @theCoinPrimaryGreenPale;
+@lightTeal        : @theCoinPalettePaleGreen1;
+@lightBlue        : @blue;
+@lightViolet      : @lightBlue;
+@lightPurple      : @lightBlue;
+@lightPink        : @lightRed;
+@lightBrown       : @lightYellow;
+@lightGrey        : @theCoinPaletteGray1;
+@lightBlack       : #545454;
+
+/*-------------------
+    Brand Colors
+    We use an accented analogous color
+    scheme with green as the dominant
+    color, and red as the accent
+--------------------*/
+@theCoinPalettePaleGreen1     : #8ED8D1;
+@theCoinPalettePaleGreen2     : #61C1B8;
+@theCoinPalettePaleGreen3     : #4EAEA5;
+
+@theCoinPalettePaleGreen2Faded50     : fade(@theCoinPalettePaleGreen2, 50%);
+
+@theCoinPaletteGreen1     : #95DC8F;
+@theCoinPaletteGreen2     : #60CA8E;
+@theCoinPaletteGreen3     : #20B58D;
+@theCoinPaletteGreen4     : #138175;
+@theCoinPaletteGreen5     : #2B5250;
+@theCoinPaletteGreen6     : #034B3E;
+
+@theCoinPaletteGreen2Faded     : fade(@theCoinPaletteGreen2, 30%);
+@theCoinPaletteGreen4Faded     : fade(@theCoinPaletteGreen4, 30%);
+
+@theCoinPaletteGreen4Faded15     : fade(@theCoinPaletteGreen4, 15%);
+@theCoinPaletteGreen4Faded14     : fade(@theCoinPaletteGreen4, 14%);
+@theCoinPaletteGreen4Faded10     : fade(@theCoinPaletteGreen4, 10%);
+
+@theCoinPaletteGold1     : #FDE9C2;
+@theCoinPaletteGold2     : #FECCA1;
+@theCoinPaletteGold3     : #FECCA1;
+@theCoinPaletteGold4     : #FFAB2F;
+
+@theCoinPaletteRed1     : #F99D9E;
+@theCoinPaletteRed2     : #F18182;
+@theCoinPaletteRed3     : #E4696A;
+
+@theCoinPaletteBlue1    : #65A4C5;
+
+@theCoinPaletteDarkBlue1    : #5396E5;
+@theCoinPaletteDarkBlue2    : #4174B0;
+@theCoinPaletteDarkBlue3    : #396394;
+
+@theCoinPaletteGray1     : #6F6571;
+@theCoinPaletteGray2     : #F2F2F2;
+@theCoinPaletteGray3     : #767676;
+
+@theCoinPaletteGray1Faded10     : fade(@theCoinPaletteGray1, 10%);
+
+@theCoinPaletteGreenGradient1     : linear-gradient(359.64deg, @theCoinPaletteGreen4 35.26%, @theCoinPaletteGreen3 87.06%, @theCoinPaletteGreen4 109.26%);
+@theCoinPaletteGreenGradient2     : linear-gradient(0.38deg, @theCoinPaletteGreen3 21.77%, @theCoinPaletteGreen2 63.66%, @theCoinPaletteGreen4 109.03%);
+@theCoinPaletteGreenGradient3     : linear-gradient(179.98deg, @theCoinPaletteGreen4 50.82%, @theCoinPaletteGreen5 110.16%);
+
+@theCoinPrimaryRedPale        : @theCoinPaletteRed1;
+@theCoinPrimaryRedNeutral     : @theCoinPaletteRed2;
+@theCoinPrimaryRedDark        : @theCoinPaletteRed3;
+
+@theCoinPrimaryGreenPale        : @theCoinPalettePaleGreen2;
+@theCoinPrimaryGreenNeutral     : @theCoinPaletteGreen4;
+@theCoinPrimaryGreenDark        : @theCoinPaletteGreen5;
+
+@theCoinSecondaryGreenPale        : @theCoinPalettePaleGreen1;
+@theCoinSecondaryGreenNeutral     : @theCoinPalettePaleGreen2;
+@theCoinSecondaryGreenDark        : @theCoinPalettePaleGreen3;
+
+
+@primaryColor        : @theCoinPrimaryRedPale;
+@primaryColorHover   : @theCoinPrimaryRedNeutral;
+@primaryColorActive  : @theCoinPrimaryRedDark;
+
+@secondaryColor      : @theCoinPaletteGreen4;
+
+@lightPrimaryColor   : @theCoinPaletteRed1;
+@lightSecondaryColor : @theCoinPalettePaleGreen1;
+
+@textColor           : @grey;
+@textDarkColor       : @theCoinPaletteGreen5;
+
+@primaryColor1              : @theCoinPaletteGreen4;
+@primaryColor1Hover         : @lightOlive;
+@primaryColor1Active        : @theCoinPaletteGreen5;
+@primaryColor2              : @theCoinPalettePaleGreen2;
+@primaryColor2Hover         : @theCoinPalettePaleGreen1;
+@primaryColor2Active        : @theCoinPalettePaleGreen3;
+
+// This is the most common definition in our CSS,
+// not the most common usage on our site
+@textColor                  : @theCoinPaletteGreen5;
+@textLightColor             : @grey;
+@hoveredTextColor           : @textColor;
+@selectedTextColor          : @textColor;
+@negativeTextColor          : @red;
+
+/*******************************
+             States
+*******************************/
+
+/*-------------------
+      Disabled
+--------------------*/
+
+@disabledOpacity: 0.50;
+
+/*-------------------
+    Down (:active)
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorDown        : @theCoinPaletteRed3;
+@secondaryColorDown      : @theCoinPalettePaleGreen3;
+
+@redDown                 : darken(@red, 10);
+@oliveDown               : darken(@olive, 10);
+@greenDown               : darken(@green, 10);
+@tealDown                : darken(@teal, 10);
+
+/*-------------------
+        Active
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorActive        : saturate(darken(@theCoinPaletteRed3, 5), 6, relative); //#e44f50
+@secondaryColorActive      : saturate(lighten(@secondaryColor, 5), 6, relative);
+
+@redActive                 : saturate(darken(@red, 5), 6, relative);
+@oliveActive               : saturate(darken(@olive, 5), 6, relative);
+@greenActive               : saturate(darken(@green, 5), 6, relative);
+@tealActive                : @theCoinPalettePaleGreen3;
+
+/*-------------------
+        Focus
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorFocus        : saturate(darken(@primaryColor, 8), 20, relative);
+@secondaryColorFocus      : saturate(lighten(@theCoinPalettePaleGreen2, 8), 20, relative);
+
+@redFocus                 : saturate(darken(@red, 8), 20, relative);
+@oliveFocus               : saturate(darken(@olive, 8), 20, relative);
+@greenFocus               : saturate(darken(@green, 8), 20, relative);
+@tealFocus                : saturate(darken(@teal, 8), 20, relative);
+
+/*-------------------
+        Hover
+--------------------*/
+
+/*---  Colors  ---*/
+@primaryColorHover        : saturate(lighten(@primaryColor, 5), 10, relative);
+@secondaryColorHover      : saturate(lighten(@theCoinPalettePaleGreen2, 5), 10, relative);
+
+@redHover                 : saturate(lighten(@red, 5), 6, relative);
+@oliveHover               : saturate(lighten(@olive, 5), 6, relative);
+@greenHover               : saturate(lighten(@green, 5), 6, relative);
+@tealHover                : @theCoinPalettePaleGreen1;
+
+
+/*--------------
+  Page Heading
+---------------*/
+
+@headerFontWeight : @light;
+
+@h1 : unit((72 / @emSize), rem);
+@h1Mobile : unit((56 / @emSize), rem);
+@h2 : unit((56 / @emSize), rem);
+@h2Mobile : unit((40 / @emSize), rem);
+@h3 : unit((40 / @emSize), rem);
+@h3Mobile : unit((28 / @emSize), rem);
+@h4 : unit((28 / @emSize), rem);
+@h5 : 1rem;
+
+/*-------------------
+    Borders
+--------------------*/
+
+@relativeBorderRadius: @relative10px;
+@absoluteBorderRadius: @10px;
+
+@borderColor         : @primaryColor2;
+@focusBorderColor    : @primaryColor1;
+@focusedFormBorderColor: @primaryColor1;
+@hoverBorderColor    : @primaryColor2Hover;
+
+@hoverBoxShadow      : 0px 0px 2px @primaryColor2;
+@focusBoxShadow      : 0px 0px 2px #00827E;
+//@errorBoxShadow      : none; // only shadow on focus
+
+
+/*--------------
+   Form Input
+---------------*/
+
+/* This adjusts the default form input across all elements */
+@inputVerticalPadding   : @relative15px;
+@inputHorizontalPadding : @relative15px;
+
+/* Input Text Color */
+@inputPlaceholderColor: @grey;
+@inputPlaceholderFocusColor: @primaryColor1;
+
+/* Line Height Default For Inputs in Browser */
+@inputLineHeight: 1.5;
+
+
+/*-------------------
+       Links
+--------------------*/
+
+@linkColor           : @primaryColor1;
+@linkUnderline       : none;
+@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverUnderline  : @linkUnderline;
+
+
+/*-------------------
+     Transitions
+--------------------*/
+
+@defaultDuration : 0.1s;
+@defaultEasing   : ease;
+
+/*-------------------
+     Page variables
+--------------------*/
+@pageTransitionDuration: 300;
+@SidebarWidth: 230px;
+
+/*--------------
+   Form Input
+---------------*/
+
+/* Input Text Color */
+@inputColor: @olive;
+@inputPlaceholderColor: @black;
+@inputPlaceholderFocusColor: @black;
+
+/* Line Height Default For Inputs in Browser (Descenders are 17px at 14px base em) */
+@inputLineHeight: unit((17 / 14), em);
+
+/*-------------------
+    Focused Input
+--------------------*/
+
+/* Used on inputs, textarea etc */
+@focusedFormBorderColor: @olive;
+
+/* Used on dropdowns, other larger blocks */
+@focusedFormMutedBorderColor: @olive;
+
+
+
+/*-------------------
+    Derived Values
+--------------------*/
+
+/* Positive / Negative Dupes */
+@successBackgroundColor : @positiveBackgroundColor;
+@successColor           : @positiveColor;
+@successBorderColor     : @positiveBorderColor;
+@successHeaderColor     : @positiveHeaderColor;
+@successTextColor       : @positiveTextColor;
+
+@errorBackgroundColor   : @primaryColor;
+@errorColor             : @primaryColor;
+@errorBorderColor       : @primaryColor;
+@errorHeaderColor       : @primaryColor;
+@errorTextColor         : @primaryColor;

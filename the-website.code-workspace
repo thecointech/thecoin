@@ -17,6 +17,10 @@
       "path": "libs/shared"
     },
     {
+      "name": "site-semantic-theme",
+      "path": "libs/site-semantic-theme"
+    },
+    {
       "name": "utils-ts",
       "path": "libs/utils-ts"
     }

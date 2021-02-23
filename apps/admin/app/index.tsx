@@ -2,12 +2,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import {createReducer} from './reducers';
 import { App } from './containers/App';
-import { configureAppStore } from '@the-coin/shared/configureStore';
-import history from '@the-coin/shared/utils/history';
+import { configureAppStore, history } from '@the-coin/shared/store';
+
 // Import Language Provider
-import LanguageProvider from './containers/LanguageProvider';
+import { LanguageProvider } from '@the-coin/shared/containers/LanguageProvider';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 //import './app.global.css';
@@ -17,19 +16,14 @@ import {Initialize} from './init';
 Initialize();
 
 // Import i18n messages
-//import { translationMessages } from './translations/index.js';
-const translationMessages = {
-  "en": {
-  }
-}
+import { translations } from './translations';
 
-const store = configureAppStore(createReducer, undefined, history);
-
+const store = configureAppStore(undefined);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <Provider store={store}>
-    <LanguageProvider locale="en" messages={translationMessages}>
+    <LanguageProvider languages={translations}>
       <ConnectedRouter history={history}>
         <App />
       </ConnectedRouter>
