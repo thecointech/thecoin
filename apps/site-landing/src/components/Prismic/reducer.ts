@@ -1,6 +1,6 @@
 
 import Prismic from 'prismic-javascript'
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/store/immerReducer'
 import { IActions, PrismicState, initialState } from './types'
 import { call, takeLatest } from 'redux-saga/effects'
 import { Document } from 'prismic-javascript/d.ts/documents'
