@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, DefaultAccountValues, IActions } from './types';
 import { buildSagas, bindActions } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
-import { TheCoinReducer, GetNamedReducer } from '../../utils/immerReducer';
+import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
