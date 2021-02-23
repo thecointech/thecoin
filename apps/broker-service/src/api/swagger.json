@@ -141,12 +141,7 @@
 			"additionalProperties": false
 		},
 		"BoolResponse": {
-			"properties": {
-				"success": {
-					"type": "boolean",
-					"x-nullable": true
-				}
-			},
+			"properties": {},
 			"type": "object",
 			"additionalProperties": false
 		},
@@ -418,7 +413,7 @@
 						"description": "Server Error"
 					}
 				},
-				"description": "Get subscription details.\n\nid String \nreturns SubscriptionDetails",
+				"description": "Get subscription details.\n\nid String\nreturns SubscriptionDetails",
 				"security": [],
 				"parameters": [
 					{
@@ -450,7 +445,7 @@
 						"description": "Server Error"
 					}
 				},
-				"description": "Unsubscribe an email address from our newsletter.\n\nid String \nreturns BoolResponse",
+				"description": "Unsubscribe an email address from our newsletter.\n\nid String\nreturns BoolResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -482,7 +477,7 @@
 						"description": "Server Error"
 					}
 				},
-				"description": "Confirm email subscription.\n\ndetails SubscriptionDetails \nreturns BoolResponse",
+				"description": "Confirm email subscription.\n\ndetails SubscriptionDetails\nreturns BoolResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -516,7 +511,7 @@
 						"description": "Server Error"
 					}
 				},
-				"description": "Register an email address for our newsletter.\n\nemail SubscriptionDetails  \nreturns BoolResponse",
+				"description": "Register an email address for our newsletter.\n\nemail SubscriptionDetails\nreturns BoolResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -627,7 +622,7 @@
 						"description": "Permission Denied"
 					}
 				},
-				"description": "Get the listing of available accounts\n\ntoken GoogleToken \nreturns GoogleListResult",
+				"description": "Get the listing of available accounts\n\ntoken GoogleToken\nreturns GoogleListResult",
 				"security": [],
 				"parameters": [
 					{
@@ -658,7 +653,7 @@
 						"description": "Permission Denied"
 					}
 				},
-				"description": "Store on google drive\n\naccount GoogleUploadPacket \nreturns BoolResponse",
+				"description": "Store on google drive\n\naccount GoogleUploadPacket\nreturns BoolResponse",
 				"security": [],
 				"parameters": [
 					{
@@ -686,7 +681,7 @@
 						}
 					}
 				},
-				"description": "Retrieve previously-stored file from google drive\n\ntoken GoogleToken \nreturns GoogleGetResult",
+				"description": "Retrieve previously-stored file from google drive\n\ntoken GoogleToken\nreturns GoogleGetResult",
 				"security": [],
 				"parameters": [
 					{

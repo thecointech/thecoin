@@ -1,6 +1,7 @@
 import { Controller, Body, Route, Get, Put, Response } from 'tsoa';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
-import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, BoolResponse, GoogleGetResult } from "@the-coin/types";
+import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from "@the-coin/types";
+import { BoolResponse } from '../types';
 
 
 
@@ -29,7 +30,7 @@ export class SecureController extends Controller {
     /**
      * Get the listing of available accounts
      *
-     * token GoogleToken 
+     * token GoogleToken
      * returns GoogleListResult
      **/
     @Put("google/list")
@@ -49,7 +50,7 @@ export class SecureController extends Controller {
     /**
      * Store on google drive
      *
-     * account GoogleUploadPacket 
+     * account GoogleUploadPacket
      * returns BoolResponse
      **/
     @Put("google/put")
@@ -73,7 +74,7 @@ export class SecureController extends Controller {
     /**
      * Retrieve previously-stored file from google drive
      *
-     * token GoogleToken 
+     * token GoogleToken
      * returns GoogleGetResult
      **/
     @Put("google/get")

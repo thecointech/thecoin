@@ -1,6 +1,7 @@
 import { Controller, Get, Put, Route, Query, Body, Post, Response } from 'tsoa';
 import { Signup, Confirm, Unsubscribe, Details } from '../newsletter/Newsletter'
-import { SubscriptionDetails, BoolResponse } from '@the-coin/types';
+import { SubscriptionDetails } from '@the-coin/types';
+import { BoolResponse } from '../types';
 
 @Route('newsletter')
 export class NewsletterController extends Controller {
@@ -8,7 +9,7 @@ export class NewsletterController extends Controller {
     /**
      * Get subscription details.
      *
-     * id String 
+     * id String
      * returns SubscriptionDetails
      **/
     @Get('details')
@@ -30,7 +31,7 @@ export class NewsletterController extends Controller {
     /**
      * Unsubscribe an email address from our newsletter.
      *
-     * id String 
+     * id String
      * returns BoolResponse
      **/
     @Get('unsubscribe')
@@ -40,7 +41,7 @@ export class NewsletterController extends Controller {
     async newsletterUnsubscribe(@Query() id: string) : Promise<BoolResponse> {
         try {
             const success = await Unsubscribe(id);
-            return { success } 
+            return { success }
         } catch (e) {
             console.error("Unsubscribe: " + JSON.stringify(e));
         }
@@ -50,7 +51,7 @@ export class NewsletterController extends Controller {
     /**
      * Confirm email subscription.
      *
-     * details SubscriptionDetails 
+     * details SubscriptionDetails
      * returns BoolResponse
      **/
     @Put("confirm")
@@ -66,11 +67,11 @@ export class NewsletterController extends Controller {
             throw new Error('Server Error');
         }
     }
-    
+
     /**
      * Register an email address for our newsletter.
      *
-     * email SubscriptionDetails  
+     * email SubscriptionDetails
      * returns BoolResponse
      **/
     @Post("signup")
@@ -80,7 +81,7 @@ export class NewsletterController extends Controller {
     async newsletterSignup(@Body() details: SubscriptionDetails) : Promise<BoolResponse> {
         try {
             const success = await Signup(details, true);
-            return { success } 
+            return { success }
         } catch (e) {
             console.error("Signup: " + JSON.stringify(e));
         }
