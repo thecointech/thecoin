@@ -1,12 +1,12 @@
 
 import Prismic from 'prismic-javascript'
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/utils/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/store/immerReducer'
 import { IActions, PrismicState, initialState } from './types'
 import { call, takeLatest } from 'redux-saga/effects'
 import { Document } from 'prismic-javascript/d.ts/documents'
 import { ApplicationRootState } from 'types'
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
-import { buildSaga } from '@the-coin/shared/utils/sagas'
+import { buildSaga } from '@the-coin/shared/store/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -17,8 +17,8 @@ console.log(Client);
 export class PrismicReducer extends TheCoinReducer<PrismicState>
 	implements IActions
 {
-  	
-  
+
+
   *fetchFaqs(): Generator<any> {
 
     // Only fetch FAQ's once
@@ -26,7 +26,7 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
       console.log("FAQs already fetched, nothing to do");
       return;
     }
-	
+
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
         '', //Prismic.Predicates.at('document.type', 'faq'),
@@ -64,5 +64,5 @@ export const usePrismic = () => {
   useInjectSaga({ key: DOCUMENTS_KEY, saga: rootSaga});
 }
 
-export const usePrismicActions = () => 
+export const usePrismicActions = () =>
   (bindActionCreators(actions, useDispatch()) as any) as IActions;
