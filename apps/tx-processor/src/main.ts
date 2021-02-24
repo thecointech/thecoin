@@ -1,8 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
+
 import { signIn, InitContract } from "@the-coin/tx-processing";
 import { init as LogInit, log } from "@the-coin/logging";
 import { RbcStore, RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
-import { GetWallet } from './wallet';
+import { getWallet } from '@the-coin/utilities/Wallets';
 import { initBrowser } from "@the-coin/rbcapi/action";
 import { ProcessUnsettledDeposits } from "@the-coin/tx-processing/deposit/service";
 import { processUnsettledETransfers } from "@the-coin/tx-processing/etransfer/service";
@@ -15,7 +18,7 @@ async function initialize() {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  const wallet = await GetWallet();
+  const wallet = await getWallet('BrokerCAD');
   if (!wallet) {
     throw new Error("Couldn't load wallet'");
   }

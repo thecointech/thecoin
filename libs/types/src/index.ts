@@ -81,9 +81,6 @@ export interface BrokerStatus {
   address: string;
   certifiedFee: number;
 }
-export interface BoolResponse {
-  success?: boolean;
-}
 export interface BillPayeePacket {
   payee?: string;
   accountNumber?: string;

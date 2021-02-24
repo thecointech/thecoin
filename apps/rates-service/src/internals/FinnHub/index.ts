@@ -1,6 +1,13 @@
 import { FinnhubData, FinnhubRates, hasError } from "./types";
 import Axios, { AxiosResponse } from 'axios';
-import { finnhub_key } from './secret.json';
+import { log } from '@the-coin/logging';
+import { exit } from "process";
+
+const finnhub_key = process.env.FINNHUB_API_KEY;
+if (!finnhub_key) {
+  log.fatal('Missing FINNHUB_API_KEY variable');
+  exit(1);
+}
 
 function throwError(r: AxiosResponse): never {
   throw new Error(`Fetch failed: ${r.statusText} : ${
