@@ -10,7 +10,6 @@ import iconBank from "./images/icon_bank.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
-
 import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
