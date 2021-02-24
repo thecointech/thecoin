@@ -11,7 +11,7 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { useActiveAccount } from '../../containers/AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../../containers/LanguageProvider/selector';
 
@@ -67,7 +67,7 @@ export const TransactionHistory = (props: MyProps) => {
     const transactions = account!.history;
     const transactionLoading = account?.historyLoading;
 
-    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    let filteredTx = transactions.filter((tx: { date: { toMillis: () => number; }; }) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
     let txJsxRows = txOutput.map((tx, index) => {
