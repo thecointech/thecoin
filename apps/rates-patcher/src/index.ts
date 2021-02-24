@@ -13,7 +13,7 @@ import { exit } from 'process';
 
 const finnhub_key = process.env.FINNHUB_API_KEY;
 if (!finnhub_key) {
-  log.fatal('Missing Api Key');
+  log.fatal('Missing FINNHUB_API_KEY variable');
   exit(1);
 }
 
