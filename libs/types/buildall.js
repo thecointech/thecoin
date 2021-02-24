@@ -1,16 +1,7 @@
 const { readFileSync, writeFileSync, copyFile, mkdirSync } = require('fs');
-//const swaggerToTS = require('@manifoldco/swagger-to-ts').default;
-const swaggerToTS = require('./swagger-to-ts').default;
+const swaggerToTS = require('@manifoldco/swagger-to-ts').default;
 const yaml = require('js-yaml');
 const path = require('path');
-
-console.warn(`
-!!! NOTE: !!!
- We are using a local version of swagger-to-ts, until the following issue is resolved:
- https://github.com/manifoldco/swagger-to-ts/issues/111
-
- Once fixed, remove our local build and go back to the NPM version
-`)
 
 const root = path.resolve(__dirname, "..", "..")
 const yamlPath = path.resolve(root, "apis", "broker-cad.yaml");

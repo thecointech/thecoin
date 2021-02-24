@@ -9,7 +9,6 @@ import { configureAppStore, history } from '@the-coin/shared/store';
 import { LanguageProvider } from '@the-coin/shared/containers/LanguageProvider';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-//import './app.global.css';
 import 'semantic-ui-css/semantic.min.css'
 
 import {Initialize} from './init';

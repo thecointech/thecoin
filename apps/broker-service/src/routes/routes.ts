@@ -88,7 +88,6 @@ const models: TsoaRoute.Models = {
   "BoolResponse": {
     "dataType": "refObject",
     "properties": {
-      "success": { "dataType": "boolean" },
     },
     "additionalProperties": false,
   },
