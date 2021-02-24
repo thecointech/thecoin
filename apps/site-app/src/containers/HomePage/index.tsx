@@ -15,4 +15,3 @@ export const HomePage = (routerProps:AccountPageProps) => {
     </React.Fragment>
   );
 }
-

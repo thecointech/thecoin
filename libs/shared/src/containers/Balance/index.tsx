@@ -5,7 +5,7 @@ import { toHuman } from "@the-coin/utilities";
 import { getFxRate } from "../FxRate/reducer";
 import { AccountPageProps } from "../Account/types";
 
-import { TransactionHistory } from "../TransactionHistory";
+import { TransactionList } from "../TransactionList";
 import styles from "./styles.module.less";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
@@ -44,9 +44,8 @@ export const Balance = ({ account, actions }: AccountPageProps) => {
         </p>
         <Button onClick={doUpdateBalance}>Update Balance</Button>
 
-        <TransactionHistory
+        <TransactionList
           rates={rates}
-          onRangeChange={actions.updateHistory}
         />
       </div>
     </React.Fragment>

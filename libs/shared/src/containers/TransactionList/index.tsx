@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
+import { DateRangeSelect } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
@@ -10,14 +10,12 @@ import iconBank from "./images/icon_bank.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
-
-import { useActiveAccount } from '../../containers/AccountMap';
+import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
-import { selectLocale } from '../../containers/LanguageProvider/selector';
+import { selectLocale } from '../LanguageProvider/selector';
 
 type MyProps = {
   rates: FXRate[];
-  onRangeChange: OnChangeCallback;
 }
 
 
@@ -50,7 +48,7 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 }
 
 
-export const TransactionHistory = (props: MyProps) => { 
+export const TransactionList = (props: MyProps) => { 
 
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
@@ -129,5 +127,3 @@ export const TransactionHistory = (props: MyProps) => {
       </React.Fragment>
     );
 }
-
-

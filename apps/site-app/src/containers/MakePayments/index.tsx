@@ -1,4 +1,3 @@
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
@@ -10,6 +9,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 
 
 const title = { id:"app.makepayments.title",
