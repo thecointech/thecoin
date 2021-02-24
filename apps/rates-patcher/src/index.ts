@@ -7,16 +7,26 @@ import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 // import usdcad5m from './usdcad5m.json';
 import { ExchangeRate, FXRate, CoinUpdateInterval, RateOffsetFromMarket, FinnhubData, FinnhubRates, FinnhubFxQuotes } from './types';
 import Axios from 'axios';
-import { finnhub_key } from './secret.json';
 import { log } from './logging';
 import fs from 'fs';
+import { exit } from 'process';
 
-var config = {
-  keyFilename: '/src/TheCoin/apps/rates-patcher/thecoincore-212314-6f71b16407ed.json'
-};
+const finnhub_key = process.env.FINNHUB_API_KEY;
+if (!finnhub_key) {
+  log.fatal('Missing Api Key');
+  exit(1);
+}
+
+const keyFilename = process.env.GOOGLE_COINCORE_APP_CREDENTIALS;
+if (!keyFilename) {
+  log.fatal('Missing App Credentials');
+  exit(1);
+}
 
 // Creates a client
-const datastore = new Datastore(config);
+const datastore = new Datastore({
+  keyFilename
+});
 
 
 function getCoinRate(ts: number, data1m: FinnhubData, data5m?: FinnhubData): ExchangeRate {

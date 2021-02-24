@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "yarn cross-env NODE_ENV=development && yarn build && node --inspect ./build/index.js",
-    "build": "yarn tsc tsconfig.build.json",
+    "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build"
   }
 }
