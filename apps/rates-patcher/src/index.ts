@@ -1,10 +1,10 @@
+import dotenv from 'dotenv'
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
+
 // Imports the Google Cloud client library
 import { Datastore } from '@google-cloud/datastore';
 import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 
-// import data1m from './data1m.json';
-// import data5m from './data5m.json';
-// import usdcad5m from './usdcad5m.json';
 import { ExchangeRate, FXRate, CoinUpdateInterval, RateOffsetFromMarket, FinnhubData, FinnhubRates, FinnhubFxQuotes } from './types';
 import Axios from 'axios';
 import { log } from './logging';
@@ -63,31 +63,6 @@ function getCoinRate(ts: number, data1m: FinnhubData, data5m?: FinnhubData): Exc
   log.fatal(`Could not find coin rate for: ${ts}.  \nWe have ${data1m.t.length} rates, from ${new Date(data1m.t[0] * 1000)} => ${new Date(data1m.t[cnt - 1] * 1000)}`)
   throw new Error("RateNotFound");
 }
-
-// function getFxRate(ts: number) : FXRate {
-//     const minuteBoundary = (ts - RateOffsetFromMarket) / 1000;
-//     for (var i = 0; i < 6; i++) {
-//         const periodStart = minuteBoundary - (i * 60);
-//         const idx5 = usdcad5m.t.indexOf(periodStart);
-//         if (idx5 >= 0)
-//         {
-//             return {
-//                 Rate: usdcad5m.o[idx5],
-//                 ValidFrom: ts,
-//                 ValidUntil: ts + CoinUpdateInterval
-//             }
-//         }
-//     }
-//     throw "Not Possible:  " + ts;
-// }
-
-// async function getLatest<T>(ex: string, latestTs: number) : Promise<T>
-// {
-//     const k = datastore.key([ex, latestTs]);
-//     const [resp] = await (datastore.get(k)) as T[];
-//     log.trace("Latest: " + JSON.stringify(resp))
-//     return resp;
-// }
 
 async function setRate(kind: string, rate: ExchangeRate | FXRate) {
   const k = datastore.key([kind, rate.ValidUntil]);
@@ -161,12 +136,6 @@ async function update(count: number) : Promise<boolean> {
   const new5m = await fetchNewCoinRates("5", fetchTimestamp, now);
   const newFxRate = await fetchNewFxRates();
 
-  //const latestCoin = await getLatest<ExchangeRate>("0", latestTs);
-  //const latestCad = await getLatest<FXRate>("124", latestTs);
-
-  //const latestBuy = latestCoin.Buy * latestCad.Rate;
-  //const latestSell = latestCoin.Sell * latestCad.Rate;
-
   let validUntil = latestTs;
   while (validUntil < now) {
     const coinRate = getCoinRate(validUntil, new1m, new5m);
@@ -177,17 +146,6 @@ async function update(count: number) : Promise<boolean> {
 
     log.trace(`New CAD buy rate: ${buy}`);
     log.trace(`New CAD sell rate: ${sell}`);
-
-    // We modify the coin rate to always be the best version
-    // compared to the old buy/sell
-    // if (latestBuy > buy)
-    // {
-    //     coinRate.Buy = latestBuy / fxRate;
-    // }
-    // if (latestSell < sell)
-    // {
-    //     coinRate.Sell = latestSell / fxRate;
-    // }
 
     validUntil = validUntil + CoinUpdateInterval
     const nextOpen = await NextOpenTimestamp(new Date(validUntil), 90 * 1000)
