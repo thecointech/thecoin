@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
@@ -18,10 +18,9 @@ import { useFxRates } from '@the-coin/shared/containers/FxRate';
 const description = { id:"app.accounts.billPayments.description",
                 defaultMessage:"You can pay your bills directly from The Coin. Select payee:",
                 description:"Description for the make a payment page / bill payment tab" };
-/* This class will need to be changed in order to use that translation
-const payee = { id:"app.accounts.billPayments.form.payee",
+const payeeTxt = { id:"app.accounts.billPayments.form.payee",
                 defaultMessage:"Select Payee",
-                description:"Label for the form the make a payment page / bill payment tab" };*/
+                description:"Label for the form the make a payment page / bill payment tab" };
 const accountNumer = { id:"app.accounts.billPayments.form.accNumber",
                 defaultMessage:"Payee Account Number",
                 description:"Label for the form the make a payment page / bill payment tab" }; 
@@ -40,10 +39,14 @@ const step3= { id:"app.accounts.billPayments.step3",
 const transferOutProgress = { id:"app.accounts.billPayments.transferOutProgress",
                 defaultMessage:"Please wait, we are sending your order to our servers..." };
 
+const payeeAccount = { id:"app.accounts.billPayments.form.payeeAccount",
+                defaultMessage:"Payee account number",
+                description:"Label for the form the make a payment page / bill payment tab" };
+                
 
 
 export const BillPayments = () => { 
-  
+  const intl = useIntl();
   const [coinToSell, setCoinToSell] = useState(null as number | null);
   const [payee, setPayee] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
@@ -218,7 +221,7 @@ export const BillPayments = () => {
             </Header>
             <FilterPayee />
             <Dropdown
-                placeholder="Select Payee"
+                placeholder={intl.formatMessage(payeeTxt)}
                 fluid
                 search
                 selection
@@ -232,7 +235,7 @@ export const BillPayments = () => {
                 isValid={isValid}
                 forceValidate={forceValidate}
                 message={validationMessage}
-                placeholder="Payee account number"
+                placeholder={intl.formatMessage(payeeAccount)}
             />
             {/*<Form.Input label="Bill Name" onChange={onNameChange} placeholder="An optional name to remember this payee by" /> */}
             <DualFxInput
