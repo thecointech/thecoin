@@ -8,8 +8,9 @@
     "@the-coin/utilities": "*"
   },
   "scripts": {
-    "dev": "yarn cross-env NODE_ENV=development && yarn build && node --inspect ./build/index.js",
-    "build": "yarn tsc tsconfig.build.json",
+    "dev": "cross-env NODE_ENV=development && yarn build && yarn start",
+    "start": "node -r dotenv/config ./build/index.js",
+    "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build"
   }
 }
