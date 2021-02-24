@@ -11,9 +11,9 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
-import { useActiveAccount } from '../../containers/AccountMap';
+import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
-import { selectLocale } from '../../containers/LanguageProvider/selector';
+import { selectLocale } from '../LanguageProvider/selector';
 
 type MyProps = {
   rates: FXRate[];
@@ -50,7 +50,7 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 }
 
 
-export const TransactionHistory = (props: MyProps) => { 
+export const TransactionList = (props: MyProps) => { 
 
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
