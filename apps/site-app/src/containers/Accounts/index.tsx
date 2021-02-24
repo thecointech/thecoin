@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Account, RouterPath } from '@the-coin/shared/containers/Account';
+import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
@@ -11,20 +12,20 @@ const AccountRoutes: RouterPath[] = [
   {
     name: 'Home',
     urlFragment: '/',
-    creator: () => (() => <HomePage />),
+    creator: (routerProps: AccountPageProps) => ((props) => <HomePage {...props} {...routerProps} />),
     exact: true,
     icon: "home",
   },
   {
     name: 'Top up balance',
     urlFragment: 'transferIn',
-    creator: () => (() => <Topup />),
+    creator: (routerProps: AccountPageProps) => ((props) => <Topup {...props} {...routerProps} />),
     icon: "arrow circle up",
   },
   {
     name: 'Make payments',
     urlFragment: 'makepayments',
-    creator: () => (() => <MakePayments />),
+    creator: (routerProps: AccountPageProps) => (() => <MakePayments {...routerProps} />),
     icon: "arrow circle right",
   },
   {

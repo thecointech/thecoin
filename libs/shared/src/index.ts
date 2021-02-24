@@ -10,5 +10,5 @@ export { Login } from './containers/Login';
 export { ModalOperation } from './containers/ModalOperation';
 export { NotFoundPage } from './containers/NotFoundPage';
 export { PageSidebar } from './containers/PageSidebar';
-export { TransactionList } from './containers/TransactionList';
+export { TransactionHistory } from './containers/TransactionHistory';
 export { UploadWallet } from './containers/UploadWallet';

@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { selectLocale } from 'containers/LanguageProvider/selector';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { DateRangeSelect } from '../../components/DateRangeSelect';
+import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
@@ -13,13 +11,22 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
-import { useActiveAccount } from '../AccountMap';
+import { useActiveAccount } from '../../containers/AccountMap';
+import { useSelector } from 'react-redux';
+import { selectLocale } from '../../containers/LanguageProvider/selector';
 
-export const buildPagination = (transactions: Transaction[], maxRowCount: number, currentPage: number):[Transaction[], any] =>{
+type MyProps = {
+  rates: FXRate[];
+  onRangeChange: OnChangeCallback;
+}
+
+
+function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
+{
   const pageCount = Math.ceil(transactions.length / maxRowCount);
   currentPage = Math.min(currentPage, pageCount - 1);
   if (pageCount > 1) {
-    // console.error('WARNING: Not Tested');
+    console.error('WARNING: Not Tested');
     const startRow = currentPage * maxRowCount;
     transactions = transactions.slice(startRow, startRow + maxRowCount);
 
@@ -43,7 +50,7 @@ export const buildPagination = (transactions: Transaction[], maxRowCount: number
 }
 
 
-export const TransactionList = (props: {rates: FXRate[] }) => { 
+export const TransactionHistory = (props: MyProps) => { 
 
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
@@ -122,5 +129,3 @@ export const TransactionList = (props: {rates: FXRate[] }) => {
       </React.Fragment>
     );
 }
-
-

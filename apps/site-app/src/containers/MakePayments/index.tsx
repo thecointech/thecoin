@@ -9,6 +9,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
 
 
 const title = { id:"app.makepayments.title",
@@ -30,7 +31,7 @@ const templates = { id:"app.makepayments.tabs.templates",
                 defaultMessage:"Templates",
                 description:"Title for the tabs the Make a payment page in the app" };
 
-export const MakePayments = () => {
+export const MakePayments = (routerProps:AccountPageProps) => {
   const intl = useIntl();
   const account = useActiveAccount();
   const panes = [
@@ -58,7 +59,7 @@ export const MakePayments = () => {
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions />
+        <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
   );
