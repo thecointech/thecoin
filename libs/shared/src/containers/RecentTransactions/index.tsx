@@ -25,7 +25,6 @@ export const RecentTransactions = ({ actions }: AccountPageProps) => {
 
         <TransactionList
           rates={rates}
-          onRangeChange={actions.updateHistory}
         />
       </div>
     </React.Fragment>

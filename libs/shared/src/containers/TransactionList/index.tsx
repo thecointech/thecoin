@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
 import { toHuman } from '@the-coin/utilities/Conversion'
 import { FXRate } from '@the-coin/pricing';
-import { DateRangeSelect, OnChangeCallback } from '../../components/DateRangeSelect';
+import { DateRangeSelect } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
@@ -17,7 +17,6 @@ import { selectLocale } from '../LanguageProvider/selector';
 
 type MyProps = {
   rates: FXRate[];
-  onRangeChange: OnChangeCallback;
 }
 
 
