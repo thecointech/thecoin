@@ -11,7 +11,7 @@ import styles from './styles.module.less';
 import { Transaction } from '@the-coin/tx-blockchain';
 import { useState } from 'react';
 
-import { useActiveAccount } from '../../containers/AccountMap';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../../containers/LanguageProvider/selector';
 

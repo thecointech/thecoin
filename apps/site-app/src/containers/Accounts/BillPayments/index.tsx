@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
@@ -12,7 +12,6 @@ import { UxInput } from '@the-coin/shared/components/UxInput';
 import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
 import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
-import { useState } from 'react';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import { useFxRates } from '@the-coin/shared/containers/FxRate';
 
