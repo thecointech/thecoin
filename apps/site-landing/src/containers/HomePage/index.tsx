@@ -18,7 +18,7 @@ import { CreateAccountSmall } from './createAccountSmall';
 import { Underwater } from './underwater/UnderwaterGreaterThanMobile';
 import { UnderwaterMobile } from './underwater/UnderwaterMobile';
 import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/shared/components/ResponsiveTool';
-import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
+import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 
 export const HomePage = () => {
 

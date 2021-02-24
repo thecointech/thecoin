@@ -1,7 +1,8 @@
 import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
 import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
-import { BoolResponse, NewAccountReferal } from '@the-coin/types';
+import { NewAccountReferal } from '@the-coin/types';
 import { Timestamp } from '@the-coin/utilities/firestore';
+import { BoolResponse } from '../types';
 
 @Route('referrers')
 export class ReferrersController extends Controller {

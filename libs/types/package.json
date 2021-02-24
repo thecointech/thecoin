@@ -15,6 +15,7 @@
   },
 
   "scripts": {
+    "clean": "rimraf ./build",
     "build": "node buildall.js",
     "postinstall": "node ./postinstallcwd.js",
     "postinstallcwd": "yarn build"
@@ -30,7 +31,7 @@
   },
 
   "devDependencies": {
-    "@manifoldco/swagger-to-ts": "^1.1.1",
+    "@manifoldco/swagger-to-ts": "^1.6.1",
     "js-yaml": "^3.13.0"
   }
 }
