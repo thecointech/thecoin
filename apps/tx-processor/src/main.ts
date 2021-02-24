@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
+
 import { signIn, InitContract } from "@the-coin/tx-processing";
 import { init as LogInit, log } from "@the-coin/logging";
 import { RbcStore, RbcApi } from "@the-coin/rbcapi";
