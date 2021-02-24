@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
@@ -47,6 +47,10 @@ const payeeAccount = { id:"app.accounts.billPayments.form.payeeAccount",
 
 export const BillPayments = () => { 
   const intl = useIntl();
+  const account = useActiveAccount();
+  const { rates } = useFxRates();
+  const rate = weBuyAt(rates);
+
   const [coinToSell, setCoinToSell] = useState(null as number | null);
   const [payee, setPayee] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
@@ -61,7 +65,9 @@ export const BillPayments = () => {
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
   
-  function resetState(){
+
+  const resetState = useCallback(
+    () => {
       setCoinToSell(null);
       setPayee("");
       setAccountNumber("");
@@ -73,7 +79,9 @@ export const BillPayments = () => {
       setTransferValues(undefined);
       setPercentComplete(0);
       setDoCancel(false);
-  }
+    },
+    [],
+  );
   
   function onValueChange(value: number) {
       setCoinToSell(value);  
@@ -205,9 +213,6 @@ export const BillPayments = () => {
       resetState();
     }
 
-    const account = useActiveAccount();
-    const { rates } = useFxRates();
-    const rate = weBuyAt(rates);
 
     const isValid = !validationMessage;
     const canSubmit = isValid && coinToSell;
