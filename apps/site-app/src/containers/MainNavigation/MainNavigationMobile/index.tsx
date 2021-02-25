@@ -42,12 +42,12 @@ export const MainNavigationMobile = () => {
                   </Menu.Item>
                   <Menu.Item>
                     <Icon name="content" onClick={()=>setModalVisible(true)} />
-                      <ModalOperation isOpen={modalVisible} closeIcon={true} progressPercent={1}>
+                      <ModalOperation isOpen={modalVisible} progressPercent={1}>
                         <Menu vertical id={styles.userMenu}>
                             <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
                               <Icon name="home" size={"huge"}/><FormattedMessage {...home} />
                             </Menu.Item>
-                            <Menu.Item as={ NavLink } to='/transfertin' onClick={()=>setModalVisible(false)}>
+                            <Menu.Item as={ NavLink } to='/transferIn' onClick={()=>setModalVisible(false)}>
                               <Icon name="home" size={"huge"} /><FormattedMessage {...transferin} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/makepayments' onClick={()=>setModalVisible(false)}>
