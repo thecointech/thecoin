@@ -1,6 +1,8 @@
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts/cryptography/ECDSA.sol";
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+import "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol";
 //import "./Seriality/Seriality.sol";
 
 contract LibCertTransfer {
@@ -105,8 +107,8 @@ contract LibCertTransfer {
 	{
 		// This recreates the message that was signed on the client.
     	bytes32 message = buildMessage(from, to, value, fee, timestamp);
-		bytes32 signedMessage = ECDSA.toEthSignedMessageHash(message);
-		return ECDSA.recover(signedMessage, signature);
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
+		return ECDSAUpgradeable.recover(signedMessage, signature);
 
 		// bytes memory message = buildMessage(from, to, value, fee, timestamp);
 		// address signer = recover(message, signature);

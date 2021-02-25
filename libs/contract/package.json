@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "run-s build:contracts build:copy build:src",
-    "build:contracts": "truffle compile --contracts_build_directory=./src/deployed",
+    "build:contracts": "truffle compile",
     "build:copy": "cpx \"zos.*\" ./src/deployed/",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./src/deployed",
@@ -26,9 +26,7 @@
     "zospush": "yarn run zossession && zos push",
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
-    "console": "truffle console",
-    "postinstall.fixme": "node ./postinstallcwd.js",
-    "postinstallcwd": "yarn build"
+    "console": "truffle console"
   },
   "files": [
     "build/**/*"
@@ -39,10 +37,10 @@
     "./": "./build/"
   },
   "devDependencies": {
-    "@openzeppelin/cli": "^2.8.2",
-    "@openzeppelin/contracts": "^3.1.0",
-    "@openzeppelin/upgrades": "^2.8.0",
-    "truffle": "^5.1.12",
+    "@openzeppelin/truffle-upgrades": "^1.5.0",
+    "@openzeppelin/contracts-upgradeable": "^3.4.0",
+    "@openzeppelin/test-helpers": "^0.5.10",
+    "truffle": "^5.1.67",
     "ethers": "^4.0.46",
     "jest": "*"
   }
