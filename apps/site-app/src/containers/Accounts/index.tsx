@@ -25,7 +25,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: 'Make payments',
     urlFragment: 'makepayments',
-    creator: (routerProps: AccountPageProps) => ((props) => <MakePayments {...props} {...routerProps} />),
+    creator: (routerProps: AccountPageProps) => (() => <MakePayments {...routerProps} />),
     icon: "arrow circle right",
   },
   {

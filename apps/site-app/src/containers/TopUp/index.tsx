@@ -49,9 +49,8 @@ export const Topup = (routerProps:AccountPageProps) => {
       </Grid>
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...activeAccount} {...routerProps} />
+        <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
   );
 }
-
