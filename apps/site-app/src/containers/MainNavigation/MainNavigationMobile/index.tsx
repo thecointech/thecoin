@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Container, Dropdown } from 'semantic-ui-react';
+import { Menu, Container, Dropdown, Icon, Divider } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
@@ -10,15 +10,15 @@ import { NavLink } from 'react-router-dom';
 const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
-const indepth = { id:"app.MainNavigation.indepth",
-                  defaultMessage:"In-depth",
-                  description:"Title for the In-depth entry in the menu"};
-const wedomore = {  id:"app.MainNavigation.wedomore",
-                    defaultMessage:"We do more",
-                    description:"Title for the We do more entry in the menu"};
-const yourbenefits = {  id:"app.MainNavigation.yourbenefits",
-                    defaultMessage:"Your benefits",
-                    description:"Title for the Your benefits entry in the menu"};
+const transferin = { id:"app.MainNavigation.transferin",
+                  defaultMessage:"Top up balance",
+                  description:"Title for the Top up balance entry in the menu"};
+const makepayments = {  id:"app.MainNavigation.makepayments",
+                    defaultMessage:"Make payments",
+                    description:"Title for the Make payments entry in the menu"};
+const settings = {  id:"app.MainNavigation.settings",
+                    defaultMessage:"Settings",
+                    description:"Title for the Settings entry in the menu"};
 
 export class MainNavigationMobile extends React.Component {
   render() {
@@ -39,19 +39,22 @@ export class MainNavigationMobile extends React.Component {
                     <LanguageSwitcher />
                   </Menu.Item>
                   <Menu.Item>
-                  <Dropdown icon='content' className='icon'>
+                  <Dropdown icon='content' className='icon' id={styles.userMenu}>
                     <Dropdown.Menu>
                       <Dropdown.Item as={ NavLink } to='/'>
-                        <FormattedMessage {...home} />
+                        <Icon name="home" /><FormattedMessage {...home} />
                       </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/healthier'>
-                        <FormattedMessage {...indepth} />
+                      <Divider></Divider>
+                      <Dropdown.Item as={ NavLink } to='/transfertin'>
+                        <Icon name="home" /><FormattedMessage {...transferin} />
                       </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/wedomore'>
-                        <FormattedMessage {...wedomore} />
+                      <Divider></Divider>
+                      <Dropdown.Item as={ NavLink } to='/makepayments'>
+                        <Icon name="home" /><FormattedMessage {...makepayments} />
                       </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/compare'>
-                        <FormattedMessage {...yourbenefits} />
+                      <Divider></Divider>
+                      <Dropdown.Item as={ NavLink } to='/settings'>
+                        <Icon name="home" /><FormattedMessage {...settings} />
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

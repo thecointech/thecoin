@@ -1,4 +1,6 @@
-.mainMenu{
+@import "~@the-coin/site-semantic-theme/variables.less";
+
+.mainMenuContainer{
     width: auto;
     display: inline-block;
     height: 60px;
@@ -8,4 +10,29 @@
     #logo{
         width: 40px;
     }
+}
+
+#mainMenuContainer #userMenu{
+    background-color: blue !important;
+    & > div{
+        width: 330px;
+        border: 1px solid #61C1B8;
+        border-radius: 20px;
+        box-shadow: none;
+        a{
+            border: none;
+            height: 65px;
+            line-height: 40px;
+            
+        }
+        a:hover{
+            background-color: transparent;
+        }
+        div{
+            border-bottom: 1px solid @theCoinPaletteGreen4Faded;
+            width: 85%;
+            margin: auto;
+        }
+    }
+
 }
