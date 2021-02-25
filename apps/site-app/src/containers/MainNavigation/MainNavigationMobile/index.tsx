@@ -1,11 +1,12 @@
-import React from 'react';
-import { Menu, Container, Dropdown, Icon, Divider } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Menu, Container, Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 
 const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
@@ -20,8 +21,9 @@ const settings = {  id:"app.MainNavigation.settings",
                     defaultMessage:"Settings",
                     description:"Title for the Settings entry in the menu"};
 
-export class MainNavigationMobile extends React.Component {
-  render() {
+export const MainNavigationMobile = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+    
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
@@ -39,30 +41,27 @@ export class MainNavigationMobile extends React.Component {
                     <LanguageSwitcher />
                   </Menu.Item>
                   <Menu.Item>
-                  <Dropdown icon='content' className='icon' id={styles.userMenu}>
-                    <Dropdown.Menu>
-                      <Dropdown.Item as={ NavLink } to='/'>
-                        <Icon name="home" /><FormattedMessage {...home} />
-                      </Dropdown.Item>
-                      <Divider></Divider>
-                      <Dropdown.Item as={ NavLink } to='/transfertin'>
-                        <Icon name="home" /><FormattedMessage {...transferin} />
-                      </Dropdown.Item>
-                      <Divider></Divider>
-                      <Dropdown.Item as={ NavLink } to='/makepayments'>
-                        <Icon name="home" /><FormattedMessage {...makepayments} />
-                      </Dropdown.Item>
-                      <Divider></Divider>
-                      <Dropdown.Item as={ NavLink } to='/settings'>
-                        <Icon name="home" /><FormattedMessage {...settings} />
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                    <Icon name="content" onClick={()=>setModalVisible(true)} />
+                      <ModalOperation isOpen={modalVisible} closeIcon={true} progressPercent={1}>
+                        <Menu vertical id={styles.userMenu}>
+                            <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"}/><FormattedMessage {...home} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/transfertin' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...transferin} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/makepayments' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...makepayments} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/settings' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...settings} />
+                            </Menu.Item>
+                        </Menu>
+                      </ModalOperation>
                   </Menu.Item>
                 </Menu.Menu>
               </Menu>
             </div>
       </Container>
     );
-  }
 }

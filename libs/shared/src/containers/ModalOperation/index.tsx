@@ -4,10 +4,11 @@ import { MessageDescriptor, FormattedMessage } from 'react-intl';
 
 interface OwnProps {
   isOpen: boolean;
-  header: MessageDescriptor;
+  header?: MessageDescriptor;
   progressPercent?: number;
   progressMessage?: MessageDescriptor;
   messageValues?: any;
+  closeIcon?: boolean;
   cancelCallback?: () => void;
   okCallback?: () => void;
 }
@@ -75,12 +76,13 @@ export class ModalOperation extends React.PureComponent<Props, {}, null> {
   );
 
   render() {
-    const { isOpen, header, progressPercent } = this.props;
+    const { isOpen, header, closeIcon, progressPercent } = this.props;
+    const headerContent = header ? <Modal.Header><FormattedMessage {...header} /></Modal.Header> : "";
+    const closeContent = closeIcon ? <Icon name="close" size="large" /> : "";
     return (
       <Modal open={isOpen} basic size="small">
-        <Modal.Header>
-          <FormattedMessage {...header} />
-        </Modal.Header>
+        {closeContent}
+        {headerContent}
         <Modal.Content>{this.renderContent(progressPercent)}</Modal.Content>
         {this.renderButtons()}
       </Modal>
