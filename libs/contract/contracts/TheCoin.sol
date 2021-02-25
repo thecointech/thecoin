@@ -1,4 +1,4 @@
-/// @title TheCoin: Future-proof currency
+/// @title THE:Coin: Future-proof currency
 /// @author Stephen Taylor
 /// @notice TheCoin is a stablecoin, backed by the S&P500 and designed as a day-to-day currency.
 /// @dev Explain to a developer any extra details
@@ -7,14 +7,10 @@
 
 pragma solidity ^0.6.0;
 
-import "./LibCertTransfer.sol";
-
+import "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-
-// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 
 
 // ----------------------------------------------------------------------------
@@ -36,7 +32,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is ERC20Upgradeable, LibCertTransfer {
+contract TheCoin is ERC20Upgradeable {
 
     // An account may be subject to a timeout, during which
     // period it is forbidden from transferring its value
@@ -159,6 +155,22 @@ contract TheCoin is ERC20Upgradeable, LibCertTransfer {
         lastTxTimestamp[from] = timestamp;
     }
 
+	function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp)
+	public pure returns (bytes32)
+	{
+		bytes memory packed = abi.encodePacked(from, to, value, fee, timestamp);
+		return keccak256(packed);
+	}
+
+	function recoverSigner(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
+	public pure returns (address)
+	{
+		// This recreates the message that was signed on the client.
+    	bytes32 message = buildMessage(from, to, value, fee, timestamp);
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
+		return ECDSAUpgradeable.recover(signedMessage, signature);
+	}
+
     // ------------------------------------------------------------------------
     // Client interactions with TheCoin
     // ------------------------------------------------------------------------
@@ -167,7 +179,6 @@ contract TheCoin is ERC20Upgradeable, LibCertTransfer {
     // a transfer with a precise timestamp to ensure we can reconstruct the fx price
     // of this transaction later.
     // NOTE: timestamp is in seconds
-    // TODO: Convert timestamp to ms for consistency before mainnet publish
     function coinPurchase(address purchaser, uint amount, uint /*timeout*/, uint timestamp) public
     {
         _transfer(msg.sender, purchaser, amount);
