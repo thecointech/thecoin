@@ -1,27 +1,29 @@
-import React from 'react';
-import { Menu, Container, Dropdown } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Menu, Container, Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
+import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 
 const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
-const indepth = { id:"app.MainNavigation.indepth",
-                  defaultMessage:"In-depth",
-                  description:"Title for the In-depth entry in the menu"};
-const wedomore = {  id:"app.MainNavigation.wedomore",
-                    defaultMessage:"We do more",
-                    description:"Title for the We do more entry in the menu"};
-const yourbenefits = {  id:"app.MainNavigation.yourbenefits",
-                    defaultMessage:"Your benefits",
-                    description:"Title for the Your benefits entry in the menu"};
+const transferin = { id:"app.MainNavigation.transferin",
+                  defaultMessage:"Top up balance",
+                  description:"Title for the Top up balance entry in the menu"};
+const makepayments = {  id:"app.MainNavigation.makepayments",
+                    defaultMessage:"Make payments",
+                    description:"Title for the Make payments entry in the menu"};
+const settings = {  id:"app.MainNavigation.settings",
+                    defaultMessage:"Settings",
+                    description:"Title for the Settings entry in the menu"};
 
-export class MainNavigationMobile extends React.Component {
-  render() {
+export const MainNavigationMobile = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+    
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
@@ -39,27 +41,27 @@ export class MainNavigationMobile extends React.Component {
                     <LanguageSwitcher />
                   </Menu.Item>
                   <Menu.Item>
-                  <Dropdown icon='content' className='icon'>
-                    <Dropdown.Menu>
-                      <Dropdown.Item as={ NavLink } to='/'>
-                        <FormattedMessage {...home} />
-                      </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/healthier'>
-                        <FormattedMessage {...indepth} />
-                      </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/wedomore'>
-                        <FormattedMessage {...wedomore} />
-                      </Dropdown.Item>
-                      <Dropdown.Item as={ NavLink } to='/compare'>
-                        <FormattedMessage {...yourbenefits} />
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                    <Icon name="content" onClick={()=>setModalVisible(true)} />
+                      <ModalOperation isOpen={modalVisible}>
+                        <Menu vertical id={styles.userMenu}>
+                            <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"}/><FormattedMessage {...home} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/transferIn' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...transferin} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/makepayments' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...makepayments} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/settings' onClick={()=>setModalVisible(false)}>
+                              <Icon name="home" size={"huge"} /><FormattedMessage {...settings} />
+                            </Menu.Item>
+                        </Menu>
+                      </ModalOperation>
                   </Menu.Item>
                 </Menu.Menu>
               </Menu>
             </div>
       </Container>
     );
-  }
 }
