@@ -25,6 +25,7 @@
   "dependencies": {
     "@the-coin/utilities": "*",
     "@the-coin/rbcapi": "*",
+    "@the-coin/shared": "*",
     "@the-coin/tx-firestore": "*",
     "@the-coin/tx-gmail": "*",
     "@the-coin/tx-blockchain": "*"
