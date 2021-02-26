@@ -14,9 +14,7 @@ const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
 
-export class MainNavigationGreaterThanMobile extends React.Component {
-
-  render() {
+  export const MainNavigationGreaterThanMobile = () => {
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
@@ -43,5 +41,4 @@ export class MainNavigationGreaterThanMobile extends React.Component {
           </div>
       </Container>
     );
-  }
 }
