@@ -55,7 +55,7 @@ export class ModalOperation extends React.PureComponent<Props, {}, null> {
     );
   }
 
-  renderContent = (progressPercent?: number) => (!progressPercent || progressPercent < 1 ? <Loader>{this.renderMessage()}</Loader> : this.renderMessage());
+  renderContent = (progressPercent?: number) => (progressPercent || (progressPercent! < 1) ? <Loader>{this.renderMessage()}</Loader> : this.renderMessage());
 
   renderProgress = () => (
     <h3>
