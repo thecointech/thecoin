@@ -1,8 +1,6 @@
-//import {IsDebug} from '@the-coin/utilities/IsDebug'
-
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
-import * as firebase from "firebase/app";
+import firebase from 'firebase/app';
 
 // Add the Firebase services that you want to use
 import "firebase/auth";
@@ -10,7 +8,6 @@ import "firebase/firestore";
 import { SetFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import firebaseConfig from "./password.config.json";
-// Your web app's Firebase configuration
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
