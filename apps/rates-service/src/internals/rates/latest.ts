@@ -109,5 +109,5 @@ function checkValidity(key: RateKey, newRate: RateType)
 // This should only get called one time, on system initialization
 export const initLatest = async () => {
   latest.Coin = (await getLatestStored("Coin") ?? latest.Coin) as CoinRate;
-  latest.FxRates = (await getLatestStored("Coin") ?? latest.FxRates) as FxRates;
+  latest.FxRates = (await getLatestStored("FxRates") ?? latest.FxRates) as FxRates;
 }

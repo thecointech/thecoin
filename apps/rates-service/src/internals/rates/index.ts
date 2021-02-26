@@ -4,6 +4,7 @@ import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
 import { validFor } from "@the-coin/utilities/FxRates";
 import { getRate } from "./db";
 import { update } from "./UpdateDb";
+import { log } from "@the-coin/logging";
 export { updateRates } from './UpdateDb'
 
 //
@@ -117,7 +118,7 @@ async function maybeInsert(ts: number, lastExpired: number, rates: CombinedRates
       }
     }
     catch (e) {
-      console.exception("Error fetching {Timestamp}", ts, e);
+      log.error(e, "Error fetching {Timestamp}", ts);
     }
   }
   return lastExpired;

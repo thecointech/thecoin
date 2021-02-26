@@ -1,13 +1,9 @@
 import express from 'express';
 import { RegisterRoutes } from './routes/routes';
-//import createMiddleware from 'swagger-express-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
-import './setupLuxon';
 import { ServicePorts } from '@the-coin/utilities/ServiceAddresses';
-import { init as loginit } from '@the-coin/logging';
-import { init as dbinit } from '@the-coin/utilities/firestore';
-import { initLatest } from './internals/rates/latest';
+import { init } from './init';
 
 const app = express();
 const port = process.env.PORT ?? ServicePorts.THE_CORE;
@@ -15,11 +11,7 @@ const port = process.env.PORT ?? ServicePorts.THE_CORE;
 RegisterRoutes(app);
 
 (async () => {
-  const l = loginit
-  console.log(l);
-  loginit('rates-service');
-  await dbinit({project: "broker-cad"});
-  await initLatest();
+  await init();
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
