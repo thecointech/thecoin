@@ -26,7 +26,7 @@ it('can insert rates', async function () {
     )
 });
 
-describe("DB Tests to run on emulator", () => {
+describe("emulator-only tests", () => {
 
   beforeEach(async () => {
     jest.setTimeout(10000);
@@ -36,7 +36,7 @@ describe("DB Tests to run on emulator", () => {
 
     // Insert 5 rates, out of order
     var rates = [1000, 9000, 3000, 2000, 6000, 5000].map(buildRate)
-    await init({});
+    await init({ project: "rates-service-test" });
     await Promise.all(rates.map(r => setRate("Coin", r)));
 
     var latest = await getCoinRate(9999);

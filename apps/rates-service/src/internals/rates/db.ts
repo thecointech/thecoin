@@ -1,16 +1,15 @@
 import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
 import { RateKey, RateType } from "./types";
 import { IsDebug } from "@the-coin/utilities/IsDebug";
-
+import { log } from "@the-coin/logging";
 // Our data is stored in native Timestamp
-// for easy human-comprehension
+// for easy human-comprehension reading the DB through webUI
 import { DocumentData } from '@the-coin/types';
 
 //
-//  All functions connecting to the DB occur in this file
+// All functions connecting to the DB occur in this file
 // Nobody outside this file should be aware of our storage
 //
-
 
 type DbType = Omit<Omit<RateType, "validFrom">, "validTill"> & {
   validFrom: Timestamp,
@@ -77,8 +76,7 @@ export const getFxRates = (ts: number) => getRate("FxRates", ts);
 // Set the new rate. Does no validity checking
 //
 export function setRate(key: RateKey, rate: RateType) {
-  console.log("Setting {FxKey} rate with validity {ValidTill}",
-    key, rate.validFrom);
+  log.trace({ FxKey: key, ValidTill: rate.validTill }, "Setting {FxKey} rate with validity {ValidTill}");
   const doc = getRateDoc(key, rate.validFrom);
   const data = toDbType(rate);
   return doc.set(data, {merge: false});

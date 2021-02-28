@@ -3,11 +3,11 @@ import { setRate, cleanDb } from "./db";
 import { CoinRate, FxRates } from "./types";
 import { init, describe } from "@the-coin/utilities/firestore/jestutils";
 
-describe('we connect', () => {
+describe('emulator-only tests', () => {
 
-  it('should initialize correctly', async () => {
+  it('can find latest rates on initialization', async () => {
 
-    await init("broker-cad-init");
+    await init("rates-service-test");
     await cleanDb();
 
     // Insert 5 rates, out of order

@@ -47,7 +47,7 @@ export async function SeedWithRandomRates(from: DateTime, validityInterval: Dura
 const RandomFxRates = () => Object.fromEntries(
   Object
     .keys(CurrencyCode)
-    .filter(k => !isNaN(+k))
+    .filter(k => /^\d+$/.test(k))
     .filter(k => k !== '0')
     .map(key => [key, RandomFxRate()])
 );
