@@ -10,7 +10,7 @@ export async function init() {
   // Logging (todo: connect to logs aggregator)
   initlog('rates-service');
   // connect to DB
-  await initdb({project: "broker-cad"});
+  await initdb({project: "rates-service"});
 
   // Assume development is dev:live
   if (process.env.NODE_ENV === 'development') {

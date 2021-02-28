@@ -46,6 +46,7 @@
   "dependencies": {
     "@the-coin/utilities": "*",
     "@the-coin/logging": "*",
+    "luxon": "*",
     "axios": "*",
     "cors": "^2.8.5",
     "express": "^4.16.4",
