@@ -48,6 +48,7 @@ const RandomFxRates = () => Object.fromEntries(
   Object
     .keys(CurrencyCode)
     .filter(k => !isNaN(+k))
+    .filter(k => k !== '0')
     .map(key => [key, RandomFxRate()])
 );
 const RandomFxRate = () => 0.9 + (Math.random() / 10)
