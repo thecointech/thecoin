@@ -567,7 +567,7 @@
      *
      * @returns A Promise that resolves with an array of CollectionReferences.
      */
-    listCollections() : Promise<CollectionReference[]>;
+    listCollections?() : Promise<CollectionReference[]>;
 
     /**
      * Creates a document referred to by this `DocumentReference` with the
@@ -576,7 +576,7 @@
      * @param data The object data to serialize as the document.
      * @return A Promise resolved with the write time of this create.
      */
-    create(data: DocumentData): Promise<WriteResult>;
+    create?(data: DocumentData): Promise<WriteResult>;
 
     /**
      * Writes to the document referred to by this `DocumentReference`. If the
@@ -602,7 +602,7 @@
      * @param precondition A Precondition to enforce on this update.
      * @return A Promise resolved with the write time of this update.
      */
-    update(data: UpdateData, precondition?: Precondition): Promise<WriteResult>;
+    update(data: UpdateData, precondition?: Precondition): Promise<WriteResult|void>;
 
     /**
      * Updates fields in the document referred to by this `DocumentReference`.
@@ -622,7 +622,7 @@
      * @return A Promise resolved with the write time of this update.
      */
     update(field: string|FieldPath, value:any,
-           ...moreFieldsOrPrecondition: any[]): Promise<WriteResult>;
+           ...moreFieldsOrPrecondition: any[]): Promise<WriteResult|void>;
 
     /**
      * Deletes the document referred to by this `DocumentReference`.
@@ -630,7 +630,7 @@
      * @param precondition A Precondition to enforce for this delete.
      * @return A Promise resolved with the write time of this delete.
      */
-    delete(precondition?:Precondition): Promise<WriteResult>;
+    delete(precondition?:Precondition): Promise<WriteResult|void>;
 
     /**
      * Reads the document referred to by this `DocumentReference`.
@@ -659,7 +659,7 @@
      * @param other The `DocumentReference` to compare against.
      * @return true if this `DocumentReference` is equal to the provided one.
      */
-    isEqual(other: DocumentReference): boolean;
+    //isEqual(other: DocumentReference): boolean;
   }
 
   /**
@@ -700,7 +700,7 @@
     /**
      * The time this snapshot was read.
      */
-    readonly readTime: Timestamp;
+    readonly readTime?: Timestamp;
 
     /**
      * Retrieves all fields in the document as an Object. Returns 'undefined' if
@@ -1112,7 +1112,7 @@
      * @return {Promise<DocumentReference[]>} The list of documents in this
      * collection.
      */
-    listDocuments(): Promise<DocumentReference[]>;
+    listDocuments?(): Promise<DocumentReference[]>;
 
     /**
      * Get a `DocumentReference` for a randomly-named document within this

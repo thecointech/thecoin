@@ -15,6 +15,7 @@ export async function init(projectId: string) : Promise<boolean> {
   });
   const db = firebase.firestore();
   db.useEmulator("localhost", ServicePorts.FIRESTORE_EMULATOR);
+  //  deepcode ignore no-any: TODO: Remove this ANY - https://github.com/thecointech/thecoin/issues/109
   SetFirestore(db as any);
 
   Timestamp.init(firebase.firestore.Timestamp);

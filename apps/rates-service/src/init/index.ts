@@ -13,7 +13,7 @@ export async function init() {
   await initdb({project: "broker-cad"});
 
   // Assume development is dev:live
-  if (process.env.NODE_ENV == 'development') {
+  if (process.env.NODE_ENV === 'development') {
     // Seed our DB for a year, values set for a day.
     const from = DateTime
       .local()
