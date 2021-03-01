@@ -1,7 +1,28 @@
-import { Wallet, Signer, Contract, ethers } from 'ethers';
+import { Wallet, Signer, Contract, providers } from 'ethers';
 
-type Network = "ropsten"|"mainnet";
+type Network = "develop"|"ropsten"|"mainnet";
+const getProvider = () => {
+  if (process.env.NODE_ENV === 'production') {
+    // Connect through infura
+    const key = process.env.INFURA_API_KEY;
+    if (!key)
+      throw new Error("Missing Infura Key, cannot connect to blockchain");
+
+    // Which network do we connect to?
+    // TODO: replace mainnet with
+    if (process.env.SETTINGS === 'staging')
+      return new providers.InfuraProvider("ropsten", key);
+  }
+  else {
+    if (process.env.SETTINGS == 'live') {
+      return new providers.JsonRpcProvider("https://localhost:9545")
+  }
+
+  throw new Error(`Unsupported environment: ${process.env.NODE_ENV}:${process.env.SETTINGS}`);
+}
+
 async function BuildContract(network: Network) {
+
 	const deploy = await import(`./deployed/zos.${network}.json`);
 	const TheCoinSpec = await import('./deployed/TheCoin.json');
 	if (!deploy || !TheCoinSpec)
@@ -9,8 +30,8 @@ async function BuildContract(network: Network) {
 
 	const { address } = deploy.proxies["the-contract/TheCoin"][0];
 	const { abi } = TheCoinSpec;
-	const provider = new ethers.providers.InfuraProvider(network, "54e16af940e445f4ad38ab9e2cd4cab6");
-	return new ethers.Contract(address, abi, provider);
+
+	return new Contract(address, abi, provider);
 }
 
 //if (!IsDebug)
@@ -19,6 +40,7 @@ export const InitialCoinBlock = 4456169;
 
 let _contract: Contract|undefined = undefined;
 export async function GetContract() : Promise<Contract> {
+
 
 	if (!_contract)
 	{

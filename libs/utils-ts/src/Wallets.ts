@@ -42,17 +42,22 @@ function getKey(name: string) {
 }
 
 async function loadWallet(name: string, callback?: ProgressCallback) {
-  const encrypted = loadEncrypted(name);
-  const key = getKey(name);
-  const wallet = await Wallet.fromEncryptedJson(encrypted, key, callback);
-  log.info(`${name} wallet loaded`);
-  setGlobal({
-    wallets: {
-      ...globalThis.__thecoin.wallets,
-      [name]: wallet,
-    }
-  })
-  return wallet;
+  if (process.env.NODE_ENV == 'development') {
+
+  }
+  else {
+    const encrypted = loadEncrypted(name);
+    const key = getKey(name);
+    const wallet = await Wallet.fromEncryptedJson(encrypted, key, callback);
+    log.info(`${name} wallet loaded`);
+    setGlobal({
+      wallets: {
+        ...globalThis.__thecoin.wallets,
+        [name]: wallet,
+      }
+    })
+    return wallet;
+  }
 }
 
 export async function getWallet(name: string, callback?: ProgressCallback) : Promise<Wallet> {

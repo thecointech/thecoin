@@ -29,3 +29,11 @@ test('Has Contract', async () => {
 	expect(balanceCAD.toNumber()).toBeGreaterThanOrEqual(0);
 });
 
+//
+// We build and run our contract under one of several environments:
+//  development: emulator (Ganache or truffle/develop)
+//  development,live
+//  testing: ropsten network
+//  production: ropsten - although this will change to mainnet once Ethereum2.0 is released.
+it('builds the right contract', () => {
+})

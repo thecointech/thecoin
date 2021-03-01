@@ -12,6 +12,7 @@ module.exports = {
       port: 9545,
       network_id: "*",
     },
+    // TODO: test deployment to ropsten (this seems... wrong)
     ropsten: {
       host: 'localhost',
       port: 9545,
