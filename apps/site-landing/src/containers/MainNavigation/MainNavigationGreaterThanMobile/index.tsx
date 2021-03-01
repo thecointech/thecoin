@@ -29,48 +29,45 @@ const loginLink = {  id:"site.MainNavigation.loginLink",
                     description:"Title for the Login entry in the menu"};
 
 // TODO: Fix Login button
-export class MainNavigationGreaterThanMobile extends React.Component {
-
-  render() {
-    return (
-      <Container>
-          <div className={styles.navContainer} id={styles.mainMenuContainer}>
-              <Menu text className={styles.mainMenu} >
-                <Menu.Menu position='left'>
-                    <Link to="/" id={styles.logoLink}>
-                        <img src={Logo} id={styles.logo} />
+export const MainNavigationGreaterThanMobile = () => {
+  return (
+    <Container>
+        <div className={styles.navContainer} id={styles.mainMenuContainer}>
+            <Menu text className={styles.mainMenu} >
+              <Menu.Menu position='left'>
+                  <Link to="/" id={styles.logoLink}>
+                      <img src={Logo} id={styles.logo} />
+                  </Link>
+                </Menu.Menu>
+                <HeaderLink to="/" exact>
+                  <FormattedMessage {...home} />
+                </HeaderLink>
+                <HeaderLink to="/healthier">
+                  <FormattedMessage {...indepth} />
+                </HeaderLink>
+                <HeaderLink to="/wedomore">
+                  <FormattedMessage {...wedomore} />
+                </HeaderLink>
+                <HeaderLink to="/compare">
+                  <FormattedMessage {...yourbenefits} />
+                </HeaderLink>
+                <Menu.Menu position='right'>
+                  <Menu.Item>
+                    <Link to="/" className={sharedStyles.loginLink}>
+                      <FormattedMessage {...loginLink} />
                     </Link>
-                  </Menu.Menu>
-                  <HeaderLink to="/" exact>
-                    <FormattedMessage {...home} />
-                  </HeaderLink>
-                  <HeaderLink to="/healthier">
-                    <FormattedMessage {...indepth} />
-                  </HeaderLink>
-                  <HeaderLink to="/wedomore">
-                    <FormattedMessage {...wedomore} />
-                  </HeaderLink>
-                  <HeaderLink to="/compare">
-                    <FormattedMessage {...yourbenefits} />
-                  </HeaderLink>
-                  <Menu.Menu position='right'>
-                    <Menu.Item>
-                      <Link to="/" className={sharedStyles.loginLink}>
-                        <FormattedMessage {...loginLink} />
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <ButtonPrimary as={NavLink} to="/addAccount" >
-                          <FormattedMessage {...titleButton} />
-                      </ButtonPrimary>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <LanguageSwitcher />
-                    </Menu.Item>
-                  </Menu.Menu>
-              </Menu>
-          </div>
-      </Container>
-    );
-  }
+                  </Menu.Item>
+                  <Menu.Item>
+                    <ButtonPrimary as={NavLink} to="/addAccount" >
+                        <FormattedMessage {...titleButton} />
+                    </ButtonPrimary>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <LanguageSwitcher />
+                  </Menu.Item>
+                </Menu.Menu>
+            </Menu>
+        </div>
+    </Container>
+  );
 }

@@ -2,8 +2,6 @@
     User Variable Overrides
 *******************************/
 
-@itemTextColor: @primaryColor;
-
 @hoverItemBackground: transparent;
 @hoverItemTextColor: inherit;
 
