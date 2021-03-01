@@ -2,7 +2,7 @@ import { Modal, Loader, Button, Icon } from 'semantic-ui-react';
 import * as React from 'react';
 import { MessageDescriptor, FormattedMessage } from 'react-intl';
 
-interface OwnProps {
+interface ModalProps {
   isOpen: boolean;
   header?: MessageDescriptor;
   progressPercent?: number;
@@ -13,13 +13,11 @@ interface OwnProps {
   okCallback?: () => void;
 }
 
-type Props = OwnProps;
-
-export const ModalOperation : React.FC = (props, propsModal:Props) => {
+export const ModalOperation : React.FC<ModalProps> = (props) => {
 
   function cancelOperation(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    if (propsModal.cancelCallback) propsModal.cancelCallback();
+    if (props.cancelCallback) props.cancelCallback();
   }
 
   function renderCancelButton(cancelCallback?: () => void){
@@ -43,7 +41,7 @@ export const ModalOperation : React.FC = (props, propsModal:Props) => {
   }
 
   function renderButtons() {
-    const { cancelCallback, okCallback, progressPercent } = propsModal;
+    const { cancelCallback, okCallback, progressPercent } = props;
     return (
       <Modal.Actions>
         {renderCancelButton(cancelCallback)}
@@ -60,20 +58,20 @@ export const ModalOperation : React.FC = (props, propsModal:Props) => {
    return ( 
       <h3>
         <FormattedMessage
-          {...propsModal.progressMessage!}
+          {...props.progressMessage!}
           values={{
-            percentComplete: propsModal.progressPercent,
-            ...(propsModal.messageValues || {})
+            percentComplete: props.progressPercent,
+            ...(props.messageValues || {})
           }}
         />
       </h3>);
   }
 
   function renderMessage(){
-    return propsModal.progressMessage ? renderProgress() : props.children
+    return props.progressMessage ? renderProgress() : props.children
   }
 
-  const { isOpen, header, closeIcon, progressPercent } = propsModal;
+  const { isOpen, header, closeIcon, progressPercent } = props;
   const headerContent = header ? <Modal.Header><FormattedMessage {...header} /></Modal.Header> : "";
   const closeContent = closeIcon ? <Icon name="close" size="large" /> : "";
   return (
