@@ -1,6 +1,5 @@
 import { Wallet, Signer, Contract, providers } from 'ethers';
 
-type Network = "develop"|"ropsten"|"mainnet";
 const getProvider = () => {
   if (process.env.NODE_ENV === 'production') {
     // Connect through infura
@@ -15,40 +14,55 @@ const getProvider = () => {
   }
   else {
     if (process.env.SETTINGS == 'live') {
-      return new providers.JsonRpcProvider("https://localhost:9545")
+      return new providers.JsonRpcProvider("http://localhost:9545")
+    }
   }
 
   throw new Error(`Unsupported environment: ${process.env.NODE_ENV}:${process.env.SETTINGS}`);
 }
 
-async function BuildContract(network: Network) {
-
-	const deploy = await import(`./deployed/zos.${network}.json`);
+const getAbi = async () => {
 	const TheCoinSpec = await import('./deployed/TheCoin.json');
-	if (!deploy || !TheCoinSpec)
-		throw new Error('Cannot create contract: missing deployment');
+	if (!TheCoinSpec)
+		throw new Error('Cannot create contract: missing contract spec');
 
-	const { address } = deploy.proxies["the-contract/TheCoin"][0];
-	const { abi } = TheCoinSpec;
-
-	return new Contract(address, abi, provider);
+  return TheCoinSpec.abi;
 }
 
-//if (!IsDebug)
-//	throw new Error("Fix this!");
-export const InitialCoinBlock = 4456169;
+type Network = "development"|"ropsten"|"mainnet";
+const getNetwork = () : Network =>
+  process.env.NODE_ENV === 'production'
+    ? process.env.SETTINGS === 'staging'
+      ? "ropsten"
+      : "mainnet"
+    : "development";
 
-let _contract: Contract|undefined = undefined;
+const getContractAddress = async () => {
+  const network = getNetwork();
+  const deployment = await import(`./deployed/${network}.json`);
+  if (!deployment) {
+    throw new Error('Cannot create contract: missing deployment');
+  }
+  return deployment.proxy;
+}
+
+const buildContract = async () =>
+  new Contract(
+    await getContractAddress(),
+    await getAbi(),
+    getProvider()
+  )
+
+declare module globalThis {
+  let __contract: Contract|undefined;
+}
+
 export async function GetContract() : Promise<Contract> {
-
-
-	if (!_contract)
-	{
-		const network = 'ropsten'; //IsDebug ? 'ropsten' : 'mainnet';
-		_contract = await BuildContract(network);
-	}
-	return _contract;
-};
+  if (!globalThis.__contract) {
+    globalThis.__contract= await buildContract();
+  }
+  return globalThis.__contract
+}
 
 export async function ConnectWallet(wallet: Wallet) {
 	const contract = await GetContract();

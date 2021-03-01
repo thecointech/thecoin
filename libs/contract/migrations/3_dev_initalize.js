@@ -5,7 +5,7 @@ const { time } = require('@openzeppelin/test-helpers');
 
 const COIN_EXP = 1000000
 
-module.exports = async function (deployer, network, accounts) {
+module.exports = async function (_deployer, network, accounts) {
   // On development blockchain, seed accounts with random data
   if (network == 'development') {
     const proxy = await TheCoin.deployed();

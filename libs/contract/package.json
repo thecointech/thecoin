@@ -22,11 +22,14 @@
     "clean": "rimraf ./build && rimraf ./src/deployed",
     "test:contract": "truffle test",
     "test": "yarn jest",
+    "dev:live": "run-p emulator migrate",
+    "migrate": "truffle migrate",
     "zossession": "zos session --network ropsten --from 0xbe0B3F8ae028818BAd966DaA20B29181ec3DFc06 --expires 3600",
     "zospush": "yarn run zossession && zos push",
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
-    "console": "truffle console"
+    "console": "truffle console",
+    "emulator": "truffle develop"
   },
   "files": [
     "build/**/*"

@@ -1,16 +1,18 @@
 import { GetContract } from './index'
 
-const brokerCAD = "0x38de1b6515663dbe145cc54179addcb963bb606a"
-
-test('Has Contract', async () => {
+//
+// Simple sanity test for a contract
+// deployed in development environment
+test('Contract has migrated correctly', async () => {
 
   jest.setTimeout(60000);
 
+  // Note, this
+  process.env.SETTINGS = 'live';
 	const contract = await GetContract();
 	expect(contract.address).toBeDefined();
 
 	const minted = await contract.totalSupply();
-	console.log("Minted: ", minted.toString());
 	expect(minted.toNumber()).toBeGreaterThan(0);
 
 	const roles = await contract.getRoles();
@@ -19,21 +21,5 @@ test('Has Contract', async () => {
 
 	const theCoin = roles[2];
 	const balance = await contract.balanceOf(theCoin);
-
-	console.log("Balance: ", balance.toString());
 	expect(balance.toNumber()).toBeGreaterThanOrEqual(0);
-
-	const balanceCAD = await contract.balanceOf(brokerCAD);
-
-	console.log("Balance: ", balanceCAD.toString());
-	expect(balanceCAD.toNumber()).toBeGreaterThanOrEqual(0);
 });
-
-//
-// We build and run our contract under one of several environments:
-//  development: emulator (Ganache or truffle/develop)
-//  development,live
-//  testing: ropsten network
-//  production: ropsten - although this will change to mainnet once Ethereum2.0 is released.
-it('builds the right contract', () => {
-})
