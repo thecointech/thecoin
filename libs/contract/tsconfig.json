@@ -2,10 +2,11 @@
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
 
-    "rootDir": "./src",
     "outDir": "./build",
 
-    "tsBuildInfoFile": "./build/.buildinfo",
+    "isolatedModules": false,
+    "types": ["node", "truffle-typings"],
+    "tsBuildInfoFile": "./build/.buildinfo"
   },
-  "include": ["./src/**/*", "./src/**/*.json"]
+  "include": ["**/*.ts"]
 }

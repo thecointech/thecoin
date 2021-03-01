@@ -1,6 +1,7 @@
 'use strict';
 // Allow using typescript in deployments
 require("ts-node").register({
+  project: "tsconfig.migrate.json",
   files: true,
 });
 

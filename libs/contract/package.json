@@ -40,10 +40,13 @@
     "./": "./build/"
   },
   "devDependencies": {
+    "typechain": "^4.0.2",
+    "@typechain/truffle-v5": "^4.0.1",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "truffle": "^5.1.67",
+    "truffle-typings": "^1.0.8",
     "ethers": "^4.0.46",
     "jest": "*"
   }

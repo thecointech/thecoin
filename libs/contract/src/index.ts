@@ -1,4 +1,8 @@
 import { Wallet, Signer, Contract, providers } from 'ethers';
+export * from './utils';
+
+export const getDevLiveProvider = () =>
+  new providers.JsonRpcProvider("http://localhost:9545");
 
 const getProvider = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -14,7 +18,7 @@ const getProvider = () => {
   }
   else {
     if (process.env.SETTINGS == 'live') {
-      return new providers.JsonRpcProvider("http://localhost:9545")
+      return getDevLiveProvider();
     }
   }
 
