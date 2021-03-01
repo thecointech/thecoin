@@ -1,4 +1,9 @@
 'use strict';
+// Allow using typescript in deployments
+require("ts-node").register({
+  files: true,
+});
+
 var path = require('path');
 
 module.exports = {

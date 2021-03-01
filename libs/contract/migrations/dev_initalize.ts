@@ -1,6 +1,6 @@
 
 const TheCoin = artifacts.require("TheCoin");;
-const { namedAccounts, setMinter } = require('../utils');
+const { namedAccounts, setMinter } = require('../src/utils');
 const { time } = require('@openzeppelin/test-helpers');
 
 const COIN_EXP = 1000000
