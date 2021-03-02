@@ -5,52 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "pwa-node",
       "request": "launch",
       "name": "Launch Program",
       "skipFiles": [
         "<node_internals>/**"
       ],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
       "preLaunchTask": "build src:rates-service",
-      "program": "${workspaceFolder}/build/main.js",
-      "envFile": "${workspaceFolder}/../../tools/debug.env"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest All Tests",
-      "program": "${workspaceFolder}/../../node_modules/.bin/jest",
-      "console": "integratedTerminal",
-      "disableOptimisticBPs": true,
-      "args": [
-        "-i",
-        "--runInBand"
+      "program": "${workspaceFolder}/src/main.ts",
+      "envFile": "${workspaceFolder}/../../tools/debug.env",
+      "outputCapture": "std",
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
+      "resolveSourceMapLocations": [
+        "**",
+        "!**/node_modules/**"
       ],
-      "internalConsoleOptions": "openOnSessionStart",
-      "outFiles": [
-        "${workspaceRoot}/dist/**/*"
-      ],
-      "windows": {
-        "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
-      },
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest Current File",
-      "program": "${workspaceFolder}/../../node_modules/.bin/jest",
-      "args": [
-        "--runTestsByPath",
-        "${relativeFile}",
-        "--config",
-        "jest.config.js"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
-      }
     },
     {
       "type": "node",

@@ -1,31 +1,25 @@
 
-//import "firestore-admin";
-// import { SetFirestore } from './firestore';
-// import { Timestamp } from './timestamp';
 
-export async function init(_projectId: string) : Promise<boolean> {
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+//import { Firestore, Timestamp as TimestampServer } from '@google-cloud/firestore';
+import { SetFirestore } from './firestore';
+import { Timestamp } from './timestamp';
 
-  // If emulator wanted, both admin API and web API can connect to emulator now
-  // https://firebase.google.com/docs/emulator-suite/connect_firestore#web
-  throw new Error('firestore/testing broken with upgrade to Node14.');
-  // // Directly link to appropriate Timestamp
-  // // Do this first so even if we don't have a running instance
-  // // we can still run tests that work with TimeStamp
-  // Timestamp.init(firebase.firestore.Timestamp)
+import { ServicePorts } from '../ServiceAddresses';
 
-  // const admin = firebase.initializeAdminApp({
-  //   projectId,
-  // });
+export async function init(projectId: string) : Promise<boolean> {
 
-  // var _db = admin.firestore();
-  // // Note that the Firebase Web SDK must connect to the WebChannel port
-  // _db.settings({
-  //   host: `localhost:${process.env.FIRESTORE_EMULATOR}`,
-  //   ssl: false
-  // });
-  // SetFirestore(_db as any);
+  firebase.initializeApp({
+    projectId,
+  });
+  const db = firebase.firestore();
+  db.useEmulator("localhost", ServicePorts.FIRESTORE_EMULATOR);
+  //  deepcode ignore no-any: TODO: Remove this ANY - https://github.com/thecointech/thecoin/issues/109
+  SetFirestore(db as any);
 
-  // return true;
+  Timestamp.init(firebase.firestore.Timestamp);
+  return true;
 }
 
 export async function release() {

@@ -57,10 +57,12 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
       recievedTimestamp: dt,
       processedTimestamp,
       fiatDisbursed: 0,
-      transfer: buildTransfer(action, bc)
+      transfer: buildTransfer(action, bc),
     },
     blockchain: bc,
     bank: [] as BankRecord[],
+    database: null,
+    email: null,
   } as ReconciledRecord;
   user.transactions.push(record);
   return { user, record };

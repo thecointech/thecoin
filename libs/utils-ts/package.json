@@ -34,12 +34,12 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^2.4.0",
+    "@google-cloud/firestore": "^4.9.4",
     "@the-coin/contract": "*",
     "@the-coin/types": "*",
     "axios": "*",
     "base32": "^0.0.6",
-    "firebase": "^7.17.2",
+    "firebase": "^8.2.9",
     "luxon": "*"
   },
   "devDependencies": {
