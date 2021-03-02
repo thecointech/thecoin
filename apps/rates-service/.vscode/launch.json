@@ -15,7 +15,6 @@
         "-r",
         "ts-node/register"
       ],
-      "preLaunchTask": "build src:rates-service",
       "program": "${workspaceFolder}/src/main.ts",
       "envFile": "${workspaceFolder}/../../tools/debug.env",
       "outputCapture": "std",

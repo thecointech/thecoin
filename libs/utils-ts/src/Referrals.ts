@@ -58,7 +58,7 @@ export async function GetUsersReferrer(address: string) {
 export function GetReferrerCode(signature: string) {
   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
   const buffer = Buffer.from(normSig, "hex");
-  const s2 = base32.encode(buffer);
+  const s2: string = base32.encode(buffer);
   return s2.slice(-6).toLowerCase();
 }
 

@@ -25,7 +25,9 @@ export class ReferrersController extends Controller {
     }
     catch(err) {
       console.error(err);
-      throw new Error('Server Error');
+      return {
+        success: false
+      }
     }
   }
 
