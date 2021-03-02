@@ -1,5 +1,7 @@
 import { Wallet, Signer, Contract, providers } from 'ethers';
+import { TheCoin } from '../types/ethers-contracts/TheCoin';
 export * from './utils';
+export type { TheCoin } from '../types/ethers-contracts/TheCoin';
 
 export const getDevLiveProvider = () =>
   new providers.JsonRpcProvider("http://localhost:9545");
@@ -26,7 +28,7 @@ const getProvider = () => {
 }
 
 const getAbi = async () => {
-	const TheCoinSpec = await import('./deployed/TheCoin.json');
+	const TheCoinSpec = await import('./contracts/TheCoin.json');
 	if (!TheCoinSpec)
 		throw new Error('Cannot create contract: missing contract spec');
 
@@ -55,13 +57,13 @@ const buildContract = async () =>
     await getContractAddress(),
     await getAbi(),
     getProvider()
-  )
+  ) as TheCoin
 
 declare module globalThis {
-  let __contract: Contract|undefined;
+  let __contract: TheCoin|undefined;
 }
 
-export async function GetContract() : Promise<Contract> {
+export async function GetContract() : Promise<TheCoin> {
   if (!globalThis.__contract) {
     globalThis.__contract= await buildContract();
   }

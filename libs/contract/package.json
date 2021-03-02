@@ -15,11 +15,13 @@
     "directory": "libs/contract"
   },
   "scripts": {
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run-s build:contracts generate-types build:src",
     "build:contracts": "truffle compile",
-    "build:copy": "cpx \"zos.*\" ./src/deployed/",
     "build:src": "yarn tsc --project tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./src/deployed",
+    "clean": "run-p clean:*",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/deployed",
+    "clean:types": "rimraf ./types",
     "test:contract": "truffle test",
     "test": "yarn jest",
     "dev:live": "run-p emulator migrate",
@@ -29,11 +31,15 @@
     "zoscreate": "yarn run zospush && zos create TheCoin --init initialize --args 0x4f107b6633a4b3385c9e20945144c59ce4ff2def",
     "zosupgrade": "yarn run zospush && zos update TheCoin",
     "console": "truffle console",
-    "emulator": "truffle develop"
+    "emulator": "truffle develop",
+    "generate-types": "run-p generate-types:*",
+    "generate-types:truffle": "yarn typechain --target=truffle-v5 src/contracts/*.json",
+    "generate-types:ethers": "yarn typechain --target=ethers-v4 src/contracts/*.json"
   },
   "files": [
     "build/**/*"
   ],
+  "types": "./types",
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
@@ -42,11 +48,11 @@
   "devDependencies": {
     "typechain": "^4.0.2",
     "@typechain/truffle-v5": "^4.0.1",
+    "@typechain/ethers-v4": "^4.0.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "truffle": "^5.1.67",
-    "truffle-typings": "^1.0.8",
     "ethers": "^4.0.46",
     "jest": "*"
   }

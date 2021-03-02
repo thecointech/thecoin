@@ -1,4 +1,4 @@
-import { Contract } from "ethers";
+import { TheCoinInstance } from "../types/truffle-contracts";
 
 export const COIN_EXP = 1000000;
 
@@ -19,7 +19,7 @@ export const namedAccounts = (accounts: string[]) => {
   }
 }
 
-export const setMinter = async (proxy: Contract, acMinter: string, acTheCoin: string) => {
+export const setMinter = async (proxy: TheCoinInstance, acMinter: string, acTheCoin: string) => {
   await proxy.setMinter(acMinter, { from: acTheCoin });
   await proxy.acceptMinter({ from: acMinter });
 }

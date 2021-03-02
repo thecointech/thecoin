@@ -5,8 +5,9 @@
     "outDir": "./build",
 
     "isolatedModules": false,
-    "types": ["node", "truffle-typings"],
+    "typeRoots": ["./types"],
+    "types": ["node", "truffle-contracts"],
     "tsBuildInfoFile": "./build/.buildinfo"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.json"]
 }
