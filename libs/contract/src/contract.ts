@@ -3,6 +3,10 @@ import { TheCoin } from '../types/ethers-contracts/TheCoin';
 import { getNetwork } from './network';
 import { getProvider } from './provider';
 
+//
+// Multiplier of base values to human-readable fractions (eg $ and c)
+export const COIN_EXP = 1000000;
+
 const getAbi = async () => {
 	const TheCoinSpec = await import('./contracts/TheCoin.json');
 	if (!TheCoinSpec)
