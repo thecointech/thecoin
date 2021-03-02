@@ -1,4 +1,4 @@
-import { GetContract } from './index'
+import { GetContract } from '../src/index'
 
 //
 // Simple sanity test for a contract
@@ -7,7 +7,7 @@ test('Contract has migrated correctly', async () => {
 
   jest.setTimeout(60000);
 
-  // Note, this
+  // Note, this test assumes that migrations have occured and truffle develop is running
   process.env.SETTINGS = 'live';
 	const contract = await GetContract();
 	expect(contract.address).toBeDefined();

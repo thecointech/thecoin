@@ -1,3 +1,4 @@
 types
 src/contracts
+src/deployed/development.json
 build

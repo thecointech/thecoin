@@ -10,7 +10,7 @@ var path = require('path');
 module.exports = {
   // We output into our src directory so we can directly import
   // the JSON artifacts into our TS code.
-  contracts_build_directory: path.join(__dirname, "src", "deployed"),
+  contracts_build_directory: path.join(__dirname, "src", "contracts"),
 
   networks: {
     development: {

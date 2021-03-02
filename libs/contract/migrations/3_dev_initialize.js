@@ -1,1 +1,1 @@
-module.exports = require(`./3_dev_initalize.ts`)(artifacts, web3);
+module.exports = require(`./3_dev_initialize.ts`)(artifacts, web3);

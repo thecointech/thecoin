@@ -1,13 +1,10 @@
-import { namedAccounts, setMinter } from '../src/utils';
+import { namedAccounts } from '../src/utils';
 import { COIN_EXP } from "../src";
 import { DateTime } from 'luxon';
+import { TheCoinInstance } from '../types/truffle-contracts/TheCoin';
 
-module.exports = (artifacts: Truffle.Artifacts) => {
-  return async (
-    _deployer: Truffle.Deployer,
-    network: string,
-    accounts: string[]
-  ) => {
+const deploy: MigrationStep = (artifacts) =>
+  async (_deployer, network, accounts) => {
     // On development blockchain, seed accounts with random data
     if (network == 'development') {
 
@@ -31,7 +28,12 @@ module.exports = (artifacts: Truffle.Artifacts) => {
     }
   }
 
-  async function seedAccount(proxy: any, acTheCoin: string, client: string) {
+  async function setMinter(proxy: TheCoinInstance, acMinter: string, acTheCoin: string) {
+    await proxy.setMinter(acMinter, { from: acTheCoin });
+    await proxy.acceptMinter({ from: acMinter });
+  }
+
+  async function seedAccount(proxy: TheCoinInstance, acTheCoin: string, client: string) {
     // Assign ~15 transactions to client randomly in the past
     console.log("Seeding account: " + client);
     const now = DateTime.local();
@@ -55,4 +57,5 @@ module.exports = (artifacts: Truffle.Artifacts) => {
       }
     }
   }
-}
+
+module.exports = deploy;
