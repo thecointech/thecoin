@@ -36,6 +36,7 @@
 /* The size of page text  */
 @fontSize       : 16px;
 
+@fontSizeVeryVeryBig    : unit((28 / @emSize), rem);
 @fontSizeVeryBig    : unit((24 / @emSize), rem);
 @fontSizeBig    : unit((20 / @emSize), rem);
 @fontSizeSmall  : unit((12 / @emSize), rem);
@@ -108,6 +109,7 @@
 @theCoinPaletteGreen2Faded     : fade(@theCoinPaletteGreen2, 30%);
 @theCoinPaletteGreen4Faded     : fade(@theCoinPaletteGreen4, 30%);
 
+@theCoinPaletteGreen4Faded30     : fade(@theCoinPaletteGreen4, 30%);
 @theCoinPaletteGreen4Faded15     : fade(@theCoinPaletteGreen4, 15%);
 @theCoinPaletteGreen4Faded14     : fade(@theCoinPaletteGreen4, 14%);
 @theCoinPaletteGreen4Faded10     : fade(@theCoinPaletteGreen4, 10%);
@@ -176,6 +178,17 @@
 @hoveredTextColor           : @textColor;
 @selectedTextColor          : @textColor;
 @negativeTextColor          : @red;
+
+
+/*-------------------
+       Accents
+--------------------*/
+
+/* Differentiating Layers */
+@subtleShadow:
+  0px 4px 4px 0px @theCoinPaletteGray3
+;
+
 
 /*******************************
              States
