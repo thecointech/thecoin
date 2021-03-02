@@ -5,6 +5,8 @@
 
 import { Wallet, Contract } from 'ethers';
 import { ConnectContract } from '@the-coin/contract';
+import { getDevLiveProvider } from '@the-coin/contract/provider';
+import { toNamedAccounts, AccountType } from '../../contract/build/systemAccounts';
 import { existsSync, readFileSync } from 'fs';
 import { ProgressCallback } from 'ethers/utils';
 import { setGlobal } from './globals';
@@ -41,18 +43,22 @@ function getKey(name: string) {
   return key;
 }
 
-// async function loadDevLiveSigner(name: string) {
-//   const provider = getDevLiveProvider();
-//   const accounts = await provider.listAccounts();
-//   const named =
-//   const signer = new Signer()
-// }
+// In dev:live environment, pull signers from
+// local emulator for our system accounts
+async function loadDevLiveSigner(name: AccountType) {
+  const provider = getDevLiveProvider();
+  const accounts = await provider.listAccounts();
+  const named = toNamedAccounts(accounts);
+
+  provider.getSigner(AccountName[name])
+  const signer = new Signer()
+}
 
 async function loadWallet(name: string, callback?: ProgressCallback) {
   if (process.env.NODE_ENV === 'development') {
     // dev:live environment, we pull in the wallets from local emulator
     if (process.env.SETTINGS === 'live') {
-
+      return await loadDevLiveSigner(name);
     }
     else {
       // regular development environment, wallets should(?) be emulated (how?)
