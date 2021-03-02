@@ -6,7 +6,7 @@ import { toNamedAccounts } from '../src/accounts';
 const deploy: MigrationStep = (artifacts) =>
   async (_deployer, network, accounts) => {
     // On development blockchain, seed accounts with random data
-    if (network == 'development') {
+    if (network === 'development') {
 
       const contract = artifacts.require("TheCoin");
       const proxy = await contract.deployed();
@@ -15,11 +15,11 @@ const deploy: MigrationStep = (artifacts) =>
       const roles = await proxy.getRoles();
 
       // Update minter and add 10,000 Coins (aprox $40K)
-      if (roles[1] != Minter) {
+      if (roles[1] !== Minter) {
         await setMinter(proxy, Minter, TheCoin);
       }
       const tcBal = await proxy.balanceOf(TheCoin);
-      if (tcBal.toNumber() == 0) {
+      if (tcBal.toNumber() === 0) {
         await proxy.mintCoins(10000 * COIN_EXP, { from: Minter });
       }
 

@@ -54,7 +54,7 @@ async function loadWallet(name: AccountName, callback?: ProgressCallback) {
   if (process.env.NODE_ENV === 'development') {
     // dev:live environment, we pull in the wallets from local emulator
     if (process.env.SETTINGS === 'live') {
-      return await loadDevLiveSigner(name);
+      return loadDevLiveSigner(name);
     }
     else {
       // regular development environment, wallets should(?) be emulated (how?)

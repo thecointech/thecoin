@@ -18,7 +18,7 @@ export async function getBrokerCADAddress() {
     // In dev live, we transfer our $$ back to BrokerCAD
     if (process.env.SETTINGS === 'live') {
       const brokerCad = await getWallet('BrokerCAD');
-      return await brokerCad.getAddress();
+      return brokerCad.getAddress();
     }
     // In all other circumstances, it doesn't matter (so just use production)
   }
