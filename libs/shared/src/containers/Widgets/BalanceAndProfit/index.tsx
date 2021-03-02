@@ -12,20 +12,19 @@ export const BalanceAndProfit = () => {
   const activeAccount = useActiveAccount();
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
-  const balance = activeAccount?.balance ? activeAccount?.balance : 0
-  const history = activeAccount?.history ? activeAccount?.history : [];
+  const balance = activeAccount?.balance ?? 0;
+  const history = activeAccount?.history ?? [];
 
   const cadBalance = toHuman(buy * balance * fxRate, true);
   const profit = calculateProfit(balance, history, rates);
   const profitDisplay = (profit < 1 ? "< .1" : profit.toString())
   return (
     <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
-
       <div className={styles.illustrationMobile}>
         <img src={illustrationMobile} />
       </div>
       <div className={styles.balanceZone}>
-        <Header as="h5">
+        <Header as="h5" className={"appTitles"}>
             Balance
         </Header>
         <img src={illustration} className={styles.illustrationDesktop}/>
@@ -33,7 +32,7 @@ export const BalanceAndProfit = () => {
         <div className={styles.cadBalanceCurrency}>CAD</div>
       </div>
       <div className={styles.profitZone}>
-        <Header as="h5">
+        <Header as="h5" className={"appTitles"}>
             Profit
         </Header>
         <div><Icon name='arrow up' />{profitDisplay}%</div>
