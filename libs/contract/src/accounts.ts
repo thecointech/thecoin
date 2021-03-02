@@ -10,6 +10,7 @@ export enum AccountId {
   Police,
   BrokerCAD,
   BrokerTransferAssistant,
+  // NOTE: The following accounts for testing only!
   client1,
   client2,
   client3,

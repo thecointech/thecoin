@@ -6,7 +6,7 @@
 import { Wallet, Contract } from 'ethers';
 import { ConnectContract } from '@the-coin/contract';
 import { getDevLiveProvider } from '@the-coin/contract/provider';
-import { toNamedAccounts, AccountType } from '../../contract/build/systemAccounts';
+import { AccountName, AccountId } from '../../contract/build/accounts';
 import { existsSync, readFileSync } from 'fs';
 import { ProgressCallback } from 'ethers/utils';
 import { setGlobal } from './globals';
@@ -45,16 +45,12 @@ function getKey(name: string) {
 
 // In dev:live environment, pull signers from
 // local emulator for our system accounts
-async function loadDevLiveSigner(name: AccountType) {
+async function loadDevLiveSigner(name: AccountName) {
   const provider = getDevLiveProvider();
-  const accounts = await provider.listAccounts();
-  const named = toNamedAccounts(accounts);
-
-  provider.getSigner(AccountName[name])
-  const signer = new Signer()
+  return provider.getSigner(AccountId[name])
 }
 
-async function loadWallet(name: string, callback?: ProgressCallback) {
+async function loadWallet(name: AccountName, callback?: ProgressCallback) {
   if (process.env.NODE_ENV === 'development') {
     // dev:live environment, we pull in the wallets from local emulator
     if (process.env.SETTINGS === 'live') {
@@ -80,12 +76,11 @@ async function loadWallet(name: string, callback?: ProgressCallback) {
   }
 }
 
-export async function getWallet(name: string, callback?: ProgressCallback) : Promise<Wallet> {
+export async function getWallet(name: AccountName, callback?: ProgressCallback) : Promise<Wallet> {
   return globalThis.__thecoin.wallets[name] ?? loadWallet(name, callback);
 }
 
-
-export async function getContract(name: string, callback?: ProgressCallback) : Promise<Contract> {
+export async function getContract(name: AccountName, callback?: ProgressCallback) : Promise<Contract> {
 	if (!ConnectedContract) {
 		const wallet = await getWallet(name, callback);
 		ConnectedContract = await ConnectContract(wallet);
