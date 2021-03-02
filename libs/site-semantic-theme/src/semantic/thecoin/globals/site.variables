@@ -179,6 +179,17 @@
 @selectedTextColor          : @textColor;
 @negativeTextColor          : @red;
 
+
+/*-------------------
+       Accents
+--------------------*/
+
+/* Differentiating Layers */
+@subtleShadow:
+  0px 4px 4px 0px @theCoinPaletteGray3
+;
+
+
 /*******************************
              States
 *******************************/
