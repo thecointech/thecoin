@@ -6,7 +6,7 @@ export async function init() {
   // Init luxon to use the right timezone
   Settings.defaultZoneName = "America/New_York";
   // Logging (todo: connect to logs aggregator)
-  initlog('rates-service');
+  initlog("broker-cad");
   // connect to DB
   await initdb({project: "broker-cad"});
 

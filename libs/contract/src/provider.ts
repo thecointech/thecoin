@@ -1,4 +1,4 @@
-import { providers } from "ethers/ethers";
+import { providers } from "ethers";
 
 export const getDevLiveProvider = () =>
   new providers.JsonRpcProvider("http://localhost:9545");
@@ -16,7 +16,7 @@ export const getProvider = () => {
       return new providers.InfuraProvider("ropsten", key);
   }
   else {
-    if (process.env.SETTINGS == 'live') {
+    if (process.env.SETTINGS === 'live') {
       return getDevLiveProvider();
     }
   }

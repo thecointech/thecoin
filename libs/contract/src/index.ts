@@ -1,3 +1,4 @@
 export * from './utils';
-export type { TheCoin } from '../types/ethers-contracts/TheCoin';
+export type { TheCoin } from './types/TheCoin';
 export * from './connect';
+export * from './contract';

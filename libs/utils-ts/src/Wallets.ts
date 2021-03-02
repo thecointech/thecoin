@@ -4,7 +4,7 @@
 // to locate wallets, removing them from the build system
 
 import { Wallet, Contract } from 'ethers';
-import {ConnectContract} from '@the-coin/contract';
+import { ConnectContract } from '@the-coin/contract';
 import { existsSync, readFileSync } from 'fs';
 import { ProgressCallback } from 'ethers/utils';
 import { setGlobal } from './globals';
@@ -41,9 +41,23 @@ function getKey(name: string) {
   return key;
 }
 
-async function loadWallet(name: string, callback?: ProgressCallback) {
-  if (process.env.NODE_ENV == 'development') {
+// async function loadDevLiveSigner(name: string) {
+//   const provider = getDevLiveProvider();
+//   const accounts = await provider.listAccounts();
+//   const named =
+//   const signer = new Signer()
+// }
 
+async function loadWallet(name: string, callback?: ProgressCallback) {
+  if (process.env.NODE_ENV === 'development') {
+    // dev:live environment, we pull in the wallets from local emulator
+    if (process.env.SETTINGS === 'live') {
+
+    }
+    else {
+      // regular development environment, wallets should(?) be emulated (how?)
+    }
+    return null;
   }
   else {
     const encrypted = loadEncrypted(name);

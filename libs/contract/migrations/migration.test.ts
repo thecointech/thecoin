@@ -1,4 +1,4 @@
-import { GetContract } from '../src/index'
+import { GetContract } from '../src'
 
 //
 // Simple sanity test for a contract

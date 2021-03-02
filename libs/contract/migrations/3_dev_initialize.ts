@@ -1,7 +1,7 @@
 import { namedAccounts } from '../src/utils';
-import { COIN_EXP } from "../src";
+import { COIN_EXP } from "../src/contract";
 import { DateTime } from 'luxon';
-import { TheCoinInstance } from '../types/truffle-contracts/TheCoin';
+import { TheCoinInstance } from './types/TheCoin';
 
 const deploy: MigrationStep = (artifacts) =>
   async (_deployer, network, accounts) => {

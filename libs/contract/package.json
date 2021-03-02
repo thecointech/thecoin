@@ -18,10 +18,11 @@
     "build": "run-s build:contracts generate-types build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:copy": "cpx \"./src/deployed\" ./build/",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/deployed",
-    "clean:types": "rimraf ./types",
+    "clean:contracts": "rimraf ./src/contracts",
+    "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "test": "yarn jest",
     "dev:live": "run-p emulator migrate",
@@ -33,13 +34,12 @@
     "console": "truffle console",
     "emulator": "truffle develop",
     "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --target=truffle-v5 src/contracts/*.json",
-    "generate-types:ethers": "yarn typechain --target=ethers-v4 src/contracts/*.json"
+    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 src/contracts/*.json",
+    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 src/contracts/*.json"
   },
   "files": [
     "build/**/*"
   ],
-  "types": "./types",
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
