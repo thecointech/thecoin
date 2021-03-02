@@ -3,7 +3,7 @@
 // for use in the nodejs system.  Uses env variables
 // to locate wallets, removing them from the build system
 
-import { Wallet, Contract } from 'ethers';
+import { Wallet, Contract, Signer } from 'ethers';
 import { ConnectContract } from '@the-coin/contract';
 import { getDevLiveProvider } from '@the-coin/contract/provider';
 import { AccountName, AccountId } from '../../contract/build/accounts';
@@ -76,7 +76,7 @@ async function loadWallet(name: AccountName, callback?: ProgressCallback) {
   }
 }
 
-export async function getWallet(name: AccountName, callback?: ProgressCallback) : Promise<Wallet> {
+export async function getWallet(name: AccountName, callback?: ProgressCallback) : Promise<Signer> {
   return globalThis.__thecoin.wallets[name] ?? loadWallet(name, callback);
 }
 
