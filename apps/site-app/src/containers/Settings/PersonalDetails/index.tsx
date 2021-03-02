@@ -27,6 +27,11 @@ const name = {
   defaultMessage: "Given Name",
   description: "Name field for the page setting / tab personal details in the app"
 };
+const familyname = {
+  id: "app.settings.personaldetails.familyname",
+  defaultMessage: "Family Name",
+  description: "Name field for the page setting / tab personal details in the app"
+};
 const email = {
   id: "app.settings.personaldetails.email",
   defaultMessage: "Email",
@@ -62,12 +67,14 @@ export const PersonalDetails = () => {
   const onDetailsChange = useCallback((_, {details, name, value}: InputOnChangeData) => {
     setDetails({
       ...details,
-      [name]: value
+      [name]: value,
     });
+    console.log(details);
   }, [setDetails])
 
   const onSetDetails = useCallback(() => {
     accountApi.setDetails({...details});
+    console.log(details);
   }, [details, accountApi])
 
   return (
@@ -79,29 +86,50 @@ export const PersonalDetails = () => {
         <Form.Input
           className={"half left"}
           label={<FormattedMessage {...name} />}
-          value={details.given_name || ""}
+          value={details.given_name}
           onChange={onDetailsChange}
           details={details}
           name="given_name" />
 
         <Form.Input
           className={"half right"}
-          label={<FormattedMessage {...email} />}
-          name="email" />
+          label={<FormattedMessage {...familyname} />}
+          value={details.family_name}
+          onChange={onDetailsChange}
+          details={details}
+          name="family_name" />
 
         <Form.Input
           className={"half left"}
           label={<FormattedMessage {...dob} />}
-          name="dob" />
+          onChange={onDetailsChange}
+          details={details}
+          value={details.DOB}
+          name="DOB" />
+
         <Form.Input
-          className={"half right"}
+          className={""}
+          label={<FormattedMessage {...email} />}
+          value={details.email}
+          onChange={onDetailsChange}
+          details={details}
+          name="email" />
+
+        <Form.Input
+          className={"half left"}
+          details={details}
+          value={details.phone}
           label={<FormattedMessage {...phone} />}
+          onChange={onDetailsChange}
           name="phone" />
 
         <Form.Input
           className={"borderTop borderBottom"}
           label={<FormattedMessage {...address} />}
-          name="address" />
+          onChange={onDetailsChange}
+          details={details}
+          value={details.address?.address}
+          name="address[address]" />
 
         <Header as="h5" className={`appTitles`}>
           <FormattedMessage {...titleCurrency} />
