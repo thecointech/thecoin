@@ -10,7 +10,7 @@ export const cadbrokerOut = "0x2fe3cbf59a777e8f4be4e712945ffefc6612d46f";
 export const cadbrokerIn = "0x38de1b6515663dbe145cc54179addcb963bb606a";
 
 export async function fetchCoinHistory(contract?: Contract) {
-  let tc = contract ?? await GetContract();
+  const tc = contract ?? await GetContract();
 
   let history : Transaction[] = [];
   history = await loadAndMergeHistory(cadbrokerOut, 0, tc, history);
