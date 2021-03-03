@@ -1,4 +1,4 @@
-import { BunyanLogger } from 'logger';
+import { BunyanLogger } from './logger';
 import { init as init_node } from './browser';
 
 // NOTE: our log is declared as type 'bunyan', but then
