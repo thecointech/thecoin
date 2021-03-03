@@ -27,7 +27,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "bunyan": "^1.8.12"
+    "bunyan": "^1.8.12",
+    "browser-bunyan": "^1.6.3"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.6"

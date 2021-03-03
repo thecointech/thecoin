@@ -59,6 +59,9 @@ module.exports = require('./webpack.base.babel')({
       exclude: /a\.js|node_modules/, // exclude node_modules
       failOnError: false, // show a warning when there is a circular dependency
     }),
+    new webpack.EnvironmentPlugin({
+      TC_LOG_FOLDER: undefined, // disable logging to file
+    })
   ],
 
   // Emit a source map for easier debugging

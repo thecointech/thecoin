@@ -3190,6 +3190,32 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@browser-bunyan/console-formatted-stream@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@browser-bunyan/console-formatted-stream/-/console-formatted-stream-1.6.2.tgz#e458a1913b952249afa4be3fde0d7b3068ab9507"
+  integrity sha512-RFY4VG5+ewPG5A4LC3uN4AC8MIXEjlUJ568VlXhdMDfV9/LUrUX1LUbf0UmFQ3OhI2jqbeC31XwP0gBIrwbXpw==
+  dependencies:
+    "@browser-bunyan/levels" "^1.6.0"
+
+"@browser-bunyan/console-plain-stream@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@browser-bunyan/console-plain-stream/-/console-plain-stream-1.6.0.tgz#295404482150e7693846ccb07045676218bcc911"
+  integrity sha512-92j8/Lk7yD6F4JKygWd7g9++QoNiEIj1MAP5zMGVk0g1ssPs3vqK1F+HgWfzYaHccREJ6S553imX9Ll5OAn2nA==
+  dependencies:
+    "@browser-bunyan/levels" "^1.6.0"
+
+"@browser-bunyan/console-raw-stream@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@browser-bunyan/console-raw-stream/-/console-raw-stream-1.6.0.tgz#255f4734c064dc046fe7896353982c563e2ec150"
+  integrity sha512-OqPe4uy/rGOL8ZRiq3iwGM/YIGWKd2ne+8cxWSsMbcLL5hr66IOhzr3nwhyRsSo58JbWDC3K/IaJDyoOTcwrdA==
+  dependencies:
+    "@browser-bunyan/levels" "^1.6.0"
+
+"@browser-bunyan/levels@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@browser-bunyan/levels/-/levels-1.6.0.tgz#3a50b8118254aa2ac26caf9d2aafa72d157e374b"
+  integrity sha512-wte6nXXZH62Y/RGysYRlOkKxuJn+4S8xEamMF0fDncxxy0SriCHYwGPyWGF0FWYWmRzbZuEkp7dNebBf9Xfeeg==
+
 "@ceramicnetwork/3id-did-resolver@^0.6.10":
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/@ceramicnetwork/3id-did-resolver/-/3id-did-resolver-0.6.10.tgz#61f6c889adaff4086e3e1208853e5ef71df71fa4"
@@ -12045,6 +12071,16 @@ brorand@^1.0.1, brorand@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
+
+browser-bunyan@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/browser-bunyan/-/browser-bunyan-1.6.3.tgz#0e58c51ff48507317ba8e5cf579e8b6bad7281e0"
+  integrity sha512-HRg+acpwO3dsY2RWgtjw2wPVHV+uzbCrdhUxD25+qo5NFSTpbfJekrRP0yFNypAhG5LwXFV1Dc5FIc8cxwU5rQ==
+  dependencies:
+    "@browser-bunyan/console-formatted-stream" "^1.6.2"
+    "@browser-bunyan/console-plain-stream" "^1.6.0"
+    "@browser-bunyan/console-raw-stream" "^1.6.0"
+    "@browser-bunyan/levels" "^1.6.0"
 
 browser-process-hrtime@^0.1.2:
   version "0.1.3"
