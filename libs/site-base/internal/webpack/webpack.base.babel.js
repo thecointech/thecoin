@@ -129,6 +129,7 @@ module.exports = options => ({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       //SETTINGS: JSON.stringify(process.env.SETTINGS),
       RUNTIME_ENV: "browser",
+      ENV_BROWSER: true,
     }),
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),

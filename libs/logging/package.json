@@ -21,9 +21,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
+  "browser": "./build/main_browser.js",
+  "main": "./build/main_node.js",
   "exports": {
-    ".": "./build/index.js",
     "./": "./build/"
   },
   "dependencies": {

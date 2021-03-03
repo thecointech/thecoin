@@ -39,7 +39,6 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./any/random/path",
     "paths": {
-      "@the-coin/logging/*":    ["../../../libs/logging/build/*"],
       "@the-coin/contract/*":   ["../../../libs/contract/build/*"],
       "@the-coin/types/*":      ["../../../libs/types/build/*"],
       "@the-coin/store/*":      ["../../../libs/store/build/*"],
