@@ -49,7 +49,7 @@ function weSellAt(rates: FXRate[], date?: Date) {
   return sell * fxRate;
 }
 
-async function fetchRate(date?: Date): Promise<FXRate | null> {
+export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCode.CAD;
   log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
 
