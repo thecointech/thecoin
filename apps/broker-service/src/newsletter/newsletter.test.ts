@@ -1,5 +1,5 @@
 
-import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail } from './Newsletter'
+import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail, Details } from './Newsletter'
 import { init, describe } from '@the-coin/utilities/firestore/jestutils'
 import { GetFirestore } from '@the-coin/utilities/firestore';
 
@@ -29,6 +29,20 @@ describe('Test newsletter actions', () => {
 
     // Let's clean after
     const id = await getDocId(email);
+    await Unsubscribe(id);
+  });
+
+  test("Can fetch details", async () => {
+    let email = "marie@thecoin.io";
+    await Signup({
+      email: email,
+      confirmed: true,
+    }, false)
+
+    const id = await getDocId(email);
+    const details = await Details(id);
+    //expect(details.email).toEqual(email);
+    expect(details.id).toEqual(id);
     await Unsubscribe(id);
   });
 
@@ -67,6 +81,7 @@ describe('Test newsletter actions', () => {
 
     let res = await Confirm({
       id: await getDocId(email),
+      email,
       confirmed: true,
       firstName: "Stephen",
       city: "Montreal"

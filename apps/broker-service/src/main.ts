@@ -4,8 +4,11 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
 import { DevLivePort, Service } from '@the-coin/utilities/ServiceAddresses';
 import { init } from './init';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
+//app.options('*', cors());
 const port = process.env.PORT ?? DevLivePort(Service.BROKER);
 
 RegisterRoutes(app);
