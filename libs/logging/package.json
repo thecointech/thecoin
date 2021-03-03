@@ -18,7 +18,6 @@
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
-  "type": "module",
   "files": [
     "build/**/*"
   ],

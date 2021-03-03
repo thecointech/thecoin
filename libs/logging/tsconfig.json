@@ -1,8 +1,6 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ES2020",
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
