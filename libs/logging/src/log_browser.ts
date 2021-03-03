@@ -1,5 +1,5 @@
-import type { createLogger } from 'browser-bunyan';
-import { init as browser_init } from './browser';
+import { BunyanLogger } from 'logger';
+import { init as init_browser } from './browser';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -8,11 +8,9 @@ import { init as browser_init } from './browser';
 // to manually initialize us.  In other words, we are replacing
 // the compilers guarantee with one we manage manually.  If this
 // variable is null, that means logging hasn't been init'ed (yet).
-type BunyanLogger = Omit<ReturnType<typeof createLogger>, "addStream"|"addSerializers"|"child">;
 export var log : BunyanLogger = null! as BunyanLogger;
 
 export async function init(name: string) {
-  // basic env sniffing: are we running in the browser?
-  log = browser_init(name);
-  log.trace('Logging Initialized');
+  log = init_browser(name);
+  log.trace('Web logging initialized');
 }

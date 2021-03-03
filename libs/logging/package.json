@@ -23,7 +23,7 @@
     "build/**/*"
   ],
   "main": "./build/log_node.js",
-  "browser": "./build/log_web.js",
+  "browser": "./build/log_browser.js",
   "exports": "./build/log_node.js",
   "dependencies": {
     "bunyan": "^1.8.12",

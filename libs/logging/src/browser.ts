@@ -1,5 +1,6 @@
-import { createLogger, INFO, stdSerializers } from 'browser-bunyan';
+import { createLogger, TRACE, DEBUG, WARN, stdSerializers } from 'browser-bunyan';
 import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
+import { BunyanLogger } from 'logger';
 
 // const getStreams = (_name: string) => {
 //   const streams = [new ConsoleFormattedStream()];
@@ -11,17 +12,21 @@ import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream
 //   // }
 //   return streams;
 // }
-type BunyanLogger = ReturnType<typeof createLogger>;
-export function init(name: string) : BunyanLogger {
+
+export function init(name: string): BunyanLogger {
   return createLogger({
     name,
     streams: [
       {
-          level: INFO, // or use the string 'info'
-          stream: new ConsoleFormattedStream()
+        level: process.env.NODE_ENV === "development"
+          ? TRACE
+          : process.env.SETTINGS === "staging"
+            ? DEBUG
+            : WARN,
+        stream: new ConsoleFormattedStream()
       }
     ],
-  serializers: stdSerializers,
+    serializers: stdSerializers,
   });
 
 }
