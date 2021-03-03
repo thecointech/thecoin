@@ -22,7 +22,7 @@
     "deploy:cron": "gcloud app deploy cron.yaml --project=carbon-theorem-283310",
     "deploy": "yarn deploy:pre && yarn build && yarn deploy:upload && yarn deploy:clean",
     "start": "node ./build/main.js",
-    "dev": "yarn build && node -r dotenv/config --inspect ./build/main.js dotenv_config_path=../../tools/debug.env",
+    "dev": "cross-env NODE_ENV=development && node --inspect -r ts-node/register ./src/main.ts",
     "dev:live": "yarn dev",
     "build": "yarn build:api && yarn build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
