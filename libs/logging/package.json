@@ -22,9 +22,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/main_node.js",
-  "browser": "./build/main_web.js",
-  "exports": "./build/main_node.js",
+  "main": "./build/log_node.js",
+  "browser": "./build/log_web.js",
+  "exports": "./build/log_node.js",
   "dependencies": {
     "bunyan": "^1.8.12",
     "browser-bunyan": "^1.6.3"
