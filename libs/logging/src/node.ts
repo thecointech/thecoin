@@ -5,7 +5,7 @@ import { getFileStream } from "filestream";
 const getStreams = (name: string) => {
   const streams = [getConsoleStream()];
   // Are we testing with jest?
-  if (!process.env.JEST_WORKER_ID !== undefined) {
+  if (process.env.JEST_WORKER_ID === undefined) {
     // Do we have a output folder specifed?
     if (process.env.TC_LOG_FOLDER)
     {

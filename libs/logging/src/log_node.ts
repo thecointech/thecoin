@@ -8,7 +8,7 @@ import { init as init_node } from './browser';
 // to manually initialize us.  In other words, we are replacing
 // the compilers guarantee with one we manage manually.  If this
 // variable is null, that means logging hasn't been init'ed (yet).
-export var log : BunyanLogger = null! as BunyanLogger;
+export let log : BunyanLogger = null! as BunyanLogger;
 
 export function init(name: string) {
   log = init_node(name);
