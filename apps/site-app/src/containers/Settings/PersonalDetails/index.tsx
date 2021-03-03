@@ -4,7 +4,7 @@ import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import React, { useCallback, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, Icon, InputOnChangeData, Label } from 'semantic-ui-react';
+import { Form, Header, Icon, InputOnChangeData } from 'semantic-ui-react';
 import styles from './styles.module.less';
 
 const title = {
