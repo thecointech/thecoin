@@ -4,7 +4,7 @@ import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import React, { useCallback, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, InputOnChangeData } from 'semantic-ui-react';
+import { Form, Header, Icon, InputOnChangeData, Label } from 'semantic-ui-react';
 import styles from './styles.module.less';
 
 const title = {
@@ -21,6 +21,12 @@ const descriptionCurrency = {
   id: "app.settings.personaldetails.descriptionCurrency",
   defaultMessage: "Your can choose the currency you want us to display:",
   description: "Title for the currency section of the page setting / tab personal details in the app"
+};
+
+const edit = {
+  id: "app.settings.personaldetails.edit",
+  defaultMessage: "Edit",
+  description: "Edit zone for the page setting / tab personal details in the app"
 };
 const name = {
   id: "app.settings.personaldetails.name",
@@ -63,7 +69,13 @@ export const PersonalDetails = () => {
   const account = useActiveAccount()!;
   const accountApi = useAccountApi(account.address);
   const [details, setDetails] = useState(account.details);
-
+  const [givenNameEdit, setGivenNameEdit] = useState(false);
+  const [familyNameEdit, setFamilyNameEdit] = useState(false);
+  const [dobEdit, setDobEdit] = useState(false);
+  const [addressEdit, setAddressEdit] = useState(false);
+  const [emailEdit, setEmailEdit] = useState(false);
+  const [phoneEdit, setPhoneEdit] = useState(false);
+  
   const onDetailsChange = useCallback((_, {details, name, value}: InputOnChangeData) => {
     setDetails({
       ...details,
@@ -82,56 +94,88 @@ export const PersonalDetails = () => {
       <Header as="h5" className={`appTitles`}>
         <FormattedMessage {...title} />
       </Header>
-      <Form>
+      <Form id={styles.personalInfo}>
+
         <Form.Input
           className={"half left"}
-          label={<FormattedMessage {...name} />}
+          label={<div>
+                    <FormattedMessage {...name} />
+                    <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
+                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                    </span>
+                </div>}
           value={details.given_name}
           onChange={onDetailsChange}
           details={details}
-          name="given_name" />
+          name="given_name" readOnly={!givenNameEdit} />
+        
 
         <Form.Input
           className={"half right"}
-          label={<FormattedMessage {...familyname} />}
+          label={<div>
+                    <FormattedMessage {...familyname} />
+                    <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={styles.edit}>
+                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                    </span>
+                </div>}
           value={details.family_name}
           onChange={onDetailsChange}
           details={details}
-          name="family_name" />
+          name="family_name" readOnly={!familyNameEdit} />
 
         <Form.Input
           className={"half left"}
-          label={<FormattedMessage {...dob} />}
+          label={<div>
+                    <FormattedMessage {...dob} />
+                    <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
+                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                    </span>
+                  </div>}
           onChange={onDetailsChange}
           details={details}
           value={details.DOB}
-          name="DOB" />
-
-        <Form.Input
-          className={""}
-          label={<FormattedMessage {...email} />}
-          value={details.email}
-          onChange={onDetailsChange}
-          details={details}
-          name="email" />
-
-        <Form.Input
-          className={"half left"}
-          details={details}
-          value={details.phone}
-          label={<FormattedMessage {...phone} />}
-          onChange={onDetailsChange}
-          name="phone" />
+          name="DOB" readOnly={!dobEdit} />
 
         <Form.Input
           className={"borderTop borderBottom"}
-          label={<FormattedMessage {...address} />}
+          label={<div>
+                    <FormattedMessage {...address} />
+                    <span onClick={()=>setAddressEdit(!addressEdit)} className={styles.edit}>
+                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                    </span>
+                  </div>}
           onChange={onDetailsChange}
           details={details}
-          value={details.address?.address}
-          name="address[address]" />
+          value={details.address}
+          name="address" readOnly={!addressEdit} />
 
-        <Header as="h5" className={`appTitles`}>
+        <Form.Input
+          className={"half left"}
+          label={<div>
+                  <FormattedMessage {...email} />
+                  <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
+                    <Icon name={"edit"} /><FormattedMessage {...edit} />
+                  </span>
+                </div>}
+          value={details.email}
+          onChange={onDetailsChange}
+          details={details}
+          name="email" readOnly={!emailEdit} />
+
+        <Form.Input
+          className={"half right"}
+          details={details}
+          value={details.phone}
+          label={<div>
+                    <FormattedMessage {...phone} />
+                    <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
+                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                    </span>
+                  </div>}
+          onChange={onDetailsChange}
+          name="phone" readOnly={!phoneEdit} />
+
+        <Header as="h5" className={`appTitles x6spaceBefore`}>
           <FormattedMessage {...titleCurrency} />
           <Header.Subheader>
             <FormattedMessage  {...descriptionCurrency} />
