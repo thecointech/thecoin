@@ -37,6 +37,9 @@ import { translations } from './translations';
 import { initTracking } from './utils/reactga';
 
 initTracking();
+import { log, init } from '@the-coin/logging';
+init('site-landing')
+log.debug('yo!!!!');
 
 // Create redux store with history
 const store = configureAppStore();

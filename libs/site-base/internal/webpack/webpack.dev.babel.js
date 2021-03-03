@@ -32,11 +32,11 @@ module.exports = require('./webpack.base.babel')({
   },
 
   rules: [
-    {
-      test: /\.js$/,
-      enforce: 'pre',
-      use: ['source-map-loader'],
-    },
+    // {
+    //   test: /\.js$/,
+    //   enforce: 'pre',
+    //   use: ['source-map-loader'],
+    // },
   ],
 
   // Disable unused vars for debug builds.

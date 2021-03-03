@@ -18,14 +18,13 @@
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
+  "type": "module",
   "files": [
     "build/**/*"
   ],
-  "browser": "./build/main_browser.js",
   "main": "./build/main_node.js",
-  "exports": {
-    "./": "./build/"
-  },
+  "browser": "./build/main_web.js",
+  "exports": "./build/main_node.js",
   "dependencies": {
     "bunyan": "^1.8.12",
     "browser-bunyan": "^1.6.3"
