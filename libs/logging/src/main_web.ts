@@ -1,4 +1,5 @@
 import type { createLogger } from 'browser-bunyan';
+import { init as browser_init } from './browser';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -12,12 +13,6 @@ export var log : BunyanLogger = null! as BunyanLogger;
 
 export async function init(name: string) {
   // basic env sniffing: are we running in the browser?
-  if (process.env.RUNTIME_ENV === 'browser')
-  {
-    log = (await import('./browser')).init(name);
-  }
-  else {
-    log = (await import('./node')).init(name);
-  }
+  log = browser_init(name);
   log.trace('Logging Initialized');
 }

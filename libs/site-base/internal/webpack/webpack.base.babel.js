@@ -127,6 +127,7 @@ module.exports = options => ({
     // drop any unreachable code.
     new webpack.EnvironmentPlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      ENV_BROWSER: true,
     }),
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),
