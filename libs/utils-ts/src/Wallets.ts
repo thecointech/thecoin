@@ -3,8 +3,10 @@
 // for use in the nodejs system.  Uses env variables
 // to locate wallets, removing them from the build system
 
-import { Wallet, Contract } from 'ethers';
+import { Wallet, Contract, Signer } from 'ethers';
 import { ConnectContract } from '@the-coin/contract';
+import { getDevLiveProvider } from '@the-coin/contract/provider';
+import { AccountName, AccountId } from '../../contract/build/accounts';
 import { existsSync, readFileSync } from 'fs';
 import { ProgressCallback } from 'ethers/utils';
 import { setGlobal } from './globals';
@@ -41,18 +43,18 @@ function getKey(name: string) {
   return key;
 }
 
-// async function loadDevLiveSigner(name: string) {
-//   const provider = getDevLiveProvider();
-//   const accounts = await provider.listAccounts();
-//   const named =
-//   const signer = new Signer()
-// }
+// In dev:live environment, pull signers from
+// local emulator for our system accounts
+async function loadDevLiveSigner(name: AccountName) {
+  const provider = getDevLiveProvider();
+  return provider.getSigner(AccountId[name])
+}
 
-async function loadWallet(name: string, callback?: ProgressCallback) {
+async function loadWallet(name: AccountName, callback?: ProgressCallback) {
   if (process.env.NODE_ENV === 'development') {
     // dev:live environment, we pull in the wallets from local emulator
     if (process.env.SETTINGS === 'live') {
-
+      return loadDevLiveSigner(name);
     }
     else {
       // regular development environment, wallets should(?) be emulated (how?)
@@ -74,12 +76,11 @@ async function loadWallet(name: string, callback?: ProgressCallback) {
   }
 }
 
-export async function getWallet(name: string, callback?: ProgressCallback) : Promise<Wallet> {
+export async function getWallet(name: AccountName, callback?: ProgressCallback) : Promise<Signer> {
   return globalThis.__thecoin.wallets[name] ?? loadWallet(name, callback);
 }
 
-
-export async function getContract(name: string, callback?: ProgressCallback) : Promise<Contract> {
+export async function getContract(name: AccountName, callback?: ProgressCallback) : Promise<Contract> {
 	if (!ConnectedContract) {
 		const wallet = await getWallet(name, callback);
 		ConnectedContract = await ConnectContract(wallet);

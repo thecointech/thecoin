@@ -2,9 +2,9 @@ import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
 import { BillPayeePacket } from '@the-coin/types';
-import status from '../status/Status.json';
 import { init, describe } from '@the-coin/utilities/firestore/jestutils';
 import { CertifiedTransferRecord } from '@the-coin/utilities/firestore';
+import {current} from '../status';
 
 beforeAll(async () => {
   init('broker-cad-billpayments');
@@ -19,7 +19,7 @@ describe('Test bill payments actions', () => {
 
     // TODO!  Create a testing account to handle this stuff!
     const tc = await GetContract();
-    const myBalance = await tc.balanceOf(wallet.address)
+    const myBalance = await tc.balanceOf(await wallet.getAddress())
     expect(myBalance.toNumber()).toBeGreaterThan(0);
 
     const payee: BillPayeePacket = {
@@ -28,7 +28,8 @@ describe('Test bill payments actions', () => {
     };
 
     const amount = 100;
-    const billPayment = await BuildVerifiedBillPayment(payee, wallet, status.address, amount, status.certifiedFee);
+    const curr = await current();
+    const billPayment = await BuildVerifiedBillPayment(payee, wallet, curr.BrokerCAD, amount, curr.certifiedFee);
     const tx = await ProcessBillPayment(billPayment);
 
     expect(tx).toBeTruthy();

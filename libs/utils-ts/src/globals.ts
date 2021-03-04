@@ -1,10 +1,10 @@
 import { Firestore } from '@the-coin/types';
-import { Wallet } from 'ethers';
+import { Signer } from 'ethers';
 
 type TheCoinGlobals = {
   firestore: Firestore|null;
   wallets: {
-    [name: string]: Wallet;
+    [name: string]: Signer;
   }
 }
 declare global {

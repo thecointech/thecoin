@@ -705,7 +705,19 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"additionalProperties": true,
+							"properties": {
+								"certifiedFee": {
+									"type": "number",
+									"format": "double"
+								},
+								"address": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"address",
+								"certifiedFee"
+							],
 							"type": "object"
 						}
 					}
