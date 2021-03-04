@@ -7,6 +7,32 @@ import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
 import { DateTime, Duration } from "luxon";
 import { getLatestStored, setRate } from "../internals/rates/db";
 import { CoinRate, FxRates } from "../internals/rates/types";
+import { log } from "@the-coin/logging";
+
+export async function seed() {
+  log.trace('--- Seeding DB ---');
+  // temp disable logging (todo: move into log library?)
+  const oldLevels = log.levels();
+  oldLevels.forEach((_lvl, idx) => log.levels(idx, 50));
+
+  // Seed our DB for a year, values set for a day.
+  const from = DateTime
+    .local()
+    .minus({ years: 1.1 })
+    .set({
+      hour: 9,
+      minute: 31,
+      second: 30,
+      millisecond: 0
+    });
+
+  const validityInterval = Duration.fromObject({ days: 1 });
+  await SeedWithRandomRates(from, validityInterval);
+
+  // re-enable logging
+  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
+  log.trace('Seeding complete');
+}
 
 export async function SeedWithRandomRates(from: DateTime, validityInterval: Duration) {
 

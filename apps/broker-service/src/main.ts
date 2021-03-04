@@ -1,13 +1,12 @@
 import express from 'express';
 import { RegisterRoutes } from './routes/routes';
-//import createMiddleware from 'swagger-express-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
-import { ServicePorts } from '@the-coin/utilities/ServiceAddresses';
+import { DevLivePort, Service } from '@the-coin/utilities/ServiceAddresses';
 import { init } from './init';
 
 const app = express();
-const port = process.env.PORT ?? ServicePorts.BROKER_PORT;
+const port = process.env.PORT ?? DevLivePort(Service.BROKER);
 
 RegisterRoutes(app);
 

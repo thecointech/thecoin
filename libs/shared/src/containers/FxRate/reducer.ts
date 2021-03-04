@@ -6,6 +6,8 @@ import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { FxRatesState, IFxRates } from './types';
 import { buildSaga, sendValues } from '../../store/sagas';
+import { log } from '@the-coin/logging';
+import { ServiceAddress, Service } from '@the-coin/utilities/ServiceAddresses';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
@@ -49,14 +51,15 @@ function weSellAt(rates: FXRate[], date?: Date) {
 
 export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCode.CAD;
-  console.log(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
-  const api = new RatesApi();
+  log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
+
+  const api = new RatesApi(undefined, ServiceAddress(Service.RATES));
   const r = await api.getConversion(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {
     if (date)
-      console.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText}`)
+      log.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText} - ${r.data}`)
     else
-      console.error(`Error fetching latest rate: ${r.statusText}`);
+      log.error(`Error fetching latest rate: ${r.statusText}`);
     return null;
   }
   return r.data;
@@ -76,20 +79,19 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
 
     // We can modify the draft state up until the first yield
     yield this.storeValues({fetching: +1});
-    console.log(`We are now running ${this.state.fetching + 1} fetches`);
     const newState = {
       fetching: -1,
       rates: [] as FXRate[]
     }
     try {
-      const newFxRate: FXRate|null = (yield call<typeof fetchRate>(fetchRate, date)) as any;
+      const newFxRate: FXRate|null = (yield call(fetchRate, date)) as any;
       if (newFxRate)
         newState.rates = [newFxRate];
     }
     catch (err) {
       console.error(err);
     }
-    // Even in the case of the throw, try to decrement our counter
+    // Even in the case of the throw, we store values to decrement our counter
     yield this.storeValues(newState);
   }
 
@@ -107,7 +109,6 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
 
     // If we have completed a fetch, remove the counter
     this.draftState.fetching = this.state.fetching + (newState.fetching ?? 0);
-    console.log(`We are still running ${this.draftState.fetching} fetches`);
   }
 
   haveRateFor(ts: number): boolean {
