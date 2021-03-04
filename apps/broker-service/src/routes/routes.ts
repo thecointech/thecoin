@@ -74,11 +74,10 @@ const models: TsoaRoute.Models = {
   "SubscriptionDetails": {
     "dataType": "refObject",
     "properties": {
-      "id": { "dataType": "string" },
-      "email": { "dataType": "string" },
+      "email": { "dataType": "string", "required": true },
       "confirmed": { "dataType": "boolean" },
-      "firstName": { "dataType": "string" },
-      "lastName": { "dataType": "string" },
+      "givenName": { "dataType": "string" },
+      "familyName": { "dataType": "string" },
       "country": { "dataType": "string" },
       "city": { "dataType": "string" },
     },
@@ -88,6 +87,7 @@ const models: TsoaRoute.Models = {
   "BoolResponse": {
     "dataType": "refObject",
     "properties": {
+      "success": { "dataType": "boolean", "required": true },
     },
     "additionalProperties": false,
   },
@@ -291,9 +291,10 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.put('/api/v1/newsletter/confirm',
+  app.put('/api/v1/newsletter/update',
     function(request: any, response: any, next: any) {
       const args = {
+        id: { "in": "query", "name": "id", "required": true, "dataType": "string" },
         details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
       };
 
@@ -309,14 +310,14 @@ export function RegisterRoutes(app: express.Express) {
       const controller = new NewsletterController();
 
 
-      const promise = controller.newsletterConfirm.apply(controller, validatedArgs as any);
+      const promise = controller.newsletterUpdate.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post('/api/v1/newsletter/signup',
     function(request: any, response: any, next: any) {
       const args = {
-        details: { "in": "body", "name": "details", "required": true, "ref": "SubscriptionDetails" },
+        email: { "in": "query", "name": "email", "required": true, "dataType": "string" },
       };
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

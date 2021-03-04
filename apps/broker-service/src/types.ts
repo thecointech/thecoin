@@ -1,4 +1,4 @@
 
-export type BoolResponse = {
+export interface BoolResponse {
   success: boolean
 }

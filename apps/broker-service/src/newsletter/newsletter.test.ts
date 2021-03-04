@@ -1,126 +1,89 @@
+jest.mock('@the-coin/email');
 
-import { Signup, Confirm, Unsubscribe, SubDoc, numberOccurrencesEmail, Details } from './Newsletter'
-import { init, describe } from '@the-coin/utilities/firestore/jestutils'
-import { GetFirestore } from '@the-coin/utilities/firestore';
+import { SendWelcomeEmail } from '@the-coin/email';
+import { mocked } from 'ts-jest/utils'
+import { Signup, Update, Unsubscribe, Details } from './Newsletter'
+import { init } from '@the-coin/utilities/firestore';
 
-async function getDocId(email: string) {
-  return (await SubDoc(email)).id;
-}
+const mockedSend = mocked(SendWelcomeEmail);
+mockedSend.mockReturnValue(Promise.resolve(true))
 
-describe('Test newsletter actions', () => {
-
-  beforeAll(async () => {
-    await init('broker-cad')
-  });
-
-  test("We have DB", async () => {
-    let db = GetFirestore();
-    expect(db).toBeTruthy();
-  });
-
-  //
-  // Test email signup
-  test("Can sign up for email", async () => {
-    let email = "marie@thecoin.io";
-    await Signup({
-      email: email,
-      confirmed: true,
-    }, false)
-
-    // Let's clean after
-    const id = await getDocId(email);
-    await Unsubscribe(id);
-  });
-
-  test("Can fetch details", async () => {
-    let email = "marie@thecoin.io";
-    await Signup({
-      email: email,
-      confirmed: true,
-    }, false)
-
-    const id = await getDocId(email);
-    const details = await Details(id);
-    //expect(details.email).toEqual(email);
-    expect(details.id).toEqual(id);
-    await Unsubscribe(id);
-  });
-
-  test("Cannot sign up more than once", async () => {
-
-    let email = "marie@thecoin.io";
-    await Signup({
-      email,
-      confirmed: true,
-    }, false)
-
-    email = "Marie@thecoin.io";
-    await Signup({
-      email,
-      confirmed: true,
-    }, false)
-
-    email = "MARIE@thecoin.io";
-    await Signup({
-      email,
-      confirmed: true,
-    }, false)
-
-    let numberOccurences = await numberOccurrencesEmail(email)
-    expect(numberOccurences).toBe(1);
-
-    // Let's clean after
-    const id = await getDocId(email);
-    await Unsubscribe(id);
-  });
-
-
-  test("Can confirm existing email", async () => {
-    const email = "yiopieowyi@ghgyu.io";
-    await (Signup({ email, confirmed: false, }, false));
-
-    let res = await Confirm({
-      id: await getDocId(email),
-      email,
-      confirmed: true,
-      firstName: "Stephen",
-      city: "Montreal"
-    });
-
-    expect(res).toBeTruthy();
-    expect(res!.confirmed).toBeTruthy();
-    expect(res!.email).toBe(email);
-
-    // Let's clean after
-    const id = await getDocId(email);
-    await Unsubscribe(id);
-  });
-
-  test("Cannot confim non-existent signup", async () => {
-    expect(Confirm({
-      id: "123456",
-      email: "random@wew",
-      confirmed: true,
-    })).rejects.toThrow();
-  });
-
-  test("Can delete subscription", async () => {
-    const email = "sets@dfvs.com";
-    let s = await Signup({
-      email,
-      confirmed: false,
-    }, false)
-    expect(s).toBeTruthy();
-    const id = await getDocId(email);
-    let d = await Unsubscribe(id);
-    expect(d).toBeTruthy();
-
-    // allow unsubscribe non-existent emails
-    let du = await Unsubscribe(id);
-    expect(du).toBeTruthy();
-
-    let dr = await Unsubscribe("sdfsdf");
-    expect(dr).toBeTruthy();
-  });
-
+beforeEach(() => {
+  jest.resetAllMocks();
+  mockedSend.mockReturnValue(Promise.resolve(true))
+  init({});
 })
+
+const RandomEmail = () => `${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}@asdjflkj.co`;
+
+//
+// Test email signup
+test("Can sign up for email", async () => {
+  const email = RandomEmail();
+  const id = await Signup(email)
+  expect(mockedSend).toBeCalledWith(email, id);
+  expect(id).toBeTruthy();
+});
+
+test("Can fetch details correctly", async () => {
+  let email = RandomEmail();
+  const id = await Signup(email)
+  const details = await Details(id!);
+  expect(details?.email).toEqual(email);
+  // Fetch non-existent fails cleanly
+  expect(await Details("asdfasdf")).toBeNull();
+});
+
+it("Ignores capitalization differences", async () => {
+
+  const email = "marie@thecoin.io";
+  const id1 = await Signup(email)
+
+  const id2 = await Signup("Marie@thecoin.io");
+  expect(id1).toEqual(id2);
+
+  const id3 = await Signup("MARIE@thecoin.io")
+  expect(id1).toEqual(id3);
+
+  // However, we want to send an email each time
+  expect(mockedSend).toBeCalledTimes(3);
+});
+
+
+test("Can confirm existing email", async () => {
+  const email = RandomEmail();
+  const id = await Signup(email);
+  expect(id).toBeTruthy();
+
+  let res = await Update(id!, {
+    email,
+    confirmed: true,
+    givenName: "Stephen",
+    city: "Montreal"
+  });
+
+  expect(res).toBeTruthy();
+  expect(res?.confirmed).toBeTruthy();
+  expect(res?.email).toBe(email);
+});
+
+test("Cannot confim non-existent signup", async () => {
+  expect(Update("123456", {
+    email: "random@wew",
+    confirmed: true,
+  })).rejects.toThrow();
+});
+
+test("Can delete subscription", async () => {
+  const email = RandomEmail();
+  let id = await Signup(email);
+  expect(id).toBeTruthy();
+
+  expect(await Unsubscribe(id!)).toBeTruthy();
+  // Delete does not work with mocked DB
+  //expect(await Details(id!)).toBeNull();
+
+  // allow unsubscribe non-existent emails
+  expect(await Unsubscribe(id!)).toBeTruthy();
+  expect(await Unsubscribe("sdfsdf")).toBeTruthy();
+});

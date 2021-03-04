@@ -37,6 +37,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@the-coin/utilities": "*",
+    "@the-coin/email": "*",
     "@the-coin/logging": "*",
     "cors": "^2.8.5",
     "luxon": "*",

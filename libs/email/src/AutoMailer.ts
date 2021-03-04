@@ -1,4 +1,5 @@
 import { Email } from "node-mailjet";
+import { log } from '@the-coin/logging';
 
 async function connect() {
   const secret = process.env.TC_SENDGRID_API_KEY;
@@ -27,10 +28,15 @@ async function SendMail(subject: string, message: string) {
 		],
   };
 
+  // In dev:live, don't actually send an email...
+  if (process.env.NODE_ENV === 'development' && process.env.SETTINGS === 'live') {
+    log.info("Emailer: I would have sent the following email:\n", message);
+    return true;
+  }
+
   const mj = await connect();
 	const response = await mj.post('send', { version: 'v3.1' }).request(options);
 
-	console.log(response.body);
 	// Render the index route on success
 	return response.body;
 }
@@ -52,6 +58,12 @@ async function SendTemplate(to: string, template: number, variables: object)
 		],
   };
 
+  // In dev:live, don't actually send an email...
+  if (process.env.NODE_ENV === 'development' && process.env.SETTINGS === 'live') {
+    log.info("Emailer: I would have sent an email with the following parameters: \n", JSON.stringify(options));
+    return true;
+  }
+
   try {
     const mj = await connect();
     const response = await mj.post('send', { version: 'v3.1' }).request(options);
@@ -61,7 +73,7 @@ async function SendTemplate(to: string, template: number, variables: object)
   catch (e)
   {
     // TODO: Proper logging here!
-    console.error(e)
+    log.error(e, "Failed sending email");
   }
   return false;
 }
