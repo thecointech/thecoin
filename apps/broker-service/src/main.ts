@@ -22,11 +22,7 @@ app.use(cors());
 
 // Use body parser to read sent json payloads
 // otherwise nothing is recieved in body
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 RegisterRoutes(app);
 
