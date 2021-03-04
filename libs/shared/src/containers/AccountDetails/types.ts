@@ -35,9 +35,6 @@ export type AccountDetails = {
   // TheCoin's signature that `{ethAddress country postalCode state city address}` is legit;
   addressSig?: string;
 
-  // email of client
-  email?: string;
-
   // date of birth
   DOB?: string;
   // TheCoins's sig that `{ethAddress DOB}` is legit
@@ -56,6 +53,9 @@ export type AccountDetails = {
   //----------------------------------------------
   // unsigned (not-legally-important) details
 
+  // email of client
+  email?: string;
+  
   // Where have we persisted this account to?
   storedOnGoogle?: boolean,
   storedOnDropbox?: boolean,
