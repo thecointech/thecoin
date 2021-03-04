@@ -71,7 +71,6 @@ const options = [
 export const ClimateImpact = () => {
   const quantity = 80;
   var randomItem = options[Math.floor(Math.random()*options.length)];
-  console.log(randomItem)
   return (
     <div className={ `${styles.climateImpact} ${randomItem.class}` }>  
       <Header as="h5">
