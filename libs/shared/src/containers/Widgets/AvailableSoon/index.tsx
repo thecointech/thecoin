@@ -13,7 +13,7 @@ export const AvailableSoon : React.FC = (props) => {
   return (
     <div className={styles.availableSoonContainer}> 
         <Header as="h5" className={styles.soon}><FormattedMessage {...title} /></Header>
-        <div className={`${styles.availableSoon}`}>
+        <div className={`${styles.availableSoonBlur}`}>
             {props.children}
         </div>
     </div>
