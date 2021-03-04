@@ -42,7 +42,7 @@ export interface ETransferPacket {
   answer: string;
   message?: string;
 }
-export interface eTransferCodeResponse {
+export interface ETransferCodeResponse {
   code?: string;
   error?: string;
 }
