@@ -62,7 +62,7 @@ const farmText = {
 
 const options = [
   { key: 'water', class: styles.water, unityToTranslate: waterUnity ,textToTranslate: waterText },
-  { key: 'wind', class: styles.wind, unityToTranslate: windUnity ,textYoTranslate: windText },
+  { key: 'wind', class: styles.wind, unityToTranslate: windUnity ,textToTranslate: windText },
   { key: 'earth', class: styles.earth, unityToTranslate: earthUnity ,textToTranslate: earthText },
   { key: 'trees', class: styles.trees, unityToTranslate: treesUnity ,textToTranslate: treesText },
   { key: 'farm', class: styles.farm, unityToTranslate: farmUnity ,textToTranslate: farmText },
