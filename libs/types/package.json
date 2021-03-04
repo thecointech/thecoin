@@ -16,9 +16,7 @@
 
   "scripts": {
     "clean": "rimraf ./build",
-    "build": "node buildall.js",
-    "postinstall": "node ./postinstallcwd.js",
-    "postinstallcwd": "yarn build"
+    "build": "node buildall.js"
   },
 
   "files": [

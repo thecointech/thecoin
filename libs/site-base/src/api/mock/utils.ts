@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosRequestConfig } from "axios";
 
-export function buildResponse<T>(data: T): AxiosResponse {
+export function buildResponse<T>(data: T): AxiosResponse<T> {
   return {
     data: deepCopy(data),
     status: 200,

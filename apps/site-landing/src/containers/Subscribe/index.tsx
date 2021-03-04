@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Input, Button, Message } from 'semantic-ui-react';
+import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from '../../api';
 import styles from './styles.module.less';
 import { FormattedMessage } from 'react-intl';
+import { Result, StatusMessage } from './status';
 
 
 const description = {  id:"site.subscribe.description",
@@ -12,46 +13,22 @@ const button = {  id:"site.subscribe.button",
                       defaultMessage:"Subscribe",
                       description:"Button for the bottom subscription part for the site"};
 
-const invalidEmail = {  id:"site.subscribe.email.invalid",
-                      defaultMessage:"Please enter a valid email",
-                      description:"Message we give a user when the subscription failed"};
-const errorEmail = {  id:"site.subscribe.email.error",
-                      defaultMessage:"Signup failed: please contact support@thecoin.io",
-                      description:"Message we give a user when the subscription failed (already subscribed or server)"};
-const successEmail = {  id:"site.subscribe.email.success",
-                      defaultMessage:"Success: check your emails",
-                      description:"Message we give a user when the subscription is a success"};
-
-
 export const Subscribe = () => {
-  const [errorInfos, setErrorInfos] = useState(true);
-  const [confirmInfos, setConfirmInfos] = useState(true);
-  const [validInfos, setValidInfos] = useState(true);
-
+  const [result, setResult] = useState(Result.Initial)
   const [email, setEmail] = React.useState('');
-  const onInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.currentTarget.value), [setEmail]);
   const doSubscribe = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.preventDefault();
 
     if (email.indexOf('@') < 0) {
-      setValidInfos(false);
-      setErrorInfos(true);
-      setConfirmInfos(true);
+      setResult(Result.Invalid);
     } else {
       const api = GetNewsletterApi();
-      const result = await api.newsletterSignup({
-        email,
-        confirmed: false,
-      }) as any;
-      if (!result.success) {
-        setValidInfos(true);
-        setErrorInfos(false);
-        setConfirmInfos(true);
-      } else {
-        setValidInfos(true);
-        setErrorInfos(true);
-        setConfirmInfos(false);
-      }
+      const result = await api.newsletterSignup(email);
+      setResult(
+        result.status == 200 && result.data.success
+          ? Result.Success
+          : Result.Error
+      )
     }
   }, [email]);
 
@@ -64,19 +41,9 @@ export const Subscribe = () => {
           </h3>
       </span>
       <span className={styles.search}>
-        <div>
-          <Message color='orange' hidden={validInfos}>
-            <FormattedMessage {...invalidEmail}/>
-          </Message>
-          <Message color='red' hidden={errorInfos}>
-            <FormattedMessage {...errorEmail} />
-          </Message>
-          <Message color='olive' hidden={confirmInfos}>
-            <FormattedMessage {...successEmail} />
-          </Message>
-        </div>
+        <StatusMessage result={result} />
         <Input
-          onChange={onInputChange}
+          onChange={(_e, data) => setEmail(data.value)}
           placeholder="Your email" />
 
         <Button onClick={doSubscribe} secondary>

@@ -16,15 +16,12 @@
     "node": ">=12.18.x"
   },
   "scripts": {
-    "postinstall": "yarn build:apis",
     "gen:rates": "openapi-generator generate -i apis/the-pricing.yaml -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
-    "gen:broker": "openapi-generator generate -i apis/broker-cad.yaml -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
+    "gen:broker": "openapi-generator generate -i apps/broker-service/api/swagger.json -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:apis": "yarn gen:rates && yarn gen:broker",
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "concurrently \"yarn build:rates\" \"yarn build:broker\"",
-    "gen:broker:server": "openapi-generator generate -i apis/broker-cad.yaml -g nodejs-express-server -o apps/broker-service/Generated",
-    "copy:broker:api": "cpx \"apps/broker-service/Generated/controllers/*.*\" \"apps/broker-service/src/controllers\" && cpx \"apps/broker-service/Generated/api/*.*\" \"apps/broker-service/src/api",
     "start:site": "cd apps/site && yarn start",
     "start:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "build": "yarn clean && lerna run build",
@@ -35,7 +32,7 @@
     "bootstrap": "node ./tools/bootstrapIdx.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "ethers": "^4.0.46",
     "invariant": "2.2.4",
@@ -69,6 +66,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "^7.8.3",
     "@babel/register": "7.4.4",
+    "@openapitools/openapi-generator-cli": "^2.1.26",
     "@storybook/addon-actions": "^6.1.10",
     "@storybook/addon-essentials": "^6.1.10",
     "@storybook/addon-links": "^6.1.10",
