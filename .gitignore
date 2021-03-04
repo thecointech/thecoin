@@ -7,6 +7,7 @@ geth
 **/obj/
 **/bin/
 /secrets
+**/api/swagger.json
 
 !**/summary.txt
 
