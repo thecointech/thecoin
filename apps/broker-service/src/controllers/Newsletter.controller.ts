@@ -14,7 +14,7 @@ export class NewsletterController extends Controller {
      * returns SubscriptionDetails
      **/
     @Get('details')
-    @Response('200', 'Email successfully registered')
+    @Response('200', 'Subscription details')
     @Response('400', 'Not Found')
     @Response('500', 'Server Error')
     async newsletterDetails(@Query() id: string) : Promise<SubscriptionDetails> {
@@ -38,7 +38,6 @@ export class NewsletterController extends Controller {
      **/
     @Get('unsubscribe')
     @Response('200', 'Email successfully removed')
-    @Response('400', 'Not Found')
     @Response('500', 'Server Error')
     async newsletterUnsubscribe(@Query() id: string) : Promise<BoolResponse> {
         try {
@@ -58,7 +57,6 @@ export class NewsletterController extends Controller {
      **/
     @Put("update")
     @Response('200', 'Subscription updated')
-    @Response('400', 'Not Found')
     @Response('403', 'Not Permitted')
     @Response('500', 'Server Error')
     async newsletterUpdate(@Query('id') id: string, @Body() details: SubscriptionDetails) : Promise<SubscriptionDetails> {
@@ -83,8 +81,6 @@ export class NewsletterController extends Controller {
      **/
     @Post("signup")
     @Response('200', 'Email successfully registered')
-    @Response('400', 'Not Found')
-    @Response('500', 'Server Error')
     async newsletterSignup(@Query() email: string) : Promise<BoolResponse> {
         try {
             const success = !!(await Signup(email));
