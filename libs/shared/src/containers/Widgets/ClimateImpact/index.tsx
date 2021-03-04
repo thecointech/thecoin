@@ -3,14 +3,6 @@ import { FormattedMessage } from "react-intl";
 import { Header } from "semantic-ui-react";
 import styles from "./styles.module.less";
 
-/*const options = [
-  { key: 'water', toTranslate: "en" },
-  { key: 'wind', toTranslate: "fr" },
-  { key: 'earth', toTranslate: "fr" },
-  { key: 'trees', toTranslate: "fr" },
-  { key: 'farm', toTranslate: "fr" },
-];*/
-
 const title = {
   id: "shared.widgets.climateimpact.title",
   defaultMessage: "Climate Impact",
@@ -79,6 +71,7 @@ const options = [
 export const ClimateImpact = () => {
   const quantity = 80;
   var randomItem = options[Math.floor(Math.random()*options.length)];
+  console.log(randomItem)
   return (
     <div className={ `${styles.climateImpact} ${randomItem.class}` }>  
       <Header as="h5">

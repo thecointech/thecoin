@@ -5,7 +5,7 @@ import styles from './styles.module.less';
 export const ColumnRightBottom = () => {
 
   return (
-    <div className={styles.columnRightBottom}>
+    <div className={`${styles.columnRightBottom} x2spaceBefore`}>
         <ClimateImpact/>
     </div>
   )
