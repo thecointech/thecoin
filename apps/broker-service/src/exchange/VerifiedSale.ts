@@ -1,4 +1,4 @@
-import { CertifiedTransfer } from '@the-coin/types';
+import { CertifiedTransfer } from '../types';
 import { CertifiedActionVerify } from './CertifiedActionVerify';
 import { CertifiedActionProcess } from './CertifiedActionProcess';
 

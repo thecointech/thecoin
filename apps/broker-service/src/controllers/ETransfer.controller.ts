@@ -1,5 +1,5 @@
 import { Controller, Body, Route, Post, Put, Response } from 'tsoa';
-import { CertifiedTransfer, SignedMessage, eTransferCodeResponse } from "@the-coin/types";
+import { CertifiedTransfer, SignedMessage, eTransferCodeResponse } from "../types";
 import { SendMail } from "@the-coin/email";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";

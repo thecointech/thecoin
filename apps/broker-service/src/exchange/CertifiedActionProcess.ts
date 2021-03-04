@@ -1,9 +1,9 @@
-import { CertifiedTransfer} from "@the-coin/types";
+import { CertifiedTransfer} from "../types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 import { CertifiedTransferRecord, Timestamp } from "@the-coin/utilities/firestore";
-import { DocumentReference } from "@the-coin/types/FirebaseFirestore";
+import { DocumentReference } from "../types/FirebaseFirestore";
 
 export type VerifiedActionResult = {
 	doc: DocumentReference,

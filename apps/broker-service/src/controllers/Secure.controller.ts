@@ -1,6 +1,6 @@
 import { Controller, Body, Route, Get, Put, Response } from 'tsoa';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
-import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from "@the-coin/types";
+import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from "../types";
 import { BoolResponse } from '../types';
 
 

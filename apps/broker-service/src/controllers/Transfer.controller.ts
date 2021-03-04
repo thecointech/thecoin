@@ -1,6 +1,6 @@
 import { Controller, Body, Route, Post, Response } from 'tsoa';
 import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransfer';
-import { CertifiedTransferRequest, CertifiedTransferResponse} from '@the-coin/types'
+import { CertifiedTransferRequest, CertifiedTransferResponse} from '../types'
 
 
 @Route('transfer')

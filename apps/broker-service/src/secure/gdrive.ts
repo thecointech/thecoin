@@ -2,7 +2,7 @@ import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
 import credentials from './gdrive_cred.json'
-import { GoogleToken, GoogleStoreAccount, GoogleWalletItem, GoogleFileIdent } from '@the-coin/types';
+import { GoogleToken, GoogleStoreAccount, GoogleWalletItem, GoogleFileIdent } from '../types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
@@ -53,7 +53,7 @@ export async function storeOnGoogle(account: GoogleStoreAccount) {
   var media = {
     body: wallet,
   };
-  
+
   var params: drive_v3.Params$Resource$Files$Create = {
     media,
     fields: 'id',
@@ -104,7 +104,7 @@ export async function fetchWallets(request: GoogleToken) : Promise<GoogleWalletI
           type: "pwd" // Means it's protected by a password...
         },
         wallet: (r.status == 200)
-          ? r.data 
+          ? r.data
           : `{ "error": "Error Fetching" }`
       }
   })

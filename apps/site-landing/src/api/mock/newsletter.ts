@@ -1,5 +1,4 @@
 import { SubscriptionDetails } from "@the-coin/broker-cad";
-import { delay } from "redux-saga/effects";
 
 export class MockNewsletterApi {
     /**
