@@ -1,0 +1,32 @@
+@import "~@the-coin/site-semantic-theme/variables.less";
+
+.availableSoonContainer{
+    height: 200px;
+}
+
+.availableSoon{
+    z-index: 100;
+    filter: blur(3px);
+}
+
+h5.soon{
+    position: absolute;
+    z-index: 100;
+    top: 19%;
+    margin: auto;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    border: 1px solid @theCoinPaletteGreen4;
+    border-radius: 10px;
+    box-shadow: @subtleShadow;
+    font-size: 15px;
+    transform: rotate(-10deg);
+
+    .smallerThanDesktop({
+        position: relative;
+        top: 50%;
+        left: 25%;
+        width: 200px;
+     });
+}

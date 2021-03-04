@@ -1,6 +1,7 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { Header } from "semantic-ui-react";
+import { AvailableSoon } from "../AvailableSoon";
 import styles from "./styles.module.less";
 
 const title = {
@@ -72,6 +73,7 @@ export const ClimateImpact = () => {
   const quantity = 80;
   const randomItem = options[Math.floor(Math.random()*options.length)];
   return (
+    <AvailableSoon>
     <div className={ `${styles.climateImpact} ${randomItem.class}` }>  
       <Header as="h5">
         <FormattedMessage {...title} />
@@ -88,5 +90,6 @@ export const ClimateImpact = () => {
       </div>
       <div className={styles.decoration}></div>
     </div>
+    </AvailableSoon>
   )
 }
