@@ -17,13 +17,13 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development && yarn build && node --inspect ./build/main.js",
+    "dev": "cross-env NODE_ENV=development && node --inspect -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env SETTINGS=live && yarn dev",
     "build": "yarn build:api && yarn build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn build:routes && yarn build:swagger",
     "build:routes": "yarn tsoa routes",
     "build:swagger": "yarn tsoa swagger",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "clean": "rimraf ./build",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
@@ -37,7 +37,9 @@
   "main": "./build/main.js",
   "dependencies": {
     "@the-coin/utilities": "*",
+    "@the-coin/logging": "*",
     "cors": "^2.8.5",
+    "luxon": "*",
     "express": "^4.16.4",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",

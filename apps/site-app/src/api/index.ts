@@ -6,16 +6,14 @@ import {
   SecureApi,
   ETransferApi,
 } from '@the-coin/broker-cad';
-import { ServiceAddress, ServicePorts } from '@the-coin/utilities/ServiceAddresses';
+import { ServiceAddress, Service } from '@the-coin/utilities/ServiceAddresses';
 import { MockReferrersApi } from './mock/referrers';
 import { MockSecureApi } from './mock/secure';
 
-const BrokerCADAddress = ServiceAddress(ServicePorts.BROKER_PORT);
+const BrokerCADAddress = ServiceAddress(Service.BROKER);
 
-const NoDatabase = (process.env.NODE_ENV === 'test' ||process.env.NODE_ENV === 'development')
-                    && process.env.DB_CONFIG !== 'connected';
-
-console.log("NoDatabase: " + NoDatabase);
+const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development')
+                    && process.env.SETTINGS !== 'live';
 
 export const GetStatusApi = () => new StatusApi(undefined, BrokerCADAddress);
 export const GetBillPaymentsApi = () => new BillPaymentsApi(undefined, BrokerCADAddress);

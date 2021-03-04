@@ -1,4 +1,4 @@
-import { Signer, Wallet } from "ethers/ethers";
+import { Signer, Wallet } from "ethers";
 
 export interface SignerIdent {
   address: string;

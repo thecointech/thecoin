@@ -4,7 +4,7 @@ import { log } from '@the-coin/logging';
 import { exit } from "process";
 
 const finnhub_key = process.env.FINNHUB_API_KEY;
-if (!finnhub_key) {
+if (process.env.NODE_ENV === 'production' && !finnhub_key) {
   log.fatal('Missing FINNHUB_API_KEY variable');
   exit(1);
 }

@@ -53,6 +53,9 @@ export type AccountDetails = {
   //----------------------------------------------
   // unsigned (not-legally-important) details
 
+  // email of client
+  email?: string;
+  
   // Where have we persisted this account to?
   storedOnGoogle?: boolean,
   storedOnDropbox?: boolean,

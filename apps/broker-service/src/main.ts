@@ -1,17 +1,25 @@
 import express from 'express';
 import { RegisterRoutes } from './routes/routes';
-//import createMiddleware from 'swagger-express-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
+import { DevLivePort, Service } from '@the-coin/utilities/ServiceAddresses';
+import { init } from './init';
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT ?? DevLivePort(Service.BROKER);
 
 RegisterRoutes(app);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+(async () => {
+  await init();
 
-app.listen(port, () => console.log(`Server started listening to port ${port}`));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+  app.listen(port, () => {
+    console.log('Your server is listening on port %d (http://localhost:%d)', port, port);
+    console.log('Swagger-ui is available on http://localhost:%d/docs', port);
+  })
+})()
 
 // Initialize Swagger Express Middleware with our Swagger file
 //let swaggerFile = path.join(__dirname, 'api', 'swagger.json');

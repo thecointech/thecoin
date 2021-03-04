@@ -21,6 +21,7 @@
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
     "dev": "yarn cross-env NODE_ENV=development node internals/server --port=3000",
+    "dev:live": "cross-env SETTINGS=live yarn dev",
     "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start": "yarn test && yarn build && yarn start:server",
     "start:server": "yarn cross-env NODE_ENV=production node ./internals/server",

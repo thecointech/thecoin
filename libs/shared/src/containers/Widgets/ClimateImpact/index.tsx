@@ -22,7 +22,7 @@ const waterText = {
 };
 const windUnity = {
   id: "shared.widgets.climateimpact.windUnity",
-  defaultMessage: "tonns",
+  defaultMessage: "tonnes",
   description: "Text for the Widget Climate impact in the app"
 };
 const windText = {
