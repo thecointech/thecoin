@@ -1,6 +1,1 @@
-var Migrations = artifacts.require("Migrations");
-
-module.exports = function(deployer) {
-  // Deploy the Migrations contract as our only task
-  deployer.deploy(Migrations);
-};
+module.exports = require(`./1_initial_migration.ts`)(artifacts, web3);
