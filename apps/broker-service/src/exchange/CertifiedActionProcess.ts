@@ -3,7 +3,7 @@ import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
 import { CertifiedTransferRecord, Timestamp } from "@the-coin/utilities/firestore";
-import { DocumentReference } from "../types/FirebaseFirestore";
+import { DocumentReference } from "@the-coin/types/FirebaseFirestore";
 
 export type VerifiedActionResult = {
 	doc: DocumentReference,

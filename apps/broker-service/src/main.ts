@@ -3,6 +3,7 @@ import express, {
   Request as ExRequest,
   NextFunction,
 } from "express";
+import bodyParser from "body-parser";
 import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
@@ -12,11 +13,21 @@ import cors from 'cors';
 import { ValidateError } from "tsoa";
 import { log } from "@the-coin/logging";
 
-const app = express();
-app.use(cors());
-//app.options('*', cors());
 const port = process.env.PORT ?? DevLivePort(Service.BROKER);
 
+const app = express();
+// enable cors
+app.use(cors());
+//app.options('*', cors());
+
+// Use body parser to read sent json payloads
+// otherwise nothing is recieved in body
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
 RegisterRoutes(app);
 
 (async () => {

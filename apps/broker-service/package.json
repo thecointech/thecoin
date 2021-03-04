@@ -47,7 +47,7 @@
     "swagger-express-middleware": "3.0.0-alpha.5",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2",
-    "tsoa": "^2.5.13"
+    "tsoa": "^3.5.2"
   },
   "devDependencies": {
     "@types/swagger-express-middleware": "^1.0.10",

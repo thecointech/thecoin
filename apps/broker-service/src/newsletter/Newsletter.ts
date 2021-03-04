@@ -81,7 +81,7 @@ export async function Update(id: string, details: SubscriptionDetails) : Promise
     registerDate: existing.data()?.registerDate,
   }
   await doc.set(newDetails)
-  return newDetails;
+  return details;
 }
 
 export async function Unsubscribe(id: string)

@@ -7528,6 +7528,32 @@
     strip-indent "^2.0.0"
     super-split "^1.1.0"
 
+"@tsoa/cli@^3.5.2":
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-3.5.2.tgz#14f90b462289bab111fdbba2bee64bf2ffce73a7"
+  integrity sha512-eY0oGJn8b94k/YgXp5jy0hp1RPuTaeOitI1UZWJpNvKt7v11zK9sp+psKJurH82XkOsjkGnNY9S658nnAZSIXQ==
+  dependencies:
+    "@tsoa/runtime" "^3.5.2"
+    deepmerge "^4.2.2"
+    fs-extra "^8.1.0"
+    glob "^7.1.6"
+    handlebars "^4.7.6"
+    merge "^2.1.0"
+    minimatch "^3.0.4"
+    moment "^2.24.0"
+    typescript "^4.1.2"
+    validator "^12.2.0"
+    yamljs "^0.3.0"
+    yargs "^14.0.0"
+
+"@tsoa/runtime@^3.5.2":
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-3.5.2.tgz#fbd8004e4be794bf3b0f66a1cd42af0ff7cbd561"
+  integrity sha512-XtJWAQn/54XJxAVbHG+sAMNYX473U+SFKnXZY5CKB6zlVVap2wMF1c/MRbG5GGj9b0UvWNdLn2XjOPkXPkSjcg==
+  dependencies:
+    moment "^2.24.0"
+    validator "^12.2.0"
+
 "@typechain/ethers-v4@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@typechain/ethers-v4/-/ethers-v4-4.0.0.tgz#9bc5700249b18fa698a41a495bdf6fed34df89d3"
@@ -20799,6 +20825,18 @@ handlebars@^4.4.0, handlebars@^4.5.3:
   optionalDependencies:
     uglify-js "^3.1.4"
 
+handlebars@^4.7.6:
+  version "4.7.7"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.7.tgz#9ce33416aad02dbd6c8fafa8240d5d98004945a1"
+  integrity sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==
+  dependencies:
+    minimist "^1.2.5"
+    neo-async "^2.6.0"
+    source-map "^0.6.1"
+    wordwrap "^1.0.0"
+  optionalDependencies:
+    uglify-js "^3.1.4"
+
 hapi-pino@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/hapi-pino/-/hapi-pino-8.3.0.tgz#1cdcff01e4b61af8aa9bd7ca87c592582c403cd7"
@@ -28133,6 +28171,11 @@ merge@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
+
+merge@^2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/merge/-/merge-2.1.1.tgz#59ef4bf7e0b3e879186436e8481c06a6c162ca98"
+  integrity sha512-jz+Cfrg9GWOZbQAnDQ4hlVnQky+341Yk5ru8bZSe6sIDTCIg8n9i/u7hSQGSVOF3C7lH6mGtqjkiT9G4wFLL0w==
 
 merkle-patricia-tree@^2.1.2, merkle-patricia-tree@^2.3.2:
   version "2.3.2"
@@ -38411,6 +38454,14 @@ tsoa@^2.5.13:
     yamljs "^0.3.0"
     yargs "^14.0.0"
 
+tsoa@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.5.2.tgz#f66a907836a0cdf9c6c99898dd12b5208f141641"
+  integrity sha512-IYYVuXw7lwZ6k5qGoiZrknRtDSjW1DpjyQJD2Low3u5SldP2SGMcErJQdfjVEZzPeszBtEBwfSAF7bRKkq6SnA==
+  dependencies:
+    "@tsoa/cli" "^3.5.2"
+    "@tsoa/runtime" "^3.5.2"
+
 tsutils@^3.17.1:
   version "3.17.1"
   resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.17.1.tgz#ed719917f11ca0dee586272b2ac49e015a2dd759"
@@ -38609,6 +38660,11 @@ typescript@^4.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.2.tgz#7ea7c88777c723c681e33bf7988be5d008d05ac2"
   integrity sha512-e4ERvRV2wb+rRZ/IQeb3jm2VxBsirQLpQhdxplZ2MEzGvDkkMmPglecnNDfSUBivMjP93vRbngYYDQqQ/78bcQ==
+
+typescript@^4.1.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.2.tgz#1450f020618f872db0ea17317d16d8da8ddb8c4c"
+  integrity sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
 
 typescript@^4.1.3:
   version "4.1.5"
@@ -39413,6 +39469,11 @@ validator@^11.0.0, validator@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/validator/-/validator-11.1.0.tgz#ac18cac42e0aa5902b603d7a5d9b7827e2346ac4"
   integrity sha512-qiQ5ktdO7CD6C/5/mYV4jku/7qnqzjrxb3C/Q5wR3vGGinHTgJZN/TdFT3ZX4vXhX2R1PXx42fB1cn5W+uJ4lg==
+
+validator@^12.2.0:
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-12.2.0.tgz#660d47e96267033fd070096c3b1a6f2db4380a0a"
+  integrity sha512-jJfE/DW6tIK1Ek8nCfNFqt8Wb3nzMoAbocBF6/Icgg1ZFSBpObdnwVY2jQj6qUqzhx5jc71fpvBWyLGO7Xl+nQ==
 
 value-equal@^0.4.0:
   version "0.4.0"
@@ -40718,15 +40779,15 @@ word-wrap@^1.2.3, word-wrap@~1.2.3:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
+wordwrap@^1.0.0, wordwrap@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
+  integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
+
 wordwrap@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
   integrity sha1-o9XabNXAvAAI03I0u68b7WMFkQc=
-
-wordwrap@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
-  integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
 
 worker-farm@^1.6.0, worker-farm@^1.7.0:
   version "1.7.0"
