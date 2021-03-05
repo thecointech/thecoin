@@ -13,6 +13,7 @@ import { createReducer} from './reducers';
 export { history };
 
 declare var window: any;
+declare var module: any;
 
 export function configureAppStore(initialState: ApplicationBaseState | undefined = undefined) {
   const reduxSagaMonitorOptions = {};

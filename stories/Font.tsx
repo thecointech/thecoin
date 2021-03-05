@@ -1,5 +1,5 @@
 import React from 'react';
-import "@the-coin/site-base/build/styles/semantic.less"
+import "@the-coin/site-semantic-theme/semantic.less"
 
 export type FontProps = {
   classname: string,

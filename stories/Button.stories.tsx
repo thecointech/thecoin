@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react';
 import { ButtonPrimary, ButtonSecondary, ButtonTertiary } from '../libs/site-base/src/components/Buttons';
 import { Button, ButtonProps } from 'semantic-ui-react';
 
-import "@the-coin/site-base/build/styles/semantic.less";
+import "@the-coin/site-semantic-theme/semantic.less"
 
 export default {
   title: 'SemanticUI/Button',
