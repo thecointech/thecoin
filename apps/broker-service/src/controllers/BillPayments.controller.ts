@@ -1,6 +1,6 @@
 import { Controller, Body, Route, Post, Response } from 'tsoa';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { CertifiedTransfer } from "@the-coin/types";
+import { CertifiedTransfer } from "../types";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
 

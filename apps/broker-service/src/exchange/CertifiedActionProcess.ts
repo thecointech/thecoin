@@ -1,4 +1,4 @@
-import { CertifiedTransfer} from "@the-coin/types";
+import { CertifiedTransfer} from "../types";
 import { TransactionResponse } from "ethers/providers";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";

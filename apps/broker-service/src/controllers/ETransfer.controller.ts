@@ -1,5 +1,5 @@
 import { Controller, Body, Route, Post, Put, Response } from 'tsoa';
-import { CertifiedTransfer, SignedMessage, eTransferCodeResponse } from "@the-coin/types";
+import { CertifiedTransfer, SignedMessage, ETransferCodeResponse } from "../types";
 import { SendMail } from "@the-coin/email";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
@@ -28,12 +28,12 @@ export class ETransferController extends Controller {
      * A code unique to the user that is required on all eTransfers sent in to this broker
      *
      * request SignedMessage Signed timestamp message
-     * returns eTransferCodeResponse
+     * returns ETransferCodeResponse
      **/
     @Put('eTransfer/code')
     @Response('200', 'The requesters unique eTransfer code')
     @Response('405', 'Invalid input')
-    async eTransferInCode(@Body() request: SignedMessage) : Promise<eTransferCodeResponse> {
+    async eTransferInCode(@Body() request: SignedMessage) : Promise<ETransferCodeResponse> {
       try {
         return {
           code: await GenerateCode(request)

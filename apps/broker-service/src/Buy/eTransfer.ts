@@ -1,4 +1,4 @@
-import { SignedMessage} from "@the-coin/types";
+import { SignedMessage} from "../types";
 import { GetWallet } from "../exchange/Wallet";
 import { utils } from 'ethers';
 import { GetReferrerCode } from "@the-coin/utilities/Referrals";

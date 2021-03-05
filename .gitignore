@@ -7,6 +7,7 @@ geth
 **/obj/
 **/bin/
 /secrets
+**/api/swagger.json
 
 !**/summary.txt
 
@@ -17,3 +18,4 @@ geth
 **/src/semantic/semantic
 **/semantic.css
 
+**/ts/.openapi-generator

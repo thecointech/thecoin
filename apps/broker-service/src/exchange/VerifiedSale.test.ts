@@ -3,7 +3,7 @@ import { GetContract, GetWallet } from './Wallet'
 import { toHuman } from '@the-coin/utilities'
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
 import { DoCertifiedSale } from './VerifiedSale'
-import { ETransferPacket } from '@the-coin/types';
+import { ETransferPacket } from '../types';
 import { init, describe } from '@the-coin/utilities/firestore/jestutils';
 import { CertifiedTransferRecord } from '@the-coin/utilities/firestore';
 import { current } from '../status';

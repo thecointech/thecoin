@@ -1,67 +1,82 @@
-import * as React from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, CheckboxProps, Form, InputOnChangeData } from 'semantic-ui-react';
 import queryString from 'query-string';
-import { SubscriptionDetails } from '@the-coin/types';
 import { GetNewsletterApi } from 'api';
-import { RouteComponentProps } from 'react-router';
+import { useLocation } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useEffect } from 'react';
 import styles from './styles.module.less';
+import { SubscriptionDetails } from '@the-coin/broker-cad';
+import { log } from '@the-coin/logging';
 
-function getInitialState(qs: string): SubscriptionDetails {
-    const query = queryString.parse(qs);
-    const id = query.id as string;
-    return {
-      id,
-      confirmed: true
-    };
-  }
+export const FormSubscribed = () => {
+  const id = useIdFromQuery();
+  const [details, setDetails] = useState(undefined as SubscriptionDetails|undefined);
+  const confirmed = !!details;
 
-export const FormSubscribed = (props: RouteComponentProps) => {
-      // Trigger immediate confirmation
-    useEffect(() => {
-        updateSubscription();
-    }, []);
+  // Trigger immediate confirmation
+  useEffect(() => {
+    confirmSubscription(id).then(setDetails).catch(log.error);
+  }, [id]);
 
-    const [details, setDetails] = React.useState(getInitialState(props.location.search));
-    const onInputChange = React.useCallback((event: React.SyntheticEvent<HTMLInputElement>) => {
-        const { value, name } = event.currentTarget;
-        setDetails({
-            ...details,
-            [name]: value
-        });
-        }, [details, setDetails]);
+  const onInputChange = useCallback((_event, data: InputOnChangeData|CheckboxProps) => {
+    const { value, name, checked } = data;
+    setDetails({
+      email: "", // Our initial undefined state means
+      ...details,
+      [name]: value ?? checked
+    });
+  }, [details, setDetails]);
 
+  let intl = useIntl();
+  const emailField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.email', defaultMessage: 'Email' });
+  const firstnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.firstname', defaultMessage: 'Given Name' });
+  const lastnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.lastname', defaultMessage: 'Family Name' });
+  const countryField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.country', defaultMessage: 'Country' });
+  const cityField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.city', defaultMessage: 'City' });
+  const subCheckbox = intl.formatMessage({ id: 'site.subscribe.confirmation.form.subcheckbox', defaultMessage: 'I want to receive the newsletter' });
 
-    const updateSubscription = React.useCallback(async () => {
-        const api = GetNewsletterApi();
-        const result = await api.newsletterConfirm(details);
-        setDetails(result.data);
-    }, [details]);
+  return (
+    <>
+      <Form className={styles.formStyle}>
+        <Form.Input disabled={!confirmed} onChange={onInputChange} placeholder={emailField} value={details?.email ?? ""} name="email" />
+        <Form.Input disabled={!confirmed} onChange={onInputChange} placeholder={firstnameField} value={details?.givenName ?? ""} name="givenName" />
+        <Form.Input disabled={!confirmed} onChange={onInputChange} placeholder={lastnameField} value={details?.familyName ?? ""} name="familyName" />
+        <Form.Input disabled={!confirmed} onChange={onInputChange} placeholder={countryField} value={details?.country ?? ""} name="country" />
+        <Form.Input disabled={!confirmed} onChange={onInputChange} placeholder={cityField} value={details?.city ?? ""} name="city" />
+        <Form.Checkbox disabled={!confirmed} onChange={onInputChange} label={subCheckbox} checked={details?.confirmed ?? true} name="confirmed" />
 
-    let intl = useIntl();
-    const emailField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.email', defaultMessage:'Email'});
-    const firstnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.firstname', defaultMessage:'First Name'});
-    const lastnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.lastname', defaultMessage:'Last Name'});
-    const countryField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.country', defaultMessage:'Country'});
-    const cityField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.city', defaultMessage:'City'});
-    const subCheckbox = intl.formatMessage({ id: 'site.subscribe.confirmation.form.subcheckbox', defaultMessage:'I want to receive the newsletter'});
+        <Button disabled={!confirmed} onClick={() => updateSubscription(id, details!)}>
+          <FormattedMessage id="site.subscribe.confirmation.button" defaultMessage="Update Details!" />
+        </Button>
+      </Form>
 
-    return (
-        <>
-            <Form className={styles.formStyle}>
-                <Form.Input onChange={onInputChange} placeholder={emailField} value={details.email} name="email" />
-                <Form.Input onChange={onInputChange} placeholder={firstnameField} value={details.firstName} name="firstName" />
-                <Form.Input onChange={onInputChange} placeholder={lastnameField} value={details.lastName} name="lastName" />
-                <Form.Input onChange={onInputChange} placeholder={countryField} value={details.country} name="country" />
-                <Form.Input onChange={onInputChange} placeholder={cityField} value={details.city} name="city" />
-                <Form.Checkbox onChange={onInputChange} label={subCheckbox} checked={details.confirmed} name="confirmed" />
+    </>
+  );
+}
 
-                <Button onClick={updateSubscription}>
-                  <FormattedMessage id="site.subscribe.confirmation.button" defaultMessage="Update Details!" />
-                </Button>
-              </Form>
+const useIdFromQuery = () => {
+  const location = useLocation();
+  const query = queryString.parse(location.search);
+  return query.id as string;
+}
 
-        </>
-    );
+const confirmSubscription = async (id: string) => {
+  const api = GetNewsletterApi();
+  const r = await api.newsletterDetails(id);
+  if (r.status !== 200)
+    return undefined;
+
+  const details = {
+    ...r.data,
+    confirmed: true,
+  };
+  return await updateSubscription(id, details)
+    ? details
+    : undefined;
+}
+
+const updateSubscription = async (id: string, details: SubscriptionDetails) => {
+  const api = GetNewsletterApi();
+  const result = await api.newsletterUpdate(id, details);
+  return result.status === 200;
 }

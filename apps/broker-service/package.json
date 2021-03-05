@@ -19,12 +19,10 @@
     "start": "node ./build/main.js",
     "dev": "cross-env NODE_ENV=development && node --inspect -r ts-node/register ./src/main.ts",
     "dev:live": "cross-env SETTINGS=live && yarn dev",
-    "build": "yarn build:api && yarn build:src",
+    "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
-    "build:api": "yarn build:routes && yarn build:swagger",
-    "build:routes": "yarn tsoa routes",
-    "build:swagger": "yarn tsoa swagger",
-    "clean": "rimraf ./build",
+    "build:api": "yarn tsoa spec-and-routes",
+    "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
   },
@@ -37,6 +35,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@the-coin/utilities": "*",
+    "@the-coin/email": "*",
     "@the-coin/logging": "*",
     "cors": "^2.8.5",
     "luxon": "*",
@@ -46,11 +45,12 @@
     "swagger-express-middleware": "3.0.0-alpha.5",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2",
-    "tsoa": "^2.5.13"
+    "tsoa": "^3.5.2"
   },
   "devDependencies": {
     "@types/swagger-express-middleware": "^1.0.10",
     "@types/swagger-ui-express": "^4.1.1",
+    "@types/cors": "^2.8.10",
     "jest": "*"
   }
 }
