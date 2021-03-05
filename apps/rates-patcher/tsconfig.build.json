@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.ts", "**/__mocks__/**"],
+  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [{ "path": "../../libs/utils-ts/tsconfig.build.json" }]
 }
