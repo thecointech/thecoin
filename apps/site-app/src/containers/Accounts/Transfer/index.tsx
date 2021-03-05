@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { NormalizeAddress } from '@the-coin/utilities';
 import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
-import { StatusApi, TransferApi } from '@the-coin/broker-cad';
+import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
 import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
@@ -73,7 +73,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     // Init messages
     this.setState({ transferMessage: step1, percentComplete: 0.0 });
     // First, get the brokers fee
-    const statusApi = new StatusApi(); //undefined, "http://localhost:8080"
+    const statusApi = GetStatusApi(); //undefined, "http://localhost:8080"
     var status = await statusApi.status();
     // Check out if we have the right values
     if (!status.data.certifiedFee) return false;
@@ -93,7 +93,7 @@ class TransferClass extends React.PureComponent<Props, StateType> {
       coinTransfer,
       status.data.certifiedFee,
     );
-    const transferApi = new TransferApi();
+    const transferApi = GetDirectTransferApi();
 
     if (this.state.doCancel) return false;
 

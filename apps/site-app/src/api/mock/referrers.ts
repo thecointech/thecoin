@@ -1,7 +1,7 @@
-import { NewAccountReferal } from "@the-coin/broker-cad";
-import { buildResponse, delay } from "./network";
+import { ReferralsApi, NewAccountReferal } from "@the-coin/broker-cad";
+import { buildResponse, delay } from "@the-coin/site-base/api/mock/utils";
 
-export class MockReferrersApi
+export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
 {
     /**
      * Returns a boolean indicating whether the passed referrer is valid

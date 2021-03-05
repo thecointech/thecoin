@@ -9,7 +9,7 @@ import { ETransferController } from './../controllers/ETransfer.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NewsletterController } from './../controllers/Newsletter.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ReferrersController } from './../controllers/Referrers.controller';
+import { ReferralsController } from './../controllers/Referrers.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { SecureController } from './../controllers/Secure.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -21,6 +21,15 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "CertifiedTransferResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "txHash": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CertifiedTransferRequest": {
         "dataType": "refObject",
         "properties": {
@@ -162,15 +171,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CertifiedTransferResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "message": {"dataType":"string","required":true},
-            "txHash": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const validationService = new ValidationService(models);
 
@@ -203,7 +203,7 @@ export function RegisterRoutes(app: express.Router) {
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/exchange/eTransfer',
+        app.post('/api/v1/etransfer/eTransfer',
             function (request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"CertifiedTransfer"},
@@ -225,7 +225,7 @@ export function RegisterRoutes(app: express.Router) {
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/api/v1/exchange/eTransfer/code',
+        app.put('/api/v1/etransfer/eTransfer/code',
             function (request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"SignedMessage"},
@@ -336,7 +336,7 @@ export function RegisterRoutes(app: express.Router) {
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/referrers',
+        app.get('/api/v1/referrals',
             function (request: any, response: any, next: any) {
             const args = {
                     referrerId: {"in":"query","name":"referrerId","required":true,"dataType":"string"},
@@ -351,14 +351,14 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ReferrersController();
+            const controller = new ReferralsController();
 
 
             const promise = controller.referrerValid.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/referrers',
+        app.post('/api/v1/referrals',
             function (request: any, response: any, next: any) {
             const args = {
                     referral: {"in":"body","name":"referral","required":true,"ref":"NewAccountReferal"},
@@ -373,7 +373,7 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ReferrersController();
+            const controller = new ReferralsController();
 
 
             const promise = controller.referralCreate.apply(controller, validatedArgs as any);

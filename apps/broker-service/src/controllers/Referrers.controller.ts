@@ -1,11 +1,12 @@
-import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
+import { Controller, Get, Route, Query, Body, Post, Response, Tags } from 'tsoa';
 import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
-import { NewAccountReferal } from '../types';
 import { Timestamp } from '@the-coin/utilities/firestore';
 import { BoolResponse } from '../types';
+import { NewAccountReferal } from '@the-coin/types';
 
-@Route('referrers')
-export class ReferrersController extends Controller {
+@Route('referrals')
+@Tags('Referrals')
+export class ReferralsController extends Controller {
 
   /**
   * Returns a boolean indicating whether the passed referrer is valid

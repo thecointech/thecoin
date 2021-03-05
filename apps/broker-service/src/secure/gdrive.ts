@@ -1,8 +1,7 @@
 import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-
 import credentials from './gdrive_cred.json'
-import { GoogleToken, GoogleStoreAccount, GoogleWalletItem, GoogleFileIdent } from '../types';
+import { GoogleFileIdent, GoogleStoreAccount, GoogleToken, GoogleWalletItem } from '@the-coin/types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];

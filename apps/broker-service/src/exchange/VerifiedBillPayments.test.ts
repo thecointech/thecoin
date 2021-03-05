@@ -1,10 +1,10 @@
 import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
-import { BillPayeePacket } from '../types';
 import { init, describe } from '@the-coin/utilities/firestore/jestutils';
 import { CertifiedTransferRecord } from '@the-coin/utilities/firestore';
 import {current} from '../status';
+import { BillPayeePacket } from '@the-coin/types';
 
 beforeAll(async () => {
   init('broker-cad-billpayments');
