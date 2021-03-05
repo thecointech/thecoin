@@ -33,6 +33,7 @@ module.exports = {
             "@the-coin/contract": "@the-coin/contract/build",
             "@the-coin/shared": "@the-coin/shared/build",
             "@the-coin/site-base": "@the-coin/site-base/build",
+            "@the-coin/site-semantic-theme": "@the-coin/site-semantic-theme/build",
           }
         }
       }

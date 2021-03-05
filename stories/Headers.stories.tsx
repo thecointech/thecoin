@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { Header, StrictHeaderProps } from 'semantic-ui-react';
-import "@the-coin/site-base/build/styles/semantic.less"
+import "@the-coin/site-semantic-theme/semantic.less"
 
 
 export default {
