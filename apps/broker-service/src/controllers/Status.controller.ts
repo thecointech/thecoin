@@ -1,7 +1,8 @@
 import { current } from '../status';
-import { Controller, Get, Route, Response } from 'tsoa';
+import { Controller, Get, Route, Response, Tags } from 'tsoa';
 
 @Route('status')
+@Tags('Status')
 export class StatusController extends Controller {
 
   /**

@@ -1,7 +1,7 @@
-import { SignedMessage} from "@the-coin/types";
 import { GetWallet } from "../exchange/Wallet";
 import { utils } from 'ethers';
 import { GetReferrerCode } from "@the-coin/utilities/Referrals";
+import { SignedMessage } from "@the-coin/types";
 
 // Todo: move SignMessage-y fn's to utilities
 export function GetHash(

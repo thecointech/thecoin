@@ -1,11 +1,12 @@
-import { Controller, Body, Route, Get, Put, Response } from 'tsoa';
+import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from '@the-coin/types';
+import { Controller, Body, Route, Get, Put, Response, Tags } from 'tsoa';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
-import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from "@the-coin/types";
 import { BoolResponse } from '../types';
 
 
 
 @Route('secure')
+@Tags('Secure')
 export class SecureController extends Controller {
 
     /**

@@ -1,8 +1,8 @@
 import {
   StatusApi,
   BillPaymentsApi,
-  ReferrersApi,
-  TransferApi,
+  ReferralsApi,
+  DirectTransferApi,
   SecureApi,
   ETransferApi,
 } from '@the-coin/broker-cad';
@@ -17,13 +17,13 @@ const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 
 
 export const GetStatusApi = () => new StatusApi(undefined, BrokerCADAddress);
 export const GetBillPaymentsApi = () => new BillPaymentsApi(undefined, BrokerCADAddress);
-export const GetTransferApi = () => new TransferApi(undefined, BrokerCADAddress);
+export const GetDirectTransferApi = () => new DirectTransferApi(undefined, BrokerCADAddress);
 export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddress);
 
 export const GetReferrersApi = () =>
   NoDatabase
     ? new MockReferrersApi()
-    : new ReferrersApi(undefined, BrokerCADAddress);
+    : new ReferralsApi(undefined, BrokerCADAddress);
 
 export const GetSecureApi = () =>
   NoDatabase

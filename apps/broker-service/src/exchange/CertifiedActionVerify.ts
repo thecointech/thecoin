@@ -1,5 +1,5 @@
 
-import { CertifiedTransfer } from '@the-coin/types'
+import { CertifiedTransfer } from '@the-coin/types';
 import { NormalizeAddress } from '@the-coin/utilities';
 import { GetSigner } from '@the-coin/utilities/VerifiedAction'
 import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer'

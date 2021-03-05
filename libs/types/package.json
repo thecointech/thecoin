@@ -14,20 +14,13 @@
     "directory": "libs/contract"
   },
 
-  "scripts": {
-    "clean": "rimraf ./build",
-    "build": "node buildall.js",
-    "postinstall": "node ./postinstallcwd.js",
-    "postinstallcwd": "yarn build"
-  },
-
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.d.ts",
+  "main": "./src/index.ts",
   "exports": {
-    ".": "./build/index.d.ts",
-    "./": "./build/"
+    ".": "./src/index.d.ts",
+    "./": "./src/"
   },
 
   "devDependencies": {

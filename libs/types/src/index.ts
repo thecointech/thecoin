@@ -3,15 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-export interface SubscriptionDetails {
-  id?: string;
-  email?: string;
-  confirmed?: boolean;
-  firstName?: string;
-  lastName?: string;
-  country?: string;
-  city?: string;
-}
 export interface SignedMessage {
   message: string;
   signature: string;
@@ -51,10 +42,6 @@ export interface ETransferPacket {
   question: string;
   answer: string;
   message?: string;
-}
-export interface eTransferCodeResponse {
-  code?: string;
-  error?: string;
 }
 export interface EncryptedPacket {
   encryptedPacket: string;
