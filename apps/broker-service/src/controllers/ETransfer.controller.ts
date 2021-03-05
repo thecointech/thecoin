@@ -1,12 +1,14 @@
-import { Controller, Body, Route, Post, Put, Response } from 'tsoa';
-import { CertifiedTransfer, SignedMessage, ETransferCodeResponse } from "../types";
+import { Controller, Body, Route, Post, Put, Response, Tags } from 'tsoa';
 import { SendMail } from "@the-coin/email";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 import { GenerateCode } from "../Buy/eTransfer";
+import { CertifiedTransfer, SignedMessage } from '@the-coin/types';
+import { ETransferCodeResponse } from './types';
 
 
-@Route('exchange')
+@Route('etransfer')
+@Tags('ETransfer')
 export class ETransferController extends Controller {
 
     /**
@@ -20,7 +22,7 @@ export class ETransferController extends Controller {
     @Response('200', 'The response confirms to the user the order has been processed')
     @Response('405', 'Invalid input')
     async eTransfer(@Body() request: CertifiedTransfer) {
-      await DoActionAndNotify(request, DoCertifiedSale);
+      return DoActionAndNotify(request, DoCertifiedSale);
     }
 
     /**

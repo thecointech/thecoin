@@ -14,18 +14,13 @@
     "directory": "libs/contract"
   },
 
-  "scripts": {
-    "clean": "rimraf ./build",
-    "build": "node buildall.js"
-  },
-
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.d.ts",
+  "main": "./src/index.ts",
   "exports": {
-    ".": "./build/index.d.ts",
-    "./": "./build/"
+    ".": "./src/index.d.ts",
+    "./": "./src/"
   },
 
   "devDependencies": {

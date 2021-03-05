@@ -1,5 +1,5 @@
-import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/types";
-import { buildResponse, delay } from "./network";
+import { SecureApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/broker-cad";
+import { buildResponse, delay } from "@the-coin/site-base/api/mock/utils";
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { AccountMap, initialState } from "@the-coin/shared/containers/AccountMap";
@@ -45,7 +45,7 @@ const checkCode = ({token}: GoogleToken) => {
  * @class SecureApi
  * @extends {BaseAPI}
  */
-export class MockSecureApi {
+export class MockSecureApi  implements Pick<SecureApi, keyof SecureApi> {
   /**
    *
    * @summary Get the authorization URL to redirect the user to
@@ -94,7 +94,7 @@ export class MockSecureApi {
       type: "not sure",
       wallet: uploadPacket.wallet,
     })
-    return buildResponse<boolean>(true);
+    return buildResponse({success: true});
   }
   /**
    *

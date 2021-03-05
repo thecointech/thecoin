@@ -1,10 +1,11 @@
-import { Controller, Body, Route, Post, Response } from 'tsoa';
+import { CertifiedTransfer } from '@the-coin/types';
+import { Controller, Body, Route, Post, Response, Tags } from 'tsoa';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { CertifiedTransfer } from "../types";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
 
 @Route('bills')
+@Tags('BillPayments')
 export class BillPaymentsController extends Controller {
 
     /**
@@ -20,6 +21,6 @@ export class BillPaymentsController extends Controller {
     @Response('400', 'Bad request')
     @Response('405', 'Invalid input')
     async billPayment(@Body() request: CertifiedTransfer) {
-        await DoActionAndNotify(request, ProcessBillPayment);
+        return DoActionAndNotify(request, ProcessBillPayment);
     }
 }

@@ -33,7 +33,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "node-mailjet": "^3.3.1"
+    "node-mailjet": "^3.3.1",
+    "@the-coin/logging": "*"
   },
   "devDependencies": {
     "@types/node-mailjet": "^3.3.1",
