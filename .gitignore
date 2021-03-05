@@ -18,3 +18,4 @@ geth
 **/src/semantic/semantic
 **/semantic.css
 
+**/ts/.openapi-generator

@@ -25,7 +25,7 @@ export const Subscribe = () => {
       const api = GetNewsletterApi();
       const result = await api.newsletterSignup(email);
       setResult(
-        result.status == 200 && result.data.success
+        result.status === 200 && result.data.success
           ? Result.Success
           : Result.Error
       )

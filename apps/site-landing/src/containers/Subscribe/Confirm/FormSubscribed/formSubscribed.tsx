@@ -6,6 +6,7 @@ import { useLocation } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 import { SubscriptionDetails } from '@the-coin/broker-cad';
+import { log } from '@the-coin/logging';
 
 export const FormSubscribed = () => {
   const id = useIdFromQuery();
@@ -14,7 +15,7 @@ export const FormSubscribed = () => {
 
   // Trigger immediate confirmation
   useEffect(() => {
-    confirmSubscription(id).then(setDetails);
+    confirmSubscription(id).then(setDetails).catch(log.error);
   }, [id]);
 
   const onInputChange = useCallback((_event, data: InputOnChangeData|CheckboxProps) => {
