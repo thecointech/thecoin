@@ -12,9 +12,6 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { createReducer} from './reducers';
 export { history };
 
-declare var window: any;
-declare var module: any;
-
 export function configureAppStore(initialState: ApplicationBaseState | undefined = undefined) {
   const reduxSagaMonitorOptions = {};
 
@@ -51,6 +48,11 @@ export function configureAppStore(initialState: ApplicationBaseState | undefined
 
   return store;
 }
+
+//  deepcode ignore no-any: dev-only usage of vars
+declare var window: any;
+//  deepcode ignore no-any: dev-only usage of vars
+declare var module: any;
 
 function getCompose()
 {
