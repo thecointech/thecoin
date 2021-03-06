@@ -1,8 +1,7 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
-import { Header } from "semantic-ui-react";
 import { AvailableSoon } from "../AvailableSoon";
-import styles from "./styles.module.less";
+import styles from "./Visual/styles.module.less";
+import { Visual } from "./Visual";
 
 const title = {
   id: "shared.widgets.climateimpact.title",
@@ -61,35 +60,20 @@ const farmText = {
   description: "Text for the Widget Climate impact in the app"
 };
 
-const options = [
-  { key: 'water', class: styles.water, unityToTranslate: waterUnity ,textToTranslate: waterText },
-  { key: 'wind', class: styles.wind, unityToTranslate: windUnity ,textToTranslate: windText },
-  { key: 'earth', class: styles.earth, unityToTranslate: earthUnity ,textToTranslate: earthText },
-  { key: 'trees', class: styles.trees, unityToTranslate: treesUnity ,textToTranslate: treesText },
-  { key: 'farm', class: styles.farm, unityToTranslate: farmUnity ,textToTranslate: farmText },
+export const options = [
+  { key: 'water', class: styles.water, unityToTranslate: waterUnity, textToTranslate: waterText },
+  { key: 'wind', class: styles.wind, unityToTranslate: windUnity, textToTranslate: windText },
+  { key: 'earth', class: styles.earth, unityToTranslate: earthUnity, textToTranslate: earthText },
+  { key: 'trees', class: styles.trees, unityToTranslate: treesUnity, textToTranslate: treesText },
+  { key: 'farm', class: styles.farm, unityToTranslate: farmUnity, textToTranslate: farmText },
 ];
 
 export const ClimateImpact = () => {
-  const quantity = 80;
+  const quantity = "80";
   const randomItem = options[Math.floor(Math.random()*options.length)];
   return (
     <AvailableSoon>
-    <div className={ `${styles.climateImpact} ${randomItem.class}` }>  
-      <Header as="h5">
-        <FormattedMessage {...title} />
-      </Header>
-      <div className={styles.textZone}>
-        <Header as="h3">
-            {quantity}
-        </Header> &nbsp;
-        <Header as="h4">
-          <FormattedMessage {...randomItem.unityToTranslate} />
-        </Header>
-        <br  />
-        <FormattedMessage {...randomItem.textToTranslate} />
-      </div>
-      <div className={styles.decoration}></div>
-    </div>
+      <Visual title={title} quantity={quantity} item={randomItem} />
     </AvailableSoon>
   )
 }
