@@ -28,7 +28,7 @@ export function DevLivePort(service: Service) {
 // indicate the default service should be connected to
 export function ServiceAddress(service: Service) {
   // TODO: production can be either staging or production
-  if (process.env.NODE_ENV === 'production')
+  if (process.env.NODE_ENV === 'production' || process.env.SETTINGS !== 'live')
     return undefined;
   // In debug, we connect locally only
   return 'http://localhost:' + DevLivePort(service);

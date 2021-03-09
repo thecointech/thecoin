@@ -1,6 +1,5 @@
 import { Contract } from 'ethers/contract';
 import { TheCoin } from './types/TheCoin';
-//import { getNetwork } from './network';
 import { getProvider } from './provider';
 
 //
@@ -25,12 +24,14 @@ export const getNetwork = () =>
     ? process.env.SETTINGS === 'staging'
       ? "ropsten"
       : "mainnet"
-    : "development";
+    : process.env.SETTINGS === 'live'
+      ? "development" // In dev:live, connect to local emulator chain
+      : "ropsten";    // In dev, we still connect to ropsten (until we can finish mocking contract)
 
 const getContractAddress = async () => {
-  //const network = getNetwork();
+  const network = getNetwork();
 
-  const deployment = await import(`./deployed/${getNetwork()}.json`);
+  const deployment = await import(`./deployed/${network}.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
