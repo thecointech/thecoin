@@ -6,8 +6,13 @@ declare module globalThis {
   let __ceramic: CeramicApi;
 }
 
-// Public URL: 'https://ceramic-clay.3boxlabs.com'
-const CERAMIC_URL = process.env.CERAMIC_URL || 'http://localhost:7007'
+// TODO: Why isn't this in an environment variable?
+const publicURL = 'https://ceramic-clay.3boxlabs.com'
+const CERAMIC_URL = process.env.NODE_ENV === 'production'
+  ? publicURL
+  : process.env.SETTINGS === 'live'
+    ? 'http://localhost:7007'
+    : publicURL
 
 export function Ceramic(): CeramicApi {
   globalThis.__ceramic = globalThis.__ceramic ?? new HttpCeramic(CERAMIC_URL);

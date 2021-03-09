@@ -19,6 +19,11 @@ export const getProvider = () => {
     if (process.env.SETTINGS === 'live') {
       return getDevLiveProvider();
     }
+    else {
+      // For now we use ropsten for dev, at least until we have completed a fully
+      // encapsulated dev environment
+      return new providers.InfuraProvider("ropsten", process.env.INFURA_API_KEY);
+    }
   }
 
   throw new Error(`Unsupported environment: ${process.env.NODE_ENV}:${process.env.SETTINGS}`);
