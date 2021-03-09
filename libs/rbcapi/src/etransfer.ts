@@ -13,7 +13,7 @@ export async function send(prefix: string, amount: number, name:string, packet: 
   // Navigate to old account page
   await act.clickOnText(ApiAction.Credentials.accountNo, "a");
 
-  await act.clickAndNavigate('.leftnav-currentsection > :nth-child(3) > a', 'Payment');
+  await act.clickOnText("Pay Bills & Transfer Funds", "a")
   await page.type('#amount', amount.toString());
   await page.click('#emtrbccust');
   await act.clickAndNavigate('#id_btn_submit', 'Recipient');
