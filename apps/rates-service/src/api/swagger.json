@@ -6,7 +6,6 @@
 	"definitions": {
 		"CurrencyCode": {
 			"enum": [
-				0,
 				784,
 				971,
 				8,
@@ -191,10 +190,6 @@
 		},
 		"CombinedRates": {
 			"properties": {
-				"0": {
-					"type": "number",
-					"format": "double"
-				},
 				"8": {
 					"type": "number",
 					"format": "double"
