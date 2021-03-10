@@ -4,7 +4,7 @@ import base32 from 'base32';
 import { utils, Wallet } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
 import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@the-coin/types";
-import { getWallet } from "./Wallets";
+import { getSigner } from "./blockchain";
 import { AccountName } from "@the-coin/contract/accounts";
 
 export function GetReferrersCollection() : CollectionReference {
@@ -118,7 +118,7 @@ export async function GetAccountCode(address: string, wallet: Wallet|AccountName
   // generate this signers secret key
   const rhash = GetHash(address.toLowerCase());
   const signer = (typeof wallet === "string")
-    ? await getWallet(wallet)
+    ? await getSigner(wallet)
     : wallet;
   const rsign = await signer.signMessage(rhash);
   return GetReferrerCode(rsign);

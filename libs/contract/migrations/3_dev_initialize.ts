@@ -48,11 +48,9 @@ const deploy: MigrationStep = (artifacts) =>
       const amount = Math.floor(Math.random() * 100 * COIN_EXP);
       const balance = await proxy.balanceOf(client);
       if (balance.toNumber() <= amount || Math.random() < 0.6) {
-        console.log(`Purchasing ${amount / COIN_EXP} at: ${ts}`);
         await proxy.coinPurchase(client, amount, 0, toSeconds(ts), { from: TheCoin });
       }
       else {
-        console.log(`Selling ${amount / COIN_EXP} at: ${ts}`);
         await proxy.coinRedeem(amount, TheCoin, toSeconds(ts), { from: client });
       }
     }
