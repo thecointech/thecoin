@@ -5,7 +5,7 @@ import { signIn } from "@the-coin/tx-processing";
 import { init as LogInit, log } from "@the-coin/logging";
 import { RbcStore, RbcApi } from "@the-coin/rbcapi";
 import { ConfigStore } from "@the-coin/store";
-import { getContract } from '@the-coin/utilities/Wallets';
+import { getContract } from '@the-coin/utilities/blockchain';
 import { initBrowser } from "@the-coin/rbcapi/action";
 import type { TheCoin } from '@the-coin/contract';
 import { ProcessUnsettledDeposits } from "@the-coin/tx-processing/deposit/service";

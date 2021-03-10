@@ -34,9 +34,6 @@ module.exports = require('./webpack.base.babel')({
   ignoreWarnings: [
     { message: /Failed to parse source map/ }
   ],
-  node: {
-    fs: "empty"
-  },
 
   rules: [
     {

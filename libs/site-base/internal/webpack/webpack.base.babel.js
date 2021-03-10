@@ -14,6 +14,9 @@ module.exports = options => ({
   node: options.node,
   mode: options.mode,
   entry: options.entry,
+  node: {
+    fs: "empty"
+  },
   output: Object.assign(
     {
       // Compile into js/build.js
