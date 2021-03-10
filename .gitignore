@@ -19,3 +19,5 @@ geth
 **/semantic.css
 
 **/ts/.openapi-generator
+
+libs/contract/.openzeppelin/unknown-1337.json

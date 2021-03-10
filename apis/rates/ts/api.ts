@@ -24,1123 +24,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
- * @interface CombinedRates
- */
-export interface CombinedRates {
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _8?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _12?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _32?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _36?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _44?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _48?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _50?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _51?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _52?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _60?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _64?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _68?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _72?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _84?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _90?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _96?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _104?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _108?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _116?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _124?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _132?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _136?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _144?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _152?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _156?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _170?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _174?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _188?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _191?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _192?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _203?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _208?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _214?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _222?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _230?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _232?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _238?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _242?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _262?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _270?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _292?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _320?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _324?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _328?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _332?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _340?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _344?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _348?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _352?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _356?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _360?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _364?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _368?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _376?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _388?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _392?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _398?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _400?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _404?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _408?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _410?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _414?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _417?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _418?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _422?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _426?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _430?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _434?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _446?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _454?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _458?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _462?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _480?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _484?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _496?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _498?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _504?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _512?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _516?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _524?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _532?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _533?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _548?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _554?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _558?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _566?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _578?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _586?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _590?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _598?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _600?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _604?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _608?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _634?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _643?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _646?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _654?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _682?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _690?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _694?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _702?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _704?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _706?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _710?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _728?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _748?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _752?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _756?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _760?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _764?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _776?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _780?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _784?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _788?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _800?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _807?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _818?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _826?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _834?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _840?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _858?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _860?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _882?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _886?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _901?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _927?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _928?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _929?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _930?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _931?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _932?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _933?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _934?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _936?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _938?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _940?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _941?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _943?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _944?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _946?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _947?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _948?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _949?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _950?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _951?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _952?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _953?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _955?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _956?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _957?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _958?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _959?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _960?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _961?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _962?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _963?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _964?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _965?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _967?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _968?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _969?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _970?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _971?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _972?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _973?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _975?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _976?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _977?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _978?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _979?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _980?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _981?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _984?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _985?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _986?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _990?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _994?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _997?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    _999?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    validTill: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    validFrom: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    sell: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    buy: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CombinedRates
-     */
-    fxRate: number;
-    /**
-     * 
-     * @type {CurrencyCode}
-     * @memberof CombinedRates
-     */
-    target: CurrencyCode;
-}
-/**
- * 
- * @export
  * @enum {string}
  */
 export enum CurrencyCode {
@@ -1325,6 +208,1123 @@ export enum CurrencyCode {
     NUMBER_932 = 932
 }
 
+/**
+ * 
+ * @export
+ * @interface FXRate
+ */
+export interface FXRate {
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _8?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _12?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _32?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _36?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _44?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _48?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _50?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _51?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _52?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _60?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _64?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _68?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _72?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _84?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _90?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _96?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _104?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _108?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _116?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _124?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _132?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _136?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _144?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _152?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _156?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _170?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _174?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _188?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _191?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _192?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _203?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _208?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _214?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _222?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _230?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _232?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _238?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _242?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _262?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _270?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _292?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _320?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _324?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _328?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _332?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _340?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _344?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _348?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _352?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _356?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _360?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _364?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _368?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _376?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _388?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _392?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _398?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _400?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _404?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _408?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _410?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _414?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _417?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _418?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _422?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _426?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _430?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _434?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _446?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _454?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _458?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _462?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _480?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _484?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _496?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _498?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _504?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _512?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _516?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _524?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _532?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _533?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _548?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _554?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _558?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _566?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _578?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _586?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _590?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _598?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _600?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _604?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _608?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _634?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _643?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _646?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _654?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _682?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _690?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _694?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _702?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _704?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _706?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _710?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _728?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _748?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _752?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _756?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _760?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _764?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _776?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _780?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _784?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _788?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _800?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _807?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _818?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _826?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _834?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _840?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _858?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _860?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _882?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _886?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _901?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _927?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _928?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _929?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _930?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _931?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _932?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _933?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _934?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _936?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _938?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _940?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _941?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _943?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _944?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _946?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _947?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _948?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _949?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _950?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _951?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _952?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _953?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _955?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _956?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _957?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _958?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _959?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _960?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _961?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _962?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _963?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _964?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _965?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _967?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _968?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _969?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _970?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _971?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _972?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _973?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _975?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _976?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _977?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _978?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _979?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _980?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _981?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _984?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _985?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _986?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _990?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _994?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _997?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    _999?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    validTill: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    validFrom: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    sell: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    buy: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FXRate
+     */
+    fxRate: number;
+    /**
+     * 
+     * @type {CurrencyCode}
+     * @memberof FXRate
+     */
+    target: CurrencyCode;
+}
 
 /**
  * DefaultApi - axios parameter creator
@@ -1361,6 +1361,71 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+    }
+};
+
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+export const DefaultApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Get rates.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async doUpdate(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.doUpdate(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DefaultApi - factory interface
+ * @export
+ */
+export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DefaultApiFp(configuration)
+    return {
+        /**
+         * Get rates.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        doUpdate(options?: any): AxiosPromise<boolean> {
+            return localVarFp.doUpdate(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+export class DefaultApi extends BaseAPI {
+    /**
+     * Get rates.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public doUpdate(options?: any) {
+        return DefaultApiFp(this.configuration).doUpdate(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * RatesApi - axios parameter creator
+ * @export
+ */
+export const RatesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
         /**
          * Query many values simultaneously
          * @param {Array<number>} timestamps 
@@ -1439,28 +1504,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 };
 
 /**
- * DefaultApi - functional programming interface
+ * RatesApi - functional programming interface
  * @export
  */
-export const DefaultApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
+export const RatesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RatesApiAxiosParamCreator(configuration)
     return {
-        /**
-         * Get rates.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async doUpdate(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.doUpdate(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
         /**
          * Query many values simultaneously
          * @param {Array<number>} timestamps 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMany(timestamps: Array<number>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CombinedRates>>> {
+        async getMany(timestamps: Array<number>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FXRate>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMany(timestamps, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1471,7 +1527,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSingle(currencyCode: number, timestamp?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CombinedRates>> {
+        async getSingle(currencyCode: number, timestamp?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FXRate>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSingle(currencyCode, timestamp, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1479,27 +1535,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * DefaultApi - factory interface
+ * RatesApi - factory interface
  * @export
  */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DefaultApiFp(configuration)
+export const RatesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RatesApiFp(configuration)
     return {
-        /**
-         * Get rates.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        doUpdate(options?: any): AxiosPromise<boolean> {
-            return localVarFp.doUpdate(options).then((request) => request(axios, basePath));
-        },
         /**
          * Query many values simultaneously
          * @param {Array<number>} timestamps 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMany(timestamps: Array<number>, options?: any): AxiosPromise<Array<CombinedRates>> {
+        getMany(timestamps: Array<number>, options?: any): AxiosPromise<Array<FXRate>> {
             return localVarFp.getMany(timestamps, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1509,38 +1557,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingle(currencyCode: number, timestamp?: number, options?: any): AxiosPromise<CombinedRates> {
+        getSingle(currencyCode: number, timestamp?: number, options?: any): AxiosPromise<FXRate> {
             return localVarFp.getSingle(currencyCode, timestamp, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * DefaultApi - object-oriented interface
+ * RatesApi - object-oriented interface
  * @export
- * @class DefaultApi
+ * @class RatesApi
  * @extends {BaseAPI}
  */
-export class DefaultApi extends BaseAPI {
-    /**
-     * Get rates.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public doUpdate(options?: any) {
-        return DefaultApiFp(this.configuration).doUpdate(options).then((request) => request(this.axios, this.basePath));
-    }
-
+export class RatesApi extends BaseAPI {
     /**
      * Query many values simultaneously
      * @param {Array<number>} timestamps 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof RatesApi
      */
     public getMany(timestamps: Array<number>, options?: any) {
-        return DefaultApiFp(this.configuration).getMany(timestamps, options).then((request) => request(this.axios, this.basePath));
+        return RatesApiFp(this.configuration).getMany(timestamps, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1549,10 +1587,10 @@ export class DefaultApi extends BaseAPI {
      * @param {number} [timestamp] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof RatesApi
      */
     public getSingle(currencyCode: number, timestamp?: number, options?: any) {
-        return DefaultApiFp(this.configuration).getSingle(currencyCode, timestamp, options).then((request) => request(this.axios, this.basePath));
+        return RatesApiFp(this.configuration).getSingle(currencyCode, timestamp, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

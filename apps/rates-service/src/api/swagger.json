@@ -188,7 +188,7 @@
 			],
 			"type": "number"
 		},
-		"CombinedRates": {
+		"FXRate": {
 			"properties": {
 				"8": {
 					"type": "number",
@@ -965,7 +965,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/CombinedRates"
+							"$ref": "#/definitions/FXRate"
 						}
 					},
 					"204": {
@@ -976,6 +976,9 @@
 					}
 				},
 				"description": "Query a single value",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -1006,7 +1009,7 @@
 						"description": "Ok",
 						"schema": {
 							"items": {
-								"$ref": "#/definitions/CombinedRates"
+								"$ref": "#/definitions/FXRate"
 							},
 							"type": "array"
 						}
@@ -1019,6 +1022,9 @@
 					}
 				},
 				"description": "Query many values simultaneously",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{

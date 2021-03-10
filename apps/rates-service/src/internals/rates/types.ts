@@ -44,3 +44,7 @@ export interface CombinedRates extends RatesMapping, CoinRate {
   fxRate: number,  // To remove: supports old method where we only had 1 currency per query
   target: CurrencyCode, // To remove: supports old method where we only had 1 currency per query
 };
+
+// Rename to FXRate to ease code churn in the rest of the project.
+// TODO: Sync naming across the project, this should be consistent everywhere
+export interface FXRate extends CombinedRates {};
