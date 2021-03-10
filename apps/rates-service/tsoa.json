@@ -22,5 +22,5 @@
     "paths": {
       "@the-coin/utilities/*":  ["../../libs/utils-ts/build/*"]
     }
-}
+  }
 }
