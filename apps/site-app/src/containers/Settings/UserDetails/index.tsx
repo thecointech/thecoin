@@ -1,11 +1,10 @@
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 import * as React from 'react';
 import { useState } from 'react';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { AccountVerified } from '../Verified';
 import { Avatars } from '@the-coin/shared/components/Avatars';
-import { Form, Grid, Icon, Reveal } from 'semantic-ui-react';
+import { Form, Grid, Icon } from 'semantic-ui-react';
 import { CopyToClipboard } from '@the-coin/site-base/components/CopyToClipboard';
 import { IActions, useAccountApi } from '@the-coin/shared/containers/Account';
 import styles from './styles.module.less';
@@ -26,11 +25,11 @@ const codeInfos = { id:"app.settings.userDetails.codeInfos",
                 description:"Infos for the info for the tab User details in the setting page in the app" };
 const edit = { id: "app.settings.userDetails.edit",
                 defaultMessage: "Edit",
-                description: "Edit zone for the page setting / tab personal details in the app"
+                description: "Edit zone for the tab User details in the setting page in the app"
               };
-const button = { id: "app.settings.userDetails.button",
+const save = { id: "app.settings.userDetails.save",
               defaultMessage: "Save",
-              description: "Content for the page setting / tab personal details in the app"
+              description: "Content for the tab User details in the setting page in the app"
             };
 
 
@@ -42,6 +41,7 @@ export const UserDetails = () => {
   const activeAccount = useActiveAccount();
   const [accountName, setAccountName] = useState(activeAccount!.name);
   const [accountNameEdit, setAccountNameEdit] = useState(false);
+  const [saveClass, setSaveClass] = useState(sharedStyles.hide);
   const { address } = activeAccount!;
   const accountActions = useAccountApi(address);
 
@@ -54,24 +54,23 @@ export const UserDetails = () => {
             </Grid.Column>
             <Grid.Column width={12} verticalAlign="middle">
               <div className={"x4spaceAfter"}>
+                <Form>
                 <Form.Input
-                  style={{width: "100%"}}
                   onChange={event => setAccountName(event.target.value)}
                   label={<div>
                             <FormattedMessage {...accountNameLabel} />
-                            <span onClick={()=>setAccountNameEdit(!accountNameEdit)} className={sharedStyles.edit}>
+                            <span onClick={()=>{setAccountNameEdit(!accountNameEdit); 
+                                                setSaveClass("")}} className={sharedStyles.edit}>
                               <Icon name={"edit"} /><FormattedMessage {...edit} />
+                            </span>
+                            <span onClick={()=>{setNewAccountName(accountActions,accountName); 
+                                                setAccountNameEdit(false); 
+                                                setSaveClass(sharedStyles.hide)}} className={`${sharedStyles.edit} ${saveClass}`} >
+                              <Icon name={"save outline"} /><FormattedMessage {...save} />
                             </span>
                         </div>}
                   value={accountName} readOnly={!accountNameEdit} />
-
-                  <Reveal animated='small fade'>
-                    <Reveal.Content visible>
-                      <ButtonTertiary id={styles.buttonToSave} active={accountNameEdit} onClick={()=>setNewAccountName(accountActions,accountName)}>
-                        <FormattedMessage {...button} />
-                      </ButtonTertiary>
-                    </Reveal.Content>
-                  </Reveal>
+                </Form>
                 </div> 
             </Grid.Column>
           </Grid.Row>
