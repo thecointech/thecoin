@@ -87,7 +87,6 @@ export const PersonalDetails = () => {
 
   const onSetDetails = useCallback(() => {
     accountApi.setDetails({...details});
-    console.log(details);
   }, [details, accountApi])
 
   return (
