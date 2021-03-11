@@ -30,16 +30,16 @@ import { LanguageProvider, Languages } from '@the-coin/shared/containers/Languag
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import { configureAppStore, history } from '@the-coin/shared/store';
+import { history } from '@the-coin/shared/store';
 import { translations } from './translations';
-
+import { store } from './store';
 import { initTracking } from './utils/reactga';
 initTracking();
 import { init } from '@the-coin/logging';
+
 init('site-app')
 
-// Create redux store with history
-const store = configureAppStore(undefined);
+
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (languages: Languages, Component = App) => {
