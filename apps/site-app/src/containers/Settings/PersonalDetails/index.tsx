@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon, InputOnChangeData } from 'semantic-ui-react';
 import styles from './styles.module.less';
+import sharedStyles from '../styles.module.less';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -94,13 +95,13 @@ export const PersonalDetails = () => {
       <Header as="h5" className={`appTitles`}>
         <FormattedMessage {...title} />
       </Header>
-      <Form id={styles.personalInfo}>
+      <Form id={sharedStyles.editableInfo}>
 
         <Form.Input
           className={"half left"}
           label={<div>
                     <FormattedMessage {...name} />
-                    <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
+                    <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={sharedStyles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                 </div>}
@@ -114,7 +115,7 @@ export const PersonalDetails = () => {
           className={"half right"}
           label={<div>
                     <FormattedMessage {...familyname} />
-                    <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={styles.edit}>
+                    <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={sharedStyles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                 </div>}
@@ -127,7 +128,7 @@ export const PersonalDetails = () => {
           className={"half left"}
           label={<div>
                     <FormattedMessage {...dob} />
-                    <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
+                    <span onClick={()=>setDobEdit(!dobEdit)} className={sharedStyles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
@@ -140,7 +141,7 @@ export const PersonalDetails = () => {
           className={"borderTop borderBottom"}
           label={<div>
                     <FormattedMessage {...address} />
-                    <span onClick={()=>setAddressEdit(!addressEdit)} className={styles.edit}>
+                    <span onClick={()=>setAddressEdit(!addressEdit)} className={sharedStyles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
@@ -153,7 +154,7 @@ export const PersonalDetails = () => {
           className={"half left"}
           label={<div>
                   <FormattedMessage {...email} />
-                  <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
+                  <span onClick={()=>setEmailEdit(!emailEdit)} className={sharedStyles.edit}>
                     <Icon name={"edit"} /><FormattedMessage {...edit} />
                   </span>
                 </div>}
@@ -168,7 +169,7 @@ export const PersonalDetails = () => {
           value={details.phone}
           label={<div>
                     <FormattedMessage {...phone} />
-                    <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
+                    <span onClick={()=>setPhoneEdit(!phoneEdit)} className={sharedStyles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}

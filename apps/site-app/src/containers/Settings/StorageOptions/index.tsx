@@ -49,14 +49,6 @@ export function StorageOptions() {
           </span>
           <span className={styles.toggleZone}><StoreGoogle onStateChange={onStateChange} toggle={true} /></span>
         </div>
-
-        <div className={ `border-bottom-green4 x4spaceBefore ${styles.lineSave}`}>
-          <span>
-            <img src={google} />
-            <FormattedMessage {...labelGoogle} />
-          </span>
-          <span className={styles.toggleZone}><StoreGoogle onStateChange={onStateChange} toggle={true} /></span>
-        </div>
         
         <div className={`x18spaceAfter`}>
           <div className={ `x6spaceBefore x4spaceAfter`}>
