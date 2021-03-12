@@ -3,6 +3,7 @@ import Thisismy from './Thisismy.wallet.json';
 import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
 import { getSigner } from '@the-coin/utilities/blockchain';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { useEffect } from 'react';
 
 export const wallets = [
   {
