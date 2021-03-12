@@ -45,7 +45,6 @@ const button = { id:"app.accounts.transfert.form.button",
                 description:"Label for the form the make a payment page / transfert tab" };
 
 export const TransferHook = (props: Props) => {
-  //class TransferClass extends React.PureComponent<Props, StateType> {
 
   const [coinTransfer, setCoinTransfer] = useState(null as number | null);
   const [toAddress, setToAddress] = useState('');
@@ -91,7 +90,7 @@ export const TransferHook = (props: Props) => {
     setPercentComplete(0.25);
     const response = await transferApi.transfer(transferCommand);
 
-    //console.log(`TxResponse: ${response.data.message}`);
+    console.log(`TxResponse: ${response.data.message}`);
     if (!response.data.txHash) {
       alert(response.data.message);
       return false;
