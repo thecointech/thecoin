@@ -34,7 +34,7 @@ export function useInjectedSigners() {
   // with no accounts and redirect to addAccount)
   if (firstRun) {
     // always insert default wallet
-    addDevWallet();
+    //addDevWallet();
     // In dev:live mode, we also connect to default
     // accounts from local develop blockchain.
     if (process.env.SETTINGS === "live") {
@@ -43,12 +43,17 @@ export function useInjectedSigners() {
   }
 }
 
-function addDevWallet() {
-  const accountToLoad = wallets[1];
-  const walletToLoad = JSON.parse(accountToLoad.wallet);
-  const initReducer = new AccountMap(initialState, initialState);
-  initReducer.addAccount(walletToLoad.name, walletToLoad, false);
-}
+// const accountToLoad = wallets[1];
+// const walletToLoad = JSON.parse(accountToLoad.wallet);
+// const initReducer = new AccountMap(initialState, initialState);
+// initReducer.addAccount(walletToLoad.name, walletToLoad, false);
+
+// function addDevWallet() {
+//   const accountToLoad = wallets[1];
+//   const walletToLoad = JSON.parse(accountToLoad.wallet);
+//   const initReducer = new AccountMap(initialState, initialState);
+//   initReducer.addAccount(walletToLoad.name, walletToLoad, false);
+// }
 
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
   const client1 = await getSigner("client1")
