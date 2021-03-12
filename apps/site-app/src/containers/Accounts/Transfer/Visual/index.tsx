@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Header, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
@@ -10,18 +10,18 @@ import { AccountState } from '@the-coin/shared/containers/Account';
 
 type VisualProps={
   description:MessageDescriptor,
-  onValueChange:any,
+  onValueChange: (value: number) => void,
   account: AccountState,
   coinTransfer: number | null,
   rate: number,
 
   onAccountValue: ChangeCB,
   forceValidate: boolean,
-  onSubmit: any,
+  onSubmit: StrictButtonProps["onClick"],
   button: MessageDescriptor,
   destinationAddress: string,
 
-  onCancelTransfer: any,
+  onCancelTransfer: () => void,
   transferInProgress: boolean,
   transferOutHeader: MessageDescriptor | undefined,
   transferMessage: MessageDescriptor | undefined,
