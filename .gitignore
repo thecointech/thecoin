@@ -8,6 +8,7 @@ geth
 **/bin/
 /secrets
 **/api/swagger.json
+**/vscode-chrome-debug-userdatadir
 
 !**/summary.txt
 

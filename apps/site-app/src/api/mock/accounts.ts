@@ -3,7 +3,6 @@ import Thisismy from './Thisismy.wallet.json';
 import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
 import { getSigner } from '@the-coin/utilities/blockchain';
 import { TheSigner } from '@the-coin/shared/SignerIdent';
-import { useEffect } from 'react';
 
 export const wallets = [
   {
@@ -35,6 +34,8 @@ export function useInjectedSigners() {
   // with no accounts and redirect to addAccount)
   if (firstRun) {
     // always insert default wallet
+    // NOTE: this must be run when this file is loaded,
+    // when this function is run is already too late
     //addDevWallet();
     // In dev:live mode, we also connect to default
     // accounts from local develop blockchain.
@@ -44,17 +45,13 @@ export function useInjectedSigners() {
   }
 }
 
-// const accountToLoad = wallets[1];
-// const walletToLoad = JSON.parse(accountToLoad.wallet);
-// const initReducer = new AccountMap(initialState, initialState);
-// initReducer.addAccount(walletToLoad.name, walletToLoad, false);
-
-// function addDevWallet() {
-//   const accountToLoad = wallets[1];
-//   const walletToLoad = JSON.parse(accountToLoad.wallet);
-//   const initReducer = new AccountMap(initialState, initialState);
-//   initReducer.addAccount(walletToLoad.name, walletToLoad, false);
-// }
+function addDevWallet() {
+  const accountToLoad = wallets[1];
+  const walletToLoad = JSON.parse(accountToLoad.wallet);
+  const initReducer = new AccountMap(initialState, initialState);
+  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
+}
+addDevWallet();
 
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
   const client1 = await getSigner("client1")

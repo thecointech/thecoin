@@ -12,6 +12,7 @@ import { useAccountApi } from "./reducer";
 import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@the-coin/utilities";
 import { SemanticICONS } from "semantic-ui-react";
+import { DateTime } from "luxon";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
@@ -57,6 +58,14 @@ export const Account = (props: Props) => {
         accountActions.setSigner(signer);
       }
     }
+
+    // If we do not have todays history, update for last year
+    // TODO: Implement account history properly.
+    const now = DateTime.local();
+    if (account.historyEnd?.day != now.day) {
+      accountActions.updateHistory(now.minus({year: 1}), now);
+    }
+
     return () => sidebar.removeGenerator(account.name);
   }, [account, signer, sidebarCb])
 

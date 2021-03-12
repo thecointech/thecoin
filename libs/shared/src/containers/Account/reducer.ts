@@ -13,6 +13,7 @@ import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
 import { connectIDX } from '../IDX';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
+import { DateTime } from 'luxon';
 
 
 // The reducer for a single account state
@@ -76,12 +77,14 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   }
 
-  *updateHistory(from: Date, until: Date) {
+  *updateHistory(from: DateTime, until: DateTime) {
     const { signer, contract } = this.state;
     if (contract === null || signer === null)
       return;
-    if (this.state.historyStart && this.state.historyEnd) {
-      if (from >= this.state.historyStart && until <= this.state.historyEnd)
+
+    const { historyStart, historyEnd } = this.state;
+    if (historyStart && historyEnd) {
+      if (from >= historyStart && until <= historyEnd)
         return;
     }
 
@@ -108,9 +111,9 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     yield this.storeValues({
       history: newHistory,
       historyLoading: false,
-      historyStart: new Date(0),
+      historyStart: from,
       historyStartBlock: 0,
-      historyEnd: new Date(),
+      historyEnd: until,
       historyEndBlock: currentBlock
     });
 
