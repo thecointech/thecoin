@@ -43,10 +43,15 @@ export const Account = (props: Props) => {
     [props]
   );
 
+  // Initialize sidebar
   const sidebar = useSidebar();
   useEffect(() => {
     sidebar.addGenerator(account.name, sidebarCb);
+    return () => sidebar.removeGenerator(account.name);
+  }, [account, sidebarCb])
 
+  // prepare account for usage
+  useEffect(() => {
     // Is this a remote account?
     if (isSigner(signer)) {
       if (!signer.provider)
@@ -55,7 +60,7 @@ export const Account = (props: Props) => {
         // When a new account is added to account map,
         // it will be missing the contract.  Here we
         // enforce that connection for all cases
-        accountActions.setSigner(signer);
+        accountActions.connect();
       }
     }
 
@@ -63,11 +68,9 @@ export const Account = (props: Props) => {
     // TODO: Implement account history properly.
     const now = DateTime.local();
     if (account.historyEnd?.day != now.day) {
-      accountActions.updateHistory(now.minus({year: 1}), now);
+      accountActions.updateHistory(now.minus({ year: 1 }), now);
     }
-
-    return () => sidebar.removeGenerator(account.name);
-  }, [account, signer, sidebarCb])
+  }, [signer])
 
 
   if (isWallet(signer)) {

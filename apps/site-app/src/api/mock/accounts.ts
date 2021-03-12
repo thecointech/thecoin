@@ -42,6 +42,7 @@ export function useInjectedSigners() {
     if (process.env.SETTINGS === "live") {
       addDevLiveSigners(mapApi)
     }
+    firstRun = false;
   }
 }
 

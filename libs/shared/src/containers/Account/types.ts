@@ -66,6 +66,9 @@ export interface IActions extends ImmerReducer<AccountState> {
   setName(name: string): void;
   setSigner(signer: TheSigner): Iterator<object>;
 
+  // create contract, connect to services, load details
+  connect(): Iterator<object>;
+
   // Save/load private details
   loadDetails(): Iterator<object>;
   setDetails(newDetails: AccountDetails): Iterator<object>;

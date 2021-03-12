@@ -25,39 +25,44 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   *setSigner(signer: TheSigner) {
+    yield this.storeValues({ signer });
+    yield this.sendValues(this.actions().connect);
+  }
+
+  *connect() {
+    // Load details last, so it
+    yield this.sendValues(this.actions().loadDetails);
+
+    const { signer } = this.state;
     // Connect to the contract
     const contract = yield call(ConnectContract, signer);
-    // Connect to IDX
-    const idx = yield call(connectIDX, signer)
-
-    yield this.storeValues({
-      signer,
-      contract,
-      idx,
-    });
+    // store the contract prior to trying update history.
+    yield this.storeValues({contract});
     // Load history info by default
     yield this.sendValues(this.actions().updateHistory, [new Date(0), new Date()]);
-    // Load user account info
-    yield this.sendValues(this.actions().loadDetails);
+
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Save/load private details
 
   *loadDetails() {
-    if (this.state.idx) {
-      yield this.storeValues({idxIO: true});
-      const payload = yield loadDetails(this.state.idx);
+    // Connect to IDX
+    let idx = this.state.idx;
+    if (!idx) idx = yield call(connectIDX, this.state.signer)
+    if (idx) {
+      yield this.storeValues({ idx, idxIO: true });
+      const payload = yield loadDetails(idx);
       const details = payload?.data || DefaultAccountValues.details;
-      yield this.storeValues({details, idxIO: false});
+      yield this.storeValues({ details, idxIO: false });
     }
   };
 
   *setDetails(details: AccountDetails) {
-    yield this.storeValues({details, idxIO: true});
+    yield this.storeValues({ details, idxIO: true });
     if (this.state.idx) {
       yield call(setDetails, this.state.idx, details);
-      yield this.storeValues({idxIO: false});
+      yield this.storeValues({ idxIO: false });
     }
   }
 
@@ -69,7 +74,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       return;
     }
     try {
-      const { address }= signer;
+      const { address } = signer;
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber() });
     } catch (err) {
@@ -118,8 +123,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     });
 
     // Ensure we have fx value for each tx in this list
-    for (var i = 0; i < newHistory.length; i++)
-    {
+    for (var i = 0; i < newHistory.length; i++) {
       yield this.sendValues(FxActions.fetchRateAtDate, newHistory[i].date.toJSDate());
     }
   }
@@ -185,10 +189,18 @@ export const getAccountReducer = (address: string) => {
   return GetNamedReducer(AccountReducer, address, {}, ACCOUNTMAP_KEY);
 }
 
-export const useAccountApi = (address: string) => {
+export const useAccount = (address: string|null) => {
+  // We must inject something, but if we do not have an account we inject an empty saga
+  useInjectSaga({
+    key: address || "DEFAULT|ACC",
+    saga: address
+      ? buildSagas(address)
+      : function* () { }
+  });
+}
 
+export const useAccountApi = (address: string) => {
   const { actions } = getAccountReducer(address);
-  useInjectSaga({ key: address, saga: buildSagas(address) });
   const dispatch = useDispatch();
   return bindActions(actions, dispatch);
 }
