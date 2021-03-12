@@ -2,27 +2,35 @@
 	"folders": [
     {
       "name": "site-landing",
-      "path": "apps/site-landing"
+      "path": "apps\\site-landing"
     },
     {
       "name": "site-app",
-      "path": "apps/site-app"
+      "path": "apps\\site-app"
     },
     {
       "name": "site-base",
-      "path": "libs/site-base"
+      "path": "libs\\site-base"
     },
     {
       "name": "shared",
-      "path": "libs/shared"
+      "path": "libs\\shared"
     },
     {
       "name": "site-semantic-theme",
-      "path": "libs/site-semantic-theme"
+      "path": "libs\\site-semantic-theme"
     },
     {
       "name": "utils-ts",
-      "path": "libs/utils-ts"
+      "path": "libs\\utils-ts"
+    },
+    {
+      "name": "tx-blockchain",
+      "path": "libs\\tx-blockchain"
+    },
+    {
+      "name": "contract",
+      "path": "libs\\contract"
     }
   ],
   "settings": {

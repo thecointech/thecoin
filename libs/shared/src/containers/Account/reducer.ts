@@ -34,8 +34,9 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       contract,
       idx,
     });
-    // Load necessary info from remote stores
-    yield this.sendValues(this.actions().updateBalance);
+    // Load history info by default
+    yield this.sendValues(this.actions().updateHistory, [new Date(0), new Date()]);
+    // Load user account info
     yield this.sendValues(this.actions().loadDetails);
   }
 

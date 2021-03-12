@@ -9,7 +9,7 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
-import { isWallet } from "../../SignerIdent";
+import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@the-coin/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 
@@ -47,27 +47,29 @@ export const Account = (props: Props) => {
     sidebar.addGenerator(account.name, sidebarCb);
 
     // Is this a remote account?
-    if (signer && !isWallet(signer) && !signer.provider) {
-      connectSigner(account, accountActions);
+    if (isSigner(signer)) {
+      if (!signer.provider)
+        connectSigner(account, accountActions);
+      else if (!account.contract) {
+        // When a new account is added to account map,
+        // it will be missing the contract.  Here we
+        // enforce that connection for all cases
+        accountActions.setSigner(signer);
+      }
     }
     return () => sidebar.removeGenerator(account.name);
   }, [account, signer, sidebarCb])
 
 
-  if (signer === null) {
-    debugger;
-    return <div>Critical Error: Given account does not have a signer - please contact <a href="mailto:support@thecoin.io">support</a></div>;
+  if (isWallet(signer)) {
+    if (!signer.privateKey)
+      return (
+        <Login account={account} />
+      );
   } else {
-    if (isWallet(signer)) {
-      if (!signer.privateKey)
-        return (
-          <Login account={account} />
-        );
-    } else {
-      if (!signer.provider) {
-        // Does not have a provider on-load
-        return <div>Connecting to your Web3 provider</div>;
-      }
+    if (!signer.provider) {
+      // Does not have a provider on-load
+      return <div>Connecting to your Web3 provider</div>;
     }
   }
 

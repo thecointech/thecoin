@@ -1,14 +1,14 @@
 import { ThreeIdConnect, EthereumAuthProvider } from '@the-coin/3id-connect'
-import { Wallet as EthereumWallet } from 'ethers/wallet'
+import { Signer as EthereumSigner } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'
 import type { DIDProvider } from 'dids'
-import { AnySigner, isWallet } from '../../SignerIdent'
+import { AnySigner } from '../../SignerIdent'
 
 class EthereumProvider extends EventEmitter {
-  wallet: EthereumWallet
+  wallet: EthereumSigner
 
-  constructor(wallet: EthereumWallet) {
+  constructor(wallet: EthereumSigner) {
     super()
     this.wallet = wallet
   }
@@ -40,13 +40,10 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(wallet: AnySigner): Promise<DIDProvider> {
-  const { address } = wallet;
-  const ethProvider = isWallet(wallet)
-    ? new EthereumProvider(wallet)
-    : null;
-  if (!ethProvider) throw new Error('Unsupported wallet type (fix me!!!)');
-  // Also - how do we connect to multiple accounts at the same time?!?
+export async function getProvider(signer: AnySigner): Promise<DIDProvider> {
+  const { address } = signer;
+  const ethProvider = new EthereumProvider(signer);
+  // TODO: how do we connect to multiple accounts at the same time?!?
   await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
   return globalThis.__threeID.getDidProvider()
 }

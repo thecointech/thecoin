@@ -1,12 +1,8 @@
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
-import { accountMapApi, useActiveAccount } from "@the-coin/shared/containers/AccountMap";
+import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
 import { getSigner } from '@the-coin/utilities/blockchain';
-import { isSigner, TheSigner } from '@the-coin/shared/SignerIdent';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Dispatch } from 'redux';
-import { useAccountApi } from '@the-coin/shared/containers/Account';
+import { TheSigner } from '@the-coin/shared/SignerIdent';
 
 export const wallets = [
   {
@@ -29,46 +25,38 @@ export const wallets = [
   }
 ];
 
-// In dev-live mode, we automatically connect to default accounts
-// from the debug blockchain.
-
+let firstRun = true;
 export function useInjectedSigners() {
-  const dispatch = useDispatch();
-  // On first run, inject new signers signers
-  useEffect(() => { injectSigners(dispatch) }, []);
-
-  useUpdateOnActiveChanged();
-}
-
-async function injectSigners(dispatch: Dispatch) {
-  // We automatically insert one of these accounts into our local store
-  // This code assumes that our reducer has already been initialized
-  const walletToLoad = wallets[1];
-  const mapApi = accountMapApi(dispatch)
-  mapApi.addAccount(walletToLoad.name, testWallet as any, false);
-
-  if (process.env.SETTINGS === "live") {
-    const client1 = await getSigner("client1")
-    const address = await client1.getAddress();
-    const theSigner = client1 as TheSigner;
-
-    theSigner.address = address;
-    theSigner._isSigner = true;
-    mapApi.addAccount("Client1", theSigner, false);
-    mapApi.setActiveAccount(address);
+  const mapApi = useAccountMapApi();
+  // On first run, inject new signers.We can't
+  // use useEffect here because it will delay
+  // the execution too long (we render the app
+  // with no accounts and redirect to addAccount)
+  if (firstRun) {
+    // always insert default wallet
+    addDevWallet();
+    // In dev:live mode, we also connect to default
+    // accounts from local develop blockchain.
+    if (process.env.SETTINGS === "live") {
+      addDevLiveSigners(mapApi)
+    }
   }
 }
 
-//
-// This function ensures our injected accounts get initialized properly
-// TODO: This is risky because it changes some pretty core behaviour
-// between dev & testing.  There is probably a more generic method to
-// ensure this happens on all accounts (not just the accounts we inject here).
-function useUpdateOnActiveChanged() {
-  const activeAccount = useActiveAccount();
-  const api = useAccountApi(activeAccount?.address!);
+function addDevWallet() {
+  const accountToLoad = wallets[1];
+  const walletToLoad = JSON.parse(accountToLoad.wallet);
+  const initReducer = new AccountMap(initialState, initialState);
+  initReducer.addAccount(walletToLoad.name, walletToLoad, false);
+}
 
-  if (activeAccount?.contract === null && isSigner(activeAccount?.signer)) {
-    api.setSigner(activeAccount.signer);
-  }
+async function addDevLiveSigners(mapApi: IAccountMapActions) {
+  const client1 = await getSigner("client1")
+  const address = await client1.getAddress();
+  const theSigner = client1 as TheSigner;
+
+  theSigner.address = address;
+  theSigner._isSigner = true;
+  mapApi.addAccount("Client1", theSigner, false);
+  mapApi.setActiveAccount(address);
 }
