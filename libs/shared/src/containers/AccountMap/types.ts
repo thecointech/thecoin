@@ -15,7 +15,7 @@ export const initialState = {
   active: null as string | null,
 };
 
-export type AccountMapState = typeof initialState;
+export type AccountMapState = Readonly<typeof initialState>;
 
 ////////////////////////////////////////////
 
@@ -24,7 +24,7 @@ export interface IAccountMapActions {
   setActiveAccount(account: string|null): void;
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
-  addAccount(name: string, signer: AnySigner, store: boolean, unlocked?: Wallet): Iterator<object>;
+  addAccount(name: string, signer: AnySigner, store: boolean, unlocked?: Wallet): void;
 
   // Remove the given account from list & storage
   deleteAccount(account: AccountState): void;

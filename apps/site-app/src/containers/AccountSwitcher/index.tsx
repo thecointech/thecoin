@@ -1,27 +1,29 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Dropdown, DropdownItemProps } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
-import { useAccountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap";
+import { useDispatch } from "react-redux";
+import { accountMapApi, useAccounts } from "@the-coin/shared/containers/AccountMap";
 import avatar from './images/avatars/16user_avatar16.svg';
+
 import { AccountState } from "@the-coin/shared/containers/Account/types";
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 
 
 const titleMsg = { id: 'app.accountSwitcher.login', defaultMessage:'LOG IN'};
-const myAccounts = {  id:"app.accountSwitcher.myAccounts",
+const myAccounts = {  id:"app.accountSwitcher.myAccounts", 
                       defaultMessage:"My Accounts",
                       description:"Title for the My Accounts title in the menu"};
-const addAccount = {  id:"app.accountSwitcher.addAccount",
+const addAccount = {  id:"app.accountSwitcher.addAccount", 
                       defaultMessage:"Add an Account",
                       description:"Title for the Add an Account in the menu"};
-const see = {   id:"app.accountSwitcher.see",
+const see = {   id:"app.accountSwitcher.see", 
                 defaultMessage:"See",
                 description:"Title for the See in the menu"};
-const settings = {    id:"app.accountSwitcher.settings",
+const settings = {    id:"app.accountSwitcher.settings", 
                       defaultMessage:"Settings",
                       description:"Title for the Settings in the menu"};
-const signout = {   id:"app.accountSwitcher.signout",
+const signout = {   id:"app.accountSwitcher.signout", 
                     defaultMessage:"Sign Out",
                     description:"Title for the Sign Out in the menu"};
 
@@ -29,14 +31,15 @@ const signout = {   id:"app.accountSwitcher.signout",
 export const AccountSwitcher = () => {
 
   const {active, map} = useAccounts();
-  const activeAccount = active
+  const activeAccount = active 
     ? map[active]
     : undefined;
-
-  const accountMapApi = useAccountMapApi();
-  const doSetActive = (_: React.MouseEvent, data: DropdownItemProps) => {
-    accountMapApi.setActiveAccount(data.address)
-  }
+  
+  const dispatch = useDispatch();
+  const doSetActive = useCallback((_: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
+    const accounts = accountMapApi(dispatch);
+    accounts.setActiveAccount(data.address)
+  }, [dispatch])
 
   const allAccounts = Object.values(map);
 
@@ -58,13 +61,13 @@ export const AccountSwitcher = () => {
             .filter(account => account.address !== activeAccount?.address)
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
-              <Dropdown.Item
+              <Dropdown.Item 
                 trigger={trigger}
-                key={account.address}
+                key={account.address} 
                 address={account.address}
                 text={account.name}
-                as={Link}
-                onClick={doSetActive}
+                as={Link} 
+                onClick={doSetActive} 
                 to="/" />
               )
             )
