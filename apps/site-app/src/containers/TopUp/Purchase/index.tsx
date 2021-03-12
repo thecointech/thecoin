@@ -74,13 +74,16 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
       <div id={styles.appList}>
         <ol className={"ui list"}>
           <li>
+            <div className={styles.line}></div>
             <FormattedMessage {...signin} /><img src={illustration} />
           </li>
           <li>
+            <div className={styles.line}></div>
             <FormattedMessage {...generate} /><br />
             <ButtonTertiary onClick={this.onGenerateRecipient}><FormattedMessage {...buttonGenerate} /></ButtonTertiary>
           </li>
           <li>
+            <div className={styles.line}></div>
             <FormattedMessage {...newRecipient} />
           </li>
           <li>
