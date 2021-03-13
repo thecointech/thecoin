@@ -14,6 +14,7 @@ import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin
 import { connectIDX } from '../IDX';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
+import { log } from '@the-coin/logging';
 
 
 // The reducer for a single account state
@@ -55,6 +56,10 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       const payload = yield loadDetails(idx);
       const details = payload?.data || DefaultAccountValues.details;
       yield this.storeValues({ details, idxIO: false });
+      log.trace("Restored account details from IDX");
+    }
+    else {
+      log.warn("No IDX connection present, details may not be loaded correctly");
     }
   };
 
@@ -62,7 +67,11 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     yield this.storeValues({ details, idxIO: true });
     if (this.state.idx) {
       yield call(setDetails, this.state.idx, details);
+      log.trace("Persisted new details to IDX");
       yield this.storeValues({ idxIO: false });
+    }
+    else {
+      log.warn("No IDX connection present, changes may not be preserved");
     }
   }
 
