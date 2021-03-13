@@ -14,9 +14,10 @@ module.exports = options => ({
   node: options.node,
   mode: options.mode,
   entry: options.entry,
-  node: {
-    fs: "empty"
-  },
+
+  // see https://github.com/trentm/node-bunyan#webpack
+  externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support'],
+
   output: Object.assign(
     {
       // Compile into js/build.js
@@ -25,6 +26,7 @@ module.exports = options => ({
     },
     options.output,
   ), // Merge with env dependent settings
+
   optimization: options.optimization,
   module: {
     rules: [
