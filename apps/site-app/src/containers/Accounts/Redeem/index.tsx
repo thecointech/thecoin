@@ -54,8 +54,8 @@ const noSpecialCaractDesc = { id:"app.accounts.redeem.form.noSpecialCaractDesc",
                 defaultMessage:"No numbers or special characters ",
                 description:"Label for the form the make a payment page / etransfert tab" };
                                
-//const step1= { id:"app.accounts.redeem.step1",
-//                defaultMessage:"Step 1 of 3: Checking order availability..." };
+const step1= { id:"app.accounts.redeem.step1",
+                defaultMessage:"Step 1 of 3: Checking order availability..." };
 const step2= { id:"app.accounts.redeem.step2",
                 defaultMessage:"Step 2 of 3: Sending sell order to our servers..." };
 const step3= { id:"app.accounts.redeem.step3",
