@@ -89,6 +89,7 @@ export const RedeemHook = (props: Props) => {
 
   async function doSale() {
     // Init messages
+    setTransferMessage(step1);
     setPercentComplete(0.0);
 
     // First, get the brokers fee
