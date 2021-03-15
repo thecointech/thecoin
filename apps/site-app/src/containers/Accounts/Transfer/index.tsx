@@ -10,7 +10,7 @@ import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { useState } from 'react';
-import { Visual } from './Visual';
+import { TransferWidget } from './TransferWidget';
 
 type MyProps = {
   account: AccountState;
@@ -149,7 +149,7 @@ export const TransferHook = (props: Props) => {
   const rate = weBuyAt(rates);
   const intl = useIntl();
   return (
-    <Visual 
+    <TransferWidget 
       description={description} 
       onValueChange={onValueChange} 
       account={account}

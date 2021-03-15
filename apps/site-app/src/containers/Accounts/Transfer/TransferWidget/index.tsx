@@ -29,7 +29,7 @@ type VisualProps={
   transferValues: string,
 };
 
-export const Visual = (props: VisualProps) => {
+export const TransferWidget = (props: VisualProps) => {
   
   return (
     <React.Fragment>
@@ -41,7 +41,7 @@ export const Visual = (props: VisualProps) => {
         </Header>
 
         <DualFxInput
-          onChange={ {} }
+          onChange={props.onValueChange}
           asCoin={true}
           maxValue={props.account.balance}
           value={props.coinTransfer}
