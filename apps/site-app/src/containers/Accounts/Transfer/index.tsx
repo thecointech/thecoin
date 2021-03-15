@@ -56,7 +56,7 @@ export const TransferHook = (props: Props) => {
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
 
-  async function doTransfer() {
+  const doTransfer = async () => { 
     // Init messages
     setTransferMessage(step1);
     setPercentComplete(0.0);
@@ -69,7 +69,6 @@ export const TransferHook = (props: Props) => {
     if (doCancel) return false;
 
     // Get our variables
-    //const { coinTransfer, toAddress } = this.state;
     const { signer, contract } = props.account;
     if (coinTransfer === null || !signer || !contract) return false;
 
@@ -115,7 +114,7 @@ export const TransferHook = (props: Props) => {
     return true;
   }
 
-  async function onSubmit(e: React.MouseEvent<HTMLElement>) {
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
     if (e) e.preventDefault();
 
     setDoCancel(false);
@@ -131,7 +130,7 @@ export const TransferHook = (props: Props) => {
       alert('Transfer Error');
     }
     setPercentComplete(1);
-    setTransferInProgress(true);
+    setTransferInProgress(false);
   }
 
   function onValueChange(value: number) {

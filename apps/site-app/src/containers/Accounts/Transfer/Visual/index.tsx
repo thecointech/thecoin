@@ -41,7 +41,7 @@ export const Visual = (props: VisualProps) => {
         </Header>
 
         <DualFxInput
-          onChange={props.onValueChange}
+          onChange={ {} }
           asCoin={true}
           maxValue={props.account.balance}
           value={props.coinTransfer}
