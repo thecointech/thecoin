@@ -67,7 +67,7 @@ export const Account = (props: Props) => {
     // If we do not have todays history, update for last year
     // TODO: Implement account history properly.
     const now = DateTime.local();
-    if (account.historyEnd?.day != now.day) {
+    if (account.historyEnd?.day !== now.day) {
       accountActions.updateHistory(now.minus({ year: 1 }), now);
     }
   }, [signer])

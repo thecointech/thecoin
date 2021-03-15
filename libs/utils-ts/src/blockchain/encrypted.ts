@@ -35,5 +35,5 @@ function getKey(name: string) {
 export async function loadAndDecrypt(name: string, callback?: ProgressCallback) {
   const encrypted = loadEncrypted(name);
   const key = getKey(name);
-  return await Wallet.fromEncryptedJson(encrypted, key, callback);
+  return Wallet.fromEncryptedJson(encrypted, key, callback);
 }

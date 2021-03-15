@@ -33,7 +33,7 @@ async function loadSigner(name: AccountName, callback?: ProgressCallback) {
   }
   else {
     const { loadAndDecrypt } = await import('./encrypted');
-    return await loadAndDecrypt(name, callback);
+    return loadAndDecrypt(name, callback);
   }
 }
 
