@@ -64,7 +64,7 @@ export const RedeemWidget = (props: VisualProps) => {
         <DualFxInput
           onChange={props.onValueChange}
           asCoin={true}
-          maxValue={props.account.balance}
+          maxValue={props.account!.balance}
           value={props.coinToSell}
           fxRate={props.rate}
         />
