@@ -8,6 +8,7 @@ geth
 **/bin/
 /secrets
 **/api/swagger.json
+**/vscode-chrome-debug-userdatadir
 
 !**/summary.txt
 
@@ -19,3 +20,5 @@ geth
 **/semantic.css
 
 **/ts/.openapi-generator
+
+libs/contract/.openzeppelin/unknown-1337.json

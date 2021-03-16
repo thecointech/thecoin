@@ -5,6 +5,7 @@ import { TheSigner, AnySigner } from '../../SignerIdent'
 import { Transaction } from '@the-coin/tx-blockchain';
 import { AccountDetails } from '../AccountDetails';
 import { IDX } from '@ceramicstudio/idx';
+import { DateTime } from 'luxon';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -20,8 +21,6 @@ export type AccountState = {
   signer: AnySigner;
   // Contract connected to this wallet as a signer
   contract: Contract | null;
-  // The timestamp of the last update to balance/history
-  lastUpdate: Date;
   // Current balance in Coin
   balance: number;
   // Transaction history
@@ -40,15 +39,14 @@ export type AccountState = {
   // cache values to remember the date range we
   // have stored, and corresponding block numbers
   historyLoading?: boolean;
-  historyStart?: Date;
+  historyStart?: DateTime;
   historyStartBlock?: number;
-  historyEnd?: Date;
+  historyEnd?: DateTime;
   historyEndBlock?: number;
 };
 
 export const DefaultAccountValues = {
   contract: null,
-  lastUpdate: new Date(0),
   balance: -1,
   history: [],
 
@@ -68,13 +66,16 @@ export interface IActions extends ImmerReducer<AccountState> {
   setName(name: string): void;
   setSigner(signer: TheSigner): Iterator<object>;
 
+  // create contract, connect to services, load details
+  connect(): Iterator<object>;
+
   // Save/load private details
   loadDetails(): Iterator<object>;
   setDetails(newDetails: AccountDetails): Iterator<object>;
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): Iterator<object>;
-  updateHistory(from: Date, until: Date): Generator<object>;
+  updateHistory(from: DateTime, until: DateTime): Generator<object>;
 
   decrypt(password: string, callback: DecryptCallback | undefined): Iterator<object>;
 }

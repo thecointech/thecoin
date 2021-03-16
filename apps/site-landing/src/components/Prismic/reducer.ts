@@ -46,7 +46,8 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
   };
 }
 
-// TODO: CLEAN THIS UP!
+// TODO: CLEAN THIS UP! All of our reducer creation/maintenance is unfinished, with utility fn's
+// (like createRootEntitySelector here) left scattered in various classes
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
 const { actions, reducer, reducerClass } = GetNamedReducer(PrismicReducer, "prismic_docs", initialState)
@@ -65,4 +66,4 @@ export const usePrismic = () => {
 }
 
 export const usePrismicActions = () =>
-  (bindActionCreators(actions, useDispatch()) as any) as IActions;
+  (bindActionCreators(actions, useDispatch()) as unknown) as IActions;

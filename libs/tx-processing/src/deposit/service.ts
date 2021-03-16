@@ -30,7 +30,7 @@ async function setCoinRate(record: DepositRecord) {
     return;
   }
   // Ok, lets get an FX result for this
-  const rate = await ratesApi.getConversion(124, processedTimestamp.toMillis());
+  const rate = await ratesApi.getSingle(124, processedTimestamp.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${processedTimestamp.toDate()}`);
     return false;

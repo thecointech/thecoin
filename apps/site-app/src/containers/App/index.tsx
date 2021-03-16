@@ -28,11 +28,18 @@ import '../../semantic/semantic.css';
 import styles from './styles.module.less';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+import { useInjectedSigners } from 'api/mock/accounts';
+
 
 export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
   const location = useLocation();
+
+  if (process.env.NODE_ENV !== 'production')
+  {
+    useInjectedSigners();
+  }
 
   return (
     <>

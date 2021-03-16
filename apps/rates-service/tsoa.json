@@ -17,5 +17,10 @@
   },
   "ignore": [
     "**/node_modules/**"
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@the-coin/utilities/*":  ["../../libs/utils-ts/build/*"]
+    }
+  }
 }

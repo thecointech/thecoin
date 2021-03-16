@@ -17,7 +17,7 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./src/index.ts",
+  "main": "./src/index.d.ts",
   "exports": {
     ".": "./src/index.d.ts",
     "./": "./src/"

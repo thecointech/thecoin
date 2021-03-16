@@ -11,7 +11,7 @@ export async function ConnectContract(signer: Signer) : Promise<TheCoin> {
 	// First fetch contract
 	const contract = await GetContract();
 	// Ensure wallet is connected to the same signer as the contract
-	if ((signer as Wallet).connect !== null) {
+	if (!!(signer as Wallet).connect) {
 		signer = await ConnectWallet(signer as Wallet);
 	}
 	else {

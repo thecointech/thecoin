@@ -1,6 +1,6 @@
 import { FXRate, RatesApi } from '@the-coin/pricing';
 import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
-import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
+import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
@@ -54,7 +54,7 @@ export async function fetchRate(date?: Date): Promise<FXRate | null> {
   log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
 
   const api = new RatesApi(undefined, ServiceAddress(Service.RATES));
-  const r = await api.getConversion(cc, date?.getTime() ?? 0);
+  const r = await api.getSingle(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {
     if (date)
       log.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText} - ${r.data}`)
@@ -122,20 +122,22 @@ const { actions, reducer, reducerClass } = GetNamedReducer(FxRateReducer, "fxRat
 
 //
 // The loop function waits for updtes
-function* loopFxUpdates() {
+function* loopFxUpdates() : Generator<Effect> {
 
   let latest = 0;
   let validFrom = 0;
   let endPolling = false;
   while (!endPolling) {
+    // Wait until sets new update and stores values
     const rateAction = yield take(actions.updateWithValues.type);
-    const {rates} = rateAction.payload as Partial<FxRatesState>;
+    const {rates} = (rateAction as ReturnType<typeof actions.updateWithValues>).payload;
     if (!rates)
       continue;
 
     latest = rates.reduce((p, r) => Math.max(p, r.validTill), latest)
     validFrom = rates.reduce((p, r) => Math.max(p, r.validFrom), validFrom)
     // If the clients clock is wrong, we don't wan't to sleep too long
+    // TODO: get time from the server
     const now = Math.max(Date.now(), validFrom);
 
     // wait at least 10 seconds till update, or 100ms past update time

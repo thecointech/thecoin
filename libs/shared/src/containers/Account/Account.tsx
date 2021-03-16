@@ -9,9 +9,11 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
-import { isWallet } from "../../SignerIdent";
+import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@the-coin/utilities";
 import { SemanticICONS } from "semantic-ui-react";
+import { DateTime } from "luxon";
+import { FormattedMessage } from "react-intl";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
@@ -30,6 +32,9 @@ interface Props {
   addressMatch?: (address: string) => boolean;
 }
 
+const waitingForWeb3 = { defaultMessage: "Connecting to your Web3 provider",
+                description:"Message to display while waiting for user to complete Web3 connection" };
+
 export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
@@ -42,32 +47,45 @@ export const Account = (props: Props) => {
     [props]
   );
 
+  // Initialize sidebar
   const sidebar = useSidebar();
   useEffect(() => {
     sidebar.addGenerator(account.name, sidebarCb);
-
-    // Is this a remote account?
-    if (signer && !isWallet(signer) && !signer.provider) {
-      connectSigner(account, accountActions);
-    }
     return () => sidebar.removeGenerator(account.name);
-  }, [account, signer, sidebarCb])
+  }, [account, sidebarCb])
 
-
-  if (signer === null) {
-    debugger;
-    return <div>Critical Error: Given account does not have a signer - please contact <a href="mailto:support@thecoin.io">support</a></div>;
-  } else {
-    if (isWallet(signer)) {
-      if (!signer.privateKey)
-        return (
-          <Login account={account} />
-        );
-    } else {
-      if (!signer.provider) {
-        // Does not have a provider on-load
-        return <div>Connecting to your Web3 provider</div>;
+  // prepare account for usage
+  useEffect(() => {
+    // Is this a remote account?
+    if (isSigner(signer)) {
+      if (!signer.provider)
+        connectSigner(account, accountActions);
+      else if (!account.contract) {
+        // When a new account is added to account map,
+        // it will be missing the contract.  Here we
+        // enforce that connection for all cases
+        accountActions.connect();
       }
+    }
+
+    // If we do not have todays history, update for last year
+    // TODO: Implement account history properly.
+    const now = DateTime.local();
+    if (account.historyEnd?.day !== now.day) {
+      accountActions.updateHistory(now.minus({ year: 1 }), now);
+    }
+  }, [signer])
+
+
+  if (isWallet(signer)) {
+    if (!signer.privateKey)
+      return (
+        <Login account={account} />
+      );
+  } else {
+    if (!signer.provider) {
+      // Does not have a provider on-load
+      return <FormattedMessage {...waitingForWeb3} />
     }
   }
 
