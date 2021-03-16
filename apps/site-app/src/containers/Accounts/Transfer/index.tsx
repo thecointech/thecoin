@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 
 import { NormalizeAddress } from '@the-coin/utilities/';
 import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { selectFxRate, useFxRates } from '@the-coin/shared/containers/FxRate/selectors';
+import { useFxRates } from '@the-coin/shared/containers/FxRate/selectors';
 import { useState } from 'react';
 import { TransferWidget } from './TransferWidget';
 import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
