@@ -1,20 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
 import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@the-coin/types';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
-import interact from './images/icon_payment_big.svg';
 import { useState } from 'react';
+import { RedeemWidget } from './RedeemWidget';
 
 type MyProps = {
   account: AccountState;
@@ -185,70 +181,38 @@ export const RedeemHook = (props: Props) => {
   const { account, rates } = props;
   const rate = weBuyAt(rates);
   return (
-    <React.Fragment>
-      <Form>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={10}>
-              <Header as="h5">
-                <Header.Subheader>
-                  <FormattedMessage {...description} />
-                </Header.Subheader>
-              </Header>
-            </Grid.Column>
-            <Grid.Column floated='right' width={4}>
-              <img src={interact} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-
-        <DualFxInput
-          onChange={onValueChange}
-          asCoin={true}
-          maxValue={account.balance}
-          value={coinToSell}
-          fxRate={rate}
-        />
-        <Form.Input
-          className={"borderTop borderBottom"}
-          label={<FormattedMessage {...emailLabel} />}
-          name="email"
-          onChange={event => setEmail(event.target.value)}
-          placeholder={intl.formatMessage(emailDesc)}
-        />
-        <Form.Input
-          className={"half left"}
-          label={<FormattedMessage {...questionLabel} />}
-          name="question"
-          onChange={event => setQuestion(event.target.value)}
-          placeholder={intl.formatMessage(noSpecialCaractDesc)}
-        />
-        <Form.Input
-          className={"half right"}
-          label={<FormattedMessage {...answerLabel} />}
-          name="answer"
-          onChange={event => setAnswer(event.target.value)}
-          placeholder={intl.formatMessage(noSpecialCaractDesc)}
-        />
-        <Form.Input
-          className={"borderTop"}
-          label={<FormattedMessage {...messageLabel} />}
-          name="message"
-          type="text"
-          onChange={event => setMessage(event.target.value)}
-          placeholder={intl.formatMessage(messageDesc)}
-        />
-        <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={onSubmit}><FormattedMessage {...button} /></ButtonTertiary>
-      </Form>
-      <ModalOperation
+      <RedeemWidget
+        coinToSell={coinToSell}
+        description={description}
+        onValueChange={onValueChange}
+        account={account}
+        rate={rate}
+    
+        emailLabel={emailLabel}
+        setEmail={event => setEmail(event.target.value)}
+        emailDes={intl.formatMessage(emailDesc)}
+    
+        questionLabel={questionLabel}
+        setQuestion={event => setQuestion(event.target.value)}
+        noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
+    
+        answerLabel={answerLabel}
+        setAnswer={event => setAnswer(event.target.value)}
+    
+        messageLabel={messageLabel}
+        setMessage={event => setMessage(event.target.value)}
+        messageDesc={intl.formatMessage(messageDesc)}
+  
+        button={button}
+        onSubmit={onSubmit}
+      
         cancelCallback={onCancelTransfer}
-        isOpen={transferInProgress}
-        header={transferOutHeader}
-        progressMessage={transferMessage}
-        progressPercent={percentComplete}
-        messageValues={transferValues}
+        transferInProgress={transferInProgress}
+        transferOutHeader={transferOutHeader}
+        transferMessage={transferMessage}
+        percentComplete={percentComplete}
+        transferValues={transferValues}
       />
-    </React.Fragment>
   );
 }
 
