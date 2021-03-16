@@ -12,16 +12,16 @@ import { log } from '@the-coin/logging';
 import { cacheSigner } from './cache';
 
 // If running on GAE, check in secrets manager
-const GAE_ENV = process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
+const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
 
 async function loadSigner(name: AccountName, callback?: ProgressCallback) {
   if (process.env.NODE_ENV === 'development') {
-    const { connectAccount } = await import('./emulated');
-    return await connectAccount(name);
+    const { connectAccount } = await import('./development');
+    return connectAccount(name);
   }
-  else if (GAE_ENV) {
-    const { loadWallet } = await import('./ga-secrets');
-    return loadWallet(`WALLET_${name}`);
+  else if (PrivilegedEnv()) {
+    const { loadWallet } = await import('./server');
+    return loadWallet(name);
   }
   else {
     const { loadAndDecrypt } = await import('./encrypted');
