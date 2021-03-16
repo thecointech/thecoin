@@ -3,16 +3,14 @@ import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import { AccountName } from '@the-coin/contract';
 import { Wallet } from 'ethers';
 
+// Get Secrets.  Only enabled for TCCC
 export async function getSecret(name: string) {
   const client = new SecretManagerServiceClient();
-  // Access the secret.
   const [accessResponse] = await client.accessSecretVersion({
-    name,
+    name: `projects/906091868238/secrets/${name}/versions/latest`,
   });
 
-  const responsePayload = accessResponse.payload?.data?.toString();
-  return responsePayload;
-
+  return accessResponse.payload?.data?.toString();
 }
 
 export async function loadWallet(name: AccountName) {
