@@ -1,5 +1,5 @@
 
-import { getContract, getSigner } from '@the-coin/utilities/blockchain';
+import { getContract, getSigner } from '@the-coin/accounts';
 
 const walletName = 'BrokerTransferAssistant';
 export const GetWallet = () => getSigner(walletName);

@@ -1,4 +1,4 @@
-import { getSigner } from '@the-coin/utilities/blockchain';
+import { getSigner } from '@the-coin/accounts';
 import constant from './constant.json';
 import production from './production.json';
 

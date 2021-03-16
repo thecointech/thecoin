@@ -9,8 +9,6 @@ import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
 import { AccountState } from '@the-coin/shared/containers/Account/types';
 import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
 import { UxAddress } from '@the-coin/shared/components/UxAddress';
-
-
 import { toHuman, roundPlaces } from '@the-coin/utilities';
 import { GetActionDoc } from '@the-coin/utilities/User';
 import { Timestamp } from '@the-coin/utilities/firestore';
@@ -18,11 +16,10 @@ import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
 import { DocumentReference } from '@the-coin/types';
 import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
 import { GetAccountCode } from '@the-coin/utilities/Referrals';
+import { getSigner } from '@the-coin/accounts';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-
-
 
 type MyProps = AccountState & {
   updateBalance: Function
@@ -202,7 +199,8 @@ class PurchaseClass extends React.PureComponent<Props> {
   }
 
   async updateCode(account: string) {
-    const code = await GetAccountCode(account, "BrokerTransferAssistant");
+    const signer = await getSigner("BrokerTransferAssistant");
+    const code = await GetAccountCode(account, signer);
     this.setState({
       purchaserCode: code,
      });

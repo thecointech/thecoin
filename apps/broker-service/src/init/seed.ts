@@ -5,7 +5,7 @@ import { NormalizeAddress } from "@the-coin/utilities";
 import { Timestamp } from "@the-coin/utilities/firestore/timestamp";
 import { CreateReferree, CreateReferrer } from "@the-coin/utilities/Referrals";
 import { GetUserVerified, SetUserVerified } from "@the-coin/utilities/User";
-import { getSigner } from "@the-coin/utilities/blockchain";
+import { getSigner } from "@the-coin/accounts";
 
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred

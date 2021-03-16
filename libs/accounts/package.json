@@ -24,12 +24,14 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": "./build/index.js",
+  "main": "./build/index_node.js",
+  "browser": "./build/index_web.js",
+  "exports": "./build/index_node.js",
   "dependencies": {
     "ethers": "^4.0.46",
     "@google-cloud/secret-manager": "^3.5.0",
-    "@the-coin/logging": "*"
+    "@the-coin/logging": "*",
+    "@the-coin/contract": "*"
   },
   "devDependencies": {
     "jest": "*"

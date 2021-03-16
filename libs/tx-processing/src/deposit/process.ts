@@ -7,6 +7,7 @@ import { log } from "@the-coin/logging";
 import { IsValidAddress } from "@the-coin/utilities";
 import { eTransferData } from "@the-coin/tx-gmail";
 import { DepositRecord } from "@the-coin/tx-firestore";
+import { getSigner } from "@the-coin/accounts";
 
 export async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
 
@@ -28,7 +29,8 @@ export async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, pr
     }
   }
 
-  const code = await GetAccountCode(address, "BrokerTransferAssistant")
+  const bta = await getSigner("BrokerTransferAssistant");
+  const code = await GetAccountCode(address, bta);
   const prefix = `${name}/${recieved.toSQLDate()}`;
   const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);
