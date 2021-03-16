@@ -34,7 +34,6 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@google-cloud/secret-manager": "^3.5.0",
     "@google-cloud/firestore": "^4.9.4",
     "@the-coin/contract": "*",
     "@the-coin/types": "*",
