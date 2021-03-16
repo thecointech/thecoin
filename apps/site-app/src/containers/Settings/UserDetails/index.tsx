@@ -1,11 +1,11 @@
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AccountVerified } from '../Verified';
-import { Avatars } from '@the-coin/shared/components/Avatars';
+import { Avatars } from '@thecointech/shared/components/Avatars';
 import { Grid } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { CopyToClipboard } from '@the-coin/site-base/components/CopyToClipboard';
+import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
 
 const accountName = { id:"app.settings.userDetails.name",
                 defaultMessage:"Account name",

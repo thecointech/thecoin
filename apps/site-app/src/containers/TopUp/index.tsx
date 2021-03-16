@@ -1,5 +1,5 @@
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
-import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import * as React from 'react';
 import illustration from './images/icon_topup_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
@@ -7,7 +7,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Purchase } from 'containers/Accounts/Purchase';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 
 
 const title = { id:"app.topup.title",

@@ -5,9 +5,9 @@
 //
 
 import type { Contract, Signer } from 'ethers';
-import { ConnectContract } from '@the-coin/contract';
-import { AccountName } from '@the-coin/contract/accounts';
-import { log } from '@the-coin/logging';
+import { ConnectContract } from '@thecointech/contract';
+import { AccountName } from '@thecointech/contract/accounts';
+import { log } from '@thecointech/logging';
 import { cacheSigner } from './cache';
 
 type Loader = () => Promise<Signer>;

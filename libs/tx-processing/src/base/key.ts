@@ -1,4 +1,4 @@
-import { ConfigStore } from "@the-coin/store";
+import { ConfigStore } from "@thecointech/store";
 
 const ACTION_KEY = "ActionPrivateKey";
 export const setActionPrivateKey = (key: string) => ConfigStore.set(ACTION_KEY, key);

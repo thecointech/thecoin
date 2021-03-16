@@ -1,6 +1,6 @@
-import { Timestamp } from "@the-coin/types";
-import { IsValidAddress } from "@the-coin/utilities";
-import { GetUserDoc } from "@the-coin/utilities/User";
+import { Timestamp } from "@thecointech/types";
+import { IsValidAddress } from "@thecointech/utilities";
+import { GetUserDoc } from "@thecointech/utilities/User";
 import { Dictionary } from "lodash";
 import { DepositRecord } from "./types";
 import { fetchAllUsers } from "./users";

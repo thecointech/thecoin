@@ -1,12 +1,12 @@
 
 import Prismic from 'prismic-javascript'
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/store/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@thecointech/shared/store/immerReducer'
 import { IActions, PrismicState, initialState } from './types'
 import { call, takeLatest } from 'redux-saga/effects'
 import { Document } from 'prismic-javascript/d.ts/documents'
 import { ApplicationRootState } from 'types'
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
-import { buildSaga } from '@the-coin/shared/store/sagas'
+import { buildSaga } from '@thecointech/shared/store/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 

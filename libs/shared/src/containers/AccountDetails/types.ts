@@ -5,7 +5,7 @@
 // without requiring full KYC again.  However, we'll
 // need to figure out how we can manage verified details
 
-import { CurrencyCode } from "@the-coin/utilities";
+import { CurrencyCode } from "@thecointech/utilities";
 
 // However, we will need to validate this data against
 export type AccountDetails = {
@@ -55,7 +55,7 @@ export type AccountDetails = {
 
   // email of client
   email?: string;
-  
+
   // Where have we persisted this account to?
   storedOnGoogle?: boolean,
   storedOnDropbox?: boolean,

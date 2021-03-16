@@ -1,8 +1,8 @@
 
-import { CertifiedTransfer } from '@the-coin/types';
-import { NormalizeAddress } from '@the-coin/utilities';
-import { GetSigner } from '@the-coin/utilities/VerifiedAction'
-import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer'
+import { CertifiedTransfer } from '@thecointech/types';
+import { NormalizeAddress } from '@thecointech/utilities';
+import { GetSigner } from '@thecointech/utilities/VerifiedAction'
+import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { getBrokerCADAddress } from '../status';
 
 const ValidSignatures = (action: CertifiedTransfer) => {

@@ -1,12 +1,12 @@
 import { GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
-import { init } from '@the-coin/utilities/firestore/mock';
-import { GetUserDoc } from "@the-coin/utilities/User";
-import { getContract } from "@the-coin/utilities/Wallets";
-import { ConfigStore } from '@the-coin/store';
-import { PurchaseType } from '@the-coin/tx-firestore';
+import { init } from '@thecointech/utilities/firestore/mock';
+import { GetUserDoc } from "@thecointech/utilities/User";
+import { getContract } from "@thecointech/utilities/Wallets";
+import { ConfigStore } from '@thecointech/store';
+import { PurchaseType } from '@thecointech/tx-firestore';
 
 // Don't go to the server for this
-jest.mock('@the-coin/email');
+jest.mock('@thecointech/email');
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;

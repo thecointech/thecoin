@@ -943,7 +943,7 @@
 		}
 	},
 	"info": {
-		"title": "@the-coin/rates-service",
+		"title": "@thecointech/rates-service",
 		"version": "0.1.1",
 		"description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
 		"license": {

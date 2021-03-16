@@ -1,19 +1,19 @@
 import React, { useCallback, useState } from 'react';
 import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { BuildVerifiedBillPayment } from '@the-coin/utilities/VerifiedBillPayment';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { payees, validate } from './payees';
-import { BillPayeePacket } from '@the-coin/types';
+import { BillPayeePacket } from '@thecointech/types';
 import { GetStatusApi, GetBillPaymentsApi } from 'api';
-import { UxInput } from '@the-coin/shared/components/UxInput';
-import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { UxInput } from '@thecointech/shared/components/UxInput';
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { useFxRates } from '@the-coin/shared/containers/FxRate';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useFxRates } from '@thecointech/shared/containers/FxRate';
 
 const description = { id:"app.accounts.billPayments.description",
                 defaultMessage:"You can pay your bills directly from The Coin. Select payee:",
@@ -23,7 +23,7 @@ const payeeTxt = { id:"app.accounts.billPayments.form.payee",
                 description:"Label for the form the make a payment page / bill payment tab" };
 const accountNumer = { id:"app.accounts.billPayments.form.accNumber",
                 defaultMessage:"Payee Account Number",
-                description:"Label for the form the make a payment page / bill payment tab" }; 
+                description:"Label for the form the make a payment page / bill payment tab" };
 const button = { id:"app.accounts.billPayments.form.button",
                 defaultMessage:"Send payment",
                 description:"Label for the form the make a payment page / bill payment tab" };
@@ -42,10 +42,10 @@ const transferOutProgress = { id:"app.accounts.billPayments.transferOutProgress"
 const payeeAccount = { id:"app.accounts.billPayments.form.payeeAccount",
                 defaultMessage:"Payee account number",
                 description:"Label for the form the make a payment page / bill payment tab" };
-                
 
 
-export const BillPayments = () => { 
+
+export const BillPayments = () => {
   const intl = useIntl();
   const account = useActiveAccount();
   const { rates } = useFxRates();
@@ -55,16 +55,16 @@ export const BillPayments = () => {
   const [payee, setPayee] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   //const [payeeName, setPayeeName] = useState("");
-  
+
   const [validationMessage, setValidationMessage] = useState(null as ValuedMessageDesc|null);
   const [forceValidate, setForceValidate] = useState(false);
-  
+
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [paymentMessage, setPaymentMessage] = useState(transferOutProgress);
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
-  
+
 
   const resetState = useCallback(
     () => {
@@ -82,56 +82,56 @@ export const BillPayments = () => {
     },
     [],
   );
-  
+
   function onValueChange(value: number) {
-      setCoinToSell(value);  
-  } 
-  
+      setCoinToSell(value);
+  }
+
   function onCancelTransfer() {
       setDoCancel(true);
   }
-  
+
   function onSubmit() {
       async (e: React.MouseEvent<HTMLElement>) => {
           e.preventDefault();
           doSubmit();
       };
   }
-  
+
   function onPayeeSelect (_: React.SyntheticEvent<HTMLElement, Event>,data: DropdownProps) {
       setPayee((data.value as string) || '');
   }
-    
+
   //function onNameChange (_: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) {
    //   setPayeeName(data.value);
-  //} 
-  
+  //}
+
   function onAccountNumber (value: string) {
       const validation = validate(payee, value);
       setValidationMessage(validation);
       setAccountNumber(value);
     };
-  
+
     async function doBillPayment() {
       // Init messages
       setPaymentMessage(step1);
       setPercentComplete(0.0);
-  
+
       // First, get the brokers fee
       const statusApi = GetStatusApi();
       var {data} = await statusApi.status();
       // Check out if we have the right values
       if (!data?.certifiedFee)
         return false;
-  
+
       if (doCancel)
         return false;
-  
+
       // Get our variables
       const account = useActiveAccount();
       const { signer, contract } = account!;
       if (coinToSell === null || !signer || !contract || !payee) return false;
-  
+
       const packet: BillPayeePacket = {
         accountNumber,
         payee,
@@ -147,7 +147,7 @@ export const BillPayments = () => {
       );
       const billPayApi = GetBillPaymentsApi();
       if (doCancel) return false;
-  
+
       // Send the command to the server
       setPaymentMessage(step2);
       setPercentComplete(0.25);
@@ -157,7 +157,7 @@ export const BillPayments = () => {
         alert(JSON.stringify(response));
         return false;
       }
-  
+
       // Wait on the given hash
       const transferValues = {
         link: (
@@ -182,17 +182,17 @@ export const BillPayments = () => {
       setPercentComplete(1);
       return true;
     }
-  
+
     async function doSubmit() {
       setDoCancel(false);
       setTransferValues(undefined);
       setTransferInProgress(true);
       setForceValidate(true);
-  
+
       // Validate inputs
       const isValid = !validationMessage;
       if (!coinToSell || !payee || !accountNumber || !isValid) return;
-  
+
       try {
         const results = await doBillPayment();
         if (!results) {
@@ -203,7 +203,7 @@ export const BillPayments = () => {
           alert(
             'Order recieved.\nYour bill payment will be processed in the next 1-2 business days.\nPlease note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time.',
           );
-  
+
         // Reset back to default state
         resetState();
       } catch (e) {

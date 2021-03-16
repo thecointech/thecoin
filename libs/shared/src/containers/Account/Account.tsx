@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
-import { RUrl } from '@the-coin/utilities/RUrl';
+import { RUrl } from '@thecointech/utilities/RUrl';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
 import { ApplicationBaseState } from "types";
@@ -10,7 +10,7 @@ import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
 import { useAccountApi } from "./reducer";
 import { isSigner, isWallet } from "../../SignerIdent";
-import { NormalizeAddress } from "@the-coin/utilities";
+import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";
 

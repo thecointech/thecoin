@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/tx-processing",
+  "name": "@thecointech/tx-processing",
   "version": "0.1.0",
   "private": true,
   "description": "The Coin: A library for processing coin deposits and etransfers",
@@ -24,11 +24,11 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/tx-gmail": "*",
-    "@the-coin/tx-firestore": "*",
-    "@the-coin/rbcapi": "*",
-    "@the-coin/shared": "*",
-    "@the-coin/utilities": "*"
+    "@thecointech/tx-gmail": "*",
+    "@thecointech/tx-firestore": "*",
+    "@thecointech/rbcapi": "*",
+    "@thecointech/shared": "*",
+    "@thecointech/utilities": "*"
   },
   "devDependencies": {
     "jest": "*"

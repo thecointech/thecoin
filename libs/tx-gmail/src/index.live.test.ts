@@ -1,8 +1,8 @@
 import { fetchETransfers, FetchNewDepositEmails } from './index'
-import { ConfigStore } from '@the-coin/store';
-import { init, release } from '@the-coin/utilities/firestore/jestutils';
-import { IsValidAddress } from '@the-coin/utilities';
-import { describe, IsManualRun } from '@the-coin/jestutils';
+import { ConfigStore } from '@thecointech/store';
+import { init, release } from '@thecointech/utilities/firestore/jestutils';
+import { IsValidAddress } from '@thecointech/utilities';
+import { describe, IsManualRun } from '@thecointech/jestutils';
 
 jest.unmock("googleapis")
 jest.unmock("auth")

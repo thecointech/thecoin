@@ -1,8 +1,8 @@
-import { Props as BaseProps } from '@the-coin/shared/components/UxPassword/types';
+import { Props as BaseProps } from '@thecointech/shared/components/UxPassword/types';
 
 export type ChangeCB = (value: string, score: number) => boolean;
 
-// Unfortunately we can't inherit our base props as 
+// Unfortunately we can't inherit our base props as
 // we are overriding the base uxChange props
 export type MyProps = {
   infoBar?: boolean,

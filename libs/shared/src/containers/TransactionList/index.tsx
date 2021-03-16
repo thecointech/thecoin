@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
-import { toHuman } from '@the-coin/utilities/Conversion'
-import { FXRate } from '@the-coin/pricing';
+import { toHuman } from '@thecointech/utilities/Conversion'
+import { FXRate } from '@thecointech/pricing';
 import { DateRangeSelect } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconBank from "./images/icon_bank.svg";
 import styles from './styles.module.less';
-import { Transaction } from '@the-coin/tx-blockchain';
+import { Transaction } from '@thecointech/tx-blockchain';
 import { useState } from 'react';
 import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
@@ -48,14 +48,14 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 }
 
 
-export const TransactionList = (props: MyProps) => { 
+export const TransactionList = (props: MyProps) => {
 
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
-  
+
     function onDateRangeChange(from: Date, until: Date) {
       setFromDate(from);
-      setUntilDate(until); 
+      setUntilDate(until);
     }
     const { locale } = useSelector(selectLocale);
 
@@ -83,9 +83,9 @@ export const TransactionList = (props: MyProps) => {
         contentForComment = "OUT";
       }
       const monthTodisplay = tx.date.setLocale(locale).monthShort;
-      const yearToDisplay = tx.date.setLocale(locale).year; 
+      const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
-      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute; 
+      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
 
       return (
         <Table.Row key={index}>

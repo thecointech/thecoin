@@ -1,4 +1,4 @@
-import { IFxRates, FXRate, getRate, EmptyRate, fetchRate } from "@the-coin/shared/containers/FxRate";
+import { IFxRates, FXRate, getRate, EmptyRate, fetchRate } from "@thecointech/shared/containers/FxRate";
 
 // file deepcode ignore UsageOfUndefinedReturnValue: false positive on return Promise<void>
 

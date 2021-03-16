@@ -1,5 +1,5 @@
 // NOTE!  tsoa requires the original (source) enum here, not the compiled version
-import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
+import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
 
 // Rates come into effect 30 seconds afeter the market rate.
 // This to allow us time to update, and give brokers plenty of time

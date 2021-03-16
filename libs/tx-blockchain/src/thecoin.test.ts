@@ -1,6 +1,6 @@
 import { cadbrokerIn, cadbrokerOut, fetchCoinHistory } from "./thecoin";
 import { BigNumber } from "ethers/utils";
-import { GetContract } from "@the-coin/contract";
+import { GetContract } from "@thecointech/contract";
 
 it('Can fetch TheCoin history', async () => {
   jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)

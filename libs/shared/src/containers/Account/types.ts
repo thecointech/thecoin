@@ -1,8 +1,8 @@
 import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
-import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes'
+import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
-import { Transaction } from '@the-coin/tx-blockchain';
+import { Transaction } from '@thecointech/tx-blockchain';
 import { AccountDetails } from '../AccountDetails';
 import { IDX } from '@ceramicstudio/idx';
 import { DateTime } from 'luxon';

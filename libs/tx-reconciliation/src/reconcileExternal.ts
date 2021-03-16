@@ -2,16 +2,16 @@
 // Reconcile transactions from external sources.
 //
 import { spliceBank } from "./matchBank";
-import { UserAction } from "@the-coin/utilities/User";
-import { Timestamp } from "@the-coin/utilities/firestore";
+import { UserAction } from "@thecointech/utilities/User";
+import { Timestamp } from "@thecointech/utilities/firestore";
 import { spliceEmail } from "./matchEmails";
 import { getOrCreateUser } from "./utils";
-import { NormalizeAddress } from "@the-coin/utilities";
+import { NormalizeAddress } from "@thecointech/utilities";
 import { builtInAccounts, theCoin } from './data/manual.json';
-import { Transaction } from "@the-coin/tx-blockchain/";
+import { Transaction } from "@thecointech/tx-blockchain/";
 import { getFiat } from "./fxrates";
 import { AllData, Reconciliations, ReconciledRecord, BankRecord } from "types";
-import { CertifiedTransferRequest } from "@the-coin/types";
+import { CertifiedTransferRequest } from "@thecointech/types";
 
 export function reconcileExternal(data: AllData) {
 

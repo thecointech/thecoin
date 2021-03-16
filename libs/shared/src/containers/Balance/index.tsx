@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, Popup, Icon } from "semantic-ui-react";
 
-import { toHuman } from "@the-coin/utilities";
+import { toHuman } from "@thecointech/utilities";
 import { getFxRate } from "../FxRate/reducer";
 import { AccountPageProps } from "../Account/types";
 

@@ -2,7 +2,7 @@ import { useInjectReducer } from "redux-injectors";
 import { bindActionCreators, Dispatch } from "redux";
 import { Wallet } from "ethers";
 import { useDispatch } from "react-redux";
-import { IsValidAddress, NormalizeAddress } from "@the-coin/utilities";
+import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { ACCOUNTMAP_KEY, initialState, AccountMapState, IAccountMapActions } from "./types";
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from "../../store/immerReducer";
 import { AccountState, DefaultAccountValues, useAccount } from "../Account";

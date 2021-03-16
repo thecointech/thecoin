@@ -1,8 +1,8 @@
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
-import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
-import { TheSigner } from '@the-coin/shared/SignerIdent';
-import accounts from '@the-coin/accounts';
+import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@thecointech/shared/containers/AccountMap";
+import { TheSigner } from '@thecointech/shared/SignerIdent';
+import accounts from '@thecointech/accounts';
 
 export const wallets = [
   {

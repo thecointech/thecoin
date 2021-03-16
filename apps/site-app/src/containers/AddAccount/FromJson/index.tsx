@@ -1,15 +1,15 @@
 import React from "react";
 import { Container } from "semantic-ui-react";
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
-import { UploadWallet, ReadFileData } from "@the-coin/shared/containers/UploadWallet";
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { UploadWallet, ReadFileData } from "@thecointech/shared/containers/UploadWallet";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
-const explanation = { id:"app.account.restore.createAccount.explanation", 
+const explanation = { id:"app.account.restore.createAccount.explanation",
                         defaultMessage:"Don’t have an account?",
                         description:"The text before the button to redirect to the create an account page for the restore your account page"};
 
-const buttonCreate = { id:"app.account.restore.createAccount.button", 
+const buttonCreate = { id:"app.account.restore.createAccount.button",
                         defaultMessage:"Create Account",
                         description:"The button to redirect to the create an account page for the restore your account page"};
 

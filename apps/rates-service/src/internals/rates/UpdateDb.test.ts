@@ -1,8 +1,8 @@
 
 import { update, ensureLatestCoinRate, ensureLatestFxRate } from "./UpdateDb";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { validFor } from "@the-coin/utilities/FxRates";
-import { describe, init } from "@the-coin/utilities/firestore/jestutils";
+import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
+import { validFor } from "@thecointech/utilities/FxRates";
+import { describe, init } from "@thecointech/utilities/firestore/jestutils";
 import { RateOffsetFromMarket, CoinRate, CoinUpdateInterval } from "./types";
 import { updateLatest, getLatest } from "./latest";
 import { cleanDb, getLatestStored, getRate } from "./db";

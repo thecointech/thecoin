@@ -1,8 +1,8 @@
 import { Dictionary } from "lodash";
-import { GetUserDoc } from "@the-coin/utilities/User";
+import { GetUserDoc } from "@thecointech/utilities/User";
 import { BaseTransactionRecord, UserAction, DepositRecord, CertifiedTransferRecord, DbRecords } from "./types";
 import { fetchAllUsers } from "./users";
-import { IsValidAddress } from "@the-coin/utilities";
+import { IsValidAddress } from "@thecointech/utilities";
 
 export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: UserAction) {
   const db: Dictionary<T[]> = {};

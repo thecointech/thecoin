@@ -1,10 +1,10 @@
-import { IFxRates, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
-import { toHuman, toCoin } from "@the-coin/utilities";
-import { GetActionDoc, GetActionRef, UserAction } from "@the-coin/utilities/User";
-import { FXRate } from "@the-coin/pricing";
-import { Timestamp } from "@the-coin/utilities/firestore";
-import { BaseTransactionRecord } from "@the-coin/tx-firestore"
+import { IFxRates, weBuyAt, weSellAt } from "@thecointech/shared/containers/FxRate";
+import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
+import { toHuman, toCoin } from "@thecointech/utilities";
+import { GetActionDoc, GetActionRef, UserAction } from "@thecointech/utilities/User";
+import { FXRate } from "@thecointech/pricing";
+import { Timestamp } from "@thecointech/utilities/firestore";
+import { BaseTransactionRecord } from "@thecointech/tx-firestore"
 
 export async function AddSettlementDate(record: BaseTransactionRecord, fxApi: IFxRates) {
   const recievedAt = record.recievedTimestamp.toDate()

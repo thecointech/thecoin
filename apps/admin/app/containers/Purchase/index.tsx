@@ -4,19 +4,19 @@ import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import Datetime from 'react-datetime';
 import { Moment } from 'moment';
 
-import { getFxRate, FxRatesState, IFxRates, selectFxRate, mapDispatchToProps } from '@the-coin/shared/containers/FxRate';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
-import { toHuman, roundPlaces } from '@the-coin/utilities';
-import { GetActionDoc } from '@the-coin/utilities/User';
-import { Timestamp } from '@the-coin/utilities/firestore';
-import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
-import { DocumentReference } from '@the-coin/types';
-import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
-import { GetAccountCode } from '@the-coin/utilities/Referrals';
-import { getSigner } from '@the-coin/accounts';
+import { getFxRate, FxRatesState, IFxRates, selectFxRate, mapDispatchToProps } from '@thecointech/shared/containers/FxRate';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
+import { AccountState } from '@thecointech/shared/containers/Account/types';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { toHuman, roundPlaces } from '@thecointech/utilities';
+import { GetActionDoc } from '@thecointech/utilities/User';
+import { Timestamp } from '@thecointech/utilities/firestore';
+import { NextOpenTimestamp } from '@thecointech/utilities/MarketStatus';
+import { DocumentReference } from '@thecointech/types';
+import { DepositRecord, PurchaseType } from '@thecointech/tx-firestore';
+import { GetAccountCode } from '@thecointech/utilities/Referrals';
+import { getSigner } from '@thecointech/accounts';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"

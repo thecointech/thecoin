@@ -1,4 +1,4 @@
-import { AccountName } from '@the-coin/contract';
+import { AccountName } from '@thecointech/contract';
 import { ProgressCallback } from 'ethers/utils';
 import { baseContract, baseSigner } from './index_base';
 

@@ -20,7 +20,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@the-coin/utilities/*":  ["../../libs/utils-ts/build/*"]
+      "@thecointech/utilities/*":  ["../../libs/utils-ts/build/*"]
     }
   }
 }

@@ -1,4 +1,4 @@
-import { AccountName } from "@the-coin/contract"
+import { AccountName } from "@thecointech/contract"
 import { Contract } from "ethers/contract"
 import { Signer } from "ethers/abstract-signer"
 

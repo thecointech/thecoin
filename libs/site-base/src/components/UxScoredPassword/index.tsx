@@ -6,7 +6,7 @@ import styles from './styles.module.less';
 import messages, { scope as MessageScope } from './messages';
 import type { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
-import { UxPassword } from '@the-coin/shared/components/UxPassword';
+import { UxPassword } from '@thecointech/shared/components/UxPassword';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,

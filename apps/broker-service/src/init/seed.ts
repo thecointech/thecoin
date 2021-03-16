@@ -1,11 +1,11 @@
 //
 // In dev:live, we need basic setup for our
 //
-import { NormalizeAddress } from "@the-coin/utilities";
-import { Timestamp } from "@the-coin/utilities/firestore/timestamp";
-import { CreateReferree, CreateReferrer } from "@the-coin/utilities/Referrals";
-import { GetUserVerified, SetUserVerified } from "@the-coin/utilities/User";
-import { getSigner } from "@the-coin/accounts";
+import { NormalizeAddress } from "@thecointech/utilities";
+import { Timestamp } from "@thecointech/utilities/firestore/timestamp";
+import { CreateReferree, CreateReferrer } from "@thecointech/utilities/Referrals";
+import { GetUserVerified, SetUserVerified } from "@thecointech/utilities/User";
+import { getSigner } from "@thecointech/accounts";
 
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred

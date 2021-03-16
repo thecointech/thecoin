@@ -1,19 +1,19 @@
-import { log } from '@the-coin/logging';
-import { RbcApi, ETransferErrorCode } from "@the-coin/rbcapi";
-import { RatesApi } from '@the-coin/pricing';
-import { toCoin, isPresent } from "@the-coin/utilities";
-import { Timestamp } from "@the-coin/utilities/firestore";
-import { GetActionDoc } from "@the-coin/utilities/User";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import { log } from '@thecointech/logging';
+import { RbcApi, ETransferErrorCode } from "@thecointech/rbcapi";
+import { RatesApi } from '@thecointech/pricing';
+import { toCoin, isPresent } from "@thecointech/utilities";
+import { Timestamp } from "@thecointech/utilities/firestore";
+import { GetActionDoc } from "@thecointech/utilities/User";
+import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 import { depositInBank, storeInDB } from "./process";
 import { waitTheTransfer, startTheTransfer } from "./contract";
-import { eTransferData, FetchNewDepositEmails, setETransferLabel } from "@the-coin/tx-gmail";
-import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
-import { DocumentReference } from "@the-coin/types";
-import { SendDepositConfirmation } from "@the-coin/email";
+import { eTransferData, FetchNewDepositEmails, setETransferLabel } from "@thecointech/tx-gmail";
+import { DepositRecord, PurchaseType } from '@thecointech/tx-firestore';
+import { DocumentReference } from "@thecointech/types";
+import { SendDepositConfirmation } from "@thecointech/email";
 import { DateTime } from "luxon";
 import { Deposit, toTimestamp } from './types';
-import { TheCoin } from '@the-coin/contract';
+import { TheCoin } from '@thecointech/contract';
 
 export async function setSettlementDate(record: DepositRecord) {
   const recievedAt = record.recievedTimestamp.toDate()

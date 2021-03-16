@@ -6,7 +6,7 @@ import { Stickers } from '../stickers';
 
 import styles from '../styles.module.less';
 import landscapeGreenPartMobile from '../images/illustration_header_mob.svg';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 
 export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode; }) => {
@@ -21,7 +21,7 @@ export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescrip
                   {Props.mainDescription}
                 </Header.Subheader>
               </Header>
-              <ButtonPrimary className={`${styles.overTheLandscape} x2spaceBefore` } as={NavLink} to="/Accounts" size='large'> 
+              <ButtonPrimary className={`${styles.overTheLandscape} x2spaceBefore` } as={NavLink} to="/Accounts" size='large'>
                 {Props.mainButton}
               </ButtonPrimary>
           </Grid.Column>

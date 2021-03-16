@@ -1,5 +1,5 @@
 import { calculateProfit, fiatChange, totalCad, currentValue, filterFees } from "./profit";
-import { toHuman } from "@the-coin/utilities";
+import { toHuman } from "@thecointech/utilities";
 import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
 
 test("Calculate simple profit correctly", () => {

@@ -2,7 +2,7 @@ import { RbcStore } from './store';
 import * as PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { send } from './etransfer';
-import { describe, IsManualRun } from '@the-coin/jestutils';
+import { describe, IsManualRun } from '@thecointech/jestutils';
 
 
 // Note, this test will send real money from a real account.

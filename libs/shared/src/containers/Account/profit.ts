@@ -1,5 +1,5 @@
-import { Transaction } from "@the-coin/tx-blockchain";
-import { toHuman } from "@the-coin/utilities";
+import { Transaction } from "@thecointech/tx-blockchain";
+import { toHuman } from "@thecointech/utilities";
 import { weSellAt, weBuyAt, FXRate } from "../FxRate";
 
 // What is the CAD value of the money coming into the account?

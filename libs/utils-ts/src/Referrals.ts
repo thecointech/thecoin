@@ -3,7 +3,7 @@ import { IsValidAddress, IsValidReferrerId } from "./Address";
 import base32 from 'base32';
 import { Signer, utils } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@the-coin/types";
+import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
 export function GetReferrersCollection() : CollectionReference {
   return GetFirestore().collection("Referrers");

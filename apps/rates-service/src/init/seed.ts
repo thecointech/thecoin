@@ -3,11 +3,11 @@
 // Used for dev:live.   If we are running on development,
 // then seed our database with random values.
 
-import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
+import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
 import { DateTime, Duration } from "luxon";
 import { getLatestStored, setRate } from "../internals/rates/db";
 import { CoinRate, FxRates } from "../internals/rates/types";
-import { log } from "@the-coin/logging";
+import { log } from "@thecointech/logging";
 
 export async function seed() {
   log.trace('--- Seeding DB ---');

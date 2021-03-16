@@ -1,5 +1,5 @@
-import { AccountId, AccountName } from '@the-coin/contract';
-import { getDevLiveProvider } from '@the-coin/contract/provider';
+import { AccountId, AccountName } from '@thecointech/contract';
+import { getDevLiveProvider } from '@thecointech/contract/provider';
 import { Wallet } from 'ethers/wallet';
 
 // In dev:live environment, pull signers from

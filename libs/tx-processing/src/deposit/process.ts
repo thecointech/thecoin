@@ -1,13 +1,13 @@
 
-import { RbcApi, ETransferErrorCode, DepositResult } from "@the-coin/rbcapi";
+import { RbcApi, ETransferErrorCode, DepositResult } from "@thecointech/rbcapi";
 
-import { GetActionDoc } from "@the-coin/utilities/User";
-import { GetAccountCode } from "@the-coin/utilities/Referrals";
-import { log } from "@the-coin/logging";
-import { IsValidAddress } from "@the-coin/utilities";
-import { eTransferData } from "@the-coin/tx-gmail";
-import { DepositRecord } from "@the-coin/tx-firestore";
-import { getSigner } from "@the-coin/accounts";
+import { GetActionDoc } from "@thecointech/utilities/User";
+import { GetAccountCode } from "@thecointech/utilities/Referrals";
+import { log } from "@thecointech/logging";
+import { IsValidAddress } from "@thecointech/utilities";
+import { eTransferData } from "@thecointech/tx-gmail";
+import { DepositRecord } from "@thecointech/tx-firestore";
+import { getSigner } from "@thecointech/accounts";
 
 export async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
 

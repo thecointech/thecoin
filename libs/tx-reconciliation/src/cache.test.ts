@@ -1,5 +1,5 @@
 import { readDataCache, writeDataCache } from './cache';
-import { init } from '@the-coin/utilities/firestore';
+import { init } from '@thecointech/utilities/firestore';
 
 
 it("should be able to read/write the cached data", async () => {

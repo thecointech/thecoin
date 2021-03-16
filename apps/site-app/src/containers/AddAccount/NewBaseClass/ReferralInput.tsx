@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { UxInput } from "@the-coin/shared/components/UxInput";
+import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@the-coin/utilities";
+import { IsValidReferrerId } from "@thecointech/utilities";
 import { MessageDescriptor } from "react-intl";
 
 
@@ -31,9 +31,9 @@ export const ReferralInput = (props: Props) => {
     setReferral(newState.isValid
       ? newState.value
       : undefined);
-      
+
   }, [setState, setReferral]);
-  
+
   return (
     <UxInput
       uxChange={onChange}
@@ -59,12 +59,12 @@ export const registerReferral = async (address: string, code: string) => {
       'Registering this account failed. Please contact support@thecoin.io',
     );
     return false;
-  }  
+  }
   return true;
 }
 
 const isLegalReferral = async (code: string) => {
-  
+
   const api = GetReferrersApi()
   // Weird issue: typescript not recognizing the return type
   const isValid = await api.referrerValid(code);

@@ -1,4 +1,4 @@
-import { Firestore } from '@the-coin/types';
+import { Firestore } from '@thecointech/types';
 
 type TheCoinGlobals = {
   firestore: Firestore|null;

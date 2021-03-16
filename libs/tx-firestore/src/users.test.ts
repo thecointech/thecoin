@@ -1,6 +1,6 @@
 import { fetchAllUsers } from './users';
-import { init } from '@the-coin/utilities/firestore';
-import { IsValidAddress } from '@the-coin/utilities';
+import { init } from '@thecointech/utilities/firestore';
+import { IsValidAddress } from '@thecointech/utilities';
 
 it('Can fetch new all users', async () => {
 

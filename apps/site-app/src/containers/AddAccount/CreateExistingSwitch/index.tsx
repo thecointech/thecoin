@@ -1,11 +1,11 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
-import { isWeb3Enabled } from '@the-coin/shared/utils/detection';
+import { isWeb3Enabled } from '@thecointech/shared/utils/detection';
 import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
 import { FormattedMessage } from 'react-intl';
-import { ButtonPrimary, ButtonSecondary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary, ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 
 type Props = {
   url: string
@@ -50,7 +50,7 @@ export const CreateExistingSwitch = (props: Props) => {
         </ButtonPrimary>
         <Divider horizontal>Or</Divider>
         <ButtonSecondary as={NavLink} to={existingUrl} className={styles.button}>
-          <FormattedMessage {...buttonAccount} />  
+          <FormattedMessage {...buttonAccount} />
         </ButtonSecondary>
       </div>
       <Decoration />

@@ -3,10 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { App } from './containers/App';
-import { configureAppStore, history } from '@the-coin/shared/store';
+import { configureAppStore, history } from '@thecointech/shared/store';
 
 // Import Language Provider
-import { LanguageProvider } from '@the-coin/shared/containers/LanguageProvider';
+import { LanguageProvider } from '@thecointech/shared/containers/LanguageProvider';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import 'semantic-ui-css/semantic.min.css'

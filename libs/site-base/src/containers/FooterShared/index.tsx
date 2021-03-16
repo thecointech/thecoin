@@ -6,8 +6,8 @@ import { Grid, StrictGridColumnProps } from 'semantic-ui-react';
 import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
-import { useWindowDimensions } from '@the-coin/shared/components/WindowDimensions';
-import { breakpointsValues } from '@the-coin/shared/components/ResponsiveTool';
+import { useWindowDimensions } from '@thecointech/shared/components/WindowDimensions';
+import { breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
 
 
 const registered = {  id:"base.footer.registered",

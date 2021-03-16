@@ -1,6 +1,6 @@
 'use strict';
 
-const GetContract = require('@the-coin/utilities/TheContract').default;
+const GetContract = require('@thecointech/utilities/TheContract').default;
 const datastore = require('./Datastore');
 
 const ds = datastore.datastore;
@@ -66,7 +66,7 @@ async function doTapCapTopUp(address, amount, hash, blockNumber, timestamp)
     //     throw("Re-processing block: " + blockNumber + " for tx: " + event.transactionHash);
     // }
 
-    // We store a separate record of the data 
+    // We store a separate record of the data
     const depositKey = ds.key(["User", address, "deposit", hash]);
     const latestKey = GetLatestKey(address);
     const transaction = ds.transaction();
@@ -90,7 +90,7 @@ async function doTapCapTopUp(address, amount, hash, blockNumber, timestamp)
                 const latestBlock = Math.max()
 
                 const txKey = ds.key(["User", address, "tx", nonce]);
-        
+
                 transaction.save([
                     {
                         key: depositKey,
@@ -122,7 +122,7 @@ async function doTapCapTopUp(address, amount, hash, blockNumber, timestamp)
                             lastBlock: lastProcessedBlock
                         }
                     }
-                ]);                               
+                ]);
             }
             return transaction.commit();
         })
@@ -165,7 +165,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 else if (process.env.DATASTORE_EMULATOR_HOST !== undefined)
 {
-    // Add some $$$ to my personal account.  This is the 
+    // Add some $$$ to my personal account.  This is the
     // easiest way to fund an account on the development server.
     let ts = new Date().getTime();
     let autoTopMeUp = () => doTapCapTopUp("0x8B40D01D2bcFFef5CF3441a8197cD33e9eD6e836", 100000000, "123456789", 123456789, ts);

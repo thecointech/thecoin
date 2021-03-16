@@ -1,13 +1,13 @@
-import { FXRate, RatesApi } from '@the-coin/pricing';
-import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
+import { FXRate, RatesApi } from '@thecointech/pricing';
+import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes';
 import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
 import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { FxRatesState, IFxRates } from './types';
 import { buildSaga, sendValues } from '../../store/sagas';
-import { log } from '@the-coin/logging';
-import { ServiceAddress, Service } from '@the-coin/utilities/ServiceAddresses';
+import { log } from '@thecointech/logging';
+import { ServiceAddress, Service } from '@thecointech/utilities/ServiceAddresses';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
