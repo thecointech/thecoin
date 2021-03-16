@@ -13,6 +13,10 @@ import { log } from '@the-coin/logging';
 
 let ConnectedContract: Contract|null = null;
 
+// If running on GAE, check in secrets manager
+const GAE_ENV = process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
+
+
 // In dev:live environment, pull signers from
 // local emulator for our system accounts
 async function loadDevLiveSigner(name: AccountName) {
@@ -30,6 +34,10 @@ async function loadSigner(name: AccountName, callback?: ProgressCallback) {
       // regular development environment, wallets should(?) be emulated (how?)
       return Wallet.createRandom();
     }
+  }
+  else if (GAE_ENV) {
+    const { loadWallet } = await import('./ga-secrets');
+    return loadWallet(`WALLET_${name}`);
   }
   else {
     const { loadAndDecrypt } = await import('./encrypted');
