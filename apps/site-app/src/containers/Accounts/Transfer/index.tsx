@@ -5,18 +5,12 @@ import { useIntl } from 'react-intl';
 import { NormalizeAddress } from '@the-coin/utilities/';
 import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { selectFxRate, useFxRates } from '@the-coin/shared/containers/FxRate/selectors';
 import { useState } from 'react';
 import { TransferWidget } from './TransferWidget';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
 
-type MyProps = {
-  account: AccountState;
-};
-
-type Props = MyProps & FxRatesState;
 
 const description = { id:"app.accounts.transfert.description",
                       defaultMessage:"Transfer directly to another account with TheCoin.",
@@ -44,7 +38,7 @@ const button = { id:"app.accounts.transfert.form.button",
                 defaultMessage:"Transfert",
                 description:"Label for the form the make a payment page / transfert tab" };
 
-export const TransferHook = (props: Props) => {
+export const Transfer = () => {
 
   const [coinTransfer, setCoinTransfer] = useState(null as number | null);
   const [toAddress, setToAddress] = useState('');
@@ -56,6 +50,11 @@ export const TransferHook = (props: Props) => {
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
 
+  const account = useActiveAccount();
+  const { rates } = useFxRates();
+  const rate = weBuyAt(rates);
+  const intl = useIntl();
+  
   const doTransfer = async () => { 
     // Init messages
     setTransferMessage(step1);
@@ -69,7 +68,7 @@ export const TransferHook = (props: Props) => {
     if (doCancel) return false;
 
     // Get our variables
-    const { signer, contract } = props.account;
+    const { signer, contract } = account!;
     if (coinTransfer === null || !signer || !contract) return false;
 
     // To transfer, we construct & sign a message that
@@ -145,14 +144,11 @@ export const TransferHook = (props: Props) => {
   function onCancelTransfer() {
     setDoCancel(true);
   }
-  const { account, rates } = props;
-  const rate = weBuyAt(rates);
-  const intl = useIntl();
   return (
     <TransferWidget 
       description={description} 
       onValueChange={onValueChange} 
-      account={account}
+      account={account!}
       coinTransfer={coinTransfer}
       rate={rate}
 
@@ -170,5 +166,3 @@ export const TransferHook = (props: Props) => {
       transferValues={transferValues} />
   );
 }
-
-export const Transfer = connect(selectFxRate)(TransferHook);

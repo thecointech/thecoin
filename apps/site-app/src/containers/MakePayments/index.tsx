@@ -37,7 +37,7 @@ export const MakePayments = (routerProps:AccountPageProps) => {
   const panes = [
     { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem account={account!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (
