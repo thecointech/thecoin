@@ -1,22 +1,14 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
-
 import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
 import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { useFxRates } from '@the-coin/shared/containers/FxRate/selectors';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@the-coin/types';
 import { useState } from 'react';
 import { RedeemWidget } from './RedeemWidget';
+import { useActiveAccount } from '@the-coin/shared/containers/AccountMap/selectors';
 
-type MyProps = {
-  account: AccountState;
-};
-
-type Props = MyProps & FxRatesState;
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
@@ -67,7 +59,7 @@ const button = { id:"app.accounts.redeem.form.button",
                 description:"For the button in the make a payment page / etransfert tab" };
 
 
-export const RedeemHook = (props: Props) => {
+export const Redeem = () => {
 
   const [coinToSell, setCoinToSell] = useState(null as number | null);
   const [email, setEmail] = useState('');
@@ -80,6 +72,10 @@ export const RedeemHook = (props: Props) => {
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
+
+  const account = useActiveAccount();
+  const { rates } = useFxRates();
+  const rate = weBuyAt(rates);
 
   const intl = useIntl();
 
@@ -97,7 +93,7 @@ export const RedeemHook = (props: Props) => {
     if (doCancel) return false;
 
     // Get our variables
-    const { signer, contract } = props.account;
+    const { signer, contract } = account!;
     if (coinToSell === null || !signer || !contract)
       return false;
 
@@ -178,8 +174,7 @@ export const RedeemHook = (props: Props) => {
     setDoCancel(true);
   }
 
-  const { account, rates } = props;
-  const rate = weBuyAt(rates);
+
   return (
       <RedeemWidget
         coinToSell={coinToSell}
@@ -215,5 +210,3 @@ export const RedeemHook = (props: Props) => {
       />
   );
 }
-
-export const Redeem = connect(selectFxRate)(RedeemHook);

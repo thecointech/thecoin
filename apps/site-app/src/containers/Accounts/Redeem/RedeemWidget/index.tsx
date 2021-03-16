@@ -12,7 +12,7 @@ type VisualProps={
     coinToSell: number | null,
     description:MessageDescriptor,
     onValueChange: (value: number) => void,
-    account: AccountState,
+    account: AccountState | null,
     rate: number,
 
     emailLabel: MessageDescriptor,
