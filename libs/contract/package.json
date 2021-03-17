@@ -65,6 +65,6 @@
     "jest": "*"
   },
   "dependencies": {
-    "ethers": "^4.0.47"
+    "ethers": "4.0.47"
   }
 }

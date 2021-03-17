@@ -7,8 +7,7 @@
 	  "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
 	},
 	"dependencies": {
-	  "body-parser": "^1.18.3",
-	  "express": "^4.16.4"
+	  "body-parser": "^1.18.3"
 	},
 	"devDependencies": {
 	  "concurrently": "^4.0.1"

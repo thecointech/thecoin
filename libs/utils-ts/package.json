@@ -40,9 +40,11 @@
     "@google-cloud/firestore": "^4.9.4",
     "@thecointech/contract": "*",
     "@thecointech/logging": "*",
-    "axios": "*",
     "base32": "^0.0.6",
-    "firebase": "^8.2.9",
+    "firebase": "^8.2.9"
+  },
+  "peerDependencies": {
+    "axios": "*",
     "luxon": "*"
   },
   "devDependencies": {

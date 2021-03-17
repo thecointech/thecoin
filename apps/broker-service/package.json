@@ -24,7 +24,7 @@
     "build:api": "yarn tsoa spec-and-routes",
     "deploy": "run-s build deploy:pre deploy:gae-test",
     "deploy:pre": "cpx ../../yarn.lock .",
-    "deploy:gae-test": "gcloud app deploy --project tccc-testing",
+    "deploy:gae-test": "gcloud app deploy --project tccc-testing app.testing.yaml",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
@@ -41,22 +41,21 @@
     "@thecointech/logging": "*",
     "@thecointech/utilities": "*",
     "@thecointech/accounts": "*",
+    "@thecointech/contract": "*",
     "@tsoa/runtime": "^3.5.2",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",
-    "luxon": "*",
-    "swagger-express-middleware": "^4.0.2",
+    "luxon": "1.26.0",
     "swagger-tools": "^0.10.4",
-    "swagger-ui-express": "^4.0.2",
+    "swagger-ui-express": "^4.1.6",
     "openapi-types": "^7.2.3"
   },
   "devDependencies": {
-    "@types/swagger-express-middleware": "^1.0.10",
     "@types/swagger-ui-express": "^4.1.1",
     "@types/cors": "^2.8.10",
-    "jest": "*"
+    "jest": "*",
+    "tsoa": "^3.5.2"
   }
 }
