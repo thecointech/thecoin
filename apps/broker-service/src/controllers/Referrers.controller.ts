@@ -1,4 +1,4 @@
-import { Controller, Get, Route, Query, Body, Post, Response, Tags } from 'tsoa';
+import { Controller, Get, Route, Query, Body, Post, Response, Tags } from '@tsoa/runtime';
 import { GetReferrerData, CreateReferree } from '@thecointech/utilities/Referrals';
 import { Timestamp } from '@thecointech/utilities/firestore';
 import { BoolResponse } from '../types';

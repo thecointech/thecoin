@@ -1,4 +1,4 @@
-import { Controller, Get, Route, Response, Path, Query, Tags } from 'tsoa';
+import { Controller, Get, Route, Response, Path, Query, Tags } from '@tsoa/runtime';
 import { getCombinedRates, getLatestCombinedRates, getManyRates } from '../internals/rates';
 import { FXRate } from '../internals/rates/types';
 

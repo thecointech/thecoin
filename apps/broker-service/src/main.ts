@@ -10,7 +10,7 @@ import swaggerDocument from './api/swagger.json';
 import { DevLivePort, Service } from '@thecointech/utilities/ServiceAddresses';
 import { init } from './init';
 import cors from 'cors';
-import { ValidateError } from "tsoa";
+import { ValidateError } from "@tsoa/runtime";
 import { log } from "@thecointech/logging";
 
 const port = process.env.PORT ?? DevLivePort(Service.BROKER);

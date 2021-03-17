@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
@@ -34,15 +34,18 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/utilities": "*",
     "@thecointech/email": "*",
     "@thecointech/logging": "*",
+    "@thecointech/utilities": "*",
+    "@thecointech/accounts": "*",
+    "@tsoa/runtime": "^3.5.2",
     "cors": "^2.8.5",
-    "luxon": "*",
+    "cross-env": "^7.0.3",
     "express": "^4.16.4",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",
-    "swagger-express-middleware": "3.0.0-alpha.5",
+    "luxon": "*",
+    "swagger-express-middleware": "^4.0.2",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.0.2"
   },
