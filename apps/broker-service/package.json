@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development node --inspect=9231 -r ts-node/register ./src/main.ts",
+    "dev": "cross-env NODE_ENV=development node --inspect=9231 -r \"ts-node/register\" \"./src/main.ts\"",
     "dev:live": "cross-env SETTINGS=live yarn dev",
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
