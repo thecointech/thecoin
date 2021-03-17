@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.1.2",
+  "version": "0.1.1",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
@@ -22,6 +22,9 @@
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
+    "deploy": "run-s build deploy:pre deploy:gae-test",
+    "deploy:pre": "cpx ../../yarn.lock .",
+    "deploy:gae-test": "gcloud app deploy --project tccc-testing",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
@@ -47,7 +50,8 @@
     "luxon": "*",
     "swagger-express-middleware": "^4.0.2",
     "swagger-tools": "^0.10.4",
-    "swagger-ui-express": "^4.0.2"
+    "swagger-ui-express": "^4.0.2",
+    "openapi-types": "^7.2.3"
   },
   "devDependencies": {
     "@types/swagger-express-middleware": "^1.0.10",
