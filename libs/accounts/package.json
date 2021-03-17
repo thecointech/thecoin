@@ -11,6 +11,9 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/account"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
     "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
@@ -28,7 +31,6 @@
   "browser": "./build/index_web.js",
   "exports": "./build/index_node.js",
   "dependencies": {
-    "ethers": "^4.0.46",
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "*",
     "@thecointech/contract": "*"

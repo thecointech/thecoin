@@ -14,7 +14,15 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/logging"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },

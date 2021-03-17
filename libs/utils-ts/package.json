@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.1.27",
+  "version": "0.1.31",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
@@ -39,7 +39,6 @@
   "dependencies": {
     "@google-cloud/firestore": "^4.9.4",
     "@thecointech/contract": "*",
-    "@thecointech/types": "*",
     "@thecointech/logging": "*",
     "axios": "*",
     "base32": "^0.0.6",

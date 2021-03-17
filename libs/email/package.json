@@ -14,6 +14,9 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/email"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
     "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
