@@ -23,25 +23,25 @@ type Props = MyProps & FxRatesState;
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
-                description:"Error Message for the make a payment page / etransfert tab" };
+                description:"Error Message for the make a payment page / etransfer tab" };
 const successMessage = { id:"app.accounts.redeem.successMessage",
                 defaultMessage:"Order recieved.\nYou should receive the e-Transfer in 1-2 business days.",
-                description:"Success Message for the make a payment page / etransfert tab" };
+                description:"Success Message for the make a payment page / etransfer tab" };
 const description = { id:"app.accounts.redeem.description",
                 defaultMessage:"Email money to anyone with an interac e-Transfer.",
-                description:"Description for the make a payment page / etransfert tab" };
+                description:"Description for the make a payment page / etransfer tab" };
 const email = { id:"app.accounts.redeem.form.email",
                 defaultMessage:"Recipient email",
-                description:"Label for the form the make a payment page / etransfert tab" };
+                description:"Label for the form the make a payment page / etransfer tab" };
 const question = { id:"app.accounts.redeem.form.question",
                 defaultMessage:"Security question",
-                description:"Label for the form the make a payment page / etransfert tab" };
+                description:"Label for the form the make a payment page / etransfer tab" };
 const answer= { id:"app.accounts.redeem.form.answer",
                 defaultMessage:"Security answer",
-                description:"Label for the form the make a payment page / etransfert tab" };
+                description:"Label for the form the make a payment page / etransfer tab" };
 const message= { id:"app.accounts.redeem.form.message",
                 defaultMessage:"Message (optional)",
-                description:"Label for the form the make a payment page / etransfert tab" };
+                description:"Label for the form the make a payment page / etransfer tab" };
 
 const step1= { id:"app.accounts.redeem.step1",
                 defaultMessage:"Step 1 of 3: Checking order availability..." };
@@ -56,8 +56,8 @@ const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
                 defaultMessage:"Please wait, we are sending your order to our servers..." };
 
 const button = { id:"app.accounts.redeem.form.button",
-                defaultMessage:"Send e-Transfert",
-                description:"For the button in the make a payment page / etransfert tab" };
+                defaultMessage:"Send e-Transfer",
+                description:"For the button in the make a payment page / etransfer tab" };
 
 
 const initialState = {

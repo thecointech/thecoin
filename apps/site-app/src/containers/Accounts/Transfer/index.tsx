@@ -21,28 +21,28 @@ type MyProps = {
 
 type Props = MyProps & FxRatesState;
 
-const description = { id:"app.accounts.transfert.description",
+const description = { id:"app.accounts.transfer.description",
                 defaultMessage:"Transfer directly to another account with TheCoin.",
-                description:"Description for the make a payment page / transfert tab" };
-const transferOutHeader = { id:"app.accounts.transfert.transferHeader",
+                description:"Description for the make a payment page / transfer tab" };
+const transferOutHeader = { id:"app.accounts.transfer.transferHeader",
                 defaultMessage:"Processing Transfer...",
-                description:"transferHeader for the make a payment page / transfert tab" };
-const step1 = { id:"app.accounts.transfert.step1",
+                description:"transferHeader for the make a payment page / transfer tab" };
+const step1 = { id:"app.accounts.transfer.step1",
                 defaultMessage:"Step 1 of 3: Checking transfer availability...",
-                description:"Message for step1 for the make a payment page / transfert tab" };
-const step2 = { id:"app.accounts.transfert.step2",
+                description:"Message for step1 for the make a payment page / transfer tab" };
+const step2 = { id:"app.accounts.transfer.step2",
                 defaultMessage:"Step 2 of 3: Sending transfer command to our servers...",
-                description:"Message for step2 for the make a payment page / transfert tab" };
-const step3 = { id:"app.accounts.transfert.step3",
+                description:"Message for step2 for the make a payment page / transfer tab" };
+const step3 = { id:"app.accounts.transfer.step3",
                 defaultMessage:"Step 3 of 3: Waiting for the transfer to be accepted\n(check progress {link})...",
-                description:"Message for step3 for the make a payment page / transfert tab" };
-const transferOutProgress = { id:"app.accounts.transfert.transferOutProgress",
+                description:"Message for step3 for the make a payment page / transfer tab" };
+const transferOutProgress = { id:"app.accounts.transfer.transferOutProgress",
                 defaultMessage:"Please wait, we are sending your order to our servers...",
-                description:"transferOutProgress for the make a payment page / transfert tab" };
+                description:"transferOutProgress for the make a payment page / transfer tab" };
 
-const button = { id:"app.accounts.transfert.form.button",
-                defaultMessage:"Transfert",
-                description:"Label for the form the make a payment page / transfert tab" };
+const button = { id:"app.accounts.transfer.form.button",
+                defaultMessage:"Transfer",
+                description:"Label for the form the make a payment page / transfer tab" };
 
 const initialState = {
   coinTransfer: null as number | null,
