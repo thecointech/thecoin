@@ -17,7 +17,8 @@ export const BalanceAndProfit = () => {
 
   const cadBalance = toHuman(buy * balance * fxRate, true);
   const profit = calculateProfit(balance, history, rates);
-  const profitDisplay = (profit < 1 ? "< .1" : profit.toString())
+  const profitCut = profit.toFixed(1);
+  const profitDisplay = (profit < 1 ? "< .1" : profitCut.toString())
   return (
     <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
       <div className={styles.illustrationMobile}>
