@@ -49,20 +49,18 @@ export const App = ( ) => {
         <MainNavigation />
       </div>
 
-      <Container
-        style={{
-          width: '100%',
-        }}
-      >
+      <div className={`${styles.contentContainer}`}>
+        <Container style={{ width: '100%'}} className={``}>
           <MainPageTransition location={location}>
-          <PageSidebar/>
-          <ColumnRightTop />
-            <section id={styles.mainContent} className={styles.pageMainInner}>
-              <MainRouter location={location} />
-            </section>
-          <ColumnRightBottom />
+            <PageSidebar/>
+            <ColumnRightTop />
+              <section id={styles.mainContent} className={styles.pageMainInner}>
+                <MainRouter location={location} />
+              </section>
+            <ColumnRightBottom />
           </MainPageTransition>
-      </Container>
+        </Container>
+      </div>
       <Footer />
     </MediaContextProvider>
     </>

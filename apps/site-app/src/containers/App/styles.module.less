@@ -7,6 +7,11 @@
   margin: auto;
 }
 
+.contentContainer{
+  max-width: 1300px;
+  margin: auto;
+}
+
 .pageMainInner {
   min-height: 450px;
   padding: 0em;
@@ -14,10 +19,12 @@
 
 #headerDecoration{
   border-bottom: 1px solid @theCoinPalettePaleGreen2;
-  box-shadow: 0px 5px grey;
   width: 100%;
   background-color: @white;
-  box-shadow: 0px 0px 12px 4px @theCoinPaletteGray3;
+  box-shadow: @subtleShadow;
+  
+  position: fixed;
+  z-index: 1;
 }
 
 .smallerThanDesktop({

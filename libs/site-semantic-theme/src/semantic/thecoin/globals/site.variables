@@ -186,7 +186,7 @@
 
 /* Differentiating Layers */
 @subtleShadow:
-  0px 4px 4px 0px @theCoinPaletteGray3
+  0px 2px 5px 0px @theCoinPaletteGray3
 ;
 
 
