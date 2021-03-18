@@ -20,7 +20,7 @@
     "deploy:upload": "gcloud app deploy --project=carbon-theorem-283310",
     "deploy:clean": "del yarn.lock",
     "deploy:cron": "gcloud app deploy cron.yaml --project=carbon-theorem-283310",
-    "deploy:gae-test": "gcloud config configurations activate thecointech && gcloud app deploy --project rates-service-testing && gcloud app deploy cron.yaml --project=carbon-theorem-283310",
+    "deploy:prod:test": "gcloud config configurations activate thecointech && gcloud app deploy --project rates-service-testing && gcloud app deploy cron.yaml --project=carbon-theorem-283310",
     "deploy": "yarn deploy:pre && yarn build && yarn deploy:upload && yarn deploy:clean",
     "start": "node ./build/main.js",
     "dev": "cross-env NODE_ENV=development node --inspect=localhost:9230 -r ts-node/register ./src/main.ts",

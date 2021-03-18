@@ -22,9 +22,9 @@
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
-    "deploy": "run-s build deploy:pre deploy:gae-test",
+    "deploy": "run-s build deploy:pre deploy:prod:test",
     "deploy:pre": "cpx ../../yarn.lock .",
-    "deploy:gae-test": "gcloud app deploy --project tccc-testing app.testing.yaml",
+    "deploy:prod:test": "gcloud app deploy --project tccc-testing app.testing.yaml",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"

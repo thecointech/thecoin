@@ -25,3 +25,4 @@ geth
 
 libs/contract/.openzeppelin/unknown-1337.json
 environments/prod.test.env
+libs/contract/src/deployed/*-fork.json
