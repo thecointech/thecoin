@@ -55,6 +55,7 @@
     "./": "./build/"
   },
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.2.3",
     "typechain": "^4.0.2",
     "@typechain/truffle-v5": "^4.0.1",
     "@typechain/ethers-v4": "^4.0.0",

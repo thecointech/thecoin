@@ -2,5 +2,9 @@
 runtime: nodejs14
 instance_class: F1
 
+# include environment variables.
+includes:
+  - app.vars.yaml
+
 # TODO: Require secure connection always
 # [END app_yaml]
