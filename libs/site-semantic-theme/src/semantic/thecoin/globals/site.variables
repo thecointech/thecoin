@@ -278,7 +278,7 @@
 @relativeBorderRadius: @relative10px;
 @absoluteBorderRadius: @10px;
 
-@borderColor         : @primaryColor2;
+@borderColor         : @theCoinPalettePaleGreen2Faded50;
 @focusBorderColor    : @primaryColor1;
 @focusedFormBorderColor: @primaryColor1;
 @hoverBorderColor    : @primaryColor2Hover;
