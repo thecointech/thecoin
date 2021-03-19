@@ -1,15 +1,14 @@
 import { initializeDevLive } from "./3.1_init_devlive";
-import { initializeProdTest } from "./3.1_init_prodtest";
+import { initializeTestNet } from "./3.1_init_testnet";
 
-const deploy: MigrationStep = (artifacts) =>
-  async (_deployer, network, accounts) => {
+const deploy: MigrationStep = () =>
+  async (_, network) => {
     // On development blockchain, seed accounts with random data
-    const contract = artifacts.require("TheCoin");
     if (network === 'development') {
-      await initializeDevLive(contract, accounts)
+      await initializeDevLive()
     }
     else if (network.startsWith('prodtest')) {
-      await initializeProdTest(contract, accounts);
+      await initializeTestNet();
     }
   }
 

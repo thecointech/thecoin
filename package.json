@@ -28,14 +28,13 @@
     "dev:live:ceramic": "yarn ceramic daemon",
     "dev:live:projects": "yarn wait-port 8377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live:bootstrap": "yarn wait-port 7007 && yarn idx bootstrap && node ./tools/bootstrapIdx.js",
-    "dev:live": "run-p dev:live:*",
+    "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
     "deploy:testing:sites": "firebase deploy --project tccc-testing --only hosting",
     "clean": "lerna run clean",
     "clean:ceramic": "rimraf ~/.ceramic && ~/.jsipfs",
     "test": "lerna run test",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "bootstrap": "node ./tools/bootstrapIdx.js"
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "axios": "^0.21.1",

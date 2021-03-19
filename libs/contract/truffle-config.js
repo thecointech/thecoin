@@ -1,13 +1,10 @@
 'use strict';
-// Allow using typescript in deployments
-require("ts-node").register({
-  project: "tsconfig.migrate.json",
-  files: true,
-});
 var path = require('path');
-
-// We use ethers infura provider for goerli deployment
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+// Allow using typescript in deployments
+loadTypescript();
+// Load environment for the network we are deploying to
+require('../../tools/setenv');
 
 module.exports = {
   // We output into our src directory so we can directly import
@@ -18,22 +15,21 @@ module.exports = {
     // dev:live environment
     development: {
       host: "127.0.0.1",
-      port: 9545,
+      port: process.env.DEPLOY_NETWORK_PORT,
       network_id: "*",
     },
     // prod:test environment
     prodtest: {
       provider: () => {
         // Load config variables.
-        const cfgPath = path.join(__dirname, "..", "..", "environments", "prod.test.env")
-        require('dotenv').config({ path: cfgPath })
+
         return new HDWalletProvider(
-          process.env.WALLET_TheCoin_MNEMONIC,
-          `https://goerli.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+          process.env.WALLET_Owner_MNEMONIC,
+          `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
         );
       },
-      network_id: '5', // eslint-disable-line camelcase
-      gasPrice: 100,
+      network_id: '*', // eslint-disable-line camelcase
+      gasPrice: 1000,
       skipDryRun: true
     },
     // TODO: we are stuck on ropsten till the price of gas comes down.
@@ -58,3 +54,10 @@ module.exports = {
     }
   }
 };
+
+function loadTypescript() {
+  require("ts-node").register({
+    project: "tsconfig.migrate.json",
+    files: true,
+  });
+}

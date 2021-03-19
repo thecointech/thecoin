@@ -1,37 +1,41 @@
 
 import { COIN_EXP } from "../src/contract";
 import { DateTime } from 'luxon';
-import { TheCoinContract, TheCoinInstance } from './types/TheCoin';
-import { toNamedAccounts } from '../src/accounts';
+import { AccountName, getSigner } from "@thecointech/accounts";
+import { ConnectContract, TheCoin } from "../src";
 
-export async function initializeDevLive(contract: TheCoinContract, accounts: string[]) {
-  const proxy = await contract.deployed();
-  const { TheCoin, Minter, client1, client2 } = toNamedAccounts(accounts);
+export async function initializeDevLive() {
+  const tcSigner = await getSigner("TheCoin");
+  const tc = await ConnectContract(tcSigner);
+  const tcAddr = await tcSigner.getAddress();
+  const mintSigner = await getSigner("Minter");
+  const mint = await ConnectContract(mintSigner);
+  const mintAddr = await mintSigner.getAddress();
 
-  const roles = await proxy.getRoles();
+  const roles = await tc.getRoles();
 
   // Update minter and add 10,000 Coins (aprox $40K)
-  if (roles[1] !== Minter) {
-    await setMinter(proxy, Minter, TheCoin);
+  if (roles[1] !== mintAddr) {
+    console.log("Assigning Roles...");
+    await tc.setMinter(mintAddr);
+    await mint.acceptMinter();
   }
-  const tcBal = await proxy.balanceOf(TheCoin);
+
+  const tcBal = await mint.balanceOf(tcAddr);
   if (tcBal.toNumber() === 0) {
-    await proxy.mintCoins(10000 * COIN_EXP, { from: Minter });
+    await mint.mintCoins(10000 * COIN_EXP);
   }
 
-  await seedAccount(proxy, TheCoin, client1);
-  await seedAccount(proxy, TheCoin, client2);
+  await seedAccount(tc, tcAddr, "client1");
+  await seedAccount(tc, tcAddr, "client2");
 }
 
-
-async function setMinter(proxy: TheCoinInstance, Minter: string, TheCoin: string) {
-  await proxy.setMinter(Minter, { from: TheCoin });
-  await proxy.acceptMinter({ from: Minter });
-}
-
-async function seedAccount(proxy: TheCoinInstance, TheCoin: string, client: string) {
+async function seedAccount(tc: TheCoin, tcAddr: string, clientName: AccountName) {
+  const clientSigner = await getSigner(clientName);
+  const client = await ConnectContract(clientSigner);
+  const clientAddress = await clientSigner.getAddress();
   // Assign ~15 transactions to client randomly in the past
-  console.log("Seeding account: " + client);
+  console.log("Seeding account: " + clientAddress);
   const now = DateTime.local();
   const toSeconds = (dt: DateTime) => Math.floor(dt.toMillis() / 1000);
 
@@ -42,12 +46,14 @@ async function seedAccount(proxy: TheCoinInstance, TheCoin: string, client: stri
   ) {
     // either purchase or sell up to 100 coins
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
-    const balance = await proxy.balanceOf(client);
+    const balance = await tc.balanceOf(clientAddress);
     if (balance.toNumber() <= amount || Math.random() < 0.6) {
-      await proxy.coinPurchase(client, amount, 0, toSeconds(ts), { from: TheCoin });
+      await tc.coinPurchase(clientAddress, amount, 0, toSeconds(ts));
     }
     else {
-      await proxy.coinRedeem(amount, TheCoin, toSeconds(ts), { from: client });
+      // TODO: Our redemption function is not gass-less.  We need
+      // to unify our functionality to enable processing these functions
+      await client.coinPurchase(tcAddr, amount, 0, toSeconds(ts));
     }
   }
 }

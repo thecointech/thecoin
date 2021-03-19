@@ -1,7 +1,7 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-
+require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -133,6 +133,14 @@ module.exports = options => ({
     new webpack.EnvironmentPlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       SETTINGS: JSON.stringify(process.env.SETTINGS),
+
+      URL_SITE_APP: JSON.stringify(process.env.URL_SITE_APP),
+      URL_SITE_LANDING: JSON.stringify(process.env.URL_SITE_LANDING),
+      URL_SERVICE_BROKER: JSON.stringify(process.env.URL_SERVICE_BROKER),
+      URL_SERVICE_RATES: JSON.stringify(process.env.URL_SERVICE_RATES),
+
+      DEPLOY_NETWORK: JSON.stringify(process.env.DEPLOY_NETWORK),
+      DEPLOY_NETWORK_PORT: JSON.stringify(process.env.DEPLOY_NETWORK_PORT),
     }),
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),

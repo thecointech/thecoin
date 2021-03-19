@@ -1,7 +1,7 @@
 // Import the Secret Manager client and instantiate it:
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
-import { AccountName } from '@thecointech/contract';
 import { Wallet } from 'ethers';
+import { AccountName } from './names';
 
 // Get Secrets.  Only enabled for TCCC
 export async function getSecret(name: string) {

@@ -7,7 +7,6 @@ import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { FxRatesState, IFxRates } from './types';
 import { buildSaga, sendValues } from '../../store/sagas';
 import { log } from '@thecointech/logging';
-import { ServiceAddress, Service } from '@thecointech/utilities/ServiceAddresses';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
@@ -53,7 +52,7 @@ export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCode.CAD;
   log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
 
-  const api = new RatesApi(undefined, ServiceAddress(Service.RATES));
+  const api = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
   const r = await api.getSingle(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {
     if (date)

@@ -17,8 +17,9 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development node --inspect=9231 -r ts-node/register ./src/main.ts",
-    "dev:live": "cross-env SETTINGS=live yarn dev",
+    "dev": "yarn dev:run dotenv_config_path=../../environments/development.env",
+    "dev:live": "yarn dev dotenv_config_path=../../environments/devlive.env",
+    "dev:run": "node --inspect=9231 -r ts-node/register -r dotenv/config ./src/main.ts",
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",

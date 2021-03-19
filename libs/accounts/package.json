@@ -32,8 +32,7 @@
   "exports": "./build/index_node.js",
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/logging": "*",
-    "@thecointech/contract": "*"
+    "@thecointech/logging": "*"
   },
   "devDependencies": {
     "jest": "*"

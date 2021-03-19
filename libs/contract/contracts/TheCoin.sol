@@ -138,7 +138,8 @@ contract TheCoin is ERC20Upgradeable {
     // ------------------------------------------------------------------------
     // Additional paid-transfer functions allows a client to sign a request
     // and for the request to be paid by someone else (likely us)
-    // Apparently this is now a thing (gass-less transactions)
+    // Apparently this is now a thing (gass-less transactions), but our
+    // implementation appears significantly more efficient.
     // ------------------------------------------------------------------------
 
     function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
