@@ -20,7 +20,7 @@ const getAbi = async () => {
 }
 
 const getContractAddress = async () => {
-  const deployment = await import(`./deployed/${process.env.DEPLOY_NETWORK}.json`);
+  const deployment = await import(`./deployed/${process.env.CONFIG_NAME}.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }

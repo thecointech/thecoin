@@ -14,12 +14,18 @@ export async function initializeTestNet() {
 
   const bcSigner = await getSigner("BrokerCAD");
 
-
   // Assign Roles, currently assigned to TheCoin
   console.log("Assigning Roles...");
+  const tcAddr = await tcSigner.getAddress();
+  const roles = await tc.getRoles();
+  console.log(`TC: ${tcAddr} - Current: ${roles}`);
+  console.log(`Contract: ${tc.address}`);
   const mintAddr = await mintSigner.getAddress();
+  console.log('starting');
   await tc.setMinter(mintAddr);
+  console.log('Set Minter');
   await mint.acceptMinter();
+  console.log('Accepted');
   const plcAddr = await policeSigner.getAddress();
   await tc.setPolice(plcAddr);
   await police.acceptPolice();

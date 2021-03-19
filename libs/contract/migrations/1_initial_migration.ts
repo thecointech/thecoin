@@ -1,4 +1,6 @@
 import { getSigner } from "@thecointech/accounts";
+import { MigrationStep } from './types';
+import "../../../tools/setenv";
 
 const step: MigrationStep =  (artifacts) =>
   async (deployer, _network, accounts) => {

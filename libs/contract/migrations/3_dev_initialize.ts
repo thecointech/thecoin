@@ -1,5 +1,6 @@
 import { initializeDevLive } from "./3.1_init_devlive";
 import { initializeTestNet } from "./3.1_init_testnet";
+import { MigrationStep } from './types';
 
 const deploy: MigrationStep = () =>
   async (_, network) => {

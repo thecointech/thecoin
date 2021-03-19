@@ -133,6 +133,7 @@ module.exports = options => ({
     new webpack.EnvironmentPlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       SETTINGS: JSON.stringify(process.env.SETTINGS),
+      CONFIG_NAME: JSON.stringify(process.env.CONFIG_NAME),
 
       URL_SITE_APP: JSON.stringify(process.env.URL_SITE_APP),
       URL_SITE_LANDING: JSON.stringify(process.env.URL_SITE_LANDING),

@@ -10,13 +10,17 @@ function loadEncrypted(name: string) {
 
   let wallet = existsSync(name)
     ? readFileSync(name, 'utf8')
-    : process.env[`${name}_WALLET`];
+    : process.env[`WALLET_${name}`];
 
   if (!wallet)
   {
-    const path = process.env[`THECOIN_${name}_PATH`];
-    if (path && existsSync(path))
+    const path = process.env[`WALLET_${name}_PATH`];
+    console.log(path);
+    if (path) {
+      if (!existsSync(path))
+        throw new Error(`Could not load ${name} from path: ${path}`);
       wallet = readFileSync(path, 'utf8');
+    }
   }
   if (!wallet)
     throw new Error(`Could not load wallet: ${name}`);
@@ -25,7 +29,7 @@ function loadEncrypted(name: string) {
 }
 
 function getKey(name: string) {
-  const key = process.env[`THECOIN_${name}_KEY`];
+  const key = process.env[`WALLET_${name}_KEY`];
   if (!key) {
     throw new Error(`Could not load wallet key: ${name}`);
   }

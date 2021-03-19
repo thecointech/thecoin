@@ -13,7 +13,7 @@ module.exports = {
 
   networks: {
     // dev:live environment
-    development: {
+    devlive: {
       host: "127.0.0.1",
       port: process.env.DEPLOY_NETWORK_PORT,
       network_id: "*",
@@ -21,10 +21,13 @@ module.exports = {
     // prod:test environment
     prodtest: {
       provider: () => {
-        // Load config variables.
-
+        // Load config variables.  This mnemoniv is not normally
+        // included in our env files, ensure you define it
+        const mnemonic = process.env.WALLET_Owner_MNEMONIC
+        if (!mnemonic)
+          throw new Error("Cannot deploy without a mnemonic");
         return new HDWalletProvider(
-          process.env.WALLET_Owner_MNEMONIC,
+          mnemonic,
           `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
         );
       },
@@ -57,7 +60,6 @@ module.exports = {
 
 function loadTypescript() {
   require("ts-node").register({
-    project: "tsconfig.migrate.json",
-    files: true,
+    project: "tsconfig.migrate.json"
   });
 }
