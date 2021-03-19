@@ -2,11 +2,13 @@
          Site Overrides
 *******************************/
 
+
+
 .ui.sidebar{
   border-radius: @absoluteBorderRadius !important;
   height: auto !important;
-  margin-left: 2% !important;
   margin-top: 80px !important;
+
   &.menu .item{
     color: @theCoinPaletteGray1;
     padding: 10px;
@@ -45,3 +47,63 @@
   height: auto;
   margin: 20px;
 }
+
+ @media only screen and (min-width: 2001px) {
+    .ui.sidebar{
+      margin-left: 18vw !important;
+    }
+  }
+
+ @media only screen and (max-width: 2000px) and (min-width: 1901px) {
+    .ui.sidebar{
+      margin-left: 16vw !important;
+    }
+  }
+
+ @media only screen and (max-width: 1900px) and (min-width: 1801px) {
+    .ui.sidebar{
+      margin-left: 15vw !important;
+    }
+  }
+
+ @media only screen and (max-width: 1800px) and (min-width: 1701px) {
+    .ui.sidebar{
+      margin-left: 14vw !important;
+    }
+  }
+
+ @media only screen and (max-width: 1700px) and (min-width: 1601px) {
+    .ui.sidebar{
+      margin-left: 13vw !important;
+    }
+  }
+
+ @media only screen and (max-width: 1600px) and (min-width: 1501px) {
+    .ui.sidebar{
+      margin-left: 12vw !important;
+    }
+  }
+
+  @media only screen and (max-width: 1500px) and (min-width: 1432px) {
+    .ui.sidebar{
+      margin-left: 11vw !important;
+    }
+  }
+
+  @media only screen and (max-width: 1600px) and (min-width: 1431px ) {
+    .ui.sidebar{
+      margin-left: 8vw !important;
+    }
+  }
+
+  @media only screen and (max-width: 1430px) and (min-width: 1201px) {
+    .ui.sidebar{
+      margin-left: 5vw !important;
+    }
+  }
+
+   @media only screen and (max-width: 1200px) and (min-width: 600px) {
+     .ui.sidebar{
+        margin-left: 2vw !important;
+     } 
+  }
