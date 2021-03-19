@@ -28,3 +28,4 @@ environments/prod.test.env
 environments/prodtest
 
 libs/contract/src/deployed/*-fork.json
+libs/contract/src/deployed/devlive.json
