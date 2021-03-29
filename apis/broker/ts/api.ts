@@ -22,297 +22,297 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
- *
+ * 
  * @export
  * @interface BoolResponse
  */
 export interface BoolResponse {
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof BoolResponse
      */
     success: boolean;
 }
 /**
- *
+ * 
  * @export
  * @interface CertifiedTransfer
  */
 export interface CertifiedTransfer {
     /**
-     *
+     * 
      * @type {CertifiedTransferRequest}
      * @memberof CertifiedTransfer
      */
     transfer: CertifiedTransferRequest;
     /**
-     *
+     * 
      * @type {EncryptedPacket}
      * @memberof CertifiedTransfer
      */
     instructionPacket: EncryptedPacket;
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransfer
      */
     signature: string;
 }
 /**
- *
+ * 
  * @export
  * @interface CertifiedTransferRequest
  */
 export interface CertifiedTransferRequest {
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransferRequest
      */
     from: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransferRequest
      */
     to: string;
     /**
-     *
+     * 
      * @type {number}
      * @memberof CertifiedTransferRequest
      */
     value: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof CertifiedTransferRequest
      */
     fee: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof CertifiedTransferRequest
      */
     timestamp: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransferRequest
      */
     signature: string;
 }
 /**
- *
+ * 
  * @export
  * @interface CertifiedTransferResponse
  */
 export interface CertifiedTransferResponse {
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransferResponse
      */
     message: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof CertifiedTransferResponse
      */
     txHash: string;
 }
 /**
- *
+ * 
  * @export
  * @interface ETransferCodeResponse
  */
 export interface ETransferCodeResponse {
     /**
-     *
+     * 
      * @type {string}
      * @memberof ETransferCodeResponse
      */
     code?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ETransferCodeResponse
      */
     error?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface EncryptedPacket
  */
 export interface EncryptedPacket {
     /**
-     *
+     * 
      * @type {string}
      * @memberof EncryptedPacket
      */
     encryptedPacket: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof EncryptedPacket
      */
     version: string;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleAuthUrl
  */
 export interface GoogleAuthUrl {
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleAuthUrl
      */
     url: string;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleFileIdent
  */
 export interface GoogleFileIdent {
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleFileIdent
      */
     id: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleFileIdent
      */
     name?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleFileIdent
      */
     type?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleGetResult
  */
 export interface GoogleGetResult {
     /**
-     *
+     * 
      * @type {Array<GoogleWalletItem>}
      * @memberof GoogleGetResult
      */
     wallets: Array<GoogleWalletItem>;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleListResult
  */
 export interface GoogleListResult {
     /**
-     *
+     * 
      * @type {Array<GoogleFileIdent>}
      * @memberof GoogleListResult
      */
     wallets: Array<GoogleFileIdent>;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleStoreAccount
  */
 export interface GoogleStoreAccount {
     /**
-     *
+     * 
      * @type {GoogleToken}
      * @memberof GoogleStoreAccount
      */
     token: GoogleToken;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleStoreAccount
      */
     wallet: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleStoreAccount
      */
     walletName: string;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleToken
  */
 export interface GoogleToken {
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleToken
      */
     token: string;
 }
 /**
- *
+ * 
  * @export
  * @interface GoogleWalletItem
  */
 export interface GoogleWalletItem {
     /**
-     *
+     * 
      * @type {GoogleFileIdent}
      * @memberof GoogleWalletItem
      */
     id: GoogleFileIdent;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GoogleWalletItem
      */
     wallet?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface InlineResponse200
  */
 export interface InlineResponse200 {
     /**
-     *
+     * 
      * @type {string}
      * @memberof InlineResponse200
      */
     address: string;
     /**
-     *
+     * 
      * @type {number}
      * @memberof InlineResponse200
      */
     certifiedFee: number;
 }
 /**
- *
+ * 
  * @export
  * @interface NewAccountReferal
  */
 export interface NewAccountReferal {
     /**
-     *
+     * 
      * @type {string}
      * @memberof NewAccountReferal
      */
     referrerId: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof NewAccountReferal
      */
@@ -325,20 +325,20 @@ export interface NewAccountReferal {
  */
 export interface SignedMessage {
     /**
-     *
+     * 
      * @type {string}
      * @memberof SignedMessage
      */
     message: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SignedMessage
      */
     signature: string;
 }
 /**
- *
+ * 
  * @export
  * @interface SubscriptionDetails
  */
@@ -362,19 +362,19 @@ export interface SubscriptionDetails {
      */
     givenName?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SubscriptionDetails
      */
     familyName?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SubscriptionDetails
      */
     country?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SubscriptionDetails
      */
@@ -389,7 +389,7 @@ export const BillPaymentsApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * Bill Payment Called by the client to pay a bill with coin via a certified transfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -409,7 +409,7 @@ export const BillPaymentsApiAxiosParamCreator = function (configuration?: Config
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -434,7 +434,7 @@ export const BillPaymentsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Bill Payment Called by the client to pay a bill with coin via a certified transfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -454,7 +454,7 @@ export const BillPaymentsApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * Bill Payment Called by the client to pay a bill with coin via a certified transfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -473,7 +473,7 @@ export const BillPaymentsApiFactory = function (configuration?: Configuration, b
 export class BillPaymentsApi extends BaseAPI {
     /**
      * Bill Payment Called by the client to pay a bill with coin via a certified transfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted BillPayeePacket returns CertifiedTransferResponse
-     * @param {CertifiedTransfer} request
+     * @param {CertifiedTransfer} request 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BillPaymentsApi
@@ -492,7 +492,7 @@ export const DirectTransferApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * Transfer to another The Coin account A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether  request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments returns CertifiedTransferResponse
-         * @param {CertifiedTransferRequest} request
+         * @param {CertifiedTransferRequest} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -512,7 +512,7 @@ export const DirectTransferApiAxiosParamCreator = function (configuration?: Conf
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -537,7 +537,7 @@ export const DirectTransferApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Transfer to another The Coin account A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether  request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments returns CertifiedTransferResponse
-         * @param {CertifiedTransferRequest} request
+         * @param {CertifiedTransferRequest} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -557,7 +557,7 @@ export const DirectTransferApiFactory = function (configuration?: Configuration,
     return {
         /**
          * Transfer to another The Coin account A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether  request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments returns CertifiedTransferResponse
-         * @param {CertifiedTransferRequest} request
+         * @param {CertifiedTransferRequest} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -576,7 +576,7 @@ export const DirectTransferApiFactory = function (configuration?: Configuration,
 export class DirectTransferApi extends BaseAPI {
     /**
      * Transfer to another The Coin account A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether  request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments returns CertifiedTransferResponse
-     * @param {CertifiedTransferRequest} request
+     * @param {CertifiedTransferRequest} request 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DirectTransferApi
@@ -595,7 +595,7 @@ export const ETransferApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * Request eTransfer Called by the client to exchange coin for CAD and send via eTransfer  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -615,7 +615,7 @@ export const ETransferApiAxiosParamCreator = function (configuration?: Configura
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -630,7 +630,7 @@ export const ETransferApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * Required answer for eTransfer sent to this broker A code unique to the user that is required on all eTransfers sent in to this broker  request SignedMessage Signed timestamp message returns ETransferCodeResponse
-         * @param {SignedMessage} request
+         * @param {SignedMessage} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -650,7 +650,7 @@ export const ETransferApiAxiosParamCreator = function (configuration?: Configura
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -675,7 +675,7 @@ export const ETransferApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Request eTransfer Called by the client to exchange coin for CAD and send via eTransfer  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -685,7 +685,7 @@ export const ETransferApiFp = function(configuration?: Configuration) {
         },
         /**
          * Required answer for eTransfer sent to this broker A code unique to the user that is required on all eTransfers sent in to this broker  request SignedMessage Signed timestamp message returns ETransferCodeResponse
-         * @param {SignedMessage} request
+         * @param {SignedMessage} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -705,7 +705,7 @@ export const ETransferApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * Request eTransfer Called by the client to exchange coin for CAD and send via eTransfer  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket returns CertifiedTransferResponse
-         * @param {CertifiedTransfer} request
+         * @param {CertifiedTransfer} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -714,7 +714,7 @@ export const ETransferApiFactory = function (configuration?: Configuration, base
         },
         /**
          * Required answer for eTransfer sent to this broker A code unique to the user that is required on all eTransfers sent in to this broker  request SignedMessage Signed timestamp message returns ETransferCodeResponse
-         * @param {SignedMessage} request
+         * @param {SignedMessage} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -733,7 +733,7 @@ export const ETransferApiFactory = function (configuration?: Configuration, base
 export class ETransferApi extends BaseAPI {
     /**
      * Request eTransfer Called by the client to exchange coin for CAD and send via eTransfer  request CertifiedTransfer Must contain a transfer to this brokers address, and an encrypted ETransferPacket returns CertifiedTransferResponse
-     * @param {CertifiedTransfer} request
+     * @param {CertifiedTransfer} request 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ETransferApi
@@ -744,7 +744,7 @@ export class ETransferApi extends BaseAPI {
 
     /**
      * Required answer for eTransfer sent to this broker A code unique to the user that is required on all eTransfers sent in to this broker  request SignedMessage Signed timestamp message returns ETransferCodeResponse
-     * @param {SignedMessage} request
+     * @param {SignedMessage} request 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ETransferApi
@@ -763,7 +763,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * Get subscription details.  id String returns SubscriptionDetails
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -787,7 +787,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -823,7 +823,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -835,7 +835,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * Unsubscribe an email address from our newsletter.  id String returns BoolResponse
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -859,7 +859,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -871,8 +871,8 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * Update email subscription.  Also used to confirm  details SubscriptionDetails returns BoolResponse
-         * @param {string} id
-         * @param {SubscriptionDetails} details
+         * @param {string} id 
+         * @param {SubscriptionDetails} details 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -898,7 +898,7 @@ export const NewsletterApiAxiosParamCreator = function (configuration?: Configur
             }
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -923,7 +923,7 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Get subscription details.  id String returns SubscriptionDetails
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -943,7 +943,7 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
         },
         /**
          * Unsubscribe an email address from our newsletter.  id String returns BoolResponse
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -953,8 +953,8 @@ export const NewsletterApiFp = function(configuration?: Configuration) {
         },
         /**
          * Update email subscription.  Also used to confirm  details SubscriptionDetails returns BoolResponse
-         * @param {string} id
-         * @param {SubscriptionDetails} details
+         * @param {string} id 
+         * @param {SubscriptionDetails} details 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -974,7 +974,7 @@ export const NewsletterApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * Get subscription details.  id String returns SubscriptionDetails
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -992,7 +992,7 @@ export const NewsletterApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * Unsubscribe an email address from our newsletter.  id String returns BoolResponse
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1001,8 +1001,8 @@ export const NewsletterApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * Update email subscription.  Also used to confirm  details SubscriptionDetails returns BoolResponse
-         * @param {string} id
-         * @param {SubscriptionDetails} details
+         * @param {string} id 
+         * @param {SubscriptionDetails} details 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1021,7 +1021,7 @@ export const NewsletterApiFactory = function (configuration?: Configuration, bas
 export class NewsletterApi extends BaseAPI {
     /**
      * Get subscription details.  id String returns SubscriptionDetails
-     * @param {string} id
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsletterApi
@@ -1043,7 +1043,7 @@ export class NewsletterApi extends BaseAPI {
 
     /**
      * Unsubscribe an email address from our newsletter.  id String returns BoolResponse
-     * @param {string} id
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsletterApi
@@ -1054,8 +1054,8 @@ export class NewsletterApi extends BaseAPI {
 
     /**
      * Update email subscription.  Also used to confirm  details SubscriptionDetails returns BoolResponse
-     * @param {string} id
-     * @param {SubscriptionDetails} details
+     * @param {string} id 
+     * @param {SubscriptionDetails} details 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsletterApi
@@ -1074,7 +1074,7 @@ export const ReferralsApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * Set referal for new account  NewAccountReferal: This referral must have been previously registered with the system
-         * @param {NewAccountReferal} referral
+         * @param {NewAccountReferal} referral 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1094,7 +1094,7 @@ export const ReferralsApiAxiosParamCreator = function (configuration?: Configura
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -1109,7 +1109,7 @@ export const ReferralsApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * Returns a boolean indicating whether the passed referrer is valid  Referrers ID: This ID must have been previously registered with the system
-         * @param {string} referrerId
+         * @param {string} referrerId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1133,7 +1133,7 @@ export const ReferralsApiAxiosParamCreator = function (configuration?: Configura
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1155,7 +1155,7 @@ export const ReferralsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Set referal for new account  NewAccountReferal: This referral must have been previously registered with the system
-         * @param {NewAccountReferal} referral
+         * @param {NewAccountReferal} referral 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1165,7 +1165,7 @@ export const ReferralsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Returns a boolean indicating whether the passed referrer is valid  Referrers ID: This ID must have been previously registered with the system
-         * @param {string} referrerId
+         * @param {string} referrerId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1185,7 +1185,7 @@ export const ReferralsApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * Set referal for new account  NewAccountReferal: This referral must have been previously registered with the system
-         * @param {NewAccountReferal} referral
+         * @param {NewAccountReferal} referral 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1194,7 +1194,7 @@ export const ReferralsApiFactory = function (configuration?: Configuration, base
         },
         /**
          * Returns a boolean indicating whether the passed referrer is valid  Referrers ID: This ID must have been previously registered with the system
-         * @param {string} referrerId
+         * @param {string} referrerId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1213,7 +1213,7 @@ export const ReferralsApiFactory = function (configuration?: Configuration, base
 export class ReferralsApi extends BaseAPI {
     /**
      * Set referal for new account  NewAccountReferal: This referral must have been previously registered with the system
-     * @param {NewAccountReferal} referral
+     * @param {NewAccountReferal} referral 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReferralsApi
@@ -1224,7 +1224,7 @@ export class ReferralsApi extends BaseAPI {
 
     /**
      * Returns a boolean indicating whether the passed referrer is valid  Referrers ID: This ID must have been previously registered with the system
-     * @param {string} referrerId
+     * @param {string} referrerId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReferralsApi
@@ -1260,7 +1260,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1272,7 +1272,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * Get the listing of available accounts  token GoogleToken returns GoogleListResult
-         * @param {GoogleToken} token
+         * @param {GoogleToken} token 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1292,7 +1292,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -1307,7 +1307,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * Store on google drive  account GoogleUploadPacket returns BoolResponse
-         * @param {GoogleStoreAccount} account
+         * @param {GoogleStoreAccount} account 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1327,7 +1327,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -1342,7 +1342,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * Retrieve previously-stored file from google drive  token GoogleToken returns GoogleGetResult
-         * @param {GoogleToken} request
+         * @param {GoogleToken} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1362,7 +1362,7 @@ export const SecureApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
 
 
-
+    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -1396,7 +1396,7 @@ export const SecureApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get the listing of available accounts  token GoogleToken returns GoogleListResult
-         * @param {GoogleToken} token
+         * @param {GoogleToken} token 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1406,7 +1406,7 @@ export const SecureApiFp = function(configuration?: Configuration) {
         },
         /**
          * Store on google drive  account GoogleUploadPacket returns BoolResponse
-         * @param {GoogleStoreAccount} account
+         * @param {GoogleStoreAccount} account 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1416,7 +1416,7 @@ export const SecureApiFp = function(configuration?: Configuration) {
         },
         /**
          * Retrieve previously-stored file from google drive  token GoogleToken returns GoogleGetResult
-         * @param {GoogleToken} request
+         * @param {GoogleToken} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1444,7 +1444,7 @@ export const SecureApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * Get the listing of available accounts  token GoogleToken returns GoogleListResult
-         * @param {GoogleToken} token
+         * @param {GoogleToken} token 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1453,7 +1453,7 @@ export const SecureApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * Store on google drive  account GoogleUploadPacket returns BoolResponse
-         * @param {GoogleStoreAccount} account
+         * @param {GoogleStoreAccount} account 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1462,7 +1462,7 @@ export const SecureApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * Retrieve previously-stored file from google drive  token GoogleToken returns GoogleGetResult
-         * @param {GoogleToken} request
+         * @param {GoogleToken} request 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1491,7 +1491,7 @@ export class SecureApi extends BaseAPI {
 
     /**
      * Get the listing of available accounts  token GoogleToken returns GoogleListResult
-     * @param {GoogleToken} token
+     * @param {GoogleToken} token 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecureApi
@@ -1502,7 +1502,7 @@ export class SecureApi extends BaseAPI {
 
     /**
      * Store on google drive  account GoogleUploadPacket returns BoolResponse
-     * @param {GoogleStoreAccount} account
+     * @param {GoogleStoreAccount} account 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecureApi
@@ -1513,7 +1513,7 @@ export class SecureApi extends BaseAPI {
 
     /**
      * Retrieve previously-stored file from google drive  token GoogleToken returns GoogleGetResult
-     * @param {GoogleToken} request
+     * @param {GoogleToken} request 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecureApi
@@ -1549,7 +1549,7 @@ export const StatusApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarQueryParameter = {} as any;
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
