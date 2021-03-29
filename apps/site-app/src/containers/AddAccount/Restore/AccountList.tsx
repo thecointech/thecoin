@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { GoogleWalletItem } from "@the-coin/types";
-import { useAccountMap, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
+import { GoogleWalletItem } from "@thecointech/types";
+import { useAccountMap, useAccountMapApi } from "@thecointech/shared/containers/AccountMap";
 import { List, Button, ButtonProps } from "semantic-ui-react";
 import { Wallet } from "ethers";
-import { NormalizeAddress } from "@the-coin/utilities";
+import { NormalizeAddress } from "@thecointech/utilities";
 import { Dictionary } from "lodash";
 import { useHistory } from "react-router";
 import styles from './styles.module.less';

@@ -6,7 +6,7 @@ import Confetti from 'react-confetti';
 import styles from './styles.module.less';
 import illustration from './images/illust_congrats.svg';
 import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.create.congratulations.aboveTheTitle",

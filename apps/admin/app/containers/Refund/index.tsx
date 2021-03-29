@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
-import { log } from "@the-coin/logging";
-import { CertifiedTransferRecord } from "@the-coin/tx-firestore";
-import { CertifiedTransferRequest } from "@the-coin/types";
-import { ProcessRecord } from "@the-coin/utilities/firestore";
-import { GetActionDoc } from "@the-coin/utilities/User";
+import { log } from "@thecointech/logging";
+import { CertifiedTransferRecord } from "@thecointech/tx-firestore";
+import { CertifiedTransferRequest } from "@thecointech/types";
+import { ProcessRecord } from "@thecointech/utilities/firestore";
+import { GetActionDoc } from "@thecointech/utilities/User";
 import { Contract } from "ethers/contract";
 import { DateTime } from "luxon";
 import { Button } from "semantic-ui-react";
-import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
+import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
 
 type Props = {
   record: CertifiedTransferRecord,

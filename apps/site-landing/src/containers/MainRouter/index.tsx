@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 import { HomePage } from 'containers/HomePage/index';
-import { NotFoundPage } from '@the-coin/shared/containers/NotFoundPage';
+import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
 import { WeDoMore } from 'containers/WeDoMore';
 import { Compare } from 'containers/Compare';

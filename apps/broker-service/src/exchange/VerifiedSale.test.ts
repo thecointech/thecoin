@@ -1,11 +1,11 @@
 
 import { GetContract, GetWallet } from './Wallet'
-import { toHuman } from '@the-coin/utilities'
-import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
+import { toHuman } from '@thecointech/utilities'
+import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
 import { DoCertifiedSale } from './VerifiedSale'
 import { ETransferPacket } from '../types';
-import { init, describe } from '@the-coin/utilities/firestore/jestutils';
-import { CertifiedTransferRecord } from '@the-coin/utilities/firestore';
+import { init, describe } from '@thecointech/utilities/firestore/jestutils';
+import { CertifiedTransferRecord } from '@thecointech/utilities/firestore';
 import { current } from '../status';
 
 beforeAll(async () => {

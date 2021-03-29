@@ -1,4 +1,4 @@
-import { RbcApi } from "@the-coin/rbcapi";
+import { RbcApi } from "@thecointech/rbcapi";
 import { BankRecord } from "./types";
 
 export async function fetchBankTransactions(bankApi: RbcApi) {

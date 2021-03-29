@@ -1,10 +1,10 @@
 import React from "react";
-import { Transaction } from "@the-coin/tx-blockchain/";
+import { Transaction } from "@thecointech/tx-blockchain/";
 import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { Table } from "semantic-ui-react";
-import { Currency } from "@the-coin/site-base/components/Currency";
-import { useFxRates } from "@the-coin/shared/containers/FxRate";
-import { totalCad } from '@the-coin/shared/containers/Account/profit';
+import { Currency } from "@thecointech/site-base/components/Currency";
+import { useFxRates } from "@thecointech/shared/containers/FxRate";
+import { totalCad } from '@thecointech/shared/containers/Account/profit';
 
 const msgTxsIn = { id:"app.historygraph.tooltip.in",
                       defaultMessage:"In",

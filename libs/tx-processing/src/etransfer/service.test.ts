@@ -1,7 +1,7 @@
 import {fetchActionsToComplete, getInstructions, processUnsettledETransfers } from './service'
-import { init } from '@the-coin/utilities/firestore';
-import { RbcApi } from "@the-coin/rbcapi";
-import { ConfigStore } from '@the-coin/store';
+import { init } from '@thecointech/utilities/firestore';
+import { RbcApi } from "@thecointech/rbcapi";
+import { ConfigStore } from '@thecointech/store';
 
 import data from './service.test.mockdb.json';
 

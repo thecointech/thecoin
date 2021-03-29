@@ -1,5 +1,5 @@
 import { loadAndMergeHistory, calculateTxBalances } from "./fetch";
-import { GetContract } from '@the-coin/contract';
+import { GetContract } from '@thecointech/contract';
 import { BigNumber } from "ethers/utils";
 import { Contract } from "ethers";
 import { Transaction } from "./types";

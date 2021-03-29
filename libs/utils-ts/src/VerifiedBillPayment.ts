@@ -1,4 +1,4 @@
-import { BillPayeePacket, CertifiedTransfer } from "@the-coin/types";
+import { BillPayeePacket, CertifiedTransfer } from "@thecointech/types";
 import { Signer } from "ethers";
 import { BuildVerifiedAction } from "./VerifiedAction";
 

@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import { Form, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import { NormalizeAddress } from '@the-coin/utilities';
-import { BuildVerifiedXfer } from '@the-coin/utilities/VerifiedTransfer';
+import { NormalizeAddress } from '@thecointech/utilities';
+import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
-import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { FxRatesState } from '@thecointech/shared/containers/FxRate/types';
+import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
+import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
+import { AccountState } from '@thecointech/shared/containers/Account/types';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 
 type MyProps = {
   account: AccountState;

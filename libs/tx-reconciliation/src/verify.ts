@@ -1,6 +1,6 @@
 import { findBank } from "./matchBank";
 import { builtInAccounts, knownIssues } from './data/manual.json';
-import { NormalizeAddress } from "@the-coin/utilities/Address";
+import { NormalizeAddress } from "@thecointech/utilities/Address";
 import { getFiat } from "./fxrates";
 import { Reconciliations, AllData, ReconciledRecord } from "./types";
 

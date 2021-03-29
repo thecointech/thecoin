@@ -1,5 +1,5 @@
 import { getAllFromFirestore } from './fetch';
-import { init } from '@the-coin/utilities/firestore';
+import { init } from '@thecointech/utilities/firestore';
 
 it('Can fetch all transactions', async () => {
   jest.setTimeout(30000);

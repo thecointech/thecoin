@@ -1,4 +1,4 @@
-import { describe, IsManualRun } from '@the-coin/jestutils';
+import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getAllUserData } from './data';
 
 describe('Live data fetches', () => {

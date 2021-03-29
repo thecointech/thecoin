@@ -1,9 +1,9 @@
-jest.mock('@the-coin/email');
+jest.mock('@thecointech/email');
 
-import { SendWelcomeEmail } from '@the-coin/email';
+import { SendWelcomeEmail } from '@thecointech/email';
 import { mocked } from 'ts-jest/utils'
 import { Signup, Update, Unsubscribe, Details } from './Newsletter'
-import { init } from '@the-coin/utilities/firestore';
+import { init } from '@thecointech/utilities/firestore';
 
 const mockedSend = mocked(SendWelcomeEmail);
 mockedSend.mockReturnValue(Promise.resolve(true))

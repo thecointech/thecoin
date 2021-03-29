@@ -1,4 +1,4 @@
-const logging = require('@the-coin/logging');
+const logging = require('@thecointech/logging');
 const path = require('path');
 
 var cwd = process.cwd();

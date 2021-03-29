@@ -1,4 +1,4 @@
-import { CertifiedTransfer, Timestamp } from "@the-coin/types";
+import { CertifiedTransfer, Timestamp } from "@thecointech/types";
 export { init } from "./init";
 export * from './timestamp';
 export * from './firestore';

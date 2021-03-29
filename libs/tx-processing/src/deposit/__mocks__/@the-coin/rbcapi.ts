@@ -1,4 +1,4 @@
-import { ETransferErrorCode, DepositResult } from "@the-coin/rbcapi";
+import { ETransferErrorCode, DepositResult } from "@thecointech/rbcapi";
 
 export { ETransferErrorCode };
 export class RbcApi {

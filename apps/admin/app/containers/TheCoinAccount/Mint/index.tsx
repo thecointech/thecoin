@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import messages from './messages';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { useFxRates, weSellAt } from '@the-coin/shared/containers/FxRate';
-import { toHuman } from '@the-coin/utilities';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap'
-import { useAccountApi } from '@the-coin/shared/containers/Account';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
+import { useFxRates, weSellAt } from '@thecointech/shared/containers/FxRate';
+import { toHuman } from '@thecointech/utilities';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap'
+import { useAccountApi } from '@thecointech/shared/containers/Account';
 
 enum MintStatus {
   WAITING,

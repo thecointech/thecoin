@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
+import { useAccountMap, useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
+import { Balance } from '@thecointech/shared/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
-import { ReadFileData, UploadWallet } from '@the-coin/shared/containers/UploadWallet';
+import { ReadFileData, UploadWallet } from '@thecointech/shared/containers/UploadWallet';
 
 
 const AccountMap: RouterPath[] = [

@@ -1,10 +1,10 @@
-import { Timestamp } from "@the-coin/utilities/firestore";
+import { Timestamp } from "@thecointech/utilities/firestore";
 import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
 import { AllData, Reconciliations } from "./types";
-import {log} from '@the-coin/logging';
+import {log} from '@thecointech/logging';
 
 // file deepcode ignore no-any: JSON processing is basically all 'any'
 

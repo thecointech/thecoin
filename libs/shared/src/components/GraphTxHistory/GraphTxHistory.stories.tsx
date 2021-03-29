@@ -1,7 +1,7 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react';
 import { GraphTxHistory } from '.';
-import { Transaction } from '@the-coin/tx-blockchain';
+import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
 //import { FXRate } from 'containers/FxRate/types';
 

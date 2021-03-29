@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import { toHuman, toCoin } from '@the-coin/utilities/Conversion';
+import { toHuman, toCoin } from '@thecointech/utilities/Conversion';
 
 type OnChangeCallback = (value: number) => void;
 type Props = {
@@ -38,7 +38,7 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 			return [null, null];
 		if (!val)
 			return [0, 0];
-			 
+
 		const { fxRate }= this.props;
 		return (isCoin) ?
 			[val, toHuman(val * fxRate)] :

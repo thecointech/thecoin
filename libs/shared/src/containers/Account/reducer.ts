@@ -1,8 +1,8 @@
-import { InitialCoinBlock, ConnectContract } from '@the-coin/contract';
+import { InitialCoinBlock, ConnectContract } from '@thecointech/contract';
 import { Wallet } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { useInjectSaga } from "redux-injectors";
-import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, DefaultAccountValues, IActions } from './types';
 import { buildSagas, bindActions } from './actions';
@@ -10,11 +10,11 @@ import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
-import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
+import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '../IDX';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 
 
 // The reducer for a single account state

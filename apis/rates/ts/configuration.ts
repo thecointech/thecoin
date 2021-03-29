@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * @the-coin/rates-service
+ * @thecointech/rates-service
  * TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies
  *
  * The version of the OpenAPI document: 0.1.1

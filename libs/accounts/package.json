@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/accounts",
+  "name": "@thecointech/accounts",
   "version": "0.1.0",
   "description": "The Coin: centralized access for built-in accounts.  Not for external use",
   "keywords": ["TheCoin"],
@@ -30,8 +30,8 @@
   "dependencies": {
     "ethers": "^4.0.46",
     "@google-cloud/secret-manager": "^3.5.0",
-    "@the-coin/logging": "*",
-    "@the-coin/contract": "*"
+    "@thecointech/logging": "*",
+    "@thecointech/contract": "*"
   },
   "devDependencies": {
     "jest": "*"

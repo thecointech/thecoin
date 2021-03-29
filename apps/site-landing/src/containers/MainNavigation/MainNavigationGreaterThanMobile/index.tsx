@@ -2,14 +2,14 @@ import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
-import HeaderLink from '@the-coin/site-base/components/HeaderLink';
+import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 
-import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
+import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",

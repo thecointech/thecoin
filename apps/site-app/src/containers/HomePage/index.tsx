@@ -1,5 +1,5 @@
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
-import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import { AppContainerWithShadow } from 'components/AppContainers';
 import { HistoryGraph } from 'containers/HistoryGraph';
 

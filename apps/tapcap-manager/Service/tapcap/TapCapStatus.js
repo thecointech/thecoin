@@ -1,6 +1,6 @@
 'use strict';
 
-const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
+const { ParseSignedMessage } = require('@thecointech/utilities/TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 

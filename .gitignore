@@ -10,6 +10,8 @@ geth
 **/api/swagger.json
 **/vscode-chrome-debug-userdatadir
 
+.firebase/hosting.*
+
 !**/summary.txt
 
 **/*.module.css.map

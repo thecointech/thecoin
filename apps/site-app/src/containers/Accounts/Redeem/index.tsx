@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { Form, Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { FxRatesState } from '@the-coin/shared/containers/FxRate/types';
-import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { AccountState } from '@the-coin/shared/containers/Account/types';
+import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { FxRatesState } from '@thecointech/shared/containers/FxRate/types';
+import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
+import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
+import { AccountState } from '@thecointech/shared/containers/Account/types';
 import { GetStatusApi, GetETransferApi } from 'api'
-import { ETransferPacket } from '@the-coin/types';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { ETransferPacket } from '@thecointech/types';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 
 type MyProps = {

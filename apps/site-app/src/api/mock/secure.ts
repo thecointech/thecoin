@@ -1,5 +1,5 @@
-import { SecureApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/broker-cad";
-import { buildResponse, delay } from "@the-coin/site-base/api/mock/utils";
+import { SecureApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
+import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
 import { wallets } from './accounts';
 
 const MockedCode = "MockedCode";

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useAccountApi } from '@the-coin/shared/containers/Account';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { useAccountApi } from '@thecointech/shared/containers/Account';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon, StrictInputProps } from 'semantic-ui-react';
 import styles from './styles.module.less';

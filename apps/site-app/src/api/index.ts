@@ -5,8 +5,8 @@ import {
   DirectTransferApi,
   SecureApi,
   ETransferApi,
-} from '@the-coin/broker-cad';
-import { ServiceAddress, Service } from '@the-coin/utilities/ServiceAddresses';
+} from '@thecointech/broker-cad';
+import { ServiceAddress, Service } from '@thecointech/utilities/ServiceAddresses';
 import { MockReferrersApi } from './mock/referrers';
 import { MockSecureApi } from './mock/secure';
 

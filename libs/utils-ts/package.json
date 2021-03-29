@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/utilities",
+  "name": "@thecointech/utilities",
   "version": "0.1.27",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
@@ -13,6 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/utils-ts"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
@@ -35,17 +38,17 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "^4.9.4",
-    "@the-coin/contract": "*",
-    "@the-coin/types": "*",
-    "@the-coin/logging": "*",
+    "@thecointech/contract": "*",
+    "@thecointech/types": "*",
+    "@thecointech/logging": "*",
     "axios": "*",
     "base32": "^0.0.6",
     "firebase": "^8.2.9",
     "luxon": "*"
   },
   "devDependencies": {
-    "@the-coin/types": "*",
-    "@the-coin/jestutils": "*",
+    "@thecointech/types": "*",
+    "@thecointech/jestutils": "*",
     "jest": "*"
   }
 }

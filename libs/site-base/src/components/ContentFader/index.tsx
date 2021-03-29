@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Location } from 'history';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { LessVars } from '@the-coin/site-semantic-theme/variables';
+import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import styles from './styles.module.less';
 
 type OwnProps = {

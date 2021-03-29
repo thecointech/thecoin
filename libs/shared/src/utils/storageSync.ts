@@ -1,7 +1,7 @@
 import { AccountState, DefaultAccountValues } from '../containers/Account/types';
 import { AccountDict } from '../containers/AccountMap/types';
 import { isSigner, SignerIdent } from '../SignerIdent';
-import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { Deprecated_GetStored } from './storageSync_deprecated';
 
 const ThrowIfNotValid = (data: any) => {

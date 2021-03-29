@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Subscribe } from '../../containers/Subscribe';
-import { FooterShared } from '@the-coin/site-base/containers/FooterShared';
+import { FooterShared } from '@thecointech/site-base/containers/FooterShared';
 
 import styles from './styles.module.less';
 

@@ -1,5 +1,5 @@
 import { ethers, Signer } from "ethers";
-import { CertifiedTransferRequest } from "@the-coin/types";
+import { CertifiedTransferRequest } from "@thecointech/types";
 
 // ---------------------------------------------------------\\
 

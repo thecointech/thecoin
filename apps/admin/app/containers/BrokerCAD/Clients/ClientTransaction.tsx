@@ -1,5 +1,5 @@
-import { ReconciledRecord, isComplete, toDateTime } from "@the-coin/tx-reconciliation"
-import { CertifiedTransferRecord } from "@the-coin/utilities/firestore"
+import { ReconciledRecord, isComplete, toDateTime } from "@thecointech/tx-reconciliation"
+import { CertifiedTransferRecord } from "@thecointech/utilities/firestore"
 import { RefundButton } from "containers/Refund"
 import React from "react"
 import { Icon, List } from "semantic-ui-react"
