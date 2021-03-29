@@ -4,13 +4,12 @@
 import { ProgressCallback } from "ethers/utils";
 import { Wallet } from "ethers/wallet";
 import { existsSync, readFileSync } from "fs";
+import { AccountName } from "./names";
 
 // or from file system if name is a path.
-function loadEncrypted(name: string) {
+function loadEncrypted(name: AccountName) {
 
-  let wallet = existsSync(name)
-    ? readFileSync(name, 'utf8')
-    : process.env[`WALLET_${name}`];
+  let wallet = process.env[`WALLET_${name}`];
 
   if (!wallet)
   {
@@ -28,16 +27,28 @@ function loadEncrypted(name: string) {
   return wallet;
 }
 
-function getKey(name: string) {
-  const key = process.env[`WALLET_${name}_KEY`];
+function getPassword(name: AccountName) {
+  const key = process.env[`WALLET_${name}_PWD`];
   if (!key) {
     throw new Error(`Could not load wallet key: ${name}`);
   }
   return key;
 }
 
-export async function loadAndDecrypt(name: string, callback?: ProgressCallback) {
+// This function is referenced directly from libs/contract deployment
+export function loadFromPK(name: AccountName) {
+  const pk = process.env[`WALLET_${name}_KEY`];
+  if (pk)
+    return new Wallet(pk);
+  return undefined;
+}
+
+export async function loadAndDecrypt(name: AccountName, callback?: ProgressCallback) {
   const encrypted = loadEncrypted(name);
-  const key = getKey(name);
+  const key = getPassword(name);
   return Wallet.fromEncryptedJson(encrypted, key, callback);
+}
+
+export async function loadFromEnv(name: AccountName, callback?: ProgressCallback) {
+  return loadFromPK(name) ?? await loadAndDecrypt(name, callback);
 }

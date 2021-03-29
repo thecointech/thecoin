@@ -16,8 +16,8 @@ async function loadSigner(name: AccountName, callback?: ProgressCallback) {
     return loadWallet(name);
   }
   else {
-    const { loadAndDecrypt } = await import('./encrypted');
-    return loadAndDecrypt(name, callback);
+    const { loadFromEnv } = await import('./encrypted');
+    return loadFromEnv(name, callback);
   }
 }
 

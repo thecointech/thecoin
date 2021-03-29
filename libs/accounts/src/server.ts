@@ -14,9 +14,9 @@ export async function getSecret(name: string) {
 }
 
 export async function loadWallet(name: AccountName) {
-  const mnemonic = await getSecret(`WALLET_${name}`);
-  if (!mnemonic)
+  const privatekey = await getSecret(`WALLET_${name}_MNEMONIC`);
+  if (!privatekey)
     throw new Error(`Wallet ${name} not found in secrets`);
 
-  return Wallet.fromMnemonic(mnemonic);
+  return Wallet.fromMnemonic(privatekey);
 }

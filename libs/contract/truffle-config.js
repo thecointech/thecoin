@@ -5,6 +5,9 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 loadTypescript();
 // Load environment for the network we are deploying to
 require('../../tools/setenv');
+const { AccountId } = require('@thecointech/accounts');
+const { loadFromPK } = require('@thecointech/accounts/encrypted');
+
 
 module.exports = {
   // We output into our src directory so we can directly import
@@ -21,18 +24,20 @@ module.exports = {
     // prod:test environment
     prodtest: {
       provider: () => {
-        // Load config variables.  This mnemoniv is not normally
+        // Load config variables.  This mnemonic is not normally
         // included in our env files, ensure you define it
-        const mnemonic = process.env.WALLET_Owner_MNEMONIC
-        if (!mnemonic)
-          throw new Error("Cannot deploy without a mnemonic");
+        const numBuiltIn = AccountId.BrokerCAD + 1;
+        const testAccounts = loadAccounts(numBuiltIn);
         return new HDWalletProvider(
-          mnemonic,
-          `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+          testAccounts,
+          `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+          0,
+          numBuiltIn
         );
       },
       network_id: '*', // eslint-disable-line camelcase
-      gasPrice: 1000,
+      gasPrice: 10000000009, // 10 GWei
+      gas: 1000000, // Lower gas limit to allow completing migration with lower-funded accounts
       skipDryRun: true
     },
     // TODO: we are stuck on ropsten till the price of gas comes down.
@@ -57,6 +62,17 @@ module.exports = {
     }
   }
 };
+
+function loadAccounts(maxIdx) {
+  const testAccountKeys = [];
+  for (let i = 0; i < maxIdx; i++) {
+    const wallet = loadFromPK(AccountId[i]);
+    if (!wallet)
+      throw new Error(`Cannot deploy: missing account ${AccountId[i]}`);
+    testAccountKeys.push(wallet.privateKey.slice(2));
+  }
+  return testAccountKeys;
+}
 
 function loadTypescript() {
   require("ts-node").register({

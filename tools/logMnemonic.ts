@@ -21,4 +21,8 @@ async function readRoles() {
 readRoles();
 readMnemonic("Owner");
 readMnemonic("TheCoin");
+readMnemonic("TCManager");
 readMnemonic("Minter");
+readMnemonic("Police");
+readMnemonic("BrokerCAD");
+readMnemonic("BrokerTransferAssistant");

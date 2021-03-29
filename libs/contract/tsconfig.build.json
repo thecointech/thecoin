@@ -5,5 +5,8 @@
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [{ "path": "../logging/tsconfig.build.json" }]
+  "references": [
+    { "path": "../logging/tsconfig.build.json" },
+    { "path": "../accounts/tsconfig.build.json" }
+  ]
 }
