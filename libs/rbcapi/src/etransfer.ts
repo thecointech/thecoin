@@ -1,6 +1,6 @@
 import { ApiAction } from "./action";
-import { log } from "@the-coin/logging";
-import { ETransferPacket } from "@the-coin/types";
+import { log } from "@thecointech/logging";
+import { ETransferPacket } from "@thecointech/types";
 
 
 export async function send(prefix: string, amount: number, name:string, packet: ETransferPacket)

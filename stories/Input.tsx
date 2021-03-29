@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Form, Label, Input as SemanticInput, StrictInputProps } from 'semantic-ui-react'
-import "@the-coin/site-semantic-theme/semantic.less"
+import "@thecointech/site-semantic-theme/semantic.less"
 
 export interface InputProps extends StrictInputProps {
   label: string,

@@ -1,6 +1,6 @@
 import { RbcTransaction } from "./types";
 import { DateTime, DateTimeOptions } from "luxon";
-import { BaseStore, ConfigStore } from "@the-coin/store";
+import { BaseStore, ConfigStore } from "@thecointech/store";
 
 const lastSyncKey = 'LastSync';
 

@@ -5,7 +5,7 @@ import { Header, Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Decoration } from "components/Decoration";
 import styles from '../styles.module.less';
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.connect.existing.aboveTheTitle",
@@ -22,7 +22,7 @@ const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
                               description:"The button to redirect to the create an account page for the restore your account page"};
 
 export const Existing = () => {
-  
+
   return (
     <Container className={styles.content}>
     <Header as="h5" className={`x8spaceBefore`}>

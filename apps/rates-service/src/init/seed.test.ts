@@ -1,4 +1,4 @@
-import { GetFirestore, init } from "@the-coin/utilities/firestore";
+import { GetFirestore, init } from "@thecointech/utilities/firestore";
 import { DateTime, Duration } from "luxon"
 import { RateKey } from "../internals/rates/types";
 import { SeedWithRandomRates } from "./seed"

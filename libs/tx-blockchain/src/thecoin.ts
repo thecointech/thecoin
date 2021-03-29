@@ -1,4 +1,4 @@
-import { GetContract } from "@the-coin/contract";
+import { GetContract } from "@thecointech/contract";
 import { Contract } from "ethers";
 import { BigNumber } from "ethers/utils";
 import { loadAndMergeHistory, calculateTxBalances } from "./fetch";

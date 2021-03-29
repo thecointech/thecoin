@@ -1,5 +1,8 @@
 export enum CurrencyCode {
-	THE = 0,   // THE Currency
+  // Do not include THE as currency code here.
+  // It confuses our type declarations in rates-service,
+  // and has no legitimate reason to be present
+	//THE = 0,   // THE Currency
 
 	AED = 784, //United Arab Emirates dirham
 	AFN = 971, //Afghan afghani

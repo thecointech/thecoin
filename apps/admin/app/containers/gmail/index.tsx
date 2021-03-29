@@ -1,24 +1,24 @@
 import React from 'react';
 //import { useEffect, useState, useCallback } from 'react';
-// import { authorize, finishLogin, isValid } from '@the-coin/tx-processing/deposit/auth';
+// import { authorize, finishLogin, isValid } from '@thecointech/tx-processing/deposit/auth';
 // import { Input, Button } from 'semantic-ui-react';
-// import { addFromGmail, initializeApi, setETransferLabel } from '@the-coin/tx-processing/deposit/addFromGmail';
+// import { addFromGmail, initializeApi, setETransferLabel } from '@thecointech/tx-processing/deposit/addFromGmail';
 // import { OAuth2Client } from 'google-auth-library';
 
-// import { useFxRates, useFxRatesApi, IFxRates } from '@the-coin/shared/containers/FxRate';
+// import { useFxRates, useFxRatesApi, IFxRates } from '@thecointech/shared/containers/FxRate';
 // import { TransferList } from 'containers/TransferList/TransferList';
-// import { AddSettlementDate } from '@the-coin/tx-processing/base/utils';
+// import { AddSettlementDate } from '@thecointech/tx-processing/base/utils';
 // import { DepositRenderer } from './DepositRenderer';
-// import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-// import { useAccountApi } from '@the-coin/shared/containers/Account';
-// import { RbcApi, ETransferErrorCode } from '@the-coin/rbcapi';
-// import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+// import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+// import { useAccountApi } from '@thecointech/shared/containers/Account';
+// import { RbcApi, ETransferErrorCode } from '@thecointech/rbcapi';
+// import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 // import messages from './messages';
-// import { storeInDB, depositInBank } from '@the-coin/tx-processing/deposit/process';
-// import { completeTheTransfer, InitContract } from '@the-coin/tx-processing/deposit/contract';
+// import { storeInDB, depositInBank } from '@thecointech/tx-processing/deposit/process';
+// import { completeTheTransfer, InitContract } from '@thecointech/tx-processing/deposit/contract';
 // import { Wallet } from 'ethers';
-// import { Timestamp } from '@the-coin/utilities/firestore';
-// import { PurchaseType } from '@the-coin/tx-firestore/';
+// import { Timestamp } from '@thecointech/utilities/firestore';
+// import { PurchaseType } from '@thecointech/tx-firestore/';
 
 
 export const Gmail = () => {

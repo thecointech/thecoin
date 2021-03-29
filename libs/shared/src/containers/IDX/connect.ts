@@ -1,16 +1,15 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '@the-coin/3id-connect'
-import { Wallet as EthereumWallet } from 'ethers/wallet'
+import { ThreeIdConnect, EthereumAuthProvider } from '@thecointech/3id-connect'
+import { Signer } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'
 import type { DIDProvider } from 'dids'
-import { AnySigner, isWallet } from '../../SignerIdent'
 
 class EthereumProvider extends EventEmitter {
-  wallet: EthereumWallet
+  signer: Signer
 
-  constructor(wallet: EthereumWallet) {
+  constructor(signer: Signer) {
     super()
-    this.wallet = wallet
+    this.signer = signer
   }
 
   send(
@@ -24,7 +23,7 @@ class EthereumProvider extends EventEmitter {
       if (message.startsWith('0x')) {
         message = toString(fromString(message.slice(2), 'base16'), 'utf8')
       }
-      callback(null, { result: this.wallet.signMessage(message) })
+      callback(null, { result: this.signer.signMessage(message) })
     } else {
       callback(new Error(`Unsupported method: ${request.method}`))
     }
@@ -40,13 +39,10 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(wallet: AnySigner): Promise<DIDProvider> {
-  const { address } = wallet;
-  const ethProvider = isWallet(wallet)
-    ? new EthereumProvider(wallet)
-    : null;
-  if (!ethProvider) throw new Error('Unsupported wallet type (fix me!!!)');
-  // Also - how do we connect to multiple accounts at the same time?!?
+export async function getProvider(signer: Signer): Promise<DIDProvider> {
+  const address = await signer.getAddress();
+  const ethProvider = new EthereumProvider(signer);
+  // TODO: how do we connect to multiple accounts at the same time?!?
   await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
   return globalThis.__threeID.getDidProvider()
 }

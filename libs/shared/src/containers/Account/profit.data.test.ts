@@ -1,5 +1,5 @@
-import { FXRate } from "@the-coin/pricing"
-import { Transaction } from "@the-coin/tx-blockchain";
+import { FXRate } from "@thecointech/pricing"
+import { Transaction } from "@thecointech/tx-blockchain";
 import { DateTime } from "luxon";
 
 // file deepcode ignore DateMonthIndex%2Ftest: <please specify a reason of ignoring this>

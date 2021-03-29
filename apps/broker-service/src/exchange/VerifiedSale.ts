@@ -1,6 +1,6 @@
 import { CertifiedActionVerify } from './CertifiedActionVerify';
 import { CertifiedActionProcess } from './CertifiedActionProcess';
-import { CertifiedTransfer } from '@the-coin/types';
+import { CertifiedTransfer } from '@thecointech/types';
 
 async function  DoCertifiedSale(sale: CertifiedTransfer) {
 

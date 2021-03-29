@@ -8,6 +8,9 @@ geth
 **/bin/
 /secrets
 **/api/swagger.json
+**/vscode-chrome-debug-userdatadir
+
+.firebase/hosting.*
 
 !**/summary.txt
 
@@ -19,3 +22,5 @@ geth
 **/semantic.css
 
 **/ts/.openapi-generator
+
+libs/contract/.openzeppelin/unknown-1337.json

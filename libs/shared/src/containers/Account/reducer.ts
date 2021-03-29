@@ -1,8 +1,8 @@
-import { InitialCoinBlock, ConnectContract } from '@the-coin/contract';
+import { InitialCoinBlock, ConnectContract } from '@thecointech/contract';
 import { Wallet } from 'ethers';
 import { call } from 'redux-saga/effects';
 import { useInjectSaga } from "redux-injectors";
-import { IsValidAddress, NormalizeAddress } from '@the-coin/utilities';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, DefaultAccountValues, IActions } from './types';
 import { buildSagas, bindActions } from './actions';
@@ -10,9 +10,11 @@ import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { ACCOUNTMAP_KEY } from '../AccountMap';
-import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@the-coin/tx-blockchain';
+import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '../IDX';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
+import { DateTime } from 'luxon';
+import { log } from '@thecointech/logging';
 
 
 // The reducer for a single account state
@@ -24,38 +26,52 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   *setSigner(signer: TheSigner) {
+    yield this.storeValues({ signer });
+    yield this.sendValues(this.actions().connect);
+  }
+
+  *connect() {
+    // Load details last, so it
+    yield this.sendValues(this.actions().loadDetails);
+
+    const { signer } = this.state;
     // Connect to the contract
     const contract = yield call(ConnectContract, signer);
-    // Connect to IDX
-    const idx = yield call(connectIDX, signer)
+    // store the contract prior to trying update history.
+    yield this.storeValues({contract});
+    // Load history info by default
+    yield this.sendValues(this.actions().updateHistory, [new Date(0), new Date()]);
 
-    yield this.storeValues({
-      signer,
-      contract,
-      idx,
-    });
-    // Load necessary info from remote stores
-    yield this.sendValues(this.actions().updateBalance);
-    yield this.sendValues(this.actions().loadDetails);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Save/load private details
 
   *loadDetails() {
-    if (this.state.idx) {
-      yield this.storeValues({idxIO: true});
-      const payload = yield loadDetails(this.state.idx);
+    // Connect to IDX
+    let idx = this.state.idx;
+    if (!idx) idx = yield call(connectIDX, this.state.signer)
+    if (idx) {
+      yield this.storeValues({ idx, idxIO: true });
+      const payload = yield loadDetails(idx);
       const details = payload?.data || DefaultAccountValues.details;
-      yield this.storeValues({details, idxIO: false});
+      yield this.storeValues({ details, idxIO: false });
+      log.trace("Restored account details from IDX");
+    }
+    else {
+      log.warn("No IDX connection present, details may not be loaded correctly");
     }
   };
 
   *setDetails(details: AccountDetails) {
-    yield this.storeValues({details, idxIO: true});
+    yield this.storeValues({ details, idxIO: true });
     if (this.state.idx) {
       yield call(setDetails, this.state.idx, details);
-      yield this.storeValues({idxIO: false});
+      log.trace("Persisted new details to IDX");
+      yield this.storeValues({ idxIO: false });
+    }
+    else {
+      log.warn("No IDX connection present, changes may not be preserved");
     }
   }
 
@@ -67,7 +83,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
       return;
     }
     try {
-      const { address }= signer;
+      const { address } = signer;
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber() });
     } catch (err) {
@@ -75,12 +91,14 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   }
 
-  *updateHistory(from: Date, until: Date) {
+  *updateHistory(from: DateTime, until: DateTime) {
     const { signer, contract } = this.state;
     if (contract === null || signer === null)
       return;
-    if (this.state.historyStart && this.state.historyEnd) {
-      if (from >= this.state.historyStart && until <= this.state.historyEnd)
+
+    const { historyStart, historyEnd } = this.state;
+    if (historyStart && historyEnd) {
+      if (from >= historyStart && until <= historyEnd)
         return;
     }
 
@@ -107,15 +125,14 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     yield this.storeValues({
       history: newHistory,
       historyLoading: false,
-      historyStart: new Date(0),
+      historyStart: from,
       historyStartBlock: 0,
-      historyEnd: new Date(),
+      historyEnd: until,
       historyEndBlock: currentBlock
     });
 
     // Ensure we have fx value for each tx in this list
-    for (var i = 0; i < newHistory.length; i++)
-    {
+    for (var i = 0; i < newHistory.length; i++) {
       yield this.sendValues(FxActions.fetchRateAtDate, newHistory[i].date.toJSDate());
     }
   }
@@ -181,10 +198,18 @@ export const getAccountReducer = (address: string) => {
   return GetNamedReducer(AccountReducer, address, {}, ACCOUNTMAP_KEY);
 }
 
-export const useAccountApi = (address: string) => {
+export const useAccount = (address: string|null) => {
+  // We must inject something, but if we do not have an account we inject an empty saga
+  useInjectSaga({
+    key: address || "DEFAULT|ACC",
+    saga: address
+      ? buildSagas(address)
+      : function* () { }
+  });
+}
 
+export const useAccountApi = (address: string) => {
   const { actions } = getAccountReducer(address);
-  useInjectSaga({ key: address, saga: buildSagas(address) });
   const dispatch = useDispatch();
   return bindActions(actions, dispatch);
 }

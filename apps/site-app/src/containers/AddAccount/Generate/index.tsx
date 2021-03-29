@@ -2,16 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { Wallet } from 'ethers';
 import { Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
-import { useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
+import { useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
 
 import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;

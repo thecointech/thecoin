@@ -1,7 +1,7 @@
 import { google, gmail_v1 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { log } from '@the-coin/logging';
-import { isPresent } from '@the-coin/utilities';
+import { log } from '@thecointech/logging';
+import { isPresent } from '@thecointech/utilities';
 
 let __gmail: gmail_v1.Gmail | null = null;
 const getGmail = () => {

@@ -1,19 +1,19 @@
-import { RUrl } from '@the-coin/utilities/RUrl';
+import { RUrl } from '@thecointech/utilities/RUrl';
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useSidebar } from './actions';
 import { MapMenuItems, SidebarMenuItem } from './types';
 
 export const MainRouterStorybook = () => {
-  
-  const ConstantSidebarItems: SidebarMenuItem[] = 
+
+  const ConstantSidebarItems: SidebarMenuItem[] =
   [
     {
       link: {
         to: false,
         name: 'Profile',
-        header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg", 
-                  primaryDescription: "The quick brown fox jumps over the lazy dog.", 
+        header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg",
+                  primaryDescription: "The quick brown fox jumps over the lazy dog.",
                   secondaryDescription: "Description2" },
       },
     },
@@ -53,12 +53,12 @@ export const MainRouterStorybook = () => {
       }
     }
   ];
-  
-  const generateSidebarItems = () : SidebarMenuItem[] => 
+
+  const generateSidebarItems = () : SidebarMenuItem[] =>
     MapMenuItems(ConstantSidebarItems, "/");
-  
+
     const SIDEBAR_KEY = "RootItems"
-    
+
     const sidebar = useSidebar();
     React.useEffect(() => {
       sidebar.addGenerator(SIDEBAR_KEY, generateSidebarItems);

@@ -1,6 +1,6 @@
-import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
-import { SendWelcomeEmail } from "@the-coin/email";
-import { log } from "@the-coin/logging";
+import { GetFirestore, Timestamp } from "@thecointech/utilities/firestore";
+import { SendWelcomeEmail } from "@thecointech/email";
+import { log } from "@thecointech/logging";
 import { SubscriptionDetails } from "./types";
 
 interface SubscriptionStore extends SubscriptionDetails {

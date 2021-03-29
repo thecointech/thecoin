@@ -1,12 +1,12 @@
 
 import Prismic from 'prismic-javascript'
-import { TheCoinReducer, GetNamedReducer } from '@the-coin/shared/store/immerReducer'
+import { TheCoinReducer, GetNamedReducer } from '@thecointech/shared/store/immerReducer'
 import { IActions, PrismicState, initialState } from './types'
 import { call, takeLatest } from 'redux-saga/effects'
 import { Document } from 'prismic-javascript/d.ts/documents'
 import { ApplicationRootState } from 'types'
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
-import { buildSaga } from '@the-coin/shared/store/sagas'
+import { buildSaga } from '@thecointech/shared/store/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -46,7 +46,8 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
   };
 }
 
-// TODO: CLEAN THIS UP!
+// TODO: CLEAN THIS UP! All of our reducer creation/maintenance is unfinished, with utility fn's
+// (like createRootEntitySelector here) left scattered in various classes
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
 const { actions, reducer, reducerClass } = GetNamedReducer(PrismicReducer, "prismic_docs", initialState)
@@ -65,4 +66,4 @@ export const usePrismic = () => {
 }
 
 export const usePrismicActions = () =>
-  (bindActionCreators(actions, useDispatch()) as any) as IActions;
+  (bindActionCreators(actions, useDispatch()) as unknown) as IActions;

@@ -1,5 +1,5 @@
 import { Email } from "node-mailjet";
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 
 async function connect() {
   const secret = process.env.TC_SENDGRID_API_KEY;

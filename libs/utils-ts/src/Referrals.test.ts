@@ -5,7 +5,7 @@ import {
   GetUsersReferrer
 } from "./Referrals";
 import { GetUserDoc } from "./User";
-import { NewAccountReferal } from "@the-coin/types";
+import { NewAccountReferal } from "@thecointech/types";
 import { init, Timestamp } from "./firestore";
 
 async function ClearExistingUser(address: string) {

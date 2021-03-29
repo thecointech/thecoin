@@ -6,7 +6,6 @@
 	"definitions": {
 		"CurrencyCode": {
 			"enum": [
-				0,
 				784,
 				971,
 				8,
@@ -189,12 +188,8 @@
 			],
 			"type": "number"
 		},
-		"CombinedRates": {
+		"FXRate": {
 			"properties": {
-				"0": {
-					"type": "number",
-					"format": "double"
-				},
 				"8": {
 					"type": "number",
 					"format": "double"
@@ -948,7 +943,7 @@
 		}
 	},
 	"info": {
-		"title": "@the-coin/rates-service",
+		"title": "@thecointech/rates-service",
 		"version": "0.1.1",
 		"description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
 		"license": {
@@ -970,7 +965,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/CombinedRates"
+							"$ref": "#/definitions/FXRate"
 						}
 					},
 					"204": {
@@ -981,6 +976,9 @@
 					}
 				},
 				"description": "Query a single value",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -1011,7 +1009,7 @@
 						"description": "Ok",
 						"schema": {
 							"items": {
-								"$ref": "#/definitions/CombinedRates"
+								"$ref": "#/definitions/FXRate"
 							},
 							"type": "array"
 						}
@@ -1024,6 +1022,9 @@
 					}
 				},
 				"description": "Query many values simultaneously",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{

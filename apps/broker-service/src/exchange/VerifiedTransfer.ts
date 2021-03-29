@@ -1,8 +1,8 @@
 import { GetContract } from './Wallet';
 import { certifiedFee } from '../status/constant.json';
-import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer';
+import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer';
 import { TransactionResponse } from 'ethers/providers';
-import { CertifiedTransferRequest, CertifiedTransferResponse } from '@the-coin/types';
+import { CertifiedTransferRequest, CertifiedTransferResponse } from '@thecointech/types';
 
 function success(val: string | undefined): CertifiedTransferResponse {
   if (!val) {

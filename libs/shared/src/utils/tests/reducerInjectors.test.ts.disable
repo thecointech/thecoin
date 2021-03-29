@@ -3,7 +3,7 @@
  */
 
 import identity from 'lodash/identity';
-import history from '@the-coin/shared/utils/history';
+import history from '@thecointech/shared/utils/history';
 
 import configureStore from '../../configureStore';
 

@@ -1,6 +1,6 @@
 import { DropdownItemProps } from 'semantic-ui-react';
 import { number } from 'card-validator';
-import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types'
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types'
 
 const invalidVisaChars = { id:"app.accounts.billPayments.invalidVisaChars",
                 defaultMessage:"Your card number should be 16 digits long" };

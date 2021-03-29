@@ -1,4 +1,4 @@
-import { UserReconciled } from "@the-coin/tx-reconciliation";
+import { UserReconciled } from "@thecointech/tx-reconciliation";
 
 export type UserState = UserReconciled & {
   balanceCoin: number;

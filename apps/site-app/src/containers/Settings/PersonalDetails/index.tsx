@@ -1,10 +1,9 @@
-import { useAccountApi } from '@the-coin/shared/containers/Account';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
-import React, { useCallback, useState } from 'react';
-
+import React, { useState } from 'react';
+import { useAccountApi } from '@thecointech/shared/containers/Account';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
-import { Form, Header, Icon, InputOnChangeData } from 'semantic-ui-react';
+import { Form, Header, Icon, StrictInputProps } from 'semantic-ui-react';
 import styles from './styles.module.less';
 
 const title = {
@@ -75,19 +74,16 @@ export const PersonalDetails = () => {
   const [addressEdit, setAddressEdit] = useState(false);
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
-  
-  const onDetailsChange = useCallback((_, {details, name, value}: InputOnChangeData) => {
+
+  const onDetailsChange: StrictInputProps['onChange'] = (_, {details, name, value}) => {
     setDetails({
       ...details,
       [name]: value,
     });
-    console.log(details);
-  }, [setDetails])
-
-  const onSetDetails = useCallback(() => {
+  }
+  const onSetDetails = () => {
     accountApi.setDetails({...details});
-    console.log(details);
-  }, [details, accountApi])
+  }
 
   return (
     <div>
@@ -108,7 +104,7 @@ export const PersonalDetails = () => {
           onChange={onDetailsChange}
           details={details}
           name="given_name" readOnly={!givenNameEdit} />
-        
+
 
         <Form.Input
           className={"half right"}

@@ -5,7 +5,7 @@ export interface SignerIdent {
   _isSigner: true;
 }
 
-export type TheSigner = Signer & SignerIdent;
+export interface TheSigner extends Signer, SignerIdent {};
 
 export type AnySigner = TheSigner|Wallet;
 

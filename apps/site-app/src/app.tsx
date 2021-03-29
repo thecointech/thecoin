@@ -24,19 +24,19 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@the-coin/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import { configureAppStore, history } from '@the-coin/shared/store';
+import { configureAppStore, history } from '@thecointech/shared/store';
 import { translations } from './translations';
 
 import { initTracking } from './utils/reactga';
 initTracking();
-import { init } from '@the-coin/logging';
-init('site-landing')
+import { init } from '@thecointech/logging';
+init('site-app')
 
 // Create redux store with history
 const store = configureAppStore(undefined);

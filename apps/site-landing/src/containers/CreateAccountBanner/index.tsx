@@ -6,7 +6,7 @@ import illustrationPlant from './images/illust_flowers.svg';
 
 import styles from './styles.module.less';
 import { NavLink } from 'react-router-dom';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 export enum TypeCreateAccountBanner {
     People,
@@ -17,11 +17,11 @@ export type Props = {
     Type: TypeCreateAccountBanner;
 }
 
-const title = { id:"site.createAccountBanner.title", 
+const title = { id:"site.createAccountBanner.title",
                 defaultMessage:"The benefits of a chequing, savings, and investing account all in one!",
                 description:"The benefits of a chequing, savings, and investing account all in one!"};
 
-const buttonCreate = { id:"site.createAccountBanner.button", 
+const buttonCreate = { id:"site.createAccountBanner.button",
                         defaultMessage:"Create Account",
                         description:"Create Account button for the create account banner for interior pages"};
 

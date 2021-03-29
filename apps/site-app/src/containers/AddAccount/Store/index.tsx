@@ -2,9 +2,9 @@ import React, { useState, useCallback } from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
-import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage";
+import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage";
 import { Link } from "react-router-dom";
-import { useActiveAccount } from "@the-coin/shared/containers/AccountMap";
+import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
 import { onDownload } from "containers/Settings/StorageOptions/download";
 import { StoreDropbox } from "containers/StoreOnline/Dropbox";
 import { StoreMicrosoft } from "containers/StoreOnline/Microsoft";
@@ -16,7 +16,7 @@ import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",

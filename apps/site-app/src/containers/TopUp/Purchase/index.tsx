@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { selectFxRate } from '@the-coin/shared/containers/FxRate/selectors';
-import { AnySigner } from '@the-coin/shared/SignerIdent';
+import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
+import { AnySigner } from '@thecointech/shared/SignerIdent';
 
-import { GetSignedMessage } from '@the-coin/utilities/SignedMessages';
+import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';
 import { ETransferModal } from './eTransferModal';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import illustration from './images/img_interaclogo.svg';
 import styles from './styles.module.less';
 

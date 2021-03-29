@@ -2,7 +2,7 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import { Message } from "semantic-ui-react";
 import messages from './messages';
-import { isWeb3Enabled } from "@the-coin/shared/utils/detection";
+import { isWeb3Enabled } from "@thecointech/shared/utils/detection";
 
 export const WarnIfDisabled = () =>
   !isWeb3Enabled()

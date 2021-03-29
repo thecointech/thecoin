@@ -1,6 +1,6 @@
-import { NewsletterApi, SubscriptionDetails } from "@the-coin/broker-cad";
+import { NewsletterApi, SubscriptionDetails } from "@thecointech/broker-cad";
 import { Dictionary } from 'lodash';
-import { buildResponse, delay } from '@the-coin/site-base/api/mock/utils';
+import { buildResponse, delay } from '@thecointech/site-base/api/mock/utils';
 
 const subscriptions = {} as Dictionary<SubscriptionDetails>;
 const randomId = () => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();

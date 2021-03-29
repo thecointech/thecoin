@@ -1,11 +1,9 @@
 import { GetFirestore } from "./firestore";
 import { IsValidAddress, IsValidReferrerId } from "./Address";
 import base32 from 'base32';
-import { utils, Wallet } from 'ethers';
+import { Signer, utils } from 'ethers';
 import { GetUserDoc, GetUserData } from "./User";
-import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@the-coin/types";
-import { getWallet } from "./Wallets";
-import { AccountName } from "@the-coin/contract/accounts";
+import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
 export function GetReferrersCollection() : CollectionReference {
   return GetFirestore().collection("Referrers");
@@ -113,13 +111,10 @@ export async function CreateReferree(referral: NewAccountReferal, created: Times
 //
 //
 //
-export async function GetAccountCode(address: string, wallet: Wallet|AccountName)
+export async function GetAccountCode(address: string, signer: Signer)
 {
   // generate this signers secret key
   const rhash = GetHash(address.toLowerCase());
-  const signer = (typeof wallet === "string")
-    ? await getWallet(wallet)
-    : wallet;
   const rsign = await signer.signMessage(rhash);
   return GetReferrerCode(rsign);
 }

@@ -1,4 +1,4 @@
-import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
@@ -8,8 +8,8 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
 
 
 const title = { id:"app.makepayments.title",

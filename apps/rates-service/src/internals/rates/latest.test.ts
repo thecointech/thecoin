@@ -1,7 +1,7 @@
 import { initLatest, getLatest } from "./latest"
 import { setRate, cleanDb } from "./db";
 import { CoinRate, FxRates } from "./types";
-import { init, describe } from "@the-coin/utilities/firestore/jestutils";
+import { init, describe } from "@thecointech/utilities/firestore/jestutils";
 
 describe('emulator-only tests', () => {
 

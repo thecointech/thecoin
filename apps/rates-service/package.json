@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/rates-service",
+  "name": "@thecointech/rates-service",
   "version": "0.1.1",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
@@ -22,8 +22,8 @@
     "deploy:cron": "gcloud app deploy cron.yaml --project=carbon-theorem-283310",
     "deploy": "yarn deploy:pre && yarn build && yarn deploy:upload && yarn deploy:clean",
     "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development && node --inspect -r ts-node/register ./src/main.ts",
-    "dev:live": "cross-env SETTINGS=live && yarn dev",
+    "dev": "cross-env NODE_ENV=development node --inspect=localhost:9230 -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env SETTINGS=live yarn dev",
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
@@ -42,8 +42,8 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@the-coin/utilities": "*",
-    "@the-coin/logging": "*",
+    "@thecointech/utilities": "*",
+    "@thecointech/logging": "*",
     "luxon": "*",
     "axios": "*",
     "cors": "^2.8.5",

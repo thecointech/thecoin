@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
 import credentials from './gmail.json';
-import { ConfigStore } from '@the-coin/store';
+import { ConfigStore } from '@thecointech/store';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [

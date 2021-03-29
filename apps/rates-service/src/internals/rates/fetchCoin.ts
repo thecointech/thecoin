@@ -1,6 +1,6 @@
 import { fetchNewCoinRates, FinnhubData } from "../FinnHub";
 import { RateOffsetFromMarket, CoinUpdateInterval, CoinRate } from "./types";
-import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
+import { NextOpenTimestamp } from '@thecointech/utilities/MarketStatus';
 import { alignToNextBoundary } from "./fetchUtils";
 
 export function fetchCoinData(latestUntil: number) {

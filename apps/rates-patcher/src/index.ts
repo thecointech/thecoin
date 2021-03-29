@@ -3,7 +3,7 @@ dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
 
 // Imports the Google Cloud client library
 import { Datastore } from '@google-cloud/datastore';
-import { NextOpenTimestamp } from '@the-coin/utilities/MarketStatus';
+import { NextOpenTimestamp } from '@thecointech/utilities/MarketStatus';
 
 import { ExchangeRate, FXRate, CoinUpdateInterval, RateOffsetFromMarket, FinnhubData, FinnhubRates, FinnhubFxQuotes } from './types';
 import Axios from 'axios';

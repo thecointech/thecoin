@@ -1,12 +1,12 @@
-import { fetchETransfers } from '@the-coin/tx-gmail';
-import { getAllFromFirestore } from "@the-coin/tx-firestore";
-import { getAllFromFirestoreObsolete } from "@the-coin/tx-firestore/obsolete";
-import { RbcApi } from '@the-coin/rbcapi';
-import { fetchCoinHistory } from '@the-coin/tx-blockchain/thecoin';
+import { fetchETransfers } from '@thecointech/tx-gmail';
+import { getAllFromFirestore } from "@thecointech/tx-firestore";
+import { getAllFromFirestoreObsolete } from "@thecointech/tx-firestore/obsolete";
+import { RbcApi } from '@thecointech/rbcapi';
+import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
-import { NormalizeAddress } from '@the-coin/utilities';
+import { NormalizeAddress } from '@thecointech/utilities';
 import { AllData } from './types';
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 
 export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 

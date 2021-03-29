@@ -1,8 +1,8 @@
-import { init } from '@the-coin/utilities/firestore';
+import { init } from '@thecointech/utilities/firestore';
 import { setRate, getCoinRate, toDbType } from './db';
 import { CoinRate } from "./types";
-import { Timestamp } from '@the-coin/utilities/firestore';
-import { describe } from '@the-coin/utilities/firestore/jestutils';
+import { Timestamp } from '@thecointech/utilities/firestore';
+import { describe } from '@thecointech/utilities/firestore/jestutils';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
 // Insertion can be tested with mocks
