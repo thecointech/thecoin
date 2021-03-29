@@ -22,7 +22,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
- *
+ * 
  * @export
  * @enum {string}
  */
@@ -209,1117 +209,1117 @@ export enum CurrencyCode {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FXRate
  */
 export interface FXRate {
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _8?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _12?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _32?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _36?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _44?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _48?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _50?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _51?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _52?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _60?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _64?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _68?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _72?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _84?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _90?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _96?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _104?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _108?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _116?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _124?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _132?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _136?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _144?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _152?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _156?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _170?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _174?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _188?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _191?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _192?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _203?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _208?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _214?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _222?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _230?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _232?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _238?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _242?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _262?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _270?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _292?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _320?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _324?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _328?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _332?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _340?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _344?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _348?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _352?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _356?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _360?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _364?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _368?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _376?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _388?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _392?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _398?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _400?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _404?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _408?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _410?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _414?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _417?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _418?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _422?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _426?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _430?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _434?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _446?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _454?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _458?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _462?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _480?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _484?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _496?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _498?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _504?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _512?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _516?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _524?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _532?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _533?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _548?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _554?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _558?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _566?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _578?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _586?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _590?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _598?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _600?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _604?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _608?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _634?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _643?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _646?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _654?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _682?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _690?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _694?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _702?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _704?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _706?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _710?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _728?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _748?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _752?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _756?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _760?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _764?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _776?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _780?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _784?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _788?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _800?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _807?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _818?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _826?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _834?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _840?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _858?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _860?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _882?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _886?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _901?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _927?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _928?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _929?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _930?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _931?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _932?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _933?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _934?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _936?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _938?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _940?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _941?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _943?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _944?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _946?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _947?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _948?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _949?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _950?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _951?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _952?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _953?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _955?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _956?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _957?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _958?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _959?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _960?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _961?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _962?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _963?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _964?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _965?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _967?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _968?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _969?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _970?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _971?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _972?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _973?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _975?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _976?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _977?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _978?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _979?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _980?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _981?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _984?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _985?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _986?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _990?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _994?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _997?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     _999?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     validTill: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     validFrom: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     sell: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     buy: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FXRate
      */
     fxRate: number;
     /**
-     *
+     * 
      * @type {CurrencyCode}
      * @memberof FXRate
      */
@@ -1351,7 +1351,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1428,7 +1428,7 @@ export const RatesApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * Query many values simultaneously
-         * @param {Array<number>} timestamps
+         * @param {Array<number>} timestamps 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1452,7 +1452,7 @@ export const RatesApiAxiosParamCreator = function (configuration?: Configuration
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1464,8 +1464,8 @@ export const RatesApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * Query a single value
-         * @param {number} currencyCode
-         * @param {number} [timestamp]
+         * @param {number} currencyCode 
+         * @param {number} [timestamp] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1490,7 +1490,7 @@ export const RatesApiAxiosParamCreator = function (configuration?: Configuration
             }
 
 
-
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -1512,7 +1512,7 @@ export const RatesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Query many values simultaneously
-         * @param {Array<number>} timestamps
+         * @param {Array<number>} timestamps 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1522,8 +1522,8 @@ export const RatesApiFp = function(configuration?: Configuration) {
         },
         /**
          * Query a single value
-         * @param {number} currencyCode
-         * @param {number} [timestamp]
+         * @param {number} currencyCode 
+         * @param {number} [timestamp] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1543,7 +1543,7 @@ export const RatesApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * Query many values simultaneously
-         * @param {Array<number>} timestamps
+         * @param {Array<number>} timestamps 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1552,8 +1552,8 @@ export const RatesApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * Query a single value
-         * @param {number} currencyCode
-         * @param {number} [timestamp]
+         * @param {number} currencyCode 
+         * @param {number} [timestamp] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1572,7 +1572,7 @@ export const RatesApiFactory = function (configuration?: Configuration, basePath
 export class RatesApi extends BaseAPI {
     /**
      * Query many values simultaneously
-     * @param {Array<number>} timestamps
+     * @param {Array<number>} timestamps 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RatesApi
@@ -1583,8 +1583,8 @@ export class RatesApi extends BaseAPI {
 
     /**
      * Query a single value
-     * @param {number} currencyCode
-     * @param {number} [timestamp]
+     * @param {number} currencyCode 
+     * @param {number} [timestamp] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RatesApi

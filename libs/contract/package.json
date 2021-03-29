@@ -35,8 +35,8 @@
     "zosupgrade": "yarn run zospush && zos update TheCoin",
     "console": "truffle console",
     "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 src/contracts/*.json",
-    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 src/contracts/*.json"
+    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
+    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\""
   },
   "files": [
     "build/**/*"
