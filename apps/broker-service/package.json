@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/broker-service",
+  "name": "@thecointech/broker-service",
   "version": "0.1.1",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
@@ -17,8 +17,8 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development && node --inspect -r ts-node/register ./src/main.ts",
-    "dev:live": "cross-env SETTINGS=live && yarn dev",
+    "dev": "cross-env NODE_ENV=development node --inspect=9231 -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env SETTINGS=live yarn dev",
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
@@ -34,9 +34,9 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@the-coin/utilities": "*",
-    "@the-coin/email": "*",
-    "@the-coin/logging": "*",
+    "@thecointech/utilities": "*",
+    "@thecointech/email": "*",
+    "@thecointech/logging": "*",
     "cors": "^2.8.5",
     "luxon": "*",
     "express": "^4.16.4",

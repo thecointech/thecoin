@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Container, Dropdown } from 'semantic-ui-react';
-import {LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
+import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { Link, NavLink } from 'react-router-dom';
@@ -65,5 +65,5 @@ export const MainNavigationMobile = () => {
           </div>
     </Container>
   );
-  
+
 }

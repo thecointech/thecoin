@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
-import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
+import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { NavLink } from 'react-router-dom';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 
 const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
@@ -23,7 +23,7 @@ const settings = {  id:"app.MainNavigation.settings",
 
 export const MainNavigationMobile = () => {
     const [modalVisible, setModalVisible] = useState(false);
-    
+
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>

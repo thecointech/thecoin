@@ -4,7 +4,7 @@
 
 import { Transaction } from "./types";
 import { Contract, EventFilter } from "ethers";
-import { toHuman } from "@the-coin/utilities";
+import { toHuman } from "@thecointech/utilities";
 import { Log } from "ethers/providers";
 import { DateTime } from "luxon";
 import { BigNumber } from "ethers/utils";

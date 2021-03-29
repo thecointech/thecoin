@@ -1,4 +1,4 @@
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 import { InitParams, isMockedDb, isEmulatorAvailable } from './types';
 
 // Connect to a firestore instance.  This function is intended to be used

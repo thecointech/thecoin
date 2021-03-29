@@ -1,5 +1,5 @@
 import React from 'react';
-import { FooterShared } from '@the-coin/site-base/containers/FooterShared';
+import { FooterShared } from '@thecointech/site-base/containers/FooterShared';
 
 import styles from './styles.module.less';
 

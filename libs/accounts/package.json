@@ -1,0 +1,39 @@
+{
+  "name": "@thecointech/accounts",
+  "version": "0.1.0",
+  "description": "The Coin: centralized access for built-in accounts.  Not for external use",
+  "keywords": ["TheCoin"],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/account"
+  },
+  "scripts": {
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
+    "build": "yarn tsc --project tsconfig.build.json",
+    "test": "yarn jest",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index_node.js",
+  "browser": "./build/index_web.js",
+  "exports": "./build/index_node.js",
+  "dependencies": {
+    "ethers": "^4.0.46",
+    "@google-cloud/secret-manager": "^3.5.0",
+    "@thecointech/logging": "*",
+    "@thecointech/contract": "*"
+  },
+  "devDependencies": {
+    "jest": "*"
+  }
+}

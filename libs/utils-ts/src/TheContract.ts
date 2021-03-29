@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
-import { SignedMessage } from "@the-coin/types";
+import { SignedMessage } from "@thecointech/types";
 //import { IsDebug } from './IsDebug'
-//import TheCoinSpec from '@the-coin/contract';
+//import TheCoinSpec from '@thecointech/contract';
 
 
 export function ParseSignedMessage(signedMessage: SignedMessage) {

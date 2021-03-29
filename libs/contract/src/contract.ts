@@ -9,7 +9,9 @@ export const COIN_EXP = 1000000;
 //
 // TODO: This is hard-coded at our current contract,
 // and will cause issues on all non-production environments
-export const InitialCoinBlock = 4456169;
+export const InitialCoinBlock = process.env.NODE_ENV === 'production'
+  ? 4456169
+  : 0;
 
 const getAbi = async () => {
 	const TheCoinSpec = await import('./contracts/TheCoin.json');

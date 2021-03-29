@@ -1,6 +1,6 @@
 import { FinnhubData, FinnhubRates, hasError } from "./types";
 import Axios, { AxiosResponse } from 'axios';
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 import { exit } from "process";
 
 const finnhub_key = process.env.FINNHUB_API_KEY;

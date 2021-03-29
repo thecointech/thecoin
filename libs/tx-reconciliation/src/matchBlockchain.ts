@@ -1,5 +1,5 @@
-import { Transaction } from "@the-coin/tx-blockchain/";
-import { BaseTransactionRecord } from "@the-coin/tx-firestore";
+import { Transaction } from "@thecointech/tx-blockchain/";
+import { BaseTransactionRecord } from "@thecointech/tx-firestore";
 import { AllData, User, ReconciledRecord } from "types";
 
 // Next, the tx hash should match blockchain

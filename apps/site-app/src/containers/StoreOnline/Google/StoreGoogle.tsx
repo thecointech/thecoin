@@ -1,14 +1,14 @@
-//import {GetStoredWallet} from '@the-coin/shared/containers/Account/storageSync';
+//import {GetStoredWallet} from '@thecointech/shared/containers/Account/storageSync';
 import { GetSecureApi } from 'api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { getStoredAccountData } from '@the-coin/shared/utils/storageSync';
+import { getStoredAccountData } from '@thecointech/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
-import { isWallet } from '@the-coin/shared/SignerIdent';
+import { isWallet } from '@thecointech/shared/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { Props as MessageProps } from '@the-coin/site-base/components/MaybeMessage';
-import { ButtonSecondary } from '@the-coin/site-base/components/Buttons';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { Props as MessageProps } from '@thecointech/site-base/components/MaybeMessage';
+import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { Checkbox } from 'semantic-ui-react';
 
 
@@ -103,10 +103,10 @@ export const StoreGoogle = (props: MyProps) => {
     ? messages.buttonSuccess
     : messages.buttonConnect
 
-  const connectVia = (props.toggle) 
-    ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} /> 
+  const connectVia = (props.toggle)
+    ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} />
     : <ButtonSecondary onClick={onConnectClick} disabled={disabled} loading={loading}><FormattedMessage {...message } /></ButtonSecondary>;
-  
+
   return (
     <div>
       {connectVia}

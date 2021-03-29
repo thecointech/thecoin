@@ -17,7 +17,7 @@
         "ts-node/register",
         "${workspaceFolder}/src/main.ts"
       ],
-      "envFile": "${workspaceFolder}/../../tools/debug.env",
+      "envFile": "${workspaceFolder}/../../environments/debug.env",
       "outputCapture": "std",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
       "resolveSourceMapLocations": [

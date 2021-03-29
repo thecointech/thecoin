@@ -2,13 +2,14 @@ import { useInjectReducer } from "redux-injectors";
 import { bindActionCreators, Dispatch } from "redux";
 import { Wallet } from "ethers";
 import { useDispatch } from "react-redux";
-import { IsValidAddress, NormalizeAddress } from "@the-coin/utilities";
+import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { ACCOUNTMAP_KEY, initialState, AccountMapState, IAccountMapActions } from "./types";
 import { TheCoinReducer, GetNamedReducer, buildNamedDictionaryReducer } from "../../store/immerReducer";
-import { AccountState, DefaultAccountValues } from "../Account/types";
+import { AccountState, DefaultAccountValues, useAccount } from "../Account";
 import { storeAccount, deleteAccount } from "../../utils/storageSync";
 import { AnySigner, isWallet } from "../../SignerIdent";
 import { composeReducers } from "immer-reducer";
+import { useAccounts } from "./selectors";
 
 export class AccountMap extends TheCoinReducer<AccountMapState> implements IAccountMapActions {
 
@@ -73,6 +74,10 @@ const dictionaryReducer = buildNamedDictionaryReducer(ACCOUNTMAP_KEY, "map", ini
 const combined = composeReducers(reducer, dictionaryReducer);
 export const useAccountMapStore = () => {
   useInjectReducer({ key: ACCOUNTMAP_KEY, reducer: combined });
+  // We also need to start saga's for any account that becomes activated.
+  const accounts = useAccounts();
+  // Because of the rules around hooks
+  useAccount(accounts?.active);
 }
 
 export const accountMapApi = (dispatch: Dispatch) =>

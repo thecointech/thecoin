@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/tx-firestore",
+  "name": "@thecointech/tx-firestore",
   "version": "0.1.0",
   "private": true,
   "description": "The Coin: Re/store transactions in firestore DB ",
@@ -24,8 +24,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/logging": "*",
-    "@the-coin/utilities": "*"
+    "@thecointech/logging": "*",
+    "@thecointech/utilities": "*"
   },
   "devDependencies": {
     "jest": "*"

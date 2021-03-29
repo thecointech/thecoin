@@ -2,9 +2,9 @@ import manual from './data/manual.json';
 import { DateTime } from "luxon";
 import Decimal from "decimal.js-light";
 import { spliceBank } from "./matchBank";
-import { Timestamp } from "@the-coin/utilities/firestore";
+import { Timestamp } from "@thecointech/utilities/firestore";
 import { buildNewUserRecord } from "./reconcileExternal";
-import { UserAction } from '@the-coin/utilities/User';
+import { UserAction } from '@thecointech/utilities/User';
 import { Reconciliations, AllData } from './types';
 import { spliceBlockchain } from './matchBlockchain';
 

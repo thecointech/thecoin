@@ -3,10 +3,10 @@ import { Connect } from "../../Connect";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { getWeb3Type } from "@the-coin/shared/utils/detection";
+import { getWeb3Type } from "@thecointech/shared/utils/detection";
 import { Decoration } from "components/Decoration";
 import styles from '../styles.module.less';
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.connect.create.aboveTheTitle",
@@ -38,7 +38,7 @@ const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
                               description:"The button to redirect to the create an account page for the restore your account page"};
 
 
-//const BounceLink = () => 
+//const BounceLink = () =>
 //  <Link to="/addAccount/generate/">
 //    <FormattedMessage {...createTransfer} />
 //  </Link>

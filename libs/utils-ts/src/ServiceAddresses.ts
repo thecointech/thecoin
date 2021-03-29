@@ -1,4 +1,4 @@
-import { log } from "@the-coin/logging";
+import { log } from "@thecointech/logging";
 
 export enum Service {
 
@@ -24,6 +24,15 @@ export function DevLivePort(service: Service) {
 }
 
 //
+// TEMP FIX: Our swagger-genned api's appear to be
+// having difficulties with accessing the
+function GetBaseFragment(service: Service) {
+  return (service === Service.BROKER || service === Service.RATES)
+    ? '/api/v1'
+    : ''
+}
+
+//
 // The URL of the service.  May return undefined to
 // indicate the default service should be connected to
 export function ServiceAddress(service: Service) {
@@ -31,5 +40,5 @@ export function ServiceAddress(service: Service) {
   if (process.env.NODE_ENV === 'production' || process.env.SETTINGS !== 'live')
     return undefined;
   // In debug, we connect locally only
-  return 'http://localhost:' + DevLivePort(service);
+  return `http://localhost:${DevLivePort(service)}${GetBaseFragment(service)}`;
 }

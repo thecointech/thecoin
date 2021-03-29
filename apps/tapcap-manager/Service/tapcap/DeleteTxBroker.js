@@ -2,12 +2,12 @@
 
 const ethers = require('ethers')
 
-const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
+const { ParseSignedMessage } = require('@thecointech/utilities/TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 
 //
-// Build no-change latest: 
+// Build no-change latest:
 function BuildBlankTx(txKey, toAddress, latest, nonce, timestamp) {
 	return [
 		{
@@ -127,7 +127,7 @@ exports.DeleteTx = async function(uncompleted, storeName) {
 				// This tx has been confirmed already: we continue, but log error to deal with
 				console.error("Resetting tx that was previously confirmed: ", txKey)
 			}
-			
+
 			let firstId = -1;
 			if (allTxs.length >= 1)
 				firstId = parseInt(allTxs[0][datastore.KEY].id);
@@ -138,7 +138,7 @@ exports.DeleteTx = async function(uncompleted, storeName) {
 				updates = BuildUpdates(allTxs, latest)
 			}
 			else {
-				// This tx has not been registered yet.  In this case, just store the cancel struct 
+				// This tx has not been registered yet.  In this case, just store the cancel struct
 				// in case someone tries to register this tx later.
 				console.log("Revert: Building new tx for nonce %d, (with %d items)", token.nonce, allTxs.length)
 				updates = BuildBlankTx(txKey, supplierAddress, latest, token.nonce, clientRequest.timestamp);

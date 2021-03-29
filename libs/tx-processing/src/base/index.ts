@@ -1,11 +1,11 @@
-import { IFxRates } from "@the-coin/shared/containers/FxRate";
-import { GetFirestore, CertifiedTransferRecord } from "@the-coin/utilities/firestore";
-import { decryptTo } from "@the-coin/utilities/Encrypt";
-import { InstructionPacket, GetSigner } from "@the-coin/utilities/VerifiedAction";
-import { UserAction } from "@the-coin/utilities/User";
+import { IFxRates } from "@thecointech/shared/containers/FxRate";
+import { GetFirestore, CertifiedTransferRecord } from "@thecointech/utilities/firestore";
+import { decryptTo } from "@thecointech/utilities/Encrypt";
+import { InstructionPacket, GetSigner } from "@thecointech/utilities/VerifiedAction";
+import { UserAction } from "@thecointech/utilities/User";
 
 import { AddSettlementDate, MarkComplete } from "./utils";
-import { log } from "@the-coin/logging";
+import { log } from "@thecointech/logging";
 
 
 export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {

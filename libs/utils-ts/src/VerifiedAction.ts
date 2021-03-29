@@ -1,4 +1,4 @@
-import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@the-coin/types";
+import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointech/types";
 import { Signer, ethers } from "ethers";
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 import { encrypt, GetHash } from "./Encrypt";
@@ -11,7 +11,7 @@ export async function BuildVerifiedAction(
   from: Signer,
   to: string,
   value: number,
-  fee: number) 
+  fee: number)
 : Promise<CertifiedTransfer>
 {
   const xfer = await BuildVerifiedXfer(from, to, value, fee);
@@ -31,7 +31,7 @@ export function GetSigner(sale: CertifiedTransfer) {
   if (instructionPacket)
   {
     const hash = GetHash(instructionPacket, transfer);
-    return ethers.utils.verifyMessage(hash, signature);  
+    return ethers.utils.verifyMessage(hash, signature);
   }
   return false;
 }

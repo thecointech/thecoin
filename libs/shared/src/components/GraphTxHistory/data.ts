@@ -1,6 +1,6 @@
-import { FXRate } from "@the-coin/pricing";
-import { Transaction } from "@the-coin/tx-blockchain";
-import { toHuman } from "@the-coin/utilities";
+import { FXRate } from "@thecointech/pricing";
+import { Transaction } from "@thecointech/tx-blockchain";
+import { toHuman } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit";
 import { IFxRates, weSellAt } from "../../containers/FxRate";
 import { DateTime } from "luxon";

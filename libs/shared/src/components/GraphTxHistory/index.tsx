@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
-import { Transaction } from '@the-coin/tx-blockchain';
+import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
 import { TooltipWidget, TxDatum } from "./types";
 import { Theme as NivoTheme } from "@nivo/core";

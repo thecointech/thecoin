@@ -7,10 +7,10 @@ const renderer = createRenderer();
 jest.mock('react-router', () => ({
   useLocation: () => { key: "TESTING"}
 }));
-jest.mock('@the-coin/shared/containers/AccountMap', () => ({
+jest.mock('@thecointech/shared/containers/AccountMap', () => ({
   useAccountMapStore: jest.fn(),
 }));
-jest.mock('@the-coin/shared/containers/FxRate/reducer', () => ({
+jest.mock('@thecointech/shared/containers/FxRate/reducer', () => ({
   useFxRatesStore: jest.fn(),
 }));
 jest.mock('../../Prismic/reducer', () => ({

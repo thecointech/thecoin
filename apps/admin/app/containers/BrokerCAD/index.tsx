@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import { UploadWallet, ReadFileData } from '@the-coin/shared/containers/UploadWallet';
+import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
+import { useAccountMap, useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
+import { UploadWallet, ReadFileData } from '@thecointech/shared/containers/UploadWallet';
 
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { Balance } from '@thecointech/shared/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';

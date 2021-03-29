@@ -1,7 +1,7 @@
 import { GetDepositsToProcess } from './service'
-import { ConfigStore } from '@the-coin/store';
-import { init, release } from '@the-coin/utilities/firestore/jestutils';
-import { PurchaseType } from '@the-coin/tx-firestore';
+import { ConfigStore } from '@thecointech/store';
+import { init, release } from '@thecointech/utilities/firestore/jestutils';
+import { PurchaseType } from '@thecointech/tx-firestore';
 
 jest.unmock("googleapis")
 

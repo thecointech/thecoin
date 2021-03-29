@@ -1,8 +1,8 @@
-import { GetContract } from "@the-coin/contract";
-import { RbcApi } from "@the-coin/rbcapi";
-import { FXRate, weBuyAt } from "@the-coin/shared/containers/FxRate";
-import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@the-coin/tx-reconciliation";
-import { toHuman } from "@the-coin/utilities";
+import { GetContract } from "@thecointech/contract";
+import { RbcApi } from "@thecointech/rbcapi";
+import { FXRate, weBuyAt } from "@thecointech/shared/containers/FxRate";
+import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@thecointech/tx-reconciliation";
+import { toHuman } from "@thecointech/utilities";
 import { Contract } from "ethers";
 import { BigNumber } from "ethers/utils";
 import { UserState } from "./types";

@@ -7,11 +7,11 @@ import bodyParser from "body-parser";
 import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
-import { DevLivePort, Service } from '@the-coin/utilities/ServiceAddresses';
+import { DevLivePort, Service } from '@thecointech/utilities/ServiceAddresses';
 import { init } from './init';
 import cors from 'cors';
 import { ValidateError } from "tsoa";
-import { log } from "@the-coin/logging";
+import { log } from "@thecointech/logging";
 
 const port = process.env.PORT ?? DevLivePort(Service.BROKER);
 

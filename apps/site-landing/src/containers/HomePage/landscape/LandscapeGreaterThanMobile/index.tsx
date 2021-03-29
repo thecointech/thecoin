@@ -13,7 +13,7 @@ import Birds from '../images/birds.svg';
 import Sun from '../images/sun.svg';
 import SunAura from '../images/sunAura.svg';
 import landscapeGreenPart from '../images/landscape.svg';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 
 export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode;  } ) => {

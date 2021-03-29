@@ -1,4 +1,4 @@
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 import { readFileSync } from 'fs';
 import { RbcStore } from './store';
 import { ApiAction } from './action';
@@ -6,7 +6,7 @@ import { ProgressCallback, isCredentials, AuthOptions } from './types';
 
 import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
-import { ETransferPacket } from '@the-coin/types';
+import { ETransferPacket } from '@thecointech/types';
 import { send } from './etransfer';
 
 export class RbcApi {

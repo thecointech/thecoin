@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/shared",
+  "name": "@thecointech/shared",
   "version": "0.1.0",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
@@ -33,18 +33,18 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/pricing": "*",
-    "@the-coin/types": "*",
-    "@the-coin/utilities": "*",
-    "@the-coin/store": "*",
-    "@the-coin/logging": "*",
-    "@the-coin/3id-connect": "*",
+    "@thecointech/pricing": "*",
+    "@thecointech/types": "*",
+    "@thecointech/utilities": "*",
+    "@thecointech/store": "*",
+    "@thecointech/logging": "*",
+    "@thecointech/3id-connect": "*",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",
     "immer-reducer": "^0.7.10",
     "react-dates": "^21.5.1",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "1.3.0",
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#4fdd14e8",
     "axios": "*",
     "@nivo/core": "^0.67.0",
     "@nivo/bar": "^0.67.0",
@@ -63,7 +63,7 @@
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
-    "@the-coin/types": "*",
+    "@thecointech/types": "*",
     "jest": "*"
   }
 }

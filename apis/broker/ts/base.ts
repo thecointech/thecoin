@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * @the-coin/broker-service
+ * @thecointech/broker-service
  * TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies
  *
  * The version of the OpenAPI document: 0.1.1

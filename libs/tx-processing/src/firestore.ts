@@ -1,5 +1,5 @@
-import { GetUsername, GetPassword } from "@the-coin/store/firestore";
-import { init } from "@the-coin/utilities/firestore";
+import { GetUsername, GetPassword } from "@thecointech/store/firestore";
+import { init } from "@thecointech/utilities/firestore";
 
 export async function signIn() {
   const username = await GetUsername();

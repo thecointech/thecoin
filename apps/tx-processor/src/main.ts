@@ -1,15 +1,15 @@
 import dotenv from 'dotenv'
 dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
 
-import { signIn } from "@the-coin/tx-processing";
-import { init as LogInit, log } from "@the-coin/logging";
-import { RbcStore, RbcApi } from "@the-coin/rbcapi";
-import { ConfigStore } from "@the-coin/store";
-import { getContract } from '@the-coin/utilities/Wallets';
-import { initBrowser } from "@the-coin/rbcapi/action";
-import type { TheCoin } from '@the-coin/contract';
-import { ProcessUnsettledDeposits } from "@the-coin/tx-processing/deposit/service";
-import { processUnsettledETransfers } from "@the-coin/tx-processing/etransfer/service";
+import { signIn } from "@thecointech/tx-processing";
+import { init as LogInit, log } from "@thecointech/logging";
+import { RbcStore, RbcApi } from "@thecointech/rbcapi";
+import { ConfigStore } from "@thecointech/store";
+import { getContract } from '@thecointech/accounts';
+import { initBrowser } from "@thecointech/rbcapi/action";
+import type { TheCoin } from '@thecointech/contract';
+import { ProcessUnsettledDeposits } from "@thecointech/tx-processing/deposit/service";
+import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
 
 async function initialize() {
 

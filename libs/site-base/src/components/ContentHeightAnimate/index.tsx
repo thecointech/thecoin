@@ -1,7 +1,7 @@
 import React from 'react';
 import AnimateHeight from 'react-animate-height';
 import { useSelector } from 'react-redux';
-import { LessVars } from '@the-coin/site-semantic-theme/variables';
+import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import { selectContent } from '../ContentHeightMeasure/selector';
 import styles from './styles.module.less';
 

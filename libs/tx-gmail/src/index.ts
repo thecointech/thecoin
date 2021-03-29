@@ -1,5 +1,5 @@
-import { log } from "@the-coin/logging";
-import { isPresent } from "@the-coin/utilities";
+import { log } from "@thecointech/logging";
+import { isPresent } from "@thecointech/utilities";
 import { fetchEmailIds, fetchEmails, initializeApi, setETransferLabel } from "./fetch";
 import { toDepositData } from "./convert";
 import { eTransferData } from "./types";

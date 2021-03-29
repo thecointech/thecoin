@@ -1,8 +1,8 @@
 
 import { Deposit } from "./types";
-import { log } from "@the-coin/logging";
-import { Transaction } from "@the-coin/tx-blockchain";
-import { TheCoin } from '@the-coin/contract';
+import { log } from "@thecointech/logging";
+import { Transaction } from "@thecointech/tx-blockchain";
+import { TheCoin } from '@thecointech/contract';
 import { DateTime } from "luxon";
 
 type EthersTx = {

@@ -1,5 +1,5 @@
 import Crypto from "crypto";
-import { EncryptedPacket, CertifiedTransferRequest } from "@the-coin/types";
+import { EncryptedPacket, CertifiedTransferRequest } from "@thecointech/types";
 import { ethers } from "ethers";
 
 //import ecKeyUtils from 'eckey-utils';

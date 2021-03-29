@@ -5,8 +5,8 @@ import { GetNewsletterApi } from 'api';
 import { useLocation } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
-import { SubscriptionDetails } from '@the-coin/broker-cad';
-import { log } from '@the-coin/logging';
+import { SubscriptionDetails } from '@thecointech/broker-cad';
+import { log } from '@thecointech/logging';
 
 export const FormSubscribed = () => {
   const id = useIdFromQuery();

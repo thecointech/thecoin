@@ -1,14 +1,14 @@
 {
-  "name": "@the-coin/pricing",
+  "name": "@thecointech/pricing",
   "version": "2.0.0",
-  "description": "OpenAPI client for @the-coin/pricing",
+  "description": "OpenAPI client for @thecointech/pricing",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
     "axios",
     "typescript",
     "openapi-client",
     "openapi-generator",
-    "@the-coin/pricing"
+    "@thecointech/pricing"
   ],
   "license": "Unlicense",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@types/node": "^12.11.5",

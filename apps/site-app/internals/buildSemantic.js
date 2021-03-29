@@ -1,1 +1,1 @@
-require("@the-coin/site-semantic-theme/build");
+require("@thecointech/site-semantic-theme/build");

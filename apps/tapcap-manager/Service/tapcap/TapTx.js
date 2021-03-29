@@ -2,13 +2,13 @@
 
 const Ethers = require('ethers')
 
-const { ParseSignedMessage } = require('@the-coin/utilities/TheContract');
+const { ParseSignedMessage } = require('@thecointech/utilities/TheContract');
 const { datastore, GetLatestKey } = require('./Datastore');
 const { GetWallet } = require('./Wallet');
 
 
 exports.TapTx = function(request, signedRecord, storeName) {
-	
+
 	return new Promise((resolve, reject) => {
 		const [supplierAddress, supplierRecord] = ParseSignedMessage(signedRecord);
 		const signedTCRequest = supplierRecord.signedRequest;
@@ -19,13 +19,13 @@ exports.TapTx = function(request, signedRecord, storeName) {
 		// Verify the token is legitimate
 		if (myAddress != GetWallet().address)
 			throw("Invalid token signature.  Please contact support");
-	
+
 		// The root of the tx, all valid data is stored under this key
 		const txKey = datastore.key(["User", clientAddress, "tx", token.nonce]);
 		// We also store the record of who is making the update (user or supplier)
 		const txStoreKey = datastore.key(["User", clientAddress, "tx", token.nonce, "as", storeName]);
 		const latestKey = GetLatestKey(clientAddress);
-	
+
 		const txtimestamp = tcClientRequest.timestamp;
 		const transaction = datastore.transaction();
 		transaction
@@ -43,10 +43,10 @@ exports.TapTx = function(request, signedRecord, storeName) {
 					// TODO: Graceful handling of duplicated nonce
 					throw("Tx nonce duplicate")
 				}
-	
+
 				let {timestamp, balance, nonce} = latest;
 				const change = coinCharge;
-	
+
 				// The balance may be updated by the client, possibly
 				// even before this fn is called.  If so, we do not want
 				// to re-apply it.  Only modify balance if it has not been
@@ -59,7 +59,7 @@ exports.TapTx = function(request, signedRecord, storeName) {
 					// TODO: AvailExceeded handling
 					if (balance < 0)
 						throw("Tap capacity exceeded!");
-					
+
 					transaction.save([
 						{
 							key: txKey,
@@ -89,7 +89,7 @@ exports.TapTx = function(request, signedRecord, storeName) {
 					if (tx.toAddress != supplierAddress)
 						throw(`${storeName} Tx toAddress different to existing record`);
 				}
-	
+
 				// Store the tx data
 				transaction.save([
 					{

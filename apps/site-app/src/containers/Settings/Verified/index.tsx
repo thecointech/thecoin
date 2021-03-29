@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './styles.module.less';
 import notverifiedImg from './images/verified_not_icon.svg';
 import verifiedImg from './images/verified_yes_icon.svg';
-import { ButtonSecondary } from '@the-coin/site-base/components/Buttons';
+import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -27,11 +27,11 @@ type PropsVerified={
 }
 
 export const AccountVerified = (props: PropsVerified) => {
-    
+
     const getData = (verified: boolean) => verified
     ? { icon: verifiedImg, title: titleVerified, description: descriptionVerified, button: <br /> }
     : { icon: notverifiedImg, title: titleNotVerified, description: descriptionNotVerified, button: <ButtonSecondary><FormattedMessage {...buttonNotVerified} /></ButtonSecondary>}
-  
+
     const { icon, title, description, button } = getData(props.verified)
 
     return (

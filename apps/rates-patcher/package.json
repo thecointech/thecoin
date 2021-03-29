@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/datastore": "^5.1.0",
-    "@the-coin/utilities": "*"
+    "@thecointech/utilities": "*"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development && yarn build && yarn start",

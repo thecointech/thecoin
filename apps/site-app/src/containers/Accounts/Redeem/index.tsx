@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { BuildVerifiedSale } from '@the-coin/utilities/VerifiedSale';
-import { weBuyAt } from '@the-coin/shared/containers/FxRate/reducer';
-import { useFxRates } from '@the-coin/shared/containers/FxRate/selectors';
+import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
+import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
 import { GetStatusApi, GetETransferApi } from 'api'
-import { ETransferPacket } from '@the-coin/types';
+import { ETransferPacket } from '@thecointech/types';
 import { useState } from 'react';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap/selectors';
+
 
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
@@ -185,18 +186,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={event => setEmail(event.target.value)}
+        setEmail={(event: { target: { value: React.SetStateAction<string>; }; }) => setEmail(event.target.value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={event => setQuestion(event.target.value)}
+        setQuestion={(event: { target: { value: React.SetStateAction<string>; }; }) => setQuestion(event.target.value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={event => setAnswer(event.target.value)}
+        setAnswer={(event: { target: { value: React.SetStateAction<string>; }; }) => setAnswer(event.target.value)}
     
         messageLabel={messageLabel}
-        setMessage={event => setMessage(event.target.value)}
+        setMessage={(event: { target: { value: React.SetStateAction<string | undefined>; }; }) => setMessage(event.target.value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}

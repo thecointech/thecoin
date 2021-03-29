@@ -1,5 +1,5 @@
-import { NewsletterApi } from '@the-coin/broker-cad';
-import { ServiceAddress, Service } from '@the-coin/utilities/ServiceAddresses';
+import { NewsletterApi } from '@thecointech/broker-cad';
+import { ServiceAddress, Service } from '@thecointech/utilities/ServiceAddresses';
 import { MockNewsletterApi } from './mock/newsletter';
 
 const BrokerCADAddress = ServiceAddress(Service.BROKER);
@@ -10,4 +10,4 @@ const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 
 export const GetNewsletterApi = () =>
   NoDatabase
     ? new MockNewsletterApi()
-    : new NewsletterApi(undefined, `${BrokerCADAddress}/api/v1`);
+    : new NewsletterApi(undefined, BrokerCADAddress);

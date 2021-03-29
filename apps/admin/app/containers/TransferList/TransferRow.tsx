@@ -1,5 +1,5 @@
 import React from "react";
-import { toHuman } from "@the-coin/utilities";
+import { toHuman } from "@thecointech/utilities";
 import { Accordion, Icon, Button } from "semantic-ui-react";
 import { TransferRenderer, TransactionData } from "./types";
 

@@ -1,11 +1,11 @@
-import { CertifiedTransferRecord, Timestamp } from "@the-coin/utilities/firestore";
+import { CertifiedTransferRecord, Timestamp } from "@thecointech/utilities/firestore";
 import { withFiat } from "../base/utils";
 import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "../base";
 import { getActionPrivateKey } from "../base/key";
 import { OfflineFxRates } from "../base/fxrates";
-import { log } from "@the-coin/logging";
-import { RbcApi } from "@the-coin/rbcapi";
-import { ETransferPacket } from "@the-coin/types";
+import { log } from "@thecointech/logging";
+import { RbcApi } from "@thecointech/rbcapi";
+import { ETransferPacket } from "@thecointech/types";
 
 export async function processUnsettledETransfers(api: RbcApi): Promise<CertifiedTransferRecord[]> {
 
