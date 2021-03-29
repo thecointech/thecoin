@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Form, Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
-
+import { useIntl } from 'react-intl';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
@@ -15,18 +12,12 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { AccountState } from '@thecointech/shared/containers/Account/types';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 
-type MyProps = {
-  account: AccountState;
-};
-
-type Props = MyProps & FxRatesState;
-
 const description = { id:"app.accounts.transfert.description",
-                defaultMessage:"Transfer directly to another account with TheCoin.",
-                description:"Description for the make a payment page / transfert tab" };
+                      defaultMessage:"Transfer directly to another account with TheCoin.",
+                      description:"Description for the make a payment page / transfert tab" };
 const transferOutHeader = { id:"app.accounts.transfert.transferHeader",
-                defaultMessage:"Processing Transfer...",
-                description:"transferHeader for the make a payment page / transfert tab" };
+                            defaultMessage:"Processing Transfer...",
+                            description:"transferHeader for the make a payment page / transfert tab" };
 const step1 = { id:"app.accounts.transfert.step1",
                 defaultMessage:"Step 1 of 3: Checking transfer availability...",
                 description:"Message for step1 for the make a payment page / transfert tab" };
@@ -37,52 +28,47 @@ const step3 = { id:"app.accounts.transfert.step3",
                 defaultMessage:"Step 3 of 3: Waiting for the transfer to be accepted\n(check progress {link})...",
                 description:"Message for step3 for the make a payment page / transfert tab" };
 const transferOutProgress = { id:"app.accounts.transfert.transferOutProgress",
-                defaultMessage:"Please wait, we are sending your order to our servers...",
-                description:"transferOutProgress for the make a payment page / transfert tab" };
+                              defaultMessage:"Please wait, we are sending your order to our servers...",
+                              description:"transferOutProgress for the make a payment page / transfert tab" };
+const destinationAddress = { id:"app.accounts.transfert.destinationAddress",
+                            defaultMessage:"Destination Address",
+                            description:"destinationAddress for the make a payment page / transfert tab" };
 
 const button = { id:"app.accounts.transfert.form.button",
                 defaultMessage:"Transfert",
                 description:"Label for the form the make a payment page / transfert tab" };
 
-const initialState = {
-  coinTransfer: null as number | null,
-  toAddress: '',
-  forceValidate: false,
+export const Transfer = () => {
 
-  transferInProgress: false,
-  transferMessage: transferOutProgress,
-  transferValues: undefined as any,
-  percentComplete: 0,
-  doCancel: false,
-};
+  const [coinTransfer, setCoinTransfer] = useState(null as number | null);
+  const [toAddress, setToAddress] = useState('');
+  const [forceValidate] = useState(false);
 
-type StateType = Readonly<typeof initialState>;
+  const [transferInProgress, setTransferInProgress] = useState(false);
+  const [transferMessage, setTransferMessage] = useState(transferOutProgress);
+  const [transferValues, setTransferValues] = useState(undefined as any);
+  const [percentComplete, setPercentComplete] = useState(0);
+  const [doCancel, setDoCancel] = useState(false);
 
-class TransferClass extends React.PureComponent<Props, StateType> {
-  state = initialState;
-
-  constructor(props: Props) {
-    super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onAccountValue = this.onAccountValue.bind(this);
-    this.onCancelTransfer = this.onCancelTransfer.bind(this);
-  }
-
-  async doTransfer() {
+  const account = useActiveAccount();
+  const { rates } = useFxRates();
+  const rate = weBuyAt(rates);
+  const intl = useIntl();
+  
+  const doTransfer = async () => { 
     // Init messages
-    this.setState({ transferMessage: step1, percentComplete: 0.0 });
+    setTransferMessage(step1);
+    setPercentComplete(0.0);
     // First, get the brokers fee
     const statusApi = GetStatusApi(); //undefined, "http://localhost:8080"
     var status = await statusApi.status();
     // Check out if we have the right values
     if (!status.data.certifiedFee) return false;
 
-    if (this.state.doCancel) return false;
+    if (doCancel) return false;
 
     // Get our variables
-    const { coinTransfer, toAddress } = this.state;
-    const { signer, contract } = this.props.account;
+    const { signer, contract } = account!;
     if (coinTransfer === null || !signer || !contract) return false;
 
     // To transfer, we construct & sign a message that
@@ -95,10 +81,11 @@ class TransferClass extends React.PureComponent<Props, StateType> {
     );
     const transferApi = GetDirectTransferApi();
 
-    if (this.state.doCancel) return false;
+    if (doCancel) return false;
 
     // Send the command to the server
-    this.setState({ transferMessage: step2, percentComplete: 0.25 });
+    setTransferMessage(step2);
+    setPercentComplete(0.25);
     const response = await transferApi.transfer(transferCommand);
 
     console.log(`TxResponse: ${response.data.message}`);
@@ -109,114 +96,73 @@ class TransferClass extends React.PureComponent<Props, StateType> {
 
     // Wait on the given hash
     const transferValues = {
-      link: (
-        <a
-          target="_blank"
-          href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}
-        >
-          here
-        </a>
-      ),
+      link: (<a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}> here </a>),
     };
-    this.setState({
-      transferMessage: step3,
-      percentComplete: 0.5,
-      transferValues,
-    });
+    setTransferMessage(step3);
+    setPercentComplete(0.5);
+    setTransferValues(transferValues);
+
     const tx = await contract.provider.getTransaction(response.data.txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
       response.data.txHash,
     );
-    console.log(
-      `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
-    );
-    this.setState({ percentComplete: 1 });
+    console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,);
+    setPercentComplete(1);
     return true;
   }
 
-  async onSubmit(e: React.MouseEvent<HTMLElement>) {
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
     if (e) e.preventDefault();
-    this.setState({
-      doCancel: false,
-      transferValues: undefined,
-      transferInProgress: true,
-    });
+
+    setDoCancel(false);
+    setTransferValues(undefined);
+    setTransferInProgress(true);
+
     try {
-      const result = await this.doTransfer();
+      const result = await doTransfer();
       if (!result) alert('Transfer Failure');
       else alert('Transfer Success');
     } catch (err) {
       console.error(err);
       alert('Transfer Error');
     }
-    this.setState({ percentComplete: 1, transferInProgress: false });
+    setPercentComplete(1);
+    setTransferInProgress(false);
   }
 
-  onValueChange(value: number) {
-    this.setState({
-      coinTransfer: value,
-    });
+  function onValueChange(value: number) {
+    setCoinTransfer(value);
   }
 
   // Validate our inputs
-  onAccountValue(value: string) {
-    this.setState({
-      toAddress: value,
-    });
+  function onAccountValue(value: string) {
+    setToAddress(value);
   }
 
-  onCancelTransfer() {
-    this.setState({ doCancel: true });
+  function onCancelTransfer() {
+    setDoCancel(true);
   }
-  render() {
-    const { account, rates } = this.props;
-    const rate = weBuyAt(rates);
-    const {
-      coinTransfer,
-      transferInProgress,
-      transferMessage,
-      forceValidate,
-      percentComplete,
-      transferValues,
-    } = this.state;
-    return (
-      <React.Fragment>
-        <Form>
-          <Header as="h5">
-            <Header.Subheader>
-              <FormattedMessage {...description} />
-            </Header.Subheader>
-          </Header>
+  return (
+    <TransferWidget 
+      description={description} 
+      onValueChange={onValueChange} 
+      account={account!}
+      coinTransfer={coinTransfer}
+      rate={rate}
 
-          <DualFxInput
-            onChange={this.onValueChange}
-            asCoin={true}
-            maxValue={account.balance}
-            value={coinTransfer}
-            fxRate={rate}
-          />
-          <UxAddress
-            uxChange={this.onAccountValue}
-            forceValidate={forceValidate}
-            placeholder="Destination Address"
-          />
-          <ButtonTertiary onClick={this.onSubmit}>
-              <FormattedMessage {...button} />
-          </ButtonTertiary>
-        </Form>
-        <ModalOperation
-          cancelCallback={this.onCancelTransfer}
-          isOpen={transferInProgress}
-          header={transferOutHeader}
-          progressMessage={transferMessage}
-          progressPercent={percentComplete}
-          messageValues={transferValues}
-        />
-      </React.Fragment>
-    );
-  }
+      onAccountValue={onAccountValue}
+      forceValidate={forceValidate}
+      onSubmit={onSubmit}
+      button={button}
+      destinationAddress={intl.formatMessage(destinationAddress)}
+
+      onCancelTransfer={onCancelTransfer}
+      transferInProgress={transferInProgress}
+      transferOutHeader={transferOutHeader}
+      transferMessage={transferMessage}
+      percentComplete={percentComplete}
+      transferValues={transferValues} />
+  );
 }
-
-export const Transfer = connect(selectFxRate)(TransferClass);
