@@ -9,7 +9,7 @@ export const COIN_EXP = 1000000;
 //
 // TODO: This is hard-coded at our current contract,
 // and will cause issues on all non-production environments
-export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
+export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
 const getAbi = async () => {
 	const TheCoinSpec = await import('./contracts/TheCoin.json');
