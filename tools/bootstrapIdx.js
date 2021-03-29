@@ -1,5 +1,5 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, 'debug.env')});
+require('dotenv').config({ path: path.join(__dirname, '..', 'environments', 'debug.env')});
 
 const { writeFile, readFile } = require('fs').promises
 const Ceramic = require('@ceramicnetwork/http-client').default

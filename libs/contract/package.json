@@ -54,7 +54,6 @@
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "truffle": "^5.1.67",
-    "ethers": "^4.0.46",
     "jest": "*"
   }
 }
