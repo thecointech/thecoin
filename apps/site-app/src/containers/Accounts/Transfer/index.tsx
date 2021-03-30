@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { NormalizeAddress } from '@thecointech/utilities';
+import { NormalizeAddress } from '@thecointech/utilities/';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
