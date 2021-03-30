@@ -176,7 +176,6 @@ export const Redeem = () => {
     setDoCancel(true);
   }
 
-
   return (
       <RedeemWidget
         coinToSell={coinToSell}
@@ -186,18 +185,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(event: { target: { value: React.SetStateAction<string>; }; }) => setEmail(event.target.value)}
+        setEmail={(event: string) => setEmail(event)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(event: { target: { value: React.SetStateAction<string>; }; }) => setQuestion(event.target.value)}
+        setQuestion={(event: string) => setQuestion(event)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(event: { target: { value: React.SetStateAction<string>; }; }) => setAnswer(event.target.value)}
+        setAnswer={(event: string) => setAnswer(event)}
     
         messageLabel={messageLabel}
-        setMessage={(event: { target: { value: React.SetStateAction<string | undefined>; }; }) => setMessage(event.target.value)}
+        setMessage={(event: string) => setMessage(event)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}
