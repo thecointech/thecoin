@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Form, Header, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
-import { DualFxInput } from '@the-coin/shared/components/DualFxInput';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
-import { ModalOperation } from '@the-coin/shared/containers/ModalOperation';
-import { ButtonTertiary } from '@the-coin/site-base/components/Buttons';
-import { ChangeCB } from '@the-coin/shared/components/UxInput/types';
-import { AccountState } from '@the-coin/shared/containers/Account';
+import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
+import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
+import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
+import { ChangeCB } from '@thecointech/shared/components/UxInput/types';
+import { AccountState } from '@thecointech/shared/containers/Account';
 
 type VisualProps={
   description:MessageDescriptor,

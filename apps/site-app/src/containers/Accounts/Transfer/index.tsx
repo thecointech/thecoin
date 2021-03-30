@@ -3,14 +3,11 @@ import { useIntl } from 'react-intl';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
-import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
-import { UxAddress } from '@thecointech/shared/components/UxAddress';
-import { FxRatesState } from '@thecointech/shared/containers/FxRate/types';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
-import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { AccountState } from '@thecointech/shared/containers/Account/types';
-import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
+import { useState } from 'react';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useFxRates } from '@thecointech/shared/containers/FxRate';
+import { TransferWidget } from './TransferWidget';
 
 const description = { id:"app.accounts.transfert.description",
                       defaultMessage:"Transfer directly to another account with TheCoin.",
