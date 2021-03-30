@@ -1,25 +1,15 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Form, Grid, Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
-
+import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
-import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
-import { FxRatesState } from '@thecointech/shared/containers/FxRate/types';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
-import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
-import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { AccountState } from '@thecointech/shared/containers/Account/types';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@thecointech/types';
-import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import interact from './images/icon_payment_big.svg';
+import { useState } from 'react';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useFxRates } from '@thecointech/shared/containers/FxRate';
+import { RedeemWidget } from './RedeemWidget';
 
-type MyProps = {
-  account: AccountState;
-};
 
-type Props = MyProps & FxRatesState;
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
@@ -30,19 +20,29 @@ const successMessage = { id:"app.accounts.redeem.successMessage",
 const description = { id:"app.accounts.redeem.description",
                 defaultMessage:"Email money to anyone with an interac e-Transfer.",
                 description:"Description for the make a payment page / etransfert tab" };
-const email = { id:"app.accounts.redeem.form.email",
+const emailLabel = { id:"app.accounts.redeem.form.email",
                 defaultMessage:"Recipient email",
                 description:"Label for the form the make a payment page / etransfert tab" };
-const question = { id:"app.accounts.redeem.form.question",
+const emailDesc = { id:"app.accounts.redeem.form.emailDesc",
+                defaultMessage:"An email address to send the e-Transfer to",
+                description:"Label for the form the make a payment page / etransfert tab" };
+const questionLabel = { id:"app.accounts.redeem.form.question",
                 defaultMessage:"Security question",
                 description:"Label for the form the make a payment page / etransfert tab" };
-const answer= { id:"app.accounts.redeem.form.answer",
+const answerLabel = { id:"app.accounts.redeem.form.answer",
                 defaultMessage:"Security answer",
                 description:"Label for the form the make a payment page / etransfert tab" };
-const message= { id:"app.accounts.redeem.form.message",
+const messageLabel = { id:"app.accounts.redeem.form.message",
                 defaultMessage:"Message (optional)",
                 description:"Label for the form the make a payment page / etransfert tab" };
+const messageDesc = { id:"app.accounts.redeem.form.messageDesc",
+                defaultMessage:"An optional message to the recipient. Should not include the security answer",
+                description:"Label for the form the make a payment page / etransfert tab" };
 
+const noSpecialCaractDesc = { id:"app.accounts.redeem.form.noSpecialCaractDesc",
+                defaultMessage:"No numbers or special characters ",
+                description:"Label for the form the make a payment page / etransfert tab" };
+                               
 const step1= { id:"app.accounts.redeem.step1",
                 defaultMessage:"Step 1 of 3: Checking order availability..." };
 const step2= { id:"app.accounts.redeem.step2",
@@ -60,27 +60,30 @@ const button = { id:"app.accounts.redeem.form.button",
                 description:"For the button in the make a payment page / etransfert tab" };
 
 
-const initialState = {
-  coinToSell: null as number | null,
-  email: '',
-  question: '',
-  answer: '',
-  message: undefined as string | undefined,
-  transferInProgress: false,
-  transferMessage: transferOutProgress,
-  transferValues: undefined as any,
-  percentComplete: 0,
-  doCancel: false,
-};
+export const Redeem = () => {
 
-type StateType = Readonly<typeof initialState>;
+  const [coinToSell, setCoinToSell] = useState(null as number | null);
+  const [email, setEmail] = useState('');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [message, setMessage] = useState(undefined as string | undefined);
 
-class RedeemClass extends React.PureComponent<Props, StateType> {
-  state = initialState;
+  const [transferInProgress, setTransferInProgress] = useState(false);
+  const [transferMessage, setTransferMessage] = useState(transferOutProgress);
+  const [transferValues, setTransferValues] = useState(undefined as any);
+  const [percentComplete, setPercentComplete] = useState(0);
+  const [doCancel, setDoCancel] = useState(false);
 
-  async doSale() {
+  const account = useActiveAccount();
+  const { rates } = useFxRates();
+  const rate = weBuyAt(rates);
+
+  const intl = useIntl();
+
+  const doSale = async () => { 
     // Init messages
-    this.setState({ transferMessage: {...step1}, percentComplete: 0.0 });
+    setTransferMessage(step1);
+    setPercentComplete(0.0);
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
@@ -88,11 +91,10 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     // Check out if we have the right values
     if (!data.certifiedFee) return false;
 
-    if (this.state.doCancel) return false;
+    if (doCancel) return false;
 
     // Get our variables
-    const { coinToSell, email, question, answer, message } = this.state;
-    const { signer, contract } = this.props.account;
+    const { signer, contract } = account!;
     if (coinToSell === null || !signer || !contract)
       return false;
 
@@ -110,11 +112,12 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     );
     const eTransferApi = GetETransferApi();
 
-    if (this.state.doCancel)
+    if (doCancel)
       return false;
 
     // Send the command to the server
-    this.setState({ transferMessage: {...step2}, percentComplete: 0.25 });
+    setTransferMessage(step2);
+    setPercentComplete(0.25);
     const response = await eTransferApi.eTransfer(command);
 
     if (!response.data?.txHash) {
@@ -125,19 +128,12 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     // Wait on the given hash
     const transferValues = {
       link: (
-        <a
-          target="_blank"
-          href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}
-        >
-          here
-        </a>
-      ),
+        <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}> here </a>),
     };
-    this.setState({
-      transferMessage: step3,
-      percentComplete: 0.5,
-      transferValues,
-    });
+    setTransferMessage(step3);
+    setPercentComplete(0.5);
+    setTransferValues(transferValues);
+
     const tx = await contract.provider.getTransaction(response.data.txHash);
     // Wait at least 2 confirmations
     tx.wait(2);
@@ -147,19 +143,19 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
     console.log(
       `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
     );
-    this.setState({ percentComplete: 1 });
+    setPercentComplete(1);
     return true;
   }
 
-  onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
+    
     if (e) e.preventDefault();
-    this.setState({
-      doCancel: false,
-      transferValues: undefined,
-      transferInProgress: true,
-    });
+    setDoCancel(false);
+    setTransferValues(undefined);
+    setTransferInProgress(true);
+
     try {
-      const results = await this.doSale();
+      const results = await doSale();
       if (!results) {
         alert(<FormattedMessage {...errorMessage} />);
       } else
@@ -168,101 +164,50 @@ class RedeemClass extends React.PureComponent<Props, StateType> {
       console.error(e);
       alert(e);
     }
-    this.setState({ doCancel: false, transferInProgress: false });
+    setDoCancel(false);
+    setTransferInProgress(false);
   }
 
-  onValueChange = (value: number) => {
-    this.setState({
-      coinToSell: value,
-    });
+  const onValueChange = (value: number) => { 
+    setCoinToSell(value);
   }
 
-  onInputChanged = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value, name } = event.currentTarget;
-    this.setState({
-      [name]: value,
-    } as any);
+  const onCancelTransfer = () => { 
+    setDoCancel(true);
   }
 
-  onCancelTransfer = () => this.setState({ doCancel: true });
-
-  render() {
-    const { account, rates } = this.props;
-    const rate = weBuyAt(rates);
-    const {
-      coinToSell,
-      transferInProgress,
-      transferValues,
-      transferMessage,
-      percentComplete,
-    } = this.state;
-    return (
-      <React.Fragment>
-        <Form>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Header as="h5">
-                  <Header.Subheader>
-                    <FormattedMessage {...description} />
-                  </Header.Subheader>
-                </Header>
-              </Grid.Column>
-              <Grid.Column floated='right' width={4}>
-                <img src={interact} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-
-          <DualFxInput
-            onChange={this.onValueChange}
-            asCoin={true}
-            maxValue={account.balance}
-            value={coinToSell}
-            fxRate={rate}
-          />
-          <Form.Input
-            className={"borderTop borderBottom"}
-            label={<FormattedMessage {...email} />}
-            name="email"
-            onChange={this.onInputChanged}
-            placeholder="An email address to send the e-Transfer to"
-          />
-          <Form.Input
-            className={"half left"}
-            label={<FormattedMessage {...question} />}
-            name="question"
-            onChange={this.onInputChanged}
-            placeholder="No numbers or special characters"
-          />
-          <Form.Input
-            className={"half right"}
-            label={<FormattedMessage {...answer} />}
-            name="answer"
-            onChange={this.onInputChanged}
-            placeholder="No spaces or special characters"
-          />
-          <Form.Input
-            className={"borderTop"}
-            label={<FormattedMessage {...message} />}
-            name="message"
-            type="text"
-            onChange={this.onInputChanged}
-            placeholder="An optional message to the recipient.  Should not include the security answer"
-          />
-          <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={this.onSubmit}><FormattedMessage {...button} /></ButtonTertiary>
-        </Form>
-        <ModalOperation
-          cancelCallback={this.onCancelTransfer}
-          isOpen={transferInProgress}
-          header={transferOutHeader}
-          progressMessage={transferMessage}
-          progressPercent={percentComplete}
-          messageValues={transferValues}
-        />
-      </React.Fragment>
-    );
-  }
+  return (
+      <RedeemWidget
+        coinToSell={coinToSell}
+        description={description}
+        onValueChange={onValueChange}
+        account={account}
+        rate={rate}
+    
+        emailLabel={emailLabel}
+        setEmail={(event: string) => setEmail(event)}
+        emailDes={intl.formatMessage(emailDesc)}
+    
+        questionLabel={questionLabel}
+        setQuestion={(event: string) => setQuestion(event)}
+        noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
+    
+        answerLabel={answerLabel}
+        setAnswer={(event: string) => setAnswer(event)}
+    
+        messageLabel={messageLabel}
+        setMessage={(event: string) => setMessage(event)}
+        messageDesc={intl.formatMessage(messageDesc)}
+  
+        button={button}
+        onSubmit={onSubmit}
+      
+        cancelCallback={onCancelTransfer}
+        transferInProgress={transferInProgress}
+        transferOutHeader={transferOutHeader}
+        transferMessage={transferMessage}
+        percentComplete={percentComplete}
+        transferValues={transferValues}
+      />
+  );
 }
-
-export const Redeem = connect(selectFxRate)(RedeemClass);
