@@ -19,6 +19,7 @@ export class ReferralsController extends Controller {
   @Response('405', 'Server Error')
   async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
     try {
+      // TODO: This fn should _not_ throw
       const referrer = await GetReferrerData(referrerId);
       return {
         success: !!referrer

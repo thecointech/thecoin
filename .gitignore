@@ -20,6 +20,7 @@ geth
 **/.DS_Store
 **/src/semantic/semantic
 **/semantic.css
+**/*secret*
 
 **/ts/.openapi-generator
 

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/email",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "The Coin: auto-mailing library.  Not for external user really",
   "keywords": [
     "TheCoin",

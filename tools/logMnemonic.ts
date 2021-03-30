@@ -8,7 +8,7 @@ import './setenv';
 // Only used for truffle to create it's provider
 async function readMnemonic(name: string) {
   const encrypted = readFileSync(process.env[`WALLET_${name}_PATH`]);
-  const decrypted = await Wallet.fromEncryptedJson(encrypted.toString(), process.env[`WALLET_${name}_KEY`]);
+  const decrypted = await Wallet.fromEncryptedJson(encrypted.toString(), process.env[`WALLET_${name}_PWD`]);
   console.log(`${name}\t Address: ${decrypted.address} - ${decrypted.privateKey} - ${decrypted.mnemonic}`);
   return decrypted.mnemonic;
 }

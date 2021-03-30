@@ -50,7 +50,7 @@ Environments:
     System-wide deployment to projects in GAE.  Automatically
     deployed on merge to 'main'.  Live data with live $$$.
     Used to do final sanity check before enabling live traffic.
-    Identical code to what runs live.  Restricted access.
+    Identical code to what runs live.  Restricted(?s) access.
     * full data persistence
     * live system, identical to prod
     * production accounts
@@ -91,7 +91,6 @@ All service calls are made through mock-able API's.
 ### Configuration.
 
 All configuration values are set with from a .env file located in "Environments".
-*TODO*: Remove config variables from code (eg - getWallet);
 
 Deploy triggered by lerna run deploy:{env}:{settings}.  This limits deployments to
 just the projects with a defined deploy:{env}:{settings} script.  For most deployments,
