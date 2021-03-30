@@ -16,18 +16,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: any) => void,
+    setEmail: (event: string) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: any) => void,
+    setQuestion: (event: string) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: any) => void,
+    setAnswer: (event: string) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: any) => void,
+    setMessage: (event: string) => void,
     messageDesc: string,
 
     button: MessageDescriptor,
