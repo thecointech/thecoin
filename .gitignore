@@ -25,7 +25,7 @@ geth
 **/ts/.openapi-generator
 
 libs/contract/.openzeppelin/unknown-1337.json
-environments/prod.test.env
+environments/prodtest.env
 environments/prodtest
 
 libs/contract/src/deployed/*-fork.json
