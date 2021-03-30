@@ -1,5 +1,5 @@
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from '@thecointech/types';
-import { Controller, Body, Route, Get, Put, Response, Tags } from 'tsoa';
+import { Controller, Body, Route, Get, Put, Response, Tags } from '@tsoa/runtime';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
 import { BoolResponse } from '../types';
 

@@ -1,7 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "libs\\contract"
+			"path": "libs/contract"
+		},
+		{
+			"path": "libs/accounts"
 		}
 	],
 	"settings": {

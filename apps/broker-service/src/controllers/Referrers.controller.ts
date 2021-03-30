@@ -1,4 +1,4 @@
-import { Controller, Get, Route, Query, Body, Post, Response, Tags } from 'tsoa';
+import { Controller, Get, Route, Query, Body, Post, Response, Tags } from '@tsoa/runtime';
 import { GetReferrerData, CreateReferree } from '@thecointech/utilities/Referrals';
 import { Timestamp } from '@thecointech/utilities/firestore';
 import { BoolResponse } from '../types';
@@ -19,6 +19,7 @@ export class ReferralsController extends Controller {
   @Response('405', 'Server Error')
   async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
     try {
+      // TODO: This fn should _not_ throw
       const referrer = await GetReferrerData(referrerId);
       return {
         success: !!referrer

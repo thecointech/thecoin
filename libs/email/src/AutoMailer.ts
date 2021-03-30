@@ -2,11 +2,11 @@ import { Email } from "node-mailjet";
 import { log } from '@thecointech/logging';
 
 async function connect() {
-  const secret = process.env.TC_SENDGRID_API_KEY;
+  const secret = process.env.MAILJET_API_KEY;
   if (secret == null)
     throw new Error('Cannot create MailJet without setting MAILJET_API_KEY')
   const mailjet = (await import('node-mailjet')).default;
-  return mailjet.connect("7ae2f3b83905fca0cb618a5027409495", secret)
+  return mailjet.connect("05f0b484b1388fd842431a1efddde228", secret)
 }
 
 async function SendMail(subject: string, message: string) {

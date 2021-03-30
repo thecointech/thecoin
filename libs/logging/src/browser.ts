@@ -9,7 +9,7 @@ export function init(name: string): BunyanLogger {
       {
         level: process.env.NODE_ENV === "development"
           ? TRACE
-          : process.env.SETTINGS === "staging"
+          : process.env.SETTINGS === "testing"
             ? DEBUG
             : WARN,
         stream: new ConsoleFormattedStream()

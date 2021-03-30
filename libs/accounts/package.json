@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/accounts",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "The Coin: centralized access for built-in accounts.  Not for external use",
   "keywords": ["TheCoin"],
   "author": "Stephen Taylor <stephen@thecoin.io>",
@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/account"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
@@ -26,12 +29,13 @@
   ],
   "main": "./build/index_node.js",
   "browser": "./build/index_web.js",
-  "exports": "./build/index_node.js",
+  "exports": {
+    ".": "./build/index_node.js",
+    "./encrypted": "./build/encrypted.js"
+  },
   "dependencies": {
-    "ethers": "^4.0.46",
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/logging": "*",
-    "@thecointech/contract": "*"
+    "@thecointech/logging": "*"
   },
   "devDependencies": {
     "jest": "*"

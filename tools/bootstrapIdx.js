@@ -1,5 +1,5 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', 'environments', 'debug.env')});
+require('./setenv');
 
 const { writeFile, readFile } = require('fs').promises
 const Ceramic = require('@ceramicnetwork/http-client').default
@@ -8,9 +8,9 @@ const { Ed25519Provider } = require('key-did-provider-ed25519')
 const fromString = require('uint8arrays/from-string');
 
 const IdxFolder = path.join(__dirname, '..', 'libs', 'shared', 'src', 'containers', 'IDX');
-const CERAMIC_URL = 'http://localhost:7007'
+
 // Connect to the local Ceramic node
-const ceramic = new Ceramic(CERAMIC_URL)
+const ceramic = new Ceramic(process.env.CERAMIC_URL)
 
 async function getJweSchema() {
   // Publish the two schemas

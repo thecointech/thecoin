@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": ["./migrations/types"]
+  },
   "include": ["**/*.ts", "**/*.json"],
 }

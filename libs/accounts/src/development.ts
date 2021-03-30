@@ -1,12 +1,13 @@
-import { AccountId, AccountName } from '@thecointech/contract';
-import { getDevLiveProvider } from '@thecointech/contract/provider';
-import { Wallet } from 'ethers/wallet';
+
+import { Wallet, providers } from 'ethers';
+import { AccountId, AccountName } from './names';
 
 // In dev:live environment, pull signers from
 // local emulator for our system accounts
 async function loadDevLiveSigner(name: AccountName) {
-  const provider = getDevLiveProvider();
-  return provider.getSigner(AccountId[name])
+  const provider = new providers.JsonRpcProvider(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+  const id = AccountId[name];
+  return provider.getSigner(id)
 }
 
 export async function connectAccount(name: AccountName) {

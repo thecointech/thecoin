@@ -1,5 +1,5 @@
 import { current } from '../status';
-import { Controller, Get, Route, Response, Tags } from 'tsoa';
+import { Controller, Get, Route, Response, Tags } from '@tsoa/runtime';
 
 @Route('status')
 @Tags('Status')

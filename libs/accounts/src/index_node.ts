@@ -1,6 +1,7 @@
-import { AccountName } from '@thecointech/contract';
 import { ProgressCallback } from 'ethers/utils';
-import { baseContract, baseSigner } from './index_base';
+import { AccountName } from './names';
+import { baseSigner } from './index_base';
+export * from './names';
 
 // If running on GAE, check in secrets manager
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
@@ -15,13 +16,10 @@ async function loadSigner(name: AccountName, callback?: ProgressCallback) {
     return loadWallet(name);
   }
   else {
-    const { loadAndDecrypt } = await import('./encrypted');
-    return loadAndDecrypt(name, callback);
+    const { loadFromEnv } = await import('./encrypted');
+    return loadFromEnv(name, callback);
   }
 }
 
 export const getSigner = (name: AccountName, callback?: ProgressCallback) =>
   baseSigner(name, () => loadSigner(name, callback));
-
-export const getContract = (name: AccountName, callback?: ProgressCallback) =>
-  baseContract(name, () => loadSigner(name, callback));

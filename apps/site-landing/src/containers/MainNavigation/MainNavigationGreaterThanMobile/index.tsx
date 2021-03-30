@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 
 import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
@@ -53,12 +53,12 @@ export const MainNavigationGreaterThanMobile = () => {
                 </HeaderLink>
                 <Menu.Menu position='right'>
                   <Menu.Item>
-                    <Link to="/" className={sharedStyles.loginLink}>
+                    <Link to={`${process.env.URL_SITE_APP}`} className={sharedStyles.loginLink}>
                       <FormattedMessage {...loginLink} />
                     </Link>
                   </Menu.Item>
                   <Menu.Item>
-                    <ButtonPrimary as={NavLink} to="/addAccount" >
+                    <ButtonPrimary as={"a"} href={`${process.env.URL_SITE_APP}/addAccount`} >
                         <FormattedMessage {...titleButton} />
                     </ButtonPrimary>
                   </Menu.Item>

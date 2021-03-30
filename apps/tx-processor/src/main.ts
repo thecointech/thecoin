@@ -5,9 +5,9 @@ import { signIn } from "@thecointech/tx-processing";
 import { init as LogInit, log } from "@thecointech/logging";
 import { RbcStore, RbcApi } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
-import { getContract } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/accounts';
 import { initBrowser } from "@thecointech/rbcapi/action";
-import type { TheCoin } from '@thecointech/contract';
+import { ConnectContract, TheCoin } from '@thecointech/contract';
 import { ProcessUnsettledDeposits } from "@thecointech/tx-processing/deposit/service";
 import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
 
@@ -19,7 +19,8 @@ async function initialize() {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  const contract = await getContract('BrokerCAD');
+  const signer = await getSigner('BrokerCAD');
+  const contract = await ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }

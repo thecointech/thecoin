@@ -12,22 +12,20 @@
 # below:
 .git
 .gitignore
-.swagger-codegen-ignore
-.swagger-codegen/
-.vs/
-.vscode/
 
 # Node.js dependencies:
 node_modules/
 
-# No unit test
-test/
-coverage/
-**/__mocks__/
-
-# No source or build artifacts (only build)
+# do not upload ts files
 src/
 **/*.d.ts
 .buildinfo
 tsconfig.json
+tsconfig.build.json
+
+coverage/
+.vscode/
 jest.config.js
+
+
+tsoa.json

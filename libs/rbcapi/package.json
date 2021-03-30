@@ -41,9 +41,11 @@
     "@thecointech/logging": "*",
     "@thecointech/store": "*",
     "puppeteer": "^2.1.1",
-    "axios": "*",
-    "luxon": "*",
     "csvtojson": "^2.0.10"
+  },
+  "peerDependencies": {
+    "axios": "*",
+    "luxon": "*"
   },
   "devDependencies": {
     "@thecointech/types": "*",

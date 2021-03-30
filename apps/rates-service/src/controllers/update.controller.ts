@@ -1,4 +1,4 @@
-import { Controller, Get, Route, Response } from 'tsoa';
+import { Controller, Get, Route, Response } from '@tsoa/runtime';
 import { updateRates }  from '../internals/rates';
 
 @Route('doUpdate')

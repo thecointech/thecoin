@@ -33,9 +33,10 @@ Environments:
     * inter-service calls, no mocking
     * emulated ethereum connection
     * Deployment: Base level yarn script to start all dependencies
- - prod:staging
-    *env: NODE_ENV=production, SETTINGS: staging*
-    System-wide deployment to sandbox projects in GAE.  All projects are
+ - prod:test
+    *env: NODE_ENV=production, SETTINGS: testing*
+    System-wide deployment to sandbox projects in GAE.
+    Testnet deployment for contract.  All projects are
     automatically updated on successful merge to dev.  Read/write access
     for all devs.
     * permanent data persistence
@@ -49,7 +50,7 @@ Environments:
     System-wide deployment to projects in GAE.  Automatically
     deployed on merge to 'main'.  Live data with live $$$.
     Used to do final sanity check before enabling live traffic.
-    Identical code to what runs live.  Restricted access.
+    Identical code to what runs live.  Restricted(?s) access.
     * full data persistence
     * live system, identical to prod
     * production accounts
@@ -86,3 +87,13 @@ What do we need to do;
 All service calls are made through mock-able API's.
  - ethereum calls in ethers
  - all internal API calls
+
+### Configuration.
+
+All configuration values are set with from a .env file located in "Environments".
+
+Deploy triggered by lerna run deploy:{env}:{settings}.  This limits deployments to
+just the projects with a defined deploy:{env}:{settings} script.  For most deployments,
+this should be limited to setting env vars and running a standard deploy command
+
+

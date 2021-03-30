@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
 
 import { Stickers } from '../stickers';
 
@@ -28,7 +27,7 @@ export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode;
                   {Props.mainDescription}
                 </Header.Subheader>
               </Header>
-              <ButtonPrimary className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" size='large'>
+              <ButtonPrimary className={`${styles.overTheLandscape} x6spaceBefore` } as="a" href={`${process.env.URL_SITE_APP}`} size='large'>
                 {Props.mainButton}
               </ButtonPrimary>
           </Grid.Column>

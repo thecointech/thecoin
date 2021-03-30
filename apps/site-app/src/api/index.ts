@@ -6,12 +6,10 @@ import {
   SecureApi,
   ETransferApi,
 } from '@thecointech/broker-cad';
-import { ServiceAddress, Service } from '@thecointech/utilities/ServiceAddresses';
 import { MockReferrersApi } from './mock/referrers';
 import { MockSecureApi } from './mock/secure';
 
-const BrokerCADAddress = ServiceAddress(Service.BROKER);
-
+const BrokerCADAddress = process.env.URL_SERVICE_BROKER;
 const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development')
                     && process.env.SETTINGS !== 'live';
 
