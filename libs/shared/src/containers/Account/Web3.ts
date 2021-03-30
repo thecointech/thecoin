@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { TheSigner, SignerIdent } from '../../SignerIdent'
-import { GetContract } from '@the-coin/contract';
+import { GetContract } from '@thecointech/contract';
 import { getWeb3Type } from '../../utils/detection';
 
 async function AddTheCoin(ethereum: any) {

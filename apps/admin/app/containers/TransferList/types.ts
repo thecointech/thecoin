@@ -1,6 +1,6 @@
-import { BaseTransactionRecord } from "@the-coin/tx-firestore";
-import { eTransferData } from "@the-coin/tx-gmail";
-import { InstructionPacket } from "@the-coin/utilities/src/VerifiedAction";
+import { BaseTransactionRecord } from "@thecointech/tx-firestore";
+import { eTransferData } from "@thecointech/tx-gmail";
+import { InstructionPacket } from "@thecointech/utilities/src/VerifiedAction";
 
 export type TransactionData = {
   record: BaseTransactionRecord,

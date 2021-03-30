@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
-import { GoogleWalletItem } from '@the-coin/types';
+import { GoogleWalletItem } from '@thecointech/types';
 import { FormattedMessage } from 'react-intl';
 import { GetSecureApi } from 'api';
 import { AccountList } from './AccountList';
@@ -15,7 +15,7 @@ import dropbox from "./images/dropbox.svg";
 import styles from './styles.module.less';
 import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",

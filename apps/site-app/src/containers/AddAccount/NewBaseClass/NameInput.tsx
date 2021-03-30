@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { UxInput } from "@the-coin/shared/components/UxInput";
+import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
-import { useAccountMap, AccountDict } from "@the-coin/shared/containers/AccountMap";
+import { useAccountMap, AccountDict } from "@thecointech/shared/containers/AccountMap";
 
 
 type Props = {
@@ -57,7 +57,7 @@ const validateName = (value: string, accounts: AccountDict) : State =>  {
         isValid: false,
         message: messages.errorNameTooShort,
       }
-      : allAccounts.find(account => account.name === value) 
+      : allAccounts.find(account => account.name === value)
         ? {
           isValid: false,
           message: messages.errorNameDuplicate,

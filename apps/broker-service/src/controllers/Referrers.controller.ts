@@ -1,8 +1,8 @@
 import { Controller, Get, Route, Query, Body, Post, Response, Tags } from 'tsoa';
-import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
-import { Timestamp } from '@the-coin/utilities/firestore';
+import { GetReferrerData, CreateReferree } from '@thecointech/utilities/Referrals';
+import { Timestamp } from '@thecointech/utilities/firestore';
 import { BoolResponse } from '../types';
-import { NewAccountReferal } from '@the-coin/types';
+import { NewAccountReferal } from '@thecointech/types';
 
 @Route('referrals')
 @Tags('Referrals')

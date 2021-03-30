@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import styles from './styles.module.less';
 import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 const aboveTheTitle = { id:"app.account.generate.aboveTheTitle",
                         defaultMessage:"WHY ARE WE DIFFERRENT?",

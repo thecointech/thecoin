@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/site-app",
+  "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
   "version": "2.0.0",
@@ -51,9 +51,9 @@
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@the-coin/shared": "*",
-    "@the-coin/site-base": "*",
-    "@the-coin/utilities": "*",
+    "@thecointech/shared": "*",
+    "@thecointech/site-base": "*",
+    "@thecointech/utilities": "*",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",

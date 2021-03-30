@@ -6,17 +6,16 @@ const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const less_loaders = require('@the-coin/site-semantic-theme/webpack.less')
+const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 
 const projectRoot = process.cwd();
 
 module.exports = options => ({
-  node: options.node,
   mode: options.mode,
   entry: options.entry,
 
   // see https://github.com/trentm/node-bunyan#webpack
-  externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support'],
+  externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
 
   output: Object.assign(
     {
@@ -143,11 +142,11 @@ module.exports = options => ({
     mainFields: ['browser', 'jsnext:main', 'main'],
     plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
     alias: {
-      "@the-coin/utilities": "@the-coin/utilities/build",
-      "@the-coin/contract": "@the-coin/contract/build",
-      "@the-coin/shared": "@the-coin/shared/build",
-      "@the-coin/site-semantic-theme": "@the-coin/site-semantic-theme/build",
-      "@the-coin/site-base": "@the-coin/site-base/build",
+      "@thecointech/utilities": "@thecointech/utilities/build",
+      "@thecointech/contract": "@thecointech/contract/build",
+      "@thecointech/shared": "@thecointech/shared/build",
+      "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
+      "@thecointech/site-base": "@thecointech/site-base/build",
     },
   },
   devtool: options.devtool,

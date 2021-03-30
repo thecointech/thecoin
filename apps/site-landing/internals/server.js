@@ -1,5 +1,5 @@
 
-const server = require("@the-coin/site-base/internal/server");
+const server = require("@thecointech/site-base/internal/server");
 const path = require("path");
 const fs = require("fs")
 

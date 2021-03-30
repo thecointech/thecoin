@@ -1,9 +1,9 @@
-import { eTransferData } from "@the-coin/tx-gmail";
-import { UserAction } from "@the-coin/utilities/User";
+import { eTransferData } from "@thecointech/tx-gmail";
+import { UserAction } from "@thecointech/utilities/User";
 import { DateTime } from "luxon";
-import { DbRecords, BaseTransactionRecord } from "@the-coin/tx-firestore";
-import { Transaction } from "@the-coin/tx-blockchain/";
-import { ObsoleteRecords } from '@the-coin/tx-firestore/obsolete';
+import { DbRecords, BaseTransactionRecord } from "@thecointech/tx-firestore";
+import { Transaction } from "@thecointech/tx-blockchain/";
+import { ObsoleteRecords } from '@thecointech/tx-firestore/obsolete';
 
 ////////////////////////////////
 // input types

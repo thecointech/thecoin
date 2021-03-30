@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
-import {configureAppStore} from '@the-coin/shared/build/store';
+import {configureAppStore} from '@thecointech/shared/build/store';
 
 const store = configureAppStore(undefined);
 

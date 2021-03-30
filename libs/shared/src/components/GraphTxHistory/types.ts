@@ -1,5 +1,5 @@
 import { Datum, Point, PointTooltipProps} from "@nivo/line";
-import { Transaction } from "@the-coin/tx-blockchain";
+import { Transaction } from "@thecointech/tx-blockchain";
 //import { FXRate } from "containers/FxRate/types";
 
 export interface TxDatum extends Datum {

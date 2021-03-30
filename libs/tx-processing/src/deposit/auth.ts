@@ -1,7 +1,7 @@
 import { shell } from 'electron';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { ConfigStore } from '@the-coin/store';
+import { ConfigStore } from '@thecointech/store';
 import { readFileSync } from 'fs';
 
 // If modifying these scopes, delete token.json.

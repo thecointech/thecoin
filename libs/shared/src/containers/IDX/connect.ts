@@ -1,4 +1,4 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '@the-coin/3id-connect'
+import { ThreeIdConnect, EthereumAuthProvider } from '@thecointech/3id-connect'
 import { Signer } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays'

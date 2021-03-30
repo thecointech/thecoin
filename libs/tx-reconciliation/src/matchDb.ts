@@ -1,10 +1,10 @@
-import { BaseTransactionRecord, DepositRecord, PurchaseType } from "@the-coin/tx-firestore";
-import { UserAction } from "@the-coin/utilities/User";
+import { BaseTransactionRecord, DepositRecord, PurchaseType } from "@thecointech/tx-firestore";
+import { UserAction } from "@thecointech/utilities/User";
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
-import { Obsolete } from "@the-coin/tx-firestore/obsolete";
+import { Obsolete } from "@thecointech/tx-firestore/obsolete";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
 

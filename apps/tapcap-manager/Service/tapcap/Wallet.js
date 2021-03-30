@@ -1,5 +1,5 @@
 'use strict';
-const ConnectWallet = require('@the-coin/utilities/TheContract').ConnectWallet;
+const ConnectWallet = require('@thecointech/utilities/TheContract').ConnectWallet;
 const ethers = require('ethers');
 const encrypted = require('./TapCapManagerWallet');
 let key = require('./secret.json').key;

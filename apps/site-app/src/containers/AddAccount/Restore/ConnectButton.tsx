@@ -1,6 +1,6 @@
 import { Form } from "semantic-ui-react"
 import React, { useCallback } from "react"
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 type Props = {
   disabled: boolean,

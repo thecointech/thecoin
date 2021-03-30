@@ -1,7 +1,7 @@
 import { Wallet } from "ethers";
 import { AccountState, DefaultAccountValues } from "../containers/Account/types";
 import { TheSigner, AnySigner } from "../SignerIdent";
-import { NormalizeAddress } from "@the-coin/utilities";
+import { NormalizeAddress } from "@thecointech/utilities";
 
 // NOTE: These prefixes must be all equal length
 enum Prefix {

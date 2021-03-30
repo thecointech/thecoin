@@ -4,7 +4,7 @@ import { Signer } from 'ethers';
 import { Ceramic } from './ceramic';
 import config from './config.json';
 import { getProvider } from './connect';
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 
 const aliases = {
   details: config.definitions.privateDetails

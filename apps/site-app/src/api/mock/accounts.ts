@@ -1,8 +1,8 @@
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
-import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
-import { getSigner } from '@the-coin/utilities/blockchain';
-import { TheSigner } from '@the-coin/shared/SignerIdent';
+import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@thecointech/shared/containers/AccountMap";
+import { TheSigner } from '@thecointech/shared/SignerIdent';
+import accounts from '@thecointech/accounts';
 
 export const wallets = [
   {
@@ -55,7 +55,8 @@ function addDevWallet() {
 addDevWallet();
 
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
-  const client1 = await getSigner("client1")
+
+  const client1 = await accounts.getSigner("client1")
   const address = await client1.getAddress();
   const theSigner = client1 as TheSigner;
 

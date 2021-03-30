@@ -12,18 +12,18 @@ import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 import MainNavigation from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
-import { PageSidebar } from '@the-coin/shared/containers/PageSidebar';
-import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
+import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
+import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
 import {MainRouter} from 'containers/MainRouter';
-import { useAccountMapStore } from '@the-coin/shared/containers/AccountMap';
-import { useFxRatesStore } from '@the-coin/shared/containers/FxRate/reducer';
-import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
+import { useAccountMapStore } from '@thecointech/shared/containers/AccountMap';
+import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
+import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
 import '../../semantic/semantic.css';
-//import '@the-coin/site-semantic-theme/semantic.less';
+//import '@thecointech/site-semantic-theme/semantic.less';
 
 import styles from './styles.module.less';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';

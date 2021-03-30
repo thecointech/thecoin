@@ -1,8 +1,8 @@
-import { GetContract } from "@the-coin/contract";
+import { GetContract } from "@thecointech/contract";
 import { Wallet } from "ethers";
 import { BuildVerifiedSale } from "./VerifiedSale";
 import { GetSigner } from "./VerifiedAction";
-import { ETransferPacket } from "@the-coin/types";
+import { ETransferPacket } from "@thecointech/types";
 
 test('Can build verified sale', async () => {
 

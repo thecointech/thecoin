@@ -6,7 +6,7 @@ import { Wallet } from "ethers/wallet";
 import { existsSync, readFileSync } from "fs";
 
 // or from file system if name is a path.
-export function loadEncrypted(name: string) {
+function loadEncrypted(name: string) {
 
   let wallet = existsSync(name)
     ? readFileSync(name, 'utf8')
@@ -26,9 +26,9 @@ export function loadEncrypted(name: string) {
 
 function getKey(name: string) {
   const key = process.env[`THECOIN_${name}_KEY`];
-  if (!key)
+  if (!key) {
     throw new Error(`Could not load wallet key: ${name}`);
-
+  }
   return key;
 }
 

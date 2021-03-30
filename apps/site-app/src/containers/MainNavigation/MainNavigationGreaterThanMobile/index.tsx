@@ -4,8 +4,8 @@ import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { FormattedMessage } from 'react-intl';
 
 import { Link } from 'react-router-dom';
-import HeaderLink from '@the-coin/site-base/components/HeaderLink';
-import { LanguageSwitcher} from '@the-coin/site-base/containers/LanguageSwitcher';
+import HeaderLink from '@thecointech/site-base/components/HeaderLink';
+import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';

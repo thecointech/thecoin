@@ -1,9 +1,9 @@
 import { GetWallet } from "./Wallet";
-import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
+import { BuildVerifiedXfer } from "@thecointech/utilities/VerifiedTransfer";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
-import { GetContract } from "@the-coin/contract";
-import { init, describe } from '@the-coin/utilities/firestore/jestutils';
+import { GetContract } from "@thecointech/contract";
+import { init, describe } from '@thecointech/utilities/firestore/jestutils';
 import {current} from '../status';
 
 beforeAll(async () => {

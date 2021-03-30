@@ -1,4 +1,4 @@
-import { log } from "@the-coin/logging";
+import { log } from "@thecointech/logging";
 
 export enum Service {
 

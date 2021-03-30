@@ -1,4 +1,4 @@
-import { GetFirestore } from "@the-coin/utilities/firestore";
+import { GetFirestore } from "@thecointech/utilities/firestore";
 //
 // Functions relating to users
 //

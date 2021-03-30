@@ -1,10 +1,10 @@
-import { GetFirestore, Timestamp } from "@the-coin/utilities/firestore";
+import { GetFirestore, Timestamp } from "@thecointech/utilities/firestore";
 import { RateKey, RateType } from "./types";
-import { IsDebug } from "@the-coin/utilities/IsDebug";
-import { log } from "@the-coin/logging";
+import { IsDebug } from "@thecointech/utilities/IsDebug";
+import { log } from "@thecointech/logging";
 // Our data is stored in native Timestamp
 // for easy human-comprehension reading the DB through webUI
-import { DocumentData } from '@the-coin/types';
+import { DocumentData } from '@thecointech/types';
 
 //
 // All functions connecting to the DB occur in this file

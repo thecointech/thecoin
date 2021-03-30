@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/site-base",
+  "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
   "version": "2.0.0",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "build": "run-p build:*",
-    "build:src": "yarn tsc -b tsconfig.build.json",
+    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
@@ -32,9 +32,9 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@the-coin/shared": "*",
-    "@the-coin/utilities": "*",
-    "@the-coin/site-semantic-theme": "*",
+    "@thecointech/shared": "*",
+    "@thecointech/utilities": "*",
+    "@thecointech/site-semantic-theme": "*",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",

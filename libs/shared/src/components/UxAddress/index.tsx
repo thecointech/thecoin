@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IsValidAddress } from '@the-coin/utilities';
+import { IsValidAddress } from '@thecointech/utilities';
 import messages from './messages';
 import { UxInput } from '../UxInput';
 import { ChangeCB } from '../UxInput/types';

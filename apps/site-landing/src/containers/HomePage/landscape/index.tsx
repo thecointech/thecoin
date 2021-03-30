@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { GreaterThanMobileSegment, MobileSegment } from '@the-coin/shared/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
 import { LandscapeGreaterThanMobile } from './LandscapeGreaterThanMobile';
 import { LandscapeMobile } from './LandscapeMobile';
 

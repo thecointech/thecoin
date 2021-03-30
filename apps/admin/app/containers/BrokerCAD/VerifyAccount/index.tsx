@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
-import { UxAddress } from '@the-coin/shared/components/UxAddress';
+import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import messages from './messages'
-import { NormalizeAddress } from '@the-coin/utilities';
-import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@the-coin/utilities/Referrals';
-import { SetUserVerified } from '@the-coin/utilities/User';
-import { TheSigner } from '@the-coin/shared/SignerIdent';
-import { Timestamp } from '@the-coin/utilities/firestore';
+import { NormalizeAddress } from '@thecointech/utilities';
+import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCode } from '@thecointech/utilities/Referrals';
+import { SetUserVerified } from '@thecointech/utilities/User';
+import { TheSigner } from '@thecointech/shared/SignerIdent';
+import { Timestamp } from '@thecointech/utilities/firestore';
 
 
 interface OwnProps {

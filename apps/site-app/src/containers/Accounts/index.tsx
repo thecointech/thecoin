@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { Account, RouterPath } from '@the-coin/shared/containers/Account';
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { Account, RouterPath } from '@thecointech/shared/containers/Account';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';

@@ -1,5 +1,5 @@
 {
-  "name": "@the-coin/contract",
+  "name": "@thecointech/contract",
   "version": "0.1.1",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [
@@ -54,7 +54,6 @@
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "truffle": "^5.1.67",
-    "ethers": "^4.0.46",
     "jest": "*"
   }
 }

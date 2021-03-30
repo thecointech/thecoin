@@ -1,5 +1,5 @@
-import { ReferralsApi, NewAccountReferal } from "@the-coin/broker-cad";
-import { buildResponse, delay } from "@the-coin/site-base/api/mock/utils";
+import { ReferralsApi, NewAccountReferal } from "@thecointech/broker-cad";
+import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
 
 export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
 {

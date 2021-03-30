@@ -1,4 +1,4 @@
-import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
@@ -8,8 +8,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 
 import { Grid, Header, Tab } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
 
 
 const title = { id:"app.makepayments.title",
@@ -33,11 +32,10 @@ const templates = { id:"app.makepayments.tabs.templates",
 
 export const MakePayments = (routerProps:AccountPageProps) => {
   const intl = useIntl();
-  const account = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfer}), render: () => <AppContainerForTabs><Redeem account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfer}), render: () => <AppContainerForTabs><Redeem /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (

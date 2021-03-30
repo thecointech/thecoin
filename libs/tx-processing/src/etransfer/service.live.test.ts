@@ -1,5 +1,5 @@
-import { ConfigStore } from '@the-coin/store';
-import { init, release } from '@the-coin/utilities/firestore/jestutils';
+import { ConfigStore } from '@thecointech/store';
+import { init, release } from '@thecointech/utilities/firestore/jestutils';
 import { fetchActionsToComplete, getInstructions } from './service';
 import { signIn } from '../firestore';
 
