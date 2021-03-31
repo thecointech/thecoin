@@ -7,16 +7,16 @@ import { AccountName } from './names';
 export async function getSecret(name: string) {
   const client = new SecretManagerServiceClient();
   const [accessResponse] = await client.accessSecretVersion({
-    name: `projects/906091868238/secrets/${name}/versions/latest`,
+    name: `projects/${process.env.GOOGLE_CLOUD_PROJECT}/secrets/${name}/versions/latest`,
   });
 
   return accessResponse.payload?.data?.toString();
 }
 
 export async function loadWallet(name: AccountName) {
-  const privatekey = await getSecret(`WALLET_${name}_MNEMONIC`);
+  const privatekey = await getSecret(`WALLET_${name}_KEY`);
   if (!privatekey)
     throw new Error(`Wallet ${name} not found in secrets`);
 
-  return Wallet.fromMnemonic(privatekey);
+  return new Wallet(privatekey);
 }

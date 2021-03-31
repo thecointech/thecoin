@@ -26,7 +26,7 @@
     "deploy": "run-s build deploy:pre deploy:prod:test",
     "deploy:pre": "cpx ../../yarn.lock .",
     "deploy:config": "gcloud config configurations activate thecoincollab",
-    "preprod:test:deploy": "run-p build:src deploy:config",
+    "preprod:test:deploy": "run-s build:src deploy:config",
     "prod:test:deploy": "gcloud app deploy --project tccc-testing app.testing.yaml",
     "prod:test": "yarn dev:run dotenv_config_path=../../environments/prodtest.env",
     "clean": "rimraf ./build && rimraf ./src/api",

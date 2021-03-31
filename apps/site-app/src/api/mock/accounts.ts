@@ -27,6 +27,8 @@ export const wallets = [
 
 let firstRun = true;
 export function useInjectedSigners() {
+  console.log("Injecting Testing Accounts");
+
   const mapApi = useAccountMapApi();
   // On first run, inject new signers.We can't
   // use useEffect here because it will delay

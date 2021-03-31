@@ -135,6 +135,8 @@ module.exports = options => ({
       SETTINGS: JSON.stringify(process.env.SETTINGS),
       CONFIG_NAME: JSON.stringify(process.env.CONFIG_NAME),
 
+      INFURA_PROJECT_ID: JSON.stringify(process.env.INFURA_PROJECT_ID),
+
       URL_SITE_APP: JSON.stringify(process.env.URL_SITE_APP),
       URL_SITE_LANDING: JSON.stringify(process.env.URL_SITE_LANDING),
       URL_SERVICE_BROKER: JSON.stringify(process.env.URL_SERVICE_BROKER),
