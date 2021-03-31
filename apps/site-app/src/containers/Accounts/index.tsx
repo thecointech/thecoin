@@ -7,29 +7,43 @@ import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
+import { useIntl } from 'react-intl';
+
+const home = { id:"app.accounts.sidebar.home",
+                defaultMessage:"Overview",
+                description:"Title for the Home entry in the menu"};
+const transferin = { id:"app.accounts.sidebar.transferin",
+                  defaultMessage:"Top up balance",
+                  description:"Title for the Top up balance entry in the menu"};
+const makepayments = {  id:"app.accounts.sidebar.makepayments",
+                    defaultMessage:"Make payments",
+                    description:"Title for the Make payments entry in the menu"};
+const settings = {  id:"app.accounts.sidebar.settings",
+                    defaultMessage:"Settings",
+                    description:"Title for the Settings entry in the menu"};
 
 const AccountRoutes: RouterPath[] = [
   {
-    name: 'Home',
+    name: (useIntl()).formatMessage(home),
     urlFragment: '/',
     creator: (routerProps: AccountPageProps) => ((props) => <HomePage {...props} {...routerProps} />),
     exact: true,
     icon: "home",
   },
   {
-    name: 'Top up balance',
+    name: (useIntl()).formatMessage(transferin),
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Topup {...props} {...routerProps} />),
     icon: "arrow circle up",
   },
   {
-    name: 'Make payments',
+    name: (useIntl()).formatMessage(makepayments),
     urlFragment: 'makepayments',
     creator: (routerProps: AccountPageProps) => (() => <MakePayments {...routerProps} />),
     icon: "arrow circle right",
   },
   {
-    name: 'Settings',
+    name: (useIntl()).formatMessage(settings),
     urlFragment: 'settings',
     creator: () => (() => <Settings />),
     icon: "setting",
