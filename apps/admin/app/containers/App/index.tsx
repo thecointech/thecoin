@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader/root'
 import { Routes } from './Routes';
 import { Container, Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
-import { useAccountMapStore } from '@thecointech/shared//containers/AccountMap';
+import { useAccountMapStore } from '@thecointech/shared/containers/AccountMap';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
