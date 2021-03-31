@@ -21,6 +21,9 @@ const makepayments = {  id:"app.accounts.sidebar.makepayments",
 const settings = {  id:"app.accounts.sidebar.settings",
                     defaultMessage:"Settings",
                     description:"Title for the Settings entry in the menu"};
+const contact = {  id:"app.accounts.sidebar.contact",
+                    defaultMessage:"Contact Us",
+                    description:"Title for the Contact Us entry in the menu"};
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -47,6 +50,12 @@ const AccountRoutes: RouterPath[] = [
     urlFragment: 'settings',
     creator: () => (() => <Settings />),
     icon: "setting",
+  },
+  {
+    name: (useIntl()).formatMessage(contact),
+    urlFragment: 'contact',
+    creator: () => (() => <Settings />),
+    icon: "envelope outline",
   },
 ];
 
