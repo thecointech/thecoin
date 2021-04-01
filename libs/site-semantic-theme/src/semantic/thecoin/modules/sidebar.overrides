@@ -109,7 +109,7 @@
 
   @media only screen and (max-width: 1500px) and (min-width: 1431px ) {
     .ui.sidebar{
-      margin-left: 10vw !important;
+      margin-left: 7vw !important;
     }
   }
 

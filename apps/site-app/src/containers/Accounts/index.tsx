@@ -7,7 +7,6 @@ import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
-import { useIntl } from 'react-intl';
 
 const home = { id:"app.accounts.sidebar.home",
                 defaultMessage:"Overview",
@@ -24,40 +23,45 @@ const settings = {  id:"app.accounts.sidebar.settings",
 const contact = {  id:"app.accounts.sidebar.contact",
                     defaultMessage:"Contact Us",
                     description:"Title for the Contact Us entry in the menu"};
+const profile = {  id:"app.accounts.sidebar.profile",
+                    defaultMessage:"Profile",
+                    description:"Title for the Profile entry in the menu"};
 
 const AccountRoutes: RouterPath[] = [
   {
-    name: (useIntl()).formatMessage(home),
+    name: home,
     urlFragment: '/',
     creator: (routerProps: AccountPageProps) => ((props) => <HomePage {...props} {...routerProps} />),
     exact: true,
     icon: "home",
   },
   {
-    name: (useIntl()).formatMessage(transferin),
+    name: transferin,
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Topup {...props} {...routerProps} />),
     icon: "arrow circle up",
   },
   {
-    name: (useIntl()).formatMessage(makepayments),
+    name: makepayments,
     urlFragment: 'makepayments',
     creator: (routerProps: AccountPageProps) => (() => <MakePayments {...routerProps} />),
     icon: "arrow circle right",
   },
   {
-    name: (useIntl()).formatMessage(settings),
+    name: settings,
     urlFragment: 'settings',
     creator: () => (() => <Settings />),
     icon: "setting",
   },
   {
-    name: (useIntl()).formatMessage(contact),
+    name: contact,
     urlFragment: 'contact',
     creator: () => (() => <Settings />),
     icon: "envelope outline",
   },
 ];
+
+
 
 export const Accounts = (props: RouteComponentProps) => {
   const activeAccount = useActiveAccount();
@@ -68,7 +72,7 @@ export const Accounts = (props: RouteComponentProps) => {
     if (!AccountRoutes[0].header){
       AccountRoutes.unshift(
         {
-          name: 'Profile',
+          name: profile,
           header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg",
                     primaryDescription: activeAccount?.name ?? "Unknown",
                     secondaryDescription: "Description2" },

@@ -13,11 +13,11 @@ import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
-  name: string;
+  name: MessageDescriptor;
   urlFragment?: string;
   creator?: PageCreator;
   exact?: boolean;
@@ -142,11 +142,11 @@ const generateSubItems = (
 ): SidebarMenuItem[] => {
   const { accountMap, account, url } = props;
   if (account.signer) {
-
+    const intl = useIntl();
     const menuItems = accountMap.map(item => (
       {
         link: {
-          name: item.name,
+          name: intl.formatMessage(item.name),
           to: BuildLink(item, url)  ? BuildLink(item, url)  : false,
           icon: item.icon,
           header: item.header,

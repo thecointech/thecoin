@@ -84,7 +84,7 @@ class UxInputClass extends React.Component<Props, State> {
         success={successTag}
         error={errorTag}
         hidden={!showMessage}
-        attached="bottom"
+        attached="top"
         className={`
           ${styles.ui}
           ${styles.attached}
@@ -102,8 +102,8 @@ class UxInputClass extends React.Component<Props, State> {
         <Label>
           <FormattedMessage {...this.props.intlLabel} />
         </Label>
-        {inputElement}
         {messageElement}
+        {inputElement}
         {footer}
       </Form.Field>
     );
