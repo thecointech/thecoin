@@ -50,36 +50,36 @@
 
 @media only screen and (min-width: 6001px) {
     .ui.sidebar{
-      margin-left: 21vw !important;
+      margin-left: 48vw !important;
     }
   }
 
   @media only screen and (max-width: 6000px) and (min-width: 5001px)  {
     .ui.sidebar{
-      margin-left: 20vw !important;
+      margin-left: 55vw !important;
     }
   }
  @media only screen and (max-width: 5000px) and (min-width: 4001px)  {
     .ui.sidebar{
-      margin-left: 19vw !important;
+      margin-left: 46vw !important;
     }
   }
 
  @media only screen and (max-width: 4000px) and (min-width: 3001px)  {
     .ui.sidebar{
-      margin-left: 18vw !important;
+      margin-left: 30vw !important;
     }
   }
 
  @media only screen and (max-width: 3000px) and (min-width: 2001px)  {
     .ui.sidebar{
-      margin-left: 17vw !important;
+      margin-left: 25vw !important;
     }
   }
 
  @media only screen and (max-width: 2000px) and (min-width: 1901px) {
     .ui.sidebar{
-      margin-left: 16vw !important;
+      margin-left: 19vw !important;
     }
   }
 
