@@ -7,6 +7,8 @@ import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
+import { getAvatarsLink } from '@thecointech/shared/components/Avatars';
+
 
 const home = { id:"app.accounts.sidebar.home",
                 defaultMessage:"Overview",
@@ -68,18 +70,20 @@ export const Accounts = (props: RouteComponentProps) => {
   const { match } = props;
   const { url } = match;
 
+  
+
   if (activeAccount){
     if (!AccountRoutes[0].header){
       AccountRoutes.unshift(
         {
           name: profile,
-          header: { avatar: "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg",
+          header: { avatar: getAvatarsLink("14"),
                     primaryDescription: activeAccount?.name ?? "Unknown",
                     secondaryDescription: "Description2" },
       });
     } else {
       AccountRoutes[0].header = {
-        avatar: "http://cdn.akc.org/content/hero/pyr_pup_hero.jpg",
+        avatar: getAvatarsLink("14"),
         primaryDescription: activeAccount?.name ?? "Unknown",
         secondaryDescription: "Description2" };
     }

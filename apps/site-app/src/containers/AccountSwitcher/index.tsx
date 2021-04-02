@@ -3,7 +3,7 @@ import { Dropdown, DropdownItemProps } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { accountMapApi, useAccounts } from "@thecointech/shared/containers/AccountMap";
-import avatar from './images/avatars/16user_avatar16.svg';
+import { getAvatarsLink } from '@thecointech/shared/components/Avatars';
 
 import { AccountState } from "@thecointech/shared/containers/Account/types";
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -46,7 +46,7 @@ export const AccountSwitcher = () => {
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
   const trigger = activeAccount
-      ? <span><img src={avatar} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
+      ? <span><img src={getAvatarsLink("14")} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
       : <span>{intl.formatMessage(titleMsg)}</span>
 
   return (
@@ -87,7 +87,7 @@ type ActiveProps = {
 const ActiveAccount = ({account}: ActiveProps) =>
   account
   ? <Dropdown.Item key={account.name}>
-      <Dropdown trigger={<span><img src={avatar} className={styles.avatars}/> {account.name.substring(0, 14) + '...'}</span>}>
+      <Dropdown trigger={<span><img src={getAvatarsLink("14")} className={styles.avatars}/> {account.name.substring(0, 14) + '...'}</span>}>
         <Dropdown.Menu direction='right'>
           <Dropdown.Item key="see" account={account.name} as={Link} to="/" >
               <FormattedMessage {...see} />
