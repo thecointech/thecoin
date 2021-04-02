@@ -82,6 +82,12 @@ export const PersonalDetails = () => {
     });
   }
   const onSetDetails = () => {
+    setGivenNameEdit(false);
+    setFamilyNameEdit(false);
+    setDobEdit(false);
+    setAddressEdit(false);
+    setEmailEdit(false);
+    setPhoneEdit(false);
     accountApi.setDetails({...details});
   }
 
