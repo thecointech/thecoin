@@ -22,7 +22,7 @@ export type RouterPath = {
   creator?: PageCreator;
   exact?: boolean;
   icon?: SemanticICONS;
-  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: string | Element | JSX.Element };
 };
 
 interface Props {

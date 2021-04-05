@@ -2,10 +2,11 @@ import React, { FunctionComponent, useState } from 'react';
 import {Clipboard} from 'ts-clipboard';
 import { Icon, Popup } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 interface Props {
   payload: string;
+  label?: MessageDescriptor;
 }
 
 const link = { id:"base.copyToClipboard.link",
@@ -19,7 +20,8 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
 
   const intl = useIntl();
   const [open, setOpen] = useState(false)
-  
+  const copyLabel = props.label ? props.label : link;
+
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     Clipboard.copy(props.payload);
     event.stopPropagation();
@@ -42,7 +44,7 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
         trigger={
           <span className={styles.Link} onClick={onClick}>
             <Icon name="copy" />
-            <FormattedMessage {...link} />
+            <FormattedMessage {...copyLabel} />
           </span>}
       />
     </>

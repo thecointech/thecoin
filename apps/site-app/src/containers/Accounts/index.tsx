@@ -8,6 +8,7 @@ import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
 import { getAvatarsLink } from '@thecointech/shared/components/Avatars';
+import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
 
 
 const home = { id:"app.accounts.sidebar.home",
@@ -28,6 +29,9 @@ const contact = {  id:"app.accounts.sidebar.contact",
 const profile = {  id:"app.accounts.sidebar.profile",
                     defaultMessage:"Profile",
                     description:"Title for the Profile entry in the menu"};
+const copyLink = { id:"shared.pagesidebar.copy",
+                defaultMessage:"Copy my address",
+                description:"Title for the Home entry in the menu"};
 
 const AccountRoutes: RouterPath[] = [
   {
@@ -70,8 +74,6 @@ export const Accounts = (props: RouteComponentProps) => {
   const { match } = props;
   const { url } = match;
 
-  
-
   if (activeAccount){
     if (!AccountRoutes[0].header){
       AccountRoutes.unshift(
@@ -79,13 +81,13 @@ export const Accounts = (props: RouteComponentProps) => {
           name: profile,
           header: { avatar: getAvatarsLink("14"),
                     primaryDescription: activeAccount?.name ?? "Unknown",
-                    secondaryDescription: "Description2" },
+                    secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> },
       });
     } else {
       AccountRoutes[0].header = {
         avatar: getAvatarsLink("14"),
         primaryDescription: activeAccount?.name ?? "Unknown",
-        secondaryDescription: "Description2" };
+        secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> };
     }
   }
 
