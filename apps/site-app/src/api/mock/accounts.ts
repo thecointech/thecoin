@@ -47,15 +47,6 @@ export function useInjectedSigners() {
     firstRun = false;
   }
 }
-
-function addDevWallet() {
-  const accountToLoad = wallets[1];
-  const walletToLoad = JSON.parse(accountToLoad.wallet);
-  const initReducer = new AccountMap(initialState, initialState);
-  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
-}
-addDevWallet();
-
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
 
   const client1 = await getSigner("client1")
@@ -66,4 +57,13 @@ async function addDevLiveSigners(mapApi: IAccountMapActions) {
   theSigner._isSigner = true;
   mapApi.addAccount("Client1", theSigner, false);
   mapApi.setActiveAccount(address);
+}
+function addDevWallet() {
+  const accountToLoad = wallets[1];
+  const walletToLoad = JSON.parse(accountToLoad.wallet);
+  const initReducer = new AccountMap(initialState, initialState);
+  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
+}
+if (process.env.NODE_ENV === "development") {
+  addDevWallet();
 }
