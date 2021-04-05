@@ -5,7 +5,6 @@ import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
 
 import styles from './styles.module.less';
-import { NavLink } from 'react-router-dom';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 export enum TypeCreateAccountBanner {
@@ -38,7 +37,7 @@ export const CreateAccountBanner = (props: Props) => {
                     <Header as='h3'>
                         <FormattedMessage {...title} />
                     </Header>
-                    <ButtonPrimary as={NavLink} to={`${process.env.URL_SITE_APP}/addAccount`} size='large' >
+                    <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} size='large' >
                         <FormattedMessage {...buttonCreate} />
                     </ButtonPrimary>
                 </Grid.Column>

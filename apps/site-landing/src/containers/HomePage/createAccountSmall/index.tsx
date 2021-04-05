@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
@@ -27,7 +26,7 @@ export const CreateAccountSmall = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <ButtonPrimary as={NavLink} to={`${process.env.URL_SITE_APP}/addAccount`} size='large' >
+            <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} size='large' >
               <FormattedMessage {...button} />
             </ButtonPrimary>
           </Grid.Column>
