@@ -105,6 +105,7 @@ class UxInputClass extends React.Component<Props, State> {
         {messageElement}
         {inputElement}
         {footer}
+        
       </Form.Field>
     );
   }

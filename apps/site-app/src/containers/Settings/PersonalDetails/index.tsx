@@ -4,6 +4,7 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon, StrictInputProps } from 'semantic-ui-react';
+import { UxPhone } from '@thecointech/shared/components/UxPhone';
 import styles from './styles.module.less';
 
 const title = {
@@ -176,6 +177,7 @@ export const PersonalDetails = () => {
                   </div>}
           onChange={onDetailsChange}
           name="phone" readOnly={!phoneEdit} />
+          <UxPhone  />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>
           <FormattedMessage {...titleCurrency} />
