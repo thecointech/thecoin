@@ -18,17 +18,17 @@ const description = { id:"app.makepayments.description",
                       defaultMessage:"You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
                       description:"Description for the Make a payment page in the app" };
 const etransfer = { id:"app.makepayments.tabs.etransfer",
-                defaultMessage:"e-Transfer",
-                description:"Title for the tabs the Make a payment page in the app" };
+                    defaultMessage:"e-Transfer",
+                    description:"Title for the tabs the Make a payment page in the app" };
 const bills = { id:"app.makepayments.tabs.bills",
                 defaultMessage:"Bills",
                 description:"Title for the tabs the Make a payment page in the app" };
 const anotherCoin = { id:"app.makepayments.tabs.anotherCoin",
-                defaultMessage:"Another Coin Account",
-                description:"Title for the tabs the Make a payment page in the app" };
+                      defaultMessage:"Coin Transfer",
+                      description:"Title for the tabs the Make a payment page in the app" };
 const templates = { id:"app.makepayments.tabs.templates",
-                defaultMessage:"Templates",
-                description:"Title for the tabs the Make a payment page in the app" };
+                    defaultMessage:"Templates",
+                    description:"Title for the tabs the Make a payment page in the app" };
 
 export const MakePayments = (routerProps:AccountPageProps) => {
   const intl = useIntl();

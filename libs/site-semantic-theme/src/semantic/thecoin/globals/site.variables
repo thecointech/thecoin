@@ -101,6 +101,7 @@
 @theCoinPalettePaleGreen3     : #4EAEA5;
 
 @theCoinPalettePaleGreen2Faded50     : fade(@theCoinPalettePaleGreen2, 50%);
+@theCoinPalettePaleGreen2Faded30     : fade(@theCoinPalettePaleGreen2, 30%);
 
 @theCoinPaletteGreen1     : #95DC8F;
 @theCoinPaletteGreen2     : #60CA8E;

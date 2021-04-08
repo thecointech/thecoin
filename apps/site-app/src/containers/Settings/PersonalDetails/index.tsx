@@ -177,7 +177,19 @@ export const PersonalDetails = () => {
                   </div>}
           onChange={onDetailsChange}
           name="phone" readOnly={!phoneEdit} />
-          <UxPhone  />
+          
+        <UxPhone 
+            className={"half right"}
+            details={details}
+            value={details.phone}
+            label={<div>
+                <FormattedMessage {...phone} />
+                <span onClick={setPhoneEdit(!phoneEdit)} className={styles.edit}>
+                  <Icon name={"edit"} /><FormattedMessage {...edit} />
+                </span>
+              </div>} 
+            onChange={onDetailsChange}
+            name="phone" readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>
           <FormattedMessage {...titleCurrency} />
