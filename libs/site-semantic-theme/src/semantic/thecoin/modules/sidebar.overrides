@@ -8,6 +8,8 @@
   border-radius: @absoluteBorderRadius !important;
   height: auto !important;
   margin-top: 80px !important;
+  position: relative;
+  z-index: 100;
 
   &.menu .item{
     color: @theCoinPaletteGray1;
@@ -51,80 +53,3 @@
   height: auto;
   margin: 20px;
 }
-
-@media only screen and (min-width: 6001px) {
-    .ui.sidebar{
-      margin-left: 48vw !important;
-    }
-  }
-
-  @media only screen and (max-width: 6000px) and (min-width: 5001px)  {
-    .ui.sidebar{
-      margin-left: 55vw !important;
-    }
-  }
- @media only screen and (max-width: 5000px) and (min-width: 4001px)  {
-    .ui.sidebar{
-      margin-left: 46vw !important;
-    }
-  }
-
- @media only screen and (max-width: 4000px) and (min-width: 3001px)  {
-    .ui.sidebar{
-      margin-left: 30vw !important;
-    }
-  }
-
- @media only screen and (max-width: 3000px) and (min-width: 2001px)  {
-    .ui.sidebar{
-      margin-left: 25vw !important;
-    }
-  }
-
- @media only screen and (max-width: 2000px) and (min-width: 1901px) {
-    .ui.sidebar{
-      margin-left: 19vw !important;
-    }
-  }
-
- @media only screen and (max-width: 1900px) and (min-width: 1801px) {
-    .ui.sidebar{
-      margin-left: 15vw !important;
-    }
-  }
-
- @media only screen and (max-width: 1800px) and (min-width: 1701px) {
-    .ui.sidebar{
-      margin-left: 14vw !important;
-    }
-  }
-
- @media only screen and (max-width: 1700px) and (min-width: 1601px) {
-    .ui.sidebar{
-      margin-left: 13vw !important;
-    }
-  }
-
- @media only screen and (max-width: 1600px) and (min-width: 1501px) {
-    .ui.sidebar{
-      margin-left: 12vw !important;
-    }
-  }
-
-  @media only screen and (max-width: 1500px) and (min-width: 1431px ) {
-    .ui.sidebar{
-      margin-left: 7vw !important;
-    }
-  }
-
-  @media only screen and (max-width: 1430px) and (min-width: 1201px) {
-    .ui.sidebar{
-      margin-left: 5vw !important;
-    }
-  }
-
-   @media only screen and (max-width: 1200px) and (min-width: 600px) {
-     .ui.sidebar{
-        margin-left: 2vw !important;
-     } 
-  }

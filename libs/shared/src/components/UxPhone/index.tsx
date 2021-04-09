@@ -1,14 +1,18 @@
-import React, { ChangeEvent, MouseEventHandler } from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
 import { AccountDetails } from 'containers/AccountDetails/types';
 
 export type Props ={
   label: JSX.Element,
+  value: {  countryCode?: string | undefined;
+            countryCode2?: string | undefined;
+            phoneNumber?: string | undefined;
+            number?: string | undefined; } | undefined,
   className?: string,
   details?: AccountDetails,
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => MouseEventHandler<HTMLSpanElement> | undefined,
-  name?: string, 
+  onChange?: ChangeEventHandler,
+  name: string, 
   readOnly?: boolean
 }
 
@@ -18,7 +22,12 @@ export const UxPhone = (props:Props) => {
       <Form.Field className={props.className}>
         <Label>
           {props.label}
-          <InputMask mask="+1 999 999 9999" maskChar="_" alwaysShowMask onChange={props.onChange} />
+          <InputMask name={props.name} 
+                      mask="+1 999 999 9999" 
+                      maskChar="_" 
+                      alwaysShowMask 
+                      onChange={props.onChange} 
+                      readOnly={props.readOnly} />
         </Label>
       </Form.Field>
     );

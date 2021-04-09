@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
+import { Form, Dropdown, DropdownProps, Label} from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
@@ -219,11 +219,7 @@ export const BillPayments = () => {
     return (
     <React.Fragment>
         <Form>
-            <Header as="h5">
-                <Header.Subheader>
-                <FormattedMessage {...description} />
-                </Header.Subheader>
-            </Header>
+            <FormattedMessage {...description} />
             <FilterPayee />
             <Dropdown
                 placeholder={intl.formatMessage(payeeTxt)}

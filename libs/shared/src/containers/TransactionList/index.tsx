@@ -87,7 +87,6 @@ export const TransactionList = (props: MyProps) => {
       const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
       const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
-
       return (
         <Table.Row key={index}>
           <Table.Cell width={2} textAlign='center'>
@@ -106,7 +105,7 @@ export const TransactionList = (props: MyProps) => {
             <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
           </Table.Cell>
-          <Table.Cell width={3}>${balanceCad}</Table.Cell>
+          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $</div></Table.Cell>
         </Table.Row>
     )});
 
