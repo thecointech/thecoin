@@ -26,6 +26,6 @@ export const Avatars = ({index}: { index: AvatarIdx }) => (
     </div>
   )
 
-export function getAvatarsLink( index: AvatarIdx ) {
+export function getAvatarLink( index: AvatarIdx ) {
    return avatars[index];
   }

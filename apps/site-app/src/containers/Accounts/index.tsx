@@ -7,7 +7,7 @@ import { HomePage } from '../HomePage';
 import { MakePayments } from 'containers/MakePayments';
 import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
-import { getAvatarsLink } from '@thecointech/shared/components/Avatars';
+import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
 
 
@@ -79,13 +79,13 @@ export const Accounts = (props: RouteComponentProps) => {
       AccountRoutes.unshift(
         {
           name: profile,
-          header: { avatar: getAvatarsLink("14"),
+          header: { avatar: getAvatarLink("14"),
                     primaryDescription: activeAccount?.name ?? "Unknown",
                     secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> },
       });
     } else {
       AccountRoutes[0].header = {
-        avatar: getAvatarsLink("14"),
+        avatar: getAvatarLink("14"),
         primaryDescription: activeAccount?.name ?? "Unknown",
         secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> };
     }
