@@ -98,7 +98,7 @@ export const PersonalDetails = () => {
         <FormattedMessage {...title} />
       </Header>
       <Form id={styles.personalInfo}>
-
+        
         <Form.Input
           className={"half left"}
           label={<div>
@@ -164,24 +164,12 @@ export const PersonalDetails = () => {
           onChange={onDetailsChange}
           details={details}
           name="email" readOnly={!emailEdit} />
-
-        <Form.Input
-          className={"half right"}
-          details={details}
-          value={details.phone}
-          label={<div>
-                    <FormattedMessage {...phone} />
-                    <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
-                    </span>
-                  </div>}
-          onChange={onDetailsChange}
-          name="phone" readOnly={!phoneEdit} />
           
         <UxPhone 
             className={"half right"}
             details={details}
             value={details.phone}
+            //onChange={onDetailsChange}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

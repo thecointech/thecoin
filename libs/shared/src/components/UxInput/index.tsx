@@ -1,8 +1,10 @@
-import React from 'react';
-import { Form, Label, Input, Message } from 'semantic-ui-react';
+import React, { createRef } from 'react';
+import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import styles from './styles.module.less';
+//import styles from './styles.module.less';
 import { Props as MyProps, initialState } from './types';
+import { LessVars } from "@thecointech/site-semantic-theme/variables";
+
 
 type State = Readonly<typeof initialState>;
 type Props = Readonly<MyProps & WrappedComponentProps>;
@@ -70,31 +72,35 @@ class UxInputClass extends React.Component<Props, State> {
     const showMessage = showState && (message != undefined);
 
     const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
+
+    const contextRef = createRef<HTMLSpanElement>()
+
+    const styleError = {
+      color:  LessVars.errorColor,
+      borderColor: LessVars.errorBorderColor,
+    }
+
+    const styleSuccess = {
+      color:  LessVars.successColor,
+      borderColor: LessVars.successBorderColor,
+    }
+
     const inputElement = (
-      <Input
-        onChange={this.onChange}
-        onBlur={this.onBlur}
-        value={value}
-        {...inputProps}
-        data-tooltip={tooltipData}
-      />
+      <span ref={contextRef}>
+        <Input
+          onChange={this.onChange}
+          onBlur={this.onBlur}
+          value={value}
+          {...inputProps}
+          data-tooltip={tooltipData}
+        />
+      </span>
     );
     const messageElement = (
-      <Message
-        success={successTag}
-        error={errorTag}
-        hidden={!showMessage}
-        attached="top"
-        className={`
-          ${styles.ui}
-          ${styles.attached}
-          ${styles.bottom}
-          ${styles.message}
-          ${styles.inputMessage}
-        `}
-      >
-        {message ? <FormattedMessage {...message} /> : undefined}
-      </Message>
+      <Popup context={contextRef} 
+              position='top right' 
+              content={message ? <FormattedMessage {...message} /> : undefined} 
+              open={showMessage} style={errorTag ? styleError : styleSuccess } />
     );
 
     return (

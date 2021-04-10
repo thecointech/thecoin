@@ -68,13 +68,16 @@ export const RedeemWidget = (props: VisualProps) => {
           value={props.coinToSell}
           fxRate={props.rate}
         />
-        <Form.Input
-          className={"borderTop borderBottom"}
-          label={<FormattedMessage {...props.emailLabel} />}
-          name="email"
-          onChange={event => props.setEmail(event.target.value)}
-          placeholder={props.emailDes}
-        />
+          <UxInput
+              className={"borderTop borderBottom"}
+              intlLabel={props.emailLabel}
+              uxChange={event => props.setEmail(event.target.value)}
+              //isValid={isValid}
+              //forceValidate={forceValidate}
+              //message={validationMessage}
+              placeholder={props.emailDes}
+              name="email"
+          />
         <Form.Input
           className={"half left"}
           label={<FormattedMessage {...props.questionLabel} />}

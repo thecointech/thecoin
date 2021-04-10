@@ -20,15 +20,14 @@ export const UxPhone = (props:Props) => {
 
     return (
       <Form.Field className={props.className}>
-        <Label>
-          {props.label}
+        <Label>{props.label}</Label>
           <InputMask name={props.name} 
                       mask="+1 999 999 9999" 
-                      maskChar="_" 
+                      maskChar="*" 
                       alwaysShowMask 
                       onChange={props.onChange} 
                       readOnly={props.readOnly} />
-        </Label>
+        
       </Form.Field>
     );
 }
