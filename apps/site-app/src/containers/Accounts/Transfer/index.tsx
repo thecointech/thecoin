@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { NormalizeAddress } from '@thecointech/utilities/';
+import { NormalizeAddress } from '@thecointech/utilities';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
@@ -10,6 +10,12 @@ import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
 
 
+const errorMessage = { id:"app.accounts.transfer.errorMessage",
+                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
+                description:"Error Message for the make a payment page / etransfer tab" };
+const successMessage = { id:"app.accounts.transfer.successMessage",
+                defaultMessage:"Order received.\nYou should receive the transfer in 1-2 business days.",
+                description:"Success Message for the make a payment page / etransfer tab" };
 const description = { id:"app.accounts.transfer.description",
                       defaultMessage:"Transfer directly to another account with TheCoin.",
                       description:"Description for the make a payment page / transfer tab" };
@@ -47,6 +53,9 @@ export const Transfer = () => {
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
+
+  const [successHidden, setSuccessHidden] = useState(true);
+  const [errorHidden, setErrorHidden] = useState(true);
 
   const account = useActiveAccount();
   const { rates } = useFxRates();
@@ -120,11 +129,18 @@ export const Transfer = () => {
 
     try {
       const result = await doTransfer();
-      if (!result) alert('Transfer Failure');
-      else alert('Transfer Success');
+      if (!result) {
+        setErrorHidden(false);
+        setSuccessHidden(true);
+      }
+      else {
+        setErrorHidden(true);
+        setSuccessHidden(false);
+      }
     } catch (err) {
       console.error(err);
-      alert('Transfer Error');
+      setErrorHidden(false);
+      setSuccessHidden(true);
     }
     setPercentComplete(1);
     setTransferInProgress(false);
@@ -144,6 +160,11 @@ export const Transfer = () => {
   }
   return (
     <TransferWidget 
+      errorMessage={errorMessage}
+      errorHidden={errorHidden}
+      successMessage={successMessage}
+      successHidden={successHidden}
+      
       description={description} 
       onValueChange={onValueChange} 
       account={account!}
