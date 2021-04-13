@@ -27,7 +27,6 @@ export const wallets = [
 
 let firstRun = true;
 export function useInjectedSigners() {
-  console.log("Injecting Testing Accounts");
 
   const mapApi = useAccountMapApi();
   // On first run, inject new signers.We can't
@@ -35,6 +34,8 @@ export function useInjectedSigners() {
   // the execution too long (we render the app
   // with no accounts and redirect to addAccount)
   if (firstRun) {
+    console.log("Injecting Testing Accounts");
+
     // always insert default wallet
     // NOTE: this must be run when this file is loaded,
     // when this function is run is already too late

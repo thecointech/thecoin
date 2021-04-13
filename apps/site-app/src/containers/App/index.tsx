@@ -30,7 +30,6 @@ import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { useInjectedSigners } from 'api/mock/accounts';
 
-
 export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
@@ -42,7 +41,6 @@ export const App = ( ) => {
   }
 
   return (
-    <>
     <MediaContextProvider>
       <style>{mediaStyles}</style>
       <div id={styles.headerDecoration}>
@@ -65,6 +63,5 @@ export const App = ( ) => {
       </Container>
       <Footer />
     </MediaContextProvider>
-    </>
   );
 }

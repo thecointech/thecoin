@@ -20,6 +20,14 @@ DEPLOY_NETWORK=goerli
 INFURA_PROJECT_ID=<AddThisHere>
 
 #
+# Connection to the IDX testnet.  This testnet is periodically wiped
+# and should not be relied on to permanently store data.
+# Can generate a new seed with
+# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+CERAMIC_API=https://ceramic-clay.3boxlabs.com
+CERAMIC_SEED=<SemiPermanentSeed>
+
+#
 # Wallets used by testing environment
 # If you want to regenerate these for any reason,
 # run the script ../tools/createWallets.ts
