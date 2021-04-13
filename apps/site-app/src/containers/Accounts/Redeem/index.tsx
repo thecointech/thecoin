@@ -182,9 +182,9 @@ export const Redeem = () => {
   return (
       <RedeemWidget
         errorMessage={errorMessage}
-        errorHidden={false}
+        errorHidden={errorHidden}
         successMessage={successMessage}
-        successHidden={false}
+        successHidden={successHidden}
 
         coinToSell={coinToSell}
         description={description}
