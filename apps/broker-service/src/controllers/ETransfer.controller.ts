@@ -1,4 +1,4 @@
-import { Controller, Body, Route, Post, Put, Response, Tags } from 'tsoa';
+import { Controller, Body, Route, Post, Put, Response, Tags } from '@tsoa/runtime';
 import { SendMail } from "@thecointech/email";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";

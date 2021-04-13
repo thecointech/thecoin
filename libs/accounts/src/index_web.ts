@@ -1,6 +1,7 @@
-import { AccountName } from '@thecointech/contract';
 import { ProgressCallback } from 'ethers/utils';
-import { baseContract, baseSigner } from './index_base';
+import { AccountName } from './names';
+import { baseSigner } from './index_base';
+export * from './names';
 
 async function loadSigner(name: AccountName) {
   if (process.env.NODE_ENV === 'development') {
@@ -13,5 +14,3 @@ async function loadSigner(name: AccountName) {
 export const getSigner = (name: AccountName, _callback?: ProgressCallback) =>
   baseSigner(name, () => loadSigner(name));
 
-export const getContract = (name: AccountName, _callback?: ProgressCallback) =>
-  baseContract(name, () => loadSigner(name));

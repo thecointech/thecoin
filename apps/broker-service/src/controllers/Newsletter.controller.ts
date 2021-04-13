@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { Controller, Get, Put, Route, Query, Body, Post, Response, Tags } from 'tsoa';
+import { Controller, Get, Put, Route, Query, Body, Post, Response, Tags } from '@tsoa/runtime';
 import { Signup, Unsubscribe, Details, SubscriptionDetails, Update } from '../newsletter'
 import { BoolResponse } from '../types';
 

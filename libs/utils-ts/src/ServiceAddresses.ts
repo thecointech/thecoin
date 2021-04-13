@@ -1,5 +1,7 @@
 import { log } from "@thecointech/logging";
 
+// TODO: Move this define into .env files
+// Most of this file should irrelevant given .env configuration
 export enum Service {
 
   SITE_LANDING=3000,

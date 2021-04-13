@@ -3,6 +3,20 @@
 runtime: nodejs14
 instance_class: F4
 
+#
+# TODO: It would be nice to de-duplicate these variables
+env_variables:
+  NODE_ENV: production
+  SETTINGS: testing
+  CONFIG_NAME: prodtest
+
+  DEPLOY_NETWORK: goerli
+  INITIAL_COIN_BLOCK: 4527910
+
+# include secrets.
+includes:
+  - app.secrets.yaml
+
 #handlers:
 #- url: *
 #  http_headers:

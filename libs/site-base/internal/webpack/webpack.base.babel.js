@@ -1,7 +1,7 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-
+require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -131,8 +131,23 @@ module.exports = options => ({
     // inside your code for any environment checks; Terser will automatically
     // drop any unreachable code.
     new webpack.EnvironmentPlugin({
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      SETTINGS: JSON.stringify(process.env.SETTINGS),
+      NODE_ENV: process.env.NODE_ENV,
+      SETTINGS: process.env.SETTINGS,
+      CONFIG_NAME: process.env.CONFIG_NAME,
+
+      INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
+
+      URL_SITE_APP: process.env.URL_SITE_APP,
+      URL_SITE_LANDING: process.env.URL_SITE_LANDING,
+      URL_SERVICE_BROKER: process.env.URL_SERVICE_BROKER,
+      URL_SERVICE_RATES: process.env.URL_SERVICE_RATES,
+
+      // convenience defines
+      URL_ACCOUNT_CREATE: `${process.env.URL_SITE_APP}/#/addAccount`,
+      URL_ACCOUNT_LOGIN: process.env.URL_SITE_APP,
+
+      DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
+      DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
     }),
     new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
   ]),

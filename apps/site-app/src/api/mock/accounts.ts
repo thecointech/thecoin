@@ -2,7 +2,7 @@ import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@thecointech/shared/containers/AccountMap";
 import { TheSigner } from '@thecointech/shared/SignerIdent';
-import accounts from '@thecointech/accounts';
+import { getSigner } from '@thecointech/accounts';
 
 export const wallets = [
   {
@@ -27,6 +27,8 @@ export const wallets = [
 
 let firstRun = true;
 export function useInjectedSigners() {
+  console.log("Injecting Testing Accounts");
+
   const mapApi = useAccountMapApi();
   // On first run, inject new signers.We can't
   // use useEffect here because it will delay
@@ -45,18 +47,9 @@ export function useInjectedSigners() {
     firstRun = false;
   }
 }
-
-function addDevWallet() {
-  const accountToLoad = wallets[1];
-  const walletToLoad = JSON.parse(accountToLoad.wallet);
-  const initReducer = new AccountMap(initialState, initialState);
-  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
-}
-addDevWallet();
-
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
 
-  const client1 = await accounts.getSigner("client1")
+  const client1 = await getSigner("client1")
   const address = await client1.getAddress();
   const theSigner = client1 as TheSigner;
 
@@ -64,4 +57,13 @@ async function addDevLiveSigners(mapApi: IAccountMapActions) {
   theSigner._isSigner = true;
   mapApi.addAccount("Client1", theSigner, false);
   mapApi.setActiveAccount(address);
+}
+function addDevWallet() {
+  const accountToLoad = wallets[1];
+  const walletToLoad = JSON.parse(accountToLoad.wallet);
+  const initReducer = new AccountMap(initialState, initialState);
+  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
+}
+if (process.env.NODE_ENV === "development") {
+  addDevWallet();
 }

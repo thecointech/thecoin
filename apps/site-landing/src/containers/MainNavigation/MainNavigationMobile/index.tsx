@@ -35,9 +35,9 @@ export const MainNavigationMobile = () => {
               </Menu.Menu>
               <Menu.Menu position='right'>
                 <Menu.Item>
-                  <Link to="/" className={sharedStyles.loginLink}>
+                  <a href={process.env.URL_ACCOUNT_LOGIN} className={sharedStyles.loginLink}>
                     <FormattedMessage {...loginLink} />
-                  </Link>
+                  </a>
                 </Menu.Item>
                 <Menu.Item>
                   <LanguageSwitcher />

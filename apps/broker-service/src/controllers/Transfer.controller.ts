@@ -1,5 +1,5 @@
 import { CertifiedTransferRequest, CertifiedTransferResponse } from '@thecointech/types';
-import { Controller, Body, Route, Post, Response, Tags } from 'tsoa';
+import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransfer';
 
 

@@ -16,20 +16,4 @@ export async function init() {
       await seed();
     }
   }
-  // // Assume development is dev:live
-  // if (process.env.NODE_ENV === 'development') {
-  //   // Seed our DB for a year, values set for a day.
-  //   const from = DateTime
-  //     .local()
-  //     .minus({years: 1.1})
-  //     .set({
-  //       hour: 9,
-  //       minute: 31,
-  //       second: 30,
-  //       millisecond: 0
-  //     });
-
-  //   const validityInterval = Duration.fromObject({days: 1});
-  //   SeedWithRandomRates(from, validityInterval)
-  //}
 }

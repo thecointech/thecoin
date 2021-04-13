@@ -20,8 +20,16 @@ geth
 **/.DS_Store
 **/src/semantic/semantic
 **/semantic.css
+**/*secret*
 
 **/ts/.openapi-generator
 
 libs/contract/.openzeppelin/unknown-1337.json
 libs/shared/src/containers/IDX/config.json
+
+environments/prodtest.env
+environments/prodtest
+
+libs/contract/src/deployed/*-fork.json
+libs/contract/src/deployed/devlive.json
+environments/prod.env

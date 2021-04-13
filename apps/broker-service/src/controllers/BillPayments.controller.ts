@@ -1,5 +1,5 @@
 import { CertifiedTransfer } from '@thecointech/types';
-import { Controller, Body, Route, Post, Response, Tags } from 'tsoa';
+import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
 import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 
