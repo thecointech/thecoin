@@ -169,7 +169,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            onChange={onDetailsChange}
+            onChange={() => onDetailsChange}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

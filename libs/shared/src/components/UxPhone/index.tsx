@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import { Form, InputOnChangeData, Label } from 'semantic-ui-react';
+import React, { ChangeEventHandler } from 'react';
+import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
 import { AccountDetails } from 'containers/AccountDetails/types';
 
@@ -11,7 +11,7 @@ export type Props ={
             number?: string | undefined; } | undefined,
   className?: string,
   details?: AccountDetails,
-  onChange?: (event: ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => void,
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined,
   name: string, 
   readOnly?: boolean
 }
