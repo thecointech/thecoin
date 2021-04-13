@@ -1,5 +1,5 @@
-import React, { ChangeEventHandler } from 'react';
-import { Form, Label } from 'semantic-ui-react';
+import React, { ChangeEvent } from 'react';
+import { Form, InputOnChangeData, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
 import { AccountDetails } from 'containers/AccountDetails/types';
 
@@ -11,7 +11,7 @@ export type Props ={
             number?: string | undefined; } | undefined,
   className?: string,
   details?: AccountDetails,
-  onChange?: ChangeEventHandler,
+  onChange?: (event: ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => void,
   name: string, 
   readOnly?: boolean
 }
@@ -23,7 +23,6 @@ export const UxPhone = (props:Props) => {
         <Label>{props.label}</Label>
           <InputMask name={props.name} 
                       mask="+1 999 999 9999" 
-                      maskChar="*" 
                       alwaysShowMask 
                       onChange={props.onChange} 
                       readOnly={props.readOnly} />
