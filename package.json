@@ -24,12 +24,19 @@
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "run-p build:rates build:broker",
     "build": "run-s clean build:projects gen:apis build:apis",
+
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "dev:live:ceramic": "yarn ceramic daemon",
     "dev:live:projects": "yarn wait-port 8377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live:bootstrap": "yarn wait-port 7007 && yarn idx bootstrap && node ./tools/bootstrapIdx.js",
     "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
-    "deploy:testing:sites": "firebase deploy --project tccc-testing --only hosting",
+
+    "predeploy": "yarn build",
+    "deploy": "lerna run deploy",
+    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy",
+    "deploy:prod": "cross-env CONFIG_NAME=production yarn deploy",
+
+    "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
     "clean": "lerna run clean",
     "clean:ceramic": "rimraf ~/.ceramic && ~/.jsipfs",
     "test": "lerna run test",
