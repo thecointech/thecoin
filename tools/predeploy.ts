@@ -1,6 +1,7 @@
-import "../tools/setenv";
+import { getEnvFile } from "../tools/setenv";
 import { exec } from "child_process";
 import { exit } from "process";
+import { readFileSync, writeFileSync } from "fs";
 
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
 
@@ -28,6 +29,21 @@ export function SetGCloudConfig(envName: string) {
 // Requires there be a matching profile defined in firebase.json
 export function FirebaseUseEnv() {
   return ShellCmd(`firebase use ${process.env.CONFIG_NAME}`)
+}
+
+export async function copyEnvVarsLocal(outYamlFile: string) {
+  const envFile = getEnvFile();
+  const contents = readFileSync(envFile, 'utf8');
+  const yamlVars = contents.split('\n')
+    .filter(line => !line.startsWith('#'))
+    .filter(line => !line.startsWith('WALLET_'))
+    .filter(line => !line.startsWith('CERAMIC_'))
+    .filter(line => !/^\s*$/.test(line))
+    .map(line => line.split('=').join(': '))
+    .join('\n  ')
+    .trim();
+  const asYaml = `env_variables:\n  ${yamlVars}`;
+  writeFileSync(outYamlFile, asYaml);
 }
 
 function ShellCmd(cmd: string) {
