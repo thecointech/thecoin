@@ -17,6 +17,7 @@ URL_SERVICE_RATES=https://rates-service-testing.nn.r.appspot.com/api/v1
 # The ethereum network our contract will be deployed to
 DEPLOY_NETWORK=goerli
 INFURA_PROJECT_ID=<AddThisHere>
+INITIAL_COIN_BLOCK=<ContractDeployedBlock>
 
 #
 # Connection to the IDX testnet.  This testnet is periodically wiped

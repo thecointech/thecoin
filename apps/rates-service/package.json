@@ -16,18 +16,22 @@
     "directory": "apps/rates-service"
   },
   "scripts": {
+    "start": "node ./build/main.js",
+
+    "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
+    "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
+    "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
+    "run-env": "node --inspect=9231 -r ts-node/register -r dotenv/config ./src/main.ts",
+
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "run-s deploy:src deploy:cron",
     "deploy:src": "gcloud app deploy",
     "deploy:cron": "gcloud app deploy cron.yaml",
 
-    "start": "node ./build/main.js",
-    "dev": "cross-env NODE_ENV=development node --inspect=localhost:9230 -r ts-node/register ./src/main.ts",
-    "dev:live": "cross-env SETTINGS=live yarn dev",
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
