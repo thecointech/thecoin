@@ -1,22 +1,9 @@
-import React, { ChangeEventHandler } from 'react';
+import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
-import { AccountDetails } from 'containers/AccountDetails/types';
+import { MaskedUxProps } from "../types";
 
-export type Props ={
-  label: JSX.Element,
-  value: {  countryCode?: string | undefined;
-            countryCode2?: string | undefined;
-            phoneNumber?: string | undefined;
-            number?: string | undefined; } | undefined,
-  className?: string,
-  details?: AccountDetails,
-  onChange?: ChangeEventHandler<HTMLInputElement> | undefined,
-  name: string, 
-  readOnly?: boolean
-}
-
-export const UxPhone = (props:Props) => {
+export const UxPhone = (props:MaskedUxProps) => {
     return (
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>
