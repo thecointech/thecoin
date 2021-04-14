@@ -4,7 +4,6 @@
 
 NODE_ENV=production
 SETTINGS=testing
-CONFIG_NAME=prodtest
 
 #
 # Cross-site references
@@ -26,6 +25,12 @@ INFURA_PROJECT_ID=<AddThisHere>
 # node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 CERAMIC_API=https://ceramic-clay.3boxlabs.com
 CERAMIC_SEED=<SemiPermanentSeed>
+
+#
+# GCloud configurations should be setup to allow deploying to each target.
+# See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a
+GCLOUD_LANDING_CONFIG=landing-testing
+GCLOUD_APP_CONFIG=app-testing
 
 #
 # Wallets used by testing environment

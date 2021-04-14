@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "prodtest": "tccc-testing",
+    "prod": "tccc-prod"
+  },
+  "targets": {
+    "tccc-testing": {
+      "hosting": {
+        "app": [
+          "tccc-testing"
+        ]
+      }
+    }
+  }
+}
