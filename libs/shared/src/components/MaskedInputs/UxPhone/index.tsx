@@ -17,7 +17,6 @@ export type Props ={
 }
 
 export const UxPhone = (props:Props) => {
-
     return (
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>

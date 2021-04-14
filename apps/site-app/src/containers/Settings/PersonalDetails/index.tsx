@@ -4,7 +4,7 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon, StrictInputProps } from 'semantic-ui-react';
-import { UxPhone } from '@thecointech/shared/components/UxPhone';
+import { UxPhone } from '@thecointech/shared/components/MaskedInputs/UxPhone';
 import styles from './styles.module.less';
 
 const title = {

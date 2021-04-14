@@ -105,7 +105,7 @@ export const TransactionList = (props: MyProps) => {
             <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
           </Table.Cell>
-          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $</div></Table.Cell>
+          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Table.Cell>
         </Table.Row>
     )});
 
