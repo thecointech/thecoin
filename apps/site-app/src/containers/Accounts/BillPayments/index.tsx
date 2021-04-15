@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Form, Dropdown, DropdownProps, Label, Message} from 'semantic-ui-react';
+import { Form, Dropdown, DropdownProps, Message} from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
@@ -233,7 +233,6 @@ export const BillPayments = () => {
             </Message>
 
             <FilterPayee />
-            <Label>Payee</Label>
             <Dropdown
                 placeholder={intl.formatMessage(payeeTxt)}
                 fluid

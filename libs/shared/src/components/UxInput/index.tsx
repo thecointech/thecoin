@@ -56,6 +56,7 @@ class UxInputClass extends React.Component<Props, State> {
     const {
       intl,
       intlLabel,
+      label,
       uxChange,
       forceValidate,
       footer,
@@ -71,7 +72,7 @@ class UxInputClass extends React.Component<Props, State> {
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
 
-    const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
+    const tooltipData = tooltip ? tooltip : undefined;
 
     const contextRef = createRef<HTMLSpanElement>()
 
@@ -106,7 +107,7 @@ class UxInputClass extends React.Component<Props, State> {
     return (
       <Form.Field className={formClassName} error={errorTag}>
         <Label>
-          <FormattedMessage {...this.props.intlLabel} />
+          <FormattedMessage {...this.props.intlLabel} /> {this.props.label}
         </Label>
         {messageElement}
         {inputElement}
