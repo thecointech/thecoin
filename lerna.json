@@ -15,6 +15,7 @@
       "allowBranch": "master"
     },
     "version": {
+      "ignoreChanges": ["**/submodules/**"],
       "allowBranch": [
         "release",
         "dev"
