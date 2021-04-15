@@ -11,7 +11,7 @@ type Aliases = {
 export type IdxAlias = keyof Aliases;
 
 async function createIDX(ceramic: CeramicApi) {
-  const config = await import(`./config.${process.env.CONFIG_NAME}`);
+  const config = await import(`./config.${process.env.CONFIG_NAME}.json`);
   const aliases: Aliases = {
     details: config.default.definitions.privateDetails
   }

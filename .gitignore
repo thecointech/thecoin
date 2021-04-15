@@ -33,3 +33,4 @@ libs/contract/src/deployed/devlive.json
 environments/prod.env
 libs/shared/src/containers/IDX/config.devlive.ts
 **/.firebase/hosting.*.cache
+libs/shared/src/containers/IDX/config.devlive.json

@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "apps\\broker-service"
+			"path": "apps/broker-service"
 		},
 		{
-			"path": "libs\\utils-ts"
+			"path": "libs/utils-ts"
 		}
 	],
 	"settings": {
