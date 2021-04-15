@@ -1,14 +1,11 @@
 {
   "projects": {
-    "default": "tccc-testing",
+    "prodtest": "tccc-testing",
     "prod": "tccc-prod"
   },
   "targets": {
     "tccc-testing": {
       "hosting": {
-        "landing": [
-          "tccc-testing-landing"
-        ],
         "app": [
           "tccc-testing"
         ]

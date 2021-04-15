@@ -16,7 +16,7 @@ export async function current() : Promise<Status> {
 
 export async function getBrokerCADAddress() {
   if (process.env.NODE_ENV === 'development') {
-    // In dev live, we transfer our $$ back to BrokerCAD
+    // In dev live, we can simply load the BrokerCAD to get it's address
     if (process.env.SETTINGS === 'live') {
       const brokerCad = await getSigner('BrokerCAD');
       return brokerCad.getAddress();

@@ -27,12 +27,14 @@ export const wallets = [
 
 let firstRun = true;
 export function useInjectedSigners() {
+
   const mapApi = useAccountMapApi();
   // On first run, inject new signers.We can't
   // use useEffect here because it will delay
   // the execution too long (we render the app
   // with no accounts and redirect to addAccount)
   if (firstRun) {
+
     // always insert default wallet
     // NOTE: this must be run when this file is loaded,
     // when this function is run is already too late
@@ -45,16 +47,9 @@ export function useInjectedSigners() {
     firstRun = false;
   }
 }
-
-function addDevWallet() {
-  const accountToLoad = wallets[1];
-  const walletToLoad = JSON.parse(accountToLoad.wallet);
-  const initReducer = new AccountMap(initialState, initialState);
-  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
-}
-addDevWallet();
-
 async function addDevLiveSigners(mapApi: IAccountMapActions) {
+
+  console.warn("Injecting hosted accounts");
 
   const client1 = await getSigner("client1")
   const address = await client1.getAddress();
@@ -64,4 +59,18 @@ async function addDevLiveSigners(mapApi: IAccountMapActions) {
   theSigner._isSigner = true;
   mapApi.addAccount("Client1", theSigner, false);
   mapApi.setActiveAccount(address);
+}
+
+function addDevWallet() {
+
+  console.warn("Injecting test wallet");
+
+  const accountToLoad = wallets[1];
+  const walletToLoad = JSON.parse(accountToLoad.wallet);
+  const initReducer = new AccountMap(initialState, initialState);
+  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
+}
+
+if (process.env.NODE_ENV === "development") {
+  addDevWallet();
 }

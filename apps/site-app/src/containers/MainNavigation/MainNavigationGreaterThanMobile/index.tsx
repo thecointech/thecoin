@@ -3,7 +3,6 @@ import { Menu, Container } from 'semantic-ui-react';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
 import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 
@@ -21,9 +20,9 @@ const home = { id:"app.MainNavigation.home",
               <Menu text className={styles.mainMenu} >
                 <Menu.Menu position='left'>
                     <div>
-                      <Link to="/" id={styles.logoLink}>
+                      <a href={process.env.URL_SITE_LANDING} id={styles.logoLink}>
                         <img src={Logo} id={styles.logo} />
-                      </Link>
+                      </a>
                     </div>
                   </Menu.Menu>
                   <HeaderLink to="/" exact>

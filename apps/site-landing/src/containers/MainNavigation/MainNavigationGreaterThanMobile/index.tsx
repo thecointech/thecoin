@@ -53,12 +53,12 @@ export const MainNavigationGreaterThanMobile = () => {
                 </HeaderLink>
                 <Menu.Menu position='right'>
                   <Menu.Item>
-                    <Link to={`${process.env.URL_SITE_APP}`} className={sharedStyles.loginLink}>
+                    <a href={process.env.URL_ACCOUNT_LOGIN} className={sharedStyles.loginLink}>
                       <FormattedMessage {...loginLink} />
-                    </Link>
+                    </a>
                   </Menu.Item>
                   <Menu.Item>
-                    <ButtonPrimary as={"a"} href={`${process.env.URL_SITE_APP}/addAccount`} >
+                    <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} >
                         <FormattedMessage {...titleButton} />
                     </ButtonPrimary>
                   </Menu.Item>

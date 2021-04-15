@@ -17,18 +17,19 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "yarn dev:run dotenv_config_path=../../environments/development.env",
-    "dev:live": "yarn dev dotenv_config_path=../../environments/devlive.env",
-    "dev:run": "node --inspect=9231 -r ts-node/register -r dotenv/config ./src/main.ts",
+
+    "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
+    "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
+    "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
+    "run-env": "node --inspect=9232 -r ts-node/register -r dotenv/config ./src/main.ts",
+
+    "predeploy": "ts-node --skip-project predeploy",
+    "deploy": "gcloud app deploy",
+
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
-    "deploy": "run-s build deploy:pre deploy:prod:test",
-    "deploy:pre": "cpx ../../yarn.lock .",
-    "deploy:config": "gcloud config configurations activate thecoincollab",
-    "preprod:test:deploy": "run-p build:src deploy:config",
-    "prod:test:deploy": "gcloud app deploy --project tccc-testing app.testing.yaml",
-    "prod:test": "yarn dev:run dotenv_config_path=../../environments/prodtest.env",
+
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
