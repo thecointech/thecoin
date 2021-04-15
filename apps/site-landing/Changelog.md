@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.2.0](https://github.com/thecointech/thecoin/compare/v0.1.29...v0.2.0) (2021-04-15)
+
+
+### Reverts
+
+* Revert "New structure and new header menu for landing" ([8cc45d2](https://github.com/thecointech/thecoin/commit/8cc45d213495dd8fa43ca5ed208dc838e81218e8))
+
+
+
+
+
 # Changelog
 
 ## RBP v4: "The One With Hooks (And Much More)" Edition (April 2019)

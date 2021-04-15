@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/shared",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -14,7 +14,6 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/shared"
   },
-
   "scripts": {
     "test": "yarn jest",
     "clean": "rimraf ./build",
@@ -23,7 +22,6 @@
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",
     "build:link": "node ../../tools/link-assets.mjs **/*.module.less"
   },
-
   "files": [
     "./build/**/*"
   ],
@@ -33,37 +31,37 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@thecointech/pricing": "*",
-    "@thecointech/types": "*",
-    "@thecointech/utilities": "*",
-    "@thecointech/store": "*",
-    "@thecointech/logging": "*",
-    "@thecointech/3id-connect": "*",
+    "@ceramicnetwork/common": "^0.15.8",
+    "@ceramicnetwork/http-client": "^0.9.5",
+    "@ceramicstudio/idx": "^0.7.0",
+    "@ceramicstudio/idx-tools": "^0.7.0",
+    "@nivo/bar": "^0.67.0",
+    "@nivo/core": "^0.67.0",
+    "@nivo/line": "^0.67.0",
+    "@nivo/tooltip": "^0.67.0",
+    "@thecointech/3id-connect": "^0.2.0",
+    "@thecointech/logging": "^0.2.0",
+    "@thecointech/pricing": "^0.2.0",
+    "@thecointech/store": "^0.2.0",
+    "@thecointech/types": "^0.2.0",
+    "@thecointech/utilities": "^0.2.0",
+    "axios": "*",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",
     "immer-reducer": "^0.7.10",
     "react-dates": "^21.5.1",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#4fdd14e8",
-    "axios": "*",
-    "@nivo/core": "^0.67.0",
-    "@nivo/bar": "^0.67.0",
-    "@nivo/line": "^0.67.0",
-    "@nivo/tooltip": "^0.67.0",
-    "@ceramicnetwork/common": "^0.15.8",
-    "@ceramicnetwork/http-client": "^0.9.5",
-    "@ceramicstudio/idx": "^0.7.0",
-    "@ceramicstudio/idx-tools": "^0.7.0"
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#4fdd14e8"
   },
   "devDependencies": {
-    "@nivo/generators": "^0.67.0",
-    "@types/d3-shape": "^2.0.0",
-    "@types/d3-scale-chromatic": "^2.0.0",
     "@babel/runtime": "^7.7.7",
+    "@nivo/generators": "^0.67.0",
+    "@thecointech/types": "*",
+    "@types/d3-scale-chromatic": "^2.0.0",
+    "@types/d3-shape": "^2.0.0",
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
-    "@thecointech/types": "*",
     "jest": "*"
   }
 }

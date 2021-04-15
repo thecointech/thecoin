@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-blockchain",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "keywords": [
     "THECoin"
@@ -23,8 +23,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@thecointech/utilities": "*",
-    "@thecointech/contract": "*"
+    "@thecointech/contract": "^0.2.0",
+    "@thecointech/utilities": "^0.2.0"
   },
   "devDependencies": {
     "jest": "*"

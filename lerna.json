@@ -1,5 +1,6 @@
 {
   "packages": [
+    "submodules/*",
     "libs/*",
     "apps/*",
     "apis/**/*"
@@ -15,11 +16,11 @@
       "allowBranch": "master"
     },
     "version": {
-      "ignoreChanges": ["**/submodules/**"],
       "allowBranch": [
         "release",
         "dev"
       ],
+      "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.test.*", "**/*.md"],
       "message": "chore(release): publish %s"
     }
   }

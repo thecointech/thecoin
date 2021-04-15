@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.1.32",
+  "version": "0.2.0",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "^4.9.4",
-    "@thecointech/contract": "*",
-    "@thecointech/logging": "*",
+    "@thecointech/contract": "^0.2.0",
+    "@thecointech/logging": "^0.2.0",
     "base32": "^0.0.6",
     "firebase": "^8.2.9"
   },
@@ -48,8 +48,8 @@
     "luxon": "*"
   },
   "devDependencies": {
-    "@thecointech/types": "*",
-    "@thecointech/jestutils": "*",
+    "@thecointech/jestutils": "^0.2.0",
+    "@thecointech/types": "^0.2.0",
     "jest": "*"
   }
 }

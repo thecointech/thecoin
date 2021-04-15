@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "keywords": [
@@ -17,21 +17,17 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-
     "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
     "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
     "run-env": "node --inspect=9231 -r ts-node/register -r dotenv/config ./src/main.ts",
-
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "run-s deploy:src deploy:cron",
     "deploy:src": "gcloud app deploy",
     "deploy:cron": "gcloud app deploy cron.yaml",
-
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
-
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -46,14 +42,14 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/utilities": "*",
-    "@thecointech/logging": "*",
+    "@thecointech/logging": "^0.2.0",
+    "@thecointech/utilities": "^0.2.0",
     "@tsoa/runtime": "^3.5.2",
-    "luxon": "1.26.0",
     "axios": "*",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "js-yaml": "^3.13.1",
+    "luxon": "1.26.0",
     "node-fetch": "^2.6.0",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.1.6"
