@@ -53,8 +53,7 @@
     "@ceramicnetwork/common": "^0.15.8",
     "@ceramicnetwork/http-client": "^0.9.5",
     "@ceramicstudio/idx": "^0.7.0",
-    "@ceramicstudio/idx-tools": "^0.7.0",
-    "react-input-mask": "*"
+    "@ceramicstudio/idx-tools": "^0.7.0"
   },
   "devDependencies": {
     "@nivo/generators": "^0.67.0",
@@ -64,6 +63,7 @@
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
+    "react-input-mask": "2.0.4",
     "@thecointech/types": "*",
     "jest": "*"
   }

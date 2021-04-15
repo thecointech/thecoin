@@ -65,7 +65,7 @@ export const TransactionList = (props: MyProps) => {
     const transactions = account!.history;
     const transactionLoading = account?.historyLoading;
 
-    let filteredTx = transactions.filter((tx: { date: { toMillis: () => number; }; }) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
     filteredTx.reverse();
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 

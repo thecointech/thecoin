@@ -72,7 +72,7 @@ class UxInputClass extends React.Component<Props, State> {
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
 
-    const tooltipData = tooltip ? tooltip : undefined;
+    const tooltipData = tooltip;
 
     const contextRef = createRef<HTMLSpanElement>()
 
@@ -98,10 +98,11 @@ class UxInputClass extends React.Component<Props, State> {
       </span>
     );
     const messageElement = (
-      <Popup context={contextRef} 
-              position='top right' 
-              content={message ? <FormattedMessage {...message} /> : undefined} 
-              open={showMessage} style={errorTag ? styleError : styleSuccess } />
+      <Popup 
+        context={contextRef} 
+        position='top right' 
+        content={message ? <FormattedMessage {...message} /> : undefined} 
+        open={showMessage} style={errorTag ? styleError : styleSuccess } />
     );
 
     return (
