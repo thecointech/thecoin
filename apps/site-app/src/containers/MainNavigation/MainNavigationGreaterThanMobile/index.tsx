@@ -14,10 +14,10 @@ const home = { id:"app.MainNavigation.home",
                 description:"Title for the Home entry in the menu"};
 const help = { id:"app.MainNavigation.help",
                 defaultMessage:"Help",
-                description:"Title for the Home entry in the menu"};
+                description:"Title for the help entry in the menu"};
 const contact = { id:"app.MainNavigation.contact",
                 defaultMessage:"Contact Us",
-                description:"Title for the Home entry in the menu"};
+                description:"Title for the contact entry in the menu"};
 
   export const MainNavigationGreaterThanMobile = () => {
     return (
