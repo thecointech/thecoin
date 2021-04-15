@@ -67,23 +67,3 @@ export function errorHandler(
 
   next();
 }
-// Initialize Swagger Express Middleware with our Swagger file
-//let swaggerFile = path.join(__dirname, 'api', 'swagger.json');
-// createMiddleware(swaggerFile, app, (_err, middleware) => {
-
-//   // Add all the Swagger Express Middleware, or just the ones you need.
-//   // NOTE: Some of these accept optional options (omitted here for brevity)
-//   app.use(
-//     middleware.metadata(),
-//     middleware.CORS(),
-//     middleware.files(),
-//     middleware.parseRequest(),
-//     middleware.validateRequest(),
-//     middleware.mock()
-//   );
-
-//   // Start the app
-//   app.listen(port, () => {
-//     console.log(`The Broker API is now running at http://localhost:${port}`);
-//   });
-// });
