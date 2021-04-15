@@ -2,7 +2,7 @@ The dev:live environment:
 
 A full, live environment living entirely on localhost.
 
-Does not (?) require env vars.  Runnable by any developer
+Has committed env file.  Runnable by any developer
 
 ethereum emulator
  - DONE contract is automatically deployed
@@ -16,12 +16,11 @@ Rates-Service:
  - DONE does not update (requires restart each day)
 
 utilities:
- - GetContract loads from ganache
- - Replace GetWallet with GetSigner
- - Tests for all of the above
-    - Can we test
+ - DONE GetContract loads from ganache
+ - DONE Replace GetWallet with GetSigner
+ - DONE Tests for all of the above
 
 Broker-CAD:
- - Connects to ethereum emulator for accounts (?)
+ - DONE Connects to ethereum emulator for accounts
  - processes transactions and submits to emulated ethers chain
  - locally-mocked (temp) storage for google drive.
