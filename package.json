@@ -19,7 +19,7 @@
     "gen:rates": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
     "gen:broker": "openapi-generator-cli generate -i apps/broker-service/src/api/swagger.json -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:apis": "yarn gen:rates && yarn gen:broker",
-    "build:projects": "lerna run build",
+    "build:projects": "cross-env CONFIG_NAME=prod lerna run build",
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "run-p build:rates build:broker",
@@ -33,6 +33,7 @@
 
     "predeploy": "yarn build",
     "deploy": "lerna run deploy",
+    "deploy:version": "lerna version 0.2.0 --allow-branch publish/* --no-push",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy",
     "deploy:prod": "cross-env CONFIG_NAME=production yarn deploy",
 
