@@ -63,7 +63,7 @@ const getAsItem = (item: SidebarMenuItem) => {
         key={url}
         to={url}
       >
-        <Icon name={item.link.icon as SemanticICONS} />
+        <Icon name={item.link.icon} />
         {item.link.name}
       </MenuItem>
       {buildSubMenuArray(item)}
