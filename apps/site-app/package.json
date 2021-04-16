@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
     "clean:analyze": "rimraf stats.json",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "firebase deploy --only hosting",
-
     "dev": "yarn cross-env NODE_ENV=development node internals/server",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn start:server",
@@ -54,9 +53,9 @@
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.0",
-    "@thecointech/site-base": "^0.2.0",
-    "@thecointech/utilities": "^0.2.0",
+    "@thecointech/shared": "^0.2.1",
+    "@thecointech/site-base": "^0.2.1",
+    "@thecointech/utilities": "^0.2.1",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
