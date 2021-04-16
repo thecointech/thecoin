@@ -4,7 +4,6 @@
 
 NODE_ENV=production
 SETTINGS=testing
-CONFIG_NAME=prodtest
 
 #
 # Cross-site references
@@ -18,6 +17,21 @@ URL_SERVICE_RATES=https://rates-service-testing.nn.r.appspot.com/api/v1
 # The ethereum network our contract will be deployed to
 DEPLOY_NETWORK=goerli
 INFURA_PROJECT_ID=<AddThisHere>
+INITIAL_COIN_BLOCK=<ContractDeployedBlock>
+
+#
+# Connection to the IDX testnet.  This testnet is periodically wiped
+# and should not be relied on to permanently store data.
+# Can generate a new seed with
+# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+CERAMIC_API=https://ceramic-clay.3boxlabs.com
+CERAMIC_SEED=<SemiPermanentSeed>
+
+#
+# GCloud configurations should be setup to allow deploying to each target.
+# See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a
+GCLOUD_LANDING_CONFIG=landing-testing
+GCLOUD_APP_CONFIG=app-testing
 
 #
 # Wallets used by testing environment

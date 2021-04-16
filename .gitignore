@@ -32,4 +32,7 @@ environments/prodtest
 
 libs/contract/src/deployed/*-fork.json
 libs/contract/src/deployed/devlive.json
+
 environments/prod.env
+libs/shared/src/containers/IDX/config.devlive.ts
+**/.firebase/hosting.*.cache

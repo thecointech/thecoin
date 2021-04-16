@@ -31,7 +31,6 @@ import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { useInjectedSigners } from 'api/mock/accounts';
 import { createRef } from 'react';
 
-
 export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
@@ -44,7 +43,6 @@ export const App = ( ) => {
 
   const contextRef = createRef<HTMLDivElement>()
   return (
-    <>
     <MediaContextProvider>
       <style>{mediaStyles}</style>
       <div id={styles.headerDecoration}>
@@ -74,6 +72,5 @@ export const App = ( ) => {
       </div>
       <Footer />
     </MediaContextProvider>
-    </>
   );
 }
