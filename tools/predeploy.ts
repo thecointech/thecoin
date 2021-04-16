@@ -42,7 +42,7 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
     .map(line => line.split('=').join(': '))
     .join('\n  ')
     .trim();
-  const asYaml = `env_variables:\n  CONFIG_NAME: ${process.env.CONFIG_NAME}\n  ${yamlVars}`;
+  const asYaml = `env_variables:\n  ${yamlVars}`;
   writeFileSync(outYamlFile, asYaml);
 }
 

@@ -8,7 +8,7 @@ const { Ed25519Provider } = require('key-did-provider-ed25519')
 const fromString = require('uint8arrays/from-string');
 
 const idxFolder = path.join(__dirname, '..', 'libs', 'shared', 'src', 'containers', 'IDX');
-const schemaPath = `${idxFolder}/config.${process.env.CONFIG_NAME}.ts`;
+const schemaPath = `${idxFolder}/config.${process.env.CONFIG_NAME}.json`;
 
 // Connect to the local Ceramic node
 const ceramic = new Ceramic(process.env.CERAMIC_API)
@@ -44,7 +44,7 @@ async function run() {
       jwe: schemaJwe.commitId.toUrl(),
     },
   }
-  await writeFile(schemaPath, `export default ${JSON.stringify(config, null, 2)}`);
+  await writeFile(schemaPath, JSON.stringify(config, null, 2));
 
   console.log(`Config written to ${schemaPath}`, config)
   process.exit(0)
