@@ -1,71 +1,56 @@
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-//import styles from './styles.module.less';
-import { Props as MyProps, initialState } from './types';
+import { FormattedMessage } from 'react-intl';
+import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
+type Props = Readonly<MyProps>;
+export const initialState = {
+  value: '',
+  showState: false,
+};
 
-type State = Readonly<typeof initialState>;
-type Props = Readonly<MyProps & WrappedComponentProps>;
 
-class UxInputClass extends React.Component<Props, State> {
-  state = initialState;
-
-  static defaultProps = {
-    forceValidate: false
-  };
-
-  constructor(props: Props) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-  }
-
+export const UxInput = (props:Props) => {
+  
+  const [value, setValue] = useState("");
+  const [showState, setShowState] = useState(false);
+  const {
+    intlLabel,
+    label,
+    uxChange,
+    forceValidate,
+    footer,
+    isValid,
+    message,
+    messageValues,
+    tooltip,
+    ...inputProps
+  } = props;
+  
   //
   // Ensure that if we recieve the forceValidate prop, we validate
   // our current value and show the result (regardless of state)
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.forceValidate && !prevState.showState) {
-      nextProps.uxChange(prevState.value);
-      return {
-        showState: true,
-      };
-    }
-    return null;
-  }
+  //function getDerivedStateFromProps(nextProps: Props, prevState: State) {
+  //  if (nextProps.forceValidate && !prevState.showState) {
+  //    nextProps.uxChange(prevState.value);
+  //    return {
+  //      showState: true,
+  //    };
+  //  }
+  //  return null;
+  //}
 
-  onBlur(event: React.FocusEvent<HTMLInputElement>) {
+  function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
-    this.setState({
-      showState: value.length > 0,
-    });
+    setShowState(value.length > 0);
   }
 
-  onChange(event: React.FormEvent<HTMLInputElement>) {
+  function onChange(event: React.FormEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
-    this.props.uxChange(value);
-    this.setState({
-      value,
-    });
+    props.uxChange(value);
+    setValue(value);
   }
-
-  render() {
-    const { value, showState } = this.state;
-    const {
-      intl,
-      intlLabel,
-      label,
-      uxChange,
-      forceValidate,
-      footer,
-      isValid,
-      message,
-      messageValues,
-      tooltip,
-      ...inputProps
-    } = this.props;
 
     const errorTag = showState && (isValid === false);
     const successTag = showState && (isValid === true);
@@ -89,8 +74,8 @@ class UxInputClass extends React.Component<Props, State> {
     const inputElement = (
       <span ref={contextRef}>
         <Input
-          onChange={this.onChange}
-          onBlur={this.onBlur}
+          onChange={onChange}
+          onBlur={onBlur}
           value={value}
           {...inputProps}
           data-tooltip={tooltipData}
@@ -105,10 +90,10 @@ class UxInputClass extends React.Component<Props, State> {
         open={showMessage} style={errorTag ? styleError : styleSuccess } />
     );
 
-    return (
+    return(
       <Form.Field className={formClassName} error={errorTag}>
         <Label>
-          <FormattedMessage {...this.props.intlLabel} /> {this.props.label}
+          <FormattedMessage {...props.intlLabel} /> {props.label}
         </Label>
         {messageElement}
         {inputElement}
@@ -116,7 +101,4 @@ class UxInputClass extends React.Component<Props, State> {
         
       </Form.Field>
     );
-  }
 }
-
-export const UxInput = injectIntl(UxInputClass);
