@@ -2,6 +2,10 @@
         User Overrides
 *******************************/
 
+.ui.tabular.menu{
+        border-bottom: none;
+}
+
 
 .ui.tabular.menu .item{
         background-color: fade(@theCoinPalettePaleGreen2, 30%);   // Return @color with 30% opacity in rgba;

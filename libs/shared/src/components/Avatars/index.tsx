@@ -25,3 +25,7 @@ export const Avatars = ({index}: { index: AvatarIdx }) => (
         <img src={avatars[index]} title="Avatar"/>
     </div>
   )
+
+export function getAvatarLink( index: AvatarIdx ) {
+   return avatars[index];
+  }

@@ -2,11 +2,15 @@
          Site Overrides
 *******************************/
 
+
+
 .ui.sidebar{
   border-radius: @absoluteBorderRadius !important;
   height: auto !important;
-  margin-left: 2% !important;
-  margin-top: 89px !important;
+  margin-top: 80px !important;
+  position: relative;
+  z-index: 100;
+
   &.menu .item{
     color: @theCoinPaletteGray1;
     padding: 10px;
@@ -15,7 +19,7 @@
     opacity: 0.7;
     &.active{
       opacity: 1;
-      background-color: @theCoinPalettePaleGreen1;
+      background-color: @theCoinPalettePaleGreen2Faded30;
       color: @theCoinPaletteGreen4;
       font-weight: bold;
       i.icon{
@@ -35,6 +39,10 @@
 .ui.vertical.menu .item > i.icon{
   float: left;
   margin-right: 10px;
+}
+
+.ui.vertical.menu .item::before {
+  background-color: @theCoinPaletteGreen4Faded30;
 }
 
 .ui.left.visible.sidebar, .ui.right.visible.sidebar{

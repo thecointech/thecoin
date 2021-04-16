@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Header, StrictButtonProps } from 'semantic-ui-react';
+import { Form, Header, Message, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
@@ -9,6 +9,12 @@ import { ChangeCB } from '@thecointech/shared/components/UxInput/types';
 import { AccountState } from '@thecointech/shared/containers/Account';
 
 type VisualProps={
+
+  errorMessage: MessageDescriptor,
+  errorHidden: boolean,
+  successMessage: MessageDescriptor,
+  successHidden: boolean,
+
   description:MessageDescriptor,
   onValueChange: (value: number) => void,
   account: AccountState,
@@ -40,6 +46,13 @@ export const TransferWidget = (props: VisualProps) => {
           </Header.Subheader>
         </Header>
 
+        <Message hidden={props.successHidden} positive>
+          <FormattedMessage {...props.successMessage} />
+        </Message>
+        <Message hidden={props.errorHidden} negative>
+          <FormattedMessage {...props.errorMessage} />
+        </Message>
+        
         <DualFxInput
           onChange={props.onValueChange}
           asCoin={true}

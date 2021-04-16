@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Form, Header, Dropdown, DropdownProps} from 'semantic-ui-react';
+import { Form, Dropdown, DropdownProps, Message} from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
@@ -28,6 +28,13 @@ const button = { id:"app.accounts.billPayments.form.button",
                 defaultMessage:"Send payment",
                 description:"Label for the form the make a payment page / bill payment tab" };
 
+const errorForm = { id:"app.accounts.billPayments.form.errorForm",
+                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please contact support@thecoin.io and describe what happened",
+                description:"Message for the form the make a payment page / bill payment tab" };
+const successForm = { id:"app.accounts.billPayments.form.successForm",
+                defaultMessage:"Order received. Your bill payment will be processed in the next 1-2 business days. Please note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time",
+                description:"Label for the form the make a payment page / bill payment tab" };
+
 const transferOutHeader= { id:"app.accounts.billPayments.transferOutHeader",
                 defaultMessage:"Processing Bill Payment..." };
 const step1= { id:"app.accounts.billPayments.step1",
@@ -42,8 +49,6 @@ const transferOutProgress = { id:"app.accounts.billPayments.transferOutProgress"
 const payeeAccount = { id:"app.accounts.billPayments.form.payeeAccount",
                 defaultMessage:"Payee account number",
                 description:"Label for the form the make a payment page / bill payment tab" };
-
-
 
 export const BillPayments = () => {
   const intl = useIntl();
@@ -65,6 +70,11 @@ export const BillPayments = () => {
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
 
+  const [successHidden, setSuccessHidden] = useState(true);
+  const [errorHidden, setErrorHidden] = useState(true);
+
+  const isValid = !validationMessage;
+  const canSubmit = isValid && coinToSell;
 
   const resetState = useCallback(
     () => {
@@ -196,14 +206,11 @@ export const BillPayments = () => {
       try {
         const results = await doBillPayment();
         if (!results) {
-          alert(
-            "We have encountered an error.\nDon't worry, your money is safe, but please contact support@thecoin.io and describe whats happened",
-          );
+          setErrorHidden(false);
+          setSuccessHidden(true);
         } else
-          alert(
-            'Order recieved.\nYour bill payment will be processed in the next 1-2 business days.\nPlease note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time.',
-          );
-
+          setSuccessHidden(false);
+          setErrorHidden(true);
         // Reset back to default state
         resetState();
       } catch (e) {
@@ -214,16 +221,17 @@ export const BillPayments = () => {
     }
 
 
-    const isValid = !validationMessage;
-    const canSubmit = isValid && coinToSell;
     return (
     <React.Fragment>
         <Form>
-            <Header as="h5">
-                <Header.Subheader>
-                <FormattedMessage {...description} />
-                </Header.Subheader>
-            </Header>
+            <FormattedMessage {...description} />
+            <Message hidden={successHidden} positive>
+              <FormattedMessage {...successForm} />
+            </Message>
+            <Message hidden={errorHidden} negative>
+              <FormattedMessage {...errorForm} />
+            </Message>
+
             <FilterPayee />
             <Dropdown
                 placeholder={intl.formatMessage(payeeTxt)}

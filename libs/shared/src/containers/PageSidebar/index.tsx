@@ -84,7 +84,7 @@ const getAsHeader = (item: SidebarMenuItem) =>
     <div className={`${styles.containerAvatar}` }>
       <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
     </div>
-    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
+    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar}` }>
       <span>{item.link.header?.primaryDescription}</span>
     </div>
     <Icon name="caret right" disabled size='tiny' id={ `${styles.moreToSee}` } />

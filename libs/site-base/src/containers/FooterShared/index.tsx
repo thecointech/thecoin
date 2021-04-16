@@ -46,7 +46,7 @@ export const FooterShared = () => {
 
   return (
     <>
-      <Grid columns='equal' centered verticalAlign='top' stackable className={ `x2spaceBefore` }>
+      <Grid columns='equal' centered verticalAlign='top' stackable className={ `x0spaceBefore` }>
         <Grid.Row>
           <Grid.Column textAlign={alignForLeftColumn as StrictGridColumnProps["textAlign"]}>
             {leftColumn}

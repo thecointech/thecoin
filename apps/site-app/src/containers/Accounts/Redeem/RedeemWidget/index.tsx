@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Grid, Header, StrictButtonProps } from 'semantic-ui-react';
+import { Form, Grid, Header, Message, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
@@ -7,8 +7,15 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 import { AccountState } from '@thecointech/shared/containers/Account';
+import { UxInput } from '@thecointech/shared/components/UxInput';
 
 type VisualProps={
+
+    errorMessage: MessageDescriptor,
+    errorHidden: boolean,
+    successMessage: MessageDescriptor,
+    successHidden: boolean,
+
     coinToSell: number | null,
     description:MessageDescriptor,
     onValueChange: (value: number) => void,
@@ -61,6 +68,13 @@ export const RedeemWidget = (props: VisualProps) => {
           </Grid.Row>
         </Grid>
 
+        <Message hidden={props.successHidden} positive>
+          <FormattedMessage {...props.successMessage} />
+        </Message>
+        <Message hidden={props.errorHidden} negative>
+          <FormattedMessage {...props.errorMessage} />
+        </Message>
+
         <DualFxInput
           onChange={props.onValueChange}
           asCoin={true}
@@ -68,13 +82,16 @@ export const RedeemWidget = (props: VisualProps) => {
           value={props.coinToSell}
           fxRate={props.rate}
         />
-        <Form.Input
-          className={"borderTop borderBottom"}
-          label={<FormattedMessage {...props.emailLabel} />}
-          name="email"
-          onChange={event => props.setEmail(event.target.value)}
-          placeholder={props.emailDes}
-        />
+        <UxInput
+            className={"borderTop borderBottom"}
+            intlLabel={props.emailLabel}
+            uxChange={(event: { target: { value: string; }; }) => props.setEmail(event.target.value)}
+            //isValid={isValid}
+            //forceValidate={forceValidate}
+            //message={validationMessage}
+            placeholder={props.emailDes}
+            name="email"
+          />
         <Form.Input
           className={"half left"}
           label={<FormattedMessage {...props.questionLabel} />}
