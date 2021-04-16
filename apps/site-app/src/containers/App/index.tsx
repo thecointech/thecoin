@@ -35,13 +35,13 @@ export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
   const location = useLocation();
+  const contextRef = createRef<HTMLDivElement>()
 
   if (process.env.NODE_ENV !== 'production')
   {
     useInjectedSigners();
   }
 
-  const contextRef = createRef<HTMLDivElement>()
   return (
     <MediaContextProvider>
       <style>{mediaStyles}</style>
