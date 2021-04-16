@@ -33,7 +33,7 @@
 
     "predeploy": "yarn build",
     "deploy": "lerna run deploy",
-    "deploy:version": "lerna version 0.2.0 --allow-branch publish/* --no-push",
+    "deploy:version": "lerna version 0.2.1 --allow-branch publish/* --no-push",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy",
     "deploy:prod": "cross-env CONFIG_NAME=production yarn deploy",
 
