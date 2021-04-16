@@ -10,13 +10,14 @@ import { ETransferModal } from './eTransferModal';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import illustration from './images/img_interaclogo.svg';
 import styles from './styles.module.less';
+import { Grid } from 'semantic-ui-react';
 
 interface MyProps {
   signer: AnySigner;
 }
 
 const signin = { id:"app.purchase.signin",
-                defaultMessage:"Sign into your finacial institution. Navigate to where you can send an Interac Email Transfer",
+                defaultMessage:"Sign into your financial institution. Navigate to where you can send an Interac Email Transfer",
                 description:"Content for the purchase list explanation page in the app" };
 const buttonGenerate = { id:"app.makepayments.button",
                 defaultMessage:"Generate",
@@ -75,7 +76,12 @@ class PurchaseClass extends React.PureComponent<Props, StateType> {
         <ol className={"ui list"}>
           <li>
             <div className={styles.line}></div>
-            <FormattedMessage {...signin} /><img src={illustration} />
+            <Grid>
+              <Grid.Row>
+                <Grid.Column floated='left'  width={11}><FormattedMessage {...signin} /></Grid.Column>
+                <Grid.Column floated='right' width={5}><img src={illustration} /></Grid.Column>
+              </Grid.Row>
+            </Grid>
           </li>
           <li>
             <div className={styles.line}></div>

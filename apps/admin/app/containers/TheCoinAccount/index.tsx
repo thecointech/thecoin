@@ -7,21 +7,30 @@ import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
 import { ReadFileData, UploadWallet } from '@thecointech/shared/containers/UploadWallet';
 
+const balance = { id:"admin.thecoinaccounts.sidebar.balance",
+                defaultMessage:"Balance",
+                description:"Title for the balance entry in the menu"};
+const minting = { id:"app.thecoinaccounts.sidebar.minting",
+                  defaultMessage:"Minting",
+                  description:"Title for the minting entry in the menu"};
+const purchase = {  id:"app.thecoinaccounts.sidebar.purchase",
+                    defaultMessage:"Complete Purchase",
+                    description:"Title for the purchase entry in the menu"};
 
 const AccountMap: RouterPath[] = [
   {
-    name: "Balance",
+    name: balance,
     urlFragment: "",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} />),
     exact: true
   },
   {
-    name: "Minting",
+    name: minting,
     urlFragment: "mint",
     creator: () => (() => <Mint />),
   },
   {
-    name: "Complete Purchase",
+    name: purchase,
     urlFragment: "purchase",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />),
   }

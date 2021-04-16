@@ -17,7 +17,6 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-
     "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
     "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",

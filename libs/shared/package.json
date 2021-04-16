@@ -63,6 +63,7 @@
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "^17.1.6",
+    "react-input-mask": "2.0.4",
     "@thecointech/types": "*",
     "jest": "*"
   }

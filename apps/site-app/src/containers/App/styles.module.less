@@ -2,8 +2,14 @@
 
 #mainContent{
   padding: 20px;
-  padding-left: 50px;
+  padding-left: 66px;
   width: 55%;
+  margin: auto;
+  padding-top: 70px;
+}
+
+.contentContainer{
+  max-width: 1300px;
   margin: auto;
 }
 
@@ -13,11 +19,13 @@
 }
 
 #headerDecoration{
-  border-bottom: 1px solid @theCoinPalettePaleGreen2;
-  box-shadow: 0px 5px grey;
+  border-bottom: 1px solid @theCoinPalettePaleGreen2Faded50;
   width: 100%;
   background-color: @white;
-  box-shadow: 0px 0px 12px 4px @theCoinPaletteGray3;
+  box-shadow: @subtleShadow;
+  
+  position: fixed;
+  z-index: 1;
 }
 
 .smallerThanDesktop({
@@ -32,5 +40,7 @@
 .biggerThanSmallComputer({
   #mainContent{
     width: 65%;
+    margin-top: 50px;
+    padding-top: 20px;
   }
 });

@@ -65,7 +65,8 @@ export const TransactionList = (props: MyProps) => {
     const transactions = account!.history;
     const transactionLoading = account?.historyLoading;
 
-    let filteredTx = transactions.filter((tx: { date: { toMillis: () => number; }; }) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    filteredTx.reverse();
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
     let txJsxRows = txOutput.map((tx, index) => {
@@ -86,7 +87,6 @@ export const TransactionList = (props: MyProps) => {
       const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
       const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
-
       return (
         <Table.Row key={index}>
           <Table.Cell width={2} textAlign='center'>
@@ -105,7 +105,7 @@ export const TransactionList = (props: MyProps) => {
             <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
           </Table.Cell>
-          <Table.Cell width={3}>${balanceCad}</Table.Cell>
+          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Table.Cell>
         </Table.Row>
     )});
 

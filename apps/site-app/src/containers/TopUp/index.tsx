@@ -16,7 +16,7 @@ const title = { id:"app.topup.title",
 const description = { id:"app.topup.description",
                       defaultMessage:"Transfer funds from your Canadian bank to your account.",
                       description:"Description for the topup page in the app" };
-const etransfert = { id:"app.topup.tabs.etransfert",
+const etransfer = { id:"app.topup.tabs.etransfer",
                 defaultMessage:"Interac E-mail Transfer",
                 description:"Title for the tabs the topup page in the app" };
 const interact = { id:"app.topup.tabs.interact",
@@ -27,7 +27,7 @@ export const Topup = (routerProps:AccountPageProps) => {
   const intl = useIntl();
   const activeAccount = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Purchase signer={activeAccount!.signer!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfer}), render: () => <AppContainerForTabs><Purchase signer={activeAccount!.signer!} /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
   ]
   return (

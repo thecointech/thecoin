@@ -9,14 +9,14 @@ export interface SidebarMenuLink {
   name: string;
   to: RUrl | boolean;
   icon?: SemanticICONS;
-  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: JSX.Element | Element | string };
 }
 
 export interface SidebarMenuItem {
   link: SidebarMenuLink;
   subItems?: SidebarMenuItem[];
   icon?: SemanticICONS;
-  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: JSX.Element | Element | string };
 }
 
 // Sidebar does not directly recieve state: instead;

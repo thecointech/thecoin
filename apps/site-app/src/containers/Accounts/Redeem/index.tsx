@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
 import { GetStatusApi, GetETransferApi } from 'api'
@@ -9,14 +9,12 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
 
-
-
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
-                description:"Error Message for the make a payment page / etransfert tab" };
+                description:"Error Message for the make a payment page / etransfer tab" };
 const successMessage = { id:"app.accounts.redeem.successMessage",
-                defaultMessage:"Order recieved.\nYou should receive the e-Transfer in 1-2 business days.",
-                description:"Success Message for the make a payment page / etransfert tab" };
+                defaultMessage:"Order received.\nYou should receive the e-Transfer in 1-2 business days.",
+                description:"Success Message for the make a payment page / etransfer tab" };
 const description = { id:"app.accounts.redeem.description",
                 defaultMessage:"Email money to anyone with an interac e-Transfer.",
                 description:"Description for the make a payment page / etransfert tab" };
@@ -56,8 +54,8 @@ const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
                 defaultMessage:"Please wait, we are sending your order to our servers..." };
 
 const button = { id:"app.accounts.redeem.form.button",
-                defaultMessage:"Send e-Transfert",
-                description:"For the button in the make a payment page / etransfert tab" };
+                defaultMessage:"Send e-Transfer",
+                description:"For the button in the make a payment page / etransfer tab" };
 
 
 export const Redeem = () => {
@@ -73,6 +71,9 @@ export const Redeem = () => {
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
+
+  const [successHidden, setSuccessHidden] = useState(true);
+  const [errorHidden, setErrorHidden] = useState(true);
 
   const account = useActiveAccount();
   const { rates } = useFxRates();
@@ -157,9 +158,11 @@ export const Redeem = () => {
     try {
       const results = await doSale();
       if (!results) {
-        alert(<FormattedMessage {...errorMessage} />);
+        setSuccessHidden(true);
+        setErrorHidden(false);
       } else
-        alert(<FormattedMessage {...successMessage} />);
+        setSuccessHidden(false);
+        setErrorHidden(true);
     } catch (e) {
       console.error(e);
       alert(e);
@@ -178,6 +181,11 @@ export const Redeem = () => {
 
   return (
       <RedeemWidget
+        errorMessage={errorMessage}
+        errorHidden={errorHidden}
+        successMessage={successMessage}
+        successHidden={successHidden}
+
         coinToSell={coinToSell}
         description={description}
         onValueChange={onValueChange}

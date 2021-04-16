@@ -29,6 +29,7 @@
     margin-top: -20px;
     padding: 5px;
     position: relative;
+    font-weight: bold;
   }
   .secondaryDescriptionSidebar{
     color: @theCoinPalettePaleGreen2;
@@ -52,6 +53,7 @@
   border-right: 13px solid white;
   cursor: pointer;
   span {
+    min-width: 190px;
     position: absolute;
     white-space: nowrap;
     transform: translateX(0);
@@ -60,7 +62,7 @@
     padding: 10px;
   }
   &:hover span {
-    transform: translateX(calc(200px - 100%));
+    transform: translateX(calc(190px - 100%));
   }
 }
 

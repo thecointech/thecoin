@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Sidebar, Menu, MenuItem, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -19,19 +19,9 @@ type Props = {
 export const PageSidebar: React.FC<Props> = (props) => {
   const { visible, inverted } = props;
   useSidebar();
-  const appState = useSelector(s => s as ApplicationBaseState);
-  const generators = selectSidebar(appState);
-  const menuItems = useMemo(() => {
-    let items: SidebarMenuItem[] = [];
-
-    Object.entries(generators.generators).forEach(([_, generator]) => {
-      items = generator(items, appState);
-    });
-
-    return buildMenuArray(items);
-  }, [appState, generators])
-
+  const menuItems = useMenuItems();
   const { width } = useWindowDimensions();
+
   return (
       <Sidebar
         as={Menu}
@@ -46,6 +36,18 @@ export const PageSidebar: React.FC<Props> = (props) => {
         {menuItems}
       </Sidebar>
   );
+}
+
+const useMenuItems = () => {
+  let items: SidebarMenuItem[] = [];
+  const appState = useSelector(s => s as ApplicationBaseState);
+  const generators = selectSidebar(appState);
+
+  Object.entries(generators.generators).forEach(([_, generator]) => {
+    items = generator(items, appState);
+  });
+
+  return buildMenuArray(items);
 }
 
 const getAsItem = (item: SidebarMenuItem) => {
@@ -84,7 +86,7 @@ const getAsHeader = (item: SidebarMenuItem) =>
     <div className={`${styles.containerAvatar}` }>
       <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
     </div>
-    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
+    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar}` }>
       <span>{item.link.header?.primaryDescription}</span>
     </div>
     <Icon name="caret right" disabled size='tiny' id={ `${styles.moreToSee}` } />
