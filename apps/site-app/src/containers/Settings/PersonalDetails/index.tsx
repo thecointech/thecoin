@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useAccountApi } from '@thecointech/shared/containers/Account';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Form, Header, Icon, StrictInputProps } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
+import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxPhone } from '@thecointech/shared/components/MaskedInputs/UxPhone';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
-import { UxInput } from '@thecointech/shared/components/UxInput';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -78,12 +77,13 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange: StrictInputProps['onChange'] = (_, {details, name, value}) => {
+  const onDetailsChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDetails({
       ...details,
-      [name]: value,
+      [event.target.name]: event.target.value,
     });
   }
+
   const onSetDetails = () => {
     setGivenNameEdit(false);
     setFamilyNameEdit(false);
@@ -93,8 +93,6 @@ export const PersonalDetails = () => {
     setPhoneEdit(false);
     accountApi.setDetails({...details});
   }
-
-  const intl = useIntl();
   
   return (
     <div>
@@ -102,22 +100,6 @@ export const PersonalDetails = () => {
         <FormattedMessage {...title} />
       </Header>
       <Form id={styles.personalInfo}>
-        
-
-          <UxInput
-              className={"half left"}
-              label={<div>
-                            <FormattedMessage {...name} />
-                            <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
-                              <Icon name={"edit"} /><FormattedMessage {...edit} />
-                            </span>
-                        </div>}
-              uxChange={onDetailsChange}
-              details={details}
-              isValid={true}
-              placeholder={intl.formatMessage(button)}
-              name="given_name" readOnly={!givenNameEdit} 
-            />
 
         <Form.Input
           className={"half left"}
@@ -154,7 +136,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={() => onDetailsChange}
+          onChange={onDetailsChange}
           details={details}
           value={details.DOB}
           name="DOB" readOnly={!dobEdit} />
@@ -175,8 +157,8 @@ export const PersonalDetails = () => {
         <Form.Input
             className={"half left"}
             details={details}
-            value={details.phone}
-            onChange={() => onDetailsChange}
+            value={details.email}
+            onChange={onDetailsChange}
             label={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -189,7 +171,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            onChange={() => onDetailsChange}
+            onChange={onDetailsChange}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
