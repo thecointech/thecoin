@@ -1,13 +1,20 @@
 {
   "projects": {
     "prodtest": "tccc-testing",
-    "prod": "tccc-prod"
+    "prod": "tccc-release"
   },
   "targets": {
     "tccc-testing": {
       "hosting": {
         "app": [
           "tccc-testing"
+        ]
+      }
+    },
+    "tccc-release": {
+      "hosting": {
+        "app": [
+          "thecoin-app"
         ]
       }
     }
