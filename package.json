@@ -31,11 +31,11 @@
     "dev:live:bootstrap": "yarn wait-port 7007 && yarn idx bootstrap && node ./tools/bootstrapIdx.js",
     "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
 
-    "predeploy": "yarn build",
-    "deploy": "lerna run deploy",
     "deploy:version": "lerna version 0.2.1 --allow-branch publish/* --no-push",
-    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy",
-    "deploy:prod": "cross-env CONFIG_NAME=production yarn deploy",
+    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
+    "pre_deploy": "yarn build",
+    "_deploy": "lerna run deploy",
 
     "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
     "clean": "lerna run clean",

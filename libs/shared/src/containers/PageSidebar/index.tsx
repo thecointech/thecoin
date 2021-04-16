@@ -1,5 +1,5 @@
 import React from "react";
-import { Sidebar, Menu, MenuItem, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
+import { Sidebar, Menu, MenuItem, Divider, Icon, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
