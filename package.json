@@ -19,11 +19,11 @@
     "gen:rates": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
     "gen:broker": "openapi-generator-cli generate -i apps/broker-service/src/api/swagger.json -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:apis": "yarn gen:rates && yarn gen:broker",
-    "build:projects": "cross-env CONFIG_NAME=prod lerna run build",
+    "build:projects": "lerna run build",
     "build:rates": "cd apis/rates/ts && yarn build",
     "build:broker": "cd apis/broker/ts && yarn build",
     "build:apis": "run-p build:rates build:broker",
-    "build": "run-s clean build:projects gen:apis build:apis",
+    "build": "cross-env CONFIG_NAME=prod run-s clean build:projects gen:apis build:apis",
 
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "dev:live:ceramic": "yarn ceramic daemon",
