@@ -5,11 +5,6 @@ import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 type Props = Readonly<MyProps>;
-export const initialState = {
-  value: '',
-  showState: false,
-};
-
 
 export const UxInput = (props:Props) => {
   
@@ -40,6 +35,16 @@ export const UxInput = (props:Props) => {
   //  }
   //  return null;
   //}
+  function update({nextProps}) {
+    const [prevState, setPrevState] = useState(prevState);
+  
+    if (nextProps.forceValidate && !prevState.showState) {
+      nextProps.uxChange(prevState.value);
+      setShowState(true);
+      setPrevState(nextProps);
+    }
+    return null;
+  }
 
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
