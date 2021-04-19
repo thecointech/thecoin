@@ -2,16 +2,11 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
-
+import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
 
 const title = { id:"site.homepage.createAccountSmall.title",
                 defaultMessage:"TheCoin is a revolutionary new kind of account.",
                 description:"Title / content for the small create account banner"};
-const button = {  id:"site.homepage.createAccountSmall.button",
-                  defaultMessage:"Create Account",
-                  description:"Create Account button for the small create account banner for the home pages"};
-
 
 export const CreateAccountSmall = () => {
 
@@ -26,9 +21,7 @@ export const CreateAccountSmall = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} size='large' >
-              <FormattedMessage {...button} />
-            </ButtonPrimary>
+            <CreateAccountButton size="large" />
           </Grid.Column>
         </Grid.Row>
       </Grid>
