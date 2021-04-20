@@ -5,7 +5,7 @@ import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
 
 import styles from './styles.module.less';
-import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
+import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
 
 export enum TypeCreateAccountBanner {
     People,

@@ -4,7 +4,7 @@ import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitch
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { Link, NavLink } from 'react-router-dom';
-import { LoginLink } from 'components/AppLinks/Login';
+import { LoginLink } from '../../../components/AppLinks/Login';
 import styles from './styles.module.less';
 
 const home = { id:"site.MainNavigation.home",
