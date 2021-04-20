@@ -944,7 +944,7 @@
 	},
 	"info": {
 		"title": "@thecointech/rates-service",
-		"version": "0.1.1",
+		"version": "0.2.1",
 		"description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
 		"license": {
 			"name": "MIT"

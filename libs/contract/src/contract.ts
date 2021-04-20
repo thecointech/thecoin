@@ -7,8 +7,8 @@ import { getProvider } from './provider';
 export const COIN_EXP = 1000000;
 
 //
-// TODO: This is hard-coded at our current contract,
-// and will cause issues on all non-production environments
+// Ensure your .env specifies where this contract was deployed at
+// (used in fetching history to prevent searching too far back!)
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
 const getAbi = async () => {

@@ -3,7 +3,6 @@ import { mkdirSync } from 'fs';
 
 export const getFileStream = (name: string, folder: string, rotate: boolean) : Stream => {
 
-  // TODO: Obvs, we can't do this on appengine/browser.
   mkdirSync(folder, { recursive: true });
   const filepath = `${folder}/${name}.log`
 

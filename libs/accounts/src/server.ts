@@ -3,7 +3,7 @@ import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import { Wallet } from 'ethers';
 import { AccountName } from './names';
 
-// Get Secrets.  Only enabled for TCCC
+// Get Secrets.  Currently only used on TCCC Broker
 export async function getSecret(name: string) {
   const client = new SecretManagerServiceClient();
   const [accessResponse] = await client.accessSecretVersion({
