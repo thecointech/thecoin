@@ -31,13 +31,18 @@ Tooltip.args = {
   }
 }
 
-const initState = {
-  fxRates: {
-    rates: [],
-    fetching: 0,
-  }
-}
-
 Tooltip.decorators = [
-  withStore<ApplicationRootState>(initState)
+  withStore<ApplicationRootState>({
+    fxRates: {
+      rates: [{
+        buy: 1,
+        sell: 1,
+        fxRate: 1,
+        validFrom: 0,
+        validTill: 1800000000000,
+        target: 124
+      }],
+      fetching: 0,
+    }
+  })
 ]
