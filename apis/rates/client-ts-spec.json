@@ -1,5 +1,4 @@
 {
     "supportsES6": true,
-    "npmName": "@thecointech/pricing",
-    "npmVersion" : "2.0.0"
+    "npmName": "@thecointech/pricing"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "description": "The Coin: Common logging setup",
   "keywords": [
     "TheCoin",
@@ -33,8 +33,8 @@
   "browser": "./build/log_browser.js",
   "exports": "./build/log_node.js",
   "dependencies": {
-    "bunyan": "^1.8.12",
-    "browser-bunyan": "^1.6.3"
+    "browser-bunyan": "^1.6.3",
+    "bunyan": "^1.8.12"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.6"

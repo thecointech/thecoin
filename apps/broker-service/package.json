@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
@@ -17,19 +17,15 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-
     "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
     "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
     "run-env": "node --inspect=9232 -r ts-node/register -r dotenv/config ./src/main.ts",
-
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "gcloud app deploy",
-
     "build": "run-s build:api build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:api": "yarn tsoa spec-and-routes",
-
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
@@ -42,24 +38,24 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/email": "*",
-    "@thecointech/logging": "*",
-    "@thecointech/utilities": "*",
-    "@thecointech/accounts": "*",
-    "@thecointech/contract": "*",
+    "@thecointech/accounts": "^0.2.1",
+    "@thecointech/contract": "^0.2.1",
+    "@thecointech/email": "^0.2.1",
+    "@thecointech/logging": "^0.2.1",
+    "@thecointech/utilities": "^0.2.1",
     "@tsoa/runtime": "^3.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "google-auth-library": "^5.6.1",
     "googleapis": "47.0.0",
     "luxon": "1.26.0",
+    "openapi-types": "^7.2.3",
     "swagger-tools": "^0.10.4",
-    "swagger-ui-express": "^4.1.6",
-    "openapi-types": "^7.2.3"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
-    "@types/swagger-ui-express": "^4.1.1",
     "@types/cors": "^2.8.10",
+    "@types/swagger-ui-express": "^4.1.1",
     "jest": "*",
     "tsoa": "^3.5.2"
   }
