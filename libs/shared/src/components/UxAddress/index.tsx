@@ -4,6 +4,7 @@ import messages from './messages';
 import { UxInput } from '../UxInput';
 import { ChangeCB } from '../UxInput/types';
 import { MessageDescriptor } from 'react-intl';
+import { useState } from 'react';
 
 type MyProps = {
 	forceValidate?: boolean,
@@ -12,36 +13,28 @@ type MyProps = {
 	uxChange: ChangeCB
 }
 
-class UxAddress extends React.PureComponent<MyProps> {
-
-	state = {
-		account: "",
-		isValid: undefined,
-		message: undefined as MessageDescriptor | undefined,
-	};
+export const UxAddress = (props:MyProps) => {
+	const [account, setAccount] = useState("");
+	const [isValid, setIsValid] = useState(false);
+	const [message] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
-	onAccountValue = (value: string) => {
-		const isValid = IsValidAddress(value)
-		this.setState({
-			account: value,
-			isValid
-		});
+	function onAccountValue(value: string) {
+		const isValidTemp = IsValidAddress(value)
+		setAccount(value);
+		setIsValid(isValidTemp);
 		if (isValid)
-			this.props.uxChange(value)
+			props.uxChange(value)
 	}
 
-	render() {
-		return (
-			<UxInput
-				intlLabel={messages.labelAccount}
-				{...this.state}
-				{...this.props}
-				uxChange={this.onAccountValue}
-			/>
-		);
-	}
+	return(
+		<UxInput
+			intlLabel={messages.labelAccount}
+			{...account}
+			{...isValid}
+			{...message}
+			{...props}
+			uxChange={onAccountValue}
+		/>
+	);
 }
-
-export { UxAddress };
-

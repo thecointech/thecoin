@@ -26,7 +26,7 @@ export interface Props {
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: ValuedMessageDesc;
+  message?: ValuedMessageDesc | null;
   tooltip?: MessageDescriptor;
 
   forceValidate?: boolean;
