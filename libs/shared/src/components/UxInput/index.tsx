@@ -10,6 +10,7 @@ export const UxInput = (props:Props) => {
   
   const [value, setValue] = useState("");
   const [showState, setShowState] = useState(false);
+  //const [prevState, setPrevState] = useState();
   const {
     intlLabel,
     label,
@@ -23,29 +24,6 @@ export const UxInput = (props:Props) => {
     ...inputProps
   } = props;
   
-  //
-  // Ensure that if we recieve the forceValidate prop, we validate
-  // our current value and show the result (regardless of state)
-  //function getDerivedStateFromProps(nextProps: Props, prevState: State) {
-  //  if (nextProps.forceValidate && !prevState.showState) {
-  //    nextProps.uxChange(prevState.value);
-  //    return {
-  //      showState: true,
-  //    };
-  //  }
-  //  return null;
-  //}
-  function update({nextProps}) {
-    const [prevState, setPrevState] = useState(prevState);
-  
-    if (nextProps.forceValidate && !prevState.showState) {
-      nextProps.uxChange(prevState.value);
-      setShowState(true);
-      setPrevState(nextProps);
-    }
-    return null;
-  }
-
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
     setShowState(value.length > 0);
@@ -55,6 +33,7 @@ export const UxInput = (props:Props) => {
     const { value } = event.currentTarget;
     props.uxChange(value);
     setValue(value);
+    setShowState(true);
   }
 
     const errorTag = showState && (isValid === false);
@@ -98,7 +77,7 @@ export const UxInput = (props:Props) => {
     return(
       <Form.Field className={formClassName} error={errorTag}>
         <Label>
-          <FormattedMessage {...props.intlLabel} /> {props.label}
+          <FormattedMessage {...intlLabel} /> {label}
         </Label>
         {messageElement}
         {inputElement}
