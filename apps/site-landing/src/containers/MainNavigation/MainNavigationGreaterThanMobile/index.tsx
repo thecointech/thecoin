@@ -3,13 +3,11 @@ import { Menu, Container } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import HeaderLink from '@thecointech/site-base/components/HeaderLink';
-
 import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
-
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
-import sharedStyles from '../styles.module.less';
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
+import { LoginLink } from 'components/AppLinks/Login';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",
@@ -23,10 +21,6 @@ const wedomore = {  id:"site.MainNavigation.wedomore",
 const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
-const titleButton = { id: 'site.MainNavigation.button,createAccount', defaultMessage:'Create Account'};
-const loginLink = {  id:"site.MainNavigation.loginLink",
-                    defaultMessage:"LOG IN",
-                    description:"Title for the Login entry in the menu"};
 
 // TODO: Fix Login button
 export const MainNavigationGreaterThanMobile = () => {
@@ -53,14 +47,10 @@ export const MainNavigationGreaterThanMobile = () => {
                 </HeaderLink>
                 <Menu.Menu position='right'>
                   <Menu.Item>
-                    <a href={process.env.URL_ACCOUNT_LOGIN} className={sharedStyles.loginLink}>
-                      <FormattedMessage {...loginLink} />
-                    </a>
+                    <LoginLink />
                   </Menu.Item>
                   <Menu.Item>
-                    <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} >
-                        <FormattedMessage {...titleButton} />
-                    </ButtonPrimary>
+                    <CreateAccountButton />
                   </Menu.Item>
                   <Menu.Item>
                     <LanguageSwitcher />

@@ -5,7 +5,7 @@ import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
 
 import styles from './styles.module.less';
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
 
 export enum TypeCreateAccountBanner {
     People,
@@ -20,10 +20,6 @@ const title = { id:"site.createAccountBanner.title",
                 defaultMessage:"The benefits of a chequing, savings, and investing account all in one!",
                 description:"The benefits of a chequing, savings, and investing account all in one!"};
 
-const buttonCreate = { id:"site.createAccountBanner.button",
-                        defaultMessage:"Create Account",
-                        description:"Create Account button for the create account banner for interior pages"};
-
 export const CreateAccountBanner = (props: Props) => {
 
     let illustration = illustrationPlant;
@@ -37,9 +33,7 @@ export const CreateAccountBanner = (props: Props) => {
                     <Header as='h3'>
                         <FormattedMessage {...title} />
                     </Header>
-                    <ButtonPrimary as={"a"} href={process.env.URL_ACCOUNT_CREATE} size='large' >
-                        <FormattedMessage {...buttonCreate} />
-                    </ButtonPrimary>
+                    <CreateAccountButton size='large' />
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>

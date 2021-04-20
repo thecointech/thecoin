@@ -143,9 +143,6 @@ module.exports = options => ({
       URL_SERVICE_RATES: process.env.URL_SERVICE_RATES,
 
       // convenience defines
-      URL_ACCOUNT_CREATE: `${process.env.URL_SITE_APP}/#/addAccount`,
-      URL_ACCOUNT_LOGIN: process.env.URL_SITE_APP,
-
       DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
       DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
     }),

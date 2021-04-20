@@ -4,7 +4,7 @@ import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitch
 import { FormattedMessage } from 'react-intl';
 import Logo from './logo.svg';
 import { Link, NavLink } from 'react-router-dom';
-import sharedStyles from '../styles.module.less';
+import { LoginLink } from 'components/AppLinks/Login';
 import styles from './styles.module.less';
 
 const home = { id:"site.MainNavigation.home",
@@ -19,9 +19,7 @@ const wedomore = {  id:"site.MainNavigation.wedomore",
 const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
-const loginLink = {  id:"site.MainNavigation.loginLink",
-                    defaultMessage:"LOG IN",
-                    description:"Title for the Login entry in the menu"};
+
 
 export const MainNavigationMobile = () => {
   return (
@@ -35,9 +33,7 @@ export const MainNavigationMobile = () => {
               </Menu.Menu>
               <Menu.Menu position='right'>
                 <Menu.Item>
-                  <a href={process.env.URL_ACCOUNT_LOGIN} className={sharedStyles.loginLink}>
-                    <FormattedMessage {...loginLink} />
-                  </a>
+                  <LoginLink />
                 </Menu.Item>
                 <Menu.Item>
                   <LanguageSwitcher />
