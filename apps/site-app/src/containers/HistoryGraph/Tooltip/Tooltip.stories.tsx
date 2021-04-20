@@ -3,6 +3,8 @@ import { Story, Meta } from '@storybook/react';
 import { Tooltip as GraphTooltip, TooltipProps } from './Tooltip';
 import sampleData from './Tooltip.stories.data.json';
 import { DateTime } from 'luxon';
+import { withStore } from '@thecointech/storybookutils';
+import { ApplicationRootState } from '../../../types';
 
 export default {
   title: 'App/HistoryGraphTooltip',
@@ -28,3 +30,14 @@ Tooltip.args = {
     }
   }
 }
+
+const initState = {
+  fxRates: {
+    rates: [],
+    fetching: 0,
+  }
+}
+
+Tooltip.decorators = [
+  withStore<ApplicationRootState>(initState)
+]
