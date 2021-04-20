@@ -33209,7 +33209,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@^15.0.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.0.0, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -37106,6 +37106,13 @@ store@2.0.12, store@^2.0.12:
   version "2.0.12"
   resolved "https://registry.yarnpkg.com/store/-/store-2.0.12.tgz#8c534e2a0b831f72b75fc5f1119857c44ef5d593"
   integrity sha1-jFNOKguDH3K3X8XxEZhXxE711ZM=
+
+storybook-addon-intl@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/storybook-addon-intl/-/storybook-addon-intl-2.4.1.tgz#870d990defde87615e490aa4ca18abec3ac19f2c"
+  integrity sha512-07CofbUQcx8axTWd2/x0CNyaNJzRFW+/idHg2W3fnimy9w56A088kJwQzefjVFVSJELFDL2kjG19pP3MJ2A0ng==
+  dependencies:
+    prop-types "^15.5.0"
 
 stream-browserify@^2.0.1:
   version "2.0.2"

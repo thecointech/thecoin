@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import {configureAppStore} from '@thecointech/shared/build/store';
+import { withTranslations } from './intl';
 
 const store = configureAppStore(undefined);
 
@@ -17,4 +18,5 @@ export const decorators = [
       </MemoryRouter>
     </Provider>
   ),
+  withTranslations,
 ];
