@@ -6,8 +6,8 @@ import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 import {LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
-import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
-import { LoginLink } from 'components/AppLinks/Login';
+import { CreateAccountButton } from '../../../components/AppLinks/CreateAccount';
+import { LoginLink } from '../../../components/AppLinks/Login';
 
 const home = { id:"site.MainNavigation.home",
                 defaultMessage:"Home",

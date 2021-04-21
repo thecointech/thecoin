@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
-import { CreateAccountButton } from 'components/AppLinks/CreateAccount';
+import { CreateAccountButton } from '../../../components/AppLinks/CreateAccount';
 
 const title = { id:"site.homepage.createAccountSmall.title",
                 defaultMessage:"TheCoin is a revolutionary new kind of account.",
