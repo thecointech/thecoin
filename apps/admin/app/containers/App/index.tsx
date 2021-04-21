@@ -7,10 +7,12 @@ import { useAccountMapStore } from '@thecointech/shared/containers/AccountMap';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
+import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 
 const AppRender = () => {
   useFxRatesStore();
   useAccountMapStore();
+  useSidebar();
 
   const divStyle = {
     minHeight: "500px"

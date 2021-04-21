@@ -17,6 +17,7 @@ import MainPageTransition from '@thecointech/site-base/components/MainPageTransi
 import {MainRouter} from 'containers/MainRouter';
 import { useAccountMapStore } from '@thecointech/shared/containers/AccountMap';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
+import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
@@ -34,6 +35,7 @@ import { createRef } from 'react';
 export const App = ( ) => {
   useFxRatesStore();
   useAccountMapStore();
+  useSidebar();
   const location = useLocation();
   const contextRef = createRef<HTMLDivElement>()
 
@@ -58,7 +60,7 @@ export const App = ( ) => {
                 <PageSidebar/>
               </Sticky>
             </Rail>
-            
+
             <ColumnRightTop />
 
             <Ref innerRef={contextRef}>

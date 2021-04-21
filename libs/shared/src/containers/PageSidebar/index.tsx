@@ -6,7 +6,6 @@ import { SidebarMenuItem } from "./types";
 import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
-import { useSidebar } from "./reducer";
 import { useWindowDimensions } from '../../components/WindowDimensions';
 import { breakpointsValues } from '../../components/ResponsiveTool';
 
@@ -18,7 +17,6 @@ type Props = {
 
 export const PageSidebar: React.FC<Props> = (props) => {
   const { visible, inverted } = props;
-  useSidebar();
   const menuItems = useMenuItems();
   const { width } = useWindowDimensions();
 
