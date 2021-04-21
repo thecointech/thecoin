@@ -7,6 +7,7 @@ import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxPhone } from '@thecointech/shared/components/MaskedInputs/UxPhone';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
+import { UxInput } from '@thecointech/shared/components/UxInput';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -101,6 +102,13 @@ export const PersonalDetails = () => {
       </Header>
       <Form id={styles.personalInfo}>
 
+        <UxInput
+            className={"half left"}
+            intLabel={familyname}
+            uxChange={() => onDetailsChange}
+            name="given_name" 
+            readOnly={!givenNameEdit}
+          />
         <Form.Input
           className={"half left"}
           label={<div>

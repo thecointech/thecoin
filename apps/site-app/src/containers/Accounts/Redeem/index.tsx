@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
@@ -66,6 +67,9 @@ export const Redeem = () => {
   const [answer, setAnswer] = useState('');
   const [message, setMessage] = useState(undefined as string | undefined);
 
+  const [validationMessage] = useState(null as ValuedMessageDesc|null);
+  const [forceValidate, setForceValidate] = useState(false);
+
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [transferMessage, setTransferMessage] = useState(transferOutProgress);
   const [transferValues, setTransferValues] = useState(undefined as any);
@@ -81,8 +85,12 @@ export const Redeem = () => {
 
   const intl = useIntl();
 
+  const isValid = !validationMessage;
+  //const canSubmit = isValid && coinToSell;
+
   const doSale = async () => { 
     // Init messages
+    setForceValidate(true);
     setTransferMessage(step1);
     setPercentComplete(0.0);
 
@@ -149,7 +157,7 @@ export const Redeem = () => {
   }
 
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
-    
+    console.log(email);
     if (e) e.preventDefault();
     setDoCancel(false);
     setTransferValues(undefined);
@@ -216,6 +224,10 @@ export const Redeem = () => {
         transferMessage={transferMessage}
         percentComplete={percentComplete}
         transferValues={transferValues}
+
+        isValid={isValid}
+        forceValidate={forceValidate}
+        validationMessage={null}
       />
   );
 }

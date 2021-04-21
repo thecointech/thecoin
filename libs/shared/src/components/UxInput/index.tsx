@@ -75,9 +75,9 @@ export const UxInput = (props:Props) => {
     );
 
     return(
-      <Form.Field className={formClassName} error={errorTag}>
+      <Form.Field className={formClassName +" "+ inputProps.className} error={errorTag}>
         <Label>
-          <FormattedMessage {...intlLabel} /> {label}
+          <FormattedMessage {...intlLabel} />{label}
         </Label>
         {messageElement}
         {inputElement}

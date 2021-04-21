@@ -22,7 +22,7 @@ export type ValuedMessageDesc = {
 } & MessageDescriptor;
 
 export interface Props {
-  intlLabel: MessageDescriptor;
+  intlLabel?: MessageDescriptor;
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
