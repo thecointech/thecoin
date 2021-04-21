@@ -85,7 +85,7 @@ export const RedeemWidget = (props: VisualProps) => {
         <UxInput
             className={"borderTop borderBottom"}
             intlLabel={props.emailLabel}
-            uxChange={(event: { target: { value: string; }; }) => props.setEmail(event.target.value)}
+            uxChange={props.setEmail}
             //isValid={isValid}
             //forceValidate={forceValidate}
             //message={validationMessage}
