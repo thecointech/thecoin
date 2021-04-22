@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { RUrl } from '@thecointech/utilities/RUrl';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
-import { ApplicationBaseState } from "types";
+import { ApplicationBaseState } from "../../types";
 import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
