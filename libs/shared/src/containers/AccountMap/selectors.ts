@@ -1,40 +1,34 @@
 import { useSelector } from "react-redux";
-import { AccountState } from "../Account/types";
-import { ApplicationBaseState } from "../../types";
-
-// Select the whole thing
-export const selectAccounts = (state: ApplicationBaseState) =>
-  state.accounts;
-export const useAccounts = () =>
-  useSelector(selectAccounts);
+import { AccountMapStore } from './types';
 
 
-// Select account map
-export const selectAccountMap = (state: ApplicationBaseState) =>
-  selectAccounts(state).map;
-export const useAccountMap = () =>
-  useSelector(selectAccountMap);
+//const selectAccountMap = (state: AccountMapStore) => state.accounts;
+// Select all account addresses
+// export const selectAccountAddresses = (state: AccountMapStore) =>
+//   Object.keys(state).filter(IsValidAddress);
+// export const useAccounts = () =>
+//   useSelector(selectAccounts);
 
-// Select specific account
-export const useAccount = (address:  string) : AccountState|undefined =>
-  useAccountMap()[address]
+// Select array of all accounts
+export const selectAccountArray = (state: AccountMapStore) =>
+  Object.values(state.accounts.map)
 
-// export const getDefaultAccount = (accounts: AccountDict) =>
-//   Object.keys(accounts)[0];
+export const useAccountStore = () =>
+  useSelector((state: AccountMapStore) => ({
+    accounts: selectAccountArray(state as AccountMapStore),
+    active: state.accounts.active
+  }));
+
 
 // Select the active account
-export const activeAccountSelector = (state: ApplicationBaseState) => {
-  const {map, active} = state.accounts;
+export const activeAccountSelector = (state: AccountMapStore) => {
+  const { active } = state.accounts;
 
-  if (active && map[active])
-    return map[active];
+  if (active && state.accounts.map[active])
+    return state.accounts.map[active];
 
   // If we have no active account, just return the first one.
-  const allAccounts = Object.values(map);
-  if (allAccounts.length == 0)
-    return null;
-
-  return allAccounts[0];
+  return selectAccountArray(state)[0];
 }
 
 export const useActiveAccount = () =>

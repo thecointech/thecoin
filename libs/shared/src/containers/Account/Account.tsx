@@ -8,7 +8,7 @@ import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { AccountState, IActions, AccountPageProps } from "./types";
-import { useAccountApi } from "./reducer";
+import { useAccount, useAccountApi } from "./reducer";
 import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
@@ -39,6 +39,8 @@ export const Account = (props: Props) => {
 
   const { accountMap, account } = props;
   const { signer, address } = account;
+  // Inject reducers/etc
+  useAccount(account);
   const accountActions = useAccountApi(address);
 
   const sidebarCb = useCallback(

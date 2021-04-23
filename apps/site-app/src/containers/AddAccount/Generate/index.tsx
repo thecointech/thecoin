@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Wallet } from 'ethers';
 import { Header, Form } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
@@ -7,11 +7,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
-import { useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
-
-import styles from './styles.module.less';
 import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import styles from './styles.module.less';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -42,9 +41,9 @@ export const Generate = (props: RouteComponentProps) => {
 
   ////////////////////////////////
   // Callback to actually generate the account
-  const accountMapApi = useAccountMapApi();
+  const accountsApi = useAccountStoreApi();
   const { history } = props;
-  const onGenerate = useCallback(async (e: React.MouseEvent<HTMLElement>) => {
+  const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     if (!(password && referral && name)) {
       setForceValidate(true);
@@ -54,8 +53,7 @@ export const Generate = (props: RouteComponentProps) => {
     const generated = await generateNewWallet(password, setProgress);
     if (generated) {
       const { wallet, decrypted } = generated;
-      accountMapApi.addAccount(name, wallet, true, decrypted);
-      accountMapApi.setActiveAccount(wallet.address)
+      accountsApi.addAccount(name, wallet, true, true, decrypted);
       registerReferral(wallet.address, referral);
 
       const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");
@@ -64,7 +62,7 @@ export const Generate = (props: RouteComponentProps) => {
 
     // Else, we probably cancelled, so do nothing...
     return undefined;
-  }, [name, password, referral, setForceValidate, setProgress, accountMapApi, history])
+  }
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)

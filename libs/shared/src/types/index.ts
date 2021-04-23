@@ -1,6 +1,5 @@
 import { Store, Reducer } from 'redux';
 import { SidebarGenerators } from '../containers/PageSidebar/types';
-import { AccountMapState } from '../containers/AccountMap';
 import { FxRatesState } from '../containers/FxRate/types';
 import { Saga, Task } from 'redux-saga';
 import { LanguageProviderState } from 'containers/LanguageProvider/types';
@@ -9,7 +8,6 @@ import { LanguageProviderState } from 'containers/LanguageProvider/types';
 // TODO: Rename to AccountsBaseStore (more accurate name)
 export interface ApplicationBaseState {
   readonly sidebar: SidebarGenerators;
-  readonly accounts: AccountMapState;
   readonly fxRates: FxRatesState;
   readonly language: LanguageProviderState;
 }

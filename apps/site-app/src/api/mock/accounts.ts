@@ -1,13 +1,14 @@
+import { IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
-import { AccountMap, IAccountMapActions, initialState, useAccountMapApi } from "@thecointech/shared/containers/AccountMap";
+import { Wallet } from 'ethers';
+import { AccountName, getSigner } from '@thecointech/accounts';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
-import { getSigner } from '@thecointech/accounts';
 
 export const wallets = [
   {
     id: "123",
-    name: "TestAccNoT First.wallet.json",
+    name: "TestAccNoT",
     type: "Type?",
     wallet: JSON.stringify(testWallet),
   },
@@ -25,52 +26,32 @@ export const wallets = [
   }
 ];
 
-let firstRun = true;
-export function useInjectedSigners() {
+// Fetch some wallets to test with.
+// We always add 1 encrypted wallet at the
+// end (to be able to test login);
+export function addDevAccounts(accountsApi: IAccountStoreAPI) {
 
-  const mapApi = useAccountMapApi();
-  // On first run, inject new signers.We can't
-  // use useEffect here because it will delay
-  // the execution too long (we render the app
-  // with no accounts and redirect to addAccount)
-  if (firstRun) {
-
-    // always insert default wallet
-    // NOTE: this must be run when this file is loaded,
-    // when this function is run is already too late
-    //addDevWallet();
-    // In dev:live mode, we also connect to default
-    // accounts from local develop blockchain.
-    if (process.env.SETTINGS === "live") {
-      addDevLiveSigners(mapApi)
-    }
-    firstRun = false;
+  // if dev mode, we add a random wallet,
+  if (process.env.SETTINGS !== 'live') {
+    accountsApi.addAccount('Random Test', Wallet.createRandom(), false, true);
   }
+  // We always add one encrypted wallet
+  const encrypted = wallets[0];
+  accountsApi.addAccount(encrypted.name, JSON.parse(encrypted.wallet), false, false);
 }
-async function addDevLiveSigners(mapApi: IAccountMapActions) {
 
-  console.warn("Injecting hosted accounts");
+export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {
+  // if dev:live we add 2 connected wallets.
+  addRemoteAccount('client1', accountsApi);
+  addRemoteAccount('client2', accountsApi);
+}
 
-  const client1 = await getSigner("client1")
-  const address = await client1.getAddress();
-  const theSigner = client1 as TheSigner;
-
+async function addRemoteAccount(name: AccountName, accountsApi: IAccountStoreAPI) {
+  const signer = await getSigner(name)
+  const address = await signer.getAddress();
+  const theSigner = signer as TheSigner;
   theSigner.address = address;
   theSigner._isSigner = true;
-  mapApi.addAccount("Client1", theSigner, false);
-  mapApi.setActiveAccount(address);
-}
 
-function addDevWallet() {
-
-  console.warn("Injecting test wallet");
-
-  const accountToLoad = wallets[1];
-  const walletToLoad = JSON.parse(accountToLoad.wallet);
-  const initReducer = new AccountMap(initialState, initialState);
-  initReducer.addAccount(accountToLoad.name, walletToLoad, false);
-}
-
-if (process.env.NODE_ENV === "development") {
-  addDevWallet();
+  accountsApi.addAccount(name, theSigner, false, true);
 }
