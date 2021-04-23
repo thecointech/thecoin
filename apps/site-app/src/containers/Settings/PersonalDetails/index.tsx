@@ -79,7 +79,6 @@ export const PersonalDetails = () => {
   const [phoneEdit, setPhoneEdit] = useState(false);
 
   const onDetailsChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(details);
     setDetails({
       ...details,
       [event.target.name]: event.target.value,
@@ -87,7 +86,6 @@ export const PersonalDetails = () => {
   }
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(details);
     setDetails({
       ...details,
       [e.currentTarget.name]: e.currentTarget.value,
