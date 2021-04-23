@@ -23,7 +23,9 @@ export type ValuedMessageDesc = {
 
 export interface Props {
   intlLabel?: MessageDescriptor;
+  label?: JSX.Element;
   uxChange: ChangeCB;
+  uxchangenew?: (e:React.FormEvent<HTMLInputElement>) => void;
   footer?: ReactNode;
   isValid?: boolean;
   message?: ValuedMessageDesc | null;

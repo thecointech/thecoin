@@ -10,11 +10,12 @@ export const UxInput = (props:Props) => {
   
   const [value, setValue] = useState("");
   const [showState, setShowState] = useState(false);
-  //const [prevState, setPrevState] = useState();
+
   const {
     intlLabel,
     label,
     uxChange,
+    uxchangenew,
     forceValidate,
     footer,
     isValid,
@@ -31,7 +32,10 @@ export const UxInput = (props:Props) => {
 
   function onChange(event: React.FormEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
-    props.uxChange(value);
+    uxChange(value);
+    if (uxchangenew){
+      uxchangenew(event);
+    }
     setValue(value);
     setShowState(true);
   }
@@ -40,6 +44,9 @@ export const UxInput = (props:Props) => {
     const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
+    const labelToTranslate = intlLabel ? <FormattedMessage {...intlLabel} /> : undefined;
+    const labelToShow = label ? label : undefined;
+    const labelToPrint = labelToTranslate ? labelToTranslate : labelToShow;
 
     const tooltipData = tooltip;
 
@@ -77,7 +84,7 @@ export const UxInput = (props:Props) => {
     return(
       <Form.Field className={formClassName +" "+ inputProps.className} error={errorTag}>
         <Label>
-          <FormattedMessage {...intlLabel} />{label}
+          {labelToPrint}
         </Label>
         {messageElement}
         {inputElement}

@@ -79,9 +79,18 @@ export const PersonalDetails = () => {
   const [phoneEdit, setPhoneEdit] = useState(false);
 
   const onDetailsChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(details);
     setDetails({
       ...details,
       [event.target.name]: event.target.value,
+    });
+  }
+
+  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    console.log(details);
+    setDetails({
+      ...details,
+      [e.currentTarget.name]: e.currentTarget.value,
     });
   }
 
@@ -104,26 +113,20 @@ export const PersonalDetails = () => {
 
         <UxInput
             className={"half left"}
-            intLabel={familyname}
-            uxChange={() => onDetailsChange}
+            label={<div>
+                        <FormattedMessage {...name} />
+                        <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
+                          <Icon name={"edit"} /><FormattedMessage {...edit} />
+                        </span>
+                    </div>}
+            message={null}
+            uxChange={ () => onDetailsChange }
+            uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
             name="given_name" 
             readOnly={!givenNameEdit}
           />
-        <Form.Input
-          className={"half left"}
-          label={<div>
-                    <FormattedMessage {...name} />
-                    <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
-                    </span>
-                </div>}
-          value={details.given_name}
-          onChange={onDetailsChange}
-          details={details}
-          name="given_name" readOnly={!givenNameEdit} />
 
-
-        <Form.Input
+        <UxInput
           className={"half right"}
           label={<div>
                     <FormattedMessage {...familyname} />
@@ -132,9 +135,11 @@ export const PersonalDetails = () => {
                     </span>
                 </div>}
           value={details.family_name}
-          onChange={onDetailsChange}
+          uxChange={ () => onDetailsChange}
+          uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
           details={details}
-          name="family_name" readOnly={!familyNameEdit} />
+          name="family_name" 
+          readOnly={!familyNameEdit} />
 
         <UxDate
           className={"half left"}
@@ -149,7 +154,7 @@ export const PersonalDetails = () => {
           value={details.DOB}
           name="DOB" readOnly={!dobEdit} />
 
-        <Form.Input
+        <UxInput
           className={"borderTop borderBottom"}
           label={<div>
                     <FormattedMessage {...address} />
@@ -157,23 +162,26 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={onDetailsChange}
+          uxChange={ () => onDetailsChange}
+          uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
 
-        <Form.Input
+        <UxInput
             className={"half left"}
             details={details}
             value={details.email}
-            onChange={onDetailsChange}
+            uxChange={ () => onDetailsChange}
+            uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
             label={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
                 </span>
               </div>} 
-            name="email" readOnly={!emailEdit} />
+            name="email" 
+            readOnly={!emailEdit} />
           
         <UxPhone 
             className={"half right"}
@@ -186,7 +194,8 @@ export const PersonalDetails = () => {
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
                 </span>
               </div>} 
-            name="phone" readOnly={!phoneEdit} />
+            name="phone" 
+            readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>
           <FormattedMessage {...titleCurrency} />
