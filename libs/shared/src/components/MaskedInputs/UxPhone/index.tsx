@@ -8,7 +8,7 @@ export const UxPhone = (props:MaskedUxProps) => {
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>
           <InputMask name={props.name} 
-                      mask="+1 999 999 9999" 
+                      mask="999 999 9999" 
                       alwaysShowMask 
                       onChange={props.onChange} 
                       readOnly={props.readOnly} />

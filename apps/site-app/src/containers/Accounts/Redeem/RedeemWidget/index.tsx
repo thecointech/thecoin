@@ -24,18 +24,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: string) => void,
+    setEmail: (event: React.FormEvent<HTMLInputElement>) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: string) => void,
+    setQuestion: (event: React.FormEvent<HTMLInputElement>) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: string) => void,
+    setAnswer: (event: React.FormEvent<HTMLInputElement>) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: string) => void,
+    setMessage: (event: React.FormEvent<HTMLInputElement>) => void,
     messageDesc: string,
 
     button: MessageDescriptor,

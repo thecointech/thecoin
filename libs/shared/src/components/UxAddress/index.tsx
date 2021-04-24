@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IsValidAddress } from '@thecointech/utilities/';
 import messages from './messages';
 import { UxInput } from '../UxInput';
-import { ChangeCB } from '../UxInput/types';
 import { MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
 
@@ -10,7 +9,7 @@ type MyProps = {
 	forceValidate?: boolean,
 	placeholder?: string,
 	intlLabel?: MessageDescriptor,
-	uxChange: ChangeCB
+	uxChange: (e:React.FormEvent<HTMLInputElement>) => void
 }
 
 export const UxAddress = (props:MyProps) => {
@@ -19,12 +18,12 @@ export const UxAddress = (props:MyProps) => {
 	const [message] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
-	function onAccountValue(value: string) {
-		const isValidTemp = IsValidAddress(value)
-		setAccount(value);
+	function onAccountValue(event: React.FormEvent<HTMLInputElement>) {
+		const isValidTemp = IsValidAddress(event.currentTarget.value)
+		setAccount(event.currentTarget.value);
 		setIsValid(isValidTemp);
 		if (isValid)
-			props.uxChange(value)
+			props.uxChange(event)
 	}
 
 	return(

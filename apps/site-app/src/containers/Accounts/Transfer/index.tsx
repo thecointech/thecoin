@@ -151,8 +151,8 @@ export const Transfer = () => {
   }
 
   // Validate our inputs
-  function onAccountValue(value: string) {
-    setToAddress(value);
+  function onAccountValue(e:React.FormEvent<HTMLInputElement>) {
+    setToAddress(e.currentTarget.value);
   }
 
   function onCancelTransfer() {

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, FormEvent } from "react";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
 import { UxScoredPassword } from "@thecointech/site-base/components/UxScoredPassword";
@@ -22,8 +22,8 @@ export const PasswordInput = (props: Props) => {
   const { setPassword, ...rest } = props;
 
   ////////////////////////////////
-  const onChange = useCallback((value: string, score: number) => {
-    const newState = validatePassword(value, score);
+  const onChange = useCallback((e: FormEvent<HTMLInputElement>, score: number) => {
+    const newState = validatePassword(e.currentTarget.value, score);
     setState(newState);
     setPassword(newState.isValid
       ? newState.value

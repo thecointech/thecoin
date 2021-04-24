@@ -66,10 +66,10 @@ state = initialState;
 
   /*==========  HANDLERS  ==========*/
 
-  uxChange(value: string): void {
+  uxChange(event: React.FormEvent<HTMLInputElement>): void {
 
-    const stats = this.getScore(value);
-    const isValid = this.props.uxChange(value, stats ? stats.score : -1);
+    const stats = this.getScore(event.currentTarget.value);
+    const isValid = this.props.uxChange(event, stats ? stats.score : -1);
 
     if (stats !== null) {
       const hasWarning = stats.feedback.warning.length > 0;

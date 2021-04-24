@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
@@ -31,9 +31,9 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		this.fetchExistingAccounts();
 	}
 
-	onAccountValue = (value: string) => {
+	onAccountValue = (e: FormEvent<HTMLInputElement>) => {
 		this.setState({
-			account: value,
+			account: e.currentTarget.value,
 		});
 	}
 	onVerifyAccount = async (e: React.MouseEvent<HTMLElement>) => {

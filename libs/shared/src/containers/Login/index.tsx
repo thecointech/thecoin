@@ -70,8 +70,8 @@ export const Login = (props: Props) => {
   const placeholderPasswordTranslated = intl.formatMessage(placeholderPassword);
  
   /////////////////////////////////
-  const onPasswordChange = useCallback((value: string) => {
-    setPassword(value);
+  const onPasswordChange = useCallback((event: React.FormEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
     // If we are in a failed state, reset state with new keystroke
     if (loginState == LoginState.Cancelled || loginState == LoginState.Failed) {
       setLoginState(LoginState.Entry);

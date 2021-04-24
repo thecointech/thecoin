@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, FormEvent } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
@@ -25,8 +25,8 @@ export const NameInput = (props: Props) => {
 
   ////////////////////////////////
   const accounts = useAccountMap();
-  const onChange = useCallback((value: string) => {
-    const newState = validateName(value, accounts);
+  const onChange = useCallback((e: FormEvent<HTMLInputElement>) => {
+    const newState = validateName(e.currentTarget.value, accounts);
     setState(newState);
     props.setName(newState.isValid
       ? newState.value

@@ -78,14 +78,18 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const onDetailsChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(details);
     setDetails({
       ...details,
-      [event.target.name]: event.target.value,
+      [e.currentTarget.name]: e.currentTarget.value,
     });
   }
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+
+  const onDetailsChange = (e: React.FormEvent<HTMLInputElement>) => {
+    console.log(details);
     setDetails({
       ...details,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -99,7 +103,7 @@ export const PersonalDetails = () => {
     setAddressEdit(false);
     setEmailEdit(false);
     setPhoneEdit(false);
-    accountApi.setDetails({...details});
+    console.log(accountApi.setDetails({...details}));
   }
   
   return (
@@ -118,8 +122,9 @@ export const PersonalDetails = () => {
                         </span>
                     </div>}
             message={null}
-            uxChange={ () => onDetailsChange }
-            uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
+            uxChange={ (e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e) }
+            details={details}
+            value={details.given_name}
             name="given_name" 
             readOnly={!givenNameEdit}
           />
@@ -133,8 +138,7 @@ export const PersonalDetails = () => {
                     </span>
                 </div>}
           value={details.family_name}
-          uxChange={ () => onDetailsChange}
-          uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
+          uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
           details={details}
           name="family_name" 
           readOnly={!familyNameEdit} />
@@ -147,7 +151,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={onDetailsChange}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange2(e)}
           details={details}
           value={details.DOB}
           name="DOB" readOnly={!dobEdit} />
@@ -160,8 +164,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          uxChange={ () => onDetailsChange}
-          uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
+          uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
@@ -170,8 +173,7 @@ export const PersonalDetails = () => {
             className={"half left"}
             details={details}
             value={details.email}
-            uxChange={ () => onDetailsChange}
-            uxchangenew={ (e: React.FormEvent<HTMLInputElement>) => onChange(e) }
+            uxChange={ (e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e) }
             label={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -185,7 +187,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            onChange={onDetailsChange}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange2(e)}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

@@ -31,12 +31,11 @@ export const UxInput = (props:Props) => {
   }
 
   function onChange(event: React.FormEvent<HTMLInputElement>) {
-    const { value } = event.currentTarget;
-    uxChange(value);
+    uxChange(event);
     if (uxchangenew){
       uxchangenew(event);
     }
-    setValue(value);
+    setValue(event.currentTarget.value);
     setShowState(true);
   }
 

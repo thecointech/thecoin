@@ -14,8 +14,6 @@ export enum ErrorState {
   Warning,
 }
 
-export type ChangeCB = (value: string) => void;
-
 // Allow embedding values directly into MessageDescriptor
 export type ValuedMessageDesc = {
   values?: Object
@@ -24,7 +22,7 @@ export type ValuedMessageDesc = {
 export interface Props {
   intlLabel?: MessageDescriptor;
   label?: JSX.Element;
-  uxChange: ChangeCB;
+  uxChange: (e:React.FormEvent<HTMLInputElement>) => void;
   uxchangenew?: (e:React.FormEvent<HTMLInputElement>) => void;
   footer?: ReactNode;
   isValid?: boolean;

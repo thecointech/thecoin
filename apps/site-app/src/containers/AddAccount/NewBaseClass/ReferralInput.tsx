@@ -25,8 +25,8 @@ export const ReferralInput = (props: Props) => {
   const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
 
-  const onChange = useCallback(async (value: string) => {
-    const newState = await validateReferral(value);
+  const onChange = useCallback(async (e: React.FormEvent<HTMLInputElement>) => {
+    const newState = await validateReferral(e.currentTarget.value);
     setState(newState);
     setReferral(newState.isValid
       ? newState.value

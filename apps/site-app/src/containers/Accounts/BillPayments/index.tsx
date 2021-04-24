@@ -116,10 +116,10 @@ export const BillPayments = () => {
    //   setPayeeName(data.value);
   //}
 
-  function onAccountNumber (value: string) {
-      const validation = validate(payee, value);
+  function onAccountNumber (e: React.FormEvent<HTMLInputElement>) {
+      const validation = validate(payee, e.currentTarget.value);
       setValidationMessage(validation);
-      setAccountNumber(value);
+      setAccountNumber(e.currentTarget.value);
     };
 
     async function doBillPayment() {

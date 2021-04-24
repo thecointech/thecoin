@@ -201,18 +201,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(event: string) => setEmail(event)}
+        setEmail={(event: React.FormEvent<HTMLInputElement>) => setEmail(event.currentTarget.value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(event: string) => setQuestion(event)}
+        setQuestion={(event: React.FormEvent<HTMLInputElement>) => setQuestion(event.currentTarget.value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(event: string) => setAnswer(event)}
+        setAnswer={(event: React.FormEvent<HTMLInputElement>) => setAnswer(event.currentTarget.value)}
     
         messageLabel={messageLabel}
-        setMessage={(event: string) => setMessage(event)}
+        setMessage={(event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}
