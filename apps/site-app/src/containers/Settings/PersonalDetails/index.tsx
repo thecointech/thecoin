@@ -145,6 +145,7 @@ export const PersonalDetails = () => {
 
         <UxDate
           className={"half left"}
+          value={details.DOB}
           label={<div>
                     <FormattedMessage {...dob} />
                     <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
@@ -153,7 +154,7 @@ export const PersonalDetails = () => {
                   </div>}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange2(e)}
           details={details}
-          value={details.DOB}
+          defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
 
         <UxInput
@@ -186,8 +187,8 @@ export const PersonalDetails = () => {
         <UxPhone 
             className={"half right"}
             details={details}
-            value={details.phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange2(e)}
+            //value={details.phone}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange(e)}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

@@ -9,6 +9,7 @@ export const UxPhone = (props:MaskedUxProps) => {
         <Label>{props.label}</Label>
           <InputMask name={props.name} 
                       mask="999 999 9999" 
+                      defaultValue={props.value}
                       alwaysShowMask 
                       onChange={props.onChange} 
                       readOnly={props.readOnly} />

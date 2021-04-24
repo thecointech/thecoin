@@ -27,6 +27,8 @@ export const UxDate = (props:MaskedUxProps) => {
         <Label>{props.label}</Label>
           <InputMask name={props.name} 
                       mask="9999-99-99"
+                      defaultValue={props.value}
+                      value={props.value}
                       beforeMaskedValueChange={beforeMaskedValueChange}
                       alwaysShowMask 
                       onChange={props.onChange} 
