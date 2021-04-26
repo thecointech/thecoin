@@ -52,6 +52,16 @@ export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCode.CAD;
   log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
 
+  if (process.env.NODE_ENV === 'development' && process.env.CONFIG !== 'live') {
+    return {
+      buy: 1,
+      sell: 1,
+      fxRate: 1,
+      target: 124,
+      validFrom: 0,
+      validTill: 0,
+    }
+  }
   const api = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
   const r = await api.getSingle(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {

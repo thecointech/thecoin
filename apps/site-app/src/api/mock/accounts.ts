@@ -1,4 +1,4 @@
-import { IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
+import { AccountMapState, buildNewAccount, IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
@@ -29,15 +29,23 @@ export const wallets = [
 // Fetch some wallets to test with.
 // We always add 1 encrypted wallet at the
 // end (to be able to test login);
-export function addDevAccounts(accountsApi: IAccountStoreAPI) {
-
+export function getDevWallets() : AccountMapState {
+  const encrypted = wallets[0];
+  const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
+  // We always add one encrypted wallet
+  const r: AccountMapState =  {
+    active: null,
+    map: {
+      [encryptedAccount.address]: encryptedAccount
+    }
+  }
   // if dev mode, we add a random wallet,
   if (process.env.SETTINGS !== 'live') {
-    accountsApi.addAccount('Random Test', Wallet.createRandom(), false, true);
+    const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
+    r.active = randomAccount.address;
+    r.map[randomAccount.address] = randomAccount
   }
-  // We always add one encrypted wallet
-  const encrypted = wallets[0];
-  accountsApi.addAccount(encrypted.name, JSON.parse(encrypted.wallet), false, false);
+  return r;
 }
 
 export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {

@@ -28,32 +28,28 @@ import '../../semantic/semantic.css';
 import styles from './styles.module.less';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
-import { addDevAccounts, addDevLiveAccounts } from 'api/mock/accounts';
+//import { addDevAccounts, addDevLiveAccounts } from 'api/mock/accounts';
 import { createRef } from 'react';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStoreReducer, AccountMapState, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { addDevLiveAccounts, getDevWallets } from 'api/mock/accounts';
+import { readAllAccounts } from '@thecointech/shared/utils/storageSync';
 
-let needsInit = true;
+let hasRun = false;
 export const App = () => {
   useFxRatesStore();
   useSidebar();
+  useAccountStoreReducer(initialAccounts);
   const location = useLocation();
-  const contextRef = createRef<HTMLDivElement>()
+  const contextRef = createRef<HTMLDivElement>();
 
-  const accountsApi = useAccountStoreApi();
-  if (needsInit) {
-    needsInit = false;
-    if (process.env.NODE_ENV === 'production') {
-      accountsApi.initializeAccounts();
+  if (process.env.CONFIG_NAME === 'devlive') {
+    const accountsApi = useAccountStoreApi();
+    if (!hasRun) {
+      addDevLiveAccounts(accountsApi);
+      hasRun = true;
     }
-    else {
-      // In debug, initialize with default accounts
-      addDevAccounts(accountsApi);
-      if (process.env.SETTINGS === 'live') {
-        addDevLiveAccounts(accountsApi);
-      }
-    }
-
   }
+
 
   return (
     <MediaContextProvider>
@@ -86,4 +82,14 @@ export const App = () => {
       <Footer />
     </MediaContextProvider>
   );
+}
+
+function initialAccounts() : AccountMapState {
+
+  return (process.env.NODE_ENV === 'development')
+    ? getDevWallets()
+    : {
+        active: null,
+        map: readAllAccounts()
+      }
 }

@@ -1,14 +1,6 @@
 import { useSelector } from "react-redux";
 import { AccountMapStore } from './types';
 
-
-//const selectAccountMap = (state: AccountMapStore) => state.accounts;
-// Select all account addresses
-// export const selectAccountAddresses = (state: AccountMapStore) =>
-//   Object.keys(state).filter(IsValidAddress);
-// export const useAccounts = () =>
-//   useSelector(selectAccounts);
-
 // Select array of all accounts
 export const selectAccountArray = (state: AccountMapStore) =>
   Object.values(state.accounts.map)

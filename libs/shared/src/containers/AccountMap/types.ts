@@ -22,9 +22,6 @@ export type AccountMapStore = {
 ////////////////////////////////////////////
 
 export interface IAccountStoreAPI {
-  // Initialize account map.  Can only be run on start
-  initializeAccounts(map?: AccountMap): void;
-
   // Set the account we are currently interacting with
   setActiveAccount(account: string|null): void;
 

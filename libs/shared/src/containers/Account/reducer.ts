@@ -189,10 +189,12 @@ function getAccountReducerClass(address: string) {
   // In development mode, ensure we are only called with a legal address
   if (process.env.NODE_ENV !== "production") {
     if (!IsValidAddress(address)) {
+      debugger;
       alert('Invalid adddress: Connect debugger and figure this out');
       throw new Error("Invalid Address passed to accountApi");
     }
     if (NormalizeAddress(address) != address) {
+      debugger;
       alert('Connect debugger and figure this out');
       throw new Error("Un-normalized address being passed to accountApi");
     }
