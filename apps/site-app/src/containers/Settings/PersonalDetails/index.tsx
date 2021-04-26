@@ -4,7 +4,6 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
-import { UxPhone } from '@thecointech/shared/components/MaskedInputs/UxPhone';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
 import { UxInput } from '@thecointech/shared/components/UxInput';
@@ -184,11 +183,11 @@ export const PersonalDetails = () => {
             name="email" 
             readOnly={!emailEdit} />
           
-        <UxPhone 
+        <UxInput 
             className={"half right"}
             details={details}
-            //value={details.phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange(e)}
+            value={details.phone}
+            uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
             label={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
