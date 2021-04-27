@@ -20,4 +20,4 @@ function createReducer(injectedReducers?: ReducersMapObject): Reducer {
 }
 
 export { history };
-export const configureAppStore = () => configureStore(createReducer);
+export const configureAdminStore = () => configureStore(createReducer);
