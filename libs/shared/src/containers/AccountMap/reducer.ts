@@ -80,32 +80,16 @@ export function buildNewAccount(name: string, signer: AnySigner) : AccountState 
   }
 }
 
+// This should be called by createReducers to manually create the accounts reducers.
 // Our accountMapReducer is a little different than most, as it cannot be injected.
-// It is responsible for re-organizing the injected account reducers below
-let accountMapReducer = null as Reducer|null; // = createReducerFunction(AccountMapReducer, initialState) as unknown as Reducer;
-const actions = createActionCreators(AccountMapReducer);
-
-// Called by createReducers.  Returns a single reducer for all accounts and
-// a list of the remaining (non-account) reducers.
-export function buildAccountStoreReducer(injectedReducers?: ReducersMapObject) {
+// This is because it shares it's state tree with the account reducers
+export function buildAccountStoreReducer(injectedReducers?: ReducersMapObject, initial?: AccountMapState) {
   const { accounts, rest } = splitAccountFromRest(injectedReducers);
-  const accountStoreReducer = accountMapReducer
-    ? mappedReducer(accountMapReducer, accounts)
-    : (state: AccountMapState) =>
-    {
-      return state ?? initialState;
-    }
+  const accountMapReducer = createReducerFunction(AccountMapReducer, initial ?? initialState) as unknown as Reducer;
+  const accountStoreReducer = mappedReducer(accountMapReducer, accounts);
   return { accountStoreReducer, rest };
 }
 
-// Slightly-hacky way to support customizable initialState.  This reducer is
-// not injected, but we still want the initial creation to be client-controlled
-export const useAccountStoreReducer = (initial: () => AccountMapState = () => initialState) => {
-  if (!accountMapReducer) {
-    console.log("Initializing ASR");
-    accountMapReducer = createReducerFunction(AccountMapReducer, initial()) as unknown as Reducer;
-  }
-}
-
+const actions = createActionCreators(AccountMapReducer);
 export const useAccountStoreApi = () =>
   bindActionCreators(actions, useDispatch()) as IAccountStoreAPI;;

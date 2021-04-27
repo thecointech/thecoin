@@ -30,15 +30,13 @@ import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 //import { addDevAccounts, addDevLiveAccounts } from 'api/mock/accounts';
 import { createRef } from 'react';
-import { useAccountStoreReducer, AccountMapState, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
-import { addDevLiveAccounts, getDevWallets } from 'api/mock/accounts';
-import { readAllAccounts } from '@thecointech/shared/utils/storageSync';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { addDevLiveAccounts } from 'api/mock/accounts';
 
 let hasRun = false;
 export const App = () => {
   useFxRatesStore();
   useSidebar();
-  useAccountStoreReducer(initialAccounts);
   const location = useLocation();
   const contextRef = createRef<HTMLDivElement>();
 
@@ -82,14 +80,4 @@ export const App = () => {
       <Footer />
     </MediaContextProvider>
   );
-}
-
-function initialAccounts() : AccountMapState {
-
-  return (process.env.NODE_ENV === 'development')
-    ? getDevWallets()
-    : {
-        active: null,
-        map: readAllAccounts()
-      }
 }
