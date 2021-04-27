@@ -18,20 +18,18 @@ import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+import { createRef } from 'react';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
 import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
-
 import styles from './styles.module.less';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
-//import { addDevAccounts, addDevLiveAccounts } from 'api/mock/accounts';
-import { createRef } from 'react';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
-import { addDevLiveAccounts } from 'api/mock/accounts';
 
 let hasRun = false;
 export const App = () => {
