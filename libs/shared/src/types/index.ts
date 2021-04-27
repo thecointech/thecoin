@@ -5,7 +5,7 @@ import { Saga, Task } from 'redux-saga';
 import { LanguageProviderState } from 'containers/LanguageProvider/types';
 
 // Your root reducer type, which is your redux state types also
-// TODO: Rename to AccountsBaseStore (more accurate name)
+// TODO: Rename to SharedBaseStore (more accurate name)
 export interface ApplicationBaseState {
   readonly sidebar: SidebarGenerators;
   readonly fxRates: FxRatesState;

@@ -1,5 +1,5 @@
 
-import { TheCoinReducer, GetNamedReducer } from '@thecointech/shared/store/immerReducer'
+import { TheCoinReducer } from '@thecointech/shared/store/immerReducer'
 import { ContentState, IActions } from './types';
 import { SiteBaseStore } from 'SiteBaseStore';
 import { useInjectReducer } from 'redux-injectors';
@@ -24,8 +24,8 @@ class HeightMeasureReducer extends TheCoinReducer<ContentState>
   }
 }
 
+const { reducer, actions} = HeightMeasureReducer.buildReducers(HeightMeasureReducer, initialState);
 export const useHeightMeasure = () => {
-  const { reducer, actions } = GetNamedReducer(HeightMeasureReducer, CONTENT_KEY, initialState);
   useInjectReducer({ key: CONTENT_KEY, reducer });
   return (bindActionCreators(actions, useDispatch()) as any) as IActions;
 }
