@@ -7,7 +7,7 @@ import webpack from 'webpack';
 import { GenerateAliases } from './patchpaths';
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const configFile = path.join(__dirname, '..', 'tsconfig.build.json'),
+const configFile = path.join(__dirname, '..', 'tsconfig.build.json');
 
 export default {
   externals: [

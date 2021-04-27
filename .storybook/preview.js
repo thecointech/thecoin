@@ -1,16 +1,13 @@
-import React from 'react';
-import { MemoryRouter } from 'react-router';
-import { withTranslations } from './intl';
+import { withIntl } from './withIntl';
+import { withRouter } from './withRouter';
+import { withStore } from './withStore';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
 }
 
 export const decorators = [
-  (Story) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-  ),
-  withTranslations,
+  withRouter,
+  withIntl,
+  withStore,
 ];
