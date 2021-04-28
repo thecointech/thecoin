@@ -1,12 +1,6 @@
 import * as React from 'react';
-import illustration from './images/icon_contact_big.svg';
-import {AppContainerWithShadow} from 'components/AppContainers';
 
-import { Grid, Header } from 'semantic-ui-react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { ContactForm } from './Form';
-import { useState } from 'react';
-import { ContactAvatar, TheCoinAvatar } from './Avatars';
+import { ContactAvatar, TheCoinAvatar } from '../Avatars';
 
 import styles from './styles.module.less';
 

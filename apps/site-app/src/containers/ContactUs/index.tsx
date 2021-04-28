@@ -7,7 +7,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { ContactForm } from './Form';
 import { useState } from 'react';
 import { ContactAvatar, TheCoinAvatar } from './Avatars';
-import { UserMessage, Answer } from './Messages';
+import { UserMessage } from './Messages';
 
 import styles from './styles.module.less';
 
