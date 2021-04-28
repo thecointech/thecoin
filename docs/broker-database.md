@@ -9,9 +9,35 @@ The DB should:
  - Be anonymous (no identifying data should be present in the DB)
  - Be reconstructible (to the degree possible) from primary sources.
 
+## Events
+Our DB exists to enable safe offline processing & error-and-recovery for client transactions, and to store minimal user data.  The transaction data is stored entirely in a sequence of events, recording each step of the transaction in a non-destructive manner.  Each event looks like:
+```
+[key] : {
+  timestamp,
+  type: string,
+  data: any
+}
+```
+#### Key
+The key of each timestamp is the timestamp of when that action was created.  Only calculated on the client, this is not completely reliable and only intended to make human-viewing of online content a bit more compreshensible.
+
+We ignore the best practices on this because the events are already shareded by their random ID, and no single transaction will ever incur 500 writes-per-second.
+
+#### Timestamp
+represents when the event is -for-, not when the event was written. Eg, a 'settled' event will have a timestamp for when the action settled, not when the event was created (and may be very different)
+
+#### type
+Defines what kind of event this is.  One of a pre-existing list of event types (eg 'initial', 'transfer', 'complete') etc.  This value defines what is held in `data`.
+
+#### data
+Stores what changes have occured due to this event.  For example, `transfer` may store a transaction hash, or `tofiat` stores the converted fiat value of the transfer at that time.
+
+## Action ID's
+
 Our ID's for buy/sell/bill are random.  Although it is tempting to rely on external
 identifiers (eg - using txHash for Sale/uniqueId for purchases) we cannot do this because sales/bills do not have an appropriate identifier to use.  Any failed tx recovery would need to rely on searching the action list anyway, which negates teh primary benefit of determinstic ID's.  There is also no consistent identifier for e-transfers & direct deposits.  Given this lack of consistency, it is best to simply use a random ID, index the event data, then perform searches to ensure new data is assigned to the appropriate actions events.
 
+## Our NoSQL schema notation
 Firestore follows an Collection/Document structure, which is basically a map.
 I can't find how to do UML in markup, so here goes:
 In the docs below it looks like:
@@ -32,7 +58,8 @@ One-of groups are surrounded by brackets
   OrThis
 }
 ```
-Layout:
+## Firestore Layout
+
 ```
  + [Referrers]: 6-char id
   - address: normalized ethereum address
@@ -51,13 +78,14 @@ Layout:
     - referrer: address
     + [Buy]: RandomID
         + [events]: created-timestamp
-          // Timestamp represents when the event is -for-, not when it happened.
-          // Eg, a 'settled' event will have a timestamp for when the action
-          // settled, not when the event was created (and may be very different)
           - timestamp
-          { // First entry in any deposit, how much is deposited & how
-            type: 'etransfer'|'deposit'|'other'
-            data: number (Fiat Value)
+          { // First entry in any deposit
+            type: 'initial'
+            data: {
+              type: 'etransfer'|'deposit'|'other',
+              sourceId: etransferId|deposit timestamp,
+              amount: number,
+            }
           }
           { // Settlement. Logged when deposit is converted.
             type: 'tocoin'
@@ -154,7 +182,7 @@ Layout:
           }
 
 
-    + [Bill]: signature[40]
+    + [Bill]: RandomID
         + [events]: typestamp
           - timestamp
           { // First entry records user request
