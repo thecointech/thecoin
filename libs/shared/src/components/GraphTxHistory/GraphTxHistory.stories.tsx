@@ -1,9 +1,11 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react';
-import { GraphTxHistory } from '.';
+import { GraphTxHistory, Theme } from '.';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
-//import { FXRate } from 'containers/FxRate/types';
+import { withStore } from '@thecointech/storybookutils';
+import { FXRate } from 'containers/FxRate';
+import { toCoin } from '@thecointech/utilities'
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -20,20 +22,36 @@ const defaultArgs = {
   from: Date.now() - (30 * days),
   to: Date.now(),
   txFrequency: 5,
-  theme: {
-    colors: ['#61C1B8'],
-    dotColor: "#138175"
-  }
+  lineColor: '#61C1B8',
 }
 
-const template: Story<typeof defaultArgs> = (args) =>
-  <GraphTxHistory
-    height={350}
-    txs={genTxs(args)}
-    from={DateTime.fromMillis(args.from)}
-    to={DateTime.fromMillis(args.to)}
-    theme={args.theme}
-  />;
+const template: Story<typeof defaultArgs> = (args) => {
+  const withFxRates = withStore({
+    fxRates: {
+      rates: genFxRates(args),
+      fetching: 0,
+    }
+  })
+  const txs = genTxs(args);
+  const theme: Theme = {
+    lineColors: [
+      args.lineColor,
+      'green',
+    ],
+    dotColor: "#138175"
+  }
+  const GraphWrapper = () => (
+    <GraphTxHistory
+      height={350}
+      txs={txs}
+      from={DateTime.fromMillis(args.from)}
+      to={DateTime.fromMillis(args.to)}
+      theme={theme}
+    />
+  )
+  return withFxRates(GraphWrapper);
+}
+
 
 export const Default = template.bind({});
 Default.args = defaultArgs;
@@ -47,8 +65,8 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   while (date < now) {
     const change = Math.max((Math.random() - 0.45) * 100, -balance);
     r.push({
-      balance,
-      change,
+      balance: toCoin(balance),
+      change: toCoin(change),
       date: DateTime.fromMillis(date),
       logEntry: "Transaction",
       counterPartyAddress: "0x12345",
@@ -60,23 +78,23 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
   return r;
 }
 
-// TODO: Move this commented code into a mocked fxRates store
-// const genFxRates = ({from, to}: typeof defaultArgs) => {
-//   let now = to + 10 * days; // Add more time just to ensure limits work
-//   let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
-//   const r : FXRate[] = [];
-//   const incr = days / 4; // roughly 4 updates per day
-//   while (date < now) {
-//     // Up to 0.1 % change per day
-//     const ex = 1 + (0.1 * (Math.random() - 0.45))
-//     r.push({
-//       buy: ex - 0.01,
-//       sell: ex + 0.01,
-//       fxRate: 1,
-//       validFrom: date,
-//       validTill: date + incr,
-//     })
-//     date = date + incr;
-//   }
-//   return r;
-// }
+const genFxRates = ({from, to}: {from: number, to: number}) => {
+  let now = to + 10 * days; // Add more time just to ensure limits work
+  let date = from - 10 * days;  // Add 10 days warm up to ensure randomness
+  const r : FXRate[] = [];
+  const incr = days / 4; // roughly 4 updates per day
+  while (date < now) {
+    // Up to 0.1 % change per day
+    const ex = 1 + (0.1 * (Math.random() - 0.45))
+    r.push({
+      buy: ex - 0.01,
+      sell: ex + 0.01,
+      fxRate: 1,
+      target: 124,
+      validFrom: date,
+      validTill: date + incr,
+    })
+    date = date + incr;
+  }
+  return r;
+}
