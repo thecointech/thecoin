@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@thecointech/utilities";
+import { IsValidReferrerId } from "@thecointech/utilities/";
 import { MessageDescriptor } from "react-intl";
 
 
