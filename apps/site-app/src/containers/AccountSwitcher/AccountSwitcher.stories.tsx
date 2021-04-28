@@ -4,7 +4,6 @@ import { AccountSwitcher as AccountSwitcherComponent } from '.';
 import { AccountState } from '@thecointech/shared/containers/Account';
 import { withAccounts } from '@thecointech/storybookutils';
 
-
 export default {
   title: 'App/AccountSwitcher',
   component: AccountSwitcherComponent,
