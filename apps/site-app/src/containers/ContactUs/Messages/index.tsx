@@ -10,7 +10,7 @@ export const UserMessage = () => {
       <div className={ `${styles.contactMessageLine} x6spaceBefore` }>
         <div>
           TEST
-        <div>you - 2 days ago</div>
+        <div className={styles.infosRight}>you - 2 days ago</div>
         </div>
         </div>
         <div className={styles.contactAvatarLine}>
