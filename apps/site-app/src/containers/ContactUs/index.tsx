@@ -6,8 +6,10 @@ import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { ContactForm } from './Form';
 import { useState } from 'react';
-import { ContactAvatar } from './Avatars';
+import { ContactAvatar, TheCoinAvatar } from './Avatars';
+import { UserMessage, Answer } from './Messages';
 
+import styles from './styles.module.less';
 
 const title = { id:"app.contactus.title",
                 defaultMessage:"Contact Us",
@@ -71,9 +73,9 @@ export const ContactUs = () => {
         <Header as="h5" className={ `appTitles` }>
             <FormattedMessage {...titleMessages} />
         </Header>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={9} textAlign={'right'}>
+        <div className={styles.messagesContainer}>
+          <div>
+            <div className={styles.contactFormLine}>
               <ContactForm
                 errorMessage={errorMessage}
                 errorHidden={errorHidden}
@@ -87,12 +89,74 @@ export const ContactUs = () => {
                 button={button}
                 onSubmit={onSubmit}
               />
-            </Grid.Column>
-            <Grid.Column width={3} textAlign={'left'}>
-              <ContactAvatar />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+              </div>
+              <div className={styles.contactAvatarLine}>
+                <ContactAvatar />
+              </div>
+          </div>
+
+
+          <div>
+            <div className={styles.contactAnswerLine}>
+              <div className={ `${styles.contactAvatarLine} ${styles.answer}` }>
+                <TheCoinAvatar />
+              </div>
+              <div className={styles.messageZone}>
+                  TEST
+                <div>you - 2 days ago</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className={ `${styles.contactMessageLine} x6spaceBefore` }>
+              <div>
+                TEST
+              <div>you - 2 days ago</div>
+              </div>
+              </div>
+              <div className={styles.contactAvatarLine}>
+                <ContactAvatar />
+              </div>
+          </div>
+
+          <div>
+            <div className={styles.contactAnswerLine}>
+              <div className={ `${styles.contactAvatarLine} x6spaceAfter ${styles.answer}` }>
+                <TheCoinAvatar />
+              </div>
+              <div className={styles.messageZone}>
+                  TEST
+                <div className={styles.infosRight}>you - 2 days ago</div>
+              </div>
+            </div>
+          </div>
+
+          <UserMessage />
+
+          <div>
+            <div className={styles.contactAnswerLine}>
+              <div className={ `${styles.contactAvatarLine} x6spaceAfter ${styles.answer}` }>
+                <TheCoinAvatar />
+              </div>
+              <div className={styles.messageZone}>
+                  TEST
+                <div className={styles.infosRight}>you - 2 days ago</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className={styles.contactAnswerLine}>
+              <div className={ `${styles.contactAvatarLine} x6spaceAfter x6spaceBefore ${styles.answer}` }>
+                <TheCoinAvatar />
+              </div>
+              <div className={styles.messageZone}>
+                  TEST
+                <div>you - 2 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </AppContainerWithShadow>
     </React.Fragment>
   );

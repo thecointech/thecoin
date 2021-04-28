@@ -1,0 +1,101 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.contactFormLine, .contactMessageLine{
+    display: inline-block;
+    color: @theCoinPaletteGreen5;
+    width: 400px;
+    height: 130px;
+    > div{
+        background-color: @theCoinPalettePaleGreen2Faded50;
+        border-radius: @absoluteBorderRadius;
+        padding-left: 10px;
+        width: 380px;
+        margin: auto;
+        height: 100px;
+        input, button{
+            display: inline;
+            float: left;
+            margin: auto;
+        }
+        button{
+            right: -75px;
+            position: relative;
+            top: -10px;
+            height: 80px;
+            width: 100px;
+        }
+    }
+}
+
+.contactMessageLine{
+    
+}
+
+.contactAnswerLine{
+    display: inline-block;
+    color: @theCoinPaletteGreen5;
+    width: 470px;
+    .messageZone{
+        display: inline-block;
+        background-color: @theCoinPaletteGray1Faded30;
+        border-radius: @absoluteBorderRadius;
+        padding-left: 10px;
+        width: 380px;
+        margin: auto;
+        height: 100px;
+    }
+
+}
+
+.contactAvatarLine{    
+    display: inline-block;
+    width: 60px;
+    top: -28px;
+    position: relative;
+    margin-left: 10px;
+    &.answer{
+        top: 45px;
+        margin-left: 0;
+    }
+}
+
+.contactFormLine::after,.contactMessageLine::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-left: 15px solid @theCoinPalettePaleGreen2Faded50;
+    border-bottom: 10px solid transparent;
+    display: inline-flex;
+    right: -81px;
+    position: relative;
+    top: -40px;
+}
+
+.contactAnswerLine::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 15px solid @theCoinPaletteGray1Faded30;
+    border-bottom: 10px solid transparent;
+    display: inline-flex;
+    right: -60px;
+    position: relative;
+    bottom: -40px;
+}
+
+
+.contactMessageLine::after {
+    left: 390px;
+}
+
+.messagesContainer{
+    width: 500px;
+    margin: auto;
+}
+
+.infosRight{
+    text-align: right;
+    color: @theCoinPaletteGray1;
+}

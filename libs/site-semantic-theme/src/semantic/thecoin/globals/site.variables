@@ -138,6 +138,7 @@
 @theCoinPaletteGray3     : #767676;
 
 @theCoinPaletteGray1Faded10     : fade(@theCoinPaletteGray1, 10%);
+@theCoinPaletteGray1Faded30     : fade(@theCoinPaletteGray1, 30%);
 
 @theCoinPaletteGreenGradient1     : linear-gradient(359.64deg, @theCoinPaletteGreen4 35.26%, @theCoinPaletteGreen3 87.06%, @theCoinPaletteGreen4 109.26%);
 @theCoinPaletteGreenGradient2     : linear-gradient(0.38deg, @theCoinPaletteGreen3 21.77%, @theCoinPaletteGreen2 63.66%, @theCoinPaletteGreen4 109.03%);

@@ -5,8 +5,6 @@ import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { UxInput } from '@thecointech/shared/components/UxInput';
 
-import styles from './styles.module.less';
-
 type VisualProps={
 
     errorMessage: MessageDescriptor,
@@ -26,7 +24,7 @@ type VisualProps={
 
 export const ContactForm = (props: VisualProps) => {
   return (
-    <div className={styles.contactusForm}>
+    <div>
         <Message hidden={props.successHidden} positive>
           <FormattedMessage {...props.successMessage} />
         </Message>
@@ -34,6 +32,7 @@ export const ContactForm = (props: VisualProps) => {
           <FormattedMessage {...props.errorMessage} />
         </Message>
 
+      <div>
         <UxInput
             className={"half left"}
             uxChange={props.setMessage}
@@ -43,6 +42,7 @@ export const ContactForm = (props: VisualProps) => {
         <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
           <FormattedMessage {...props.button} />
         </ButtonSecondary>
+      </div>
     </div>
   );
 }
