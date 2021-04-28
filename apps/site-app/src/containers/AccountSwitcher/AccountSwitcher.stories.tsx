@@ -8,12 +8,6 @@ import { withAccounts } from '@thecointech/storybookutils';
 export default {
   title: 'App/AccountSwitcher',
   component: AccountSwitcherComponent,
-  argTypes: {
-    accounts: [
-      'First Account',
-      'Second Account',
-    ],
-  },
 } as Meta;
 
 const Template: Story = () => <AccountSwitcherComponent />;
