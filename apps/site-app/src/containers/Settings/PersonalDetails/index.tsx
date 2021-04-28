@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useAccountApi } from '@thecointech/shared/containers/Account';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
@@ -68,7 +67,6 @@ const button = {
 export const PersonalDetails = () => {
 
   const account = useActiveAccount()!;
-  const accountApi = useAccountApi(account.address);
   const [details, setDetails] = useState(account.details);
   const [givenNameEdit, setGivenNameEdit] = useState(false);
   const [familyNameEdit, setFamilyNameEdit] = useState(false);
@@ -77,18 +75,7 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-
-  const onDetailsChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(details);
-    setDetails({
-      ...details,
-      [e.currentTarget.name]: e.currentTarget.value,
-    });
-  }
-
-
-  const onDetailsChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(details);
+  const onDetailsChange = (e: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLInputElement>) => {
     setDetails({
       ...details,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -102,7 +89,6 @@ export const PersonalDetails = () => {
     setAddressEdit(false);
     setEmailEdit(false);
     setPhoneEdit(false);
-    console.log(accountApi.setDetails({...details}));
   }
   
   return (
@@ -151,7 +137,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange2(e)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange(e)}
           details={details}
           defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
