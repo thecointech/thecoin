@@ -3,7 +3,7 @@
  * LanguageProvider reducer
  *
  */
-import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
+import { TheCoinReducer } from '../../store/immerReducer';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -23,8 +23,10 @@ export class LanguageProviderReducer extends TheCoinReducer<LanguageProviderStat
     }
 }
 
+const { reducer, actions} = LanguageProviderReducer.buildReducers(LanguageProviderReducer, initialState);
 export const useLanguageProvider = () => {
-  const { reducer, actions } = GetNamedReducer(LanguageProviderReducer, LANGUAGE_KEY, initialState);
   useInjectReducer({ key: LANGUAGE_KEY, reducer });
+}
+export const useLanguageProviderApi = () => {
   return (bindActionCreators(actions, useDispatch()) as IActions) as IActions;
 };

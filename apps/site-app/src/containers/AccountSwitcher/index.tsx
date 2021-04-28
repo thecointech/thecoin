@@ -1,11 +1,8 @@
-import React, { useCallback } from "react";
-import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import React from "react";
+import { Dropdown } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { accountMapApi, useAccounts } from "@thecointech/shared/containers/AccountMap";
+import { useAccountStoreApi, useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-
-import { AccountState } from "@thecointech/shared/containers/Account/types";
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 
@@ -30,18 +27,9 @@ const signout = {   id:"app.accountSwitcher.signout",
 
 export const AccountSwitcher = () => {
 
-  const {active, map} = useAccounts();
-  const activeAccount = active
-    ? map[active]
-    : undefined;
-
-  const dispatch = useDispatch();
-  const doSetActive = useCallback((_: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
-    const accounts = accountMapApi(dispatch);
-    accounts.setActiveAccount(data.address)
-  }, [dispatch])
-
-  const allAccounts = Object.values(map);
+  const {active, accounts} = useAccountStore();
+  const accountStore = useAccountStoreApi();
+  const activeAccount = accounts.find(account => account.address === active)
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
@@ -57,7 +45,7 @@ export const AccountSwitcher = () => {
         </Dropdown.Header>
         <ActiveAccount account={activeAccount} />
         {
-          allAccounts
+          accounts
             .filter(account => account.address !== activeAccount?.address)
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
@@ -67,7 +55,7 @@ export const AccountSwitcher = () => {
                 address={account.address}
                 text={account.name}
                 as={Link}
-                onClick={doSetActive}
+                onClick={(_, data) => accountStore.setActiveAccount(data.address)}
                 to="/" />
               )
             )

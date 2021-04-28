@@ -69,14 +69,13 @@ export const Restore = () => {
 
   /////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
-  useEffect(() => {
-    doSetup(setAuthUrl, setState);
-  }, [setAuthUrl, setState]);
+  useEffect(
+    () => doSetup(setAuthUrl, setState),
+    [setAuthUrl, setState]
+  );
 
   /////////////////////////////////////////
-  const onConnectClick = useCallback(() => {
-    onInitiateLogin(gauthUrl!);
-  }, [gauthUrl]);
+  const onConnectClick = () => onInitiateLogin(gauthUrl!);
 
   /////////////////////////////////////////
 
@@ -96,25 +95,25 @@ export const Restore = () => {
 
       <Grid stackable centered columns={4} id={styles.choices}>
         <Grid.Row centered>
-          <Grid.Column centered>
+          <Grid.Column>
               <img src={ manually } />
               <br />
               <ButtonPrimary as={Link} to="/addAccount/upload/" id={styles.knowMore} >
                 <FormattedMessage {...manualy} />
               </ButtonPrimary>
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
               <img src={ google } />
               <br />
               <AccountList wallets={wallets} />
               <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
               <img src={ microsoft } />
               <br />
               <FormattedMessage {...microsoftLink} />
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
                 <img src={ dropbox } />
                 <br />
                 <FormattedMessage {...dropboxLink} />

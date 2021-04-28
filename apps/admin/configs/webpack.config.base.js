@@ -7,6 +7,7 @@ import webpack from 'webpack';
 import { GenerateAliases } from './patchpaths';
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const configFile = path.join(__dirname, '..', 'tsconfig.build.json');
 
 export default {
   externals: [
@@ -23,7 +24,7 @@ export default {
           {
             loader: 'ts-loader',
             options: {
-              configFile: path.join(__dirname, '..', 'tsconfig.build.json'),
+              configFile,
               transpileOnly: true, // fork-ts-checker-webpack-plugin is used for type checking
               projectReferences: true,
               logLevel: 'info',
@@ -54,6 +55,9 @@ export default {
       NODE_ENV: 'production'
     }),
     new webpack.NamedModulesPlugin(),
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: configFile,
+      checkSyntacticErrors: true
+    }),
   ]
 };

@@ -1,4 +1,4 @@
-import { setIntlConfig, withIntl } from 'storybook-addon-intl';
+import { setIntlConfig, withIntl as srcWithIntl } from 'storybook-addon-intl';
 import {translations} from '@thecointech/site-landing/src/translations'
 
 const getMessages = (locale) => translations[locale];
@@ -10,4 +10,4 @@ setIntlConfig({
     getMessages,
 });
 
-export const withTranslations = withIntl;
+export const withIntl = srcWithIntl;

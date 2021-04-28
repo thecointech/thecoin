@@ -21,5 +21,9 @@
   "exports": {
     ".": "./build/index.js",
     "./": "./build/"
+  },
+
+  "dependencies": {
+    "@thecointech/shared": "*"
   }
 }
