@@ -157,7 +157,6 @@ export const Redeem = () => {
   }
 
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
-    console.log(email);
     if (e) e.preventDefault();
     setDoCancel(false);
     setTransferValues(undefined);
