@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStore, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import { UploadWallet, ReadFileData } from '@thecointech/shared/containers/UploadWallet';
 
 import { Balance } from '@thecointech/shared/containers/Balance';
@@ -82,10 +82,9 @@ export const AccountName = "BrokerCAD";
 export const BrokerCAD = (props: Props) =>  {
   const { url } = props.match;
 
-  const accounts = useAccountMap();
-  const accountsApi = useAccountMapApi();
-  const brokerCAD = Object.values(accounts)
-    .find(account => account.name === AccountName);
+  const store = useAccountStore();
+  const accountsApi = useAccountStoreApi();
+  const brokerCAD = store.accounts.find(account => account.name === AccountName);
 
   React.useEffect(() => {
     if (brokerCAD?.address)

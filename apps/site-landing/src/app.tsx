@@ -30,7 +30,7 @@ import { LanguageProvider, Languages } from '@thecointech/shared/containers/Lan
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import {configureAppStore, history } from '@thecointech/shared/store';
+import {configureLandingStore, history } from './reducers';
 
 // Import i18n messages
 import { translations } from './translations';
@@ -41,7 +41,7 @@ import { init } from '@thecointech/logging';
 init('site-landing')
 
 // Create redux store with history
-const store = configureAppStore();
+const store = configureLandingStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (languages: Languages, Component = App) => {

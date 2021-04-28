@@ -1,20 +1,22 @@
 import { InitialCoinBlock, ConnectContract } from '@thecointech/contract';
 import { Wallet } from 'ethers';
 import { call } from 'redux-saga/effects';
-import { useInjectSaga } from "redux-injectors";
+import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { useDispatch } from 'react-redux';
 import { AccountState, DecryptCallback, DefaultAccountValues, IActions } from './types';
-import { buildSagas, bindActions } from './actions';
+import { buildSagas } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
-import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
+import { TheCoinReducer } from '../../store/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
-import { ACCOUNTMAP_KEY } from '../AccountMap';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '../IDX';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
+import { Dictionary } from 'lodash';
+import { bindActionCreators } from 'redux';
 
 
 // The reducer for a single account state
@@ -181,35 +183,48 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 }
 
-export const getAccountReducer = (address: string) => {
+const reducerCache : Dictionary<typeof AccountReducer> = {};
+function getAccountReducerClass(address: string) {
 
   // In development mode, ensure we are only called with a legal address
   if (process.env.NODE_ENV !== "production") {
     if (!IsValidAddress(address)) {
-      alert('Connect debugger and figure this out');
+      debugger;
+      alert('Invalid adddress: Connect debugger and figure this out');
       throw new Error("Invalid Address passed to accountApi");
     }
     if (NormalizeAddress(address) != address) {
+      debugger;
       alert('Connect debugger and figure this out');
       throw new Error("Un-normalized address being passed to accountApi");
     }
   }
 
-  return GetNamedReducer(AccountReducer, address, {}, ACCOUNTMAP_KEY);
+  if (!reducerCache[address]) {
+    class NamedAccountReducer extends AccountReducer {};
+    NamedAccountReducer.customName = address;
+    const actions = createActionCreators(NamedAccountReducer);
+    NamedAccountReducer.prototype.actions = () => actions;
+    reducerCache[address] = NamedAccountReducer;
+  }
+  return reducerCache[address];
 }
 
-export const useAccount = (address: string|null) => {
+export const useAccount = (initial: AccountState) => {
+  const { address } = initial;
+  const ReducerClass = getAccountReducerClass(initial.address);
+  const reducer: any = createReducerFunction(ReducerClass, initial);
+  useInjectReducer({ key: address, reducer });
+
+  const actions = createActionCreators(ReducerClass);
   // We must inject something, but if we do not have an account we inject an empty saga
   useInjectSaga({
-    key: address || "DEFAULT|ACC",
-    saga: address
-      ? buildSagas(address)
-      : function* () { }
+    key: address,
+    saga: buildSagas(address, actions, ReducerClass)
   });
 }
 
 export const useAccountApi = (address: string) => {
-  const { actions } = getAccountReducer(address);
-  const dispatch = useDispatch();
-  return bindActions(actions, dispatch);
+  const ReducerClass = getAccountReducerClass(address);
+  return bindActionCreators(ReducerClass.prototype.actions(), useDispatch()) as unknown as IActions;
 }
