@@ -12,7 +12,7 @@ export function init(database: MockedDb, immutable?: boolean) {
   // If this is a test is allowed to ping the live
   // DB when available, ensure it safe by enforcing readonly
   if (immutable) {
-    db.set = async () => { throw new Error("Error: read-only test attempting to modify database"); }
+    mocks.FakeFirestore.DocumentReference.prototype.set = async () => { throw new Error("Error: read-only test attempting to modify database"); }
   }
 
   // Import the mocked db, and assign.

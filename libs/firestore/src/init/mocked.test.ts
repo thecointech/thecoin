@@ -10,7 +10,7 @@ test('basic creation', async () => {
 
   const db = GetFirestore();
   const userCollection = db.collection('users');
-  const userDocs = await db.collection('users').get();
+  const userDocs = await userCollection.get();
   // write assertions here
   expect(userDocs.docs.length).toBe(2);
 
@@ -38,8 +38,9 @@ test('immutability', async () => {
   const db = GetFirestore();
 
   // assert that mutations throw
-  const shouldThrow = () => db.collection('users').doc('any').set({
-    mutated: true
-  });
+  const shouldThrow = () =>
+    db.collection('users').doc('any').set({
+      mutated: true
+    });
   return expect(shouldThrow()).rejects.toThrowError("Error: read-only test attempting to modify database");
 })
