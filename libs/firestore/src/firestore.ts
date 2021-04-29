@@ -1,7 +1,7 @@
 import { Firestore } from "@thecointech/types";
 
 // Store on global to avoid any weirdities
-export function SetFirestore(db: Firestore)
+export function setFirestore(db: Firestore)
 {
   globalThis.__thecoin = {
     ...globalThis.__thecoin,
@@ -10,7 +10,7 @@ export function SetFirestore(db: Firestore)
 }
 
 
-export function GetFirestore() : Firestore
+export function getFirestore() : Firestore
 {
   if (!globalThis.__thecoin.firestore)
     throw new Error("Firestore not initialized");

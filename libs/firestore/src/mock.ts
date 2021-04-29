@@ -1,4 +1,4 @@
-import { SetFirestore } from './firestore';
+import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import mocks from 'firestore-jest-mock';
 import { MockedDb } from './types';
@@ -17,7 +17,7 @@ export function init(database: MockedDb, immutable?: boolean) {
 
   // Import the mocked db, and assign.
   Timestamp.init(mocks.FakeFirestore.Timestamp);
-  SetFirestore(db);
+  setFirestore(db);
 
   return true;
 }

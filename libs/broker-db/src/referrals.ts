@@ -1,24 +1,24 @@
-import { GetFirestore } from "./firestore";
-import { IsValidAddress, IsValidReferrerId } from "./Address";
+import { getFirestore } from "@thecointech/firestore";
+import { IsValidAddress, IsValidReferrerId } from "@thecointech/utilities/Address";
 import base32 from 'base32';
 import { Signer, utils } from 'ethers';
-import { GetUserDoc, GetUserData } from "./User";
+import { getUserDoc, getUserData } from "./user";
 import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
 export function GetReferrersCollection() : CollectionReference {
-  return GetFirestore().collection("Referrers");
+  return getFirestore().collection("Referrers");
 }
 
 // Document stored as /Referrer/{id}/
 // Contains the address of the referrer, and is
 // signed by TheCoin
-export interface VerifiedReferrer {
+export type VerifiedReferrer = {
   address: string;
   signature: string;
 }
 
 // Subsection of user-data associated with referrals
-export interface ReferralData {
+export type ReferralData = {
   created: Timestamp|Date;
   referrer: string;
 }
@@ -39,7 +39,7 @@ export async function GetReferrerData(referrerId: string) {
 }
 
 export async function GetUsersReferrer(address: string) {
-  const user = await GetUserData(address);
+  const user = await getUserData(address);
   if (user && user.referrer && user.created) {
     return user as ReferralData;
   }
@@ -94,7 +94,7 @@ export async function CreateReferree(referral: NewAccountReferal, created: Times
   if (!referrer.exists) throw new Error("Referrer doesnt exist");
 
   // Create new referral link
-  const newUserKey = GetUserDoc(newAccount);
+  const newUserKey = getUserDoc(newAccount);
   const user = await newUserKey.get();
   if (user.exists) throw new Error("User already exists");
 

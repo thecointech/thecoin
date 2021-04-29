@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
-import { SetFirestore } from './firestore';
+import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import firebaseConfig from "./password.config.json";
 
@@ -19,7 +19,7 @@ export const init = async (name: string, password: string) =>
   if (cred != null)
   {
     const _db = firebase.firestore();
-    SetFirestore(_db as any);
+    setFirestore(_db as any);
     Timestamp.init(firebase.firestore.Timestamp);
     return true;
   }

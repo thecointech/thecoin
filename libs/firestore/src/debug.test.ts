@@ -1,6 +1,6 @@
 import { init } from './debug';
 import { describe } from '@thecointech/jestutils';
-import { GetFirestore, Timestamp } from '.';
+import { getFirestore, Timestamp } from '.';
 import { isEmulatorAvailable } from './types';
 
 
@@ -25,7 +25,7 @@ describe('Our testing correctly connects to Firestore', () => {
     const isValid = await init('broker-cad');
     expect(isValid).toBeTruthy();
 
-    const db = GetFirestore();
+    const db = getFirestore();
     expect(db).toBeDefined();
 
     const key = Date.now().toString();
