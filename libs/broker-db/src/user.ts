@@ -16,7 +16,7 @@ export type UserAction = "Buy"|"Sell"|"Bill";
 //
 // get user document
 //
-function getUserDoc(address: string): DocumentReference {
+export function getUserDoc(address: string): DocumentReference {
   if (!IsValidAddress(address)) {
     console.error(`${address} is not a valid address`);
     throw new Error("Invalid address");
@@ -25,7 +25,7 @@ function getUserDoc(address: string): DocumentReference {
 }
 
 // get data associated with user.
-async function getUserData(address: string) {
+export async function getUserData(address: string) {
 	const userDoc = getUserDoc(address)
 	const userData = await userDoc.get();
 	return userData.exists ?
@@ -37,7 +37,7 @@ async function getUserData(address: string) {
 // Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
 //
-async function SetUserVerified(signature: string, address: string, timestamp: Timestamp) {
+export async function setUserVerified(signature: string, address: string, timestamp: Timestamp) {
 	const userDoc = getUserDoc(address)
 	const data: UserVerifiedInfo = {
 		verified: signature,
@@ -47,7 +47,7 @@ async function SetUserVerified(signature: string, address: string, timestamp: Ti
 	await userDoc.set(data, { merge: true });
 }
 
-async function getUserVerified(address: string) {
+export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
 	return userData && !!userData.verified;
 }
@@ -55,13 +55,11 @@ async function getUserVerified(address: string) {
 //
 // Helper functions for accessing stuff
 //
-function getActionDoc(user: string, action: UserAction, hash: string): DocumentReference {
+export function getActionDoc(user: string, action: UserAction, hash: string): DocumentReference {
 	const userDoc = getUserDoc(user);
 	return userDoc.collection(action).doc(hash);
 }
 
-function getActionRef(action: UserAction, hash: string): DocumentReference {
+export function getActionRef(action: UserAction, hash: string): DocumentReference {
   return getFirestore().collection(action).doc(hash);
 }
-
-export { getUserDoc, getUserData, SetUserVerified, getUserVerified, getActionDoc, getActionRef }

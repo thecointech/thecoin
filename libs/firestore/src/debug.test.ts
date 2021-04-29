@@ -47,4 +47,4 @@ describe('Our testing correctly connects to Firestore', () => {
     const ts = Timestamp.now();
     expect(ts).toBeTruthy();
   });
-}, filterByEmulator());
+}, filterByEmulator);
