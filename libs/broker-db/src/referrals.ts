@@ -2,7 +2,7 @@ import { getFirestore } from "@thecointech/firestore";
 import { IsValidAddress, IsValidReferrerId } from "@thecointech/utilities/Address";
 import base32 from 'base32';
 import { Signer, utils } from 'ethers';
-import { getUserDoc, getUserData } from "./user";
+import { getUserDoc, getUserData, ReferralData } from "./user";
 import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
 export function getReferrersCollection() : CollectionReference {
@@ -15,12 +15,6 @@ export function getReferrersCollection() : CollectionReference {
 export type VerifiedReferrer = {
   address: string;
   signature: string;
-}
-
-// Subsection of user-data associated with referrals
-export type ReferralData = {
-  created: Timestamp|Date;
-  referrer: string;
 }
 
 // GetReferrer

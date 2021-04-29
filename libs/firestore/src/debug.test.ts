@@ -1,20 +1,7 @@
-import { init } from './debug';
+import { init, filterByEmulator } from './debug';
 import { describe } from '@thecointech/jestutils';
 import { getFirestore, Timestamp } from '.';
-import { isEmulatorAvailable } from './types';
 
-
-///////////////////////////////////////////////////////////////
-// For Jest fn's that connect to the emulator:
-// Do not attempt to connect if we do not have an
-// active connection.
-export const filterByEmulator = () => {
-  if (!isEmulatorAvailable()) {
-    console.warn("Cannot connect to firestore, abandoning unit tests");
-    return false;
-  }
-  return true;
-}
 
 //
 // Test the connection to the firestore emulator.

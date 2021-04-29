@@ -2,6 +2,7 @@ import { Timestamp } from "@thecointech/types";
 export { init } from "./init";
 export * from './timestamp';
 export * from './firestore';
+export { filterByEmulator } from "./debug";
 
 // export type ProcessRecord = {
 //   recievedTimestamp: Timestamp,

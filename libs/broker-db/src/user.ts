@@ -1,17 +1,24 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { getFirestore } from '@thecointech/firestore';
-import { ReferralData } from "./referrals";
 import { Timestamp, DocumentReference } from "@thecointech/types";
 
-type UserVerifiedInfo = {
+export type UserVerifiedInfo = {
 	verified: string,
 	verifiedTimestamp: Timestamp|Date
+}
+export type ReferralData = {
+  created: Timestamp|Date;
+  referrer: string;
 }
 
 // A union of all possible data on a user.
 type AllUserData = Partial<UserVerifiedInfo> & Partial<ReferralData>
 
 export type UserAction = "Buy"|"Sell"|"Bill";
+
+export function getUserCollection() {
+  return getFirestore().collection("User");
+}
 
 //
 // get user document
@@ -21,7 +28,7 @@ export function getUserDoc(address: string): DocumentReference {
     console.error(`${address} is not a valid address`);
     throw new Error("Invalid address");
   }
-  return getFirestore().collection("User").doc(NormalizeAddress(address));
+  return getUserCollection().doc(NormalizeAddress(address));
 }
 
 // get data associated with user.

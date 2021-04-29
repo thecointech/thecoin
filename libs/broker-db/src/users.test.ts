@@ -1,6 +1,5 @@
 import { getAllUsers } from './users';
-import { init } from '@thecointech/firestore';
-import { filterByEmulator } from '@thecointech/firestore/src/debug.test';
+import { init, filterByEmulator } from '@thecointech/firestore';
 import { IsValidAddress } from '@thecointech/utilities';
 import { describe } from '@thecointech/jestutils';
 
@@ -13,6 +12,6 @@ describe('Live DB fetching', () => {
     // There should be (at least) 41 entries
     expect(users.length).toBeGreaterThanOrEqual(41);
 
-    expect(users.find(s => !IsValidAddress(s))).toBeFalsy();
+    expect(users.every(IsValidAddress)).toBeTruthy();
   })
 }, filterByEmulator)
