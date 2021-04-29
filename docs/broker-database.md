@@ -19,7 +19,7 @@ Our DB exists to enable safe offline processing & error-and-recovery for client 
 }
 ```
 #### Key
-The key of each timestamp is the timestamp of when that action was created.  Only calculated on the client, this is not completely reliable and only intended to make human-viewing of online content a bit more compreshensible.
+The key of each timestamp is the timestamp of when that action was created.  Only calculated on the client, this is not completely reliable and only intended to make human-viewing of online content a bit more comprehensible.
 
 We ignore the best practices on this because the events are already shareded by their random ID, and no single transaction will ever incur 500 writes-per-second.
 
