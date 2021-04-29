@@ -1,15 +1,14 @@
-import { IFxRates } from "@thecointech/shared/containers/FxRate";
-import { GetFirestore, CertifiedTransferRecord } from "@thecointech/utilities/firestore";
+import { getFirestore } from "@thecointech/firestore";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { InstructionPacket, GetSigner } from "@thecointech/utilities/VerifiedAction";
 import { UserAction } from "@thecointech/utilities/User";
 
-import { AddSettlementDate, MarkComplete } from "./utils";
+import { MarkComplete } from "./utils";
 import { log } from "@thecointech/logging";
 
 
-export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
-  const firestore = GetFirestore()
+export async function FetchUnsettledRecords(type: string) {
+  const firestore = getFirestore()
   const collection = firestore.collection(type);
   const allDocs = await collection.get();
   const fetchAllBills = allDocs.docs.map(async (d) => {
@@ -17,7 +16,6 @@ export async function FetchUnsettledRecords(type: string, fxApi: IFxRates) {
     const billDocument = firestore.doc(path);
     const rawData = await billDocument.get();
     const record = rawData.data() as CertifiedTransferRecord;
-    await AddSettlementDate(record, fxApi);
     return record;
   });
   log.debug({action: type}, `Fetched ${fetchAllBills.length} actions of type: {action}`)
