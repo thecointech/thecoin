@@ -3,7 +3,8 @@ export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);
 }
 
-// Valid ID's exclude IOUL
+// Valid ID's exclude IOUL.  Defined here (rather than
+// in broker-db) because it is used in site-app
 export function IsValidReferrerId(id: string) {
 	return /^[a-hj-km-np-tv-z0-9]{6}$/i.test(id)
 }

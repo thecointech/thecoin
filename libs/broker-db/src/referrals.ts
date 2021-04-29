@@ -5,7 +5,7 @@ import { Signer, utils } from 'ethers';
 import { getUserDoc, getUserData } from "./user";
 import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
-export function GetReferrersCollection() : CollectionReference {
+export function getReferrersCollection() : CollectionReference {
   return getFirestore().collection("Referrers");
 }
 
@@ -24,21 +24,21 @@ export type ReferralData = {
 }
 
 // GetReferrer
-export function GetReferrerDoc(referrerId: string) : DocumentReference {
+export function getReferrerDoc(referrerId: string) : DocumentReference {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
     throw new Error("Invalid Referrer");
   }
-  return GetReferrersCollection().doc(referrerId.toLowerCase());
+  return getReferrersCollection().doc(referrerId.toLowerCase());
 }
 
-export async function GetReferrerData(referrerId: string) {
-  const doc = GetReferrerDoc(referrerId);
+export async function getReferrerData(referrerId: string) {
+  const doc = getReferrerDoc(referrerId);
   const referrer = await doc.get();
   return referrer.exists ? (referrer.data() as VerifiedReferrer) : null;
 }
 
-export async function GetUsersReferrer(address: string) {
+export async function getUsersReferrer(address: string) {
   const user = await getUserData(address);
   if (user && user.referrer && user.created) {
     return user as ReferralData;
@@ -53,7 +53,7 @@ export async function GetUsersReferrer(address: string) {
 //   return s2.slice(-6).toLowerCase();
 // }
 
-export function GetReferrerCode(signature: string) {
+export function getReferrerCode(signature: string) {
   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
   const buffer = Buffer.from(normSig, "hex");
   const s2: string = base32.encode(buffer);
@@ -66,9 +66,9 @@ export function GetReferrerCode(signature: string) {
 //  TODO: Re-consider naming (eg consistent use of word 'code')
 //  TODO: Move the signature creation inside this function
 //
-export async function CreateReferrer(signature: string, address: string) {
-  const code = GetReferrerCode(signature);
-  const referrerDoc = GetReferrerDoc(code);
+export async function createReferrer(signature: string, address: string) {
+  const code = getReferrerCode(signature);
+  const referrerDoc = getReferrerDoc(code);
 
   const data: VerifiedReferrer = {
     address,
@@ -83,13 +83,13 @@ export async function CreateReferrer(signature: string, address: string) {
 // every account requires a referral code, but it should not
 // be possible to assign codes to existing accounts
 //
-export async function CreateReferree(referral: NewAccountReferal, created: Timestamp) {
+export async function createReferree(referral: NewAccountReferal, created: Timestamp) {
   const { referrerId, newAccount } = referral;
 
   if (!IsValidReferrerId(referrerId)) throw new Error("Invalid Referrer");
   if (!IsValidAddress(newAccount)) throw new Error("Invalid Address");
 
-  const referrerDoc = GetReferrerDoc(referrerId);
+  const referrerDoc = getReferrerDoc(referrerId);
   const referrer = await referrerDoc.get();
   if (!referrer.exists) throw new Error("Referrer doesnt exist");
 
@@ -116,7 +116,7 @@ export async function GetAccountCode(address: string, signer: Signer)
   // generate this signers secret key
   const rhash = GetHash(address.toLowerCase());
   const rsign = await signer.signMessage(rhash);
-  return GetReferrerCode(rsign);
+  return getReferrerCode(rsign);
 }
 
 

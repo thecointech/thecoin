@@ -238,8 +238,8 @@ Refactor into:
 Current areas:
  utils:
   + firestore init => firestore package (done)
-  + users => broker-db
-  + referrals => broker-db
+  + users => broker-db (done)
+  + referrals => broker-db (done)
       used by admin & broker-cad.  Means broker-db will incorporate generating referral code.  Not ideal, but not the biggest deal
  tx-processing:
   + FetchUnsettledRecords => broker-db
