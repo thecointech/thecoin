@@ -1,7 +1,7 @@
 
 // Do not attempt to connect if we do not have an
 // active connection.
-export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR !== 'false'
+export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR_PORT && process.env.FIRESTORE_EMULATOR_PORT !== 'false'
 
 // Mocked DB structure
 export type MockedDocument = {

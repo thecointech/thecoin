@@ -9,5 +9,5 @@
 
     "allowSyntheticDefaultImports": true,
   },
-  "include": ["./src/**/*", "./src/**/*.json", "types/global.d.ts"]
+  "include": ["./src/**/*", "./src/**/*.json"]
 }

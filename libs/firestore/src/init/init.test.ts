@@ -27,7 +27,7 @@ describe('We choose the right instance of firestore', () => {
   })
 
   it ('chooses right when emulator is running', async () => {
-    process.env.FIRESTORE_EMULATOR = '1234';
+    process.env.FIRESTORE_EMULATOR_PORT = '1234';
     await init({project: "utilities"}); // TODO: move project into env variable (?)
     expect(init_debug).toBeCalled();
   })
@@ -42,7 +42,7 @@ describe('We choose the right instance of firestore', () => {
     // no matter what other options there are, we only choose mock
     process.env.GAE_ENV = 'true';
     process.env.GOOGLE_APPLICATION_CREDENTIALS = 'true';
-    process.env.FIRESTORE_EMULATOR = 'true';
+    process.env.FIRESTORE_EMULATOR_PORT = 'true';
     // with mocked data
     await init(data);
     expect(init_mock).toBeCalled();

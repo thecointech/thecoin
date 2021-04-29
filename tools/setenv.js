@@ -1,9 +1,9 @@
 const { join } = require('path');
 const { existsSync } = require('fs');
 
-function getEnvFile() {
-  const cfgName = process.env.CONFIG_NAME || "development";
-  const cfgFile = join(__dirname, '..', 'environments', `${cfgName}.env`);
+function getEnvFile(cfgName) {
+  const filename = cfgName || process.env.CONFIG_NAME || "development";
+  const cfgFile = join(__dirname, '..', 'environments', `${filename}.env`);
   if (!existsSync(cfgFile)) {
     throw new Error(`Missing cfg file for: ${cfgName} (${cfgFile})`);
   }
