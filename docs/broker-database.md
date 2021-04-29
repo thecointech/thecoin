@@ -224,3 +224,45 @@ One-of groups are surrounded by brackets
             data?: notes
           }
 ```
+
+
+## Refactoring efforts
+
+Currently, we do not have a consolidated place for Firestore access.  We will
+refactor the current system to move all firestore operations into a single place.
+
+Refactor into:
+ firestore => Firestore init and normalization across projects
+ broker-db => DB translation: wraps all access to firestore to ensure consistency.
+
+Current areas:
+ utils:
+  + firestore init => firestore package (done)
+  + users => broker-db
+  + referrals => broker-db
+      used by admin & broker-cad.  Means broker-db will incorporate generating referral code.  Not ideal, but not the biggest deal
+ tx-processing:
+  + FetchUnsettledRecords => broker-db
+      used by tx-processing/admin.  Needs refactoring to separate AddSettlementDate
+ tx-firestore:
+  + fetchAllUsers => broker-db
+
+ broker-cad:
+  + newsletter => broker-db (just for consistencies sake)
+
+Once complete, we will need to implement DB spec above in broker-db
+
+Update all clients.  No client should directly call `set` after this.
+ admin:
+  + Purchase
+  + Sell
+  + Refund.
+  Ideally - admin would not actually directly use broker-db, and would instead route through tx-processing.
+ broker-service
+  + CertifiedActionProcess
+ tx-processing:
+ + MarkComplete
+ + storeInDb => storeEvent
+ + inProgress (?) how does this fit in?
+
+Finally: Port data from the old spec to the new one.
