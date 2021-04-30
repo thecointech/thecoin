@@ -21,6 +21,7 @@ import { getSigner } from '@thecointech/accounts';
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
 import { FormEvent } from 'react';
+import { UxOnChange } from '@thecointech/shared/src/components/UxInput/types';
 
 type MyProps = AccountState & {
   updateBalance: Function
@@ -179,7 +180,7 @@ class PurchaseClass extends React.PureComponent<Props> {
   }
 
   // Validate our inputs
-  onAccountValue = (e: FormEvent<HTMLInputElement>) => {
+  onAccountValue = (e: UxOnChange) => {
     this.setState({
       account: e.currentTarget.value,
     });
