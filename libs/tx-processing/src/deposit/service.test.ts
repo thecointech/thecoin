@@ -1,4 +1,4 @@
-import { GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
+import { getDepositsToProcess, processUnsettledDeposits } from './service'
 import { init } from '@thecointech/utilities/firestore/mock';
 import { GetUserDoc } from "@thecointech/utilities/User";
 import { getContract } from "@thecointech/utilities/Wallets";
@@ -21,7 +21,7 @@ afterAll(() => {
 
 it('We have valid deposits', async () => {
 
-  const deposits = await GetDepositsToProcess();
+  const deposits = await getDepositsToProcess();
   expect(deposits).not.toBeUndefined();
 
   for (const deposit of deposits) {
@@ -41,7 +41,7 @@ it("Can complete deposits", async () => {
   jest.setTimeout(900000);
 
   const theContract = await getContract('BrokerCAD');
-  const deposits = await ProcessUnsettledDeposits(theContract);
+  const deposits = await processUnsettledDeposits(theContract);
   // First, ensure that we have added our users to the DB
   for (const deposit of deposits) {
     // seed the deposit so it's visible in our emulator

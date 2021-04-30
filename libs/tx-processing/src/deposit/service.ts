@@ -42,7 +42,7 @@ async function setCoinRate(record: DepositRecord) {
     return true;
 }
 
-async function FillDepositDetails(etransfer: eTransferData) : Promise<Deposit|null> {
+async function fillDepositDetails(etransfer: eTransferData) : Promise<Deposit|null> {
   // get users address
   const { address, recieved, cad } = etransfer;
   const record: DepositRecord = {
@@ -87,33 +87,33 @@ async function FillDepositDetails(etransfer: eTransferData) : Promise<Deposit|nu
   }
 }
 
-export async function GetDepositsToProcess()
+export async function getDepositsToProcess()
 {
   const rawDeposits = await FetchNewDepositEmails();
   // Fill in appropriate details for pending deposits
-  const depositsAsync = rawDeposits.map(FillDepositDetails);
+  const depositsAsync = rawDeposits.map(fillDepositDetails);
   // complete async
   const deposits = await Promise.all(depositsAsync);
   // Remove all deposits that weren't properly filled out
   return deposits.filter(isPresent);
 }
 
-export async function ProcessUnsettledDeposits(contract: TheCoin, rbcApi?: RbcApi)
+export async function processUnsettledDeposits(contract: TheCoin, rbcApi?: RbcApi)
 {
-  const deposits = await GetDepositsToProcess();
+  const deposits = await getDepositsToProcess();
   const bank = rbcApi ?? new RbcApi();
 
   // for each email, we immediately try and deposit it.
   for (const deposit of deposits)
   {
-    deposit.isComplete = await ProcessUnsettledDeposit(deposit, contract, bank);
+    deposit.isComplete = await processUnsettledDeposit(deposit, contract, bank);
     log.debug("Deposit Completed: " + deposit.isComplete);
   }
 
   return deposits;
 }
 
-export async function ProcessUnsettledDeposit(deposit: Deposit, contract: TheCoin, rbcApi: RbcApi)
+export async function processUnsettledDeposit(deposit: Deposit, contract: TheCoin, rbcApi: RbcApi)
 {
   const inProgress = await initiateDeposit(deposit);
   if (!inProgress)
@@ -122,7 +122,7 @@ export async function ProcessUnsettledDeposit(deposit: Deposit, contract: TheCoi
   const { etransfer, record } = deposit;
 
   // Do the actual deposit
-  const confirmation = await ProcessDepositBank(etransfer, rbcApi)
+  const confirmation = await processDepositBank(etransfer, rbcApi)
   if (!confirmation)
     return false;
   record.confirmation = confirmation;
@@ -131,7 +131,7 @@ export async function ProcessUnsettledDeposit(deposit: Deposit, contract: TheCoi
   await inProgress.set(deposit.record);
 
   // Complete transfer to person
-  const processed = await ProcessDepositTransfer(deposit, contract, inProgress);
+  const processed = await processDepositTransfer(deposit, contract, inProgress);
 
   // Update inProgress with progress
   await inProgress.set(deposit.record);
@@ -154,9 +154,9 @@ export async function ProcessUnsettledDeposit(deposit: Deposit, contract: TheCoi
 }
 
 //
-// Put money in the bank.  Should only return true
+// Put money in the bank.  Returns confirmation
 // if this transfer was actually completed
-export async function ProcessDepositBank(etransfer: eTransferData, rbcApi: RbcApi)
+export async function processDepositBank(etransfer: eTransferData, rbcApi: RbcApi)
 {
   const result = await depositInBank(etransfer, rbcApi, log.trace);
   if (result.code != ETransferErrorCode.Success)
@@ -170,7 +170,7 @@ export async function ProcessDepositBank(etransfer: eTransferData, rbcApi: RbcAp
 
 //
 // Transfer the appropriate amount of Coin to client
-export async function ProcessDepositTransfer(deposit: Deposit, contract: TheCoin, inProgress: DocumentReference) : Promise<boolean>
+export async function processDepositTransfer(deposit: Deposit, contract: TheCoin, inProgress: DocumentReference) : Promise<boolean>
 {
   log.debug({address: deposit.etransfer.address, deposited: deposit.etransfer.recieved.toJSDate()},
     `Beginning transfer to satisfy deposit from {address} for date {DepositDate}`);
