@@ -8,8 +8,6 @@ import { CertifiedTransfer } from '@thecointech/types';
 import { ProcessRecord } from '@thecointech/utilities/firestore';
 import { Dictionary } from 'lodash';
 
-export type UserAction = "Buy"|"Sell"|"Bill";
-
 // TODO: This project should encapsulate communication with/from firestore.
 
 // All transaction types

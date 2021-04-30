@@ -35,8 +35,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^4.9.4",
-    "firebase": "^8.2.9"
+    "@google-cloud/firestore": "^4.10.1",
+    "firebase": "^8.4.3"
   },
   "devDependencies": {
     "jest": "*"

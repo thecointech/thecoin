@@ -32,11 +32,10 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^4.9.4",
-    "firebase": "^8.2.9"
+    "@thecointech/firestore": "*"
   },
   "devDependencies": {
     "jest": "*"

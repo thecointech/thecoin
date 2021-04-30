@@ -18,7 +18,7 @@ export async function init(params?: InitParams) {
     return mock.init(params);
   }
   // Release build, running on server
-  else if (process.env.GAE_ENV) {
+  else if (process.env.GAE_ENV || process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     log.debug('Connecting server-side db running locally');
     const server = await import('./server')
     return server.init();
@@ -28,12 +28,6 @@ export async function init(params?: InitParams) {
     log.debug('Connecting client-side db with user/password');
     const pwd = await import('./password');
     return pwd.init(params.username, params.password);
-  }
-  // Release build, running locally.  May have data, but prefer live connection
-  else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    log.debug('Connecting server-side db with credentials');
-    const release = await import('./release')
-    return release.init();
   }
   // no way to connect online, if we have emulator attempt that connection
   else if (isEmulatorAvailable()) {

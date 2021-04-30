@@ -1,8 +1,6 @@
-import { CertifiedTransferRecord, Timestamp } from "@thecointech/utilities/firestore";
-import { withFiat } from "../base/utils";
-import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "../base";
+import { CertifiedTransferRecord } from "@thecointech/utilities/firestore";
+import { decryptInstructions } from "@thecointech/broker-db";
 import { getActionPrivateKey } from "../base/key";
-import { OfflineFxRates } from "../base/fxrates";
 import { log } from "@thecointech/logging";
 import { RbcApi } from "@thecointech/rbcapi";
 import { ETransferPacket } from "@thecointech/types";
@@ -37,10 +35,10 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
     log.debug({hash: record.hash}, `Sending e-Transfer to complete transaction: {hash}`)
     const confirmation = await api.sendETransfer(address, record.fiatDisbursed, toName, instruction, progressCb);
     record.confirmation = confirmation;
-    if (record.confirmation >= 0)
-    {
-      await MarkCertComplete("Sell", record);
-    }
+    // if (record.confirmation >= 0)
+    // {
+    //   await completeAction("Sell", record);
+    // }
   }
   return toComplete;
 }
@@ -59,16 +57,18 @@ function isValid(packet: ETransferPacket) {
 
 export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord[]>
 {
-  const fxRates = new OfflineFxRates();
-  const toSettle = await FetchUnsettledRecords('Sell', fxRates);
+  //const toSettle = await getUnsettledActions('Sell');
 
-  await fxRates.waitFetches();
-  const ts = Timestamp.now();
-  // Filter out all tx's that have not yet settled
-  toSettle.filter(tx => tx.processedTimestamp && tx.processedTimestamp >= ts)
-  const toComplete = withFiat(toSettle, fxRates.rates);
-  log.debug({action: 'Sell'}, `Fetched ${toComplete.length} {action} actions that are ready to complete`);
-  return toComplete;
+  // const fxRates = new OfflineFxRates();
+  // toSettle.forEach(doc => doc.)
+  // await fxRates.waitFetches();
+  // const ts = Timestamp.now();
+  // // Filter out all tx's that have not yet settled
+  // toSettle.filter(tx => tx.processedTimestamp && tx.processedTimestamp >= ts)
+  // const toComplete = withFiat(toSettle, fxRates.rates);
+  // log.debug({action: 'Sell'}, `Fetched ${toComplete.length} {action} actions that are ready to complete`);
+  // return toComplete;
+  return [];
 }
 
 export async function getInstructions(toComplete: CertifiedTransferRecord[])
@@ -79,7 +79,7 @@ export async function getInstructions(toComplete: CertifiedTransferRecord[])
     throw new Error("Cannot process actions: Private Key is null");
   }
 
-  const instructions = DecryptRecords(toComplete, privateKey);
+  const instructions = decryptInstructions(toComplete as any, privateKey);
   if (!instructions)
   {
     throw new Error('Cannot process actions: Instructions did not decrypt');

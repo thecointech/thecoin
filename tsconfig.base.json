@@ -39,6 +39,8 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "baseUrl": "./any/random/path",
     "paths": {
+      "@thecointech/firestore/*":   ["../../../libs/firestore/build/*"],
+      "@thecointech/broker-db/*":   ["../../../libs/broker-db/build/*"],
       "@thecointech/contract/*":   ["../../../libs/contract/build/*"],
       "@thecointech/types/*":      ["../../../libs/types/build/*"],
       "@thecointech/store/*":      ["../../../libs/store/build/*"],

@@ -12,9 +12,7 @@ export type ReferralData = {
 }
 
 // A union of all possible data on a user.
-type AllUserData = Partial<UserVerifiedInfo> & Partial<ReferralData>
-
-export type UserAction = "Buy"|"Sell"|"Bill";
+type AllUserData = Partial<UserVerifiedInfo&ReferralData>
 
 export function getUserCollection() {
   return getFirestore().collection("User");
@@ -57,16 +55,4 @@ export async function setUserVerified(signature: string, address: string, timest
 export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
 	return userData && !!userData.verified;
-}
-
-//
-// Helper functions for accessing stuff
-//
-export function getActionDoc(user: string, action: UserAction, hash: string): DocumentReference {
-	const userDoc = getUserDoc(user);
-	return userDoc.collection(action).doc(hash);
-}
-
-export function getActionRef(action: UserAction, hash: string): DocumentReference {
-  return getFirestore().collection(action).doc(hash);
 }

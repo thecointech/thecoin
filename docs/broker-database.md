@@ -77,16 +77,15 @@ One-of groups are surrounded by brackets
     - created: DateTime
     - referrer: address
     + [Buy]: RandomID
+        - timestamp
+        - data {
+            amount: number (Fiat Value)
+            type: 'etransfer'|'deposit'|'other',
+            sourceId: etransferId|deposit timestamp,
+          }
+
         + [events]: created-timestamp
           - timestamp
-          { // First entry in any deposit
-            type: 'initial'
-            data: {
-              type: 'etransfer'|'deposit'|'other',
-              sourceId: etransferId|deposit timestamp,
-              amount: number,
-            }
-          }
           { // Settlement. Logged when deposit is converted.
             type: 'tocoin'
             data: number (Coin Value)
@@ -119,12 +118,12 @@ One-of groups are surrounded by brackets
           }
 
     + [Sell]: RandomID
+        // Record the InstructionPacket sent by the client
+        // to initiate this action.
+        - timestamp
+        - data: InstructionPacket
         + [events]: created-timestamp
           - timestamp
-          { // First entry in any sale
-            type: 'initial'
-            data: InstructionPacket
-          },
           { // Added before beginning transfer of any kind
             // The next event _must_ be either successful or
             // failed transfer.  If not found, manual
@@ -183,12 +182,12 @@ One-of groups are surrounded by brackets
 
 
     + [Bill]: RandomID
+        // Record the InstructionPacket sent by the client
+        // to initiate this action.
+        - timestamp
+        - data: InstructionPacket
         + [events]: typestamp
           - timestamp
-          { // First entry records user request
-            type: 'initial'
-            data: InstructionPacket
-          },
           { // Added before beginning transfer of any kind
             // The next event _must_ be either successful or
             // failed transfer.  If not found, manual
@@ -225,7 +224,6 @@ One-of groups are surrounded by brackets
           }
 ```
 
-
 ## Refactoring efforts
 
 Currently, we do not have a consolidated place for Firestore access.  We will
@@ -237,15 +235,15 @@ Refactor into:
 
 Current areas:
  utils:
-  + firestore init => firestore package (done)
-  + users => broker-db (done)
-  + referrals => broker-db (done)
+  + firestore init => firestore package (DONE)
+  + users => broker-db (DONE)
+  + referrals => broker-db (DONE)
       used by admin & broker-cad.  Means broker-db will incorporate generating referral code.  Not ideal, but not the biggest deal
  tx-processing:
   + FetchUnsettledRecords => broker-db
       used by tx-processing/admin.  Needs refactoring to separate AddSettlementDate
  tx-firestore:
-  + fetchAllUsers => broker-db
+  + fetchAllUsers => broker-db (DONE)
 
  broker-cad:
   + newsletter => broker-db (just for consistencies sake)
