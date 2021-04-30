@@ -8,6 +8,7 @@ import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCo
 import { SetUserVerified } from '@thecointech/utilities/User';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
 import { Timestamp } from '@thecointech/utilities/firestore';
+import { UxOnChange } from '@thecointech/shared/src/components/UxInput/types';
 
 
 interface OwnProps {
@@ -31,7 +32,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		this.fetchExistingAccounts();
 	}
 
-	onAccountValue = (e: FormEvent<HTMLInputElement>) => {
+	onAccountValue = (e: UxOnChange) => {
 		this.setState({
 			account: e.currentTarget.value,
 		});
