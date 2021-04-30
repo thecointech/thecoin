@@ -13,7 +13,6 @@ export const UxInput = (props:Props) => {
 
   const {
     intlLabel,
-    label,
     uxChange,
     uxchangenew,
     forceValidate,
@@ -32,9 +31,6 @@ export const UxInput = (props:Props) => {
 
   function onChange(event: React.FormEvent<HTMLInputElement>) {
     uxChange(event);
-    if (uxchangenew){
-      uxchangenew(event);
-    }
     setValue(event.currentTarget.value);
     setShowState(true);
   }
@@ -43,10 +39,7 @@ export const UxInput = (props:Props) => {
     const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
-    const labelToTranslate = intlLabel ? <FormattedMessage {...intlLabel} /> : undefined;
-    const labelToShow = label ? label : undefined;
-    const labelToPrint = labelToTranslate ? labelToTranslate : labelToShow;
-
+    const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
     const tooltipData = tooltip;
 
     const contextRef = createRef<HTMLSpanElement>()

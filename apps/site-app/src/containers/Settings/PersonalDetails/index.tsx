@@ -90,7 +90,7 @@ export const PersonalDetails = () => {
     setEmailEdit(false);
     setPhoneEdit(false);
   }
-  
+
   return (
     <div>
       <Header as="h5" className={`appTitles`}>
@@ -100,7 +100,7 @@ export const PersonalDetails = () => {
 
         <UxInput
             className={"half left"}
-            label={<div>
+            intlLabel={<div>
                         <FormattedMessage {...name} />
                         <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
                           <Icon name={"edit"} /><FormattedMessage {...edit} />
@@ -116,7 +116,7 @@ export const PersonalDetails = () => {
 
         <UxInput
           className={"half right"}
-          label={<div>
+          intlLabel={<div>
                     <FormattedMessage {...familyname} />
                     <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
@@ -144,7 +144,7 @@ export const PersonalDetails = () => {
 
         <UxInput
           className={"borderTop borderBottom"}
-          label={<div>
+          intlLabel={<div>
                     <FormattedMessage {...address} />
                     <span onClick={()=>setAddressEdit(!addressEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
@@ -160,7 +160,7 @@ export const PersonalDetails = () => {
             details={details}
             value={details.email}
             uxChange={ (e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e) }
-            label={<div>
+            intlLabel={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
@@ -174,7 +174,7 @@ export const PersonalDetails = () => {
             details={details}
             value={details.phone}
             uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
-            label={<div>
+            intlLabel={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
