@@ -7,6 +7,7 @@ import messages, { scope as MessageScope } from './messages';
 import type { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
 import { UxPassword } from '@thecointech/shared/components/UxPassword';
+import { UxOnChange } from '../../../../shared/build/components/UxInput/types';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,
@@ -66,7 +67,7 @@ state = initialState;
 
   /*==========  HANDLERS  ==========*/
 
-  uxChange(event: React.FormEvent<HTMLInputElement>): void {
+  uxChange(event: UxOnChange): void {
 
     const stats = this.getScore(event.currentTarget.value);
     const isValid = this.props.uxChange(event, stats ? stats.score : -1);

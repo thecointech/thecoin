@@ -8,7 +8,7 @@ import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 import { AccountState } from '@thecointech/shared/containers/Account';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { UxOnChange, ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 type VisualProps={
 
@@ -24,18 +24,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: React.FormEvent<HTMLInputElement>) => void,
+    setEmail: (event: UxOnChange) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: React.FormEvent<HTMLInputElement>) => void,
+    setQuestion: (event: UxOnChange) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: React.FormEvent<HTMLInputElement>) => void,
+    setAnswer: (event: UxOnChange) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: React.FormEvent<HTMLInputElement>) => void,
+    setMessage: (event: UxOnChange) => void,
     messageDesc: string,
 
     button: MessageDescriptor,

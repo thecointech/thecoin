@@ -4,6 +4,7 @@ import messages from '../messages';
 import { GetReferrersApi } from "api";
 import { IsValidReferrerId } from "@thecointech/utilities/";
 import { MessageDescriptor } from "react-intl";
+import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
 
 
 type Props = {
@@ -25,7 +26,7 @@ export const ReferralInput = (props: Props) => {
   const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
 
-  const onChange = useCallback(async (e: React.FormEvent<HTMLInputElement>) => {
+  const onChange = useCallback(async (e: UxOnChange) => {
     const newState = await validateReferral(e.currentTarget.value);
     setState(newState);
     setReferral(newState.isValid

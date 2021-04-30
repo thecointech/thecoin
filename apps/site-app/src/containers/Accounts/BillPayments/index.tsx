@@ -9,7 +9,7 @@ import { payees, validate } from './payees';
 import { BillPayeePacket } from '@thecointech/types';
 import { GetStatusApi, GetBillPaymentsApi } from 'api';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { ValuedMessageDesc, UxOnChange } from '@thecointech/shared/components/UxInput/types';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
@@ -116,7 +116,7 @@ export const BillPayments = () => {
    //   setPayeeName(data.value);
   //}
 
-  function onAccountNumber (e: React.FormEvent<HTMLInputElement>) {
+  function onAccountNumber (e: UxOnChange) {
       const validation = validate(payee, e.currentTarget.value);
       setValidationMessage(validation);
       setAccountNumber(e.currentTarget.value);

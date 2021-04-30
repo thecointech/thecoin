@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { UxOnChange, ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
@@ -200,18 +200,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(event: React.FormEvent<HTMLInputElement>) => setEmail(event.currentTarget.value)}
+        setEmail={(event: UxOnChange) => setEmail(event.currentTarget.value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(event: React.FormEvent<HTMLInputElement>) => setQuestion(event.currentTarget.value)}
+        setQuestion={(event: UxOnChange) => setQuestion(event.currentTarget.value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(event: React.FormEvent<HTMLInputElement>) => setAnswer(event.currentTarget.value)}
+        setAnswer={(event: UxOnChange) => setAnswer(event.currentTarget.value)}
     
         messageLabel={messageLabel}
-        setMessage={(event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value)}
+        setMessage={(event: UxOnChange) => setMessage(event.currentTarget.value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}

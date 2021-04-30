@@ -4,6 +4,7 @@ import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
 import { useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
+import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
 
 
 type Props = {
@@ -26,7 +27,7 @@ export const NameInput = (props: Props) => {
   const {accounts} = useAccountStore();
   ////////////////////////////////
 
-  const onChange = (e:React.FormEvent<HTMLInputElement>) => {
+  const onChange = (e:UxOnChange) => {
     const newState = validateName(e.currentTarget.value, accounts);
     setState(newState);
     props.setName(newState.isValid

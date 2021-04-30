@@ -1,7 +1,7 @@
 import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
-import { Props as MyProps } from './types';
+import { Props as MyProps, UxOnChange } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 type Props = Readonly<MyProps>;
@@ -29,7 +29,7 @@ export const UxInput = (props:Props) => {
     setShowState(value.length > 0);
   }
 
-  function onChange(event: React.FormEvent<HTMLInputElement>) {
+  function onChange(event: UxOnChange) {
     uxChange(event);
     setValue(event.currentTarget.value);
     setShowState(true);

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
+import { UxOnChange } from '@thecointech/shared/components/UxInput/types';
 
 
 const errorMessage = { id:"app.accounts.transfer.errorMessage",
@@ -151,7 +152,7 @@ export const Transfer = () => {
   }
 
   // Validate our inputs
-  function onAccountValue(e:React.FormEvent<HTMLInputElement>) {
+  function onAccountValue(e:UxOnChange) {
     setToAddress(e.currentTarget.value);
   }
 

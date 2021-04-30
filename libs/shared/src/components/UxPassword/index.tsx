@@ -4,6 +4,7 @@ import { Container, Icon } from 'semantic-ui-react';
 import { UxInput } from '../../components/UxInput';
 import { Props, State, initialState } from './types';
 import styles from './styles.module.less';
+import { UxOnChange } from 'components/UxInput/types';
 
 const UnMasked = "text";
 const Masked = "password";
@@ -57,7 +58,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
     });
   }
 
-  uxChange(event: React.FormEvent<HTMLInputElement>): void {
+  uxChange(event: UxOnChange): void {
     const returnValue = this.props.uxChange(event);
     return returnValue;
   }

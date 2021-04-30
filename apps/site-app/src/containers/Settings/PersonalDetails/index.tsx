@@ -6,6 +6,7 @@ import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
 import { UxInput } from '@thecointech/shared/components/UxInput';
+import { UxOnChange } from '@thecointech/shared/components/UxInput/types';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -75,7 +76,7 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange = (e: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLInputElement>) => {
+  const onDetailsChange = (e: UxOnChange | React.ChangeEvent<HTMLInputElement>) => {
     setDetails({
       ...details,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -107,7 +108,7 @@ export const PersonalDetails = () => {
                         </span>
                     </div>}
             message={null}
-            uxChange={ (e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e) }
+            uxChange={ (e: UxOnChange) => onDetailsChange(e) }
             details={details}
             value={details.given_name}
             name="given_name" 
@@ -123,7 +124,7 @@ export const PersonalDetails = () => {
                     </span>
                 </div>}
           value={details.family_name}
-          uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
+          uxChange={(e: UxOnChange) => onDetailsChange(e)}
           details={details}
           name="family_name" 
           readOnly={!familyNameEdit} />
@@ -150,7 +151,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
+          uxChange={(e: UxOnChange) => onDetailsChange(e)}
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
@@ -159,7 +160,7 @@ export const PersonalDetails = () => {
             className={"half left"}
             details={details}
             value={details.email}
-            uxChange={ (e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e) }
+            uxChange={ (e: UxOnChange) => onDetailsChange(e) }
             intlLabel={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -173,7 +174,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            uxChange={(e: React.FormEvent<HTMLInputElement>) => onDetailsChange(e)}
+            uxChange={(e: UxOnChange) => onDetailsChange(e)}
             intlLabel={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
