@@ -1,5 +1,5 @@
 import { Props as BaseProps } from '@thecointech/shared/components/UxPassword/types';
-import { UxOnChange } from '../../../../shared/build/components/UxInput/types';
+import { UxOnChange } from '@thecointech/shared/build/components/UxInput/types';
 
 // Unfortunately we can't inherit our base props as
 // we are overriding the base uxChange props

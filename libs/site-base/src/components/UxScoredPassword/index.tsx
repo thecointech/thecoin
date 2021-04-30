@@ -7,7 +7,7 @@ import messages, { scope as MessageScope } from './messages';
 import type { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
 import { UxPassword } from '@thecointech/shared/components/UxPassword';
-import { UxOnChange } from '../../../../shared/build/components/UxInput/types';
+import { UxOnChange } from '@thecointech/shared/build/components/UxInput/types';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,
