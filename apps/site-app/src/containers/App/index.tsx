@@ -21,7 +21,7 @@ import { MediaContextProvider, mediaStyles } from '@thecointech/shared/component
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStoreApi, useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
@@ -46,6 +46,9 @@ export const App = () => {
     }
   }
 
+  const activeAccount = useActiveAccount();
+  const rightColumnTop = activeAccount ? <ColumnRightTop /> : "";
+  const rightColumnBottom = activeAccount ? <ColumnRightBottom /> : "";
 
   return (
     <MediaContextProvider>
@@ -64,14 +67,14 @@ export const App = () => {
               </Sticky>
             </Rail>
 
-            <ColumnRightTop />
+            {rightColumnTop}
 
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>
                 <MainRouter location={location} />
               </section>
             </Ref>
-            <ColumnRightBottom />
+            {rightColumnBottom}
           </MainPageTransition>
         </Container>
       </div>
