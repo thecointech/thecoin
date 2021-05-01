@@ -20,7 +20,6 @@ import { getSigner } from '@thecointech/accounts';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { FormEvent } from 'react';
 import { UxOnChange } from '@thecointech/shared/src/components/UxInput/types';
 
 type MyProps = AccountState & {
