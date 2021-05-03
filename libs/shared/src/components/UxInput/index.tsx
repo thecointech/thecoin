@@ -1,6 +1,6 @@
 import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Props as MyProps, UxOnChange } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
@@ -52,15 +52,16 @@ export const UxInput = (props:Props) => {
     uxChange(event);
     setValue(event.currentTarget.value);
   }
+    const intl = useIntl();
 
     const errorTag = showState && (isValid === false);
     const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
     const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
-    const tooltipData = tooltip;
+    const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
 
-    const contextRef = createRef<HTMLSpanElement>()
+    const contextRef = createRef<HTMLSpanElement>();
 
     const styleError = {
       color:  LessVars.errorColor,
