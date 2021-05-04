@@ -27,6 +27,7 @@ Basic.args = {
   placeholder: "placeholder text",
   intlLabel: "Test for the input",
   error: false,
+  value:"TEST",
   message: { id:"shared.uxinput.storybook.message", defaultMessage:"Test for the message" },
   tooltip: { id:"shared.uxinput.storybook.tooltip", defaultMessage:"Test for the tooltip" }
 };

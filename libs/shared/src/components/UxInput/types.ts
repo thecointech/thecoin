@@ -23,9 +23,10 @@ export interface Props {
   uxChange: (e:UxOnChange) => void;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: ValuedMessageDesc | null;
+  message?: ValuedMessageDesc;
   tooltip?: MessageDescriptor;
   forceValidate?: boolean;
+  isRequired?: boolean;
 
   // pass through additional props to underlying type
   [id: string]: any;

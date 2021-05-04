@@ -14,7 +14,6 @@ export const UxInput = (props:Props) => {
   const {
     intlLabel,
     uxChange,
-    uxchangenew,
     forceValidate,
     footer,
     isValid,
@@ -46,6 +45,7 @@ export const UxInput = (props:Props) => {
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
     setShowState(value.length > 0);
+    //setShowState(true);
   }
 
   function onChange(event: UxOnChange) {
@@ -94,9 +94,7 @@ export const UxInput = (props:Props) => {
 
     return(
       <Form.Field className={formClassName +" "+ inputProps.className} error={errorTag}>
-        <Label>
-          {labelToPrint}
-        </Label>
+        <Label>{labelToPrint}</Label>
         {messageElement}
         {inputElement}
         {footer}

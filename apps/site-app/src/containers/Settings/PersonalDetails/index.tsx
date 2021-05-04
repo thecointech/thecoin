@@ -107,7 +107,7 @@ export const PersonalDetails = () => {
                           <Icon name={"edit"} /><FormattedMessage {...edit} />
                         </span>
                     </div>}
-            message={null}
+            message={undefined}
             uxChange={ (e: UxOnChange) => onDetailsChange(e) }
             details={details}
             value={details.given_name}

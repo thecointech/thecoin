@@ -139,6 +139,7 @@ state = initialState;
         id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}
+        message={undefined}
         {...inputProps}
         {...restState}
       />
