@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { IsValidAddress } from '@thecointech/utilities/';
-import messages from './messages';
+import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
 import { MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
 import { UxOnChange } from 'components/UxInput/types';
+
+const labelAddress = { id:"shared.uxaddress.address.label",
+                defaultMessage:"Account",
+                description:"Label for the address field in make a payment / coin transfer" };
+
+const errorMessage = { id:"shared.uxaddress.address.error",
+                defaultMessage:"This address is not the right format",
+                description:"Error Message for the address field in make a payment / coin transfer" };
 
 type MyProps = {
 	forceValidate?: boolean,
@@ -16,20 +23,23 @@ type MyProps = {
 export const UxAddress = (props:MyProps) => {
 	const [account, setAccount] = useState("");
 	const [isValid, setIsValid] = useState(false);
-	const [message] = useState(undefined as MessageDescriptor | undefined);
+	const [message, setMessage] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
 	function onAccountValue(event: UxOnChange) {
-		const isValidTemp = IsValidAddress(event.currentTarget.value)
+		const isValidTemp = IsValidAddress(event.currentTarget.value);
 		setAccount(event.currentTarget.value);
 		setIsValid(isValidTemp);
+		if (!isValidTemp){
+			setMessage(errorMessage);
+		}
 		if (isValid)
 			props.uxChange(event)
 	}
 
 	return(
 		<UxInput
-			intlLabel={messages.labelAccount}
+			intlLabel={labelAddress}
 			{...account}
 			{...isValid}
 			{...message}

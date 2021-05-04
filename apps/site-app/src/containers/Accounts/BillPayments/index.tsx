@@ -171,12 +171,7 @@ export const BillPayments = () => {
       // Wait on the given hash
       const transferValues = {
         link: (
-          <a
-            target="_blank"
-            href={`https://ropsten.etherscan.io/tx/${txHash}`}
-          >
-            here
-          </a>
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${txHash}`}>here</a>
         ),
       };
       setPaymentMessage(step3);
