@@ -2,12 +2,12 @@ import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@thecointech/utilities/";
+import { IsValidReferrerId } from "@thecointech/utilities";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
 
 
-const tooltip = { id:"app.addaccount.newbaseclass.referralinput.tooltip",
+const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
                         defaultMessage:"6 letters or numbers",
                         description:"Tooltip for the referral input"};
 const error = { id:"app.addaccount.newbaseclass.referralinput.error",
@@ -49,7 +49,7 @@ export const ReferralInput = (props: Props) => {
       intlLabel={messages.labelReferrer}
       isValid={state.isValid}
       message={state.message}
-      placeholder={intl.formatMessage(tooltip)}
+      placeholder={intl.formatMessage(placeholder)}
       {...rest}
     />
   );

@@ -17,6 +17,7 @@ export const UxInput = (props:Props) => {
     forceValidate,
     footer,
     isValid,
+    isRequired,
     message,
     messageValues,
     tooltip,
@@ -45,7 +46,12 @@ export const UxInput = (props:Props) => {
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
     setShowState(value.length > 0);
-    //setShowState(true);
+    if (isRequired && (value.length == 0)){
+      setShowState(true);
+      if (intlLabel && tooltip){
+        
+      }
+    }
   }
 
   function onChange(event: UxOnChange) {
