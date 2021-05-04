@@ -4,6 +4,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Props as MyProps, UxOnChange } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
+const placeholder = { id:"shared.uxinput.required.tooltip",
+                        defaultMessage:"This field is required",
+                        description:"Tooltip for the required uxinput"};
+
+
 type Props = Readonly<MyProps>;
 
 export const UxInput = (props:Props) => {
@@ -48,9 +53,6 @@ export const UxInput = (props:Props) => {
     setShowState(value.length > 0);
     if (isRequired && (value.length == 0)){
       setShowState(true);
-      if (intlLabel && tooltip){
-        
-      }
     }
   }
 
@@ -65,7 +67,8 @@ export const UxInput = (props:Props) => {
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
     const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
-    const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
+    const tooltipRequired = (!intlLabel && !tooltip && isRequired) ? placeholder: undefined;
+    const tooltipData = tooltip ? intl.formatMessage(tooltip) : tooltipRequired;
 
     const contextRef = createRef<HTMLSpanElement>();
 

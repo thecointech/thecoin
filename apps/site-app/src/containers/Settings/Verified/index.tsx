@@ -38,7 +38,7 @@ export const AccountVerified = (props: PropsVerified) => {
         <div className={styles.containerVerify}>
             <Grid stackable>
                 <Grid.Row >
-                    <Grid.Column width={2} centered verticalAlign='middle' textAlign='center'><img src={icon} /></Grid.Column>
+                    <Grid.Column width={2} centered={true} verticalAlign='middle' textAlign='center'><img src={icon} /></Grid.Column>
                     <Grid.Column width={10}>
                         <Header as="h5">
                             <FormattedMessage {...title} />
