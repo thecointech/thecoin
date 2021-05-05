@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
 import { UxScoredPassword } from "@thecointech/site-base/components/UxScoredPassword";
-import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
 
 type Props = {
   disabled?: boolean;

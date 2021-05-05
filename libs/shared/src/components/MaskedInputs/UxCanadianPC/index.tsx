@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
 import { MaskedUxProps } from '../types';
@@ -10,7 +10,7 @@ export const UxCanadianPC = (props:MaskedUxProps) => {
           <InputMask name={props.name} 
                       mask="a9a 9a9"
                       alwaysShowMask 
-                      onChange={props.onChange} 
+                      onChange={(_event: ChangeEvent<HTMLInputElement>) => props.onChange} 
                       readOnly={props.readOnly} />
         
       </Form.Field>

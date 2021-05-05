@@ -6,7 +6,7 @@ import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { UxOnChange } from '@thecointech/shared/components/UxInput/types';
+import { useAccountApi } from '@thecointech/shared/containers/Account';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -68,6 +68,7 @@ const button = {
 export const PersonalDetails = () => {
 
   const account = useActiveAccount()!;
+  const accountApi = useAccountApi(account.address);
   const [details, setDetails] = useState(account.details);
   const [givenNameEdit, setGivenNameEdit] = useState(false);
   const [familyNameEdit, setFamilyNameEdit] = useState(false);
@@ -76,11 +77,11 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange = (e: UxOnChange | React.ChangeEvent<HTMLInputElement>) => {
+  const onDetailsChange = (value: string, name?: string) => {
 
     setDetails({
       ...details,
-      [e.currentTarget.name]: e.currentTarget.value,
+      [name as string]: value,
     });
   }
 
@@ -91,7 +92,7 @@ export const PersonalDetails = () => {
     setAddressEdit(false);
     setEmailEdit(false);
     setPhoneEdit(false);
-    account.setDetails({...details});
+    accountApi.setDetails({...details});
   }
 
   return (
@@ -110,7 +111,7 @@ export const PersonalDetails = () => {
                         </span>
                     </div>}
             message={undefined}
-            uxChange={ (e: UxOnChange) => onDetailsChange(e) }
+            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
             details={details}
             value={details.given_name}
             name="given_name" 
@@ -126,7 +127,7 @@ export const PersonalDetails = () => {
                     </span>
                 </div>}
           value={details.family_name}
-          uxChange={(e: UxOnChange) => onDetailsChange(e)}
+          uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
           details={details}
           name="family_name" 
           readOnly={!familyNameEdit} />
@@ -140,7 +141,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onDetailsChange(e)}
+          onChange={(value: string, name?: string) => onDetailsChange(value,name)}
           details={details}
           defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
@@ -153,7 +154,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          uxChange={(e: UxOnChange) => onDetailsChange(e)}
+          uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
@@ -162,7 +163,7 @@ export const PersonalDetails = () => {
             className={"half left"}
             details={details}
             value={details.email}
-            uxChange={ (e: UxOnChange) => onDetailsChange(e) }
+            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
             intlLabel={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -176,7 +177,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            uxChange={(e: UxOnChange) => onDetailsChange(e)}
+            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
             intlLabel={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

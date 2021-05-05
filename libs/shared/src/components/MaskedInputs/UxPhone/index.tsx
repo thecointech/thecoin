@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
 import { MaskedUxProps } from "../types";
@@ -11,7 +11,7 @@ export const UxPhone = (props:MaskedUxProps) => {
                       mask="999 999 9999" 
                       defaultValue={props.value}
                       alwaysShowMask 
-                      onChange={props.onChange} 
+                      onChange={(_event: ChangeEvent<HTMLInputElement>) => props.onChange} 
                       readOnly={props.readOnly} />
         
       </Form.Field>

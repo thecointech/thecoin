@@ -50,7 +50,7 @@ type VisualProps={
 
     isValid: boolean,
     forceValidate: boolean,
-    validationMessage: ValuedMessageDesc | null
+    validationMessage?: ValuedMessageDesc
 };
   
 

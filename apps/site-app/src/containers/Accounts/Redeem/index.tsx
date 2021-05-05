@@ -226,7 +226,7 @@ export const Redeem = () => {
 
         isValid={isValid}
         forceValidate={forceValidate}
-        validationMessage={null}
+        validationMessage={undefined}
       />
   );
 }

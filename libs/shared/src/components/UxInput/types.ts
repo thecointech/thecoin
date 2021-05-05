@@ -19,7 +19,7 @@ export type ValuedMessageDesc = {
   values?: Object
 } & MessageDescriptor;
 
-export type ChangeCB = (value: string) => void;
+export type ChangeCB = (value: string, name?: string) => void;
 
 export interface Props {
   uxChange: ChangeCB;

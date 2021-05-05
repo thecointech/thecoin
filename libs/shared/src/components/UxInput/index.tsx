@@ -1,7 +1,7 @@
 import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Props as MyProps, UxOnChange } from './types';
+import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 const placeholder = { id:"shared.uxinput.required.tooltip",
