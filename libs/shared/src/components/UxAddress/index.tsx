@@ -3,7 +3,7 @@ import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
 import { MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
-import { UxOnChange } from 'components/UxInput/types';
+import { ChangeCB } from 'components/UxInput/types';
 
 const labelAddress = { id:"shared.uxaddress.address.label",
                 defaultMessage:"Account",
@@ -17,7 +17,7 @@ type MyProps = {
 	forceValidate?: boolean,
 	placeholder?: string,
 	intlLabel?: MessageDescriptor,
-	uxChange: (e:UxOnChange) => void
+	uxChange: ChangeCB
 }
 
 export const UxAddress = (props:MyProps) => {
@@ -26,15 +26,15 @@ export const UxAddress = (props:MyProps) => {
 	const [message, setMessage] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
-	function onAccountValue(event: UxOnChange) {
-		const isValidTemp = IsValidAddress(event.value);
-		setAccount(event.value);
+	function onAccountValue(value: string) {
+		const isValidTemp = IsValidAddress(value)
+		setAccount(value);
 		setIsValid(isValidTemp);
 		if (!isValidTemp){
 			setMessage(errorMessage);
 		}
 		if (isValid)
-			props.uxChange(event)
+			props.uxChange(value)
 	}
 
 	return(

@@ -145,7 +145,7 @@ export const Login = (props: Props) => {
             uxChange={onPasswordChange}
             intlLabel={passwordLabel}
             placeholder={placeholderPasswordTranslated}
-            message={message!}
+            message={message}
             isValid={isValid}
             forceValidate={forceValidate}
           />
