@@ -11,7 +11,7 @@ import * as React from 'react';
 import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
-import MainNavigation from 'containers/MainNavigation';
+import {Navigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
 import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
@@ -34,7 +34,7 @@ export const App = () => {
       <MediaContextProvider>
         <style>{mediaStyles}</style>
         <div id={styles.headerDecoration}>
-          <MainNavigation />
+          <Navigation />
         </div>
 
         <Container className={styles.appContainer}>

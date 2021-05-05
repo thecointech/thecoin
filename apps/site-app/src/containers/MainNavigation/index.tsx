@@ -3,7 +3,7 @@ import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/com
 import {MainNavigationMobile} from './MainNavigationMobile';
 import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
 
-class Navigation extends React.Component {
+export class Navigation extends React.Component {
   render() {
     return (
       <>
@@ -18,5 +18,3 @@ class Navigation extends React.Component {
     );
   }
 }
-
-export default Navigation;

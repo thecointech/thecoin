@@ -10,7 +10,7 @@
 import * as React from 'react';
 import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
-import MainNavigation from 'containers/MainNavigation';
+import {Navigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
@@ -51,7 +51,7 @@ export const App = () => {
     <MediaContextProvider>
       <style>{mediaStyles}</style>
       <div id={styles.headerDecoration}>
-        <MainNavigation />
+        <Navigation />
       </div>
 
       <div className={`${styles.contentContainer}`}>
