@@ -12,6 +12,7 @@ const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
 type Props = {
   disabled?: boolean;
   forceValidate?: boolean;
+  isRequired?: boolean;
   setName: (name: MaybeString) => void;
 }
 
@@ -44,6 +45,7 @@ export const NameInput = (props: Props) => {
       uxChange={onChange}
       intlLabel={messages.labelName}
       isValid={state.isValid}
+      isRequired={props.isRequired}
       message={state.message}
       placeholder={intl.formatMessage(placeholder)}
       {...rest}

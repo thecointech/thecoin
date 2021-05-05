@@ -61,7 +61,7 @@ export const BillPayments = () => {
   const [accountNumber, setAccountNumber] = useState("");
   //const [payeeName, setPayeeName] = useState("");
 
-  const [validationMessage, setValidationMessage] = useState(null as ValuedMessageDesc|null);
+  const [validationMessage, setValidationMessage] = useState(undefined as ValuedMessageDesc|undefined);
   const [forceValidate, setForceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
@@ -82,7 +82,7 @@ export const BillPayments = () => {
       setPayee("");
       setAccountNumber("");
       //setPayeeName("");
-      setValidationMessage(null);
+      setValidationMessage(undefined);
       setForceValidate(false);
       setTransferInProgress(false);
       setPaymentMessage(transferOutProgress);
@@ -242,7 +242,7 @@ export const BillPayments = () => {
                 uxChange={onAccountNumber}
                 isValid={isValid}
                 forceValidate={forceValidate}
-                message={validationMessage!}
+                message={validationMessage}
                 placeholder={intl.formatMessage(payeeAccount)}
             />
             {/*<Form.Input label="Bill Name" onChange={onNameChange} placeholder="An optional name to remember this payee by" /> */}

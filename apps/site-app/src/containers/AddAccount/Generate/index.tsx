@@ -82,7 +82,7 @@ export const Generate = (props: RouteComponentProps) => {
       </Header>
       <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
         <div className={`container ui`}>
-          <NameInput forceValidate={forceValidate} setName={setName}/>
+          <NameInput forceValidate={forceValidate} setName={setName} isRequired={true} />
         </div>
         <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
         <div className={`container ui`}>
