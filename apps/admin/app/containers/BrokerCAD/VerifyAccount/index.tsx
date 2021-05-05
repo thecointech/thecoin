@@ -34,7 +34,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 
 	onAccountValue = (e: UxOnChange) => {
 		this.setState({
-			account: e.currentTarget.value,
+			account: e.value,
 		});
 	}
 	onVerifyAccount = async (e: React.MouseEvent<HTMLElement>) => {

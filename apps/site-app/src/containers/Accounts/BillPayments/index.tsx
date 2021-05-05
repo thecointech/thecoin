@@ -117,9 +117,9 @@ export const BillPayments = () => {
   //}
 
   function onAccountNumber (e: UxOnChange) {
-      const validation = validate(payee, e.currentTarget.value);
+      const validation = validate(payee, e.value);
       setValidationMessage(validation);
-      setAccountNumber(e.currentTarget.value);
+      setAccountNumber(e.value);
     };
 
     async function doBillPayment() {
@@ -242,7 +242,7 @@ export const BillPayments = () => {
                 uxChange={onAccountNumber}
                 isValid={isValid}
                 forceValidate={forceValidate}
-                message={validationMessage!}
+                message={validationMessage}
                 placeholder={intl.formatMessage(payeeAccount)}
             />
             {/*<Form.Input label="Bill Name" onChange={onNameChange} placeholder="An optional name to remember this payee by" /> */}

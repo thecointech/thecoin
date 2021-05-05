@@ -19,8 +19,10 @@ export type ValuedMessageDesc = {
   values?: Object
 } & MessageDescriptor;
 
+export type ChangeCB = (value: string) => void;
+
 export interface Props {
-  uxChange: (e:UxOnChange) => void;
+  uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
   message?: ValuedMessageDesc;
@@ -40,4 +42,5 @@ interface LabelWithElements extends Props{
 
 export type UxLabel = LabelWithIntl | LabelWithElements;
 
-export type UxOnChange = React.FormEvent<HTMLInputElement>;
+//export type ChangeCB = (value: string) => void;
+export type UxOnChange = {value: string, name: string};

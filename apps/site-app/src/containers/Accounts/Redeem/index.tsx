@@ -200,18 +200,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(event: UxOnChange) => setEmail(event.currentTarget.value)}
+        setEmail={(e: UxOnChange) => setEmail(e.value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(event: UxOnChange) => setQuestion(event.currentTarget.value)}
+        setQuestion={(e: UxOnChange) => setQuestion(e.value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(event: UxOnChange) => setAnswer(event.currentTarget.value)}
+        setAnswer={(e: UxOnChange) => setAnswer(e.value)}
     
         messageLabel={messageLabel}
-        setMessage={(event: UxOnChange) => setMessage(event.currentTarget.value)}
+        setMessage={(e: UxOnChange) => setMessage(e.value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}

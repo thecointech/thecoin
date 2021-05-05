@@ -1,6 +1,8 @@
 import { MessageDescriptor } from 'react-intl';
 import { Props as BaseProps } from '../UxInput/types';
 
+export type ChangeCB = (value: string) => void;
+
 export type Props = {
   unMaskTime?: number;
 } & BaseProps;

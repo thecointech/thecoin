@@ -181,9 +181,9 @@ class PurchaseClass extends React.PureComponent<Props> {
   // Validate our inputs
   onAccountValue = (e: UxOnChange) => {
     this.setState({
-      account: e.currentTarget.value,
+      account: e.value,
     });
-    this.updateCode(e.currentTarget.value);
+    this.updateCode(e.value);
   }
   onSetType = (event: React.SyntheticEvent<HTMLElement, Event>) => {
     this.setState({

@@ -12,7 +12,6 @@ import { AccountState } from "../Account/types";
 import { useAccountApi } from "../Account/reducer";
 
 import styles from "./styles.module.less";
-import { UxOnChange } from "components/UxInput/types";
 
 interface OwnProps {
   account: AccountState;
@@ -71,8 +70,8 @@ export const Login = (props: Props) => {
   const placeholderPasswordTranslated = intl.formatMessage(placeholderPassword);
  
   /////////////////////////////////
-  const onPasswordChange = useCallback((event: UxOnChange) => {
-    setPassword(event.currentTarget.value);
+  const onPasswordChange = useCallback((value: string) => {
+    setPassword(value);
     // If we are in a failed state, reset state with new keystroke
     if (loginState == LoginState.Cancelled || loginState == LoginState.Failed) {
       setLoginState(LoginState.Entry);

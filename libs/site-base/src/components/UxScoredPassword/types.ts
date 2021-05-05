@@ -1,5 +1,6 @@
 import { Props as BaseProps } from '@thecointech/shared/components/UxPassword/types';
-import { UxOnChange } from '@thecointech/shared/build/components/UxInput/types';
+
+export type ChangeCB = (value: string, score: number) => boolean;
 
 // Unfortunately we can't inherit our base props as
 // we are overriding the base uxChange props
@@ -7,7 +8,7 @@ export type MyProps = {
   infoBar?: boolean,
   statusColor?: string,
   statusInactiveColor?: string,
-  uxChange: (e:UxOnChange, score: number) => boolean,
+  uxChange: ChangeCB,
 }
 
 type Without<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>

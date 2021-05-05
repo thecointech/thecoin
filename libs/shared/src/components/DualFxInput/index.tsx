@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { toHuman, toCoin } from '@thecointech/utilities/Conversion';
-import { UxOnChange } from 'components/UxInput/types';
 
 type OnChangeCallback = (value: number) => void;
 type Props = {
@@ -46,7 +45,7 @@ class DualFxInput extends React.PureComponent<Props, State, null> {
 			[toCoin(val / fxRate), val]
 	}
 
-	onChange(event: UxOnChange) {
+	onChange(event: React.FormEvent<HTMLInputElement>) {
 		const { currentTarget } = event;
 		const {asCoin, maxValue} = this.props;
 		let value = currentTarget.valueAsNumber;

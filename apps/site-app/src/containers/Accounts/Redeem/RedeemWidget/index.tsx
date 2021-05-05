@@ -24,18 +24,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: UxOnChange) => void,
+    setEmail: (e: UxOnChange) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: UxOnChange) => void,
+    setQuestion: (e: UxOnChange) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: UxOnChange) => void,
+    setAnswer: (e: UxOnChange) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: UxOnChange) => void,
+    setMessage: (e: UxOnChange) => void,
     messageDesc: string,
 
     button: MessageDescriptor,

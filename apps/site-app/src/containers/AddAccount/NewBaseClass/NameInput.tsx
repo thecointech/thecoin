@@ -32,7 +32,7 @@ export const NameInput = (props: Props) => {
   ////////////////////////////////
 
   const onChange = (e:UxOnChange) => {
-    const newState = validateName(e.currentTarget.value, accounts);
+    const newState = validateName(e.value, accounts);
     setState(newState);
     props.setName(newState.isValid
       ? newState.value

@@ -27,8 +27,8 @@ export const UxAddress = (props:MyProps) => {
 
 	// Validate our inputs
 	function onAccountValue(event: UxOnChange) {
-		const isValidTemp = IsValidAddress(event.currentTarget.value);
-		setAccount(event.currentTarget.value);
+		const isValidTemp = IsValidAddress(event.value);
+		setAccount(event.value);
 		setIsValid(isValidTemp);
 		if (!isValidTemp){
 			setMessage(errorMessage);

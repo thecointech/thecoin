@@ -77,6 +77,7 @@ export const PersonalDetails = () => {
   const [phoneEdit, setPhoneEdit] = useState(false);
 
   const onDetailsChange = (e: UxOnChange | React.ChangeEvent<HTMLInputElement>) => {
+
     setDetails({
       ...details,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -90,6 +91,7 @@ export const PersonalDetails = () => {
     setAddressEdit(false);
     setEmailEdit(false);
     setPhoneEdit(false);
+    account.setDetails({...details});
   }
 
   return (

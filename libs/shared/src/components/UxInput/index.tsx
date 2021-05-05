@@ -41,10 +41,14 @@ export const UxInput = (props:Props) => {
     }
   }
 
-  function onChange(event: UxOnChange) {
-    uxChange(event);
-    setValue(event.currentTarget.value);
+  function onChange(event: React.FormEvent<HTMLInputElement>) {
+    const { value } = event.currentTarget;
+    props.uxChange(value);
+    setValue(value);
+    setShowState(true);
   }
+
+  
     const intl = useIntl();
 
     const errorTag = showState && (isValid === false);

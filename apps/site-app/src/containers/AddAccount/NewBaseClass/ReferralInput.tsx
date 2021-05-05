@@ -35,7 +35,7 @@ export const ReferralInput = (props: Props) => {
   const { setReferral, ...rest} = props;
 
   const onChange = useCallback(async (e: UxOnChange) => {
-    const newState = await validateReferral(e.currentTarget.value);
+    const newState = await validateReferral(e.value);
     setState(newState);
     setReferral(newState.isValid
       ? newState.value

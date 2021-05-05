@@ -47,7 +47,7 @@ export const Transfer = () => {
 
   const [coinTransfer, setCoinTransfer] = useState(null as number | null);
   const [toAddress, setToAddress] = useState('');
-  const [forceValidate] = useState(true);
+  const [forceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [transferMessage, setTransferMessage] = useState(transferOutProgress);
@@ -153,7 +153,7 @@ export const Transfer = () => {
 
   // Validate our inputs
   function onAccountValue(e:UxOnChange) {
-    setToAddress(e.currentTarget.value);
+    setToAddress(e.value);
   }
 
   function onCancelTransfer() {
