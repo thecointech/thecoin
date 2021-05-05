@@ -6,7 +6,7 @@ export type MaskedUxProps ={
     defaultValue?: string,
     className?: string,
     details?: AccountDetails,
-    onChange?: (value: string, name?: string) => void,
+    uxChange?: (value: string, name?: string) => void,
     name: string, 
     readOnly?: boolean
   }

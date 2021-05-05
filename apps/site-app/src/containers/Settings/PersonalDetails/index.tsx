@@ -78,7 +78,6 @@ export const PersonalDetails = () => {
   const [phoneEdit, setPhoneEdit] = useState(false);
 
   const onDetailsChange = (value: string, name?: string) => {
-
     setDetails({
       ...details,
       [name as string]: value,
@@ -111,7 +110,7 @@ export const PersonalDetails = () => {
                         </span>
                     </div>}
             message={undefined}
-            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
+            uxChange={(value: string) => onDetailsChange(value,"given_name")}
             details={details}
             value={details.given_name}
             name="given_name" 
@@ -127,7 +126,7 @@ export const PersonalDetails = () => {
                     </span>
                 </div>}
           value={details.family_name}
-          uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
+          uxChange={(value: string) => onDetailsChange(value,"family_name" )}
           details={details}
           name="family_name" 
           readOnly={!familyNameEdit} />
@@ -141,7 +140,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={(value: string, name?: string) => onDetailsChange(value,name)}
+          uxChange={(value: string) => onDetailsChange(value,"DOB")}
           details={details}
           defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
@@ -154,7 +153,7 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
+          uxChange={(value: string) => onDetailsChange(value,"address")}
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
@@ -163,7 +162,7 @@ export const PersonalDetails = () => {
             className={"half left"}
             details={details}
             value={details.email}
-            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
+            uxChange={(value: string) => onDetailsChange(value,"email")}
             intlLabel={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -177,7 +176,7 @@ export const PersonalDetails = () => {
             className={"half right"}
             details={details}
             value={details.phone}
-            uxChange={(value: string, name?: string) => onDetailsChange(value,name)}
+            uxChange={(value: string) => onDetailsChange(value,"phone")}
             intlLabel={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>

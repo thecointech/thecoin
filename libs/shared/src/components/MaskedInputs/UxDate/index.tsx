@@ -21,7 +21,15 @@ function beforeMaskedValueChange(state: InputState) {
 }
 
 
+
 export const UxDate = (props:MaskedUxProps) => {
+  
+
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
+    if (props.uxChange)
+      props.uxChange(event.currentTarget.value);
+  }
+
     return (
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>
@@ -31,9 +39,9 @@ export const UxDate = (props:MaskedUxProps) => {
                       value={props.value}
                       beforeMaskedValueChange={beforeMaskedValueChange}
                       alwaysShowMask 
-                      onChange={(_event: ChangeEvent<HTMLInputElement>) => props.onChange} 
+                      onChange={onChange}
                       readOnly={props.readOnly} />
         
       </Form.Field>
     );
-}
+} 
