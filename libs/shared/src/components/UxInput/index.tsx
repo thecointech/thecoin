@@ -28,24 +28,6 @@ export const UxInput = (props:Props) => {
     tooltip,
     ...inputProps
   } = props;
-  
-
-  //
-  // Ensure that if we recieve the forceValidate prop, we validate
-  // our current value and show the result (regardless of state)
-  //static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-  //  if (nextProps.forceValidate && !prevState.showState) {
-  //    nextProps.uxChange(prevState.value);
-  //    return {
-  //      showState: true,
-  //    };
-  //  }
-  //  return null;
-  //}
-
-  //if (forceValidate) {        
-    //setShowState(true);
-  //}
 
 
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
@@ -53,6 +35,9 @@ export const UxInput = (props:Props) => {
     setShowState(value.length > 0);
     if (isRequired && (value.length == 0)){
       setShowState(true);
+    }
+    if (isValid){
+      setShowState(false);
     }
   }
 

@@ -47,7 +47,7 @@ export const Transfer = () => {
 
   const [coinTransfer, setCoinTransfer] = useState(null as number | null);
   const [toAddress, setToAddress] = useState('');
-  const [forceValidate] = useState(false);
+  const [forceValidate] = useState(true);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [transferMessage, setTransferMessage] = useState(transferOutProgress);

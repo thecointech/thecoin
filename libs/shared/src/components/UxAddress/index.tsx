@@ -40,9 +40,9 @@ export const UxAddress = (props:MyProps) => {
 	return(
 		<UxInput
 			intlLabel={labelAddress}
-			{...account}
-			{...isValid}
-			{...message}
+			value={account}
+			isValid={isValid}
+			message={message}
 			{...props}
 			uxChange={onAccountValue}
 		/>
