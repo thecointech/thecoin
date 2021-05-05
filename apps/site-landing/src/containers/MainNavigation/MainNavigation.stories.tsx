@@ -1,17 +1,16 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
-
+import { Meta } from '@storybook/react';
 import MainNavigation from '.';
-import { ProviderProps } from 'react-redux';
-import { AnyAction } from 'redux';
+import { withStore, withLanguageProvider, withMediaContext } from '@thecointech/storybookutils';
 
 export default {
-  title: 'Landing/MainNavigation',
+  title: 'Landing/Header',
   component: MainNavigation,
-  argTypes: {}
+  decorators: [
+    withMediaContext,
+    withLanguageProvider,
+    withStore(),
+  ]
 } as Meta;
 
-const Template = () => <MainNavigation />;
-
-export const Basic: Story<ProviderProps<AnyAction>> = Template.bind({});
-Basic.args = {};
+export const Header = () => <MainNavigation />;
