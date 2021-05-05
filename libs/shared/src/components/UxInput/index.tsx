@@ -45,7 +45,6 @@ export const UxInput = (props:Props) => {
     const { value } = event.currentTarget;
     props.uxChange(value);
     setValue(value);
-    setShowState(true);
   }
 
   
