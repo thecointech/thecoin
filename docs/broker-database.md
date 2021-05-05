@@ -60,6 +60,12 @@ One-of groups are surrounded by brackets
 ```
 ## Firestore Layout
 
+An action (buy/sell/bill) is best described as a finite state machine.
+
+The action has an initial state.  Each action also has a timeseries of events (transitions), that list both the type (input) of what we are trying to achieve, and the output (what part of the state has changed).
+
+For every state there is only one legal next state.
+
 ```
  + [Referrers]: 6-char id
   - address: normalized ethereum address
