@@ -152,8 +152,8 @@ export const Transfer = () => {
   }
 
   // Validate our inputs
-  function onAccountValue(e:UxOnChange) {
-    setToAddress(e.value);
+  function onAccountValue(value: string) {
+    setToAddress(value);
   }
 
   function onCancelTransfer() {

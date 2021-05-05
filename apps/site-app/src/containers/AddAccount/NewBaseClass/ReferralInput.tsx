@@ -4,8 +4,6 @@ import messages from '../messages';
 import { GetReferrersApi } from "api";
 import { IsValidReferrerId } from "@thecointech/utilities";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
-import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
-
 
 const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
                         defaultMessage:"6 letters or numbers",
@@ -34,8 +32,8 @@ export const ReferralInput = (props: Props) => {
   const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
 
-  const onChange = useCallback(async (e: UxOnChange) => {
-    const newState = await validateReferral(e.value);
+  const onChange = useCallback(async (value: string) => {
+    const newState = await validateReferral(value);
     setState(newState);
     setReferral(newState.isValid
       ? newState.value

@@ -8,7 +8,7 @@ import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 import { AccountState } from '@thecointech/shared/containers/Account';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { UxOnChange, ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 type VisualProps={
 
@@ -24,18 +24,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (e: UxOnChange) => void,
+    setEmail: (value: string) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (e: UxOnChange) => void,
+    setQuestion: (value: string) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (e: UxOnChange) => void,
+    setAnswer: (value: string) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (e: UxOnChange) => void,
+    setMessage: (value: string) => void,
     messageDesc: string,
 
     button: MessageDescriptor,

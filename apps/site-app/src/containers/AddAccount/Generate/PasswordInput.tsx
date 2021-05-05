@@ -23,8 +23,8 @@ export const PasswordInput = (props: Props) => {
   const { setPassword, ...rest } = props;
 
   ////////////////////////////////
-  const onChange = useCallback((e: UxOnChange, score: number) => {
-    const newState = validatePassword(e.value, score);
+  const onChange = useCallback((value: string, score: number) => {
+    const newState = validatePassword(value, score);
     setState(newState);
     setPassword(newState.isValid
       ? newState.value

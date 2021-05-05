@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
-import { UxOnChange, ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 const errorMessage = { id:"app.accounts.redeem.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
@@ -200,18 +200,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(e: UxOnChange) => setEmail(e.value)}
+        setEmail={(value: string) => setEmail(value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(e: UxOnChange) => setQuestion(e.value)}
+        setQuestion={(value: string) => setQuestion(value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(e: UxOnChange) => setAnswer(e.value)}
+        setAnswer={(value: string) => setAnswer(value)}
     
         messageLabel={messageLabel}
-        setMessage={(e: UxOnChange) => setMessage(e.value)}
+        setMessage={(value: string) => setMessage(value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}

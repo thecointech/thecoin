@@ -4,7 +4,6 @@ import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor, useIntl } from "react-intl";
 import messages from '../messages';
 import { useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
-import { UxOnChange } from "@thecointech/shared/components/UxInput/types";
 
 const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
                         defaultMessage:"Any name you like",
@@ -31,8 +30,8 @@ export const NameInput = (props: Props) => {
   const {accounts} = useAccountStore();
   ////////////////////////////////
 
-  const onChange = (e:UxOnChange) => {
-    const newState = validateName(e.value, accounts);
+  const onChange = (value: string) => {
+    const newState = validateName(value, accounts);
     setState(newState);
     props.setName(newState.isValid
       ? newState.value
