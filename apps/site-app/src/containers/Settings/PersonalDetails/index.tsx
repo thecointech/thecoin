@@ -109,7 +109,6 @@ export const PersonalDetails = () => {
                           <Icon name={"edit"} /><FormattedMessage {...edit} />
                         </span>
                     </div>}
-            message={undefined}
             uxChange={(value: string) => onDetailsChange(value,"given_name")}
             details={details}
             value={details.given_name}

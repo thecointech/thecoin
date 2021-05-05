@@ -41,6 +41,3 @@ interface LabelWithElements extends Props{
 }
 
 export type UxLabel = LabelWithIntl | LabelWithElements;
-
-//export type ChangeCB = (value: string) => void;
-export type UxOnChange = {value: string, name: string};

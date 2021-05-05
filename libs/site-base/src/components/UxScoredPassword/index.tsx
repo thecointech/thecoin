@@ -139,7 +139,6 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
         id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}
-        message={undefined}
         {...inputProps}
         {...restState}
       />
