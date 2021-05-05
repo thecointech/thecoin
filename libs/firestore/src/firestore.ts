@@ -1,3 +1,6 @@
+//import type { Firestore as FirestoreAdmin } from '@google-cloud/firestore';
+//import type { Firestore as FirestoreClient } from 'firebase/firestore';
+
 import { Firestore } from "@thecointech/types";
 
 // Store on global to avoid any weirdities

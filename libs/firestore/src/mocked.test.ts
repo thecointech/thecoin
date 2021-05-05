@@ -30,17 +30,3 @@ test('basic creation', async () => {
   const ts = Timestamp.now();
   expect(ts).toBeDefined();
 })
-
-test('immutability', async () => {
-
-  init(data, true);
-
-  const db = getFirestore();
-
-  // assert that mutations throw
-  const shouldThrow = () =>
-    db.collection('users').doc('any').set({
-      mutated: true
-    });
-  return expect(shouldThrow()).rejects.toThrowError("Error: read-only test attempting to modify database");
-})

@@ -1,16 +1,14 @@
 jest.mock("./debug");
 jest.mock("./server");
 jest.mock("./mock");
-jest.mock("./release");
 
 import { init } from '.';
 import { init as init_debug } from './debug';
 import { init as init_server } from './server';
 import { init as init_mock } from './mock';
-import { init as init_release } from './release';
 
 import data from './mock.data.json';
-import { liveOrMock, isMockedDb } from './types';
+import { isMockedDb } from './types';
 
 describe('We choose the right instance of firestore', () => {
 
@@ -32,10 +30,10 @@ describe('We choose the right instance of firestore', () => {
     expect(init_debug).toBeCalled();
   })
 
-  it ('chooses right service account is available', async () => {
+  it ('chooses right when service account is available', async () => {
     process.env.GOOGLE_APPLICATION_CREDENTIALS = 'somepath';
     await init({project: "utilities"});
-    expect(init_release).toBeCalled();
+    expect(init_server).toBeCalled();
   })
 
   it("chooses the right when offline-only data provided", async () => {
@@ -46,13 +44,6 @@ describe('We choose the right instance of firestore', () => {
     // with mocked data
     await init(data);
     expect(init_mock).toBeCalled();
-  })
-
-  it("chooses the right when data & optional online allowed", async () => {
-    // with mocked data & online connection
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = 'somepath';
-    await init(liveOrMock(data));
-    expect(init_release).toBeCalled();
   })
 
   it ('can differentiate mocked data', () => {

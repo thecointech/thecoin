@@ -11,9 +11,9 @@ import { InitParams, isMockedDb, isEmulatorAvailable } from './types';
 //
 // a running instance.  Some tests may not have
 export async function init(params?: InitParams) {
-  // If we explicitly only want a mocked db, return that
-  if (isMockedDb(params) && !params.live) {
-    log.debug('Initializing a mutable mocked db');
+  // If we pass a mocked db, then that is what we want
+  if (isMockedDb(params)) {
+    log.debug('Initializing a mocked db');
     const mock = await import('./mock');
     return mock.init(params);
   }
@@ -39,18 +39,12 @@ export async function init(params?: InitParams) {
     const debug = await import('./debug');
     return debug.init(project);
   }
-  // no online db, create a mocked DB with sample data if present or empty DB if not.
-  else if (isMockedDb(params)) {
-    log.debug('Initializing an immutable mocked db')
-    const debug = await import('./mock');
-    return debug.init(params, params.live);
-  }
   else {
     // If this is a test, better to put in a default than to fail.
     if (process.env.JEST_WORKER_ID) {
       log.debug('Initializing to empty mutable mocked db')
       const debug = await import('./mock');
-      return debug.init({}, false);
+      return debug.init({});
     }
     // No connection.  Better to throw than let the app continue
     throw new Error('No firestore connection possible');

@@ -39,6 +39,7 @@
     "firebase": "^8.4.3"
   },
   "devDependencies": {
-    "jest": "*"
+    "jest": "*",
+    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#63887364"
   }
 }

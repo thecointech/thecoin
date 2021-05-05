@@ -25,11 +25,8 @@ export type MockedDb = {
   // tests that should always run but may be beneficial
   // to run against live data.  Eg tests that verify that
   // input data is correct are also nice-to-run against live data.
-  live?: boolean,
+  immutable?: boolean, // NOTE: mutable by default
 } & MockedData;
-
-// Function to ease creating mocked jest data (ts doesn't like the mix of bool & string index type)
-export const liveOrMock = (data: MockedData) : MockedDb => Object.assign({ live: true }, data);
 
 export type ConnectionParams = { project?: string; username?: string; password?: string; };
 
@@ -37,6 +34,6 @@ export type InitParams = ConnectionParams|MockedDb;
 
 export const isMockedDb = (t?: InitParams) : t is MockedDb =>
   t !== undefined && Object.entries(t).every(kv => (
-    kv[0] === "live" ||
+    kv[0] === "mutable" ||
     (Array.isArray(kv[1]) && kv[1].every((doc: MockedDocument) => doc.id))
   ))
