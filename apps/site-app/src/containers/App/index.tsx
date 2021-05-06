@@ -10,37 +10,42 @@
 import * as React from 'react';
 import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
-import MainNavigation from 'containers/MainNavigation';
-import {Footer} from 'components/Footer';
+import { MainNavigation } from 'containers/MainNavigation';
+import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
-import {MainRouter} from 'containers/MainRouter';
-import { useAccountMapStore } from '@thecointech/shared/containers/AccountMap';
+import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
+import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+import { createRef } from 'react';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
 import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
-
 import styles from './styles.module.less';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
-import { useInjectedSigners } from 'api/mock/accounts';
-import { createRef } from 'react';
 
-export const App = ( ) => {
+let hasRun = false;
+export const App = () => {
   useFxRatesStore();
-  useAccountMapStore();
+  useSidebar();
   const location = useLocation();
-  const contextRef = createRef<HTMLDivElement>()
+  const contextRef = createRef<HTMLDivElement>();
 
-  if (process.env.NODE_ENV !== 'production')
-  {
-    useInjectedSigners();
+  if (process.env.CONFIG_NAME === 'devlive') {
+    const accountsApi = useAccountStoreApi();
+    if (!hasRun) {
+      addDevLiveAccounts(accountsApi);
+      hasRun = true;
+    }
   }
+
 
   return (
     <MediaContextProvider>
@@ -50,15 +55,15 @@ export const App = ( ) => {
       </div>
 
       <div className={`${styles.contentContainer}`}>
-        <Container style={{ width: '100%'}} className={``}>
+        <Container style={{ width: '100%' }} className={``}>
           <MainPageTransition location={location}>
 
             <Rail internal position='left'>
               <Sticky context={contextRef}>
-                <PageSidebar/>
+                <PageSidebar />
               </Sticky>
             </Rail>
-            
+
             <ColumnRightTop />
 
             <Ref innerRef={contextRef}>

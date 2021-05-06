@@ -1,8 +1,8 @@
-import React, { useState, useCallback, FormEvent } from "react";
+import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
-import { useAccountMap, AccountDict } from "@thecointech/shared/containers/AccountMap";
+import { useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
 
 
 type Props = {
@@ -22,16 +22,15 @@ export const NameInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
   const { setName, ...rest } = props;
-
+  const {accounts} = useAccountStore();
   ////////////////////////////////
-  const accounts = useAccountMap();
-  const onChange = useCallback((e: FormEvent<HTMLInputElement>) => {
-    const newState = validateName(e.currentTarget.value, accounts);
+  const onChange = (value: string) => {
+    const newState = validateName(value, accounts);
     setState(newState);
     props.setName(newState.isValid
       ? newState.value
       : undefined)
-  }, [setState, accounts, setName])
+  }
   ////////////////////////////////
 
 
@@ -49,15 +48,14 @@ export const NameInput = (props: Props) => {
 
 
 // Validate our inputs
-const validateName = (value: string, accounts: AccountDict) : State =>  {
-  const allAccounts = Object.values(accounts);
+const validateName = (value: string, accounts: AccountState[]) : State =>  {
   const validation =
     value.length === 0
       ? {
         isValid: false,
         message: messages.errorNameTooShort,
       }
-      : allAccounts.find(account => account.name === value)
+      : accounts.find(account => account.name === value)
         ? {
           isValid: false,
           message: messages.errorNameDuplicate,

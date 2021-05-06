@@ -1,5 +1,5 @@
 import { AccountState, DefaultAccountValues } from '../containers/Account/types';
-import { AccountDict } from '../containers/AccountMap/types';
+import { AccountMap } from '../containers/AccountMap';
 import { isSigner, SignerIdent } from '../SignerIdent';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { Deprecated_GetStored } from './storageSync_deprecated';
@@ -58,8 +58,8 @@ export function getStoredAccountData(address: string): AccountState | null {
 }
 
 // Utility function for fetching all stored accounts
-export function readAllAccounts(): AccountDict {
-  const allAccounts: AccountDict = {};
+export function readAllAccounts(): AccountMap {
+  const allAccounts: AccountMap = {};
   for (let i = 0; i < localStorage.length; i++) {
     const raw = localStorage.key(i);
     if (!raw)

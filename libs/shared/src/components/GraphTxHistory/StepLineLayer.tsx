@@ -13,6 +13,7 @@ export const StepLineLayer = ({ colors, series, xScale, yScale }: CustomLayerPro
   const datum = series[0].data.map(d => d.data as TxDatum);
   const stepDatum = datum.map(d => [d.x, d.costBasis]);
   const d =  lineGenerator(stepDatum as Array<[number, number]>) ?? undefined;
+
   return (
     <>
       <path

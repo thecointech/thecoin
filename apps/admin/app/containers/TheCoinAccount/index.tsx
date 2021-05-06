@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStore, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import { Balance } from '@thecointech/shared/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
@@ -41,10 +41,9 @@ export const AccountName = "TheCoin";
 export const TheCoin = (props: RouteComponentProps) => {
   const { url } = props.match;
 
-  const accounts = useAccountMap();
-  const accountsApi = useAccountMapApi();
-  const theCoin = Object.values(accounts)
-    .find(account => account.name === AccountName);
+  const store = useAccountStore();
+  const accountsApi = useAccountStoreApi();
+  const theCoin = store.accounts.find(account => account.name === AccountName);
 
   useEffect(() => {
     accountsApi.setActiveAccount(theCoin?.address ?? null);

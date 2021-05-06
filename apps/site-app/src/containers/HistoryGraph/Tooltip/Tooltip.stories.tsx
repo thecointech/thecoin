@@ -4,7 +4,6 @@ import { Tooltip as GraphTooltip, TooltipProps } from './Tooltip';
 import sampleData from './Tooltip.stories.data.json';
 import { DateTime } from 'luxon';
 import { withStore } from '@thecointech/storybookutils';
-import { ApplicationRootState } from '../../../types';
 
 export default {
   title: 'App/HistoryGraphTooltip',
@@ -32,7 +31,7 @@ Tooltip.args = {
 }
 
 Tooltip.decorators = [
-  withStore<ApplicationRootState>({
+  withStore({
     fxRates: {
       rates: [{
         buy: 1,
@@ -44,5 +43,5 @@ Tooltip.decorators = [
       }],
       fetching: 0,
     }
-  })
+  }),
 ]

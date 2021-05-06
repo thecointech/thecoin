@@ -9,6 +9,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 
 const projectRoot = process.cwd();
+const configFile = path.join(projectRoot, 'tsconfig.build.json');
 
 module.exports = options => ({
   mode: options.mode,
@@ -36,7 +37,7 @@ module.exports = options => ({
         use: {
           loader: 'ts-loader',
           options: {
-            configFile: path.join(projectRoot, 'tsconfig.build.json'),
+            configFile,
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
@@ -146,13 +147,16 @@ module.exports = options => ({
       DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
       DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
     }),
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: configFile,
+      checkSyntacticErrors: true
+    }),
   ]),
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
-    plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
+    plugins: [new TsconfigPathsPlugin({ configFile })],
     alias: {
       "@thecointech/utilities": "@thecointech/utilities/build",
       "@thecointech/contract": "@thecointech/contract/build",

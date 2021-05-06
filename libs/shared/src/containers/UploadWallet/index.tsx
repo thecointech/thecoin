@@ -3,8 +3,7 @@ import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@thecointech/utilities';
 import styles from './styles.module.less';
 import { FormattedMessage } from 'react-intl';
-import { useCallback } from 'react';
-import { useAccountMapApi } from '../AccountMap';
+import { useAccountStoreApi } from '../AccountMap';
 import { useHistory } from 'react-router';
 
 import illustration from "./images/illust_flowers.svg";
@@ -37,21 +36,20 @@ const id = '__upload26453312f';
 
 export const UploadWallet = (props: Props) => {
 
-  const accountMapApi = useAccountMapApi()
   const history = useHistory();
+  const accountsApi = useAccountStoreApi();
 
-  const onRecieveFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onRecieveFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = ValidateFile(wallet, props.validate);
 
     if (isValid) {
-      accountMapApi.addAccount(name, wallet, true);
-      accountMapApi.setActiveAccount(wallet.address);
+      accountsApi.addAccount(name, wallet);
       history.push("/accounts");
     } else {
       alert('Bad Wallet');
     }
-  }, [accountMapApi, history])
+  }
 
   return (
     <Container className={styles.content}>

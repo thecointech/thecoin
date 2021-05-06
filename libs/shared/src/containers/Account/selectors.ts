@@ -1,9 +1,14 @@
+import { IsValidAddress } from "@thecointech/utilities";
+import { AccountMapStore } from "containers/AccountMap";
 import { useSelector } from "react-redux";
-import { ApplicationBaseState } from "../../types";
 
 
-export const makeAccountSelector = (address: string) => 
-  (state: ApplicationBaseState) => state.accounts.map[address];
+// Select specific account
+export const makeAccountSelector = (address: string) =>
+  (state: AccountMapStore) =>
+    IsValidAddress(address)
+      ? state.accounts.map[address]
+      : undefined;
 
-export const useSelectAccount = (address: string) => 
+export const useAccount = (address: string) =>
   useSelector(makeAccountSelector(address))
