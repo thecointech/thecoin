@@ -1,12 +1,14 @@
 import * as BrokerDB from '@thecointech/broker-db';
+import { GetContract } from '@thecointech/contract';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore/mock';
 import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import * as FSM from '.';
+import { ActionContainer, StateData } from './types';
 
-const getLast = (cont: FSM.ActionContainer) => cont.history.slice(-1)[0];
+const getLast = (cont: ActionContainer) => cont.history.slice(-1)[0];
 const transitionBase = (type: string) =>({
   timestamp: DateTime.now(),
   type,
@@ -19,8 +21,8 @@ const breakHere = async () => null;
 const addFiat = async () => ({ ...transitionBase('addFiat'), fiat: new Decimal(10) })
 const addCoin = async () => ({ ...transitionBase('addCoin'), coin: new Decimal(10) })
 const makeError = async () => ({ ...transitionBase('makeError'), error: "An error occurs" })
-const logSuccess = async (cont: FSM.ActionContainer) => { log.trace(getLast(cont).data.meta!); return transitionBase('logSuccess'); }
-const logError = async (cont: FSM.ActionContainer) => { log.warn(getLast(cont).data.error!); return transitionBase('logError'); }
+const logSuccess = async (cont: ActionContainer) => { log.trace(getLast(cont).data.meta!); return transitionBase('logSuccess'); }
+const logError = async (cont: ActionContainer) => { log.warn(getLast(cont).data.error!); return transitionBase('logError'); }
 
 type States = "initial"|"withFiat"|"withCoin"|"finalize"|"error"|"complete";
 
@@ -44,34 +46,26 @@ const graph : FSM.StateGraph<States> = {
 
 it("Processes and repeats a list of events", async () => {
 
-  const spyOnRunTransitions = spyOn(BrokerDB, 'storeEvent');
+  const spyOnRunTransitions = spyOn(BrokerDB, 'storeTransition');
   const spyOnLogError = spyOn(log, 'error');
 
   // Log nothing
   log.level(100);
-  init({
-    Buy: [
-      {
-        id: "1234",
-        somedata: 12345,
-        _collections: {
-          events: []
-        }
-      }
-    ]
-  })
-  const processor = new FSM.StateMachineProcessor(graph);
+  init({})
+  const contract = await GetContract();
+  const processor = new FSM.StateMachineProcessor(graph, contract);
 
   const action: BrokerDB.BaseAction = {
     data: {
+      initial: {},
       initialId: "1234",
       timestamp: DateTime.now(),
     },
-    events: [],
+    history: [],
     doc: getFirestore().doc("/Buy/1234"),
   }
 
-  const expectedValues: FSM.StateData = {
+  const expectedValues: StateData = {
     fiat: new Decimal(0),
     coin: new Decimal(0),
   }
@@ -92,8 +86,8 @@ it("Processes and repeats a list of events", async () => {
     expect(result1.data.coin.toNumber()).toEqual(expectedValues.coin.toNumber());
     expect(result1.data.fiat.toNumber()).toBe(expectedValues.fiat.toNumber());
 
-    // Reset our events (don't use DB, mocked DB can't simulate this)
-    action.events = container.history.slice(1).map(h => h.delta);
+    // Reset our history (don't use DB, mocked DB can't simulate this)
+    action.history = container.history.slice(1).map(h => h.delta);
   }
 
   // On first run, we should stop on withFiat.  The next transition does not complete
@@ -121,6 +115,6 @@ it("Processes and repeats a list of events", async () => {
 
   // No errors, re-run the entire thing
   graph.withCoin!.next = FSM.transitionTo(noop, "finalize");
-  action.events = [];
+  action.history = [];
   await runTest('complete', 4, 0);
 })

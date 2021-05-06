@@ -1,4 +1,5 @@
 import { BaseAction, TransitionDelta } from "@thecointech/broker-db";
+import { TheCoin } from "@thecointech/contract";
 import { Decimal } from "decimal.js-light";
 
 // The mutable elements of our state.
@@ -27,6 +28,8 @@ export type ActionContainer = {
   action: BaseAction,
   // Events applied to the action
   history: StateSnapshot[],
+  // contract any coin actions are executed against.
+  contract: TheCoin,
 }
 
 export type TransitionCallback = (container: ActionContainer) => Promise<Partial<TransitionDelta> | null>;

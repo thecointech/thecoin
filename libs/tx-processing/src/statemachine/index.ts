@@ -1,53 +1,34 @@
-import { BaseAction, BaseEventType, storeEvent } from "@thecointech/broker-db";
+import { BaseAction, TransitionDelta, storeTransition } from "@thecointech/broker-db";
 import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
-
-// The mutable elements of our state.
-export type StateData = {
-  fiat: Decimal,
-  coin: Decimal,
-  // metadata set by the last transition
-  meta?: string;
-  // Error message set by the last transition
-  error?: string,
-}
-
-type StateSnapshot<States = string> = {
-  // name of the current state
-  state: States,
-  // results of the last transition taken to reach this state
-  delta: BaseEventType,
-  // current state
-  data: StateData,
-}
-
-export type ActionContainer = {
-  // The source data used to initiate this action (eg eTransfer, CertifiedTransfer etc)
-  source: unknown,
-  // The broker-db data structure representing current state
-  action: BaseAction,
-  // Events applied to the action
-  history: StateSnapshot[],
-}
-
-type TransitionCallback = (container: ActionContainer) => Promise<BaseEventType | null>;
-
+import { DateTime } from "luxon";
+import { ActionContainer, StateSnapshot, TransitionCallback } from "./types";
+import { TheCoin } from '@thecointech/contract';
 //
 // Execute the transition. If we recieve a result, store it in the DB
-async function runAndStoreTransition(container: ActionContainer, transition: TransitionCallback) {
+async function runAndStoreTransition(container: ActionContainer, transition: TransitionCallback) : Promise<TransitionDelta|null> {
   log.trace({ transition: transition.name, initialId: container.action.data.initialId },
     `Calculating transition {transition} for {initialId}`);
 
   const delta = await transition(container);
-  if (delta) {
-    // we can trust there is no sensitive info in the delta, becuase we shouldn't
-    // store any sensitive information in the database.
-    log.trace({ delta, transition: transition.name, initialId: container.action.data.initialId },
-      `Storing delta {delta} for transition {transition} for {initialId}`);
+  // If we have a null response, transition did not complete
+  if (!delta)
+    return null;
 
-    await storeEvent(container.action.doc, delta);
+  // Ensure required values
+  const withMeta = {
+    timestamp: DateTime.now(),
+    type: transition.name,
+    ...delta
   }
-  return delta;
+
+  log.trace({ delta, transition: transition.name, initialId: container.action.data.initialId },
+    `Storing delta {delta} for transition {transition} for {initialId}`);
+
+  // Store the output in the cloud to allow replaying
+  // the transition without executing it
+  await storeTransition(container.action.doc, withMeta);
+  return withMeta;
 }
 
 //
@@ -56,7 +37,7 @@ async function runAndStoreTransition(container: ActionContainer, transition: Tra
 // into current state and return new currentState
 export function transitionTo(transition: TransitionCallback, nextState: string) {
 
-  return async (container: ActionContainer, currentState: StateSnapshot, replay?: BaseEventType): Promise<StateSnapshot | null> => {
+  return async (container: ActionContainer, currentState: StateSnapshot, replay?: TransitionDelta): Promise<StateSnapshot | null> => {
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {
@@ -92,9 +73,11 @@ export type StateGraph<States extends string> = {
 export class StateMachineProcessor<States extends RequiredStates> {
 
   graph: StateGraph<States>;
+  contract: TheCoin;
 
-  constructor(graph: StateGraph<States>) {
+  constructor(graph: StateGraph<States>, contract: TheCoin) {
     this.graph = graph;
+    this.contract = contract;
   }
 
   // Every graph execution starts in the initial state.
@@ -116,11 +99,12 @@ export class StateMachineProcessor<States extends RequiredStates> {
       source,
       action,
       history: [currentState],
+      contract: this.contract,
     }
 
     // Duplicate the stored events.  We want to replay the list (but do
     // not want to modify the original list.)
-    const storedEvents = [...container.action.events];
+    const priorTransitions = [...container.action.history];
 
     // Now, execute the graph till we are all done
     while (currentState.state != 'complete') {
@@ -139,11 +123,13 @@ export class StateMachineProcessor<States extends RequiredStates> {
       // Have we timed out?
       let timeout = false;
       let nextState: StateSnapshot | null = null;
+      const replay = priorTransitions.shift();
+
       // If our last transition left an error state, what should we do?
       if (currentState.delta.error) {
         // Is an error handler registered for this state?
         if (transitions.onError) {
-          nextState = await transitions.onError?.(container, currentState);
+          nextState = await transitions.onError?.(container, currentState, replay);
         }
         else {
           log.error({ state }, `State {state} has error, but no error handler registered:\n${currentState.delta.error}`);
@@ -155,15 +141,15 @@ export class StateMachineProcessor<States extends RequiredStates> {
       // of individual actions.  Probably should be calculated in runTransition though
       else if (timeout && transitions.onTimeout) {
         log.error({ initialId, state }, 'Action {initialId} timed out while in state: {state}');
-        nextState = await transitions.onTimeout(container, currentState);
+        nextState = await transitions.onTimeout(container, currentState, replay);
       }
       else {
         // no problems, iterate to the next state
-        const nextEvent = storedEvents.shift();
-        nextState = await transitions.next(container, currentState, nextEvent);
+        nextState = await transitions.next(container, currentState, replay);
         log.trace({ initialId, state: nextState?.state, transition: transitions.next.name },
           `Action {initialId} transitioning via {transition} to state {state}`);
       }
+
       // If our transition has not generated a state for us, we break.
       // This can happen when a transition cannot be completed (eg, calling
       // tocoin before the tx has a chance to settle), but there is no error.

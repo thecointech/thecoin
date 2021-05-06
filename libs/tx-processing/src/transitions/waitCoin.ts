@@ -1,10 +1,11 @@
 import { GetContract } from "@thecointech/contract";
 import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
-import { ActionContainer, getCurrentState, TransitionCallback } from "statemachine/types";
+import { ActionContainer, getCurrentState } from "statemachine/types";
 
+//
 // Deposit an eTransfer and update fiat balance
-export const waitCoin: TransitionCallback = async (container) => {
+export async function waitCoin(container: ActionContainer) {
 
   const hash = getHash(container);
   if (!hash) return { error: "Invalid state, unexpected hash"};

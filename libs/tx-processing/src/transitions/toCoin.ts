@@ -1,6 +1,6 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
-import { getCurrentState, TransitionCallback } from "statemachine/types";
+import { ActionContainer, getCurrentState } from "statemachine/types";
 import { RatesApi } from "@thecointech/pricing";
 import { toCoinDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
@@ -8,7 +8,7 @@ import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 
 //
 // Convert fiat to coin
-export const toCoin: TransitionCallback = async (container) => {
+export async function toCoin(container: ActionContainer) {
 
   // First, what is our settlement date here?
   const initiated = container.history[0].delta.timestamp;

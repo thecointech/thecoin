@@ -5,13 +5,14 @@ import { eTransferData } from "@thecointech/tx-gmail";
 import { IsValidAddress } from "@thecointech/utilities";
 import { GetAccountCode } from "@thecointech/utilities/Referrals";
 import Decimal from "decimal.js-light";
-import { getCurrentState, TransitionCallback } from "../statemachine/types";
+import { ActionContainer, getCurrentState, TransitionCallback } from "../statemachine/types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 
 //
 // Deposit an eTransfer and update fiat balance
-export const depositFiat : TransitionCallback = async (container) =>
-  verifyPreTransfer(container) ?? doDeposit(container);
+export async function depositFiat(container: ActionContainer) {
+  return verifyPreTransfer(container) ?? await doDeposit(container);
+}
 
 
 const doDeposit : TransitionCallback = async (container) => {
