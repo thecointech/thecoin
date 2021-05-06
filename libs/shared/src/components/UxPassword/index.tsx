@@ -57,8 +57,8 @@ export class UxPassword extends React.PureComponent<Props, State> {
     });
   }
 
-  uxChange(event: React.FormEvent<HTMLInputElement>): void {
-    const returnValue = this.props.uxChange(event);
+  uxChange(value: string): void {
+    const returnValue = this.props.uxChange(value);
     return returnValue;
   }
 

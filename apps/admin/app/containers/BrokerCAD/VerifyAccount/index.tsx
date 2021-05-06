@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
@@ -8,7 +8,6 @@ import { CreateReferrer, VerifiedReferrer, GetReferrersCollection, GetReferrerCo
 import { SetUserVerified } from '@thecointech/utilities/User';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
 import { Timestamp } from '@thecointech/utilities/firestore';
-
 
 interface OwnProps {
 	signer: TheSigner,
@@ -31,9 +30,9 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 		this.fetchExistingAccounts();
 	}
 
-	onAccountValue = (e: FormEvent<HTMLInputElement>) => {
+	onAccountValue = (value: string) => {
 		this.setState({
-			account: e.currentTarget.value,
+			account: value,
 		});
 	}
 	onVerifyAccount = async (e: React.MouseEvent<HTMLElement>) => {

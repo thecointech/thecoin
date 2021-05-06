@@ -25,7 +25,7 @@ type Props = Readonly<MyProps>;
 export class UxScoredPassword extends React.PureComponent<Props, State> {
 
   static defaultProps = defaultProps;
-state = initialState;
+  state = initialState;
 
   // This is the link to the zxcvbn function that
   // does the actual password scoring
@@ -66,10 +66,11 @@ state = initialState;
 
   /*==========  HANDLERS  ==========*/
 
-  uxChange(event: React.FormEvent<HTMLInputElement>): void {
+  uxChange(value: string): void {
 
-    const stats = this.getScore(event.currentTarget.value);
-    const isValid = this.props.uxChange(event, stats ? stats.score : -1);
+    const stats = this.getScore(value);
+    const isValid = this.props.uxChange(value, stats ? stats.score : -1);
+
 
     if (stats !== null) {
       const hasWarning = stats.feedback.warning.length > 0;

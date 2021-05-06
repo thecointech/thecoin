@@ -1,37 +1,48 @@
 import * as React from 'react';
-import { IsValidAddress } from '@thecointech/utilities/';
-import messages from './messages';
+import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
 import { MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
+import { ChangeCB } from 'components/UxInput/types';
+
+const labelAddress = { id:"shared.uxaddress.address.label",
+                defaultMessage:"Account",
+                description:"Label for the address field in make a payment / coin transfer" };
+
+const errorMessage = { id:"shared.uxaddress.address.error",
+                defaultMessage:"This address is not the right format",
+                description:"Error Message for the address field in make a payment / coin transfer" };
 
 type MyProps = {
 	forceValidate?: boolean,
 	placeholder?: string,
 	intlLabel?: MessageDescriptor,
-	uxChange: (e:React.FormEvent<HTMLInputElement>) => void
+	uxChange: ChangeCB
 }
 
 export const UxAddress = (props:MyProps) => {
 	const [account, setAccount] = useState("");
 	const [isValid, setIsValid] = useState(false);
-	const [message] = useState(undefined as MessageDescriptor | undefined);
+	const [message, setMessage] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
-	function onAccountValue(event: React.FormEvent<HTMLInputElement>) {
-		const isValidTemp = IsValidAddress(event.currentTarget.value)
-		setAccount(event.currentTarget.value);
+	function onAccountValue(value: string) {
+		const isValidTemp = IsValidAddress(value)
+		setAccount(value);
 		setIsValid(isValidTemp);
+		if (!isValidTemp){
+			setMessage(errorMessage);
+		}
 		if (isValid)
-			props.uxChange(event)
+			props.uxChange(value)
 	}
 
 	return(
 		<UxInput
-			intlLabel={messages.labelAccount}
-			{...account}
-			{...isValid}
-			{...message}
+			intlLabel={labelAddress}
+			value={account}
+			isValid={isValid}
+			message={message}
 			{...props}
 			uxChange={onAccountValue}
 		/>

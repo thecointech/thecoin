@@ -200,18 +200,18 @@ export const Redeem = () => {
         rate={rate}
     
         emailLabel={emailLabel}
-        setEmail={(event: React.FormEvent<HTMLInputElement>) => setEmail(event.currentTarget.value)}
+        setEmail={(value: string) => setEmail(value)}
         emailDes={intl.formatMessage(emailDesc)}
     
         questionLabel={questionLabel}
-        setQuestion={(event: React.FormEvent<HTMLInputElement>) => setQuestion(event.currentTarget.value)}
+        setQuestion={(value: string) => setQuestion(value)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
     
         answerLabel={answerLabel}
-        setAnswer={(event: React.FormEvent<HTMLInputElement>) => setAnswer(event.currentTarget.value)}
+        setAnswer={(value: string) => setAnswer(value)}
     
         messageLabel={messageLabel}
-        setMessage={(event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value)}
+        setMessage={(value: string) => setMessage(value)}
         messageDesc={intl.formatMessage(messageDesc)}
   
         button={button}
@@ -226,7 +226,7 @@ export const Redeem = () => {
 
         isValid={isValid}
         forceValidate={forceValidate}
-        validationMessage={null}
+        validationMessage={undefined}
       />
   );
 }

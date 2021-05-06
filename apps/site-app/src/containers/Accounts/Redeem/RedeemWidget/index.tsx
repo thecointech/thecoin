@@ -24,18 +24,18 @@ type VisualProps={
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: React.FormEvent<HTMLInputElement>) => void,
+    setEmail: (value: string) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: React.FormEvent<HTMLInputElement>) => void,
+    setQuestion: (value: string) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: React.FormEvent<HTMLInputElement>) => void,
+    setAnswer: (value: string) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: React.FormEvent<HTMLInputElement>) => void,
+    setMessage: (value: string) => void,
     messageDesc: string,
 
     button: MessageDescriptor,
@@ -50,7 +50,7 @@ type VisualProps={
 
     isValid: boolean,
     forceValidate: boolean,
-    validationMessage: ValuedMessageDesc | null
+    validationMessage?: ValuedMessageDesc
 };
   
 

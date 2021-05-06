@@ -19,18 +19,25 @@ export type ValuedMessageDesc = {
   values?: Object
 } & MessageDescriptor;
 
+export type ChangeCB = (value: string, name?: string) => void;
+
 export interface Props {
-  intlLabel?: MessageDescriptor;
-  label?: JSX.Element;
-  uxChange: (e:React.FormEvent<HTMLInputElement>) => void;
-  uxchangenew?: (e:React.FormEvent<HTMLInputElement>) => void;
+  uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: ValuedMessageDesc | null;
+  message?: ValuedMessageDesc;
   tooltip?: MessageDescriptor;
-
   forceValidate?: boolean;
+  isRequired?: boolean;
 
   // pass through additional props to underlying type
   [id: string]: any;
 }
+interface LabelWithIntl extends Props{
+  intlLabel?: MessageDescriptor;
+}
+interface LabelWithElements extends Props{
+  elementLabel?: JSX.Element;
+}
+
+export type UxLabel = LabelWithIntl | LabelWithElements;

@@ -1,4 +1,3 @@
-import { ChangeEventHandler } from 'react';
 import { AccountDetails } from 'containers/AccountDetails/types';
 
 export type MaskedUxProps ={
@@ -7,7 +6,7 @@ export type MaskedUxProps ={
     defaultValue?: string,
     className?: string,
     details?: AccountDetails,
-    onChange?: ChangeEventHandler<HTMLInputElement>,
+    uxChange?: (value: string, name?: string) => void,
     name: string, 
     readOnly?: boolean
   }

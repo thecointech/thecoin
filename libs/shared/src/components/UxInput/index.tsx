@@ -1,8 +1,13 @@
 import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
+
+const placeholder = { id:"shared.uxinput.required.tooltip",
+                        defaultMessage:"This field is required",
+                        description:"Tooltip for the required uxinput"};
+
 
 type Props = Readonly<MyProps>;
 
@@ -13,43 +18,47 @@ export const UxInput = (props:Props) => {
 
   const {
     intlLabel,
-    label,
     uxChange,
-    uxchangenew,
     forceValidate,
     footer,
     isValid,
+    isRequired,
     message,
     messageValues,
     tooltip,
     ...inputProps
   } = props;
-  
+
+
   function onBlur(event: React.FocusEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
     setShowState(value.length > 0);
+    if (isRequired && (value.length == 0)){
+      setShowState(true);
+    }
+    if (isValid){
+      setShowState(false);
+    }
   }
 
   function onChange(event: React.FormEvent<HTMLInputElement>) {
-    uxChange(event);
-    if (uxchangenew){
-      uxchangenew(event);
-    }
-    setValue(event.currentTarget.value);
-    setShowState(true);
+    const { value } = event.currentTarget;
+    props.uxChange(value);
+    setValue(value);
   }
+
+  
+    const intl = useIntl();
 
     const errorTag = showState && (isValid === false);
     const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
-    const labelToTranslate = intlLabel ? <FormattedMessage {...intlLabel} /> : undefined;
-    const labelToShow = label ? label : undefined;
-    const labelToPrint = labelToTranslate ? labelToTranslate : labelToShow;
+    const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
+    const tooltipRequired = (!intlLabel && !tooltip && isRequired) ? placeholder: undefined;
+    const tooltipData = tooltip ? intl.formatMessage(tooltip) : tooltipRequired;
 
-    const tooltipData = tooltip;
-
-    const contextRef = createRef<HTMLSpanElement>()
+    const contextRef = createRef<HTMLSpanElement>();
 
     const styleError = {
       color:  LessVars.errorColor,
@@ -82,9 +91,7 @@ export const UxInput = (props:Props) => {
 
     return(
       <Form.Field className={formClassName +" "+ inputProps.className} error={errorTag}>
-        <Label>
-          {labelToPrint}
-        </Label>
+        <Label>{labelToPrint}</Label>
         {messageElement}
         {inputElement}
         {footer}

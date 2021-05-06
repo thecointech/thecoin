@@ -61,7 +61,7 @@ export const BillPayments = () => {
   const [accountNumber, setAccountNumber] = useState("");
   //const [payeeName, setPayeeName] = useState("");
 
-  const [validationMessage, setValidationMessage] = useState(null as ValuedMessageDesc|null);
+  const [validationMessage, setValidationMessage] = useState(undefined as ValuedMessageDesc|undefined);
   const [forceValidate, setForceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
@@ -82,7 +82,7 @@ export const BillPayments = () => {
       setPayee("");
       setAccountNumber("");
       //setPayeeName("");
-      setValidationMessage(null);
+      setValidationMessage(undefined);
       setForceValidate(false);
       setTransferInProgress(false);
       setPaymentMessage(transferOutProgress);
@@ -116,10 +116,10 @@ export const BillPayments = () => {
    //   setPayeeName(data.value);
   //}
 
-  function onAccountNumber (e: React.FormEvent<HTMLInputElement>) {
-      const validation = validate(payee, e.currentTarget.value);
+  function onAccountNumber (value: string) {
+      const validation = validate(payee, value);
       setValidationMessage(validation);
-      setAccountNumber(e.currentTarget.value);
+      setAccountNumber(value);
     };
 
     async function doBillPayment() {
@@ -171,12 +171,7 @@ export const BillPayments = () => {
       // Wait on the given hash
       const transferValues = {
         link: (
-          <a
-            target="_blank"
-            href={`https://ropsten.etherscan.io/tx/${txHash}`}
-          >
-            here
-          </a>
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${txHash}`}>here</a>
         ),
       };
       setPaymentMessage(step3);

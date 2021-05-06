@@ -6,6 +6,7 @@ import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { AccountState } from '@thecointech/shared/containers/Account';
+import { ChangeCB } from '@thecointech/shared/components/UxInput/types';
 
 type VisualProps={
 
@@ -20,7 +21,7 @@ type VisualProps={
   coinTransfer: number | null,
   rate: number,
 
-  onAccountValue: (e:React.FormEvent<HTMLInputElement>) => void,
+  onAccountValue: ChangeCB,
   forceValidate: boolean,
   onSubmit: StrictButtonProps["onClick"],
   button: MessageDescriptor,

@@ -20,7 +20,6 @@ import { getSigner } from '@thecointech/accounts';
 
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
-import { FormEvent } from 'react';
 
 type MyProps = AccountState & {
   updateBalance: Function
@@ -179,11 +178,11 @@ class PurchaseClass extends React.PureComponent<Props> {
   }
 
   // Validate our inputs
-  onAccountValue = (e: FormEvent<HTMLInputElement>) => {
+  onAccountValue = (value: string) => {
     this.setState({
-      account: e.currentTarget.value,
+      account: value,
     });
-    this.updateCode(e.currentTarget.value);
+    this.updateCode(value);
   }
   onSetType = (event: React.SyntheticEvent<HTMLElement, Event>) => {
     this.setState({
