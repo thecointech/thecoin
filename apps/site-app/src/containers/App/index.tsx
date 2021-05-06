@@ -10,7 +10,7 @@
 import * as React from 'react';
 import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
-import {Navigation} from 'containers/MainNavigation';
+import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
