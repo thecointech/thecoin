@@ -2,9 +2,6 @@ import { ETransferErrorCode, DepositResult } from "@thecointech/rbcapi";
 
 export { ETransferErrorCode };
 export class RbcApi {
-    constructor() {
-        console.log("Created");
-    }
 
     results = [
         ETransferErrorCode.Success,

@@ -11,9 +11,9 @@ import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 export async function toCoin(container: ActionContainer) {
 
   // First, what is our settlement date here?
-  const initiated = container.history[0].delta.timestamp;
+  const initiated = container.action.data.timestamp;
   const nextOpen = await NextOpenTimestamp(initiated.toJSDate());
-  if (nextOpen < Date.now())
+  if (nextOpen >= Date.now())
     return null;
 
   const timestamp = DateTime.fromMillis(nextOpen);

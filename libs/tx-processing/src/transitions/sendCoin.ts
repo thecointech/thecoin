@@ -9,8 +9,9 @@ import { toCoin } from "./toCoin";
 
 //
 // Deposit an eTransfer and update fiat balance
-export const sendCoin: TransitionCallback = async (container) =>
-  verifyPreTransfer(container) ?? doSendCoin(container);
+export async function sendCoin(container: ActionContainer) {
+  return verifyPreTransfer(container) ?? await doSendCoin(container);
+}
 
 // implementation
 const doSendCoin: TransitionCallback = async (container) => {

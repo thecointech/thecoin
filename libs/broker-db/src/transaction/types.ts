@@ -19,28 +19,7 @@ export type IncompleteRef = {
   ref: string;
 }
 
-// Transaction State is the state acted on
-// by the processing state machine.
-// export type TransactionState = {
-// }
-
-// type EventDataMapping = {
-//   tocoin: Decimal;
-//   tofiat: Decimal;
-//   pretransfer: "send"|"recieve";
-//   transfer: string; // Transfer value to/from client
-//   //sendto: string;   // Send value (TC or Cash) to client - store hash or confirm,
-//   //recievefrom: string; // Recieve value (TC or Cash) from client - store hash or confirm,
-//   // sendfiat: string;     // Send e-Transfer to client: store confirmation number
-//   // sendtc: string;       // Send TC to client: store hash
-//   refund: string;
-//   completed: string;
-// }
-
-// export type EventType = keyof EventDataMapping;
-
 // The updateable properties of a transaction.
-
 // The change to values from running a transition
 export type TransitionDelta = {
   timestamp: DateTime;
@@ -52,37 +31,15 @@ export type TransitionDelta = {
   error?: string; // Any error data.  Could be merged into meta?
 }
 
-// export interface TypedEvent<TypeName extends EventType>  extends TransitionEvent {
-//   type: TypeName; // Override type with explicit value
-// }
-
-// export type ToCoinEvent = TypedEvent<"tocoin">;
-// export type PreTransferEvent = TypedEvent<"pretransfer">;
-// // export type FiatTransferEvent = TypedEvent<"confirmfiat">;
-// // export type CoinTransferEvent = TypedEvent<"confirmtc">;
-// export type CompletedEvent = TypedEvent<"completed">;
-// export type AnyEvent = TransitionEvent;
-
-// export const isEventType = <Type extends EventType>(type: Type, event?: AnyEvent, )
-//   : event is TypedEvent<Type> => event?.type === type;
-
-// export type ProcessRecord = {
-//   recievedTimestamp: Timestamp,
-//   processedTimestamp?: Timestamp,
-//   completedTimestamp?: Timestamp,
-//   hash: string,
-//   hashRefund?: string,
-//   confirmed: boolean,
-//   fiatDisbursed: number
-//   confirmation?: number;
-// }
-
-
 // An action stores very little data directly.
 // Instead, it has an 'events' subcollection
 // which is a record of all the state changes
 // that have happened to the collection.
-export type BaseActionData = { timestamp: DateTime; initialId: string}
+export type BaseActionData = {
+  initial: unknown,
+  timestamp: DateTime;
+  initialId: string
+}
 export type ActionTypes = {
   Buy: {
     initial: {

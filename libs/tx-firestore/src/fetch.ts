@@ -1,10 +1,10 @@
 import { Dictionary } from "lodash";
 import { GetUserDoc } from "@thecointech/utilities/User";
 import { BaseTransactionRecord, DepositRecord, CertifiedTransferRecord, DbRecords } from "./types";
-import { UserAction, getAllUsers } from "@thecointech/broker-db";
+import { ActionType, getAllUsers } from "@thecointech/broker-db";
 import { IsValidAddress } from "@thecointech/utilities";
 
-export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: UserAction) {
+export async function fetchDBRecords<T extends BaseTransactionRecord>(users: string[], type: ActionType) {
   const db: Dictionary<T[]> = {};
   for (const address of users.filter(IsValidAddress)) {
     const user = GetUserDoc(address);

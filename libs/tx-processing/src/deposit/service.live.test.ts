@@ -1,4 +1,4 @@
-import { GetDepositsToProcess } from './service'
+import { getDepositsToProcess } from './service'
 import { ConfigStore } from '@thecointech/store';
 import { init, release } from '@thecointech/utilities/firestore/jestutils';
 import { PurchaseType } from '@thecointech/tx-firestore';
@@ -26,7 +26,7 @@ it('We have valid deposits', async () => {
   if (!IsManualRun)
     return;
 
-  const deposits = await GetDepositsToProcess();
+  const deposits = await getDepositsToProcess();
   expect(deposits).not.toBeUndefined();
 
   for (const deposit of deposits) {
