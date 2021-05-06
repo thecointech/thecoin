@@ -64,7 +64,11 @@ An action (buy/sell/bill) is best described as a finite state machine.
 
 The action has an initial state.  Each action also has a timeseries of events (transitions), that list both the type (input) of what we are trying to achieve, and the output (what part of the state has changed).
 
-For every state there is only one legal next state.
+For each state we can have 3 onward transitions, next/error/timeout.
+
+### Deposit FSM
+https://online.visual-paradigm.com/app/diagrams/#G1mXn77JGHL4VIifzeO-rowdCClmQxWLch
+![alt text](./broker-deposit.fsm.png)
 
 ```
  + [Referrers]: 6-char id
