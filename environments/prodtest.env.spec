@@ -14,6 +14,12 @@ URL_SERVICE_BROKER=https://tccc-testing.nn.r.appspot.com/api/v1
 URL_SERVICE_RATES=https://rates-service-testing.nn.r.appspot.com/api/v1
 
 #
+# prod:test fetches live stockmarket data, so needs this key
+FINNHUB_API_KEY=<SetAPIKey>
+MAILJET_API_KEY=<SetAPIKey>
+TRADIER_API_KEY=<SetAPIKey>
+
+#
 # The ethereum network our contract will be deployed to
 DEPLOY_NETWORK=goerli
 INFURA_PROJECT_ID=<AddThisHere>

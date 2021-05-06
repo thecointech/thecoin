@@ -1,25 +1,24 @@
 import { ETransferErrorCode, DepositResult } from "@thecointech/rbcapi";
 
 export { ETransferErrorCode };
-export class RbcApi {
 
-    results = [
-        ETransferErrorCode.Success,
-        ETransferErrorCode.AlreadyDeposited,
-        ETransferErrorCode.InvalidInput,
-        ETransferErrorCode.Cancelled,
-        ETransferErrorCode.UnknownError
-    ];
-    result = 0;
+let results = [
+  ETransferErrorCode.Success,
+  ETransferErrorCode.AlreadyDeposited,
+  ETransferErrorCode.InvalidInput,
+  ETransferErrorCode.Cancelled,
+  ETransferErrorCode.UnknownError
+];
+let result = 0;
+export class RbcApi {
     depositETransfer = () : DepositResult => {
-        const code = this.results[this.result % this.results.length];
-        this.result += 1;
+        const code = results[result % results.length];
+        result += 1;
         return {
             message: code.toString(),
             code,
-            confirmation: code == ETransferErrorCode.Success ? this.result : undefined,
+            confirmation: code == ETransferErrorCode.Success ? result : undefined,
         }
     }
-
     sendETransfer = ()  => 123;
 }

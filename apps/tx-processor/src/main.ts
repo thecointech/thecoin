@@ -8,7 +8,7 @@ import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/accounts';
 import { initBrowser } from "@thecointech/rbcapi/action";
 import { ConnectContract, TheCoin } from '@thecointech/contract';
-import { ProcessUnsettledDeposits } from "@thecointech/tx-processing/deposit/service";
+import { processUnsettledDeposits } from "@thecointech/tx-processing/deposit";
 import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
 
 async function initialize() {

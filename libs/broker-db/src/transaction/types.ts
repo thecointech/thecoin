@@ -55,6 +55,7 @@ export type ActionType = keyof ActionTypes;
 // A structure encompassing all the data related to an action
 // Includes both root document and stream documents
 export interface BaseAction {
+  type: ActionType,
   // Initial data stored in DB. Has no processing applied.
   data: BaseActionData,
   // Transitions that have been applied to this action.
@@ -64,6 +65,7 @@ export interface BaseAction {
 }
 export interface TypedAction<Type extends ActionType> extends BaseAction {
   data: ActionTypes[Type];
+  type: Type;
 }
 export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;

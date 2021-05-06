@@ -6,23 +6,6 @@ import { getCurrentState } from 'statemachine/types';
 // Don't go to the server for this
 jest.mock('@thecointech/email');
 
-// it('We have valid deposits', async () => {
-
-//   const deposits = await getDepositsToProcess();
-//   expect(deposits).not.toBeUndefined();
-
-//   for (const deposit of deposits) {
-//     console.log(`Deposit from: ${deposit.etransfer.name} - ${deposit.etransfer.recieved?.toLocaleString()}`);
-//     const { record } = deposit;
-//     expect(record.type).toBe(PurchaseType.etransfer);
-//     expect(record.fiatDisbursed).toBeGreaterThan(0);
-//     expect(record.transfer.value).toBeGreaterThan(0);
-//     expect(record.recievedTimestamp).toBeTruthy();
-//     expect(record.processedTimestamp).toBeTruthy();
-//     expect(record.completedTimestamp).toBeUndefined();
-//   }
-// })
-
 it("Can complete deposits", async () => {
 
   jest.setTimeout(900000);
@@ -35,9 +18,11 @@ it("Can complete deposits", async () => {
     // seed the deposit so it's visible in our emulator
     await deposit.action.doc.parent.parent!.set({visible: true});
   }
-  // At least one passed
   const results = deposits.map(getCurrentState);
+  // At least one passed
   expect(results.find(d => d.state == "complete")).toBeTruthy();
+  // We should have a few failures too
+  expect(results.find(d => d.state != "complete")).toBeTruthy();
 
   // If passed, balance is 0
   for (const result of results) {

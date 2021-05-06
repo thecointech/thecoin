@@ -6,3 +6,5 @@ export * from './waitCoin';
 export * from './timeout';
 export * from './onError';
 export * from './noop';
+export * from './requestManual';
+export * from './markComplete';
