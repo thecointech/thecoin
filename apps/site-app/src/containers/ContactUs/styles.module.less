@@ -1,15 +1,19 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-.contactFormLine, .contactMessageLine{
-    display: inline-block;
+.containerContactUs{
+    height: 450px;
+    overflow-y: auto;
+}
+
+.contactFormLine{
     color: @theCoinPaletteGreen5;
-    width: 400px;
     height: 130px;
-    > div{
+    float: right;
+    > div > div{
         background-color: @theCoinPalettePaleGreen2Faded50;
         border-radius: @absoluteBorderRadius;
         padding-left: 10px;
-        max-width: 380px;
+        max-width: 300px;
         margin: auto;
         height: 100px;
         input, button{
@@ -18,43 +22,26 @@
             margin: auto;
         }
         button{
-            right: -75px;
+            right: -2%;
             position: relative;
             top: -10px;
             height: 80px;
-            width: 100px;
+            width: 90px;
         }
     }
 }
-
 
 .contactAvatarLine{    
     display: inline-block;
     width: 60px;
     top: -44px;
     position: relative;
-    margin-left: 10px;
+    margin-left: 5px;
     &.answer{
         top: 45px;
         margin-left: 0;
     }
 }
-
-.contactFormLine::after {
-    content: "";
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-left: 15px solid rgba(97, 193, 184, 0.5);
-    border-bottom: 10px solid transparent;
-    display: inline-flex;
-    left: 5px;
-    position: relative;
-    top: -40px;
-    float: right;
-}
-
-
 
 .messagesContainer{
     width: 85%;

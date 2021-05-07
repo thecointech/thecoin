@@ -1,36 +1,19 @@
 import * as React from 'react';
-
-import coin from '../images/thecoin_icon.svg';
-import verified from '../images/verified_yes_icon.svg';
+import verifiedIcon from '../images/verified_yes_icon.svg';
 import styles from './styles.module.less';
-import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 
-//type VisualProps={
-//    errorMessage: MessageDescriptor
-//};
-  
+type VisualProps={
+    avatar: string,
+    verified: boolean,
+};
 
-export const ContactAvatar = () => {
-  const avatar= getAvatarLink("14");
+export const ContactAvatar = (props:VisualProps) => {
+  const avatar = props.avatar;
+  const verified = props.verified ? <img src={verifiedIcon} title={"Verified"} /> : "";
   return (
     <div>
       <div className={styles.contactusVerified}>
-          <img src={verified} title={"Verified"} />
-      </div>
-      <div className={styles.contactusAvatar}>
-          <img src={avatar} title={"Avatar"} />
-      </div>
-    </div>
-  );
-}
-
-
-export const TheCoinAvatar = () => {
-  const avatar = coin;
-  return (
-    <div>
-      <div className={styles.contactusVerified}>
-          <img src={verified} title={"Verified"} />
+          {verified}
       </div>
       <div className={styles.contactusAvatar}>
           <img src={avatar} title={"Avatar"} />

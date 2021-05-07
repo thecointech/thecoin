@@ -6,7 +6,6 @@ import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { ContactForm } from './Form';
 import { useState } from 'react';
-import { ContactAvatar } from './Avatars';
 import { UserMessage, Answer } from './Messages';
 
 import styles from './styles.module.less';
@@ -69,7 +68,7 @@ export const ContactUs = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <AppContainerWithShadow>
+      <AppContainerWithShadow className={styles.containerContactUs}>
         <Header as="h5" className={ `appTitles` }>
             <FormattedMessage {...titleMessages} />
         </Header>
@@ -90,15 +89,16 @@ export const ContactUs = () => {
                 onSubmit={onSubmit}
               />
               </div>
-              <div className={styles.contactAvatarLine}>
-                <ContactAvatar />
-              </div>
           </div>
 
-          <Answer />
-          <UserMessage />
-          <Answer />
-          <UserMessage />
+          <UserMessage 
+            message={} 
+            messageDate={}  
+          />
+          <Answer 
+            message={"Welcome"} 
+            messageDate={}  
+          />
 
         </div>
       </AppContainerWithShadow>
