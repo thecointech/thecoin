@@ -83,7 +83,7 @@ export const ContactUs = () => {
                 successHidden={successHidden}
 
                 messageLabel={messageLabel}
-                setMessage={(event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value)}
+                setMessage={(value: string) => setMessage(value)}
                 messageDes={intl.formatMessage(messageDesc)}
 
                 button={button}

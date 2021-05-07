@@ -13,7 +13,7 @@ type VisualProps={
     successHidden: boolean,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: React.FormEvent<HTMLInputElement>) => void,
+    setMessage: (value: string) => void,
     messageDes: string,
 
     button: MessageDescriptor,
@@ -38,7 +38,9 @@ export const ContactForm = (props: VisualProps) => {
             uxChange={props.setMessage}
             placeholder={props.messageDes}
             name="email"
+            intlLabel={"Message"}
           />
+          
         <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
           <FormattedMessage {...props.button} />
         </ButtonSecondary>

@@ -3,15 +3,13 @@
 .contactFormLine, .contactMessageLine{
     display: inline-block;
     color: @theCoinPaletteGreen5;
-    width: 400px;
-    height: 130px;
     > div{
         background-color: @theCoinPalettePaleGreen2Faded50;
         border-radius: @absoluteBorderRadius;
-        padding-left: 10px;
-        width: 380px;
+        padding: 10px;
+        max-width: 220px;
         margin: auto;
-        height: 100px;
+        min-height: 60px;
         input, button{
             display: inline;
             float: left;
@@ -27,9 +25,6 @@
     }
 }
 
-.contactMessageLine{
-    
-}
 
 .contactAnswerLine{
     display: inline-block;
@@ -39,22 +34,25 @@
         display: inline-block;
         background-color: @theCoinPaletteGray1Faded30;
         border-radius: @absoluteBorderRadius;
-        padding-left: 10px;
-        width: 380px;
+        padding: 10px;
+        max-width: 380px;
         margin: auto;
-        height: 100px;
+        min-height: 60px;
     }
 
+}
+
+.userMessageContainer{
+    float: right;
 }
 
 .contactAvatarLine{    
     display: inline-block;
     width: 60px;
-    top: -28px;
     position: relative;
-    margin-left: 10px;
+    margin-left: 20px;
     &.answer{
-        top: 45px;
+        position:initial;
         margin-left: 0;
     }
 }
@@ -82,18 +80,15 @@
     display: inline-flex;
     right: -60px;
     position: relative;
-    bottom: -40px;
+    top:-10px;
 }
 
 
-.contactMessageLine::after {
-    left: 390px;
+.contactMessageLine::after {    
+    left: 15px;
+    float: right;
 }
 
-.messagesContainer{
-    width: 500px;
-    margin: auto;
-}
 
 .infosRight{
     text-align: right;
