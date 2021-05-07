@@ -1,7 +1,9 @@
 import * as React from 'react';
 import illustration from './images/icon_contact_big.svg';
 import {AppContainerWithShadow} from 'components/AppContainers';
+//import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableSoon";
 
+import coin from './images/thecoin_icon.svg';
 import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { ContactForm } from './Form';
@@ -9,6 +11,7 @@ import { useState } from 'react';
 import { UserMessage, Answer } from './Messages';
 
 import styles from './styles.module.less';
+import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 
 const title = { id:"app.contactus.title",
                 defaultMessage:"Contact Us",
@@ -16,9 +19,6 @@ const title = { id:"app.contactus.title",
 const description = { id:"app.contactus.description",
                       defaultMessage:"Send us a secured message and we will answer as quickly as we can",
                       description:"Description for the Contact Us page in the app" };
-const titleMessages = { id:"app.contactus.titleSection",
-                defaultMessage:"Messages",
-                description:"Main title for the Contact Us page, message section in the app" };
 
 const errorMessage = { id:"app.contactus.errorMessage",
                 defaultMessage:"We have encountered an error. Don't worry, your message is safe, but please still contact support@thecoin.io",
@@ -68,10 +68,8 @@ export const ContactUs = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
+
       <AppContainerWithShadow className={styles.containerContactUs}>
-        <Header as="h5" className={ `appTitles` }>
-            <FormattedMessage {...titleMessages} />
-        </Header>
         <div className={styles.messagesContainer}>
           <div>
             <div className={styles.contactFormLine}>
@@ -89,17 +87,19 @@ export const ContactUs = () => {
                 onSubmit={onSubmit}
               />
               </div>
-          </div>
-
-          <UserMessage 
-            message={} 
-            messageDate={}  
-          />
-          <Answer 
-            message={"Welcome"} 
-            messageDate={}  
-          />
-
+            </div>
+            <UserMessage 
+              message={"Hi"} 
+              messageComplement={"you - 2 days ago"} 
+              contactAvatar={getAvatarLink("14")} 
+              contactVerified={false}  
+            />
+            <Answer 
+              message={"Welcome to the contact us page"} 
+              messageComplement={"Admin - 2 days ago"}  
+              contactAvatar={coin} 
+              contactVerified={true} 
+            />
         </div>
       </AppContainerWithShadow>
     </React.Fragment>

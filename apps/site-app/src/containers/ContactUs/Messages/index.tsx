@@ -1,42 +1,47 @@
-import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import * as React from 'react';
-import coin from '../images/thecoin_icon.svg';
 import { ContactAvatar } from '../Avatars';
-
 import styles from './styles.module.less';
 
-export const UserMessage = () => {
+type VisualProps={
+  message: string, 
+  messageComplement: string,
+
+  contactAvatar: string,
+  contactVerified: boolean,
+};
+
+export const UserMessage = (props: VisualProps) => {
   return (
     <div className={styles.userMessageContainer}>
       <div className={ `${styles.contactMessageLine} x4spaceBefore` }>
         <div>
-          TEST
-        <div className={styles.infosRight}>you - 2 days ago</div>
+          <span className={styles.message}>{props.message}</span>
+        <div className={styles.infosRight}>{props.messageComplement}</div>
         </div>
       </div>
         <div className={styles.contactAvatarLine}>
           <ContactAvatar 
-            avatar={getAvatarLink("14")} 
-            verified={true} 
+            avatar={props.contactAvatar} 
+            verified={props.contactVerified} 
           />
         </div>
     </div>
   );     
 }
 
-export const Answer = () => {
+export const Answer = (props: VisualProps) => {
   return (
     <div>
       <div className={styles.contactAnswerLine}>
         <div className={ `${styles.contactAvatarLine} x2spaceAfter ${styles.answer}` }>
           <ContactAvatar 
-            avatar={coin} 
-            verified={true} 
+            avatar={props.contactAvatar} 
+            verified={props.contactVerified} 
           />
         </div>
         <div className={styles.messageZone}>
-            TEST
-          <div className={styles.infosRight}>you - 2 days ago</div>
+          <span className={styles.message}>{props.message}</span>
+          <div className={styles.infosRight}>{props.messageComplement}</div>
         </div>
       </div>
     </div>

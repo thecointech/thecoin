@@ -34,7 +34,7 @@ export const ContactForm = (props: VisualProps) => {
         <div>
           <textarea className={styles.messageField}></textarea>
             
-          <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
+          <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} disabled={true} >
             <FormattedMessage {...props.button} />
           </ButtonSecondary>
         </div>

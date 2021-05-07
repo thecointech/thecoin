@@ -277,9 +277,6 @@
     Borders
 --------------------*/
 
-@relativeBorderRadius: @relative10px;
-@absoluteBorderRadius: @10px;
-
 @borderColor         : @theCoinPalettePaleGreen2Faded50;
 @focusBorderColor    : @primaryColor1;
 @focusedFormBorderColor: @primaryColor1;
