@@ -20,15 +20,20 @@ it("Can complete deposits", async () => {
   }
   const results = deposits.map(getCurrentState);
   // At least one passed
-  expect(results.find(d => d.state == "complete")).toBeTruthy();
+  expect(results.find(d => d.name == "complete")).toBeTruthy();
   // We should have a few failures too
-  expect(results.find(d => d.state != "complete")).toBeTruthy();
+  expect(results.find(d => d.name != "complete")).toBeTruthy();
 
   // If passed, balance is 0
   for (const result of results) {
-    if (result.state == "complete") {
-      expect(result.data.coin.isZero()).toBeTruthy();
-      expect(result.data.fiat.isZero()).toBeTruthy();
+    if (result.name == "complete") {
+      expect(result.data.hash).toBeTruthy();
+      expect(result.data.coin?.isZero()).toBeTruthy();
+      expect(result.data.fiat?.isZero()).toBeTruthy();
+    }
+    else {
+      expect(result.name).toEqual('error')
+      expect(result.data.hash).toBeUndefined();
     }
   }
 })

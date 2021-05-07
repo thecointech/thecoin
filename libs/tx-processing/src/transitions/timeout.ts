@@ -1,4 +1,4 @@
-import { ActionContainer } from "statemachine/types";
+import { AnyActionContainer } from "statemachine/types";
 
 // TODO: Implement timeout handling
-export function timeout(_deposit: ActionContainer) { return Promise.resolve({}) };
+export function timeout(_deposit: AnyActionContainer) { return Promise.resolve({}) };

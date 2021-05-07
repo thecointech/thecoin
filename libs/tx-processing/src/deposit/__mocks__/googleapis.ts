@@ -19,7 +19,6 @@ export namespace google {
   }
 
   export function gmail() {
-    console.log("Createing mocked gmail");
     return new GmailMocked();
   }
 

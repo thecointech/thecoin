@@ -1,4 +1,5 @@
 export * from './depositFiat';
+export * from './depositCoin';
 export * from './pretransfer';
 export * from './sendCoin';
 export * from './toCoin';
@@ -8,3 +9,4 @@ export * from './onError';
 export * from './noop';
 export * from './requestManual';
 export * from './markComplete';
+export * from './sendETransfer';

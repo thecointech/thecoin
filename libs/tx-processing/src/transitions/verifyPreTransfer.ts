@@ -1,4 +1,4 @@
-import { ActionContainer, getCurrentState } from "statemachine/types";
+import { AnyActionContainer, getCurrentState } from "statemachine/types";
 import { preTransfer } from './pretransfer';
 
 //
@@ -6,7 +6,7 @@ import { preTransfer } from './pretransfer';
 // errors/sudden disconects mid-transfer.  We do this by transitioning into
 // a pre-transfer state prior to the transfer, then when actioning the state
 //
-export const verifyPreTransfer = (container: ActionContainer) => {
+export const verifyPreTransfer = (container: AnyActionContainer) => {
 
   const state = getCurrentState(container);
   // was our last state a pre-transfer?
