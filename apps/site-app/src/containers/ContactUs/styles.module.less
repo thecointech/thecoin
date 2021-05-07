@@ -31,7 +31,7 @@
 .contactAvatarLine{    
     display: inline-block;
     width: 60px;
-    top: -28px;
+    top: -44px;
     position: relative;
     margin-left: 10px;
     &.answer{
@@ -40,18 +40,21 @@
     }
 }
 
-.contactFormLine::after,.contactMessageLine::after {
+.contactFormLine::after {
     content: "";
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
-    border-left: 15px solid @theCoinPalettePaleGreen2Faded50;
+    border-left: 15px solid rgba(97, 193, 184, 0.5);
     border-bottom: 10px solid transparent;
     display: inline-flex;
-    right: -81px;
+    left: 5px;
     position: relative;
     top: -40px;
+    float: right;
 }
+
+
 
 .messagesContainer{
     width: 85%;
