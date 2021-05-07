@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Message, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
-
+import styles from './styles.module.less';
 import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
-import { UxInput } from '@thecointech/shared/components/UxInput';
 
 type VisualProps={
 
@@ -31,19 +30,14 @@ export const ContactForm = (props: VisualProps) => {
         <Message hidden={props.errorHidden} negative>
           <FormattedMessage {...props.errorMessage} />
         </Message>
-
       <div>
-        <UxInput
-            className={"half left"}
-            uxChange={props.setMessage}
-            placeholder={props.messageDes}
-            name="email"
-            intlLabel={"Message"}
-          />
-          
-        <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
-          <FormattedMessage {...props.button} />
-        </ButtonSecondary>
+        <div>
+          <textarea className={styles.messageField}></textarea>
+            
+          <ButtonSecondary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
+            <FormattedMessage {...props.button} />
+          </ButtonSecondary>
+        </div>
       </div>
     </div>
   );
