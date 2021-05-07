@@ -1,15 +1,13 @@
 // The eTransfer needs to find a file to read for it's decryption key.
 // It's not actually used, so any file will do (ie - this one...)
 process.env.DB_ACTION_PK_PATH = __filename;
-
 import { processUnsettledETransfers } from '.'
 import { init } from '@thecointech/firestore/mock';
-
-import data from './index.test.mockdb.json';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '../statemachine/types';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
+import data from './index.test.mockdb.json';
 
 // Allow mocking the decryption fn
 import { decryptTo } from '@thecointech/utilities/Encrypt';

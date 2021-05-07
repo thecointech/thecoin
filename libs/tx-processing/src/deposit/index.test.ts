@@ -3,9 +3,6 @@ import { init } from '@thecointech/firestore/mock';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from 'statemachine/types';
 
-// Don't go to the server for this
-jest.mock('@thecointech/email');
-
 it("Can complete deposits", async () => {
 
   jest.setTimeout(900000);
