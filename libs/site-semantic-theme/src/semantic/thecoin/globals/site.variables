@@ -23,6 +23,7 @@
 @pageFont          : Montserrat, Verdana, sans-serif;
 
 @bold: 700;
+@semibold: 600;
 @light: 400;
 
 // Hosting our own fonts is faster and more reliable

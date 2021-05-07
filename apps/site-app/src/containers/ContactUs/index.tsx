@@ -2,16 +2,14 @@ import * as React from 'react';
 import illustration from './images/icon_contact_big.svg';
 import {AppContainerWithShadow} from 'components/AppContainers';
 //import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableSoon";
-
 import coin from './images/thecoin_icon.svg';
-import { Grid, Header } from 'semantic-ui-react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { ContactForm } from './Form';
 import { useState } from 'react';
 import { UserMessage, Answer } from './Messages';
-
-import styles from './styles.module.less';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
+import { PageHeader } from '../PageHeader';
+import styles from './styles.module.less';
 
 const title = { id:"app.contactus.title",
                 defaultMessage:"Contact Us",
@@ -53,22 +51,11 @@ export const ContactUs = () => {
 
   return (
     <React.Fragment>
-      <Grid className={ `x2spaceBefore x4spaceAfter` } >
-        <Grid.Row>
-          <Grid.Column width={2}>
-            <img src={illustration} />
-          </Grid.Column>
-          <Grid.Column width={13}>
-            <Header as="h5" className={ `appTitles` }>
-                <FormattedMessage {...title} />
-                <Header.Subheader>
-                  <FormattedMessage  {...description} />
-                </Header.Subheader>
-            </Header>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-
+      <PageHeader 
+          illustration={illustration}
+          title={title}
+          description= {description}
+      />
       <AppContainerWithShadow className={styles.containerContactUs}>
         <div className={styles.messagesContainer}>
           <div>
