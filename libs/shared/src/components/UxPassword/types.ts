@@ -1,5 +1,4 @@
 import { MessageDescriptor } from 'react-intl';
-//export { ChangeCB } from '../UxInput/types';
 import { Props as BaseProps } from '../UxInput/types';
 
 export type ChangeCB = (value: string) => void;

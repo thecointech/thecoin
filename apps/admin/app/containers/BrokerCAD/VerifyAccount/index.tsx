@@ -9,7 +9,6 @@ import { SetUserVerified } from '@thecointech/utilities/User';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
 import { Timestamp } from '@thecointech/utilities/firestore';
 
-
 interface OwnProps {
 	signer: TheSigner,
 }

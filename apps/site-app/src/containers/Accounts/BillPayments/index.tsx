@@ -61,7 +61,7 @@ export const BillPayments = () => {
   const [accountNumber, setAccountNumber] = useState("");
   //const [payeeName, setPayeeName] = useState("");
 
-  const [validationMessage, setValidationMessage] = useState(null as ValuedMessageDesc|null);
+  const [validationMessage, setValidationMessage] = useState(undefined as ValuedMessageDesc|undefined);
   const [forceValidate, setForceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
@@ -82,7 +82,7 @@ export const BillPayments = () => {
       setPayee("");
       setAccountNumber("");
       //setPayeeName("");
-      setValidationMessage(null);
+      setValidationMessage(undefined);
       setForceValidate(false);
       setTransferInProgress(false);
       setPaymentMessage(transferOutProgress);
@@ -171,12 +171,7 @@ export const BillPayments = () => {
       // Wait on the given hash
       const transferValues = {
         link: (
-          <a
-            target="_blank"
-            href={`https://ropsten.etherscan.io/tx/${txHash}`}
-          >
-            here
-          </a>
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${txHash}`}>here</a>
         ),
       };
       setPaymentMessage(step3);
