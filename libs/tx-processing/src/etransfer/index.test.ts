@@ -5,7 +5,7 @@ process.env.DB_ACTION_PK_PATH = __filename;
 import { processUnsettledETransfers } from '.'
 import { init } from '@thecointech/firestore/mock';
 
-import data from './service.test.mockdb.json';
+import data from './index.test.mockdb.json';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '../statemachine/types';
 import { DateTime } from 'luxon';
