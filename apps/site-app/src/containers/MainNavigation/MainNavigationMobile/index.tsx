@@ -20,6 +20,9 @@ const makepayments = {  id:"app.MainNavigation.makepayments",
 const settings = {  id:"app.MainNavigation.settings",
                     defaultMessage:"Settings",
                     description:"Title for the Settings entry in the menu"};
+const contact = {  id:"app.MainNavigation.contact",
+                    defaultMessage:"Contact Us",
+                    description:"Title for the Contact Us entry in the menu"};
 
 export const MainNavigationMobile = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -45,16 +48,19 @@ export const MainNavigationMobile = () => {
                       <ModalOperation isOpen={modalVisible}>
                         <Menu vertical id={styles.userMenu}>
                             <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
-                              <Icon name="home" size={"huge"}/><FormattedMessage {...home} />
+                              <Icon name="home" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...home} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/transferIn' onClick={()=>setModalVisible(false)}>
-                              <Icon name="home" size={"huge"} /><FormattedMessage {...transferin} />
+                              <Icon name="arrow circle up" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...transferin} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/makepayments' onClick={()=>setModalVisible(false)}>
-                              <Icon name="home" size={"huge"} /><FormattedMessage {...makepayments} />
+                              <Icon name="arrow circle right" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...makepayments} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/settings' onClick={()=>setModalVisible(false)}>
-                              <Icon name="home" size={"huge"} /><FormattedMessage {...settings} />
+                              <Icon name="setting" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...settings} />
+                            </Menu.Item>
+                            <Menu.Item as={ NavLink } to='/contact' onClick={()=>setModalVisible(false)}>
+                              <Icon name="envelope outline" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...contact} />
                             </Menu.Item>
                         </Menu>
                       </ModalOperation>
