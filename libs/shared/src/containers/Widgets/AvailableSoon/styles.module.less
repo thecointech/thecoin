@@ -1,7 +1,7 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .availableSoonContainer{
-    height: 200px;
+    height: 100%;
     margin-top: -60px;
 }
 
@@ -10,20 +10,14 @@
     filter: blur(3px);
 }
 
-h5.soon{
+h5#soon {
     position: relative;
     z-index: 100;
-    top: 50%;
     background-color: white;
     text-align: center;
     border-radius: 10px;
     box-shadow: @subtleShadow;
     transform: rotate(-10deg);
     padding: 10px !important;
-
-    .smallerThanDesktop({
-        position: relative;
-        left: 25%;
-        width: 200px;
-     });
+    top: 100px !important;
 }
