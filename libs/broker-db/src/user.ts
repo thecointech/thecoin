@@ -8,7 +8,7 @@ export type UserVerifiedInfo = {
 }
 export type ReferralData = {
   created: Timestamp|Date;
-  referrer: string;
+  referredBy: string;
 }
 
 // A union of all possible data on a user.

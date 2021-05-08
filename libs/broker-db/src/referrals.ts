@@ -6,7 +6,7 @@ import { getUserDoc, getUserData, ReferralData } from "./user";
 import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
 
 export function getReferrersCollection() : CollectionReference {
-  return getFirestore().collection("Referrers");
+  return getFirestore().collection("Referrer");
 }
 
 // Document stored as /Referrer/{id}/
@@ -34,7 +34,7 @@ export async function getReferrerData(referrerId: string) {
 
 export async function getUsersReferrer(address: string) {
   const user = await getUserData(address);
-  if (user && user.referrer && user.created) {
+  if (user && user.referredBy && user.created) {
     return user as ReferralData;
   }
   return null;
@@ -93,7 +93,7 @@ export async function createReferree(referral: NewAccountReferal, created: Times
   if (user.exists) throw new Error("User already exists");
 
   const data: ReferralData = {
-    referrer: referrer.get("address"),
+    referredBy: referrer.get("address"),
     created
   };
   await newUserKey.set(data);

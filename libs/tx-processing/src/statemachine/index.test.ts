@@ -17,10 +17,15 @@ const transitionBase = (type: string) =>({
   error: undefined,
   meta: undefined,
 });
+// Simple transitions just test the different kind of scenarios the FSM needs to process.
+// noop - no change to data, just transition to a new state
 const noop = async () => transitionBase('noop');
+// breakHere returns null to simulate a transition that cannot complete (for reasons that are not an error)
 const breakHere = async () => null;
+// simulate adding data
 const addFiat = async () => ({ ...transitionBase('addFiat'), fiat: new Decimal(10) })
 const addCoin = async () => ({ ...transitionBase('addCoin'), coin: new Decimal(10), fiat: new Decimal(0) })
+// Simulate an error occuring
 const makeError = async () => ({ ...transitionBase('makeError'), error: "An error occurs" })
 const logSuccess = async (cont: AnyActionContainer) => { log.trace(getLast(cont).data.meta!); return transitionBase('logSuccess'); }
 const logError = async (cont: AnyActionContainer) => { log.warn(getLast(cont).data.error!); return transitionBase('logError'); }
