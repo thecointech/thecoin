@@ -2,6 +2,7 @@
 
 .availableSoonContainer{
     height: 200px;
+    margin-top: -60px;
 }
 
 .availableSoonBlur{
@@ -10,22 +11,18 @@
 }
 
 h5.soon{
-    position: absolute;
+    position: relative;
     z-index: 100;
-    top: 19%;
-    margin: auto;
-    width: 100%;
+    top: 50%;
     background-color: white;
     text-align: center;
-    border: 1px solid @theCoinPaletteGreen4;
     border-radius: 10px;
     box-shadow: @subtleShadow;
-    font-size: 15px;
     transform: rotate(-10deg);
+    padding: 10px !important;
 
     .smallerThanDesktop({
         position: relative;
-        top: 50%;
         left: 25%;
         width: 200px;
      });
