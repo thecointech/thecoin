@@ -1,9 +1,8 @@
 import * as React from 'react';
 import illustration from './images/icon_contact_big.svg';
 import {AppContainerWithShadow} from 'components/AppContainers';
-//import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableSoon";
+import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableSoon";
 import coin from './images/thecoin_icon.svg';
-import { useIntl } from 'react-intl';
 import { ContactForm } from './ContactForm';
 import { useState } from 'react';
 import { UserMessage, Answer } from './Messages';
@@ -24,12 +23,6 @@ const errorMessage = { id:"app.contactus.errorMessage",
 const successMessage = { id:"app.contactus.successMessage",
                 defaultMessage:"Message received.\nYou should receive an answer in 1-2 business days.",
                 description:"Success Message for the contact us page" };
-const messageLabel = { id:"app.contactus.form.email",
-                defaultMessage:"Recipient email",
-                description:"Label for the form the contact us page" };
-const messageDesc = { id:"app.contactus.form.emailDesc",
-                defaultMessage:"An email address to send the e-Transfer to",
-                description:"Label for the form the contact us page" };
 
 const button = { id:"app.contactus.form.button",
                 defaultMessage:"Send",
@@ -38,16 +31,15 @@ const button = { id:"app.contactus.form.button",
 
 export const ContactUs = () => {
   const [message, setMessage] = useState('');
-  const [successHidden, setSuccessHidden] = useState(true);
+  const [successHidden] = useState(true);
   const [errorHidden] = useState(true);
   
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
     if (e) e.preventDefault();
     console.log(message);
     setMessage("");
-    setSuccessHidden(false);
+    //setSuccessHidden(false);
   }
-  const intl = useIntl();
 
   return (
     <React.Fragment>
@@ -57,6 +49,8 @@ export const ContactUs = () => {
           description= {description}
       />
       <AppContainerWithShadow className={styles.containerContactUs}>
+
+      <AvailableSoon>
         <div className={styles.messagesContainer}>
           <div>
             <div className={styles.contactFormLine}>
@@ -65,10 +59,6 @@ export const ContactUs = () => {
                 errorHidden={errorHidden}
                 successMessage={successMessage}
                 successHidden={successHidden}
-
-                messageLabel={messageLabel}
-                setMessage={(value: string) => setMessage(value)}
-                messageDes={intl.formatMessage(messageDesc)}
 
                 button={button}
                 onSubmit={onSubmit}
@@ -88,6 +78,8 @@ export const ContactUs = () => {
               contactVerified={true} 
             />
         </div>
+
+        </AvailableSoon>
       </AppContainerWithShadow>
     </React.Fragment>
   );

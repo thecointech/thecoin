@@ -11,10 +11,6 @@ type VisualProps={
     successMessage: MessageDescriptor,
     successHidden: boolean,
 
-    messageLabel: MessageDescriptor,
-    setMessage: (value: string) => void,
-    messageDes: string,
-
     button: MessageDescriptor,
     onSubmit: StrictButtonProps["onClick"],
 };
