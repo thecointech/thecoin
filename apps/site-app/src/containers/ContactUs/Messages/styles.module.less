@@ -1,22 +1,38 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-.contactMessageLine{
-    display: inline-block;
-    color: @theCoinPaletteGreen5;
-    > div{
-        background-color: @theCoinPalettePaleGreen2Faded50;
-        border-radius: @absoluteBorderRadius;
-        padding: 10px;
-        max-width: 220px;
-        margin: auto;
-        min-height: 60px;
+.userMessageContainer{
+    float: right;
+    .contactMessageLine{
+        display: inline-block;
+        color: @theCoinPaletteGreen5;
+        > div{
+            background-color: @theCoinPalettePaleGreen2Faded50;
+            border-radius: @absoluteBorderRadius;
+            padding: 10px;
+            max-width: 220px;
+            margin: auto;
+            min-height: 60px;
+        }
+        &::after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-left: 15px solid @theCoinPalettePaleGreen2Faded50;
+            border-bottom: 10px solid transparent;
+            display: inline-flex;
+            position: relative;
+            top: -40px;   
+            left: 15px;
+            float: right;
+        }
     }
 }
 
 .contactAnswerLine{
     display: inline-block;
     color: @theCoinPaletteGreen5;
-    width: 470px;
+    width: 100%;
     .messageZone{
         display: inline-block;
         background-color: @theCoinPaletteGray1Faded30;
@@ -26,10 +42,18 @@
         margin: auto;
         min-height: 60px;
     }
-}
-
-.userMessageContainer{
-    float: right;
+    &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-right: 15px solid @theCoinPaletteGray1Faded30;
+        border-bottom: 10px solid transparent;
+        display: inline-flex;
+        right: -60px;
+        position: relative;
+        top:-10px;
+    }
 }
 
 .contactAvatarLine{    
@@ -42,40 +66,6 @@
         margin-left: 0;
     }
 }
-
-
-.contactFormLine::after,.contactMessageLine::after {
-    content: "";
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-left: 15px solid @theCoinPalettePaleGreen2Faded50;
-    border-bottom: 10px solid transparent;
-    display: inline-flex;
-    right: -81px;
-    position: relative;
-    top: -40px;
-}
-
-.contactAnswerLine::before {
-    content: "";
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-right: 15px solid @theCoinPaletteGray1Faded30;
-    border-bottom: 10px solid transparent;
-    display: inline-flex;
-    right: -60px;
-    position: relative;
-    top:-10px;
-}
-
-
-.contactMessageLine::after {    
-    left: 15px;
-    float: right;
-}
-
 
 .message{
     font-weight: @semibold;

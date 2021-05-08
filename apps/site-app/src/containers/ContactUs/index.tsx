@@ -4,7 +4,7 @@ import {AppContainerWithShadow} from 'components/AppContainers';
 //import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableSoon";
 import coin from './images/thecoin_icon.svg';
 import { useIntl } from 'react-intl';
-import { ContactForm } from './Form';
+import { ContactForm } from './ContactForm';
 import { useState } from 'react';
 import { UserMessage, Answer } from './Messages';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
