@@ -16,7 +16,6 @@ type VisualProps={
     messageDes: string,
 
     button: MessageDescriptor,
-
     onSubmit: StrictButtonProps["onClick"],
 };
   
