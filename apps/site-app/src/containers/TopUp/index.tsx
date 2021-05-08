@@ -8,7 +8,7 @@ import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { PageHeader } from 'containers/PageHeader';
+import { PageHeader } from 'components/PageHeader';
 
 
 const title = { id:"app.topup.title",

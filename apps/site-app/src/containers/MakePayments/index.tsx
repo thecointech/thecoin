@@ -9,7 +9,7 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
-import { PageHeader } from 'containers/PageHeader';
+import { PageHeader } from 'components/PageHeader';
 
 
 const title = { id:"app.makepayments.title",

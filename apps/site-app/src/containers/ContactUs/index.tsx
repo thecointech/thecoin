@@ -8,7 +8,7 @@ import { ContactForm } from './Form';
 import { useState } from 'react';
 import { UserMessage, Answer } from './Messages';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-import { PageHeader } from '../PageHeader';
+import { PageHeader } from '../../components/PageHeader';
 import styles from './styles.module.less';
 
 const title = { id:"app.contactus.title",
