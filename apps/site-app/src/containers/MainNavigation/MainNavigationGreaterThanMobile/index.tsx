@@ -34,10 +34,10 @@ const contact = { id:"app.MainNavigation.contact",
                   <HeaderLink to="/" exact>
                     <FormattedMessage {...home} />
                   </HeaderLink>
-                  <HeaderLink to="/" exact>
+                  {/* <HeaderLink to="/" exact>
                     <FormattedMessage {...help} />
-                  </HeaderLink>
-                  <HeaderLink to="/" exact>
+                  </HeaderLink>*/}
+                  <HeaderLink to="/contact" exact>
                     <FormattedMessage {...contact} />
                   </HeaderLink>
                   <Menu.Menu position='right'>
