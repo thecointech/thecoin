@@ -5,6 +5,7 @@ import { toDepositData } from "./convert";
 import { eTransferData } from "./types";
 import { authorize, isValid } from "./auth";
 
+export type { Labels } from './fetch';
 export * from './types';
 export { setETransferLabel };
 
