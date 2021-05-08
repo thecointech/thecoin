@@ -35,7 +35,7 @@ Stores what changes have occured due to this event.  For example, `transfer` may
 ## Action ID's
 
 Our ID's for buy/sell/bill are random.  Although it is tempting to rely on external
-identifiers (eg - using txHash for Sale/uniqueId for purchases) we cannot do this because sales/bills do not have an appropriate identifier to use.  Any failed tx recovery would need to rely on searching the action list anyway, which negates teh primary benefit of determinstic ID's.  There is also no consistent identifier for e-transfers & direct deposits.  Given this lack of consistency, it is best to simply use a random ID, index the event data, then perform searches to ensure new data is assigned to the appropriate actions events.
+identifiers (eg - using txHash for Sale/uniqueId for purchases) we cannot do this because sales/bills do not have an appropriate identifier to use.  Any failed tx recovery would need to rely on searching the action list anyway, which negates the primary benefit of determinstic ID's.  There is also no consistent identifier for e-transfers & direct deposits.  Given this lack of consistency, it is best to simply use a random ID, index the event data, then perform searches to ensure new data is assigned to the appropriate actions events.
 
 ## Our NoSQL schema notation
 Firestore follows an Collection/Document structure, which is basically a map.
@@ -71,11 +71,17 @@ https://online.visual-paradigm.com/app/diagrams/#G1mXn77JGHL4VIifzeO-rowdCClmQxW
 ![alt text](./broker-deposit.fsm.png)
 
 ```
- + [Referrers]: 6-char id
-  - address: normalized ethereum address
-  - signature: signed by TheCoin (proof this entry is valid)
- // A collection of incomplete actions
- // Used so we don't have to search the DB for things to do
+ //
+ // A collection of accounts that are authorized to refer other accounts.
+ + [Referrer]: 6-char referral code
+  // The ID of the user.  It should exist in User collection below.
+  - address: users' ethereum address
+  // Proof this entry is valid.  Not currently used.
+  - signature: signed by TheCoin
+
+ //
+ // 3 collections of incomplete actions
+ // Used so we don't have to search the DB for things that need processing
  + [Sell]: randomId
   - ref: path eg /User/0x123.../Sell/random
  + [Buy]: randomId
@@ -83,9 +89,12 @@ https://online.visual-paradigm.com/app/diagrams/#G1mXn77JGHL4VIifzeO-rowdCClmQxW
  + [Bill]: randomId
   - ref: path eg /User/0x123.../Bill/random
 
+ //
+ // User data/actions.  ID is the ethereum address of the account
  + [User]: eth address
     - created: DateTime
-    - referrer: address
+    // The account that referred this user.  Must be an entry in Referrers collection above
+    - referredBy: 6-char id
     + [Buy]: RandomID
         - timestamp
         - data {
@@ -189,7 +198,6 @@ https://online.visual-paradigm.com/app/diagrams/#G1mXn77JGHL4VIifzeO-rowdCClmQxW
             type: 'completed'
             data?: notes
           }
-
 
     + [Bill]: RandomID
         // Record the InstructionPacket sent by the client
