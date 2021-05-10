@@ -81,13 +81,13 @@ function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
     // deepcode ignore GlobalReplacementRegex: Is mistakenly detecting replace has containing a regex
-    ? Number(amountRes[1].replace(',', ''))
+    ? parseFloat(amountRes[1])
     : undefined;
 }
 function getAmountFrancais(body: string) {
   const amountRes = /vous a envoyé un virement de ([0-9,]+) \$ \(CAD\)/.exec(body)
   return (amountRes)
-    ? Number(amountRes[1])
+    ? parseFloat(amountRes[1])
     : undefined;
 }
 
