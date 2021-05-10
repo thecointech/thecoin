@@ -17,7 +17,7 @@ import MainPageTransition from '@thecointech/site-base/components/MainPageTransi
 import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
@@ -58,11 +58,13 @@ export const App = () => {
         <Container style={{ width: '100%' }} className={``}>
           <MainPageTransition location={location}>
 
-            <Rail internal position='left'>
-              <Sticky context={contextRef}>
-                <PageSidebar />
-              </Sticky>
-            </Rail>
+            <GreaterThanMobileSegment>
+              <Rail internal position='left'>
+                <Sticky context={contextRef}>
+                  <PageSidebar />
+                </Sticky>
+              </Rail>
+            </GreaterThanMobileSegment>
 
             <ColumnRightTop />
 
