@@ -4,6 +4,8 @@ import { Base64 } from 'js-base64';
 import { log } from '@the-coin/logging';
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
+import currency from 'currency.js';
+
 
 export const trimQuotes = (s?: string) => s?.replace(/(^")|("$)/g, '');
 
@@ -80,14 +82,13 @@ const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
   return (amountRes)
-    // deepcode ignore GlobalReplacementRegex: Is mistakenly detecting replace has containing a regex
-    ? parseFloat(amountRes[1])
+    ? currency(amountRes[1]).value
     : undefined;
 }
 function getAmountFrancais(body: string) {
-  const amountRes = /vous a envoyé un virement de ([0-9,]+) \$ \(CAD\)/.exec(body)
+  const amountRes = /vous a envoyé un virement de ([ 0-9,]+) \$ \(CAD\)/.exec(body)
   return (amountRes)
-    ? parseFloat(amountRes[1])
+    ? currency(amountRes[1], {decimal: ','}).value
     : undefined;
 }
 
