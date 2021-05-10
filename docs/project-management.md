@@ -1,5 +1,5 @@
-### Issues types
-## Stories: new functionalities, improvements
+### Issue types
+## Storie / Epic: new functionalities, improvements
 Name must be something like: As a [User] I want to [be able to do that task] so that [I can achieve that specific goal ]
 It should be user-centered, short, specific and goal-oriented.
 This task should always contain at least:
@@ -10,7 +10,7 @@ This task should always contain at least:
 ## Bug: functional problem 
 Must contain steps to reproduce (can be a video) and expected result/behavior
 
-## Visual problem: 
+## Visual problem
 Must contain at least one image and expected behavior
 
 
