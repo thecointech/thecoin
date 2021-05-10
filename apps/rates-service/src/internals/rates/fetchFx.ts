@@ -1,4 +1,4 @@
-import { CurrencyCode, CurrencyKey } from "@the-coin/utilities/CurrencyCodes";
+import { CurrencyCode, CurrencyKey } from "@thecointech/utilities/CurrencyCodes";
 import { alignToNextBoundary } from "./fetchUtils";
 import { FXUpdateInterval, FxRates, RatesMapping } from "./types";
 import { fetchNewFxRates, FinnhubFxQuotes } from "../FinnHub";

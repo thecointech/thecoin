@@ -28,13 +28,6 @@ try {
       initArgs: [acTheCoin]
     });
 
-    const assignMinter = async (proxy) => await proxy.methods.setMinter(acMinter).send({ from: acTheCoin });
-    const acceptMinter = async (proxy) => await proxy.methods.acceptMinter().send({ from: acMinter });
-    const setMinter = async (proxy) => {
-      await assignMinter(proxy);
-      await acceptMinter(proxy);
-    }
-
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }

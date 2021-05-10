@@ -1,14 +1,15 @@
 import dotenv from 'dotenv'
 dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
 
-import { signIn, InitContract } from "@the-coin/tx-processing";
-import { init as LogInit, log } from "@the-coin/logging";
-import { RbcStore, RbcApi } from "@the-coin/rbcapi";
-import { ConfigStore } from "@the-coin/store";
-import { getWallet } from '@the-coin/utilities/Wallets';
-import { initBrowser } from "@the-coin/rbcapi/action";
-import { ProcessUnsettledDeposits } from "@the-coin/tx-processing/deposit/service";
-import { processUnsettledETransfers } from "@the-coin/tx-processing/etransfer/service";
+import { signIn } from "@thecointech/tx-processing";
+import { init as LogInit, log } from "@thecointech/logging";
+import { RbcStore, RbcApi } from "@thecointech/rbcapi";
+import { ConfigStore } from "@thecointech/store";
+import { getSigner } from '@thecointech/accounts';
+import { initBrowser } from "@thecointech/rbcapi/action";
+import { ConnectContract, TheCoin } from '@thecointech/contract';
+import { ProcessUnsettledDeposits } from "@thecointech/tx-processing/deposit/service";
+import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
 
 async function initialize() {
 
@@ -18,12 +19,8 @@ async function initialize() {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  const wallet = await getWallet('BrokerCAD');
-  if (!wallet) {
-    throw new Error("Couldn't load wallet'");
-  }
-
-  const contract = await InitContract(wallet);
+  const signer = await getSigner('BrokerCAD');
+  const contract = await ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
@@ -35,14 +32,17 @@ async function initialize() {
   await signIn()
 
   log.debug('Init Complete');
+  const rbcApi = new RbcApi();
+
+  return { contract, rbcApi };
 }
 
 //
 // Process deposits: Make 'em Rain!!!
 //
-async function ProcessDeposits(rbcApi: RbcApi) {
+async function ProcessDeposits(rbcApi: RbcApi, contract: TheCoin) {
   log.debug("Processing Deposits");
-  const deposits = await ProcessUnsettledDeposits(rbcApi);
+  const deposits = await ProcessUnsettledDeposits(contract, rbcApi);
   log.debug(`Processed ${deposits.length} deposits`);
   return deposits;
 }
@@ -54,9 +54,8 @@ async function ProcessETransfers(rbcApi: RbcApi) {
 }
 
 async function Process() {
-  await initialize();
-  const rbcApi = new RbcApi();
-  await ProcessDeposits(rbcApi);
+  const { contract, rbcApi } = await initialize();
+  await ProcessDeposits(rbcApi, contract);
   await ProcessETransfers(rbcApi);
   log.debug(` --- Completed processing --- `);
 }

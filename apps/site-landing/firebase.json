@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "build",
+    "target": "landing",
+    "public": "./build",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -13,7 +14,15 @@
       }
     ],
     "headers": [
-      { "source":"/index.html", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
     ]
   }
 }

@@ -1,6 +1,6 @@
-import { fetchRate, FXRate, weBuyAt, weSellAt } from "@the-coin/shared/containers/FxRate";
-import { toHuman } from "@the-coin/utilities";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import { fetchRate, FXRate, weBuyAt, weSellAt } from "@thecointech/shared/containers/FxRate";
+import { toHuman } from "@thecointech/utilities";
+import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 import { ReconciledRecord } from "types";
 
 const getSettlementDate = async (r: ReconciledRecord) =>

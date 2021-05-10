@@ -1,5 +1,5 @@
 import { fetchFxRate } from './fetchFx';
-import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
+import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes';
 
 // Don't go to the server for this
 jest.mock('../FinnHub')

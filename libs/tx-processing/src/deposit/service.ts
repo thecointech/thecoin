@@ -1,18 +1,19 @@
-import { log } from '@the-coin/logging';
-import { RbcApi, ETransferErrorCode } from "@the-coin/rbcapi";
-import { RatesApi } from '@the-coin/pricing';
-import { toCoin, isPresent } from "@the-coin/utilities";
-import { Timestamp } from "@the-coin/utilities/firestore";
-import { GetActionDoc } from "@the-coin/utilities/User";
-import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
+import { log } from '@thecointech/logging';
+import { RbcApi, ETransferErrorCode } from "@thecointech/rbcapi";
+import { RatesApi } from '@thecointech/pricing';
+import { toCoin, isPresent } from "@thecointech/utilities";
+import { Timestamp } from "@thecointech/utilities/firestore";
+import { GetActionDoc } from "@thecointech/utilities/User";
+import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 import { depositInBank, storeInDB } from "./process";
 import { waitTheTransfer, startTheTransfer } from "./contract";
-import { eTransferData, FetchNewDepositEmails, setETransferLabel } from "@the-coin/tx-gmail";
-import { DepositRecord, PurchaseType } from '@the-coin/tx-firestore';
-import { DocumentReference } from "@the-coin/types";
-import { SendDepositConfirmation } from "@the-coin/email";
+import { eTransferData, FetchNewDepositEmails, setETransferLabel } from "@thecointech/tx-gmail";
+import { DepositRecord, PurchaseType } from '@thecointech/tx-firestore';
+import { DocumentReference } from "@thecointech/types";
+import { SendDepositConfirmation } from "@thecointech/email";
 import { DateTime } from "luxon";
 import { Deposit, toTimestamp } from './types';
+import { TheCoin } from '@thecointech/contract';
 
 export async function setSettlementDate(record: DepositRecord) {
   const recievedAt = record.recievedTimestamp.toDate()
@@ -29,7 +30,7 @@ async function setCoinRate(record: DepositRecord) {
     return;
   }
   // Ok, lets get an FX result for this
-  const rate = await ratesApi.getConversion(124, processedTimestamp.toMillis());
+  const rate = await ratesApi.getSingle(124, processedTimestamp.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${processedTimestamp.toDate()}`);
     return false;
@@ -97,7 +98,7 @@ export async function GetDepositsToProcess()
   return deposits.filter(isPresent);
 }
 
-export async function ProcessUnsettledDeposits(rbcApi?: RbcApi)
+export async function ProcessUnsettledDeposits(contract: TheCoin, rbcApi?: RbcApi)
 {
   const deposits = await GetDepositsToProcess();
   const bank = rbcApi ?? new RbcApi();
@@ -105,14 +106,14 @@ export async function ProcessUnsettledDeposits(rbcApi?: RbcApi)
   // for each email, we immediately try and deposit it.
   for (const deposit of deposits)
   {
-    deposit.isComplete = await ProcessUnsettledDeposit(deposit, bank);
+    deposit.isComplete = await ProcessUnsettledDeposit(deposit, contract, bank);
     log.debug("Deposit Completed: " + deposit.isComplete);
   }
 
   return deposits;
 }
 
-export async function ProcessUnsettledDeposit(deposit: Deposit, rbcApi: RbcApi)
+export async function ProcessUnsettledDeposit(deposit: Deposit, contract: TheCoin, rbcApi: RbcApi)
 {
   const inProgress = await initiateDeposit(deposit);
   if (!inProgress)
@@ -130,7 +131,7 @@ export async function ProcessUnsettledDeposit(deposit: Deposit, rbcApi: RbcApi)
   await inProgress.set(deposit.record);
 
   // Complete transfer to person
-  const processed = await ProcessDepositTransfer(deposit, inProgress);
+  const processed = await ProcessDepositTransfer(deposit, contract, inProgress);
 
   // Update inProgress with progress
   await inProgress.set(deposit.record);
@@ -169,12 +170,12 @@ export async function ProcessDepositBank(etransfer: eTransferData, rbcApi: RbcAp
 
 //
 // Transfer the appropriate amount of Coin to client
-export async function ProcessDepositTransfer(deposit: Deposit, inProgress: DocumentReference) : Promise<boolean>
+export async function ProcessDepositTransfer(deposit: Deposit, contract: TheCoin, inProgress: DocumentReference) : Promise<boolean>
 {
   log.debug({address: deposit.etransfer.address, deposited: deposit.etransfer.recieved.toJSDate()},
     `Beginning transfer to satisfy deposit from {address} for date {DepositDate}`);
 
-  var tx = await startTheTransfer(deposit);
+  var tx = await startTheTransfer(deposit, contract);
 
   // Store first indication of attempted deposit
   deposit.record.hash = tx.hash;

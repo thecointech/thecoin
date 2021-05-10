@@ -1,6 +1,6 @@
-import { GetContract } from "@the-coin/contract";
+import { GetContract } from "@thecointech/contract";
 import { Wallet } from "ethers";
-import { CertifiedTransferRequest, BillPayeePacket } from "@the-coin/types";
+import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
 import { BuildVerifiedAction, GetSigner } from "./VerifiedAction";
 
 const wallet = Wallet.createRandom();

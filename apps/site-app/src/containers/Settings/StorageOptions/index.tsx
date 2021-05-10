@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Download } from './download';
 import { Container, Header } from "semantic-ui-react"
-import { isWallet } from '@the-coin/shared/SignerIdent';
-import { Props as MessageProps, MaybeMessage } from "@the-coin/site-base/components/MaybeMessage"
+import { isWallet } from '@thecointech/shared/SignerIdent';
+import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
 import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 
@@ -50,14 +50,6 @@ export function StorageOptions() {
           <span className={styles.toggleZone}><StoreGoogle onStateChange={onStateChange} toggle={true} /></span>
         </div>
 
-        <div className={ `border-bottom-green4 x4spaceBefore ${styles.lineSave}`}>
-          <span>
-            <img src={google} />
-            <FormattedMessage {...labelGoogle} />
-          </span>
-          <span className={styles.toggleZone}><StoreGoogle onStateChange={onStateChange} toggle={true} /></span>
-        </div>
-        
         <div className={`x18spaceAfter`}>
           <div className={ `x6spaceBefore x4spaceAfter`}>
             <FormattedMessage {...descriptionSave} />

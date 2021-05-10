@@ -1,21 +1,26 @@
 {
-  "swagger": {
+  "entryFile": "./src/main.ts",
+  "noImplicitAdditionalProperties": "silently-remove-extras",
+
+  "spec": {
     "basePath": "/api/v1",
-    "entryFile": "./src/main.ts",
     "specVersion": 2,
     "outputDirectory": "./src/api",
-    "noImplicitAdditionalProperties": "silently-remove-extras",
     "controllerPathGlobs": [
       "./src/controllers/**/*controller.ts"
     ]
   },
   "routes": {
     "basePath": "/api/v1",
-    "entryFile": "./src/main.ts",
     "routesDir": "./src/routes",
     "middleware": "express"
   },
   "ignore": [
     "**/node_modules/**"
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@thecointech/utilities/*":  ["../../libs/utils-ts/build/*"]
+    }
+  }
 }

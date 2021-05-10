@@ -5,16 +5,13 @@
 import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { ApplicationBaseState } from '../types';
 import { history } from './history';
-import { createStore, compose, applyMiddleware } from 'redux';
-
-import { createReducer} from './reducers';
+import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
+import { ApplicationBaseState } from '../types';
 export { history };
 
-declare var window: any;
-
-export function configureAppStore(initialState: ApplicationBaseState | undefined = undefined) {
+type reducerFn = (injectedReducers?: ReducersMapObject) => Reducer;
+export function configureStore(createReducer: reducerFn, initialState?: ApplicationBaseState) {
   const reduxSagaMonitorOptions = {};
 
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
@@ -50,6 +47,11 @@ export function configureAppStore(initialState: ApplicationBaseState | undefined
 
   return store;
 }
+
+//  deepcode ignore no-any: dev-only usage of vars
+declare var window: any;
+//  deepcode ignore no-any: dev-only usage of vars
+declare var module: any;
 
 function getCompose()
 {

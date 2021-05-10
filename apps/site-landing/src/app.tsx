@@ -24,22 +24,24 @@ import 'sanitize.css/sanitize.css';
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@the-coin/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 
-import {configureAppStore, history } from '@the-coin/shared/store';
+import {configureLandingStore, history } from './reducers';
 
 // Import i18n messages
 import { translations } from './translations';
 import { initTracking } from './utils/reactga';
 
 initTracking();
+import { init } from '@thecointech/logging';
+init('site-landing')
 
 // Create redux store with history
-const store = configureAppStore();
+const store = configureLandingStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 
 const render = (languages: Languages, Component = App) => {

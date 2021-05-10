@@ -1,12 +1,11 @@
 import React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { RouteComponentProps } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 import { FormSubscribed } from './FormSubscribed/formSubscribed';
 
 import illustration from './images/ill_subscription.svg'
 
-export const Confirm = (props: RouteComponentProps) => {
+export const Confirm = () => {
 
   return (
     <>
@@ -43,7 +42,7 @@ export const Confirm = (props: RouteComponentProps) => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <FormSubscribed {...props} />
+              <FormSubscribed />
             </Grid.Column>
           </Grid.Row>
       </Grid>

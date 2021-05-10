@@ -1,3 +1,7 @@
+/**
+ * Simple library wraps mailjet for single-source type-safe sending of templates etc.
+ */
+
 import { DateTime } from 'luxon';
 import { SendMail, SendTemplate } from './AutoMailer';
 
@@ -24,9 +28,9 @@ export const SendDepositConfirmation = (to: string, vars: DepositConfirmationVar
     ProcessDate: vars.ProcessDate.toFormat("LLL dd, H:mm"),
   });
 
-export const SendWelcomeEmail = (to: string, user: {id: string}) =>
+export const SendWelcomeEmail = (to: string, id: string) =>
   SendTemplate(to, TemplateId.WelcomeConfirm, {
-    confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(user.id)
+    confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(id)
   });
 
 export { SendMail };

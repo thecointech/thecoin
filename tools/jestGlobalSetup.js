@@ -1,8 +1,3 @@
-// Import any system variables
-const path = require('path');
-const dotenvpath = path.resolve(__dirname, '..', 'secrets', 'credentials.env');
-require('dotenv').config({ path: dotenvpath });
-
 const net = require('net');
 const FirestorePort = 8377;
 

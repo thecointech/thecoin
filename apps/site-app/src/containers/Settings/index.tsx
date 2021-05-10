@@ -26,7 +26,7 @@ export const Settings = () => {
   ]
   return (
     <React.Fragment>
-      <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
+      <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter x2spaceBefore` } />
     </React.Fragment>
   );
 }

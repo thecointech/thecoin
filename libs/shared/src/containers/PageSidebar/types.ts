@@ -1,7 +1,7 @@
 import { ImmerReducer } from 'immer-reducer';
 import { ApplicationBaseState } from '../../types';
 import { Dictionary } from 'lodash';
-import { RUrl } from '@the-coin/utilities/RUrl';
+import { RUrl } from '@thecointech/utilities/RUrl';
 import { SemanticICONS } from 'semantic-ui-react';
 
 /* --- STATE --- */
@@ -9,14 +9,14 @@ export interface SidebarMenuLink {
   name: string;
   to: RUrl | boolean;
   icon?: SemanticICONS;
-  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: JSX.Element | Element | string };
 }
 
 export interface SidebarMenuItem {
   link: SidebarMenuLink;
   subItems?: SidebarMenuItem[];
   icon?: SemanticICONS;
-  header?: { avatar: string, primaryDescription: string, secondaryDescription: string };
+  header?: { avatar: string, primaryDescription: string, secondaryDescription: JSX.Element | Element | string };
 }
 
 // Sidebar does not directly recieve state: instead;
@@ -57,7 +57,7 @@ const stripTrailingSlash = (str: string) : string => {
 
 export function MapMenuItems(item: SidebarMenuItem[], url: string): SidebarMenuItem[] {
   let surl = stripTrailingSlash(url);
-  return item.map(element => { 
+  return item.map(element => {
     if (element.link.to !== false) {
       const mapped: SidebarMenuItem = {
         link: {

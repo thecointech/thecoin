@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
 
 import { Stickers } from '../stickers';
 
@@ -13,7 +12,7 @@ import Birds from '../images/birds.svg';
 import Sun from '../images/sun.svg';
 import SunAura from '../images/sunAura.svg';
 import landscapeGreenPart from '../images/landscape.svg';
-import { ButtonPrimary } from '@the-coin/site-base/components/Buttons';
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 
 export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode;  } ) => {
@@ -28,7 +27,7 @@ export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode;
                   {Props.mainDescription}
                 </Header.Subheader>
               </Header>
-              <ButtonPrimary className={`${styles.overTheLandscape} x6spaceBefore` } as={NavLink} to="/Accounts" size='large'>
+              <ButtonPrimary className={`${styles.overTheLandscape} x6spaceBefore` } as="a" href={`${process.env.URL_SITE_APP}`} size='large'>
                 {Props.mainButton}
               </ButtonPrimary>
           </Grid.Column>

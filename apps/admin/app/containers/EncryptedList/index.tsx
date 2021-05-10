@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
-import { useFxRatesApi, useFxRates } from "@the-coin/shared/containers/FxRate";
+import { CertifiedTransferRecord } from "@thecointech/utilities/firestore";
+import { useFxRatesApi, useFxRates } from "@thecointech/shared/containers/FxRate";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList, TransferRenderer } from "../TransferList";
-import { UserAction } from "@the-coin/utilities/User";
+import { UserAction } from "@thecointech/utilities/User";
 import { Confirm } from "semantic-ui-react";
-import { withFiat } from "@the-coin/tx-processing/base/utils";
-import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "@the-coin/tx-processing/base";
-import { setActionPrivateKey } from "@the-coin/tx-processing/base/key";
-import { InstructionPacket } from "@the-coin/utilities/VerifiedAction";
+import { withFiat } from "@thecointech/tx-processing/base/utils";
+import { FetchUnsettledRecords, DecryptRecords, MarkCertComplete } from "@thecointech/tx-processing/base";
+import { setActionPrivateKey } from "@thecointech/tx-processing/base/key";
+import { InstructionPacket } from "@thecointech/utilities/VerifiedAction";
 
 type Props = {
   render: TransferRenderer,

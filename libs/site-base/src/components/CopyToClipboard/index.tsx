@@ -1,11 +1,12 @@
-import React, { useState, FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {Clipboard} from 'ts-clipboard';
-import { Icon, Message } from 'semantic-ui-react';
+import { Icon, Popup } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 interface Props {
   payload: string;
+  label?: MessageDescriptor;
 }
 
 const link = { id:"base.copyToClipboard.link",
@@ -17,36 +18,35 @@ const messageSuccess = { id:"base.copyToClipboard.messageSuccess",
 
 export const CopyToClipboard: FunctionComponent<Props> = (props) => {
 
-  const [className, setClassName] = useState(styles.ToastBox);
-  const [timeout, setTimeoutCB] = useState(0);
+  const intl = useIntl();
+  const [open, setOpen] = useState(false)
+  const copyLabel = props.label ? props.label : link;
 
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     Clipboard.copy(props.payload);
-    setClassName(styles.ShowToastBox);
-    if (timeout) {
-      window.clearTimeout(timeout);
-    }
-    const newTimeout = window.setTimeout(() => {
-      setClassName(styles.ToastBox);
-    }, 1500);
-    setTimeoutCB(newTimeout);
     event.stopPropagation();
   };
 
   return (
     <>
-    {
-      (props.children) ?
-        <a onClick={onClick} className={styles.Link}>{props.children}</a> :
-        undefined
-    }
-      <Message as="span" floating className={className}>
-        <FormattedMessage {...messageSuccess} />
-      </Message>
-      <span className={styles.Link} onClick={onClick}>
-        <Icon name="copy" />
-        <FormattedMessage {...link} />
-      </span>
+      {
+        (props.children) ?
+          <a onClick={onClick} className={styles.Link}>{props.children}</a> :
+          undefined
+      }
+      <Popup
+        content={intl.formatMessage(messageSuccess)}
+        on='click'
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        position='left center'
+        trigger={
+          <span className={styles.Link} onClick={onClick}>
+            <Icon name="copy" />
+            <FormattedMessage {...copyLabel} />
+          </span>}
+      />
     </>
   );
 };

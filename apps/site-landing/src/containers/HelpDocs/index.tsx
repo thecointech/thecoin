@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { usePrismicActions } from "components/Prismic/reducer";
-import { useSidebar } from "@the-coin/shared/containers/PageSidebar/actions";
-import { SidebarMenuItem } from "@the-coin/shared/containers/PageSidebar/types";
+import { useSidebar } from "@thecointech/shared/containers/PageSidebar/actions";
+import { SidebarMenuItem } from "@thecointech/shared/containers/PageSidebar/types";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
 import { Switch, Route, RouteComponentProps } from "react-router";
 import { FAQs } from "./FAQs";
-import { RUrl } from "@the-coin/utilities/RUrl";
+import { RUrl } from "@thecointech/utilities/RUrl";
 import { Dictionary } from "lodash";
 import { FAQDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
@@ -61,7 +61,7 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
             const url = buildUrl(entry[0]).toString()
             return <Route key={index} path={url} render={() => <FAQs faqs={entry[1]} />} />
           })
-        // docs.faqs.map(a => 
+        // docs.faqs.map(a =>
         //   <Route key={a.id} path={buildUrl(a.id).toString()} render={()=> <Article {...a} />} />
         // )
         //<Route path={buildUrl("").toString()} exact={true} render={()=> <FAQs faqs={docs.faqs} />} />

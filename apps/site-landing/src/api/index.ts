@@ -1,30 +1,9 @@
-import {
-  StatusApi,
-  BillPaymentsApi,
-  ReferrersApi,
-  TransferApi,
-  SecureApi,
-  NewsletterApi,
-  ETransferApi,
-} from '@the-coin/broker-cad';
-import { ServiceAddress, ServicePorts } from '@the-coin/utilities/ServiceAddresses';
+import { NewsletterApi } from '@thecointech/broker-cad';
 import { MockNewsletterApi } from './mock/newsletter';
 
-const BrokerCADAddress = ServiceAddress(ServicePorts.BROKER_PORT);
-
-const NoDatabase = (process.env.NODE_ENV === 'test' ||process.env.NODE_ENV === 'development')
-                    && process.env.DB_CONFIG !== 'connected';
-
-console.log("NoDatabase: " + NoDatabase);
-
-export const GetStatusApi = () => new StatusApi(undefined, BrokerCADAddress);
-export const GetBillPaymentsApi = () => new BillPaymentsApi(undefined, BrokerCADAddress);
-export const GetTransferApi = () => new TransferApi(undefined, BrokerCADAddress);
-export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddress);
-
-// TODO: These will be deleted
-export const GetReferrersApi = () => new ReferrersApi(undefined, BrokerCADAddress);
-export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
+const BrokerCADAddress = process.env.URL_SERVICE_BROKER;
+const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development')
+                    && process.env.SETTINGS !== 'live';
 
 export const GetNewsletterApi = () =>
   NoDatabase

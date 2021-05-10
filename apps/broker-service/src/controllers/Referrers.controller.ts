@@ -1,11 +1,12 @@
-import { Controller, Get, Route, Query, Body, Post, Response } from 'tsoa';
-import { GetReferrerData, CreateReferree } from '@the-coin/utilities/Referrals';
-import { NewAccountReferal } from '@the-coin/types';
-import { Timestamp } from '@the-coin/utilities/firestore';
+import { Controller, Get, Route, Query, Body, Post, Response, Tags } from '@tsoa/runtime';
+import { GetReferrerData, CreateReferree } from '@thecointech/utilities/Referrals';
+import { Timestamp } from '@thecointech/utilities/firestore';
 import { BoolResponse } from '../types';
+import { NewAccountReferal } from '@thecointech/types';
 
-@Route('referrers')
-export class ReferrersController extends Controller {
+@Route('referrals')
+@Tags('Referrals')
+export class ReferralsController extends Controller {
 
   /**
   * Returns a boolean indicating whether the passed referrer is valid
@@ -18,6 +19,7 @@ export class ReferrersController extends Controller {
   @Response('405', 'Server Error')
   async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
     try {
+      // TODO: This fn should _not_ throw
       const referrer = await GetReferrerData(referrerId);
       return {
         success: !!referrer
@@ -25,7 +27,9 @@ export class ReferrersController extends Controller {
     }
     catch(err) {
       console.error(err);
-      throw new Error('Server Error');
+      return {
+        success: false
+      }
     }
   }
 

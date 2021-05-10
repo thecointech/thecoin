@@ -1,6 +1,6 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
-import { BillPayeePacket } from "@the-coin/types";
+import { BillPayeePacket } from "@thecointech/types";
 import { Segment } from "semantic-ui-react";
 import { TransactionData } from "containers/TransferList";
 

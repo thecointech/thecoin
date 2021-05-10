@@ -1,6 +1,6 @@
 {
-  "name": "@the-coin/tx-gmail",
-  "version": "0.1.0",
+  "name": "@thecointech/tx-gmail",
+  "version": "0.2.1",
   "private": true,
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "keywords": [
@@ -24,7 +24,7 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/utilities": "*"
+    "@thecointech/utilities": "^0.2.1"
   },
   "devDependencies": {
     "jest": "*"

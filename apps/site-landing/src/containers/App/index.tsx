@@ -11,18 +11,18 @@ import * as React from 'react';
 import { Container } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
 
-import MainNavigation from 'containers/MainNavigation';
+import {MainNavigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
-import MainPageTransition from '@the-coin/site-base/components/MainPageTransition';
+import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
 import { usePrismic } from 'components/Prismic/reducer';
-import { MediaContextProvider, mediaStyles } from '@the-coin/shared/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
 import '../../semantic/semantic.css';
-//import '@the-coin/site-semantic-theme/semantic.less';
+//import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
 export const App = () => {

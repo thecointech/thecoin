@@ -1,8 +1,8 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
 import { TransactionData } from "containers/TransferList";
-import { DepositRecord } from "@the-coin/tx-firestore";
-import { eTransferData } from "@the-coin/tx-gmail/";
+import { DepositRecord } from "@thecointech/tx-firestore";
+import { eTransferData } from "@thecointech/tx-gmail/";
 
 export const DepositRenderer = (props : TransactionData) => {
 

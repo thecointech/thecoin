@@ -1,6 +1,6 @@
 {
-  "name": "@the-coin/logging",
-  "version": "0.1.0",
+  "name": "@thecointech/logging",
+  "version": "0.2.1",
   "description": "The Coin: Common logging setup",
   "keywords": [
     "TheCoin",
@@ -14,19 +14,26 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/logging"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./": "./build/"
-  },
+  "main": "./build/log_node.js",
+  "browser": "./build/log_browser.js",
+  "exports": "./build/log_node.js",
   "dependencies": {
+    "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.12"
   },
   "devDependencies": {

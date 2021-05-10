@@ -1,4 +1,4 @@
-import {log} from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 import { InitParams, isMockedDb, isEmulatorAvailable } from './types';
 
 // Connect to a firestore instance.  This function is intended to be used
@@ -10,8 +10,7 @@ import { InitParams, isMockedDb, isEmulatorAvailable } from './types';
 //    this is backup data to allow tests in environments without live connection
 //
 // a running instance.  Some tests may not have
-export async function init(params?: InitParams)
-{
+export async function init(params?: InitParams) {
   // If we explicitly only want a mocked db, return that
   if (isMockedDb(params) && !params.live) {
     log.debug('Initializing a mutable mocked db');
@@ -19,29 +18,25 @@ export async function init(params?: InitParams)
     return mock.init(params);
   }
   // Release build, running on server
-  else if (process.env.GAE_ENV)
-  {
+  else if (process.env.GAE_ENV) {
     log.debug('Connecting server-side db running locally');
     const server = await import('./server')
     return server.init();
   }
   // client build, running in electron
-  else if (!isMockedDb(params) && params?.password && params?.username)
-  {
+  else if (!isMockedDb(params) && params?.password && params?.username) {
     log.debug('Connecting client-side db with user/password');
     const pwd = await import('./password');
     return pwd.init(params.username, params.password);
   }
   // Release build, running locally.  May have data, but prefer live connection
-  else if (process.env.GOOGLE_APPLICATION_CREDENTIALS)
-  {
+  else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     log.debug('Connecting server-side db with credentials');
     const release = await import('./release')
     return release.init();
   }
   // no way to connect online, if we have emulator attempt that connection
-  else if(isEmulatorAvailable())
-  {
+  else if (isEmulatorAvailable()) {
     log.debug('No connection parameters supplied, attempting to connect to emulator');
     const project = params?.project;
     // todo: can we drop the project requirement?

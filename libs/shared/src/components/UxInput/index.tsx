@@ -1,113 +1,101 @@
-import React from 'react';
-import { Form, Label, Input, Message } from 'semantic-ui-react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import styles from './styles.module.less';
-import { Props as MyProps, initialState } from './types';
+import React, { createRef, useState } from 'react';
+import { Form, Label, Input, Popup } from 'semantic-ui-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Props as MyProps } from './types';
+import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
-type State = Readonly<typeof initialState>;
-type Props = Readonly<MyProps & WrappedComponentProps>;
+const placeholder = { id:"shared.uxinput.required.tooltip",
+                        defaultMessage:"This field is required",
+                        description:"Tooltip for the required uxinput"};
 
-class UxInputClass extends React.Component<Props, State> {
-  state = initialState;
 
-  static defaultProps = {
-    forceValidate: false
-  };
+type Props = Readonly<MyProps>;
 
-  constructor(props: Props) {
-    super(props);
+export const UxInput = (props:Props) => {
+  
+  const [value, setValue] = useState("");
+  const [showState, setShowState] = useState(false);
 
-    this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-  }
+  const {
+    intlLabel,
+    uxChange,
+    forceValidate,
+    footer,
+    isValid,
+    isRequired,
+    message,
+    messageValues,
+    tooltip,
+    ...inputProps
+  } = props;
 
-  //
-  // Ensure that if we recieve the forceValidate prop, we validate
-  // our current value and show the result (regardless of state)
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.forceValidate && !prevState.showState) {
-      nextProps.uxChange(prevState.value);
-      return {
-        showState: true,
-      };
+
+  function onBlur(event: React.FocusEvent<HTMLInputElement>) {
+    const { value } = event.currentTarget;
+    setShowState(value.length > 0);
+    if (isRequired && (value.length == 0)){
+      setShowState(true);
     }
-    return null;
+    if (isValid){
+      setShowState(false);
+    }
   }
 
-  onBlur(event: React.FocusEvent<HTMLInputElement>) {
+  function onChange(event: React.FormEvent<HTMLInputElement>) {
     const { value } = event.currentTarget;
-    this.setState({
-      showState: value.length > 0,
-    });
+    props.uxChange(value);
+    setValue(value);
   }
 
-  onChange(event: React.FormEvent<HTMLInputElement>) {
-    const { value } = event.currentTarget;
-    this.props.uxChange(value);
-    this.setState({
-      value,
-    });
-  }
-
-  render() {
-    const { value, showState } = this.state;
-    const {
-      intl,
-      intlLabel,
-      uxChange,
-      forceValidate,
-      footer,
-      isValid,
-      message,
-      messageValues,
-      tooltip,
-      ...inputProps
-    } = this.props;
+  
+    const intl = useIntl();
 
     const errorTag = showState && (isValid === false);
     const successTag = showState && (isValid === true);
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
+    const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
+    const tooltipRequired = (!intlLabel && !tooltip && isRequired) ? placeholder: undefined;
+    const tooltipData = tooltip ? intl.formatMessage(tooltip) : tooltipRequired;
 
-    const tooltipData = tooltip ? intl.formatMessage(tooltip) : undefined;
+    const contextRef = createRef<HTMLSpanElement>();
+
+    const styleError = {
+      color:  LessVars.errorColor,
+      borderColor: LessVars.errorBorderColor,
+    }
+
+    const styleSuccess = {
+      color:  LessVars.successColor,
+      borderColor: LessVars.successBorderColor,
+    }
+
     const inputElement = (
-      <Input
-        onChange={this.onChange}
-        onBlur={this.onBlur}
-        value={value}
-        {...inputProps}
-        data-tooltip={tooltipData}
-      />
+      <span ref={contextRef}>
+        <Input
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+          {...inputProps}
+          data-tooltip={tooltipData}
+        />
+      </span>
     );
     const messageElement = (
-      <Message
-        success={successTag}
-        error={errorTag}
-        hidden={!showMessage}
-        attached="bottom"
-        className={`
-          ${styles.ui}
-          ${styles.attached}
-          ${styles.bottom}
-          ${styles.message}
-          ${styles.inputMessage}
-        `}
-      >
-        {message ? <FormattedMessage {...message} /> : undefined}
-      </Message>
+      <Popup 
+        context={contextRef} 
+        position='top right' 
+        content={message ? <FormattedMessage {...message} /> : undefined} 
+        open={showMessage} style={errorTag ? styleError : styleSuccess } />
     );
 
-    return (
-      <Form.Field className={formClassName} error={errorTag}>
-        <Label>
-          <FormattedMessage {...this.props.intlLabel} />
-        </Label>
-        {inputElement}
+    return(
+      <Form.Field className={formClassName +" "+ inputProps.className} error={errorTag}>
+        <Label>{labelToPrint}</Label>
         {messageElement}
+        {inputElement}
         {footer}
+        
       </Form.Field>
     );
-  }
 }
-
-export const UxInput = injectIntl(UxInputClass);

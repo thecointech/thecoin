@@ -1,10 +1,10 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
-import { ETransferPacket } from "@the-coin/types";
+import { ETransferPacket } from "@thecointech/types";
 import { Segment } from "semantic-ui-react";
 import { TransactionData } from "../../TransferList";
 import { RefundButton } from 'containers/Refund';
-import { CertifiedTransferRecord } from "@the-coin/utilities/firestore";
+import { CertifiedTransferRecord } from "@thecointech/utilities/firestore";
 
 const RenderETransfer = (props: TransactionData) => {
   const eTransfer = props.instruction as ETransferPacket;

@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { Dropdown, DropdownProps } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-import { useLanguageProvider } from "@the-coin/shared/containers/LanguageProvider/reducer";
-import { selectLocale } from '@the-coin/shared/containers/LanguageProvider/selector';
-import { Locale } from "@the-coin/shared/containers/LanguageProvider/types";
+import { useLanguageProviderApi } from "@thecointech/shared/containers/LanguageProvider/reducer";
+import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
+import { Locale } from "@thecointech/shared/containers/LanguageProvider/types";
 
 const options = [
   { key: 1, text: 'EN', value: "en" },
@@ -13,7 +13,7 @@ const options = [
 export const LanguageSwitcher = () => {
 
   const { locale } = useSelector(selectLocale);
-  const langProvider = useLanguageProvider();
+  const langProvider = useLanguageProviderApi();
   const handleChange = useCallback((_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     langProvider.setLocale(data.value as Locale);
   }, [langProvider]);

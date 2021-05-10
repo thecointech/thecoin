@@ -1,0 +1,15 @@
+#
+# [START app_yaml]
+runtime: nodejs14
+instance_class: F4
+
+# include secrets.
+includes:
+  - app.secrets.yaml
+
+#handlers:
+#- url: *
+#  http_headers:
+#    Access-Control-Allow-Origin: https://brokerCAD.thecoincore-212314.appspot.com
+# TODO: Require secure connection always
+# [END app_yaml]

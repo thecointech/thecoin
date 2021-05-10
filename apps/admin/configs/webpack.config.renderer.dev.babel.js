@@ -17,7 +17,7 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import dotenv from 'dotenv'
 
-import shared_loaders  from '@the-coin/site-semantic-theme/webpack.less';
+import shared_loaders  from '@thecointech/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('development');
 

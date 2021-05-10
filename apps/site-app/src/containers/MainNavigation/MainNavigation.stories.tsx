@@ -1,17 +1,19 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
-
-import MainNavigation from '.';
-import { ProviderProps } from 'react-redux';
-import { AnyAction } from 'redux';
+import { Meta } from '@storybook/react';
+import { MainNavigation } from '.';
+import { withAccounts, withLanguageProvider, withMediaContext } from '@thecointech/storybookutils';
 
 export default {
-  title: 'App/MainNavigation',
+  title: 'App/Header',
   component: MainNavigation,
-  argTypes: {}
+  decorators: [
+    withMediaContext,
+    withLanguageProvider,
+    withAccounts({
+      active: null,
+      map: {}
+    }),
+  ]
 } as Meta;
 
-const Template = () => <MainNavigation />;
-
-export const Basic: Story<ProviderProps<AnyAction>> = Template.bind({});
-Basic.args = {};
+export const Header = () => <MainNavigation />;

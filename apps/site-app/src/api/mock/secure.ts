@@ -1,39 +1,8 @@
-import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@the-coin/types";
-import { buildResponse, delay } from "./network";
-import testWallet from './testAccount1.json';
-import Thisismy from './Thisismy.wallet.json';
-import { AccountMap, initialState } from "@the-coin/shared/containers/AccountMap";
-
-
-const wallets = [
-  {
-    id: "123",
-    name: "TestAccNoT First.wallet.json",
-    type: "Type?",
-    wallet: JSON.stringify(testWallet),
-  },
-  {
-    id: "345",
-    name: "TestAccNoT Another",
-    type: "Type?",
-    wallet: JSON.stringify(testWallet),
-  },
-  {
-    id: "789",
-    name: "This is my.wallet.json",
-    type: "Type?",
-    wallet: JSON.stringify(Thisismy),
-  }
-];
+import { SecureApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
+import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
+import { wallets } from './accounts';
 
 const MockedCode = "MockedCode";
-
-// We automatically insert one of these accounts into our local store
-// This code assumes that our reducer has already been initialized
-const walletToLoad = wallets[1];
-const initReducer = new AccountMap(initialState, initialState);
-initReducer.addAccount(walletToLoad.name, testWallet as any, false);
-
 const checkCode = ({token}: GoogleToken) => {
   if (MockedCode !== token) {
     throw new Error("Invalid Code");
@@ -45,7 +14,7 @@ const checkCode = ({token}: GoogleToken) => {
  * @class SecureApi
  * @extends {BaseAPI}
  */
-export class MockSecureApi {
+export class MockSecureApi  implements Pick<SecureApi, keyof SecureApi> {
   /**
    *
    * @summary Get the authorization URL to redirect the user to
@@ -94,7 +63,7 @@ export class MockSecureApi {
       type: "not sure",
       wallet: uploadPacket.wallet,
     })
-    return buildResponse<boolean>(true);
+    return buildResponse({success: true});
   }
   /**
    *

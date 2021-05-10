@@ -1,8 +1,8 @@
 import { GetContract } from './Wallet';
-import status from '../status/Status.json';
-import { GetTransferSigner } from '@the-coin/utilities/VerifiedTransfer';
-import { CertifiedTransferRequest, CertifiedTransferResponse } from '@the-coin/types';
+import { certifiedFee } from '../status/constant.json';
+import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer';
 import { TransactionResponse } from 'ethers/providers';
+import { CertifiedTransferRequest, CertifiedTransferResponse } from '@thecointech/types';
 
 function success(val: string | undefined): CertifiedTransferResponse {
   if (!val) {
@@ -27,7 +27,7 @@ function failure(val: string): CertifiedTransferResponse {
 }
 
 function FeeValid(transfer: CertifiedTransferRequest) {
-  return transfer.fee == status.certifiedFee;
+  return transfer.fee == certifiedFee;
 }
 async function AvailableBalance(transfer: CertifiedTransferRequest) {
 	const contract = await GetContract();

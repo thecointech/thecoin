@@ -4,8 +4,8 @@
 // TODO: dedup with utilities
 // TODO: convert to DateTime / Decimal for appropriate entries
 
-import { CertifiedTransfer } from '@the-coin/types';
-import { ProcessRecord } from '@the-coin/utilities/firestore';
+import { CertifiedTransfer } from '@thecointech/types';
+import { ProcessRecord } from '@thecointech/utilities/firestore';
 import { Dictionary } from 'lodash';
 
 export type UserAction = "Buy"|"Sell"|"Bill";

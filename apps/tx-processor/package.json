@@ -1,35 +1,34 @@
 {
-    "name": "@the-coin/tx-processor",
-    "version": "0.1.0",
-    "description": "The Coin: A command-line app for completing transactions",
-    "keywords": [
+  "name": "@thecointech/tx-processor",
+  "version": "0.2.1",
+  "description": "The Coin: A command-line app for completing transactions",
+  "keywords": [
     "THECoin"
-],
-    "author": "Stephen Taylor <stephen@thecoin.io>",
-    "homepage": "http://thecoin.io",
-    "license": "MIT",
-
-    "scripts": {
-      "build": "yarn tsc -b tsconfig.build.json",
-      "clean": "rimraf ./build && rimraf ./coverage",
-      "dev": "yarn build && node --inspect ./build/main.js",
-      "test": "jest --coverage",
-      "test:summary": "jest --coverage > ./coverage/summary.txt"
-    },
-    "files": [
-      "build/**/*"
-    ],
-    "main": "./build/index.js",
-    "exports": {
-      ".": "./build/index.js",
-      "./": "./build/"
-    },
-    "dependencies": {
-      "@the-coin/rbcapi": "*",
-      "@the-coin/tx-processing": "*",
-      "@the-coin/logging": "*"
-    },
-    "devDependencies": {
-      "jest": "*"
-    }
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc -b tsconfig.build.json",
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "dev": "yarn build && node --inspect ./build/main.js",
+    "test": "jest --coverage",
+    "test:summary": "jest --coverage > ./coverage/summary.txt"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
+  "dependencies": {
+    "@thecointech/logging": "^0.2.1",
+    "@thecointech/rbcapi": "^0.2.1",
+    "@thecointech/tx-processing": "^0.2.1"
+  },
+  "devDependencies": {
+    "jest": "*"
   }
+}

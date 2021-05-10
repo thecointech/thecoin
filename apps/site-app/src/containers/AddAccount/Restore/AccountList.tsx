@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
-import { GoogleWalletItem } from "@the-coin/types";
-import { useAccountMap, useAccountMapApi } from "@the-coin/shared/containers/AccountMap";
+import React from "react";
+import { GoogleWalletItem } from "@thecointech/types";
+import { useAccountStore, useAccountStoreApi } from "@thecointech/shared/containers/AccountMap";
 import { List, Button, ButtonProps } from "semantic-ui-react";
 import { Wallet } from "ethers";
-import { NormalizeAddress } from "@the-coin/utilities";
+import { NormalizeAddress } from "@thecointech/utilities";
 import { Dictionary } from "lodash";
 import { useHistory } from "react-router";
 import styles from './styles.module.less';
@@ -16,10 +16,12 @@ type LoadingWallet = {
   wallet: Wallet;
   name: string;
   id: string;
-  exists: true;
+  exists: boolean;
 }
 export const AccountList = ({ wallets }: Props) => {
-  const existing = useAccountMap();
+  const {accounts} = useAccountStore();
+  const accountsApi = useAccountStoreApi();
+  const history = useHistory();
 
   const loadableWallets: Dictionary<LoadingWallet> = {};
   wallets.forEach(w => {
@@ -31,27 +33,25 @@ export const AccountList = ({ wallets }: Props) => {
     if (!loadableWallets[address]) {
       loadableWallets[address] = {
         wallet,
-        exists: !!existing[address],
+        exists: !!accounts.find(account => account.address === address),
         id: w.id.id,
         name: w.id.name.split('.wallet')[0]
       }
     }
   });
 
-  const accountMapApi = useAccountMapApi();
-  const history = useHistory();
-  const onRestore = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
+  const onRestore = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
     event?.preventDefault();
     const loadable: LoadingWallet = data.loadable;
     var {name, wallet, exists} = loadable;
     if (exists) {
-      accountMapApi.setActiveAccount(wallet.address);
+      accountsApi.setActiveAccount(wallet.address);
       history.push("/accounts")
     }
     else {
-      accountMapApi.addAccount(name, wallet, true);
+      accountsApi.addAccount(name, wallet);
     }
-  }, [accountMapApi, history])
+  }
 
 
   return wallets

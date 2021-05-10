@@ -1,27 +1,16 @@
-import { Contract, Wallet } from "ethers";
-import { ConnectContract } from "@the-coin/contract";
+
 import { Deposit } from "./types";
-import { log } from "@the-coin/logging";
-import { Transaction } from "@the-coin/tx-blockchain";
+import { log } from "@thecointech/logging";
+import { Transaction } from "@thecointech/tx-blockchain";
+import { TheCoin } from '@thecointech/contract';
 import { DateTime } from "luxon";
-
-let _contract: Contract;
-
-
-export async function InitContract(wallet: Wallet) : Promise<Contract> {
-  if (_contract == null)
-  {
-    _contract = await ConnectContract(wallet);
-  }
-  return _contract;
-}
 
 type EthersTx = {
   hash: string;
   wait: () => Promise<void>;
 }
 
-export async function startTheTransfer(deposit: Deposit)
+export async function startTheTransfer(deposit: Deposit, contract: TheCoin)
 {
   const {record, etransfer } = deposit;
   const {address} = etransfer;
@@ -29,7 +18,7 @@ export async function startTheTransfer(deposit: Deposit)
     throw new Error("Cannot complete transfer without speficying Processed Timestamp")
   log.debug({address}, `Transfering ${record.transfer.value} to {address}`);
 
-  const tx: EthersTx = await _contract.coinPurchase(
+  const tx: EthersTx = await contract.coinPurchase(
     address,
     record.transfer.value,
     0,
@@ -46,9 +35,9 @@ export async function waitTheTransfer(tx: EthersTx)
   return tx.hash;
 }
 
-export async function completeTheTransfer(deposit: Deposit) : Promise<Transaction>
+export async function completeTheTransfer(deposit: Deposit, contract: TheCoin) : Promise<Transaction>
 {
-  const tx = await startTheTransfer(deposit);
+  const tx = await startTheTransfer(deposit, contract);
   const hash = await waitTheTransfer(tx);
   return {
     txHash: hash,

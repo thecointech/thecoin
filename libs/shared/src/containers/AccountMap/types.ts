@@ -1,30 +1,32 @@
-import { AccountState } from '../Account/types'
-import { Dictionary } from 'lodash';
+import { AnySigner } from "../../SignerIdent";
+import { AccountState } from "../Account";
 import { Wallet } from 'ethers';
-import { ApplicationBaseState } from '../../types';
-import { readAllAccounts } from '../../utils/storageSync';
-import { AnySigner } from '../../SignerIdent';
+import { Dictionary } from "lodash";
 
 
-export const ACCOUNTMAP_KEY: keyof ApplicationBaseState = "accounts";
+export type AccountMap = Dictionary<AccountState>;
+export type AccountMapState =  {
+  active: string|null;
+  map: AccountMap;
+}
 
-export type AccountDict = Dictionary<AccountState>;
-
-export const initialState = {
-  map: readAllAccounts(),
-  active: null as string | null,
+export const initialState: AccountMapState = {
+  active: null,
+  map: {}
 };
 
-export type AccountMapState = Readonly<typeof initialState>;
+export type AccountMapStore = {
+  accounts: AccountMapState
+}
 
 ////////////////////////////////////////////
 
-export interface IAccountMapActions {
+export interface IAccountStoreAPI {
   // Set the account we are currently interacting with
   setActiveAccount(account: string|null): void;
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
-  addAccount(name: string, signer: AnySigner, store: boolean, unlocked?: Wallet): void;
+  addAccount(name: string, signer: AnySigner, store?: boolean, setActive?: boolean, unlocked?: Wallet): void;
 
   // Remove the given account from list & storage
   deleteAccount(account: AccountState): void;

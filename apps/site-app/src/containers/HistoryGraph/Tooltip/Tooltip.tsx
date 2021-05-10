@@ -1,8 +1,8 @@
 import React from "react";
-import { TxDatum } from "@the-coin/shared/components/GraphTxHistory/types";
+import { TxDatum } from "@thecointech/shared/components/GraphTxHistory/types";
 import styles from './styles.module.less';
 import { Table } from "semantic-ui-react";
-import { Currency } from "@the-coin/site-base/components/Currency";
+import { Currency } from "@thecointech/site-base/components/Currency";
 import { FormattedMessage } from "react-intl";
 import { TooltipTxRows } from "./TooltipTxs";
 

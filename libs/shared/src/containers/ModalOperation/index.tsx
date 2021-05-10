@@ -2,40 +2,35 @@ import { Modal, Loader, Button, Icon } from 'semantic-ui-react';
 import * as React from 'react';
 import { MessageDescriptor, FormattedMessage } from 'react-intl';
 
-interface OwnProps {
+interface ModalProps {
   isOpen: boolean;
-  header: MessageDescriptor;
+  header?: MessageDescriptor;
   progressPercent?: number;
   progressMessage?: MessageDescriptor;
   messageValues?: any;
+  closeIcon?: boolean;
   cancelCallback?: () => void;
   okCallback?: () => void;
 }
 
-type Props = OwnProps;
+export const ModalOperation : React.FC<ModalProps> = (props) => {
 
-export class ModalOperation extends React.PureComponent<Props, {}, null> {
-  constructor(props: Props) {
-    super(props);
-
-    this.cancelOperation = this.cancelOperation.bind(this);
-  }
-
-  cancelOperation(e: React.MouseEvent<HTMLElement>) {
+  function cancelOperation(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    if (this.props.cancelCallback) this.props.cancelCallback();
+    if (props.cancelCallback) props.cancelCallback();
   }
 
-  renderCancelButton = (cancelCallback?: () => void) =>
-    cancelCallback ? (
-      <Button color="red" onClick={this.cancelOperation} inverted>
-        <Icon name="cancel" /> Cancel
-      </Button>
-    ) : (
-      undefined
+  function renderCancelButton(cancelCallback?: () => void){
+    return (
+      cancelCallback ? (
+        <Button color="red" onClick={cancelOperation} inverted>
+          <Icon name="cancel" /> Cancel
+        </Button>
+      ) : (undefined)
     );
+  }
 
-  renderOkButton = (okCallback?: () => void, progressPercent?: number) =>
+  function renderOkButton(okCallback?: () => void, progressPercent?: number) {
     okCallback && progressPercent && progressPercent >= 1 ? (
       <Button onClick={okCallback} inverted primary>
         <Icon />OK
@@ -43,47 +38,49 @@ export class ModalOperation extends React.PureComponent<Props, {}, null> {
     ) : (
       undefined
     );
+  }
 
-  renderButtons() {
-    const { cancelCallback, okCallback, progressPercent } = this.props;
+  function renderButtons() {
+    const { cancelCallback, okCallback, progressPercent } = props;
     return (
       <Modal.Actions>
-        {this.renderCancelButton(cancelCallback)}
-        {this.renderOkButton(okCallback, progressPercent)}
+        {renderCancelButton(cancelCallback)}
+        {renderOkButton(okCallback, progressPercent)}
       </Modal.Actions>
     );
   }
 
-  renderContent = (progressPercent?: number) => (!progressPercent || progressPercent < 1 ? <Loader>{this.renderMessage()}</Loader> : this.renderMessage());
+  function renderContent(progressPercent?: number) {
+    return (progressPercent || (progressPercent! < 1) ? <Loader>{renderMessage()}</Loader> : renderMessage());
+  } 
 
-  renderProgress = () => (
-    <h3>
-      <FormattedMessage
-        {...this.props.progressMessage!}
-        values={{
-          percentComplete: this.props.progressPercent,
-          ...(this.props.messageValues || {})
-        }}
-      />
-    </h3>
-  );
-
-  renderMessage = () => (
-    this.props.progressMessage ? 
-      this.renderProgress() :
-      this.props.children
-  );
-
-  render() {
-    const { isOpen, header, progressPercent } = this.props;
-    return (
-      <Modal open={isOpen} basic size="small">
-        <Modal.Header>
-          <FormattedMessage {...header} />
-        </Modal.Header>
-        <Modal.Content>{this.renderContent(progressPercent)}</Modal.Content>
-        {this.renderButtons()}
-      </Modal>
-    );
+  function renderProgress() {
+   return ( 
+      <h3>
+        <FormattedMessage
+          {...props.progressMessage!}
+          values={{
+            percentComplete: props.progressPercent,
+            ...(props.messageValues || {})
+          }}
+        />
+      </h3>);
   }
+
+  function renderMessage(){
+    return props.progressMessage ? renderProgress() : props.children
+  }
+
+  const { isOpen, header, closeIcon, progressPercent } = props;
+  const headerContent = header ? <Modal.Header><FormattedMessage {...header} /></Modal.Header> : "";
+  const closeContent = closeIcon ? <Icon name="close" size="large" /> : "";
+  return (
+    <Modal open={isOpen} basic size="small">
+      {closeContent}
+      {headerContent}
+      <Modal.Content>{renderContent(progressPercent)}</Modal.Content>
+      {renderButtons()}
+    </Modal>
+  );
+  
 }

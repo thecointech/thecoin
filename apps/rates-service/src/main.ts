@@ -1,21 +1,21 @@
 import express from 'express';
 import { RegisterRoutes } from './routes/routes';
-//import createMiddleware from 'swagger-express-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
-import './setupLuxon';
-import { ServicePorts } from '@the-coin/utilities/ServiceAddresses';
-import { init } from '@the-coin/utilities/firestore';
-import { initLatest } from './internals/rates/latest';
+import { DevLivePort, Service } from '@thecointech/utilities/ServiceAddresses';
+import { init } from './init';
+import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT ?? ServicePorts.THE_CORE;
+// enable cors
+app.use(cors());
+
+const port = process.env.PORT ?? DevLivePort(Service.RATES);
 
 RegisterRoutes(app);
 
 (async () => {
-  await init({project: "broker-cad"});
-  await initLatest();
+  await init();
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

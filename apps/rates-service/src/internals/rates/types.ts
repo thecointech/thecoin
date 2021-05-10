@@ -1,4 +1,5 @@
-import {CurrencyCode} from '@the-coin/utilities/CurrencyCodes'
+// NOTE!  tsoa requires the original (source) enum here, not the compiled version
+import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
 
 // Rates come into effect 30 seconds afeter the market rate.
 // This to allow us time to update, and give brokers plenty of time
@@ -24,13 +25,12 @@ export type CoinRate = {
     validTill: number;
 }
 
-//
-// The exchange rate from USD to other supported
-// currencies.  We use the published rate, with no markup
-//
+// Note; this includes '0' as code for THE,
+// but it shouldn't, as that's covered by CoinRate
 export type RatesMapping = {
   [code in CurrencyCode]: number;
 }
+
 export type FxRates = {
     validFrom: number;
     validTill: number;
@@ -38,7 +38,13 @@ export type FxRates = {
 
 export type RateType = CoinRate|FxRates;
 export type RateKey = "Coin"|"FxRates";
-export type CombinedRates = {
+
+// Required to be interface for correct parsing by tsoa in swagger2.  Could be converted back to type once we jump to 3.
+export interface CombinedRates extends RatesMapping, CoinRate {
   fxRate: number,  // To remove: supports old method where we only had 1 currency per query
   target: CurrencyCode, // To remove: supports old method where we only had 1 currency per query
-} & CoinRate & RatesMapping;
+};
+
+// Rename to FXRate to ease code churn in the rest of the project.
+// TODO: Sync naming across the project, this should be consistent everywhere
+export interface FXRate extends CombinedRates {};

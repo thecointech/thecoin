@@ -1,5 +1,6 @@
-import { SiteBaseStore } from '@the-coin/site-base/SiteBaseStore';
-import { ApplicationBaseState } from '@the-coin/shared/types';
+import { SiteBaseStore } from '@thecointech/site-base/SiteBaseStore';
+import { ApplicationBaseState } from '@thecointech/shared/types';
+import { AccountMapStore } from '@thecointech/shared/containers/AccountMap';
 
 // The app reducer is simply the site with accounts
-export interface ApplicationRootState extends SiteBaseStore, ApplicationBaseState {}
+export type ApplicationState = SiteBaseStore & ApplicationBaseState & AccountMapStore;

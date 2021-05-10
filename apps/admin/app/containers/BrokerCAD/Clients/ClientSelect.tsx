@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { DropdownProps, Select } from "semantic-ui-react";
 import { Client } from "./Client";
-import { useFxRates } from "@the-coin/shared/containers/FxRate";
+import { useFxRates } from "@thecointech/shared/containers/FxRate";
 import { UserState } from "./types";
 import { getAllUserData } from "./data";
 

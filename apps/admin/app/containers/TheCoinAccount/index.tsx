@@ -1,27 +1,36 @@
 import React, { useEffect } from 'react';
-import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
+import { useAccountStore, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { Balance } from '@thecointech/shared/containers/Balance';
 import { Mint } from './Mint';
 import { RouteComponentProps } from 'react-router';
 import { Purchase } from 'containers/Purchase';
-import { ReadFileData, UploadWallet } from '@the-coin/shared/containers/UploadWallet';
+import { ReadFileData, UploadWallet } from '@thecointech/shared/containers/UploadWallet';
 
+const balance = { id:"admin.thecoinaccounts.sidebar.balance",
+                defaultMessage:"Balance",
+                description:"Title for the balance entry in the menu"};
+const minting = { id:"app.thecoinaccounts.sidebar.minting",
+                  defaultMessage:"Minting",
+                  description:"Title for the minting entry in the menu"};
+const purchase = {  id:"app.thecoinaccounts.sidebar.purchase",
+                    defaultMessage:"Complete Purchase",
+                    description:"Title for the purchase entry in the menu"};
 
 const AccountMap: RouterPath[] = [
   {
-    name: "Balance",
+    name: balance,
     urlFragment: "",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} />),
     exact: true
   },
   {
-    name: "Minting",
+    name: minting,
     urlFragment: "mint",
     creator: () => (() => <Mint />),
   },
   {
-    name: "Complete Purchase",
+    name: purchase,
     urlFragment: "purchase",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />),
   }
@@ -32,10 +41,9 @@ export const AccountName = "TheCoin";
 export const TheCoin = (props: RouteComponentProps) => {
   const { url } = props.match;
 
-  const accounts = useAccountMap();
-  const accountsApi = useAccountMapApi();
-  const theCoin = Object.values(accounts)
-    .find(account => account.name === AccountName);
+  const store = useAccountStore();
+  const accountsApi = useAccountStoreApi();
+  const theCoin = store.accounts.find(account => account.name === AccountName);
 
   useEffect(() => {
     accountsApi.setActiveAccount(theCoin?.address ?? null);

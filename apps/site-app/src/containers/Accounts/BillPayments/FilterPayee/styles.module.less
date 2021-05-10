@@ -1,13 +1,14 @@
-@import "~@the-coin/site-semantic-theme/variables.less";
+@import "~@thecointech/site-semantic-theme/variables.less";
 
 
 :root {
-  --gutter: 5px;
+  --gutter: 0;
 }
 
 .swipeZone {
   text-align: center;
   padding: var(--gutter) 0;
+  padding-bottom: 20px;
   display: grid;
   grid-gap: var(--gutter) 0;
   grid-template-columns: var(--gutter) 1fr var(--gutter);
@@ -27,7 +28,7 @@
 
 .hs {
   display: grid;
-  grid-gap: 25px;
+  grid-gap: 5px;
   grid-template-columns: repeat(5, 140px);
   grid-template-rows: minmax(150px, 1fr);
 

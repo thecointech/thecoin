@@ -1,6 +1,6 @@
 {
-  "name": "@the-coin/email",
-  "version": "0.1.0",
+  "name": "@thecointech/email",
+  "version": "0.2.1",
   "description": "The Coin: auto-mailing library.  Not for external user really",
   "keywords": [
     "TheCoin",
@@ -13,6 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/email"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
     "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
@@ -33,6 +36,7 @@
     "./": "./build/"
   },
   "dependencies": {
+    "@thecointech/logging": "^0.2.1",
     "node-mailjet": "^3.3.1"
   },
   "devDependencies": {

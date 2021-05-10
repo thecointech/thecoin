@@ -6,7 +6,7 @@ import Confetti from 'react-confetti';
 import styles from './styles.module.less';
 import illustration from './images/illust_congrats.svg';
 import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@the-coin/site-base/components/Buttons";
+import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.create.congratulations.aboveTheTitle",
@@ -32,33 +32,33 @@ export const Congratulations = () => {
                 numberOfPieces={50}
                 tweenDuration={100}
             />
-            <Grid stackable centered textAlign='center' verticalAlign='middle' columns='equal'>
-                <Grid.Row centered>
-                    <Grid.Column centered textAlign='center' verticalAlign='middle' >
+            <Grid stackable textAlign='center' verticalAlign='middle' columns='equal'>
+                <Grid.Row>
+                    <Grid.Column textAlign='center' verticalAlign='middle' >
                         <Header as="h5">
                             <FormattedMessage {...aboveTheTitle} />
                         </Header>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row centered>
-                    <Grid.Column centered textAlign='center' verticalAlign='middle' >
+                <Grid.Row>
+                    <Grid.Column textAlign='center' verticalAlign='middle' >
                         <Header as="h1">
                             <FormattedMessage {...title} />
                         </Header>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row centered>
-                    <Grid.Column centered textAlign='center' verticalAlign='middle' >
+                <Grid.Row>
+                    <Grid.Column textAlign='center' verticalAlign='middle' >
                         <img src={illustration} />
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row centered>
-                    <Grid.Column centered textAlign='center' verticalAlign='middle' >
+                <Grid.Row>
+                    <Grid.Column textAlign='center' verticalAlign='middle' >
                         <FormattedMessage {...description} />
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row centered>
-                    <Grid.Column centered textAlign='center' verticalAlign='middle' >
+                <Grid.Row>
+                    <Grid.Column textAlign='center' verticalAlign='middle' >
                         <ButtonPrimary as={Link} to="/accounts" size="medium">
                             <FormattedMessage {...goToAccount} />
                         </ButtonPrimary>

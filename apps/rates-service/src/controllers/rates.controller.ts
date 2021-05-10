@@ -1,8 +1,9 @@
-import { Controller, Get, Route, Response, Path, Query } from 'tsoa';
+import { Controller, Get, Route, Response, Path, Query, Tags } from '@tsoa/runtime';
 import { getCombinedRates, getLatestCombinedRates, getManyRates } from '../internals/rates';
-import { CombinedRates } from '../internals/rates/types';
+import { FXRate } from '../internals/rates/types';
 
 @Route('')
+@Tags('Rates')
 export class RatesController extends Controller {
 
   /**
@@ -14,7 +15,7 @@ export class RatesController extends Controller {
   async getSingle(
     @Path() currencyCode: number,
     @Query() timestamp?: number)
-    : Promise<CombinedRates>
+    : Promise<FXRate>
   {
     try {
       // First try and return the correct rate
@@ -38,7 +39,7 @@ export class RatesController extends Controller {
   @Response('405', 'unknown exception')
   async getMany(
     @Query() timestamps: number[])
-    : Promise<CombinedRates[]>
+    : Promise<FXRate[]>
   {
     return await getManyRates(timestamps);
   }

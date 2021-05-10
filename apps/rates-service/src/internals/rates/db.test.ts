@@ -1,8 +1,8 @@
-import { init } from '@the-coin/utilities/firestore';
+import { init } from '@thecointech/utilities/firestore';
 import { setRate, getCoinRate, toDbType } from './db';
 import { CoinRate } from "./types";
-import { Timestamp } from '@the-coin/utilities/firestore';
-import { describe } from '@the-coin/utilities/firestore/jestutils';
+import { Timestamp } from '@thecointech/utilities/firestore';
+import { describe } from '@thecointech/utilities/firestore/jestutils';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
 // Insertion can be tested with mocks
@@ -26,7 +26,7 @@ it('can insert rates', async function () {
     )
 });
 
-describe("DB Tests to run on emulator", () => {
+describe("emulator-only tests", () => {
 
   beforeEach(async () => {
     jest.setTimeout(10000);
@@ -36,7 +36,7 @@ describe("DB Tests to run on emulator", () => {
 
     // Insert 5 rates, out of order
     var rates = [1000, 9000, 3000, 2000, 6000, 5000].map(buildRate)
-    await init({});
+    await init({ project: "rates-service-test" });
     await Promise.all(rates.map(r => setRate("Coin", r)));
 
     var latest = await getCoinRate(9999);

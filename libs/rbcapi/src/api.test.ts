@@ -2,9 +2,9 @@ import { RbcApi } from './index';
 import { RbcStore } from './store';
 import PouchDB from 'pouchdb';
 import { initBrowser } from './action';
-import { ConfigStore } from '@the-coin/store';
-import { init } from '@the-coin/logging'
-import { describe } from '@the-coin/jestutils';
+import { ConfigStore } from '@thecointech/store';
+import { init } from '@thecointech/logging'
+import { describe } from '@thecointech/jestutils';
 
 beforeAll(() => {
   PouchDB.plugin(require('pouchdb-adapter-memory'));

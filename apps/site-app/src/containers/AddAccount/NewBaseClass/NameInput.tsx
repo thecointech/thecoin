@@ -1,13 +1,17 @@
-import React, { useState, useCallback } from "react";
-import { UxInput } from "@the-coin/shared/components/UxInput";
-import { MessageDescriptor } from "react-intl";
+import React, { useState } from "react";
+import { UxInput } from "@thecointech/shared/components/UxInput";
+import { MessageDescriptor, useIntl } from "react-intl";
 import messages from '../messages';
-import { useAccountMap, AccountDict } from "@the-coin/shared/containers/AccountMap";
+import { useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
 
+const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
+                        defaultMessage:"Any name you like",
+                        description:"Tooltip for the account name input"};
 
 type Props = {
   disabled?: boolean;
   forceValidate?: boolean;
+  isRequired?: boolean;
   setName: (name: MaybeString) => void;
 }
 
@@ -20,19 +24,18 @@ type State = typeof initialState;
 
 export const NameInput = (props: Props) => {
 
+  const intl = useIntl();
   const [state, setState] = useState(initialState);
   const { setName, ...rest } = props;
+  const {accounts} = useAccountStore();
 
-  ////////////////////////////////
-  const accounts = useAccountMap();
-  const onChange = useCallback((value: string) => {
+  const onChange = (value: string) => {
     const newState = validateName(value, accounts);
     setState(newState);
     props.setName(newState.isValid
       ? newState.value
       : undefined)
-  }, [setState, accounts, setName])
-  ////////////////////////////////
+  }
 
 
   return (
@@ -40,8 +43,9 @@ export const NameInput = (props: Props) => {
       uxChange={onChange}
       intlLabel={messages.labelName}
       isValid={state.isValid}
+      isRequired={props.isRequired}
       message={state.message}
-      placeholder="Any name you like"
+      placeholder={intl.formatMessage(placeholder)}
       {...rest}
     />
   );
@@ -49,15 +53,14 @@ export const NameInput = (props: Props) => {
 
 
 // Validate our inputs
-const validateName = (value: string, accounts: AccountDict) : State =>  {
-  const allAccounts = Object.values(accounts);
+const validateName = (value: string, accounts: AccountState[]) : State =>  {
   const validation =
     value.length === 0
       ? {
         isValid: false,
         message: messages.errorNameTooShort,
       }
-      : allAccounts.find(account => account.name === value) 
+      : accounts.find(account => account.name === value)
         ? {
           isValid: false,
           message: messages.errorNameDuplicate,

@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { selectLocale } from './selector';
 import { Languages } from './types';
+import { useLanguageProvider } from './reducer';
 
 export * from './types';
 
@@ -20,8 +21,8 @@ export interface Props {
 }
 
 export function LanguageProvider(props : Props) {
+  useLanguageProvider();
   const { locale } = useSelector(selectLocale);
-
   return (
     <IntlProvider
       locale={locale}

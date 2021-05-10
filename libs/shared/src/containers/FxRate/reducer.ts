@@ -1,11 +1,12 @@
-import { FXRate, RatesApi } from '@the-coin/pricing';
-import { CurrencyCode } from '@the-coin/utilities/CurrencyCodes';
-import { call, fork, take, delay, takeEvery } from 'redux-saga/effects';
+import { FXRate, RatesApi } from '@thecointech/pricing';
+import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes';
+import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
-import { TheCoinReducer, GetNamedReducer } from '../../store/immerReducer';
+import { TheCoinReducer } from '../../store/immerReducer';
 import { FxRatesState, IFxRates } from './types';
 import { buildSaga, sendValues } from '../../store/sagas';
+import { log } from '@thecointech/logging';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
@@ -49,14 +50,25 @@ function weSellAt(rates: FXRate[], date?: Date) {
 
 export async function fetchRate(date?: Date): Promise<FXRate | null> {
   const cc = CurrencyCode.CAD;
-  console.log(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
-  const api = new RatesApi();
-  const r = await api.getConversion(cc, date?.getTime() ?? 0);
+  log.trace(`fetching fx rate: ${cc} for time ${date?.toLocaleTimeString() ?? "now"}`);
+
+  if (process.env.NODE_ENV === 'development' && process.env.SETTINGS !== 'live') {
+    return {
+      buy: 1,
+      sell: 1,
+      fxRate: 1,
+      target: 124,
+      validFrom: 0,
+      validTill: 0,
+    }
+  }
+  const api = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
+  const r = await api.getSingle(cc, date?.getTime() ?? 0);
   if (r.status != 200 || !r.data.validFrom) {
     if (date)
-      console.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText}`)
+      log.error(`Error fetching rate for: ${date.getTime()} (${date.toLocaleString()}): ${r.statusText} - ${r.data}`)
     else
-      console.error(`Error fetching latest rate: ${r.statusText}`);
+      log.error(`Error fetching latest rate: ${r.statusText}`);
     return null;
   }
   return r.data;
@@ -76,20 +88,19 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
 
     // We can modify the draft state up until the first yield
     yield this.storeValues({fetching: +1});
-    console.log(`We are now running ${this.state.fetching + 1} fetches`);
     const newState = {
       fetching: -1,
       rates: [] as FXRate[]
     }
     try {
-      const newFxRate: FXRate|null = (yield call<typeof fetchRate>(fetchRate, date)) as any;
+      const newFxRate: FXRate|null = (yield call(fetchRate, date)) as any;
       if (newFxRate)
         newState.rates = [newFxRate];
     }
     catch (err) {
       console.error(err);
     }
-    // Even in the case of the throw, try to decrement our counter
+    // Even in the case of the throw, we store values to decrement our counter
     yield this.storeValues(newState);
   }
 
@@ -107,7 +118,6 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
 
     // If we have completed a fetch, remove the counter
     this.draftState.fetching = this.state.fetching + (newState.fetching ?? 0);
-    console.log(`We are still running ${this.draftState.fetching} fetches`);
   }
 
   haveRateFor(ts: number): boolean {
@@ -115,26 +125,28 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
   }
 }
 
-const { actions, reducer, reducerClass } = GetNamedReducer(FxRateReducer, "fxRates", initialState)
+const { reducer, actions } = FxRateReducer.buildReducers(FxRateReducer, initialState);
 
 //////////////////////////////////////////////////////////////////////////
 
 //
 // The loop function waits for updtes
-function* loopFxUpdates() {
+function* loopFxUpdates() : Generator<Effect> {
 
   let latest = 0;
   let validFrom = 0;
   let endPolling = false;
   while (!endPolling) {
+    // Wait until sets new update and stores values
     const rateAction = yield take(actions.updateWithValues.type);
-    const {rates} = rateAction.payload as Partial<FxRatesState>;
+    const {rates} = (rateAction as ReturnType<typeof actions.updateWithValues>).payload;
     if (!rates)
       continue;
 
     latest = rates.reduce((p, r) => Math.max(p, r.validTill), latest)
     validFrom = rates.reduce((p, r) => Math.max(p, r.validFrom), validFrom)
     // If the clients clock is wrong, we don't wan't to sleep too long
+    // TODO: get time from the server
     const now = Math.max(Date.now(), validFrom);
 
     // wait at least 10 seconds till update, or 100ms past update time
@@ -156,7 +168,7 @@ function buildSagas(name: keyof ApplicationBaseState) {
 
   function* rootSaga() {
     yield fork(loopFxUpdates);
-    yield takeEvery(actions.fetchRateAtDate.type, buildSaga<FxRateReducer>(reducerClass, selectAccount, "fetchRateAtDate"))
+    yield takeEvery(actions.fetchRateAtDate.type, buildSaga<FxRateReducer>(FxRateReducer, selectAccount, "fetchRateAtDate"))
     yield sendValues(actions.fetchRateAtDate);
   }
 

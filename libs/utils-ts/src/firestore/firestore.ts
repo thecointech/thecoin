@@ -1,4 +1,4 @@
-import { Firestore } from "@the-coin/types";
+import { Firestore } from "@thecointech/types";
 
 // Store on global to avoid any weirdities
 export function SetFirestore(db: Firestore)

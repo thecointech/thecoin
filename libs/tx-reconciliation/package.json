@@ -1,6 +1,6 @@
 {
-  "name": "@the-coin/tx-reconciliation",
-  "version": "0.1.0",
+  "name": "@thecointech/tx-reconciliation",
+  "version": "0.2.1",
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
   "keywords": [
     "THECoin"
@@ -23,12 +23,12 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@the-coin/utilities": "*",
-    "@the-coin/rbcapi": "*",
-    "@the-coin/shared": "*",
-    "@the-coin/tx-firestore": "*",
-    "@the-coin/tx-gmail": "*",
-    "@the-coin/tx-blockchain": "*"
+    "@thecointech/rbcapi": "^0.2.1",
+    "@thecointech/shared": "^0.2.1",
+    "@thecointech/tx-blockchain": "^0.2.1",
+    "@thecointech/tx-firestore": "^0.2.1",
+    "@thecointech/tx-gmail": "^0.2.1",
+    "@thecointech/utilities": "^0.2.1"
   },
   "devDependencies": {
     "jest": "*"

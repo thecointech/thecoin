@@ -1,4 +1,4 @@
-import { RecentTransactions } from '@the-coin/shared/containers/RecentTransactions';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
@@ -6,10 +6,10 @@ import * as React from 'react';
 import illustration from './images/icon_payment_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
 
-import { Grid, Header, Tab } from 'semantic-ui-react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useActiveAccount } from '@the-coin/shared/containers/AccountMap';
-import { AccountPageProps } from '@the-coin/shared/containers/Account/types';
+import { Tab } from 'semantic-ui-react';
+import { useIntl } from 'react-intl';
+import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
+import { PageHeader } from 'components/PageHeader';
 
 
 const title = { id:"app.makepayments.title",
@@ -18,45 +18,34 @@ const title = { id:"app.makepayments.title",
 const description = { id:"app.makepayments.description",
                       defaultMessage:"You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
                       description:"Description for the Make a payment page in the app" };
-const etransfert = { id:"app.makepayments.tabs.etransfert",
-                defaultMessage:"e-Transfert",
-                description:"Title for the tabs the Make a payment page in the app" };
+const etransfer = { id:"app.makepayments.tabs.etransfer",
+                    defaultMessage:"e-Transfer",
+                    description:"Title for the tabs the Make a payment page in the app" };
 const bills = { id:"app.makepayments.tabs.bills",
                 defaultMessage:"Bills",
                 description:"Title for the tabs the Make a payment page in the app" };
 const anotherCoin = { id:"app.makepayments.tabs.anotherCoin",
-                defaultMessage:"Another Coin Account",
-                description:"Title for the tabs the Make a payment page in the app" };
+                      defaultMessage:"Coin Transfer",
+                      description:"Title for the tabs the Make a payment page in the app" };
 const templates = { id:"app.makepayments.tabs.templates",
-                defaultMessage:"Templates",
-                description:"Title for the tabs the Make a payment page in the app" };
+                    defaultMessage:"Templates",
+                    description:"Title for the tabs the Make a payment page in the app" };
 
 export const MakePayments = (routerProps:AccountPageProps) => {
   const intl = useIntl();
-  const account = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfert}), render: () => <AppContainerForTabs><Redeem account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...etransfer}), render: () => <AppContainerForTabs><Redeem /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...bills}), render: () => <AppContainerForTabs><BillPayments /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer account={account!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...anotherCoin}), render: () => <AppContainerForTabs><Transfer /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...templates}), render: () => <AppContainerForTabs>Templates</AppContainerForTabs> },
   ]
   return (
     <React.Fragment>
-      <Grid className={ `x2spaceBefore x4spaceAfter` } >
-        <Grid.Row>
-          <Grid.Column width={2}>
-            <img src={illustration} />
-          </Grid.Column>
-          <Grid.Column width={13}>
-            <Header as="h5" className={ `appTitles` }>
-                <FormattedMessage {...title} />
-                <Header.Subheader>
-                  <FormattedMessage  {...description} />
-                </Header.Subheader>
-            </Header>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <PageHeader 
+          illustration={illustration}
+          title={title}
+          description= {description}
+      />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
         <RecentTransactions {...routerProps} />

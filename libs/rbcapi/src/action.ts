@@ -1,6 +1,6 @@
 import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
 import fs from 'fs';
-import { log } from '@the-coin/logging';
+import { log } from '@thecointech/logging';
 import { Credentials } from './types';
 
 ////////////////////////////////////////////////////////////////

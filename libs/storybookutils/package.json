@@ -1,0 +1,29 @@
+{
+  "name": "@thecointech/storybookutils",
+  "version": "0.2.0",
+  "description": "The Coin: common storybook decorators",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/storybookutils"
+  },
+  "scripts": {
+    "build": "yarn tsc -b tsconfig.build.json",
+    "clean": "rimraf ./build"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./": "./build/"
+  },
+
+  "dependencies": {
+    "@thecointech/shared": "*"
+  }
+}

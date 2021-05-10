@@ -1,3 +1,5 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
 .currencyChoices{
     display: inline-block;
     [type=radio]{
@@ -6,4 +8,19 @@
     label{
         margin-right: 20px;
     }
+}
+
+#personalInfo{
+    input:read-only {
+        border: 1px solid transparent !important;
+        &:hover{
+            box-shadow: 0 0 0 0 transparent !important;
+        }
+      }
+
+      .edit{
+          margin-left: 10px;
+          position: relative;
+          color: @theCoinPalettePaleGreen2;
+      }
 }

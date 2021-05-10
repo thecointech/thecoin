@@ -1,18 +1,17 @@
 import { GetDepositsToProcess, ProcessUnsettledDeposits } from './service'
-import { init } from '@the-coin/utilities/firestore/mock';
-import { InitContract } from './contract';
-import { GetUserDoc } from "@the-coin/utilities/User";
-import { ConfigStore } from '@the-coin/store';
-import { PurchaseType } from '@the-coin/tx-firestore';
+import { init } from '@thecointech/utilities/firestore/mock';
+import { GetUserDoc } from "@thecointech/utilities/User";
+import { getContract } from "@thecointech/utilities/Wallets";
+import { ConfigStore } from '@thecointech/store';
+import { PurchaseType } from '@thecointech/tx-firestore';
 
 // Don't go to the server for this
-jest.mock('@the-coin/email');
+jest.mock('@thecointech/email');
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
   ConfigStore.initialize();
-  InitContract({} as any);
   await init({});
 });
 
@@ -41,7 +40,8 @@ it("Can complete deposits", async () => {
 
   jest.setTimeout(900000);
 
-  const deposits = await ProcessUnsettledDeposits();
+  const theContract = await getContract('BrokerCAD');
+  const deposits = await ProcessUnsettledDeposits(theContract);
   // First, ensure that we have added our users to the DB
   for (const deposit of deposits) {
     // seed the deposit so it's visible in our emulator

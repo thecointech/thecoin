@@ -1,10 +1,16 @@
 import React, { useState, useCallback } from "react";
-import { UxInput } from "@the-coin/shared/components/UxInput";
+import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@the-coin/utilities";
-import { MessageDescriptor } from "react-intl";
+import { IsValidReferrerId } from "@thecointech/utilities";
+import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
+const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
+                        defaultMessage:"6 letters or numbers",
+                        description:"Tooltip for the referral input"};
+const error = { id:"app.addaccount.newbaseclass.referralinput.error",
+                        defaultMessage:"Registering this account failed. Please contact support@thecoin.io6 letters or numbers",
+                        description:"Error for the referral input"};
 
 type Props = {
   disabled?: boolean,
@@ -22,6 +28,7 @@ type State = typeof initialState;
 
 export const ReferralInput = (props: Props) => {
 
+  const intl = useIntl();
   const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
 
@@ -31,16 +38,16 @@ export const ReferralInput = (props: Props) => {
     setReferral(newState.isValid
       ? newState.value
       : undefined);
-      
+
   }, [setState, setReferral]);
-  
+
   return (
     <UxInput
       uxChange={onChange}
       intlLabel={messages.labelReferrer}
       isValid={state.isValid}
       message={state.message}
-      placeholder="6 letters or numbers"
+      placeholder={intl.formatMessage(placeholder)}
       {...rest}
     />
   );
@@ -55,16 +62,14 @@ export const registerReferral = async (address: string, code: string) => {
   });
 
   if (!isRegistered.data?.success) {
-    alert(
-      'Registering this account failed. Please contact support@thecoin.io',
-    );
+    alert(<FormattedMessage {...error} />);
     return false;
-  }  
+  }
   return true;
 }
 
 const isLegalReferral = async (code: string) => {
-  
+
   const api = GetReferrersApi()
   // Weird issue: typescript not recognizing the return type
   const isValid = await api.referrerValid(code);

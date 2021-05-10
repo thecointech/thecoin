@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, ButtonProps } from 'semantic-ui-react';
 
-//import styles from './styles.module.less';
 
 export const ButtonPrimary : React.FC<ButtonProps> = (args) =>{
   return (

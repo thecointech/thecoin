@@ -1,4 +1,4 @@
-var shared_loaders = require('@the-coin/site-semantic-theme/webpack.less');
+var shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 
 module.exports = {
   stories: [
@@ -29,10 +29,11 @@ module.exports = {
       {
         resolve: {
           alias: {
-            "@the-coin/utilities": "@the-coin/utilities/build",
-            "@the-coin/contract": "@the-coin/contract/build",
-            "@the-coin/shared": "@the-coin/shared/build",
-            "@the-coin/site-base": "@the-coin/site-base/build",
+            "@thecointech/utilities": "@thecointech/utilities/build",
+            "@thecointech/contract": "@thecointech/contract/build",
+            "@thecointech/shared": "@thecointech/shared/build",
+            "@thecointech/site-base": "@thecointech/site-base/build",
+            "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
           }
         }
       }

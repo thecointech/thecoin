@@ -1,5 +1,22 @@
 {
   "projects": {
-    "default": "the-broker-cad"
+    "prodtest": "tccc-testing",
+    "prod": "tccc-release"
+  },
+  "targets": {
+    "tccc-testing": {
+      "hosting": {
+        "app": [
+          "tccc-testing"
+        ]
+      }
+    },
+    "tccc-release": {
+      "hosting": {
+        "app": [
+          "thecoin-app"
+        ]
+      }
+    }
   }
 }

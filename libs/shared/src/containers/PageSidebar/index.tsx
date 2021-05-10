@@ -1,12 +1,11 @@
-import React, { useMemo } from "react";
-import { Sidebar, Menu, MenuItem, Divider, Icon, SemanticICONS, Header } from "semantic-ui-react";
+import React from "react";
+import { Sidebar, Menu, MenuItem, Divider, Icon, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { SidebarMenuItem } from "./types";
 import styles from "./styles.module.less";
 import { ApplicationBaseState } from "../../types";
 import { selectSidebar } from "./selector";
-import { useSidebar } from "./reducer";
 import { useWindowDimensions } from '../../components/WindowDimensions';
 import { breakpointsValues } from '../../components/ResponsiveTool';
 
@@ -18,20 +17,9 @@ type Props = {
 
 export const PageSidebar: React.FC<Props> = (props) => {
   const { visible, inverted } = props;
-  useSidebar();
-  const appState = useSelector(s => s as ApplicationBaseState);
-  const generators = selectSidebar(appState);
-  const menuItems = useMemo(() => {
-    let items: SidebarMenuItem[] = [];
-
-    Object.entries(generators.generators).forEach(([_, generator]) => {
-      items = generator(items, appState);
-    });
-
-    return buildMenuArray(items);
-  }, [appState, generators])
-
+  const menuItems = useMenuItems();
   const { width } = useWindowDimensions();
+
   return (
       <Sidebar
         as={Menu}
@@ -48,6 +36,18 @@ export const PageSidebar: React.FC<Props> = (props) => {
   );
 }
 
+const useMenuItems = () => {
+  let items: SidebarMenuItem[] = [];
+  const appState = useSelector(s => s as ApplicationBaseState);
+  const generators = selectSidebar(appState);
+
+  Object.entries(generators.generators).forEach(([_, generator]) => {
+    items = generator(items, appState);
+  });
+
+  return buildMenuArray(items);
+}
+
 const getAsItem = (item: SidebarMenuItem) => {
   let url = item.link.to.toString();
   if (!url.startsWith('/'))
@@ -61,7 +61,7 @@ const getAsItem = (item: SidebarMenuItem) => {
         key={url}
         to={url}
       >
-        <Icon name={item.link.icon as SemanticICONS} />
+        <Icon name={item.link.icon} />
         {item.link.name}
       </MenuItem>
       {buildSubMenuArray(item)}
@@ -84,7 +84,7 @@ const getAsHeader = (item: SidebarMenuItem) =>
     <div className={`${styles.containerAvatar}` }>
       <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
     </div>
-    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar} font-big` }>
+    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar}` }>
       <span>{item.link.header?.primaryDescription}</span>
     </div>
     <Icon name="caret right" disabled size='tiny' id={ `${styles.moreToSee}` } />

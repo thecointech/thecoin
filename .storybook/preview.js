@@ -1,20 +1,11 @@
-import React from 'react';
-import { MemoryRouter } from 'react-router';
-import { Provider } from 'react-redux';
-import {configureAppStore} from '@the-coin/shared/build/configureStore';
-
-const store = configureAppStore(undefined);
+import { withIntl } from './withIntl';
+import { withRouter } from './withRouter';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
 }
 
 export const decorators = [
-  (Story) => (
-    <Provider store={store}>
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    </Provider>
-  ),
+  withRouter,
+  withIntl,
 ];

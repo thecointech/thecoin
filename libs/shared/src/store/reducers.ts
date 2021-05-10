@@ -10,7 +10,7 @@ import { history } from './history';
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
-export function createReducer(injectedReducers: ReducersMapObject = {}) : Reducer {
+export function createReducer(injectedReducers?: ReducersMapObject) : Reducer {
   const rootReducer = combineReducers({
     router: connectRouter(history) as Reducer,
     ...injectedReducers,

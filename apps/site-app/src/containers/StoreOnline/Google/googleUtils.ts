@@ -1,3 +1,4 @@
+import { log } from "@thecointech/logging";
 import { GetSecureApi } from "api";
 
 export enum UploadState {
@@ -26,15 +27,29 @@ export async function fetchGAuthUrl() {
   return false;
 }
 
-export async function doSetup(setAuthUrl: (url: string) => void, setState: (state: UploadState) => void) {
-  const url = await fetchGAuthUrl();
-  if (url) {
-    setAuthUrl(url);
-    setState(UploadState.Ready);
-  }
-  else { 
-    setState(UploadState.Invalid);
-  }
+export function doSetup(setAuthUrl: (url: string) => void, setState: (state: UploadState) => void) {
+
+  let isCancelled = false;
+  const cancel = () => { isCancelled = true; }
+
+  fetchGAuthUrl()
+    .then(url => {
+      // Allow cancelling (eg - navigating away from page)
+      if (isCancelled)
+        return;
+      if (url) {
+        setAuthUrl(url);
+        setState(UploadState.Ready);
+      }
+      else {
+        setState(UploadState.Invalid);
+      }
+    })
+    .catch(err => {
+      log.error(err);
+      setState(UploadState.Invalid);
+    })
+  return cancel;
 }
 
 
@@ -45,7 +60,7 @@ export function onInitiateLogin(gauthUrl: string) {
   //setupCallback(callback);
 
   // Next trigger opening
-  const gauthWindow = window.open(gauthUrl, name);
+  const gauthWindow = window.open(gauthUrl);
   if (gauthWindow) {
     //setWindow(gauthWindow);
     //this.waitGauthLogin(gauthWindow);

@@ -1,18 +1,23 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-
+require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const less_loaders = require('@the-coin/site-semantic-theme/webpack.less')
+const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 
 const projectRoot = process.cwd();
+const configFile = path.join(projectRoot, 'tsconfig.build.json');
 
 module.exports = options => ({
   mode: options.mode,
   entry: options.entry,
+
+  // see https://github.com/trentm/node-bunyan#webpack
+  externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
+
   output: Object.assign(
     {
       // Compile into js/build.js
@@ -21,6 +26,7 @@ module.exports = options => ({
     },
     options.output,
   ), // Merge with env dependent settings
+
   optimization: options.optimization,
   module: {
     rules: [
@@ -31,7 +37,7 @@ module.exports = options => ({
         use: {
           loader: 'ts-loader',
           options: {
-            configFile: path.join(projectRoot, 'tsconfig.build.json'),
+            configFile,
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
@@ -126,21 +132,37 @@ module.exports = options => ({
     // inside your code for any environment checks; Terser will automatically
     // drop any unreachable code.
     new webpack.EnvironmentPlugin({
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      NODE_ENV: process.env.NODE_ENV,
+      SETTINGS: process.env.SETTINGS,
+      CONFIG_NAME: process.env.CONFIG_NAME,
+
+      INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
+
+      URL_SITE_APP: process.env.URL_SITE_APP,
+      URL_SITE_LANDING: process.env.URL_SITE_LANDING,
+      URL_SERVICE_BROKER: process.env.URL_SERVICE_BROKER,
+      URL_SERVICE_RATES: process.env.URL_SERVICE_RATES,
+
+      // convenience defines
+      DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
+      DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
     }),
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: configFile,
+      checkSyntacticErrors: true
+    }),
   ]),
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
-    plugins: [new TsconfigPathsPlugin({ configFile: "../../tsconfig.base.json"  })],
+    plugins: [new TsconfigPathsPlugin({ configFile })],
     alias: {
-      "@the-coin/utilities": "@the-coin/utilities/build",
-      "@the-coin/contract": "@the-coin/contract/build",
-      "@the-coin/shared": "@the-coin/shared/build",
-      "@the-coin/site-semantic-theme": "@the-coin/site-semantic-theme/build",
-      "@the-coin/site-base": "@the-coin/site-base/build",
+      "@thecointech/utilities": "@thecointech/utilities/build",
+      "@thecointech/contract": "@thecointech/contract/build",
+      "@thecointech/shared": "@thecointech/shared/build",
+      "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
+      "@thecointech/site-base": "@thecointech/site-base/build",
     },
   },
   devtool: options.devtool,

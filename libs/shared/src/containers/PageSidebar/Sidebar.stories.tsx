@@ -1,9 +1,12 @@
-import {MainRouterStorybook} from './Sidebar.defaultroutes.stories';
-import "@the-coin/site-base/build/styles/semantic.less";
+import "@thecointech/site-semantic-theme/semantic.less"
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { PageSidebar } from '.';
 import { Route } from 'react-router';
+import { withStore } from '@thecointech/storybookutils';
+import { ApplicationBaseState } from 'types';
+import ConstantSidebarItems from './Sidebar.stories.data.json';
+import { MapMenuItems } from './types';
 
 export type SidebardProps = {
     text: string
@@ -15,24 +18,26 @@ export type SidebardProps = {
   }
 
 export default {
-  title: 'App/Sidebar',
+  title: 'Shared/Sidebar',
   component: PageSidebar,
   args: {
-    text: "This is the content",
     visible: true,
     minimize: false,
     inverted: false
   }
 } as Meta;
 
-const Template: Story<SidebardProps> = (args) =>
-<div>
-  <PageSidebar visible={args.visible} inverted={args.inverted} />
-    <MainRouterStorybook /> {args.text}
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br />;
-</div>
+const Template: Story<SidebardProps> = (args) => <PageSidebar {...args} />
 
 export const Basic = Template.bind({});
 Basic.args = {}
+Basic.decorators = [
+  withStore<ApplicationBaseState>({
+    sidebar: {
+      generators: {
+        SampleGenerator: () => MapMenuItems(ConstantSidebarItems as any, "/")
+      },
+    }
+  })
+]
+

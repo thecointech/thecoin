@@ -1,5 +1,5 @@
 import Crypto from "crypto";
-import { EncryptedPacket, CertifiedTransferRequest } from "@the-coin/types";
+import { EncryptedPacket, CertifiedTransferRequest } from "@thecointech/types";
 import { ethers } from "ethers";
 
 //import ecKeyUtils from 'eckey-utils';
@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 //   const curveName = 'secp256k1';
 //   const ecdh = Crypto.createECDH(curveName);
 //   ecdh.setPrivateKey(wallet.privateKey.substr(2), "hex");
-  
+
 //   return ecKeyUtils.generatePem({
 //     curveName,
 //     privateKey: ecdh.getPrivateKey(),

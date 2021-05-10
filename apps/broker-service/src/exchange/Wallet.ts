@@ -1,7 +1,11 @@
 
-import { getContract, getWallet } from '@the-coin/utilities/Wallets';
+import { getSigner } from '@thecointech/accounts';
+import { ConnectContract } from '@thecointech/contract';
 
 const walletName = 'BrokerTransferAssistant';
-export const GetWallet = () => getWallet(walletName);
-export const GetContract = () => getContract(walletName);
+export const GetWallet = () => getSigner(walletName);
+export const GetContract = async () => {
+  const signer = await GetWallet();
+  return ConnectContract(signer);
+}
 

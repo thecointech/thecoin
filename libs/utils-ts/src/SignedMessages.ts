@@ -1,5 +1,5 @@
 import { utils, Signer } from "ethers";
-import { SignedMessage } from "@the-coin/types";
+import { SignedMessage } from "@thecointech/types";
 
 export function GetHash(
   value: string

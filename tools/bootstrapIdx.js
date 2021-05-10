@@ -1,20 +1,21 @@
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, 'debug.env')});
+require('./setenv');
 
+const path = require('path');
 const { writeFile, readFile } = require('fs').promises
 const Ceramic = require('@ceramicnetwork/http-client').default
 const { createDefinition, publishSchema } = require('@ceramicstudio/idx-tools')
 const { Ed25519Provider } = require('key-did-provider-ed25519')
 const fromString = require('uint8arrays/from-string');
 
-const IdxFolder = path.join(__dirname, '..', 'libs', 'shared', 'src', 'containers', 'IDX');
-const CERAMIC_URL = 'http://localhost:7007'
+const idxFolder = path.join(__dirname, '..', 'libs', 'shared', 'src', 'containers', 'IDX');
+const schemaPath = `${idxFolder}/config.${process.env.CONFIG_NAME}.json`;
+
 // Connect to the local Ceramic node
-const ceramic = new Ceramic(CERAMIC_URL)
+const ceramic = new Ceramic(process.env.CERAMIC_API)
 
 async function getJweSchema() {
   // Publish the two schemas
-  const SchemaJWE = JSON.parse(await readFile(`${IdxFolder}/schemaJWE.json`));
+  const SchemaJWE = JSON.parse(await readFile(`${idxFolder}/schemaJWE.json`));
   return publishSchema(ceramic, { content: SchemaJWE })
 }
 
@@ -43,9 +44,9 @@ async function run() {
       jwe: schemaJwe.commitId.toUrl(),
     },
   }
-  await writeFile(`${IdxFolder}/config.json`, JSON.stringify(config, null, 2))
+  await writeFile(schemaPath, JSON.stringify(config, null, 2));
 
-  console.log('Config written to src/config.json file:', config)
+  console.log(`Config written to ${schemaPath}`, config)
   process.exit(0)
 }
 

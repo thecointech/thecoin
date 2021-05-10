@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
-import { toHuman } from '@the-coin/utilities/Conversion'
-import { FXRate } from '@the-coin/pricing';
+import { toHuman } from '@thecointech/utilities/Conversion'
+import { FXRate } from '@thecointech/pricing';
 import { DateRangeSelect } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconBank from "./images/icon_bank.svg";
 import styles from './styles.module.less';
-import { Transaction } from '@the-coin/tx-blockchain';
+import { Transaction } from '@thecointech/tx-blockchain';
 import { useState } from 'react';
 import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
@@ -48,14 +48,14 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 }
 
 
-export const TransactionList = (props: MyProps) => { 
+export const TransactionList = (props: MyProps) => {
 
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
-  
+
     function onDateRangeChange(from: Date, until: Date) {
       setFromDate(from);
-      setUntilDate(until); 
+      setUntilDate(until);
     }
     const { locale } = useSelector(selectLocale);
 
@@ -65,7 +65,8 @@ export const TransactionList = (props: MyProps) => {
     const transactions = account!.history;
     const transactionLoading = account?.historyLoading;
 
-    let filteredTx = transactions.filter((tx: { date: { toMillis: () => number; }; }) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+    filteredTx.reverse();
     let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
     let txJsxRows = txOutput.map((tx, index) => {
@@ -83,10 +84,9 @@ export const TransactionList = (props: MyProps) => {
         contentForComment = "OUT";
       }
       const monthTodisplay = tx.date.setLocale(locale).monthShort;
-      const yearToDisplay = tx.date.setLocale(locale).year; 
+      const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
-      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute; 
-
+      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
       return (
         <Table.Row key={index}>
           <Table.Cell width={2} textAlign='center'>
@@ -105,7 +105,7 @@ export const TransactionList = (props: MyProps) => {
             <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
           </Table.Cell>
-          <Table.Cell width={3}>${balanceCad}</Table.Cell>
+          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Table.Cell>
         </Table.Row>
     )});
 

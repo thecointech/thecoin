@@ -1,10 +1,10 @@
 import { GetWallet } from "./Wallet";
-import { BuildVerifiedXfer } from "@the-coin/utilities/VerifiedTransfer";
+import { BuildVerifiedXfer } from "@thecointech/utilities/VerifiedTransfer";
 import { DoCertifiedTransferWaitable } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
-import status from '../status/Status.json';
-import { GetContract } from "@the-coin/contract";
-import { init, describe } from '@the-coin/utilities/firestore/jestutils';
+import { GetContract } from "@thecointech/contract";
+import { init, describe } from '@thecointech/utilities/firestore/jestutils';
+import {current} from '../status';
 
 beforeAll(async () => {
   init('broker-cad-billpayments');
@@ -13,14 +13,16 @@ beforeAll(async () => {
 test("Transfer checks balance", async () => {
   jest.setTimeout(180000);
 	const wallet = Wallet.createRandom();
-	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, 100, status.certifiedFee);
+  const status = await current();
+	const certTransfer = await BuildVerifiedXfer(wallet, status.BrokerCAD, 100, status.certifiedFee);
 	await expect(DoCertifiedTransferWaitable(certTransfer)).rejects.toThrow("Insufficient funds");
 })
 
 
 test("Transfer checks fee", async () => {
 	const wallet = Wallet.createRandom();
-	const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, 100, 0);
+  const status = await current();
+	const certTransfer = await BuildVerifiedXfer(wallet, status.BrokerCAD, 100, 0);
 	await expect(DoCertifiedTransferWaitable(certTransfer)).rejects.toThrow("Invalid fee present");
 })
 
@@ -32,13 +34,15 @@ describe('Test certified transfer actions', () => {
     const wallet = await GetWallet();
     const tc = await GetContract();
     expect(wallet).toBeDefined();
+    const address = await wallet.getAddress();
 
     // TODO!  Create a testing account to handle this stuff!
-    const myBalance = await tc.balanceOf(wallet.address)
+    const myBalance = await tc.balanceOf(address)
     expect(myBalance.toNumber()).toBeGreaterThan(0);
 
     const transfer = 100;
-    const certTransfer = await BuildVerifiedXfer(wallet, wallet.address, transfer, status.certifiedFee);
+    const status = await current();
+    const certTransfer = await BuildVerifiedXfer(wallet, address, transfer, status.certifiedFee);
     const tx = await DoCertifiedTransferWaitable(certTransfer);
 
     expect(tx.hash).toBeTruthy();

@@ -4,18 +4,954 @@
 		"application/json"
 	],
 	"definitions": {
-		"CombinedRates": {
-			"properties": {},
+		"CurrencyCode": {
+			"enum": [
+				784,
+				971,
+				8,
+				51,
+				532,
+				973,
+				32,
+				36,
+				533,
+				944,
+				977,
+				52,
+				50,
+				975,
+				48,
+				108,
+				60,
+				96,
+				68,
+				984,
+				986,
+				44,
+				64,
+				72,
+				933,
+				84,
+				124,
+				976,
+				947,
+				756,
+				948,
+				990,
+				152,
+				156,
+				170,
+				970,
+				188,
+				931,
+				192,
+				132,
+				203,
+				262,
+				208,
+				214,
+				12,
+				818,
+				232,
+				230,
+				978,
+				242,
+				238,
+				826,
+				981,
+				936,
+				292,
+				270,
+				324,
+				320,
+				328,
+				344,
+				340,
+				191,
+				332,
+				348,
+				360,
+				376,
+				356,
+				368,
+				364,
+				352,
+				388,
+				400,
+				392,
+				404,
+				417,
+				116,
+				174,
+				408,
+				410,
+				414,
+				136,
+				398,
+				418,
+				422,
+				144,
+				430,
+				426,
+				434,
+				504,
+				498,
+				969,
+				807,
+				104,
+				496,
+				446,
+				929,
+				480,
+				462,
+				454,
+				484,
+				979,
+				458,
+				943,
+				516,
+				566,
+				558,
+				578,
+				524,
+				554,
+				512,
+				590,
+				604,
+				598,
+				608,
+				586,
+				985,
+				600,
+				634,
+				946,
+				941,
+				643,
+				646,
+				682,
+				90,
+				690,
+				938,
+				752,
+				702,
+				654,
+				694,
+				706,
+				968,
+				728,
+				930,
+				222,
+				760,
+				748,
+				764,
+				972,
+				934,
+				788,
+				776,
+				949,
+				780,
+				901,
+				834,
+				980,
+				800,
+				840,
+				997,
+				940,
+				858,
+				927,
+				860,
+				928,
+				704,
+				548,
+				882,
+				950,
+				961,
+				959,
+				955,
+				956,
+				957,
+				958,
+				951,
+				960,
+				952,
+				964,
+				953,
+				962,
+				994,
+				963,
+				965,
+				999,
+				886,
+				710,
+				967,
+				932
+			],
+			"type": "number"
+		},
+		"FXRate": {
+			"properties": {
+				"8": {
+					"type": "number",
+					"format": "double"
+				},
+				"12": {
+					"type": "number",
+					"format": "double"
+				},
+				"32": {
+					"type": "number",
+					"format": "double"
+				},
+				"36": {
+					"type": "number",
+					"format": "double"
+				},
+				"44": {
+					"type": "number",
+					"format": "double"
+				},
+				"48": {
+					"type": "number",
+					"format": "double"
+				},
+				"50": {
+					"type": "number",
+					"format": "double"
+				},
+				"51": {
+					"type": "number",
+					"format": "double"
+				},
+				"52": {
+					"type": "number",
+					"format": "double"
+				},
+				"60": {
+					"type": "number",
+					"format": "double"
+				},
+				"64": {
+					"type": "number",
+					"format": "double"
+				},
+				"68": {
+					"type": "number",
+					"format": "double"
+				},
+				"72": {
+					"type": "number",
+					"format": "double"
+				},
+				"84": {
+					"type": "number",
+					"format": "double"
+				},
+				"90": {
+					"type": "number",
+					"format": "double"
+				},
+				"96": {
+					"type": "number",
+					"format": "double"
+				},
+				"104": {
+					"type": "number",
+					"format": "double"
+				},
+				"108": {
+					"type": "number",
+					"format": "double"
+				},
+				"116": {
+					"type": "number",
+					"format": "double"
+				},
+				"124": {
+					"type": "number",
+					"format": "double"
+				},
+				"132": {
+					"type": "number",
+					"format": "double"
+				},
+				"136": {
+					"type": "number",
+					"format": "double"
+				},
+				"144": {
+					"type": "number",
+					"format": "double"
+				},
+				"152": {
+					"type": "number",
+					"format": "double"
+				},
+				"156": {
+					"type": "number",
+					"format": "double"
+				},
+				"170": {
+					"type": "number",
+					"format": "double"
+				},
+				"174": {
+					"type": "number",
+					"format": "double"
+				},
+				"188": {
+					"type": "number",
+					"format": "double"
+				},
+				"191": {
+					"type": "number",
+					"format": "double"
+				},
+				"192": {
+					"type": "number",
+					"format": "double"
+				},
+				"203": {
+					"type": "number",
+					"format": "double"
+				},
+				"208": {
+					"type": "number",
+					"format": "double"
+				},
+				"214": {
+					"type": "number",
+					"format": "double"
+				},
+				"222": {
+					"type": "number",
+					"format": "double"
+				},
+				"230": {
+					"type": "number",
+					"format": "double"
+				},
+				"232": {
+					"type": "number",
+					"format": "double"
+				},
+				"238": {
+					"type": "number",
+					"format": "double"
+				},
+				"242": {
+					"type": "number",
+					"format": "double"
+				},
+				"262": {
+					"type": "number",
+					"format": "double"
+				},
+				"270": {
+					"type": "number",
+					"format": "double"
+				},
+				"292": {
+					"type": "number",
+					"format": "double"
+				},
+				"320": {
+					"type": "number",
+					"format": "double"
+				},
+				"324": {
+					"type": "number",
+					"format": "double"
+				},
+				"328": {
+					"type": "number",
+					"format": "double"
+				},
+				"332": {
+					"type": "number",
+					"format": "double"
+				},
+				"340": {
+					"type": "number",
+					"format": "double"
+				},
+				"344": {
+					"type": "number",
+					"format": "double"
+				},
+				"348": {
+					"type": "number",
+					"format": "double"
+				},
+				"352": {
+					"type": "number",
+					"format": "double"
+				},
+				"356": {
+					"type": "number",
+					"format": "double"
+				},
+				"360": {
+					"type": "number",
+					"format": "double"
+				},
+				"364": {
+					"type": "number",
+					"format": "double"
+				},
+				"368": {
+					"type": "number",
+					"format": "double"
+				},
+				"376": {
+					"type": "number",
+					"format": "double"
+				},
+				"388": {
+					"type": "number",
+					"format": "double"
+				},
+				"392": {
+					"type": "number",
+					"format": "double"
+				},
+				"398": {
+					"type": "number",
+					"format": "double"
+				},
+				"400": {
+					"type": "number",
+					"format": "double"
+				},
+				"404": {
+					"type": "number",
+					"format": "double"
+				},
+				"408": {
+					"type": "number",
+					"format": "double"
+				},
+				"410": {
+					"type": "number",
+					"format": "double"
+				},
+				"414": {
+					"type": "number",
+					"format": "double"
+				},
+				"417": {
+					"type": "number",
+					"format": "double"
+				},
+				"418": {
+					"type": "number",
+					"format": "double"
+				},
+				"422": {
+					"type": "number",
+					"format": "double"
+				},
+				"426": {
+					"type": "number",
+					"format": "double"
+				},
+				"430": {
+					"type": "number",
+					"format": "double"
+				},
+				"434": {
+					"type": "number",
+					"format": "double"
+				},
+				"446": {
+					"type": "number",
+					"format": "double"
+				},
+				"454": {
+					"type": "number",
+					"format": "double"
+				},
+				"458": {
+					"type": "number",
+					"format": "double"
+				},
+				"462": {
+					"type": "number",
+					"format": "double"
+				},
+				"480": {
+					"type": "number",
+					"format": "double"
+				},
+				"484": {
+					"type": "number",
+					"format": "double"
+				},
+				"496": {
+					"type": "number",
+					"format": "double"
+				},
+				"498": {
+					"type": "number",
+					"format": "double"
+				},
+				"504": {
+					"type": "number",
+					"format": "double"
+				},
+				"512": {
+					"type": "number",
+					"format": "double"
+				},
+				"516": {
+					"type": "number",
+					"format": "double"
+				},
+				"524": {
+					"type": "number",
+					"format": "double"
+				},
+				"532": {
+					"type": "number",
+					"format": "double"
+				},
+				"533": {
+					"type": "number",
+					"format": "double"
+				},
+				"548": {
+					"type": "number",
+					"format": "double"
+				},
+				"554": {
+					"type": "number",
+					"format": "double"
+				},
+				"558": {
+					"type": "number",
+					"format": "double"
+				},
+				"566": {
+					"type": "number",
+					"format": "double"
+				},
+				"578": {
+					"type": "number",
+					"format": "double"
+				},
+				"586": {
+					"type": "number",
+					"format": "double"
+				},
+				"590": {
+					"type": "number",
+					"format": "double"
+				},
+				"598": {
+					"type": "number",
+					"format": "double"
+				},
+				"600": {
+					"type": "number",
+					"format": "double"
+				},
+				"604": {
+					"type": "number",
+					"format": "double"
+				},
+				"608": {
+					"type": "number",
+					"format": "double"
+				},
+				"634": {
+					"type": "number",
+					"format": "double"
+				},
+				"643": {
+					"type": "number",
+					"format": "double"
+				},
+				"646": {
+					"type": "number",
+					"format": "double"
+				},
+				"654": {
+					"type": "number",
+					"format": "double"
+				},
+				"682": {
+					"type": "number",
+					"format": "double"
+				},
+				"690": {
+					"type": "number",
+					"format": "double"
+				},
+				"694": {
+					"type": "number",
+					"format": "double"
+				},
+				"702": {
+					"type": "number",
+					"format": "double"
+				},
+				"704": {
+					"type": "number",
+					"format": "double"
+				},
+				"706": {
+					"type": "number",
+					"format": "double"
+				},
+				"710": {
+					"type": "number",
+					"format": "double"
+				},
+				"728": {
+					"type": "number",
+					"format": "double"
+				},
+				"748": {
+					"type": "number",
+					"format": "double"
+				},
+				"752": {
+					"type": "number",
+					"format": "double"
+				},
+				"756": {
+					"type": "number",
+					"format": "double"
+				},
+				"760": {
+					"type": "number",
+					"format": "double"
+				},
+				"764": {
+					"type": "number",
+					"format": "double"
+				},
+				"776": {
+					"type": "number",
+					"format": "double"
+				},
+				"780": {
+					"type": "number",
+					"format": "double"
+				},
+				"784": {
+					"type": "number",
+					"format": "double"
+				},
+				"788": {
+					"type": "number",
+					"format": "double"
+				},
+				"800": {
+					"type": "number",
+					"format": "double"
+				},
+				"807": {
+					"type": "number",
+					"format": "double"
+				},
+				"818": {
+					"type": "number",
+					"format": "double"
+				},
+				"826": {
+					"type": "number",
+					"format": "double"
+				},
+				"834": {
+					"type": "number",
+					"format": "double"
+				},
+				"840": {
+					"type": "number",
+					"format": "double"
+				},
+				"858": {
+					"type": "number",
+					"format": "double"
+				},
+				"860": {
+					"type": "number",
+					"format": "double"
+				},
+				"882": {
+					"type": "number",
+					"format": "double"
+				},
+				"886": {
+					"type": "number",
+					"format": "double"
+				},
+				"901": {
+					"type": "number",
+					"format": "double"
+				},
+				"927": {
+					"type": "number",
+					"format": "double"
+				},
+				"928": {
+					"type": "number",
+					"format": "double"
+				},
+				"929": {
+					"type": "number",
+					"format": "double"
+				},
+				"930": {
+					"type": "number",
+					"format": "double"
+				},
+				"931": {
+					"type": "number",
+					"format": "double"
+				},
+				"932": {
+					"type": "number",
+					"format": "double"
+				},
+				"933": {
+					"type": "number",
+					"format": "double"
+				},
+				"934": {
+					"type": "number",
+					"format": "double"
+				},
+				"936": {
+					"type": "number",
+					"format": "double"
+				},
+				"938": {
+					"type": "number",
+					"format": "double"
+				},
+				"940": {
+					"type": "number",
+					"format": "double"
+				},
+				"941": {
+					"type": "number",
+					"format": "double"
+				},
+				"943": {
+					"type": "number",
+					"format": "double"
+				},
+				"944": {
+					"type": "number",
+					"format": "double"
+				},
+				"946": {
+					"type": "number",
+					"format": "double"
+				},
+				"947": {
+					"type": "number",
+					"format": "double"
+				},
+				"948": {
+					"type": "number",
+					"format": "double"
+				},
+				"949": {
+					"type": "number",
+					"format": "double"
+				},
+				"950": {
+					"type": "number",
+					"format": "double"
+				},
+				"951": {
+					"type": "number",
+					"format": "double"
+				},
+				"952": {
+					"type": "number",
+					"format": "double"
+				},
+				"953": {
+					"type": "number",
+					"format": "double"
+				},
+				"955": {
+					"type": "number",
+					"format": "double"
+				},
+				"956": {
+					"type": "number",
+					"format": "double"
+				},
+				"957": {
+					"type": "number",
+					"format": "double"
+				},
+				"958": {
+					"type": "number",
+					"format": "double"
+				},
+				"959": {
+					"type": "number",
+					"format": "double"
+				},
+				"960": {
+					"type": "number",
+					"format": "double"
+				},
+				"961": {
+					"type": "number",
+					"format": "double"
+				},
+				"962": {
+					"type": "number",
+					"format": "double"
+				},
+				"963": {
+					"type": "number",
+					"format": "double"
+				},
+				"964": {
+					"type": "number",
+					"format": "double"
+				},
+				"965": {
+					"type": "number",
+					"format": "double"
+				},
+				"967": {
+					"type": "number",
+					"format": "double"
+				},
+				"968": {
+					"type": "number",
+					"format": "double"
+				},
+				"969": {
+					"type": "number",
+					"format": "double"
+				},
+				"970": {
+					"type": "number",
+					"format": "double"
+				},
+				"971": {
+					"type": "number",
+					"format": "double"
+				},
+				"972": {
+					"type": "number",
+					"format": "double"
+				},
+				"973": {
+					"type": "number",
+					"format": "double"
+				},
+				"975": {
+					"type": "number",
+					"format": "double"
+				},
+				"976": {
+					"type": "number",
+					"format": "double"
+				},
+				"977": {
+					"type": "number",
+					"format": "double"
+				},
+				"978": {
+					"type": "number",
+					"format": "double"
+				},
+				"979": {
+					"type": "number",
+					"format": "double"
+				},
+				"980": {
+					"type": "number",
+					"format": "double"
+				},
+				"981": {
+					"type": "number",
+					"format": "double"
+				},
+				"984": {
+					"type": "number",
+					"format": "double"
+				},
+				"985": {
+					"type": "number",
+					"format": "double"
+				},
+				"986": {
+					"type": "number",
+					"format": "double"
+				},
+				"990": {
+					"type": "number",
+					"format": "double"
+				},
+				"994": {
+					"type": "number",
+					"format": "double"
+				},
+				"997": {
+					"type": "number",
+					"format": "double"
+				},
+				"999": {
+					"type": "number",
+					"format": "double"
+				},
+				"validTill": {
+					"type": "number",
+					"format": "double"
+				},
+				"validFrom": {
+					"type": "number",
+					"format": "double"
+				},
+				"sell": {
+					"type": "number",
+					"format": "double"
+				},
+				"buy": {
+					"type": "number",
+					"format": "double"
+				},
+				"fxRate": {
+					"type": "number",
+					"format": "double"
+				},
+				"target": {
+					"$ref": "#/definitions/CurrencyCode"
+				}
+			},
+			"required": [
+				"validTill",
+				"validFrom",
+				"sell",
+				"buy",
+				"fxRate",
+				"target"
+			],
 			"type": "object",
 			"additionalProperties": false
 		}
 	},
 	"info": {
-		"title": "@the-coin/rates-service",
-		"version": "0.1.1",
+		"title": "@thecointech/rates-service",
+		"version": "0.2.1",
 		"description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
 		"license": {
 			"name": "MIT"
+		},
+		"contact": {
+			"name": "Stephen Taylor ",
+			"email": "stephen@thecoin.io"
 		}
 	},
 	"paths": {
@@ -29,7 +965,7 @@
 					"200": {
 						"description": "Ok",
 						"schema": {
-							"$ref": "#/definitions/CombinedRates"
+							"$ref": "#/definitions/FXRate"
 						}
 					},
 					"204": {
@@ -40,6 +976,9 @@
 					}
 				},
 				"description": "Query a single value",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -70,7 +1009,7 @@
 						"description": "Ok",
 						"schema": {
 							"items": {
-								"$ref": "#/definitions/CombinedRates"
+								"$ref": "#/definitions/FXRate"
 							},
 							"type": "array"
 						}
@@ -83,6 +1022,9 @@
 					}
 				},
 				"description": "Query many values simultaneously",
+				"tags": [
+					"Rates"
+				],
 				"security": [],
 				"parameters": [
 					{

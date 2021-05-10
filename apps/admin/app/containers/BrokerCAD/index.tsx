@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Account, RouterPath, AccountPageProps } from '@the-coin/shared/containers/Account';
-import { useAccountMap, useAccountMapApi } from '@the-coin/shared/containers/AccountMap';
-import { UploadWallet, ReadFileData } from '@the-coin/shared/containers/UploadWallet';
+import { Account, RouterPath, AccountPageProps } from '@thecointech/shared/containers/Account';
+import { useAccountStore, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { UploadWallet, ReadFileData } from '@thecointech/shared/containers/UploadWallet';
 
-import { Balance } from '@the-coin/shared/containers/Balance';
+import { Balance } from '@thecointech/shared/containers/Balance';
 import { VerifyAccount } from './VerifyAccount';
 import { BillPayments } from './BillPayments';
 import { Purchase } from 'containers/Purchase';
@@ -14,41 +14,64 @@ import { ClientSelect } from './Clients/ClientSelect';
 
 type Props = RouteComponentProps;
 
+const balance = { id:"admin.brokercad.sidebar.balance",
+                defaultMessage:"Balance",
+                description:"Title for the balance entry in the menu"};
+const purchase = {  id:"app.brokercad.sidebar.purchase",
+                    defaultMessage:"Complete Purchase",
+                    description:"Title for the purchase entry in the menu"};
+const eTransfer = { id:"app.brokercad.sidebar.etransfer",
+                  defaultMessage:"Complete e-Transfer",
+                  description:"Title for the Complete e-Transfer entry in the menu"};
+const billing = { id:"app.brokercad.sidebar.billing",
+                  defaultMessage:"Bill Payments",
+                  description:"Title for the Bill Payments entry in the menu"};
+const verify = { id:"app.brokercad.sidebar.verify",
+                  defaultMessage:"Verify",
+                  description:"Title for the Verify entry in the menu"};
+const autoPurchase = { id:"app.brokercad.sidebar.autoPurchase",
+                  defaultMessage:"AutoPurchase",
+                  description:"Title for the AutoPurchase entry in the menu"};
+const clients = { id:"app.brokercad.sidebar.clients",
+                  defaultMessage:"Clients",
+                  description:"Title for the Clients entry in the menu"};
+
+
 // Does this work?
 const AccountMap: RouterPath[] = [
   {
-    name: "Balance",
+    name: balance,
     urlFragment: "",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Balance {...props} {...routerProps} /> ),
     exact: true
   },
   {
-    name: "Complete Purchase",
+    name: purchase,
     urlFragment: "purchase",
     creator: (routerProps: AccountPageProps) => ((props: any) => <Purchase {...props} {...routerProps.account} />)
   },
   {
-    name: "Complete e-Transfer",
+    name: eTransfer,
     urlFragment: "eTransfer",
     creator: (routerProps: AccountPageProps) => ((props: any) => <ETransfers {...props} {...routerProps.account} />)
   },
   {
-    name: "Bill Payments",
+    name: billing,
     urlFragment: "billing",
     creator: (routerProps: AccountPageProps) => ((props: any) => <BillPayments {...props} {...routerProps.account} />)
   },
   {
-    name: "Verify",
+    name: verify,
     urlFragment: "verify",
     creator: (routerProps: AccountPageProps) => ((props: any) => <VerifyAccount {...props} signer={routerProps.account.signer} /> )
   },
   {
-    name: "AutoPurchase",
+    name: autoPurchase,
     urlFragment: "autoPurchase",
     creator: (_routerProps: AccountPageProps) => ((_props: any) => <Gmail /> )
   },
   {
-    name: "Clients",
+    name: clients,
     urlFragment: "clients",
     creator: (_routerProps: AccountPageProps) => ((_props: any) => <ClientSelect /> )
   }
@@ -59,10 +82,9 @@ export const AccountName = "BrokerCAD";
 export const BrokerCAD = (props: Props) =>  {
   const { url } = props.match;
 
-  const accounts = useAccountMap();
-  const accountsApi = useAccountMapApi();
-  const brokerCAD = Object.values(accounts)
-    .find(account => account.name === AccountName);
+  const store = useAccountStore();
+  const accountsApi = useAccountStoreApi();
+  const brokerCAD = store.accounts.find(account => account.name === AccountName);
 
   React.useEffect(() => {
     if (brokerCAD?.address)

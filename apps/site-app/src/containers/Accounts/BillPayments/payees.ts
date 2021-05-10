@@ -1,6 +1,6 @@
 import { DropdownItemProps } from 'semantic-ui-react';
 import { number } from 'card-validator';
-import { ValuedMessageDesc } from '@the-coin/shared/components/UxInput/types'
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types'
 
 const invalidVisaChars = { id:"app.accounts.billPayments.invalidVisaChars",
                 defaultMessage:"Your card number should be 16 digits long" };
@@ -51,10 +51,10 @@ export function findPayee(text: string): Validatable|undefined {
   return item;
 }
 
-export function validate(name: string, value: string) : ValuedMessageDesc|null
+export function validate(name: string, value: string) : ValuedMessageDesc|undefined
 {
   const payee = findPayee(name);
-  return payee?.validate(value) ?? null;
+  return payee?.validate(value) ?? undefined;
 }
 
 //   const validatable = findType(name)

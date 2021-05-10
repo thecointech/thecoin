@@ -1,9 +1,10 @@
 import { RateKey, CombinedRates, RateType, CoinRate, FxRates } from "./types";
 import { getLatest } from "./latest";
-import { CurrencyCode } from "@the-coin/utilities/CurrencyCodes";
-import { validFor } from "@the-coin/utilities/FxRates";
+import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
+import { validFor } from "@thecointech/utilities/FxRates";
 import { getRate } from "./db";
 import { update } from "./UpdateDb";
+import { log } from "@thecointech/logging";
 export { updateRates } from './UpdateDb'
 
 //
@@ -117,7 +118,7 @@ async function maybeInsert(ts: number, lastExpired: number, rates: CombinedRates
       }
     }
     catch (e) {
-      console.exception("Error fetching {Timestamp}", ts, e);
+      log.error(e, "Error fetching {Timestamp}", ts);
     }
   }
   return lastExpired;

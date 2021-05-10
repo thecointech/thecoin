@@ -1,9 +1,10 @@
-import { Controller, Body, Route, Post, Response } from 'tsoa';
+import { CertifiedTransferRequest, CertifiedTransferResponse } from '@thecointech/types';
+import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransfer';
-import { CertifiedTransferRequest, CertifiedTransferResponse} from '@the-coin/types'
 
 
 @Route('transfer')
+@Tags('DirectTransfer')
 export class TransferController extends Controller {
 
 

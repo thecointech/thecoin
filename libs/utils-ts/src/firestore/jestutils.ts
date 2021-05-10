@@ -1,6 +1,6 @@
 import { isEmulatorAvailable } from './types';
 export { init, release } from './debug';
-import { describe } from "@the-coin/jestutils"
+import { describe } from "@thecointech/jestutils"
 
 ///////////////////////////////////////////////////////////////
 // Firestore helper functions
