@@ -1,0 +1,38 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.containerContactUs{
+    height: 450px;
+    overflow-y: auto;
+}
+
+.messagesContainer{
+    width: 85%;
+    margin: auto;
+}
+
+.contactFormLine{
+    color: @theCoinPaletteGreen5;
+    height: 130px;
+    float: right;
+    width: 100%;
+    > div > div{
+        background-color: @theCoinPalettePaleGreen2Faded50;
+        border-radius: @absoluteBorderRadius;
+        padding-left: 10px;
+        max-width: 300px;
+        margin: auto;
+        height: 100px;
+        input, button{
+            display: inline;
+            float: left;
+            margin: auto;
+        }
+        button{
+            right: -2%;
+            position: relative;
+            top: -10px;
+            height: 80px;
+            width: 90px;
+        }
+    }
+}

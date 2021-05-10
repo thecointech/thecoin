@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor, useIntl } from "react-intl";
@@ -29,7 +28,6 @@ export const NameInput = (props: Props) => {
   const [state, setState] = useState(initialState);
   const { setName, ...rest } = props;
   const {accounts} = useAccountStore();
-  ////////////////////////////////
 
   const onChange = (value: string) => {
     const newState = validateName(value, accounts);
