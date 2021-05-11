@@ -19,17 +19,20 @@ export type IncompleteRef = {
   ref: string;
 }
 
-// The updateable properties of a transaction.
-// The change to values from running a transition
-export type TransitionDelta = {
-  timestamp: DateTime;
-  type: string;
-
+// Changes applied to the action
+export type StateData = {
   fiat?: Decimal;
   coin?: Decimal;
+  hash?: string; // Most recent tx hash
   meta?: string; // Any metadata about this transition: eg confirmation numbers etc
   error?: string; // Any error data.  Could be merged into meta?
 }
+
+// The changes applied to an action
+export type TransitionDelta = {
+  timestamp: DateTime;
+  type: string;
+} & StateData;
 
 // An action stores very little data directly.
 // Instead, it has an 'events' subcollection
@@ -40,7 +43,7 @@ export type BaseActionData = {
   timestamp: DateTime;
   initialId: string
 }
-export type ActionTypes = {
+export type ActionDataTypes = {
   Buy: {
     initial: {
       amount: Decimal;
@@ -50,23 +53,24 @@ export type ActionTypes = {
   Sell: { initial: CertifiedTransfer } & BaseActionData;
   Bill: { initial: CertifiedTransfer } & BaseActionData;
 }
-export type ActionType = keyof ActionTypes;
+export type ActionType = keyof ActionDataTypes;
 
 // A structure encompassing all the data related to an action
 // Includes both root document and stream documents
-export interface BaseAction {
-  type: ActionType,
+export interface TypedAction<Type extends ActionType> {
+  // Ethereum address of the user
+  address: string;
+  // Kind of action
+  type: Type,
   // Initial data stored in DB. Has no processing applied.
-  data: BaseActionData,
+  data: ActionDataTypes[Type],
   // Transitions that have been applied to this action.
   history: TransitionDelta[],
   // The firestore document that data came from
   doc: DocumentReference,
 }
-export interface TypedAction<Type extends ActionType> extends BaseAction {
-  data: ActionTypes[Type];
-  type: Type;
-}
+
 export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
+export type AnyAction = TypedAction<ActionType>;

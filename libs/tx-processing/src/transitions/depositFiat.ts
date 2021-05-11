@@ -5,33 +5,30 @@ import { eTransferData } from "@thecointech/tx-gmail";
 import { IsValidAddress } from "@thecointech/utilities";
 import { GetAccountCode } from "@thecointech/utilities/Referrals";
 import Decimal from "decimal.js-light";
-import { ActionContainer, getCurrentState, TransitionCallback } from "../statemachine/types";
+import { BuyActionContainer, getCurrentState } from "../statemachine/types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 
 //
 // Deposit an eTransfer and update fiat balance
-export async function depositFiat(container: ActionContainer) {
+export async function depositFiat(container: BuyActionContainer) {
   return verifyPreTransfer(container) ?? await doDeposit(container);
 }
 
+async function doDeposit(container: BuyActionContainer) {
+  const etransfer = container.instructions;
+  if (etransfer == null) { return { error: "Deposit missing eTransfer deposit instructions"}};
 
-const doDeposit : TransitionCallback = async (container) => {
-  // TODO: Throw if we already have fiat
+  // There is no scenario where we already have fiat but want to add more
   const currentState = getCurrentState(container);
   if (currentState.data.fiat?.isZero() === false) {
     return { error: 'invalid state: a balance is already assigned to this transaction'}
   }
 
-  const etransfer = container.source as eTransferData;
   const bank = new RbcApi();
   const result = await depositInBank(etransfer, bank, log.trace);
   if (result.code != ETransferErrorCode.Success || !result.confirmation)
   {
-    log.error({address: etransfer.address, errorCode: ETransferErrorCode[result?.code ?? ETransferErrorCode.UnknownError]},
-      `Could not process deposit from: {address}, got {errorCode}`);
-    return {
-      error: result.message
-    };
+    return { error: result.message };
   }
   // Return new balance of transaction
   return {

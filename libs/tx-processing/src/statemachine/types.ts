@@ -1,58 +1,60 @@
-import { BaseAction, TransitionDelta } from "@thecointech/broker-db";
+import { ActionType, TransitionDelta, TypedAction, StateData } from "@thecointech/broker-db";
 import { TheCoin } from "@thecointech/contract";
-import { Decimal } from "decimal.js-light";
+import { eTransferData } from "@thecointech/tx-gmail";
+import { BillPayeePacket, ETransferPacket } from "@thecointech/types";
 
 export type RequiredStates = "initial" | "complete" | "error";
 
-// The mutable elements of our state.
-export type StateData = {
-  fiat: Decimal,
-  coin: Decimal,
-  // metadata set by the last transition
-  meta?: string;
-  // Error message set by the last transition
-  error?: string,
-}
-
 export type StateSnapshot<States extends string> = {
   // name of the current state
-  state: States,
+  name: States,
   // results of the last transition taken to reach this state
   delta: TransitionDelta,
-  // current state
+  // previous state merged with delta creates current state
   data: StateData,
 }
 
-export type Transition<States extends string=string> = (container: ActionContainer, currentState: StateSnapshot<States>, replay?: TransitionDelta) => Promise<StateSnapshot<States> | null>
-export type StateTransitions<States extends string> = {
-  next: Transition<States>,
-  onError?: Transition<States>,
-  onTimeout?: Transition<States>,
+export type Transition<States extends string, Type extends ActionType> = (container: TypedActionContainer<Type>, currentState: StateSnapshot<States>, replay?: TransitionDelta) => Promise<StateSnapshot<States> | null>
+export type StateTransitions<States extends string, Type extends ActionType> = {
+  next: Transition<States, Type>,
+  onError?: Transition<States, Type>,
+  onTimeout?: Transition<States, Type>,
 };
 
-export type StateGraph<States extends string> =
+export type StateGraph<States extends string, Type extends ActionType> =
   Omit<
-    Record<States, StateTransitions<States>>,
+    Record<States, StateTransitions<States, Type>>,
     "complete"|"error"
   > &
-  //Record<States, StateTransitions<States>> &
   {
     complete: null,
     error: null,
   };
 
-export type ActionContainer = {
-  // The source data used to initiate this action (eg eTransfer, CertifiedTransfer etc)
-  source: unknown,
+export type InstructionDataTypes = {
+  Buy: eTransferData;
+  Sell: ETransferPacket;
+  Bill: BillPayeePacket;
+}
+
+export interface TypedActionContainer<Type extends ActionType> {
   // The broker-db data structure representing current state
-  action: BaseAction,
+  action: TypedAction<Type>;
+  // The transfer instructions (eg etransfer/BillPayment/withdrawal instructions).
+  // This data is not included the DB.
+  instructions: InstructionDataTypes[Type]|null;
   // Events applied to the action
   history: StateSnapshot<string>[],
   // contract any coin actions are executed against.
   contract: TheCoin,
 }
 
-export type TransitionCallback = (container: ActionContainer) => Promise<Partial<TransitionDelta> | null>;
+export type SellActionContainer = TypedActionContainer<"Sell">;
+export type BuyActionContainer = TypedActionContainer<"Buy">;
+export type BillActionContainer = TypedActionContainer<"Bill">;
+export type AnyActionContainer = TypedActionContainer<ActionType>;
+
+export type TransitionCallback<Type extends ActionType=ActionType> = (container: TypedActionContainer<Type>) => Promise<Partial<TransitionDelta> | null>;
 
 // Handy utility function to get current state (last entry in the history)
-export const getCurrentState = (container: ActionContainer) => container.history[container.history.length - 1];
+export const getCurrentState = (container: AnyActionContainer) => container.history[container.history.length - 1];

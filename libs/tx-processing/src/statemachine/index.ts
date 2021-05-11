@@ -1,12 +1,11 @@
-import { BaseAction, TransitionDelta, storeTransition } from "@thecointech/broker-db";
+import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thecointech/broker-db";
 import { log } from "@thecointech/logging";
-import { Decimal } from "decimal.js-light";
 import { DateTime } from "luxon";
-import { ActionContainer, StateGraph, StateSnapshot, Transition, TransitionCallback } from "./types";
+import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
 import { TheCoin } from '@thecointech/contract';
 //
 // Execute the transition. If we recieve a result, store it in the DB
-async function runAndStoreTransition(container: ActionContainer, transition: TransitionCallback) : Promise<TransitionDelta|null> {
+async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: TransitionCallback<Type>) : Promise<TransitionDelta|null> {
   log.trace({ transition: transition.name, initialId: container.action.data.initialId },
     `Calculating transition {transition} for {initialId}`);
 
@@ -35,7 +34,7 @@ async function runAndStoreTransition(container: ActionContainer, transition: Tra
 // Builds a simple reducer function.  Takes current state, and (optionally) next delta.
 // If no delta exists, run the transition to create it.  Finally, merge the delta
 // into current state and return new currentState
-export function transitionTo<States extends string>(transition: TransitionCallback, nextState: States) : Transition<States> {
+export function transitionTo<States extends string, Type extends ActionType=ActionType>(transition: TransitionCallback<Type>, nextState: States) : Transition<States, Type> {
 
   // ensure that our transition matches the one being replayed.
   if (transition.name == '' || transition.name == 'anonymous') {
@@ -48,10 +47,10 @@ export function transitionTo<States extends string>(transition: TransitionCallba
     if (replay && transition.name != replay.type) {
       throw new Error('Replay event does not match next transition');
     }
-    const delta = replay ?? await runAndStoreTransition(container, transition);
+    const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta
       ? {
-        state: nextState,
+        name: nextState,
         delta,
         data: {
           ...currentState.data,
@@ -64,34 +63,31 @@ export function transitionTo<States extends string>(transition: TransitionCallba
 
 // Every graph execution starts in the initial state.
 const initialState = <States extends string>(timestamp: DateTime): StateSnapshot<States> => ({
-  state: "initial" as States,
-  data: {
-    fiat: new Decimal(0),
-    coin: new Decimal(0),
-  },
+  name: "initial" as States,
+  data: {},
   delta: {
-    type: "initial",
+    type: "no prior state",
     timestamp,
   },
 })
 
-export class StateMachineProcessor<States extends string> {
+export class StateMachineProcessor<States extends string, Type extends ActionType> {
 
-  graph: StateGraph<States>;
+  graph: StateGraph<States, Type>;
   contract: TheCoin;
 
-  constructor(graph: StateGraph<States>, contract: TheCoin) {
+  constructor(graph: StateGraph<States, Type>, contract: TheCoin) {
     this.graph = graph;
     this.contract = contract;
   }
 
-  async execute(source: unknown, action: BaseAction) {
+  async execute(instructions: InstructionDataTypes[Type]|null, action: TypedAction<Type>) {
 
     // We always start in the initial state with zero'ed entries
     let currentState = initialState<States>(action.data.timestamp);
     // Create a new empty container to hold the processed data
-    const container: ActionContainer = {
-      source,
+    const container: TypedActionContainer<Type> = {
+      instructions,
       action,
       history: [currentState],
       contract: this.contract,
@@ -102,9 +98,9 @@ export class StateMachineProcessor<States extends string> {
     const priorTransitions = [...container.action.history];
 
     // Now, execute the graph till we are all done
-    while (currentState.state != 'complete' && currentState.state != 'error') {
+    while (currentState.name != 'complete' && currentState.name != 'error') {
       // Our meta-programming has passed typescripts limit: manually cast to get rid of false errors
-      const state = currentState.state as keyof StateGraph<States>;
+      const state = currentState.name as keyof StateGraph<States, Type>;
       const { initialId } = action.data;
       const transitions = this.graph[state];
 
@@ -123,7 +119,9 @@ export class StateMachineProcessor<States extends string> {
 
       // If our last transition left an error state, what should we do?
       if (currentState.delta.error) {
-        // Is an error handler registered for this state?
+        // Log every error.
+        log.error({ state }, `Error occured on {state}, ${currentState.delta.error}`);
+          // IF we have a handler, we continue processing
         if (transitions.onError) {
           nextState = await transitions.onError?.(container, currentState, replay);
         }
@@ -131,7 +129,6 @@ export class StateMachineProcessor<States extends string> {
           log.error({ state }, `State {state} has error, but no error handler registered:\n${currentState.delta.error}`);
           break;
         }
-        // what to do?
       }
       // If this transaction (as a whole) has timed-out.  Not related to timeout
       // of individual actions.  Probably should be calculated in runTransition though
@@ -142,7 +139,7 @@ export class StateMachineProcessor<States extends string> {
       else {
         // no problems, iterate to the next state
         nextState = await transitions.next(container, currentState, replay);
-        log.trace({ initialId, state: nextState?.state, transition: transitions.next.name },
+        log.trace({ initialId, state: nextState?.name, transition: transitions.next.name },
           `Action {initialId} transitioning via {transition} to state {state}`);
       }
 

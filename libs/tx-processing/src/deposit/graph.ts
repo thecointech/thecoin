@@ -4,9 +4,11 @@ import * as transitions from '../transitions';
 
 type States =
   "initial" |
+  "labelledETransfer" |
   "depositReady" |
   "depositResult" |
-  "convertFiat" |
+  "deposited" |
+  "converted" |
   "tcReady" |
   "tcWaiting" |
   "tcResult" |
@@ -16,23 +18,29 @@ type States =
 //"refundReady";
 
 
-export const graph : StateGraph<States> = {
+export const graph : StateGraph<States, "Buy"> = {
   initial: {
+    next: transitionTo<States, "Buy">(transitions.labelEmailETransfer, "labelledETransfer"),
+  },
+  labelledETransfer:{
     onTimeout: transitionTo<States>(transitions.timeout, "complete"),
     next: transitionTo<States>(transitions.preTransfer, "depositReady"),
   },
 
   depositReady: {
-    next: transitionTo<States>(transitions.depositFiat, "depositResult"),
+    next: transitionTo<States, "Buy">(transitions.depositFiat, "depositResult"),
   },
   depositResult: {
     // Our depositResult should be able to (eventually) handle
     // a wide range of errors automatically (eg cancelled eTransfers etc)
     onError: transitionTo<States>(transitions.requestManual, "error"),
-    next: transitionTo<States>(transitions.toCoin, "convertFiat"),
+    next: transitionTo<States, "Buy">(transitions.labelEmailDeposited, "deposited"),
+  },
+  deposited: {
+    next: transitionTo<States>(transitions.toCoin, "converted"),
   },
 
-  convertFiat: {
+  converted: {
     onError: transitionTo<States>(transitions.requestManual, "error"),
     onTimeout: transitionTo<States>(transitions.requestManual, "error"),
     next: transitionTo<States>(transitions.preTransfer, "tcReady"),
@@ -50,6 +58,7 @@ export const graph : StateGraph<States> = {
     onError: transitionTo<States>(transitions.requestManual, "error"),
     next: transitionTo<States>(transitions.markComplete, "complete"),
   },
+
   // refunding: {
   //   next: transitionTo(noop, "complete"),
   // },

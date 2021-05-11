@@ -8,8 +8,7 @@ import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/accounts';
 import { initBrowser } from "@thecointech/rbcapi/action";
 import { ConnectContract, TheCoin } from '@thecointech/contract';
-import { processUnsettledDeposits } from "@thecointech/tx-processing/deposit";
-import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
+import { processUnsettledDeposits, processUnsettledETransfers } from "@thecointech/tx-processing";
 
 async function initialize() {
 
@@ -42,7 +41,7 @@ async function initialize() {
 //
 async function ProcessDeposits(rbcApi: RbcApi, contract: TheCoin) {
   log.debug("Processing Deposits");
-  const deposits = await ProcessUnsettledDeposits(contract, rbcApi);
+  const deposits = await processUnsettledDeposits(contract, rbcApi);
   log.debug(`Processed ${deposits.length} deposits`);
   return deposits;
 }

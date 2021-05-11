@@ -29,7 +29,7 @@ export async function processUnsettledDeposits(contract: TheCoin)
   // action may be resumed by a raw eTransfer.  This is only
   // to resume incomplete actions for which we no longer have email)
   const resumedActions = incomplete.map(async ic => {
-    return processor.execute({}, ic);
+    return processor.execute(null, ic);
   })
 
   return Promise.all([

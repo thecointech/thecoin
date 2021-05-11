@@ -1,14 +1,37 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
-import { ActionContainer, getCurrentState } from "statemachine/types";
-import { RatesApi } from "@thecointech/pricing";
-import { toCoinDecimal } from "@thecointech/utilities";
+import { AnyActionContainer, getCurrentState } from "statemachine/types";
+import { FXRate, RatesApi } from "@thecointech/pricing";
+import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
 import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 
+type Currency = "fiat" | "coin";
+type Converter = (v: Decimal, rate: FXRate) => Decimal;
 //
 // Convert fiat to coin
-export async function toCoin(container: ActionContainer) {
+export function toCoin(container: AnyActionContainer) {
+  return doConversion(container, "fiat", "coin", (val, rate) =>
+    toCoinDecimal(val
+      .div(rate.fxRate * rate.buy)
+    ))
+};
+
+//
+// Convert coin to fiat
+export function toFiat(container: AnyActionContainer) {
+  return doConversion(container, "coin", "fiat", (val, rate) =>
+    toHumanDecimal(val
+      .mul(rate.fxRate * rate.sell))
+    );
+}
+
+async function doConversion(container: AnyActionContainer, from: Currency, to: Currency, multiplier: Converter) {
+  const currentState = getCurrentState(container);
+  const fromValue = currentState.data[from];
+  if (!fromValue || fromValue.isZero()) {
+    return { error: `Cannot convert from ${from} to ${to}: no value for ${from}` };
+  }
 
   // First, what is our settlement date here?
   const initiated = container.action.data.timestamp;
@@ -18,27 +41,24 @@ export async function toCoin(container: ActionContainer) {
 
   const timestamp = DateTime.fromMillis(nextOpen);
   const convertAt = await getConvertAt(timestamp);
-  if (!convertAt) return { error: `Failed fetching exchange rate for ${timestamp}`};
+  if (!convertAt) return { error: `Failed fetching exchange rate for ${timestamp}` };
 
-  const currentState = getCurrentState(container);
-  const coin = currentState.data.fiat.div(convertAt)
   return {
     timestamp,
-    fiat: new Decimal(0),
-    coin: toCoinDecimal(coin),
+    [from]: new Decimal(0),
+    [to]: multiplier(fromValue, convertAt),
   }
 }
 
+// Fetch conversion rate from server
 async function getConvertAt(timestamp: DateTime) {
   const ratesApi = new RatesApi();
-
-  // Ok, lets get an FX result for this
   const rate = await ratesApi.getSingle(124, timestamp.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${timestamp}`);
     return false;
   }
-
-  const { sell, fxRate } = rate.data;
-  return sell * fxRate;
+  return rate.data;
+  // const { buy, sell, fxRate } = rate.data;
+  // return fxRate * (from == "fiat" ? sell : buy);
 }

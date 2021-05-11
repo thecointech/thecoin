@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "jest": "*",
-    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#63887364"
+    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#f11d964c"
   }
 }
