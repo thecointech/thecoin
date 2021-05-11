@@ -1,32 +1,30 @@
-import { getFirestore } from "@thecointech/firestore";
+import { getFirestore, DocumentReference, CollectionReference, DocumentSnapshot } from "@thecointech/firestore";
 import { log } from "@thecointech/logging";
-import { ActionType, ActionDataTypes, TransitionDelta, TypedAction } from "./types";
-import { DocumentReference, DocumentSnapshot } from "@thecointech/types";
+import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData } from "./types";
 import { getUserDoc } from "../user";
 import equal from "fast-deep-equal/es6";
 
 const HISTORY_KEY = "history";
 const getIncompleteCollection = (type: ActionType) => getFirestore().collection(type);
-const historyCollection = (action: DocumentReference) => action.collection(HISTORY_KEY);
-
+const historyCollection = <T>(action: DocumentReference<T>) => action.collection(HISTORY_KEY) as CollectionReference<TransitionDelta>;
+const userActionRef = <Type extends ActionType>(address: string, type: Type) => getUserDoc(address).collection(type) as CollectionReference<ActionDataTypes[Type]>;
 //
 // Get event collection of single action, ordered by timestamp
-export async function getActionHistory(action: DocumentReference) {
-  const history = await historyCollection(action).get()
-
-  return history.docs.map(doc => doc.data() as TransitionDelta)
+export async function getActionHistory(action: DocumentReference<AnyActionData>) {
+  const history = await historyCollection(action).get();
+  return [...history.docs].map(doc => doc.data());
 }
 
 //
 // Add transition to this action history
-export const storeTransition = (action: DocumentReference, transition: TransitionDelta) =>
+export const storeTransition = (action: DocumentReference<AnyActionData>, transition: TransitionDelta) =>
   historyCollection(action).add(transition);
 
 //
-// Return action data for the given path
+// Return action data for the action by type/firestore id
 export async function getAction<Type extends ActionType>(address: string, type: Type, id: string): Promise<TypedAction<Type>> {
   // get action doc
-  const doc = getUserDoc(address).collection(type).doc(id);
+  const doc = userActionRef(address, type).doc(id);
   const snapshot = await doc.get();
   if (!snapshot.exists)
     throw new Error(`Action ${doc.path} does not exist`);
@@ -36,7 +34,7 @@ export async function getAction<Type extends ActionType>(address: string, type: 
 //
 // Find an action for user addres with initialId
 export async function getActionFromInitial<Type extends ActionType>(address: string, type: Type, initial: ActionDataTypes[Type]): Promise<TypedAction<Type>> {
-  const typeCollection = getUserDoc(address).collection(type);
+  const typeCollection = userActionRef(address, type);
   const query = await typeCollection
     .where("initialId", "==", initial.initialId)
     .get();
@@ -45,7 +43,7 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
     case 0:
       return createAction(address, type, initial);
     case 1:
-      const action = await toAction<Type>(address, type, query.docs[0]);
+      const action = await toAction(address, type, query.docs[0]);
       // Assert equivalency
       assertSame(action.data.timestamp, initial.timestamp);
       assertSame(action.data.initial, initial.initial);
@@ -57,6 +55,7 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
   }
 }
 
+// test deep equality.
 function assertSame<T>(data: T, initial: T) {
   if (!equal(data, initial))
     throw new Error(`Initial data ${data} does not match queried data ${initial}`);
@@ -66,7 +65,7 @@ function assertSame<T>(data: T, initial: T) {
 // Create a new Action document and initialize with passed data.  Does not
 // create any events.  Automatically registers incomplete ref for the new action
 export async function createAction<Type extends ActionType>(address: string, type: Type, data: ActionDataTypes[Type]): Promise<TypedAction<Type>> {
-  const doc = getUserDoc(address).collection(type).doc();
+  const doc = userActionRef(address, type).doc();
   // An incomplete ref is automatically created for every new action
   const incompleteRef = getIncompleteCollection(type).doc();
 
@@ -88,7 +87,7 @@ export async function createAction<Type extends ActionType>(address: string, typ
 
 //
 // Convert firestore action document to full action type, including history
-const toAction = async <Type extends ActionType>(address: string, type: Type, snapshot: DocumentSnapshot) => ({
+const toAction = async <Type extends ActionType>(address: string, type: Type, snapshot: DocumentSnapshot<ActionDataTypes[Type]>) => ({
   address,
   doc: snapshot.ref,
   data: snapshot.data() as ActionDataTypes[Type],
@@ -116,7 +115,7 @@ function decomposeActionPath(path: string) {
 // Get all actions of type that have not yet completed.
 export async function getIncompleteActions<Type extends ActionType>(type: Type) {
   const allIncompleteOfType = await getIncompleteCollection(type).get();
-  const fetchAll = allIncompleteOfType.docs.map(d => {
+  const fetchAll = [...allIncompleteOfType.docs].map(d => {
     const path = d.get('ref');
     const { address, id } = decomposeActionPath(path);
     return getAction(address, type, id);
@@ -136,7 +135,7 @@ export async function removeIncomplete(type: ActionType, path: string) {
     .get();
 
   // mocked db does not implement 'where' clause, so manually filter here so tests pass
-  let docs = snapshot.docs;
+  let docs = [...snapshot.docs];
   if (process.env.NODE_ENV === 'test') {
     docs = docs.filter(d => d.get('ref') == path);
   }

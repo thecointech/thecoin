@@ -1,7 +1,6 @@
 import * as BrokerDB from '@thecointech/broker-db';
-import { ActionType } from '@thecointech/broker-db';
 import { GetContract } from '@thecointech/contract';
-import { getFirestore } from "@thecointech/firestore";
+import { DocumentReference, getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore/mock';
 import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
@@ -32,7 +31,7 @@ const logError = async (cont: AnyActionContainer) => { log.warn(getLast(cont).da
 
 type States = "initial"|"withFiat"|"withCoin"|"finalize"|"error"|"complete";
 
-const graph : StateGraph<States, ActionType> = {
+const graph : StateGraph<States, BrokerDB.ActionType> = {
   initial: {
     next: FSM.transitionTo<States>(addFiat, "withFiat"),
   },
@@ -69,7 +68,7 @@ it("Processes and repeats a list of events", async () => {
       timestamp: DateTime.now(),
     },
     history: [],
-    doc: getFirestore().doc("/Buy/1234"),
+    doc: getFirestore().doc("/Buy/1234") as DocumentReference<BrokerDB.AnyActionData>,
   }
 
   const expectedValues = {

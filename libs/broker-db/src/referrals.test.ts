@@ -34,7 +34,7 @@ test("Can create referrer", async () => {
 it('Rejects unregistered codes', async () => {
   const junk = "123456";
   const verifyJunk = await getReferrerData(junk);
-  expect(verifyJunk).toBeNull();
+  expect(verifyJunk).toBeUndefined();
 })
 
 test("Can refer new user.", async () => {

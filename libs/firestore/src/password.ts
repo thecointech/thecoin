@@ -18,8 +18,8 @@ export const init = async (name: string, password: string) =>
   const cred = await _auth.signInWithEmailAndPassword(name, password);
   if (cred != null)
   {
-    const _db = firebase.firestore();
-    setFirestore(_db as any);
+    const db = firebase.firestore();
+    setFirestore(db);
     Timestamp.init(firebase.firestore.Timestamp);
     return true;
   }
