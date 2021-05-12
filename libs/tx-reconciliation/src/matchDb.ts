@@ -1,12 +1,10 @@
-import { BaseTransactionRecord, DepositRecord, PurchaseType } from "@thecointech/tx-firestore";
-import { UserAction } from "@thecointech/utilities/User";
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { matchManual } from "./matchManual";
-import { Obsolete } from "@thecointech/tx-firestore/obsolete";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
+import { ActionType } from "@thecointech/broker-db";
 
 
 // Match all DB entries with raw data
@@ -18,9 +16,6 @@ export function matchDB(data: AllData) {
   const sales = convertBaseTransactions(data, "Sell");
   addReconciled(r, bills);
   addReconciled(r, sales);
-
-  const obsolete = convertObsolete(data);
-  addReconciled(r, obsolete);
 
   matchManual(r, data);
 
@@ -34,12 +29,12 @@ export function matchDB(data: AllData) {
   return r;
 }
 
-export function convertBaseTransactions(data: AllData, action: UserAction) {
+export function convertBaseTransactions(data: AllData, action: ActionType) {
   const deposits = Object.entries(data.dbs[action]).map(([address, deposits]) => {
 
     // find the bank record that matches this purchase
     const names = findNames(data, address);
-    const records = deposits.map((d: BaseTransactionRecord) => convertBaseTransactionRecord(d, action));
+    const records = deposits.map((d: any)=> convertBaseTransactionRecord(d, action));
     // find the bank record that matches this purchase
     return {
       names,
@@ -72,7 +67,7 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
   }
 }
 
-const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserAction) : ReconciledRecord => ({
+const convertBaseTransactionRecord = (record: any, type: ActionType) : ReconciledRecord => ({
   action: type,
   database: record,
   data: {
@@ -84,46 +79,3 @@ const convertBaseTransactionRecord = (record: BaseTransactionRecord, type: UserA
   bank: [],
   blockchain: null,
 });
-
-function convertObsolete(data: AllData) {
-  return Object.entries(data.obsolete).map(([address, txs]) => {
-    // find the bank record that matches this purchase
-    const names = findNames(data, address);
-    const transactions =  txs.map(tx => {
-      const ob = tx as Obsolete;
-      const dp = tx as DepositRecord;
-      const recievedTimestamp = ob.recieved ?? dp.recievedTimestamp;
-      const completedTimestamp = ob.completed ?? dp.completedTimestamp;
-      const processedTimestamp = ob.settled ?? dp.processedTimestamp;
-      const value = ob.coin ?? dp.transfer.value;
-      const fiat = ob.fiat ?? dp.fiatDisbursed;
-      const hash = ob.txHash ?? dp.hash;
-      const type = PurchaseType.etransfer;
-      const record :DepositRecord = {
-        type,
-        confirmed: true,
-        hash,
-        fiatDisbursed: fiat,
-        recievedTimestamp,
-        completedTimestamp,
-        processedTimestamp,
-        transfer: { value }
-      };
-      return record;
-    })
-    .map(deposit => ({
-      action: "Buy" as UserAction,
-      data: deposit,
-      database: null,
-      blockchain: null,
-      email: null,
-      bank: [],
-    }))
-
-    return {
-      names,
-      address,
-      transactions,
-    }
-  })
-};

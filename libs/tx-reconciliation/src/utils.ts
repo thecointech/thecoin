@@ -1,4 +1,4 @@
-import { Timestamp } from "@thecointech/types";
+import { Timestamp } from "@thecointech/firestore";
 import { DateTime } from "luxon"
 import { Reconciliations } from "./types";
 import { knownIssues } from './data/manual.json';

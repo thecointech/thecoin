@@ -1,5 +1,5 @@
 import { getFirestore, CollectionReference, Timestamp, DocumentReference } from "@thecointech/firestore";
-import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities/Address";
+import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities";
 import { getUserDoc, getUserData, ReferralData } from "./user";
 import { NewAccountReferal } from "@thecointech/types";
 

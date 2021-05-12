@@ -23,10 +23,10 @@
     "./": "./build/"
   },
   "dependencies": {
+    "@thecointech/broker-db": "*",
     "@thecointech/rbcapi": "^0.2.1",
     "@thecointech/shared": "^0.2.1",
     "@thecointech/tx-blockchain": "^0.2.1",
-    "@thecointech/tx-firestore": "^0.2.1",
     "@thecointech/tx-gmail": "^0.2.1",
     "@thecointech/utilities": "^0.2.1"
   },

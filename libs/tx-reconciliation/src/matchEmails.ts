@@ -1,5 +1,5 @@
-import { filterCandidates, toDateTime } from "./utils";
-import { DepositRecord } from "@thecointech/tx-firestore";
+import { filterCandidates } from "./utils";
+import { BuyAction } from "@thecointech/broker-db";
 import { AllData, User, ReconciledRecord } from "types";
 
 // Find the most common name associated with an
@@ -14,7 +14,7 @@ export function findNames(data: AllData, address: string) {
 
 export function spliceEmail(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
   const email = record.action === "Buy"
-    ? findEmail(data, user, record.data as DepositRecord, maxDays)
+    ? findEmail(data, user, record.data as BuyAction, maxDays)
     : null;
 
   if (email) {
@@ -23,34 +23,18 @@ export function spliceEmail(data: AllData, user: User, record: ReconciledRecord,
   return null;
 }
 
-export function findEmail(data: AllData, user: User, deposit: DepositRecord, maxDays: number) {
-  const { sourceId, recievedTimestamp, fiatDisbursed } = deposit;
-  if (sourceId)
-    return data.eTransfers.find(et => et.id === sourceId);
+export function findEmail(data: AllData, user: User, deposit: BuyAction, maxDays: number) {
+  const { initialId, timestamp, initial } = deposit.data;
+  if (initialId)
+    return data.eTransfers.find(et => et.id === initialId);
 
   // basic requirements
   let candidates = data.eTransfers.filter(et => et.address === user.address);
-  candidates = candidates.filter(et => et.cad.eq(fiatDisbursed));
+  candidates = candidates.filter(et => et.cad.eq(initial.amount));
 
-  candidates = filterCandidates(candidates, "recieved", toDateTime(recievedTimestamp), maxDays);
+  candidates = filterCandidates(candidates, "recieved", timestamp, maxDays);
   if (candidates.length === 1 || (maxDays === 0 && candidates.length > 0))
     return candidates[0];
 
   return null;
-
-
-  // if (candidates[0]?.recieved.equals(date))
-  //   return candidates[0];
-
-  // // not exact, lets get fuzzy!  First, make sure our closest match is on the right side of history
-  // candidates = candidates.filter(et => et.recieved.minus({days: 1}) <= date);
-
-  // // If we have only one option, and it's reasonably close, lets take it.
-  // if (candidates.length == 1)
-  // {
-  //   const candidate = candidates[0];
-  //   if (candidate.recieved.diff(date).get("days") < 5)
-  //     return candidate;
-  // }
-  // return undefined;
 }

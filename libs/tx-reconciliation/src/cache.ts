@@ -1,4 +1,4 @@
-import { Timestamp } from "@thecointech/utilities/firestore";
+import { Timestamp } from "@thecointech/firestore";
 import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
@@ -65,10 +65,6 @@ export function convertDataFromJson(asJson: any) {
   convertAction(asData.dbs.Buy);
   convertAction(asData.dbs.Sell);
   convertAction(asData.dbs.Bill);
-
-  Object.values(asData.obsolete).forEach((txs: any) => {
-    txs.forEach(convertTimestamps)
-  })
 
   return asData;
 }
