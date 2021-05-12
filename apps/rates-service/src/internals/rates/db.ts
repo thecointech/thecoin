@@ -1,16 +1,16 @@
-import { GetFirestore, Timestamp } from "@thecointech/utilities/firestore";
+import { getFirestore, Timestamp, CollectionReference } from "@thecointech/firestore";
 import { RateKey, RateType } from "./types";
 import { IsDebug } from "@thecointech/utilities/IsDebug";
 import { log } from "@thecointech/logging";
-// Our data is stored in native Timestamp
-// for easy human-comprehension reading the DB through webUI
-import { DocumentData } from '@thecointech/types';
+
 
 //
 // All functions connecting to the DB occur in this file
 // Nobody outside this file should be aware of our storage
 //
 
+// Our data is stored in native Timestamp, but our codebase is based
+// on DateTime.  This file manages the conversion back and forth
 type DbType = Omit<Omit<RateType, "validFrom">, "validTill"> & {
   validFrom: Timestamp,
   validTill: Timestamp,
@@ -18,12 +18,12 @@ type DbType = Omit<Omit<RateType, "validFrom">, "validTill"> & {
 
 // Helpers
 const getRatesCollection = (key: RateKey) =>
-  GetFirestore().collection(key.toString());
+  getFirestore().collection(key.toString()) as CollectionReference<DbType>;
 
 const getRateDoc = (key: RateKey, ts: number) =>
   getRatesCollection(key).doc(ts.toString())
 
-const toRateType = (db: DocumentData): RateType => ({
+const toRateType = (db: DbType): RateType => ({
   ...db as any,
   validFrom: db.validFrom.toMillis(),
   validTill: db.validTill.toMillis(),
