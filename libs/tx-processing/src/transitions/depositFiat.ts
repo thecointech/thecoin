@@ -16,12 +16,12 @@ export async function depositFiat(container: BuyActionContainer) {
 
 async function doDeposit(container: BuyActionContainer) {
   const etransfer = container.instructions;
-  if (etransfer == null) { return { error: "Deposit missing eTransfer deposit instructions"}};
+  if (etransfer == null) { return { error: "Buy action missing eTransfer instructions"}};
 
-  // There is no scenario where we already have fiat but want to add more
+  // An action should not contain multiple fiat deposits
   const currentState = getCurrentState(container);
   if (currentState.data.fiat?.isZero() === false) {
-    return { error: 'invalid state: a balance is already assigned to this transaction'}
+    return { error: 'Cannot deposit fiat, action already has fiat balance'}
   }
 
   const bank = new RbcApi();

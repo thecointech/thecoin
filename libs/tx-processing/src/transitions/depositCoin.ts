@@ -16,8 +16,9 @@ export async function depositCoin(container: TypedActionContainer<BSActionTypes>
 // implementation
 const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
   const currentState = getCurrentState(container);
+  // An action should not contain multiple coin deposits
   if (currentState.data.coin?.isPositive()) {
-    return { error: 'Cannot deposit coin, has existing value' }
+    return { error: 'Cannot deposit coin, action already has coin balance' }
   }
 
   const transfer = container.action.data.initial;

@@ -14,7 +14,6 @@ globalThis.__thecoin = {
   firestore: null,
 }
 
-
 // Store on global to avoid any weirdities
 export function setFirestore(db: Firestore)
 {
@@ -23,7 +22,6 @@ export function setFirestore(db: Firestore)
     firestore: db,
   };
 }
-
 
 export function getFirestore() : Firestore
 {
