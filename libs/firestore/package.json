@@ -34,6 +34,9 @@
     ".": "./build/index.js",
     "./": "./build/"
   },
+  "dependencies": {
+    "@thecointech/logging": "*"
+  },
   "peerDependencies": {
     "@google-cloud/firestore": "*",
     "firebase": "*"

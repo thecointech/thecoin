@@ -1,7 +1,5 @@
 import { getFirestore, CollectionReference, Timestamp, DocumentReference } from "@thecointech/firestore";
-import { IsValidAddress, IsValidReferrerId } from "@thecointech/utilities/Address";
-import base32 from 'base32';
-import { Signer, utils } from 'ethers';
+import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities/Address";
 import { getUserDoc, getUserData, ReferralData } from "./user";
 import { NewAccountReferal } from "@thecointech/types";
 
@@ -39,13 +37,6 @@ export async function getUsersReferrer(address: string) {
   return null;
 }
 
-export function getReferrerCode(signature: string) {
-  const normSig = signature[1] == "x" ? signature.slice(2) : signature;
-  const buffer = Buffer.from(normSig, "hex");
-  const s2: string = base32.encode(buffer);
-  return s2.slice(-6).toLowerCase();
-}
-
 //
 //  Add a referral code for an account
 //  TODO: Only verified accounts can have referral codes?
@@ -53,7 +44,7 @@ export function getReferrerCode(signature: string) {
 //  TODO: Move the signature creation inside this function
 //
 export async function createReferrer(signature: string, address: string) {
-  const code = getReferrerCode(signature);
+  const code = getShortCode(signature);
   const referrerDoc = getReferrerDoc(code);
 
   const data: VerifiedReferrer = {
@@ -92,24 +83,4 @@ export async function createReferree(referral: NewAccountReferal, created: Times
   console.log(
     `Create user: ${newAccount} from ${referrer}`
   );
-}
-
-//
-// Get 6-digit account code, used for e-Transfers & referrals (but from different signers)
-export async function GetAccountCode(address: string, signer: Signer)
-{
-  // generate this signers secret key
-  const rhash = GetHash(address.toLowerCase());
-  const rsign = await signer.signMessage(rhash);
-  return getReferrerCode(rsign);
-}
-
-export function GetHash(
-  value: string
-) {
-  const ethersHash = utils.solidityKeccak256(
-    ["string"],
-    [value]
-  );
-  return utils.arrayify(ethersHash);
 }

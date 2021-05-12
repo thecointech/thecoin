@@ -1,6 +1,6 @@
 import { getFirestore, DocumentReference, CollectionReference, DocumentSnapshot } from "@thecointech/firestore";
 import { log } from "@thecointech/logging";
-import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData } from "./types";
+import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types";
 import { getUserDoc } from "../user";
 import equal from "fast-deep-equal/es6";
 
@@ -32,7 +32,7 @@ export async function getAction<Type extends ActionType>(address: string, type: 
 }
 
 //
-// Find an action for user addres with initialId
+// Find an action for user address with initialId
 export async function getActionFromInitial<Type extends ActionType>(address: string, type: Type, initial: ActionDataTypes[Type]): Promise<TypedAction<Type>> {
   const typeCollection = userActionRef(address, type);
   const query = await typeCollection
@@ -52,6 +52,34 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
       log.fatal({ intialId: initial.initialId, type, address },
         'Duplicate {type} initialId {initialId} found for {address}');
       throw new Error(`Found duplicate actions`);
+  }
+}
+
+//
+// Gets all actions (complete & incomplete) of type for user address
+export async function getActionsForAddress<Type extends ActionType>(address: string, type: Type) {
+  const actionRefs = await userActionRef(address, type).get();
+  const actions = await Promise.all([...actionRefs.docs].map(d => toAction(address, type, d)));
+  return actions.sort((a, b) => a.data.timestamp.toMillis() - b.data.timestamp.toMillis());
+}
+
+//
+// Gets all actions (complete & incomplete) of type for users
+export async function getAllActionsOfType<Type extends ActionType>(addresses: string[], type: Type) {
+  const r: ActionDictionary<Type> = {};
+  for (const address of addresses) {
+    r[address] = await getActionsForAddress(address, type)
+  }
+  return r;
+}
+
+//
+// Get all actions for the passed users
+export async function getAllActions(addresses: string[]) {
+  return {
+    Buy: await getAllActionsOfType(addresses, "Buy"),
+    Sell: await getAllActionsOfType(addresses, "Sell"),
+    Bill: await getAllActionsOfType(addresses, "Bill"),
   }
 }
 

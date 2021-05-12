@@ -44,11 +44,13 @@ export type BaseActionData = {
   timestamp: DateTime;
   initialId: string
 }
+
+export type PurchaseType = "etransfer"|"deposit"|"other";
 export type ActionDataTypes = {
   Buy: {
     initial: {
       amount: Decimal;
-      type: "etransfer"|"deposit"|"other";
+      type: PurchaseType;
     }
   } & BaseActionData;
   Sell: { initial: CertifiedTransfer } & BaseActionData;
@@ -76,3 +78,7 @@ export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
 export type AnyAction = TypedAction<ActionType>;
+
+// Store a mapping of address => Actions[]
+export type ActionDictionary<Type extends ActionType> = { [address: string]: TypedAction<Type>[] }
+
