@@ -6,7 +6,7 @@ import equal from "fast-deep-equal/es6";
 
 const HISTORY_KEY = "history";
 const getIncompleteCollection = (type: ActionType) => getFirestore().collection(type);
-const historyCollection = <T>(action: DocumentReference<T>) => action.collection(HISTORY_KEY) as CollectionReference<TransitionDelta>;
+const historyCollection = (action: DocumentReference<AnyActionData>) => action.collection(HISTORY_KEY) as CollectionReference<TransitionDelta>;
 const userActionRef = <Type extends ActionType>(address: string, type: Type) => getUserDoc(address).collection(type) as CollectionReference<ActionDataTypes[Type]>;
 //
 // Get event collection of single action, ordered by timestamp
