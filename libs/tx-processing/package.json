@@ -21,7 +21,7 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*"
   },
   "dependencies": {
     "@thecointech/broker-db": "*",
