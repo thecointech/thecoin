@@ -5,8 +5,6 @@ export type FirestoreClient = firebase.firestore.Firestore;
 export type FirestoreAdmin = firestore.Firestore;
 
 // Export the basic types we are likely to name elsewhere
-//export type CollectionReference<T> = firebase.firestore.CollectionReference<T>|firestore.CollectionReference<T>;
-//export type DocumentReference<T> = firebase.firestore.DocumentReference<T>|firestore.DocumentReference<T>;
 export type DocumentSnapshot<T> = firebase.firestore.DocumentSnapshot<T>|firestore.DocumentSnapshot<T>;
 export type QueryDocumentSnapshot<T = DocumentData> = firebase.firestore.QueryDocumentSnapshot<T>|firestore.QueryDocumentSnapshot<T>;
 export type FirestoreDataConverter<T> = firebase.firestore.FirestoreDataConverter<T>|firestore.FirestoreDataConverter<T>;
