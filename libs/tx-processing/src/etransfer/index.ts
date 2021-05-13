@@ -1,5 +1,5 @@
 import { getIncompleteActions } from "@thecointech/broker-db";
-import { StateMachineProcessor } from "statemachine";
+import { StateMachineProcessor } from "../statemachine";
 import { graph } from "./graph";
 import { TheCoin } from '@thecointech/contract';
 

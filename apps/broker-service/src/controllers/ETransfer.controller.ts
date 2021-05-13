@@ -1,11 +1,15 @@
 import { Controller, Body, Route, Post, Put, Response, Tags } from '@tsoa/runtime';
 import { SendMail } from "@thecointech/email";
 import { DoCertifiedSale } from "../exchange/VerifiedSale";
-import { DoActionAndNotify } from "../utils/DoActionAndNotify";
 import { GenerateCode } from "../Buy/eTransfer";
 import { CertifiedTransfer, SignedMessage } from '@thecointech/types';
 import { ETransferCodeResponse } from './types';
 
+type ActionResult = {
+  hash?: string;
+  message?: string;
+  error?: string
+}
 
 @Route('etransfer')
 @Tags('ETransfer')
@@ -21,8 +25,8 @@ export class ETransferController extends Controller {
     @Post('eTransfer')
     @Response('200', 'The response confirms to the user the order has been processed')
     @Response('405', 'Invalid input')
-    async eTransfer(@Body() request: CertifiedTransfer) {
-      return DoActionAndNotify(request, DoCertifiedSale);
+    async eTransfer(@Body() request: CertifiedTransfer) : Promise<ActionResult> {
+      return DoCertifiedSale(request);
     }
 
     /**

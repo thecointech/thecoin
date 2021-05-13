@@ -31,16 +31,11 @@ const doSendCoin: TransitionCallback = async (container) => {
   };
 }
 
-type EthersTx = {
-  hash: string;
-  wait: () => Promise<void>;
-}
-
 async function startTheTransfer(address: string, value: Decimal, settled: DateTime, contract: TheCoin)
 {
   log.debug({address}, `Transfering ${value.toString()} to {address}`);
 
-  const tx: EthersTx = await contract.coinPurchase(
+  const tx = await contract.coinPurchase(
     address,
     value.toString(),
     0,

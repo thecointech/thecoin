@@ -10,3 +10,4 @@ export * from './requestManual';
 export * from './markComplete';
 export * from './sendETransfer';
 export * from './labelEmail';
+export * from './doBillPayment';

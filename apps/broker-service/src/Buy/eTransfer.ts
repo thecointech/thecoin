@@ -1,6 +1,6 @@
 import { GetWallet } from "../exchange/Wallet";
 import { utils } from 'ethers';
-import { GetReferrerCode } from "@thecointech/utilities/Referrals";
+import { getShortCode } from "@thecointech/utilities/Address";
 import { SignedMessage } from "@thecointech/types";
 
 // Todo: move SignMessage-y fn's to utilities
@@ -35,5 +35,5 @@ export async function GenerateCode(request: SignedMessage)
 	const rsign = await wallet.signMessage(rhash);
 	// We multi-purpose the referrer code
 	// to give a unique & repeatable code per-user
-	return GetReferrerCode(rsign);
+	return getShortCode(rsign);
 }

@@ -27,7 +27,7 @@
     "build": "run-s build:contracts generate-types build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
-    "build:copy": "cpx \"./src/deployed\" ./build/",
+    "build:copy": "cpx \"./src/types/*.d.ts\" ./build/types",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
