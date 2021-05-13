@@ -1,24 +1,50 @@
 import { DocumentData, FirestoreDataConverter, toDateTime, toTimestamp } from "@thecointech/firestore";
+import { Decimal } from "decimal.js-light";
+import { isPlainObject } from 'lodash';
+
+function convertObject(obj: DocumentData, keys: string[], converter: (v: any) => any) {
+  // do a deep clone
+  const r = { ...obj };
+  Object.keys(obj).forEach(k => {
+    if (keys.includes(k)) {
+      r[k] = converter(obj[k]);
+    }
+    else if (isPlainObject(obj[k])) {
+      r[k] = convertObject(obj[k], keys, converter);
+    }
+  })
+  return r;
+}
+type converter = {
+  toFirestore: (v: any) => any;
+  fromFirestore: (v: any) => any;
+  keys: string[];
+};
+
+export function convertDates<T>(...keys: (keyof T)[]) {
+  return {
+    toFirestore: toTimestamp,
+    fromFirestore: toDateTime,
+    keys,
+  }
+}
+export function convertDecimal<T>(...keys: (keyof T)[]) {
+  return {
+    toFirestore: (d: Decimal) => d.toNumber(),
+    fromFirestore: (n: number) => new Decimal(n),
+    keys,
+  }
+}
+
 
 // Helper function converts to/from datastore, with DateTime/Timestamp conversion
-export function buildConverter<T>(dtKeys: (keyof T)[]=[]) : FirestoreDataConverter<T> {
+export function buildConverter<T>(...converters: converter[]): FirestoreDataConverter<T> {
   return {
     toFirestore(data: T) {
-      const r: DocumentData = {...data};
-      dtKeys.forEach(k => {
-        const ks = k as string;
-        if (r[ks])
-          r[ks] = toTimestamp(r[ks])]
-      });
-      return r
+      return converters.reduce((obj, cv) => convertObject(obj, cv.keys, cv.toFirestore), data as DocumentData);
     },
     fromFirestore(snapshot: DocumentData): T {
-      const r = {...snapshot.data()};
-      dtKeys.forEach(k => {
-        if (r[k])
-          r[k] = toDateTime(r[k]);
-      });
-      return r as T;
+      return converters.reduce((obj, cv) => convertObject(obj, cv.keys, cv.fromFirestore), snapshot.data());
     }
   }
 }

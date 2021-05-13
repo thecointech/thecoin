@@ -1,13 +1,13 @@
-import { getFirestore, DocumentReference, DocumentSnapshot } from "@thecointech/firestore";
+import { getFirestore, DocumentReference, DocumentSnapshot, FirestoreDataConverter } from "@thecointech/firestore";
 import { log } from "@thecointech/logging";
 import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types";
 import { getUserDoc } from "../user";
 import equal from "fast-deep-equal/es6";
-import { actionConverter, incompleteConverter, transitionConverter } from "./converters";
+import { actionConverters, incompleteConverter, transitionConverter } from "./converters";
 
 const incompleteCollection = (type: ActionType) => getFirestore().collection(type).withConverter(incompleteConverter);
 const historyCollection = (action: DocumentReference<AnyActionData>) => action.collection("History").withConverter(transitionConverter);
-const userActionCollection = <Type extends ActionType>(address: string, type: Type) => getUserDoc(address).collection(type).withConverter(actionConverter<Type>());
+const userActionCollection = <Type extends ActionType>(address: string, type: Type) => getUserDoc(address).collection(type).withConverter(actionConverters[type] as FirestoreDataConverter<ActionDataTypes[Type]>)
 
 //
 // Get event collection of single action, ordered by timestamp
@@ -46,7 +46,7 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
     case 1:
       const action = await toAction(address, type, query.docs[0]);
       // Assert equivalency
-      assertSame(action.data.timestamp, initial.timestamp);
+      assertSame(action.data.date, initial.date);
       assertSame(action.data.initial, initial.initial);
       return action;
     default:
@@ -61,7 +61,7 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
 export async function getActionsForAddress<Type extends ActionType>(address: string, type: Type) {
   const actionRefs = await userActionCollection(address, type).get();
   const actions = await Promise.all([...actionRefs.docs].map(d => toAction(address, type, d)));
-  return actions.sort((a, b) => a.data.timestamp.toMillis() - b.data.timestamp.toMillis());
+  return actions.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
 }
 
 //

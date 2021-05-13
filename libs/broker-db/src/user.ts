@@ -30,11 +30,11 @@ export async function getUserData(address: string) : Promise<AllUserData|undefin
 //
 // Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
-export async function setUserVerified(signature: string, address: string, timestamp: DateTime) {
+export async function setUserVerified(signature: string, address: string, date: DateTime) {
 	const userDoc = getUserDoc(address)
 	const data: UserVerifiedInfo = {
 		verified: signature,
-		verifiedTimestamp: timestamp
+		verifiedDate: date
 	}
 	// We store the verified signature
 	await userDoc.set(data, { merge: true });
