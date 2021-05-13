@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "currency.js": "^2.0.3",
     "dotenv": "^8.2.0",
     "invariant": "2.2.4",
     "lodash": "^4.17.15",

@@ -51,10 +51,10 @@ export function findPayee(text: string): Validatable|undefined {
   return item;
 }
 
-export function validate(name: string, value: string) : ValuedMessageDesc|null
+export function validate(name: string, value: string) : ValuedMessageDesc|undefined
 {
   const payee = findPayee(name);
-  return payee?.validate(value) ?? null;
+  return payee?.validate(value) ?? undefined;
 }
 
 //   const validatable = findType(name)

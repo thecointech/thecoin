@@ -10,14 +10,14 @@
 import * as React from 'react';
 import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
 import { useLocation } from 'react-router';
-import { MainNavigation } from 'containers/MainNavigation';
+import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
@@ -61,11 +61,13 @@ export const App = () => {
         <Container style={{ width: '100%' }} className={``}>
           <MainPageTransition location={location}>
 
-            <Rail internal position='left'>
-              <Sticky context={contextRef}>
-                <PageSidebar />
-              </Sticky>
-            </Rail>
+            <GreaterThanMobileSegment>
+              <Rail internal position='left'>
+                <Sticky context={contextRef}>
+                  <PageSidebar />
+                </Sticky>
+              </Rail>
+            </GreaterThanMobileSegment>
 
             {rightColumnTop}
 

@@ -14,23 +14,30 @@ export enum ErrorState {
   Warning,
 }
 
-export type ChangeCB = (value: string) => void;
-
 // Allow embedding values directly into MessageDescriptor
 export type ValuedMessageDesc = {
   values?: Object
 } & MessageDescriptor;
 
+export type ChangeCB = (value: string, name?: string) => void;
+
 export interface Props {
-  intlLabel: MessageDescriptor;
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: ValuedMessageDesc | null;
+  message?: ValuedMessageDesc;
   tooltip?: MessageDescriptor;
-
   forceValidate?: boolean;
+  isRequired?: boolean;
 
   // pass through additional props to underlying type
   [id: string]: any;
 }
+interface LabelWithIntl extends Props{
+  intlLabel?: MessageDescriptor;
+}
+interface LabelWithElements extends Props{
+  elementLabel?: JSX.Element;
+}
+
+export type UxLabel = LabelWithIntl | LabelWithElements;

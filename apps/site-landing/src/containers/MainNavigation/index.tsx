@@ -3,20 +3,13 @@ import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/com
 import {MainNavigationMobile} from './MainNavigationMobile';
 import {MainNavigationGreaterThanMobile} from './MainNavigationGreaterThanMobile';
 
-class Navigation extends React.Component {
-  render() {
-    return (
-      <>
-        <GreaterThanMobileSegment>
-          <MainNavigationGreaterThanMobile />
-        </GreaterThanMobileSegment>
+export const MainNavigation = () =>
+  <>
+    <GreaterThanMobileSegment>
+      <MainNavigationGreaterThanMobile />
+    </GreaterThanMobileSegment>
 
-        <MobileSegment>
-          <MainNavigationMobile />
-        </MobileSegment>
-      </>
-    );
-  }
-}
-
-export default Navigation;
+    <MobileSegment>
+      <MainNavigationMobile />
+    </MobileSegment>
+  </>

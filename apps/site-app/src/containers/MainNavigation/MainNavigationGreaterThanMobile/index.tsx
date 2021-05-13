@@ -12,9 +12,9 @@ import styles from './styles.module.less';
 const home = { id:"app.MainNavigation.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
-const help = { id:"app.MainNavigation.help",
-                defaultMessage:"Help",
-                description:"Title for the help entry in the menu"};
+//const help = { id:"app.MainNavigation.help",
+//                defaultMessage:"Help",
+//                description:"Title for the help entry in the menu"};
 const contact = { id:"app.MainNavigation.contact",
                 defaultMessage:"Contact Us",
                 description:"Title for the contact entry in the menu"};
@@ -34,10 +34,10 @@ const contact = { id:"app.MainNavigation.contact",
                   <HeaderLink to="/" exact>
                     <FormattedMessage {...home} />
                   </HeaderLink>
-                  <HeaderLink to="/" exact>
+                  {/* <HeaderLink to="/" exact>
                     <FormattedMessage {...help} />
-                  </HeaderLink>
-                  <HeaderLink to="/" exact>
+                  </HeaderLink>*/}
+                  <HeaderLink to="/contact" exact>
                     <FormattedMessage {...contact} />
                   </HeaderLink>
                   <Menu.Menu position='right'>

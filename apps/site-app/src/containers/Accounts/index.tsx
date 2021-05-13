@@ -9,6 +9,7 @@ import { Topup } from 'containers/TopUp';
 import { Settings } from 'containers/Settings';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
+import { ContactUs } from 'containers/ContactUs';
 
 
 const home = { id:"app.accounts.sidebar.home",
@@ -62,7 +63,7 @@ const AccountRoutes: RouterPath[] = [
   {
     name: contact,
     urlFragment: 'contact',
-    creator: () => (() => <Settings />),
+    creator: () => (() => <ContactUs />),
     icon: "envelope outline",
   },
 ];
