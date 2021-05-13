@@ -80,10 +80,10 @@ it("Processes and repeats a list of events", async () => {
     coin: undefined as undefined|Decimal,
   }
 
-  const runTest = async (expectedState: States, executedTransitions: number, numErrors: number) => {
+  const runTest = async (expectedState: States, executedTransitions: number, numErrors: number, breakAt?: States) => {
 
     jest.resetAllMocks();
-    const container = await processor.execute({}, action);
+    const container = await processor.execute({}, action, breakAt);
 
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
@@ -126,4 +126,9 @@ it("Processes and repeats a list of events", async () => {
   graph.withCoin.next = FSM.transitionTo<States>(noop, "finalize");
   action.history = [];
   await runTest('complete', 4, 0);
+
+  // Does it break & resume properly?
+  action.history = [];
+  await runTest('withCoin', 2, 0, "withCoin");
+  await runTest('complete', 2, 0);
 })

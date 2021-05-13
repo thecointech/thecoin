@@ -61,12 +61,4 @@ async function DoCertifiedTransferWaitable(transfer: CertifiedTransferRequest) {
   return tx;
 }
 
-// function isTx(tx:  CertifiedTransferResponse | TransactionResponse): tx is TransactionResponse {
-// 	return (<TransactionResponse>tx).hash !== undefined;
-// }
-// async function DoCertifiedTransfer(transfer: CertifiedTransferRequest) {
-// 	const res = await DoCertifiedTransferWaitable(transfer);
-// 	return res;
-// }
-
 export { success, failure, DoCertifiedTransferWaitable };

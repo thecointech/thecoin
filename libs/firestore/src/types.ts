@@ -19,7 +19,7 @@ export type CollectionReference<T=DocumentData> = Omit<firebase.firestore.Collec
   // listDocuments only present on server library
   listDocuments?: () => Promise<Array<DocumentReference<T>>>;
 }
-export type DocumentReference<T> = Omit<firebase.firestore.DocumentReference<T>|firestore.DocumentReference<T>, "collection"> & {
+export type DocumentReference<T=DocumentData> = Omit<firebase.firestore.DocumentReference<T>|firestore.DocumentReference<T>, "collection"> & {
   collection(id: string): CollectionReference
 };
 

@@ -5,10 +5,8 @@ import { GetSigner } from '@thecointech/utilities/VerifiedAction'
 import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { getBrokerCADAddress } from '../status';
 
-const ValidSignatures = (action: CertifiedTransfer) => {
-  const actionSigner = GetSigner(action);
-  if (!actionSigner)
-    return false;
+const ValidSignatures = (action: CertifiedTransfer, actionSigner: string) => {
+
   const xferSigner = GetTransferSigner(action.transfer);
   if (!xferSigner)
     return false;
@@ -22,8 +20,13 @@ const ValidDestination = (action: CertifiedTransfer, brokerCAD: string) =>
   NormalizeAddress(action.transfer.to) == NormalizeAddress(brokerCAD);
 
 export const CertifiedActionVerify = async (action: CertifiedTransfer) => {
-	// First, check that bill payment & the transfer are signed by the same person
-	if (!ValidSignatures(action))
+  // First, is the signature valid?
+  const actionSigner = GetSigner(action);
+  if (!actionSigner)
+    throw new Error("Invalid signature");
+
+	// Next, check that bill payment & the transfer are signed by the same person
+	if (!ValidSignatures(action, actionSigner))
 		throw new Error("Mismatching Signatures");
 
 	// verify that the transfer recipient is the Broker CAD
@@ -31,5 +34,5 @@ export const CertifiedActionVerify = async (action: CertifiedTransfer) => {
 	if (!ValidDestination(action, brokerCAD))
     throw new Error("Invalid Destination");
 
-  return true;
+  return actionSigner;
 }

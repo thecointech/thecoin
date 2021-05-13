@@ -1,8 +1,7 @@
-import { Controller, Get, Route, Query, Body, Post, Response, Tags } from '@tsoa/runtime';
-import { GetReferrerData, CreateReferree } from '@thecointech/utilities/Referrals';
-import { Timestamp } from '@thecointech/utilities/firestore';
+import { Controller, Get, Route, Query, Post, Response, Tags, BodyProp } from '@tsoa/runtime';
+import { getReferrerData, createReferree } from '@thecointech/broker-db/Referrals';
 import { BoolResponse } from '../types';
-import { NewAccountReferal } from '@thecointech/types';
+import { DateTime } from 'luxon';
 
 @Route('referrals')
 @Tags('Referrals')
@@ -19,8 +18,7 @@ export class ReferralsController extends Controller {
   @Response('405', 'Server Error')
   async referrerValid(@Query() referrerId: string) : Promise<BoolResponse> {
     try {
-      // TODO: This fn should _not_ throw
-      const referrer = await GetReferrerData(referrerId);
+      const referrer = await getReferrerData(referrerId);
       return {
         success: !!referrer
       };
@@ -42,10 +40,9 @@ export class ReferralsController extends Controller {
   @Post()
   @Response('200', 'Referral success')
   @Response('405', 'Server Error')
-  async referralCreate(@Body() referral: NewAccountReferal): Promise<BoolResponse> {
+  async referralCreate(@BodyProp() code: string, @BodyProp() address: string): Promise<BoolResponse> {
     try {
-      var now = Timestamp.now();
-      await CreateReferree(referral, now);
+      await createReferree(code, address, DateTime.now());
       return {
         success: true
       };

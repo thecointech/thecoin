@@ -81,7 +81,13 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
     this.contract = contract;
   }
 
-  async execute(instructions: InstructionDataTypes[Type]|null, action: TypedAction<Type>) {
+  async execute(
+      instructions: InstructionDataTypes[Type]|null,
+      action: TypedAction<Type>,
+      breakOnState?: States
+    )
+    : Promise<TypedActionContainer<Type>>
+  {
 
     // We always start in the initial state with zero'ed entries
     let currentState = initialState<States>(action.data.date);
@@ -103,6 +109,11 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       const state = currentState.name as keyof StateGraph<States, Type>;
       const { initialId } = action.data;
       const transitions = this.graph[state];
+
+      // Manual early-exit.  Online service explicitly breaks
+      // execution early so it can return at the earliest possible moment
+      if (state === breakOnState)
+        break;
 
       log.trace({ initialId, state }, `Action {initialId} processing state: {state}`);
 
