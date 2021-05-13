@@ -1,4 +1,5 @@
 import { Timestamp as ITimestamp } from "@google-cloud/firestore";
+import { DateTime } from 'luxon';
 
 type TimestampFns = {
   now: () => Timestamp;
@@ -62,10 +63,24 @@ export function isDate(d: Timestamp|Date) : d is Date {
 export function isTimestamp(d: Timestamp|Date) : d is Timestamp {
   return (d as Timestamp).nanoseconds != undefined;
 }
+export function isDateTime(d?: Timestamp|DateTime) : d is DateTime {
+  return DateTime.isDateTime(d);
+}
 
 export function AsDate(d: Timestamp|Date) : Date {
   if (isDate(d))
     return d;
   else return d.toDate();
+}
+
+export function toTimestamp(d?: DateTime) : Timestamp|undefined {
+  return d
+    ? Timestamp.fromMillis(d.toMillis())
+    : d;
+}
+export function toDateTime(d?: Timestamp) : DateTime|undefined {
+  return d
+    ? DateTime.fromMillis(d.toMillis())
+    : d;
 }
 

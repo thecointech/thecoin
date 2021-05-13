@@ -33,9 +33,6 @@ export async function init(params?: InitParams) {
   else if (isEmulatorAvailable()) {
     log.debug('No connection parameters supplied, attempting to connect to emulator');
     const project = params?.project;
-    // todo: can we drop the project requirement?
-    if (!project || typeof project !== "string")
-      throw new Error('Cannot connect to emulator without specifying a project');
     const debug = await import('./debug');
     return debug.init(project);
   }

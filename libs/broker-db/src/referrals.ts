@@ -1,20 +1,14 @@
-import { getFirestore, CollectionReference, Timestamp, DocumentReference } from "@thecointech/firestore";
+import { getFirestore, CollectionReference, DocumentReference } from "@thecointech/firestore";
 import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities";
-import { getUserDoc, getUserData, ReferralData } from "./user";
-import { NewAccountReferal } from "@thecointech/types";
-
-// Referrers stored as /Referrer/{code}/
-// This is the list of all legal referrers.
-export type VerifiedReferrer = {
-  address: string;    // This address of the referrer
-  signature: string;  // TheCoin signature for verification
-}
+import { DateTime } from "luxon";
+import { referrerConverter, VerifiedReferrer } from "referrals.types";
+import { ReferralData } from "user.types";
+import { getUserDoc, getUserData } from "./user";
 
 export function getReferrersCollection() : CollectionReference<VerifiedReferrer> {
-  return getFirestore().collection("Referrer") as CollectionReference<VerifiedReferrer>;
+  return getFirestore().collection("Referrer").withConverter(referrerConverter);
 }
 
-// GetReferrer
 export function getReferrerDoc(referrerId: string) : DocumentReference<VerifiedReferrer> {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
@@ -59,14 +53,12 @@ export async function createReferrer(signature: string, address: string) {
 // Create a new account with the given referral code.  Not
 // every account requires a referral code, but it should not
 // be possible to assign codes to existing accounts
-//
-export async function createReferree(referral: NewAccountReferal, created: Timestamp) {
-  const { referrerId, newAccount } = referral;
+export async function createReferree(referralCode: string, newAccount: string, created: DateTime) {
 
-  if (!IsValidReferrerId(referrerId)) throw new Error("Invalid Referrer");
+  if (!IsValidReferrerId(referralCode)) throw new Error("Invalid Referrer");
   if (!IsValidAddress(newAccount)) throw new Error("Invalid Address");
 
-  const referrerDoc = getReferrerDoc(referrerId);
+  const referrerDoc = getReferrerDoc(referralCode);
   const referrer = await referrerDoc.get();
   if (!referrer.exists) throw new Error("Referrer doesnt exist");
 
@@ -77,7 +69,7 @@ export async function createReferree(referral: NewAccountReferal, created: Times
 
   const data: ReferralData = {
     referredBy: referrer.get("address"),
-    created
+    created,
   };
   await newUserKey.set(data);
   console.log(

@@ -17,7 +17,7 @@ export type CertifiedTransfer = {
 // Data definition for documents stored in
 // /{action}/randomId.
 export type IncompleteRef = {
-  ref: string;
+  ref: DocumentReference<AnyActionData>;
 }
 
 // Changes applied to the action

@@ -2,13 +2,13 @@ import {
   getReferrerData,
   createReferrer,
   createReferree,
-  getUsersReferrer
+  getUsersReferrer,
 } from "./referrals";
-import { NewAccountReferal } from "@thecointech/types";
-import { init, Timestamp } from "@thecointech/firestore";
+import { init } from "@thecointech/firestore";
+import { DateTime } from "luxon";
 
 beforeAll(async () => {
-  await init({});
+  await init();
 })
 
 const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
@@ -45,17 +45,11 @@ test("Can refer new user.", async () => {
   // Create new account referral
   const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; //  wallet
 
-  // Create new referral
-  const referral: NewAccountReferal = {
-    referrerId: junk,
-    newAccount: newAddress
-  };
   // bad referrer id
-  expect(createReferree(referral, Timestamp.now())).rejects.toThrow("Referrer doesnt exist");
+  expect(createReferree(junk, newAddress, DateTime.now())).rejects.toThrow("Referrer doesnt exist");
   // Non-throw is success
   const referralId = await createReferrer(validAddress, validAddress);
-  referral.referrerId = referralId;
-  await createReferree(referral, Timestamp.now());
+  await createReferree(referralId, newAddress, DateTime.now());
 
   // test data store properly
   const referrer = await getUsersReferrer(newAddress);
@@ -63,5 +57,5 @@ test("Can refer new user.", async () => {
   expect(referrer?.referredBy).toMatch(validAddress);
 
   // Test re-create fails
-  expect(createReferree(referral, Timestamp.now())).rejects.toThrow("User already exists");
+  expect(createReferree(referralId, newAddress, DateTime.now())).rejects.toThrow("User already exists");
 });
