@@ -49,7 +49,7 @@ async function getBuyAction(etransfer: eTransferData) {
       amount: cad,
       type: 'etransfer',
     },
-    timestamp: etransfer.recieved,
+    date: etransfer.recieved,
     initialId: id,
   })
 }

@@ -13,7 +13,7 @@
         "Sell": [
           {
             "id": "0xd918c1b0559a68a78a8d398fd00bcb481470d221105228fdea2a4bd798b5f6f2",
-            "timestamp": {
+            "date": {
               "seconds": 1594146908,
               "nanoseconds": 346000
             },

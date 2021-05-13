@@ -1,6 +1,6 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { getFirestore, CollectionReference, DocumentReference } from '@thecointech/firestore';
-import { AllUserData, userDataConverter, UserVerifiedInfo } from "user.types";
+import { AllUserData, userDataConverter, UserVerifiedInfo } from "./user.types";
 import { DateTime } from "luxon";
 
 //

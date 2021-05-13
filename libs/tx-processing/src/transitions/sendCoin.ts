@@ -20,8 +20,8 @@ const doSendCoin: TransitionCallback = async (container) => {
     return { error: 'Cannot send coin, state has no value' }
   }
 
-  const settledTimestamp = findSettledTimestamp(container);
-  var hash = await startTheTransfer(container.action.address, currentState.data.coin, settledTimestamp, container.contract);
+  const settledDate = findSettledDate(container);
+  var hash = await startTheTransfer(container.action.address, currentState.data.coin, settledDate, container.contract);
 
   // We only start the transfer (do not wait for completion).
   // If completion is required add 'waitCoin' transition.
@@ -49,7 +49,7 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
   return tx.hash;
 }
 
-function findSettledTimestamp(container: AnyActionContainer) {
+function findSettledDate(container: AnyActionContainer) {
   const settlements = container.history.filter(t => t.delta.type == toCoin.name);
-  return settlements[settlements.length - 1]?.delta.timestamp ?? container.action.data.timestamp;
+  return settlements[settlements.length - 1]?.delta.date ?? container.action.data.date;
 }

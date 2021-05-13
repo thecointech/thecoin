@@ -34,28 +34,28 @@ async function doConversion(container: AnyActionContainer, from: Currency, to: C
   }
 
   // First, what is our settlement date here?
-  const initiated = container.action.data.timestamp;
+  const initiated = container.action.data.date;
   const nextOpen = await NextOpenTimestamp(initiated.toJSDate());
   if (nextOpen >= Date.now())
     return null;
 
-  const timestamp = DateTime.fromMillis(nextOpen);
-  const convertAt = await getConvertAt(timestamp);
-  if (!convertAt) return { error: `Failed fetching exchange rate for ${timestamp}` };
+  const date = DateTime.fromMillis(nextOpen);
+  const convertAt = await getConvertAt(date);
+  if (!convertAt) return { error: `Failed fetching exchange rate for ${date}` };
 
   return {
-    timestamp,
+    date,
     [from]: new Decimal(0),
     [to]: multiplier(fromValue, convertAt),
   }
 }
 
 // Fetch conversion rate from server
-async function getConvertAt(timestamp: DateTime) {
+async function getConvertAt(date: DateTime) {
   const ratesApi = new RatesApi();
-  const rate = await ratesApi.getSingle(124, timestamp.toMillis());
+  const rate = await ratesApi.getSingle(124, date.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
-    log.error(`Error fetching rate for: ${timestamp}`);
+    log.error(`Error fetching rate for: ${date}`);
     return false;
   }
   return rate.data;

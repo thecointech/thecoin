@@ -1,4 +1,4 @@
-import { buildConverter } from "converter";
+import { buildConverter } from "./converter";
 
 // This is the list of all legal referrers.
 export type VerifiedReferrer = {

@@ -16,7 +16,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 
   // Ensure required values
   const withMeta = {
-    timestamp: DateTime.now(),
+    date: DateTime.now(),
     type: transition.name,
     ...delta
   }
@@ -62,12 +62,12 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 }
 
 // Every graph execution starts in the initial state.
-const initialState = <States extends string>(timestamp: DateTime): StateSnapshot<States> => ({
+const initialState = <States extends string>(date: DateTime): StateSnapshot<States> => ({
   name: "initial" as States,
   data: {},
   delta: {
     type: "no prior state",
-    timestamp,
+    date,
   },
 })
 
@@ -84,7 +84,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
   async execute(instructions: InstructionDataTypes[Type]|null, action: TypedAction<Type>) {
 
     // We always start in the initial state with zero'ed entries
-    let currentState = initialState<States>(action.data.timestamp);
+    let currentState = initialState<States>(action.data.date);
     // Create a new empty container to hold the processed data
     const container: TypedActionContainer<Type> = {
       instructions,
