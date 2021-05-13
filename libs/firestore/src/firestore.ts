@@ -1,7 +1,18 @@
-//import type { Firestore as FirestoreAdmin } from '@google-cloud/firestore';
-//import type { Firestore as FirestoreClient } from 'firebase/firestore';
+import { Firestore } from "./types";
 
-import { Firestore } from "@thecointech/types";
+type TheCoinGlobals = {
+  firestore: Firestore|null;
+}
+declare global {
+  namespace globalThis {
+    //  deepcode ignore no-var-keyword: var is necessary for this typing to work
+    var __thecoin: TheCoinGlobals
+  }
+}
+// initialize to empty
+globalThis.__thecoin = {
+  firestore: null,
+}
 
 // Store on global to avoid any weirdities
 export function setFirestore(db: Firestore)
@@ -11,7 +22,6 @@ export function setFirestore(db: Firestore)
     firestore: db,
   };
 }
-
 
 export function getFirestore() : Firestore
 {

@@ -1,3 +1,28 @@
+import type firestore from '@google-cloud/firestore';
+import type firebase from 'firebase/app';
+
+export type FirestoreClient = firebase.firestore.Firestore;
+export type FirestoreAdmin = firestore.Firestore;
+
+// Export the basic types we are likely to name elsewhere
+export type CollectionReference<T> = firebase.firestore.CollectionReference<T>|firestore.CollectionReference<T>;
+export type DocumentReference<T> = firebase.firestore.DocumentReference<T>|firestore.DocumentReference<T>;
+export type DocumentSnapshot<T> = firebase.firestore.DocumentSnapshot<T>|firestore.DocumentSnapshot<T>;
+
+// WriteBatch cannot be merged (self-referentiality breaks on union) so we define a stripped-down version
+export interface WriteBatch {
+  set<T>(
+    documentRef: DocumentReference<T>,
+    data: Partial<T>,
+    options: firestore.SetOptions
+  ): WriteBatch;
+  set<T>(documentRef: DocumentReference<T>, data: T): WriteBatch;
+  commit(): Promise<void|firestore.WriteResult[]>;
+}
+// Replace built-in batch with our stripped-down version.
+export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"> & {
+  batch: () => WriteBatch;
+};
 
 // Do not attempt to connect if we do not have an
 // active connection.

@@ -1,6 +1,5 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
-import { getFirestore } from '@thecointech/firestore';
-import { Timestamp, DocumentReference } from "@thecointech/types";
+import { getFirestore, Timestamp, CollectionReference, DocumentReference } from '@thecointech/firestore';
 
 export type UserVerifiedInfo = {
 	verified: string,
@@ -10,18 +9,18 @@ export type ReferralData = {
   created: Timestamp|Date;
   referredBy: string;
 }
-
 // A union of all possible data on a user.
 type AllUserData = Partial<UserVerifiedInfo&ReferralData>
 
-export function getUserCollection() {
+//
+// Collection of all users
+export function getUserCollection() : CollectionReference<AllUserData> {
   return getFirestore().collection("User");
 }
 
 //
-// get user document
-//
-export function getUserDoc(address: string): DocumentReference {
+// get single user document
+export function getUserDoc(address: string) : DocumentReference<AllUserData> {
   if (!IsValidAddress(address)) {
     console.error(`${address} is not a valid address`);
     throw new Error("Invalid address");
@@ -29,19 +28,17 @@ export function getUserDoc(address: string): DocumentReference {
   return getUserCollection().doc(NormalizeAddress(address));
 }
 
-// get data associated with user.
-export async function getUserData(address: string) {
+//
+// get data associated with user, or undefined
+export async function getUserData(address: string) : Promise<AllUserData|undefined> {
 	const userDoc = getUserDoc(address)
 	const userData = await userDoc.get();
-	return userData.exists ?
-		userData.data() as AllUserData :
-		null;
+	return userData.data();
 }
 
 //
 // Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
-//
 export async function setUserVerified(signature: string, address: string, timestamp: Timestamp) {
 	const userDoc = getUserDoc(address)
 	const data: UserVerifiedInfo = {
@@ -54,5 +51,5 @@ export async function setUserVerified(signature: string, address: string, timest
 
 export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
-	return userData && !!userData.verified;
+	return userData?.verified;
 }

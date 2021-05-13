@@ -1,5 +1,4 @@
 import { Transaction } from "@thecointech/tx-blockchain/";
-import { BaseTransactionRecord } from "@thecointech/tx-firestore";
 import { AllData, User, ReconciledRecord } from "types";
 
 // Next, the tx hash should match blockchain
@@ -10,7 +9,7 @@ export function spliceBlockchain(data: AllData, user: User, record: ReconciledRe
     : null;
 }
 
-function findBlockchain(blockchain: Transaction[], user: User, tx: BaseTransactionRecord, hash: string) {
+function findBlockchain(blockchain: Transaction[], user: User, tx: any, hash: string) {
   const bc = blockchain.find(bc => bc.txHash === hash)
   if (bc || tx.hash.startsWith('0x'))
     return bc;

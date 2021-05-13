@@ -1,6 +1,7 @@
-import { CertifiedTransferRequest, DocumentReference } from "@thecointech/types";
+import { CertifiedTransferRequest } from "@thecointech/types";
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
+import { DocumentReference } from "@thecointech/firestore";
 
 export type EncryptedPacket = {
   encryptedPacket: string;
@@ -43,17 +44,20 @@ export type BaseActionData = {
   timestamp: DateTime;
   initialId: string
 }
+
+export type PurchaseType = "etransfer"|"deposit"|"other";
 export type ActionDataTypes = {
   Buy: {
     initial: {
       amount: Decimal;
-      type: "etransfer"|"deposit"|"other";
+      type: PurchaseType;
     }
   } & BaseActionData;
   Sell: { initial: CertifiedTransfer } & BaseActionData;
   Bill: { initial: CertifiedTransfer } & BaseActionData;
 }
 export type ActionType = keyof ActionDataTypes;
+export type AnyActionData = ActionDataTypes[ActionType];
 
 // A structure encompassing all the data related to an action
 // Includes both root document and stream documents
@@ -67,10 +71,14 @@ export interface TypedAction<Type extends ActionType> {
   // Transitions that have been applied to this action.
   history: TransitionDelta[],
   // The firestore document that data came from
-  doc: DocumentReference,
+  doc: DocumentReference<ActionDataTypes[Type]>,
 }
 
 export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
 export type AnyAction = TypedAction<ActionType>;
+
+// Store a mapping of address => Actions[]
+export type ActionDictionary<Type extends ActionType> = { [address: string]: TypedAction<Type>[] }
+

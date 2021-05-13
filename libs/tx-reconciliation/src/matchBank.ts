@@ -1,5 +1,5 @@
 import { filterCandidates, toDateTime } from "./utils";
-import { UserAction } from "@thecointech/utilities/User";
+import { ActionType } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
 import { AllData, User, ReconciledRecord, BankRecord } from "types";
 
@@ -39,7 +39,7 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
 const getCompleted = (record: ReconciledRecord) : DateTime|undefined =>
   record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp) ?? toDateTime(record.data.processedTimestamp);
 
-export const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
+export const getFilter = (action: ActionType) : (tx: BankRecord) => boolean =>
 
 {
   switch(action) {

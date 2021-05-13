@@ -72,6 +72,3 @@ export interface BillPayeePacket {
   payee?: string;
   accountNumber?: string;
 }
-
-
-export * from './FirebaseFirestore';

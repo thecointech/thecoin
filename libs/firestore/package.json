@@ -35,11 +35,14 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^4.10.1",
-    "firebase": "^8.4.3"
+    "@thecointech/logging": "*"
+  },
+  "peerDependencies": {
+    "@google-cloud/firestore": "*",
+    "firebase": "*"
   },
   "devDependencies": {
     "jest": "*",
-    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#f11d964c"
+    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#05ae1f76"
   }
 }

@@ -2,11 +2,11 @@ import manual from './data/manual.json';
 import { DateTime } from "luxon";
 import Decimal from "decimal.js-light";
 import { spliceBank } from "./matchBank";
-import { Timestamp } from "@thecointech/utilities/firestore";
+import { Timestamp } from "@thecointech/firestore";
 import { buildNewUserRecord } from "./reconcileExternal";
-import { UserAction } from '@thecointech/utilities/User';
 import { Reconciliations, AllData } from './types';
 import { spliceBlockchain } from './matchBlockchain';
+import { ActionType } from '@thecointech/broker-db';
 
 // file deepcode ignore no-any: backend code, with non-trivial fix
 
@@ -63,7 +63,7 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
     case "blockchain": {
       const user = r.find(u => u.address === entry.hash);
       user!.transactions.push({
-        action: entry.type as UserAction,
+        action: entry.type as ActionType,
         data: {
           confirmed: true,
           fiatDisbursed: entry.cad ?? 0,

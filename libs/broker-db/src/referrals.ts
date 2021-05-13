@@ -1,24 +1,21 @@
-import { getFirestore } from "@thecointech/firestore";
-import { IsValidAddress, IsValidReferrerId } from "@thecointech/utilities/Address";
-import base32 from 'base32';
-import { Signer, utils } from 'ethers';
+import { getFirestore, CollectionReference, Timestamp, DocumentReference } from "@thecointech/firestore";
+import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities";
 import { getUserDoc, getUserData, ReferralData } from "./user";
-import { Timestamp, CollectionReference, DocumentReference, NewAccountReferal } from "@thecointech/types";
+import { NewAccountReferal } from "@thecointech/types";
 
-export function getReferrersCollection() : CollectionReference {
-  return getFirestore().collection("Referrer");
+// Referrers stored as /Referrer/{code}/
+// This is the list of all legal referrers.
+export type VerifiedReferrer = {
+  address: string;    // This address of the referrer
+  signature: string;  // TheCoin signature for verification
 }
 
-// Document stored as /Referrer/{id}/
-// Contains the address of the referrer, and is
-// signed by TheCoin
-export type VerifiedReferrer = {
-  address: string;
-  signature: string;
+export function getReferrersCollection() : CollectionReference<VerifiedReferrer> {
+  return getFirestore().collection("Referrer") as CollectionReference<VerifiedReferrer>;
 }
 
 // GetReferrer
-export function getReferrerDoc(referrerId: string) : DocumentReference {
+export function getReferrerDoc(referrerId: string) : DocumentReference<VerifiedReferrer> {
   if (!IsValidReferrerId(referrerId)) {
     console.error(`${referrerId} is not a valid address`);
     throw new Error("Invalid Referrer");
@@ -29,29 +26,15 @@ export function getReferrerDoc(referrerId: string) : DocumentReference {
 export async function getReferrerData(referrerId: string) {
   const doc = getReferrerDoc(referrerId);
   const referrer = await doc.get();
-  return referrer.exists ? (referrer.data() as VerifiedReferrer) : null;
+  return referrer.data();
 }
 
 export async function getUsersReferrer(address: string) {
   const user = await getUserData(address);
-  if (user && user.referredBy && user.created) {
+  if (user?.referredBy && user?.created) {
     return user as ReferralData;
   }
   return null;
-}
-
-// export function GetReferrerCode(signature: string) {
-//   const normSig = signature[1] == "x" ? signature.slice(2) : signature;
-//   const buffer = Buffer.from(normSig, "hex");
-//   const s2 = base32Encode(buffer, undefined, { padding: false });
-//   return s2.slice(-6).toLowerCase();
-// }
-
-export function getReferrerCode(signature: string) {
-  const normSig = signature[1] == "x" ? signature.slice(2) : signature;
-  const buffer = Buffer.from(normSig, "hex");
-  const s2: string = base32.encode(buffer);
-  return s2.slice(-6).toLowerCase();
 }
 
 //
@@ -61,7 +44,7 @@ export function getReferrerCode(signature: string) {
 //  TODO: Move the signature creation inside this function
 //
 export async function createReferrer(signature: string, address: string) {
-  const code = getReferrerCode(signature);
+  const code = getShortCode(signature);
   const referrerDoc = getReferrerDoc(code);
 
   const data: VerifiedReferrer = {
@@ -100,27 +83,4 @@ export async function createReferree(referral: NewAccountReferal, created: Times
   console.log(
     `Create user: ${newAccount} from ${referrer}`
   );
-}
-
-//
-//
-//
-export async function GetAccountCode(address: string, signer: Signer)
-{
-  // generate this signers secret key
-  const rhash = GetHash(address.toLowerCase());
-  const rsign = await signer.signMessage(rhash);
-  return getReferrerCode(rsign);
-}
-
-
-// Todo: move SignMessage-y fn's to utilities
-export function GetHash(
-  value: string
-) {
-  const ethersHash = utils.solidityKeccak256(
-    ["string"],
-    [value]
-  );
-  return utils.arrayify(ethersHash);
 }

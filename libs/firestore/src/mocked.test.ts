@@ -1,15 +1,20 @@
 import { init } from './mock'
 import { getFirestore } from './firestore';
 import { Timestamp } from './timestamp';
-import data from './mock.data.json';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
+import { CollectionReference } from './types';
+import data from './mock.data.json';
+
+type DocData = {
+  mutated: undefined|boolean,
+} & typeof data['users'][0];
 
 test('basic creation', async () => {
 
   init(data);
 
   const db = getFirestore();
-  const userCollection = db.collection('users');
+  const userCollection = db.collection('users') as CollectionReference<DocData>;
   const userDocs = await userCollection.get();
   // write assertions here
   expect(userDocs.docs.length).toBe(2);
