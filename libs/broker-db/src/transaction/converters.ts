@@ -12,11 +12,9 @@ export const buyActionConverter = buildConverter<ActionDataTypes["Buy"]>(
 );
 export const sellActionConverter = buildConverter<ActionDataTypes["Sell"]>(
   convertDates<ActionDataTypes["Sell"]>("date"),
-  convertDecimal("amount") // initial.amount
 );
 export const billActionConverter = buildConverter<ActionDataTypes["Bill"]>(
-  convertDates<ActionDataTypes["Sell"]>("date"),
-  convertDecimal("amount") // initial.amount
+  convertDates<ActionDataTypes["Bill"]>("date"),
 );
 
 export const actionConverters = {
