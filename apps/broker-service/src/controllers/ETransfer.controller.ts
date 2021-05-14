@@ -1,5 +1,4 @@
 import { Controller, Body, Route, Post, Put, Response, Tags } from '@tsoa/runtime';
-import { SendMail } from "@thecointech/email";
 import { ProcessSale } from "../exchange/VerifiedSale";
 import { GenerateCode } from "../Buy/eTransfer";
 import { CertifiedTransfer, SignedMessage } from '@thecointech/types';
@@ -38,18 +37,8 @@ export class ETransferController extends Controller {
     @Response('200', 'The requesters unique eTransfer code')
     @Response('405', 'Invalid input')
     async eTransferInCode(@Body() request: SignedMessage) : Promise<ETransferCodeResponse> {
-      try {
         return {
           code: await GenerateCode(request)
         }
-      }
-      catch (err) {
-        console.error(err.message);
-        SendMail("TransferCode Error", JSON.stringify(err) + "\n---\n" + JSON.stringify(request));
-        return {
-          code: "TheCoin",
-          error: "server Error",
-        }
-      }
     }
 }

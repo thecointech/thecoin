@@ -1,5 +1,4 @@
 import { validateAction } from './CertifiedActionVerify';
-import { CertifiedTransfer } from '@thecointech/types';
 import { createAction } from '@thecointech/broker-db/transaction';
 import { DateTime } from 'luxon';
 import { Processor } from "@thecointech/tx-processing/bill";
@@ -7,6 +6,7 @@ import { GetContract } from './Wallet';
 import { getCurrentState } from '@thecointech/tx-processing/statemachine/types';
 import { SendMail } from '@thecointech/email/';
 import { log } from '@thecointech/logging';
+import { CertifiedTransfer } from '@thecointech/types';
 
 export async function  ProcessBillPayment(sale: CertifiedTransfer) {
   const user = sale.transfer.from;

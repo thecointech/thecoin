@@ -1,18 +1,7 @@
-import { CertifiedTransferRequest } from "@thecointech/types";
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { DocumentReference } from "@thecointech/firestore";
-
-export type EncryptedPacket = {
-  encryptedPacket: string;
-  version: string;
-}
-
-export type CertifiedTransfer = {
-  transfer: CertifiedTransferRequest;
-  instructionPacket: EncryptedPacket;
-  signature: string;
-}
+import { CertifiedTransfer } from '@thecointech/types';
 
 // Data definition for documents stored in
 // /{action}/randomId.

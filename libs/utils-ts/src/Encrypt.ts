@@ -1,6 +1,11 @@
 import Crypto from "crypto";
-import { EncryptedPacket, CertifiedTransferRequest } from "@thecointech/types";
+import { CertifiedTransferRequest } from "@thecointech/types";
 import { ethers } from "ethers";
+
+export type EncryptedPacket = {
+  encryptedPacket: string;
+  version: string;
+};
 
 const publicCert = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6GirjYahDl+YBGtCqMx0
