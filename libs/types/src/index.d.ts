@@ -43,10 +43,7 @@ export interface EncryptedPacket {
   encryptedPacket: string;
   version: string;
 }
-export interface CertifiedTransferResponse {
-  message: string;
-  txHash: string;
-}
+
 export interface CertifiedTransferRequest {
   from: string;
   to: string;
