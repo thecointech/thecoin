@@ -218,7 +218,7 @@ export const BillPayments = () => {
 
     return (
     <React.Fragment>
-        <Form>
+        <Form className={"inAppContent"}>
             <FormattedMessage {...description} />
             <Message hidden={successHidden} positive>
               <FormattedMessage {...successForm} />

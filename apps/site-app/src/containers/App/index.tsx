@@ -21,7 +21,7 @@ import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@th
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
-import { useAccountStoreApi, useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
@@ -45,10 +45,21 @@ export const App = () => {
       hasRun = true;
     }
   }
-
-  const activeAccount = useActiveAccount();
-  const rightColumnTop = activeAccount ? <ColumnRightTop /> : "";
-  const rightColumnBottom = activeAccount ? <ColumnRightBottom /> : "";
+  //const box = document.querySelector('.inAppContent');
+  //const rect = box?.getBoundingClientRect();
+  const rect = true;
+  
+  //if (rect){
+  //  const isInViewport = rect!.top >= 0 &&
+  //          rect!.left >= 0 &&
+  //          rect!.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+  //          rect!.right <= (window.innerWidth || document.documentElement.clientWidth);
+    
+  //console.log("inAppContent---",isInViewport);
+  //}
+  //const activeAccount = useActiveAccount();
+  const rightColumnTop = rect ? <ColumnRightTop /> : "";
+  const rightColumnBottom = rect ? <ColumnRightBottom /> : "";
 
   return (
     <MediaContextProvider>

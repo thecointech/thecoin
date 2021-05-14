@@ -11,7 +11,7 @@ export const HomePage = (routerProps: AccountPageProps) => {
   return (
     <React.Fragment>
       <HistoryGraph />
-      <AppContainerWithShadow>
+      <AppContainerWithShadow className={`inAppContent`}>
         <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
