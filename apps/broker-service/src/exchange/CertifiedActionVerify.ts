@@ -20,14 +20,15 @@ const validFee = (transfer: CertifiedTransferRequest) => transfer.fee === certif
 const validTransferSigners = (transfer: CertifiedTransferRequest) => NormalizeAddress(GetTransferSigner(transfer)) === NormalizeAddress(transfer.from);
 const validActionSigners = (action: CertifiedTransfer) => NormalizeAddress(getSigner(action)) === NormalizeAddress(action.transfer.from);
 
+const throwError = <T>(src: T, key: keyof T, message: string) => { throw new ValidateError({[key]: {message, value: src[key]}}, "Transfer validation failed") }
 
 export async function validateTransfer(request: CertifiedTransferRequest) {
   if (!validFee(request))
-    throw new ValidateError({fee: {message: "Invalid fee"}}, "Transfer validation failed");
+    throwError(request, "fee", "Invalid Fee");
   if (!await validBalance(request))
-    throw new ValidateError({value: {message: "Insufficient Balance"}}, "Transfer validation failed");
+    throwError(request, "value", "Insufficient Balance");
   if (!validTransferSigners(request))
-    throw new ValidateError({signature: {message: "Signature does not match"}}, "Transfer validation failed");
+    throwError(request, "signature", "Signature does not match");
   return true
 }
 
@@ -35,9 +36,9 @@ export async function validateAction(action: CertifiedTransfer) {
   // verify that the transfer recipient is the Broker CAD
   const brokerCAD = await getBrokerCADAddress();
   if (!validDestination(action, brokerCAD))
-    throw new ValidateError({to: {message: "Invalid destination address"}}, "Action validation failed");
+    throwError(action.transfer, "to", "Invalid destination address");
   if (!validActionSigners(action))
-    throw new ValidateError({signature: {message: "Mismatched Signatures"}}, "Action validation failed");
+    throwError(action, "signature", "Mismatched Signatures");
 
   return validateTransfer(action.transfer);
 }
