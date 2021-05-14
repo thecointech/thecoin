@@ -4,8 +4,8 @@ import { createAction } from '@thecointech/broker-db/transaction';
 import { DateTime } from 'luxon';
 import { Processor } from "@thecointech/tx-processing/etransfer";
 import { GetContract } from './Wallet';
-import { getCurrentState } from '@thecointech/tx-processing/statemachine/types';
-import { SendMail } from '@thecointech/email/';
+import { getCurrentState } from '@thecointech/tx-processing/statemachine';
+import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 
 export async function  ProcessSale(sale: CertifiedTransfer) {

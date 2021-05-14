@@ -3,6 +3,8 @@ import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
 import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
 import { TheCoin } from '@thecointech/contract';
+export * from './types';
+
 //
 // Execute the transition. If we recieve a result, store it in the DB
 async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: TransitionCallback<Type>) : Promise<TransitionDelta|null> {

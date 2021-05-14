@@ -32,7 +32,9 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./*": "./build/*"
+    "./transaction": "./build/transaction/index.js",
+    "./newsletter": "./build/newsletter/index.js",
+    "./*": "./build/*.js"
   },
   "dependencies": {
     "fast-deep-equal": "3.1.3",
