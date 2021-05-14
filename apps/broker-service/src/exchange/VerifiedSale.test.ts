@@ -8,6 +8,8 @@ import { init } from '@thecointech/firestore';
 import { Wallet } from 'ethers';
 import { getActionsForAddress } from '@thecointech/broker-db/transaction';
 
+jest.mock("@thecointech/email");
+
 beforeAll(async () => {
   init({ project: 'broker-cad-billpayments' });
 });
