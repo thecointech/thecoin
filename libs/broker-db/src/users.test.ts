@@ -1,8 +1,8 @@
 import { init, filterByEmulator } from '@thecointech/firestore';
 import { describe } from '@thecointech/jestutils';
-import { getAllUsers } from 'users';
+import { getAllUsers } from './users';
 import { IsValidAddress } from '@thecointech/utilities'
-import { getActionFromInitial } from 'transaction';
+import { getActionFromInitial } from './transaction';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 

@@ -1,11 +1,11 @@
 import { init, filterByEmulator, getFirestore, Timestamp } from '@thecointech/firestore';
 import { describe } from '@thecointech/jestutils';
-import { getUserData, setUserVerified } from 'user';
+import { getUserData, setUserVerified } from './user';
 import { DateTime } from 'luxon';
-import { userDataConverter } from 'user.types';
-import { getActionFromInitial } from 'transaction';
+import { userDataConverter } from './user.types';
+import { getActionFromInitial } from './transaction';
 import Decimal from 'decimal.js-light';
-import { PurchaseType } from 'transaction/types';
+import { PurchaseType } from './transaction/types';
 
 describe('Live DB fetching', () => {
 

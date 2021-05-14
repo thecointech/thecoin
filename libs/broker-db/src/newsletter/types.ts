@@ -1,4 +1,4 @@
-import { buildConverter, convertDates } from "converter";
+import { buildConverter, convertDates } from "../converter";
 import { DateTime } from "luxon"
 
 export interface SubscriptionData {
