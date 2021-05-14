@@ -26,9 +26,9 @@ test("Can sign up for email", async () => {
 
 test("Can fetch details correctly", async () => {
   const email = RandomEmail();
-  await signup(email)
+  const id = await signup(email)
   // any ID will work
-  const sub = await details("asdf");
+  const sub = await details(id!);
   expect(sub?.email).toEqual(email);
 });
 
@@ -37,7 +37,7 @@ it("Can update existing email", async () => {
   const id = await signup(email);
   expect(id).toBeTruthy();
 
-  let res = await update("1234", {
+  let res = await update(id!, {
     email,
     confirmed: true,
     givenName: "Stephen",
