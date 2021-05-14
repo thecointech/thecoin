@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 
 // Simple email validation is best.  Double opt-in guarantees correctness,
 // and this string is stored raw (never operated on) so there is no risk of XSS etc.
-const emailValid = /^S+@S+$/;
+const emailValid = /^\S+@\S+$/;
 export function validateEmail(email: string) {
   return emailValid.test(email);
 }
@@ -44,7 +44,7 @@ export async function signup(email: string) {
     log.error({ SubId: sub.id }, "Failed to send welcome email to {SubId}");
   }
   // Always successful (even if email sent had a problem, sub was still registered)
-  return true;
+  return sub.id;
 }
 
 export async function update(id: string, details: SubscriptionData) : Promise<Subscription|undefined>
