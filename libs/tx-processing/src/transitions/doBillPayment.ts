@@ -1,4 +1,4 @@
-import { TypedActionContainer } from "statemachine/types";
+import { TypedActionContainer } from "../statemachine/types";
 
 //
 // Attempt to apply the fiat balance to billing details

@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "statemachine/types";
+import { AnyActionContainer } from "../statemachine/types";
 
 //
 // A no-op transition moves us into a new state without changing any data

@@ -1,4 +1,4 @@
-import { AnyActionContainer, getCurrentState } from "statemachine/types";
+import { AnyActionContainer, getCurrentState } from "../statemachine/types";
 import { preTransfer } from './pretransfer';
 
 //

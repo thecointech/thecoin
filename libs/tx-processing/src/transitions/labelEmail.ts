@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { setETransferLabel, Labels } from "@thecointech/tx-gmail";
-import { BuyActionContainer } from "statemachine/types";
+import { BuyActionContainer } from "../statemachine/types";
 
 export async function labelEmailETransfer(container: BuyActionContainer) {
   return await labelEmail(container, "etransfer");

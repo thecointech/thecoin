@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "statemachine/types";
+import { AnyActionContainer } from "../statemachine/types";
 import { SendMail } from '@thecointech/email';
 import { removeIncomplete } from '@thecointech/broker-db'
 

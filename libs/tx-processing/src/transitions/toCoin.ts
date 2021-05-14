@@ -1,6 +1,6 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
-import { AnyActionContainer, getCurrentState } from "statemachine/types";
+import { AnyActionContainer, getCurrentState } from "../statemachine/types";
 import { FXRate, RatesApi } from "@thecointech/pricing";
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
