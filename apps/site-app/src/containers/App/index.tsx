@@ -45,21 +45,23 @@ export const App = () => {
       hasRun = true;
     }
   }
-  //const box = document.querySelector('.inAppContent');
-  //const rect = box?.getBoundingClientRect();
-  const rect = true;
-  
-  //if (rect){
-  //  const isInViewport = rect!.top >= 0 &&
-  //          rect!.left >= 0 &&
-  //          rect!.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-  //          rect!.right <= (window.innerWidth || document.documentElement.clientWidth);
-    
-  //console.log("inAppContent---",isInViewport);
-  //}
-  //const activeAccount = useActiveAccount();
-  const rightColumnTop = rect ? <ColumnRightTop /> : "";
-  const rightColumnBottom = rect ? <ColumnRightBottom /> : "";
+
+  const [show, setShow] = React.useState(false)
+
+  React.useEffect(() => {
+    //setTimeout(() => {
+      const box = document.querySelector('#inAppContent');
+      const rect = box?.getBoundingClientRect();
+        console.log("inAppContent----",box,rect);
+        if (rect){
+          setShow(true);
+        }
+    //}, 1000)
+  }, []);
+
+  //if (!show) return null
+  const rightColumnTop = show ? <ColumnRightTop /> : "";
+  const rightColumnBottom = show ? <ColumnRightBottom /> : "";
 
   return (
     <MediaContextProvider>

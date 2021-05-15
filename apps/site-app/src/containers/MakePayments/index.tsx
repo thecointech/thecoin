@@ -47,7 +47,7 @@ export const MakePayments = (routerProps:AccountPageProps) => {
           description= {description}
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
-      <AppContainerWithShadow className={`inAppContent`}>
+      <AppContainerWithShadow id={`inAppContent`}>
         <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
     </React.Fragment>
