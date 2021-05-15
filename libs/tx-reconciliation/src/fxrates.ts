@@ -4,8 +4,8 @@ import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
 import { ReconciledRecord } from "types";
 
 const getSettlementDate = async (r: ReconciledRecord) =>
-r.data.processedTimestamp?.toDate() ??
-new Date(await NextOpenTimestamp(r.data.recievedTimestamp.toDate()));
+  r.data.processedTimestamp?.toDate() ??
+  new Date(await NextOpenTimestamp(r.data.recievedTimestamp.toDate()));
 
 const rates: FXRate[] = [];
 

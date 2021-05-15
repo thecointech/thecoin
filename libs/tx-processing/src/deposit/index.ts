@@ -4,6 +4,7 @@ import { StateMachineProcessor } from "statemachine";
 import { graph } from "./graph";
 import { TheCoin } from '@thecointech/contract';
 
+export const Processor = (contract: TheCoin) => new StateMachineProcessor(graph, contract);
 export async function processUnsettledDeposits(contract: TheCoin)
 {
   const raw = await fetchNewDepositEmails();
@@ -12,7 +13,7 @@ export async function processUnsettledDeposits(contract: TheCoin)
   // processing (even if data is no longer present in email list)
   let incomplete = await getIncompleteActions("Buy");
 
-  const processor = new StateMachineProcessor(graph, contract);
+  const processor = Processor(contract);
 
   // Process each raw deposit.
   const rawActions = raw.map(async eTransfer => {
