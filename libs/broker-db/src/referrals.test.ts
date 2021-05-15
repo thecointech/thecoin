@@ -2,60 +2,50 @@ import {
   getReferrerData,
   createReferrer,
   createReferree,
-  getUsersReferrer
+  getUsersReferrer,
 } from "./referrals";
-import { NewAccountReferal } from "@thecointech/types";
-import { init, Timestamp } from "@thecointech/firestore";
+import { init } from "@thecointech/firestore";
+import { DateTime } from "luxon";
 
 beforeAll(async () => {
-  await init({});
+  await init();
 })
 
 const validAddress = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
+const junk = "123456";
 
-test("Can create referrer", async () => {
+it("Can create referrer", async () => {
   // Create a referrer
-  const referralId = await createReferrer(validAddress, validAddress);
+  const referralCode = await createReferrer(validAddress, validAddress);
 
   // First, do we get valid referrer address for valid referrer ID
-  let referrerData = await getReferrerData(referralId);
+  let referrerData = await getReferrerData(referralCode);
   expect(referrerData).not.toBeNull();
   referrerData = referrerData!;
   expect(referrerData.address).toMatch(validAddress);
   expect(referrerData.signature).toMatch(validAddress);
-
-  // verify it's case insensitive
-  const validIdUC = referralId.toUpperCase();
-  const verifyUC = await getReferrerData(validIdUC);
-  expect(verifyUC!.address).toEqual(validAddress);
 });
 
-// verify a junk key fails.  This is a possibly-valid key that just isn't registered yet
-it('Rejects unregistered codes', async () => {
-  const junk = "123456";
+it('is referrer code is case insensitive', async () => {
+  const referralCode = await createReferrer(validAddress, validAddress);
+  const validIdUC = referralCode.toUpperCase();
+  const verifyUC = await getReferrerData(validIdUC);
+  expect(verifyUC!.address).toEqual(validAddress);
+})
+
+it('returns undefined for non-existent referrer', async () => {
   const verifyJunk = await getReferrerData(junk);
   expect(verifyJunk).toBeUndefined();
 })
 
-test("Can refer new user.", async () => {
+it('throws with invalid referral code', async () => {
+  expect(createReferree("345679", validAddress, DateTime.now())).rejects.toThrow("Referrer doesnt exist");
+})
 
-  const junk = "123456";
-
-  // Running on emulator
-  // Create new account referral
-  const newAddress = "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"; //  wallet
-
-  // Create new referral
-  const referral: NewAccountReferal = {
-    referrerId: junk,
-    newAccount: newAddress
-  };
-  // bad referrer id
-  expect(createReferree(referral, Timestamp.now())).rejects.toThrow("Referrer doesnt exist");
-  // Non-throw is success
-  const referralId = await createReferrer(validAddress, validAddress);
-  referral.referrerId = referralId;
-  await createReferree(referral, Timestamp.now());
+it("Can refer new user.", async () => {
+  const newAddress = `0x123456789012345678901234567${Date.now()}`;
+  const referralCode = await createReferrer(validAddress, validAddress);
+  await createReferree(referralCode, newAddress, DateTime.now());
 
   // test data store properly
   const referrer = await getUsersReferrer(newAddress);
@@ -63,5 +53,5 @@ test("Can refer new user.", async () => {
   expect(referrer?.referredBy).toMatch(validAddress);
 
   // Test re-create fails
-  expect(createReferree(referral, Timestamp.now())).rejects.toThrow("User already exists");
+  expect(createReferree(referralCode, newAddress, DateTime.now())).rejects.toThrow("User already exists");
 });

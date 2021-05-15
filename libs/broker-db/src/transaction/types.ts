@@ -17,7 +17,7 @@ export type CertifiedTransfer = {
 // Data definition for documents stored in
 // /{action}/randomId.
 export type IncompleteRef = {
-  ref: string;
+  ref: DocumentReference<AnyActionData>;
 }
 
 // Changes applied to the action
@@ -31,7 +31,7 @@ export type StateData = {
 
 // The changes applied to an action
 export type TransitionDelta = {
-  timestamp: DateTime;
+  date: DateTime;
   type: string;
 } & StateData;
 
@@ -41,7 +41,7 @@ export type TransitionDelta = {
 // that have happened to the collection.
 export type BaseActionData = {
   initial: unknown,
-  timestamp: DateTime;
+  date: DateTime;
   initialId: string
 }
 
