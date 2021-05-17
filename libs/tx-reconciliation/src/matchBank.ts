@@ -14,7 +14,7 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
 
     // Find TX
     const transition = record.action.history.filter(ts => ts.fiat !== undefined);
-    transition.map(tr => {
+    transition.forEach(tr => {
       const amount = tr.fiat!;
       const names = record.action.type === "Buy" ? user.names : undefined;
 
