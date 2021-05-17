@@ -1,6 +1,6 @@
 import { getIncompleteActions, getActionFromInitial } from "@thecointech/broker-db";
 import { eTransferData, fetchNewDepositEmails } from "@thecointech/tx-gmail";
-import { StateMachineProcessor } from "statemachine";
+import { StateMachineProcessor } from "../statemachine";
 import { graph } from "./graph";
 import { TheCoin } from '@thecointech/contract';
 

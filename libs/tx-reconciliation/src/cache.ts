@@ -73,7 +73,8 @@ export function convertReconciledFromJson(asJson: any) {
   const asReconciled = asJson as Reconciliations;
   for (const user of asReconciled) {
     for (const tx of user.transactions) {
-      convertTimestamps(tx.data);
+      throw new Error("NOTE: We don't use timestamps any more (use DateTime instead)");
+      convertTimestamps(tx.action);
       convertTimestamps(tx.database);
       convertETransfer(tx.email);
       tx.bank.forEach(convertBank);

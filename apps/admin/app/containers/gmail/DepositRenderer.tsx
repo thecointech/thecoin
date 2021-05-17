@@ -1,25 +1,23 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
-import { TransactionData } from "containers/TransferList";
-import { DepositRecord } from "@thecointech/tx-firestore";
-import { eTransferData } from "@thecointech/tx-gmail/";
+import { BuyActionContainer, getCurrentState } from '@thecointech/tx-processing/statemachine';
 
-export const DepositRenderer = (props : TransactionData) => {
+export const DepositRenderer = (props : BuyActionContainer) => {
 
-  const record = props.record as DepositRecord;
-  const instructions = props.instruction as eTransferData;
+  const { action, instructions } = props;
+  const state = getCurrentState(props);
   return (
     <Segment>
-    <div>Name: {instructions.name} - {record.type}</div>
-    <div>Address: {instructions.address}</div>
+    <div>Name: {instructions?.name} - {action.type}</div>
+    <div>Address: {instructions?.address}</div>
     <div>
     {
-      instructions.raw
-        ? `Email Recieved on: ${instructions.recieved?.toSQLDate()}`
+      instructions?.raw
+        ? `Email Recieved on: ${instructions?.recieved?.toSQLDate()}`
         : "Warning: No matching email"
     }
     </div>
-    <div>Completed: {record.completedTimestamp?.toDate().toString()}</div>
+    <div>State: ${state.name} - {state.delta.date.toSQLDate()}</div>
     {/* <div>
     {
       deposit.bank
@@ -37,32 +35,3 @@ export const DepositRenderer = (props : TransactionData) => {
   </Segment>
   )
 }
-
-// type TxSelectProps = {
-//   deposit: DepositData;
-// }
-// const TxSelect = ({deposit}: TxSelectProps) => {
-//   const {db} = deposit;
-//   if (Array.isArray(db)) {
-//     const options = db.map((dep, index) => (
-//       {
-//         key: dep.hash,
-//         value: index,
-//         text: `$${dep.fiatDisbursed} - ${dep.processedTimestamp?.toDate().toDateString()}`
-//       }))
-//     return db.length > 0
-//       ? <Select placeholder="Select a TX" options={options} />
-//       : null;
-//   }
-//   else {
-//     return (
-//       <div>
-//       {
-//         db
-//         ? `Db Stored: ${db.hash}`
-//         : "Warning: No DB found"
-//       }
-//       </div>
-//     )
-//   }
-// }

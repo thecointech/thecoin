@@ -13,6 +13,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
 import "react-datetime/css/react-datetime.css"
+import { getCurrentState } from '@thecointech/tx-processing/statemachine';
 
 
 type Props = AccountState & {
@@ -60,10 +61,11 @@ export class Purchase extends React.PureComponent<Props> {
     this.setState({isProcessing: true});
     const buy = await this.buildPurchaseEntry();
     const processor = Processor(this.props.contract!);
-    const result = await processor.execute(buy);
+    const result = await processor.execute(null, buy);
     // Update with the step we get to.
     // TODO: Could we make this a callback?
-    this.setState({ txHash: result.data.hash, step: result.state});
+    const current = getCurrentState(result);
+    this.setState({ txHash: current.data.hash, step: current.name});
   }
 
   onSetDate = async (value: string|Moment) => {

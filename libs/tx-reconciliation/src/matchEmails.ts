@@ -13,8 +13,8 @@ export function findNames(data: AllData, address: string) {
 }
 
 export function spliceEmail(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
-  const email = record.action === "Buy"
-    ? findEmail(data, user, record.data as BuyAction, maxDays)
+  const email = record.action.type === "Buy"
+    ? findEmail(data, user, record.action as BuyAction, maxDays)
     : null;
 
   if (email) {
