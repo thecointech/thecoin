@@ -79,25 +79,29 @@ hosted at nft.thecoin.io
 Minimal website with backend.  Uses Ethereum wallets running in-browser or arbitrary 3rd-party connections.
 
  1) Create/Upload/Restore account functionality (duplicate of TheCoin).
-   a) Does it provide passwordless account recovery?  That would be nice, but does cost us $$$.
+   - Does it provide passwordless account recovery?  That would be nice, but does cost us $$$.
  2) Upload base image (signin required)
  3) Apply optional decorations: Some possibilities
-   a) TC Border
-   b) CO2 neutral(or)safe
-   c) Validity years eg (2022-2023) OR Token ID: #12345
+   - TC Border
+   - CO2 neutral(or)safe
+   - Validity years eg (2022-2023) OR Token ID: #12345
  4) Submit image to web app for storage
-   a) Generate perceptual hash/signature,
-   b) Store signature in image metadata under "Copyright" field
-   b) Upload resulting binary data to backend
-   c) backend stores metadata/image on IPFS (should we verify the proofs?)
-   d) Return IPFS url of JSON file
-   e) Client updates token with new metadata URI.
-   f) Download signed image to clients machine, and/or provide direct link to IPFS image
+   - Generate perceptual hash/signature,
+   - Store signature in image metadata under "Copyright" field
+   - Upload resulting binary data to backend
+   - backend stores metadata/image on IPFS (should we verify the proofs?)
+   - Return IPFS url of JSON file
+   - Client updates token with new metadata URI.
+   - Download signed image to clients machine, and/or provide direct link to IPFS image
  5) Validate image claims page (no signin required)
-   a) Provide image to prove (upload OR by URL)
-   b) Read signature from copyright field
-   c) Get address from perceptual hash/signature
-   d) Find all tokens owned by address
-   e) Display the valid claims that this address can make (eg, token ID's and years of CO2 neutrality)
+   - Provide image to prove (upload OR by URL)
+   - Read hash/signature from copyright field
+   - Verify hash:
+      - Generate new hash,
+      - compare with claimed hash.
+      - Display how likely this is to be authentic
+   - Get address from perceptual hash/signature
+   - Find all tokens owned by address
+   - Display the valid claims that this address can make (eg, token ID's and years of CO2 neutrality)
 
 
