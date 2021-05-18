@@ -1,0 +1,66 @@
+{
+  "name": "@thecointech/nft-contract",
+  "version": "0.2.1",
+  "description": "The Coin: Solidity contract for TheCoin NFT",
+  "keywords": [
+    "TheCoin",
+    "ethereum",
+    "NFT",
+    "CO2 neutral"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/nft-contract"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
+    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
+    "deploy:clean": "rimraf ./build/.buildinfo",
+    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
+    "deploy:post": "rimraf ./build/package.json",
+    "deploy:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
+    "build": "run-s build:contracts generate-types build:src",
+    "build:contracts": "truffle compile",
+    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:copy": "cpx \"./src/deployed\" ./build/",
+    "clean": "run-p clean:*",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/contracts",
+    "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
+    "test:contract": "truffle test",
+    "test": "yarn jest",
+    "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
+    "dev:live:emulator": "truffle develop",
+    "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
+    "generate-types": "run-p generate-types:*",
+    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
+    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\"",
+    "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": "./build/index.js",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.1.0",
+    "@openzeppelin/truffle-upgrades": "^1.5.0",
+    "@thecointech/accounts": "*",
+    "@truffle/hdwallet-provider": "^1.2.3",
+    "@typechain/ethers-v4": "^4.0.0",
+    "@typechain/truffle-v5": "^4.0.1",
+    "jest": "*",
+    "truffle": "^5.1.67",
+    "typechain": "^4.0.2"
+  },
+  "dependencies": {
+    "ethers": "4.0.47"
+  }
+}

@@ -6323,6 +6323,11 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.4.0.tgz#7674c73c643a509f1b90c509e3e72fe9aae02aeb"
   integrity sha512-7wBcbukDqWZt/B1zjb7zyeWq+AC7rx7nGln7/hPxHdKd8PAiiteXd51Cp2KmGP8qaY0/TXh/fQLsA082LWp8Zw==
 
+"@openzeppelin/contracts@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.1.0.tgz#baec89a7f5f73e3d8ea582a78f1980134b605375"
+  integrity sha512-TihZitscnaHNcZgXGj9zDLDyCqjziytB4tMCwXq0XimfWkAjBYyk5/pOsDbbwcavhlc79HhpTEpQcrMnPVa1mw==
+
 "@openzeppelin/test-helpers@^0.5.10":
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/@openzeppelin/test-helpers/-/test-helpers-0.5.10.tgz#0a6ab9fd0810085e8114f9f33aed4102e848f27f"
