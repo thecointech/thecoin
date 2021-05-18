@@ -48,7 +48,7 @@ export const ContactUs = () => {
           title={title}
           description= {description}
       />
-      <AppContainerWithShadow className={`${styles.containerContactUs}`} id={"inAppContent"}>
+      <AppContainerWithShadow className={`${styles.containerContactUs}`}>
 
       <AvailableSoon>
         <div className={styles.messagesContainer}>
