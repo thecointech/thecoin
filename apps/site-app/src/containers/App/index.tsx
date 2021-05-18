@@ -30,8 +30,12 @@ import { addDevLiveAccounts } from 'api/mock/accounts';
 import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
+//import { checkIfInApp } from './checkApp';
 
 let hasRun = false;
+let  showRColumn = false;
+const rightColumnIn: string[] = ['/overview', '/transferIn', '/makepayments', '/settings', '/contact'];
+
 export const App = () => {
   useFxRatesStore();
   useSidebar();
@@ -45,23 +49,15 @@ export const App = () => {
       hasRun = true;
     }
   }
+console.log(location)
+   if (rightColumnIn.indexOf(location.pathname) > -1){
+      showRColumn = true;
+   } else {
+    showRColumn = false;
+   }
 
-  const [show, setShow] = React.useState(false)
-
-  React.useEffect(() => {
-    //setTimeout(() => {
-      const box = document.querySelector('#inAppContent');
-      const rect = box?.getBoundingClientRect();
-        console.log("inAppContent----",box,rect);
-        if (rect){
-          setShow(true);
-        }
-    //}, 1000)
-  }, []);
-
-  //if (!show) return null
-  const rightColumnTop = show ? <ColumnRightTop /> : "";
-  const rightColumnBottom = show ? <ColumnRightBottom /> : "";
+  const rightColumnTop = showRColumn ? <ColumnRightTop /> : "";
+  const rightColumnBottom = showRColumn ? <ColumnRightBottom /> : "";
 
   return (
     <MediaContextProvider>
