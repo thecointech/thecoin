@@ -28,7 +28,6 @@ import { addDevLiveAccounts } from 'api/mock/accounts';
 import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-//import { checkIfInApp } from './checkApp';
 
 let hasRun = false;
 
