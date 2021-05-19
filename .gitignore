@@ -32,6 +32,7 @@ environments/prodtest
 
 libs/contract/src/deployed/*-fork.json
 libs/contract/src/deployed/devlive.json
+libs/nft-contract/src/deployed/devlive.json
 
 environments/prod.env
 **/.firebase/hosting.*.cache
@@ -39,3 +40,5 @@ libs/shared/src/containers/IDX/config.devlive.json
 
 libs/nft-contract/src/contracts/*.json
 
+libs/nft-contract/migrations/types
+libs/nft-contract/src/types

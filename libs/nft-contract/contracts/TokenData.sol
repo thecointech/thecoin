@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 pragma solidity ^0.8.0;
 
@@ -9,7 +9,7 @@ struct TokenDataPacked {
   // 5b: The timestamp of the last time ipfsHash was updated
   // Valid until
   uint40 lastUpdate;
-  // 1b each: Validity interval.
+  // 1b each: The period CO2 will be offset for.
   uint8 validFrom;  // 3-digit year (2000-2256)
   uint8 validUntil;  // 3-digit year (2000-2256)
   // 2b: prefix of IPFS hash.  If 0, then is 0x1220 (sha256)
