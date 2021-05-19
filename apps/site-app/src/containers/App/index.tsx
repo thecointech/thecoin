@@ -18,8 +18,6 @@ import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
 import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import { addDevLiveAccounts } from 'api/mock/accounts';
@@ -33,8 +31,6 @@ import styles from './styles.module.less';
 //import { checkIfInApp } from './checkApp';
 
 let hasRun = false;
-let  showRColumn = false;
-const rightColumnIn: string[] = ['/overview', '/transferIn', '/makepayments', '/settings', '/contact'];
 
 export const App = () => {
   useFxRatesStore();
@@ -49,15 +45,6 @@ export const App = () => {
       hasRun = true;
     }
   }
-console.log(location)
-   if (rightColumnIn.indexOf(location.pathname) > -1){
-      showRColumn = true;
-   } else {
-    showRColumn = false;
-   }
-
-  const rightColumnTop = showRColumn ? <ColumnRightTop /> : "";
-  const rightColumnBottom = showRColumn ? <ColumnRightBottom /> : "";
 
   return (
     <MediaContextProvider>
@@ -78,14 +65,12 @@ console.log(location)
               </Rail>
             </GreaterThanMobileSegment>
 
-            {rightColumnTop}
 
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>
                 <MainRouter location={location} />
               </section>
             </Ref>
-            {rightColumnBottom}
           </MainPageTransition>
         </Container>
       </div>
