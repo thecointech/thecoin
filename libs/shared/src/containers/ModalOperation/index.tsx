@@ -9,9 +9,17 @@ interface ModalProps {
   progressMessage?: MessageDescriptor;
   messageValues?: any;
   closeIcon?: boolean;
+  closeIconFct?: (value:string) => void;
   cancelCallback?: () => void;
   okCallback?: () => void;
 }
+
+const ok = { id:"shared.modalOperation.ok",
+                defaultMessage:"Ok",
+                description:"Text for the ok button for the modal tool"};
+const cancel = { id:"shared.modalOperation.cancel",
+                defaultMessage:"Cancel",
+                description:"Text for the cancel button for the modal tool"};
 
 export const ModalOperation : React.FC<ModalProps> = (props) => {
 
@@ -24,7 +32,7 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
     return (
       cancelCallback ? (
         <Button color="red" onClick={cancelOperation} inverted>
-          <Icon name="cancel" /> Cancel
+          <Icon name="cancel" /> <FormattedMessage {...cancel} />
         </Button>
       ) : (undefined)
     );
@@ -33,7 +41,7 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
   function renderOkButton(okCallback?: () => void, progressPercent?: number) {
     okCallback && progressPercent && progressPercent >= 1 ? (
       <Button onClick={okCallback} inverted primary>
-        <Icon />OK
+        <Icon /><FormattedMessage {...ok} />
       </Button>
     ) : (
       undefined
@@ -71,9 +79,9 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
     return props.progressMessage ? renderProgress() : props.children
   }
 
-  const { isOpen, header, closeIcon, progressPercent } = props;
+  const { isOpen, header, closeIcon, closeIconFct, progressPercent } = props;
   const headerContent = header ? <Modal.Header><FormattedMessage {...header} /></Modal.Header> : "";
-  const closeContent = closeIcon ? <Icon name="close" size="large" /> : "";
+  const closeContent = closeIcon ? <Icon name="close" size="large" onClick={closeIconFct}/> : "";
   return (
     <Modal open={isOpen} basic size="small">
       {closeContent}
