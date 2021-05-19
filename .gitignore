@@ -36,3 +36,6 @@ libs/contract/src/deployed/devlive.json
 environments/prod.env
 **/.firebase/hosting.*.cache
 libs/shared/src/containers/IDX/config.devlive.json
+
+libs/nft-contract/src/contracts/*.json
+

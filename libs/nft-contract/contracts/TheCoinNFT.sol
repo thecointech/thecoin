@@ -5,106 +5,162 @@
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "./TokenData.sol";
 
-struct TokenDataPacked {
-  // 20b: The owner of this token
-  address owner;
-  // 5b: The timestamp of the last time ipfsHash was updated
-  // Valid until
-  uint40 lastUpdate;
-  // 1b each: Validity interval.
-  uint8 validFrom;  // 3-digit year (2000-2256)
-  uint8 validUntil;  // 3-digit year (2000-2256)
-  // 2b: prefix of IPFS hash.  If 0, then is 0x1220 (sha256)
-  uint16 ipfsHashPrefix;
-
-  // we have 3(?) bytes of padding here
-
-  // The hash of the JSON metadata on IPFS.  Note that IPFS-native
-  // data is 64 bytes of Base58 encoded data, or 32 bytes decoded
-  // https://ethereum.stackexchange.com/questions/17094/how-to-store-ipfs-hash-using-bytes32?rq=1
-  bytes32 ipfsHash;
-}
-
-// Unpacked TokenData.
-struct TokenData {
-  address owner;
-  uint256 lastUpdate;
-  uint256 validFrom;
-  uint256 validUntil;
-  uint256 ipfsHashPrefix;
-  bytes32 ipfsHash;
-}
-
-// 20-byte mask
-uint256 constant ADDRESS_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 contract TheCoinNFT is ERC721, AccessControl {
+
+  using ECDSA for bytes32;
 
   // Create a new role identifier for the minter role
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-  // We may (eventually) mint up to 100K tokens
+  // We may (eventually) mint up to 100K tokens.  This is not editable
   uint public constant tokenSupply = 100000;
 
-  // TODO: It is (apparently) cheaper to store in 2 LU tables than in a struct.
+  // TODO: Once validated, we can try applying the below optimizations to improve
+  // our efficiency.  It is (apparently) cheaper to store in 2 LU tables than in a struct.
   // https://medium.com/@novablitz/storing-structs-is-costing-you-gas-774da988895e
-
   // Mapping from tokenID to to data
-  mapping (uint256 => uint256) private _tokenOwnerData;
+  //mapping (uint256 => uint256) private _tokenOwnerData;
   // Mapping from tokenID to it's Sha256 value.
-  mapping (uint256 => bytes32) private _tokenMetaSha256;
+  ///mapping (uint256 => bytes32) private _tokenMetaSha256;
 
-  constructor(address minter) public ERC721("TheCoinNFT", "TCN") {
+  // For PoC, we don't care about efficiency, so just duplicate the whole mapping.
+  mapping (uint256 => TokenDataPacked) private _tokenMetadata;
+
+  /**
+    * @dev Initialize minter, owner, and basic data.
+    */
+  constructor(address minter) ERC721("TheCoinNFT", "TCN") {
     _setupRole(MINTER_ROLE, minter);
   }
 
-  // Decode packed data into composite form
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
+    return ERC721.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  // Built-in overrides.
+
+  /**
+  * @dev See {IERC721Metadata-tokenURI}.
+  */
+  function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+    return "TODO";
+  }
+
+  function bulkMinting(uint256[] calldata ids, TokenDataPacked[] calldata tokens, address[] calldata owners) external onlyRole(MINTER_ROLE) {
+    require(ids.length == tokens.length && ids.length == owners.length, "Mismatched arrays");
+
+    for (uint i = 0; i < ids.length; i++) {
+      // Create the token
+      bytes memory data = abi.encodePacked(tokens[i].ipfsHash);
+      _safeMint(owners[i], ids[i], data);
+      // Store the token metadata
+      _tokenMetadata[ids[i]] = tokens[i];
+    }
+  }
+
+  /**
+   * Update the metadata associated with a token.  A user will use this when signing an image
+   * It is only legal to call this function once every 3 months.
+   */
+  function updateMetaSha256(uint256 tokenId, uint16 prefix, bytes32 ipfsHash) external {
+    // Is the sender allowed to do this allowed to do this?
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "Meta update not owner");
+    updateMeta(_tokenMetadata[tokenId], prefix, ipfsHash);
+  }
+
+  /**
+   * Similar to updateMetaSha256, allows gassless updates to a tokens metadata.
+   * The owner of the token must sign a combination of lastUpdate + id + prefix + hash.
+   * We verify the signature on-chain to prove legitimacy
+   * Sourcing lastUpdate onChain ensures that this fn cannot be replayed, because if
+   * the function is succesfull lastUpdate will be modifed (and the signature will no longer match)
+   */
+  function updateMetaSha256GassLess(uint256 tokenId, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) external {
+    address signer = recoverSigner(tokenId, _tokenMetadata[tokenId].lastUpdate, prefix, ipfsHash, signature);
+    address owner = ERC721.ownerOf(tokenId);
+    require(signer == owner, "Meta signer is not owner");
+    updateMeta(_tokenMetadata[tokenId], prefix, ipfsHash);
+  }
+
+  /**
+   * Update token metadata, and reset lastUpdate
+   */
+  function updateMeta(TokenDataPacked storage token, uint16 prefix, bytes32 ipfsHash) internal {
+    require((token.lastUpdate - block.timestamp) < 21600, "Cannot update within 3 months of prior update");
+    token.ipfsHashPrefix = prefix;
+    token.ipfsHash = ipfsHash;
+    token.lastUpdate = uint40(block.timestamp);
+  }
+
+  /**
+   *
+   */
+  function recoverSigner(uint256 tokenId, uint40 lastUpdate, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
+	{
+    // First, recreate the message that the client signed.
+    // This packed data must match the client's data packing
+		bytes memory packed = abi.encodePacked(tokenId, lastUpdate, prefix, ipfsHash);
+    // Take the hash of the packed data.
+		return keccak256(packed)
+      .toEthSignedMessageHash()
+      .recover(signature);
+	}
+
+  /**
+    * @dev Decode packed uint256 data into struct form
+
   function getTokenData(uint256 id) external view returns(TokenData memory token) {
     uint256 packedToken = _tokenOwnerData[id];
     token.ipfsHash = _tokenMetaSha256[id];
-    token.owner = getOwner(packedToken);
-    token.lastUpdate = address(uint40(packedToken>>160));
+    token.owner = unpackOwner(packedToken);
+    token.lastUpdate = uint256(uint40(packedToken>>160));
     token.validFrom = uint256(uint8(packedToken>>200));
     token.validUntil = uint256(uint8(packedToken>>201));
     token.ipfsHashPrefix = uint256(uint16(packedToken>>202));
   }
 
-  function getOwner(uint256 memory packedToken) internal view returns(address memory) {
-    return address(packedToken);
+  function unpackOwner(uint256 packedToken) internal view returns(address) {
+    return address(uint160(packedToken));
   }
 
-  // Bulk-mint tokens.
-  function bulkMinting(uint256[] calldata ids, uint256[] calldata packedTokens, bytes32[] calldata hashes) external {
-    onlyRole(MINTER_ROLE);
 
-    require(ids.length == datum.length, "Mismatched lists of ID & Datum");
-    for (int i = 0; i < proofs.length; i++) {
+  // Bulk-mint tokens.  The values set here should be pre-computed
+  // before being passed to this function.
+  function bulkMinting(uint256[] calldata ids, uint256[] calldata packedTokens, bytes32[] calldata hashes) external onlyRole(MINTER_ROLE) {
+    require(ids.length == packedTokens.length && ids.length == hashes.length, "Mismatched lengths of ID, token, and hash");
+    for (uint i = 0; i < ids.length; i++) {
       require(ids[i] >= tokenSupply, "Cannot mint token with ID > 100K");
-      require(onwerOf(ids[i]) == 0, "Minting is overwriting an existing token");
+      require(ownerOf(ids[i]) == address(0), "Minting is overwriting an existing token");
 
-      address to = getOwner(packedToken);
+      address to = unpackOwner(packedTokens[i]);
       _balances[to] += 1;
       _tokenOwnerData[ids[i]] = packedTokens[i];
       _tokenMetaSha256[ids[i]] = hashes[i];
 
-      require(_checkOnERC721Received(address(0), to, ids[i], packedTokens[i]), "ERC721: transfer to non ERC721Receiver implementer");
+      require(ERC721._checkOnERC721Received(address(0), to, ids[i], packedTokens[i]), "ERC721: transfer to non ERC721Receiver implementer");
 
       emit Transfer(address(0), to, ids[i]);
     }
   }
 
   /**
-   * Update the metadata associated with a token.  A user will use this when digitally signing an image.
-   */
-  function updateMetaSha256(uint256 calldata tokenId, bytes32 sha256 metaHash) external {
+   * Update the metadata associated with a token.  A user will use this when signing an image
+
+  function updateMetaSha256(uint256 tokenId, bytes32 metaHash) external {
     require(_exists(tokenId), "ERC721: operator query for nonexistent token");
     address owner = ERC721.ownerOf(tokenId);
     require(_msgSender() == owner, "ERC721: Update caller is not owner");
-    _tokenMetaSha256[ids[i]] = metaHash;
+    _tokenMetaSha256[tokenId] = metaHash;
   }
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +170,7 @@ contract TheCoinNFT is ERC721, AccessControl {
 
   /**
     * @dev See {IERC721-ownerOf}.
-    */
+
   function ownerOf(uint256 tokenId) public view virtual override returns (address) {
       address owner = address(_tokenOwnerData[tokenId]);
       require(owner != address(0), "ERC721: owner query for nonexistent token");
@@ -123,7 +179,7 @@ contract TheCoinNFT is ERC721, AccessControl {
 
   /**
     * @dev Returns whether `tokenId` exists.
-    */
+
   function _exists(uint256 tokenId) internal view virtual override returns (bool) {
       return _tokenOwnerData[tokenId] != 0;
   }
@@ -138,7 +194,8 @@ contract TheCoinNFT is ERC721, AccessControl {
     * - `tokenId` token must be owned by `from`.
     *
     * Emits a {Transfer} event.
-    */
+
+  uint256 private constant ADDRESS_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
   function _transfer(address from, address to, uint256 tokenId) internal virtual override {
     require(ERC721.ownerOf(tokenId) == from, "ERC721: transfer of token that is not own");
     require(to != address(0), "ERC721: transfer to the zero address");
@@ -148,29 +205,17 @@ contract TheCoinNFT is ERC721, AccessControl {
     // Clear approvals from the previous owner
     _approve(address(0), tokenId);
 
-    _balances[from] -= 1;
-    _balances[to] += 1;
+    ERC721._balances[from] -= 1;
+    ERC721._balances[to] += 1;
 
     // Clear existing address from packed data and set new one
+    // 20-byte mask
     _tokenOwnerData[tokenId] = to | (_tokenOwnerData[tokenId] & ~ADDRESS_MASK);
 
     emit Transfer(from, to, tokenId);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////
-
-  /**
-  * @dev See {IERC721Metadata-tokenURI}.
   */
-  function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-
-    return "TODO";
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////
-  //
-
 
 
 }

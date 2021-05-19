@@ -50,14 +50,14 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "^0.6.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
+      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
       docker: false,
       settings: {
         optimizer: {
           enabled: true,
           runs: 200
         },
-        evmVersion: "byzantium"
+        evmVersion: "constantinople"
       }
     }
   }
