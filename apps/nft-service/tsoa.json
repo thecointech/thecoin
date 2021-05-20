@@ -1,0 +1,21 @@
+{
+  "entryFile": "./src/main.ts",
+  "noImplicitAdditionalProperties": "silently-remove-extras",
+
+  "spec": {
+    "basePath": "/api/v1",
+    "specVersion": 2,
+    "outputDirectory": "./src/api",
+    "controllerPathGlobs": [
+      "./src/controllers/**/*controller.ts"
+    ]
+  },
+  "routes": {
+    "basePath": "/api/v1",
+    "routesDir": "./src/routes",
+    "middleware": "express"
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ]
+}

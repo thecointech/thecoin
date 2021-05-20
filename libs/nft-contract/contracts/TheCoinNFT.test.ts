@@ -1,7 +1,7 @@
 import { accounts, contract } from '@openzeppelin/test-environment';
 import { Wallet } from 'ethers';
 import { TheCoinNFTContract, TheCoinNFTInstance } from '../migrations/types';
-import { signGasslessUpdate, splitIpfsUri } from '../src/ipfs';
+import { signGasslessUpdate, splitIpfsUri } from '../src';
 
 // Loads a compiled contract using OpenZeppelin test-environment
 contract.artifactsDir = "src/contracts";
@@ -50,8 +50,8 @@ it('Can do gassless update of metadata', async () => {
   await mintForUsers([user.address], nft, id);
 
   // Can we do a gassless update?
-  const signature = await signGasslessUpdate(user, id, 0, prefix, digest);
-  await nft.updateMetaSha256GassLess(id, prefix, digest, signature);
+  const r = await signGasslessUpdate(user, id, 0, prefix, digest);
+  await nft.updateMetaSha256GassLess(id, prefix, digest, r.signature);
 
   // Check that the data stored is legitimate
   const tokenUri = await nft.tokenURI(id);
