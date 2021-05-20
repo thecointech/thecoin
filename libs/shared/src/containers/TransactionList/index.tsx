@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Menu, Icon, Dimmer, Transition, Button, Grid } from 'semantic-ui-react';
+import { Table, Menu, Icon, Dimmer, Grid } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
 import { FXRate } from '@thecointech/pricing';
 import { DateRangeSelect } from '../../components/DateRangeSelect';
@@ -13,11 +13,20 @@ import { useState } from 'react';
 import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
+import { FormattedMessage } from 'react-intl';
+import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
+import { DateTime } from 'luxon';
 
 type MyProps = {
   rates: FXRate[];
 }
 
+const hide = { id:"shared.transactionList.hide",
+                defaultMessage:"Hide filters",
+                description:"Label for the filter show / hide system"};
+const show = { id:"app.transactionList.show",
+                defaultMessage:"Show filters",
+                description:"Label for the filter show / hide system"};
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
@@ -86,7 +95,6 @@ export const TransactionList = (props: MyProps) => {
       const monthTodisplay = tx.date.setLocale(locale).monthShort;
       const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
-      const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
       return (
         <Grid.Row key={index} className={styles.transactionLine}>
           <Grid.Column width={2} textAlign='center'>
@@ -103,7 +111,7 @@ export const TransactionList = (props: MyProps) => {
           </Grid.Column>
           <Grid.Column width={3} textAlign='right'>
             <div className={classForMoneyCell}>{changeCad} $</div>
-            <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
+            <div className={`${styles.timeInTable}`}>{tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE)}</div>
           </Grid.Column>
           <Grid.Column textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Grid.Column>
         </Grid.Row>
@@ -111,13 +119,14 @@ export const TransactionList = (props: MyProps) => {
 
     const [filtersVisibility, setFiltersVisibility] = useState(true);
     const classForFilters = filtersVisibility ? styles.noDisplay : "";
+    const labelForFilters = filtersVisibility ? show : hide;
 
     return (
       <React.Fragment>
-        <Button onClick={()=>setFiltersVisibility(!filtersVisibility)}>Filters</Button>
-        <Transition visible={filtersVisibility} animation='scale' className={classForFilters} duration={500}>
+        <ButtonSecondary onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></ButtonSecondary>
+        <div className={classForFilters}>
           <DateRangeSelect onDateRangeChange={onDateRangeChange} />
-        </Transition>
+        </div>
 
         <Dimmer.Dimmable>
           <Dimmer active={transactionLoading}>Loading...</Dimmer>
