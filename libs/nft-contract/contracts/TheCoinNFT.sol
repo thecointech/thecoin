@@ -61,6 +61,8 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
     require(ids.length == tokens.length && ids.length == owners.length, "Mismatched arrays");
 
     for (uint i = 0; i < ids.length; i++) {
+      // 
+      require(ids[i] < tokenSupply, "Invalid ID supplied");
       // Create the token
       bytes memory data = abi.encodePacked(tokens[i].ipfsHash);
       _safeMint(owners[i], ids[i], data);
@@ -97,14 +99,14 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
    * Update token metadata, and reset lastUpdate
    */
   function updateMeta(TokenDataPacked storage token, uint16 prefix, bytes32 ipfsHash) internal {
-    require((token.lastUpdate - block.timestamp) < 21600, "Cannot update within 3 months of prior update");
+    require((block.timestamp - token.lastUpdate) > 21600, "Cannot update within 3 months of prior update");
     token.ipfsPrefix = prefix;
     token.ipfsHash = ipfsHash;
     token.lastUpdate = uint40(block.timestamp);
   }
 
   /**
-   *
+   * Get the address who signed off on the following variables.
    */
   function recoverSigner(uint256 tokenId, uint40 lastUpdate, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
 	{
@@ -124,7 +126,7 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
   //mapping (uint256 => uint256) private _tokenOwnerData;
   // Mapping from tokenID to it's Sha256 value.
   ///mapping (uint256 => bytes32) private _tokenMetaSha256;
-  
+
   /**
     * @dev Decode packed uint256 data into struct form
 
