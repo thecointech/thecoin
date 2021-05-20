@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Table, Menu, Icon, Dimmer, Grid } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
 import { FXRate } from '@thecointech/pricing';
-import { DateRangeSelect } from '../../components/DateRangeSelect';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
-import iconBank from "./images/icon_bank.svg";
+//import iconBank from "./images/icon_bank.svg";
+import iconCard from "./images/icon_card.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { useState } from 'react';
@@ -14,8 +14,8 @@ import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
 import { FormattedMessage } from 'react-intl';
-import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { DateTime } from 'luxon';
+import { Filters } from './Filters';
 
 type MyProps = {
   rates: FXRate[];
@@ -28,6 +28,20 @@ const show = { id:"app.transactionList.show",
                 defaultMessage:"Show filters",
                 description:"Label for the filter show / hide system"};
 
+const sent = { id:"shared.transactionList.sent",
+                defaultMessage:"Sent",
+                description:"For title in comment section for the transaction history"};
+const received = { id:"app.transactionList.received",
+                defaultMessage:"Received",
+                description:"For title in comment section for the transaction history"};
+
+const to = { id:"shared.transactionList.to",
+                defaultMessage:"To",
+                description:"For description in comment section for the transaction history"};
+const from = { id:"app.transactionList.from",
+                defaultMessage:"From",
+                description:"For description in comment section for the transaction history"};
+
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
   const pageCount = Math.ceil(transactions.length / maxRowCount);
@@ -37,7 +51,8 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
     const startRow = currentPage * maxRowCount;
     transactions = transactions.slice(startRow, startRow + maxRowCount);
 
-    return [transactions, (<Table.Footer>
+    return [transactions, (
+    <Table.Footer>
       <Table.Row>
         <Table.HeaderCell colSpan='4'>
           <Menu floated='right' pagination>
@@ -84,30 +99,28 @@ export const TransactionList = (props: MyProps) => {
       const changeCad = toHuman(change, true);
       const balanceCad = toHuman(balance, true);
 
-      let imgForLine = iconThecoin;
-      let classForMoneyCell = styles.moneyPositive;
-      let contentForComment = "IN";
-      if (changeCad < 0){
-        imgForLine = iconBank;
-        classForMoneyCell = styles.moneyNegative;
-        contentForComment = "OUT";
-      }
+      const imgForLine = changeCad < 0 ? iconCard : iconThecoin;
+      const classForMoneyCell = changeCad < 0 ? styles.moneyNegative : styles.moneyPositive;
+      const contentForComment = changeCad < 0 ? <FormattedMessage {...sent} /> : <FormattedMessage {...received} />;
+      const descForComment = changeCad < 0 ? <FormattedMessage {...to} /> : <FormattedMessage {...from} />;
+
       const monthTodisplay = tx.date.setLocale(locale).monthShort;
       const yearToDisplay = tx.date.setLocale(locale).year;
       const dayToDisplay = tx.date.setLocale(locale).day;
+      console.log(tx)
       return (
         <Grid.Row key={index} className={styles.transactionLine}>
-          <Grid.Column width={2} textAlign='center'>
+          <Grid.Column className={styles.dateColumn} width={2} textAlign='center'>
             <div className={`${styles.dateInTable}`}>
               <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
               <div className={"font-bold"}>{monthTodisplay}</div>
               <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
             </div>
           </Grid.Column>
-          <Grid.Column width={2}><img src={imgForLine} /></Grid.Column>
-          <Grid.Column width={6}>
-            <div>{contentForComment}</div>
-            <span className={`font-small font-green font-bold`}>To</span> <span className={`font-grey-06`}>Test content</span>
+          <Grid.Column className={styles.imageColumn} width={1}><img src={imgForLine} /></Grid.Column>
+          <Grid.Column className={styles.contentColumn} width={7}>
+            <div className={`font-bold ${styles.contentTextInTable}`}>{contentForComment}</div>
+            <span className={`font-small font-green font-bold`}>{descForComment}</span>&nbsp;<span className={`${styles.toTextInTable} font-grey-06`}>{tx.counterPartyAddress}</span>
           </Grid.Column>
           <Grid.Column width={3} textAlign='right'>
             <div className={classForMoneyCell}>{changeCad} $</div>
@@ -123,16 +136,16 @@ export const TransactionList = (props: MyProps) => {
 
     return (
       <React.Fragment>
-        <ButtonSecondary onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></ButtonSecondary>
+        <a onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></a>
         <div className={classForFilters}>
-          <DateRangeSelect onDateRangeChange={onDateRangeChange} />
+          <Filters onDateRangeChange={onDateRangeChange} />
         </div>
 
         <Dimmer.Dimmable>
           <Dimmer active={transactionLoading}>Loading...</Dimmer>
         </Dimmer.Dimmable>
 
-        <Grid stackable >
+        <Grid stackable padded>
           {...txJsxRows}
           {jsxFooter}
         </Grid>

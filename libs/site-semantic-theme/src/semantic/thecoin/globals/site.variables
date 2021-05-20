@@ -137,6 +137,7 @@
 @theCoinPaletteGray1     : #6F6571;
 @theCoinPaletteGray2     : #F2F2F2;
 @theCoinPaletteGray3     : #767676;
+@theCoinPaletteGray4     : #6A6A6A;
 
 @theCoinPaletteGray1Faded10     : fade(@theCoinPaletteGray1, 10%);
 @theCoinPaletteGray1Faded30     : fade(@theCoinPaletteGray1, 30%);
