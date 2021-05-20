@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Menu, Icon, Dimmer } from 'semantic-ui-react';
+import { Table, Menu, Icon, Dimmer, Transition, Button, Grid } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
 import { FXRate } from '@thecointech/pricing';
 import { DateRangeSelect } from '../../components/DateRangeSelect';
@@ -88,41 +88,45 @@ export const TransactionList = (props: MyProps) => {
       const dayToDisplay = tx.date.setLocale(locale).day;
       const timeToDisplay = tx.date.setLocale(locale).hour+":"+tx.date.setLocale(locale).minute;
       return (
-        <Table.Row key={index}>
-          <Table.Cell width={2} textAlign='center'>
+        <Grid.Row key={index} className={styles.transactionLine}>
+          <Grid.Column width={2} textAlign='center'>
             <div className={`${styles.dateInTable}`}>
               <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
               <div className={"font-bold"}>{monthTodisplay}</div>
               <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
             </div>
-          </Table.Cell>
-          <Table.Cell width={1}><img src={imgForLine} /></Table.Cell>
-          <Table.Cell width={8}>
+          </Grid.Column>
+          <Grid.Column width={2}><img src={imgForLine} /></Grid.Column>
+          <Grid.Column width={6}>
             <div>{contentForComment}</div>
             <span className={`font-small font-green font-bold`}>To</span> <span className={`font-grey-06`}>Test content</span>
-          </Table.Cell>
-          <Table.Cell width={3} textAlign='right'>
+          </Grid.Column>
+          <Grid.Column width={3} textAlign='right'>
             <div className={classForMoneyCell}>{changeCad} $</div>
             <div className={`${styles.timeInTable}`}>{timeToDisplay}</div>
-          </Table.Cell>
-          <Table.Cell textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Table.Cell>
-        </Table.Row>
+          </Grid.Column>
+          <Grid.Column textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Grid.Column>
+        </Grid.Row>
     )});
+
+    const [filtersVisibility, setFiltersVisibility] = useState(true);
+    const classForFilters = filtersVisibility ? styles.noDisplay : "";
 
     return (
       <React.Fragment>
-        <DateRangeSelect onDateRangeChange={onDateRangeChange} />
+        <Button onClick={()=>setFiltersVisibility(!filtersVisibility)}>Filters</Button>
+        <Transition visible={filtersVisibility} animation='scale' className={classForFilters} duration={500}>
+          <DateRangeSelect onDateRangeChange={onDateRangeChange} />
+        </Transition>
 
         <Dimmer.Dimmable>
           <Dimmer active={transactionLoading}>Loading...</Dimmer>
         </Dimmer.Dimmable>
 
-        <Table basic='very' singleLine >
-          <Table.Body>
-            {...txJsxRows}
-          </Table.Body>
+        <Grid stackable >
+          {...txJsxRows}
           {jsxFooter}
-        </Table>
+        </Grid>
 
       </React.Fragment>
     );
