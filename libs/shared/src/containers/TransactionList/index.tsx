@@ -77,79 +77,79 @@ export const TransactionList = (props: MyProps) => {
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
 
-    function onDateRangeChange(from: Date, until: Date) {
-      setFromDate(from);
-      setUntilDate(until);
-    }
-    const { locale } = useSelector(selectLocale);
+  const [filtersVisibility, setFiltersVisibility] = useState(true);
+  const classForFilters = filtersVisibility ? styles.noDisplay : "";
+  const labelForFilters = filtersVisibility ? show : hide;
 
-    const maxRowCount = 50;
-    const { rates } = props;
-    const account = useActiveAccount();
-    const transactions = account!.history;
-    const transactionLoading = account?.historyLoading;
+  function onDateRangeChange(from: Date, until: Date) {
+    setFromDate(from);
+    setUntilDate(until);
+  }
+  const { locale } = useSelector(selectLocale);
 
-    let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
-    filteredTx.reverse();
-    let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
+  const maxRowCount = 50;
+  const { rates } = props;
+  const account = useActiveAccount();
+  const transactions = account!.history;
+  const transactionLoading = account?.historyLoading;
 
-    let txJsxRows = txOutput.map((tx, index) => {
-      const change = fiatChange(tx, rates);
-      const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
-      const changeCad = toHuman(change, true);
-      const balanceCad = toHuman(balance, true);
+  let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+  filteredTx.reverse();
+  let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
-      const imgForLine = changeCad < 0 ? iconCard : iconThecoin;
-      const classForMoneyCell = changeCad < 0 ? styles.moneyNegative : styles.moneyPositive;
-      const contentForComment = changeCad < 0 ? <FormattedMessage {...sent} /> : <FormattedMessage {...received} />;
-      const descForComment = changeCad < 0 ? <FormattedMessage {...to} /> : <FormattedMessage {...from} />;
+  let txJsxRows = txOutput.map((tx, index) => {
+    const change = fiatChange(tx, rates);
+    const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
+    const changeCad = toHuman(change, true);
+    const balanceCad = toHuman(balance, true);
 
-      const monthTodisplay = tx.date.setLocale(locale).monthShort;
-      const yearToDisplay = tx.date.setLocale(locale).year;
-      const dayToDisplay = tx.date.setLocale(locale).day;
-      console.log(tx)
-      return (
-        <Grid.Row key={index} className={styles.transactionLine}>
-          <Grid.Column className={styles.dateColumn} width={2} textAlign='center'>
-            <div className={`${styles.dateInTable}`}>
-              <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
-              <div className={"font-bold"}>{monthTodisplay}</div>
-              <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
-            </div>
-          </Grid.Column>
-          <Grid.Column className={styles.imageColumn} width={1}><img src={imgForLine} /></Grid.Column>
-          <Grid.Column className={styles.contentColumn} width={7}>
-            <div className={`font-bold ${styles.contentTextInTable}`}>{contentForComment}</div>
-            <span className={`font-small font-green font-bold`}>{descForComment}</span>&nbsp;<span className={`${styles.toTextInTable} font-grey-06`}>{tx.counterPartyAddress}</span>
-          </Grid.Column>
-          <Grid.Column width={3} textAlign='right'>
-            <div className={classForMoneyCell}>{changeCad} $</div>
-            <div className={`${styles.timeInTable}`}>{tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE)}</div>
-          </Grid.Column>
-          <Grid.Column textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $&nbsp;&nbsp;</div></Grid.Column>
-        </Grid.Row>
-    )});
+    const imgForLine = changeCad < 0 ? iconCard : iconThecoin;
+    const classForMoneyCell = changeCad < 0 ? styles.moneyNegative : styles.moneyPositive;
+    const contentForComment = changeCad < 0 ? <FormattedMessage {...sent} /> : <FormattedMessage {...received} />;
+    const descForComment = changeCad < 0 ? <FormattedMessage {...to} /> : <FormattedMessage {...from} />;
 
-    const [filtersVisibility, setFiltersVisibility] = useState(true);
-    const classForFilters = filtersVisibility ? styles.noDisplay : "";
-    const labelForFilters = filtersVisibility ? show : hide;
-
+    const monthTodisplay = tx.date.setLocale(locale).monthShort;
+    const yearToDisplay = tx.date.setLocale(locale).year;
+    const dayToDisplay = tx.date.setLocale(locale).day;
+    
     return (
-      <React.Fragment>
-        <a onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></a>
-        <div className={classForFilters}>
-          <Filters onDateRangeChange={onDateRangeChange} />
-        </div>
+      <Grid.Row key={index} className={styles.transactionLine}>
+        <Grid.Column className={styles.dateColumn} width={2} textAlign='center'>
+          <div className={`${styles.dateInTable}`}>
+            <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
+            <div className={"font-bold"}>{monthTodisplay}</div>
+            <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
+          </div>
+        </Grid.Column>
+        <Grid.Column className={styles.imageColumn} width={1}><img src={imgForLine} /></Grid.Column>
+        <Grid.Column className={styles.contentColumn} width={7}>
+          <div className={`font-bold ${styles.contentTextInTable}`}>{contentForComment}</div>
+          <span className={`font-small font-green font-bold`}>{descForComment}</span>&nbsp;<span className={`${styles.toTextInTable} font-grey-06`}>{tx.counterPartyAddress}</span>
+        </Grid.Column>
+        <Grid.Column className={styles.changeColumn} width={3} textAlign='right'>
+          <div className={classForMoneyCell}>{changeCad} $</div>
+          <div className={`${styles.timeInTable}`}>{tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE)}</div>
+        </Grid.Column>
+        <Grid.Column className={styles.balanceColumn} textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $</div></Grid.Column>
+      </Grid.Row>
+  )});
 
-        <Dimmer.Dimmable>
-          <Dimmer active={transactionLoading}>Loading...</Dimmer>
-        </Dimmer.Dimmable>
+  return (
+    <React.Fragment>
+      <a onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></a>
+      <div className={classForFilters}>
+        <Filters onDateRangeChange={onDateRangeChange} />
+      </div>
 
-        <Grid stackable padded>
-          {...txJsxRows}
-          {jsxFooter}
-        </Grid>
+      <Dimmer.Dimmable>
+        <Dimmer active={transactionLoading}>Loading...</Dimmer>
+      </Dimmer.Dimmable>
 
-      </React.Fragment>
-    );
+      <Grid stackable padded>
+        {...txJsxRows}
+        {jsxFooter}
+      </Grid>
+
+    </React.Fragment>
+  );
 }
