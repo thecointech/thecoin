@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.0;
 
+/// The metadata describing the basic function of each token
 struct TokenDataPacked {
   // 20b: The owner of this token
   //address owner; -- Disabled for now.
@@ -13,7 +14,7 @@ struct TokenDataPacked {
   uint8 validFrom;  // 3-digit year (2000-2256)
   uint8 validUntil;  // 3-digit year (2000-2256)
   // 2b: prefix of IPFS hash.  If 0, then is 0x1220 (sha256)
-  uint16 ipfsHashPrefix;
+  uint16 ipfsPrefix;
 
   // we have 3(?) bytes of padding here
 
@@ -23,7 +24,7 @@ struct TokenDataPacked {
   bytes32 ipfsHash;
 }
 
-// Unpacked TokenData.
+// Unpacked TokenData. Not currently used
 struct TokenData {
   address owner;
   uint256 lastUpdate;

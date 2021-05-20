@@ -11,9 +11,10 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "./TokenData.sol";
+import "./IPFS.sol";
 
 
-contract TheCoinNFT is ERC721, AccessControl {
+contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
 
   using ECDSA for bytes32;
 
@@ -22,14 +23,6 @@ contract TheCoinNFT is ERC721, AccessControl {
 
   // We may (eventually) mint up to 100K tokens.  This is not editable
   uint public constant tokenSupply = 100000;
-
-  // TODO: Once validated, we can try applying the below optimizations to improve
-  // our efficiency.  It is (apparently) cheaper to store in 2 LU tables than in a struct.
-  // https://medium.com/@novablitz/storing-structs-is-costing-you-gas-774da988895e
-  // Mapping from tokenID to to data
-  //mapping (uint256 => uint256) private _tokenOwnerData;
-  // Mapping from tokenID to it's Sha256 value.
-  ///mapping (uint256 => bytes32) private _tokenMetaSha256;
 
   // For PoC, we don't care about efficiency, so just duplicate the whole mapping.
   mapping (uint256 => TokenDataPacked) private _tokenMetadata;
@@ -41,20 +34,27 @@ contract TheCoinNFT is ERC721, AccessControl {
     _setupRole(MINTER_ROLE, minter);
   }
 
+  ///////////////////////////////////////////////////////////////////////
+  // Built-in overrides.
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return ERC721.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
   }
-
-  ///////////////////////////////////////////////////////////////////////
-  // Built-in overrides.
-
+  
   /**
   * @dev See {IERC721Metadata-tokenURI}.
   */
   function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
     require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-    return "TODO";
+    TokenDataPacked storage token = _tokenMetadata[tokenId];
+    return buildIpfsURI(token.ipfsPrefix, token.ipfsHash);
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  // Custom functions.
+
+  function setBaseURI(string calldata newUri) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    setGateway(newUri);
   }
 
   function bulkMinting(uint256[] calldata ids, TokenDataPacked[] calldata tokens, address[] calldata owners) external onlyRole(MINTER_ROLE) {
@@ -98,7 +98,7 @@ contract TheCoinNFT is ERC721, AccessControl {
    */
   function updateMeta(TokenDataPacked storage token, uint16 prefix, bytes32 ipfsHash) internal {
     require((token.lastUpdate - block.timestamp) < 21600, "Cannot update within 3 months of prior update");
-    token.ipfsHashPrefix = prefix;
+    token.ipfsPrefix = prefix;
     token.ipfsHash = ipfsHash;
     token.lastUpdate = uint40(block.timestamp);
   }
@@ -117,6 +117,14 @@ contract TheCoinNFT is ERC721, AccessControl {
       .recover(signature);
 	}
 
+  // TODO: Once validated, we can try applying the below optimizations to improve
+  // our efficiency.  It is (apparently) cheaper to store in 2 LU tables than in a struct.
+  // https://medium.com/@novablitz/storing-structs-is-costing-you-gas-774da988895e
+  // Mapping from tokenID to to data
+  //mapping (uint256 => uint256) private _tokenOwnerData;
+  // Mapping from tokenID to it's Sha256 value.
+  ///mapping (uint256 => bytes32) private _tokenMetaSha256;
+  
   /**
     * @dev Decode packed uint256 data into struct form
 
