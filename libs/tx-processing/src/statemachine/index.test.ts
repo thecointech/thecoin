@@ -49,7 +49,7 @@ const graph : StateGraph<States, ActionType> = {
   complete: null,
 }
 
-it("Processes and repeats a list of events", async () => {
+it("Pauses and resumes running a processing graph on an action", async () => {
 
   const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
   const spyOnLogError = jest.spyOn(log, 'error');

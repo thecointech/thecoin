@@ -50,8 +50,8 @@ export const registerReferral = async (address: string, code: string) => {
   // Register this account on the server
   const api = GetReferrersApi();
   var isRegistered = await api.referralCreate({
-    newAccount: address,
-    referrerId: code,
+    address,
+    code,
   });
 
   if (!isRegistered.data?.success) {

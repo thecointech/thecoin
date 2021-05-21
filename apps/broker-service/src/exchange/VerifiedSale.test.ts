@@ -22,7 +22,7 @@ it("has valid status", async () => {
   expect(fee).toBe(0.005);
 })
 
-it("completes sale properly", async () => {
+it("Submits a sale for processing", async () => {
 
   jest.setTimeout(900000);
   const wallet = Wallet.createRandom();

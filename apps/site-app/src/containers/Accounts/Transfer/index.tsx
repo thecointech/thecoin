@@ -61,8 +61,8 @@ export const Transfer = () => {
   const { rates } = useFxRates();
   const rate = weBuyAt(rates);
   const intl = useIntl();
-  
-  const doTransfer = async () => { 
+
+  const doTransfer = async () => {
     // Init messages
     setTransferMessage(step1);
     setPercentComplete(0.0);
@@ -96,31 +96,31 @@ export const Transfer = () => {
     const response = await transferApi.transfer(transferCommand);
 
     console.log(`TxResponse: ${response.data.message}`);
-    if (!response.data.txHash) {
+    if (!response.data.hash) {
       alert(response.data.message);
       return false;
     }
 
     // Wait on the given hash
     const transferValues = {
-      link: (<a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}> here </a>),
+      link: (<a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
     };
     setTransferMessage(step3);
     setPercentComplete(0.5);
     setTransferValues(transferValues);
 
-    const tx = await contract.provider.getTransaction(response.data.txHash);
+    const tx = await contract.provider.getTransaction(response.data.hash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
-      response.data.txHash,
+      response.data.hash,
     );
     console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,);
     setPercentComplete(1);
     return true;
   }
 
-  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
 
     setDoCancel(false);
@@ -159,14 +159,14 @@ export const Transfer = () => {
     setDoCancel(true);
   }
   return (
-    <TransferWidget 
+    <TransferWidget
       errorMessage={errorMessage}
       errorHidden={errorHidden}
       successMessage={successMessage}
       successHidden={successHidden}
-      
-      description={description} 
-      onValueChange={onValueChange} 
+
+      description={description}
+      onValueChange={onValueChange}
       account={account!}
       coinTransfer={coinTransfer}
       rate={rate}

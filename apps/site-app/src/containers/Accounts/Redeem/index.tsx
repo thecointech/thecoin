@@ -40,7 +40,7 @@ const messageDesc = { id:"app.accounts.redeem.form.messageDesc",
 const noSpecialCaractDesc = { id:"app.accounts.redeem.form.noSpecialCaractDesc",
                 defaultMessage:"No numbers or special characters ",
                 description:"Label for the form the make a payment page / etransfert tab" };
-                               
+
 const step1= { id:"app.accounts.redeem.step1",
                 defaultMessage:"Step 1 of 3: Checking order availability..." };
 const step2= { id:"app.accounts.redeem.step2",
@@ -81,7 +81,7 @@ export const Redeem = () => {
 
   const intl = useIntl();
 
-  const doSale = async () => { 
+  const doSale = async () => {
     // Init messages
     setTransferMessage(step1);
     setPercentComplete(0.0);
@@ -121,7 +121,7 @@ export const Redeem = () => {
     setPercentComplete(0.25);
     const response = await eTransferApi.eTransfer(command);
 
-    if (!response.data?.txHash) {
+    if (!response.data?.hash) {
       console.log(`Error: ${JSON.stringify(response)}`);
       return false;
     }
@@ -129,17 +129,17 @@ export const Redeem = () => {
     // Wait on the given hash
     const transferValues = {
       link: (
-        <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.txHash}`}> here </a>),
+        <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
     };
     setTransferMessage(step3);
     setPercentComplete(0.5);
     setTransferValues(transferValues);
 
-    const tx = await contract.provider.getTransaction(response.data.txHash);
+    const tx = await contract.provider.getTransaction(response.data.hash);
     // Wait at least 2 confirmations
     tx.wait(2);
     const receipt = await contract.provider.getTransactionReceipt(
-      response.data.txHash,
+      response.data.hash,
     );
     console.log(
       `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
@@ -148,8 +148,8 @@ export const Redeem = () => {
     return true;
   }
 
-  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
-    
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+
     if (e) e.preventDefault();
     setDoCancel(false);
     setTransferValues(undefined);
@@ -171,11 +171,11 @@ export const Redeem = () => {
     setTransferInProgress(false);
   }
 
-  const onValueChange = (value: number) => { 
+  const onValueChange = (value: number) => {
     setCoinToSell(value);
   }
 
-  const onCancelTransfer = () => { 
+  const onCancelTransfer = () => {
     setDoCancel(true);
   }
 
@@ -191,25 +191,25 @@ export const Redeem = () => {
         onValueChange={onValueChange}
         account={account}
         rate={rate}
-    
+
         emailLabel={emailLabel}
         setEmail={(event: string) => setEmail(event)}
         emailDes={intl.formatMessage(emailDesc)}
-    
+
         questionLabel={questionLabel}
         setQuestion={(event: string) => setQuestion(event)}
         noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
-    
+
         answerLabel={answerLabel}
         setAnswer={(event: string) => setAnswer(event)}
-    
+
         messageLabel={messageLabel}
         setMessage={(event: string) => setMessage(event)}
         messageDesc={intl.formatMessage(messageDesc)}
-  
+
         button={button}
         onSubmit={onSubmit}
-      
+
         cancelCallback={onCancelTransfer}
         transferInProgress={transferInProgress}
         transferOutHeader={transferOutHeader}
