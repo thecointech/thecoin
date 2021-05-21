@@ -3,7 +3,7 @@ import { AllData, User, ReconciledRecord } from "types";
 
 // Next, the tx hash should match blockchain
 export function spliceBlockchain(data: AllData, user: User, record: ReconciledRecord, hash: string) {
-  const bc = findBlockchain(data.blockchain, user, record.data, hash);
+  const bc = findBlockchain(data.blockchain, user, record.action, hash);
   return (bc)
     ? data.blockchain.splice(data.blockchain.indexOf(bc), 1)[0]
     : null;

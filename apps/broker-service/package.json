@@ -38,11 +38,8 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/accounts": "^0.2.1",
-    "@thecointech/contract": "^0.2.1",
     "@thecointech/email": "^0.2.1",
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/tx-processing": "*",
     "@tsoa/runtime": "^3.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",

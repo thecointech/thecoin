@@ -1,5 +1,5 @@
 import { eTransferData } from "@thecointech/tx-gmail";
-import { ActionDictionary, ActionType } from "@thecointech/broker-db";
+import { ActionDictionary, AnyAction } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
 import { Transaction } from "@thecointech/tx-blockchain/";
 
@@ -28,11 +28,11 @@ export type AllData = {
 // ouput type
 
 export type ReconciledRecord = {
-  action: ActionType;
+  action: AnyAction;
   // TODO: Complete db upgrade by fixing these types back to TypedAction
-  data: any; // final/database data.  Can be set directly to db
+  //data: AnyAction; // final/database data.  Can be set directly to db
 
-  database: any | null; // current database record
+  database: AnyAction | null; // current database record
   email: eTransferData | null; // data from e-transfers
   bank: BankRecord[]; // data from bank, can be multiple in case of failed e-transfers
   blockchain: Transaction | null; // data from blockchain

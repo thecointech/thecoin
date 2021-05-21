@@ -2,11 +2,11 @@ import { Controller, Get, Put, Route, Query, Body, Post, Response, Tags } from '
 import { signup, unsubscribe, details, update } from '../newsletter'
 import { SubscriptionData, Subscription } from '@thecointech/broker-db';
 import { BoolResponse } from '../types';
-import { ErrorResponse, SubscriptionDetails } from './types';
+import { SubscriptionDetails } from './types';
 
 // Convert from datetime rep to number timestamp
-function convert(sub?: Subscription) {
-  if (!sub) return { error: "Not Found" };
+function convert(sub?: Subscription): SubscriptionDetails {
+  if (!sub) return { email: "", registerDate: 0 };
   const { registerDate, ...rest } = sub;
   return {
     registerDate: registerDate.toMillis(),
@@ -28,7 +28,7 @@ export class NewsletterController extends Controller {
   @Response('200', 'Subscription details')
   @Response('400', 'Not Found')
   @Response('500', 'Server Error')
-  async newsletterDetails(@Query() id: string): Promise<SubscriptionDetails|ErrorResponse> {
+  async newsletterDetails(@Query() id: string): Promise<SubscriptionDetails> {
     const r = await details(id);
     return convert(r);
   }
@@ -55,7 +55,7 @@ export class NewsletterController extends Controller {
    **/
   @Put("update")
   @Response('200', 'Subscription updated')
-  async newsletterUpdate(@Query('id') id: string, @Body() details: SubscriptionData): Promise<SubscriptionDetails|ErrorResponse> {
+  async newsletterUpdate(@Query('id') id: string, @Body() details: SubscriptionData): Promise<SubscriptionDetails> {
     const r = await update(id, details);
     return convert(r);
   }

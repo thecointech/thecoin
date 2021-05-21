@@ -1,15 +1,14 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
-import { BillPayeePacket } from "@thecointech/types";
 import { Segment } from "semantic-ui-react";
-import { TransactionData } from "containers/TransferList";
+import { BillActionContainer } from '@thecointech/tx-processing/statemachine';
 
-const RenderBillPayment = (props: TransactionData) => {
-  const billPay = props.instruction as BillPayeePacket;
+const RenderBillPayment = (props: BillActionContainer) => {
+  const billPay = props.instructions;
   return (
     <Segment>
-      <div>Payee: {billPay.payee}</div>
-      <div>Acc #: {billPay.accountNumber}</div>
+      <div>Payee: {billPay?.payee}</div>
+      <div>Acc #: {billPay?.accountNumber}</div>
     </Segment>
   )
 }

@@ -1,7 +1,6 @@
 import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
-import { matchManual } from "./matchManual";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
 import { ActionType } from "@thecointech/broker-db";
@@ -17,7 +16,8 @@ export function matchDB(data: AllData) {
   addReconciled(r, bills);
   addReconciled(r, sales);
 
-  matchManual(r, data);
+  throw new Error("Yes, fix this too");
+  // matchManual(r, data);
 
   for (let i = 0; i < 30; i++) {
     matchTransactions(data, r, i);
@@ -52,25 +52,19 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
     for (const record of user.transactions) {
 
       record.email = record.email ?? spliceEmail(data, user, record, maxDays);
-      record.blockchain = record.blockchain ?? spliceBlockchain(data, user, record, record.data.hash);
+      record.blockchain = record.blockchain ?? spliceBlockchain(data, user, record, "TODO");
       record.bank = spliceBank(data, user, record, maxDays);
 
-      if (record.data.hashRefund && !record.refund)
-        record.refund = spliceBlockchain(data, user, record, record.data.hashRefund) ?? undefined;
-
-      // if (record.action == "Sell" && record.bank) {
-      //   // was this an e-transfer, and was it cancelled?
-      //   const confirmation = (record.data as any).confirmation;
-      //   record.cancelled = findCancellation(data, record.bank.Amount, record.bank.Date, confirmation)
-      // }
+      // if (record.data.hashRefund && !record.refund)
+      //   record.refund = spliceBlockchain(data, user, record, "TODO") ?? undefined;
     }
   }
 }
 
 const convertBaseTransactionRecord = (record: any, type: ActionType) : ReconciledRecord => ({
-  action: type,
   database: record,
-  data: {
+  action: {
+    type,
     ...record,
     hash: record.hash.trim(),
   },

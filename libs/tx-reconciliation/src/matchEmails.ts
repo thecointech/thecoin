@@ -1,6 +1,6 @@
 import { filterCandidates } from "./utils";
 import { BuyAction } from "@thecointech/broker-db";
-import { AllData, User, ReconciledRecord } from "types";
+import { AllData, User, ReconciledRecord } from "./types";
 
 // Find the most common name associated with an
 export function findNames(data: AllData, address: string) {
@@ -13,8 +13,8 @@ export function findNames(data: AllData, address: string) {
 }
 
 export function spliceEmail(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
-  const email = record.action === "Buy"
-    ? findEmail(data, user, record.data as BuyAction, maxDays)
+  const email = record.action.type === "Buy"
+    ? findEmail(data, user, record.action as BuyAction, maxDays)
     : null;
 
   if (email) {
@@ -24,7 +24,7 @@ export function spliceEmail(data: AllData, user: User, record: ReconciledRecord,
 }
 
 export function findEmail(data: AllData, user: User, deposit: BuyAction, maxDays: number) {
-  const { initialId, timestamp, initial } = deposit.data;
+  const { initialId, date, initial } = deposit.data;
   if (initialId)
     return data.eTransfers.find(et => et.id === initialId);
 
@@ -32,7 +32,7 @@ export function findEmail(data: AllData, user: User, deposit: BuyAction, maxDays
   let candidates = data.eTransfers.filter(et => et.address === user.address);
   candidates = candidates.filter(et => et.cad.eq(initial.amount));
 
-  candidates = filterCandidates(candidates, "recieved", timestamp, maxDays);
+  candidates = filterCandidates(candidates, "recieved", date, maxDays);
   if (candidates.length === 1 || (maxDays === 0 && candidates.length > 0))
     return candidates[0];
 
