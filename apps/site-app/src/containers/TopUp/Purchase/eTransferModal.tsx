@@ -33,7 +33,6 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
       isOpen={props.showDlg}
       header={haveTransferCodeHeader}
       okCallback={props.onCloseDlg}
-      closeIcon={true}
       closeIconFct={props.onCloseDlg}
     >
       <Grid stackable columns={2}>
@@ -67,7 +66,6 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
       isOpen={props.showDlg}
       header={getTransferCodeHeader}
       okCallback={props.onCloseDlg}
-      closeIcon={true}
       closeIconFct={props.onCloseDlg}
     >
       <FormattedMessage {...fetchTransferCode} />

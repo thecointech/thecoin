@@ -8,7 +8,6 @@ interface ModalProps {
   progressPercent?: number;
   progressMessage?: MessageDescriptor;
   messageValues?: any;
-  closeIcon?: boolean;
   closeIconFct?: (value:string) => void;
   cancelCallback?: () => void;
   okCallback?: () => void;
@@ -79,9 +78,9 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
     return props.progressMessage ? renderProgress() : props.children
   }
 
-  const { isOpen, header, closeIcon, closeIconFct, progressPercent } = props;
+  const { isOpen, header, closeIconFct, progressPercent } = props;
   const headerContent = header ? <Modal.Header><FormattedMessage {...header} /></Modal.Header> : "";
-  const closeContent = closeIcon ? <Icon name="close" size="large" onClick={closeIconFct}/> : "";
+  const closeContent = closeIconFct ? <Icon name="close" size="large" onClick={closeIconFct}/> : "";
   return (
     <Modal open={isOpen} basic size="small">
       {closeContent}

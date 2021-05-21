@@ -45,7 +45,7 @@ export const MainNavigationMobile = () => {
                   </Menu.Item>
                   <Menu.Item>
                     <Icon name="content" onClick={()=>setModalVisible(true)} />
-                      <ModalOperation isOpen={modalVisible} closeIcon={true} closeIconFct={()=>setModalVisible(false)}>
+                      <ModalOperation isOpen={modalVisible} closeIconFct={()=>setModalVisible(false)}>
                         <Menu vertical id={styles.userMenu}>
                             <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
                               <Icon name="home" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...home} />
