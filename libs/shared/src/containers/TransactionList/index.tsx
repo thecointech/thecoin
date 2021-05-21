@@ -16,17 +16,11 @@ import { selectLocale } from '../LanguageProvider/selector';
 import { FormattedMessage } from 'react-intl';
 import { DateTime } from 'luxon';
 import { Filters } from './Filters';
+import { TransactionLine } from './TransactionLine';
 
 type MyProps = {
   rates: FXRate[];
 }
-
-const hide = { id:"shared.transactionList.hide",
-                defaultMessage:"Hide filters",
-                description:"Label for the filter show / hide system"};
-const show = { id:"app.transactionList.show",
-                defaultMessage:"Show filters",
-                description:"Label for the filter show / hide system"};
 
 const sent = { id:"shared.transactionList.sent",
                 defaultMessage:"Sent",
@@ -77,9 +71,6 @@ export const TransactionList = (props: MyProps) => {
   const [fromDate, setFromDate] = useState(new Date());
   const [untilDate, setUntilDate] = useState(new Date());
 
-  const [filtersVisibility, setFiltersVisibility] = useState(true);
-  const classForFilters = filtersVisibility ? styles.noDisplay : "";
-  const labelForFilters = filtersVisibility ? show : hide;
 
   function onDateRangeChange(from: Date, until: Date) {
     setFromDate(from);
@@ -97,7 +88,7 @@ export const TransactionList = (props: MyProps) => {
   filteredTx.reverse();
   let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
-  let txJsxRows = txOutput.map((tx, index) => {
+  let txJsxRows = txOutput.map((tx) => {
     const change = fiatChange(tx, rates);
     const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
     const changeCad = toHuman(change, true);
@@ -111,35 +102,34 @@ export const TransactionList = (props: MyProps) => {
     const monthTodisplay = tx.date.setLocale(locale).monthShort;
     const yearToDisplay = tx.date.setLocale(locale).year;
     const dayToDisplay = tx.date.setLocale(locale).day;
+
+    const timeToDisplay = tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE);
+    const addressComment = tx.counterPartyAddress;
     
     return (
-      <Grid.Row key={index} className={styles.transactionLine}>
-        <Grid.Column className={styles.dateColumn} width={2} textAlign='center'>
-          <div className={`${styles.dateInTable}`}>
-            <div className={`font-small write-vertical ${styles.yearInTable}`}>{yearToDisplay}</div>
-            <div className={"font-bold"}>{monthTodisplay}</div>
-            <div className={`font-big ${styles.dayInTable}`}>{dayToDisplay}</div>
-          </div>
-        </Grid.Column>
-        <Grid.Column className={styles.imageColumn} width={1}><img src={imgForLine} /></Grid.Column>
-        <Grid.Column className={styles.contentColumn} width={7}>
-          <div className={`font-bold ${styles.contentTextInTable}`}>{contentForComment}</div>
-          <span className={`font-small font-green font-bold`}>{descForComment}</span>&nbsp;<span className={`${styles.toTextInTable} font-grey-06`}>{tx.counterPartyAddress}</span>
-        </Grid.Column>
-        <Grid.Column className={styles.changeColumn} width={3} textAlign='right'>
-          <div className={classForMoneyCell}>{changeCad} $</div>
-          <div className={`${styles.timeInTable}`}>{tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE)}</div>
-        </Grid.Column>
-        <Grid.Column className={styles.balanceColumn} textAlign='right' width={3}><div className={`font-big`}>{balanceCad} $</div></Grid.Column>
-      </Grid.Row>
+      <TransactionLine
+        locale={locale}
+
+        yearToDisplay={yearToDisplay}
+        monthTodisplay={monthTodisplay}
+        dayToDisplay={dayToDisplay}
+      
+        imgForLine={imgForLine}
+        contentForComment={contentForComment}
+        addressComment={addressComment}
+        descForComment={descForComment}
+      
+        classForMoneyCell={classForMoneyCell}
+        changeCad={changeCad}
+        timeToDisplay={timeToDisplay}
+      
+        balanceCad={balanceCad}
+      />
   )});
 
   return (
     <React.Fragment>
-      <a onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></a>
-      <div className={classForFilters}>
-        <Filters onDateRangeChange={onDateRangeChange} />
-      </div>
+      <Filters onDateRangeChange={onDateRangeChange} />
 
       <Dimmer.Dimmable>
         <Dimmer active={transactionLoading}>Loading...</Dimmer>
