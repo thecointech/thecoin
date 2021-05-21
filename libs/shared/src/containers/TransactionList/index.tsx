@@ -88,7 +88,7 @@ export const TransactionList = (props: MyProps) => {
   filteredTx.reverse();
   let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
-  let txJsxRows = txOutput.map((tx) => {
+  let txJsxRows = txOutput.map((tx, index) => {
     const change = fiatChange(tx, rates);
     const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
     const changeCad = toHuman(change, true);
@@ -108,6 +108,7 @@ export const TransactionList = (props: MyProps) => {
     
     return (
       <TransactionLine
+        key={index}
         locale={locale}
 
         yearToDisplay={yearToDisplay}
