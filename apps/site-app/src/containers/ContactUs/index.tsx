@@ -9,6 +9,8 @@ import { UserMessage, Answer } from './Messages';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { PageHeader } from '../../components/PageHeader';
 import styles from './styles.module.less';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
 
 const title = { id:"app.contactus.title",
                 defaultMessage:"Contact Us",
@@ -43,12 +45,13 @@ export const ContactUs = () => {
 
   return (
     <React.Fragment>
+      <ColumnRightTop />
       <PageHeader 
           illustration={illustration}
           title={title}
           description= {description}
       />
-      <AppContainerWithShadow className={styles.containerContactUs}>
+      <AppContainerWithShadow className={`${styles.containerContactUs}`}>
 
       <AvailableSoon>
         <div className={styles.messagesContainer}>
@@ -81,6 +84,7 @@ export const ContactUs = () => {
 
         </AvailableSoon>
       </AppContainerWithShadow>
+      <ColumnRightBottom />
     </React.Fragment>
   );
 }

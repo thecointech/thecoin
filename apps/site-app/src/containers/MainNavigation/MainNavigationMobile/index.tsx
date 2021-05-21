@@ -4,12 +4,12 @@ import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 import { FormattedMessage } from 'react-intl';
-import Logo from './logo.svg';
+import Logo from './images/logo.svg';
 import { NavLink } from 'react-router-dom';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 
 const home = { id:"app.MainNavigation.home",
-                defaultMessage:"Home",
+                defaultMessage:"Overview",
                 description:"Title for the Home entry in the menu"};
 const transferin = { id:"app.MainNavigation.transferin",
                   defaultMessage:"Top up balance",
@@ -30,7 +30,7 @@ export const MainNavigationMobile = () => {
     return (
       <Container>
           <div className={styles.navContainer} id={styles.mainMenuContainer}>
-              <Menu secondary className={ `${styles.mainMenu} x2spaceAfter` } >
+              <Menu secondary className={ `${styles.mainMenu}` } >
                 <Menu.Menu position='left'>
                   <div>
                     <img src={Logo} id={styles.logo} className={ `x2spaceBefore` }/>
@@ -45,7 +45,7 @@ export const MainNavigationMobile = () => {
                   </Menu.Item>
                   <Menu.Item>
                     <Icon name="content" onClick={()=>setModalVisible(true)} />
-                      <ModalOperation isOpen={modalVisible}>
+                      <ModalOperation isOpen={modalVisible} closeIconFct={()=>setModalVisible(false)}>
                         <Menu vertical id={styles.userMenu}>
                             <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
                               <Icon name="home" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...home} />

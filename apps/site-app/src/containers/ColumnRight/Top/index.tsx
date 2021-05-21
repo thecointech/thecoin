@@ -6,7 +6,7 @@ import { AppContainerWithShadowWithoutPadding } from "components/AppContainers";
 export const ColumnRightTop = () => {
   return (
     <div className={styles.columnRightTop}>
-        <AppContainerWithShadowWithoutPadding><BalanceAndProfit /></AppContainerWithShadowWithoutPadding>
+        <AppContainerWithShadowWithoutPadding><BalanceAndProfit/></AppContainerWithShadowWithoutPadding>
     </div>
   )
 }

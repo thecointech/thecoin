@@ -29,7 +29,7 @@ export const Connect = () => {
     if (theSigner) {
       storeSigner(accountsApi, theSigner, name, referral);
       // We redirect directly to the now-active account
-      history.push('/accounts');
+      history.push('/');
     }
 
     return true;
