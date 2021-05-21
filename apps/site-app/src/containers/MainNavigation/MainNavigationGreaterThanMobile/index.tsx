@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 
-import Logo from './logoAndName.svg';
+import Logo from './images/logoAndName.svg';
 import styles from './styles.module.less';
 
 const home = { id:"app.MainNavigation.home",
