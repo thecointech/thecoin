@@ -4,11 +4,12 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
 import { init } from './init';
 import cors from 'cors';
+;
 
 const app = express();
 // enable cors
 app.use(cors());
-const port = process.env.PORT;
+const port = process.env.PORT ?? 9009;
 
 RegisterRoutes(app);
 

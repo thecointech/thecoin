@@ -2,7 +2,7 @@ import { log } from '@thecointech/logging';
 import { GasslessUpdateRequest, getGasslessSigner, TheCoinNFT } from '@thecointech/nft-contract';
 import { getContract } from "./contract";
 
-export async function gasslessUpdate(request: GasslessUpdateRequest): Promise<Boolean> {
+export async function gasslessUpdate(request: GasslessUpdateRequest): Promise<boolean> {
 
   const contract = await getContract();
   // First, lets verify the details (no point submitting a transaction that will never work)

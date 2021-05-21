@@ -13,7 +13,7 @@
     "noImplicitUseStrict": true,
   },
   "include": [
-    "./src/**/*.*"
+    "./src/**/*.*", "./types/*.*",
   ],
   "references": [
     { "path": "../../libs/nft-contract/tsconfig.build.json" },

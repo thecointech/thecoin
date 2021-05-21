@@ -3,3 +3,4 @@ export * from './connect';
 export * from './contract';
 export * from './ipfs';
 export * from './gassless';
+export * from './metadata';

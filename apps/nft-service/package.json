@@ -42,9 +42,10 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
+    "@pinata/sdk": "1.1.20",
     "@thecointech/logging": "^0.2.1",
     "@thecointech/utilities": "^0.2.1",
-    "@tsoa/runtime": "^3.5.2",
+    "@tsoa/runtime": "^3.8.0",
     "axios": "*",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -52,12 +53,15 @@
     "luxon": "1.26.0",
     "node-fetch": "^2.6.0",
     "swagger-tools": "^0.10.4",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "multer": "^1.4.2",
+    "image-type": "^4.1.0"
   },
   "devDependencies": {
+    "@types/multer": "^1.4.5",
     "@types/node-fetch": "^2.5.5",
     "@types/swagger-ui-express": "^4.1.1",
     "jest": "*",
-    "tsoa": "^3.5.2"
+    "tsoa": "^3.8.0"
   }
 }
