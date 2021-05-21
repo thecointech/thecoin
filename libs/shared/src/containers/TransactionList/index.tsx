@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Menu, Icon, Dimmer, Grid } from 'semantic-ui-react';
+import { Table, Menu, Icon, Dimmer, Grid, Segment, Header } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
 import { FXRate } from '@thecointech/pricing';
 import { weBuyAt } from '../FxRate/reducer';
@@ -34,6 +34,12 @@ const to = { id:"shared.transactionList.to",
                 description:"For description in comment section for the transaction history"};
 const from = { id:"app.transactionList.from",
                 defaultMessage:"From",
+                description:"For description in comment section for the transaction history"};
+const notransactions = { id:"app.transactionList.notransactions",
+                defaultMessage:"We don't have any transactions matching your query.",
+                description:"For description in comment section for the transaction history"};
+const loading = { id:"app.transactionList.loading",
+                defaultMessage:"Loading...",
                 description:"For description in comment section for the transaction history"};
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
@@ -105,7 +111,6 @@ export const TransactionList = (props: MyProps) => {
 
     const timeToDisplay = tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE);
     const addressComment = tx.counterPartyAddress;
-    
     return (
       <TransactionLine
         key={index}
@@ -127,19 +132,19 @@ export const TransactionList = (props: MyProps) => {
         balanceCad={balanceCad}
       />
   )});
+  const transactionsListZone = txJsxRows.length > 0 
+      ? <Grid stackable padded>{...txJsxRows}{jsxFooter}</Grid> 
+      : <Segment placeholder><Header as="h4" icon><Icon name='search' /><FormattedMessage {...notransactions} /></Header></Segment> ;
 
   return (
     <React.Fragment>
       <Filters onDateRangeChange={onDateRangeChange} />
 
       <Dimmer.Dimmable>
-        <Dimmer active={transactionLoading}>Loading...</Dimmer>
+        <Dimmer active={transactionLoading}><FormattedMessage {...loading} /></Dimmer>
       </Dimmer.Dimmable>
 
-      <Grid stackable padded>
-        {...txJsxRows}
-        {jsxFooter}
-      </Grid>
+      {transactionsListZone}
 
     </React.Fragment>
   );
