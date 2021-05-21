@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Table, Menu, Icon, Dimmer, Grid, Segment, Header } from 'semantic-ui-react';
+import { Menu, Icon, Dimmer, Grid, Segment, Header } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
 import { FXRate } from '@thecointech/pricing';
 import { weBuyAt } from '../FxRate/reducer';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
-//import iconBank from "./images/icon_bank.svg";
 import iconCard from "./images/icon_card.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@thecointech/tx-blockchain';
@@ -52,9 +51,9 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
     transactions = transactions.slice(startRow, startRow + maxRowCount);
 
     return [transactions, (
-    <Table.Footer>
-      <Table.Row>
-        <Table.HeaderCell colSpan='4'>
+    <Grid>
+      <Grid.Row>
+        <Grid.Column>
           <Menu floated='right' pagination>
             <Menu.Item key={0} as='a' icon>
               <Icon name='chevron left' />
@@ -64,9 +63,9 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
               <Icon name='chevron right' />
             </Menu.Item>
           </Menu>
-        </Table.HeaderCell>
-      </Table.Row>
-    </Table.Footer>)]
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>)]
   }
   return [transactions, undefined]
 }
@@ -94,7 +93,7 @@ export const TransactionList = (props: MyProps) => {
   filteredTx.reverse();
   let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
-  let txJsxRows = txOutput.map((tx, index) => {
+  let txJsxRows = txOutput.map((tx) => {
     const change = fiatChange(tx, rates);
     const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
     const changeCad = toHuman(change, true);
@@ -113,7 +112,6 @@ export const TransactionList = (props: MyProps) => {
     const addressComment = tx.counterPartyAddress;
     return (
       <TransactionLine
-        key={index}
         locale={locale}
 
         yearToDisplay={yearToDisplay}

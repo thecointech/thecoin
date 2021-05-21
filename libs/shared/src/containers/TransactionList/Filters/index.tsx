@@ -22,7 +22,7 @@ export const Filters = (props:VisualProps) => {
     return (
       <>
         <a id={styles.filterButton} onClick={()=>setFiltersVisibility(!filtersVisibility)}><FormattedMessage {...labelForFilters} /></a>
-        <div className={`${classForFilters} styles.filtersContent`}>
+        <div className={`${classForFilters} ${styles.filtersContent}`}>
             <DateRangeSelect onDateRangeChange={props.onDateRangeChange} />
         </div>
       </>
