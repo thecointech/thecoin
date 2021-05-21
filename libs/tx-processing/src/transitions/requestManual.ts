@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "statemachine/types";
+import { AnyActionContainer } from "../statemachine/types";
 import { SendMail } from '@thecointech/email';
 import { removeIncomplete } from '@thecointech/broker-db'
 
@@ -10,7 +10,7 @@ export async function requestManual(action: AnyActionContainer) {
   await SendMail(
     `Manual attention required: ${action.action.type}`,
     `InitialId: ${action.action.data.initialId}\n` +
-    `Recieved: ${action.action.data.timestamp.toSQLDate()}\n` +
+    `Recieved: ${action.action.data.date.toSQLDate()}\n` +
     `History:\n ${printHistory(action)}\n`
   );
 
@@ -24,7 +24,7 @@ const printHistory = (action: AnyActionContainer) =>
   action.history.map(h => {
     const { name, delta } = h;
     const sb = [
-      `${delta.timestamp.toString()}`,
+      `${delta.date.toString()}`,
       `${delta.type} ==> ${name}`,
     ]
     if (delta.meta) sb.push(`meta: ${delta.meta}`);

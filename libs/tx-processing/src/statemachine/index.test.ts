@@ -1,6 +1,7 @@
-import * as BrokerDB from '@thecointech/broker-db';
+import { ActionType, BuyAction } from '@thecointech/broker-db';
+import * as Transactions from '@thecointech/broker-db/transaction';
 import { GetContract } from '@thecointech/contract';
-import { DocumentReference, getFirestore } from "@thecointech/firestore";
+import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore/mock';
 import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
@@ -31,7 +32,7 @@ const logError = async (cont: AnyActionContainer) => { log.warn(getLast(cont).da
 
 type States = "initial"|"withFiat"|"withCoin"|"finalize"|"error"|"complete";
 
-const graph : StateGraph<States, BrokerDB.ActionType> = {
+const graph : StateGraph<States, ActionType> = {
   initial: {
     next: FSM.transitionTo<States>(addFiat, "withFiat"),
   },
@@ -50,8 +51,8 @@ const graph : StateGraph<States, BrokerDB.ActionType> = {
 
 it("Processes and repeats a list of events", async () => {
 
-  const spyOnRunTransitions = spyOn(BrokerDB, 'storeTransition');
-  const spyOnLogError = spyOn(log, 'error');
+  const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
+  const spyOnLogError = jest.spyOn(log, 'error');
 
   // Log nothing
   log.level(100);
@@ -59,16 +60,19 @@ it("Processes and repeats a list of events", async () => {
   const contract = await GetContract();
   const processor = new FSM.StateMachineProcessor(graph, contract);
 
-  const action: BrokerDB.AnyAction = {
+  const action: BuyAction = {
     address: "0x123",
     type: "Buy",
     data: {
-      initial: {} as any,
+      initial: {
+        amount: new Decimal(100),
+        type: "other",
+      },
       initialId: "1234",
-      timestamp: DateTime.now(),
+      date: DateTime.now(),
     },
     history: [],
-    doc: getFirestore().doc("/Buy/1234") as DocumentReference<BrokerDB.AnyActionData>,
+    doc: getFirestore().doc("/Buy/1234") as unknown as BuyAction["doc"],
   }
 
   const expectedValues = {
@@ -76,11 +80,10 @@ it("Processes and repeats a list of events", async () => {
     coin: undefined as undefined|Decimal,
   }
 
-  const runTest = async (expectedState: States, executedTransitions: number, numErrors: number) => {
+  const runTest = async (expectedState: States, executedTransitions: number, numErrors: number, breakAt?: States) => {
 
-    spyOnRunTransitions.calls.reset();
-    spyOnLogError.calls.reset();
-    const container = await processor.execute({}, action);
+    jest.resetAllMocks();
+    const container = await processor.execute({}, action, breakAt);
 
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
@@ -123,4 +126,9 @@ it("Processes and repeats a list of events", async () => {
   graph.withCoin.next = FSM.transitionTo<States>(noop, "finalize");
   action.history = [];
   await runTest('complete', 4, 0);
+
+  // Does it break & resume properly?
+  action.history = [];
+  await runTest('withCoin', 2, 0, "withCoin");
+  await runTest('complete', 2, 0);
 })

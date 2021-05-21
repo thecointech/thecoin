@@ -1,7 +1,7 @@
 import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore/mock';
 import { GetContract } from '@thecointech/contract';
-import { getCurrentState } from 'statemachine/types';
+import { getCurrentState } from '../statemachine/types';
 
 it("Can complete deposits", async () => {
 

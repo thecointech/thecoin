@@ -19,12 +19,11 @@ it('Succesfully Processes Sell', async ()=> {
   jest.setTimeout(90000000);
   init(data);
 
-  // Manually convert timestamps.  To be removed once conversion
-  // happens cleanly in broker-db.  Must happen after init (it clones db)
+  // Manually convert TS to DateTime.  Must happen after init (it clones db)
   const db = getFirestore();
   const dbdata = (db as any).database as typeof data;
   const ev = dbdata.User[0]._collections.Sell[0];
-  ev.timestamp = DateTime.fromMillis(ev.timestamp.seconds * 1000) as any;
+  ev.date = DateTime.fromMillis(ev.date.seconds * 1000) as any;
 
   // decryption returns the values spec'ed in our json file.
   mockedEncrypt.mockReturnValueOnce(ev.decrypted);

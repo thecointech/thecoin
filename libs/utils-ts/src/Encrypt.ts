@@ -1,23 +1,11 @@
 import Crypto from "crypto";
-import { EncryptedPacket, CertifiedTransferRequest } from "@thecointech/types";
+import { CertifiedTransferRequest } from "@thecointech/types";
 import { ethers } from "ethers";
 
-//import ecKeyUtils from 'eckey-utils';
-//import EthCrypto from 'eth-crypto';
-
-
-
-// function buildPemKey(wallet: Signer) {
-//   const curveName = 'secp256k1';
-//   const ecdh = Crypto.createECDH(curveName);
-//   ecdh.setPrivateKey(wallet.privateKey.substr(2), "hex");
-
-//   return ecKeyUtils.generatePem({
-//     curveName,
-//     privateKey: ecdh.getPrivateKey(),
-//     publicKey: ecdh.getPublicKey()
-//   });
-// }
+export type EncryptedPacket = {
+  encryptedPacket: string;
+  version: string;
+};
 
 const publicCert = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6GirjYahDl+YBGtCqMx0
@@ -32,21 +20,6 @@ LM6N3WvacmDnzLjHp2vsTzC2A8gO5xVqwY+pFH8YOX185uA5pWiR0/JTWSvwkS4D
 const certVersion = "1.0.1";
 
 export function encrypt(object: Object) {
-  //   // create identitiy with key-pairs and address
-  //   const alice = EthCrypto.createIdentity();
-  //   const secretMessage = 'My name is Satoshi Buterin';
-  //   const encrypted = await EthCrypto.encryptWithPublicKey(
-  //       alice.publicKey, // encrypt with alice's publicKey
-  //       secretMessage
-  //   );
-
-  //   const publicKey = EthCrypto.publicKeyByPrivateKey(
-  //     wallet.privateKey
-  // );
-  //   const encrypted2 = await EthCrypto.encryptWithPublicKey(
-  //     publicKey, // encrypt with alice's publicKey
-  //     name
-  //   );
   const toEncrypt = JSON.stringify(object);
   const bufferPayee = Buffer.from(toEncrypt);
   const encryptedPayee = Crypto.publicEncrypt(publicCert, bufferPayee);

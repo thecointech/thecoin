@@ -18,8 +18,9 @@ export async function getActionHistory(action: DocumentReference<AnyActionData>)
 
 //
 // Add transition to this action history
-export const storeTransition = (action: DocumentReference<AnyActionData>, transition: TransitionDelta) =>
-  historyCollection(action).add(transition);
+export function storeTransition(action: DocumentReference<AnyActionData>, transition: TransitionDelta) {
+  return historyCollection(action).add(transition);
+}
 
 //
 // Return action data for the action by type/firestore id

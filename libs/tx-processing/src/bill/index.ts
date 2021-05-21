@@ -5,9 +5,9 @@ import { TheCoin } from '@thecointech/contract';
 
 export const Processor = (contract: TheCoin) => new StateMachineProcessor(graph, contract);
 
-export async function processUnsettledETransfers(contract: TheCoin)
+export async function processUnsettledBillPayments(contract: TheCoin)
 {
-  let incomplete = await getIncompleteActions("Sell");
+  let incomplete = await getIncompleteActions("Bill");
   const processor = Processor(contract);
 
   const resumedActions = incomplete.map(async ic => {

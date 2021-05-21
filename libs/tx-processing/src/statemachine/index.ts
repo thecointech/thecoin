@@ -3,6 +3,8 @@ import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
 import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
 import { TheCoin } from '@thecointech/contract';
+export * from './types';
+
 //
 // Execute the transition. If we recieve a result, store it in the DB
 async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: TransitionCallback<Type>) : Promise<TransitionDelta|null> {
@@ -16,7 +18,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 
   // Ensure required values
   const withMeta = {
-    timestamp: DateTime.now(),
+    date: DateTime.now(),
     type: transition.name,
     ...delta
   }
@@ -62,12 +64,12 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 }
 
 // Every graph execution starts in the initial state.
-const initialState = <States extends string>(timestamp: DateTime): StateSnapshot<States> => ({
+const initialState = <States extends string>(date: DateTime): StateSnapshot<States> => ({
   name: "initial" as States,
   data: {},
   delta: {
     type: "no prior state",
-    timestamp,
+    date,
   },
 })
 
@@ -81,10 +83,16 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
     this.contract = contract;
   }
 
-  async execute(instructions: InstructionDataTypes[Type]|null, action: TypedAction<Type>) {
+  async execute(
+      instructions: InstructionDataTypes[Type]|null,
+      action: TypedAction<Type>,
+      breakOnState?: States
+    )
+    : Promise<TypedActionContainer<Type>>
+  {
 
     // We always start in the initial state with zero'ed entries
-    let currentState = initialState<States>(action.data.timestamp);
+    let currentState = initialState<States>(action.data.date);
     // Create a new empty container to hold the processed data
     const container: TypedActionContainer<Type> = {
       instructions,
@@ -103,6 +111,11 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       const state = currentState.name as keyof StateGraph<States, Type>;
       const { initialId } = action.data;
       const transitions = this.graph[state];
+
+      // Manual early-exit.  Online service explicitly breaks
+      // execution early so it can return at the earliest possible moment
+      if (state === breakOnState)
+        break;
 
       log.trace({ initialId, state }, `Action {initialId} processing state: {state}`);
 

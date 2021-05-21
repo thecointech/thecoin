@@ -26,12 +26,8 @@ export async function BuildVerifiedAction(
   };
 }
 
-export function GetSigner(sale: CertifiedTransfer) {
+export function getSigner(sale: CertifiedTransfer) {
   const { transfer, instructionPacket, signature } = sale;
-  if (instructionPacket)
-  {
-    const hash = GetHash(instructionPacket, transfer);
-    return ethers.utils.verifyMessage(hash, signature);
-  }
-  return false;
+  const hash = GetHash(instructionPacket, transfer);
+  return ethers.utils.verifyMessage(hash, signature);
 }

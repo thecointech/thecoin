@@ -1,4 +1,4 @@
-import { AnyActionContainer, getCurrentState } from "statemachine/types";
+import { AnyActionContainer, getCurrentState } from "../statemachine/types";
 import { preTransfer } from './pretransfer';
 
 //
@@ -14,7 +14,7 @@ export const verifyPreTransfer = (container: AnyActionContainer) => {
     return { error: 'Running transfer without matching per-transfer' };
 
   // How long ago was it registered?
-  const age = state.delta.timestamp.diffNow();
+  const age = state.delta.date.diffNow();
   if (age.as('seconds') > 120) {
     return { error: 'Timeout from pre-transfer'}
   }

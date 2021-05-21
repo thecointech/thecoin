@@ -1,8 +1,8 @@
 import { getFirestore, CollectionReference, DocumentReference } from "@thecointech/firestore";
 import { IsValidAddress, IsValidReferrerId, getShortCode } from "@thecointech/utilities";
 import { DateTime } from "luxon";
-import { referrerConverter, VerifiedReferrer } from "referrals.types";
-import { ReferralData } from "user.types";
+import { referrerConverter, VerifiedReferrer } from "./referrals.types";
+import { ReferralData } from "./user.types";
 import { getUserDoc, getUserData } from "./user";
 
 export function getReferrersCollection() : CollectionReference<VerifiedReferrer> {

@@ -7,7 +7,6 @@ it('Can fetch all transactions', async () => {
   await init();
   const users = await getAllUsers();
   // Not sure what we can test for here other than the code functions!
-  expect(users.length).toBeGreaterThan(0);
   const actions = await getAllActions(users);
   expect(actions).toBeTruthy();
 })

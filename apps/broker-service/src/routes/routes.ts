@@ -25,7 +25,25 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "message": {"dataType":"string","required":true},
-            "txHash": {"dataType":"string","required":true},
+            "state": {"dataType":"string"},
+            "hash": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ValidateErrorJSON": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "details": {"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"any"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ServerError": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -65,8 +83,7 @@ const models: TsoaRoute.Models = {
     "ETransferCodeResponse": {
         "dataType": "refObject",
         "properties": {
-            "code": {"dataType":"string"},
-            "error": {"dataType":"string"},
+            "code": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -89,6 +106,15 @@ const models: TsoaRoute.Models = {
             "familyName": {"dataType":"string"},
             "country": {"dataType":"string"},
             "city": {"dataType":"string"},
+            "registerDate": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ErrorResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -101,11 +127,15 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "NewAccountReferal": {
+    "SubscriptionData": {
         "dataType": "refObject",
         "properties": {
-            "referrerId": {"dataType":"string","required":true},
-            "newAccount": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
+            "confirmed": {"dataType":"boolean"},
+            "givenName": {"dataType":"string"},
+            "familyName": {"dataType":"string"},
+            "country": {"dataType":"string"},
+            "city": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -295,7 +325,7 @@ export function RegisterRoutes(app: express.Router) {
             function (request: any, response: any, next: any) {
             const args = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
-                    details: {"in":"body","name":"details","required":true,"ref":"SubscriptionDetails"},
+                    details: {"in":"body","name":"details","required":true,"ref":"SubscriptionData"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -361,7 +391,8 @@ export function RegisterRoutes(app: express.Router) {
         app.post('/api/v1/referrals',
             function (request: any, response: any, next: any) {
             const args = {
-                    referral: {"in":"body","name":"referral","required":true,"ref":"NewAccountReferal"},
+                    code: {"in":"body-prop","name":"code","required":true,"dataType":"string"},
+                    address: {"in":"body-prop","name":"address","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

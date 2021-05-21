@@ -1,6 +1,6 @@
 import { GetContract } from "@thecointech/contract";
 import { log } from "@thecointech/logging";
-import { AnyActionContainer, getCurrentState } from "statemachine/types";
+import { AnyActionContainer, getCurrentState } from "../statemachine/types";
 import { TransactionReceipt } from 'ethers/providers'
 
 //
