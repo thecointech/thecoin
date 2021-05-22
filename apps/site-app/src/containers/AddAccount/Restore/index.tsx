@@ -16,6 +16,7 @@ import styles from './styles.module.less';
 import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
@@ -98,9 +99,9 @@ export const Restore = () => {
           <Grid.Column>
               <img src={ manually } />
               <br />
-              <ButtonPrimary as={Link} to="/addAccount/upload/" id={styles.knowMore} >
+              <Link to="/addAccount/upload/" id={styles.knowMore} >
                 <FormattedMessage {...manualy} />
-              </ButtonPrimary>
+              </Link>
           </Grid.Column>
           <Grid.Column>
               <img src={ google } />
@@ -109,14 +110,18 @@ export const Restore = () => {
               <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
           </Grid.Column>
           <Grid.Column>
+            <AvailableSoon>
               <img src={ microsoft } />
               <br />
               <FormattedMessage {...microsoftLink} />
+            </AvailableSoon>
           </Grid.Column>
           <Grid.Column>
+            <AvailableSoon>
                 <img src={ dropbox } />
                 <br />
                 <FormattedMessage {...dropboxLink} />
+            </AvailableSoon>
           </Grid.Column>
         </Grid.Row>
       </Grid>
