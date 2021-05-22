@@ -68,7 +68,7 @@ export const Wealthier = () => {
           <Grid.Column>
               <Header as='h2'>
                 <FormattedMessage {...title} />
-                <Header.Subheader>
+                <Header.Subheader className={`x5spaceBefore`}>
                   <FormattedMessage {...description} />
                 </Header.Subheader>
               </Header>

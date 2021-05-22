@@ -58,7 +58,7 @@ export const Underwater = () => {
         <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
               <Header as='h2' id={ `x32spaceBefore` }>
                 <FormattedMessage {...title} />
-                <Header.Subheader>
+                <Header.Subheader className={`x5spaceBefore`}>
                   <FormattedMessage {...description} />
                 </Header.Subheader>
               </Header>

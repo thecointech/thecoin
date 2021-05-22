@@ -23,7 +23,7 @@ export const LandscapeGreaterThanMobile = ( Props: { mainTitle: React.ReactNode;
           <Grid.Column id={styles.headingWrapper}>
               <Header as="h1">
                 {Props.mainTitle}
-                <Header.Subheader>
+                <Header.Subheader className={`x5spaceBefore`}>
                   {Props.mainDescription}
                 </Header.Subheader>
               </Header>

@@ -76,7 +76,7 @@ export function Healthier() {
           <Grid id={ `${styles.healthierContent}` } columns='equal' textAlign='left' verticalAlign='top' stackable>
             <Header as="h2" className={ `x2spaceBefore` }>
                 <FormattedMessage {...title} />
-                <Header.Subheader>
+                <Header.Subheader className={`x5spaceBefore`}>
                   <FormattedMessage  {...description} />
                 </Header.Subheader>
             </Header>
