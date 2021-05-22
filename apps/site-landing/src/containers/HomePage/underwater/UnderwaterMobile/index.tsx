@@ -10,6 +10,7 @@ import backgroundMobile from '../images/full_background_mobile.svg';
 import illustrationDeco from '../images/smallillustration_right.svg';
 
 import { Grid, Header } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 
 const title = { id:"site.homepage.underwater.title", 
@@ -73,7 +74,7 @@ export const UnderwaterMobile = () => {
                 <p>
                   <FormattedMessage {...differenceDescription} />
                 </p>
-                <a href=""><FormattedMessage {...differenceLink} /></a>
+                <Link to="/healthier"><FormattedMessage {...differenceLink} /></Link>
             </Grid.Column>
 
             <Grid.Column columns={3} className={styles.mobileLine} >
@@ -84,7 +85,7 @@ export const UnderwaterMobile = () => {
                 <p>
                   <FormattedMessage {...scienceDescription} />
                 </p>
-                <a href=""><FormattedMessage {...scienceLink} /></a>
+                <Link to="/healthier"><FormattedMessage {...scienceLink} /></Link>
             </Grid.Column>
 
             <Grid.Column columns={3} className={styles.mobileLine} >
@@ -95,7 +96,7 @@ export const UnderwaterMobile = () => {
                 <p>
                   <FormattedMessage {...treesDescription} />
                 </p>
-                <a href=""><FormattedMessage {...treesLink} /></a>
+                <Link to="/healthier"><FormattedMessage {...treesLink} /></Link>
             </Grid.Column>
           </Grid.Row>
         </Grid>

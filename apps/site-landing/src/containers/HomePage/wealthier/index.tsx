@@ -9,6 +9,7 @@ import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
 import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
+import { Link } from 'react-router-dom';
 
 
 const title = { id:"site.homepage.wealthier.title",
@@ -82,7 +83,8 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...startnowDescription} />
               </p>
-              <a href=""><FormattedMessage {...startnowLink} /></a>
+
+              <Link to="/compare"><FormattedMessage {...startnowLink} /></Link>
           </Grid.Column>
 
           <Grid.Column columns={3}>
@@ -93,7 +95,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...investmentDescription} />
               </p>
-              <a href=""><FormattedMessage {...investmentLink} /></a>
+              <Link to="/compare"><FormattedMessage {...investmentLink} /></Link>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -115,7 +117,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...growthDescription} />
               </p>
-              <a href=""><FormattedMessage {...growthLink} /></a>
+              <Link to="/compare"><FormattedMessage {...growthLink} /></Link>
           </Grid.Column>
 
           <Grid.Column columns={3} >
@@ -126,7 +128,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...profitsDescription} />
               </p>
-              <a href=""><FormattedMessage {...profitsLink} /></a>
+              <Link to="/compare"><FormattedMessage {...profitsLink} /></Link>
           </Grid.Column>
         </Grid.Row>
       </Grid>
