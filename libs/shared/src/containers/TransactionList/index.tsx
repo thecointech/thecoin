@@ -34,12 +34,13 @@ const to = { id:"shared.transactionList.to",
 const from = { id:"app.transactionList.from",
                 defaultMessage:"From",
                 description:"For description in comment section for the transaction history"};
+                
 const notransactions = { id:"app.transactionList.notransactions",
                 defaultMessage:"We don't have any transactions matching your query.",
-                description:"For description in comment section for the transaction history"};
+                description:"For when we have no transactions to display for the transaction history"};
 const loading = { id:"app.transactionList.loading",
                 defaultMessage:"Loading...",
-                description:"For description in comment section for the transaction history"};
+                description:"For loading in comment section for the transaction history"};
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
@@ -131,7 +132,7 @@ export const TransactionList = (props: MyProps) => {
       />
   )});
   const transactionsListZone = txJsxRows.length > 0 
-      ? <Grid stackable padded>{...txJsxRows}{jsxFooter}</Grid> 
+      ? <Grid padded>{...txJsxRows}{jsxFooter}</Grid> 
       : <Segment placeholder><Header as="h4" icon><Icon name='search' /><FormattedMessage {...notransactions} /></Header></Segment> ;
 
   return (
