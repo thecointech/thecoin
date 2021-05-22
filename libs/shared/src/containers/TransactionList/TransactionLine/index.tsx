@@ -3,7 +3,7 @@ import styles from './styles.module.less';
 import { Grid } from 'semantic-ui-react';
 
 type VisualProps={
-  key: string,
+  key: number,
   locale: string,
 
   yearToDisplay: number,
