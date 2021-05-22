@@ -3,6 +3,7 @@ import styles from './styles.module.less';
 import { Grid } from 'semantic-ui-react';
 
 type VisualProps={
+  key: string,
   locale: string,
 
   yearToDisplay: number,
@@ -25,7 +26,7 @@ type VisualProps={
 export const TransactionLine = (props:VisualProps) => {
 
     return (
-      <Grid.Row className={styles.transactionLine} >
+      <Grid.Row id={"transaction_"+props.key} className={styles.transactionLine} >
         <Grid.Column className={styles.dateColumn} width={2} textAlign='center' only='computer'>
           <div className={`${styles.dateInTable}`}>
             <div className={`font-small write-vertical ${styles.yearInTable}`}>{props.yearToDisplay}</div>

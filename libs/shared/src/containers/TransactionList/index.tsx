@@ -34,7 +34,7 @@ const to = { id:"shared.transactionList.to",
 const from = { id:"app.transactionList.from",
                 defaultMessage:"From",
                 description:"For description in comment section for the transaction history"};
-                
+
 const notransactions = { id:"app.transactionList.notransactions",
                 defaultMessage:"We don't have any transactions matching your query.",
                 description:"For when we have no transactions to display for the transaction history"};
@@ -94,7 +94,7 @@ export const TransactionList = (props: MyProps) => {
   filteredTx.reverse();
   let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
-  let txJsxRows = txOutput.map((tx) => {
+  let txJsxRows = txOutput.map((tx, index) => {
     const change = fiatChange(tx, rates);
     const balance = tx.balance *  weBuyAt(rates, tx.date.toJSDate());
     const changeCad = toHuman(change, true);
@@ -113,6 +113,7 @@ export const TransactionList = (props: MyProps) => {
     const addressComment = tx.counterPartyAddress;
     return (
       <TransactionLine
+        key={index}
         locale={locale}
 
         yearToDisplay={yearToDisplay}
