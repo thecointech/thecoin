@@ -9,5 +9,8 @@ export type MetadataJson = {
   // and aspect ratio between 1.91:1 and 4:5 inclusive.
   image: string;
 
-  // Any other properties?
+  // We also store the perceptual hash of the image.
+  // Storing a canonical version of the hash may simplify
+  // future upgrades (?)
+  hash: string;
 }

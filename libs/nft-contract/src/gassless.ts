@@ -24,6 +24,8 @@ export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, pre
   return arrayify(hash);
 }
 
+//
+// Client-side data creation.  Signer must be owner of tokenId
 export async function signGasslessUpdate(signer: Signer, tokenId: number, lastUpdate: number, prefix: string, digest: string) : Promise<GasslessUpdateRequest> {
   const hash = getGasslessUpdateBuffer(tokenId, lastUpdate, prefix, digest);
   return {

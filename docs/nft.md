@@ -11,7 +11,7 @@ To succesfully prove ownership, it is necessary to:
 
 ### For images:
 
-Prooving authenticity of an image is more complex than standard data, given that we have no control over the final format & display of an image.  A standard hash of binary data will fail if the display platform (eg LinkedIn etc) applies any changes to the data (eg, stripping metadata or compressing the image).
+Proving authenticity of an image is more complex than standard data, given that we have no control over the final format & display of an image.  A standard hash of binary data will fail if the display platform (eg LinkedIn etc) applies any changes to the data (eg, stripping metadata or compressing the image).
 
 It is also important that the proof of ownership comes from the token owner, not from TheCoin.
 

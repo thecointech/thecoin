@@ -20,7 +20,7 @@
     "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
     "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
-    "run-env": "node --inspect=9231 -r ts-node/register -r dotenv/config ./src/main.ts",
+    "run-env": "node --inspect=9233 -r ts-node/register -r dotenv/config ./src/main.ts",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "run-s deploy:src deploy:cron",
     "deploy:src": "gcloud app deploy",

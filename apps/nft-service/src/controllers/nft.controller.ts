@@ -1,9 +1,11 @@
-import { Controller, Post, Body, Route, SuccessResponse, Request } from '@tsoa/runtime';
+import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, UploadedFile, File } from '@tsoa/runtime';
 import { gasslessUpdate } from '../nft/gassless';
-import type { GasslessUpdateRequest } from '@thecointech/nft-contract';
-import express from 'express';
-import multer from "multer";
+import type { GasslessUpdateRequest, MetadataJson } from '@thecointech/nft-contract';
+import { uploadAvatar, uploadMetadata } from '../nft/ipfs';
 
+type UpdateRequest = {
+  signature: string
+} & MetadataJson
 @Route('nft')
 export class NftController extends Controller {
 
@@ -11,38 +13,38 @@ export class NftController extends Controller {
    * Perform a gassless update of an NFT's metadata
    * TODO: Should we pack the image in here?
    **/
-  @Post('updateMeta')
-  async updateMetadata(@Body() update: GasslessUpdateRequest) : Promise<boolean>
-  {
+  @Post('updateNftUri')
+  async updateNftUri(@Body() update: GasslessUpdateRequest): Promise<boolean> {
     return gasslessUpdate(update);
   }
 
   /**
    * Upload an file to IPFS, and return it's URI
+   * @param {string} signature
+   * @pattern signature ^(0[xX])?[A-Fa-f0-9]{130}$
    **/
-   @Post("uploadAvatar")
+  @Post("uploadAvatar")
   @SuccessResponse("201", "Created")
-  public async uploadAvatar(@Body() signature: string, @Request() request: express.Request): Promise<string> {
-    const avatar = await this.handleFile(request);
-    validateUpload(avatar, signature)
-    const metaUri = await
-     // file will be in request.avatar, it is a buffer
-     return "Qmazone";
-   }
+  @Response("400", "Invalid input")
+  public async uploadAvatar(@UploadedFile() avatar: File, @FormField() signature: string): Promise<string> {
+    const r = await uploadAvatar(avatar.buffer, signature);
+    if (r) return r;
+    this.setStatus(400);
+    return "Upload Failed";
+  }
 
-
-  private handleFile(request: express.Request) {
-    // NOTE: the 'avatar' name here must match the merged swagger
-    // spec in tsoa.json.
-    const multerSingle = multer().single("avatar");
-    return new Promise((resolve, reject) => {
-      multerSingle(request, undefined as any, async (error) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(request.file.buffer);
-      });
-    });
+  /**
+   * Upload an file to IPFS, and return it's URI
+   **/
+  @Post("uploadMetadata")
+  @SuccessResponse("201", "Created")
+  @Response("400", "Invalid input")
+  public async uploadMetadata(@Body() json: UpdateRequest): Promise<string> {
+    const { signature, ...metadata } = json;
+    const r = await uploadMetadata(metadata, signature);
+    if (r) return r;
+    this.setStatus(400);
+    return "Upload Failed";
   }
 }
 

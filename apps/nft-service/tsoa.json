@@ -5,27 +5,7 @@
   "spec": {
     "basePath": "/api/v1",
     "specVersion": 2,
-    "outputDirectory": "./src/api",
-    "specMerging": "recursive",
-    "spec": {
-      "paths": {
-        "/nft/uploadAvatar": {
-          "post": {
-            "consumes": [
-              "multipart/form-data"
-            ],
-            "parameters": [
-              {
-                "in": "formData",
-                "name": "avatar",
-                "required": true,
-                "type": "file"
-              }
-            ]
-          }
-        }
-      }
-    }
+    "outputDirectory": "./src/api"
   },
   "routes": {
     "basePath": "/api/v1",
