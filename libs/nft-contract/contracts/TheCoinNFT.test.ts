@@ -58,17 +58,15 @@ it('Can do gassless update of metadata', async () => {
   expect(tokenUri).toEqual(sampleUri);
 })
 
-const randomId = () => Math.round(Math.random() * Number.MAX_SAFE_INTEGER) % 100000;
+const randomId = () => Math.floor(Math.random() * 100000);
 const getContract = () => nft.new(minter, {from: owner});
-const getNftMeta = () =>  ({
-  lastUpdate: 0,
-  validFrom: 22, // 2022
-  validUntil: 25, // 2025
-  ipfsPrefix: "0x1220",
-  ipfsHash: "0x".padEnd(66, "0"),
-})
 const mintForUsers = async (users: string[], nft: TheCoinNFTInstance, startId = 0) => {
   const ids = users.map((_, idx) => idx + startId);
-  const tokens = users.map(getNftMeta);
-  return nft.bulkMinting(ids, tokens, users, {from: minter});
+  const r = await nft.bulkMinting(ids, 2022, {from: minter});
+  await Promise.all(
+    users.map(
+      (user, idx) => nft.transferFrom(minter, user, ids[idx], {from: minter})
+    )
+  );
+  return r;
 }

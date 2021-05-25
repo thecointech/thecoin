@@ -4,9 +4,9 @@ import { getContract } from "./contract";
 
 export async function connectNFT(signer: Signer) : Promise<TheCoinNFT> {
 	const contract = await getContract();
-	if ((signer as Wallet).connect) {
+	if (signer instanceof Wallet) {
 	  // Ensure wallet is connected to the same network as the contract
-		signer = (signer as Wallet).connect(contract.provider);
+		signer = signer.connect(contract.provider);
 	}
 	else {
 		// Validate that signer and contract are connected to the same network
