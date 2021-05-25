@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, UploadedFile, File } from '@tsoa/runtime';
+import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, UploadedFile, File, Tags } from '@tsoa/runtime';
 import { gasslessUpdate } from '../nft/gassless';
 import type { GasslessUpdateRequest, MetadataJson } from '@thecointech/nft-contract';
 import { uploadAvatar, uploadMetadata } from '../nft/ipfs';
@@ -8,6 +8,7 @@ type UpdateRequest = {
   signature: string
 } & MetadataJson
 @Route('nft')
+@Tags('NFT')
 export class NftController extends Controller {
 
   /**

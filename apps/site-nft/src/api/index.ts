@@ -1,4 +1,4 @@
-import { DefaultApi } from '@thecointech/nft';
+import { NFTApi } from '@thecointech/nft';
 import { SecureApi } from '@thecointech/broker-cad';
 import { MockNftApi } from './mock/nft';
 import { MockSecureApi } from './mock/secure';
@@ -11,7 +11,7 @@ const NoDatabase = (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 
 export const GetNftApi = () =>
   NoDatabase
     ? new MockNftApi()
-    : new DefaultApi(undefined, NftServiceAddress);
+    : new NFTApi(undefined, NftServiceAddress);
 
 export const GetSecureApi = () =>
   NoDatabase
