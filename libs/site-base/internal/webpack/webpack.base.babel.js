@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
+const { transform } = require('@formatjs/ts-transformer');
 
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
@@ -42,6 +43,15 @@ module.exports = options => ({
             experimentalWatchApi: true,
             projectReferences: true,
             compilerOptions: options.tsCompilerOptions,
+            // Include the custom transformer to automate compiling out i18n messages
+            getCustomTransformers: () => ({
+              before: [
+                transform({
+                  overrideIdFn: '[sha512:contenthash:base64:6]',
+                  ast: true,
+                }),
+              ],
+            }),
           },
         },
       },

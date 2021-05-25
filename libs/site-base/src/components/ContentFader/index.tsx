@@ -1,13 +1,8 @@
 import * as React from 'react';
-import { Location } from 'history';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import styles from './styles.module.less';
-
-type OwnProps = {
-  location: Location;
-}
-type Props = OwnProps;
+import { useLocation } from 'react-router';
 
 const classStyles = {
   enter: styles.fadeEnter,
@@ -15,22 +10,17 @@ const classStyles = {
   exitActive: styles.fadeExitActive,
 };
 
-export class ContentFader extends React.PureComponent<Props, {}, null> {
-  render() {
-    // TODO: Can we remove this location? Check once fading has been
-    // implemented on the landing site
-    const { location } = this.props;
-
-    return (
-      <TransitionGroup className={styles.fadeBase}>
-        <CSSTransition
-          key={location.key}
-          classNames={classStyles}
-          timeout={LessVars.pageTransitionDuration}
-        >
-          {this.props.children}
-        </CSSTransition>
-      </TransitionGroup>
-    );
-  }
+export const ContentFader: React.FC = (props) => {
+  const location = useLocation();
+  return (
+    <TransitionGroup className={styles.fadeBase}>
+      <CSSTransition
+        key={location.key}
+        classNames={classStyles}
+        timeout={LessVars.pageTransitionDuration}
+      >
+        {props.children}
+      </CSSTransition>
+    </TransitionGroup>
+  );
 }

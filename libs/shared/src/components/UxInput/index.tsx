@@ -12,7 +12,7 @@ const placeholder = { id:"shared.uxinput.required.tooltip",
 type Props = Readonly<MyProps>;
 
 export const UxInput = (props:Props) => {
-  
+
   const [value, setValue] = useState("");
   const [showState, setShowState] = useState(false);
 
@@ -47,7 +47,7 @@ export const UxInput = (props:Props) => {
     setValue(value);
   }
 
-  
+
     const intl = useIntl();
 
     const errorTag = showState && (isValid === false);
@@ -82,10 +82,10 @@ export const UxInput = (props:Props) => {
       </span>
     );
     const messageElement = (
-      <Popup 
-        context={contextRef} 
-        position='top right' 
-        content={message ? <FormattedMessage {...message} /> : undefined} 
+      <Popup
+        context={contextRef}
+        position='top right'
+        content={message ? intl.formatMessage(message) : undefined}
         open={showMessage} style={errorTag ? styleError : styleSuccess } />
     );
 
@@ -95,7 +95,7 @@ export const UxInput = (props:Props) => {
         {messageElement}
         {inputElement}
         {footer}
-        
+
       </Form.Field>
     );
 }

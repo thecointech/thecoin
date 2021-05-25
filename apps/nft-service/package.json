@@ -2,7 +2,7 @@
   "name": "@thecointech/nft-service",
   "version": "0.2.1",
   "private": true,
-  "description": "TheCoin NFT service.  Permits gassless transactions with the TheCoin NFT contract",
+  "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apps/rates-service"
+    "directory": "apps/nft-service"
   },
   "scripts": {
     "start": "node ./build/main.js",

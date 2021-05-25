@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { AccountState } from '.';
 import { AccountMapStore } from './types';
 
 // Select array of all accounts
@@ -13,7 +14,7 @@ export const useAccountStore = () =>
 
 
 // Select the active account
-export const activeAccountSelector = (state: AccountMapStore) => {
+export const activeAccountSelector = (state: AccountMapStore) : AccountState|undefined => {
   const { active } = state.accounts;
 
   if (active && state.accounts.map[active])

@@ -127,11 +127,11 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
   /**
    * Get the address who signed off on the following variables.
    */
-  function recoverSigner(uint256 tokenId, uint40 lastUpdate, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
+  function recoverSigner(uint256 tokenId, uint40 ts, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
 	{
     // First, recreate the message that the client signed.
     // This packed data must match the client's data packing
-		bytes memory packed = abi.encodePacked(tokenId, lastUpdate, prefix, ipfsHash);
+		bytes memory packed = abi.encodePacked(tokenId, ts, prefix, ipfsHash);
     // Take the hash of the packed data.
 		return keccak256(packed)
       .toEthSignedMessageHash()
