@@ -9,7 +9,7 @@ export enum AccountId {
   // NOTE: The following accounts for testing only!
   client1,
   client2,
-  client3,
+  NFTMinter,
 };
 
 export type AccountName = keyof typeof AccountId;

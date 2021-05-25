@@ -9,7 +9,7 @@ const step: MigrationStep = (artifacts) =>
     const nftContract = artifacts.require("TheCoinNFT");
 
     // Create with minter assigned.
-    const minter = await getSigner('Minter');
+    const minter = await getSigner('NFTMinter');
     const mintAddress = await minter.getAddress();
     // Deploy the NFT contract.
     await deployer.deploy(nftContract, mintAddress);
