@@ -2,6 +2,7 @@ import { writeFileSync } from 'fs';
 import { MigrationStep } from './step';
 import { getSigner } from '@thecointech/accounts';
 import { getTokenClaimCode } from '../src/tokenCodes';
+import { join } from 'path';
 
 const step: MigrationStep = (artifacts) =>
   async (_, network, _accounts) => {
@@ -21,8 +22,9 @@ const step: MigrationStep = (artifacts) =>
       // Now build 9 codes to be used.
       const codes = await Promise.all(ids.slice(1).map(id => getTokenClaimCode(id, minter)));
       // now, write these out into an appropriate file
-      const asJson = codes.reduce((obj, val, idx) => obj[idx + 11] = val, {} as any);
-      writeFileSync('../devlive.tokens.json', JSON.stringify(asJson));
+      const asJson = codes.reduce((obj, val, idx) => { obj[idx + 11] = val; return obj } , {} as any);
+      const tokenFile = join(__dirname, '../devlive.tokens.json');
+      writeFileSync(tokenFile, JSON.stringify(asJson));
     }
   }
 

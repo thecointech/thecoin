@@ -2,12 +2,22 @@ import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, Up
 import { gasslessUpdate } from '../nft/gassless';
 import type { GasslessUpdateRequest, MetadataJson } from '@thecointech/nft-contract';
 import { uploadAvatar, uploadMetadata } from '../nft/ipfs';
+import { claimNft, NftClaim } from '../nft/claim';
 
 type UpdateRequest = {
   signature: string
 } & MetadataJson
 @Route('nft')
 export class NftController extends Controller {
+
+  /**
+   * Allow a user to claim a token.  The user supplies the token they are claiming,
+   * it's associated claim code, and their address, and we transfer the token to them
+   **/
+  @Post('claimNft')
+  async claimNft(@Body() claim: NftClaim): Promise<boolean> {
+    return claimNft(claim);
+  }
 
   /**
    * Perform a gassless update of an NFT's metadata
@@ -34,7 +44,7 @@ export class NftController extends Controller {
   }
 
   /**
-   * Upload an file to IPFS, and return it's URI
+   * Upload a full metadata file to IPFS, and return it's URI'
    **/
   @Post("uploadMetadata")
   @SuccessResponse("201", "Created")
