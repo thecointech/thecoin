@@ -52,7 +52,7 @@ const passwordTextKeep = { id:"app.account.generate.passwordTextKeep",
 
 const storeAccountText = { id:"app.account.generate.storeAccountText",
                       defaultMessage:"We employ a multi-layered approach to ensure your account has complete security. Your account and it's value are secured on the blockchain, meaning that the same security that protects over $17 trillion of assets also protects your account. This security is, in practical terms, unhackable.",
-                      description:"The create account button for the information page before the create account form"};
+                      description:"The text for the where is my account stored"};
 
 export const Intro = () => {
   const [passwordTextVisibility, setPasswordTextVisibility] = useState(false);
