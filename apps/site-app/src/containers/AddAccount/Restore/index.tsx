@@ -14,7 +14,7 @@ import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
@@ -28,6 +28,9 @@ const title = { id:"app.account.restore.title",
 const manualy = { id:"app.account.restore.manualy",
                   defaultMessage:"Upload manualy",
                   description:"Locale link for the restore your account page"};
+const googleLink = { id:"app.account.restore.google",
+                        defaultMessage:"Google",
+                        description:"Microsoft link for the restore your account page"};
 const microsoftLink = { id:"app.account.restore.microsoft",
                         defaultMessage:"Microsoft OneDrive",
                         description:"Microsoft link for the restore your account page"};
@@ -98,37 +101,35 @@ export const Restore = () => {
       <Grid stackable centered columns={4} id={sharedStyles.choices}>
         <Grid.Row centered>
           <Grid.Column>
+            <a href={"/addAccount/upload/"}>
               <img src={ manually } />
-              <br /><br />
-              <ButtonPrimary as={NavLink} to="/addAccount/upload/" >
-                <FormattedMessage {...manualy} />
-              </ButtonPrimary>
+              <Header as={"h4"}><FormattedMessage {...manualy} /></Header>
+            </a>
           </Grid.Column>
           <Grid.Column>
+            <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
               <img src={ google } />
-              <br />
+              <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
               <AccountList wallets={wallets} />
-              <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} />
+            </ConnectButton>  
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
-                <img src={ microsoft } />
-                <br /><br />
-                <ButtonPrimary as={NavLink} to="" disabled={true} >
-                  <FormattedMessage {...microsoftLink} />
-                </ButtonPrimary>
+                <a>
+                  <img src={ microsoft } />
+                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
+                </a>
               </div>
             </AvailableSoon>
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
-                <img src={ dropbox } />
-                  <br /><br />
-                <ButtonPrimary as={NavLink} to="" disabled={true} >
-                  <FormattedMessage {...dropboxLink} />
-                </ButtonPrimary>
+                <a>
+                  <img src={ dropbox } />
+                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
+                </a>
               </div>
             </AvailableSoon>
           </Grid.Column>

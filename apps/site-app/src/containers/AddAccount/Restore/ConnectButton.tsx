@@ -15,18 +15,24 @@ const connectButton = { id:"app.addAccount.restore.connectButton.",
                     description:"The text for the create your password text"};
 
 
-export const ConnectButton = (props: Props) => {
+export const ConnectButton : React.FC<Props> = (props)=> {
   const { isVisible, disabled, loading } = props;
 
   const onClick = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault();
     props.onClick();
   }, [props.onClick]);
+  const linkToRestore = props.children 
+      ?   <a onClick={()=>onClick}>
+            {props.children}
+          </a>
+      : <Form>
+          <ButtonPrimary onClick={onClick} disabled={disabled} loading={loading} >
+            <FormattedMessage {...connectButton} />
+          </ButtonPrimary>
+        </Form>;
+
   return isVisible
-    ? <Form>
-      <ButtonPrimary onClick={onClick} disabled={disabled} loading={loading} >
-        <FormattedMessage {...connectButton} />
-      </ButtonPrimary>
-    </Form>
+    ? linkToRestore
     : null;
 }
