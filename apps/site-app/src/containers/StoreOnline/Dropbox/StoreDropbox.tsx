@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
-
+import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 
 const dropbox = { id:"app.storeOnline.dropbox.link", 
                 defaultMessage:"Dropbox",
@@ -9,9 +9,15 @@ const dropbox = { id:"app.storeOnline.dropbox.link",
 export const StoreDropbox : React.FC = (props) => {
 
     return (
-      <a href="addAccount/store">
-        {props.children}
-        <FormattedMessage {...dropbox} />
-      </a>
+      <>
+          {props.children}
+          <br />
+          <ButtonPrimary href="">
+            <FormattedMessage 
+                id="app.storeOnline.microsoft.link"
+                defaultMessage="Microsoft"
+                description=""/>
+          </ButtonPrimary>
+      </>
     );
   }

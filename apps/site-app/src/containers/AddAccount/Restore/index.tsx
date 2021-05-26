@@ -13,6 +13,7 @@ import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
+import sharedStyles from '../styles.module.less';
 import { Link, NavLink } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
@@ -94,7 +95,7 @@ export const Restore = () => {
           <FormattedMessage {...title} />
       </Header>
 
-      <Grid stackable centered columns={4} id={styles.choices}>
+      <Grid stackable centered columns={4} id={sharedStyles.choices}>
         <Grid.Row centered>
           <Grid.Column>
               <img src={ manually } />
@@ -111,7 +112,7 @@ export const Restore = () => {
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
-              <div className={styles.soon}>
+              <div className={sharedStyles.soon}>
                 <img src={ microsoft } />
                 <br /><br />
                 <ButtonPrimary as={NavLink} to="" disabled={true} >
@@ -122,7 +123,7 @@ export const Restore = () => {
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
-              <div className={styles.soon}>
+              <div className={sharedStyles.soon}>
                 <img src={ dropbox } />
                   <br /><br />
                 <ButtonPrimary as={NavLink} to="" disabled={true} >

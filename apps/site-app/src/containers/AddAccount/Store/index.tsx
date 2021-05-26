@@ -15,8 +15,10 @@ import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
+import sharedStyles from '../styles.module.less';
 import { Decoration } from "components/Decoration";
 import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 
 const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
@@ -70,7 +72,7 @@ export const Store = () => {
       </Header>
       <MaybeMessage {...feedback} />
 
-      <Grid stackable centered columns={4} id={styles.choices}>
+      <Grid stackable centered columns={4} id={sharedStyles.choices}>
         <Grid.Row centered>
           <Grid.Column centered>
               <img src={ manually } />
@@ -85,16 +87,24 @@ export const Store = () => {
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete} />
           </Grid.Column>
           <Grid.Column centered>
-            <StoreMicrosoft>
-              <img src={ microsoft } />
-              <br />
-            </StoreMicrosoft>
+            <AvailableSoon>
+              <div className={sharedStyles.soon}>
+                <StoreMicrosoft>
+                  <img src={ microsoft } />
+                  <br />
+                </StoreMicrosoft>
+              </div>
+            </AvailableSoon>
           </Grid.Column>
           <Grid.Column centered>
-              <StoreDropbox>
-                <img src={ dropbox } />
-                <br />
-              </StoreDropbox>
+            <AvailableSoon>
+              <div className={sharedStyles.soon}>
+                <StoreDropbox>
+                  <img src={ dropbox } />
+                  <br />
+                </StoreDropbox>
+              </div>
+              </AvailableSoon>
           </Grid.Column>
         </Grid.Row>
       </Grid>
