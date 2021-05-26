@@ -81,21 +81,21 @@ export const Store = () => {
       </Header>
       <MaybeMessage {...feedback} />
 
-      <Grid stackable centered columns={4} id={sharedStyles.choices}>
-        <Grid.Row centered>
-          <Grid.Column centered>
+      <Grid stackable columns={4} id={sharedStyles.choices}>
+        <Grid.Row>
+          <Grid.Column>
               <a onClick={onDownloadClicked}>
                 <img src={ manually } />
                 <Header as={"h4"}><FormattedMessage {...download} /></Header>
               </a>
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
                 <img src={ google } />
                 <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
               </StoreGoogle>
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
                 <StoreMicrosoft>
@@ -105,7 +105,7 @@ export const Store = () => {
               </div>
             </AvailableSoon>
           </Grid.Column>
-          <Grid.Column centered>
+          <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
                 <StoreDropbox>
