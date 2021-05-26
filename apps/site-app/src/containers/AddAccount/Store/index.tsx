@@ -43,7 +43,7 @@ const googleLink = {  id:"app.account.create.store.button.google",
                           defaultMessage:"Google",
                           description:"The button to save on google for the store your account page"};
 const microsoftLink = {  id:"app.account.create.store.button.microsoft",
-                          defaultMessage:"Microsoft",
+                          defaultMessage:"Microsoft OneDrive",
                           description:"The button to save on microsoft for the store your account page"};
 const dropboxLink = {  id:"app.account.create.store.button.dropbox",
                           defaultMessage:"Dropbox",
