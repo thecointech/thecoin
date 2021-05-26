@@ -13,7 +13,7 @@ import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
@@ -28,10 +28,10 @@ const manualy = { id:"app.account.restore.manualy",
                   defaultMessage:"Upload manualy",
                   description:"Locale link for the restore your account page"};
 const microsoftLink = { id:"app.account.restore.microsoft",
-                        defaultMessage:"Restore from  Microsoft OneDrive",
+                        defaultMessage:"Microsoft OneDrive",
                         description:"Microsoft link for the restore your account page"};
 const dropboxLink = { id:"app.account.restore.dropbox",
-                      defaultMessage:"Restore from Dropbox",
+                      defaultMessage:"Dropbox",
                       description:"Dropbox link for the restore your account page"};
 const otherEthereum = { id:"app.account.restore.otherEthereum.explanation",
                         defaultMessage:"Also you can log into your account using an existing Ethereum account.",
@@ -98,10 +98,10 @@ export const Restore = () => {
         <Grid.Row centered>
           <Grid.Column>
               <img src={ manually } />
-              <br />
-              <Link to="/addAccount/upload/" id={styles.knowMore} >
+              <br /><br />
+              <ButtonPrimary as={NavLink} to="/addAccount/upload/" >
                 <FormattedMessage {...manualy} />
-              </Link>
+              </ButtonPrimary>
           </Grid.Column>
           <Grid.Column>
               <img src={ google } />
@@ -111,16 +111,24 @@ export const Restore = () => {
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
-              <img src={ microsoft } />
-              <br />
-              <FormattedMessage {...microsoftLink} />
+              <div className={styles.soon}>
+                <img src={ microsoft } />
+                <br /><br />
+                <ButtonPrimary as={NavLink} to="" disabled={true} >
+                  <FormattedMessage {...microsoftLink} />
+                </ButtonPrimary>
+              </div>
             </AvailableSoon>
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
+              <div className={styles.soon}>
                 <img src={ dropbox } />
-                <br />
-                <FormattedMessage {...dropboxLink} />
+                  <br /><br />
+                <ButtonPrimary as={NavLink} to="" disabled={true} >
+                  <FormattedMessage {...dropboxLink} />
+                </ButtonPrimary>
+              </div>
             </AvailableSoon>
           </Grid.Column>
         </Grid.Row>
