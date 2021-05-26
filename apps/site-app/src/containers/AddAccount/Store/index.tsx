@@ -39,6 +39,15 @@ const explainDownload = { id:"app.account.create.store.explainDownload",
 const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
+const googleLink = {  id:"app.account.create.store.button.google",
+                          defaultMessage:"Google",
+                          description:"The button to save on google for the store your account page"};
+const microsoftLink = {  id:"app.account.create.store.button.microsoft",
+                          defaultMessage:"Microsoft",
+                          description:"The button to save on microsoft for the store your account page"};
+const dropboxLink = {  id:"app.account.create.store.button.dropbox",
+                          defaultMessage:"Dropbox",
+                          description:"The button to save on dropbox for the store your account page"};
 
 export const Store = () => {
 
@@ -75,23 +84,23 @@ export const Store = () => {
       <Grid stackable centered columns={4} id={sharedStyles.choices}>
         <Grid.Row centered>
           <Grid.Column centered>
-              <img src={ manually } />
-              <br />
               <a onClick={onDownloadClicked}>
-                <FormattedMessage {...download} />
+                <img src={ manually } />
+                <Header as={"h4"}><FormattedMessage {...download} /></Header>
               </a>
           </Grid.Column>
           <Grid.Column centered>
-              <img src={ google } />
-              <br />
-              <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete} />
+              <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
+                <img src={ google } />
+                <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
+              </StoreGoogle>
           </Grid.Column>
           <Grid.Column centered>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
                 <StoreMicrosoft>
                   <img src={ microsoft } />
-                  <br />
+                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
                 </StoreMicrosoft>
               </div>
             </AvailableSoon>
@@ -101,7 +110,7 @@ export const Store = () => {
               <div className={sharedStyles.soon}>
                 <StoreDropbox>
                   <img src={ dropbox } />
-                  <br />
+                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
                 </StoreDropbox>
               </div>
               </AvailableSoon>
