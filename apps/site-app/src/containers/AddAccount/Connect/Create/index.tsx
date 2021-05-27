@@ -77,7 +77,7 @@ export const Create = () => {
       <div className={`${styles.createAccountContent} x8spaceBefore x12spaceAfter`} >
           <FormattedMessage {...explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <ButtonPrimary as={Link} to="/addAccount" size='medium' >
+          <ButtonPrimary as={Link} to="/addAccount/generate/intro" size='medium' >
             <FormattedMessage {...buttonCreateAccount} />
           </ButtonPrimary>
       </div>
