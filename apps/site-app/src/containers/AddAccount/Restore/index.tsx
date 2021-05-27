@@ -116,7 +116,7 @@ export const Restore = () => {
           <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
-                <a className={"x4spaceAfter"}>
+                <a className={"x8spaceAfter"}>
                   <img src={ microsoft } />
                   <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
                 </a>
@@ -126,7 +126,7 @@ export const Restore = () => {
           <Grid.Column>
             <AvailableSoon>
               <div className={sharedStyles.soon}>
-                <a className={"x4spaceAfter"}>
+                <a className={"x8spaceAfter"}>
                   <img src={ dropbox } />
                   <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
                 </a>

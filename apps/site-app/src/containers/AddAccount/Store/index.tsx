@@ -40,13 +40,13 @@ const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
 const googleLink = {  id:"app.account.create.store.button.google",
-                          defaultMessage:"Google",
+                          defaultMessage:"Store on Google",
                           description:"The button to save on google for the store your account page"};
 const microsoftLink = {  id:"app.account.create.store.button.microsoft",
-                          defaultMessage:"Microsoft OneDrive",
+                          defaultMessage:"Store on Microsoft OneDrive",
                           description:"The button to save on microsoft for the store your account page"};
 const dropboxLink = {  id:"app.account.create.store.button.dropbox",
-                          defaultMessage:"Dropbox",
+                          defaultMessage:"Store on Dropbox",
                           description:"The button to save on dropbox for the store your account page"};
 
 export const Store = () => {
