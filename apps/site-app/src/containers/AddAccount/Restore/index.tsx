@@ -101,10 +101,10 @@ export const Restore = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-            <a href={"/addAccount/upload/"}>
+            <Link to={"/addAccount/upload"}>
               <img src={ manually } />
               <Header as={"h4"}><FormattedMessage {...manualy} /></Header>
-            </a>
+            </Link>
           </Grid.Column>
           <Grid.Column>
             <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
