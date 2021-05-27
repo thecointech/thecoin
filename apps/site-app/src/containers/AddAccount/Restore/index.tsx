@@ -29,13 +29,13 @@ const manualy = { id:"app.account.restore.manualy",
                   defaultMessage:"Upload manualy",
                   description:"Locale link for the restore your account page"};
 const googleLink = { id:"app.account.restore.google",
-                        defaultMessage:"Google",
+                        defaultMessage:"Restore from Google",
                         description:"Microsoft link for the restore your account page"};
 const microsoftLink = { id:"app.account.restore.microsoft",
-                        defaultMessage:"Microsoft OneDrive",
+                        defaultMessage:"Restore from Microsoft OneDrive",
                         description:"Microsoft link for the restore your account page"};
 const dropboxLink = { id:"app.account.restore.dropbox",
-                      defaultMessage:"Dropbox",
+                      defaultMessage:"Restore from Dropbox",
                       description:"Dropbox link for the restore your account page"};
 const otherEthereum = { id:"app.account.restore.otherEthereum.explanation",
                         defaultMessage:"Also you can log into your account using an existing Ethereum account.",
