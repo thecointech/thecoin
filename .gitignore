@@ -42,3 +42,4 @@ libs/nft-contract/src/contracts/*.json
 
 libs/nft-contract/migrations/types
 libs/nft-contract/src/types
+apps/nft-service/src/routes/routes.ts
