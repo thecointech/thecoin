@@ -4,12 +4,6 @@ import { AxiosResponse } from 'axios';
 
 const genRandBase = (size: number, base: number) => [...Array(size)].map(() => Math.floor(Math.random() * base).toString(base)).join('');
 const flipCoin = () => Math.random() > 0.5;
-/**
- * SecureApi - object-oriented interface
- * @export
- * @class SecureApi
- * @extends {BaseAPI}
- */
 export class MockNftApi  implements Pick<NFTApi, keyof NFTApi> {
   async claimNft(_claim: NftClaim, _options?: any): Promise<AxiosResponse<boolean>> {
     await delay(250);

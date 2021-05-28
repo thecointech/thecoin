@@ -11,6 +11,7 @@ import { OptionToggles } from './OptionToggles';
 import { getContract } from '@thecointech/nft-contract';
 import { BigNumber } from 'ethers/utils';
 import { Options } from './types';
+import { log } from '@thecointech/logging';
 
 const title = defineMessage({ defaultMessage: "Create Profile Image", description: "Title message on profile page" });
 const description = defineMessage({ defaultMessage: "Create and sign an image to show your carbon-neutral status", description: "Profile instructions" });
@@ -22,7 +23,11 @@ export const ProfileBuilder = () => {
   const [years, setYears] = useState<[number, number] | undefined>();
 
   useEffect(
-    () => { getYears(tokenIds).then(setYears) },
+    () => {
+      getYears(tokenIds)
+        .then(setYears)
+        .catch(log.error);
+    },
     [tokenIds[0]]
   );
 

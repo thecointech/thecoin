@@ -47,27 +47,3 @@ export const App = () => {
     </div>
   )
 };
-
-// // Copied from Account/Account.tsx.  Necessary in dev
-// // mode to hook up the accounts we automatically add.
-// // HOWEVER: In the near future we will transition to
-// // a split sandbox for the websites, so don't worry if
-// // this code feels a little shonky, it'll be reviewed soon.
-// const useDevPrep = (account: AccountState) => {
-//   const api = useAccountApi(account.address);
-//   // prepare account for usage
-//   useEffect(() => {
-//     // Is this a remote account?
-//     const { signer, contract } = account!;
-//     if (isSigner(signer)) {
-//       if (!signer.provider)
-//         connectSigner(account, api);
-//       else if (!contract) {
-//         // When a new account is added to account map,
-//         // it will be missing the contract.  Here we
-//         // enforce that connection for all cases
-//         api.connect();
-//       }
-//     }
-//   })
-// }
