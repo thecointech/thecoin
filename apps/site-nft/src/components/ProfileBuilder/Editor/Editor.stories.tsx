@@ -1,12 +1,16 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
-import { Editor } from '.';
+import { Meta, Story } from '@storybook/react';
+import { Editor as Component, Props } from '.';
 
 export default {
   title: 'NFT/Editor',
-  component: Editor,
+  component: Component,
 } as Meta;
 
-export const Footer = () => {
-  return <Editor />
-}
+const Template: Story<Props> = (args) => <Component {...args} />;
+export const Editor = Template.bind({});
+Editor.args = {
+  showFrame: true,
+  tokenId: 1234,
+  years: [2000, 2010]
+};

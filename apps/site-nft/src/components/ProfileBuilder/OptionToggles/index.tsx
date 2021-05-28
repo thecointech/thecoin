@@ -17,7 +17,7 @@ export const OptionToggles = ({state, setState}: Props) => {
   const toggle = (_: unknown, data: CheckboxProps) => {
     setState(opt => ({
       ...opt,
-      [data.name!]: data.value,
+      [data.name!]: data.checked,
     }))
   }
   return (
