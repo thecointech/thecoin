@@ -25,11 +25,11 @@
     "clean:analyze": "rimraf stats.json",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "firebase deploy --only hosting",
-    "dev": "yarn cross-env NODE_ENV=development node internals/server --port=3002",
+    "dev": "yarn cross-env NODE_ENV=development node internals/server --port=3003",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn start:server",
     "start": "yarn test && yarn build && yarn start:server",
-    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server --port=3002",
+    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server --port=3003",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
@@ -55,7 +55,8 @@
   "dependencies": {
     "@thecointech/shared": "^0.2.1",
     "@thecointech/site-base": "^0.2.1",
-    "@thecointech/nft": "*"
+    "@thecointech/nft": "*",
+    "@toast-ui/react-image-editor": "3.14.2"
   },
   "devDependencies": {
     "jest": "*"

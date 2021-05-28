@@ -4,6 +4,7 @@ import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
 import { AccountName, getSigner } from '@thecointech/accounts';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
+import { connectNFT } from '@thecointech/nft-contract';
 
 export const wallets = [
   {
@@ -42,6 +43,7 @@ export function getDevWallets() : AccountMapState {
   // if dev mode, we add a random wallet,
   if (process.env.SETTINGS !== 'live') {
     const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
+    randomAccount.contract = connectNFT(randomAccount.signer);
     r.active = randomAccount.address;
     r.map[randomAccount.address] = randomAccount
   }

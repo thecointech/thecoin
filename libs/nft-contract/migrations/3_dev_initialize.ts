@@ -23,6 +23,7 @@ const step: MigrationStep = (artifacts) =>
       const codes = await Promise.all(ids.slice(1).map(id => getTokenClaimCode(id, minter)));
       // now, write these out into an appropriate file
       const asJson = codes.reduce((obj, val, idx) => { obj[idx + 11] = val; return obj } , {} as any);
+
       const tokenFile = join(__dirname, '../devlive.tokens.json');
       writeFileSync(tokenFile, JSON.stringify(asJson));
     }

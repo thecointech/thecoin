@@ -4,13 +4,23 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
 import { init } from './init';
 import cors from 'cors';
-;
+import bodyParser from 'body-parser';
+
+const port = process.env.PORT ?? process.env.PORT_SERVICE_NFT ?? 7003;
 
 const app = express();
+// DC fix: Don't post powered-by cause less info exposed is better.
+// (ironic, for an OS project ;-) )
+app.disable('x-powered-by');
 // enable cors
 app.use(cors());
-const port = process.env.PORT ?? 9009;
-
+// Use body parser to read sent json payloads
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
 RegisterRoutes(app);
 
 (async () => {

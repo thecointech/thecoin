@@ -1,7 +1,8 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-require('../../../../tools/setenv')
+const { getEnvFile } = require('../../../../tools/setenv')
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -138,25 +139,7 @@ module.exports = options => ({
     ],
   },
   plugins: options.plugins.concat([
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
-    // inside your code for any environment checks; Terser will automatically
-    // drop any unreachable code.
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: process.env.NODE_ENV,
-      SETTINGS: process.env.SETTINGS,
-      CONFIG_NAME: process.env.CONFIG_NAME,
-
-      INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
-
-      URL_SITE_APP: process.env.URL_SITE_APP,
-      URL_SITE_LANDING: process.env.URL_SITE_LANDING,
-      URL_SERVICE_BROKER: process.env.URL_SERVICE_BROKER,
-      URL_SERVICE_RATES: process.env.URL_SERVICE_RATES,
-
-      // convenience defines
-      DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
-      DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
-    }),
+    new Dotenv({path: getEnvFile()}),
     new ForkTsCheckerWebpackPlugin({
       tsconfig: configFile,
       checkSyntacticErrors: true

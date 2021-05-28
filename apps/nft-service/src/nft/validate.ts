@@ -64,7 +64,7 @@ async function isValidJson(json: MetadataJson, address: string) {
   }
   // TODO: This validates CIDv0 - We probably want to switch to CIDv1 for browser interop
   if (!json.hash.match(/^\/ipfs\/[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{46}$/)) {
-    log.warn({ address }, `Rejected upload from {address} because an JSON payload is too big`);
+    log.warn({ address }, `Rejected upload from {address} because the hash is not valid Base58`);
     return false;
   }
   return json.hash.match(/^ipfs:\/\//)

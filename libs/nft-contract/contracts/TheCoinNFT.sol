@@ -36,10 +36,10 @@ contract TheCoinNFT is BaseData, Mintable, UpdateMeta, IPFSUriGenerator {
   // Custom functions.
 
   /**
-   * Allow setting an IPFS gateway.  All tokenURI's will be relative to this link
+   * Get the URI tokens will be initialized to (and reset back to)
    */
-  function setBaseURI(string calldata newUri) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    setGateway(newUri);
+  function defaultTokenUri() external view returns (string memory) {
+    return buildIpfsURI(defaultIpfsPrefix, defaultIpfsHash);
   }
 
   /**
@@ -48,6 +48,13 @@ contract TheCoinNFT is BaseData, Mintable, UpdateMeta, IPFSUriGenerator {
   function setDefaultIpfsData(bytes32 newDefaultHash, uint16 newDefaultPrefix)  external onlyRole(DEFAULT_ADMIN_ROLE) {
     defaultIpfsHash = newDefaultHash;
     defaultIpfsPrefix = newDefaultPrefix;
+  }
+
+  /**
+   * Allow setting an IPFS gateway.  All tokenURI's will be relative to this link
+   */
+  function setBaseURI(string calldata newUri) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    setGateway(newUri);
   }
 
   // TODO: Once validated, we can try applying the below optimizations to improve

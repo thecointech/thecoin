@@ -24,5 +24,21 @@ declare module '*.jpg';
 
 declare module '*.png';
 
+declare module '@toast-ui/react-image-editor' {
+  import ImageEditor, { IThemeConfig } from 'tui-image-editor';
+
+  class ImageEditorComponent {
+    getInstance() : ImageEditor
+  }
+
+  type Props = {
+    ref?: React.RefObject<ImageEditorComponent>,
+  } & ConstructorParameters<typeof ImageEditor>[1];
+
+  export type EditorCore = ImageEditor;
+  export type ThemeConfig = IThemeConfig;
+  export default function BaseImageEditor(props: Props): JSX.Element;
+}
+
 type MaybeString = string | undefined;
 type MaybeNumber = number | undefined;

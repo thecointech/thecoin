@@ -13,7 +13,7 @@ import { useLocation } from 'react-router';
 import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
-import MainPageTransition from '@thecointech/site-base/components/MainPageTransition';
+import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
@@ -56,7 +56,7 @@ export const App = () => {
 
       <div className={`${styles.contentContainer}`}>
         <Container style={{ width: '100%' }} className={``}>
-          <MainPageTransition location={location}>
+          <MainPageTransition>
 
             <GreaterThanMobileSegment>
               <Rail internal position='left'>

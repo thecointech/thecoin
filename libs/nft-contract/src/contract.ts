@@ -1,27 +1,25 @@
 import { Contract } from 'ethers/contract';
 import { TheCoinNFT } from './types/TheCoinNFT';
 import { getProvider } from './provider';
+import TheCoinNFTSpec from './contracts/TheCoinNFT.json';
 
-const getAbi = async () => {
-	const TheCoinSpec = await import('./contracts/TheCoinNFT.json');
-	if (!TheCoinSpec)
-		throw new Error('Cannot create contract: missing contract spec');
-
-  return TheCoinSpec.abi;
+const getAbi = () => {
+  return TheCoinNFTSpec.abi;
 }
 
-const getContractAddress = async () => {
-  const deployment = await import(`./deployed/${process.env.CONFIG_NAME}.json`);
+const getContractAddress = () => {
+  console.log(`Loading NFT contract for: ${process.env.CONFIG_NAME}`);
+  const deployment = require(`./deployed/${process.env.CONFIG_NAME}.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
   return deployment.contract;
 }
 
-const buildContract = async () =>
+const buildContract = () =>
   new Contract(
-    await getContractAddress(),
-    await getAbi(),
+    getContractAddress(),
+    getAbi(),
     getProvider()
   ) as TheCoinNFT
 
@@ -29,7 +27,14 @@ declare module globalThis {
   let __contractNFT: TheCoinNFT|undefined;
 }
 
-export async function getContract() : Promise<TheCoinNFT> {
-  globalThis.__contractNFT = globalThis.__contractNFT ?? await buildContract();
+export function getContract() : TheCoinNFT {
+  globalThis.__contractNFT = globalThis.__contractNFT ?? buildContract();
   return globalThis.__contractNFT!;
+}
+
+//
+// A simple workaround to force the TS compiler to copy the file
+export async function forceCompilerToCopyFile() {
+  const deployment = await import(`./deployed/${process.env.CONFIG_NAME}.json`);
+  return deployment.contract;
 }

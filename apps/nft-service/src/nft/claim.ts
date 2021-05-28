@@ -1,5 +1,5 @@
 import { getContract, getMinterAddress } from './contract';
-import { getTokenClaimAuthority, TheCoinNFT } from '@thecointech/nft-contract';
+import { getTokenClaimAuthority, getTokenClaimSig, TheCoinNFT } from '@thecointech/nft-contract';
 import { NormalizeAddress } from "@thecointech/utilities";
 import { log } from '@thecointech/logging';
 
@@ -12,7 +12,7 @@ export type NftClaim = {
 //
 // Claim (assign to) a token by claimant.
 export async function claimNft({tokenId, code, claimant}: NftClaim) {
-  log.trace({address: claimant, tokenId}, `Token {tokenId} is being claimed by {address}`);
+  log.trace({address: claimant, tokenId}, `Token {tokenId} is being casdflaimed by {address}`);
   const nft = await getContract();
   const minter = await getMinterAddress();
   return (
@@ -37,6 +37,7 @@ async function isValidCode(tokenId: number, code: string, minter: string) {
 //
 // Check token in question can still be assigned.
 async function isValidToken(tokenId: number, nft: TheCoinNFT, minter: string) {
+  console.log("Checking ownership of " + tokenId);
 
   const owner = await nft.ownerOf(tokenId);
   if (NormalizeAddress(owner) !== NormalizeAddress(minter)) {
@@ -49,7 +50,9 @@ async function isValidToken(tokenId: number, nft: TheCoinNFT, minter: string) {
 //
 // assign the token, return true
 async function doClaimToken(tokenId: number, nft: TheCoinNFT, code: string, claimant: string) {
-  const r = await nft.claimToken(tokenId, claimant, code);
+  const signature = getTokenClaimSig(code);
+  console.log("Claim Sig: " + signature);
+  const r = await nft.claimToken(tokenId, claimant, signature);
   log.trace({address: claimant, tokenId, hash: r.hash}, `Token {tokenId} assigned in {hash}`);
   return true;
 }

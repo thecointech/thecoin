@@ -5,7 +5,7 @@ import { AccountState } from '@thecointech/shared/containers/Account';
 import { withAccounts } from '@thecointech/storybookutils';
 
 export default {
-  title: 'App/AccountSwitcher',
+  title: 'NFT/AccountSwitcher',
   component: AccountSwitcherComponent,
 } as Meta;
 

@@ -19,7 +19,7 @@ contract UpdateMeta is BaseData {
    */
   function resetMetaSha256(uint256 tokenId) external {
     // Is the sender allowed to do this allowed to do this?
-    require(_isApprovedOrOwner(_msgSender(), tokenId), "Meta reset not owner");
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "Only owner can reset");
     // IMPORTANT: A reset does not modify 'lastUpdate', and can be done at any time
     _tokenMetadata[tokenId].ipfsPrefix = defaultIpfsPrefix;
     _tokenMetadata[tokenId].ipfsHash = defaultIpfsHash;
@@ -31,7 +31,7 @@ contract UpdateMeta is BaseData {
    */
   function updateMetaSha256(uint256 tokenId, uint16 prefix, bytes32 ipfsHash) external {
     // Is the sender allowed to do this allowed to do this?
-    require(_isApprovedOrOwner(_msgSender(), tokenId), "Meta update not owner");
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "Only owner can update");
     updateMeta(_tokenMetadata[tokenId], prefix, ipfsHash);
   }
 

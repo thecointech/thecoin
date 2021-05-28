@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Login } from "@thecointech/shared/containers/Login";
 import { isWallet } from "@thecointech/shared/SignerIdent";
@@ -11,11 +11,8 @@ const waitingForWeb3 = {
   description:"Message to display while waiting for user to complete Web3 connection"
 };
 
-type AuthRouteProps<T> = T & { component: React.ComponentType<any> };
-
-//
 // An authorized route is one that requires the use of an unlocked account
-export const AuthRoute = <T, >({ component: Component, ...rest }: AuthRouteProps<T>)  => {
+export const AuthRoute = (routeProps: RouteProps)  => {
   const account = useActiveAccount();
 
   // If no account, suggest adding one (?)
@@ -45,8 +42,18 @@ export const AuthRoute = <T, >({ component: Component, ...rest }: AuthRouteProps
   }
 
   return (
-    <Route {...rest} render={
-      props => <Component {...rest} {...props} />
-    } />
+    <Route {...routeProps} />
   )
 }
+
+// const connectSigner = async (accountState: AccountState, accountActions: IActions) => {
+//   const { address } = accountState;
+//   const theSigner = await ConnectWeb3();
+//   if ( theSigner?.address ) {
+//     if (NormalizeAddress(theSigner.address) !== address) {
+//       alert("Warning: cannot connect - remote account has a different address to the local store");
+//       return;
+//     }
+//     accountActions.setSigner(theSigner);
+//   }
+// }

@@ -1,11 +1,11 @@
-import { arrayify, solidityKeccak256, verifyMessage } from 'ethers/utils';
-import { Signer } from 'ethers/abstract-signer';
+import { utils, Signer } from 'ethers';
 import bs58 from 'bs58';
+import { signMessage } from './sign';
 
 const remove0x = (s: string) => s.match(/^(?:0x)?(.+)$/i)?.[1] ?? s;
 const getClaimTokenHash = (tokenId: number) => (
-  arrayify(
-    solidityKeccak256(["uint256"], [tokenId])
+  utils.arrayify(
+    utils.solidityKeccak256(["uint256"], [tokenId])
   )
 )
 
@@ -14,7 +14,7 @@ const getClaimTokenHash = (tokenId: number) => (
 // to transfer a previously-minted but not-yet-owned token from the minter to any address
 export async function getTokenClaimCode(tokenId: number, authority: Signer) {
   const hash = getClaimTokenHash(tokenId);
-  const signed = await authority.signMessage(hash);
+  const signed = await signMessage(hash, authority);
   // Remove the leading 0x
   const trimmed = remove0x(signed);
   // We encode the signature to base58, simply to
@@ -36,5 +36,5 @@ export function getTokenClaimSig(code: string) {
 export function getTokenClaimAuthority(tokenId: number, code: string) {
   const signature = getTokenClaimSig(code);
   const hash = getClaimTokenHash(tokenId);
-  return verifyMessage(hash, signature);
+  return utils.verifyMessage(hash, signature);
 }

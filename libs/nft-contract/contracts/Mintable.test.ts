@@ -21,29 +21,29 @@ it("Mints tokens", async () => {
 
   const nft = await getContract();
   // Create a list of tokens
-  const r = await mintUsers(nft);
-  expect(r.logs.length).toEqual(users.length);
+  const r = await mintTokens(nft, 10);
+  expect(r.logs.length).toEqual(10);
 })
 
 it("Can claim tokens", async () => {
 
   const nft = await getContract();
-  await mintUsers(nft);
+  await mintTokens(nft, 15);
   const auth = new Wallet(privateKeys[1]);
   // user1 claims token1
-  const code = await getTokenClaimCode(1, auth);
+  const code = await getTokenClaimCode(13, auth);
   // turn it back into a signature
   const sig = getTokenClaimSig(code);
   // test recovery
-  const auth2 = await nft.recoverClaimSigner(1, sig);
+  const auth2 = await nft.recoverClaimSigner(13, sig);
   expect(auth2).toEqual(auth.address);
     // Use it to mint
-  const r = await nft.claimToken(1, users[1], sig);
+  const r = await nft.claimToken(13, users[1], sig);
   expect(r.logs.length).toEqual(2); // Approval & Transfer
   // check ownership transfered
-  const owner = await nft.ownerOf(1);
+  const owner = await nft.ownerOf(13);
   expect(owner).toEqual(users[1]);
 })
 
-const mintUsers = (nft: MintableInstance) => nft.bulkMinting(users.map((_, idx) => idx), 2022, {from: minter});
+const mintTokens = (nft: MintableInstance, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022, {from: minter});
 const getContract = () => nft.new(minter, {from: owner});

@@ -1,4 +1,4 @@
-import { getEnvFile } from "../tools/setenv";
+import { getEnvFile } from "./setenv";
 import { exec } from "child_process";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";

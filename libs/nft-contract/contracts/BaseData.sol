@@ -7,15 +7,16 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "./TokenData.sol";
 
-abstract contract BaseData is ERC721, AccessControl {
+abstract contract BaseData is ERC721Enumerable, AccessControl {
 
   // We may (eventually) mint up to 100K tokens.  This is not editable
   uint public constant tokenSupply = 100000;
 
-   // Max possible value. Really, really big
+   // Max possible value. Really, really big.  Leave enough padding
+   // off the end so that our validity function doesn't wrap
   uint public constant MAX_INTEGER = 2**256 - 1;
 
   // For PoC, we don't care about efficiency, so just duplicate the whole mapping.
@@ -32,8 +33,8 @@ abstract contract BaseData is ERC721, AccessControl {
     */
   constructor() ERC721("TheCoinNFT", "TCN") {}
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
-    return ERC721.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721Enumerable) returns (bool) {
+    return ERC721Enumerable.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
   }
 
   /**
@@ -64,19 +65,31 @@ abstract contract BaseData is ERC721, AccessControl {
    * Get the number of years a given token is valid for.
    */
   function yearsValid(uint256 tokenId) public pure returns (uint256) {
-    if (tokenId > tokenSupply) return 0;
+    if (tokenId >= tokenSupply) return 0;
     // 5-digit are 1-yr tokens, CO2-safe tokens
-    if (tokenId > 10000) return 1;
+    if (tokenId >= 10000) return 1;
     // 4-digit are 5-yr tokens, CO2-safe tokens
-    if (tokenId > 1000) return 5;
+    if (tokenId >= 1000) return 5;
     // 3-digit are 50-yr tokens, CO2-safe tokens
-    if (tokenId > 100) return 50;
+    if (tokenId >= 100) return 50;
     // 2-digit are 50-yr tokens, CO2-neutral tokens
-    if (tokenId > 10) return 50;
-    // single-digit: CO2-neutral. Valid forever.
-    // These tokens rely on the startup deposit
+    if (tokenId >= 10) return 50;
+    // single-digit: CO2-neutral. Valid for the age of the universe.
+    // These tokens rely partly on asset growth & partly initial deposit
     // to earn sufficient dividends to stay viable.
     return MAX_INTEGER;
+  }
+
+  /**
+   * Convenience function, return validity [from, till).
+   */
+  function validity(uint256 tokenId) public view returns (uint256, uint256) {
+    if (!_exists(tokenId)) return (0, 0);
+    uint256 from = validFrom(tokenId);
+    uint256 duration  = yearsValid(tokenId);
+    if (duration == MAX_INTEGER)
+      return (from, MAX_INTEGER);
+    else return (from, from + duration);
   }
 
   ////////////////////////////////

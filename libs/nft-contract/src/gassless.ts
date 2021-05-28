@@ -1,5 +1,5 @@
-import { arrayify, solidityKeccak256, verifyMessage } from 'ethers/utils';
-import { Signer } from 'ethers/abstract-signer';
+import { utils, Signer } from 'ethers';
+import { signMessage } from './sign';
 
 export type GasslessUpdateRequest = {
   tokenId: number,
@@ -12,7 +12,7 @@ export type GasslessUpdateRequest = {
 
 export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, prefix: string, digest: string) {
   // The concatenation for the signature is id, lastUpdate, prefix, hash
-  const hash = solidityKeccak256(
+  const hash = utils.solidityKeccak256(
     ["uint256", "uint40", "uint16", "bytes32"],
     [
       tokenId,
@@ -21,24 +21,26 @@ export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, pre
       digest,
     ]
   );
-  return arrayify(hash);
+  return utils.arrayify(hash);
 }
 
 //
 // Client-side data creation.  Signer must be owner of tokenId
 export async function signGasslessUpdate(signer: Signer, tokenId: number, lastUpdate: number, prefix: string, digest: string) : Promise<GasslessUpdateRequest> {
   const hash = getGasslessUpdateBuffer(tokenId, lastUpdate, prefix, digest);
+  const signature = await signMessage(hash, signer);
+
   return {
     tokenId,
     lastUpdate,
     prefix,
     digest,
-    signature: await signer.signMessage(hash)
+    signature,
   }
 }
 
 export function getGasslessSigner(transfer: GasslessUpdateRequest) {
   const { tokenId, lastUpdate, prefix, digest, signature } = transfer;
   const hash = getGasslessUpdateBuffer(tokenId, lastUpdate, prefix, digest);
-  return verifyMessage(hash, signature);
+  return utils.verifyMessage(hash, signature);
 }
