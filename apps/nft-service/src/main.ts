@@ -3,16 +3,16 @@ import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './api/swagger.json';
 import { init } from './init';
+import helmet from 'helmet';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
 const port = process.env.PORT ?? process.env.PORT_SERVICE_NFT ?? 7003;
 
 const app = express();
-// DC fix: Don't post powered-by cause less info exposed is better.
-// (ironic, for an OS project ;-) )
-app.disable('x-powered-by');
-// enable cors
+// Set Secure Headers with Helmet
+app.use(helmet());
+// enable cors (TODO: Whitelist this)
 app.use(cors());
 // Use body parser to read sent json payloads
 app.use(
