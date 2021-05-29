@@ -2,17 +2,16 @@ import { createCanvas, loadImage } from 'canvas'
 import { join } from 'path';
 import { getHash, updateExif } from '../index';
 
-
 it('Can hash the image', async() => {
   const canvas = await loadCanvas();
   const hash = await getHash(canvas);
-  expect(hash).toBe('030753f7f5770303');
+  expect(hash).toBe('030377b7f7530703');
 })
 
 it ('reads & write EXIF', async() => {
   const canvas = await loadCanvas();
   const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
-  const updated = updateExif(dataUrl, "12345");
+  const updated = updateExif(dataUrl, '12345', '56789');
   expect(updated).toBeTruthy();
 });
 

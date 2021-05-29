@@ -3,4 +3,4 @@
 	url = https://github.com/thecointech/3id-connect.git
 [submodule "submodules/exif-library"]
 	path = submodules/exif-library
-	url = https://github.com/thecointech/exif-library.git
+	url = https://github.com/FrozenKiwi/exif-library.git

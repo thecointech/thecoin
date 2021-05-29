@@ -14,6 +14,7 @@ import { log } from '@thecointech/logging';
 import { ImageEditorComponent } from '@toast-ui/react-image-editor';
 import { signAndUpload } from './SignAndUpload';
 import { Button } from 'semantic-ui-react';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 
 const title = defineMessage({ defaultMessage: "Create Profile Image", description: "Title message on profile page" });
 const description = defineMessage({ defaultMessage: "Create and sign an image to show your carbon-neutral status", description: "Profile instructions" });
@@ -23,6 +24,8 @@ export const ProfileBuilder = () => {
   const [tokenIds, setTokenIds] = useState<number[]>([]);
   const [options, setOptions] = useState<Options>({})
   const [years, setYears] = useState<[number, number] | undefined>();
+
+  const account = useActiveAccount();
 
   const editorRef = React.createRef<ImageEditorComponent>();
 
@@ -39,7 +42,7 @@ export const ProfileBuilder = () => {
     <AppContainer shadow className={styles.page}>
       <PageHeader illustration={icon} title={title} description={description} />
       <Editor
-        oref={editorRef}
+        editorRef={editorRef}
         years={options.showYears ? years : undefined}
         tokenId={options.showTokenId ? Math.min(...tokenIds) : undefined}
         showFrame={options.showFrame}
@@ -48,7 +51,7 @@ export const ProfileBuilder = () => {
       <OptionToggles state={options} setState={setOptions} />
       <div className={styles.submitRow}>
         <TokenIdSelect tokenIds={tokenIds} setTokenIds={setTokenIds} />
-        <Button onClick={() => signAndUpload(editorRef.current)}><FormattedMessage {...upload} /></Button>
+        <Button onClick={() => signAndUpload(editorRef.current, account?.signer)}><FormattedMessage {...upload} /></Button>
       </div>
     </AppContainer>
   )
