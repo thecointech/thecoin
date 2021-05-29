@@ -10,24 +10,23 @@ const myTheme: ThemeConfig = {
 };
 
 export type Props = {
-  ref?: React.RefObject<ImageEditorComponent>,
+  oref: React.RefObject<ImageEditorComponent>
   showFrame?: boolean,
   years?: [number, number],
   tokenId?: number,
 };
+export type Ref = ImageEditorComponent;
 
-export const Editor = ({showFrame, years, tokenId} : Props) => {
+export const Editor = ({showFrame, years, tokenId, oref}: Props) => {
 
-  const editorRef = React.createRef<ImageEditorComponent>();
-
-  useEffect(() => { toggleFrame(editorRef.current?.getInstance(), showFrame); }, [editorRef.current, showFrame])
-  useEffect(() => { toggleTokenId(editorRef.current?.getInstance(), tokenId); }, [editorRef.current, tokenId])
-  useEffect(() => { toggleYears(editorRef.current?.getInstance(), years); }, [editorRef.current, years?.[0], years?.[1]])
+  useEffect(() => { toggleFrame(oref?.current?.getInstance(), showFrame); }, [oref?.current, showFrame])
+  useEffect(() => { toggleTokenId(oref?.current?.getInstance(), tokenId); }, [oref?.current, tokenId])
+  useEffect(() => { toggleYears(oref?.current?.getInstance(), years); }, [oref?.current, years?.[0], years?.[1]])
 
   return (
     <div id={styles.wrapper}>
       <ImageEditor
-        ref={editorRef}
+        ref={oref}
         includeUI={{
           loadImage: {
             path: "https://gateway.pinata.cloud/ipfs/QmZ9m3cW2jc7pRtvnmXwKDCSJ6GBuv2i33MnWjdb8jR81U",
@@ -52,27 +51,24 @@ export const Editor = ({showFrame, years, tokenId} : Props) => {
       />
     </div>
   )
-}
+};
 
 async function toggleFrame(editor?: EditorCore, withFrame?: boolean) {
-  console.log(`WithFrame: ${withFrame}`);
   if (!editor) return;
   if (withFrame) {
     const img = document.createElement("img");
     img.src = border;
-    const r = await editor?.addImageObject(img.src);
-    console.log('BorderAdded' + r);
+    await editor?.addImageObject(img.src);
   }
 }
 
 async function toggleYears(editor?: EditorCore, years?: [number, number]) {
   if (!editor) return;
   if (years) {
-    const r = await editor.addText(years[0].toString(), {
+    await editor.addText(years[0].toString(), {
       position: { x: 300, y: 10}
     });
     editor.deactivateAll();
-    console.log('Text Added' + r);
   }
 
 }
@@ -81,11 +77,10 @@ async function toggleTokenId(editor?: EditorCore, tokenId?: number) {
   if (!editor) return;
 
   if (tokenId) {
-    const r = await editor.addText(`#${tokenId}`, {
+    await editor.addText(`#${tokenId}`, {
       position: { x: 300, y: 400}
     });
     editor.discardSelection();
-    console.log('Text Added' + r);
   }
 }
 

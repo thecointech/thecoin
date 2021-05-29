@@ -19,6 +19,8 @@ For reference, a good discussion of the challenges inherent here is in the paper
 
 We will implement a subset of their algorithm using the blockhash-js library: http://blockhash.io/  This library implements a blockhash algorithm that appears sufficiently accurate, and can run in the browser.
 
+NOTE: The library https://npm.io/package/prcp may be superior to blockhash.
+
 Proof of ownership is achieved by linking an image with a token.  This can be done by the tokens owner signing the perceptual hash of an image.  Both the perceptual hash and the signature is stored in image metadata.  Investigations have shown that the `copywrite` field of an images metadata is preserved when uploading to facebook.
 
  - To prove ownership, derive the signing address from the hash/signature.  The address can then be used to lookup tokens, connecting the hash & signature to a token.

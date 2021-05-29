@@ -5,16 +5,14 @@ import { log } from '@thecointech/logging';
 import { defineMessage, useIntl } from 'react-intl';
 import { Select } from 'semantic-ui-react';
 
-
 const noTokenToSelect = defineMessage({ defaultMessage: "No Tokens Available", description: "Profile default message for no tokens" });
 const selectTokenId =   defineMessage({ defaultMessage: "Select Token ID", description: "Profile option to select owned token" });
 
-
-type TokenIdSelectProps = {
+type Props = {
   tokenIds: number[],
   setTokenIds: (v: number[]) => void,
 }
-export const TokenIdSelect = ({ tokenIds, setTokenIds }: TokenIdSelectProps) => {
+export const TokenIdSelect = ({ tokenIds, setTokenIds }: Props) => {
   let cancelled = false;
   const [loading, setLoading] = useState(false);
   const account = useActiveAccount();

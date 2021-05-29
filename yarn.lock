@@ -12643,6 +12643,11 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
+blockhash@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/blockhash/-/blockhash-0.2.0.tgz#7c979ae5017fd252e819fbe761b096703942ccf7"
+  integrity sha1-fJea5QF/0lLoGfvnYbCWcDlCzPc=
+
 bluebird-lst@^1.0.7, bluebird-lst@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/bluebird-lst/-/bluebird-lst-1.0.9.tgz#a64a0e4365658b9ab5fe875eb9dfb694189bb41c"
@@ -19426,6 +19431,11 @@ exenv@^1.2.1, exenv@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
   integrity sha1-KueOhdmJQVhnCwPUe+wfA72Ru50=
+
+exif-library@2.0.0-alpha.0:
+  version "2.0.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/exif-library/-/exif-library-2.0.0-alpha.0.tgz#c1fef2951885a6d0f1d8308032c6abf1265a3360"
+  integrity sha512-xk3AMvvL+/Fs8D5/dnTL2+a5abQlUtecuSDlpsv7B/1I0wjWo2o1sEAOrOJyh5JNbW++PeNNPIKy/0gJV1pMmw==
 
 exif-parser@^0.1.9:
   version "0.1.12"
@@ -32868,6 +32878,11 @@ pidtree@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/pidtree/-/pidtree-0.3.1.tgz#ef09ac2cc0533df1f3250ccf2c4d366b0d12114a"
   integrity sha512-qQbW94hLHEqCg7nhby4yRC7G2+jYHY4Rguc2bjw7Uug4GIJuu1tvf2uHaZv5Q8zdt+WKJ6qK1FOI6amaWUo5FA==
+
+piexif-ts@2.0.16:
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/piexif-ts/-/piexif-ts-2.0.16.tgz#b49313811f099d617e7e5ea42741e3eed9fb58ab"
+  integrity sha512-D32ISpv1CwGYVMLk4Zm/+793DhOj2JuMMpyJRA2/b096XDDWhpAsB901ckXkP4m4cBnI5t6novtOwruwlNVxaA==
 
 pify@4.0.1, pify@^4.0.0, pify@^4.0.1:
   version "4.0.1"
