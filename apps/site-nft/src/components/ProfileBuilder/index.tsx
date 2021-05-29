@@ -51,7 +51,7 @@ export const ProfileBuilder = () => {
       <OptionToggles state={options} setState={setOptions} />
       <div className={styles.submitRow}>
         <TokenIdSelect tokenIds={tokenIds} setTokenIds={setTokenIds} />
-        <Button onClick={() => signAndUpload(editorRef.current, account?.signer)}><FormattedMessage {...upload} /></Button>
+        <Button onClick={() => signAndUpload(editorRef.current, tokenIds[0], account?.signer)}><FormattedMessage {...upload} /></Button>
       </div>
     </AppContainer>
   )

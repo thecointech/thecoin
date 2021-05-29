@@ -1,6 +1,6 @@
 import { createCanvas, loadImage } from 'canvas'
 import { join } from 'path';
-import { getHash, updateExif } from '../index';
+import { getHash, updateExif } from '../sign';
 
 it('Can hash the image', async() => {
   const canvas = await loadCanvas();
@@ -11,7 +11,7 @@ it('Can hash the image', async() => {
 it ('reads & write EXIF', async() => {
   const canvas = await loadCanvas();
   const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
-  const updated = updateExif(dataUrl, '12345', '56789');
+  const updated = updateExif(dataUrl, 'TheCoin', '12345', '56789');
   expect(updated).toBeTruthy();
 });
 
