@@ -40,7 +40,7 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return ERC721.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
   }
-  
+
   /**
   * @dev See {IERC721Metadata-tokenURI}.
   */
@@ -57,10 +57,31 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
     setGateway(newUri);
   }
 
+  /**
+   * Query if the given TokenID is able to updated.  Updates are limited to once per 3 months
+   */
+  function canUpdate(uint256 tokenId) public view returns (bool) {
+    if (!_exists(tokenId)) return false;
+    return canUpdate(_tokenMetadata[tokenId]);
+  }
+
+  /**
+   * Query the lastUpdate time of a given token
+   */
+  function lastUpdate(uint256 tokenId) public view returns (uint40) {
+    if (!_exists(tokenId)) return 0;
+    return _tokenMetadata[tokenId].lastUpdate;
+  }
+
+  /**
+   * Mint a whole lotta tokens at once.  Cheaper than individual minting calls
+   */
   function bulkMinting(uint256[] calldata ids, TokenDataPacked[] calldata tokens, address[] calldata owners) external onlyRole(MINTER_ROLE) {
     require(ids.length == tokens.length && ids.length == owners.length, "Mismatched arrays");
 
     for (uint i = 0; i < ids.length; i++) {
+      //
+      require(ids[i] < tokenSupply, "Invalid ID supplied");
       // Create the token
       bytes memory data = abi.encodePacked(tokens[i].ipfsHash);
       _safeMint(owners[i], ids[i], data);
@@ -97,14 +118,14 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
    * Update token metadata, and reset lastUpdate
    */
   function updateMeta(TokenDataPacked storage token, uint16 prefix, bytes32 ipfsHash) internal {
-    require((token.lastUpdate - block.timestamp) < 21600, "Cannot update within 3 months of prior update");
+    require(canUpdate(token), "Cannot update within 3 months of prior update");
     token.ipfsPrefix = prefix;
     token.ipfsHash = ipfsHash;
     token.lastUpdate = uint40(block.timestamp);
   }
 
   /**
-   *
+   * Get the address who signed off on the following variables.
    */
   function recoverSigner(uint256 tokenId, uint40 lastUpdate, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
 	{
@@ -117,6 +138,10 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
       .recover(signature);
 	}
 
+  function canUpdate(TokenDataPacked storage token) internal view returns (bool) {
+    return (block.timestamp - token.lastUpdate) > 21600;
+  }
+
   // TODO: Once validated, we can try applying the below optimizations to improve
   // our efficiency.  It is (apparently) cheaper to store in 2 LU tables than in a struct.
   // https://medium.com/@novablitz/storing-structs-is-costing-you-gas-774da988895e
@@ -124,7 +149,7 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
   //mapping (uint256 => uint256) private _tokenOwnerData;
   // Mapping from tokenID to it's Sha256 value.
   ///mapping (uint256 => bytes32) private _tokenMetaSha256;
-  
+
   /**
     * @dev Decode packed uint256 data into struct form
 

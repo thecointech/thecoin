@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "nft-service",
+			"path": "apps/nft-service"
+		},
+		{
+			"name": "nft-contract",
+			"path": "libs/nft-contract"
+		}
+	],
+	"settings": {}
+}

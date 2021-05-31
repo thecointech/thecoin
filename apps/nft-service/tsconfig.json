@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.apps.json",
+  "compilerOptions": {
+    /* Basic Options */
+    "module": "commonjs",
+    "outDir": "./build",   /* Redirect output structure to the directory. */
+    "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "tsBuildInfoFile": "./build/.buildinfo",          /* Specify file to store incremental compilation information */
+    "lib": ["ES2019"],
+    /* Required for TSOA */
+    "experimentalDecorators": true,
+    "alwaysStrict": false,
+    "noImplicitUseStrict": true,
+  },
+  "include": [
+    "./src/**/*.*", "./types/*.*",
+  ],
+  "references": [
+    { "path": "../../libs/nft-contract/tsconfig.build.json" },
+    { "path": "../../libs/logging/tsconfig.build.json" }
+  ]
+}
