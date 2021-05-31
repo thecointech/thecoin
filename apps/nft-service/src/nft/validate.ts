@@ -63,7 +63,7 @@ async function isValidJson(json: MetadataJson, address: string) {
     return false;
   }
   // TODO: This validates CIDv0 - We probably want to switch to CIDv1 for browser interop
-  if (!json.image.match(/^\/ipfs\/[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{46}$/)) {
+  if (!json.image.match(/^ipfs:\/\/[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{46}$/)) {
     log.warn({ address }, `Rejected upload from {address} because the hash is not valid Base58`);
     return false;
   }
