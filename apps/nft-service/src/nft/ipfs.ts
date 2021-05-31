@@ -6,13 +6,17 @@ import { log } from '@thecointech/logging';
 import { MetadataJson } from '@thecointech/nft-contract';
 import { validateImage, validateJson } from './validate';
 
+import { Readable } from 'stream';
+
 const pinata = pinataSDK(process.env.PINATA_API_KEY!, process.env.PINATA_API_SECRET!);
 
 //
 // Upload buffer to IPFS, return upload hash
 export async function upload(file: Buffer) {
-  log.trace(`Uploading ${file.byteLength} bytes for `)
-  const r = await pinata.pinFileToIPFS(file, {
+  log.trace(`Uploading ${file.byteLength} bytes`);
+
+  const stream = Readable.from(file);
+  const r = await pinata.pinFileToIPFS(stream, {
     pinataOptions: {
       cidVersion: 0
     }

@@ -1,4 +1,5 @@
 
+import { log } from '@thecointech/logging';
 import { signMessage } from '@thecointech/nft-contract';
 import { Signer } from 'ethers';
 import { dump, IExif, IExifElement, insert, TagNumbers } from 'exif-library';
@@ -10,6 +11,7 @@ import { hash } from './prcp';
 
 // Create signed blob
 export async function sign(canvas: HTMLCanvasElement, signer: Signer) {
+  log.trace('Signing canvas');
   // Get image hash
   const hash = await getHash(canvas);
   // Owner signs the image
@@ -30,9 +32,9 @@ export async function sign(canvas: HTMLCanvasElement, signer: Signer) {
 // Add EXIF data
 export function updateExif(dataUrl: string, author: string, hash: string, signature: string) {
   const zeroth: IExifElement = {};
+  zeroth[TagNumbers.ImageIFD.Artist] = author;
   zeroth[TagNumbers.ImageIFD.ImageDescription] = hash;
   zeroth[TagNumbers.ImageIFD.Copyright] = signature;
-  zeroth[TagNumbers.ImageIFD.XPAuthor] = author;
   const exifObj: IExif = {"0th":zeroth};
   const exifStr = dump(exifObj);
 

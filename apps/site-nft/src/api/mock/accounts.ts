@@ -52,16 +52,16 @@ export function getDevWallets() : AccountMapState {
 
 export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {
   // if dev:live we add 2 connected wallets.
-  addRemoteAccount('client1', accountsApi);
-  addRemoteAccount('client2', accountsApi);
+  addRemoteAccount('client1', accountsApi, true);
+  addRemoteAccount('client2', accountsApi, false);
 }
 
-async function addRemoteAccount(name: AccountName, accountsApi: IAccountStoreAPI) {
+async function addRemoteAccount(name: AccountName, accountsApi: IAccountStoreAPI, active: boolean) {
   const signer = await getSigner(name)
   const address = await signer.getAddress();
   const theSigner = signer as TheSigner;
   theSigner.address = address;
   theSigner._isSigner = true;
 
-  accountsApi.addAccount(name, theSigner, false, true);
+  accountsApi.addAccount(name, theSigner, false, active);
 }

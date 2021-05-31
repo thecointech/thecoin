@@ -17,7 +17,7 @@
     "build": "run-p build:semantic build:i18l build:copy && yarn build:src",
     "build:src": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:semantic": "node ./internals/buildSemantic",
-    "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./src/.htaccess\" ./build",
+    "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build",
     "build:i18l": "run-s extract compile",
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",

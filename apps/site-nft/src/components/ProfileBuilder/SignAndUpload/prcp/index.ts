@@ -61,7 +61,7 @@ export function hash(image: ImageData, precision: number = 8): string {
     throw new Error('Bad image dimensions')
   }
 
-  if (isNaN(precision) || precision < 1) {
+  if (Number.isNaN(precision) || precision < 1) {
     throw new Error('Hash precision should be a positive number')
   }
 

@@ -26,9 +26,8 @@ import { App } from 'components/App';
 // Import Language Provider
 import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
-// Load the favicon and the .htaccess file
+// Load the favicon
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
-import 'file-loader?name=.htaccess!./.htaccess';
 
 import { configureAppStore, history } from './reducers';
 import { translations } from './translations';
