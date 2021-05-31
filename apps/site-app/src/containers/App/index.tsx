@@ -18,8 +18,6 @@ import { MainRouter } from 'containers/MainRouter';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { createRef } from 'react';
 import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import { addDevLiveAccounts } from 'api/mock/accounts';
@@ -32,6 +30,7 @@ import '../../semantic/semantic.css';
 import styles from './styles.module.less';
 
 let hasRun = false;
+
 export const App = () => {
   useFxRatesStore();
   useSidebar();
@@ -45,7 +44,6 @@ export const App = () => {
       hasRun = true;
     }
   }
-
 
   return (
     <MediaContextProvider>
@@ -66,14 +64,12 @@ export const App = () => {
               </Rail>
             </GreaterThanMobileSegment>
 
-            <ColumnRightTop />
 
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>
                 <MainRouter location={location} />
               </section>
             </Ref>
-            <ColumnRightBottom />
           </MainPageTransition>
         </Container>
       </div>

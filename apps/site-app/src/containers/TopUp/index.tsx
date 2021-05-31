@@ -9,6 +9,8 @@ import { useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { PageHeader } from 'components/PageHeader';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 
 
 const title = { id:"app.topup.title",
@@ -33,15 +35,17 @@ export const Topup = (routerProps:AccountPageProps) => {
   ]
   return (
     <React.Fragment>
-    <PageHeader 
-        illustration={illustration}
-        title={title}
-        description= {description}
-    />
+      <ColumnRightTop />
+      <PageHeader 
+          illustration={illustration}
+          title={title}
+          description= {description}
+      />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
         <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
+      <ColumnRightBottom />
     </React.Fragment>
   );
 }

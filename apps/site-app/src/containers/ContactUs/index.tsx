@@ -5,10 +5,11 @@ import { AvailableSoon } from "@thecointech/shared/containers/Widgets/AvailableS
 import coin from './images/thecoin_icon.svg';
 import { ContactForm } from './ContactForm';
 import { useState } from 'react';
-import { UserMessage, Answer } from './Messages';
-import { getAvatarLink } from '@thecointech/shared/components/Avatars';
+import { Answer } from './Messages';
 import { PageHeader } from '../../components/PageHeader';
 import styles from './styles.module.less';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
 
 const title = { id:"app.contactus.title",
                 defaultMessage:"Contact Us",
@@ -43,12 +44,13 @@ export const ContactUs = () => {
 
   return (
     <React.Fragment>
+      <ColumnRightTop />
       <PageHeader 
           illustration={illustration}
           title={title}
           description= {description}
       />
-      <AppContainerWithShadow className={styles.containerContactUs}>
+      <AppContainerWithShadow className={`${styles.containerContactUs}`}>
 
       <AvailableSoon>
         <div className={styles.messagesContainer}>
@@ -65,12 +67,12 @@ export const ContactUs = () => {
               />
               </div>
             </div>
-            <UserMessage 
+            {/*<UserMessage 
               message={"Hi"} 
               messageComplement={"you - 2 days ago"} 
               contactAvatar={getAvatarLink("14")} 
-              contactVerified={false}  
-            />
+            contactVerified={false} 
+            /> */}
             <Answer 
               message={"Welcome to the contact us page"} 
               messageComplement={"Admin - 2 days ago"}  
@@ -81,6 +83,7 @@ export const ContactUs = () => {
 
         </AvailableSoon>
       </AppContainerWithShadow>
+      <ColumnRightBottom />
     </React.Fragment>
   );
 }

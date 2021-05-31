@@ -24,7 +24,7 @@ export const FooterShared = () => {
   const windowDimension = useWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
   const registeredContent = <FormattedMessage {...registered} />;
-  const socialLinksContent = <><img src={facebook} /><img src={twitter} /><img src={instagram} /></>;
+  const socialLinksContent = <><a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank"><img src={facebook} /></a><img src={twitter} /><img src={instagram} /></>;
   const copyrightContent = <>&#169; &nbsp;<FormattedMessage {...copyright} /></>;
 
   let alignForLeftColumn = "left" ;

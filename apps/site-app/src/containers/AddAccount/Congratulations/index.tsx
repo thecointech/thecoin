@@ -59,7 +59,7 @@ export const Congratulations = () => {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column textAlign='center' verticalAlign='middle' >
-                        <ButtonPrimary as={Link} to="/accounts" size="medium">
+                        <ButtonPrimary as={Link} to="/" size="medium">
                             <FormattedMessage {...goToAccount} />
                         </ButtonPrimary>
                     </Grid.Column>

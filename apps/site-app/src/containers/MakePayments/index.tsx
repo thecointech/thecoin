@@ -10,6 +10,8 @@ import { Tab } from 'semantic-ui-react';
 import { useIntl } from 'react-intl';
 import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
 import { PageHeader } from 'components/PageHeader';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 
 
 const title = { id:"app.makepayments.title",
@@ -41,6 +43,7 @@ export const MakePayments = (routerProps:AccountPageProps) => {
   ]
   return (
     <React.Fragment>
+      <ColumnRightTop />
       <PageHeader 
           illustration={illustration}
           title={title}
@@ -50,6 +53,7 @@ export const MakePayments = (routerProps:AccountPageProps) => {
       <AppContainerWithShadow>
         <RecentTransactions {...routerProps} />
       </AppContainerWithShadow>
+      <ColumnRightBottom />
     </React.Fragment>
   );
 }

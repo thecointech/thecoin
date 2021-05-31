@@ -15,8 +15,10 @@ import microsoft from "./images/microsoft.svg";
 import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
+import sharedStyles from '../styles.module.less';
 import { Decoration } from "components/Decoration";
 import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 
 const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
@@ -37,6 +39,15 @@ const explainDownload = { id:"app.account.create.store.explainDownload",
 const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
+const googleLink = {  id:"app.account.create.store.button.google",
+                          defaultMessage:"Store on Google",
+                          description:"The button to save on google for the store your account page"};
+const microsoftLink = {  id:"app.account.create.store.button.microsoft",
+                          defaultMessage:"Store on Microsoft OneDrive",
+                          description:"The button to save on microsoft for the store your account page"};
+const dropboxLink = {  id:"app.account.create.store.button.dropbox",
+                          defaultMessage:"Store on Dropbox",
+                          description:"The button to save on dropbox for the store your account page"};
 
 export const Store = () => {
 
@@ -70,31 +81,39 @@ export const Store = () => {
       </Header>
       <MaybeMessage {...feedback} />
 
-      <Grid stackable centered columns={4} id={styles.choices}>
-        <Grid.Row centered>
-          <Grid.Column centered>
-              <img src={ manually } />
-              <br />
+      <Grid stackable columns={4} id={sharedStyles.choices}>
+        <Grid.Row>
+          <Grid.Column>
               <a onClick={onDownloadClicked}>
-                <FormattedMessage {...download} />
+                <img src={ manually } />
+                <Header as={"h4"}><FormattedMessage {...download} /></Header>
               </a>
           </Grid.Column>
-          <Grid.Column centered>
-              <img src={ google } />
-              <br />
-              <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete} />
+          <Grid.Column>
+              <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
+                <img src={ google } />
+                <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
+              </StoreGoogle>
           </Grid.Column>
-          <Grid.Column centered>
-            <StoreMicrosoft>
-              <img src={ microsoft } />
-              <br />
-            </StoreMicrosoft>
+          <Grid.Column>
+            <AvailableSoon>
+              <div className={sharedStyles.soon}>
+                <StoreMicrosoft>
+                  <img src={ microsoft } />
+                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
+                </StoreMicrosoft>
+              </div>
+            </AvailableSoon>
           </Grid.Column>
-          <Grid.Column centered>
-              <StoreDropbox>
-                <img src={ dropbox } />
-                <br />
-              </StoreDropbox>
+          <Grid.Column>
+            <AvailableSoon>
+              <div className={sharedStyles.soon}>
+                <StoreDropbox>
+                  <img src={ dropbox } />
+                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
+                </StoreDropbox>
+              </div>
+              </AvailableSoon>
           </Grid.Column>
         </Grid.Row>
       </Grid>

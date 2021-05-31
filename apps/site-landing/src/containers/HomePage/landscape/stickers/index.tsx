@@ -3,6 +3,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
+import { Link } from 'react-router-dom';
 
 export type Props = {
     Mobile: boolean;
@@ -46,7 +47,8 @@ export const Stickers = (props: Props) => {
                 <p>
                     <FormattedMessage {...descriptionLeft} />
                 </p>
-                <a href=""><FormattedMessage {...linkLeft} /></a>
+
+                <Link to="/compare"><FormattedMessage {...linkLeft} /></Link>
                 </Grid.Column>
                 <Grid.Column className={ `${styles.card} x6spaceLeft` }>
                     <Header as='h4'>
@@ -55,7 +57,7 @@ export const Stickers = (props: Props) => {
                     <p>
                         <FormattedMessage {...descriptionRight} />
                     </p>
-                    <a href=""><FormattedMessage {...linkRight} /></a>
+                    <Link to="/wedomore"><FormattedMessage {...linkRight} /></Link>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

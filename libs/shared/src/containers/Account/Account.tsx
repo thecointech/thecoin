@@ -23,6 +23,7 @@ export type RouterPath = {
   exact?: boolean;
   icon?: SemanticICONS;
   header?: { avatar: string, primaryDescription: string, secondaryDescription: string | Element | JSX.Element };
+  key?: string
 };
 
 interface Props {
@@ -104,7 +105,7 @@ export const Account = (props: Props) => {
           return (
             <Route
               path={targetUrl}
-              key={targetUrl}
+              key={item.key ?? targetUrl}
               render={component}
               exact={item.exact}
             />
