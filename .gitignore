@@ -23,6 +23,7 @@
 
 **/ts/.openapi-generator
 apis/nft/ts
+apis/ipfs/ts
 
 libs/contract/.openzeppelin/unknown-1337.json
 libs/shared/src/containers/IDX/config.json
