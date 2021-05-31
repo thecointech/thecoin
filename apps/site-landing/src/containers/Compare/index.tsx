@@ -26,9 +26,9 @@ export function Compare() {
   return (
     <>
       <div className={styles.wrapper}>
-        <Header as="h2" className={`x10spaceBefore`}>
+        <Header as="h2" className={`x10spaceBefore x10spaceAfter`}>
             <FormattedMessage {...title} />
-            <Header.Subheader>
+            <Header.Subheader className={`x5spaceBefore`}>
               <FormattedMessage  {...description} />
             </Header.Subheader>
         </Header>
