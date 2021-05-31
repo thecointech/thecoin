@@ -63,6 +63,7 @@ export function errorHandler(
     });
   }
   if (err instanceof Error) {
+    log.error(err, `Internal Error for ${req.path}`);
     return res.status(500).json({
       message: "Internal Server Error",
     });
