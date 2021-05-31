@@ -10,6 +10,7 @@ import { TheSigner } from '@thecointech/shared/SignerIdent';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import styles from '../styles.module.less';
 
 export const Connect = () => {
 
@@ -38,7 +39,7 @@ export const Connect = () => {
   return (
     <>
       <WarnIfDisabled />
-      <Form>
+      <Form id={styles.createAccountForm}>
         <NameInput forceValidate={forceValidate} setName={setName} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         <ButtonPrimary onClick={onConnect} size="medium">
