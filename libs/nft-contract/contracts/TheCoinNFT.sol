@@ -7,39 +7,21 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "./TokenData.sol";
 import "./IPFS.sol";
+import "./UpdateMeta.sol";
+import "./Mintable.sol";
+import "./BaseData.sol";
 
 
-contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
-
+contract TheCoinNFT is BaseData, Mintable, UpdateMeta, IPFSUriGenerator {
   using ECDSA for bytes32;
 
-  // Create a new role identifier for the minter role
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-
-  // We may (eventually) mint up to 100K tokens.  This is not editable
-  uint public constant tokenSupply = 100000;
-
-  // For PoC, we don't care about efficiency, so just duplicate the whole mapping.
-  mapping (uint256 => TokenDataPacked) private _tokenMetadata;
-
-  /**
-    * @dev Initialize minter, owner, and basic data.
-    */
-  constructor(address minter) ERC721("TheCoinNFT", "TCN") {
-    _setupRole(MINTER_ROLE, minter);
-  }
+  constructor(address minter)
+    Mintable(minter) {}
 
   ///////////////////////////////////////////////////////////////////////
   // Built-in overrides.
-
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
-    return ERC721.supportsInterface(interfaceId) || AccessControl.supportsInterface(interfaceId);
-  }
 
   /**
   * @dev See {IERC721Metadata-tokenURI}.
@@ -53,93 +35,26 @@ contract TheCoinNFT is ERC721, AccessControl, IPFSUriGenerator {
   ///////////////////////////////////////////////////////////////////////
   // Custom functions.
 
+  /**
+   * Get the URI tokens will be initialized to (and reset back to)
+   */
+  function defaultTokenUri() external view returns (string memory) {
+    return buildIpfsURI(defaultIpfsPrefix, defaultIpfsHash);
+  }
+
+  /**
+   * Set the default IPFS data tokens are initialized to.
+    */
+  function setDefaultIpfsData(bytes32 newDefaultHash, uint16 newDefaultPrefix)  external onlyRole(DEFAULT_ADMIN_ROLE) {
+    defaultIpfsHash = newDefaultHash;
+    defaultIpfsPrefix = newDefaultPrefix;
+  }
+
+  /**
+   * Allow setting an IPFS gateway.  All tokenURI's will be relative to this link
+   */
   function setBaseURI(string calldata newUri) external onlyRole(DEFAULT_ADMIN_ROLE) {
     setGateway(newUri);
-  }
-
-  /**
-   * Query if the given TokenID is able to updated.  Updates are limited to once per 3 months
-   */
-  function canUpdate(uint256 tokenId) public view returns (bool) {
-    if (!_exists(tokenId)) return false;
-    return canUpdate(_tokenMetadata[tokenId]);
-  }
-
-  /**
-   * Query the lastUpdate time of a given token
-   */
-  function lastUpdate(uint256 tokenId) public view returns (uint40) {
-    if (!_exists(tokenId)) return 0;
-    return _tokenMetadata[tokenId].lastUpdate;
-  }
-
-  /**
-   * Mint a whole lotta tokens at once.  Cheaper than individual minting calls
-   */
-  function bulkMinting(uint256[] calldata ids, TokenDataPacked[] calldata tokens, address[] calldata owners) external onlyRole(MINTER_ROLE) {
-    require(ids.length == tokens.length && ids.length == owners.length, "Mismatched arrays");
-
-    for (uint i = 0; i < ids.length; i++) {
-      //
-      require(ids[i] < tokenSupply, "Invalid ID supplied");
-      // Create the token
-      bytes memory data = abi.encodePacked(tokens[i].ipfsHash);
-      _safeMint(owners[i], ids[i], data);
-      // Store the token metadata
-      _tokenMetadata[ids[i]] = tokens[i];
-    }
-  }
-
-  /**
-   * Update the metadata associated with a token.  A user will use this when signing an image
-   * It is only legal to call this function once every 3 months.
-   */
-  function updateMetaSha256(uint256 tokenId, uint16 prefix, bytes32 ipfsHash) external {
-    // Is the sender allowed to do this allowed to do this?
-    require(_isApprovedOrOwner(_msgSender(), tokenId), "Meta update not owner");
-    updateMeta(_tokenMetadata[tokenId], prefix, ipfsHash);
-  }
-
-  /**
-   * Similar to updateMetaSha256, allows gassless updates to a tokens metadata.
-   * The owner of the token must sign a combination of lastUpdate + id + prefix + hash.
-   * We verify the signature on-chain to prove legitimacy
-   * Sourcing lastUpdate onChain ensures that this fn cannot be replayed, because if
-   * the function is succesfull lastUpdate will be modifed (and the signature will no longer match)
-   */
-  function updateMetaSha256GassLess(uint256 tokenId, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) external {
-    address signer = recoverSigner(tokenId, _tokenMetadata[tokenId].lastUpdate, prefix, ipfsHash, signature);
-    address owner = ERC721.ownerOf(tokenId);
-    require(signer == owner, "Meta signer is not owner");
-    updateMeta(_tokenMetadata[tokenId], prefix, ipfsHash);
-  }
-
-  /**
-   * Update token metadata, and reset lastUpdate
-   */
-  function updateMeta(TokenDataPacked storage token, uint16 prefix, bytes32 ipfsHash) internal {
-    require(canUpdate(token), "Cannot update within 3 months of prior update");
-    token.ipfsPrefix = prefix;
-    token.ipfsHash = ipfsHash;
-    token.lastUpdate = uint40(block.timestamp);
-  }
-
-  /**
-   * Get the address who signed off on the following variables.
-   */
-  function recoverSigner(uint256 tokenId, uint40 lastUpdate, uint16 prefix, bytes32 ipfsHash, bytes calldata signature) internal pure returns (address)
-	{
-    // First, recreate the message that the client signed.
-    // This packed data must match the client's data packing
-		bytes memory packed = abi.encodePacked(tokenId, lastUpdate, prefix, ipfsHash);
-    // Take the hash of the packed data.
-		return keccak256(packed)
-      .toEthSignedMessageHash()
-      .recover(signature);
-	}
-
-  function canUpdate(TokenDataPacked storage token) internal view returns (bool) {
-    return (block.timestamp - token.lastUpdate) > 21600;
   }
 
   // TODO: Once validated, we can try applying the below optimizations to improve

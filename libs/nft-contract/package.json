@@ -26,10 +26,10 @@
     "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
     "deploy:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build": "run-s build:contracts generate-types build:src",
+    "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
-    "build:copy": "cpx \"./src/deployed\" ./build/",
+    "build:copy": "cpx \"./src/deployed\" ./build/ && cpx \"./src/types/*.d.ts\" ./build/types/",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
@@ -41,7 +41,7 @@
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
     "generate-types": "run-p generate-types:*",
     "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
-    "generate-typesss:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\"",
+    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\"",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "files": [

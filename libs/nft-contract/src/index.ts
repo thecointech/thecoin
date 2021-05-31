@@ -4,3 +4,5 @@ export * from './contract';
 export * from './ipfs';
 export * from './gassless';
 export * from './metadata';
+export * from './tokenCodes';
+export * from './sign';

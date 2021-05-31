@@ -1,4 +1,3 @@
-geth
 **/node_modules/
 *.log
 **/build/
@@ -23,6 +22,7 @@ geth
 **/*secret*
 
 **/ts/.openapi-generator
+apis/nft/ts
 
 libs/contract/.openzeppelin/unknown-1337.json
 libs/shared/src/containers/IDX/config.json
@@ -43,3 +43,7 @@ libs/nft-contract/src/contracts/*.json
 libs/nft-contract/migrations/types
 libs/nft-contract/src/types
 apps/nft-service/src/routes/routes.ts
+
+apps/site-nft/src/translations
+apps/site-nft/lang
+libs/nft-contract/devlive.tokens.json

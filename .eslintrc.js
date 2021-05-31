@@ -1,14 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
-const prettierOptions = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '.prettierrc'), 'utf8'),
-);
-
 module.exports = {
   parser: '@typescript-eslint/parser',
-  extends: ['plugin:@typescript-eslint/recommended', 'airbnb', 'prettier', 'prettier/react'],
-  plugins: ["@typescript-eslint/eslint-plugin", 'prettier', 'redux-saga', 'react', 'jsx-a11y', "react-hooks"],
+  extends: ['plugin:@typescript-eslint/recommended', 'airbnb'],
+  plugins: ["@typescript-eslint/eslint-plugin", 'redux-saga', 'react', 'jsx-a11y', "react-hooks"],
   env: {
     jest: true,
     browser: true,
@@ -23,7 +16,7 @@ module.exports = {
     },
   },
   rules: {
-    'prettier/prettier': ['error', prettierOptions],
+    '@typescript-eslint/explicit-function-return-type': 'off',
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,
     'comma-dangle': [2, 'always-multiline'],

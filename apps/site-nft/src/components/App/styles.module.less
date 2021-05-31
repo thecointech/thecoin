@@ -1,0 +1,24 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+#app {
+  display: grid;
+  grid-template-columns: [full-start] auto [page-start] 173px [content-start] minmax(auto, 837px) [content-end] 173px [page-end] auto [full-end];
+  grid-template-rows: [header-start] 60px [header-end content-start] 1fr [content-end footer-start] 32px [footer-end];
+
+  grid-template-areas:
+    "lgap header header header rgap"
+    "lgap left   main   right  rgap"
+    "lgap footer footer footer rgap";
+}
+
+.contentContainer{
+  grid-area: main;
+}
+
+#mainContent{
+  // Explicitly define a min-height to prevent our content
+  // resizer from collapsing down if our content is too small
+  min-height: 300px;
+  margin: 28px;
+}
+

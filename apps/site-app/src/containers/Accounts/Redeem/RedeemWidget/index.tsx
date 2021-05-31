@@ -20,7 +20,7 @@ type VisualProps={
     coinToSell: number | null,
     description:MessageDescriptor,
     onValueChange: (value: number) => void,
-    account: AccountState | null,
+    account: AccountState | undefined,
     rate: number,
 
     emailLabel: MessageDescriptor,
@@ -52,7 +52,7 @@ type VisualProps={
     forceValidate: boolean,
     validationMessage?: ValuedMessageDesc
 };
-  
+
 
 export const RedeemWidget = (props: VisualProps) => {
   return (

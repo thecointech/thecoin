@@ -2,7 +2,7 @@
   "name": "@thecointech/nft-service",
   "version": "0.2.1",
   "private": true,
-  "description": "TheCoin NFT service.  Permits gassless transactions with the TheCoin NFT contract",
+  "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apps/rates-service"
+    "directory": "apps/nft-service"
   },
   "scripts": {
     "start": "node ./build/main.js",
@@ -45,6 +45,7 @@
     "@pinata/sdk": "1.1.20",
     "@thecointech/logging": "^0.2.1",
     "@thecointech/utilities": "^0.2.1",
+    "@thecointech/nft-contract": "*",
     "@tsoa/runtime": "^3.8.0",
     "axios": "*",
     "cors": "^2.8.5",
@@ -54,6 +55,7 @@
     "node-fetch": "^2.6.0",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.1.6",
+    "helmet": "^4.6.0",
     "multer": "^1.4.2",
     "image-type": "^4.1.0"
   },

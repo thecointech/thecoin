@@ -22,7 +22,7 @@ export async function validateImage(buffer: Buffer, signature: string) {
 
 export async function validateJson(metadata: MetadataJson, signature: string) {
   // First, lets check the signature of this upload
-  const address = verifyMessage(metadata.hash, signature);
+  const address = verifyMessage(metadata.image, signature);
   log.debug({ address }, `Validating metadata from {address}`);
   // TODO: harden v unknown data in metadata, and/or
   return (
@@ -47,7 +47,7 @@ async function isOwned(address: string) {
 // Check the binary data is a supported image type.
 async function isValidImageType(buffer: Buffer, address: string) {
   const res = imageType(buffer);
-  if (res?.mime !== 'image/png' && res?.mime !== 'image/webp' && res?.mime !== 'image/jpg') {
+  if (res?.mime !== 'image/png' && res?.mime !== 'image/webp' && res?.mime !== 'image/jpg' && res?.mime !== 'image/jpeg') {
     log.warn({ address }, `Rejected upload from {address} because an invalid type (${res?.mime}) was detected`);
     return false;
   }
@@ -63,9 +63,9 @@ async function isValidJson(json: MetadataJson, address: string) {
     return false;
   }
   // TODO: This validates CIDv0 - We probably want to switch to CIDv1 for browser interop
-  if (!json.hash.match(/^\/ipfs\/[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{46}$/)) {
-    log.warn({ address }, `Rejected upload from {address} because an JSON payload is too big`);
+  if (!json.image.match(/^\/ipfs\/[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{46}$/)) {
+    log.warn({ address }, `Rejected upload from {address} because the hash is not valid Base58`);
     return false;
   }
-  return json.hash.match(/^ipfs:\/\//)
+  return true; // json.hash.match(/^ipfs:\/\//)
 }
