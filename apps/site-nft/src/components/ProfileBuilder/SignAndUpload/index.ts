@@ -15,10 +15,13 @@ export async function signAndUpload(editor: ImageEditorComponent | null, tokenId
   // Download it
   downloadBlob(blob);
 
+  const address = await signer.getAddress();
+  console.log(address);
+
   // Upload to IPFS
-  const avatarUri = await uploadAvatar(blob, signer);
+  const avatarHash = await uploadAvatar(blob, signer);
   // Upload metadata
-  const metadataUri = await uploadMetadata(tokenId, avatarUri, signer);
+  const metadataUri = await uploadMetadata(tokenId, `ipfs://${avatarHash}`, signer);
   // Now update the NFT to reflect thes changes
   const r = await updateNft(tokenId, metadataUri, signer);
   alert('Update success: ' + r);
