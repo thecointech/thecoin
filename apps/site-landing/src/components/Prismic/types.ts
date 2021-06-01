@@ -7,10 +7,10 @@ export type RenderableType = {
 }
 
 export type FAQResult = {
-  questions: RenderableType[]|null;
-  answers: RenderableType[]|null;
+  question: RenderableType[]|null;
+  answer: RenderableType[]|null;
   category: string;
-  starred?: boolean;
+  show_on_faq_home?: boolean;
 }
 
 export type ArticleResult = {

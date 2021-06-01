@@ -12,12 +12,4 @@ export default defineMessages({
     id: `${scope}.header`,
     defaultMessage: 'What would you like to know?',
   },
-  subHeader: {
-    id: `${scope}.subHeader`,
-    defaultMessage: 'See what interests you from the menu on the left',
-  },
-  blurb: {
-    id: `${scope}.blurb`,
-    defaultMessage: 'Or, for a quick overview of our company try the below items',
-  },
 });
