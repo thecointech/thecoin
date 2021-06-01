@@ -10,7 +10,8 @@ import styles from './styles.module.less';
 const messages = defineMessages({
   home: { defaultMessage: "Home", description: "MainNav Home page link" },
   claim: { defaultMessage: "Claim", description: "MainNav page to claim an NFT" },
-  profile: { defaultMessage: "Profile", description: "MainNav page to set Profile image on NFT" }
+  profile: { defaultMessage: "Profile", description: "MainNav page to set Profile image on NFT" },
+  validate: { defaultMessage: "Validate", description: "MainNav Link to validate page" },
 });
 
 export const MainNavigation = () => (
@@ -32,6 +33,9 @@ export const MainNavigation = () => (
       </HeaderLink>
       <HeaderLink to="/profile" exact>
         <FormattedMessage {...messages.profile} />
+      </HeaderLink>
+      <HeaderLink to="/validate" exact>
+        <FormattedMessage {...messages.validate} />
       </HeaderLink>
       <Menu.Menu position='right'>
         <Menu.Item>

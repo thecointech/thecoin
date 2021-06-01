@@ -7,6 +7,7 @@ import { Claim } from '../Claim';
 import { AuthRoute } from '../AuthRoute';
 import { ProfileBuilder } from '../ProfileBuilder';
 import { HomePage } from '../HomePage';
+import { Validate } from '../Validate';
 
 //
 // Trialing a more well-defined routing system
@@ -20,6 +21,7 @@ export const SiteMap = {
   Public: {
     gauth: GAuth,
     addAccount: AddAccount,
+    validate: Validate,
     congrats: Congratulations,
   },
   default: HomePage,

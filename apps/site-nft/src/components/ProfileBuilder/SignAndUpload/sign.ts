@@ -2,7 +2,7 @@
 import { log } from '@thecointech/logging';
 import { signMessage } from '@thecointech/nft-contract';
 import { Signer } from 'ethers';
-import { dump, IExif, IExifElement, insert, TagNumbers } from 'exif-library';
+import { dump, IExif, IExifElement, insert, load, TagNumbers } from 'exif-library';
 import { hash } from './prcp';
 
 //
@@ -40,6 +40,21 @@ export function updateExif(dataUrl: string, author: string, hash: string, signat
 
   var inserted = insert(exifStr, dataUrl);
   return inserted;
+}
+
+//
+// Read the EXIF data we would have saved to the image
+export function readExif(dataUrl: string) {
+  const exifObj = load(dataUrl);
+  const author = exifObj?.['0th']?.[TagNumbers.ImageIFD.Artist] as MaybeString;
+  const hash = exifObj?.['0th']?.[TagNumbers.ImageIFD.ImageDescription] as MaybeString;
+  const signature = exifObj?.['0th']?.[TagNumbers.ImageIFD.Copyright] as MaybeString;
+  if (!author || !hash || !signature) return null;
+  return {
+    author,
+    signature,
+    hash,
+  }
 }
 
 //
