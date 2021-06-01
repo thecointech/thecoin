@@ -11,6 +11,7 @@
     "directory": "libs/storybookutils"
   },
   "scripts": {
+    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build"
   },

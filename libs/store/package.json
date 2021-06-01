@@ -15,6 +15,7 @@
     "directory": "libs/store"
   },
   "scripts": {
+    "build:lib": "yarn build",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",

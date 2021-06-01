@@ -23,6 +23,7 @@
     "./variables.less": "./src/variables.less"
   },
   "scripts": {
+    "build:lib": "yarn build",
     "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
     "clean": "rimraf ./build"
   },

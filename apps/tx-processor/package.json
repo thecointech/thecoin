@@ -9,6 +9,7 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
+    "build:app": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "yarn build && node --inspect ./build/main.js",

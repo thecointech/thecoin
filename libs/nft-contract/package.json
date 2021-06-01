@@ -27,6 +27,7 @@
     "deploy:post": "rimraf ./build/package.json",
     "deploy:lib": "yarn deploy",
     "prod:test:migrate": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
+    "build:lib": "yarn build",
     "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
