@@ -55,7 +55,7 @@ const OffsetContent = (props: { idx: number }) =>
           <a href="https://registry.goldstandard.org/credit-blocks?q=Gold+Standard+Marketplace+Order+GSM5722+&page=1">purchase GS5229</a>
         </span>
       }
-      trigger={<a className={styles.trigger} onClick={() => false}>12.2 tonnes</a>}
+      trigger={<a className={styles.trigger} onClick={e => e.stopPropagation()}>12.2 tonnes</a>}
     />
     &nbsp;
     on Jan 1st, 2022
