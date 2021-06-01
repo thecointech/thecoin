@@ -8,13 +8,13 @@ Set the variables to the name of the config in the env file for the appropriate 
 
 `GCLOUD_RATES_CONFIG=rates-testing`
 
-The websites (app/landing) also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
+Because the app/landing websites are a pair, they are hosted under the same project.  This means these sites also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
+
+The NFT site does not have this connection because it is a stand-alone website.
 
 ## How to deploy
 
 In the root folder, run `yarn deploy:<environment>`.  By default this will increment patch version in each package, and deploy to GitHub packages & GAE.
-
-[TODO] - use lerna to increment version.
 
 ## Things to Deploy
 
