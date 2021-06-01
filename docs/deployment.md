@@ -1,8 +1,8 @@
 TheCoin is (currently) a series of micro-services connected together.
 
-## Prepare to deploy
+## System setup require prior to deployment
 
-Each deployment app (rates/broker/site) needs a GAE configuration.  In the appropriate environment file for each configuration.  See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
+Each deployment app (rates/broker/site/nft) needs a GAE configuration.  In the appropriate environment file for each configuration.  See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
 Set the variables to the name of the config in the env file for the appropriate deployment.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
 
@@ -18,7 +18,10 @@ In the root folder, run `yarn deploy:<environment>`.  By default this will incre
 
 ## Things to Deploy
 
-Apps deploy to GAE, libraries to github packages.
+Apps deploy to GAE, libraries to github packages.s
+
+Contracts:
+ - It is important that contracts are deployed first.  When a contract is deployed, it's address is written into a json file that is included with the code when deployed.
 
 Apps:
 
@@ -27,6 +30,9 @@ Apps:
  - site-landing: Static landing website, connects to broker
  - site-app: Static App website.  Connects to broker & rates.
  - site-wallet: [TODO] Static website runs wallet code. Runs site-app in a sandboxed iframe.
+
+ - nft-service: Simple service handles claiming/updating NFT's
+ - site-nft: Website to match
 
 Libraries:
  - There are a dozen libraries that need deploying

@@ -23,6 +23,7 @@
     "deploy:clean": "rimraf ./build/.buildinfo",
     "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
+    "deploy:lib": "yarn deploy",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },

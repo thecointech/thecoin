@@ -22,6 +22,7 @@
     "clean:analyze": "rimraf stats.json",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "firebase deploy --only hosting",
+    "deploy:app": "yarn deploy",
     "dev": "yarn cross-env NODE_ENV=development node internals/server",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn start:server",
