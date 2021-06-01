@@ -32,15 +32,17 @@ CERAMIC_SEED=<SemiPermanentSeed>
 # See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a
 GCLOUD_LANDING_CONFIG=landing-testing
 GCLOUD_APP_CONFIG=app-testing
+GCLOUD_RATES_CONFIG=rates-testing
+GCLOUD_BROKER_CONFIG=broker-testing
+GCLOUD_NFT_SERVICE_CONFIG=nft-service-testing
+GCLOUD_NFT_SITE_CONFIG=nft-site-testing
 
 #
 # Wallets used by testing environment
 # If you want to regenerate these for any reason,
-# run the script ../tools/createWallets.ts
-# To view details (address/mnemonmic/key) run ../tools/logMnemonic
+# Generate wallets with  - ../tools/createWallets.ts
+# Log details with       - yarn ts-node .\tools\logMnemonic.ts
 
-# not-encrypted versions of keys (to be removed once we have
-# figured out how to do async wallet construction in truffle)
 WALLET_Owner_KEY=<AddThisHere>
 WALLET_Owner_MNEMONIC=<AddThisHere>
 
