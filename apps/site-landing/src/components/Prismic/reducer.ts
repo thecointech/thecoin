@@ -11,12 +11,11 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 // TODO: Move API Endpoint into .env configuration
-const apiEndpoint = 'https://thecoinio.cdn.prismic.io/api/v2'
-const accessToken = '' // This is where you would add your access token for a Private repository
+const apiEndpoint = 'https://thecointech.cdn.prismic.io/api/v2'
+const accessToken = 'MC5ZTFZuSUJBQUFDTUF6a1Rz.77-9DgXvv73vv70xD--_ve-_vR4kOjpk77-977-9Eu-_ve-_ve-_ve-_vWrvv71377-9BnkhRx7vv71F' // This is where you would add your access token for a Private repository
 const Client = Prismic.client(apiEndpoint, { accessToken });
 
-export class PrismicReducer extends TheCoinReducer<PrismicState>
-	implements IActions
+export class PrismicReducer extends TheCoinReducer<PrismicState> implements IActions
 {
 
   *fetchFaqs(): Generator<any> {
@@ -38,6 +37,7 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
       return null;
     }
     const results: Document[] = (yield call(fetchData)) as any;
+    console.log("fetchData====",results)
     if (results)
       yield this.storeValues({
         faqs: results.filter(item => item.type === 'the_coin_faq') ?? [],
