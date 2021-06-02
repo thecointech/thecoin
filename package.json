@@ -23,7 +23,6 @@
     "build:libs": "lerna run build:lib",
     "build:apps": "lerna run build:app --stream",
     "build:apis": "run-p build:api:*",
-    "build:api:3id": "cd submodules/3id-connect && yarn build",
     "build:api:rates": "cd apis/rates/ts && yarn build",
     "build:api:broker": "cd apis/broker/ts && yarn build",
     "build:api:nft": "cd apis/nft/ts && yarn build",
