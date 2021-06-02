@@ -21,7 +21,7 @@
     "gen:nft": "openapi-generator-cli generate -i apps/nft-service/src/api/swagger.json -g typescript-axios -o apis/nft/ts -c apis/nft/client-ts-spec.json",
     "genapis": "lerna run gen:swagger && run-p gen:*",
     "build:libs": "lerna run build:lib",
-    "build:apps": "lerna run build:app",
+    "build:apps": "lerna run build:app --stream",
     "build:apis": "run-p build:api:*",
     "build:api:3id": "cd submodules/3id-connect && yarn build",
     "build:api:exif": "cd submodules/exif-library && yarn build",
