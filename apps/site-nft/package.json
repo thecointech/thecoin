@@ -2,7 +2,7 @@
   "name": "@thecointech/site-nft",
   "productName": "THECoin: NFT",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -41,7 +41,6 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ./internals/format-intl.js"
   },
@@ -55,9 +54,9 @@
     ]
   },
   "dependencies": {
-    "@thecointech/shared": "^0.2.1",
-    "@thecointech/site-base": "^0.2.1",
     "@thecointech/nft": "*",
+    "@thecointech/shared": "^0.2.2",
+    "@thecointech/site-base": "^0.2.2",
     "@toast-ui/react-image-editor": "3.14.2",
     "exif-library": "https://github.com/FrozenKiwi/exif-library#1db15506"
   },

@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.2](https://github.com/thecointech/thecoin/compare/v0.1.29...v0.2.2) (2021-06-02)
 
-**Note:** Version bump only for package @thecointech/store
-
-
-
-
-
-# [0.2.0](https://github.com/thecointech/thecoin/compare/v0.1.29...v0.2.0) (2021-04-15)
-
-**Note:** Version bump only for package @thecointech/store
+**Note:** Version bump only for package @thecointech/nft-service

@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -37,7 +37,6 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
@@ -52,9 +51,9 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/shared": "^0.2.1",
-    "@thecointech/site-base": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/shared": "^0.2.2",
+    "@thecointech/site-base": "^0.2.2",
+    "@thecointech/utilities": "^0.2.2",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
