@@ -1,7 +1,6 @@
 import React from "react";
 import { FAQ } from "./FAQ";
 import { FAQDocument } from "components/Prismic/types";
-import { Item } from "semantic-ui-react";
 
 type Props = {
   faqs: FAQDocument[]
@@ -9,8 +8,8 @@ type Props = {
 
 export const FAQs = ({ faqs }: Props) => {
   return (
-    <Item.Group divided>
+    <div className={"x10spaceBefore x8spaceAfter"}>
       {faqs.map(faq => <FAQ key={faq.id} {...faq} />)}
-    </Item.Group>
+    </div>
   )
 }
