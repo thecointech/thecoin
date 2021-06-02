@@ -39,7 +39,7 @@
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
     "pre_deploy": "yarn build:all",
     "_deploy": "run-s _deploy:version _deploy:lib _deploy:app",
-    "_deploy:version": "lerna version minor --allow-branch */* --no-push",
+    "_deploy:version": "lerna version --allow-branch */* --no-push",
     "_deploy:lib": "lerna run deploy:lib",
     "_deploy:app": "lerna run deploy:app",
     "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
