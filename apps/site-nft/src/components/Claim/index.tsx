@@ -24,9 +24,11 @@ export const Claim = () => {
   const [code, setCode] = useState('');
   const [tokenId, setTokenId] = useState('');
   const [success, setSuccess] = useState<string | boolean | undefined>();
+  const [claiming, setClaiming] = useState(false);
   const intl = useIntl();
 
   const doClaimCode = async () => {
+    setClaiming(true);
     log.trace({ address: account.address, tokenId }, "User {address} is claiming tokenId {tokenId}");
     const api = GetNftApi();
     const r = await api.claimNft({
@@ -35,7 +37,7 @@ export const Claim = () => {
       claimant: account.address,
     });
     setSuccess(r.data as unknown as boolean | string);
-    alert("Claiming result: " + r.data);
+    setClaiming(false);
   }
   return (
     <AppContainer shadow>
@@ -51,7 +53,7 @@ export const Claim = () => {
           placeholder={intl.formatMessage(messages.phCode)}
           onChange={(_, d) => setCode(d.value)}
         />
-        <Button onClick={doClaimCode} >
+        <Button onClick={doClaimCode} loading={claiming}>
           <FormattedMessage {...messages.claim} />
         </Button>
         <Success success={success} />
@@ -68,7 +70,7 @@ const Success = ({ success }: { success: string | boolean | undefined }) =>
       ? <FormattedMessage
         {...messages.success}
         values={{
-          link: (chunks: string) => <a target='_blank' href={`https:${process.env.DEPLOY_NETWORK}.etherscan.io/tx/${success}`}>{chunks}</a>
+          link: (chunks: string) => <a target='_blank' href={`https://${process.env.DEPLOY_NETWORK}.etherscan.io/tx/${success}`}>{chunks}</a>
         }}
       />
       : <FormattedMessage {...messages.failed} />
