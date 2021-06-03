@@ -14,24 +14,27 @@ const messages = defineMessages({
   phTokenId: { defaultMessage: "ID of token purchased", description: "Placeholder for claim/tokenID input" },
   phCode: { defaultMessage: "Unlock code for the token purchased", description: "Placeholder for claim/code input" },
   claim: { defaultMessage: "Claim", description: "Claim button" },
+
+  success: { defaultMessage: "Success: <link>View the Transaction</link>", description: "Show on claim success" },
+  failed: { defaultMessage: "Claim Failed: Please contact support", description: "Show on claim failed" },
 })
 
 export const Claim = () => {
   const account = useActiveAccount()!;
   const [code, setCode] = useState('');
   const [tokenId, setTokenId] = useState('');
-  const [success, setSuccess] = useState(undefined as undefined | boolean);
+  const [success, setSuccess] = useState<string | boolean | undefined>();
   const intl = useIntl();
 
   const doClaimCode = async () => {
-    log.trace({address: account.address, tokenId}, "User {address} is claiming tokenId {tokenId}");
+    log.trace({ address: account.address, tokenId }, "User {address} is claiming tokenId {tokenId}");
     const api = GetNftApi();
     const r = await api.claimNft({
       tokenId: parseInt(tokenId),
       code,
       claimant: account.address,
     });
-    setSuccess(r.data);
+    setSuccess(r.data as unknown as boolean | string);
     alert("Claiming result: " + r.data);
   }
   return (
@@ -51,8 +54,21 @@ export const Claim = () => {
         <Button onClick={doClaimCode} >
           <FormattedMessage {...messages.claim} />
         </Button>
-        <div>success: {success}</div>
+        <Success success={success} />
       </Form>
     </AppContainer>
   )
 }
+
+
+const Success = ({ success }: { success: string | boolean | undefined }) =>
+  success === undefined
+    ? null
+    : success
+      ? <FormattedMessage
+        {...messages.success}
+        values={{
+          link: (chunks: string) => <a target='_blank' href={`https:${process.env.DEPLOY_NETWORK}.etherscan.io/tx/${success}`}>{chunks}</a>
+        }}
+      />
+      : <FormattedMessage {...messages.failed} />

@@ -2,7 +2,6 @@
  * COMMON WEBPACK CONFIGURATION
  */
 const { getEnvFile } = require('../../../../tools/setenv')
-const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -12,6 +11,7 @@ const { transform } = require('@formatjs/ts-transformer');
 
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
+const dotenv = require('dotenv').config({path: getEnvFile()});
 
 module.exports = options => ({
   mode: options.mode,
@@ -139,7 +139,7 @@ module.exports = options => ({
     ],
   },
   plugins: options.plugins.concat([
-    new Dotenv({path: getEnvFile()}),
+    new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new ForkTsCheckerWebpackPlugin({
       tsconfig: configFile,
       checkSyntacticErrors: true

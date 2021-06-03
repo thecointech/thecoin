@@ -24,7 +24,7 @@ import styles from './styles.module.less';
 
 
 export const App = () => {
-
+  console.log("Loading Site with config: " + process.env.CONFIG_NAME);
   if (process.env.NODE_ENV === 'development') {
     //useDevPrep(account)
     if (process.env.CONFIG_NAME === 'devlive') {
