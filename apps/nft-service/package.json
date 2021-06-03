@@ -46,6 +46,7 @@
     "@thecointech/logging": "^0.2.2",
     "@thecointech/nft-contract": "^0.2.2",
     "@thecointech/utilities": "^0.2.2",
+    "@thecointech/accounts": "^0.2.2",
     "@tsoa/runtime": "^3.8.0",
     "axios": "*",
     "cors": "^2.8.5",
