@@ -10,6 +10,7 @@
 **/vscode-chrome-debug-userdatadir
 
 .firebase/hosting.*
+.npmrc
 
 !**/summary.txt
 
@@ -44,3 +45,4 @@ apps/nft-service/src/routes/routes.ts
 apps/site-nft/src/translations
 apps/site-nft/lang
 libs/nft-contract/devlive.tokens.json
+
