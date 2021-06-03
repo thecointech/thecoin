@@ -10,6 +10,6 @@ export const scope = 'app.components.Header';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'What would you like to know?',
+    defaultMessage: 'FAQ',
   },
 });
