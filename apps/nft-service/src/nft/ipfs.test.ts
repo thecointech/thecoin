@@ -13,7 +13,7 @@ describe('Pinata IPFS integration', () => {
     const f = readFileSync(__filename);
     // Dynamic import so it picks up the env vars set above
     const { upload } = await import('./ipfs');
-    const r = await upload(f, "testf.txt");
+    const r = await upload(f, "avatar.jpg");
     expect(r).toBeTruthy();
   })
 }, IsManualRun)

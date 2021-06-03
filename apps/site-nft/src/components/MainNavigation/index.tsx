@@ -12,6 +12,7 @@ const messages = defineMessages({
   claim: { defaultMessage: "Claim", description: "MainNav page to claim an NFT" },
   profile: { defaultMessage: "Profile", description: "MainNav page to set Profile image on NFT" },
   validate: { defaultMessage: "Validate", description: "MainNav Link to validate page" },
+  offsets: { defaultMessage: "Offsets", description: "MainNav Link to offsets page" },
 });
 
 export const MainNavigation = () => (
@@ -36,6 +37,9 @@ export const MainNavigation = () => (
       </HeaderLink>
       <HeaderLink to="/validate" exact>
         <FormattedMessage {...messages.validate} />
+      </HeaderLink>
+      <HeaderLink to="/offsets" exact>
+        <FormattedMessage {...messages.offsets} />
       </HeaderLink>
       <Menu.Menu position='right'>
         <Menu.Item>

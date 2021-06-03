@@ -62,5 +62,5 @@ WALLET_client1_PATH=<AddThisHere>
 WALLET_client1_PWD=<AddThisHere>
 WALLET_client2_PATH=<AddThisHere>
 WALLET_client2_PWD=<AddThisHere>
-WALLET_client3_PATH=<AddThisHere>
-WALLET_client3_PWD=<AddThisHere>
+WALLET_NFTMinter_PATH=<AddThisHere>
+WALLET_NFTMinter_PWD=<AddThisHere>
