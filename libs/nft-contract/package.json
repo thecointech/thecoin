@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-contract",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
     "TheCoin",
