@@ -1,4 +1,4 @@
-## @thecointech/broker-cad@0.2.2
+## @thecointech/broker-cad@0.2.3
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @thecointech/broker-cad@0.2.2 --save
+npm install @thecointech/broker-cad@0.2.3 --save
 ```
 
 _unPublished (not recommended):_
