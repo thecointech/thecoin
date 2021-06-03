@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/shared",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -42,7 +42,7 @@
     "@nivo/line": "^0.67.0",
     "@nivo/tooltip": "^0.67.0",
     "@thecointech/logging": "^0.2.2",
-    "@thecointech/pricing": "^0.2.3",
+    "@thecointech/pricing": "^0.2.4",
     "@thecointech/store": "^0.2.2",
     "@thecointech/types": "^0.2.2",
     "@thecointech/utilities": "^0.2.3",

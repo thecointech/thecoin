@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
     "THECoin"
@@ -27,7 +27,7 @@
   "dependencies": {
     "@thecointech/logging": "^0.2.2",
     "@thecointech/rbcapi": "^0.2.3",
-    "@thecointech/tx-processing": "^0.2.3"
+    "@thecointech/tx-processing": "^0.2.4"
   },
   "devDependencies": {
     "jest": "*"

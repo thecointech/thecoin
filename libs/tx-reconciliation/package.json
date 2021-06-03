@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-reconciliation",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
   "keywords": [
     "THECoin"
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@thecointech/rbcapi": "^0.2.3",
-    "@thecointech/shared": "^0.2.3",
+    "@thecointech/shared": "^0.2.4",
     "@thecointech/tx-blockchain": "^0.2.3",
     "@thecointech/tx-firestore": "^0.2.3",
     "@thecointech/tx-gmail": "^0.2.3",
