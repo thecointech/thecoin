@@ -9,6 +9,8 @@ import { Dictionary } from "lodash";
 import { FAQDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
+import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
+
 
 
 const HelpDocsInternal = (props: RouteComponentProps) => {
@@ -54,9 +56,9 @@ export function buildCategories(docs: PrismicState) {
   const { locale } = useSelector(selectLocale);
   const categories: Dictionary<FAQDocument[]> = {};
   for (const faq of faqs) {
-    const lang = ((faq.lang)?.split("-")) ? ((faq.lang)?.split("-"))[0] : "en";
+    const lang = ((faq.lang)?.split("-")) ? ((faq.lang)?.split("-"))[0] : DEFAULT_LOCALE;
     //const key = `${locale}+"_category"`;
-    const cat = (locale === "en") ? faq.data.category : faq.data.fr_category; //["level" + (selectedItem.Level+1)]
+    const cat = (locale === DEFAULT_LOCALE) ? faq.data.category : faq.data.fr_category; //["level" + (selectedItem.Level+1)]
     console.log(locale,lang,locale===lang)
     if (locale === lang){
       if (!categories[cat])
