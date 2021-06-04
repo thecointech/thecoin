@@ -3,7 +3,6 @@ import { FAQDocument } from "components/Prismic/types";
 import { Header } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { FaqList } from "./FaqList";
-import { FaqMenu } from "./FaqMenu";
 import { Decoration } from "components/Decoration";
 import messages from "./messages";
 import { Dictionary } from "lodash";
@@ -14,8 +13,6 @@ type Props = {
   menu: Dictionary<FAQDocument[]>
 }
 export const Welcome = (props: Props) => {
-
-  console.log("starred=====",props.faqs)
   const starred =  props.faqs.filter(faq => faq.data.show_on_faq_home);
   return (
     <div>
@@ -24,8 +21,7 @@ export const Welcome = (props: Props) => {
           <FormattedMessage {...messages.header} />
         </Header.Content>
       </Header>
-      <FaqList faqs={starred} />
-      <FaqMenu categories={props.menu} />
+      <FaqList menu={props.menu} faqs={starred} />
       <Decoration />
     </div>
   )

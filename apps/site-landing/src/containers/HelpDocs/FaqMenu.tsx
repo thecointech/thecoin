@@ -8,7 +8,7 @@ type Props = {
   }
   
 function displayEntry(index: number, name: string, subentries: FAQDocument[] ){
-    return <li key={index}><Link to={"/faq/"+name.replace(/ /g, '-').replace('&', 'n').toLocaleLowerCase()}>{name}</Link>
+    return <li key={index}><Link to={"/faq/theme-"+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
                 <ul>
                     { 
                         subentries.map((entrySubentries) => ( 
