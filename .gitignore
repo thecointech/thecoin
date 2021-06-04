@@ -22,9 +22,12 @@
 **/semantic.css
 **/*secret*
 
-**/ts/.openapi-generator
-apis/nft/ts
-apis/ipfs/ts
+# Ignore all auto-generated API files
+# except for the package.json (these
+# files must be present on checkout so
+# they are linked into the yarn workspace)
+/apis/*/ts/*
+!/apis/*/ts/package.json
 
 libs/contract/.openzeppelin/unknown-1337.json
 libs/shared/src/containers/IDX/config.json
