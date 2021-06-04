@@ -7,8 +7,8 @@ export function IsValidAddress(address: string) {
 }
 
 // Valid ID's exclude IOUL.  Defined here (rather than
-// in broker-db) because it is used in site-app
-export function IsValidReferrerId(id: string) {
+// in broker-db) because this fn is is used in site-app
+export function IsValidShortCode(id: string) {
 	return /^[a-hj-km-np-tv-z0-9]{6}$/i.test(id)
 }
 

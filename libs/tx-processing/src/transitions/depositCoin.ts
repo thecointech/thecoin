@@ -1,4 +1,3 @@
-import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../statemachine/types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
@@ -29,10 +28,6 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
   const balance = await tc.balanceOf(from);
   if (balance.lte(fee + value))
     return { error: 'Insufficient funds'};
-
-  // Debugging (do we need this?)
-  const gasAmount = await tc.estimate.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
-  log.trace(`Tx ${from} -> ${to}: Gas Amount ${gasAmount.toString()}`);
 
   const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
   return (tx.hash)

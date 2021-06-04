@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@thecointech/utilities";
+import { IsValidShortCode } from "@thecointech/utilities";
 import { MessageDescriptor } from "react-intl";
 
 
@@ -78,7 +78,7 @@ const validateReferral = async (value: string) : Promise<State> => {
           isValid: false,
           message: messages.errorReferrerNumChars,
         }
-      : !IsValidReferrerId(value)
+      : !IsValidShortCode(value)
         ? {
             isValid: false,
             message: messages.errorReferrerInvalidCharacters,
