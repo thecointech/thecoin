@@ -40,7 +40,6 @@
     "@thecointech/broker-db": "*",
     "@thecointech/rbcapi": "*",
     "@thecointech/shared": "^0.2.4",
-    "@thecointech/tx-firestore": "^0.2.3",
     "@thecointech/tx-gmail": "^0.2.3",
     "@thecointech/utilities": "^0.2.3"
   },

@@ -51,7 +51,6 @@
       "@thecointech/tx-reconciliation/*":["../../../libs//tx-reconciliation/build/*"],
       "@thecointech/tx-gmail/*":   ["../../../libs/tx-gmail/build/*"],
       "@thecointech/tx-blockchain/*":["../../../libs/tx-blockchain/build/*"],
-      "@thecointech/tx-firestore/*":["../../../libs/tx-firestore/build/*"],
       "@thecointech/shared/*":     ["../../../libs/shared/build/*"],
       "@thecointech/email/*":      ["../../../libs/email/build/*"],
       "@thecointech/site-base/*":     ["../../../libs/site-base/build/*"],
