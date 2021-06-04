@@ -26,7 +26,7 @@ module.exports = {
       provider: () => {
         // Load config variables.  This mnemonic is not normally
         // included in our env files, ensure you define it
-        const numBuiltIn = AccountId.BrokerCAD + 1;
+        const numBuiltIn = AccountId.NFTMinter + 1;
         const testAccounts = loadAccounts(numBuiltIn);
         return new HDWalletProvider(
           testAccounts,
@@ -36,8 +36,6 @@ module.exports = {
         );
       },
       network_id: '*', // eslint-disable-line camelcase
-      gasPrice: 10000000009, // 10 GWei
-      gas: 1000000, // Lower gas limit to allow completing migration with lower-funded accounts
       skipDryRun: true
     },
     // TODO: we are stuck on ropsten till the price of gas comes down.

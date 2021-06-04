@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-firestore",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "private": true,
   "description": "The Coin: Re/store transactions in firestore DB ",
   "keywords": [
@@ -10,6 +10,7 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
+    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -24,8 +25,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1"
+    "@thecointech/logging": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3"
   },
   "devDependencies": {
     "jest": "*"

@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
-    "build": "run-p build:*",
+    "build:lib": "yarn build",
+    "build": "run-p build:src build:link",
     "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
     "clean": "run-p clean:*",
@@ -25,16 +26,14 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract",
-    "extract-intl": "yarn extract 'src/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "formatjs compile",
-    "format-intl": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.1",
-    "@thecointech/site-semantic-theme": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/shared": "^0.2.4",
+    "@thecointech/site-semantic-theme": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",

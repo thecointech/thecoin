@@ -105,7 +105,7 @@ export const Store = () => {
         <FormattedMessage {...explainDownload} />
       </div>
 
-      <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="medium">
+      <ButtonPrimary as={Link} to="/congratulations" disabled={(process.env.SETTINGS === 'testing') ? true: backedUp} size="medium">
         <FormattedMessage {...congratulation} />
       </ButtonPrimary>
       <Decoration />

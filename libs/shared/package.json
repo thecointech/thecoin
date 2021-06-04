@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/shared",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -17,7 +17,8 @@
   "scripts": {
     "test": "yarn jest",
     "clean": "rimraf ./build",
-    "build": "run-p build:*",
+    "build:lib": "yarn build",
+    "build": "run-p build:src build:copy build:link",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",
     "build:link": "node ../../tools/link-assets.mjs **/*.module.less"
@@ -31,6 +32,7 @@
     "./": "./build/"
   },
   "dependencies": {
+    "@3id/connect": "^0.1.4",
     "@ceramicnetwork/common": "^0.15.8",
     "@ceramicnetwork/http-client": "^0.9.5",
     "@ceramicstudio/idx": "^0.7.0",
@@ -39,12 +41,11 @@
     "@nivo/core": "^0.67.0",
     "@nivo/line": "^0.67.0",
     "@nivo/tooltip": "^0.67.0",
-    "@thecointech/3id-connect": "^0.2.0",
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/pricing": "^0.2.1",
-    "@thecointech/store": "^0.2.0",
-    "@thecointech/types": "^0.2.0",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/logging": "^0.2.2",
+    "@thecointech/pricing": "^0.2.4",
+    "@thecointech/store": "^0.2.2",
+    "@thecointech/types": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3",
     "axios": "*",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",

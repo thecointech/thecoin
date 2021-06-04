@@ -131,7 +131,7 @@ const models: TsoaRoute.Models = {
     "GoogleListResult": {
         "dataType": "refObject",
         "properties": {
-            "wallets": {"dataType":"array","array":{"ref":"GoogleFileIdent"},"required":true},
+            "wallets": {"dataType":"array","array":{"dataType":"refObject","ref":"GoogleFileIdent"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -166,7 +166,7 @@ const models: TsoaRoute.Models = {
     "GoogleGetResult": {
         "dataType": "refObject",
         "properties": {
-            "wallets": {"dataType":"array","array":{"ref":"GoogleWalletItem"},"required":true},
+            "wallets": {"dataType":"array","array":{"dataType":"refObject","ref":"GoogleWalletItem"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -182,7 +182,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.post('/api/v1/bills/payment',
-            function (request: any, response: any, next: any) {
+            function BillPaymentsController_billPayment(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"CertifiedTransfer"},
             };
@@ -204,7 +204,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/etransfer/eTransfer',
-            function (request: any, response: any, next: any) {
+            function ETransferController_eTransfer(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"CertifiedTransfer"},
             };
@@ -226,7 +226,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/etransfer/eTransfer/code',
-            function (request: any, response: any, next: any) {
+            function ETransferController_eTransferInCode(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"SignedMessage"},
             };
@@ -248,7 +248,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/newsletter/details',
-            function (request: any, response: any, next: any) {
+            function NewsletterController_newsletterDetails(request: any, response: any, next: any) {
             const args = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
             };
@@ -270,7 +270,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/newsletter/unsubscribe',
-            function (request: any, response: any, next: any) {
+            function NewsletterController_newsletterUnsubscribe(request: any, response: any, next: any) {
             const args = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
             };
@@ -292,7 +292,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/newsletter/update',
-            function (request: any, response: any, next: any) {
+            function NewsletterController_newsletterUpdate(request: any, response: any, next: any) {
             const args = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
                     details: {"in":"body","name":"details","required":true,"ref":"SubscriptionDetails"},
@@ -315,7 +315,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/newsletter/signup',
-            function (request: any, response: any, next: any) {
+            function NewsletterController_newsletterSignup(request: any, response: any, next: any) {
             const args = {
                     email: {"in":"query","name":"email","required":true,"dataType":"string"},
             };
@@ -337,7 +337,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/referrals',
-            function (request: any, response: any, next: any) {
+            function ReferralsController_referrerValid(request: any, response: any, next: any) {
             const args = {
                     referrerId: {"in":"query","name":"referrerId","required":true,"dataType":"string"},
             };
@@ -359,7 +359,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/referrals',
-            function (request: any, response: any, next: any) {
+            function ReferralsController_referralCreate(request: any, response: any, next: any) {
             const args = {
                     referral: {"in":"body","name":"referral","required":true,"ref":"NewAccountReferal"},
             };
@@ -381,7 +381,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/secure/google',
-            function (request: any, response: any, next: any) {
+            function SecureController_googleAuthUrl(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -402,7 +402,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/secure/google/list',
-            function (request: any, response: any, next: any) {
+            function SecureController_googleList(request: any, response: any, next: any) {
             const args = {
                     token: {"in":"body","name":"token","required":true,"ref":"GoogleToken"},
             };
@@ -424,7 +424,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/secure/google/put',
-            function (request: any, response: any, next: any) {
+            function SecureController_googlePut(request: any, response: any, next: any) {
             const args = {
                     account: {"in":"body","name":"account","required":true,"ref":"GoogleStoreAccount"},
             };
@@ -446,7 +446,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/secure/google/get',
-            function (request: any, response: any, next: any) {
+            function SecureController_googleRetrieve(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"GoogleToken"},
             };
@@ -468,7 +468,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/status',
-            function (request: any, response: any, next: any) {
+            function StatusController_status(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -489,7 +489,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/transfer',
-            function (request: any, response: any, next: any) {
+            function TransferController_transfer(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"body","name":"request","required":true,"ref":"CertifiedTransferRequest"},
             };
@@ -527,7 +527,7 @@ export function RegisterRoutes(app: express.Router) {
                 let headers;
                 if (isController(controllerObj)) {
                     headers = controllerObj.getHeaders();
-                    statusCode = controllerObj.getStatus();
+                    statusCode = controllerObj.getStatus() || statusCode;
                 }
 
                 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -540,6 +540,9 @@ export function RegisterRoutes(app: express.Router) {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     function returnHandler(response: any, statusCode?: number, data?: any, headers: any = {}) {
+        if (response.headersSent) {
+            return;
+        }
         Object.keys(headers).forEach((name: string) => {
             response.set(name, headers[name]);
         });
@@ -551,7 +554,7 @@ export function RegisterRoutes(app: express.Router) {
             response.status(statusCode || 204).end();
         }
     }
-    
+
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     function responder(response: any): TsoaResponse<HttpStatusCodeLiteral, unknown>  {
@@ -579,6 +582,14 @@ export function RegisterRoutes(app: express.Router) {
                     return validationService.ValidateParam(args[key], request.body, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"silently-remove-extras"});
                 case 'body-prop':
                     return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, 'body.', {"noImplicitAdditionalProperties":"silently-remove-extras"});
+                case 'formData':
+                    if (args[key].dataType === 'file') {
+                        return validationService.ValidateParam(args[key], request.file, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"silently-remove-extras"});
+                    } else if (args[key].dataType === 'array' && args[key].array.dataType === 'file') {
+                        return validationService.ValidateParam(args[key], request.files, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"silently-remove-extras"});
+                    } else {
+                        return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"silently-remove-extras"});
+                    }
                 case 'res':
                     return responder(response);
             }

@@ -2,7 +2,7 @@
   "name": "@thecointech/site-landing",
   "productName": "THECoin: Website - Landing",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
+    "build:app": "yarn build",
     "build": "yarn build:semantic && yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:semantic": "node ./internals/buildSemantic",
     "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build && cpx \"./src/.htaccess\" ./build",
@@ -38,10 +39,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract",
-    "extract-intl": "yarn extract 'src/**/!(*.test).ts*' --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "formatjs compile",
-    "format-intl": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -54,9 +53,9 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/shared": "^0.2.1",
-    "@thecointech/site-base": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/shared": "^0.2.4",
+    "@thecointech/site-base": "^0.2.4",
+    "@thecointech/utilities": "^0.2.3",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",

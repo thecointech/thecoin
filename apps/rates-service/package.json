@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "keywords": [
@@ -25,9 +25,10 @@
     "deploy": "run-s deploy:src deploy:cron",
     "deploy:src": "gcloud app deploy",
     "deploy:cron": "gcloud app deploy cron.yaml",
-    "build": "run-s build:api build:src",
+    "build": "run-s gen:swagger build:src",
+    "build:app": "yarn build:src",
     "build:src": "yarn tsc -b tsconfig.build.json",
-    "build:api": "yarn tsoa spec-and-routes",
+    "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -42,8 +43,8 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/logging": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",
     "cors": "^2.8.5",
