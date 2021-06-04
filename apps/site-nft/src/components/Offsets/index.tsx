@@ -4,8 +4,9 @@ import { defineMessages } from 'react-intl';
 import { List, Image, Popup } from 'semantic-ui-react';
 import { PageHeader } from '../PageHeader';
 import icon from './images/icon_topup_big.svg';
-import randomhex from 'randomhex';
 import styles from './styles.module.less'
+
+const randomhex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
 const messages = defineMessages({
   title: { defaultMessage: "NFT Offsets", description: "NFT Offsets listings page title" },

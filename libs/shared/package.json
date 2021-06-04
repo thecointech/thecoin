@@ -44,6 +44,7 @@
     "@thecointech/logging": "^0.2.2",
     "@thecointech/pricing": "^0.2.4",
     "@thecointech/store": "^0.2.2",
+    "@thecointech/site-semantic-theme": "*",
     "@thecointech/types": "^0.2.2",
     "@thecointech/utilities": "^0.2.3",
     "axios": "*",

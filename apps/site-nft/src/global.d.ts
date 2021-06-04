@@ -40,9 +40,5 @@ declare module '@toast-ui/react-image-editor' {
   export default function BaseImageEditor(props: Props): JSX.Element;
 }
 
-declare module 'randomhex' {
-  export default (len: number) => string;
-}
-
 type MaybeString = string | undefined;
 type MaybeNumber = number | undefined;
