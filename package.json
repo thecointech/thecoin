@@ -26,7 +26,7 @@
     "build:api:rates": "cd apis/rates/ts && yarn build",
     "build:api:broker": "cd apis/broker/ts && yarn build",
     "build:api:nft": "cd apis/nft/ts && yarn build",
-    "build:all": "run-s clean build:libs genapis build:apis build:apps",
+    "build:all": "run-s clean genapis build:libs build:apis build:apps",
     "build": "cross-env CONFIG_NAME=prod yarn build:all",
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "dev:live:ceramic": "yarn ceramic daemon",
