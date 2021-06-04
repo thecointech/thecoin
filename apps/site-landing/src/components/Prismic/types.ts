@@ -10,6 +10,7 @@ export type FAQResult = {
   question: RenderableType[]|null;
   answer: RenderableType[]|null;
   category: string;
+  fr_category: string;
   show_on_faq_home?: boolean;
 }
 

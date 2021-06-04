@@ -2,18 +2,16 @@ import React from "react";
 import { FAQDocument } from "components/Prismic/types";
 import { Renderer } from "./Renderer/Renderer";
 import { Link } from 'react-router-dom';
-import { RUrl } from "@thecointech/utilities/RUrl";
 
 type Props = {
-    faqs: FAQDocument[],
-    categories: Dictionary<FAQDocument[]>
+    categories: any
   }
   
-function displayEntry(index: number, name: string, subentries: any ){
+function displayEntry(index: number, name: string, subentries: FAQDocument[] ){
     return <li key={index}><Link to={"/faq/"+name.replace(/ /g, '-').replace('&', 'n').toLocaleLowerCase()}>{name}</Link>
                 <ul>
                     { 
-                        subentries.map((entrySubentries, indexSubentries) => ( 
+                        subentries.map((entrySubentries) => ( 
                             <li key={entrySubentries.id}>
                                 <Renderer r={entrySubentries.data.question} />
                             </li> ))
@@ -23,13 +21,13 @@ function displayEntry(index: number, name: string, subentries: any ){
 }
 
 
-export const FaqMenu = ({ faqs, categories }: Props) => {
+export const FaqMenu = ({ categories }: Props) => {
 
       
     return (
         <ul className={"x10spaceBefore x8spaceAfter"}>
             { Object.entries(categories)
-                .map((entry, index) => ( displayEntry(index, entry[0], entry[1] )
+                .map((entry, index) => ( displayEntry(index, entry[0], entry[1] as FAQDocument[] )
             ))}
         </ul>
     )

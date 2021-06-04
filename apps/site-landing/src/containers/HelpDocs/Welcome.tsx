@@ -6,11 +6,12 @@ import { FaqList } from "./FaqList";
 import { FaqMenu } from "./FaqMenu";
 import { Decoration } from "components/Decoration";
 import messages from "./messages";
+import { Dictionary } from "lodash";
 
 
 type Props = {
   faqs: FAQDocument[],
-  menu: []
+  menu: Dictionary<FAQDocument[]>
 }
 export const Welcome = (props: Props) => {
 
