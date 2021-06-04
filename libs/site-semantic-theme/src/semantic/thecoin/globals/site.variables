@@ -23,6 +23,7 @@
 @pageFont          : Montserrat, Verdana, sans-serif;
 
 @bold: 700;
+@semibold: 600;
 @light: 400;
 
 // Hosting our own fonts is faster and more reliable
@@ -136,8 +137,10 @@
 @theCoinPaletteGray1     : #6F6571;
 @theCoinPaletteGray2     : #F2F2F2;
 @theCoinPaletteGray3     : #767676;
+@theCoinPaletteGray4     : #6A6A6A;
 
 @theCoinPaletteGray1Faded10     : fade(@theCoinPaletteGray1, 10%);
+@theCoinPaletteGray1Faded30     : fade(@theCoinPaletteGray1, 30%);
 
 @theCoinPaletteGreenGradient1     : linear-gradient(359.64deg, @theCoinPaletteGreen4 35.26%, @theCoinPaletteGreen3 87.06%, @theCoinPaletteGreen4 109.26%);
 @theCoinPaletteGreenGradient2     : linear-gradient(0.38deg, @theCoinPaletteGreen3 21.77%, @theCoinPaletteGreen2 63.66%, @theCoinPaletteGreen4 109.03%);
@@ -275,9 +278,6 @@
 /*-------------------
     Borders
 --------------------*/
-
-@relativeBorderRadius: @relative10px;
-@absoluteBorderRadius: @10px;
 
 @borderColor         : @theCoinPalettePaleGreen2Faded50;
 @focusBorderColor    : @primaryColor1;

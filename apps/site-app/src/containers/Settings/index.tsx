@@ -6,6 +6,8 @@ import { useIntl } from 'react-intl';
 import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
 import { UserDetails } from './UserDetails';
+import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 
 const main = { id:"app.settings.tabs.main",
                 defaultMessage:"User Settings",
@@ -26,7 +28,9 @@ export const Settings = () => {
   ]
   return (
     <React.Fragment>
+      <ColumnRightTop />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter x2spaceBefore` } />
+      <ColumnRightBottom />
     </React.Fragment>
   );
 }

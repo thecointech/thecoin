@@ -1,0 +1,84 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.dateInTable{
+    width: 55px;
+    height: 55px;
+    .yearInTable{
+        margin-left: 5px;
+        float: left;
+        letter-spacing: -0.3em;
+        font-size: 10px;
+        margin-top: 4px;
+    }
+    .dayInTable{
+        margin-top: -4px;
+    }
+}
+.timeInTable{
+    color: @theCoinPaletteGray1;
+    font-size: 16px;
+    opacity: 0.6;
+}
+
+.moneyNegative{
+    color: @theCoinPaletteRed2;
+    font-size: @fontSizeBig;
+}
+.moneyPositive{
+    color: @theCoinPalettePaleGreen2;
+    font-size: @fontSizeBig;
+}
+
+.transactionLine{
+    border:1px solid @theCoinPalettePaleGreen2Faded30;
+    margin-top: 10px;
+    border-radius: @absoluteBorderRadius;
+    padding-top: 5px !important;
+    padding-bottom: 0 !important;
+}
+
+.balanceColumn, .changeColumn{
+    padding-left: 0 !important;
+}
+
+.imageColumn, .contentColumn{
+    padding: 0 !important;
+}
+
+.contentTextInTable{
+    color: @theCoinPaletteGray4;
+    font-size: @fontSize;
+}
+
+.toTextInTable{
+    line-height: 12px;
+    width: 80%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.commentLineForMobile{
+    width: 100%;
+    img{
+        margin-top: 5px;
+        margin-right: 5px;
+        float: left;
+    }
+    span{
+        width: 60%;
+    }
+}
+
+.dateLineForMobile{
+    .monthInTable{
+        text-decoration: uppercase;
+    }
+    .timeInTable{
+        margin-left: 10px;
+    }
+    .money{
+        float: right;
+    }
+}

@@ -6,6 +6,7 @@ import { Avatars } from '@thecointech/shared/components/Avatars';
 import { Grid } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
+import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 const accountName = { id:"app.settings.userDetails.name",
                 defaultMessage:"Account name",
@@ -35,7 +36,7 @@ export const UserDetails = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AccountVerified verified={false} />
+        <AvailableSoon><AccountVerified verified={false} /></AvailableSoon>
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...address}/></div>
         <div className={"font-big x4spaceAfter"}>
           {activeAccount?.address} <CopyToClipboard payload={activeAccount?.address!} />

@@ -10,7 +10,6 @@ import { createReferrer, getReferrersCollection } from '@thecointech/broker-db/r
 import { DateTime } from 'luxon';
 import { VerifiedReferrer } from '@thecointech/broker-db/referrals.types';
 
-
 interface OwnProps {
 	signer: TheSigner,
 }

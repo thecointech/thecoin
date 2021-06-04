@@ -1,14 +1,14 @@
 {
   "entryFile": "./src/main.ts",
   "noImplicitAdditionalProperties": "silently-remove-extras",
+  "controllerPathGlobs": [
+    "./src/controllers/**/*controller.ts"
+  ],
 
   "spec": {
     "basePath": "/api/v1",
     "specVersion": 2,
-    "outputDirectory": "./src/api",
-    "controllerPathGlobs": [
-      "./src/controllers/**/*controller.ts"
-    ]
+    "outputDirectory": "./src/api"
   },
   "routes": {
     "basePath": "/api/v1",
@@ -20,7 +20,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@thecointech/utilities/*":  ["../../libs/utils-ts/build/*"]
+      "@thecointech/utilities/*":  ["../../libs/utils-ts/src/*"]
     }
   }
 }

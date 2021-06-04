@@ -1,0 +1,10 @@
+# [START app_yaml]
+runtime: nodejs14
+instance_class: F1
+
+# include environment variables.
+includes:
+  - app.secrets.yaml
+
+# TODO: Require secure connection always
+# [END app_yaml]

@@ -1,24 +1,49 @@
 TheCoin is (currently) a series of micro-services connected together.
 
-## Prepare to deploy
+## System setup require prior to deployment
 
-Each deployment app (rates/broker/site) needs a GAE configuration.  In the appropriate environment file for each configuration.  See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
+Each deployment app (rates/broker/site/nft) needs a GAE configuration.  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
-Set the variables to the name of the config in the env file for the appropriate deployment.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
+There needs to be a configuration for every deployment target.  That means that there could be a configuration for each of app/site/service/nft, multiplied by prod / prodtesting.  In practive, a lot of projects use the same configuration (eg site-landing/site-app/brokerCAD).
+
+The configuration name to switch to when deploying an app should be set in the .env file.  This is how we send prodtest to `tc-nft-testing`, and prod to `tc-nft` using the same deploy command.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
 
 `GCLOUD_RATES_CONFIG=rates-testing`
 
-The websites (app/landing) also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
+In the deployment script for rates-service, there is a setup call to `SetGCloudConfig('GCLOUD_RATES_CONFIG')`, which in this example will set the current gcloud configuration to `rates-testing`.
+
+
+Because the app/landing websites are a pair, they are hosted under the same project.  This means these sites also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
+
+The NFT site does not have this connection because it is a stand-alone website.
+
+## Building
+
+All that is needed to build is to run `yarn build` in the root folder.  This will clean, generate files, and run the build command on each project.
+
+#### To Consider
+
+Currently, the build command on root behaves slightly differently than it would in the child packages.  On the root, it cleans/gens/builds.  In the packages, it just builds.  It would be nice if the packages were refactored to be consistent; `yarn build` anywhere runs `clean/gen/build` for that package.  We could rename our build commands for consistency: each package has `clean`, `build:generate`, and `build:src` command, and the build command just calls these.
+
+It is important that the root command call `clean` on all packages before running build: this is to ensure that no un-spec'ed dependencies exist between projects that may confuse things (eg - a package building that imports from a package that has not yet been re-built).
 
 ## How to deploy
 
 In the root folder, run `yarn deploy:<environment>`.  By default this will increment patch version in each package, and deploy to GitHub packages & GAE.
 
-[TODO] - use lerna to increment version.
+## Deployment steps.
 
+The deployment happens in 2 stages:
+
+First, the libraries are deployed.
+
+Next, the apps are deployed.
 ## Things to Deploy
 
 Apps deploy to GAE, libraries to github packages.
+
+Contracts:
+ - It is important that contracts are deployed first.  When a contract is deployed, it's address is written into a json file that is included with the code when deployed.
 
 Apps:
 
@@ -28,14 +53,23 @@ Apps:
  - site-app: Static App website.  Connects to broker & rates.
  - site-wallet: [TODO] Static website runs wallet code. Runs site-app in a sandboxed iframe.
 
+ - nft-service: Simple service handles claiming/updating NFT's
+ - site-nft: Website to match
+
 Libraries:
  - There are a dozen libraries that need deploying
 
-## Configuration
+## .npmrc
 
--All- configuration information is stored in env files under <root>/environments/<name>.  Each environment
-file holds all data needed to run the system.
+The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
 
-To select which config to use, we set the environment variable CONFIG_NAME.  This triggers loading the appropriate configuration, and ensures that the deployment goes to the correct app engine etc.
+These files are then ignored, so we do not have any files committed into Git that could at any point have our secrets exposed.
+## Environment Vars
 
-The script <root>/tools/predeploy.ts contains some useful actions that are used to deploy to GAE.
+-All- configuration information is stored in env files. The location of the .env files is under a folder specified in the environment variable THECOIN_ENVIRONMENTS.  We also store example (spec) .env files under the folder `<root>/environments`.  When loading a .env file, we first query the external location, then the git folder for the file.  It should (may) be possible to do some actions (eg - build and test vs published data) by loading the git folder, but for publishing the engineer will need to fill in all the approriate keys etc.
+
+To select which config to use, we set the environment variable CONFIG_NAME.  Each build step (webpack, deploy etc) calls `tools/setenv.js` to load the appropriate config from this variable, and ensures that the deployment goes to the correct app engine etc.
+
+The script `<root>/tools/predeploy.ts` contains some useful actions that are used to deploy to GAE.
+
+For GAE deploys, there is also a build step called `copyEnvVarsLocal` that copies the contents of the active `.env` file local to the deploy (while stripping wallet keys for safeties sake).

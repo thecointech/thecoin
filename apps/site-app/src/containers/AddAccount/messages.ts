@@ -22,7 +22,7 @@ export default defineMessages({
   },
   buttonCreate: {
     id: `${scope}.buttonCreate`,
-    defaultMessage: 'CREATE ACCOUNT',
+    defaultMessage: 'Create Account',
   },
 
   errorNameTooShort: {

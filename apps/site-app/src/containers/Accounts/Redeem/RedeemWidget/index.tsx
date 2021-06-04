@@ -8,6 +8,7 @@ import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 import { AccountState } from '@thecointech/shared/containers/Account';
 import { UxInput } from '@thecointech/shared/components/UxInput';
+import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
 type VisualProps={
 
@@ -19,22 +20,22 @@ type VisualProps={
     coinToSell: number | null,
     description:MessageDescriptor,
     onValueChange: (value: number) => void,
-    account: AccountState | null,
+    account: AccountState | undefined,
     rate: number,
 
     emailLabel: MessageDescriptor,
-    setEmail: (event: string) => void,
+    setEmail: (value: string) => void,
     emailDes: string,
 
     questionLabel: MessageDescriptor,
-    setQuestion: (event: string) => void,
+    setQuestion: (value: string) => void,
     noSpecialCaractDesc: string,
 
     answerLabel: MessageDescriptor,
-    setAnswer: (event: string) => void,
+    setAnswer: (value: string) => void,
 
     messageLabel: MessageDescriptor,
-    setMessage: (event: string) => void,
+    setMessage: (value: string) => void,
     messageDesc: string,
 
     button: MessageDescriptor,
@@ -46,8 +47,12 @@ type VisualProps={
     transferMessage: MessageDescriptor | undefined,
     percentComplete: number,
     transferValues: string,
+
+    isValid: boolean,
+    forceValidate: boolean,
+    validationMessage?: ValuedMessageDesc
 };
-  
+
 
 export const RedeemWidget = (props: VisualProps) => {
   return (
@@ -86,35 +91,34 @@ export const RedeemWidget = (props: VisualProps) => {
             className={"borderTop borderBottom"}
             intlLabel={props.emailLabel}
             uxChange={props.setEmail}
-            //isValid={isValid}
-            //forceValidate={forceValidate}
-            //message={validationMessage}
             placeholder={props.emailDes}
             name="email"
           />
-        <Form.Input
-          className={"half left"}
-          label={<FormattedMessage {...props.questionLabel} />}
-          name="question"
-          onChange={event => props.setQuestion(event.target.value)}
-          placeholder={props.noSpecialCaractDesc}
-        />
-        <Form.Input
-          className={"half right"}
-          label={<FormattedMessage {...props.answerLabel} />}
-          name="answer"
-          onChange={event => props.setAnswer(event.target.value)}
-          placeholder={props.noSpecialCaractDesc}
-        />
-        <Form.Input
-          className={"borderTop"}
-          label={<FormattedMessage {...props.messageLabel} />}
-          name="message"
-          type="text"
-          onChange={event => props.setMessage(event.target.value)}
-          placeholder={props.messageDesc}
-        />
-        <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit}><FormattedMessage {...props.button} /></ButtonTertiary>
+        <UxInput
+            className={"half left"}
+            intlLabel={props.questionLabel}
+            uxChange={props.setQuestion}
+            placeholder={props.noSpecialCaractDesc}
+            name="question"
+          />
+        <UxInput
+            className={"half right"}
+            intlLabel={props.answerLabel}
+            uxChange={props.setAnswer}
+            placeholder={props.noSpecialCaractDesc}
+            name="answer"
+          />
+        <UxInput
+            className={"borderTop"}
+            intlLabel={props.messageLabel}
+            uxChange={props.setMessage}
+            placeholder={props.messageDesc}
+            name="message"
+            type="text"
+          />
+        <ButtonTertiary className={"x4spaceBefore x2spaceAfter"} onClick={props.onSubmit} >
+          <FormattedMessage {...props.button} />
+          </ButtonTertiary>
       </Form>
       <ModalOperation
         cancelCallback={props.cancelCallback}

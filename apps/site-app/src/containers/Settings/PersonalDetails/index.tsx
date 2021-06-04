@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useAccountApi } from '@thecointech/shared/containers/Account';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
-import { UxPhone } from '@thecointech/shared/components/MaskedInputs/UxPhone';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
+import { UxInput } from '@thecointech/shared/components/UxInput';
+import { useAccountApi } from '@thecointech/shared/containers/Account';
 
 const title = {
   id: "app.settings.personaldetails.title",
@@ -77,10 +77,10 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onDetailsChange = (value: string, name?: string) => {
     setDetails({
       ...details,
-      [event.target.name]: event.target.value,
+      [name as string]: value,
     });
   }
 
@@ -93,7 +93,7 @@ export const PersonalDetails = () => {
     setPhoneEdit(false);
     accountApi.setDetails({...details});
   }
-  
+
   return (
     <div>
       <Header as="h5" className={`appTitles`}>
@@ -101,84 +101,89 @@ export const PersonalDetails = () => {
       </Header>
       <Form id={styles.personalInfo}>
 
-        <Form.Input
-          className={"half left"}
-          label={<div>
-                    <FormattedMessage {...name} />
-                    <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
-                    </span>
-                </div>}
-          value={details.given_name}
-          onChange={onDetailsChange}
-          details={details}
-          name="given_name" readOnly={!givenNameEdit} />
+        <UxInput
+            className={"half left"}
+            intlLabel={<div>
+                        <FormattedMessage {...name} />
+                        <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
+                          <Icon name={"edit"} /><FormattedMessage {...edit} />
+                        </span>
+                    </div>}
+            uxChange={(value: string) => onDetailsChange(value,"given_name")}
+            details={details}
+            value={details.given_name}
+            name="given_name" 
+            readOnly={!givenNameEdit}
+          />
 
-
-        <Form.Input
+        <UxInput
           className={"half right"}
-          label={<div>
+          intlLabel={<div>
                     <FormattedMessage {...familyname} />
                     <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                 </div>}
           value={details.family_name}
-          onChange={onDetailsChange}
+          uxChange={(value: string) => onDetailsChange(value,"family_name" )}
           details={details}
-          name="family_name" readOnly={!familyNameEdit} />
+          name="family_name" 
+          readOnly={!familyNameEdit} />
 
         <UxDate
           className={"half left"}
+          value={details.DOB}
           label={<div>
                     <FormattedMessage {...dob} />
                     <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={onDetailsChange}
+          uxChange={(value: string) => onDetailsChange(value,"DOB")}
           details={details}
-          value={details.DOB}
+          defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
 
-        <Form.Input
+        <UxInput
           className={"borderTop borderBottom"}
-          label={<div>
+          intlLabel={<div>
                     <FormattedMessage {...address} />
                     <span onClick={()=>setAddressEdit(!addressEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...edit} />
                     </span>
                   </div>}
-          onChange={onDetailsChange}
+          uxChange={(value: string) => onDetailsChange(value,"address")}
           details={details}
           value={details.address}
           name="address" readOnly={!addressEdit} />
 
-        <Form.Input
+        <UxInput
             className={"half left"}
             details={details}
             value={details.email}
-            onChange={onDetailsChange}
-            label={<div>
+            uxChange={(value: string) => onDetailsChange(value,"email")}
+            intlLabel={<div>
                 <FormattedMessage {...email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
                 </span>
               </div>} 
-            name="email" readOnly={!emailEdit} />
+            name="email" 
+            readOnly={!emailEdit} />
           
-        <UxPhone 
+        <UxInput 
             className={"half right"}
             details={details}
             value={details.phone}
-            onChange={onDetailsChange}
-            label={<div>
+            uxChange={(value: string) => onDetailsChange(value,"phone")}
+            intlLabel={<div>
                 <FormattedMessage {...phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...edit} />
                 </span>
               </div>} 
-            name="phone" readOnly={!phoneEdit} />
+            name="phone" 
+            readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>
           <FormattedMessage {...titleCurrency} />

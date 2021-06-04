@@ -36,8 +36,6 @@ module.exports = {
         );
       },
       network_id: '*', // eslint-disable-line camelcase
-      gasPrice: 10000000009, // 10 GWei
-      gas: 1000000, // Lower gas limit to allow completing migration with lower-funded accounts
       skipDryRun: true
     },
     // TODO: we are stuck on ropsten till the price of gas comes down.
@@ -57,7 +55,7 @@ module.exports = {
           enabled: true,
           runs: 200
         },
-        evmVersion: "byzantium"
+        evmVersion: "constantinople"
       }
     }
   }

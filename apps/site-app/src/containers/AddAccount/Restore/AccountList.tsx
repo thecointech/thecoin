@@ -46,7 +46,7 @@ export const AccountList = ({ wallets }: Props) => {
     var {name, wallet, exists} = loadable;
     if (exists) {
       accountsApi.setActiveAccount(wallet.address);
-      history.push("/accounts")
+      history.push("/")
     }
     else {
       accountsApi.addAccount(name, wallet);

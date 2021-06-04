@@ -39,7 +39,7 @@ const button = { id:"shared.login.button",
 const textAtTheBottom = { id:"shared.login.textAtTheBottom",
                           defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
                           description:"Text at the bottom for the login page before the account name"};
-const placeholderPassword = { id: 'shared.login.placeholder.wallet', 
+const placeholderPassword = { id: 'shared.login.placeholder.wallet',
                               defaultMessage:'Wallet Password',
                               description:"PLaceholder for the Passford field in the create account form"};
 
@@ -68,7 +68,7 @@ export const Login = (props: Props) => {
 
   const intl = useIntl();
   const placeholderPasswordTranslated = intl.formatMessage(placeholderPassword);
- 
+
   /////////////////////////////////
   const onPasswordChange = useCallback((value: string) => {
     setPassword(value);

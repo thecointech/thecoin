@@ -1,15 +1,17 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-require('../../../../tools/setenv')
+const { getEnvFile } = require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
+const { transform } = require('@formatjs/ts-transformer');
 
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
+const dotenv = require('dotenv').config({path: getEnvFile()});
 
 module.exports = options => ({
   mode: options.mode,
@@ -42,6 +44,15 @@ module.exports = options => ({
             experimentalWatchApi: true,
             projectReferences: true,
             compilerOptions: options.tsCompilerOptions,
+            // Include the custom transformer to automate compiling out i18n messages
+            getCustomTransformers: () => ({
+              before: [
+                transform({
+                  overrideIdFn: '[sha512:contenthash:base64:6]',
+                  ast: true,
+                }),
+              ],
+            }),
           },
         },
       },
@@ -128,25 +139,7 @@ module.exports = options => ({
     ],
   },
   plugins: options.plugins.concat([
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
-    // inside your code for any environment checks; Terser will automatically
-    // drop any unreachable code.
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: process.env.NODE_ENV,
-      SETTINGS: process.env.SETTINGS,
-      CONFIG_NAME: process.env.CONFIG_NAME,
-
-      INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
-
-      URL_SITE_APP: process.env.URL_SITE_APP,
-      URL_SITE_LANDING: process.env.URL_SITE_LANDING,
-      URL_SERVICE_BROKER: process.env.URL_SERVICE_BROKER,
-      URL_SERVICE_RATES: process.env.URL_SERVICE_RATES,
-
-      // convenience defines
-      DEPLOY_NETWORK: process.env.DEPLOY_NETWORK,
-      DEPLOY_NETWORK_PORT: process.env.DEPLOY_NETWORK_PORT,
-    }),
+    new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new ForkTsCheckerWebpackPlugin({
       tsconfig: configFile,
       checkSyntacticErrors: true

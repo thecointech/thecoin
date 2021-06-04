@@ -1,0 +1,23 @@
+{
+  "entryFile": "./src/main.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["./src/controllers/**/*controller.ts"],
+  "spec": {
+    "basePath": "/api/v1",
+    "specVersion": 2,
+    "outputDirectory": "./src/api"
+  },
+  "routes": {
+    "basePath": "/api/v1",
+    "routesDir": "./src/routes",
+    "middleware": "express"
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@thecointech/nft-contract":  ["../../libs/nft-contract/src"]
+    }
+  }
+}

@@ -1,7 +1,8 @@
-import { getEnvFile } from "../tools/setenv";
+import { getEnvFile } from "./setenv";
 import { exec } from "child_process";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";
+import { join } from 'path';
 
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
 
@@ -36,14 +37,31 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
   const contents = readFileSync(envFile, 'utf8');
   const yamlVars = contents.split('\n')
     .filter(line => !line.startsWith('#'))
-    .filter(line => !line.startsWith('WALLET_'))
+    .filter(line => !(line.startsWith('WALLET_') && !line.includes('_ADDRESS')))
     .filter(line => !line.startsWith('CERAMIC_'))
+    .filter(line => !line.startsWith('GITHUB_'))
     .filter(line => !/^\s*$/.test(line))
-    .map(line => line.split('=').join(': '))
+    .map(line => {
+      const [key, val] = line.split('=')
+      const sval = JSON.stringify(val);
+      return [key, sval].join(': ');
+    })
     .join('\n  ')
     .trim();
   const asYaml = `env_variables:\n  ${yamlVars}`;
   writeFileSync(outYamlFile, asYaml);
+  return "Copied Env Files"
+}
+
+export async function copyNpmTokenHere(folder: string) {
+  // First, check we actually have a token
+  const token = process.env.GITHUB_PACKAGE_TOKEN;
+  if (!token) throw new Error('Cannot deploy without GH access token');
+
+  const noToken = readFileSync(join(__dirname, '.npmrc'), 'utf8');
+  const withToken = noToken.replace('<tokenhere>', token);
+  writeFileSync(join(folder, '.npmrc'), withToken);
+  return "NPM token copied here";
 }
 
 function ShellCmd(cmd: string) {

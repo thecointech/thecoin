@@ -54,7 +54,7 @@ export function WeDoMoreGreaterThanMobile() {
       <div className={styles.wrapper} id={styles.wedomore}>
         <Header as="h2" className={ `x10spaceBefore`}>
             <FormattedMessage {...title} />
-            <Header.Subheader>
+            <Header.Subheader className={`x5spaceBefore`}>
               <Grid centered stackable>
                 <Grid.Row>
                   <Grid.Column textAlign='right' width={2}>

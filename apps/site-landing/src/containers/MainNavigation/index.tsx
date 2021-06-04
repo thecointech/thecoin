@@ -3,7 +3,7 @@ import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/com
 import { MainNavigationMobile } from './MainNavigationMobile';
 import { MainNavigationGreaterThanMobile } from './MainNavigationGreaterThanMobile';
 
-export const MainNavigation = () => (
+export const MainNavigation = () =>
   <>
     <GreaterThanMobileSegment>
       <MainNavigationGreaterThanMobile />
@@ -13,4 +13,3 @@ export const MainNavigation = () => (
       <MainNavigationMobile />
     </MobileSegment>
   </>
-);

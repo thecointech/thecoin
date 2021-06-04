@@ -3,8 +3,14 @@ import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
 import { IsValidShortCode } from "@thecointech/utilities";
-import { MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
+const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
+                        defaultMessage:"6 letters or numbers",
+                        description:"Tooltip for the referral input"};
+const error = { id:"app.addaccount.newbaseclass.referralinput.error",
+                        defaultMessage:"Registering this account failed. Please contact support@thecoin.io6 letters or numbers",
+                        description:"Error for the referral input"};
 
 type Props = {
   disabled?: boolean,
@@ -22,6 +28,7 @@ type State = typeof initialState;
 
 export const ReferralInput = (props: Props) => {
 
+  const intl = useIntl();
   const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
 
@@ -40,7 +47,7 @@ export const ReferralInput = (props: Props) => {
       intlLabel={messages.labelReferrer}
       isValid={state.isValid}
       message={state.message}
-      placeholder="6 letters or numbers"
+      placeholder={intl.formatMessage(placeholder)}
       {...rest}
     />
   );
@@ -55,9 +62,7 @@ export const registerReferral = async (address: string, code: string) => {
   });
 
   if (!isRegistered.data?.success) {
-    alert(
-      'Registering this account failed. Please contact support@thecoin.io',
-    );
+    alert(<FormattedMessage {...error} />);
     return false;
   }
   return true;

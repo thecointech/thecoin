@@ -19,8 +19,8 @@ type MyProps = {
   disabled?: boolean;
   toggle?: boolean;
 }
-
-export const StoreGoogle = (props: MyProps) => {
+ 
+export const StoreGoogle : React.FC<MyProps> = (props) => {
 
   const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
   const [state, setState] = useState(UploadState.Waiting);
@@ -107,9 +107,11 @@ export const StoreGoogle = (props: MyProps) => {
     ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} />
     : <ButtonSecondary onClick={onConnectClick} disabled={disabled} loading={loading}><FormattedMessage {...message } /></ButtonSecondary>;
 
+  const linkConnect = props.children ? <a onClick={onConnectClick}>{props.children}</a> : undefined;
+
   return (
     <div>
-      {connectVia}
+      {linkConnect ?? connectVia}
     </div>
   );
 }
