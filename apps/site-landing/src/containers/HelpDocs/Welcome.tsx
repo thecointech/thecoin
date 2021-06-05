@@ -3,7 +3,6 @@ import { FAQDocument } from "components/Prismic/types";
 import { Header } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { FaqList } from "./FaqList";
-import { Decoration } from "components/Decoration";
 import messages from "./messages";
 import { Dictionary } from "lodash";
 
@@ -22,7 +21,6 @@ export const Welcome = (props: Props) => {
         </Header.Content>
       </Header>
       <FaqList menu={props.menu} faqs={starred} />
-      <Decoration />
     </div>
   )
 }

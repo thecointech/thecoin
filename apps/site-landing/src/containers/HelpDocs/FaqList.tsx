@@ -7,6 +7,7 @@ import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/se
 import styles from "./styles.module.less";
 import { FaqMenu } from "./FaqMenu";
 import { Dictionary } from "lodash";
+import { Decoration } from "components/Decoration";
 
 type Props = {
   title?: string,
@@ -19,8 +20,8 @@ export const FaqList = ({ title, faqs, menu }: Props) => {
   console.log("FaqList----", title, faqs)
   return (
     <>
-    <FaqMenu categories={menu} />
     <div className={styles.containerFaq}>
+      <FaqMenu categories={menu} />
       <Header as="h2" className={"x10spaceBefore"}>
         <Header.Content>
           {title ? ((title.split("-"))[1]) : ""}
@@ -28,6 +29,7 @@ export const FaqList = ({ title, faqs, menu }: Props) => {
       </Header>
       {faqs.filter(faq => locale === ((faq.lang!).split("-"))[0]).map(faq => (<FaqItem key={faq.id} {...faq} />))}
     </div>
+    <Decoration />
     </>
   )
 }
