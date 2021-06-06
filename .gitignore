@@ -20,6 +20,9 @@
 **/*secret*
 **/.firebase/hosting.*.cache
 
+# ignore the IPFS instance we spin up in dev:live
+/ipfs/
+
 # Ignore all auto-generated API files
 # except for the package.json (these
 # files must be present on checkout so
@@ -45,5 +48,4 @@ libs/shared/src/containers/IDX/config.devlive.json
 
 apps/site-nft/src/translations
 apps/site-nft/lang
-
 

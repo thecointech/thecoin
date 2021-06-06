@@ -11,7 +11,7 @@ export const GAuth = () => {
   useEffect(() => {
     const code = getUrlParameterByName('code');
     if (code) {
-      const opener: IWindow = window.opener;
+      const opener = window.opener as IWindow;
       if (opener && opener.completeGauthLogin) {
 				opener.completeGauthLogin(code);
         setMessage(messages.tokenSuccess);
