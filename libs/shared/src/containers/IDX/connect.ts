@@ -1,8 +1,7 @@
 import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 import { Signer } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
-import { fromString, toString } from 'uint8arrays'
-import type { DIDProvider } from 'dids'
+import { fromString, toString } from 'uint8arrays';
 
 class EthereumProvider extends EventEmitter {
   signer: Signer
@@ -39,10 +38,10 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(signer: Signer): Promise<DIDProvider> {
+export async function get3idConnect(signer: Signer) {
   const address = await signer.getAddress();
   const ethProvider = new EthereumProvider(signer);
   // TODO: how do we connect to multiple accounts at the same time?!?
   await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
-  return globalThis.__threeID.getDidProvider()
+  return globalThis.__threeID;
 }
