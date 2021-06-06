@@ -5,11 +5,6 @@
  * code.
  */
 
-if (window.location.pathname === "/accounts/gauth") {
-  const newUrl = `/#${window.location.pathname}${window.location.search}`;
-  window.location.replace(newUrl);
-}
-
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 
@@ -26,9 +21,8 @@ import { App } from 'containers/App';
 // Import Language Provider
 import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
-// Load the favicon and the .htaccess file
+// Load the favicon
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
-import 'file-loader?name=.htaccess!./.htaccess';
 
 import {configureLandingStore, history } from './reducers';
 

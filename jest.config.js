@@ -33,6 +33,5 @@ module.exports = {
   // local setup initializes logging etc
   setupFiles: [
     path.join(__dirname, 'tools', 'jestTestSetup.js'),
-    //   './mocks/localStorage.js'
   ]
 };

@@ -1,14 +1,14 @@
 {
-  "name": "@thecointech/broker-cad",
-  "version": "0.2.3",
-  "description": "OpenAPI client for @thecointech/broker-cad",
+  "name": "@thecointech/nft",
+  "version": "0.2.5",
+  "description": "OpenAPI client for @thecointech/nft",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
     "axios",
     "typescript",
     "openapi-client",
     "openapi-generator",
-    "@thecointech/broker-cad"
+    "@thecointech/nft"
   ],
   "license": "Unlicense",
   "main": "./dist/index.js",

@@ -14,5 +14,10 @@
   },
   "ignore": [
     "**/node_modules/**"
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@thecointech/nft-contract":  ["../../libs/nft-contract/src"]
+    }
+  }
 }
