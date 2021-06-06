@@ -209,7 +209,6 @@ export const Redeem = () => {
 
         answerLabel={answerLabel}
         setAnswer={(value: string) => setAnswer(value)}
-
         messageLabel={messageLabel}
         setMessage={(value: string) => setMessage(value)}
         messageDesc={intl.formatMessage(messageDesc)}
