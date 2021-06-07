@@ -1,6 +1,6 @@
 import { utils, Signer } from 'ethers';
 import bs58 from 'bs58';
-import { signMessage } from './sign';
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 const remove0x = (s: string) => s.match(/^(?:0x)?(.+)$/i)?.[1] ?? s;
 const getClaimTokenHash = (tokenId: number) => (
@@ -14,7 +14,7 @@ const getClaimTokenHash = (tokenId: number) => (
 // to transfer a previously-minted but not-yet-owned token from the minter to any address
 export async function getTokenClaimCode(tokenId: number, authority: Signer) {
   const hash = getClaimTokenHash(tokenId);
-  const signed = await signMessage(hash, authority);
+  const signed = await sign(hash, authority);
   // Remove the leading 0x
   const trimmed = remove0x(signed);
   // We encode the signature to base58, simply to
