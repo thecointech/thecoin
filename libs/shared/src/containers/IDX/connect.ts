@@ -38,10 +38,14 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function get3idConnect(signer: Signer) {
+export async function createAuthProvider(signer: Signer) {
   const address = await signer.getAddress();
   const ethProvider = new EthereumProvider(signer);
-  // TODO: how do we connect to multiple accounts at the same time?!?
-  await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
-  return globalThis.__threeID;
+  return new EthereumAuthProvider(ethProvider, address);
+}
+
+export async function get3idConnect(authProvider: EthereumAuthProvider) {
+    // TODO: how do we connect to multiple accounts at the same time?!?
+    await globalThis.__threeID.connect(authProvider)
+    return globalThis.__threeID;
 }
