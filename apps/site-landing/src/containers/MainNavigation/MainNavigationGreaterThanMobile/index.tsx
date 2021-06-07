@@ -21,6 +21,9 @@ const wedomore = {  id:"site.MainNavigation.wedomore",
 const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
+const faq = {  id:"site.MainNavigation.faq",
+                    defaultMessage:"FAQ",
+                    description:"Title for the FAQ entry in the menu"};
 
 // TODO: Fix Login button
 export const MainNavigationGreaterThanMobile = () => {
@@ -44,6 +47,9 @@ export const MainNavigationGreaterThanMobile = () => {
                 </HeaderLink>
                 <HeaderLink to="/compare">
                   <FormattedMessage {...yourbenefits} />
+                </HeaderLink>
+                <HeaderLink to="/faq/theme-0">
+                  <FormattedMessage {...faq} />
                 </HeaderLink>
                 <Menu.Menu position='right'>
                   <Menu.Item>
