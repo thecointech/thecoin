@@ -42,7 +42,7 @@ async function referClient2(code: string) {
   const clientAddress = await client2.getAddress();
   // Client2 created 1 year ago
   const ts = DateTime.now().minus({years: 1});
-  await createReferree(clientAddress, code, ts)
+  await createReferree(code, clientAddress, ts)
   console.log(`Referred with: ${code} acc ${clientAddress}`);
 }
 
