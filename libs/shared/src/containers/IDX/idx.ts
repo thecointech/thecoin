@@ -2,10 +2,10 @@ import type { CeramicApi } from '@ceramicnetwork/common'
 import { IDX } from '@ceramicstudio/idx'
 import { Signer } from 'ethers';
 import { Ceramic } from './ceramic';
-import { get3idConnect } from './connect';
+import { createAuthProvider } from './connect';
 import { log } from '@thecointech/logging';
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
-import { DID } from 'dids'
+import { authenticateDID } from './did';
+
 
 type Aliases = {
   details: string
@@ -24,15 +24,11 @@ async function createIDX(ceramic: CeramicApi) {
 export const connectIDX = async (signer: Signer) => {
   try {
     log.trace("Initiating connection to IDX...");
-    const threeIdConnect = await get3idConnect(signer);
-    const ceramic = Ceramic()
+    const authProvider = await createAuthProvider(signer);
 
-    // Authenticate did
-    const did = new DID({
-      provider: threeIdConnect.getDidProvider(),
-      resolver: ThreeIdResolver.getResolver(ceramic)
-    })
-    await did.authenticate()
+    // Auth to ceramic
+    const ceramic = Ceramic();
+    await authenticateDID(authProvider, ceramic);
 
     // Create IDX
     const idx = await createIDX(ceramic);
@@ -45,5 +41,3 @@ export const connectIDX = async (signer: Signer) => {
   }
   return null;
 }
-
-export const getDID = () => Ceramic().did!;
