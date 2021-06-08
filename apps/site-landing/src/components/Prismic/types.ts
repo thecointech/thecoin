@@ -7,19 +7,29 @@ export type RenderableType = {
 }
 
 export type FAQResult = {
-  question: RenderableType[]|null;
-  answer: RenderableType[]|null;
+  question: RenderableType[];
+  answer: RenderableType[];
   category: string;
   fr_category: string;
   show_on_faq_home?: boolean;
 }
 
+export type ImageObj = {
+  alt: string
+  copyright: string
+  dimensions: { width: number, height: number }
+  ​​​​​url: string
+}
+
 export type ArticleResult = {
+  thumbnail: ImageObj|null
+  image_before_title: ImageObj|null,
   title: RenderableType[]|null;
   questions: RenderableType[]|null;
-  answers: RenderableType[]|null;
   content: RenderableType[]|null;
   author: RenderableType[]|null;
+  categories: [],
+  fr_categories: []
 }
 export type FAQDocument = 
   Omit<Document, "data"> & 
@@ -40,5 +50,5 @@ export const initialState = {
 export type PrismicState = typeof initialState;
 
 export interface IActions {
-  fetchFaqs() : Iterator<any>;
+  fetchAllDocs() : Iterator<any>;
 }

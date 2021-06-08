@@ -18,7 +18,7 @@ const Client = Prismic.client(apiEndpoint, { accessToken });
 export class PrismicReducer extends TheCoinReducer<PrismicState> implements IActions
 {
 
-  *fetchFaqs(): Generator<any> {
+  *fetchAllDocs(): Generator<any> {
 
     // Only fetch FAQ's once
     if (this.state.faqs.length !== 0) {
@@ -29,7 +29,8 @@ export class PrismicReducer extends TheCoinReducer<PrismicState> implements IAct
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
         //'', //Prismic.Predicates.at('document.type', 'faq'),
-        Prismic.Predicates.at('document.type', 'faq'),
+        //Prismic.Predicates.at('document.type', 'faq'),
+        '',
         { lang : '*' }
       )
       if (response) {
@@ -59,7 +60,7 @@ function createRootEntitySelector<T>(rootKey: keyof ApplicationRootState, initia
 const rootSelector = createRootEntitySelector("documents", initialState);
 
 function* rootSaga() {
-  yield takeLatest(actions.fetchFaqs.type, buildSaga<PrismicReducer>(PrismicReducer, rootSelector, "fetchFaqs"));
+  yield takeLatest(actions.fetchAllDocs.type, buildSaga<PrismicReducer>(PrismicReducer, rootSelector, "fetchAllDocs"));
 }
 
 export const usePrismic = () => {
