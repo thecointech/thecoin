@@ -10,7 +10,7 @@ export const ClientTransaction = (props: ReconciledRecord) => {
   // Create default values
   // TODO: move data creation into tx-reconciliation
   const fiatDisbursed = action.history.find(h => h.fiat);
-  const [_init, refunded] = action.history.filter(h => h.hash)
+  const [/*init*/, refunded] = action.history.filter(h => h.hash)
   return (
   <List.Item key={action.data.initialId}>
     <TransactionIcon {...props} />

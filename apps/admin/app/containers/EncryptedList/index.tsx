@@ -12,7 +12,7 @@ type Props<Type extends ActionType> = {
 
 export const EncryptedList = <Type extends ActionType>({render, type}: Props<Type>) => {
   const [privateKey, setPrivateKey] = useState("");
-  const [records, _setRecords] = useState<TypedActionContainer<Type>[]>([]);
+  const [records, /*_setRecords*/] = useState<TypedActionContainer<Type>[]>([]);
   const [completeIndex, setCompleteIndex] = useState(-1);
 
   ////////////////////////////////////////////////////////
