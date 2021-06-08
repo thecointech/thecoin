@@ -103,7 +103,7 @@ export async function createAction<Type extends ActionType>(address: string, typ
   // chance a new action can be registered without it's matching incomplete ref
   await getFirestore().batch()
     .set(doc, data)
-    .set(incompleteRef, { ref: doc })
+    .set(incompleteRef, { ref: doc as any })
     .commit();
 
   return {
@@ -121,7 +121,7 @@ const toAction = async <Type extends ActionType>(address: string, type: Type, sn
   address,
   doc: snapshot.ref,
   data: snapshot.data()!,
-  history: await getActionHistory(snapshot.ref),
+  history: await getActionHistory(snapshot.ref as any),
   type,
 })
 

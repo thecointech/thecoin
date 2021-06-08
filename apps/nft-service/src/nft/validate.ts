@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { verifyMessage } from 'ethers/utils';
+import { utils } from 'ethers';
 import { getContract } from './contract';
 import imageType from 'image-type';
 import { MetadataJson } from '@thecointech/nft-contract';
@@ -9,7 +9,7 @@ const MAX_JSON_LENGTH = 4086
 
 export async function validateImage(buffer: Buffer, signature: string) {
   // First, lets check the signature of this upload
-  const address = verifyMessage(buffer, signature);
+  const address = utils.verifyMessage(buffer, signature);
   // Ensure we leave behind a trace of who-uploaded-what?
   log.debug({ address }, `Validating upload from {address}`);
 
@@ -22,7 +22,7 @@ export async function validateImage(buffer: Buffer, signature: string) {
 
 export async function validateJson(metadata: MetadataJson, signature: string) {
   // First, lets check the signature of this upload
-  const address = verifyMessage(metadata.image, signature);
+  const address = utils.verifyMessage(metadata.image, signature);
   log.debug({ address }, `Validating metadata from {address}`);
   // TODO: harden v unknown data in metadata, and/or
   return (
