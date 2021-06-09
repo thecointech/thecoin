@@ -4,6 +4,7 @@ export type RenderableType = {
   type: string;
   text: string;
   spans: string[];
+  url?: string
 }
 
 export type FAQResult = {
