@@ -2,7 +2,12 @@ const { join } = require('path');
 const { existsSync } = require('fs');
 
 function getEnvFile(cfgName) {
-  const filename = cfgName || process.env.CONFIG_NAME || "development";
+  const filename = cfgName || process.env.CONFIG_NAME || (
+    process.env.NODE_ENV == "production"
+      ? "prod"
+      : "development"
+  );
+
   // Does the user have files on the system
   const systemFolder = process.env.THECOIN_ENVIRONMENTS;
   if (systemFolder) {
