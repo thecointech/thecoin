@@ -38,7 +38,7 @@ namespace TheUtils
 
             string address = theCoinJson["networks"]["3"]["address"].ToString();
             TheCoinToken = new Nethereum.StandardTokenEIP20.StandardTokenService(web3, address);
-            TheCoinContract = new Nethereum.Contracts.Contract(web3.Eth, theCoinJson["abi"].ToString(), address);
+            TheCoinContract = web3.Eth.GetContract(theCoinJson["abi"].ToString(), address);
         }
 
         public void Connect(Account user)

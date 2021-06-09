@@ -1,5 +1,5 @@
 {
-  "packageName" : "ThePricing",
-  "targetFramework": "v5.0",
+  "packageName": "ThePricing",
+  "targetFramework": "net5.0",
   "netCoreProjectFile": true
 }
