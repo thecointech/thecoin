@@ -12,6 +12,7 @@ import { init } from './init';
 import cors from 'cors';
 import { ValidateError } from "@tsoa/runtime";
 import { log } from "@thecointech/logging";
+import { ValidateErrorJSON } from "./types";
 
 const app = express();
 // enable cors
@@ -39,7 +40,6 @@ RegisterRoutes(app);
   })
 })()
 
-
 export function notFoundHandler(_req: unknown, res: ExResponse) {
   res.status(404).send({
     message: "Not Found",
@@ -53,11 +53,12 @@ export function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof ValidateError) {
-    log.warn(`Caught Validation Error for ${req.path}:`, err.fields);
-    return res.status(422).json({
-      message: "Validation Failed",
+    log.warn(`Caught ${err.message} on ${req.path}:`, err.fields);
+    const r: ValidateErrorJSON = {
+      message: "Validation failed",
       details: err?.fields,
-    });
+    }
+    return res.status(422).json(r);
   }
   if (err instanceof Error) {
     return res.status(500).json({

@@ -1,4 +1,3 @@
-import { Contract } from 'ethers';
 import { ImmerReducer } from 'immer-reducer';
 import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes'
 import { TheSigner, AnySigner } from '../../SignerIdent'
@@ -6,6 +5,8 @@ import { Transaction } from '@thecointech/tx-blockchain';
 import { AccountDetails } from '../AccountDetails';
 import { IDX } from '@ceramicstudio/idx';
 import { DateTime } from 'luxon';
+import { SagaIterator } from 'redux-saga';
+import { TheCoin } from '@thecointech/contract';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -20,7 +21,7 @@ export type AccountState = {
   // Possibly encrypted raw ethers wallet or metamask account
   signer: AnySigner;
   // Contract connected to this wallet as a signer
-  contract: Contract | null;
+  contract: TheCoin | null;
   // Current balance in Coin
   balance: number;
   // Transaction history
@@ -64,19 +65,19 @@ export type AccountPageProps = {
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(signer: TheSigner): Iterator<object>;
+  setSigner(signer: TheSigner): SagaIterator;
 
   // create contract, connect to services, load details
-  connect(): Iterator<object>;
+  connect(): SagaIterator;
 
   // Save/load private details
-  loadDetails(): Iterator<object>;
-  setDetails(newDetails: AccountDetails): Iterator<object>;
+  loadDetails(): SagaIterator;
+  setDetails(newDetails: AccountDetails):SagaIterator;
 
   // Get the balance of the account in Coin
-  updateBalance(newBalance?: number): Iterator<object>;
-  updateHistory(from: DateTime, until: DateTime): Generator<object>;
+  updateBalance(newBalance?: number):SagaIterator;
+  updateHistory(from: DateTime, until: DateTime): SagaIterator;
 
-  decrypt(password: string, callback: DecryptCallback | undefined): Iterator<object>;
+  decrypt(password: string, callback: DecryptCallback | undefined):SagaIterator;
 }
 

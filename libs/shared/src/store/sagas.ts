@@ -1,4 +1,4 @@
-import { select, put } from "redux-saga/effects";
+import { select, put, SelectEffect } from "redux-saga/effects";
 import { ImmerReducerClass } from "immer-reducer";
 import { TheCoinReducer } from "./immerReducer";
 
@@ -7,7 +7,7 @@ export function assertNever(result: never): never {
 }
 
 export function buildSaga<T extends TheCoinReducer<any>>(reducer: ImmerReducerClass, selector: any, fnName: keyof T) {
-  function* saga(action: any) {
+  function* saga(action: any) : Generator<SelectEffect, void> {
     const state = yield select(selector);
     const reducerImp = new (reducer as any)(state, state);
     //@ts-ignore

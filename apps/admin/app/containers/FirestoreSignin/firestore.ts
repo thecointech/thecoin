@@ -1,4 +1,4 @@
-import {init} from '@thecointech/utilities/firestore';
+import {init} from '@thecointech/firestore';
 import { GetUsername, GetPassword, SetUsername, SetPassword } from '@thecointech/store/firestore';
 
 export async function signIn() {

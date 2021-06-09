@@ -1,4 +1,3 @@
-export * from './deposit/types';
-export * from './deposit/contract';
-export * from './firestore';
-export {ProcessUnsettledDeposits} from './deposit/service';
+export { processUnsettledBillPayments } from './bill';
+export { processUnsettledDeposits } from './deposit';
+export { processUnsettledETransfers } from './etransfer'

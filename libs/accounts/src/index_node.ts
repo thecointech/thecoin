@@ -7,7 +7,7 @@ export * from './names';
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
 
 async function loadSigner(name: AccountName, callback?: ProgressCallback) {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     const { connectAccount } = await import('./development');
     return connectAccount(name);
   }

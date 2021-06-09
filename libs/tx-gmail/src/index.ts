@@ -5,6 +5,7 @@ import { toDepositData } from "./convert";
 import { eTransferData } from "./types";
 import { authorize, isValid } from "./auth";
 
+export type { Labels } from './fetch';
 export * from './types';
 export { setETransferLabel };
 
@@ -50,7 +51,7 @@ export async function fetchETransfers(query?: string): Promise<eTransferData[]> 
 }
 
 // fetch new deposits
-export async function FetchNewDepositEmails()
+export async function fetchNewDepositEmails()
 {
   log.trace(`fetching from gmail`);
   const emails = await fetchETransfers('redirect interac -remember -expired -label:etransfer-deposited -label:etransfer-rejected');

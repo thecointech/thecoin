@@ -1,11 +1,8 @@
 import { Controller, Body, Route, Post, Put, Response, Tags } from '@tsoa/runtime';
-import { SendMail } from "@thecointech/email";
-import { DoCertifiedSale } from "../exchange/VerifiedSale";
-import { DoActionAndNotify } from "../utils/DoActionAndNotify";
+import { ProcessSale } from "../exchange/VerifiedSale";
 import { GenerateCode } from "../Buy/eTransfer";
 import { CertifiedTransfer, SignedMessage } from '@thecointech/types';
-import { ETransferCodeResponse } from './types';
-
+import { CertifiedTransferResponse, ETransferCodeResponse } from './types';
 
 @Route('etransfer')
 @Tags('ETransfer')
@@ -21,8 +18,12 @@ export class ETransferController extends Controller {
     @Post('eTransfer')
     @Response('200', 'The response confirms to the user the order has been processed')
     @Response('405', 'Invalid input')
-    async eTransfer(@Body() request: CertifiedTransfer) {
-      return DoActionAndNotify(request, DoCertifiedSale);
+    async eTransfer(@Body() request: CertifiedTransfer) : Promise<CertifiedTransferResponse> {
+      const r = await ProcessSale(request);
+      return {
+        message: "success",
+        ...r,
+      }
     }
 
     /**
@@ -36,18 +37,8 @@ export class ETransferController extends Controller {
     @Response('200', 'The requesters unique eTransfer code')
     @Response('405', 'Invalid input')
     async eTransferInCode(@Body() request: SignedMessage) : Promise<ETransferCodeResponse> {
-      try {
         return {
           code: await GenerateCode(request)
         }
-      }
-      catch (err) {
-        console.error(err.message);
-        SendMail("TransferCode Error", JSON.stringify(err) + "\n---\n" + JSON.stringify(request));
-        return {
-          code: "TheCoin",
-          error: "server Error",
-        }
-      }
     }
 }
