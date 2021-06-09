@@ -20,16 +20,18 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
     return { error: 'Cannot deposit coin, action already has coin balance' }
   }
 
-  const transfer = container.action.data.initial;
-  const { from, to, value, fee, timestamp } = transfer.transfer;
+  const request = container.action.data.initial;
+  const { from, to, value, fee, timestamp, signature } = request.transfer;
   const tc = container.contract;
 
   // Check balance (so we don't waste gas on a clearly-won't-work tx below)
+  // We check balance in the initial steps as well, but this is for scenarios
+  // where the deposit is delayed for any reason (eg - server crash etc);
   const balance = await tc.balanceOf(from);
   if (balance.lte(fee + value))
     return { error: 'Insufficient funds'};
 
-  const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, transfer.signature);
+  const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, signature);
   return (tx.hash)
     ? {
         hash: tx.hash,

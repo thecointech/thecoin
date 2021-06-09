@@ -2,6 +2,7 @@ import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 import { Signer } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays';
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 class EthereumProvider extends EventEmitter {
   signer: Signer
@@ -22,7 +23,7 @@ class EthereumProvider extends EventEmitter {
       if (message.startsWith('0x')) {
         message = toString(fromString(message.slice(2), 'base16'), 'utf8')
       }
-      callback(null, { result: this.signer.signMessage(message) })
+      callback(null, { result: sign(message, this.signer) })
     } else {
       callback(new Error(`Unsupported method: ${request.method}`))
     }
