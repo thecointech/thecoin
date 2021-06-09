@@ -1,12 +1,13 @@
 import { log } from '@thecointech/logging';
-import { getContract, signGasslessUpdate, signMessage, splitIpfsUri } from '@thecointech/nft-contract';
+import { getContract, signGasslessUpdate, splitIpfsUri } from '@thecointech/nft-contract';
 import { Signer } from 'ethers';
 import { GetNftApi } from '../../../api';
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 export async function uploadAvatar(image: Blob, signer: Signer) {
   log.trace('Uploading avatar');
   const contents = new Uint8Array(await image.arrayBuffer());
-  const sig = await signMessage(contents, signer);
+  const sig = await sign(contents, signer);
   const r = await GetNftApi().uploadAvatar(image, sig);
   log.trace(`Uploaded to ${r.data}`);
   return r.data;
@@ -19,7 +20,7 @@ export async function uploadMetadata(tokenId: number, imageUri: string, signer: 
     description: "TheCoin Certified CO2-Neutral",
     image: imageUri,
     hash: "TODO",
-    signature: await signMessage(imageUri, signer),
+    signature: await sign(imageUri, signer),
   }
   const r = await GetNftApi().uploadMetadata(metadata);
   log.trace(`Uploaded to ${r.data}`);

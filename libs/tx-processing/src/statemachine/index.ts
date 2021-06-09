@@ -28,7 +28,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 
   // Store the output in the cloud to allow replaying
   // the transition without executing it
-  await storeTransition(container.action.doc, withMeta);
+  await storeTransition(container.action.doc as any, withMeta);
   return withMeta;
 }
 
