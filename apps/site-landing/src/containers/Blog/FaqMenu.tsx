@@ -10,7 +10,7 @@ type Props = {
   }
   
 function displayEntry(index: number, name: string ){
-    return <List.Item key={index}><Link to={"/faq/theme-"+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
+    return <List.Item key={index}><Link to={"/blog/theme-"+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
                 { /* <List> */ }
                     { /*
                         subentries.map((entrySubentries) => ( 
@@ -24,11 +24,10 @@ function displayEntry(index: number, name: string ){
 
 
 export const FaqMenu = ({ categories }: Props) => {
-    console.log("categories===",categories)
     return (
         <>
             <GreaterThanMobileSegment>
-                <Rail position='right'>
+                <Rail position='left'>
                     <div id={styles.menuFaq}>
                         <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
                             { Object.entries(categories).map((entry, index) => ( displayEntry(index, entry[0] ))) }

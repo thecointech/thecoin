@@ -6,7 +6,7 @@ import { Switch, Route, RouteComponentProps } from "react-router";
 import { FaqList } from "./FaqList";
 import { RUrl } from "@thecointech/utilities/RUrl";
 import { Dictionary } from "lodash";
-import { ArticleDocument, FAQDocument, PrismicState } from "components/Prismic/types";
+import { ArticleDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
@@ -59,12 +59,19 @@ export function buildCategories(docs: PrismicState) {
   for (const article of articles) {
     const lang = ((article.lang)?.split("-")) ? ((article.lang)?.split("-"))[0] : DEFAULT_LOCALE;
     const categories = (locale === DEFAULT_LOCALE) ? article.data.categories : article.data.fr_categories;
+    
+    //categories.map((categ) =>
+    //  categoriesOrg[(categ as any).category] = [article]
+    //);
+
     for (const cat of categories) {
+      console.log("cat---",(cat as any).category)
+      const catName = (cat as any).category
       if (locale === lang){
-        if (!categoriesOrg[cat])
-        categoriesOrg[cat] = [article]
+        if (!categoriesOrg[catName])
+        categoriesOrg[catName] = [article]
         else
-          categoriesOrg[cat].push(article);
+          categoriesOrg[catName].push(article);
       }
     }
   }
