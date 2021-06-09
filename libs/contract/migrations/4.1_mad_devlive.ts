@@ -13,9 +13,11 @@ export async function initializeDevLive(contract: TheCoinInstance, accounts: Nam
 
   await seedAccount(contract, accounts.TheCoin, accounts.client1);
   await seedAccount(contract, accounts.TheCoin, accounts.client2);
+  // Also seed TestAccNoT so we can test tx's with a wallet vs a signer
+  await seedAccount(contract, accounts.TheCoin, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 }
 
-async function seedAccount(contract: TheCoinInstance, theCoin: string, client: string) {
+async function seedAccount(contract: TheCoinInstance, theCoin: string, client: string, onlyBuy=false) {
 
   // Assign ~15 transactions to client randomly in the past
   console.log("Seeding account: " + client);
@@ -30,7 +32,7 @@ async function seedAccount(contract: TheCoinInstance, theCoin: string, client: s
     // either purchase or sell up to 100 coins
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
     const balance = await contract.balanceOf(client);
-    if (balance.toNumber() <= amount || Math.random() < 0.6) {
+    if (onlyBuy || balance.toNumber() <= amount || Math.random() < 0.6) {
       await contract.coinPurchase(client, amount, 0, toSeconds(ts), { from: theCoin });
     }
     else {

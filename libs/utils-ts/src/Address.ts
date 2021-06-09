@@ -1,6 +1,7 @@
 
 import { Signer, utils } from 'ethers';
 import base32 from 'base32';
+import { sign } from "./SignedMessages";
 
 export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);
@@ -39,7 +40,7 @@ export async function getAddressShortCode(address: string, signer: Signer)
 {
   // generate this signers secret key
   const rhash = GetHash(address.toLowerCase());
-  const rsign = await signer.signMessage(rhash);
+  const rsign = await sign(rhash, signer);
   return getShortCode(rsign);
 }
 

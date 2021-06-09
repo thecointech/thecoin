@@ -1,6 +1,6 @@
 
 import { log } from '@thecointech/logging';
-import { signMessage } from '@thecointech/nft-contract';
+import { sign as doSign } from "@thecointech/utilities/SignedMessages";
 import { Signer } from 'ethers';
 import { dump, IExif, IExifElement, insert, load, TagNumbers } from 'exif-library';
 import { hash } from './prcp';
@@ -15,7 +15,7 @@ export async function sign(canvas: HTMLCanvasElement, signer: Signer) {
   // Get image hash
   const hash = await getHash(canvas);
   // Owner signs the image
-  const signature = await signMessage(hash, signer);
+  const signature = await doSign(hash, signer);
 
   // Now, convert to JPG.
   // TODO: can we make this PNG?  For now,
