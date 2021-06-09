@@ -31,6 +31,7 @@ namespace TheUtils
 		{
 			return ToUTC(timestamp).ToLocalTime();
 		}
+		public static DateTime ToLocal(double timestamp) => ToLocal((long)timestamp);
 
 		public static long ToTimestamp(DateTime dt)
         {

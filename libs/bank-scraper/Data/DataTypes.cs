@@ -3,38 +3,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TapCapManager.Client.Model;
+//using TapCapManager.Client.Model;
 
 namespace TheBankAPI.Data
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class ClientRequest : SignedMessage
-	{
-		/// <summary>
-		/// Add a DB id to the SignedMessage
-		/// </summary>
-		[BsonId]
-		public int ID { get; set; }
+	///// <summary>
+	///// 
+	///// </summary>
+	//public class ClientRequest : SignedMessage
+	//{
+	//	/// <summary>
+	//	/// Add a DB id to the SignedMessage
+	//	/// </summary>
+	//	[BsonId]
+	//	public int ID { get; set; }
 
-		/// <summary>
-		/// The client address - extracted from the signed message
-		/// </summary>
-		public string ClientAddress { get; set; }
-	}
+	//	/// <summary>
+	//	/// The client address - extracted from the signed message
+	//	/// </summary>
+	//	public string ClientAddress { get; set; }
+	//}
 
-	/// <summary>
-	/// Add a DB id to the FxRate returned from ThePricing API
-	/// </summary>
-	public class FXRate : TapCapManager.Client.Model.FXRate
-	{
-		/// <summary>
-		/// Add a DB id to the FxRate returned from ThePricing API
-		/// </summary>
-		[BsonId]
-		public int ID { get; set; }
-	}
+	///// <summary>
+	///// Add a DB id to the FxRate returned from ThePricing API
+	///// </summary>
+	//public class FXRate : TapCapManager.Client.Model.FXRate
+	//{
+	//	/// <summary>
+	//	/// Add a DB id to the FxRate returned from ThePricing API
+	//	/// </summary>
+	//	[BsonId]
+	//	public int ID { get; set; }
+	//}
 
 	/// <summary>
 	/// 
@@ -69,19 +69,19 @@ namespace TheBankAPI.Data
 		/// </summary>
 		public string Description { get; set; }
 
-		/// <summary>
-		/// The full signed(TapCapClientRequest) received from the client
-		/// May be null if this tx is not matched with a client request
-		/// </summary>
-		[BsonRef("requests")]
-		public ClientRequest Request { get; set; }
+		///// <summary>
+		///// The full signed(TapCapClientRequest) received from the client
+		///// May be null if this tx is not matched with a client request
+		///// </summary>
+		//[BsonRef("requests")]
+		//public ClientRequest Request { get; set; }
 
-		/// <summary>
-		/// The FxRate at the time of the request.
-		/// May be null if this tx is not matched with a client request
-		/// </summary>
-		[BsonRef("rates")]
-		public FXRate Rate { get; set; }
+		///// <summary>
+		///// The FxRate at the time of the request.
+		///// May be null if this tx is not matched with a client request
+		///// </summary>
+		//[BsonRef("rates")]
+		//public FXRate Rate { get; set; }
 
 		/// <summary>
 		/// The amount of coin charged to cover the fiat requested
@@ -138,34 +138,34 @@ namespace TheBankAPI.Data
 	/// <summary>
 	/// Stored whenever a transaction request fails (is this necessary?)
 	/// </summary>
-	public class TransactionFailed
-	{
-		/// <summary>
-		/// DB generated id
-		/// </summary>
-		[BsonId]
-		public int ID { get; set; }
+	//public class TransactionFailed
+	//{
+	//	/// <summary>
+	//	/// DB generated id
+	//	/// </summary>
+	//	[BsonId]
+	//	public int ID { get; set; }
 
-		/// <summary>
-		/// The full signed(TapCapClientRequest) received from the client
-		/// </summary>
-		[BsonRef("requests")]
-		public ClientRequest Request { get; set; }
+	//	/// <summary>
+	//	/// The full signed(TapCapClientRequest) received from the client
+	//	/// </summary>
+	//	[BsonRef("requests")]
+	//	public ClientRequest Request { get; set; }
 
-		/// <summary>
-		/// The amount of $$ (in cents) requested
-		/// </summary>
-		public int FiatRequested { get; set; }
+	//	/// <summary>
+	//	/// The amount of $$ (in cents) requested
+	//	/// </summary>
+	//	public int FiatRequested { get; set; }
 
-		/// <summary>
-		/// The signed response sent to the client
-		/// </summary>
-		public byte[] Response { get; set; }
+	//	/// <summary>
+	//	/// The signed response sent to the client
+	//	/// </summary>
+	//	public byte[] Response { get; set; }
 
-		/// <summary>
-		/// Most recent completed tx from the bank
-		/// </summary>
-		[BsonRef("tx")]
-		public Transaction LastTransaction;
-	}
+	//	/// <summary>
+	//	/// Most recent completed tx from the bank
+	//	/// </summary>
+	//	[BsonRef("tx")]
+	//	public Transaction LastTransaction;
+	//}
 }

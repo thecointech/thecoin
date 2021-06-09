@@ -12,7 +12,7 @@ namespace TheUtils
 	{
 		protected List<byte[]> queries = new List<byte[]>();
 		protected List<byte[]> responses = new List<byte[]>();
-		protected List<int?> parentIndices = new List<int?>();
+		protected List<int> parentIndices = new List<int>();
 
 		protected byte[] GpoPdol;
 		protected byte[] CryptoPdol;
