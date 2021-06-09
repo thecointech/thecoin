@@ -37,6 +37,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
+    "@thecointech/tx-processing": "*",
     "@thecointech/accounts": "^0.2.2",
     "@thecointech/contract": "^0.2.3",
     "@thecointech/email": "^0.2.2",

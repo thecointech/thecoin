@@ -1,51 +1,39 @@
-import { GetContract, GetWallet } from './Wallet'
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
-import { init, describe } from '@thecointech/utilities/firestore/jestutils';
-import { CertifiedTransferRecord } from '@thecointech/utilities/firestore';
-import {current} from '../status';
+import { init } from '@thecointech/firestore/mock';
+import { current } from '../status';
 import { BillPayeePacket } from '@thecointech/types';
+import { getActionsForAddress } from '@thecointech/broker-db/transaction';
+import { Wallet } from 'ethers';
 
-beforeAll(async () => {
-  init('broker-cad-billpayments');
+beforeEach(async () => {
+  init({});
 });
 
-describe('Test bill payments actions', () => {
-  it("can process a bill payment", async () => {
+it("can process a bill payment", async () => {
 
-    jest.setTimeout(900000);
-    const wallet = await GetWallet();
-    expect(wallet).toBeDefined();
+  jest.setTimeout(900000);
+  const wallet = Wallet.createRandom();
 
-    // TODO!  Create a testing account to handle this stuff!
-    const tc = await GetContract();
-    const myBalance = await tc.balanceOf(await wallet.getAddress())
-    expect(myBalance.toNumber()).toBeGreaterThan(0);
+  const payee: BillPayeePacket = {
+    payee: "VISA - TORONTO DOMINION",
+    accountNumber: "123456789123546"
+  };
+  const amount = 100;
+  const curr = await current();
+  const billPayment = await BuildVerifiedBillPayment(payee, wallet, curr.BrokerCAD, amount, curr.certifiedFee);
+  expect(billPayment).toBeTruthy();
+  const res = await ProcessBillPayment(billPayment);
 
-    const payee: BillPayeePacket = {
-      payee: "VISA - TORONTO DOMINION",
-      accountNumber: "123456789123546"
-    };
+  expect(res).toBeTruthy();
+  expect(res.hash).toBeDefined()
+  expect(res.state).toEqual("tcWaiting")
 
-    const amount = 100;
-    const curr = await current();
-    const billPayment = await BuildVerifiedBillPayment(payee, wallet, curr.BrokerCAD, amount, curr.certifiedFee);
-    const tx = await ProcessBillPayment(billPayment);
-
-    expect(tx).toBeTruthy();
-    expect(tx.hash).toBeDefined()
-    expect(tx.doc).toBeDefined()
-
-    // Wait one more second to make sure the datastore has been updated;
-    // Check that the datastore now has the right values
-    const r = (await tx.doc.get()).data() as CertifiedTransferRecord;
-    expect(r.hash).toEqual(tx.hash);
-    expect(r.fiatDisbursed).toEqual(0);
-    //expect(r.encryptedPayee).toMatch(name);
-
-    // Now check that we have saved the payee info
-    //const savedPayee = (await GetNamedPayee(wallet.address, name))!;
-    // expect(savedPayee.payee).toEqual(billPayment.encryptedPayee.encryptedPacket);
-    // expect(savedPayee.version).toEqual(billPayment.encryptedPayee.version);
-  })
+  // Check that the datastore now has the right values
+  const actions = await getActionsForAddress(wallet.address, "Bill");
+  expect(actions).toHaveLength(1);
+  const [action] = actions;
+  // Just make sure we have the right one.
+  expect(action.data.initialId).toEqual(billPayment.signature);
 })
+

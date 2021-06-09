@@ -12,7 +12,7 @@ export async function getAllUserData(fxRates: FXRate[]) {
   const reconciled = await matchAll(rawData);
   const full = await addBalances(reconciled, fxRates);
   full.forEach(user => user.transactions.sort(
-    (a, b) => a.data.recievedTimestamp.seconds - b.data.recievedTimestamp.seconds
+    (a, b) => a.action.data.date.toMillis() - b.action.data.date.toMillis()
   ));
   return full;
 }

@@ -39,9 +39,8 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^4.9.4",
-    "@thecointech/contract": "^0.2.3",
-    "@thecointech/logging": "^0.2.2",
+    "@thecointech/contract": "*",
+    "@thecointech/logging": "*",
     "base32": "^0.0.6",
     "firebase": "^8.2.9"
   },

@@ -8,7 +8,6 @@ import csv from "csvtojson";
 
 //
 // Fetch, from storage or from live, all latest transactions
-//
 export async function fetchLatestTransactions() {
   const { txs, syncedTill } = await RbcStore.fetchStoredTransactions();
   const toDate = new Date();
@@ -23,7 +22,6 @@ export async function fetchLatestTransactions() {
 
 //
 // Get all transactions between from & to from bank acc
-//
 export async function getTransactions(from: Date, to = new Date(), accountNo = ApiAction.Credentials.accountNo): Promise<RbcTransaction[]> {
   const act = await ApiAction.New('getTransactions', true);
   const { page } = act;

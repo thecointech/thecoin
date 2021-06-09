@@ -9,8 +9,8 @@
 			"path": "libs\\tx-processing"
 		},
 		{
-			"name": "tx-firestore",
-			"path": "libs\\tx-firestore"
+			"name": "broker-db",
+			"path": "libs\\broker-db"
 		},
 		{
 			"name": "tx-gmail",

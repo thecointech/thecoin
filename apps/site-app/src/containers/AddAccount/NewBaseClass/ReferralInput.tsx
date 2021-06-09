@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
 import { GetReferrersApi } from "api";
-import { IsValidReferrerId } from "@thecointech/utilities";
+import { IsValidShortCode } from "@thecointech/utilities";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
 const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
@@ -57,8 +57,8 @@ export const registerReferral = async (address: string, code: string) => {
   // Register this account on the server
   const api = GetReferrersApi();
   var isRegistered = await api.referralCreate({
-    newAccount: address,
-    referrerId: code,
+    address,
+    code,
   });
 
   if (!isRegistered.data?.success) {
@@ -83,7 +83,7 @@ const validateReferral = async (value: string) : Promise<State> => {
           isValid: false,
           message: messages.errorReferrerNumChars,
         }
-      : !IsValidReferrerId(value)
+      : !IsValidShortCode(value)
         ? {
             isValid: false,
             message: messages.errorReferrerInvalidCharacters,

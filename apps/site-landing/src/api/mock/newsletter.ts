@@ -41,7 +41,10 @@ export class MockNewsletterApi implements Pick<NewsletterApi, keyof NewsletterAp
    */
   async newsletterSignup(email: string, _options?: any) {
     const id = randomId();
-    subscriptions[id] = { email };
+    subscriptions[id] = {
+      email,
+      registerDate: Date.now()
+    };
     await delay(250);
     setTimeout(() => {
       alert('Simulating redirection to confirmation page');

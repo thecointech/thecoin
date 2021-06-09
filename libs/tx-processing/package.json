@@ -34,12 +34,12 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*/index.js"
   },
   "dependencies": {
-    "@thecointech/rbcapi": "^0.2.3",
+    "@thecointech/broker-db": "*",
+    "@thecointech/rbcapi": "*",
     "@thecointech/shared": "^0.2.4",
-    "@thecointech/tx-firestore": "^0.2.3",
     "@thecointech/tx-gmail": "^0.2.3",
     "@thecointech/utilities": "^0.2.3"
   },

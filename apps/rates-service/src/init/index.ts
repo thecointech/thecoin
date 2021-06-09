@@ -1,6 +1,6 @@
 import { Settings } from "luxon";
 import { init as initlog, log } from '@thecointech/logging';
-import { init as initdb } from '@thecointech/utilities/firestore';
+import { init as initdb } from '@thecointech/firestore';
 import { initLatest } from '../internals/rates/latest';
 import { seed } from "./seed";
 

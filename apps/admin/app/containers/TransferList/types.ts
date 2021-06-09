@@ -1,10 +1,4 @@
-import { BaseTransactionRecord } from "@thecointech/tx-firestore";
-import { eTransferData } from "@thecointech/tx-gmail";
-import { InstructionPacket } from "@thecointech/utilities/src/VerifiedAction";
+import { ActionType } from '@thecointech/broker-db';
+import { TypedActionContainer } from '@thecointech/tx-processing/statemachine';
 
-export type TransactionData = {
-  record: BaseTransactionRecord,
-  instruction: InstructionPacket|eTransferData,
-  isComplete?: boolean,
-}
-export type TransferRenderer = (transfer: TransactionData) => JSX.Element;
+export type TransferRenderer<Type extends ActionType> = (transfer: TypedActionContainer<Type>) => JSX.Element;

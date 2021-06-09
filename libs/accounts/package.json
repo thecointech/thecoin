@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/account"
+    "directory": "libs/accounts"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

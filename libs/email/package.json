@@ -33,10 +33,7 @@
     "build/**/*"
   ],
   "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./": "./build/"
-  },
+  "exports": "./build/index.js",
   "dependencies": {
     "@thecointech/logging": "^0.2.2",
     "node-mailjet": "^3.3.1"
