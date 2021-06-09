@@ -1,11 +1,12 @@
 import { GetWallet } from "../exchange/Wallet";
 import { GetHash, GenerateCode } from './eTransfer'
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 async function getCode(ts: number)
 {
 	const wallet = await GetWallet();
   const _ts = `${ts}`;
-  const signature = await wallet.signMessage(GetHash(_ts));
+  const signature = await sign(GetHash(_ts), wallet);
 	const code = await GenerateCode({
 		message: _ts,
 		signature
@@ -23,7 +24,7 @@ test("Can generate eTransfer key", async () => {
 test("rejects old eTransfer key", async () => {
 
   const shouldThrow = async () => {
-      try { 
+      try {
         return await getCode(Date.now() - (10 * 60 * 1000));
       }
       catch (e) {

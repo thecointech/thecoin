@@ -2,6 +2,7 @@ import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointec
 import { Signer, ethers } from "ethers";
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 import { encrypt, GetHash } from "./Encrypt";
+import { sign } from "./SignedMessages";
 
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;
@@ -17,7 +18,7 @@ export async function BuildVerifiedAction(
   const xfer = await BuildVerifiedXfer(from, to, value, fee);
   const instructionPacket = encrypt(packet);
   const saleHash = GetHash(instructionPacket, xfer);
-  const signature = await from.signMessage(saleHash);
+  const signature = await sign(saleHash, from);
 
   return {
     transfer: xfer,
