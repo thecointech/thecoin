@@ -6,6 +6,40 @@
     margin: auto;
 }
 
+.articleLine {
+    height: 250px;
+    .articleLineContainer{
+        width: 100%;
+    }
+    img, div{
+        display: block;
+    } 
+    .text{
+        height: 160px;
+        --max-lines: 3;
+        position: relative;
+        max-height: calc(var(--lh) * var(--max-lines));
+        overflow: hidden;
+        padding-right: 1rem; /* space for ellipsis */
+    }
+    .text::before {
+        position: absolute;
+        content: "...";
+        inset-block-end: 0; /* "bottom" */
+        inset-inline-end: 0; /* "right" */
+      }
+      .text::after {
+        content: "";
+        position: absolute;
+        inset-inline-end: 0; /* "right" */
+        width: 1rem;
+        height: 1rem;
+        background: white;
+      }
+    p{
+    }
+}
+
 #menuFaq{
     a {
         color: @theCoinPaletteGreen5;

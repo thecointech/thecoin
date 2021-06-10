@@ -23,8 +23,8 @@ export type ImageObj = {
 }
 
 export type ArticleResult = {
-  thumbnail: RenderableType[]|null
-  image_before_title: RenderableType[]|null,
+  thumbnail: any,
+  image_before_title: any,
   title: RenderableType[]|null;
   questions: RenderableType[]|null;
   content: RenderableType[]|null;

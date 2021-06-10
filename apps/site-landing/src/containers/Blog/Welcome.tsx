@@ -18,7 +18,7 @@ const title = { id:"site.blog.title",
 export const Welcome = (props: Props) => {
   return (
     <div>
-      <Header as="h2" className={"x10spaceBefore"}>
+      <Header as="h2" textAlign={"center"} className={"x10spaceBefore"}>
         <Header.Content>
           <FormattedMessage {...title} />
         </Header.Content>

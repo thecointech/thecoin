@@ -1,5 +1,5 @@
 import React from "react";
-import { FaqItem } from "./FaqItem";
+import { ArticleItem } from "./ArticleItem";
 import { Header } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
@@ -26,7 +26,7 @@ export const FaqList = ({ title, faqs, menu }: Props) => {
           {title ? ((title.split("-"))[1]) : ""}
         </Header.Content>
       </Header>
-      {faqs.filter(faq => locale === ((faq.lang!).split("-"))[0]).map(faq => (<FaqItem key={faq.id} {...faq} />))}
+      {faqs.filter(faq => locale === ((faq.lang!).split("-"))[0]).map(faq => (<ArticleItem key={faq.id} {...faq} />))}
     </div>
     <Decoration />
     </>
