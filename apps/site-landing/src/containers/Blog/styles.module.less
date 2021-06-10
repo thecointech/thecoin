@@ -24,7 +24,7 @@
     }
     .text::before {
         position: absolute;
-        content: "...";
+        content: "";
         inset-block-end: 0; /* "bottom" */
         inset-inline-end: 0; /* "right" */
       }
@@ -54,7 +54,12 @@
 }
 
 .smallerThanDesktop({
-    #menuFaq{
+
+    .articleLine {
+        height: auto;
+    }
+    .containerFaq{
+        width: 100%;
         a {
             text-align: center;
         }
