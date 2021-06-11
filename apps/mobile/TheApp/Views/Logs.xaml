@@ -7,9 +7,10 @@
 			 Title="Logs">
 
   <ContentPage.Content>
-    <StackLayout>
-      <Editor Text="{Binding AllLogs}" VerticalOptions="FillAndExpand"/>
-    </StackLayout>
+
+    <ScrollView Orientation="Vertical">
+      <Label Text="{Binding AllLogs}" VerticalOptions="FillAndExpand"/>
+    </ScrollView>
   </ContentPage.Content>
 </ContentPage>
 

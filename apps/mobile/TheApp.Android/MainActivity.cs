@@ -66,7 +66,7 @@ namespace TheApp.Droid
 			var logfile = new FileTarget() { FileName = filename, Name = "logfile", Layout=layout };
 			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, logfile));
 
-			target.Layout= "${brief}";
+			target.Layout= "${time}|${message} ${exception}";
 			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, target));
 			LogManager.Configuration = config;
 		}
