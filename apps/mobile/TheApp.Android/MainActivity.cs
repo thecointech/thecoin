@@ -15,6 +15,9 @@ namespace TheApp.Droid
     [Activity(Label = "TheApp", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+
+		public static LogTarget target = new LogTarget();
+
 		protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -62,6 +65,9 @@ namespace TheApp.Droid
 			var layout = "${time}|${threadid}|${message}";
 			var logfile = new FileTarget() { FileName = filename, Name = "logfile", Layout=layout };
 			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, logfile));
+
+			target.Layout= "${brief}";
+			config.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, target));
 			LogManager.Configuration = config;
 		}
 
@@ -91,6 +97,7 @@ namespace TheApp.Droid
         public void RegisterTypes(IContainerRegistry container)
         {
             // Register any platform specific implementations
+			container.RegisterInstance<LogTarget>(MainActivity.target);
         }
     }
 }

@@ -26,12 +26,12 @@ namespace TapCapSupplier.Models
         /// <summary>
         /// Gets or Sets SignedRequest
         /// </summary>
-        public SignedMessage SignedRequest { get; set; }
+        //public SignedMessage SignedRequest { get; set; }
 
         /// <summary>
         /// Gets or Sets FxRate
         /// </summary>
-        public FXRate FxRate { get; set; }
+        //public FXRate FxRate { get; set; }
 
         /// <summary>
         /// Gets or Sets CoinCharge

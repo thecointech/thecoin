@@ -61,44 +61,44 @@ namespace TapCapSupplier.TapCap
 		/// </summary>
 		/// <param name="signedRequest"></param>
 		/// <returns></returns>
-		public SignedMessage RequestTransaction(SignedMessage signedRequest)
+		public TapCapBrokerPurchase RequestTransaction(TapCapClientRequest clientRequest)
 		{
 			var stopwatch = new System.Diagnostics.Stopwatch();
 			stopwatch.Start();
 
-			var clientRequest = JsonConvert.DeserializeObject<TapCapClientRequest>(signedRequest.Message);
+			//var clientRequest = JsonConvert.DeserializeObject<TapCapClientRequest>(signedRequest.Message);
 
-			var clientAddressTask = Task.Run(() => Signing.GetSigner(signedRequest.Message, signedRequest.Signature));
-			var managerTokenTask = Task.Run(() => Signing.GetSignerAndMessage<TapCapToken>(clientRequest.Token));
+			//var clientAddressTask = Task.Run(() => Signing.GetSigner(signedRequest.Message, signedRequest.Signature));
+			//var managerTokenTask = Task.Run(() => Signing.GetSignerAndMessage<TapCapToken>(clientRequest.Token));
 			var cryptoCertTask = Task.Run(() => Card.GenerateCrypto(clientRequest));
 
-			var clientAddress = clientAddressTask.GetAwaiter().GetResult();
-			var (managerAddress, token) = managerTokenTask.GetAwaiter().GetResult();
+			//var clientAddress = await clientAddressTask;
+			//var (managerAddress, token) = managerTokenTask.GetAwaiter().GetResult();
 
 			// Verify the token supplied is for the requesting client.
-			if (clientAddress != token.ClientAccount)
-			{
-				var message = string.Format("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
-				logger.Warn(message);
+			//if (clientAddress != token.ClientAccount)
+			//{
+			//	var message = string.Format("Invalid input: Token account {0} doesn't match client account {1}", token.ClientAccount, clientAddress);
+			//	logger.Warn(message);
 
-				return new SignedMessage()
-				{
-					Message = message,
-					Signature = ""
-				};
-			}
+			//	return new SignedMessage()
+			//	{
+			//		Message = message,
+			//		Signature = ""
+			//	};
+			//}
 
-			if (clientRequest.SupplierAddress != TheAccount.Address)
-			{
-				var message = string.Format("Invalid input: Passed supplier address -{0}- not for this supplier {1}", clientRequest.SupplierAddress, TheAccount.Address);
-				logger.Warn(message);
+			//if (clientRequest.SupplierAddress != TheAccount.Address)
+			//{
+			//	var message = string.Format("Invalid input: Passed supplier address -{0}- not for this supplier {1}", clientRequest.SupplierAddress, TheAccount.Address);
+			//	logger.Warn(message);
 
-				return new SignedMessage()
-				{
-					Message = message,
-					Signature = ""
-				};
-			}
+			//	return new SignedMessage()
+			//	{
+			//		Message = message,
+			//		Signature = ""
+			//	};
+			//}
 
 			// TODO: Verify manager address is valid.
 			// if (managerAdress != ManagerAddress)
@@ -113,38 +113,40 @@ namespace TapCapSupplier.TapCap
 			if (!PDOL.ParseIntoCryptoPDOL(clientRequest.CryptoData, CryptoPDOL))
 			{
 				logger.Warn("Error parsing CPO CDOL: {0}", System.BitConverter.ToString(clientRequest.GpoData));
-				return new SignedMessage()
-				{
-					Message = "Error parsing CPO CDOL:",
-					Signature = ""
-				};
+				return null;
+				//return new SignedMessage()
+				//{
+				//	Message = "Error parsing CPO CDOL:",
+				//	Signature = ""
+				//};
 			}
 
 			long txCents = (long)PDOL.GetAmount(CryptoPDOL);
 			if (txCents == 0)
 			{
 				logger.Warn("Invalid tx cents amount");
-				return new SignedMessage()
-				{
-					Message = "Invalid tx cents amount",
-					Signature = ""
-				};
+				return null;
+				//return new SignedMessage()
+				//{
+				//	Message = "Invalid tx cents amount",
+				//	Signature = ""
+				//};
 			}
 
 			var txCoin = TheContract.ToCoin(txCents / (100 * fxRate.Sell * fxRate._FxRate));
 
 			// TODO: Return "insufficient funds"
-			if (txCoin > token.AvailableBalance)
-			{
-				var message = string.Format("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
-				logger.Debug(message);
+			//if (txCoin > token.AvailableBalance)
+			//{
+			//	var message = string.Format("insufficient funds : available {0} < requested {1}", token.AvailableBalance, txCoin);
+			//	logger.Debug(message);
 
-				return new SignedMessage()
-				{
-					Message = message,
-					Signature = ""
-				};
-			}
+			//	return new SignedMessage()
+			//	{
+			//		Message = message,
+			//		Signature = ""
+			//	};
+			//}
 			// Everything checks out - build the certificate
 			var certificate = cryptoCertTask.GetAwaiter().GetResult();
 			if (certificate == null)
@@ -152,8 +154,8 @@ namespace TapCapSupplier.TapCap
 
 			var tx = new TapCapBrokerPurchase()
 			{
-				SignedRequest = signedRequest,
-				FxRate = PackageInterop.ConvertTo<FXRate>(fxRate),
+				//SignedRequest = signedRequest,
+				//FxRate = PackageInterop.ConvertTo<FXRate>(fxRate),
 				CoinCharge = txCoin,
 				CryptoCertificate = certificate
 			};
@@ -163,7 +165,7 @@ namespace TapCapSupplier.TapCap
 
 			logger.Info(" !-!-!returning tx for ${0} in: {1}ms !-!-!", txCents / 100.0, stopwatch.ElapsedMilliseconds);
 
-			return signedTx;
+			return tx;
 		}
 
 		//async Task ValidateAndFinalizeTx(TapCapBrokerPurchase purchase, long txCents, string clientAddress)

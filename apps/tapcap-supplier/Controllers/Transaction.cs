@@ -24,12 +24,12 @@ namespace TapCapSupplier.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class TransactionApiController : ControllerBase
+    public class TransactionController : ControllerBase
     {
 		private HandleTx handler;
 		private IEmvCard card;
 		private Logger logger = LogManager.GetCurrentClassLogger();
-		public TransactionApiController(HandleTx handler, IEmvCard card)
+		public TransactionController(HandleTx handler, IEmvCard card)
 		{
 			this.handler = handler;
 			this.card = card;
@@ -64,7 +64,7 @@ namespace TapCapSupplier.Controllers
 		[Route("[action]")]
 		public virtual StaticResponses GetStatic([FromBody]SignedMessage signedMessage)
         {
-			logger.Trace("Querying Static");
+			logger.Debug("Querying Static");
 			return card.StaticResponses;
         }
 
@@ -78,7 +78,7 @@ namespace TapCapSupplier.Controllers
 		[Route("[action]")]
 		public virtual byte[] GetStaticSingle([FromBody]QueryWithHistory queryWithHistory)
         {
-			logger.Trace("Querying StaticSingle");
+			logger.Debug("Querying StaticSingle");
 			return card.GetSingleResponse(queryWithHistory);
         }
 
@@ -91,10 +91,10 @@ namespace TapCapSupplier.Controllers
         /// <response code="405">Invalid input</response>
         [HttpPost]
 		[Route("[action]")]
-		public virtual SignedMessage RequestTapCap(SignedMessage signedMessage)
+		public virtual TapCapBrokerPurchase RequestTapCap(TapCapClientRequest request)
         {
-			logger.Trace("Requesting Transaction");
-			return handler.RequestTransaction(signedMessage);
+			logger.Debug("Requesting Transaction");
+			return handler.RequestTransaction(request);
         }
     }
 }

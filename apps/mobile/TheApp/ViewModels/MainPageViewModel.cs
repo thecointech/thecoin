@@ -21,7 +21,7 @@ namespace TheApp.ViewModels
 			set { SetProperty(ref this._Logs, value); }
 		}
 
-		private bool _TestEnabled = false;
+		private bool _TestEnabled = true;
 		public bool TestEnabled
 		{
 			get { return this._TestEnabled; }
@@ -44,13 +44,14 @@ namespace TheApp.ViewModels
 
 		public bool CanConnect { get => true; }
 
-		private TransactionProcessor Transaction;
+		private TapTesting Tester;
 
 		public DelegateCommand TestPurchaseCommand { get; set; }
 		public DelegateCommand ConnectCommand { get; set; }
 		public DelegateCommand ShowHistoryCommand { get; set; }
+		public DelegateCommand ShowLogsCommand { get; set; }
 
-		public MainPageViewModel(INavigationService navigationService, Balances balances, TransactionProcessor transactions)
+		public MainPageViewModel(INavigationService navigationService, Balances balances, TapTesting tester)
 			: base(navigationService)
 		{
 			Title = "Main Page";
@@ -58,10 +59,11 @@ namespace TheApp.ViewModels
 
 			logger.Trace("Main Page Loaded on thread {0}", Environment.CurrentManagedThreadId);
 
-			Transaction = transactions;
+			Tester = tester;
 			this.balances = balances;
 
 			ShowHistoryCommand = new DelegateCommand(ShowHistory);
+			ShowLogsCommand = new DelegateCommand(ShowLogs);
 			TestPurchaseCommand = new DelegateCommand(TestPurchase, () => TestEnabled);
 			ConnectCommand = new DelegateCommand(BeginConnect);
 
@@ -74,6 +76,10 @@ namespace TheApp.ViewModels
 		{
 			NavigationService.NavigateAsync("History");
 		}
+		private void ShowLogs()
+		{
+			NavigationService.NavigateAsync("Logs");
+		}
 		private void BeginConnect()
 		{
 			NavigationService.NavigateAsync("Connect");
@@ -81,10 +87,9 @@ namespace TheApp.ViewModels
 
 		private void TestPurchase()
 		{
-			Logs = "Running Text Tx";
+			Logs = "Running Test Tx";
 
-			var testing = new TapTesting(Transaction);
-			testing.TestFull();
+			Tester.TestFull();
 		}
 
 		CancellationTokenSource source = new CancellationTokenSource();
@@ -101,7 +106,7 @@ namespace TheApp.ViewModels
 
 		void UpdateTxStatus(Events.TxStatus status)
 		{
-			if (status.SignedResponse != null)
+			if (status.Response != null)
 			{
 				Logs = "Tx Completed";
 				TestEnabled = true;

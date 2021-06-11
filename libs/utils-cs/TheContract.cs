@@ -27,7 +27,7 @@ namespace TheUtils
 
         private Account account;
 
-        public TheContract(string theCoinStr, Web3 customWeb3=null)
+        public TheContract(string theCoinStr, string address, Web3 customWeb3=null)
         {
             JObject theCoinJson = JObject.Parse(theCoinStr);
 
@@ -36,7 +36,6 @@ namespace TheUtils
             else
                 web3 = new Web3("https://ropsten.infura.io/3Ph3BvTtfMZn32IZ8jhk");
 
-            string address = theCoinJson["networks"]["3"]["address"].ToString();
             TheCoinToken = new Nethereum.StandardTokenEIP20.StandardTokenService(web3, address);
             TheCoinContract = web3.Eth.GetContract(theCoinJson["abi"].ToString(), address);
         }
