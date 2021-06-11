@@ -12,10 +12,10 @@ namespace TheApp.TheCoin
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		public ulong MainBalance;
-		public ulong TapCapBalance;
+		//public ulong TapCapBalance;
 
 		public double ExchangeRate => fxRate?.Buy * fxRate?._FxRate ?? 1;
-		public ulong TotalBalance => MainBalance + TapCapBalance;
+		public ulong TotalBalance => MainBalance /*+ TapCapBalance*/;
 		public double FiatBalance => TheUtils.TheContract.ToHuman((ulong)(TotalBalance * ExchangeRate));
 
 		public int FxCountryCode = 124;

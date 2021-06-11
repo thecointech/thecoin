@@ -11,6 +11,20 @@
   </ContentPage.Resources>
   
     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <StackLayout HorizontalOptions="StartAndExpand">
+      <Ellipse Fill="Red"
+         WidthRequest="15"
+         HeightRequest="15"/>
+      <Ellipse Fill="Red"
+         WidthRequest="15"
+         HeightRequest="15"/>
+      <Ellipse Fill="Red"
+         WidthRequest="15"
+         HeightRequest="15"/>
+      <Ellipse Fill="Red"
+         WidthRequest="15"
+         HeightRequest="15"/>
+    </StackLayout>
         <Label Text="Welcome to Xamarin Forms and Prism!" />
 
         <Button Text="Connect" IsEnabled="{Binding CanConnect}" Command="{Binding ConnectCommand}" />
@@ -24,7 +38,7 @@
             <Label Text="TapCap Balance:" Grid.Row="0" Grid.Column="0" />
             <Label Text="Total Balance:" Grid.Row="1" Grid.Column="0" />
             <Label Text="Cad Balance:" Grid.Row="2" Grid.Column="0" />
-            <Label Text="{Binding TapCapBalance, Converter={StaticResource coinToHuman}}"  Grid.Row="0" Grid.Column="1" />
+            <!--<Label Text="{Binding TapCapBalance, Converter={StaticResource coinToHuman}}"  Grid.Row="0" Grid.Column="1" />-->
             <Label Text="{Binding TotalBalance, Converter={StaticResource coinToHuman}}" Grid.Row="1" Grid.Column="1"/>
             <Label Text="{Binding CadBalance}" Grid.Row="2" Grid.Column="1"/>
         </Grid>

@@ -37,7 +37,7 @@ namespace TheApp.ViewModels
 		private Balances balances;
 
 		public ulong MainBalance => balances.MainBalance;
-		public ulong TapCapBalance => balances.TapCapBalance;
+		//public ulong TapCapBalance => balances.TapCapBalance;
 		public double CadExchangeRate => balances.FiatBalance;
 		public ulong TotalBalance => balances.TotalBalance;
 		public double CadBalance => balances.FiatBalance;
@@ -127,7 +127,7 @@ namespace TheApp.ViewModels
 		void UpdateBalances(Balances update)
 		{
 			balances = update;
-			RaisePropertyChanged("TapCapBalance");
+			//RaisePropertyChanged("TapCapBalance");
 			RaisePropertyChanged("TotalBalance");
 			RaisePropertyChanged("CadBalance");
 		}

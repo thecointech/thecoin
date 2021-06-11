@@ -34,7 +34,7 @@ namespace TheUtils
             if (customWeb3 != null)
                 web3 = customWeb3;
             else
-                web3 = new Web3("https://ropsten.infura.io/3Ph3BvTtfMZn32IZ8jhk");
+                web3 = new Web3("https://ropsten.infura.io/v3/5e8bfb1c516047f182997ea33af20652");
 
             TheCoinToken = new Nethereum.StandardTokenEIP20.StandardTokenService(web3, address);
             TheCoinContract = web3.Eth.GetContract(theCoinJson["abi"].ToString(), address);
@@ -55,9 +55,8 @@ namespace TheUtils
 
         public async Task<ulong> CoinBalance()
         {
-            //var res = await TheCoinToken.GetBalanceOfAsync<ulong>(account.Address);
-            var fnBalance = TheCoinContract.GetFunction("balanceOf");
-            return await fnBalance.CallAsync<ulong>(account.Address);
+            var res = await TheCoinToken.BalanceOfQueryAsync(account.Address);
+			return (ulong)res;
         }
 
         public async Task<ulong> GetTapCap(string userAddress, string manager= "0x0774b5aBaa87e33E47b336A88b337E2711C27ca2")
