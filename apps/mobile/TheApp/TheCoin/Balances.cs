@@ -14,7 +14,7 @@ namespace TheApp.TheCoin
 		public ulong MainBalance;
 		public ulong TapCapBalance;
 
-		public double ExchangeRate => fxRate?.Buy.GetValueOrDefault(1) * fxRate?._FxRate.GetValueOrDefault(1) ?? 1;
+		public double ExchangeRate => fxRate?.Buy * fxRate?._FxRate ?? 1;
 		public ulong TotalBalance => MainBalance + TapCapBalance;
 		public double FiatBalance => TheUtils.TheContract.ToHuman((ulong)(TotalBalance * ExchangeRate));
 
@@ -22,7 +22,7 @@ namespace TheApp.TheCoin
 
 		private IRatesApi ratesApi;
 		private FXRate fxRate;
-		private SubscriptionToken _statusUpdateSub;
+		//private SubscriptionToken _statusUpdateSub;
 		private SubscriptionToken _newAccountSub;
 
 		private UserAccount account;
@@ -30,7 +30,7 @@ namespace TheApp.TheCoin
 
 		public Balances(UserAccount account, TheContract contract, IRatesApi ratesApi)
 		{
-			_statusUpdateSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, ThreadOption.UIThread);
+			//_statusUpdateSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnTapStatusUpdate, ThreadOption.UIThread);
 			_newAccountSub = Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount, ThreadOption.UIThread);
 
 			this.ratesApi = ratesApi;
@@ -38,11 +38,11 @@ namespace TheApp.TheCoin
 			this.contract = contract;
 		}
 
-		private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
-		{
-			TapCapBalance = newStatus.Status.Balance;
-			Events.EventSystem.Publish(new Events.BalancesUpdated(this));
-		}
+		//private void OnTapStatusUpdate(Events.StatusUpdated newStatus)
+		//{
+		//	TapCapBalance = newStatus.Status.Balance;
+		//	Events.EventSystem.Publish(new Events.BalancesUpdated(this));
+		//}
 
 		private void OnSetActiveAccount(Events.SetActiveAccount setActive)
 		{
@@ -59,12 +59,12 @@ namespace TheApp.TheCoin
 			{
 				// TODO: Watch valitity interval and update when necessary
 				var now = TheCoinTime.Now();
-				var FXRateWait = ratesApi.GetConversionAsync(FxCountryCode, now).ConfigureAwait(false);
+				var FXRateWait = ratesApi.GetSingleAsync(FxCountryCode, now).ConfigureAwait(false);
 				var balanceWait = contract.Contract.CoinBalance().ConfigureAwait(false);
 
 				fxRate = await FXRateWait;
 				MainBalance = await balanceWait;
-				TapCapBalance = account.Status?.Balance ?? 0;
+				//TapCapBalance = account.Status?.Balance ?? 0;
 
 				Events.EventSystem.Publish(new Events.BalancesUpdated(this));
 			}

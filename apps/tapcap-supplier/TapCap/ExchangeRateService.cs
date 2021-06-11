@@ -44,7 +44,7 @@ namespace TapCapSupplier.TapCap
 			{
 				// The ensure should never actually block, as the system
 				// should keep NextCoinRate fresh for us.
-				if (EnsureNextRate(now) && NextFxRate.ValidTill > now)
+				if (EnsureNextRate(now)/* && NextFxRate.ValidTill > now*/)
 				{
 					logger.Trace("Updating Current at: {0} - from {1} to {2}",
 						TheCoinTime.ToLocal(now),

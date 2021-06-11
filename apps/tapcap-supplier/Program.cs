@@ -19,7 +19,7 @@ namespace TapCapSupplier
 			{
 				SetEnv.Load();
 				logger.Debug("Application Starting Up");
-				CreateHostBuilder(args).Build().Run();
+				CreateHost(args).Run();
 			}
 			catch (Exception exception)
 			{
@@ -32,10 +32,16 @@ namespace TapCapSupplier
 			}
 		}
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
+		public static IHost CreateHost(string[] args) =>
 			Host.CreateDefaultBuilder(args)
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
+					webBuilder.ConfigureKestrel(options =>
+					{
+						var port = Environment.GetEnvironmentVariable("PORT_SERVICE_TAPCAP");
+						// listen to requests from outside the local machine
+						options.Listen(System.Net.IPAddress.Any, Int32.Parse(port));
+					});
 					webBuilder.UseStartup<Startup>();
 				})
 				.ConfigureLogging(logging =>
@@ -43,6 +49,7 @@ namespace TapCapSupplier
 					logging.ClearProviders();
 					logging.SetMinimumLevel(LogLevel.Information);
 				})
-				.UseNLog();
+				.UseNLog()
+				.Build();
 	}
 }

@@ -12,7 +12,7 @@
     <RootNamespace>TheApp.Droid</RootNamespace>
     <AssemblyName>TheApp.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\node_modules\@the-coin\contract\build\contracts\TheCoin.json">
+    <AndroidAsset Include="..\..\..\node_modules\@thecointech\contract\build\contracts\TheCoin.json">
       <Link>Assets\TheCoin.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidAsset>
@@ -96,7 +96,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\the-utilities\TheUtils\TheUtils.csproj">
+    <ProjectReference Include="..\..\..\libs\utils-cs\TheUtils.csproj">
       <Project>{4FBCCF53-202D-4661-827F-C5F023B15397}</Project>
       <Name>TheUtils</Name>
     </ProjectReference>

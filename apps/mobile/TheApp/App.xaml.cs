@@ -40,6 +40,7 @@ namespace TheApp
             containerRegistry.RegisterForNavigation<Connect>();
             containerRegistry.RegisterForNavigation<Scanner>();
 			containerRegistry.RegisterForNavigation<History>();
+			containerRegistry.RegisterForNavigation<Logs>();
 
 			RegisterBackgroundServices(containerRegistry);
 		}
@@ -49,8 +50,8 @@ namespace TheApp
 			// Register services you need in the Background Service
 			containerRegistry.RegisterInstance(new TheCoin.TheContract());
 			containerRegistry.RegisterInstance<ThePricing.Api.IRatesApi>(new ThePricing.Api.RatesApi());
-			containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi()); // "http://thecoincad.tplinkdns.com:8091"));
-			containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi()); // "http://thecoincad.tplinkdns.com:8091"));
+			//containerRegistry.RegisterInstance<TapCapManager.Client.Api.IStatusApi>(new TapCapManager.Client.Api.StatusApi()); // "http://thecoincad.tplinkdns.com:8091"));
+			//containerRegistry.RegisterInstance<TapCapManager.Client.Api.ITransactionsApi>(new TapCapManager.Client.Api.TransactionsApi()); // "http://thecoincad.tplinkdns.com:8091"));
 			containerRegistry.RegisterInstance<TapCapSupplier.Client.Api.ITransactionApi>(new TapCapSupplier.Client.Api.TransactionApi("http://thecoincad.tplinkdns.com:9361"));
 			
 			containerRegistry.RegisterSingleton<TheCoin.UserAccount>();
