@@ -3,13 +3,14 @@ import { usePrismicActions } from "components/Prismic/reducer";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
 import { Switch, Route, RouteComponentProps } from "react-router";
-import { FaqList } from "./FaqList";
+import { ArticleList } from "./ArticleList";
 import { RUrl } from "@thecointech/utilities/RUrl";
 import { Dictionary } from "lodash";
 import { ArticleDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
+import { Article } from "./Article";
 
 
 
@@ -28,7 +29,6 @@ const BlogInternal = (props: RouteComponentProps) => {
     actions.fetchAllDocs();
   }, []);
 
-  console.log("docs==",docs)
   const categories = buildCategories(docs);
   return (
     <>
@@ -36,12 +36,18 @@ const BlogInternal = (props: RouteComponentProps) => {
         {
           Object.entries(categories)
             .map((entry, index) => {
-              //const url = "cat"+((entry[0]).split("-"))[0].replace(/\s/g, '').toString()
               const url = buildUrl("theme-"+((entry[0])?.split("-"))[0].replace(/ /g,'')).toString()
-              return <Route key={index} path={url} render={() => <FaqList menu={categories} title={entry[0]} faqs={entry[1]} />} />
+              { 
+                Object.entries(entry[1])
+                  .map((entry => {
+                    const urlArticle = ("article-"+entry[1].id).toString()
+                    return <Route key={entry[1].id} path={urlArticle} render={() => <Article {...entry[1]} />} />
+                })) 
+              }
+              return <Route key={index} path={url} render={() => <ArticleList menu={categories} title={entry[0]} articles={entry[1]} />} />
             })
         }
-        <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome faqs={docs.articles} menu={categories} />} />
+        <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome articles={docs.articles} menu={categories} />} />
       </Switch>
     </>
   );
@@ -59,13 +65,8 @@ export function buildCategories(docs: PrismicState) {
   for (const article of articles) {
     const lang = ((article.lang)?.split("-")) ? ((article.lang)?.split("-"))[0] : DEFAULT_LOCALE;
     const categories = (locale === DEFAULT_LOCALE) ? article.data.categories : article.data.fr_categories;
-    
-    //categories.map((categ) =>
-    //  categoriesOrg[(categ as any).category] = [article]
-    //);
 
     for (const cat of categories) {
-      console.log("cat---",(cat as any).category)
       const catName = (cat as any).category
       if (locale === lang){
         if (!categoriesOrg[catName])

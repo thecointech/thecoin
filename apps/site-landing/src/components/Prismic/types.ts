@@ -30,7 +30,8 @@ export type ArticleResult = {
   content: RenderableType[]|null;
   author: RenderableType[]|null;
   categories: [],
-  fr_categories: []
+  fr_categories: [],
+  id: string
 }
 export type FAQDocument = 
   Omit<Document, "data"> & 

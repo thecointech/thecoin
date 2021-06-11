@@ -2,12 +2,12 @@ import React from "react";
 import { ArticleDocument } from "components/Prismic/types";
 import { Header } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
-import { FaqList } from "./FaqList";
+import { ArticleList } from "./ArticleList";
 import { Dictionary } from "lodash";
 
 
 type Props = {
-  faqs: ArticleDocument[],
+  articles: ArticleDocument[],
   menu: Dictionary<ArticleDocument[]>
 }
 
@@ -23,7 +23,7 @@ export const Welcome = (props: Props) => {
           <FormattedMessage {...title} />
         </Header.Content>
       </Header>
-      <FaqList faqs={props.faqs} menu={props.menu} />
+      <ArticleList articles={props.articles} menu={props.menu} />
     </div>
   )
 }

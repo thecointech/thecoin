@@ -23,12 +23,12 @@ function displayEntry(index: number, name: string ){
 }
 
 
-export const FaqMenu = ({ categories }: Props) => {
+export const ArticleMenu = ({ categories }: Props) => {
     return (
         <>
             <GreaterThanMobileSegment>
                 <Rail position='left'>
-                    <div id={styles.menuFaq}>
+                    <div id={styles.menuArticle}>
                         <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
                             { Object.entries(categories).map((entry, index) => ( displayEntry(index, entry[0] ))) }
                         </List>
@@ -37,7 +37,7 @@ export const FaqMenu = ({ categories }: Props) => {
             </GreaterThanMobileSegment>
 
             <MobileSegment>
-                <div id={styles.menuFaq}>
+                <div id={styles.menuArticle}>
                     <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
                         { Object.entries(categories).map((entry, index) => ( displayEntry(index, entry[0] ))) }
                     </List>
