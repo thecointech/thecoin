@@ -1,5 +1,5 @@
 import React from "react";
-import { ArticleItem } from "./ArticleItem";
+import { Article } from "./Article";
 import { Header } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
@@ -26,7 +26,7 @@ export const ArticleList = ({ title, articles, menu }: Props) => {
             {title ? ((title.split("-"))[1]) : ""}
           </Header.Content>
         </Header>
-        {articles.filter(article => locale === ((article.lang!).split("-"))[0]).map(article => (<ArticleItem key={article.id} {...article} />))}
+        {articles.filter(article => locale === ((article.lang!).split("-"))[0]).map(article => (<Article key={article.id} {...article} />))}
       </div>
       <Decoration />
     </>

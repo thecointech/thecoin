@@ -1,7 +1,7 @@
 import React from "react";
 import { ArticleDocument } from "components/Prismic/types";
 import { Grid, Header } from "semantic-ui-react";
-import { Renderer } from "./Renderer/Renderer";
+import { Renderer } from "../../components/Renderer/Renderer";
 import styles from "./styles.module.less";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
