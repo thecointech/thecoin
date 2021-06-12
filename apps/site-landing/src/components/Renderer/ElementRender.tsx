@@ -11,7 +11,8 @@ export const ElementRender = ({type, text, spans}: RenderableType) => {
 
   const style = spans ? spans : "";
   //let textToFormat;
-  console.log("style---",style[0])
+  var res = text.slice(0, 5); 
+  console.log("style---",style[0],res)
 
   for (const styleLine of style) {
     console.log("styleLine---",(styleLine as any))
