@@ -59,13 +59,13 @@ namespace TapCapSupplier.Card
 			DoStaticInit(1);
 		}
 
-		byte[] AcquireLockAndDo(Func<byte[]> func)
+		byte[] AcquireLockAndDo(Func<byte[]> func, bool initialize = true)
 		{
 			byte[] res = null;
 			lock (__CardLock)
 			{
 				int wasInitialized = Interlocked.CompareExchange(ref __IsReady, 0, 1);
-				if (wasInitialized == 0)
+				if (initialize && wasInitialized == 0)
 					DoStaticInit(wasInitialized);
 
 				res = func();
@@ -117,7 +117,7 @@ namespace TapCapSupplier.Card
 
 				// TODO: Filter requests we don't permit
 				return CheckCachedResponse(queryWithHistory.Query, null);
-			});
+			}, false);
 		}
 
 		byte[] CheckCachedResponse(byte[] query, byte[] clientResponse)

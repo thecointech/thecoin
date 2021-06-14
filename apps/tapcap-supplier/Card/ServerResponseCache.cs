@@ -107,6 +107,13 @@ namespace TapCapSupplier.Card
 			}
 		}
 
+		/// <summary>
+		/// Add the new query/response node as the child of the last node
+		/// on the query tree.  Returns the index of the new node.
+		/// </summary>
+		/// <param name="query"></param>
+		/// <param name="response"></param>
+		/// <returns></returns>
 		public override int AddNewStaticResponse(byte[] query, byte[] response)
 		{
 			var idx = base.AddNewStaticResponse(query, response);

@@ -17,6 +17,11 @@ namespace TheUtils
 		protected byte[] GpoPdol;
 		protected byte[] CryptoPdol;
 
+		/// <summary>
+		/// The index that the last query returned.
+		/// This can be used as the parent index of
+		/// the next query
+		/// </summary>
 		protected int LastIndex = -1;
 
 		/// <summary>
