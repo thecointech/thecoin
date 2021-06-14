@@ -33,6 +33,13 @@ namespace TheApp.ViewModels
 			}
 		}
 
+		private bool _ShowingTransactionResult = false;
+		public bool ShowingTransactionResult
+		{
+			get { return this._ShowingTransactionResult; }
+			set { SetProperty(ref this._ShowingTransactionResult, value); }
+		}
+
 
 		private Balances balances;
 
@@ -42,6 +49,49 @@ namespace TheApp.ViewModels
 		public ulong TotalBalance => balances.TotalBalance;
 		public double CadBalance => balances.FiatBalance;
 
+		public string _Step1Color = "#777";
+		public string Step1Color
+		{
+			get { return this._Step1Color; }
+			set { SetProperty(ref this._Step1Color, value); }
+		}
+		public string _Step2Color = "#777";
+		public string Step2Color
+		{
+			get { return this._Step2Color; }
+			set { SetProperty(ref this._Step2Color, value); }
+		}
+		public string _Step3Color = "#777";
+		public string Step3Color
+		{
+			get { return this._Step3Color; }
+			set { SetProperty(ref this._Step3Color, value); }
+		}
+		public string _Step4Color = "#777";
+		public string Step4Color
+		{
+			get { return this._Step4Color; }
+			set { SetProperty(ref this._Step4Color, value); }
+		}
+		public string _Step5Color = "#777";
+		public string Step5Color
+		{
+			get { return this._Step5Color; }
+			set { SetProperty(ref this._Step5Color, value); }
+		}
+
+		public string _Step6Color = "#777";
+		public string Step6Color
+		{
+			get { return this._Step6Color; }
+			set { SetProperty(ref this._Step6Color, value); }
+		}
+		public string _Step7Color = "#777";
+		public string Step7Color
+		{
+			get { return this._Step7Color; }
+			set { SetProperty(ref this._Step7Color, value); }
+		}
 		public bool CanConnect { get => true; }
 
 		private TapTesting Tester;
@@ -116,13 +166,48 @@ namespace TheApp.ViewModels
 				string res = String.Format("Paying ${0}: {1}", status.Amount, status.Status);
 				Logs = res;
 				TestEnabled = false;
+
+				var step = status.Status[6];
+				switch(step)
+				{
+					case '0':
+						Step1Color = "#0F0";
+						break;
+					case '1':
+						Step2Color = "#0F0";
+						break;
+					case '2':
+						Step3Color = "#0F0";
+						break;
+					case '3':
+						Step4Color = "#0F0";
+						break;
+					case '4':
+						Step5Color = "#0F0";
+						break;
+					case '5':
+						Step6Color = "#0F0";
+						break;
+					case '6':
+						Step7Color = "#0F0";
+						ShowingTransactionResult = true;
+						break;
+				}
 			}
 			else
 			{
 				Logs = "--Ready--";
 				TestEnabled = true;
+				Step1Color = Step2Color = Step3Color = Step4Color = "#777";
+
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(15000);
+					ShowingTransactionResult = false;
+				});
 			}
 		}
+		
 
 		void UpdateBalances(Balances update)
 		{

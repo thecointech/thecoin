@@ -88,18 +88,22 @@ namespace TapCapSupplier.Card
 
 			logger.Trace("SW1 SW2 = {0:X2} {1:X2}", response.SW1, response.SW2);
 
-			// TODO: Test SW instead of HasData
-			if (!response.HasData)
-			{
-				logger.Error("No data. (Card does not understand)");
-				return null;
-			}
+			//// TODO: Test SW instead of HasData
+			//if (!response.HasData)
+			//{
+			//	logger.Error("No data. (Card does not understand)");
+			//	return null;
+			//}
 
-			var respData = response.GetData();
+
 
 			// Append response verification bytes
 			byte[] swbytes = { response.SW1, response.SW2 };
-			var fullresponse = respData.Concat(swbytes).ToArray();
+			var fullresponse = response.HasData
+				? response.GetData().Concat(swbytes).ToArray()
+				: swbytes;
+			//				var respData = response.GetData();
+			//respData.Concat(swbytes).ToArray();
 
 			logger.Trace("Response: \n  {0}", BitConverter.ToString(fullresponse));
 			return fullresponse;
