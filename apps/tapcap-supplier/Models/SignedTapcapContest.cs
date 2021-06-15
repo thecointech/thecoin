@@ -15,12 +15,12 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace TapCapSupplier.Models
-{ 
+{
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class SignedTapcapContest
-    { 
+    {
         /// <summary>
         /// Gets or Sets Timestamp
         /// </summary>
@@ -35,137 +35,18 @@ namespace TapCapSupplier.Models
         /// Gets or Sets Pdol
         /// </summary>
         [Required]
-        [DataMember(Name="pdol")]
         public byte[] Pdol { get; set; }
 
         /// <summary>
         /// Gets or Sets Token
         /// </summary>
         [Required]
-        [DataMember(Name="token")]
         public SignedMessage Token { get; set; }
 
         /// <summary>
         /// Gets or Sets Signature
         /// </summary>
         [Required]
-        [DataMember(Name="signature")]
         public string Signature { get; set; }
-
-        /// <summary>
-        /// Returns the string presentation of the object
-        /// </summary>
-        /// <returns>String presentation of the object</returns>
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append("class SignedTapcapContest {\n");
-            sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
-            sb.Append("  FiatAmount: ").Append(FiatAmount).Append("\n");
-            sb.Append("  Pdol: ").Append(Pdol).Append("\n");
-            sb.Append("  Token: ").Append(Token).Append("\n");
-            sb.Append("  Signature: ").Append(Signature).Append("\n");
-            sb.Append("}\n");
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="obj">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((SignedTapcapContest)obj);
-        }
-
-        /// <summary>
-        /// Returns true if SignedTapcapContest instances are equal
-        /// </summary>
-        /// <param name="other">Instance of SignedTapcapContest to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(SignedTapcapContest other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            return 
-                (
-                    Timestamp == other.Timestamp ||
-                    Timestamp != null &&
-                    Timestamp.Equals(other.Timestamp)
-                ) && 
-                (
-                    FiatAmount == other.FiatAmount ||
-                    FiatAmount != null &&
-                    FiatAmount.Equals(other.FiatAmount)
-                ) && 
-                (
-                    Pdol == other.Pdol ||
-                    Pdol != null &&
-                    Pdol.Equals(other.Pdol)
-                ) && 
-                (
-                    Token == other.Token ||
-                    Token != null &&
-                    Token.Equals(other.Token)
-                ) && 
-                (
-                    Signature == other.Signature ||
-                    Signature != null &&
-                    Signature.Equals(other.Signature)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                var hashCode = 41;
-                // Suitable nullity checks etc, of course :)
-                    if (Timestamp != null)
-                    hashCode = hashCode * 59 + Timestamp.GetHashCode();
-                    if (FiatAmount != null)
-                    hashCode = hashCode * 59 + FiatAmount.GetHashCode();
-                    if (Pdol != null)
-                    hashCode = hashCode * 59 + Pdol.GetHashCode();
-                    if (Token != null)
-                    hashCode = hashCode * 59 + Token.GetHashCode();
-                    if (Signature != null)
-                    hashCode = hashCode * 59 + Signature.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        #region Operators
-        #pragma warning disable 1591
-
-        public static bool operator ==(SignedTapcapContest left, SignedTapcapContest right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(SignedTapcapContest left, SignedTapcapContest right)
-        {
-            return !Equals(left, right);
-        }
-
-        #pragma warning restore 1591
-        #endregion Operators
     }
 }
