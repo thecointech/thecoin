@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TapCapManager.Client.Model;
 using TheBankAPI.Data;
 using TheUtils;
 
@@ -30,9 +29,9 @@ namespace TheBankAPI
 			recentTransactions = records.GetMostRecent(10);
 		}
 
-		public async Task<Transaction> MatchTx(TapCapBrokerPurchase brokerResponse, int fiatRequested)
+		public async Task<Transaction> MatchTx(long timestamp, int fiatRequested)
 		{
-			var newTx = BuildTx(brokerResponse, fiatRequested);
+			var newTx = BuildTx(timestamp, fiatRequested);
 			await Task.Delay(2000);
 
 			// We make 10 attempts to fetch the latest tx
@@ -41,7 +40,7 @@ namespace TheBankAPI
 				var recentTx = await UpdateMostRecentTx();
 				foreach (var tx in recentTx)
 				{
-					if (tx.Request != null)
+					//if (tx.Request != null)
 					{
 						// If this was a very recent transaction, allow
 						// to continue checking.  This is not the
@@ -53,22 +52,22 @@ namespace TheBankAPI
 						break;
 					}
 
-					if (tx.Equals(newTx))
-					{
-						// This is our best guess.  Numbers match, so set 'er in
-						tx.CoinChange = newTx.CoinChange;
-						tx.Date = newTx.Date;
-						tx.Rate = newTx.Rate;
-						tx.Request = newTx.Request;
-						records.AddCompleted(tx);
-						return tx;
-					}
+					//if (tx.Equals(newTx))
+					//{
+					//	// This is our best guess.  Numbers match, so set 'er in
+					//	tx.CoinChange = newTx.CoinChange;
+					//	tx.Date = newTx.Date;
+					//	//tx.Rate = newTx.Rate;
+					//	//tx.Request = newTx.Request;
+					//	records.AddCompleted(tx);
+					//	return tx;
+					//}
 				}
 				logger.LogInformation("Did not match tx {0}", fiatRequested);
 			}
 
-			var mostRecent = recentTransactions.FirstOrDefault();
-			records.AddFailed(newTx.Request, mostRecent, fiatRequested, brokerResponse.CryptoCertificate);
+			//var mostRecent = recentTransactions.FirstOrDefault();
+			//records.AddFailed(newTx.Request, mostRecent, fiatRequested, brokerResponse.CryptoCertificate);
 			return null;
 		}
 
@@ -130,34 +129,34 @@ namespace TheBankAPI
 			return newerItems.Count;
 		}
 
-		private Transaction BuildTx(TapCapBrokerPurchase brokerResponse, int fiatRequested)
+		private Transaction BuildTx(/*TapCapBrokerPurchase brokerResponse,*/ long timestamp, int fiatRequested)
 		{
-			var signedRequest = brokerResponse.SignedRequest;
-			var rate = brokerResponse.FxRate;
-			var (address, request) = Signing.GetSignerAndMessage<TapCapClientRequest>(signedRequest);
+			//var signedRequest = brokerResponse.SignedRequest;
+			//var rate = brokerResponse.FxRate;
+			//var (address, request) = Signing.GetSignerAndMessage<TapCapClientRequest>(signedRequest);
 
 			// TODO! 
 			return new Transaction()
 			{
-				Date = TheCoinTime.ToLocal(request.Timestamp.Value),
+				Date = TheCoinTime.ToLocal(timestamp),
 				FiatChange = -fiatRequested,
 				FiatBalance = int.MinValue,
 				Description = "Interac purchase",
-				CoinChange = (int)brokerResponse.CoinCharge.Value,
-				Request = new Data.ClientRequest()
-				{
-					ClientAddress = address,
-					Message = signedRequest.Message,
-					Signature = signedRequest.Signature
-				},
-				Rate = new Data.FXRate()
-				{
-					Buy = rate.Buy,
-					Sell = rate.Sell,
-					Target = rate.Target,
-					ValidFrom = rate.ValidFrom,
-					ValidTill = rate.ValidTill
-				}
+				//CoinChange = (int)brokerResponse.CoinCharge.Value,
+				//Request = new Data.ClientRequest()
+				//{
+				//	ClientAddress = address,
+				//	Message = signedRequest.Message,
+				//	Signature = signedRequest.Signature
+				//},
+				//Rate = new Data.FXRate()
+				//{
+				//	Buy = rate.Buy,
+				//	Sell = rate.Sell,
+				//	Target = rate.Target,
+				//	ValidFrom = rate.ValidFrom,
+				//	ValidTill = rate.ValidTill
+				//}
 			};
 		}
 	}
