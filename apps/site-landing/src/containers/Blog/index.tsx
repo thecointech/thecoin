@@ -34,17 +34,16 @@ const BlogInternal = (props: RouteComponentProps) => {
     <>
       <Switch>
         {
-          Object.entries(categories)
-            .map((entry, index) => {
+          Object.entries(categories).map((entry, index) => {
               const url = buildUrl("theme-"+((entry[0])?.split("-"))[0].replace(/ /g,'')).toString()
               { 
-                Object.entries(entry[1])
-                  .map((entry => {
-                    const urlArticle = ("article-"+entry[1].id).toString()
-                    return <Route key={entry[1].id} path={urlArticle} render={() => <Article {...entry[1]} />} />
+                Object.entries(entry[1]).map((entry => {
+                    const urlArticle = ("article-"+entry[1].id).toString();
+                    console.log("urlArticle---",urlArticle)
+                    return <Route exact={true} key={entry[1].id} path={urlArticle} render={() => <Article {...entry[1]} />} />
                 })) 
               }
-              return <Route key={index} path={url} render={() => <ArticleList menu={categories} title={entry[0]} articles={entry[1]} />} />
+              return <Route key={index} exact={true} path={url} render={() => <ArticleList menu={categories} title={entry[0]} articles={entry[1]} />} />
             })
         }
         <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome articles={docs.articles} menu={categories} />} />

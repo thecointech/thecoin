@@ -17,7 +17,7 @@ export const ArticleItem = ({ id, data }: ArticleDocument) => {
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>
           <Grid.Column>
-            <img src={ data.thumbnail!.url} />
+            <img src={ data.thumbnail.url} alt={data.thumbnail.alt} />
           </Grid.Column>
           <Grid.Column>
             <div className={`${styles.text}`}>

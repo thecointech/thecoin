@@ -1,5 +1,5 @@
 import React from "react";
-import { Article } from "./Article";
+//import { Article } from "./Article";
 import { Header } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import styles from "./styles.module.less";
 import { ArticleMenu } from "./ArticleMenu";
 import { Dictionary } from "lodash";
 import { Decoration } from "components/Decoration";
+import { ArticleItem } from "./ArticleItem";
 
 type Props = {
   title?: string,
@@ -26,7 +27,7 @@ export const ArticleList = ({ title, articles, menu }: Props) => {
             {title ? ((title.split("-"))[1]) : ""}
           </Header.Content>
         </Header>
-        {articles.filter(article => locale === ((article.lang!).split("-"))[0]).map(article => (<Article key={article.id} {...article} />))}
+        {articles.filter(article => locale === ((article.lang!).split("-"))[0]).map(article => (<ArticleItem key={article.id} {...article} />))}
       </div>
       <Decoration />
     </>

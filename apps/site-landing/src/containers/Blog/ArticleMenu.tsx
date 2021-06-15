@@ -10,15 +10,8 @@ type Props = {
   }
   
 function displayEntry(index: number, name: string ){
-    return <List.Item key={index}><Link to={"/blog/theme-"+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
-                { /* <List> */ }
-                    { /*
-                        subentries.map((entrySubentries) => ( 
-                            <List.Item key={entrySubentries.id}>
-                                <Renderer r={entrySubentries.data.question} />
-                            </List.Item> ))*/
-                    }
-                { /* <List> */ }
+    return <List.Item key={index}>
+                <Link to={"/blog/theme-"+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
             </List.Item>
 }
 
