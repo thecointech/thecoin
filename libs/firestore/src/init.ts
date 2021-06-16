@@ -39,13 +39,11 @@ export async function init(params?: InitParams) {
       const debug = await import('./debug');
       return debug.init(project);
     }
-    else {
-      // If this is a test, better to put in a default than to fail.
-      if (process.env.NODE_ENV === 'testing' && process.env.JEST_WORKER_ID) {
-        log.debug('Initializing to empty mutable mocked db')
-        const debug = await import('./mock');
-        return debug.init({});
-      }
+    // No connections available.  Fallback to mocked DB
+    else if (process.env.NODE_ENV !== 'production') {
+      log.warn('Initializing to empty mutable mocked db')
+      const mock = await import('./mock');
+      return mock.init({});
     }
   }
   // No connection.  Better to throw than let the app continue
