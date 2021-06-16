@@ -34,7 +34,7 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./*": [ "./build/*.js", "./build/*/index.js" ]
+    "./*": [ "./build/*/index.js" ]
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
