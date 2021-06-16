@@ -7,7 +7,7 @@
       "semantic-ui-less"
     ]
   },
-  "version": "0.2.2",
+  "version": "0.2.6",
   "description": "THECoin: Future-proof currency: Semantic theme for websites",
   "repository": {
     "type": "git",
@@ -24,7 +24,9 @@
   },
   "typesVersions": {
     "*": {
-      "*": [ "build/*" ]
+      "*": [
+        "build/*"
+      ]
     }
   },
   "scripts": {

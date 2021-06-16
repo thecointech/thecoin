@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processing",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "The Coin: A library for processing coin deposits and etransfers",
   "keywords": [
     "THECoin"
@@ -29,20 +29,27 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./*": [ "./build/*/index.js" ]
+    "./*": [
+      "./build/*/index.js"
+    ]
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts",
+        "build/*/index.d.ts"
+      ]
     }
   },
   "dependencies": {
-    "@thecointech/broker-db": "*",
-    "@thecointech/rbcapi": "*",
-    "@thecointech/tx-gmail": "^0.2.3",
-    "@thecointech/utilities": "^0.2.3"
+    "@thecointech/broker-db": "^0.2.6",
+    "@thecointech/rbcapi": "^0.2.6",
+    "@thecointech/tx-gmail": "^0.2.6",
+    "@thecointech/utilities": "^0.2.6"
   },
   "devDependencies": {
     "jest": "*"
