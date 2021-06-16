@@ -11,7 +11,7 @@ const link = { id:"site.blog.articleLink",
                 description:"Link to access article page in blog" };
 
 export const ArticleItem = ({ id, data }: ArticleDocument) => {
-  const url = ("/blog/"+id).toString()
+  const url = ("/blog/"+id).toString();
   return (
     <div className={`${styles.articleLine} x6spaceBefore x6spaceAfter`} >
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
@@ -21,7 +21,7 @@ export const ArticleItem = ({ id, data }: ArticleDocument) => {
           </Grid.Column>
           <Grid.Column>
             <div className={`${styles.text}`}>
-              <Header as={"h3"}><Renderer r={data.title} /></Header>
+              <Header as={"h4"}>{data.title ? data.title[0].text : ""}</Header>
               <Renderer r={data.content} />
             </div>
             <Link to={url}><FormattedMessage {...link} /></Link>

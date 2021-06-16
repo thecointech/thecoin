@@ -12,8 +12,6 @@ import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/se
 import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
 import { Article } from "./Article";
 
-
-
 const BlogInternal = (props: RouteComponentProps) => {
   const actions = usePrismicActions();
   const docs = useSelector((s: ApplicationRootState) => s.documents);

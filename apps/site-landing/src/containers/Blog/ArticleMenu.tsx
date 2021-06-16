@@ -15,7 +15,6 @@ function displayEntry(index: number, name: string ){
             </List.Item>
 }
 
-
 export const ArticleMenu = ({ categories }: Props) => {
     return (
         <>
