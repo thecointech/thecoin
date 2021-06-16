@@ -6,7 +6,9 @@ loadTypescript();
 // Load environment for the network we are deploying to
 require('../../tools/setenv');
 const { AccountId } = require('@thecointech/accounts');
-const { loadFromPK } = require('@thecointech/accounts/encrypted');
+// Load directly from path to side-step the limitations imposed
+// by the new package.exports module resolution
+const { loadFromPK } = require('../accounts/build/encrypted');
 
 
 module.exports = {

@@ -33,10 +33,6 @@
   ],
   "main": "./build/index_node.js",
   "browser": "./build/index_web.js",
-  "exports": {
-    ".": "./build/index_node.js",
-    "./encrypted": "./build/encrypted.js"
-  },
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "^0.2.2"

@@ -29,6 +29,19 @@
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": "./build/index.js",
+    "./internal/server": "./internal/server/index.js",
+    "./*": [ "./build/*.js", "./build/*/index.js"]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+    }
+  },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
     "@thecointech/shared": "^0.2.4",

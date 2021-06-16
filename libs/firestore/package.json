@@ -20,7 +20,6 @@
     "deploy:clean": "rimraf ./build/.buildinfo",
     "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
-
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -32,7 +31,14 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [ "build/index.d.ts" ],
+      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+    }
   },
   "dependencies": {
     "@thecointech/logging": "*"

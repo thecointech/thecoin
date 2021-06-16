@@ -25,7 +25,9 @@ module.exports = {
         loader: 'less-loader',
         options: {
           sourceMap: true,
-          modifyVars,
+          lessOptions: {
+            modifyVars,
+          }
         },
       },
     ],
