@@ -60,5 +60,6 @@
   },
   "dependencies": {
     "ethers": "4.0.47"
-  }
+  },
+  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
 }
