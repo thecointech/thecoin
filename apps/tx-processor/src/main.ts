@@ -2,9 +2,10 @@ import { init as LogInit, log } from "@thecointech/logging";
 import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/accounts';
-import { initBrowser } from "@thecointech/rbcapi/action";
+import { initBrowser } from "@thecointech/rbcapi";
 import { ConnectContract, TheCoin } from '@thecointech/contract';
-import { processUnsettledDeposits, processUnsettledETransfers } from "@thecointech/tx-processing";
+import { processUnsettledDeposits } from './deposits';
+import { processUnsettledETransfers } from './etransfer';
 
 async function initialize() {
 

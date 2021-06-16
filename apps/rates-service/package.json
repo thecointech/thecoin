@@ -43,6 +43,7 @@
   "dependencies": {
     "@thecointech/logging": "^0.2.2",
     "@thecointech/utilities": "^0.2.3",
+    "@thecointech/firestore": "^0.2.1",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",
     "cors": "^2.8.5",

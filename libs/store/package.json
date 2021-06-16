@@ -14,8 +14,12 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/store"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "build:lib": "yarn build",
+    "prepublishOnly": "run-s clean build publish:clean",
+    "publish:clean": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -24,18 +28,8 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./*": "./build/*.js"
-  },
+  "exports": "./build/index.js",
   "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
-    }
-  },
   "dependencies": {
     "pouchdb": "*",
     "pouchdb-upsert": "*"

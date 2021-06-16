@@ -1,5 +1,5 @@
 import { init } from '@thecointech/logging';
-import { RbcStore } from "@thecointech/rbcapi/store";
+import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
 import { initBrowser } from '@thecointech/rbcapi';
 
