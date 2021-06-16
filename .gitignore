@@ -51,3 +51,4 @@ libs/shared/src/containers/IDX/config.devlive.json
 apps/site-nft/src/translations
 apps/site-nft/lang
 
+apps/admin/app/main.prod.js.LICENSE.txt
