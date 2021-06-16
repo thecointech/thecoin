@@ -39,7 +39,7 @@ const BlogInternal = (props: RouteComponentProps) => {
               return <Route key={index} exact={true} path={url} render={() => <ArticleList menu={categories} title={entry[0]} articles={entry[1]} />} />
             })
         }
-        <Route exact path="/blog/:articleId" render={(articleProps) => <Article {...articleProps} />} />
+        <Route path="/blog/:articleId" render={(articleProps) => <Article {...articleProps} />} />
         <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome articles={docs.articles} menu={categories} />} />
       </Switch>
     </>
