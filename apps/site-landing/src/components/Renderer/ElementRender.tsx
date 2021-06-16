@@ -10,7 +10,7 @@ export const ElementRender = ({type, text}: RenderableType) => {
     case "heading2":
       return <Header as={"h2"}>{text}</Header>;
     case "heading3":
-      return <Header as={"h3"}>{text}</Header>;
+      return <span>{text}</span>;
     case "list-item":
         return <div>• {text}</div>;
 
