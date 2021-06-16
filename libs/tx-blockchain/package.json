@@ -21,7 +21,14 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [ "build/index.d.ts" ],
+      "*": [ "build/*" ]
+    }
   },
   "dependencies": {
     "@thecointech/contract": "^0.2.3",

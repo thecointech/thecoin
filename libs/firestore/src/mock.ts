@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV === "development") {
+  require('./mock-shimJest');
+}
 import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import mocks from 'firestore-jest-mock';
