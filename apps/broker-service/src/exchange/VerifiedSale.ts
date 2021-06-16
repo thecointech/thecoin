@@ -30,7 +30,7 @@ export async function  ProcessSale(sale: CertifiedTransfer) {
   // For now, keep sending the emails on every transaction.
   SendMail(`Coin Sell`, `${container.action.address} processed states:\n
       ${container.history.map(h => h.delta.type).join('\n')}\n
-       => ${latestState.name}`
+       => ${latestState.name} - ${latestState.data.hash}`
   );
   return {
     state: latestState.name,
