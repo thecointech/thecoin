@@ -1,5 +1,6 @@
 {
   "name": "@thecointech/tx-blockchain",
+  "private": "true",
   "version": "0.2.3",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "keywords": [
@@ -9,7 +10,6 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
-    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",

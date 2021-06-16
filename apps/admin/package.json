@@ -1,5 +1,6 @@
 {
   "name": "@thecointech/admin",
+  "private": "true",
   "productName": "THECoin: Admin app",
   "version": "0.2.4",
   "description": "A Desktop application to run back-end functionality for THECoin",

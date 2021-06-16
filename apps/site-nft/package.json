@@ -14,7 +14,6 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "build:app": "yarn cross-env CONFIG_NAME=prodtest yarn build",
     "prebuild": "run-p build:semantic build:i18l build:copy",
     "build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",
     "build:semantic": "node ./internals/buildSemantic",
