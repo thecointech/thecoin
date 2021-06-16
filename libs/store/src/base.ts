@@ -3,7 +3,7 @@ import upsert from 'pouchdb-upsert';
 
 PouchDB.plugin(upsert);
 
-const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
+const STORAGE_PATH = process.env.STORAGE_PATH;
 
 // Duplicated out of PouchDB-upsert to keep types happy upstream
 type UpsertResponse = {

@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
   "version": "0.2.3",
-  "private": true,
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "keywords": [
     "THECoin"
@@ -9,8 +8,17 @@
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/tx-gmail"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "build:lib": "yarn build",
+    "prepublishOnly": "run-s clean build publish:clean",
+    "publish:clean": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -19,11 +27,8 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./": "./build/"
-  },
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/utilities": "^0.2.3"
   },
