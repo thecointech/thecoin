@@ -1,5 +1,6 @@
 {
   "name": "@thecointech/shared",
+  "private": "true",
   "version": "0.2.4",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
@@ -17,7 +18,6 @@
   "scripts": {
     "test": "yarn jest",
     "clean": "rimraf ./build",
-    "build:lib": "yarn build",
     "build": "run-p build:src build:copy build:link",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",

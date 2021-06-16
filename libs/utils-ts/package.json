@@ -18,13 +18,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
-    "deploy:lib": "yarn deploy",
-    "build:lib": "yarn build",
+    "prepublishOnly": "run-s clean build publish:clean",
+    "publish:clean": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",

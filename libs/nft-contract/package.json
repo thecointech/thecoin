@@ -20,14 +20,9 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
-    "deploy:lib": "yarn deploy",
+    "prepublishOnly": "run-s clean build publish:clean",
+    "publish:clean": "rimraf ./build/.buildinfo",
     "prod:test:migrate": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build:lib": "yarn build",
     "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
