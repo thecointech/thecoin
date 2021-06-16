@@ -4,7 +4,7 @@
 const { getEnvFile } = require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+//const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 const { transform } = require('@formatjs/ts-transformer');
@@ -116,7 +116,7 @@ module.exports = options => ({
                 optimizationLevel: 7,
               },
               pngquant: {
-                quality: '65-90',
+                quality: [0.65, 0.90],
                 speed: 4,
               },
             },
@@ -141,22 +141,25 @@ module.exports = options => ({
   plugins: options.plugins.concat([
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: configFile,
-      checkSyntacticErrors: true
+      typescript: {
+        configFile,
+      }
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ]),
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
-    plugins: [new TsconfigPathsPlugin({ configFile })],
-    alias: {
-      "@thecointech/utilities": "@thecointech/utilities/build",
-      "@thecointech/contract": "@thecointech/contract/build",
-      "@thecointech/shared": "@thecointech/shared/build",
-      "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
-      "@thecointech/site-base": "@thecointech/site-base/build",
-    },
+    fallback: {
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
+    }
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

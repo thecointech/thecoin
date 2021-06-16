@@ -17,10 +17,15 @@
   "license": "MIT",
   "main": "./build/semantic.css",
   "exports": {
-    "./*": "./src/*",
     "./build": "./internal/buildSemantic.js",
     "./webpack.less": "./internal/webpack.less.js",
-    "./variables.less": "./src/variables.less"
+    "./variables.less": "./src/variables.less",
+    "./*": "./build/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [ "build/*" ]
+    }
   },
   "scripts": {
     "build:lib": "yarn build",

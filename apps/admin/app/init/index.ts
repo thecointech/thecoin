@@ -1,7 +1,7 @@
 import { init } from '@thecointech/logging';
 import { RbcStore } from "@thecointech/rbcapi/store";
 import { ConfigStore } from '@thecointech/store';
-import { initBrowser } from '@thecointech/rbcapi/build/action';
+import { initBrowser } from '@thecointech/rbcapi';
 
 //
 // Initialize (most of) the application

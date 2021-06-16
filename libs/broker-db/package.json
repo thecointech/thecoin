@@ -34,7 +34,14 @@
     ".": "./build/index.js",
     "./transaction": "./build/transaction/index.js",
     "./newsletter": "./build/newsletter/index.js",
-    "./*": "./build/*.js"
+    "./*": [ "./build/*.js"]
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [ "build/index.d.ts" ],
+      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+    }
   },
   "dependencies": {
     "fast-deep-equal": "3.1.3",

@@ -15,7 +15,7 @@ import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import shared_loaders  from '@thecointech/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('production');
-export default merge.smart(baseConfig, {
+export default merge(baseConfig, {
   devtool: 'source-map',
 
   mode: 'production',
@@ -98,13 +98,12 @@ export default merge.smart(baseConfig, {
   },
 
   optimization: {
+    moduleIds: "named",
     minimizer: process.env.E2E_BUILD
       ? []
       : [
           new TerserPlugin({
             parallel: true,
-            sourceMap: true,
-            cache: true
           }),
           new OptimizeCSSAssetsPlugin({
             cssProcessorOptions: {
