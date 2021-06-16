@@ -18,8 +18,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "run-s clean build publish:clean",
-    "publish:clean": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "test": "yarn jest",
     "clean": "rimraf ./build && rimraf ./coverage"
