@@ -32,7 +32,7 @@
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
     "pre_deploy": "yarn build:all",
     "_deploy": "run-s _deploy:lib _deploy:app",
-    "_deploy:lib": "lerna publish --allow-branch */* --no-push",
+    "_deploy:lib": "lerna publish --allow-branch */*",
     "_deploy:app": "lerna run deploy",
     "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
     "clean": "lerna run clean",
