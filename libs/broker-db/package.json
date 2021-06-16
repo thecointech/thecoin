@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-db",
-  "version": "0.2.1",
+  "version": "0.2.6",
   "description": "The Coin: Access BrokerCAD Firestore DB",
   "keywords": [
     "THECoin",
@@ -32,19 +32,26 @@
     ".": "./build/index.js",
     "./transaction": "./build/transaction/index.js",
     "./newsletter": "./build/newsletter/index.js",
-    "./*": [ "./build/*.js"]
+    "./*": [
+      "./build/*.js"
+    ]
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts",
+        "build/*/index.d.ts"
+      ]
     }
   },
   "dependencies": {
-    "fast-deep-equal": "3.1.3",
-    "@thecointech/firestore": "*",
-    "@thecointech/utilities": "*"
+    "@thecointech/firestore": "^0.2.6",
+    "@thecointech/utilities": "^0.2.6",
+    "fast-deep-equal": "3.1.3"
   },
   "devDependencies": {
     "jest": "*"
