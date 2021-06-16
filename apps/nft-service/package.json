@@ -23,7 +23,6 @@
     "run-env": "node --inspect=9233 -r ts-node/register -r dotenv/config ./src/main.ts",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "gcloud app deploy",
-    "deploy:app": "yarn deploy",
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "run-p clean:*",

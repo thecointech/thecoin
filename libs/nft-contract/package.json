@@ -20,8 +20,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "run-s clean build publish:clean",
-    "publish:clean": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "prod:test:migrate": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
     "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
