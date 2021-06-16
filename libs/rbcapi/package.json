@@ -47,5 +47,6 @@
     "@thecointech/types": "^0.2.6",
     "@types/puppeteer": "^2.0.1",
     "jest": "*"
-  }
+  },
+  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
 }

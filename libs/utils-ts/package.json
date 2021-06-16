@@ -58,5 +58,6 @@
     "@thecointech/jestutils": "^0.2.6",
     "@thecointech/types": "^0.2.6",
     "jest": "*"
-  }
+  },
+  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
 }
