@@ -1,7 +1,6 @@
 import React from 'react';
-import { QRCode } from 'react-qr-svg';
-import { AccountState, useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-
+import QRCode from 'qrcode.react';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 
 export const QRConnect = () => {
   const active = useActiveAccount();
@@ -16,8 +15,7 @@ export const QRConnect = () => {
       </div>
       <div>
         <div style={{ margin: 50 }}>
-          <QRCode bgColor="#FFFFFF" fgColor="#000000" level="L" style={{ width: 500 }
-          } value={encryptedAccount} />
+          <QRCode size={500} value={encryptedAccount} />
         </div>
         <div>
           Want your account on your phone ?
