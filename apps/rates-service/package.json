@@ -42,6 +42,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
+    "@google-cloud/firestore": "4.12.3",
     "@thecointech/firestore": "^0.2.7",
     "@thecointech/logging": "^0.2.7",
     "@thecointech/utilities": "^0.2.7",
