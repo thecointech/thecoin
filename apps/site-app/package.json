@@ -75,7 +75,7 @@
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
     "ts-clipboard": "^1.0.17",
-    "react-qr-svg": "^2.4.0"
+    "qrcode.react": "1.0.1"
   },
   "devDependencies": {
     "@octokit/rest": "16.33.1",
@@ -89,6 +89,7 @@
     "@types/react-test-renderer": "^16.9.0",
     "@types/react-transition-group": "^4.2.3",
     "@types/systemjs": "0.20.6",
+    "@types/qrcode.react": "1.0.1",
     "coveralls": "3.0.4",
     "esm": "3.2.25",
     "jest": "*",
