@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "OpenAPI client for @thecointech/nft",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
@@ -24,5 +24,7 @@
     "@types/node": "^12.11.5",
     "typescript": "^3.6.4"
   },
-  "gitHead": "2001c08835efcc10d80aa82adcf751ea29663ec8"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
