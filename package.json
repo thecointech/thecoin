@@ -22,7 +22,7 @@
     "gen:nft": "openapi-generator-cli generate -i apps/nft-service/src/api/swagger.json -g typescript-axios -o apis/nft/ts -c apis/nft/client-ts-spec.json",
     "genapis": "lerna run gen:swagger && run-p gen:*",
     "build:src": "lerna run build",
-    "build:all": "run-s clean genapis build:apis build:src",
+    "build:all": "run-s clean genapis build:src",
     "build": "cross-env CONFIG_NAME=prod yarn build:all",
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "dev:live:ceramic": "yarn ceramic daemon --network=inmemory",
