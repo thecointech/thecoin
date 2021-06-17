@@ -1,32 +1,31 @@
-import { CertifiedTransferRequest, CertifiedTransferResponse } from '@thecointech/types';
+import { CertifiedTransferRequest } from '@thecointech/types';
 import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
-import { DoCertifiedTransferWaitable, success } from '../exchange/VerifiedTransfer';
-
+import { certifiedTransfer } from '../exchange/VerifiedTransfer';
+import { ServerError, ValidateErrorJSON } from '../types';
+import { CertifiedTransferResponse } from './types';
 
 @Route('transfer')
 @Tags('DirectTransfer')
 export class TransferController extends Controller {
-
-
   /**
      * Transfer to another The Coin account
-     * A client may request that the Broker initiate a transfer from their account to another.  The transfer includes a fee paid to the broker to cover the cost of the transfer.  This allows a user to operate on the Ethereum blockchain without requiring their own ether
+     * A client may request that the Broker initiate a transfer from their account to another.
+     * The transfer includes a fee paid to the broker to cover the cost of the transfer.
+     * This allows a user to operate on the Ethereum blockchain without requiring their own ether
      *
-     * request CertifiedTransferRequest A request appropriately filled out and signed as described in the comments
+     * request CertifiedTransferRequest A request appropriately filled out and signed
      * returns CertifiedTransferResponse
      **/
   @Post()
   @Response('200', 'The response confirms to the user the order transfer is valid and has been initiated')
-  @Response('405', 'Invalid input')
+  @Response<ValidateErrorJSON>(422, "Validation Failed")
+  @Response<ServerError>(500, "Server Error")
   async transfer(@Body() request: CertifiedTransferRequest) : Promise<CertifiedTransferResponse> {
-    try {
-        const result = await DoCertifiedTransferWaitable(request);
-        return success(result.hash);
-      }
-      catch (e) {
-        console.error(JSON.stringify(e));
-        throw new Error("Server Error");
-      }
+    const hash = await certifiedTransfer(request);
+    return {
+      message: "success",
+      hash
+    }
   }
 }
 

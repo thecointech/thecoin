@@ -7,13 +7,13 @@ namespace TheApp.Events
 {
 	public class TxStatus : EventBase
 	{
-		public TapCapSupplier.Client.Model.SignedMessage SignedResponse;
+		public TapCapSupplier.Client.Model.TapCapBrokerPurchase Response;
 		public string Status;
 		public double Amount;
 
 		public TxStatus() { }
 		public TxStatus(string status) { Status = status; }
 		public TxStatus(string status, double amount) { Status = status; Amount = amount; }
-		public TxStatus(TapCapSupplier.Client.Model.SignedMessage message, double amount) { SignedResponse = message; Amount = amount; }
+		public TxStatus(TapCapSupplier.Client.Model.TapCapBrokerPurchase purchase, double amount) { Response = purchase; Amount = amount; }
 	}
 }

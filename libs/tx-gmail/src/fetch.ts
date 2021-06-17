@@ -15,7 +15,7 @@ const __labels = {
   deposited: null as string | null,
   rejected: null as string | null,
 };
-type Labels = typeof __labels;
+export type Labels = keyof typeof __labels;
 
 export async function initializeApi(auth: OAuth2Client) {
   if (__gmail)
@@ -34,7 +34,7 @@ export async function initializeApi(auth: OAuth2Client) {
   for (const label of labels) {
     const k = keys.find(k => label.name?.endsWith(k));
     if (k) {
-      const kf = k as keyof Labels;
+      const kf = k as Labels;
       __labels[kf] = label.id ?? null;
     }
   }
@@ -68,7 +68,7 @@ export async function fetchEmails(ids: Array<string | undefined | null>) {
   return emails.map(email => email.data);
 }
 
-export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: keyof Labels) {
+export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: Labels) {
 
   log.debug("Setting transfer label to: " + labelName);
   const labelId = __labels[labelName];

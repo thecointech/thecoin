@@ -8,8 +8,9 @@ export async function getContract() {
 
 export async function getMinterAddress() {
   if (process.env.NODE_ENV === 'production') {
-    const {address} = await import('./minter.json');
-    return address;
+    if (!process.env.WALLET_NFTMinter_ADDRESS)
+      throw new Error('Minter Address no specified');
+    return process.env.WALLET_NFTMinter_ADDRESS
   }
   // for dev, get the account and return it's address
   const signer = await getSigner("NFTMinter");

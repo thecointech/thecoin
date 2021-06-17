@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "The Coin: Common logging setup",
   "keywords": [
     "TheCoin",
@@ -23,6 +23,8 @@
     "deploy:clean": "rimraf ./build/.buildinfo",
     "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
+    "deploy:lib": "yarn deploy",
+    "build:lib": "yarn build",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },

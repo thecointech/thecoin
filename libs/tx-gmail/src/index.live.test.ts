@@ -1,4 +1,4 @@
-import { fetchETransfers, FetchNewDepositEmails } from './index'
+import { fetchETransfers, fetchNewDepositEmails } from './index'
 import { ConfigStore } from '@thecointech/store';
 import { init, release } from '@thecointech/utilities/firestore/jestutils';
 import { IsValidAddress } from '@thecointech/utilities';
@@ -24,9 +24,10 @@ describe("Live service queries for gmail", () => {
 
   it('Can fetch emails', async () => {
 
-    const deposits = await FetchNewDepositEmails();
+    const deposits = await fetchNewDepositEmails();
     expect(deposits).not.toBeUndefined();
   })
+
   it('We have valid deposits', async () => {
 
     if (!IsManualRun)
@@ -37,7 +38,7 @@ describe("Live service queries for gmail", () => {
 
     for (const deposit of deposits) {
       console.log(`Deposit from: ${deposit.name} - ${deposit.recieved?.toLocaleString()}`);
-      expect(deposit.cad).toBeGreaterThan(0);
+      expect(deposit.cad.gt(0)).toBeTruthy();
       expect(deposit.recieved).toBeTruthy();
       expect(IsValidAddress(deposit.address)).toBeTruthy();
       expect(deposit.depositUrl).toBeTruthy();

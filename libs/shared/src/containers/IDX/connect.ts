@@ -1,8 +1,8 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '@thecointech/3id-connect'
+import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 import { Signer } from 'ethers/abstract-signer'
 import { EventEmitter } from 'events'
-import { fromString, toString } from 'uint8arrays'
-import type { DIDProvider } from 'dids'
+import { fromString, toString } from 'uint8arrays';
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 class EthereumProvider extends EventEmitter {
   signer: Signer
@@ -23,7 +23,7 @@ class EthereumProvider extends EventEmitter {
       if (message.startsWith('0x')) {
         message = toString(fromString(message.slice(2), 'base16'), 'utf8')
       }
-      callback(null, { result: this.signer.signMessage(message) })
+      callback(null, { result: sign(message, this.signer) })
     } else {
       callback(new Error(`Unsupported method: ${request.method}`))
     }
@@ -39,10 +39,14 @@ declare module globalThis {
 // TODO: Test account switching!
 globalThis.__threeID = new ThreeIdConnect()
 
-export async function getProvider(signer: Signer): Promise<DIDProvider> {
+export async function createAuthProvider(signer: Signer) {
   const address = await signer.getAddress();
   const ethProvider = new EthereumProvider(signer);
-  // TODO: how do we connect to multiple accounts at the same time?!?
-  await globalThis.__threeID.connect(new EthereumAuthProvider(ethProvider, address))
-  return globalThis.__threeID.getDidProvider()
+  return new EthereumAuthProvider(ethProvider, address);
+}
+
+export async function get3idConnect(authProvider: EthereumAuthProvider) {
+    // TODO: how do we connect to multiple accounts at the same time?!?
+    await globalThis.__threeID.connect(authProvider)
+    return globalThis.__threeID;
 }

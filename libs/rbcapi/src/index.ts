@@ -60,3 +60,4 @@ export class RbcApi {
 
 export { RbcStore } from './store';
 export * from './types';
+export { initBrowser } from './action';

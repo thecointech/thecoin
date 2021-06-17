@@ -16,7 +16,7 @@ export class NftController extends Controller {
    * it's associated claim code, and their address, and we transfer the token to them
    **/
   @Post('claimNft')
-  async claimNft(@Body() claim: NftClaim): Promise<boolean> {
+  async claimNft(@Body() claim: NftClaim): Promise<boolean|string> {
     return claimNft(claim);
   }
 

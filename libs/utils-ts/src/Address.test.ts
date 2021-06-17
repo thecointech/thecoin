@@ -1,4 +1,4 @@
-import {IsValidAddress, NormalizeAddress, IsValidReferrerId, AddressMatches } from './Address';
+import {IsValidAddress, NormalizeAddress, IsValidShortCode, AddressMatches } from './Address';
 
 test('basic', () => {
 
@@ -18,21 +18,20 @@ test('basic', () => {
 	const normAddressLong = NormalizeAddress('0x2fe3cbf59a777e8f4be4e712945ffefc6612d46f');
 	expect(/^0x[A-G0-9]{40}$/.test(normAddressLong)).toBe(true);
 
-	expect(IsValidReferrerId('7k5y8w')).toBe(true);
-	expect(IsValidReferrerId('7K5y8W')).toBe(true);
-	expect(IsValidReferrerId('7K5y8W')).toBe(true);
-	
+	expect(IsValidShortCode('7k5y8w')).toBe(true);
+	expect(IsValidShortCode('7K5y8W')).toBe(true);
+	expect(IsValidShortCode('7K5y8W')).toBe(true);
+
 	// Verify failure cases
-	expect(IsValidReferrerId('75y8W')).toBe(false);	// Too short
-	expect(IsValidReferrerId('xx75y8W')).toBe(false);	// Too Long
-	expect(IsValidReferrerId('7u5y8W')).toBe(false);	// I
-	expect(IsValidReferrerId('7i5y8W')).toBe(false);	// O
-	expect(IsValidReferrerId('7o3y8W')).toBe(false);	// U
-	expect(IsValidReferrerId('7l3y8W')).toBe(false);	// L
+	expect(IsValidShortCode('75y8W')).toBe(false);	// Too short
+	expect(IsValidShortCode('xx75y8W')).toBe(false);	// Too Long
+	expect(IsValidShortCode('7u5y8W')).toBe(false);	// I
+	expect(IsValidShortCode('7i5y8W')).toBe(false);	// O
+	expect(IsValidShortCode('7o3y8W')).toBe(false);	// U
+	expect(IsValidShortCode('7l3y8W')).toBe(false);	// L
 
 	const uc = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
 	const lc = uc.toLowerCase();
 	expect(AddressMatches(uc, lc)).toBeTruthy();
 	expect(AddressMatches(uc, '0xffe3cbf59a777e8f4be4e712945ffefc6612d46f')).toBeFalsy();
   });
-  

@@ -6,9 +6,7 @@ const nocache = require('nocache')
 
 function createWebpackMiddleware(compiler, publicPath) {
   return webpackDevMiddleware(compiler, {
-    logLevel: 'warn',
     publicPath,
-    silent: true,
     stats: 'errors-only',
   });
 }
@@ -24,19 +22,4 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
   app.use(webpackHotMiddleware(compiler));
   // disable caching completely on development builds
   app.use(nocache());
-
-  // Since webpackDevMiddleware uses memory-fs internally to store build
-  // artifacts, we use it instead
-  const fs = middleware.fileSystem;
-
-  // deepcode ignore NoRateLimitingForExpensiveWebOperation: not valid for devserver
-  app.get('*', (req, res) => {
-    fs.readFile(path.join(compiler.outputPath, 'index.html'), (err, file) => {
-      if (err) {
-        res.sendStatus(404);
-      } else {
-        res.send(file.toString());
-      }
-    });
-  });
 };

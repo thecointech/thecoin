@@ -1,6 +1,6 @@
 import { getContract, getMinterAddress } from './contract';
 import { getTokenClaimAuthority, getTokenClaimSig, TheCoinNFT } from '@thecointech/nft-contract';
-import { NormalizeAddress } from "@thecointech/utilities";
+import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { log } from '@thecointech/logging';
 
 export type NftClaim = {
@@ -16,10 +16,22 @@ export async function claimNft({tokenId, code, claimant}: NftClaim) {
   const nft = await getContract();
   const minter = await getMinterAddress();
   return (
+    isValidClaimant(claimant) &&
     await isValidCode(tokenId, code, minter) &&
     await isValidToken(tokenId, nft, minter) &&
     await doClaimToken(tokenId, nft, code, claimant)
   )
+}
+
+//
+// Check that destination is legitimate address
+function isValidClaimant(claimant: string) {
+  // Check that
+  if (!IsValidAddress(claimant)) {
+    log.warn({ address: claimant }, `Rejected claim because destination is not valid: {address}`);
+    return false;
+  }
+  return true;
 }
 
 //
@@ -52,7 +64,15 @@ async function isValidToken(tokenId: number, nft: TheCoinNFT, minter: string) {
 async function doClaimToken(tokenId: number, nft: TheCoinNFT, code: string, claimant: string) {
   const signature = getTokenClaimSig(code);
   console.log("Claim Sig: " + signature);
-  const r = await nft.claimToken(tokenId, claimant, signature);
-  log.trace({address: claimant, tokenId, hash: r.hash}, `Token {tokenId} assigned in {hash}`);
-  return true;
+  try {
+ const r = await nft.claimToken(tokenId, claimant, signature);
+    log.debug({address: claimant, tokenId, hash: r.hash}, `Token {tokenId} assigned in {hash} - gasPrice: ${r.gasPrice.toString()}, limit: ${r.gasLimit.toString()}`);
+    console.log(`Token ${tokenId} assigned in ${r.hash} - gasPrice: ${r.gasPrice.toString()}, limit: ${r.gasLimit.toString()}`);
+    return r.hash ?? false;
+  }
+  catch(err) {
+    log.error(err, "Claim Failed");
+    console.error(err);
+  }
+  return false;
 }

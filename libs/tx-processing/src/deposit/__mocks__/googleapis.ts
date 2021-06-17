@@ -19,7 +19,6 @@ export namespace google {
   }
 
   export function gmail() {
-    console.log("Createing mocked gmail");
     return new GmailMocked();
   }
 
@@ -32,15 +31,15 @@ export namespace google {
               labels: [
                 {
                   name: 'etransfer',
-                  id: '123'
+                  id: 'etransfer'
                 },
                 {
                   name: 'deposited',
-                  id: '234'
+                  id: 'deposited'
                 },
                 {
                   name: 'rejected',
-                  id: '456'
+                  id: 'rejected'
                 }
               ]
             }

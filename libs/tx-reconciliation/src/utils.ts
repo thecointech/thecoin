@@ -1,7 +1,6 @@
-import { Timestamp } from "@thecointech/types";
+import { Timestamp } from "@thecointech/firestore";
 import { DateTime } from "luxon"
 import { Reconciliations } from "./types";
-import { knownIssues } from './data/manual.json';
 
 export const compareByDate = <K extends PropertyKey>(key: K) =>
   (l: Record<K, DateTime>, r: Record<K, DateTime>) => l[key].toMillis() - r[key].toMillis();
@@ -27,15 +26,6 @@ export function toDateTime(ts: Timestamp|undefined) : DateTime|undefined;
     : undefined;
 }
 
-// export function toDstArray<T>(src: T[], dst: T[], item?: T) {
-//   if (item) {
-//     src.splice(src.indexOf(item), 1);
-//     dst.push(item);
-//     return true;
-//   }
-//   return false;
-// }
-
 export const getOrCreateUser = (users: Reconciliations, address: string) => {
   let user = users.find(u => u.address === address);
   if (user === undefined) {
@@ -53,21 +43,11 @@ export const getOrCreateUser = (users: Reconciliations, address: string) => {
 export function addReconciled(data: Reconciliations, more: Reconciliations) {
   for (const record of more) {
     const src = data.find(d => d.address === record.address);
-
-    // any invalid hashes?
-    record.transactions
-      .filter(tx => !tx.data.hash.startsWith("0x"))
-      .filter(tx => !knownIssues.find(ki => ki.hash === tx.data.hash))
-      .forEach(tx => {
-        console.error("Invalid hash here: " + tx.data.hash);
-      });
-
     if (!src) data.push(record);
     else {
-      const srcHashes = src.transactions.map(tx => tx.data.hash);
-      const unique = record.transactions.filter(tx => !srcHashes.includes(tx.data.hash));
+      const srcIds = src.transactions.map(tx => tx.action.data.initialId);
+      const unique = record.transactions.filter(tx => !srcIds.includes(tx.action.data.initialId));
       src.transactions.push(...unique);
-      //src.transactions.sort((l, r) => l.data.recievedTimestamp.toMillis() - r.data.recievedTimestamp.toMillis())
     }
   }
 }

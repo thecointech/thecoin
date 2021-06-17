@@ -1,15 +1,10 @@
-import dotenv from 'dotenv'
-dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
-
-import { signIn } from "@thecointech/tx-processing";
 import { init as LogInit, log } from "@thecointech/logging";
-import { RbcStore, RbcApi } from "@thecointech/rbcapi";
+import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/accounts';
 import { initBrowser } from "@thecointech/rbcapi/action";
 import { ConnectContract, TheCoin } from '@thecointech/contract';
-import { ProcessUnsettledDeposits } from "@thecointech/tx-processing/deposit/service";
-import { processUnsettledETransfers } from "@thecointech/tx-processing/etransfer/service";
+import { processUnsettledDeposits, processUnsettledETransfers } from "@thecointech/tx-processing";
 
 async function initialize() {
 
@@ -29,34 +24,30 @@ async function initialize() {
     headless: false
   })
 
-  await signIn()
-
   log.debug('Init Complete');
-  const rbcApi = new RbcApi();
-
-  return { contract, rbcApi };
+  return contract;
 }
 
 //
 // Process deposits: Make 'em Rain!!!
 //
-async function ProcessDeposits(rbcApi: RbcApi, contract: TheCoin) {
+async function ProcessDeposits(contract: TheCoin) {
   log.debug("Processing Deposits");
-  const deposits = await ProcessUnsettledDeposits(contract, rbcApi);
+  const deposits = await processUnsettledDeposits(contract);
   log.debug(`Processed ${deposits.length} deposits`);
   return deposits;
 }
 
-async function ProcessETransfers(rbcApi: RbcApi) {
+async function ProcessETransfers(contract: TheCoin) {
   log.debug("Processing eTransfers");
-  const eTransfers = await processUnsettledETransfers(rbcApi);
+  const eTransfers = await processUnsettledETransfers(contract);
   log.debug(`Processed ${eTransfers.length} eTransfers`);
 }
 
 async function Process() {
-  const { contract, rbcApi } = await initialize();
-  await ProcessDeposits(rbcApi, contract);
-  await ProcessETransfers(rbcApi);
+  const contract = await initialize();
+  await ProcessDeposits(contract);
+  await ProcessETransfers(contract);
   log.debug(` --- Completed processing --- `);
 }
 Process();

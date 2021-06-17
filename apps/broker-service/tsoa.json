@@ -1,14 +1,14 @@
 {
   "entryFile": "./src/main.ts",
   "noImplicitAdditionalProperties": "silently-remove-extras",
+  "controllerPathGlobs": [
+    "./src/controllers/**/*controller.ts"
+  ],
 
   "spec": {
     "basePath": "/api/v1",
     "specVersion": 2,
-    "outputDirectory": "./src/api",
-    "controllerPathGlobs": [
-      "./src/controllers/**/*controller.ts"
-    ]
+    "outputDirectory": "./src/api"
   },
   "routes": {
     "basePath": "/api/v1",
@@ -17,5 +17,10 @@
   },
   "ignore": [
     "**/node_modules/**"
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@thecointech/broker-db/*":  ["../../libs/broker-db/src/*"]
+    }
+  }
 }

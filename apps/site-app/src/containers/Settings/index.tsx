@@ -8,6 +8,7 @@ import { PersonalDetails } from './PersonalDetails';
 import { UserDetails } from './UserDetails';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
+// import { QRConnect } from './QRConnect';
 
 const main = { id:"app.settings.tabs.main",
                 defaultMessage:"User Settings",
@@ -18,6 +19,9 @@ const personaldetails = { id:"app.settings.tabs.interact",
 const storage = { id:"app.settings.tabs.storage",
                 defaultMessage:"Account Storage",
                 description:"Title for the tabs the setting page in the app" };
+// const qrconnect = { id:"app.settings.tabs.qrconnect",
+//                 defaultMessage:"App Connect",
+//                 description:"Page to connect to android app" };
 
 export const Settings = () => {
   const intl = useIntl();
@@ -25,6 +29,7 @@ export const Settings = () => {
     { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs><UserDetails /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
+    //{ menuItem: intl.formatMessage({...qrconnect}), render: () => <AppContainerForTabs><QRConnect /></AppContainerForTabs> },
   ]
   return (
     <React.Fragment>

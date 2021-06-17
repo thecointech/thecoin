@@ -4,7 +4,6 @@ import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
 import { AccountName, getSigner } from '@thecointech/accounts';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
-import { connectNFT } from '@thecointech/nft-contract';
 
 export const wallets = [
   {
@@ -30,22 +29,25 @@ export const wallets = [
 // Fetch some wallets to test with.
 // We always add 1 encrypted wallet at the
 // end (to be able to test login);
+let r: AccountMapState|null = null;
 export function getDevWallets() : AccountMapState {
-  const encrypted = wallets[0];
-  const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
-  // We always add one encrypted wallet
-  const r: AccountMapState =  {
-    active: null,
-    map: {
-      [encryptedAccount.address]: encryptedAccount
+  if (!r) {
+    const encrypted = wallets[0];
+    const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
+    // We always add one encrypted wallet
+    r = {
+      active: null,
+      map: {
+        [encryptedAccount.address]: encryptedAccount
+      }
     }
-  }
-  // if dev mode, we add a random wallet,
-  if (process.env.SETTINGS !== 'live') {
-    const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
-    randomAccount.contract = connectNFT(randomAccount.signer);
-    r.active = randomAccount.address;
-    r.map[randomAccount.address] = randomAccount
+    // if dev mode, we add a random wallet,
+    if (process.env.SETTINGS !== 'live') {
+      const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
+      //randomAccount.contract = connectNFT(randomAccount.signer);
+      r.active = randomAccount.address;
+      r.map[randomAccount.address] = randomAccount
+    }
   }
   return r;
 }

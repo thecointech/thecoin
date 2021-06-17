@@ -7,10 +7,6 @@ export interface SignedMessage {
   message: string;
   signature: string;
 }
-export interface NewAccountReferal {
-  referrerId: string;
-  newAccount: string;
-}
 export interface GoogleWalletItem {
   id: GoogleFileIdent;
   wallet?: string;
@@ -47,10 +43,7 @@ export interface EncryptedPacket {
   encryptedPacket: string;
   version: string;
 }
-export interface CertifiedTransferResponse {
-  message: string;
-  txHash: string;
-}
+
 export interface CertifiedTransferRequest {
   from: string;
   to: string;
@@ -72,6 +65,3 @@ export interface BillPayeePacket {
   payee?: string;
   accountNumber?: string;
 }
-
-
-export * from './FirebaseFirestore';

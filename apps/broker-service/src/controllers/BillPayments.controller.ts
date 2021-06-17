@@ -1,7 +1,8 @@
 import { CertifiedTransfer } from '@thecointech/types';
 import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { DoActionAndNotify } from "../utils/DoActionAndNotify";
+import { ServerError, ValidateErrorJSON } from '../types';
+import { CertifiedTransferResponse } from './types';
 
 
 @Route('bills')
@@ -18,9 +19,13 @@ export class BillPaymentsController extends Controller {
      **/
     @Post("payment")
     @Response('200', 'The response confirms to the user the order has been processed')
-    @Response('400', 'Bad request')
-    @Response('405', 'Invalid input')
-    async billPayment(@Body() request: CertifiedTransfer) {
-        return DoActionAndNotify(request, ProcessBillPayment);
+    @Response<ValidateErrorJSON>(422, "Validation Failed")
+    @Response<ServerError>(500, "Server Error")
+    async billPayment(@Body() request: CertifiedTransfer) : Promise<CertifiedTransferResponse> {
+        const r = await ProcessBillPayment(request);
+        return {
+          message: "success",
+          ...r,
+        }
     }
 }
