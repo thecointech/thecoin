@@ -25,7 +25,7 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
   }
 
   useEffect(() => {
-    actions.fetchFaqs();
+    actions.fetchAllDocs();
   }, []);
 
   const categories = buildCategories(docs);
