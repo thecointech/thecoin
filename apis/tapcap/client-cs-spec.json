@@ -1,0 +1,5 @@
+{
+  "packageName": "TapCapSupplier.Client",
+  "targetFramework": "netstandard2.1",
+  "netCoreProjectFile": true
+}

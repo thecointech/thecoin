@@ -26,20 +26,20 @@ namespace TheApp.DB
 
 		void RecordTx(Events.TxStatus status)
 		{
-			if (status.SignedResponse != null)
+			if (status.Response != null)
 			{
-				var txResponse = status.SignedResponse;
-				var (address, response) = TheUtils.Signing.GetSignerAndMessage<TapCapBrokerPurchase>(txResponse);
-				var (clientAddress, request) = TheUtils.Signing.GetSignerAndMessage<TapCapClientRequest>(response.SignedRequest);
+				//var txResponse = status.SignedResponse;
+				//var (address, response) = TheUtils.Signing.GetSignerAndMessage<TapCapBrokerPurchase>(txResponse);
+				//var (clientAddress, request) = TheUtils.Signing.GetSignerAndMessage<TapCapClientRequest>(response.SignedRequest);
 
 				var tx = new CompletedTx()
 				{
 					Id = TheUtils.TheCoinTime.Now(),
-					Response = txResponse,
+					//Response = txResponse,
 					FiatRequested = status.Amount,
-					CoinCharge = response.CoinCharge.Value,
-					ClientAddress = clientAddress,
-					SupplierAddress = address
+					CoinCharge = status.Response.CoinCharge,
+					//ClientAddress = clientAddress,
+					//SupplierAddress = address
 				};
 
 				completed.Insert(tx);

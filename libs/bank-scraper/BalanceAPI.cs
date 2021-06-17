@@ -407,8 +407,8 @@ _item.value = ""{value}""
 				Path = cachePath
 			});
 			browserFetcher.DownloadProgressChanged += PrintDownloadProgress;
-			await browserFetcher.DownloadAsync(BrowserFetcher.DefaultRevision);
-			return browserFetcher.GetExecutablePath(BrowserFetcher.DefaultRevision);
+			await browserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+			return browserFetcher.GetExecutablePath(BrowserFetcher.DefaultChromiumRevision);
 		}
 
 		private long bytesDownloaded = 0;
