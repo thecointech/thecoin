@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-contract",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
     "TheCoin",
@@ -49,8 +49,8 @@
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/accounts": "^0.2.8",
-    "@thecointech/contract": "^0.2.8",
+    "@thecointech/accounts": "^0.2.9",
+    "@thecointech/contract": "^0.2.9",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",
@@ -70,5 +70,5 @@
     "bs58": "^4.0.1",
     "ethers": "4.0.47"
   },
-  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
+  "gitHead": "65c668d84d19ae243009a28187ab3bbd3299f44d"
 }
