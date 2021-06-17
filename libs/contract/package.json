@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [
     "TheCoin",
@@ -50,7 +50,7 @@
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/accounts": "^0.2.9",
+    "@thecointech/accounts": "^0.2.10",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",
@@ -61,5 +61,5 @@
   "dependencies": {
     "ethers": "4.0.47"
   },
-  "gitHead": "65c668d84d19ae243009a28187ab3bbd3299f44d"
+  "gitHead": "2001c08835efcc10d80aa82adcf751ea29663ec8"
 }
