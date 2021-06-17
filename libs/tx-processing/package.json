@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processing",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "The Coin: A library for processing coin deposits and etransfers",
   "keywords": [
     "THECoin"
@@ -46,10 +46,10 @@
     }
   },
   "dependencies": {
-    "@thecointech/broker-db": "^0.2.6",
-    "@thecointech/rbcapi": "^0.2.6",
-    "@thecointech/tx-gmail": "^0.2.6",
-    "@thecointech/utilities": "^0.2.6"
+    "@thecointech/broker-db": "^0.2.7",
+    "@thecointech/rbcapi": "^0.2.7",
+    "@thecointech/tx-gmail": "^0.2.7",
+    "@thecointech/utilities": "^0.2.7"
   },
   "devDependencies": {
     "jest": "*"
