@@ -1,4 +1,5 @@
 {
     "supportsES6": true,
-    "npmName": "@thecointech/pricing"
+    "npmName": "@thecointech/pricing",
+    "npmRepository": "https://npm.pkg.github.com/"
 }
