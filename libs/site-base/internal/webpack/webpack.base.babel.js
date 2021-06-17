@@ -11,6 +11,7 @@ const { transform } = require('@formatjs/ts-transformer');
 
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
+const packageFile = path.join(projectRoot, 'package.json');
 const dotenv = require('dotenv').config({path: getEnvFile()});
 
 module.exports = options => ({
@@ -140,6 +141,9 @@ module.exports = options => ({
   },
   plugins: options.plugins.concat([
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
+    new webpack.DefinePlugin({
+      __VERSION__: JSON.stringify(require(packageFile).version),
+    }),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         configFile,

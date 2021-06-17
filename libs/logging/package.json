@@ -25,9 +25,13 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/log_node.js",
-  "browser": "./build/log_browser.js",
-  "exports": "./build/log_node.js",
+  "exports": {
+    ".": {
+      "node": "./build/log_node.js",
+      "default": "./build/log_browser.js"
+    }
+  },
+  "types": "./build/log_browser.d.ts",
   "dependencies": {
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.12"
