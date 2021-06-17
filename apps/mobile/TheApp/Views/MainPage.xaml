@@ -7,31 +7,53 @@
   <ContentPage.Resources>
     <ResourceDictionary>
       <local:CoinToHumanConverter x:Key="coinToHuman" />
+      <local:ColorToSolidColorBrushConverter x:Key="colorConverter" />
     </ResourceDictionary>
   </ContentPage.Resources>
-  
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Label Text="Welcome to Xamarin Forms and Prism!" />
 
-        <Button Text="Connect" IsEnabled="{Binding CanConnect}" Command="{Binding ConnectCommand}" />
-        <Label Text="{Binding Logs}" />
+  <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="300" />
-            </Grid.ColumnDefinitions>
-            <Label Text="TapCap Balance:" Grid.Row="0" Grid.Column="0" />
-            <Label Text="Total Balance:" Grid.Row="1" Grid.Column="0" />
-            <Label Text="Cad Balance:" Grid.Row="2" Grid.Column="0" />
-            <Label Text="{Binding TapCapBalance, Converter={StaticResource coinToHuman}}"  Grid.Row="0" Grid.Column="1" />
-            <Label Text="{Binding TotalBalance, Converter={StaticResource coinToHuman}}" Grid.Row="1" Grid.Column="1"/>
-            <Label Text="{Binding CadBalance}" Grid.Row="2" Grid.Column="1"/>
-        </Grid>
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0,100">
 
-		<Button IsEnabled="False" Text="Test Purchase" Command="{Binding TestPurchaseCommand}" />
-		<Button IsEnabled="False" Text="History" Command="{Binding ShowHistoryCommand}" />
+    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step1Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step2Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step3Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step4Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step5Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step6Color, Converter={StaticResource colorConverter}}" />
+      <Ellipse WidthRequest="15" HeightRequest="15" Fill="{Binding Step7Color, Converter={StaticResource colorConverter}}" />
 
     </StackLayout>
+    <Label Text="Welcome to Xamarin Forms and Prism!" />
+
+    <Button Text="Connect" IsEnabled="{Binding CanConnect}" Command="{Binding ConnectCommand}" />
+    <Label Text="{Binding Logs}" />
+
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="300" />
+      </Grid.ColumnDefinitions>
+      <Label Text="TapCap Balance:" Grid.Row="0" Grid.Column="0" />
+      <Label Text="Total Balance:" Grid.Row="1" Grid.Column="0" />
+      <Label Text="Cad Balance:" Grid.Row="2" Grid.Column="0" />
+      <!--<Label Text="{Binding TapCapBalance, Converter={StaticResource coinToHuman}}"  Grid.Row="0" Grid.Column="1" />-->
+      <Label Text="{Binding TotalBalance, Converter={StaticResource coinToHuman}}" Grid.Row="1" Grid.Column="1"/>
+      <Label Text="{Binding CadBalance}" Grid.Row="2" Grid.Column="1"/>
+    </Grid>
+
+    <Button IsEnabled="False" Text="Test Purchase" Command="{Binding TestPurchaseCommand}" />
+    <Button IsEnabled="False" Text="History" Command="{Binding ShowHistoryCommand}" />
+    <Button Text="Show logs" Command="{Binding ShowLogsCommand}" />
+
+  </StackLayout>
+    <Ellipse IsVisible="{Binding ShowingTransactionResult}" WidthRequest="400" HeightRequest="400" Fill="Green"  AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" AbsoluteLayout.LayoutFlags="PositionProportional" />
+    <StackLayout AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" AbsoluteLayout.LayoutFlags="PositionProportional">
+      <Label IsVisible="{Binding ShowingTransactionResult}"  Text="This Transaction Was:" FontSize="20" TextColor="Wheat" />
+      <Label IsVisible="{Binding ShowingTransactionResult}"  Text=" FREE" FontSize="70" TextColor="Wheat" />
+    </StackLayout>
+
+  </AbsoluteLayout>
 
 </ContentPage>

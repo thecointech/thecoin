@@ -15,7 +15,9 @@
     "node": ">=12.18.x"
   },
   "scripts": {
+    "gen:tapcap-cs": "openapi-generator-cli generate -i apps/tapcap-supplier/api/swagger.json -g csharp-netcore -o apis/tapcap/cs -c apis/tapcap/client-cs-spec.json",
     "gen:rates": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
+    "gen:rates-cs": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g csharp-netcore -o apis/rates/cs -c apis/rates/client-cs-spec.json",
     "gen:broker": "openapi-generator-cli generate -i apps/broker-service/src/api/swagger.json -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:nft": "openapi-generator-cli generate -i apps/nft-service/src/api/swagger.json -g typescript-axios -o apis/nft/ts -c apis/nft/client-ts-spec.json",
     "genapis": "lerna run gen:swagger && run-p gen:*",

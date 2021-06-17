@@ -9,11 +9,12 @@ namespace TheApp.TheCoin
 		public TheContract()
 		{
 			// Register the contract
-			Task.Run(async () =>
-			{
-				var theContractJson = await LoadResource.Load("TheCoin.json");
-				Contract = new TheUtils.TheContract(theContractJson);
-			});
+			_ = Task.Run(async () =>
+			  {
+				  var theContractJson = await LoadResource.Load("TheCoin.json");
+				// Production Account
+				Contract = new TheUtils.TheContract(theContractJson, "0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530");
+			  });
 
 			Events.EventSystem.Subscribe<Events.SetActiveAccount>(OnSetActiveAccount);
 		}
