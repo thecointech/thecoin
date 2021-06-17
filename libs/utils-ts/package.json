@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "keywords": [
     "TheCoin",
@@ -45,10 +45,10 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract": "^0.2.7",
-    "@thecointech/logging": "^0.2.7",
-    "decimal.js-light": "^2.5.1",
+    "@thecointech/contract": "^0.2.8",
+    "@thecointech/logging": "^0.2.8",
     "base32": "^0.0.6",
+    "decimal.js-light": "^2.5.1",
     "firebase": "^8.2.9"
   },
   "peerDependencies": {
