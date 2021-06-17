@@ -1,9 +1,11 @@
-import { filterCandidates, toDateTime } from "./utils";
-import { UserAction } from "@thecointech/utilities/User";
+import { filterCandidates } from "./utils";
+import { ActionType } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
 import { AllData, User, ReconciledRecord, BankRecord } from "types";
+import Decimal from 'decimal.js-light';
 
 type BankFilter = ReturnType<typeof getFilter>;
+
 // Next, the tx hash should match blockchain
 export function spliceBank(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
 
@@ -11,38 +13,25 @@ export function spliceBank(data: AllData, user: User, record: ReconciledRecord, 
   if (r.length % 2 !== 1) {
 
     // Find TX
-    const amount = record.data.fiatDisbursed * (record.action === "Buy" ? 1 : -1);
-    const names = record.action === "Buy" ? user.names : undefined;
-    // Find most recent completion attempt
-    const completed = getCompleted(record)
-    const filter = getFilter(record.action);
-    const tx = findBank(data, maxDays, amount, completed, filter, names);
-    if (tx) {
-      data.bank.splice(data.bank.indexOf(tx), 1);
-      r.push(tx);
+    const transition = record.action.history.filter(ts => ts.fiat !== undefined);
+    transition.forEach(tr => {
+      const amount = tr.fiat!;
+      const names = record.action.type === "Buy" ? user.names : undefined;
 
-      // was this cancelled?
-      const confirmation = record.data.confirmation;
-      if (completed) {
-        const cancelled = findCancellation(data, amount, completed, confirmation?.toString());
-        if (cancelled) {
-          data.bank.splice(data.bank.indexOf(cancelled), 1);
-          r.push(cancelled);
-        }
+      // Find most recent completion attempt
+      const filter = getFilter(record.action.type);
+      const tx = findBank(data, maxDays, amount, tr.date, filter, names);
+      if (tx) {
+        data.bank.splice(data.bank.indexOf(tx), 1);
+        r.push(tx);
       }
-    }
+    })
   }
   return r;
 }
 
-// Compiler error: somehow TS loses the possibility that this date might be undefined
-const getCompleted = (record: ReconciledRecord) : DateTime|undefined =>
-  record.bank.slice(-1)[0]?.Date ?? toDateTime(record.data.completedTimestamp) ?? toDateTime(record.data.processedTimestamp);
-
-export const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
-
-{
-  switch(action) {
+export const getFilter = (action: ActionType): (tx: BankRecord) => boolean => {
+  switch (action) {
     case "Bill": return tx => tx.Description.startsWith('Online Banking payment');
     case "Sell": return tx => tx.Description === 'e-Transfer sent';
     case "Buy": return tx => tx.Description === 'e-Transfer received' || tx.Description === 'e-Transfer - Request Money';
@@ -51,9 +40,9 @@ export const getFilter = (action: UserAction) : (tx: BankRecord) => boolean =>
   }
 }
 
-export function findBank(data: AllData, maxDays: number, amount: number, date?: DateTime, filter?: BankFilter, names?: string[]) {
+export function findBank(data: AllData, maxDays: number, amount: Decimal, date?: DateTime, filter?: BankFilter, names?: string[]) {
   // raw filter
-  let candidates = data.bank.filter(tx => tx.Amount === amount);
+  let candidates = data.bank.filter(tx => amount.eq(tx.Amount));
 
   // Custom filter
   if (filter)

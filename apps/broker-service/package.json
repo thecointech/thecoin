@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
@@ -23,9 +23,8 @@
     "run-env": "node --inspect=9232 -r ts-node/register -r dotenv/config ./src/main.ts",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "gcloud app deploy",
-    "build": "run-s build:api build:src",
-    "build:src": "yarn tsc -b tsconfig.build.json",
-    "build:api": "yarn tsoa spec-and-routes",
+    "build": "yarn tsc -b tsconfig.build.json",
+    "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn jest --runInBand",
     "test:coverage": "yarn test --coverage"
@@ -38,11 +37,12 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/accounts": "^0.2.1",
-    "@thecointech/contract": "^0.2.1",
-    "@thecointech/email": "^0.2.1",
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/tx-processing": "*",
+    "@thecointech/accounts": "^0.2.2",
+    "@thecointech/contract": "^0.2.3",
+    "@thecointech/email": "^0.2.2",
+    "@thecointech/logging": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3",
     "@tsoa/runtime": "^3.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",

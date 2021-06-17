@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "The Coin: Base storage mechanisms",
   "keywords": [
     "TheCoin",
@@ -15,6 +15,7 @@
     "directory": "libs/store"
   },
   "scripts": {
+    "build:lib": "yarn build",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -26,7 +27,14 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [ "build/index.d.ts" ],
+      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+    }
   },
   "dependencies": {
     "pouchdb": "*",

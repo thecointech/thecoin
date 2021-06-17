@@ -4,7 +4,6 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import { GenerateAliases } from './patchpaths';
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const configFile = path.join(__dirname, '..', 'tsconfig.build.json');
@@ -47,17 +46,16 @@ export default {
   resolve: {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.ts', '.tsx', '.json'],
-    alias: GenerateAliases()
   },
 
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'
     }),
-    new webpack.NamedModulesPlugin(),
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: configFile,
-      checkSyntacticErrors: true
+      typescript: {
+        configFile,
+      }
     }),
   ]
 };

@@ -1,30 +1,23 @@
-import { ReconciledRecord, isComplete, toDateTime } from "@thecointech/tx-reconciliation"
-import { CertifiedTransferRecord } from "@thecointech/utilities/firestore"
+import { ReconciledRecord, isComplete } from "@thecointech/tx-reconciliation"
 import { RefundButton } from "containers/Refund"
 import React from "react"
 import { Icon, List } from "semantic-ui-react"
 
 export const ClientTransaction = (props: ReconciledRecord) => {
-  const { data } = props;
-  const date = toDateTime(props.data.recievedTimestamp);
+  const { action } = props;
+  const date = action.data.date;
 
   // Create default values
   // TODO: move data creation into tx-reconciliation
-  const record = {
-    ...data,
-    transfer: {
-      from: props.blockchain?.counterPartyAddress,
-      timestamp: props.blockchain?.date.toMillis(),
-      ...data.transfer,
-    }
-  }
+  const fiatDisbursed = action.history.find(h => h.fiat);
+  const [/*init*/, refunded] = action.history.filter(h => h.hash)
   return (
-  <List.Item key={props.data.hash}>
+  <List.Item key={action.data.initialId}>
     <TransactionIcon {...props} />
-    {`${date.toISODate()} ${props.action} - ${props.data.fiatDisbursed} ${props.data.hashRefund ? '[REFUNDED]' : ''}`}
+    {`${date.toISODate()} ${props.action} - ${fiatDisbursed?.fiat?.toNumber()} ${refunded ? '[REFUNDED]' : ''}`}
     {isComplete(props)
       ? undefined
-      : <RefundButton record={record as CertifiedTransferRecord} />
+      : <RefundButton action={action} />
     }
   </List.Item>
   )
@@ -33,6 +26,6 @@ export const ClientTransaction = (props: ReconciledRecord) => {
 const TransactionIcon = (props: ReconciledRecord) =>
   isComplete(props)
       ? <Icon name="check circle outline" color='green' />
-      : (props.data.hash != null)
+      : true // (props.action.history != null)
         ? <Icon name="times circle outline" color='red' />
         : <Icon name="dot circle outline" color='grey' />

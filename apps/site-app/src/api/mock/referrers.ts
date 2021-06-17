@@ -1,4 +1,4 @@
-import { ReferralsApi, NewAccountReferal } from "@thecointech/broker-cad";
+import { ReferralsApi, ReferralCreateBody } from "@thecointech/broker-cad";
 import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
 
 export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
@@ -11,7 +11,7 @@ export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
      * @throws {RequiredError}
      * @memberof ReferrersApi
      */
-    async referralCreate(_referral: NewAccountReferal, _options?: any)
+    async referralCreate(_referral: ReferralCreateBody, _options?: any)
     {
       await delay(250);
       return buildResponse({

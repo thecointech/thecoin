@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "keywords": [
     "THECoin",
@@ -18,6 +18,7 @@
     "directory": "libs/rbcapi"
   },
   "scripts": {
+    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -29,12 +30,19 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [ "build/index.d.ts" ],
+      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+    }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.1",
-    "@thecointech/store": "^0.2.0",
-    "@thecointech/utilities": "^0.2.1",
+    "@thecointech/logging": "^0.2.2",
+    "@thecointech/store": "^0.2.2",
+    "@thecointech/utilities": "^0.2.3",
     "csvtojson": "^2.0.10",
     "puppeteer": "^2.1.1"
   },
@@ -43,7 +51,7 @@
     "luxon": "*"
   },
   "devDependencies": {
-    "@thecointech/types": "^0.2.0",
+    "@thecointech/types": "^0.2.2",
     "@types/puppeteer": "^2.0.1",
     "jest": "*"
   }

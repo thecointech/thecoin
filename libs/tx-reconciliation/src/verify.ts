@@ -1,12 +1,11 @@
 import { findBank } from "./matchBank";
 import { builtInAccounts, knownIssues } from './data/manual.json';
 import { NormalizeAddress } from "@thecointech/utilities/Address";
-import { getFiat } from "./fxrates";
 import { Reconciliations, AllData, ReconciledRecord } from "./types";
 
 export async function verify(r: Reconciliations, data: AllData) {
   for (const user of r) {
-    user.transactions.sort((l, r) => r.data.recievedTimestamp.toMillis() - l.data.recievedTimestamp.toMillis());
+    user.transactions.sort((l, r) => r.action.data.date.toMillis() - l.action.data.date.toMillis());
   }
 
   await printUnmatched(r);
@@ -17,7 +16,7 @@ export async function verify(r: Reconciliations, data: AllData) {
 function matchLooseEmails(_r: Reconciliations, data: AllData) {
   data.eTransfers.forEach(et => {
     // any matches in bank?
-    const bank = findBank(data, 40, et.cad.toNumber(), et.recieved);
+    const bank = findBank(data, 40, et.cad, et.recieved);
     if (bank) {
       // can we find a block chain for this?
       const blockchain = data.blockchain.filter(bc => bc.counterPartyAddress === et.address);
@@ -29,9 +28,9 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
 }
 
 export const isComplete = (tx: ReconciledRecord) =>
-  knownIssues.find(ki => ki.hash === tx.data.hash) ||
+  knownIssues.find(ki => tx.action.history.find(tr => tr.hash === ki.hash)) ||
   !(
-    (tx.action === "Buy" && tx.email === null) ||
+    (tx.action.type === "Buy" && tx.email === null) ||
     (tx.refund === null && tx.bank.length % 2 === 0) ||
     tx.blockchain === null
   )
@@ -49,13 +48,13 @@ async function printUnmatched(r: Reconciliations) {
 
   for (const um of unMatched) {
     for (const umtx of um.transactions) {
-      const email = umtx.email || umtx.action !== "Buy" ? "" : " Email";
+      const email = umtx.email || umtx.action.type !== "Buy" ? "" : " Email";
       const blockchain = umtx.blockchain ? "" : " blockchain";
       const bank = umtx.bank.length % 2 === 1 ? "" : " bank";
       const db = umtx.database ? "" : " db";
 
-      const fiat = await getFiat(umtx);
-      console.log(`${umtx.data.recievedTimestamp.toDate()} ${umtx.action} ${um.names} - ${fiat}, missing ${email}${blockchain}${bank}${db}`);
+      const fiat = "FIGURE THIS OUT TOO"; //await getFiat(umtx);
+      console.log(`${umtx.action.data.date.toSQLDate()} ${umtx.action} ${um.names} - ${fiat}, missing ${email}${blockchain}${bank}${db}`);
     }
   }
 }
