@@ -15,6 +15,11 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
+// initialize logging first
+import { log, init } from '@thecointech/logging';
+init('site-landing');
+log.info(`Loading App: ${__VERSION__}`);
+
 // Import root app
 import { App } from 'containers/App';
 
@@ -28,8 +33,7 @@ import { translations } from './translations';
 import { initTracking } from './utils/reactga';
 
 initTracking();
-import { init } from '@thecointech/logging';
-init('site-landing')
+
 
 // Create redux store with history
 const store = configureLandingStore();

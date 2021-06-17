@@ -21,6 +21,7 @@
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
     "predeploy": "ts-node --skip-project predeploy",
+    "deploy:rebuild": "yarn build",
     "deploy": "firebase deploy --only hosting",
     "dev": "yarn node internals/server --port=3000",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
