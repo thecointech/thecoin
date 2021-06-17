@@ -29,6 +29,7 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
   }, []);
 
   const categories = buildCategories(docs);
+  console.log("categories",categories)
   return (
     <>
       <Switch>
