@@ -6,8 +6,8 @@
 **/obj/
 **/bin/
 /secrets
-**/api/swagger.json
 **/vscode-chrome-debug-userdatadir
+**/.vs/
 
 !**/summary.txt
 **/*.module.css.map
@@ -30,6 +30,12 @@
 
 # Ignore tapcap card cache files
 **/data/cache
+
+# ignore auto-gen'ed swagger files
+**/api/swagger.json
+# except the tapcap-supplier (we don't want
+# the dependency on .Net in our buildchain)
+!apps/tapcap-supplier/api/swagger.json
 
 # Ignore all auto-generated API files
 # except for the package.json (these
