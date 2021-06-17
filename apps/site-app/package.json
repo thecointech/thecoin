@@ -74,7 +74,8 @@
     "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
-    "ts-clipboard": "^1.0.17"
+    "ts-clipboard": "^1.0.17",
+    "react-qr-svg": "^2.4.0"
   },
   "devDependencies": {
     "@octokit/rest": "16.33.1",
