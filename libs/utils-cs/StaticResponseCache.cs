@@ -12,11 +12,16 @@ namespace TheUtils
 	{
 		protected List<byte[]> queries = new List<byte[]>();
 		protected List<byte[]> responses = new List<byte[]>();
-		protected List<int?> parentIndices = new List<int?>();
+		protected List<int> parentIndices = new List<int>();
 
 		protected byte[] GpoPdol;
 		protected byte[] CryptoPdol;
 
+		/// <summary>
+		/// The index that the last query returned.
+		/// This can be used as the parent index of
+		/// the next query
+		/// </summary>
 		protected int LastIndex = -1;
 
 		/// <summary>
