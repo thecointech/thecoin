@@ -11,8 +11,10 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 // TODO: Move API Endpoint into .env configuration
-const apiEndpoint = 'https://thecointech.cdn.prismic.io/api/v2';
-const accessToken = 'MC5ZTFZuSUJBQUFDTUF6a1Rz.77-9DgXvv73vv70xD--_ve-_vR4kOjpk77-977-9Eu-_ve-_ve-_ve-_vWrvv71377-9BnkhRx7vv71F';
+//const apiEndpoint = 'https://thecointech.cdn.prismic.io/api/v2';
+//const accessToken = 'MC5ZTFZuSUJBQUFDTUF6a1Rz.77-9DgXvv73vv70xD--_ve-_vR4kOjpk77-977-9Eu-_ve-_ve-_ve-_vWrvv71377-9BnkhRx7vv71F';
+const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
+const accessToken = process.env.PRISMIC_API_ACCESSTOKEN;
 const Client = Prismic.client(apiEndpoint, { accessToken });
 
 export class PrismicReducer extends TheCoinReducer<PrismicState> implements IActions
