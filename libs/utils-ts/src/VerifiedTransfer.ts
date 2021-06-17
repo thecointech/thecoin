@@ -1,7 +1,7 @@
 import { ethers, Signer } from "ethers";
 import { CertifiedTransferRequest } from "@thecointech/types";
+import { sign } from "./SignedMessages";
 
-// ---------------------------------------------------------\\
 
 function GetHash(
   from: string,
@@ -26,7 +26,7 @@ export async function SignVerifiedXfer(
 ) {
   const address = await from.getAddress();
   const hash = GetHash(address, to, value, fee, timestamp);
-  return await from.signMessage(hash);
+  return await sign(hash, from);
 }
 
 export function GetTransferSigner(

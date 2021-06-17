@@ -1,8 +1,5 @@
 ﻿using BerTlv;
 using PCSC.Iso7816;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TheUtils
 {
@@ -15,9 +12,7 @@ namespace TheUtils
             byte[] SEL_FILE = new byte[] { 0x00, 0xA4, 0x04, 0x00, 0x0E, 0x32, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31, 0x00 };
             var selResponse = card.SendCommand(SEL_FILE);
             var tlvSelResponse = Tlv.ParseTlv(selResponse);
-
-            var paymentApp = tlvSelResponse;
-            var SelApp = new CommandApdu(IsoCase.Case4Short, card.Protocol)
+			var SelApp = new CommandApdu(IsoCase.Case4Short, card.Protocol)
             {
                 Instruction = InstructionCode.SelectFile,
                 P1 = 0x04, // read the first file (I think?)
@@ -71,10 +66,8 @@ namespace TheUtils
                     Data = PDOL.GenerateCDOL(cdolParsed)
                 };
 
-                var fuckinAye = card.SendCommand(GenerateCrypto);
-                var faBytes = fuckinAye;
-
-                return true;
+                var final = card.SendCommand(GenerateCrypto);
+                return final?.Length > 0;
             }
             return false;
         }

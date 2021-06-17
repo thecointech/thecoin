@@ -41,7 +41,7 @@ export const UploadWallet = (props: Props) => {
 
   const onRecieveFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
-    const isValid = ValidateFile(wallet, props.validate);
+    const isValid = await ValidateFile(wallet, props.validate);
 
     if (isValid) {
       accountsApi.addAccount(name, wallet);

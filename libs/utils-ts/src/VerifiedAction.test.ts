@@ -1,7 +1,7 @@
 import { GetContract } from "@thecointech/contract";
 import { Wallet } from "ethers";
 import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
-import { BuildVerifiedAction, GetSigner } from "./VerifiedAction";
+import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
 
 const wallet = Wallet.createRandom();
 const value = 100000;
@@ -46,10 +46,10 @@ test("Can build full verified billpayment", async () => {
     value,
     fee
   );
-  VerifyTransfer(sale.transfer);
+  await VerifyTransfer(sale.transfer);
 
   // verify that our action signature is valid
-  const signer = GetSigner(sale);
+  const signer = getSigner(sale);
   expect(signer).toMatch(wallet.address);
 });
 

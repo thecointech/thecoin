@@ -1,6 +1,6 @@
-import { InitialCoinBlock, ConnectContract } from '@thecointech/contract';
+import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract';
 import { Wallet } from 'ethers';
-import { call } from 'redux-saga/effects';
+import { call, StrictEffect } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { useDispatch } from 'react-redux';
@@ -17,6 +17,7 @@ import { log } from '@thecointech/logging';
 import { createActionCreators, createReducerFunction } from 'immer-reducer';
 import { Dictionary } from 'lodash';
 import { bindActionCreators } from 'redux';
+import { SagaIterator } from 'redux-saga';
 
 
 // The reducer for a single account state
@@ -32,7 +33,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     yield this.sendValues(this.actions().connect);
   }
 
-  *connect() {
+  *connect() : Generator<StrictEffect, void, TheCoin> {
     // Load details last, so it
     yield this.sendValues(this.actions().loadDetails);
 
@@ -43,19 +44,26 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     yield this.storeValues({contract});
     // Load history info by default
     yield this.sendValues(this.actions().updateHistory, [new Date(0), new Date()]);
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Save/load private details
 
-  *loadDetails() {
-    // Connect to IDX
+  *getIDX() {
     let idx = this.state.idx;
-    if (!idx) idx = yield call(connectIDX, this.state.signer)
+    if (!idx) {
+      idx = yield call(connectIDX, this.state.signer);
+      yield this.storeValues({ idx, idxIO: true });
+    }
+    return idx;
+  }
+
+  *loadDetails() : SagaIterator {
+    // Connect to IDX
+    const idx = yield* this.getIDX()
     if (idx) {
       yield this.storeValues({ idx, idxIO: true });
-      const payload = yield loadDetails(idx);
+      const payload = yield call(loadDetails, idx);
       const details = payload?.data || DefaultAccountValues.details;
       yield this.storeValues({ details, idxIO: false });
       log.trace("Restored account details from IDX");
@@ -79,7 +87,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
 
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
-  *updateBalance() {
+  *updateBalance(): SagaIterator {
     const { signer, contract } = this.state;
     if (!contract || !signer) {
       return;
@@ -93,8 +101,8 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   }
 
-  *updateHistory(from: DateTime, until: DateTime) {
-    const { signer, contract } = this.state;
+  *updateHistory(from: DateTime, until: DateTime) : SagaIterator {
+    const { signer, contract, address } = this.state;
     if (contract === null || signer === null)
       return;
 
@@ -105,9 +113,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
 
     // First, fetch the account balance toasty-fresh
-    const address = yield call(signer.getAddress.bind(signer));
     const balance = yield call(contract.balanceOf, address);
-
     yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
     // Lets not push ahead too quickly with this saga,
@@ -140,7 +146,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  *decrypt(password: string, callback: DecryptCallback | undefined) {
+  *decrypt(password: string, callback: DecryptCallback | undefined) : SagaIterator {
     const { signer, name } = this.state;
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);

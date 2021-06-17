@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-contract",
-  "version": "0.2.1",
+  "version": "0.2.5",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
     "TheCoin",
@@ -25,7 +25,9 @@
     "deploy:clean": "rimraf ./build/.buildinfo",
     "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
     "deploy:post": "rimraf ./build/package.json",
-    "deploy:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
+    "deploy:lib": "yarn deploy",
+    "prod:test:migrate": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
+    "build:lib": "yarn build",
     "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
@@ -36,8 +38,8 @@
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "test": "yarn jest",
-    "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
-    "dev:live:emulator": "truffle develop",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev:live:migrate",
+    "dev:live:emulator": "start yarn truffle develop",
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
     "generate-types": "run-p generate-types:*",
     "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
@@ -51,9 +53,10 @@
   "exports": "./build/index.js",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.1.0",
-    "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@openzeppelin/test-environment": "^0.1.9",
-    "@thecointech/accounts": "*",
+    "@openzeppelin/truffle-upgrades": "^1.5.0",
+    "@thecointech/accounts": "^0.2.2",
+    "@thecointech/contract": "^0.2.3",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",
@@ -62,8 +65,15 @@
     "truffle": "^5.1.67",
     "typechain": "^4.0.2"
   },
+  "dependenciesComments": {
+    "@thecointech/contract": [
+      "We do not have an actual dependency, but truffle can",
+      "break on simultaneous compilation so we list this so",
+      "lerna doesn't try and build both at the same time"
+    ]
+  },
   "dependencies": {
-    "ethers": "4.0.47",
-    "bs58": "^4.0.1"
+    "bs58": "^4.0.1",
+    "ethers": "4.0.47"
   }
 }

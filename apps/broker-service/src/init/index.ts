@@ -1,6 +1,6 @@
 import { Settings } from "luxon";
 import { init as initlog} from '@thecointech/logging';
-import { init as initdb } from '@thecointech/utilities/firestore';
+import { init as initdb } from '@thecointech/firestore';
 import { seed } from "./seed";
 
 export async function init() {

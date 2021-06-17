@@ -12,7 +12,7 @@
     <RootNamespace>TheApp.Droid</RootNamespace>
     <AssemblyName>TheApp.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -58,11 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2.1" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="27.0.2.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
+    <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.AndroidX.MediaRouter">
+      <Version>1.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Palette">
+      <Version>1.0.0.7</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudHostCardService.cs" />
@@ -71,7 +77,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\node_modules\@the-coin\contract\build\contracts\TheCoin.json">
+    <AndroidAsset Include="..\..\..\node_modules\@thecointech\contract\build\contracts\TheCoin.json">
       <Link>Assets\TheCoin.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidAsset>
@@ -96,7 +102,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\the-utilities\TheUtils\TheUtils.csproj">
+    <ProjectReference Include="..\..\..\libs\utils-cs\TheUtils.csproj">
       <Project>{4FBCCF53-202D-4661-827F-C5F023B15397}</Project>
       <Name>TheUtils</Name>
     </ProjectReference>

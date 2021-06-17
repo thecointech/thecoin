@@ -10,7 +10,7 @@ export enum Service {
 	RATES = 7001,
 	BROKER,
 
-  FIRESTORE = 8377,
+  //FIRESTORE = 8377,
   CERAMIC = 7007,
   ETHEREUM = 9545,
 }

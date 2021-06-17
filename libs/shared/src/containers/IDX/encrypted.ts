@@ -1,6 +1,7 @@
 import { IDX } from '@ceramicstudio/idx';
 import type { JWE } from 'did-jwt';
-import { IdxAlias, getDID } from './idx';
+import { getDID } from './did';
+import { IdxAlias } from './idx';
 
 export interface EncryptedPayload<T> {
   // It is legal for the data to be null

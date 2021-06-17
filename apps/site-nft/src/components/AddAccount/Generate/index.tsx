@@ -33,7 +33,6 @@ export const Generate = (props: RouteComponentProps) => {
 
   const [name, setName] = useState(undefined as MaybeString);
   const [password, setPassword] = useState(undefined as MaybeString);
-  const [referral, /*setReferral*/] = useState(undefined as MaybeString);
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
@@ -44,7 +43,7 @@ export const Generate = (props: RouteComponentProps) => {
   const { history } = props;
   const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    if (!(password && referral && name)) {
+    if (!(password && name)) {
       setForceValidate(true);
       return false;
     }

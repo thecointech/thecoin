@@ -1,5 +1,10 @@
 const net = require('net');
-const FirestorePort = 8377;
+const { getEnvFile } = require('./setenv');
+const { readFileSync } = require('fs');
+
+const env = readFileSync(getEnvFile('devlive'));
+const config = require('dotenv').parse(env)
+const FirestorePort = config.FIRESTORE_EMULATOR_PORT;
 
 var portInUse = function (port) {
   return new Promise(resolve => {
@@ -22,7 +27,7 @@ var portInUse = function (port) {
 // Run once before any tests are setup
 const globalSetup = async () => {
   // Set a global variable indicating whether or not our firestore instance is available
-  process.env.FIRESTORE_EMULATOR = (await portInUse(FirestorePort))
+  process.env.FIRESTORE_EMULATOR_PORT = (await portInUse(FirestorePort))
     ? FirestorePort
     : false;
 }

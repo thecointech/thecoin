@@ -1,23 +1,21 @@
 import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
-import { ETransferPacket } from "@thecointech/types";
 import { Segment } from "semantic-ui-react";
-import { TransactionData } from "../../TransferList";
 import { RefundButton } from 'containers/Refund';
-import { CertifiedTransferRecord } from "@thecointech/utilities/firestore";
+import { getCurrentState, SellActionContainer } from '@thecointech/tx-processing/statemachine';
 
-const RenderETransfer = (props: TransactionData) => {
-  const eTransfer = props.instruction as ETransferPacket;
-  const record = props.record as CertifiedTransferRecord;
+const RenderETransfer = (props: SellActionContainer) => {
+  const eTransfer = props.instructions;
+  const current = getCurrentState(props);
 
   return (
     <Segment>
-      <div>Email: {eTransfer.email}</div>
-      <div>Question: {eTransfer.question}</div>
-      <div>Answer: {eTransfer.answer}</div>
-      <div>Message: {eTransfer.message}</div>
-      <div>Hash: {props.record.hash}</div>
-      <RefundButton record={record} />
+      <div>Email: {eTransfer?.email}</div>
+      <div>Question: {eTransfer?.question}</div>
+      <div>Answer: {eTransfer?.answer}</div>
+      <div>Message: {eTransfer?.message}</div>
+      <div>Hash: {current.data.hash}</div>
+      <RefundButton action={props.action} />
     </Segment>
   )
 }

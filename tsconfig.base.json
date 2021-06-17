@@ -36,25 +36,7 @@
     "downlevelIteration": true,
 
     "typeRoots": ["./node_modules/@types"],
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "baseUrl": "./any/random/path",
-    "paths": {
-      "@thecointech/contract/*":   ["../../../libs/contract/build/*"],
-      "@thecointech/types/*":      ["../../../libs/types/build/*"],
-      "@thecointech/store/*":      ["../../../libs/store/build/*"],
-      "@thecointech/rbcapi/*":     ["../../../libs/rbcapi/build/*"],
-      "@thecointech/utilities/*":  ["../../../libs/utils-ts/build/*"],
-      "@thecointech/jestutils/*":  ["../../../libs/jestutils/build/*"],
-      "@thecointech/tx-processing/*":["../../../libs/tx-processing/build/*"],
-      "@thecointech/tx-reconciliation/*":["../../../libs//tx-reconciliation/build/*"],
-      "@thecointech/tx-gmail/*":   ["../../../libs/tx-gmail/build/*"],
-      "@thecointech/tx-blockchain/*":["../../../libs/tx-blockchain/build/*"],
-      "@thecointech/tx-firestore/*":["../../../libs/tx-firestore/build/*"],
-      "@thecointech/shared/*":     ["../../../libs/shared/build/*"],
-      "@thecointech/email/*":      ["../../../libs/email/build/*"],
-      "@thecointech/site-base/*":     ["../../../libs/site-base/build/*"],
-      "@thecointech/site-semantic-theme/*":     ["../../../libs/site-semantic-theme/build/*"]
-    }
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "exclude": ["node_modules", "**/build/**/*", "**/node_modules/**"]
 }

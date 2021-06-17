@@ -1,4 +1,4 @@
-import { Timestamp } from "@thecointech/utilities/firestore";
+import { Timestamp } from "@thecointech/firestore";
 import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";
@@ -66,10 +66,6 @@ export function convertDataFromJson(asJson: any) {
   convertAction(asData.dbs.Sell);
   convertAction(asData.dbs.Bill);
 
-  Object.values(asData.obsolete).forEach((txs: any) => {
-    txs.forEach(convertTimestamps)
-  })
-
   return asData;
 }
 
@@ -77,12 +73,13 @@ export function convertReconciledFromJson(asJson: any) {
   const asReconciled = asJson as Reconciliations;
   for (const user of asReconciled) {
     for (const tx of user.transactions) {
-      convertTimestamps(tx.data);
+      convertTimestamps(tx.action);
       convertTimestamps(tx.database);
       convertETransfer(tx.email);
       tx.bank.forEach(convertBank);
       convertBlockchain(tx.blockchain)
       convertBlockchain(tx.refund);
+      throw new Error("NOTE: We don't use timestamps any more (use DateTime instead)");
     }
   }
   return asReconciled;
