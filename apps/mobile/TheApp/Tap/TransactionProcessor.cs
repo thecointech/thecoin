@@ -29,23 +29,25 @@ namespace TheApp.Tap
 
 		private Stopwatch stopwatch;
 
-		private SubscriptionToken _statusUpdatedSub;
+		//private SubscriptionToken _statusUpdatedSub;
 		private long ticksAtCompletion;
-		private SignedMessage cachedTapResponse;
+		private TapCapBrokerPurchase cachedTapResponse;
+
+		public StaticResponses StaticResponses => Cache.CardStaticResponses();
 
 		public TransactionProcessor(UserAccount userAccount, ITransactionApi supplier)
 		{
 			UserAccount = userAccount;
 			TapSupplier = supplier;
 
-			_statusUpdatedSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnStatusUpdated);
+			//_statusUpdatedSub = Events.EventSystem.Subscribe<Events.StatusUpdated>(OnStatusUpdated);
 			FetchStaticResponses();
 		}
 
-		internal void OnStatusUpdated(Events.StatusUpdated update)
-		{
-			FetchStaticResponses();
-		}
+		//internal void OnStatusUpdated(Events.StatusUpdated update)
+		//{
+		//	FetchStaticResponses();
+		//}
 
 		internal void PublishStatus(string message)
 		{
@@ -57,13 +59,14 @@ namespace TheApp.Tap
 			try
 			{
 				logger.Info("Maybe fetching");
-				if (Cache == null && UserAccount != null && UserAccount.Status != null)
+				if (Cache == null && UserAccount != null/* && UserAccount.Status != null*/)
 				{
 					logger.Info("Probably fetching");
-					Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
+					//Events.EventSystem.Unsubscribe<Events.StatusUpdated>(_statusUpdatedSub);
 
-					var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
-					var supplierResponses = await TapSupplier.GetStaticAsync(new SignedMessage(m, s)).ConfigureAwait(false);
+					//var (m, s) = Signing.GetMessageAndSignature(UserAccount.Status.SignedToken, UserAccount.TheAccount);
+					var (m, s) = ("", "");
+					var supplierResponses = await TapSupplier.TransactionGetStaticPostAsync(new SignedMessage(m, s)).ConfigureAwait(false);
 					Cache = new AppResponseCache(supplierResponses);
 					SupplierAddress = supplierResponses.Address;
 					logger.Info("Loaded Cache: {0}", supplierResponses.ToJson());
@@ -118,8 +121,8 @@ namespace TheApp.Tap
 				if (e.ErrorCode == 405)
 				{
 					logger.Error("Supplier Error: {0}", e.Message);
-					ErrorMessage error = JsonConvert.DeserializeObject<ErrorMessage>(e.ErrorContent);
-					PublishStatus("ERROR: " + error.Message);
+					//ErrorMessage error = JsonConvert.DeserializeObject<ErrorMessage>(e.ErrorContent);
+					PublishStatus("ERROR: " + e.Message);
 
 					var _ = Task.Run(async () =>
 					{
@@ -158,7 +161,7 @@ namespace TheApp.Tap
 
 		private void OnStartTx()
 		{
-			if (queryHistory.Queries.Count > 0)
+			if (queryHistory?.Queries.Count > 0)
 				ResetTransaction();
 
 			logger.Trace("--- Start New Tx ---");
@@ -214,11 +217,10 @@ namespace TheApp.Tap
 			{
 				logger.Trace("Not found in cache - Fetching remote response");
 				PublishStatus("Step: " + queryHistory.Queries.Count + " - Doing remote fetch");
-				var responseTask = TapSupplier.GetStaticSingleAsync(queryHistory);
+				var responseTask = TapSupplier.TransactionGetStaticSinglePostAsync(queryHistory);
 				WaitFetch(responseTask, "Doing remote fetch");
-				var serverResponse = await responseTask;
-				logger.Trace("Fetch Success: " + (serverResponse != null));
-				response = serverResponse.Response;
+				response = await responseTask;
+				logger.Trace("Fetch Success: " + (response != null));
 				Cache.AddNewStaticResponse(query, response);
 			}
 			// Keep running track of this tx
@@ -231,17 +233,17 @@ namespace TheApp.Tap
 		private async Task<byte[]> GetSupplierTap(byte[] cryptoData)
 		{
 			var timestamp = TheCoinTime.Now();
-			var mtoken = UserAccount.Status.SignedToken;
-			var token = new SignedMessage(mtoken.Message, mtoken.Signature);
-			TapCapClientRequest request = new TapCapClientRequest(timestamp, GpoData, cryptoData, SupplierAddress, token);
-
-			var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
-			var signedMessage = new SignedMessage(m, s);
+			//var mtoken = UserAccount.Status.SignedToken;
+			//var token = new SignedMessage(mtoken.Message, mtoken.Signature);
+			TapCapClientRequest request = new TapCapClientRequest(timestamp, GpoData, cryptoData, SupplierAddress/*, token*/);
+			
+			//var (m, s) = Signing.GetMessageAndSignature(request, UserAccount.TheAccount);
+			//var signedMessage = new SignedMessage(m, s);
 
 			logger.Trace("Fetching purchase cert");
 			PublishStatus("Step: " + queryHistory.Queries.Count + " - Fetching Cert");
 
-			var responseTask = TapSupplier.RequestTapCapAsync(signedMessage);
+			var responseTask = TapSupplier.TransactionRequestTapCapPostAsync(request);
 			WaitFetch(responseTask, "Fetching Cert");
 			cachedTapResponse = await responseTask;
 			logger.Trace("Fetch Success: " + (cachedTapResponse != null));
@@ -250,8 +252,8 @@ namespace TheApp.Tap
 				logger.Trace("Results {0}, took {1}ms", cachedTapResponse, TheCoinTime.Now() - timestamp);
 
 				// Do not decode the signing address of this, instead just extract the relevant info
-				var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
-				return purchase.CryptoCertificate;
+				//var purchase = JsonConvert.DeserializeObject<TapCapBrokerPurchase>(cachedTapResponse.Message);
+				return cachedTapResponse.CryptoCertificate;
 			}
 			PublishStatus("Step: " + queryHistory.Queries.Count + " - ERROR (fetch failed)");
 			logger.Error("Did not receive response to crypto request");
@@ -264,10 +266,10 @@ namespace TheApp.Tap
 		/// </summary>
 		/// <param name="tapResponse"></param>
 		/// <param name="ticksAtCompletion"></param>
-		private static void ValidateTx(SignedMessage tapResponse, double fiatRequested, long ticksAtCompletion, Stopwatch stopwatch)
+		private static void ValidateTx(TapCapBrokerPurchase response, double fiatRequested, long ticksAtCompletion, Stopwatch stopwatch)
 		{
 			// Now check that the whatsit all went swimmingly.
-			if (tapResponse == null)
+			if (response == null)
 			{
 				//Events.EventSystem.Publish(new Events.TxStatus("Premature Exit at " + stopwatch.ElapsedMilliseconds));
 				logger.Debug("Premature Exit at " + stopwatch.ElapsedMilliseconds);
@@ -280,7 +282,7 @@ namespace TheApp.Tap
 			if (sinceComplete >= 0)
 			{
 				// Check that our disconnection was as expected.
-				Events.EventSystem.Publish(new Events.TxStatus(tapResponse, fiatRequested));
+				Events.EventSystem.Publish(new Events.TxStatus(response, fiatRequested));
 			}
 		}
 

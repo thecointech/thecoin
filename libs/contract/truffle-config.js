@@ -6,7 +6,9 @@ loadTypescript();
 // Load environment for the network we are deploying to
 require('../../tools/setenv');
 const { AccountId } = require('@thecointech/accounts');
-const { loadFromPK } = require('@thecointech/accounts/encrypted');
+// Load directly from path to side-step the limitations imposed
+// by the new package.exports module resolution
+const { loadFromPK } = require('../accounts/build/encrypted');
 
 
 module.exports = {
@@ -36,8 +38,6 @@ module.exports = {
         );
       },
       network_id: '*', // eslint-disable-line camelcase
-      gasPrice: 10000000009, // 10 GWei
-      gas: 1000000, // Lower gas limit to allow completing migration with lower-funded accounts
       skipDryRun: true
     },
     // TODO: we are stuck on ropsten till the price of gas comes down.

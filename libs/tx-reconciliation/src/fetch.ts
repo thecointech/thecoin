@@ -1,6 +1,5 @@
 import { fetchETransfers } from '@thecointech/tx-gmail';
-import { getAllFromFirestore } from "@thecointech/tx-firestore";
-import { getAllFromFirestoreObsolete } from "@thecointech/tx-firestore/obsolete";
+import { getAllActions, getAllUsers } from "@thecointech/broker-db";
 import { RbcApi } from '@thecointech/rbcapi';
 import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
@@ -16,13 +15,11 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
   log.trace('Fetched raw banking data');
   const eTransfers = await fetchAndCleanETransfers();
   log.trace('Fetched raw e-Transfer mails');
-  const dbs = await getAllFromFirestore();
+  const users = await getAllUsers();
+  const dbs = await getAllActions(users);
   log.trace('Fetched database info');
   const blockchain = await fetchAndCleanCoinHistory();
   log.trace('Fetched raw blockchain info');
-
-  const obsolete = await getAllFromFirestoreObsolete();
-  log.trace('Fetched obsolete firestore info');
 
   log.debug('Fetch complete');
   return {
@@ -30,7 +27,6 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
     dbs,
     bank,
     blockchain,
-    obsolete,
   }
 }
 

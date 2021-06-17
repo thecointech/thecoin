@@ -1,0 +1,192 @@
+{
+  "manifestVersion": "3.1",
+  "impls": {
+    "5d744d9b92e31d9d8177c4e62b1005763a08d6a7af5d2cf38a8e17a4d55f270b": {
+      "address": "0x137e4087276dDcb2A5c374aBb1949aFcE030D98a",
+      "txHash": "0x8896299739d9d49c6dc8bfa5c97e7f0580c9645423a6959be22d5f4056db2f06",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:37"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:39"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:41"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:43"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:44"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_decimals",
+            "type": "t_uint8",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:45"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)44_storage",
+            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:312"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "freezeUntil",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:39"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "lastTxTimestamp",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:48"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "role_TapCapManager",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:54"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "role_Minter",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:58"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "role_TheCoin",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:62"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "role_Police",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:65"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "new_TapCapManager",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:70"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "new_Minter",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:71"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "new_TheCoin",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:72"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "new_Police",
+            "type": "t_address",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:73"
+          },
+          {
+            "contract": "TheCoin",
+            "label": "tapCaps",
+            "type": "t_mapping(t_address,t_struct(TapCapData)413_storage)",
+            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin-NFT\\libs\\contract\\contracts\\TheCoin.sol:239"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_struct(TapCapData)413_storage)": {
+            "label": "mapping(address => struct TheCoin.TapCapData)"
+          },
+          "t_struct(TapCapData)413_storage": {
+            "label": "struct TheCoin.TapCapData",
+            "members": [
+              {
+                "label": "TransactionId",
+                "type": "t_uint256"
+              },
+              {
+                "label": "TapCapEscrow",
+                "type": "t_uint256"
+              },
+              {
+                "label": "TapCapRefill",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_array(t_uint256)44_storage": {
+            "label": "uint256[44]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "address": "0xB57A10799D8FF3eA91AA03AB581A7a5Be28FdC2d",
+    "txHash": "0xb6645834e39afdcb3ba8bf7dc8f3bf9c2ec79c0c782f98a2b1c2bee865238af8"
+  }
+}

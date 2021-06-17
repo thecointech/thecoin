@@ -32,7 +32,7 @@ const isBadSignature = async (contract: TheCoinNFT, request: GasslessUpdateReque
 }
 
 const isTimeLocked = async (contract: TheCoinNFT, tokenId: number) => {
-  const canUpdate = contract.canUpdate(tokenId);
+  const canUpdate = await contract.canUpdate(tokenId);
   if (!canUpdate) {
     log.warn({TokenID: tokenId}, `Invalid request to update {TokenID}: NFT is still timelocked`);
     return true;

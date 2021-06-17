@@ -162,7 +162,7 @@ export const BillPayments = () => {
       setPaymentMessage(step2);
       setPercentComplete(0.25);
       const response = await billPayApi.billPayment(billPayCommand);
-      const txHash = response.data?.txHash;
+      const txHash = response.data?.hash;
       if (!txHash) {
         alert(JSON.stringify(response));
         return false;

@@ -1,6 +1,0 @@
-[submodule "submodules/3id-connect"]
-	path = submodules/3id-connect
-	url = https://github.com/thecointech/3id-connect.git
-[submodule "submodules/exif-library"]
-	path = submodules/exif-library
-	url = https://github.com/FrozenKiwi/exif-library.git

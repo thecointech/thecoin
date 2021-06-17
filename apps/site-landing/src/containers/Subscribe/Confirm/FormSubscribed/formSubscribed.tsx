@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, CheckboxProps, Form, InputOnChangeData } from 'semantic-ui-react';
 import queryString from 'query-string';
 import { GetNewsletterApi } from 'api';
@@ -8,24 +8,29 @@ import styles from './styles.module.less';
 import { SubscriptionDetails } from '@thecointech/broker-cad';
 import { log } from '@thecointech/logging';
 
+const BlankSubsData : SubscriptionDetails = {
+  email: "",
+  registerDate: 0,
+};
 export const FormSubscribed = () => {
   const id = useIdFromQuery();
-  const [details, setDetails] = useState(undefined as SubscriptionDetails|undefined);
+  const [details, setDetails] = useState(BlankSubsData);
   const confirmed = !!details;
 
   // Trigger immediate confirmation
   useEffect(() => {
-    confirmSubscription(id).then(setDetails).catch(log.error);
+    confirmSubscription(id)
+      .then(setDetails)
+      .catch(log.error);
   }, [id]);
 
-  const onInputChange = useCallback((_event, data: InputOnChangeData|CheckboxProps) => {
+  const onInputChange = (_event: React.FormEvent<HTMLInputElement>, data: InputOnChangeData|CheckboxProps) => {
     const { value, name, checked } = data;
     setDetails({
-      email: "", // Our initial undefined state means
       ...details,
       [name]: value ?? checked
     });
-  }, [details, setDetails]);
+  }
 
   let intl = useIntl();
   const emailField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.email', defaultMessage: 'Email' });
@@ -49,7 +54,6 @@ export const FormSubscribed = () => {
           <FormattedMessage id="site.subscribe.confirmation.button" defaultMessage="Update Details!" />
         </Button>
       </Form>
-
     </>
   );
 }
@@ -63,16 +67,17 @@ const useIdFromQuery = () => {
 const confirmSubscription = async (id: string) => {
   const api = GetNewsletterApi();
   const r = await api.newsletterDetails(id);
-  if (r.status !== 200)
-    return undefined;
+  if (r.status !== 200 || !r.data?.email)
+    return BlankSubsData;
 
   const details = {
     ...r.data,
     confirmed: true,
-  };
-  return await updateSubscription(id, details)
+  }
+  const confirmation = await updateSubscription(id, details);
+  return confirmation
     ? details
-    : undefined;
+    : BlankSubsData;
 }
 
 const updateSubscription = async (id: string, details: SubscriptionDetails) => {

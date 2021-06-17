@@ -1,5 +1,5 @@
 import { utils, Signer } from 'ethers';
-import { signMessage } from './sign';
+import { sign } from "@thecointech/utilities/SignedMessages";
 
 export type GasslessUpdateRequest = {
   tokenId: number,
@@ -28,7 +28,7 @@ export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, pre
 // Client-side data creation.  Signer must be owner of tokenId
 export async function signGasslessUpdate(signer: Signer, tokenId: number, lastUpdate: number, prefix: string, digest: string) : Promise<GasslessUpdateRequest> {
   const hash = getGasslessUpdateBuffer(tokenId, lastUpdate, prefix, digest);
-  const signature = await signMessage(hash, signer);
+  const signature = await sign(hash, signer);
 
   return {
     tokenId,
