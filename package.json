@@ -51,7 +51,6 @@
     "axios": "^0.21.1",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
-    "currency.js": "^2.0.3",
     "dotenv": "^8.2.0",
     "ethers": "4.0.47",
     "firebase": "^8.5.0",
