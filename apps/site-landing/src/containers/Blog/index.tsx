@@ -38,7 +38,7 @@ const BlogInternal = (props: RouteComponentProps) => {
             })
         }
         <Route path="/blog/:articleId" render={(articleProps) => <Article {...articleProps} />} />
-        <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome articles={docs.articles} menu={categories} />} />
+        <Route path={("").toString()} exact={true} render={()=> <Welcome articles={docs.articles} menu={categories} />} />
       </Switch>
     </>
   );
