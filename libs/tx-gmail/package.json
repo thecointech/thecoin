@@ -30,10 +30,10 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/utilities": "^0.2.12",
-    "js-base64": "^2.5.2"
+    "currency.js": "^2.0.4",
+    "js-base64": "^3.6.1"
   },
   "devDependencies": {
-    "@types/js-base64": "^2.3.1",
     "jest": "*"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"

@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigStore } from '@thecointech/store';
@@ -10,9 +9,11 @@ const SCOPES = [
 ];
 
 // The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
+// created automatically when the authorization flow completes for the first time.
 const TOKEN_STORE = "token.json";
+
+// Callback to trigger fetching a new auth token
+export type OpenUrl = (url: string) => void;
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -20,7 +21,7 @@ const TOKEN_STORE = "token.json";
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-export async function authorize() {
+export async function authorize(openurl?: OpenUrl) {
   const credentialsPath = process.env.GMAIL_CREDENTIALS_PATH;
   if (!credentialsPath || !existsSync(credentialsPath))
     throw new Error("Cannot authorize gmail without credentials");
@@ -36,8 +37,8 @@ export async function authorize() {
   if (existing) {
     oAuth2Client.setCredentials(JSON.parse(existing));
   }
-  else {
-    await getNewToken(oAuth2Client);
+  else if (openurl) {
+    await getNewToken(oAuth2Client, openurl);
   }
   return oAuth2Client
 }
@@ -49,25 +50,16 @@ export function isValid(oAuth2Client: OAuth2Client|null) {
 /**
  * Get and store new token after prompting for user authorization, and then
  * execute the given callback with the authorized OAuth2 client.
- * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
- * @param {getEventsCallback} callback The callback for the authorized client.
+ * @param oAuth2Client The OAuth2 client to get token for.
  */
-async function getNewToken(oAuth2Client: OAuth2Client) {
+
+async function getNewToken(oAuth2Client: OAuth2Client, openurl: OpenUrl) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
   });
 
-  if (shell)
-    shell.openExternal(authUrl);
-  else
-    openurl(authUrl);
-}
-
-function openurl(url: string)
-{
-  const start = (process.platform === 'darwin'? 'open': process.platform === 'win32'? 'start': 'xdg-open');
-  require('child_process').exec(start + ' ' + url);
+  openurl(authUrl);
 }
 
 export async function finishLogin(oAuth2Client: OAuth2Client, code: string) {
