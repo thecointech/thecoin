@@ -15,10 +15,8 @@ export const Welcome = (props: Props) => {
   const starred =  props.faqs.filter(faq => faq.data.show_on_faq_home);
   return (
     <div>
-      <Header as="h2" className={"x10spaceBefore"}>
-        <Header.Content>
+      <Header as="h2" textAlign={"center"} className={"x10spaceBefore"}>
           <FormattedMessage {...messages.header} />
-        </Header.Content>
       </Header>
       <FaqList menu={props.menu} faqs={starred} />
     </div>
