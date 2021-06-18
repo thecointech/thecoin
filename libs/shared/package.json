@@ -59,6 +59,7 @@
     "@thecointech/site-semantic-theme": "^0.2.6",
     "@thecointech/store": "^0.2.7",
     "@thecointech/types": "^0.2.6",
+    "@thecointech/tx-blockchain": "^0.2.13",
     "@thecointech/utilities": "^0.2.13",
     "axios": "*",
     "history": "4.9.0",
