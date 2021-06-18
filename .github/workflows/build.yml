@@ -30,5 +30,7 @@ jobs:
     - name: Set OpenAPI CLI Version
       run: yarn openapi-generator-cli version-manager set latest
     - name: Build
-      env: NODE_OPTIONS="--max-old-space-size=6144" # Fix OOM in build admin
+      env:
+         # Fix OOM in build admin
+        NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
