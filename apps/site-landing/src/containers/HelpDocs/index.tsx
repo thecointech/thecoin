@@ -29,13 +29,13 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
   }, []);
 
   const categories = buildCategories(docs);
+  console.log("categories",categories)
   return (
     <>
       <Switch>
         {
           Object.entries(categories)
             .map((entry, index) => {
-              //const url = "cat"+((entry[0]).split("-"))[0].replace(/\s/g, '').toString()
               const url = buildUrl("theme-"+((entry[0])?.split("-"))[0].replace(/ /g,'')).toString()
               return <Route key={index} path={url} render={() => <FaqList menu={categories} title={entry[0]} faqs={entry[1]} />} />
             })
@@ -57,7 +57,6 @@ export function buildCategories(docs: PrismicState) {
   const categories: Dictionary<FAQDocument[]> = {};
   for (const faq of faqs) {
     const lang = ((faq.lang)?.split("-")) ? ((faq.lang)?.split("-"))[0] : DEFAULT_LOCALE;
-    //const key = `${locale}+"_category"`;
     const cat = (locale === DEFAULT_LOCALE) ? faq.data.category : faq.data.fr_category;
     if (locale === lang){
       if (!categories[cat])

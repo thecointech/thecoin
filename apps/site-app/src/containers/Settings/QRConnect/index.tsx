@@ -1,6 +1,6 @@
 import React from 'react';
 import { QRCode } from 'react-qr-svg';
-import { AccountState, useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 
 
 export const QRConnect = () => {
