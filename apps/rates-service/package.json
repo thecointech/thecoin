@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "keywords": [
@@ -43,9 +43,9 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@thecointech/firestore": "^0.2.12",
-    "@thecointech/logging": "^0.2.12",
-    "@thecointech/utilities": "^0.2.12",
+    "@thecointech/firestore": "^0.2.13",
+    "@thecointech/logging": "^0.2.13",
+    "@thecointech/utilities": "^0.2.13",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",
     "cors": "^2.8.5",
