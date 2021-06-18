@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/firestore",
-  "version": "0.2.1",
+  "version": "0.2.13",
   "description": "The Coin: Environment-agnostic access to firestore",
   "keywords": [
     "THECoin",
@@ -14,12 +14,11 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/firestore"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -36,19 +35,25 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts",
+        "build/*/index.d.ts"
+      ]
     }
   },
   "dependencies": {
-    "@thecointech/logging": "*"
+    "@thecointech/logging": "^0.2.13"
   },
   "peerDependencies": {
     "@google-cloud/firestore": "*",
     "firebase": "*"
   },
   "devDependencies": {
-    "jest": "*",
-    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#05ae1f76"
-  }
+    "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#05ae1f76",
+    "jest": "*"
+  },
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

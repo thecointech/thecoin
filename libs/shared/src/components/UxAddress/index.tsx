@@ -3,7 +3,7 @@ import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
 import { MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
-import { ChangeCB } from 'components/UxInput/types';
+import { ChangeCB } from '../UxInput/types';
 
 const labelAddress = { id:"shared.uxaddress.address.label",
                 defaultMessage:"Account",

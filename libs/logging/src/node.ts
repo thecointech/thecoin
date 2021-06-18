@@ -1,6 +1,6 @@
 import bunyan from "bunyan";
-import { getConsoleStream } from "consolestream";
-import { getFileStream } from "filestream";
+import { getConsoleStream } from "./consolestream";
+import { getFileStream } from "./filestream";
 
 const getStreams = (name: string) => {
   const streams = [getConsoleStream()];
@@ -16,7 +16,7 @@ const getStreams = (name: string) => {
   return streams;
 }
 
-export const init = (name: string) =>
+export const init_node = (name: string) =>
   bunyan.createLogger({
     name,
     streams: getStreams(name)
