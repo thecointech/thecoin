@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectArticles } from "components/Prismic/selectors";
 import { Header } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
+import { AlternateLang } from "components/Prismic/types";
 //import { DEFAULT_LOCALE } from "@thecointech/shared/containers/LanguageProvider";
 
 export const Article = ( props: { match: { params: { articleId: string; }; }; } ) => {
@@ -13,12 +14,17 @@ export const Article = ( props: { match: { params: { articleId: string; }; }; } 
   const filtered = docs.filter(entry => entry.id == articleId);
   const { locale } = useSelector(selectLocale);
   
-  console.log("locale", locale )
-  //const lang = ((article.lang)?.split("-")) ? ((article.lang)?.split("-"))[0] : DEFAULT_LOCALE;
-  
+  // -- Look for translated version --
   filtered.map(articleData => { 
-    //console.log("lang",((articleData.lang)?.split("-")) ? ((articleData.lang)?.split("-"))[0] : DEFAULT_LOCALE)
-    console.log("translation",articleData.alternate_languages)
+    const alternativeLangs = articleData.alternate_languages;
+    alternativeLangs.map(articleLang => { 
+      const altLang = (articleLang as unknown as AlternateLang);
+      if (((altLang.lang)?.split("-"))[0] === locale){
+        console.log("TRANSLATED==",altLang.id,docs.filter(entry => entry.id == altLang.id))
+      }
+    })
+    //const filteredTranslation = articleData.alternate_languages.filter(entry => entry.lang == locale+"-ca");
+    //console.log("translation",articleData.alternate_languages.filter(entry => entry.lang == articleId))
   })
 
   return <>{
