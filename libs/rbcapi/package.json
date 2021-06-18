@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "keywords": [
     "THECoin",
@@ -33,9 +33,9 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.11",
+    "@thecointech/logging": "^0.2.12",
     "@thecointech/store": "^0.2.7",
-    "@thecointech/utilities": "^0.2.11",
+    "@thecointech/utilities": "^0.2.12",
     "csvtojson": "^2.0.10",
     "puppeteer": "^2.1.1"
   },
