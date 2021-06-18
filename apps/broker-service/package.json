@@ -43,6 +43,7 @@
     "@thecointech/contract": "^0.2.12",
     "@thecointech/email": "^0.2.12",
     "@thecointech/logging": "^0.2.12",
+    "@thecointech/pricing": "^0.2.12",
     "@thecointech/tx-processing": "^0.2.12",
     "@thecointech/utilities": "^0.2.12",
     "@tsoa/runtime": "^3.5.2",
