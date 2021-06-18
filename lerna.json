@@ -13,6 +13,7 @@
       "allowBranch": "master"
     },
     "version": {
+      "noChangelog": true,
       "allowBranch": [
         "release",
         "dev"
