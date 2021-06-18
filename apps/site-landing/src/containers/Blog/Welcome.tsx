@@ -5,7 +5,6 @@ import { FormattedMessage } from "react-intl";
 import { ArticleList } from "./ArticleList";
 import { Dictionary } from "lodash";
 
-
 type Props = {
   articles: ArticleDocument[],
   menu: Dictionary<ArticleDocument[]>
@@ -19,9 +18,7 @@ export const Welcome = (props: Props) => {
   return (
     <div>
       <Header as="h2" textAlign={"center"} className={"x10spaceBefore"}>
-        <Header.Content>
           <FormattedMessage {...title} />
-        </Header.Content>
       </Header>
       <ArticleList articles={props.articles} menu={props.menu} />
     </div>

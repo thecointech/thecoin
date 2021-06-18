@@ -1,5 +1,4 @@
 import React from "react";
-//import { Renderer } from "./Renderer/Renderer";
 import { Link } from 'react-router-dom';
 import styles from "./styles.module.less";
 import { List, Rail } from "semantic-ui-react";
