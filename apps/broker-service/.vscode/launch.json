@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to Process",
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node",
+      "port": 9232
+    },
+    {
       "type": "pwa-node",
       "request": "launch",
       "name": "Launch Program",

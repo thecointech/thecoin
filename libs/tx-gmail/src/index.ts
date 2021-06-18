@@ -3,15 +3,15 @@ import { isPresent } from "@thecointech/utilities";
 import { fetchEmailIds, fetchEmails, initializeApi, setETransferLabel } from "./fetch";
 import { toDepositData } from "./convert";
 import { eTransferData } from "./types";
-import { authorize, isValid } from "./auth";
+import { authorize, isValid, OpenUrl } from "./auth";
 
 export type { Labels } from './fetch';
 export * from './types';
 export { setETransferLabel };
 
-async function initialize() {
+export async function initialize(openurl?: OpenUrl) {
   // First, connect and fetch new deposit emails.
-  const auth = await authorize();
+  const auth = await authorize(openurl);
   if (!isValid(auth))
     throw new Error("Cannot run service without auth.  Please login from the UI first");
 

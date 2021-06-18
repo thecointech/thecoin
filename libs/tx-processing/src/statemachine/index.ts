@@ -2,7 +2,8 @@ import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thec
 import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
 import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
-import { TheCoin } from '@thecointech/contract';
+import type { TheCoin } from '@thecointech/contract';
+import type { RbcApi } from '@thecointech/rbcapi';
 export * from './types';
 
 //
@@ -77,9 +78,11 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
 
   graph: StateGraph<States, Type>;
   contract: TheCoin;
+  bank: RbcApi|null;
 
-  constructor(graph: StateGraph<States, Type>, contract: TheCoin) {
+  constructor(graph: StateGraph<States, Type>, contract: TheCoin, bank: RbcApi|null) {
     this.graph = graph;
+    this.bank = bank;
     this.contract = contract;
   }
 
@@ -99,6 +102,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       action,
       history: [currentState],
       contract: this.contract,
+      bank: this.bank,
     }
 
     // Duplicate the stored events.  We want to replay the list (but do
