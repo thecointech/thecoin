@@ -1,10 +1,10 @@
 import React from "react";
 import { ArticleDocument } from "components/Prismic/types";
 import { Grid, Header } from "semantic-ui-react";
-import { Renderer } from "../../components/Renderer/Renderer";
 import styles from "./styles.module.less";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
+import { RichText, RichTextBlock } from "prismic-reactjs";
 
 const link = { id:"site.blog.articleLink",
                 defaultMessage:"Read More",
@@ -22,7 +22,7 @@ export const ArticleItem = ({ id, data }: ArticleDocument) => {
           <Grid.Column>
             <div className={`${styles.text}`}>
               <Header as={"h4"}>{data.title ? data.title[0].text : ""}</Header>
-              <Renderer r={data.content} />
+              { RichText.render(data.content as unknown as RichTextBlock[]) }
             </div>
             <Link to={url}><FormattedMessage {...link} /></Link>
           </Grid.Column>
