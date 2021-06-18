@@ -28,6 +28,6 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
     - name: Set OpenAPI CLI Version
-      run: openapi-generator-cli version-manager set latest
+      run: yarn openapi-generator-cli version-manager set latest
     - name: Build
       run: yarn build
