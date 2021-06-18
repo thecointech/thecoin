@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      # Java required for OpenAPI client generation
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+        java-package: jre # optional (jdk, jre, jdk+fx or jre+fx) - defaults to jdk
     - uses: c-hive/gha-yarn-cache@v2
     - name: Use Node.js
       uses: actions/setup-node@v1
