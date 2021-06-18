@@ -5,27 +5,28 @@ import { useSelector } from "react-redux";
 import { selectArticles } from "components/Prismic/selectors";
 import { Header } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
-import { AlternateLang } from "components/Prismic/types";
-//import { DEFAULT_LOCALE } from "@thecointech/shared/containers/LanguageProvider";
+import { AlternateLang, ArticleDocument } from "components/Prismic/types";
+
+function getTranslatedArticle(filtered:ArticleDocument[],docs:ArticleDocument[]) : (ArticleDocument[]){
+  // -- Look for translated version --
+  const { locale } = useSelector(selectLocale);
+  let translation = filtered;
+  for (let i = 0; i < filtered.length; i++) {
+    const altLang = filtered[i].alternate_languages;
+    for (let i = 0; i < altLang.length; i++){
+      const altLangLine = (altLang[i] as unknown as AlternateLang);
+      if (((altLangLine.lang)?.split("-"))[0] === locale){
+        translation = (docs.filter(entry => entry.id == altLangLine.id))
+      }
+    }
+  }
+  return translation;
+}
 
 export const Article = ( props: { match: { params: { articleId: string; }; }; } ) => {
   const docs = (useSelector(selectArticles));
   const { articleId } = props.match.params;
-  const filtered = docs.filter(entry => entry.id == articleId);
-  const { locale } = useSelector(selectLocale);
-  
-  // -- Look for translated version --
-  filtered.map(articleData => { 
-    const alternativeLangs = articleData.alternate_languages;
-    alternativeLangs.map(articleLang => { 
-      const altLang = (articleLang as unknown as AlternateLang);
-      if (((altLang.lang)?.split("-"))[0] === locale){
-        console.log("TRANSLATED==",altLang.id,docs.filter(entry => entry.id == altLang.id))
-      }
-    })
-    //const filteredTranslation = articleData.alternate_languages.filter(entry => entry.lang == locale+"-ca");
-    //console.log("translation",articleData.alternate_languages.filter(entry => entry.lang == articleId))
-  })
+  const filtered = getTranslatedArticle(docs.filter(entry => entry.id == articleId),docs)
 
   return <>{
     filtered.map(articleData => (    
