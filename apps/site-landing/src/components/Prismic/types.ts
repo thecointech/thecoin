@@ -22,6 +22,12 @@ export type ImageObj = {
   ​​​​​url: string
 }
 
+export type AlternateLang = { 
+  id: string, 
+  type: string, 
+  lang: string 
+}
+
 export type ArticleResult = {
   thumbnail: any,
   image_before_title: any,
