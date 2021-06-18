@@ -1,10 +1,8 @@
 import React from "react";
-//import { Renderer } from "./Renderer/Renderer";
 import { Link } from 'react-router-dom';
 import styles from "./styles.module.less";
 import { List, Rail } from "semantic-ui-react";
-import { breakpointsValues, GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
-import { useWindowDimensions } from "@thecointech/shared/components/WindowDimensions";
+import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
 
 type Props = {
     categories: any
@@ -25,12 +23,6 @@ function displayEntry(index: number, name: string ){
 
 
 export const FaqMenu = ({ categories }: Props) => {
-
-    const windowDimension = useWindowDimensions();
-    const breakpointComputer = breakpointsValues.computer;
-    if (windowDimension.width <= breakpointComputer){
-        console.log("---SMALL---");
-    }
     return (
         <>
             <GreaterThanMobileSegment>

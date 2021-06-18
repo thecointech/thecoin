@@ -17,7 +17,6 @@ type Props = {
 
 export const FaqList = ({ title, faqs, menu }: Props) => {
   const { locale } = useSelector(selectLocale);
-  console.log("FaqList----", title, faqs)
   return (
     <>
     <div className={styles.containerFaq}>
