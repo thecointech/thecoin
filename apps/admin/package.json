@@ -5,7 +5,7 @@
   "version": "0.2.13",
   "description": "A Desktop application to run back-end functionality for THECoin",
   "scripts": {
-    "build": "yarn concurrently \"yarn run build-main\" \"yarn run build-renderer\"",
+    "build": "run-s build-main build-renderer",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js",
     "build-e2e": "cross-env E2E_BUILD=true yarn run build",
     "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js",
