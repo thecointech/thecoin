@@ -36,5 +36,5 @@
     "@types/node-mailjet": "^3.3.1",
     "jest": "*"
   },
-  "gitHead": "912a1b913fd28c57b3d538e2e16dd69055cf5bda"
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }
