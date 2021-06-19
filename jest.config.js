@@ -1,14 +1,14 @@
 const path = require('path');
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig.base.json');
-
-const pathsRelativeTo = `${path.join(__dirname, compilerOptions.baseUrl)}/`;
 
 module.exports = {
   verbose: true,
   transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
+
+  // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
+  resolver: path.join(__dirname, './tools/jestExportResolver.js'),
 
   // Test environment is required when running jest tests
   // with firestore emulator connection. See
@@ -19,7 +19,6 @@ module.exports = {
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
   moduleDirectories: ['node_modules', 'src'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: pathsRelativeTo}),
   moduleFileExtensions: [
     "ts",
     "tsx",
