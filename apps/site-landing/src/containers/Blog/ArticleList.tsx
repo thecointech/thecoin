@@ -1,11 +1,11 @@
 import React from "react";
 //import { Article } from "./Article";
-import { Header } from "semantic-ui-react";
+import { Header, SemanticFLOATS } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import styles from "./styles.module.less";
-import { ArticleMenu } from "./ArticleMenu";
+import { CategoryMenu } from "components/PrismicMenuByCategories";
 import { Dictionary } from "lodash";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";
@@ -21,7 +21,7 @@ export const ArticleList = ({ title, articles, menu }: Props) => {
   return (
     <>
       <div className={styles.containerArticle}>
-        <ArticleMenu categories={menu} />
+        <CategoryMenu categories={menu} idForMenu={styles.menuArticle} railPosition={"left" as SemanticFLOATS} pathBeforeTheId="/blog/theme-" />
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
             {title ? ((title.split("-"))[1]) : ""}
