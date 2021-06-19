@@ -6,11 +6,11 @@ import { FaqList } from "./FaqList";
 import messages from "./messages";
 import { Dictionary } from "lodash";
 
-
 type Props = {
   faqs: FAQDocument[],
   menu: Dictionary<FAQDocument[]>
 }
+
 export const Welcome = (props: Props) => {
   const starred =  props.faqs.filter(faq => faq.data.show_on_faq_home);
   return (
