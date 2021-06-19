@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { List, Rail, SemanticFLOATS } from "semantic-ui-react";
 import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
+import { Dictionary } from "lodash";
+import { ArticleDocument, FAQDocument } from "components/Prismic/types";
 
 type Props = {
-    categories: any,
-    idForMenu: any,
+    categories: Dictionary<ArticleDocument[]>|Dictionary<FAQDocument[]>,
+    idForMenu: string,
     railPosition: SemanticFLOATS,
     pathBeforeTheId: string
   }
