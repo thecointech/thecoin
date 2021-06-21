@@ -3,10 +3,10 @@ import * as React from 'react';
 import { render } from '@testing-library/react';
 import { FormattedMessage } from 'react-intl';
 import { Provider } from 'react-redux';
-
-import {LanguageProvider} from '../index';
-import {configureAppStore} from '../../../store';
+import { configureStore } from '../../../store';
 import { Languages } from '../types';
+import { createReducer } from '../../../store/reducers';
+import { LanguageProvider } from '../index';
 
 const TestId = 'some.id'
 const languages: Languages = {
@@ -18,13 +18,13 @@ const languages: Languages = {
   }
 };
 
-type AppStore = ReturnType<typeof configureAppStore>
+type AppStore = ReturnType<typeof configureStore>
 
 describe('LanguageProvider', () => {
   let store: AppStore;
 
   beforeEach(() => {
-    store = configureAppStore(undefined);
+    store = configureStore(createReducer);
   });
 
   it('should render its children', () => {
