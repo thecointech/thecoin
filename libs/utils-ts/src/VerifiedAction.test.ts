@@ -1,11 +1,18 @@
-import { GetContract } from "@thecointech/contract";
 import { Wallet } from "ethers";
 import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
 import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
+import { TheCoinContract } from '@thecointech/contract/migrations/types/TheCoin';
+import { contract } from '@openzeppelin/test-environment';
+
+// Loads a compiled contract using OpenZeppelin test-environment
+contract.artifactsDir = "../contract/src/contracts";
+const factory: TheCoinContract = contract.fromArtifact('TheCoin');
 
 const wallet = Wallet.createRandom();
 const value = 100000;
 const fee = 2000;
+
+// TODO: move contract-specific elements to ../contract
 
 // test("Can encrypt/decrypt payment name", async () => {
 //   const name = "My Visa";
@@ -21,7 +28,7 @@ const fee = 2000;
 
 // Helper to verify that the transfer is avlid
 async function VerifyTransfer(xfer: CertifiedTransferRequest) {
-  const contract = await GetContract();
+  const contract = await factory.new();
   var xferSigner = await contract.recoverSigner(
     xfer.from,
     xfer.to,
