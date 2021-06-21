@@ -1,7 +1,8 @@
 import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore/mock';
 import { GetContract } from '@thecointech/contract';
-import { getCurrentState } from '../statemachine/types';
+import { getCurrentState } from '@thecointech/tx-processing';
+import { RbcApi } from '@thecointech/rbcapi';
 
 it("Can complete deposits", async () => {
 
@@ -9,7 +10,8 @@ it("Can complete deposits", async () => {
   init({});
 
   const theContract = await GetContract();
-  const deposits = await processUnsettledDeposits(theContract);
+  const bank = new RbcApi();
+  const deposits = await processUnsettledDeposits(theContract, bank);
   // First, ensure that we have added our users to the DB
   for (const deposit of deposits) {
     // seed the deposit so it's visible in our emulator
