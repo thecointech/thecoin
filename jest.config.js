@@ -4,7 +4,18 @@ const { compilerOptions } = require('./tsconfig.base.json');
 module.exports = {
   verbose: true,
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.jsx?$": "babel-jest",
+  },
+  globals: {
+    'ts-jest': {
+      tsConfig: {
+        ...compilerOptions,
+        noUnusedLocals: false,
+        noUnusedParameters: false,
+        typeRoots: [path.join(__dirname, "node_modules", "@types")],
+      }
+    }
   },
 
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
