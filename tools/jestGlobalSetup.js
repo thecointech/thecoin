@@ -5,6 +5,7 @@ const { readFileSync } = require('fs');
 const env = readFileSync(getEnvFile('devlive'));
 const config = require('dotenv').parse(env)
 const FirestorePort = config.FIRESTORE_EMULATOR_PORT;
+const BlockchainPort = config.DEPLOY_NETWORK_PORT;
 
 var portInUse = function (port) {
   return new Promise(resolve => {
@@ -27,9 +28,12 @@ var portInUse = function (port) {
 // Run once before any tests are setup
 const globalSetup = async () => {
   // Set a global variable indicating whether or not our firestore instance is available
-  process.env.FIRESTORE_EMULATOR_PORT = (await portInUse(FirestorePort))
-    ? FirestorePort
-    : false;
+  if (await portInUse(FirestorePort))
+    process.env.FIRESTORE_EMULATOR_PORT = FirestorePort
+
+  // Set a global variable indicating whether or not our blockchain emulator is running
+  if (await portInUse(BlockchainPort))
+    process.env.DEPLOY_NETWORK_PORT = BlockchainPort;
 }
 
 module.exports = globalSetup;
