@@ -12,7 +12,6 @@ jest.disableAutomock()
 
 describe("Live service queries for gmail", () => {
 
-
   beforeAll(async () => {
     const timeout = 30 * 60 * 1000;
     jest.setTimeout(timeout);
