@@ -1,4 +1,4 @@
-import { toDepositData } from "convert";
+import { toDepositData } from "./convert";
 import emails from './__mocks__/emails.get.json';
 
 it('processes emails correctly', async () => {

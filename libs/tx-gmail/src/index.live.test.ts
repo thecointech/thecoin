@@ -1,6 +1,8 @@
+// reset env
+process.env.CONFIG_NAME='prod';
+import { getEnvFile } from "../../../tools/setenv";
 import { fetchETransfers, fetchNewDepositEmails } from './index'
 import { ConfigStore } from '@thecointech/store';
-import { init, release } from '@thecointech/utilities/firestore/jestutils';
 import { IsValidAddress } from '@thecointech/utilities';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
@@ -10,16 +12,20 @@ jest.disableAutomock()
 
 describe("Live service queries for gmail", () => {
 
+
   beforeAll(async () => {
     const timeout = 30 * 60 * 1000;
     jest.setTimeout(timeout);
-    ConfigStore.initialize();
-    await init('broker-cad');
+
+    // Initialize config with production data
+    const prodEnv = require('dotenv').config({path: getEnvFile("prod")})
+    ConfigStore.initialize({
+      prefix: prodEnv.parsed['STORAGE_PATH']
+    });
   });
 
   afterAll(() => {
     ConfigStore.release();
-    release();
   });
 
   it('Can fetch emails', async () => {
@@ -29,10 +35,6 @@ describe("Live service queries for gmail", () => {
   })
 
   it('We have valid deposits', async () => {
-
-    if (!IsManualRun)
-      return;
-
     const deposits = await fetchETransfers();
     expect(deposits).not.toBeUndefined();
 
