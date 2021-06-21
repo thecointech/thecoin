@@ -70,11 +70,12 @@ export async function SeedWithRandomRates(from: DateTime, validityInterval: Dura
   }
 }
 
-const RandomFxRates = () => Object.fromEntries(
+const RandomFxRates = () =>
   Object
     .keys(CurrencyCode)
     .filter(k => /^\d+$/.test(k))
     .filter(k => k !== '0')
     .map(key => [key, RandomFxRate()])
-);
+    .reduce((acc, [key, value]) => ({...acc, [key]: value}), {});
+
 const RandomFxRate = () => 0.9 + (Math.random() / 10)
