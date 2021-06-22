@@ -1,6 +1,6 @@
 {
   "+yDOnO": {
-    "defaultMessage": "We don't have any transactions matching your query.",
+    "defaultMessage": "Il n'y a aucune transactions avec ces critères",
     "description": "app.transactionList.notransactions: For when we have no transactions to display for the transaction history"
   },
   "024I2T": {
@@ -24,11 +24,11 @@
     "description": "shared.login.decryptIncorrectPwd"
   },
   "6ch8JH": {
-    "defaultMessage": "were planted thanks to you",
+    "defaultMessage": "ont étés planté grâce a vous",
     "description": "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"
   },
   "7E/ktj": {
-    "defaultMessage": "Account",
+    "defaultMessage": "Compte",
     "description": "shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer"
   },
   "BSYPCA": {
@@ -48,15 +48,15 @@
     "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
   },
   "EMxzDE": {
-    "defaultMessage": "were planted thanks to you",
+    "defaultMessage": "ont étés planté grâce a vous",
     "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
   },
   "EsoShw": {
-    "defaultMessage": "Connecting to your Web3 provider",
+    "defaultMessage": "Connexion à votre fournisseur Web3",
     "description": "Message to display while waiting for user to complete Web3 connection"
   },
   "FSygB8": {
-    "defaultMessage": "Logging into your account.",
+    "defaultMessage": "Connexion à votre compte.",
     "description": "shared.login.decryptHeader"
   },
   "HBuFPg": {
@@ -76,7 +76,7 @@
     "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
   },
   "NF4j5S": {
-    "defaultMessage": "Show filters",
+    "defaultMessage": "Montrer les filtres",
     "description": "app.transactionList.filters.show: Label for the filter show / hide system"
   },
   "NOGO9X": {
@@ -88,7 +88,7 @@
     "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
   },
   "QoJgfV": {
-    "defaultMessage": "Log In",
+    "defaultMessage": "Se connecter",
     "description": "shared.login.button: Text of the button for the login page"
   },
   "T4t7Q/": {

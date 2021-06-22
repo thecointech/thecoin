@@ -23,7 +23,7 @@
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",
     "build:link": "node ../../tools/link-assets.mjs **/*.module.less",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js"  
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"  
   },
   "files": [
     "./build/**/*"
