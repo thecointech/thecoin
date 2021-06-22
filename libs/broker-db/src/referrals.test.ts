@@ -39,7 +39,7 @@ it('returns undefined for non-existent referrer', async () => {
 })
 
 it('throws with invalid referral code', async () => {
-  expect(createReferree("345679", validAddress, DateTime.now())).rejects.toThrow("Referrer doesnt exist");
+  expect(createReferree("345679", validAddress, DateTime.now())).rejects.toThrow("Referral code doesnt exist");
 })
 
 it("Can refer new user.", async () => {

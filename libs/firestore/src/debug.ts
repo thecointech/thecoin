@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 import { isEmulatorAvailable } from './types';
+export { Timestamp };
 
 export async function init(projectId?: string) : Promise<boolean> {
 

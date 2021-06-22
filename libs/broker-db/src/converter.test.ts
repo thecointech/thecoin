@@ -1,4 +1,5 @@
-import { init, filterByEmulator, getFirestore, Timestamp } from '@thecointech/firestore';
+import { getFirestore } from '@thecointech/firestore';
+import { init, filterByEmulator, Timestamp } from '@thecointech/firestore/debug';
 import { describe } from '@thecointech/jestutils';
 import { getUserData, setUserVerified } from './user';
 import { DateTime } from 'luxon';

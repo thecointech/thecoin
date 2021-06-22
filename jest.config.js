@@ -15,6 +15,8 @@ module.exports = {
         noUnusedLocals: false,
         noUnusedParameters: false,
         typeRoots: [path.join(__dirname, "node_modules", "@types")],
+        incremental: true,
+        tsBuildInfoFile: '.tsbuildinfo',
       }
     }
   },
