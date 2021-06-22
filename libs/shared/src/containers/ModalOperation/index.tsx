@@ -1,6 +1,6 @@
 import { Modal, Loader, Button, Icon } from 'semantic-ui-react';
 import * as React from 'react';
-import { MessageDescriptor, FormattedMessage } from 'react-intl';
+import { MessageDescriptor, FormattedMessage, defineMessages } from 'react-intl';
 
 interface ModalProps {
   isOpen: boolean;
@@ -13,12 +13,11 @@ interface ModalProps {
   okCallback?: () => void;
 }
 
-const ok = { id:"shared.modalOperation.ok",
-                defaultMessage:"Ok",
-                description:"Text for the ok button for the modal tool"};
-const cancel = { id:"shared.modalOperation.cancel",
-                defaultMessage:"Cancel",
-                description:"Text for the cancel button for the modal tool"};
+const translate = defineMessages({ 
+  ok : {  defaultMessage:"Ok",
+          description:"shared.modalOperation.ok: Text for the ok button for the modal tool"},
+  cancel : {  defaultMessage:"Cancel",
+              description:"shared.modalOperation.cancel: Text for the cancel button for the modal tool"}});
 
 export const ModalOperation : React.FC<ModalProps> = (props) => {
 
@@ -31,7 +30,7 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
     return (
       cancelCallback ? (
         <Button color="red" onClick={cancelOperation} inverted>
-          <Icon name="cancel" /> <FormattedMessage {...cancel} />
+          <Icon name="cancel" /> <FormattedMessage {...translate.cancel} />
         </Button>
       ) : (undefined)
     );
@@ -40,7 +39,7 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
   function renderOkButton(okCallback?: () => void, progressPercent?: number) {
     okCallback && progressPercent && progressPercent >= 1 ? (
       <Button onClick={okCallback} inverted primary>
-        <Icon /><FormattedMessage {...ok} />
+        <Icon /><FormattedMessage {...translate.ok} />
       </Button>
     ) : (
       undefined

@@ -1,12 +1,12 @@
 import React, { createRef, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
-const placeholder = { id:"shared.uxinput.required.tooltip",
-                        defaultMessage:"This field is required",
-                        description:"Tooltip for the required uxinput"};
+const translate = defineMessages({  
+              placeholder: { defaultMessage:"This field is required",
+                        description:"shared.uxinput.required.tooltip: Tooltip for the required uxinput"}});
 
 
 type Props = Readonly<MyProps>;
@@ -55,7 +55,7 @@ export const UxInput = (props:Props) => {
     const formClassName = successTag ? 'success' : undefined;
     const showMessage = showState && (message != undefined);
     const labelToPrint = intlLabel.hasOwnProperty("defaultMessage") ? <FormattedMessage {...intlLabel} /> : intlLabel;
-    const tooltipRequired = (!intlLabel && !tooltip && isRequired) ? placeholder: undefined;
+    const tooltipRequired = (!intlLabel && !tooltip && isRequired) ? translate.placeholder: undefined;
     const tooltipData = tooltip ? intl.formatMessage(tooltip) : tooltipRequired;
 
     const contextRef = createRef<HTMLSpanElement>();

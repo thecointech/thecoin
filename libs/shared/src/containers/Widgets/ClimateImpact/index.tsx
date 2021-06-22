@@ -2,70 +2,38 @@ import React from "react";
 import { AvailableSoon } from "../AvailableSoon";
 import styles from "./Visual/styles.module.less";
 import { Visual } from "./Visual";
+import { defineMessages } from "react-intl";
 
-const title = {
-  id: "shared.widgets.climateimpact.title",
-  defaultMessage: "Climate Impact",
-  description: "Title for the Widget Climate impact in the app"
-};
-
-const waterUnity = {
-  id: "shared.widgets.climateimpact.waterUnity",
-  defaultMessage: "litres",
-  description: "Text for the Widget Climate impact in the app"
-};
-const waterText = {
-  id: "shared.widgets.climateimpact.waterText",
-  defaultMessage: "of water was cleaned thanks to you",
-  description: "Text for the Widget Climate impact in the app"
-};
-const windUnity = {
-  id: "shared.widgets.climateimpact.windUnity",
-  defaultMessage: "tonnes",
-  description: "Text for the Widget Climate impact in the app"
-};
-const windText = {
-  id: "shared.widgets.climateimpact.windText",
-  defaultMessage: "of CO2 offseted thanks to you",
-  description: "Text for the Widget Climate impact in the app"
-};
-const earthUnity = {
-  id: "shared.widgets.climateimpact.earthUnity",
-  defaultMessage: "tonns",
-  description: "Text for the Widget Climate impact in the app"
-};
-const earthText = {
-  id: "shared.widgets.climateimpact.earthText",
-  defaultMessage: "of CO2 offseted thanks to you",
-  description: "Text for the Widget Climate impact in the app"
-};
-const treesUnity = {
-  id: "shared.widgets.climateimpact.treesUnity",
-  defaultMessage: "trees",
-  description: "Text for the Widget Climate impact in the app"
-};
-const treesText = {
-  id: "shared.widgets.climateimpact.treesText",
-  defaultMessage: "were planted thanks to you",
-  description: "Text for the Widget Climate impact in the app"
-};
-const farmUnity = {
-  id: "shared.widgets.climateimpact.farmUnity",
-  defaultMessage: "trees",
-  description: "Text for the Widget Climate impact in the app"
-};
-const farmText = {
-  id: "shared.widgets.climateimpact.farmText",
-  defaultMessage: "were planted thanks to you",
-  description: "Text for the Widget Climate impact in the app"
-};
+const translate = defineMessages({ 
+  title : { defaultMessage: "Climate Impact",
+            description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"},
+  waterUnity : {  defaultMessage: "litres",
+                  description: "shared.widgets.climateimpact.waterUnity: Text for the Widget Climate impact in the app"},
+  waterText : { defaultMessage: "of water was cleaned thanks to you",
+                description: "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"}, 
+  windUnity : { defaultMessage: "tonnes",
+                description: "shared.widgets.climateimpact.windUnity: Text for the Widget Climate impact in the app"},
+  windText : {  defaultMessage: "of CO2 offseted thanks to you",
+                    description: "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"},
+  earthUnity : {  defaultMessage: "tonns",
+                  description: "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"}, 
+  earthText : { defaultMessage: "of CO2 offseted thanks to you",
+                description: "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"},
+  treesUnity : {  defaultMessage: "trees",
+                  description: "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"},
+  treesText : { defaultMessage: "were planted thanks to you",
+                description: "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"},
+  farmUnity : { defaultMessage: "trees",
+                    description: "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"},
+  farmText : {  defaultMessage: "were planted thanks to you",
+                description: "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"}});
 
 export const options = [
-  { key: 'water', class: styles.water, unityToTranslate: waterUnity, textToTranslate: waterText },
-  { key: 'wind', class: styles.wind, unityToTranslate: windUnity, textToTranslate: windText },
-  { key: 'earth', class: styles.earth, unityToTranslate: earthUnity, textToTranslate: earthText },
-  { key: 'trees', class: styles.trees, unityToTranslate: treesUnity, textToTranslate: treesText },
-  { key: 'farm', class: styles.farm, unityToTranslate: farmUnity, textToTranslate: farmText },
+  { key: 'water', class: styles.water, unityToTranslate: translate.waterUnity, textToTranslate: translate.waterText },
+  { key: 'wind', class: styles.wind, unityToTranslate: translate.windUnity, textToTranslate: translate.windText },
+  { key: 'earth', class: styles.earth, unityToTranslate: translate.earthUnity, textToTranslate: translate.earthText },
+  { key: 'trees', class: styles.trees, unityToTranslate: translate.treesUnity, textToTranslate: translate.treesText },
+  { key: 'farm', class: styles.farm, unityToTranslate: translate.farmUnity, textToTranslate: translate.farmText },
 ];
 
 export const ClimateImpact = () => {
@@ -73,7 +41,7 @@ export const ClimateImpact = () => {
   const randomItem = options[Math.floor(Math.random()*options.length)];
   return (
     <AvailableSoon>
-      <Visual title={title} quantity={quantity} item={randomItem} />
+      <Visual title={translate.title} quantity={quantity} item={randomItem} />
     </AvailableSoon>
   )
 }

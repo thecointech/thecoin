@@ -13,7 +13,7 @@ import { isSigner, isWallet } from "../../SignerIdent";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";
-import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
+import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {
@@ -33,8 +33,9 @@ interface Props {
   addressMatch?: (address: string) => boolean;
 }
 
-const waitingForWeb3 = { defaultMessage: "Connecting to your Web3 provider",
-                description:"Message to display while waiting for user to complete Web3 connection" };
+const translate = defineMessages({  
+  waitingForWeb3:{ defaultMessage: "Connecting to your Web3 provider",
+                description:"Message to display while waiting for user to complete Web3 connection" }});
 
 export const Account = (props: Props) => {
 
@@ -88,7 +89,7 @@ export const Account = (props: Props) => {
   } else {
     if (!signer.provider) {
       // Does not have a provider on-load
-      return <FormattedMessage {...waitingForWeb3} />
+      return <FormattedMessage {...translate.waitingForWeb3} />
     }
   }
 
