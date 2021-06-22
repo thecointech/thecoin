@@ -1,5 +1,6 @@
 const path = require('path');
 const { compilerOptions } = require('./tsconfig.base.json');
+const getTool = (name) => path.join(__dirname, 'tools', name);
 
 module.exports = {
   verbose: true,
@@ -19,7 +20,7 @@ module.exports = {
   },
 
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
-  resolver: path.join(__dirname, './tools/jestExportResolver.js'),
+  resolver: getTool('jestExportResolver.js'),
 
   // Test environment is required when running jest tests
   // with firestore emulator connection. See
@@ -39,9 +40,10 @@ module.exports = {
     "node"
   ],
   // Global setup detects presence of firestore emulator
-  globalSetup: path.join(__dirname, 'tools', 'jestGlobalSetup.js'),
+  globalSetup: getTool('jestGlobalSetup.js'),
   // local setup initializes logging etc
   setupFiles: [
-    path.join(__dirname, 'tools', 'jestTestSetup.js'),
+    getTool('jestTestSetup.js'),
+    getTool('jestMockLocalStorage.js'),
   ]
 };
