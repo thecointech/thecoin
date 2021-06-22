@@ -1,6 +1,5 @@
-const defaults = require('../../jest.config');
+const defaults = require('@thecointech/site-base/jest.config');
 
 module.exports = {
   ...defaults,
-  moduleDirectories: ['node_modules', '../../node_modules', 'src'],
 };

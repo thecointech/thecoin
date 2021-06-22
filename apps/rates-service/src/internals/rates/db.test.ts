@@ -1,4 +1,5 @@
-import { filterByEmulator, init, Timestamp } from '@thecointech/firestore/debug';
+import { init, Timestamp } from '@thecointech/firestore';
+import { filterByEmulator } from '@thecointech/firestore/debug';
 import { setRate, getCoinRate, toDbType } from './db';
 import { CoinRate } from "./types";
 import { describe } from '@thecointech/jestutils';
