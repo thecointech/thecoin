@@ -7,13 +7,7 @@ const renderer = createRenderer();
 jest.mock('react-router', () => ({
   useLocation: () => { key: "TESTING"}
 }));
-jest.mock('@thecointech/shared/containers/AccountMap', () => ({
-  useAccountMapStore: jest.fn(),
-}));
-jest.mock('@thecointech/shared/containers/FxRate/reducer', () => ({
-  useFxRatesStore: jest.fn(),
-}));
-jest.mock('../../Prismic/reducer', () => ({
+jest.mock('../../../components/Prismic/reducer', () => ({
   usePrismic: jest.fn(),
 }));
 // This import can trigger a compilation of the entire app
