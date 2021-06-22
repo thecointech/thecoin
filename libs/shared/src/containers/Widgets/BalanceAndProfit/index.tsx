@@ -7,17 +7,15 @@ import styles from "./styles.module.less";
 import { getFxRate, useFxRates } from "../../FxRate";
 import { calculateProfit } from "../../Account/profit";
 import { toHuman } from "../../../../../utils-ts/build/Conversion";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 
-const balanceTitle = { id:"shared.widgets.balanceandprofit.balance",
-                defaultMessage:"Balance",
-                description:"Title for widget Balance and profit" };
-const profitTitle = { id:"shared.widgets.balanceandprofit.profit",
-                defaultMessage:"Profit",
-                description:"Title for widget Balance and profit" };
-const cad = { id:"shared.widgets.balanceandprofit.cad",
-                defaultMessage:"$CAD",
-                description:"Title for widget Balance and profit" };
+const translate = defineMessages({ 
+    balanceTitle : {  defaultMessage:"Balance",
+                      description:"shared.widgets.balanceandprofit.balance: Title for widget Balance and profit" },
+    profitTitle : { defaultMessage:"Profit",
+                    description:"shared.widgets.balanceandprofit.profit: Title for widget Balance and profit" },
+    cad : { defaultMessage:"$CAD",
+            description:"shared.widgets.balanceandprofit.cad: Title for widget Balance and profit" }});
 
 
 export const BalanceAndProfit = () => {
@@ -38,15 +36,15 @@ export const BalanceAndProfit = () => {
       </div>
       <div className={`${styles.balanceZone}`}>
         <Header as="h5" className={"appTitles"} >
-            <FormattedMessage {...balanceTitle} />
+            <FormattedMessage {...translate.balanceTitle} />
         </Header>
         <img src={illustration} className={styles.illustrationDesktop}/>
         <div className={styles.cadBalance}>{cadBalance}</div>
-        <div className={`${styles.cadBalanceCurrency} x1spaceAfter`}><FormattedMessage {...cad} /></div>
+        <div className={`${styles.cadBalanceCurrency} x1spaceAfter`}><FormattedMessage {...translate.cad} /></div>
       </div>
       <div className={ `${styles.profitZone} x1spaceBefore` }>
         <Header as="h5" className={"appTitles"}>
-            <FormattedMessage {...profitTitle} />
+            <FormattedMessage {...translate.profitTitle} />
         </Header>
         <div><Icon name='arrow up' />{profitDisplay}%</div>
       </div>

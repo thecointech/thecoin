@@ -21,7 +21,9 @@
     "build": "run-p build:src build:copy build:link",
     "build:src": "yarn tsc -b tsconfig.build.json",
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",
-    "build:link": "node ../../tools/link-assets.mjs **/*.module.less"
+    "build:link": "node ../../tools/link-assets.mjs **/*.module.less",
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
   },
   "files": [
     "./build/**/*"
