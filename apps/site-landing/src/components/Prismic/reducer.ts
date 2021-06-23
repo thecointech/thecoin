@@ -10,16 +10,14 @@ import { buildSaga } from '@thecointech/shared/store/sagas'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-// TODO: Move API Endpoint into .env configuration
-const apiEndpoint = 'https://thecoinio.cdn.prismic.io/api/v2'
-const accessToken = '' // This is where you would add your access token for a Private repository
+const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
+const accessToken = process.env.PRISMIC_API_ACCESSTOKEN;
 const Client = Prismic.client(apiEndpoint, { accessToken });
 
-export class PrismicReducer extends TheCoinReducer<PrismicState>
-	implements IActions
+export class PrismicReducer extends TheCoinReducer<PrismicState> implements IActions
 {
 
-  *fetchFaqs(): Generator<any> {
+  *fetchAllDocs(): Generator<any> {
 
     // Only fetch FAQ's once
     if (this.state.faqs.length !== 0) {
@@ -29,8 +27,8 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
 
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
-        '', //Prismic.Predicates.at('document.type', 'faq'),
-        {}
+        Prismic.Predicates.at('document.type', 'faq'),
+        { lang : '*' }
       )
       if (response) {
         return response.results;
@@ -38,10 +36,11 @@ export class PrismicReducer extends TheCoinReducer<PrismicState>
       return null;
     }
     const results: Document[] = (yield call(fetchData)) as any;
+    console.log("results===",results);
     if (results)
       yield this.storeValues({
-        faqs: results.filter(item => item.type === 'the_coin_faq') ?? [],
-        articles: results.filter(item => item.type === 'the_coin_faq') ?? []
+        faqs: results.filter(item => item.type === 'faq') ?? [],
+        articles: results.filter(item => item.type === 'article') ?? []
       })
   };
 }
@@ -58,7 +57,7 @@ function createRootEntitySelector<T>(rootKey: keyof ApplicationRootState, initia
 const rootSelector = createRootEntitySelector("documents", initialState);
 
 function* rootSaga() {
-  yield takeLatest(actions.fetchFaqs.type, buildSaga<PrismicReducer>(PrismicReducer, rootSelector, "fetchFaqs"));
+  yield takeLatest(actions.fetchAllDocs.type, buildSaga<PrismicReducer>(PrismicReducer, rootSelector, "fetchAllDocs"));
 }
 
 export const usePrismic = () => {
