@@ -27,5 +27,6 @@ export function filterByEmulator() {
     console.warn("Cannot connect to firestore, abandoning unit tests");
     return false;
   }
+  console.debug(`Connecting to Firestore on port: ${process.env.FIRESTORE_EMULATOR_PORT}`);
   return true;
 }

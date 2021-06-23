@@ -35,4 +35,4 @@ jobs:
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
     - name: Test all
-      run: yarn test
+      run: yarn test --stream
