@@ -24,11 +24,6 @@ module.exports = {
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
   resolver: getTool('jestExportResolver.js'),
 
-  // Test environment is required when running jest tests
-  // with firestore emulator connection. See
-  // https://github.com/firebase/firebase-js-sdk/issues/2701
-  testEnvironment: "jest-environment-uint8array",
-
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
