@@ -2,10 +2,8 @@ import { init, filterByEmulator } from './emulator';
 import { describe } from '@thecointech/jestutils';
 import { getFirestore, Timestamp } from '.';
 
-console.log(process.env);
 //
 // Test the connection to the firestore emulator.
-//
 describe('Our testing correctly connects to Firestore', () => {
 
   it("connects", async () => {
