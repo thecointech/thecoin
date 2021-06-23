@@ -12,9 +12,10 @@ module.exports = {
     "@storybook/addon-essentials"
   ],
   babel: async (options) => {
-    return ({
+    const r = {
     ...options,
     plugins: [
+      ["@babel/plugin-proposal-class-properties", {loose: true}],
       ...options.plugins,
       [
         "formatjs",
@@ -22,10 +23,11 @@ module.exports = {
           "idInterpolationPattern": "[sha512:contenthash:base64:6]",
           "ast": true
         }
-      ]
-    ]
-  })},
-
+      ],
+    ]}
+    console.log(r);
+    return r;
+  },
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
@@ -43,11 +45,12 @@ module.exports = {
       {
         resolve: {
           alias: {
-            "@thecointech/utilities": "@thecointech/utilities/build",
-            "@thecointech/contract": "@thecointech/contract/build",
-            "@thecointech/shared": "@thecointech/shared/build",
-            "@thecointech/site-base": "@thecointech/site-base/build",
-            "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
+            "fs": false,
+            // "@thecointech/utilities": "@thecointech/utilities/build",
+            // "@thecointech/contract": "@thecointech/contract/build",
+            // "@thecointech/shared": "@thecointech/shared/build",
+            // "@thecointech/site-base": "@thecointech/site-base/build",
+            // "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
           }
         }
       }
@@ -55,5 +58,8 @@ module.exports = {
 
     // Return the altered config
     return config;
+  },
+  core: {
+    builder: "webpack5",
   },
 }

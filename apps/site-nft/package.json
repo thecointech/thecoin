@@ -14,10 +14,9 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "prebuild": "run-p build:semantic build:i18l build:copy",
+    "prebuild": "run-p build:semantic build:i18l",
     "build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",
     "build:semantic": "node ./internals/buildSemantic",
-    "build:copy": "cpx \"./src/**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\" ./build",
     "build:i18l": "run-s extract compile",
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
