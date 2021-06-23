@@ -1,5 +1,5 @@
 import { BunyanLogger } from './logger';
-import { init as init_node } from './browser';
+import { init_node } from './node';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).

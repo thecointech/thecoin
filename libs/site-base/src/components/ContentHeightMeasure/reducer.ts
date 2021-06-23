@@ -1,7 +1,7 @@
 
 import { TheCoinReducer } from '@thecointech/shared/store/immerReducer'
 import { ContentState, IActions } from './types';
-import { SiteBaseStore } from 'SiteBaseStore';
+import { SiteBaseStore } from '../../SiteBaseStore';
 import { useInjectReducer } from 'redux-injectors';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';

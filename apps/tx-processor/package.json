@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.4",
+  "version": "0.2.13",
+  "private": "true",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
     "THECoin"
@@ -9,7 +10,6 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
-    "build:app": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "yarn build && node --inspect ./build/main.js",
@@ -25,9 +25,9 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.2",
-    "@thecointech/rbcapi": "^0.2.3",
-    "@thecointech/tx-processing": "^0.2.4"
+    "@thecointech/logging": "^0.2.13",
+    "@thecointech/rbcapi": "^0.2.13",
+    "@thecointech/tx-processing": "^0.2.13"
   },
   "devDependencies": {
     "jest": "*"

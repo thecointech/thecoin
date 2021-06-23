@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/pricing",
-  "version": "0.2.4",
+  "version": "0.2.12",
   "description": "OpenAPI client for @thecointech/pricing",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
@@ -10,6 +10,11 @@
     "openapi-generator",
     "@thecointech/pricing"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apis/rates/ts"
+  },
   "license": "Unlicense",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -20,8 +25,8 @@
   "dependencies": {
     "axios": "^0.21.1"
   },
-  "devDependencies": {
-    "@types/node": "^12.11.5",
-    "typescript": "^3.6.4"
-  }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }
