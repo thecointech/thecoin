@@ -48,7 +48,7 @@
     "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
   },
   "EMxzDE": {
-    "defaultMessage": "ont étés planté grâce a vous",
+    "defaultMessage": "ont étés planté grâce à vous",
     "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
   },
   "EsoShw": {
@@ -60,7 +60,7 @@
     "description": "shared.login.decryptHeader"
   },
   "HBuFPg": {
-    "defaultMessage": "Or select a different account from the account switcher. You can find it at the top menu.",
+    "defaultMessage": "Ou choisissez un autre compte dans le selecteur de compte en haut a droite de l'application.",
     "description": "shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"
   },
   "HOPoKy": {
@@ -68,11 +68,11 @@
     "description": "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"
   },
   "HPpZfH": {
-    "defaultMessage": "Please wait, We are {percentComplete}% done opening your account.",
+    "defaultMessage": "Veuillez patienter. Nous openons votre compte : {percentComplete}%.",
     "description": "shared.login.decryptInProgress"
   },
   "Munucn": {
-    "defaultMessage": "of CO2 offseted thanks to you",
+    "defaultMessage": "de CO2 compensé grâce à vous",
     "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
   },
   "NF4j5S": {
@@ -84,7 +84,7 @@
     "description": "shared.widgets.balanceandprofit.cad: Title for widget Balance and profit"
   },
   "QdopU+": {
-    "defaultMessage": "WELCOME BACK TO THE COIN",
+    "defaultMessage": "Nous sommes heureux de vous revoir",
     "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
   },
   "QoJgfV": {
@@ -92,35 +92,35 @@
     "description": "shared.login.button: Text of the button for the login page"
   },
   "T4t7Q/": {
-    "defaultMessage": "of water was cleaned thanks to you",
+    "defaultMessage": "d'eau a été nettoyé grâce à vous",
     "description": "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"
   },
   "UOyqjB": {
-    "defaultMessage": "Drag 'n' drop a wallet file here, or click to browse",
+    "defaultMessage": "Glisser déposer un fichier de portefeuille ici, ou cliquer pour afficher vos fichiers",
     "description": "shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"
   },
   "WCLrSR": {
-    "defaultMessage": "From",
+    "defaultMessage": "De",
     "description": "app.transactionList.from: For description in comment section for the transaction history"
   },
   "Xc4r1i": {
-    "defaultMessage": "trees",
+    "defaultMessage": "arbres",
     "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
   },
   "YOPdSV": {
-    "defaultMessage": "Coming Soon",
+    "defaultMessage": "Bientôt disponible",
     "description": "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app"
   },
   "c4Q+vA": {
-    "defaultMessage": "Sent",
+    "defaultMessage": "Envoyé",
     "description": "shared.transactionList.sent: For title in comment section for the transaction history"
   },
   "gDjEmA": {
-    "defaultMessage": "Loading...",
+    "defaultMessage": "Chargement...",
     "description": "app.transactionList.loading: For loading in comment section for the transaction history"
   },
   "iAyWom": {
-    "defaultMessage": "Log into",
+    "defaultMessage": "Se connecter",
     "description": "shared.login.title: Title for the create account form page"
   },
   "jNMJW6": {
@@ -128,7 +128,7 @@
     "description": "shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"
   },
   "k5hxGk": {
-    "defaultMessage": "To",
+    "defaultMessage": "De",
     "description": "shared.transactionList.to: For description in comment section for the transaction history"
   },
   "kMr8B/": {
@@ -136,47 +136,47 @@
     "description": "shared.widgets.balanceandprofit.profit: Title for widget Balance and profit"
   },
   "nr9W7I": {
-    "defaultMessage": "Received",
+    "defaultMessage": "Reçu",
     "description": "app.transactionList.received: For title in comment section for the transaction history"
   },
   "p3YhGG": {
-    "defaultMessage": "This address is not the right format",
+    "defaultMessage": "Cette adresse n'a pas le bon format",
     "description": "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
   },
   "qWP9Ej": {
-    "defaultMessage": "This field is required",
+    "defaultMessage": "Ce champ est requis",
     "description": "shared.uxinput.required.tooltip: Tooltip for the required uxinput"
   },
   "r8PHp4": {
-    "defaultMessage": "Recent Operations",
+    "defaultMessage": "Opérations récentes",
     "description": "shared.balance.title: Title for the congratulations page"
   },
   "rMCWq0": {
-    "defaultMessage": "Home",
+    "defaultMessage": "Accueil",
     "description": "shared.NotFoundPage.button: Go back to homepage button for the 404 page"
   },
-  "shared.NotFoundPage.title": {
-    "defaultMessage": "Sorry, we couldn’t find the page you are looking for",
+  "8oZBpu": {
+    "defaultMessage": "Nous n'avons pas trouvé cette page",
     "description": "Title for the 404 page"
   },
   "tnlU5d": {
-    "defaultMessage": "of CO2 offseted thanks to you",
+    "defaultMessage": "de CO2 compensé grâce à vous",
     "description": "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"
   },
   "veRB0m": {
-    "defaultMessage": "Hide filters",
+    "defaultMessage": "Cacher les filtres",
     "description": "shared.transactionList.filters.hide: Label for the filter show / hide system"
   },
   "ypa6Gp": {
-    "defaultMessage": "Load an Account",
+    "defaultMessage": "Charger un compte",
     "description": "shared.account.uploadWallet.title: Title for the upload your account page"
   },
   "yrJmTB": {
-    "defaultMessage": "Wallet Password",
+    "defaultMessage": "Mot de passe pour le portefeuille",
     "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
   },
   "yyDRED": {
-    "defaultMessage": "tonns",
+    "defaultMessage": "tonnes",
     "description": "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"
   }
 }
