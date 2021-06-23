@@ -21,7 +21,7 @@ namespace TapCapSupplier
 				LoadFile(inter);
 				return;
 			}
-			throw new Exception("Cannot load environment");
+			throw new Exception($"Cannot load environment: {config}");
 		}
 		private static void LoadFile(string filePath)
 		{

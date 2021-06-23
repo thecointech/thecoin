@@ -1,15 +1,13 @@
 {
 	"name": "tapcap-admin-root",
 	"version": "1.0.0",
+  "private": "true",
 	"scripts": {
 	  "client": "cd client && yarn start",
 	  "server": "nodemon server/src/server.js",
-	  "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+	  "dev": "run-p server client"
 	},
 	"dependencies": {
 	  "body-parser": "^1.18.3"
-	},
-	"devDependencies": {
-	  "concurrently": "^4.0.1"
 	}
   }

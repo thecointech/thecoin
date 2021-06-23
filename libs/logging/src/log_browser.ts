@@ -1,5 +1,5 @@
 import { BunyanLogger } from './logger';
-import { init as init_browser } from './browser';
+import { init_browser } from './browser';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -10,7 +10,7 @@ import { init as init_browser } from './browser';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : BunyanLogger = null! as BunyanLogger;
 
-export async function init(name: string) {
+export function init(name: string) {
   log = init_browser(name);
   log.trace('Web logging initialized');
 }

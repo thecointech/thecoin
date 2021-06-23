@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/tx-blockchain",
-  "version": "0.2.3",
+  "private": "true",
+  "version": "0.2.13",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "keywords": [
     "THECoin"
@@ -9,7 +10,6 @@
   "homepage": "http://thecoin.io",
   "license": "MIT",
   "scripts": {
-    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -26,13 +26,17 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*"
+      ]
     }
   },
   "dependencies": {
-    "@thecointech/contract": "^0.2.3",
-    "@thecointech/utilities": "^0.2.3"
+    "@thecointech/contract": "^0.2.13",
+    "@thecointech/utilities": "^0.2.13"
   },
   "devDependencies": {
     "jest": "*"

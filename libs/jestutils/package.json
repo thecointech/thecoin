@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/jestutils",
-  "version": "0.2.2",
+  "private": "true",
+  "version": "0.2.6",
   "description": "The Coin: Simple jest extentions",
   "keywords": [
     "TheCoin",
@@ -15,7 +16,6 @@
     "directory": "libs/jestutils"
   },
   "scripts": {
-    "build:lib": "yarn build",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",

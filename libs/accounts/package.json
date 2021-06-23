@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/accounts",
-  "version": "0.2.2",
+  "version": "0.2.13",
   "description": "The Coin: centralized access for built-in accounts.  Not for external use",
   "keywords": [
     "TheCoin"
@@ -17,13 +17,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
-    "deploy:lib": "yarn deploy",
-    "build:lib": "yarn build",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "test": "yarn jest",
     "clean": "rimraf ./build && rimraf ./coverage"
@@ -35,9 +29,10 @@
   "browser": "./build/index_web.js",
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/logging": "^0.2.2"
+    "@thecointech/logging": "^0.2.13"
   },
   "devDependencies": {
     "jest": "*"
-  }
+  },
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

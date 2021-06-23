@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processing",
-  "version": "0.2.4",
+  "version": "0.2.13",
   "description": "The Coin: A library for processing coin deposits and etransfers",
   "keywords": [
     "THECoin"
@@ -17,12 +17,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
-    "build:lib": "yarn build",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -34,23 +29,30 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./*": [ "./build/*/index.js" ]
+    "./*": [
+      "./build/*/index.js"
+    ]
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts",
+        "build/*/index.d.ts"
+      ]
     }
   },
   "dependencies": {
-    "@thecointech/broker-db": "*",
-    "@thecointech/rbcapi": "*",
-    "@thecointech/shared": "^0.2.4",
-    "@thecointech/tx-gmail": "^0.2.3",
-    "@thecointech/utilities": "^0.2.3"
+    "@thecointech/broker-db": "^0.2.13",
+    "@thecointech/rbcapi": "^0.2.13",
+    "@thecointech/tx-gmail": "^0.2.13",
+    "@thecointech/utilities": "^0.2.13"
   },
   "devDependencies": {
     "jest": "*"
-  }
+  },
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

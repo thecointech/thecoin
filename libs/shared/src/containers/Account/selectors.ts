@@ -1,5 +1,5 @@
 import { IsValidAddress } from "@thecointech/utilities";
-import { AccountMapStore } from "containers/AccountMap";
+import { AccountMapStore } from "../AccountMap";
 import { useSelector } from "react-redux";
 
 
