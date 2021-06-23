@@ -1,4 +1,4 @@
-import { init, filterByEmulator } from '@thecointech/firestore';
+import { init, filterByEmulator } from '@thecointech/firestore/emulator';
 import { describe } from '@thecointech/jestutils';
 import { getAllUsers } from './users';
 import { IsValidAddress } from '@thecointech/utilities'
