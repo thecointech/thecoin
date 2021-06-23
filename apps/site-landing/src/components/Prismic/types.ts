@@ -40,5 +40,5 @@ export const initialState = {
 export type PrismicState = typeof initialState;
 
 export interface IActions {
-  fetchFaqs() : Iterator<any>;
+  fetchAllDocs() : Iterator<any>;
 }
