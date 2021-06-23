@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "build": "run-p build:src build:link",
-    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
+    "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
@@ -61,7 +61,9 @@
     "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "@formatjs/ts-transformer": "^3.4.3",
+    "ttypescript": "^1.5.12"
   },
   "devDependencies": {
     "@types/intl": "^1.2.0",
