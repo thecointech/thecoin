@@ -1,5 +1,5 @@
-import { init, filterByEmulator } from '@thecointech/firestore/emulator';
-import { describe } from '@thecointech/jestutils';
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
+import { init } from '@thecointech/firestore';
 import { getAllUsers } from './users';
 import { IsValidAddress } from '@thecointech/utilities'
 import { getActionFromInitial } from './transaction';

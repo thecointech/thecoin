@@ -20,8 +20,6 @@ test('Should read data in properly', async () => {
   const start = getIdx(new Date(1919, 0), data);
   const end = getIdx(new Date(2019, 1), data);
   const returns = calcReturns(start, end, data, 1.85);
-  console.log(returns * 100);
-
 });
 
 test('can build return for single period', async () => {
@@ -110,7 +108,7 @@ test('Build output all return data', async () => {
   // What is this return, and when did it happen?
   const worstDate = DateTime.fromJSDate(startDate).plus({ months: idx })
   // 1999 was a terrible time to be an investor
-  console.log(`Worst return: ${tenYrReturns[idx]} from ${worstDate.toISODate()}`);
+  //console.log(`Worst return: ${tenYrReturns[idx]} from ${worstDate.toISODate()}`);
   expect(worstDate.toISODate()).toBe("1999-02-01");
   // TODO: Why do we have a different number here?
   //expect(tenYrReturns[idx]).toBeCloseTo(-0.30009);
@@ -122,7 +120,7 @@ test('Build output all return data', async () => {
   // Turns out that's a terrible idea: the generated file
   // is 10mb vs the source data of 118 kb
   //fs.writeFileSync(outputJsonPath, JSON.stringify(allReturnsSorted));
-  console.log("all done");
+  //console.log("all done");
 });
 
 // Test to see if we calculate a reasonable average/lower/upper

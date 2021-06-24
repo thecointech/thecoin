@@ -1,14 +1,14 @@
 import { initLatest, getLatest } from "./latest"
 import { setRate, cleanDb } from "./db";
 import { CoinRate, FxRates } from "./types";
-import { init, filterByEmulator } from '@thecointech/firestore/emulator';
-import { describe } from "@thecointech/jestutils";
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
+import { init } from '@thecointech/firestore';
 
 describe('emulator-only tests', () => {
 
   it('can find latest rates on initialization', async () => {
 
-    await init("rates-service-test");
+    await init({project: "rates-service-test"});
     await cleanDb();
 
     // Insert 5 rates, out of order
