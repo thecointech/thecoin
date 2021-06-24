@@ -1,5 +1,5 @@
 import React from 'react';
-import { debounce, Cancelable } from 'lodash';
+import { debounce, DebouncedFunc } from 'lodash';
 import { Container, Icon } from 'semantic-ui-react';
 import { UxInput } from '../../components/UxInput';
 import { Props, State, initialState } from './types';
@@ -23,7 +23,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
   state = initialState;
 
   // callback to trigger toggling password masking
-  maskPassword: Function & Cancelable;
+  maskPassword: Function & DebouncedFunc<() => void>;
 
   constructor(props: Props) {
     super(props);
