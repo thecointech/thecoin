@@ -10,7 +10,7 @@ import { init_browser } from './browser';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : BunyanLogger = null! as BunyanLogger;
 
-export function init(name: string) {
-  log = init_browser(name);
+export function init(name: string, level?: number) {
+  log = init_browser(name, level);
   log.trace('Web logging initialized');
 }

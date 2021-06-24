@@ -4,9 +4,9 @@ import debug_stream from 'bunyan-debug-stream';
 
 const basepath = join(__dirname, "..", "..", "..");
 
-export const getConsoleStream = () : Stream => (
+export const getConsoleStream = (level?: number) : Stream => (
   {
-    level: 'trace',
+    level: level ?? 'trace',
     stream: debug_stream({
       basepath,
       forceColor: true,

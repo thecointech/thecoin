@@ -10,7 +10,7 @@ import { init_node } from './node';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : BunyanLogger = null! as BunyanLogger;
 
-export function init(name: string) {
-  log = init_node(name);
+export function init(name: string, level?: number) {
+  log = init_node(name, level);
   log.trace('Node logging initialized');
 }

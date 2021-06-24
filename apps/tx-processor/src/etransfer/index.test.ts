@@ -4,7 +4,7 @@ process.env.DB_ACTION_PK_PATH = __filename;
 import { processUnsettledETransfers } from '.'
 import { init } from '@thecointech/firestore/mock';
 import { GetContract } from '@thecointech/contract';
-import { getCurrentState } from '../statemachine/types';
+import { getCurrentState } from '@thecointech/tx-processing';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
 import data from './index.test.mockdb.json';
@@ -12,6 +12,12 @@ import data from './index.test.mockdb.json';
 // Allow mocking the decryption fn
 import { decryptTo } from '@thecointech/utilities/Encrypt';
 import { mocked } from 'ts-jest/utils';
+import { RbcApi } from '@thecointech/rbcapi';
+
+jest.mock('@thecointech/email');
+jest.mock('@thecointech/utilities/MarketStatus', () => ({
+  NextOpenTimestamp: (date: Date) => date.getTime()
+}))
 jest.mock('@thecointech/utilities/Encrypt')
 const mockedEncrypt = mocked(decryptTo, false);
 
@@ -29,7 +35,8 @@ it('Succesfully Processes Sell', async ()=> {
   mockedEncrypt.mockReturnValueOnce(ev.decrypted);
 
   const contract = await GetContract();
-  const eTransfers = await processUnsettledETransfers(contract);
+  const bank = new RbcApi();
+  const eTransfers = await processUnsettledETransfers(contract, bank);
 
   const results = eTransfers.map(getCurrentState);
   for (const result of results)
