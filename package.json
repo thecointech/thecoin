@@ -45,7 +45,7 @@
     "clean:ceramic": "rimraf ~/.ceramic && ~/.jsipfs",
     "clean:apis": "git clean -qfdx ./apis",
     "test": "lerna run test",
-    "test:ci": "lerna run test --stream -- --ci --forceExit",
+    "test:ci": "lerna run test -- --ci --forceExit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
