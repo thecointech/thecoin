@@ -1,21 +1,22 @@
 import { initLatest, getLatest } from "./latest"
 import { setRate, cleanDb } from "./db";
 import { CoinRate, FxRates } from "./types";
-import { init, describe } from "@thecointech/utilities/firestore/jestutils";
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
+import { init } from '@thecointech/firestore';
 
 describe('emulator-only tests', () => {
 
   it('can find latest rates on initialization', async () => {
 
-    await init("rates-service-test");
+    await init({project: "rates-service-test"});
     await cleanDb();
 
     // Insert 5 rates, out of order
     const validTimes = [1000, 9000, 3000, 2000, 6000, 5000];
     var coinRates = validTimes.map(buildCoinRate);
     var fxRates = validTimes.map(buildFxRate);
-    await Promise.all(coinRates.map(r => setRate("Coin", r)));
-    await Promise.all(fxRates.map(r => setRate("FxRates", r)));
+    await Promise.all(coinRates.map(r => setRate("Coin", r)) as Promise<void>[]);
+    await Promise.all(fxRates.map(r => setRate("FxRates", r)) as Promise<void>[]);
     await initLatest();
 
     const coin = getLatest("Coin");
@@ -26,7 +27,7 @@ describe('emulator-only tests', () => {
     expect(coin.validFrom).toEqual(mostRecent)
     expect(fx.validFrom).toEqual(mostRecent)
   })
-})
+}, filterByEmulator())
 
 
 const buildCoinRate = (ts: number): CoinRate => ({

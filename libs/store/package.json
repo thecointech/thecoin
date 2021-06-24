@@ -30,6 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
+    "@thecointech/logging": "*",
     "pouchdb": "*",
     "pouchdb-upsert": "*"
   },

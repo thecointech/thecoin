@@ -1,13 +1,16 @@
 const defaults = require('../../jest.config');
 
+const styleMock = '<rootDir>/../../tools/jestStyleMock.js';
 module.exports = {
   ...defaults,
-  moduleDirectories: ['node_modules', '../../node_modules', 'app'],
-  setupFilesAfterEnv: [
-    "<rootDir>/internals/testing/setupTests.js"
-  ],
+  testEnvironment: 'jsdom',
+  moduleDirectories: ['node_modules', '../../node_modules', 'src'],
   moduleNameMapper: {
     ...defaults.moduleNameMapper,
-    '\\.(css|less|svg)$': '<rootDir>/internals/testing/styleMock.js',
+    "@thecointech/site-semantic-theme/variables": styleMock,
+    "^components/(.*)": "<rootDir>/src/components/$1",
+    "^containers/(.*)": "<rootDir>/src/containers/$1",
+    "^api/(.*)": "<rootDir>/src/api/$1",
+    '\\.(css|less|svg)$': styleMock,
   }
 };

@@ -1,7 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigStore } from '@thecointech/store';
-import { existsSync, readFileSync } from 'fs';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -22,13 +21,10 @@ export type OpenUrl = (url: string) => void;
  * @param {function} callback The callback to call with the authorized client.
  */
 export async function authorize(openurl?: OpenUrl) {
-  const credentialsPath = process.env.GMAIL_CREDENTIALS_PATH;
-  if (!credentialsPath || !existsSync(credentialsPath))
-    throw new Error("Cannot authorize gmail without credentials");
-  const credentials = JSON.parse(readFileSync(credentialsPath, "utf8"));
-  const { client_secret, client_id, redirect_uris } = credentials.installed
   const oAuth2Client = new google.auth.OAuth2(
-    client_id, client_secret, redirect_uris[0]
+    process.env.TX_GMAIL_CLIENT_ID,
+    process.env.TX_GMAIL_CLIENT_SECRET,
+    process.env.TX_GMAIL_CLIENT_URI,
   );
 
   // Check if we have previously stored a token.

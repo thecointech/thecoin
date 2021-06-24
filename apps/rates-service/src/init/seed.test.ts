@@ -1,4 +1,4 @@
-import { GetFirestore, init } from "@thecointech/utilities/firestore";
+import { getFirestore, init } from "@thecointech/firestore";
 import { DateTime, Duration } from "luxon"
 import { RateKey } from "../internals/rates/types";
 import { SeedWithRandomRates } from "./seed"
@@ -6,7 +6,7 @@ import { SeedWithRandomRates } from "./seed"
 it('seeds the DB appropriately', async () => {
 
   await init({});
-  const db = GetFirestore();
+  const db = getFirestore();
 
   const now = Date.now();
   const from = DateTime.local().minus({years: 1.1});

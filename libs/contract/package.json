@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
-    "@openzeppelin/test-helpers": "^0.5.10",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@thecointech/accounts": "^0.2.13",
     "@truffle/hdwallet-provider": "^1.2.3",
