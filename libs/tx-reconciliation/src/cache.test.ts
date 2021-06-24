@@ -29,9 +29,6 @@ it("should be able to read/write the cached data", async () => {
   expect(data).toBeTruthy();
   expect(data?.blockchain.length).toBe(0);
 
-  // Read any existing cache
-  //readDataCache();
-
   const data3 = readDataCache("This should not exist");
   expect(data3).toBeNull()
 })

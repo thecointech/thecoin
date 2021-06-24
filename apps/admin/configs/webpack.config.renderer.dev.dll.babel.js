@@ -15,7 +15,7 @@ CheckNodeEnv('development');
 
 const dist = path.join(__dirname, '..', 'dll');
 
-export default merge.smart(baseConfig, {
+export default merge(baseConfig, {
   context: path.join(__dirname, '..'),
 
   devtool: 'eval',
