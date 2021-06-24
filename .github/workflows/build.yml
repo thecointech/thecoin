@@ -35,4 +35,4 @@ jobs:
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn rebuild
     - name: Test all
-      run: yarn test --stream
+      run: yarn test:ci

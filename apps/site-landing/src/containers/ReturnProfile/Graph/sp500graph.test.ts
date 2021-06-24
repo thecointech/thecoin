@@ -20,6 +20,7 @@ test('Should read data in properly', async () => {
   const start = getIdx(new Date(1919, 0), data);
   const end = getIdx(new Date(2019, 1), data);
   const returns = calcReturns(start, end, data, 1.85);
+  expect(returns).toBeGreaterThan(0);
 });
 
 test('can build return for single period', async () => {
