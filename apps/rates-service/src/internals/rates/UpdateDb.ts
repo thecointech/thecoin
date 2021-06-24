@@ -10,13 +10,14 @@ import { fetchCoinRate } from "./fetchCoin";
 import { RateKey, RateOffsetFromMarket, RateType } from "./types";
 import { waitTillBuffer } from "./delay";
 import { fetchFxRate } from "./fetchFx";
+import { log } from '@thecointech/logging';
 
 /////////////////////////////////////////////////////////////////////////////////
 
 //
 // Logs important info, and returns true if we should update.
 function isUpdateRequired(key: RateKey, now: number, current: RateType) {
-  console.log("Updating {FxKey} with current expiration {ValidUntil}",
+  log.debug("Updating {FxKey} with current expiration {ValidUntil}",
     key, current.validTill);
 
   // Quick exit if we are updating again too quickly
@@ -26,7 +27,7 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   const remainingValidity = current.validTill - now;
   if (remainingValidity > RateOffsetFromMarket)
   {
-    console.log("Existing {FxKey} has remaining validity {Remaining}, no update required",
+    log.debug("Existing {FxKey} has remaining validity {Remaining}, no update required",
       key, remainingValidity);
     return false;
   }
@@ -71,7 +72,7 @@ export async function ensureLatestCoinRate(now: number)
 
   // Update our cache of latest rate
   updateLatest(key, newRates.pop()!)
-  console.log("Finished update for {FxKey}", key);
+  log.debug("Finished update for {FxKey}", key);
 }
 
 //
@@ -101,7 +102,7 @@ export async function ensureLatestFxRate(now: number) {
 
   // Update our cache of latest rate
   updateLatest(key, fxRates)
-  console.log("Finished update for {FxKey}", key);
+  log.debug("Finished update for {FxKey}", key);
 }
 
 
