@@ -55,7 +55,7 @@
     "ethers": "4.0.47",
     "firebase": "^8.5.0",
     "invariant": "2.2.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "moment": "^2.24.0",
     "pouchdb": "^7.2.1",
     "pouchdb-upsert": "^2.2.0",
