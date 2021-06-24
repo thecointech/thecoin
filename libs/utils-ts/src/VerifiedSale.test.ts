@@ -3,7 +3,11 @@ import { BuildVerifiedSale } from "./VerifiedSale";
 import { getSigner } from "./VerifiedAction";
 import { ETransferPacket } from "@thecointech/types";
 
-test('Can build verified sale', async () => {
+jest.mock('./MarketStatus', () => ({
+  NextOpenTimestamp: (date: Date) => date.getTime(),
+})),
+
+it('Can build verified sale', async () => {
 
   jest.setTimeout(30000);
 

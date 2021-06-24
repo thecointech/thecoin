@@ -1,9 +1,9 @@
-jest.mock("./debug");
+jest.mock("./emulator");
 jest.mock("./server");
 jest.mock("./mock");
 
 import { init } from '.';
-import { init as init_debug } from './debug';
+import { init as init_debug } from './emulator';
 import { init as init_server } from './server';
 import { init as init_mock } from './mock';
 

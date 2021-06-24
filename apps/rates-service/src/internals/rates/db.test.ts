@@ -1,8 +1,7 @@
 import { init, Timestamp } from '@thecointech/firestore';
-import { filterByEmulator } from '@thecointech/firestore/debug';
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
 import { setRate, getCoinRate, toDbType } from './db';
 import { CoinRate } from "./types";
-import { describe } from '@thecointech/jestutils';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
 // Insertion can be tested with mocks

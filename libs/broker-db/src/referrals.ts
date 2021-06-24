@@ -1,5 +1,6 @@
 import { getFirestore, CollectionReference, DocumentReference } from "@thecointech/firestore";
 import { IsValidAddress, IsValidShortCode, getShortCode } from "@thecointech/utilities";
+import { log } from '@thecointech/logging';
 import { DateTime } from "luxon";
 import { referrerConverter, VerifiedReferrer } from "./referrals.types";
 import { ReferralData } from "./user.types";
@@ -65,7 +66,5 @@ export async function createReferree(code: string, newAccount: string, created: 
     created,
   };
   await newUserKey.set(data);
-  console.log(
-    `Create user: ${newAccount} from ${referrer}`
-  );
+  log.debug({address: newAccount, referrer}, "Create user: {address} from {referrer}");
 }
