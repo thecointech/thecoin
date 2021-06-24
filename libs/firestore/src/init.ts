@@ -36,7 +36,7 @@ export async function init(params?: InitParams) {
     else if (isEmulatorAvailable()) {
       log.debug('No connection parameters supplied, attempting to connect to emulator');
       const project = params?.project;
-      const debug = await import('./debug');
+      const debug = await import('./emulator');
       return debug.init(project);
     }
     // No connections available.  Fallback to mocked DB

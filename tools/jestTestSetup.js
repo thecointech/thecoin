@@ -4,4 +4,4 @@ const path = require('path');
 var cwd = process.cwd();
 var name = cwd.split(path.sep).pop();
 //var name = path.split(process.cwd())
-logging.init(`${name}-jest`);
+logging.init(`${name}-jest`, 40);

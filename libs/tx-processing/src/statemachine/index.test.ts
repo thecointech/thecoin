@@ -58,7 +58,7 @@ it("Pauses and resumes running a processing graph on an action", async () => {
   log.level(100);
   init({})
   const contract = await GetContract();
-  const processor = new FSM.StateMachineProcessor(graph, contract);
+  const processor = new FSM.StateMachineProcessor(graph, contract, null);
 
   const action: BuyAction = {
     address: "0x123",
