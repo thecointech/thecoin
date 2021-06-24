@@ -1,8 +1,9 @@
-import { toDepositData } from "convert";
+import { toDepositData } from "./convert";
 import emails from './__mocks__/emails.get.json';
+import { log } from '@thecointech/logging';
 
 it('processes emails correctly', async () => {
-
+  const error = jest.spyOn(log, 'error').mockImplementation();
   for (const email of emails) {
     const eTransfer = toDepositData(email.data);
     if (eTransfer) {
@@ -13,6 +14,6 @@ it('processes emails correctly', async () => {
     expect(eTransfer?.id).toBeTruthy();
     }
     //expect(eTransfer).not.toBeNull();
-
   }
+  expect(error).toHaveBeenCalledTimes(2);
 })
