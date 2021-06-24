@@ -7,7 +7,7 @@ import { CoinRate, FxRates, RateKey, RateType } from "./types";
 import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
 import { getLatestStored } from "./db";
 import { DateTime } from "luxon";
-
+import { log } from '@thecointech/logging';
 //
 // A cached list of all supported exchanges.
 //
@@ -54,7 +54,7 @@ function setNewLatest(key: RateKey, newRate: RateType)
 }
 
 function completeSetLatest(key: RateKey, newRate: RateType) {
-  console.log("Updating {FxKey} latest cache at {Now}, new expiration: {ValidTill}",
+  log.debug("Updating {FxKey} latest cache at {Now}, new expiration: {ValidTill}",
     key, new Date(), newRate.validTill);
 
   latest[key] = newRate as any;
@@ -66,19 +66,19 @@ function checkValidity(key: RateKey, newRate: RateType)
 
   if (newRate.validTill < current.validTill) {
     // Our new rate is no more valid than the current one: bail
-    console.error('New rate being set for {FxKey} with validUntil: new {ValidUntil} < current {ValidUntil}',
+    log.error('New rate being set for {FxKey} with validUntil: new {ValidUntil} < current {ValidUntil}',
       key, DateTime.fromMillis(newRate.validTill), DateTime.fromMillis(current.validTill));
     return false;
   }
   else if (newRate.validFrom < current.validTill) {
-    console.error('New rate being set for {FxKey} with validity overlap: new {ValidFrom} < current {ValidUntil}',
+    log.error('New rate being set for {FxKey} with validity overlap: new {ValidFrom} < current {ValidUntil}',
       key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(current.validTill));
     // In this case, we still increase our validity, so modify the incoming rate
     // to not overlap and continue
     newRate.validFrom = current.validTill;
   }
   else if (newRate.validFrom != current.validTill && current.validTill != 0) {
-    console.error('New rate being set for {FxKey} with validity gap: new {ValidFrom} != current {ValidUntil}',
+    log.error('New rate being set for {FxKey} with validity gap: new {ValidFrom} != current {ValidUntil}',
       key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(current.validTill));
     // In this case, we have updated too late and the previous rate expired
     // We do not modify the current rate, instead extend the previous rates
@@ -91,7 +91,7 @@ function checkValidity(key: RateKey, newRate: RateType)
   // We -must- be valid for at least 1 minute
   if (newRate.validTill - newRate.validFrom < 60000)
   {
-    console.error('New rate being set for {FxKey} with no validity: {ValidFrom} >= {ValidUntil}',
+    log.error('New rate being set for {FxKey} with no validity: {ValidFrom} >= {ValidUntil}',
       key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(newRate.validTill));
     return false;
   }
@@ -100,7 +100,7 @@ function checkValidity(key: RateKey, newRate: RateType)
   // there isn't much we can do about this, but we should be tracking possible errors
   if (newRate.validFrom - Date.now() < 5000)
   {
-    console.warn('New rate for {FxKey} takes effect too quickly: {ValidFrom} - now < 5s',
+    log.warn('New rate for {FxKey} takes effect too quickly: {ValidFrom} - now < 5s',
       key, DateTime.fromMillis(newRate.validTill))
   }
   return true;

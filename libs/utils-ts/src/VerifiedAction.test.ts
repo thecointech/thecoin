@@ -1,7 +1,7 @@
 import { Wallet } from "ethers";
 import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
 import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
-import { TheCoinContract } from '@thecointech/contract/migrations/types/TheCoin';
+import { TheCoinContract } from '../../contract/migrations/types/TheCoin';
 import { contract } from '@openzeppelin/test-environment';
 
 // Loads a compiled contract using OpenZeppelin test-environment

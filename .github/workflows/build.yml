@@ -33,6 +33,6 @@ jobs:
       env:
          # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
-      run: yarn build
+      run: yarn rebuild
     - name: Test all
-      run: yarn test
+      run: yarn test:ci

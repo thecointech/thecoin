@@ -1,6 +1,5 @@
-import { getFirestore } from '@thecointech/firestore';
-import { init, filterByEmulator, Timestamp } from '@thecointech/firestore/debug';
-import { describe } from '@thecointech/jestutils';
+import { getFirestore, init, Timestamp } from '@thecointech/firestore';
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
 import { getUserData, setUserVerified } from './user';
 import { DateTime } from 'luxon';
 import { userDataConverter } from './user.types';
