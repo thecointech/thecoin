@@ -1,4 +1,4 @@
-import { MigrationStep } from './types';
+import { MigrationStep } from './step';
 import "../../../tools/setenv";
 
 const step: MigrationStep =  (artifacts) =>

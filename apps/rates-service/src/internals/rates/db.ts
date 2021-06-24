@@ -46,7 +46,6 @@ export const getLatestStored = async (key: RateKey) : Promise<RateType|null> => 
 
 //
 // Get the stored rate encapsulating ts (timestamp)
-//
 export async function getRate(key: RateKey, ts: number) : Promise<RateType|null> {
   const collection = getRatesCollection(key);
   const minValidity = ts ?? Date.now();
@@ -74,7 +73,6 @@ export const getFxRates = (ts: number) => getRate("FxRates", ts);
 
 //
 // Set the new rate. Does no validity checking
-//
 export function setRate(key: RateKey, rate: RateType) {
   log.trace({ FxKey: key, ValidTill: rate.validTill }, "Setting {FxKey} rate with validity {ValidTill}");
   const doc = getRateDoc(key, rate.validFrom);
