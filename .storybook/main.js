@@ -11,11 +11,10 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials"
   ],
-  babel: async (options) => {
-    const r = {
+  babel: async (options) => ({
     ...options,
     plugins: [
-      ["@babel/plugin-proposal-class-properties", {loose: true}],
+      ["@babel/plugin-proposal-class-properties", { loose: true }],
       ...options.plugins,
       [
         "formatjs",
@@ -24,10 +23,8 @@ module.exports = {
           "ast": true
         }
       ],
-    ]}
-    console.log(r);
-    return r;
-  },
+    ]
+  }),
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
@@ -46,11 +43,6 @@ module.exports = {
         resolve: {
           alias: {
             "fs": false,
-            // "@thecointech/utilities": "@thecointech/utilities/build",
-            // "@thecointech/contract": "@thecointech/contract/build",
-            // "@thecointech/shared": "@thecointech/shared/build",
-            // "@thecointech/site-base": "@thecointech/site-base/build",
-            // "@thecointech/site-semantic-theme": "@thecointech/site-semantic-theme/build",
           }
         }
       }
