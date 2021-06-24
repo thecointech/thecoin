@@ -17,12 +17,12 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import dotenv from 'dotenv'
 
-import shared_loaders  from '@thecointech/site-semantic-theme/webpack.less';
+import shared_loaders from '@thecointech/site-semantic-theme/webpack.less';
 
 CheckNodeEnv('development');
 
 const env_path = path.join(__dirname, '..', '..', '..', 'secrets', 'credentials.env');
-const env_vars= dotenv.config({ path: env_path });
+const env_vars = dotenv.config({ path: env_path });
 
 const port = process.env.PORT || 1212;
 const dll = path.join(__dirname, '..', 'dll');
@@ -43,7 +43,7 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('yarn build-dll');
 }
 
-export default merge.smart(baseConfig, {
+export default merge(baseConfig, {
   devtool: 'inline-source-map',
 
   mode: 'development',
@@ -92,11 +92,11 @@ export default merge.smart(baseConfig, {
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              mimetype: 'application/font-woff'
-            }
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/font-woff'
+          }
         }
       },
       // WOFF2 Font
@@ -164,6 +164,7 @@ export default merge.smart(baseConfig, {
       }
     ]
   },
+  ignoreWarnings: [/Failed to parse source map/],
   resolve: {
     alias: {
       'react-dom': '@hot-loader/react-dom',
@@ -173,10 +174,10 @@ export default merge.smart(baseConfig, {
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
-          context: path.join(__dirname, '..', 'dll'),
-          manifest: require(manifest),
-          sourceType: 'var'
-        }),
+        context: path.join(__dirname, '..', 'dll'),
+        manifest: require(manifest),
+        sourceType: 'var'
+      }),
 
     new webpack.HotModuleReplacementPlugin({
       multiStep: true
@@ -214,23 +215,20 @@ export default merge.smart(baseConfig, {
   devServer: {
     port,
     compress: true,
-    noInfo: true,
-    stats: 'errors-only',
-    inline: true,
-    lazy: false,
-    hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, '..', 'build'),
-    watchOptions: {
-      aggregateTimeout: 300,
-      ignored: /node_modules/,
-      poll: 100
+    static: {
+      publicPath: path.join(__dirname, '..', 'build'),
+      watch: {
+        aggregateTimeout: 300,
+        ignored: /node_modules/,
+        poll: 100
+      }
     },
     historyApiFallback: {
       verbose: true,
       disableDotRule: false
     },
-    before() {
+    onBeforeSetupMiddleware() {
       if (process.env.START_HOT) {
         console.log('Starting Main Process...');
         spawn('npm', ['run', 'start-main-dev'], {
