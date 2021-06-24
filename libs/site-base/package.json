@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "build": "run-p build:src build:link",
-    "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
+    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
