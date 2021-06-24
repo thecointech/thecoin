@@ -2,6 +2,7 @@ import { GetWallet } from "../exchange/Wallet";
 import { utils } from 'ethers';
 import { getAddressShortCode } from "@thecointech/utilities/Address";
 import { SignedMessage } from "@thecointech/types";
+import { log } from '@thecointech/logging';
 
 // Todo: move SignMessage-y fn's to utilities
 export function GetHash(
@@ -21,7 +22,7 @@ export async function GenerateCode(request: SignedMessage)
 	// Message should be timestamp, within the last 5 minutes
 	const ts = parseInt(message);
 	const age = Date.now() - ts;
-	console.log(`Generating code for TS: ${ts}, ${age / 1000}s old`);
+	log.debug(`Generating code for TS: ${ts}, ${age / 1000}s old`);
 	if (age > (5 * 60 * 1000))
 		throw new Error("Timestamp too old");
 
