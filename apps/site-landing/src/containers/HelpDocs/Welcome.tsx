@@ -1,32 +1,26 @@
 import React from "react";
 import { FAQDocument } from "components/Prismic/types";
-import { Header, Segment } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
+import { FaqList } from "./FaqList";
 import messages from "./messages";
-import { FAQs } from "./FAQs";
+import { Dictionary } from "lodash";
+
 
 type Props = {
-  faqs: FAQDocument[]
+  faqs: FAQDocument[],
+  menu: Dictionary<FAQDocument[]>
 }
 export const Welcome = (props: Props) => {
-
-  const starred =  props.faqs
-    .filter(faq => faq.data.starred)
-
+  const starred =  props.faqs.filter(faq => faq.data.show_on_faq_home);
   return (
-    <>
-      <Header as="h1">
+    <div>
+      <Header as="h2" className={"x10spaceBefore"}>
         <Header.Content>
           <FormattedMessage {...messages.header} />
         </Header.Content>
-        <Header.Subheader>
-          <FormattedMessage {...messages.subHeader} />
-        </Header.Subheader>
       </Header>
-      <Segment>
-        <p><FormattedMessage {...messages.blurb} /></p>
-      </Segment>
-      <FAQs faqs={starred} />
-    </>
+      <FaqList menu={props.menu} faqs={starred} />
+    </div>
   )
 }
