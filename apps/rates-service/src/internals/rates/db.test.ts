@@ -1,8 +1,7 @@
-import { init } from '@thecointech/utilities/firestore';
+import { init, Timestamp } from '@thecointech/firestore';
+import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
 import { setRate, getCoinRate, toDbType } from './db';
 import { CoinRate } from "./types";
-import { Timestamp } from '@thecointech/utilities/firestore';
-import { describe } from '@thecointech/utilities/firestore/jestutils';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 
 // Insertion can be tested with mocks
@@ -37,7 +36,7 @@ describe("emulator-only tests", () => {
     // Insert 5 rates, out of order
     var rates = [1000, 9000, 3000, 2000, 6000, 5000].map(buildRate)
     await init({ project: "rates-service-test" });
-    await Promise.all(rates.map(r => setRate("Coin", r)));
+    await Promise.all(rates.map(r => setRate("Coin", r)) as Promise<void>[]);
 
     var latest = await getCoinRate(9999);
     expect(latest).toBeTruthy();
@@ -68,7 +67,7 @@ describe("emulator-only tests", () => {
     expect(lastMs?.validFrom).toEqual(3000);
     expect(lastMs?.validTill).toEqual(4000);
   })
-})
+}, filterByEmulator())
 
 const buildRate = (ts: number): CoinRate => ({
   buy: 10,

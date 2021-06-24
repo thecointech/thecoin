@@ -1,9 +1,11 @@
 import { readDataCache, writeDataCache } from './cache';
-import { init } from '@thecointech/utilities/firestore';
-
+import { mocked } from 'ts-jest/utils';
+import fs from 'fs';
+// No going to disk
+jest.mock('fs');
+const mockedFs = mocked(fs);
 
 it("should be able to read/write the cached data", async () => {
-  await init();
   const emptyData = {
     bank: [],
     blockchain: [],
@@ -16,18 +18,20 @@ it("should be able to read/write the cached data", async () => {
     obsolete: {},
   };
 
+  let toDisk = "";
+  mockedFs.writeFileSync.mockImplementation((_, data) => toDisk = data.toString());
   const res = writeDataCache(emptyData, "mocked.cache.json");
-
   expect(res).toBeTruthy();
 
+  mockedFs.readFileSync.mockReturnValue(toDisk);
+  mockedFs.existsSync.mockReturnValueOnce(true);
   const data = readDataCache("mocked.cache.json");
   expect(data).toBeTruthy();
   expect(data?.blockchain.length).toBe(0);
 
   // Read any existing cache
-  readDataCache();
+  //readDataCache();
 
   const data3 = readDataCache("This should not exist");
   expect(data3).toBeNull()
-
 })

@@ -1,10 +1,7 @@
-import { GetContract } from "@thecointech/contract";
 import { Wallet } from "ethers";
 import { BuildVerifiedXfer, GetTransferSigner } from "./VerifiedTransfer";
 
 test("Verified signature matches", async () => {
-  const contract = await GetContract();
-  expect(contract.address).toBeDefined();
 
   const wallet = Wallet.createRandom();
   const value = 100000;
@@ -17,17 +14,6 @@ test("Verified signature matches", async () => {
   );
 
   const { timestamp, signature } = verifiedXfer;
-  // verify that this signature matches what the contract expects
-  var signer = await contract.recoverSigner(
-    wallet.address,
-    wallet.address,
-    value,
-    fee,
-    timestamp,
-    signature
-  );
-  expect(signer == wallet.address);
-
   const signer2 = GetTransferSigner({
     from: wallet.address,
     to: wallet.address,

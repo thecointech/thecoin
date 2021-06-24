@@ -7,19 +7,21 @@ import { Link, NavLink } from 'react-router-dom';
 import { LoginLink } from '../../../components/AppLinks/Login';
 import styles from './styles.module.less';
 
-const home = { id:"site.MainNavigation.home",
+const home = { id:"site.MainNavigationMobile.home",
                 defaultMessage:"Home",
                 description:"Title for the Home entry in the menu"};
-const indepth = { id:"site.MainNavigation.indepth",
+const indepth = { id:"site.MainNavigationMobile.indepth",
                   defaultMessage:"In-depth",
                   description:"Title for the In-depth entry in the menu"};
-const wedomore = {  id:"site.MainNavigation.wedomore",
+const wedomore = {  id:"site.MainNavigationMobile.wedomore",
                     defaultMessage:"We do more",
                     description:"Title for the We do more entry in the menu"};
-const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
+const yourbenefits = {  id:"site.MainNavigationMobile.yourbenefits",
                     defaultMessage:"Your benefits",
                     description:"Title for the Your benefits entry in the menu"};
-
+const faq = {  id:"site.MainNavigationMobile.faq",
+                    defaultMessage:"FAQ",
+                    description:"Title for the FAQ entry in the menu"};
 
 export const MainNavigationMobile = () => {
   return (
@@ -52,6 +54,9 @@ export const MainNavigationMobile = () => {
                     </Dropdown.Item>
                     <Dropdown.Item as={ NavLink } to='/compare'>
                       <FormattedMessage {...yourbenefits} />
+                    </Dropdown.Item>
+                    <Dropdown.Item as={ NavLink } to="/faq/theme-0">
+                      <FormattedMessage {...faq} />
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>

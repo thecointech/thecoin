@@ -114,6 +114,7 @@ export const SimpleTransactions: Transaction[] = [
 
 export const SimpleRates: FXRate[] = [
   {
+    target: 124,
     buy: 100,
     sell: 100,
     fxRate: 1,
@@ -121,6 +122,7 @@ export const SimpleRates: FXRate[] = [
     validTill: new Date(2018,2).getTime(),
   },
   {
+    target: 124,
     buy: 200,
     sell: 200,
     fxRate: 1,
@@ -128,6 +130,7 @@ export const SimpleRates: FXRate[] = [
     validTill: new Date(2018,3).getTime(),
   },
   {
+    target: 124,
     buy: 200,
     sell: 200,
     fxRate: 1,
@@ -135,6 +138,7 @@ export const SimpleRates: FXRate[] = [
     validTill: new Date(2018,4).getTime(),
   },
   {
+    target: 124,
     buy: 100,
     sell: 100,
     fxRate: 1,
@@ -142,6 +146,7 @@ export const SimpleRates: FXRate[] = [
     validTill: new Date(2018,5).getTime(),
   },
   {
+    target: 124,
     buy: 250,
     sell: 250,
     fxRate: 1,
