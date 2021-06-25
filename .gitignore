@@ -57,5 +57,3 @@ libs/shared/src/containers/IDX/config.devlive.json
 
 apps/site-nft/src/translations
 apps/site-nft/lang
-
-environments/devlive.env
