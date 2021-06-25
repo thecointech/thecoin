@@ -1,9 +1,10 @@
 import PouchDB from 'pouchdb';
 import upsert from 'pouchdb-upsert';
+import { log } from '@thecointech/logging';
 
 PouchDB.plugin(upsert);
 
-const STORAGE_PATH = '/temp/TheCoin/admin/dbs/';
+const STORAGE_PATH = process.env.STORAGE_PATH;
 
 // Duplicated out of PouchDB-upsert to keep types happy upstream
 type UpsertResponse = {
@@ -14,7 +15,7 @@ type UpsertResponse = {
 
 export function BaseStore<T>(name: string) {
 
-  type UpsertFn =  (val: Partial<T>) => false | T;
+  type UpsertFn = (val: Partial<T>) => false | T;
 
   return class BaseStore {
     static db: PouchDB.Database<T>;
@@ -27,7 +28,7 @@ export function BaseStore<T>(name: string) {
       }));
     }
 
-    static upsert(key: string, upsertfn: UpsertFn) : Promise<UpsertResponse> {
+    static upsert(key: string, upsertfn: UpsertFn): Promise<UpsertResponse> {
       return this.db.upsert<T>(key, upsertfn);
     }
 
@@ -38,8 +39,7 @@ export function BaseStore<T>(name: string) {
           prefix: STORAGE_PATH,
           ...options
         };
-        console.log(`Initialized DB ${name} at: ${mergeopts.prefix ?? 'localStorage'}`);
-
+        log.trace(`Initialized DB ${name} at: ${mergeopts.prefix ?? 'localStorage'}`);
         BaseStore.db = new PouchDB<T>(name, mergeopts);
       }
       BaseStore.counter++;

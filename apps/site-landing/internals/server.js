@@ -14,5 +14,3 @@ server.run(app => {
     res.send(sp500string);
   });
 })
-
-

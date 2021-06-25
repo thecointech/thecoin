@@ -20,17 +20,19 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
+// initialize logging first
+import { log, init } from '@thecointech/logging';
+init('site-nft');
+log.info(`Loading App: ${__VERSION__}`);
+
 // Import root app
 import { App } from 'components/App';
 
 // Import Language Provider
 import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
-
 import { configureAppStore, history } from './reducers';
 import { translations } from './translations';
 
-import { init } from '@thecointech/logging';
-init('site-app')
 
 // Create redux store with history
 const store = configureAppStore();

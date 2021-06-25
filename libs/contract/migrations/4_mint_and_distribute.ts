@@ -1,7 +1,7 @@
 import { toNamedAccounts } from "./accounts";
 import { initializeDevLive } from "./4.1_mad_devlive";
 import { initializeTestNet } from "./4.1_mad_testnet";
-import { MigrationStep } from './types';
+import { MigrationStep } from './step';
 
 const deploy: MigrationStep = (artifacts) =>
   async (_, network, accounts) => {

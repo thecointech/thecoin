@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store",
-  "version": "0.2.2",
+  "version": "0.2.7",
   "description": "The Coin: Base storage mechanisms",
   "keywords": [
     "TheCoin",
@@ -14,8 +14,11 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/store"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "build:lib": "yarn build",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
@@ -24,24 +27,16 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./*": "./build/*.js"
-  },
+  "exports": "./build/index.js",
   "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [ "build/index.d.ts" ],
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
-    }
-  },
   "dependencies": {
+    "@thecointech/logging": "*",
     "pouchdb": "*",
     "pouchdb-upsert": "*"
   },
   "devDependencies": {
     "jest": "*",
     "pouchdb-adapter-memory": "*"
-  }
+  },
+  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
 }

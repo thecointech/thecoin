@@ -4,7 +4,7 @@
 
 import { createSelector, createStructuredSelector } from 'reselect';
 import { initialState } from './reducer';
-import { SiteBaseStore } from 'SiteBaseStore';
+import { SiteBaseStore } from '../../SiteBaseStore';
 import { ContentState } from './types';
 
 const selectContent = (state: SiteBaseStore) =>

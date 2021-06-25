@@ -1,7 +1,8 @@
 import { ActionType, TransitionDelta, TypedAction, StateData } from "@thecointech/broker-db";
-import { TheCoin } from "@thecointech/contract";
-import { eTransferData } from "@thecointech/tx-gmail";
-import { BillPayeePacket, ETransferPacket } from "@thecointech/types";
+import type { TheCoin } from "@thecointech/contract";
+import type { eTransferData } from "@thecointech/tx-gmail";
+import type { BillPayeePacket, ETransferPacket } from "@thecointech/types";
+import type { RbcApi } from '@thecointech/rbcapi';
 
 export type RequiredStates = "initial" | "complete" | "error";
 
@@ -47,6 +48,8 @@ export interface TypedActionContainer<Type extends ActionType> {
   history: StateSnapshot<string>[],
   // contract any coin actions are executed against.
   contract: TheCoin,
+  // Access to the bank (may be null)
+  bank: RbcApi|null,
 }
 
 export type SellActionContainer = TypedActionContainer<"Sell">;

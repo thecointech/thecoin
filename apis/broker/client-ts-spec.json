@@ -1,4 +1,5 @@
 {
     "supportsES6": true,
-    "npmName": "@thecointech/broker-cad"
+    "npmName": "@thecointech/broker-cad",
+    "npmRepository": "https://npm.pkg.github.com/"
 }

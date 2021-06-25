@@ -4,7 +4,7 @@ import { BigNumber } from "ethers/utils";
 import { Contract } from "ethers";
 import { Transaction } from "./types";
 import { cadbrokerIn, cadbrokerOut } from "./thecoin";
-
+import { describe, IsManualRun } from '@thecointech/jestutils';
 
 async function fetchAndTestBalance(adress: string, contract: Contract) {
   const history = await loadAndMergeHistory(adress, 0, contract, []);
@@ -19,16 +19,21 @@ function validateHistory(history: Transaction[], balance: BigNumber) {
   expect(history[history.length - 1].balance).toBe(balance.toNumber());
 }
 
-it('Can fetch out transactions', async () => {
-  jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
-  const contract = await GetContract();
-  console.log("Loading out txs");
-  await fetchAndTestBalance(cadbrokerOut, contract);
-})
+//
+// Easy-to-debug fetch of all history
+describe("Fetch live data", () => {
 
-it('Can fetch in transactions', async () => {
-  jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
-  const contract = await GetContract();
-  console.log("Loading In txs");
-  await fetchAndTestBalance(cadbrokerIn, contract);
-})
+  it('Can fetch out transactions', async () => {
+    jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
+    const contract = await GetContract();
+    console.log("Loading out txs");
+    await fetchAndTestBalance(cadbrokerOut, contract);
+  })
+
+  it('Can fetch in transactions', async () => {
+    jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
+    const contract = await GetContract();
+    console.log("Loading In txs");
+    await fetchAndTestBalance(cadbrokerIn, contract);
+  })
+}, IsManualRun);

@@ -1,5 +1,5 @@
 import { BunyanLogger } from './logger';
-import { init as init_node } from './browser';
+import { init_node } from './node';
 
 // NOTE: our log is declared as type 'bunyan', but then
 // explicitly initialized to null (a violation of that type).
@@ -10,7 +10,7 @@ import { init as init_node } from './browser';
 // variable is null, that means logging hasn't been init'ed (yet).
 export let log : BunyanLogger = null! as BunyanLogger;
 
-export function init(name: string) {
-  log = init_node(name);
+export function init(name: string, level?: number) {
+  log = init_node(name, level);
   log.trace('Node logging initialized');
 }
