@@ -10,8 +10,6 @@ const app = express();
 // enable cors
 app.use(cors());
 
-const port = process.env.PORT ?? DevLivePort(Service.RATES);
-
 RegisterRoutes(app);
 
 (async () => {
@@ -19,6 +17,7 @@ RegisterRoutes(app);
 
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+  const port = process.env.PORT ?? DevLivePort(Service.RATES);
   app.listen(port, () => {
     console.log('Your server is listening on port %d (http://localhost:%d)', port, port);
     console.log('Swagger-ui is available on http://localhost:%d/docs', port);

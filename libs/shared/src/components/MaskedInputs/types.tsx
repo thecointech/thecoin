@@ -1,4 +1,4 @@
-import { AccountDetails } from 'containers/AccountDetails/types';
+import { AccountDetails } from '../../containers/AccountDetails/types';
 
 export type MaskedUxProps ={
     label: JSX.Element,
@@ -7,6 +7,6 @@ export type MaskedUxProps ={
     className?: string,
     details?: AccountDetails,
     uxChange?: (value: string, name?: string) => void,
-    name: string, 
+    name: string,
     readOnly?: boolean
   }

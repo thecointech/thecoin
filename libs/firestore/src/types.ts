@@ -40,8 +40,7 @@ export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"|"collection
   //collection: <T>(path: string) => CollectionReference<T>;
 };
 
-// Do not attempt to connect if we do not have an
-// active connection.
+// Test if we currently have an emulator running
 export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR_PORT && process.env.FIRESTORE_EMULATOR_PORT !== 'false'
 
 // Mocked DB structure

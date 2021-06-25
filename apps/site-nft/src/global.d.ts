@@ -24,6 +24,10 @@ declare module '*.jpg';
 
 declare module '*.png';
 
+// Filled by Webpack.
+// Version info pulled from package.json
+declare const __VERSION__: string;
+
 declare module '@toast-ui/react-image-editor' {
   import ImageEditor, { IThemeConfig } from 'tui-image-editor';
 

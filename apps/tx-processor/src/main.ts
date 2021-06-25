@@ -1,10 +1,10 @@
 import { init as LogInit, log } from "@thecointech/logging";
-import { RbcStore } from "@thecointech/rbcapi";
+import { RbcStore, initBrowser, RbcApi } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/accounts';
-import { initBrowser } from "@thecointech/rbcapi/action";
 import { ConnectContract, TheCoin } from '@thecointech/contract';
-import { processUnsettledDeposits, processUnsettledETransfers } from "@thecointech/tx-processing";
+import { processUnsettledDeposits } from './deposits';
+import { processUnsettledETransfers } from './etransfer';
 
 async function initialize() {
 
@@ -30,24 +30,24 @@ async function initialize() {
 
 //
 // Process deposits: Make 'em Rain!!!
-//
-async function ProcessDeposits(contract: TheCoin) {
+async function ProcessDeposits(contract: TheCoin, bank: RbcApi) {
   log.debug("Processing Deposits");
-  const deposits = await processUnsettledDeposits(contract);
+  const deposits = await processUnsettledDeposits(contract, bank);
   log.debug(`Processed ${deposits.length} deposits`);
   return deposits;
 }
 
-async function ProcessETransfers(contract: TheCoin) {
+async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
   log.debug("Processing eTransfers");
-  const eTransfers = await processUnsettledETransfers(contract);
+  const eTransfers = await processUnsettledETransfers(contract, bank);
   log.debug(`Processed ${eTransfers.length} eTransfers`);
 }
 
 async function Process() {
   const contract = await initialize();
-  await ProcessDeposits(contract);
-  await ProcessETransfers(contract);
+  const bank = new RbcApi();
+  await ProcessDeposits(contract, bank);
+  await ProcessETransfers(contract, bank);
   log.debug(` --- Completed processing --- `);
 }
 Process();

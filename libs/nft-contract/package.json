@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-contract",
-  "version": "0.2.5",
+  "version": "0.2.13",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
     "TheCoin",
@@ -20,14 +20,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "deploy": "yarn deploy:pre && cd build && yarn publish && yarn deploy:post",
-    "deploy:copy": "cpx \"./package.json\" build --command \"node ../../tools/package-clean.js\"",
-    "deploy:clean": "rimraf ./build/.buildinfo",
-    "deploy:pre": "yarn clean && yarn build && yarn deploy:copy && yarn deploy:clean ",
-    "deploy:post": "rimraf ./build/package.json",
-    "deploy:lib": "yarn deploy",
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "prod:test:migrate": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build:lib": "yarn build",
     "build": "run-s build:contracts generate-types build:copy build:src",
     "build:contracts": "truffle compile",
     "build:src": "yarn tsc --project tsconfig.build.json",
@@ -55,8 +49,8 @@
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/accounts": "^0.2.2",
-    "@thecointech/contract": "^0.2.3",
+    "@thecointech/accounts": "^0.2.13",
+    "@thecointech/contract": "^0.2.13",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",
@@ -74,6 +68,7 @@
   },
   "dependencies": {
     "bs58": "^4.0.1",
-    "ethers": "4.0.47"
-  }
+    "ethers": "4.0.48"
+  },
+  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

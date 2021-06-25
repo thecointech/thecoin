@@ -1,7 +1,7 @@
 import { getSigner } from "@thecointech/accounts";
 import { log } from "@thecointech/logging";
 import { DepositResult, ETransferErrorCode, RbcApi } from "@thecointech/rbcapi";
-import { eTransferData } from "@thecointech/tx-gmail";
+import type { eTransferData } from "@thecointech/tx-gmail";
 import { IsValidAddress, getAddressShortCode } from "@thecointech/utilities";
 import Decimal from "decimal.js-light";
 import { BuyActionContainer, getCurrentState } from "../statemachine/types";
@@ -23,7 +23,11 @@ async function doDeposit(container: BuyActionContainer) {
     return { error: 'Cannot deposit fiat, action already has fiat balance'}
   }
 
-  const bank = new RbcApi();
+  // If we are here without a bank API, it is an error
+  // We should have stopped before doing preTransfer step
+  const {bank} = container;
+  if (!bank) return { error: 'Cannot deposit fiat, no bank API present'};
+
   const result = await depositInBank(etransfer, bank, log.trace);
   if (result.code != ETransferErrorCode.Success || !result.confirmation)
   {

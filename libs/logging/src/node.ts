@@ -1,9 +1,9 @@
 import bunyan from "bunyan";
-import { getConsoleStream } from "consolestream";
-import { getFileStream } from "filestream";
+import { getConsoleStream } from "./consolestream";
+import { getFileStream } from "./filestream";
 
-const getStreams = (name: string) => {
-  const streams = [getConsoleStream()];
+const getStreams = (name: string, level?: number) => {
+  const streams = [getConsoleStream(level)];
   // Are we testing with jest?
   if (process.env.JEST_WORKER_ID === undefined) {
     // Do we have a output folder specifed?
@@ -16,8 +16,8 @@ const getStreams = (name: string) => {
   return streams;
 }
 
-export const init = (name: string) =>
+export const init_node = (name: string, level?: number) =>
   bunyan.createLogger({
     name,
-    streams: getStreams(name)
+    streams: getStreams(name, level)
   });

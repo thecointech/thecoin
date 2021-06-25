@@ -1,17 +1,17 @@
-import { createLogger, TRACE, DEBUG, WARN, stdSerializers } from 'browser-bunyan';
+import { createLogger, TRACE, INFO, DEBUG, stdSerializers } from 'browser-bunyan';
 import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
-import { BunyanLogger } from 'logger';
+import { BunyanLogger } from './logger';
 
-export function init(name: string): BunyanLogger {
+export function init_browser(name: string, level?: number): BunyanLogger {
   return createLogger({
     name,
     streams: [
       {
-        level: process.env.NODE_ENV === "development"
+        level: level ?? process.env.NODE_ENV === "development"
           ? TRACE
           : process.env.SETTINGS === "testing"
             ? DEBUG
-            : WARN,
+            : INFO,
         stream: new ConsoleFormattedStream()
       }
     ],

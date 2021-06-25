@@ -7,7 +7,7 @@
       "semantic-ui-less"
     ]
   },
-  "version": "0.2.2",
+  "version": "0.2.6",
   "description": "THECoin: Future-proof currency: Semantic theme for websites",
   "repository": {
     "type": "git",
@@ -20,15 +20,17 @@
     "./build": "./internal/buildSemantic.js",
     "./webpack.less": "./internal/webpack.less.js",
     "./variables.less": "./src/variables.less",
+    "./semantic.less": "./src/semantic.less",
     "./*": "./build/*.js"
   },
   "typesVersions": {
     "*": {
-      "*": [ "build/*" ]
+      "*": [
+        "build/*"
+      ]
     }
   },
   "scripts": {
-    "build:lib": "yarn build",
     "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
     "clean": "rimraf ./build"
   },

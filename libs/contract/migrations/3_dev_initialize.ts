@@ -1,6 +1,6 @@
 import { NamedAccounts, toNamedAccounts } from "./accounts";
 import { TheCoinInstance } from "./types/TheCoin";
-import { MigrationStep } from './types';
+import { MigrationStep } from './step';
 
 const deploy: MigrationStep = (artifacts) =>
   async (_, _network, accounts) => {

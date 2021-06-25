@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.4",
+  "version": "0.2.13",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -11,7 +11,6 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
-    "build:lib": "yarn build",
     "build": "run-p build:src build:link",
     "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
@@ -35,18 +34,28 @@
   "exports": {
     ".": "./build/index.js",
     "./internal/server": "./internal/server/index.js",
-    "./*": [ "./build/*.js", "./build/*/index.js"]
+    "./jest.config": "./jest.config.js",
+    "./*": [
+      "./build/*.js",
+      "./build/*/index.js"
+    ]
   },
   "typesVersions": {
     "*": {
-      "*": [ "build/*.d.ts", "build/*/index.d.ts" ]
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts",
+        "build/*/index.d.ts"
+      ]
     }
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.4",
-    "@thecointech/site-semantic-theme": "^0.2.2",
-    "@thecointech/utilities": "^0.2.3",
+    "@thecointech/shared": "^0.2.13",
+    "@thecointech/site-semantic-theme": "^0.2.6",
+    "@thecointech/utilities": "^0.2.13",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",

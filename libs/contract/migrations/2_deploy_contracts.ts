@@ -1,6 +1,6 @@
 import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { MigrationStep } from './types';
+import { MigrationStep } from './step';
 import { getSigner } from '@thecointech/accounts';
 
 // It seems the types for deployProxy don't match the types

@@ -13,9 +13,10 @@ jest.mock('@thecointech/shared/containers/AccountMap', () => ({
 jest.mock('@thecointech/shared/containers/FxRate/reducer', () => ({
   useFxRatesStore: jest.fn(),
 }));
-jest.mock('../../Prismic/reducer', () => ({
-  usePrismic: jest.fn(),
+jest.mock('@thecointech/shared/containers/PageSidebar/reducer', () => ({
+  useSidebar: jest.fn(),
 }));
+
 // This import can trigger a compilation of the entire app
 // (with numerous side-effects) so we skip it entirely
 jest.mock('../../MainRouter', () => ({

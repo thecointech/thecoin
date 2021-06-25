@@ -1,13 +1,10 @@
 {
   "packages": [
-    "submodules/*",
-    "libs/*",
-    "apps/*",
     "apis/**/*"
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.2.5",
+  "version": "0.2.13",
   "command": {
     "publish": {
       "conventionalCommits": true,
@@ -16,6 +13,7 @@
       "allowBranch": "master"
     },
     "version": {
+      "noChangelog": true,
       "allowBranch": [
         "release",
         "dev"
