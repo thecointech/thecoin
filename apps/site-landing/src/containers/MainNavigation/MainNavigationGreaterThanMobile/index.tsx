@@ -24,6 +24,9 @@ const yourbenefits = {  id:"site.MainNavigation.yourbenefits",
 const faq = {  id:"site.MainNavigation.faq",
                     defaultMessage:"FAQ",
                     description:"Title for the FAQ entry in the menu"};
+const blog = {  id:"site.MainNavigation.blog",
+                    defaultMessage:"Blog",
+                    description:"Title for the Blog entry in the menu"};
 
 // TODO: Fix Login button
 export const MainNavigationGreaterThanMobile = () => {
@@ -48,8 +51,11 @@ export const MainNavigationGreaterThanMobile = () => {
                 <HeaderLink to="/compare">
                   <FormattedMessage {...yourbenefits} />
                 </HeaderLink>
-                <HeaderLink to="/faq/theme-0">
+                <HeaderLink to="/faq">
                   <FormattedMessage {...faq} />
+                </HeaderLink>
+                <HeaderLink to="/blog">
+                  <FormattedMessage {...blog} />
                 </HeaderLink>
                 <Menu.Menu position='right'>
                   <Menu.Item>
