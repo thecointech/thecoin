@@ -27,7 +27,9 @@ export class PrismicReducer extends TheCoinReducer<PrismicState> implements IAct
 
     const fetchData = async () : Promise<Document[]|null> => {
       const response = await Client.query(
-        Prismic.Predicates.at('document.type', 'faq'),
+        //'', //Prismic.Predicates.at('document.type', 'faq'),
+        //Prismic.Predicates.at('document.type', 'faq'),
+        '',
         { lang : '*' }
       )
       if (response) {
@@ -36,7 +38,6 @@ export class PrismicReducer extends TheCoinReducer<PrismicState> implements IAct
       return null;
     }
     const results: Document[] = (yield call(fetchData)) as any;
-    console.log("results===",results);
     if (results)
       yield this.storeValues({
         faqs: results.filter(item => item.type === 'faq') ?? [],

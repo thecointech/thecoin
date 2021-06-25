@@ -61,6 +61,7 @@
     "moment": "^2.24.0",
     "pouchdb": "^7.2.1",
     "pouchdb-upsert": "^2.2.0",
+    "prismic-reactjs": "^1.3.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
