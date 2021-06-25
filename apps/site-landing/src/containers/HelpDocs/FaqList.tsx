@@ -26,7 +26,9 @@ export const FaqList = ({ title, faqs, menu }: Props) => {
           {title ? ((title.split("-"))[1]) : ""}
         </Header.Content>
       </Header>
-      {faqs.filter(faq => locale === ((faq.lang!).split("-"))[0]).map(faq => (<FaqItem key={faq.id} {...faq} />))}
+      {faqs
+            .filter(faq => locale === ((faq.lang!).split("-"))[0])
+            .map(faq => (<FaqItem key={faq.id} {...faq} />))}
     </div>
     <Decoration />
     </>
