@@ -29,8 +29,8 @@ export type AlternateLang = {
 }
 
 export type ArticleResult = {
-  thumbnail: any,
-  image_before_title: any,
+  thumbnail: ImageObj,
+  image_before_title: ImageObj,
   title: RenderableType[]|null;
   questions: RenderableType[]|null;
   content: RenderableType[]|null;
