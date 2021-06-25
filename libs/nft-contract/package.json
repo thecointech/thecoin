@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "bs58": "^4.0.1",
-    "ethers": "4.0.47"
+    "ethers": "4.0.48"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }
