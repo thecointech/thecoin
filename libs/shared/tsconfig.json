@@ -10,7 +10,8 @@
         "transform": "@formatjs/ts-transformer",
         "import": "transform",
         "type": "config",
-        "overrideIdFn": "[sha512:contenthash:base64:6]"
+        "overrideIdFn": "[sha512:contenthash:base64:6]",
+        "ast": true
       }
     ]
   },
