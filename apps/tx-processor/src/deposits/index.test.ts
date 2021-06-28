@@ -5,7 +5,6 @@ import { getCurrentState } from '@thecointech/tx-processing';
 import { RbcApi } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 
-jest.mock('@thecointech/email');
 jest.mock('@thecointech/utilities/MarketStatus', () => ({
   NextOpenTimestamp: (date: Date) => date.getTime()
 }))
