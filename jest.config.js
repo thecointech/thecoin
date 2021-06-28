@@ -1,5 +1,6 @@
 const path = require('path');
 const { compilerOptions } = require('./tsconfig.base.json');
+
 const getTool = (name) => path.join(__dirname, 'tools', name);
 
 module.exports = {
@@ -10,16 +11,29 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      tsConfig: {
+      tsconfig: {
         ...compilerOptions,
+        // Relax ts restrictions
         noUnusedLocals: false,
         noUnusedParameters: false,
+        // typeRoots needs to be set absolutely because we lose the relative import of tsconfig.base.json
         typeRoots: [path.join(__dirname, "node_modules", "@types")],
-        incremental: true,
-        tsBuildInfoFile: '.tsbuildinfo',
+        // Point rootDir to root to allow compiling (__mocks__ folder)
+        rootDir: __dirname,
+        // Add multiple rootDirs
+        rootDirs: [
+          path.join('./', 'src'),
+          path.join(__dirname, '__mocks__'),
+        ],
+        // do not write files during testing
+        noEmit: true,
       }
     }
   },
+  roots: [
+    '<rootDir>/src',
+    path.join(__dirname, '__mocks__')
+  ],
 
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
   resolver: getTool('jestExportResolver.js'),
@@ -27,7 +41,7 @@ module.exports = {
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: ['node_modules', 'src'],
+  moduleDirectories: ['node_modules', 'src', path.join(__dirname, '__mocks__')],
   moduleFileExtensions: [
     "ts",
     "tsx",
