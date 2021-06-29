@@ -29,8 +29,6 @@ module.exports = {
         incremental: false,
         // Point rootDir to root to allow compiling (__mocks__ folder)
         rootDir: __dirname,
-        // Add multiple rootDirs
-        rootDirs: getRoots(),
         // do not write files during testing
         noEmit: true,
       }
