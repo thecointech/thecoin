@@ -3,14 +3,12 @@ const { compilerOptions } = require('./tsconfig.base.json');
 const { cwd } = require('process');
 
 const getTool = (name) => path.join(__dirname, 'tools', name);
-const getRoots = () => {
-  // Add mocks directory to enable easy loading
-  const roots = [path.join(__dirname, '__mocks__')]
-  // If we are not running at root, set the src folder
-  if (!cwd().endsWith('TheCoin'))
-    roots.push(path.join('<rootDir>', 'src'));
-  return roots;
-}
+const getRoots = () => [
+  path.join(__dirname, '__mocks__'),
+  cwd().endsWith('TheCoin')
+    ? './'
+    : '<rootDir>/src'
+]
 
 module.exports = {
   verbose: true,
@@ -27,6 +25,8 @@ module.exports = {
         noUnusedParameters: false,
         // typeRoots needs to be set absolutely because we lose the relative import of tsconfig.base.json
         typeRoots: [path.join(__dirname, "node_modules", "@types")],
+        // Disable incremental (as our tests aren't built anyway)
+        incremental: false,
         // Point rootDir to root to allow compiling (__mocks__ folder)
         rootDir: __dirname,
         // Add multiple rootDirs
