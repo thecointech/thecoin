@@ -1,7 +1,16 @@
 const path = require('path');
 const { compilerOptions } = require('./tsconfig.base.json');
+const { cwd } = require('process');
 
 const getTool = (name) => path.join(__dirname, 'tools', name);
+const getRoots = () => {
+  // Add mocks directory to enable easy loading
+  const roots = [path.join(__dirname, '__mocks__')]
+  // If we are not running at root, set the src folder
+  if (!cwd().endsWith('TheCoin'))
+    roots.push(path.join('<rootDir>', 'src'));
+  return roots;
+}
 
 module.exports = {
   verbose: true,
@@ -21,20 +30,13 @@ module.exports = {
         // Point rootDir to root to allow compiling (__mocks__ folder)
         rootDir: __dirname,
         // Add multiple rootDirs
-        rootDirs: [
-          path.join('./', 'src'),
-          path.join(__dirname, '__mocks__'),
-        ],
+        rootDirs: getRoots(),
         // do not write files during testing
         noEmit: true,
       }
     }
   },
-  roots: [
-    '<rootDir>/src',
-    path.join(__dirname, '__mocks__')
-  ],
-
+  roots: getRoots(),
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
   resolver: getTool('jestExportResolver.js'),
 
