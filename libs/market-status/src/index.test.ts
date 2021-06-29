@@ -6,13 +6,18 @@ Settings.defaultZoneName = "America/New_York";
 const jan1st2019 = DateTime.fromObject({year: 2019, month: 1, day: 1});
 
 describe("Live MarketStatus tests", () => {
+
+  beforeEach(() => { jest.resetAllMocks() });
+
   it("Returns Valid Calendar", async () => {
     const calendar1 = await getCalendar(jan1st2019);
     expect(calendar1).toHaveProperty('days');
+    expect(calendar1?.month).toEqual(1)
+    expect(calendar1?.year).toEqual(2019)
 
     // Ensure cache returns valid value again
     const calendar2 = await getCalendar(jan1st2019);
-    expect(calendar2).toHaveProperty('days');
+    expect(calendar2).toBe(calendar1);
   });
 
   it("Returns now if the market is currently open", async () => {
