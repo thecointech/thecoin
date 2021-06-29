@@ -4,7 +4,7 @@ import { AnyActionContainer, getCurrentState } from "../statemachine/types";
 import { FXRate, RatesApi } from "@thecointech/pricing";
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
-import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
+import { nextOpenTimestamp } from "@thecointech/market-status";
 
 type Currency = "fiat" | "coin";
 type Converter = (v: Decimal, rate: FXRate) => Decimal;
@@ -35,7 +35,7 @@ async function doConversion(container: AnyActionContainer, from: Currency, to: C
 
   // First, what is our settlement date here?
   const initiated = container.action.data.date;
-  const nextOpen = await NextOpenTimestamp(initiated.toJSDate());
+  const nextOpen = await nextOpenTimestamp(initiated);
   if (nextOpen >= Date.now())
     return null;
 

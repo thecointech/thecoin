@@ -14,7 +14,7 @@
 			"--config",
 			"jest.config.js"
 		],
-    "envFile": "${workspaceFolder}/../../../../TheCoinEnvironment/prod.env",
+    "envFile": "/TheCoinEnvironments/prod.env",
 		"cwd": "${workspaceFolder}",
 		"console": "integratedTerminal",
 		"internalConsoleOptions": "neverOpen",

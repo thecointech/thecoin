@@ -14,10 +14,6 @@ import { decryptTo } from '@thecointech/utilities/Encrypt';
 import { mocked } from 'ts-jest/utils';
 import { RbcApi } from '@thecointech/rbcapi';
 
-jest.mock('@thecointech/email');
-jest.mock('@thecointech/utilities/MarketStatus', () => ({
-  NextOpenTimestamp: (date: Date) => date.getTime()
-}))
 jest.mock('@thecointech/utilities/Encrypt')
 const mockedEncrypt = mocked(decryptTo, false);
 

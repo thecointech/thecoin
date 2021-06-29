@@ -16,7 +16,9 @@ type DayData = {
 type Calendar = {
   days: {
     day: DayData[];
-  }
+  },
+  month: number,
+  year: number,
 }
 type TradierResponse = {
   calendar: Calendar
