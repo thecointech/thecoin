@@ -30,6 +30,9 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
+    "@3id/connect": "^0.1.4",
+    "@ceramicnetwork/common": "^1.0.6",
+    "@ceramicnetwork/http-client": "^1.0.6",
     "@thecointech/logging": "*"
   },
   "devDependencies": {
