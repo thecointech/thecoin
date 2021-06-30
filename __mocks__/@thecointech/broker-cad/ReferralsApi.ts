@@ -1,7 +1,7 @@
-import { ReferralsApi, ReferralCreateBody } from "@thecointech/broker-cad";
-import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
+import type { ReferralsApi as SrcApi, ReferralCreateBody } from "@thecointech/broker-cad";
+import { buildResponse, delay } from "../axios-utils";
 
-export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
+export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>
 {
     /**
      * Returns a boolean indicating whether the passed referrer is valid
@@ -9,7 +9,7 @@ export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
      * @param {NewAccountReferal} referral Set referal for new account
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReferrersApi
+     * @memberof ReferralsApi
      */
     async referralCreate(_referral: ReferralCreateBody, _options?: any)
     {
@@ -24,7 +24,7 @@ export class MockReferrersApi implements Pick<ReferralsApi, keyof ReferralsApi>
      * @param {string} referrer Referrers ID.  This ID must have been previously registered with the system
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReferrersApi
+     * @memberof ReferralsApi
      */
     async referrerValid(_referrer: string, _options?: any)
     {

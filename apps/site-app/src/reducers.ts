@@ -6,7 +6,6 @@
  import { connectRouter } from 'connected-react-router';
  import { configureStore, history } from '@thecointech/shared/store';
 import { buildAccountStoreReducer, AccountMapState } from '@thecointech/shared/containers/AccountMap';
-import { getDevWallets } from 'api/mock/accounts';
 import { readAllAccounts } from '@thecointech/shared/utils/storageSync';
 
 /**
@@ -24,6 +23,7 @@ function createReducer(injectedReducers?: ReducersMapObject): Reducer {
 function initialAccounts() : AccountMapState {
 
   if (process.env.NODE_ENV === 'development') {
+    const { getDevWallets } = require("../../../__mocks__/@thecointech/accounts")
     return getDevWallets();
   }
   return {

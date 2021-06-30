@@ -1,10 +1,10 @@
-import { NFTApi, GasslessUpdateRequest, NftClaim} from "@thecointech/nft";
-import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
+import type { NFTApi as SrcApi, GasslessUpdateRequest, NftClaim} from "@thecointech/nft";
+import { buildResponse, delay } from "./axios-utils";
 import { AxiosResponse } from 'axios';
 
 const genRandBase = (size: number, base: number) => [...Array(size)].map(() => Math.floor(Math.random() * base).toString(base)).join('');
 const flipCoin = () => Math.random() > 0.5;
-export class MockNftApi  implements Pick<NFTApi, keyof NFTApi> {
+export class NFTApi  implements Pick<SrcApi, keyof SrcApi> {
   async claimNft(_claim: NftClaim, _options?: any): Promise<AxiosResponse<object>> {
     await delay(250);
     const r = flipCoin() ? false : "0x32c8052afdc366b00990083375178a12f45270d917315fcf0204b0d50f95fb5f";
