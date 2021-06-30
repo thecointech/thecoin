@@ -20,7 +20,6 @@ import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { createRef } from 'react';
 import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
-import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -40,6 +39,8 @@ export const App = () => {
   if (process.env.CONFIG_NAME === 'devlive') {
     const accountsApi = useAccountStoreApi();
     if (!hasRun) {
+      // Will redirect to mocks
+      const { addDevLiveAccounts } = require('@thecointech/accounts');
       addDevLiveAccounts(accountsApi);
       hasRun = true;
     }

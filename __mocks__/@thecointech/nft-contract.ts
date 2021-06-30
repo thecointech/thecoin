@@ -23,3 +23,8 @@ class MockNFT implements Pick<TheCoinNFT, "balanceOf"|"claimToken"> {
 export function getContract(): TheCoinNFT {
   return new MockNFT() as unknown as TheCoinNFT;
 }
+
+
+export function connectNFT(): TheCoinNFT {
+  return new MockNFT() as unknown as TheCoinNFT;
+}

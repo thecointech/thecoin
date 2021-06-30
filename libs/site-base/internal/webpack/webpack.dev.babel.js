@@ -6,9 +6,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const process = require('process');
-
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+
+const mocksFolder = path.join(__dirname, '..', '..', '..', '..', '__mocks__');
 
 module.exports = require('./webpack.base.babel')({
   mode: 'development',
@@ -37,6 +37,19 @@ module.exports = require('./webpack.base.babel')({
       enforce: 'pre',
       use: ['source-map-loader'],
     },
+    // Allow ts-loader to parse mocks
+    {
+      test: /\.ts(x?)$/,
+      include: mocksFolder,
+      use: {
+        loader: 'ts-loader',
+        options: {
+          configFile: path.join(mocksFolder, '..', 'tsconfig.base.json'),
+          transpileOnly: true,
+          experimentalWatchApi: true,
+        },
+      },
+    },
   ],
 
   // Disable unused vars for debug builds.
@@ -61,6 +74,11 @@ module.exports = require('./webpack.base.babel')({
       failOnError: false, // show a warning when there is a circular dependency
     }),
   ],
+
+  // Re-use our jest mocks inside our website (neat, huh?)
+  resolve: {
+    modules: [mocksFolder],
+  },
 
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool

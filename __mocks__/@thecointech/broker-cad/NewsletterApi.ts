@@ -1,11 +1,11 @@
-import { NewsletterApi, SubscriptionDetails } from "@thecointech/broker-cad";
+import { NewsletterApi as SrcApi, SubscriptionDetails } from "@thecointech/broker-cad";
 import { Dictionary } from 'lodash';
-import { buildResponse, delay } from '@thecointech/site-base/api/mock/utils';
+import { buildResponse, delay } from '../axios-utils';
 
 const subscriptions = {} as Dictionary<SubscriptionDetails>;
 const randomId = () => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
-export class MockNewsletterApi implements Pick<NewsletterApi, keyof NewsletterApi> {
+export class NewsletterApi implements Pick<SrcApi, keyof SrcApi> {
   /**
    *
    * @summary Confirm email subscription.

@@ -1,6 +1,6 @@
-import { SecureApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
-import { buildResponse, delay } from "@thecointech/site-base/api/mock/utils";
-import { wallets } from './accounts';
+import { SecureApi as SrcApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
+import { buildResponse, delay } from "../axios-utils";
+import { wallets } from '../accounts';
 
 const MockedCode = "MockedCode";
 const checkCode = ({token}: GoogleToken) => {
@@ -14,7 +14,7 @@ const checkCode = ({token}: GoogleToken) => {
  * @class SecureApi
  * @extends {BaseAPI}
  */
-export class MockSecureApi  implements Pick<SecureApi, keyof SecureApi> {
+export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
   /**
    *
    * @summary Get the authorization URL to redirect the user to
