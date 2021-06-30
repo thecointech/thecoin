@@ -28832,6 +28832,13 @@ node-modules-regexp@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
 
+node-netstat@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/node-netstat/-/node-netstat-1.8.0.tgz#3f897fd12b631c14f3f0568854056575ee307d71"
+  integrity sha512-P1a5Sh9FfjTXxI6hC9q/Nqre8kT63FQxBCr1qz5ffk76EkQBH62+XEhIhlzfz6Bz+FRwOFqidW2FDGXnOXvyJQ==
+  dependencies:
+    is-wsl "^1.1.0"
+
 node-plop@0.19.0, node-plop@~0.19.0:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/node-plop/-/node-plop-0.19.0.tgz#da76aed327e1392fa9ba27d94262747004d0abdb"

@@ -1,2 +1,3 @@
-// Stub to prevent throwing-because-no-tests in jest
 export {}
+
+it.skip("Prevents throwing-because-no-tests in jest", () => {});
