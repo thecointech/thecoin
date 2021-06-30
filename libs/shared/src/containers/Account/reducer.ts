@@ -10,7 +10,7 @@ import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer } from '../../store/immerReducer';
 import { isSigner, TheSigner } from '../../SignerIdent';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
-import { connectIDX } from '../IDX';
+import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';

@@ -4,6 +4,8 @@ import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
 import { AccountName, getSigner } from '@thecointech/accounts';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
+import { ConnectContract } from '../contract';
+import { MockIDX } from '../idx';
 
 export const wallets = [
   {
@@ -41,6 +43,9 @@ function buildDevWallets() {
   // if dev mode, we add a random wallet,
   if (process.env.SETTINGS !== 'live') {
     const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
+    // connect to mocked services - normally this is done by "connect" call
+    randomAccount.contract = ConnectContract();
+    randomAccount.idx = new MockIDX() as any;
     r.active = randomAccount.address;
     r.map[randomAccount.address] = randomAccount
   }
