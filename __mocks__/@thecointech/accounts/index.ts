@@ -26,10 +26,9 @@ export const wallets = [
   }
 ];
 
-// Fetch some wallets to test with.
-// We always add 1 encrypted wallet at the
-// end (to be able to test login);
-export function getDevWallets() : AccountMapState {
+// Make some wallets to test with.  There should be at
+// least 1 unlocked wallet, and the locked TestAccNoT
+function buildDevWallets() {
   const encrypted = wallets[0];
   const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
   // We always add one encrypted wallet
@@ -47,6 +46,9 @@ export function getDevWallets() : AccountMapState {
   }
   return r;
 }
+
+let _devWallets = buildDevWallets();
+export const getDevWallets = () => _devWallets;
 
 export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {
   // if dev:live we add 2 connected wallets.

@@ -23,7 +23,7 @@ function createReducer(injectedReducers?: ReducersMapObject): Reducer {
 function initialAccounts() : AccountMapState {
 
   if (process.env.NODE_ENV === 'development') {
-    const { getDevWallets } = require("../../../__mocks__/@thecointech/accounts")
+    const { getDevWallets } = require('@thecointech/accounts');
     return getDevWallets();
   }
   return {
