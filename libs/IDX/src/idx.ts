@@ -5,7 +5,7 @@ import { Ceramic } from './ceramic';
 import { createAuthProvider } from './connect';
 import { log } from '@thecointech/logging';
 import { authenticateDID } from './did';
-
+export * from './encrypted';
 
 type Aliases = {
   details: string
