@@ -2,7 +2,7 @@ import { AccountMapState, buildNewAccount, IAccountStoreAPI } from '@thecointech
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
-import { AccountName, getSigner } from '@thecointech/accounts';
+import { AccountName, getSigner } from '@thecointech/signers';
 import { TheSigner } from '@thecointech/shared/SignerIdent';
 import { ConnectContract } from '../contract';
 import { MockIDX } from '../idx';

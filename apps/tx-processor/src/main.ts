@@ -1,7 +1,7 @@
 import { init as LogInit, log } from "@thecointech/logging";
 import { RbcStore, initBrowser, RbcApi } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 import { ConnectContract, TheCoin } from '@thecointech/contract';
 import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
