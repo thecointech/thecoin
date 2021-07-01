@@ -11,7 +11,7 @@ export class MockIDX implements Pick<IDX, "get" | "set"> {
     return Promise.resolve(
       r
         ? JSON.parse(r) as T
-        : undefined
+        : null
     );
   }
 
