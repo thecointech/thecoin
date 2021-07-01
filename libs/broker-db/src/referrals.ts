@@ -66,5 +66,5 @@ export async function createReferree(code: string, newAccount: string, created: 
     created,
   };
   await newUserKey.set(data);
-  log.debug({address: newAccount, referrer}, "Create user: {address} from {referrer}");
+  log.debug({address: newAccount, referrer: referrer.id}, "Create user: {address} from {referrer}");
 }

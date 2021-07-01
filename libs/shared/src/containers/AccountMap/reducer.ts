@@ -1,6 +1,6 @@
 import { bindActionCreators, Reducer, ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
-import { AccountState, DefaultAccountValues } from "../Account";
+import { AccountState, DefaultAccountValues } from "../Account/types";
 import { deleteAccount, storeAccount } from "../../utils/storageSync";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { AnySigner, isWallet } from "../../SignerIdent";
