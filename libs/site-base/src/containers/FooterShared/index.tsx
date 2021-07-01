@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, StrictGridColumnProps } from 'semantic-ui-react';
 
 import facebook from './images/facebook.svg';
@@ -9,21 +9,19 @@ import instagram from './images/instagram.svg';
 import { useWindowDimensions } from '@thecointech/shared/components/WindowDimensions';
 import { breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
 
-
-const registered = {  defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
-                      description:"base.footer.registered.Registered Non profit phrase in footer"};
-
-const copyright = {   defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
-                      description:"base.footer.copyright: Copyright phrase in footer"};
-
+const translate = defineMessages({ 
+  registered : {  defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
+          description:"base.footer.registered.Registered Non profit phrase in footer"},
+  copyright : {  defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
+              description:"base.footer.copyright: Copyright phrase in footer"}});
 
 export const FooterShared = () => {
 
   const windowDimension = useWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
-  const registeredContent = <FormattedMessage {...registered} />;
+  const registeredContent = <FormattedMessage {...translate.registered} />;
   const socialLinksContent = <><a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank"><img src={facebook} /></a><img src={twitter} /><img src={instagram} /></>;
-  const copyrightContent = <>&#169; &nbsp;<FormattedMessage {...copyright} /></>;
+  const copyrightContent = <>&#169; &nbsp;<FormattedMessage {...translate.copyright} /></>;
 
   let alignForLeftColumn = "left" ;
   let alignForCenterColumn = "center";
