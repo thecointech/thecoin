@@ -3,7 +3,6 @@ import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import Datetime from 'react-datetime';
 import { Moment } from 'moment';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { AccountState } from '@thecointech/shared/containers/Account/types';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { toHuman } from '@thecointech/utilities';
@@ -12,8 +11,9 @@ import { Processor } from '@thecointech/tx-processing/deposit';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
-import "react-datetime/css/react-datetime.css"
 import { getCurrentState } from '@thecointech/tx-processing/statemachine';
+import { AccountState } from '@thecointech/account';
+import "react-datetime/css/react-datetime.css"
 
 
 type Props = AccountState & {

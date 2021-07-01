@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getStoredAccountData } from '@thecointech/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
-import { isWallet } from '@thecointech/shared/SignerIdent';
+import { isWallet } from '../../../libs/signers/src';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Props as MessageProps } from '@thecointech/site-base/components/MaybeMessage';
@@ -19,7 +19,7 @@ type MyProps = {
   disabled?: boolean;
   toggle?: boolean;
 }
- 
+
 export const StoreGoogle : React.FC<MyProps> = (props) => {
 
   const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);

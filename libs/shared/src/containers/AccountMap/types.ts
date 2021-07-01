@@ -1,8 +1,7 @@
-import { AnySigner } from "../../SignerIdent";
-import { AccountState } from "../Account";
+import { AccountState } from '@thecointech/account';
+import { AnySigner } from "@thecointech/utilities/SignerIdent";
 import { Wallet } from 'ethers';
 import { Dictionary } from "lodash";
-
 
 export type AccountMap = Dictionary<AccountState>;
 export type AccountMapState =  {
