@@ -18,13 +18,10 @@ module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
   externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
 
-  output: Object.assign(
-    {
-      // Compile into js/build.js
-      path: path.resolve(projectRoot, 'build'),
-      publicPath: '/',
-    },
-  ), // Merge with env dependent settings
+  output: {
+    path: path.resolve(projectRoot, 'build'),
+    publicPath: '/',
+  },
 
   module: {
     rules: [
