@@ -5,9 +5,6 @@ import { getCurrentState } from '@thecointech/tx-processing';
 import { RbcApi } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 
-jest.mock('@thecointech/utilities/MarketStatus', () => ({
-  NextOpenTimestamp: (date: Date) => date.getTime()
-}))
 jest.setTimeout(900000);
 
 it("Can complete deposits", async () => {

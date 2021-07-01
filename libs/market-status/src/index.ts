@@ -1,11 +1,10 @@
-import { default as axios } from 'axios';
-import { Dictionary } from 'lodash';
-import {DateTime} from 'luxon';
+import { log } from '@thecointech/logging';
+import { DateTime } from 'luxon';
+import axios from 'axios';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
-
-// TODO: Make sure we don't publish this in the website...
-const AccessToken = 'iIAGXtPBcpae7eBS4wXgP8RRUlGT';
+const AccessToken = process.env.TRADIER_API_KEY;
+const MarketTZ = "America/New_York";
 
 type DayData = {
   open: {
@@ -17,15 +16,20 @@ type DayData = {
 type Calendar = {
   days: {
     day: DayData[];
-  }
+  },
+  month: number,
+  year: number,
+}
+type TradierResponse = {
+  calendar: Calendar
 }
 
 // Cache accesses to reduce hits on the API
-let CalendarCache: Dictionary<Calendar> = {};
+const _cache = new Map<string, Calendar>();
 
-async function QueryCalendar(url: string) {
+async function queryCalendar(url: string) {
   try {
-    const r = await axios.get(url, {
+    const r = await axios.get<TradierResponse>(url, {
       headers: {
         Authorization: AccessToken,
         Accept: 'application/json'
@@ -34,27 +38,27 @@ async function QueryCalendar(url: string) {
     if (r.status == 200) {
       return r.data;
     }
-    console.error(r.statusText);
+    log.error(r.statusText);
   } catch (err) {
-    console.error(err);
+    log.error(err, `Calendar query failed`);
   }
   return null;
 }
 
 
-async function GetCalendar(date: Date) {
-  const uriArgs = `month=${date.getMonth() + 1}&year=${date.getFullYear()}`;
-  const exists = CalendarCache[uriArgs];
+export async function getCalendar(date: DateTime) {
+  const uriArgs = `month=${date.month}&year=${date.year}`;
+  const exists = _cache.get(uriArgs);
   if (exists)
     return exists;
 
-  const data = await QueryCalendar(`${ENDPOINT}?${uriArgs}`);
+  const data = await queryCalendar(`${ENDPOINT}?${uriArgs}`);
 
   if (data) {
-    console.log("Loaded Calendar for: %i-%i, (%i cached)", date.getMonth()+1, date.getFullYear(), Object.keys(CalendarCache).length)
-    const {calendar }= data;
-    CalendarCache[uriArgs] = calendar;
-    return calendar as Calendar;
+    log.trace(`Loaded Calendar for: ${date.month}-${date.year}, (${_cache.size} cached)`);
+    const { calendar } = data;
+    _cache.set(uriArgs, calendar);
+    return calendar;
   }
   return null;
 }
@@ -62,7 +66,7 @@ async function GetCalendar(date: Date) {
 //////////////////////////////////////////////////////////////////////////
 //  Returns timestamp of next time market will be open
 
-function getAsTS(data: DayData, startEnd: "start"|"end") {
+function getAsTS(data: DayData, startEnd: "start" | "end") {
   const [year, month, day] = data.date.split("-");
   const [hour, minute] = data.open[startEnd].split(":")
   return DateTime.fromObject({
@@ -71,36 +75,29 @@ function getAsTS(data: DayData, startEnd: "start"|"end") {
     day: parseInt(day),
     hour: parseInt(hour),
     minute: parseInt(minute),
-    zone: "America/New_York"
+    zone: MarketTZ
   }).toMillis();
-}
-
-function addDay(date: Date) {
-  var nd = new Date(date.valueOf());
-  nd.setDate(date.getDate() + 1);
-  return nd;
 }
 
 // Returns either 0 for currently open, or timestamp of when it will be open
 // If the market is not open on date, offset will be applied to allow us to
 // move the time well into the market open period (as we can't get instant data)
-// TODO: Support timezones
-async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
+export async function nextOpenTimestamp(date: DateTime, offset: number = 120 * 1000) {
 
   // Only search 100 days.  If the market hasn't opened in
   // 100 days, then it's most likely due to the zombie apocalypse
   // and we are going to need to adjust our sales pitch to the
   // new market...
-  const ts = date.getTime();
-  for (let dt = date, i = 0; i < 100; dt = addDay(dt), i++) {
-    const calendar = await GetCalendar(dt);
+  const local = date.setZone(MarketTZ);
+  const ts = local.toMillis();
+  for (let dt = local, i = 0; i < 100; dt = dt.plus({ days: 1 }), i++) {
+    const calendar = await getCalendar(dt);
     if (calendar == null)
       continue;
 
     const { day } = calendar.days;
-    let data = day[dt.getDate() - 1];
-    if (data.open)
-    {
+    let data = day[dt.day - 1];
+    if (data.open) {
       const ots = getAsTS(data, 'start')
       if (ots > ts)
         return offset ? offset + ots : ots;
@@ -119,4 +116,3 @@ async function NextOpenTimestamp(date: Date, offset: number=120 * 1000) {
   throw new Error("Could not find valid opening (check for zombies)");
 }
 
-export { GetCalendar, NextOpenTimestamp };
