@@ -12,7 +12,6 @@ import { MainNavigation } from '../MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from '../MainRouter';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -24,16 +23,6 @@ import styles from './styles.module.less';
 
 export const App = () => {
   console.log("Loading Site with config: " + process.env.CONFIG_NAME);
-  if (process.env.NODE_ENV === 'development') {
-    //useDevPrep(account)
-    if (process.env.CONFIG_NAME === 'devlive') {
-      const accountsApi = useAccountStoreApi();
-      React.useEffect(() => {
-        const { addDevLiveAccounts } = require('@thecointech/accounts');
-        addDevLiveAccounts(accountsApi)
-      })
-    }
-  }
 
   return (
     <div id={styles.app}>

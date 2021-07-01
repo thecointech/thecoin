@@ -1,7 +1,6 @@
-//import {GetStoredWallet} from '@thecointech/shared/containers/Account/storageSync';
 import { GetSecureApi } from 'api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { getStoredAccountData } from '@thecointech/shared/utils/storageSync';
+import { getStoredAccountData } from '@thecointech/account/store';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
