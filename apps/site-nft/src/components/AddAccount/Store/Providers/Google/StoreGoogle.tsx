@@ -157,7 +157,7 @@ function fetchAndVerifyWallet(address: string) {
     alert("Cannot upload this wallet: it is not a local account");
     throw new Error("Could not find local account: " + address);
   }
-  if (wallet.privateKey) {
+  else if (wallet.privateKey) {
     alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
     throw new Error("Cannot upload wallet with private key");
   }

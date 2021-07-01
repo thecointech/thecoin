@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getStoredAccountData } from '@thecointech/shared/utils/storageSync';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
-import { isWallet } from '../../../libs/signers/src';
+import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Props as MessageProps } from '@thecointech/site-base/components/MaybeMessage';
@@ -159,7 +159,7 @@ function fetchAndVerifyWallet(address: string) {
     alert("Cannot upload this wallet: it is not a local account");
     throw new Error("Could not find local account: " + address);
   }
-  if (wallet.privateKey) {
+  else if (wallet.privateKey) {
     alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
     throw new Error("Cannot upload wallet with private key");
   }
