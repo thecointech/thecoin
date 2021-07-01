@@ -1,4 +1,4 @@
-import { getSigner } from "@thecointech/accounts";
+import { getSigner } from "@thecointech/signers";
 import { log } from "@thecointech/logging";
 import { DepositResult, ETransferErrorCode, RbcApi } from "@thecointech/rbcapi";
 import type { eTransferData } from "@thecointech/tx-gmail";

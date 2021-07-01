@@ -41,7 +41,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.20",
-    "@thecointech/accounts": "^0.2.13",
+    "@thecointech/signers": "^0.2.13",
     "@thecointech/logging": "^0.2.13",
     "@thecointech/nft-contract": "^0.2.13",
     "@thecointech/utilities": "^0.2.13",
