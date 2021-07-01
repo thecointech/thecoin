@@ -1,9 +1,8 @@
 import { AccountState } from '@thecointech/account';
 import { AnySigner } from "@thecointech/utilities/SignerIdent";
 import { Wallet } from 'ethers';
-import { Dictionary } from "lodash";
+import { AccountMap } from '@thecointech/account';
 
-export type AccountMap = Dictionary<AccountState>;
 export type AccountMapState =  {
   active: string|null;
   map: AccountMap;

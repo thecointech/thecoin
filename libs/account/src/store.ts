@@ -1,5 +1,5 @@
-import { AccountState, DefaultAccountValues } from '@thecointech/account';
-import { AccountMap } from '../containers/AccountMap';
+import { AccountState, DefaultAccountValues } from './state';
+import { AccountMap } from './map';
 import { isSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
@@ -57,7 +57,7 @@ export function getStoredAccountData(address: string): AccountState | null {
 }
 
 // Utility function for fetching all stored accounts
-export function readAllAccounts(): AccountMap {
+export function getAllAccounts(): AccountMap {
   const allAccounts: AccountMap = {};
   for (let i = 0; i < localStorage.length; i++) {
     const raw = localStorage.key(i);

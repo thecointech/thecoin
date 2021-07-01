@@ -1,7 +1,7 @@
 import { bindActionCreators, Reducer, ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
-import { deleteAccount, storeAccount } from "../../utils/storageSync";
+import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { AnySigner, isWallet } from "@thecointech/utilities/SignerIdent";
 import { Wallet } from 'ethers';

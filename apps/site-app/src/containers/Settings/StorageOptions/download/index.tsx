@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
-import { getStoredAccountData } from '@thecointech/shared/utils/storageSync';
+import { getStoredAccountData } from '@thecointech/account/store';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { isWallet } from '@thecointech/utilities/SignerIdent';

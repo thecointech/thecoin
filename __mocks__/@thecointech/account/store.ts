@@ -1,4 +1,4 @@
-import { AccountMapState, buildNewAccount, IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
+import { AccountMapState, IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
@@ -6,6 +6,7 @@ import { AccountName, getSigner } from '@thecointech/signers';
 import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { ConnectContract } from '../contract';
 import { MockIDX } from '../idx';
+import { buildNewAccount } from '@thecointech/account';
 
 export const wallets = [
   {
