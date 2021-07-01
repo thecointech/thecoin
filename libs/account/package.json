@@ -28,8 +28,8 @@
     "build/**/*"
   ],
   "exports": {
-    "./": "./build/index.js",
-    "./store": "./build/store_web.js"
+    ".": "./build/index.js",
+    "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",
   "typesVersions": {

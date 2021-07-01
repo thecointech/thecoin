@@ -1,4 +1,4 @@
-import { AccountMapState, IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
+import { IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
@@ -6,7 +6,7 @@ import { AccountName, getSigner } from '@thecointech/signers';
 import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { ConnectContract } from '../contract';
 import { MockIDX } from '../idx';
-import { buildNewAccount } from '@thecointech/account';
+import { AccountMap, buildNewAccount } from '@thecointech/account';
 
 export const wallets = [
   {
@@ -35,26 +35,22 @@ function buildDevWallets() {
   const encrypted = wallets[0];
   const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
   // We always add one encrypted wallet
-  const r: AccountMapState =  {
-    active: null,
-    map: {
-      [encryptedAccount.address]: encryptedAccount
-    }
+  const r: AccountMap = {
+    [encryptedAccount.address]: encryptedAccount
   }
   // if dev mode, we add a random wallet,
   if (process.env.SETTINGS !== 'live') {
-    const randomAccount =  buildNewAccount("Random Test", Wallet.createRandom());
+    const randomAccount = buildNewAccount("Random Test", Wallet.createRandom());
     // connect to mocked services - normally this is done by "connect" call
     randomAccount.contract = ConnectContract();
     randomAccount.idx = new MockIDX() as any;
-    r.active = randomAccount.address;
-    r.map[randomAccount.address] = randomAccount
+    r[randomAccount.address] = randomAccount
   }
   return r;
 }
 
 let _devWallets = buildDevWallets();
-export const getDevWallets = () => _devWallets;
+export const getAllAccounts = () => _devWallets;
 
 export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {
   // if dev:live we add 2 connected wallets.
