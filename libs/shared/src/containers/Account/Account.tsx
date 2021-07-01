@@ -7,13 +7,14 @@ import { ApplicationBaseState } from "../../types";
 import { useSidebar } from "../PageSidebar/actions";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
-import { AccountState, IActions, AccountPageProps } from "./types";
+import { IActions, AccountPageProps } from "./types";
 import { useAccount, useAccountApi } from "./reducer";
-import { isSigner, isWallet } from "../../SignerIdent";
+import { isSigner, isWallet } from "@thecointech/utilities/SignerIdent";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
+import { AccountState } from '@thecointech/account';
 
 export type PageCreator = (props: AccountPageProps) => (props: any) => React.ReactNode;
 export type RouterPath = {

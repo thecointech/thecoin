@@ -1,8 +1,7 @@
-import { AccountState, DefaultAccountValues } from '../containers/Account/types';
+import { AccountState, DefaultAccountValues } from '@thecointech/account';
 import { AccountMap } from '../containers/AccountMap';
 import { isSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
-import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
-import { Deprecated_GetStored } from './storageSync_deprecated';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
 const ThrowIfNotValid = (data: any) => {
   if (data.privateKey || !IsValidAddress(data.address))
@@ -65,10 +64,7 @@ export function readAllAccounts(): AccountMap {
     if (!raw)
       continue;
 
-    let account =
-      getStoredAccountData(raw) ??
-      Deprecated_GetStored(raw);
-
+    let account = getStoredAccountData(raw);
     if (account) {
       const { address, signer } = account;
 

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Download } from './download';
 import { Container, Header } from "semantic-ui-react"
-import { isWallet } from '@thecointech/shared/SignerIdent';
+import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
 import { StoreGoogle, UploadState } from 'containers/StoreOnline/Google';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
