@@ -4,20 +4,17 @@
 const { getEnvFile } = require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
-//const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 const { transform } = require('@formatjs/ts-transformer');
+const { merge } = require("webpack-merge")
 
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
-const dotenv = require('dotenv').config({path: getEnvFile()});
+const dotenv = require('dotenv').config({ path: getEnvFile() });
 
-module.exports = options => ({
-  mode: options.mode,
-  entry: options.entry,
-
+module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
   externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
 
@@ -27,13 +24,10 @@ module.exports = options => ({
       path: path.resolve(projectRoot, 'build'),
       publicPath: '/',
     },
-    options.output,
   ), // Merge with env dependent settings
 
-  optimization: options.optimization,
   module: {
     rules: [
-      ...options.rules,
       {
         test: /\.ts(x?)$/,
         include: path.join(projectRoot, "src"),
@@ -44,7 +38,6 @@ module.exports = options => ({
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
-            compilerOptions: options.tsCompilerOptions,
             // Include the custom transformer to automate compiling out i18n messages
             getCustomTransformers: () => ({
               before: [
@@ -139,7 +132,7 @@ module.exports = options => ({
       },
     ],
   },
-  plugins: options.plugins.concat([
+  plugins: [
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
@@ -155,9 +148,9 @@ module.exports = options => ({
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
-  ]),
+  ],
   resolve: {
-    modules: [...(options.resolve?.modules ?? []), 'node_modules', 'src'],
+    modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'jsnext:main', 'main'],
     fallback: {
@@ -165,7 +158,6 @@ module.exports = options => ({
       "stream": require.resolve("stream-browserify"),
     }
   },
-  devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: options.performance || {},
-});
+  performance: {},
+}

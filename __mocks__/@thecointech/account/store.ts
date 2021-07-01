@@ -1,12 +1,12 @@
-import { IAccountStoreAPI } from '@thecointech/shared/containers/AccountMap';
 import testWallet from './testAccount1.json';
 import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
-import { AccountName, getSigner } from '@thecointech/signers';
-import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { ConnectContract } from '../contract';
 import { MockIDX } from '../idx';
 import { AccountMap, buildNewAccount } from '@thecointech/account';
+
+const _devWallets: AccountMap = {};
+let _initial: null|string = null;
 
 export const wallets = [
   {
@@ -31,39 +31,23 @@ export const wallets = [
 
 // Make some wallets to test with.  There should be at
 // least 1 unlocked wallet, and the locked TestAccNoT
-function buildDevWallets() {
+function initDevWallets() {
   const encrypted = wallets[0];
   const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
   // We always add one encrypted wallet
-  const r: AccountMap = {
-    [encryptedAccount.address]: encryptedAccount
-  }
-  // if dev mode, we add a random wallet,
-  if (process.env.SETTINGS !== 'live') {
-    const randomAccount = buildNewAccount("Random Test", Wallet.createRandom());
-    // connect to mocked services - normally this is done by "connect" call
-    randomAccount.contract = ConnectContract();
-    randomAccount.idx = new MockIDX() as any;
-    r[randomAccount.address] = randomAccount
-  }
-  return r;
+  _devWallets[encryptedAccount.address] = encryptedAccount
+
+  // Add a random decrypted wallet
+  const randomAccount = buildNewAccount("Random Test", Wallet.createRandom());
+  // connect to mocked services - normally this is done by "connect" call
+  randomAccount.contract = ConnectContract();
+  randomAccount.idx = new MockIDX() as any;
+  _devWallets[randomAccount.address] = randomAccount
+
+  _initial = randomAccount.address;
 }
 
-let _devWallets = buildDevWallets();
+// Initialize
+initDevWallets();
 export const getAllAccounts = () => _devWallets;
-
-export async function addDevLiveAccounts(accountsApi: IAccountStoreAPI) {
-  // if dev:live we add 2 connected wallets.
-  addRemoteAccount('client1', accountsApi, true);
-  addRemoteAccount('client2', accountsApi, false);
-}
-
-async function addRemoteAccount(name: AccountName, accountsApi: IAccountStoreAPI, active: boolean) {
-  const signer = await getSigner(name)
-  const address = await signer.getAddress();
-  const theSigner = signer as TheSigner;
-  theSigner.address = address;
-  theSigner._isSigner = true;
-
-  accountsApi.addAccount(name, theSigner, false, active);
-}
+export const getInitialAddress = () => _initial;

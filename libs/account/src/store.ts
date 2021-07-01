@@ -100,3 +100,14 @@ export function updateStoredAccount(account: AccountState) {
 export function deleteAccount(account: AccountState) {
   localStorage.removeItem(account.address);
 }
+
+//
+// Get the initial address (last used)
+export function getInitialAddress() {
+  return null; // TODO
+}
+
+//
+// Set the initial address (last used)
+export function setInitialAddress() {
+}
