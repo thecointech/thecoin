@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import { MessageDescriptor, useIntl } from "react-intl";
 import messages from '../messages';
-import { useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
+import { useAccountStore } from "@thecointech/shared/containers/AccountMap";
+import { AccountState } from '@thecointech/account';
 
 const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
                         defaultMessage:"Any name you like",
