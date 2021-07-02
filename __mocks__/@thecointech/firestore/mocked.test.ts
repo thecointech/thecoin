@@ -1,8 +1,6 @@
-import { init } from './mock'
-import { getFirestore } from './firestore';
-import { Timestamp } from './timestamp';
+import type { CollectionReference } from '@thecointech/firestore';
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
-import { CollectionReference } from './types';
+import { getFirestore, init, Timestamp } from '.';
 import data from './mock.data.json';
 
 type DocData = {
