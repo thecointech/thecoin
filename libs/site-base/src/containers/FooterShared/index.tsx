@@ -10,10 +10,10 @@ import { useWindowDimensions } from '@thecointech/shared/components/WindowDimens
 import { breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
 
 const translate = defineMessages({ 
-  registered : {  defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
-          description:"base.footer.registered.Registered Non profit phrase in footer"},
-  copyright : {  defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
-              description:"base.footer.copyright: Copyright phrase in footer"}});
+    registered : { defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
+            description:"base.footer.registered.Registered Non profit phrase in footer"},
+    copyright : { defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
+                description:"base.footer.copyright: Copyright phrase in footer"}});
 
 export const FooterShared = () => {
 

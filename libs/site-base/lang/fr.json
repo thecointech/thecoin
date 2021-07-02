@@ -1,0 +1,39 @@
+{
+  "+VnHem": {
+    "defaultMessage": "ineffectual"
+  },
+  "BUGYWB": {
+    "defaultMessage": "moderate"
+  },
+  "D2FTm2": {
+    "defaultMessage": "Please enter a password of at least 'moderate' strength"
+  },
+  "GfOGaW": {
+    "defaultMessage": "strong"
+  },
+  "W9yWHk": {
+    "defaultMessage": "strength"
+  },
+  "dds": {
+    "defaultMessage": "Copied to your clipboard",
+    "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
+  },
+  "dssds": {
+    "defaultMessage": "Copy",
+    "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
+  },
+  "fwfe": {
+    "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
+    "description": "base.footer.registered.Registered Non profit phrase in footer"
+  },
+  "fwseqefe": {
+    "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
+    "description": "base.footer.copyright: Copyright phrase in footer"
+  },
+  "iaWn3u": {
+    "defaultMessage": "vulnerable"
+  },
+  "mA8olw": {
+    "defaultMessage": "weak"
+  }
+}
