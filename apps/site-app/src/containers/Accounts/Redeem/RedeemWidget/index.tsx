@@ -6,9 +6,9 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
-import { AccountState } from '@thecointech/shared/containers/Account';
 import { UxInput } from '@thecointech/shared/components/UxInput';
 import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import { AccountState } from '@thecointech/account';
 
 type VisualProps={
 

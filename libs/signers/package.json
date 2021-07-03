@@ -1,7 +1,7 @@
 {
-  "name": "@thecointech/accounts",
+  "name": "@thecointech/signers",
   "version": "0.2.13",
-  "description": "The Coin: centralized access for built-in accounts.  Not for external use",
+  "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "keywords": [
     "TheCoin"
   ],
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/accounts"
+    "directory": "libs/signers"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

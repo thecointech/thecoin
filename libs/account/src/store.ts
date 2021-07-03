@@ -1,8 +1,7 @@
-import { AccountState, DefaultAccountValues } from '../containers/Account/types';
-import { AccountMap } from '../containers/AccountMap';
-import { isSigner, SignerIdent } from '../SignerIdent';
-import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
-import { Deprecated_GetStored } from './storageSync_deprecated';
+import { AccountState, DefaultAccountValues } from './state';
+import { AccountMap } from './map';
+import { isSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
 const ThrowIfNotValid = (data: any) => {
   if (data.privateKey || !IsValidAddress(data.address))
@@ -58,17 +57,14 @@ export function getStoredAccountData(address: string): AccountState | null {
 }
 
 // Utility function for fetching all stored accounts
-export function readAllAccounts(): AccountMap {
+export function getAllAccounts(): AccountMap {
   const allAccounts: AccountMap = {};
   for (let i = 0; i < localStorage.length; i++) {
     const raw = localStorage.key(i);
     if (!raw)
       continue;
 
-    let account =
-      getStoredAccountData(raw) ??
-      Deprecated_GetStored(raw);
-
+    let account = getStoredAccountData(raw);
     if (account) {
       const { address, signer } = account;
 
@@ -103,4 +99,15 @@ export function updateStoredAccount(account: AccountState) {
 // Delete the named account from localstorage (not tested)
 export function deleteAccount(account: AccountState) {
   localStorage.removeItem(account.address);
+}
+
+//
+// Get the initial address (last used)
+export function getInitialAddress() {
+  return null; // TODO
+}
+
+//
+// Set the initial address (last used)
+export function setInitialAddress() {
 }

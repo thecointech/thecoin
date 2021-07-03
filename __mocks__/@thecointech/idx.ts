@@ -16,7 +16,7 @@ export class MockIDX implements Pick<IDX, "get" | "set"> {
   }
 
   set(name: string, content: Record<string, any>, _options?: CreateOptions): Promise<StreamID> {
-    if (!content) this.records.set(name, undefined);
+    if (!content) this.records.delete(name);
     else this.records.set(name, JSON.stringify(content));
     return Promise.resolve({} as StreamID);
   }

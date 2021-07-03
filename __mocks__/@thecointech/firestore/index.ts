@@ -1,10 +1,5 @@
-if (process.env.NODE_ENV === "development") {
-  require('./mock-shimJest');
-}
-import { setFirestore } from './firestore';
-import { Timestamp } from './timestamp';
+import { setFirestore, Timestamp, getFirestore, MockedDb } from '@thecointech/firestore';
 import mocks from 'firestore-jest-mock';
-import { MockedDb } from './types';
 
 // Helper function to make defining immutable DB's easier
 export function immutable(database: MockedDb) {
@@ -12,7 +7,7 @@ export function immutable(database: MockedDb) {
   return database;
 }
 
-export function init(database: MockedDb) {
+export function init(database: MockedDb = {}) {
 
   const {immutable, ...rest} = database;
   // Clone the DB (not modifying the source)
@@ -20,8 +15,10 @@ export function init(database: MockedDb) {
   const db = new mocks.FakeFirestore(clone, {mutable: !immutable});
 
   // Import the mocked db, and assign.
-  Timestamp.init(mocks.FakeFirestore.Timestamp);
-  setFirestore(db);
+  Timestamp.init(mocks.FakeFirestore.Timestamp as any);
+  setFirestore(db as any);
 
   return true;
 }
+
+export { getFirestore, Timestamp };

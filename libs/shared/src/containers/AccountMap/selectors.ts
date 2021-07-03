@@ -1,5 +1,5 @@
+import { AccountState } from '@thecointech/account';
 import { useSelector } from "react-redux";
-import { AccountState } from '.';
 import { AccountMapStore } from './types';
 
 // Select array of all accounts

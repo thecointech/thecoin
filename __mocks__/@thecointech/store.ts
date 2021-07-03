@@ -5,6 +5,8 @@ export function BaseStore(_name: string) {
 
 export class ConfigStore {
 
+  static initialize() {};
+
   static set(_key: string, _value: string) {
     throw new Error('sdf');
   }

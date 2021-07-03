@@ -1,9 +1,9 @@
 import { bindActionCreators, Reducer, ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
-import { AccountState, DefaultAccountValues } from "../Account/types";
-import { deleteAccount, storeAccount } from "../../utils/storageSync";
+import { AccountState, buildNewAccount } from "@thecointech/account";
+import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
-import { AnySigner, isWallet } from "../../SignerIdent";
+import { AnySigner, isWallet } from "@thecointech/utilities/SignerIdent";
 import { Wallet } from 'ethers';
 import { TheCoinReducer } from "../../store/immerReducer";
 import { createActionCreators, createReducerFunction } from "immer-reducer";
@@ -67,16 +67,6 @@ export class AccountMapReducer extends TheCoinReducer<AccountMapState> implement
     if (isWallet(signer)) {
       delete (signer as any).privateKey;
     }
-  }
-}
-
-export function buildNewAccount(name: string, signer: AnySigner) : AccountState {
-  const address = NormalizeAddress(signer.address);
-  return {
-    ...DefaultAccountValues,
-    name,
-    address,
-    signer,
   }
 }
 
