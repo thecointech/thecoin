@@ -4,15 +4,10 @@ import { log } from "@thecointech/logging";
 // Most of this file should irrelevant given .env configuration
 export enum Service {
 
-  SITE_LANDING=3000,
-  SITE_APP=3001,
-
 	RATES = 7001,
 	BROKER,
 
-  //FIRESTORE = 8377,
   CERAMIC = 7007,
-  ETHEREUM = 9545,
 }
 
 //

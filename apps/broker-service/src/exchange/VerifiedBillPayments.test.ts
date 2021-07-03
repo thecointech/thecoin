@@ -6,8 +6,6 @@ import { BillPayeePacket } from '@thecointech/types';
 import { getActionsForAddress } from '@thecointech/broker-db/transaction';
 import { Wallet } from 'ethers';
 
-jest.mock('@thecointech/email');
-
 beforeEach(async () => {
   init({});
 });

@@ -49,7 +49,7 @@
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/accounts": "^0.2.13",
+    "@thecointech/signers": "^0.2.13",
     "@thecointech/contract": "^0.2.13",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
