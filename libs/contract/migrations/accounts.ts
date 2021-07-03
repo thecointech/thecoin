@@ -1,4 +1,4 @@
-import { AccountId, AccountName } from "@thecointech/accounts";
+import { AccountId, AccountName } from "@thecointech/signers";
 
 export type NamedAccounts = Record<AccountName, string>;
 
