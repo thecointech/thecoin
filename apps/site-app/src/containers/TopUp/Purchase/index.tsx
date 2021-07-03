@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { selectFxRate } from '@thecointech/shared/containers/FxRate/selectors';
-import { AnySigner } from '@thecointech/shared/SignerIdent';
+import { AnySigner } from '@thecointech/utilities/SignerIdent';
 
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';

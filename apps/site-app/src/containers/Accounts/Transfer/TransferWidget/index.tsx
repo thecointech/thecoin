@@ -5,8 +5,8 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import { AccountState } from '@thecointech/shared/containers/Account';
 import { ChangeCB } from '@thecointech/shared/components/UxInput/types';
+import { AccountState } from '@thecointech/account';
 
 type VisualProps={
 
@@ -36,7 +36,6 @@ type VisualProps={
 };
 
 export const TransferWidget = (props: VisualProps) => {
-  
   return (
     <React.Fragment>
       <Form>
@@ -52,7 +51,7 @@ export const TransferWidget = (props: VisualProps) => {
         <Message hidden={props.errorHidden} negative>
           <FormattedMessage {...props.errorMessage} />
         </Message>
-        
+
         <DualFxInput
           onChange={props.onValueChange}
           asCoin={true}

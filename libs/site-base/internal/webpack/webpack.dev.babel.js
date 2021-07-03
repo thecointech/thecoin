@@ -4,13 +4,21 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const { merge } = require("webpack-merge")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const process = require('process');
-
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
-module.exports = require('./webpack.base.babel')({
+const baseOptions = require('./webpack.base.babel');
+
+// In non-live dev mode, we redirect imports to mocked versions
+const projectRoot = path.join(__dirname, '..', '..', '..', '..');
+const mocksFolder = path.join(projectRoot, '__mocks__');
+const mockOptions = process.env.SETTINGS !== 'live'
+  ? getMockOptions()
+  : getDevLiveOptions()
+
+const devOptions = {
   mode: 'development',
 
   // Add hot reloading in development
@@ -31,19 +39,14 @@ module.exports = require('./webpack.base.babel')({
     },
   },
 
-  rules: [
-    {
-      test: /\.js$/,
-      enforce: 'pre',
-      use: ['source-map-loader'],
-    },
-  ],
-
-  // Disable unused vars for debug builds.
-  // Costs too much time when debugging
-  tsCompilerOptions: {
-    noUnusedLocals: false,
-    noUnusedParameters: false,
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+    ],
   },
 
   // Add development plugins
@@ -69,4 +72,51 @@ module.exports = require('./webpack.base.babel')({
   performance: {
     hints: false,
   },
-});
+};
+
+
+function getMockOptions() {
+  return {
+    module: {
+      rules: [
+        // Allow ts-loader to parse mocks
+        {
+          test: /\.ts(x?)$/,
+          include: mocksFolder,
+          use: {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.join(mocksFolder, '..', 'tsconfig.base.json'),
+              transpileOnly: true,
+              experimentalWatchApi: true,
+            },
+          },
+        }
+      ],
+    },
+    // Re-use our jest mocks inside our website (neat, huh?)
+    resolve: {
+      modules: [mocksFolder]
+    }
+  }
+}
+
+function getDevLiveOptions() {
+  return {
+    experiments: {
+      topLevelAwait: true,
+    },
+    // Re-direct store to js file
+    resolve: {
+      alias: {
+        "@thecointech/account/store": path.join(mocksFolder, "@thecointech", 'account', 'store_devlive.js')
+      }
+    }
+  }
+}
+
+module.exports = merge(
+  baseOptions,
+  devOptions,
+  mockOptions,
+)
