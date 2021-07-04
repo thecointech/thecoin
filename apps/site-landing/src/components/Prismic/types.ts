@@ -32,7 +32,8 @@ export type ArticleResult = {
   thumbnail: ImageObj,
   image_before_title: ImageObj,
   title: RenderableType[]|null;
-  questions: RenderableType[]|null;
+  publication_date: string; 
+  short_content: RenderableType[]|null;
   content: RenderableType[]|null;
   author: RenderableType[]|null;
   categories: [],

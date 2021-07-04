@@ -22,7 +22,7 @@ export const ArticleItem = ({ id, data }: ArticleDocument) => {
           <Grid.Column>
             <div className={`${styles.text}`}>
               <Header as={"h4"}>{data.title ? data.title[0].text : ""}</Header>
-              { RichText.render(data.content as unknown as RichTextBlock[]) }
+              { RichText.render(data.short_content as unknown as RichTextBlock[]) }
             </div>
             <Link to={url}><FormattedMessage {...link} /></Link>
           </Grid.Column>
