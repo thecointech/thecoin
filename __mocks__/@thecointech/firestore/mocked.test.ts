@@ -1,4 +1,5 @@
-import type { CollectionReference } from '@thecointech/firestore';
+import { CollectionReference, isMockedDb } from '@thecointech/firestore';
+//@ts-ignore
 import { mockSet } from 'firestore-jest-mock/mocks/firestore';
 import { getFirestore, init, Timestamp } from '.';
 import data from './mock.data.json';
@@ -7,7 +8,7 @@ type DocData = {
   mutated: undefined|boolean,
 } & typeof data['users'][0];
 
-test('basic creation', async () => {
+it ('creates mocked DB', async () => {
 
   init(data);
 

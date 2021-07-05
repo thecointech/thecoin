@@ -1,6 +1,6 @@
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { ProcessBillPayment } from './VerifiedBillPayments'
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 import { current } from '../status';
 import { BillPayeePacket } from '@thecointech/types';
 import { getActionsForAddress } from '@thecointech/broker-db/transaction';
