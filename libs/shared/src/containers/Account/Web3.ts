@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { TheSigner, SignerIdent } from '../../SignerIdent'
+import { TheSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
 import { GetContract } from '@thecointech/contract';
 import { getWeb3Type } from '../../utils/detection';
 

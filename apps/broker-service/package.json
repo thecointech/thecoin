@@ -39,7 +39,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@thecointech/accounts": "^0.2.13",
+    "@thecointech/signers": "^0.2.13",
     "@thecointech/contract": "^0.2.13",
     "@thecointech/email": "^0.2.13",
     "@thecointech/logging": "^0.2.13",

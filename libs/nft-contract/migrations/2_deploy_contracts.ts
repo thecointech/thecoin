@@ -1,7 +1,7 @@
 import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { MigrationStep } from './step';
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 
 const step: MigrationStep = (artifacts) =>
   async (deployer, network, _accounts) => {

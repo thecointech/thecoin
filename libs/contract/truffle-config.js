@@ -5,10 +5,10 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 loadTypescript();
 // Load environment for the network we are deploying to
 require('../../tools/setenv');
-const { AccountId } = require('@thecointech/accounts');
+const { AccountId } = require('@thecointech/signers');
 // Load directly from path to side-step the limitations imposed
 // by the new package.exports module resolution
-const { loadFromPK } = require('../accounts/build/encrypted');
+const { loadFromPK } = require('../signers/build/encrypted');
 
 
 module.exports = {

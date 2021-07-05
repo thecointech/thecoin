@@ -10,7 +10,7 @@ export async function init(projectId?: string) : Promise<boolean> {
     projectId: projectId ?? "broker-cad",
   });
   const db = firebase.firestore();
-  const port = Number(process.env.FIRESTORE_EMULATOR_PORT ?? 8377);
+  const port = Number(process.env.FIRESTORE_EMULATOR_PORT ?? 9377);
   db.useEmulator("localhost", port);
   setFirestore(db);
   Timestamp.init(firebase.firestore.Timestamp);

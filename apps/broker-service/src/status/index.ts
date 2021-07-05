@@ -1,4 +1,4 @@
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 import constant from './constant.json';
 import production from './production.json';
 import prodtest from './prodtest.json';

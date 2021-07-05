@@ -1,11 +1,13 @@
 // Important modules this config uses
 const path = require('path');
+const { merge } = require("webpack-merge")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-module.exports = require('./webpack.base.babel')({
+const baseOptions = require('./webpack.base.babel');
+const prodOptions = {
   mode: 'production',
 
   // In production, we skip all hot-reloading stuff
@@ -19,8 +21,6 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
-
-  rules: [],
 
   optimization: {
     minimize: true,
@@ -116,4 +116,9 @@ module.exports = require('./webpack.base.babel')({
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
-});
+};
+
+module.exports = merge(
+  baseOptions,
+  prodOptions,
+);

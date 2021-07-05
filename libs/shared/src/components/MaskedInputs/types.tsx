@@ -1,4 +1,4 @@
-import { AccountDetails } from '../../containers/AccountDetails/types';
+import { AccountDetails } from '@thecointech/account';
 
 export type MaskedUxProps ={
     label: JSX.Element,

@@ -1,4 +1,4 @@
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 import { connectNFT } from '@thecointech/nft-contract';
 
 export async function getContract() {
