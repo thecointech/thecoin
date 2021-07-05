@@ -22,6 +22,9 @@ const yourbenefits = {  id:"site.MainNavigationMobile.yourbenefits",
 const faq = {  id:"site.MainNavigationMobile.faq",
                     defaultMessage:"FAQ",
                     description:"Title for the FAQ entry in the menu"};
+const blog = {  id:"site.MainNavigationMobile.blog",
+                    defaultMessage:"Blog",
+                    description:"Title for the Blog entry in the menu"};
 
 export const MainNavigationMobile = () => {
   return (
@@ -55,8 +58,11 @@ export const MainNavigationMobile = () => {
                     <Dropdown.Item as={ NavLink } to='/compare'>
                       <FormattedMessage {...yourbenefits} />
                     </Dropdown.Item>
-                    <Dropdown.Item as={ NavLink } to="/faq/theme-0">
+                    <Dropdown.Item as={ NavLink } to="/faq">
                       <FormattedMessage {...faq} />
+                    </Dropdown.Item>
+                    <Dropdown.Item as={ NavLink } to="/blog">
+                      <FormattedMessage {...blog} />
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
