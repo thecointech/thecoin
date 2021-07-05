@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import messages from '../messages';
-import { TheSigner } from '@thecointech/shared/SignerIdent';
+import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';

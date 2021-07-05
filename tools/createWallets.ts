@@ -1,4 +1,4 @@
-import { AccountId } from '@thecointech/accounts';
+import { AccountId } from '@thecointech/signers';
 import {Wallet} from "ethers";
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import {resolve} from 'path';

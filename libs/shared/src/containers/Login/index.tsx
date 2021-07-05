@@ -7,11 +7,11 @@ import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
 
 import { useState, useCallback } from "react";
-import { isWallet } from "../../SignerIdent";
-import { AccountState } from "../Account/types";
+import { isWallet } from "@thecointech/utilities/SignerIdent";
 import { useAccountApi } from "../Account/reducer";
 
 import styles from "./styles.module.less";
+import { AccountState } from '@thecointech/account';
 
 interface OwnProps {
   account: AccountState;

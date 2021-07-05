@@ -1,5 +1,5 @@
 
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 import { ConnectContract } from '@thecointech/contract';
 
 const walletName = 'BrokerTransferAssistant';

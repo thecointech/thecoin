@@ -1,6 +1,7 @@
 import { IsValidAddress } from "@thecointech/utilities";
 import { ReducersMapObject, AnyAction, Reducer } from "redux";
-import { AccountMap, AccountMapState } from ".";
+import { AccountMapState } from ".";
+import { AccountMap } from '@thecointech/account';
 
 // AccountMap-specific reducer.  Allows sharing state across the AccountMap and accounts
 export const mappedReducer = (accountMapReducer: Reducer, accountReducers: ReducersMapObject) => {

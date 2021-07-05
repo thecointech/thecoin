@@ -1,7 +1,8 @@
 import { fetchNewCoinRates, FinnhubData } from "../FinnHub";
 import { RateOffsetFromMarket, CoinUpdateInterval, CoinRate } from "./types";
-import { NextOpenTimestamp } from '@thecointech/utilities/MarketStatus';
+import { nextOpenTimestamp } from '@thecointech/market-status';
 import { alignToNextBoundary } from "./fetchUtils";
+import { DateTime } from 'luxon';
 
 export function fetchCoinData(latestUntil: number) {
   // we fetch from 3.5 mins prior to latest validity.
@@ -66,7 +67,7 @@ export async function findValidUntil(lastValidTill: number)
   let maxValidityWait = validTill + 7 * 24 * 60 * 60 * 1000;
   while (validTill < maxValidityWait) {
     // Ensure the market open
-    const nextOpen = await NextOpenTimestamp(new Date(validTill), 0);
+    const nextOpen = await nextOpenTimestamp(DateTime.fromMillis(validTill), 0);
     // If no update, then our value is good as-is
     if (nextOpen == validTill)
       return validTill;

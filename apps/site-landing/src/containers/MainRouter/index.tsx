@@ -9,6 +9,7 @@ import { Compare } from 'containers/Compare';
 import { Confirm } from 'containers/Subscribe/Confirm';
 import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
+import { Blog } from 'containers/Blog';
 
 export const MainRouter = () => {
   return (
@@ -20,6 +21,7 @@ export const MainRouter = () => {
       <Route path="/wedomore" component={WeDoMore} />
       <Route path="/compare" component={Compare} />
       <Route path="/FAQ" component={HelpDocs} />
+      <Route path="/blog" component={Blog} />
       <Route component={NotFoundPage} />
     </Switch>
   )
