@@ -1,15 +1,9 @@
-jest.mock('@thecointech/email');
-
 import { SendWelcomeEmail } from '@thecointech/email';
-import { mocked } from 'ts-jest/utils'
 import { signup, update, details } from './Newsletter'
 import { init } from '@thecointech/firestore/mock';
 
-const mockedSend = mocked(SendWelcomeEmail);
-
 beforeEach(() => {
   jest.resetAllMocks();
-  mockedSend.mockReturnValue(Promise.resolve(true))
   init({});
 })
 
@@ -20,7 +14,7 @@ const RandomEmail = () => `${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 test("Can sign up for email", async () => {
   const email = RandomEmail();
   const id = await signup(email)
-  expect(mockedSend).toBeCalledWith(email, id);
+  expect(SendWelcomeEmail).toBeCalledWith(email, id);
   expect(id).toBeTruthy();
 });
 
@@ -65,7 +59,7 @@ it("Resends on repeated signup", async () => {
   await signup(email)
   // We should only
   // However, we want to send an email each time
-  expect(mockedSend).toBeCalledTimes(3);
+  expect(SendWelcomeEmail).toBeCalledTimes(3);
 });
 
 

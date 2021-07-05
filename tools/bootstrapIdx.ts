@@ -10,7 +10,7 @@ import { Resolver } from 'did-resolver';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import { DID } from 'dids';
 
-const idxFolder = join(__dirname, '..', 'libs', 'shared', 'src', 'containers', 'IDX');
+const idxFolder = join(__dirname, '..', 'libs', 'IDX', 'src');
 const schemaPath = `${idxFolder}/config.${process.env.CONFIG_NAME}.json`;
 const { writeFile, readFile } = promises;
 

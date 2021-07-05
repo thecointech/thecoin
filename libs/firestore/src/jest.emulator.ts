@@ -15,4 +15,3 @@ export function filterByEmulator() {
   console.log("Connecting to Firebase on port: " + process.env.FIRESTORE_EMULATOR_PORT);
   return true;
 }
-

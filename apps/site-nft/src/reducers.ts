@@ -2,12 +2,11 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
- import { combineReducers, Reducer, ReducersMapObject } from 'redux';
- import { connectRouter } from 'connected-react-router';
- import { configureStore, history } from '@thecointech/shared/store';
+import { combineReducers, Reducer, ReducersMapObject } from 'redux';
+import { connectRouter } from 'connected-react-router';
+import { configureStore, history } from '@thecointech/shared/store';
 import { buildAccountStoreReducer, AccountMapState } from '@thecointech/shared/containers/AccountMap';
-import { getDevWallets } from 'api/mock/accounts';
-import { readAllAccounts } from '@thecointech/shared/utils/storageSync';
+import { getAllAccounts } from '@thecointech/account/store';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -21,14 +20,10 @@ function createReducer(injectedReducers?: ReducersMapObject): Reducer {
   });
 }
 
-function initialAccounts() : AccountMapState {
-
-  if (process.env.NODE_ENV === 'development') {
-    return getDevWallets();
-  }
+function initialAccounts(): AccountMapState {
   return {
     active: null,
-    map: readAllAccounts()
+    map: getAllAccounts()
   }
 }
 

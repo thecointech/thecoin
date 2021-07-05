@@ -29,7 +29,6 @@
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
-    "test": "yarn jest",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev:live:migrate",
     "dev:live:emulator": "start yarn truffle develop",
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
@@ -49,7 +48,7 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/accounts": "^0.2.13",
+    "@thecointech/signers": "^0.2.13",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",
@@ -58,7 +57,7 @@
     "typechain": "^4.0.2"
   },
   "dependencies": {
-    "ethers": "4.0.47"
+    "ethers": "4.0.48"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

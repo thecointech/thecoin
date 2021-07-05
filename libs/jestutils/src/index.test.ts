@@ -8,11 +8,9 @@ let testFnFalseExec = false;
 let testFnRan = false;
 
 afterAll(() => {
-  console.log('Testing that all fns ran');
   if (!(defaultRan && boolRan && testFnTrueExec && testFnFalseExec && testFnRan)) {
     throw new Error("Functions not completed appropriately");
   }
-  console.log('All tests ran appropriately');
 });
 
 describe("These functions should run by default",

@@ -19,8 +19,6 @@ import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { createRef } from 'react';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
-import { addDevLiveAccounts } from 'api/mock/accounts';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -29,21 +27,11 @@ import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
-let hasRun = false;
-
 export const App = () => {
   useFxRatesStore();
   useSidebar();
   const location = useLocation();
   const contextRef = createRef<HTMLDivElement>();
-
-  if (process.env.CONFIG_NAME === 'devlive') {
-    const accountsApi = useAccountStoreApi();
-    if (!hasRun) {
-      addDevLiveAccounts(accountsApi);
-      hasRun = true;
-    }
-  }
 
   return (
     <MediaContextProvider>

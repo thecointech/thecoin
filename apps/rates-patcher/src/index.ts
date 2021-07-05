@@ -3,8 +3,8 @@ dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
 
 // Imports the Google Cloud client library
 import { Datastore } from '@google-cloud/datastore';
-import { NextOpenTimestamp } from '@thecointech/utilities/MarketStatus';
-
+import { nextOpenTimestamp } from '@thecointech/market-status';
+import { DateTime } from 'luxon';
 import { ExchangeRate, FXRate, CoinUpdateInterval, RateOffsetFromMarket, FinnhubData, FinnhubRates, FinnhubFxQuotes } from './types';
 import Axios from 'axios';
 import { log } from './logging';
@@ -148,7 +148,7 @@ async function update(count: number) : Promise<boolean> {
     log.trace(`New CAD sell rate: ${sell}`);
 
     validUntil = validUntil + CoinUpdateInterval
-    const nextOpen = await NextOpenTimestamp(new Date(validUntil), 90 * 1000)
+    const nextOpen = await nextOpenTimestamp(DateTime.fromMillis(validUntil), 90 * 1000)
     log.debug(`NextValid: ${new Date(validUntil)} -> ${new Date(nextOpen)}`);
     validUntil = nextOpen;
     coinRate.ValidUntil = nextOpen;

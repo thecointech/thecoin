@@ -62,9 +62,7 @@ libs/nft-contract/migrations/types
 libs/nft-contract/src/types
 libs/nft-contract/devlive.tokens.json
 
-libs/shared/src/containers/IDX/config.json
-libs/shared/src/containers/IDX/config.devlive.json
-
+libs/idx/src/config.devlive.json
 
 apps/site-nft/src/translations
 apps/site-nft/lang
