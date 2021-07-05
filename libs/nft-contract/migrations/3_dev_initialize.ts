@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 import { MigrationStep } from './step';
-import { getSigner } from '@thecointech/accounts';
+import { getSigner } from '@thecointech/signers';
 import { getTokenClaimCode } from '../src/tokenCodes';
 import { join } from 'path';
 

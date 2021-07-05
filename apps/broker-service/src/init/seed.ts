@@ -4,7 +4,7 @@
 import { NormalizeAddress } from "@thecointech/utilities";
 import { createReferree, createReferrer } from "@thecointech/broker-db/referrals";
 import { setUserVerified, getUserVerified } from "@thecointech/broker-db/user";
-import { getSigner } from "@thecointech/accounts";
+import { getSigner } from "@thecointech/signers";
 import { DateTime } from "luxon";
 import { sign } from "@thecointech/utilities/SignedMessages";
 

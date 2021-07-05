@@ -1,6 +1,6 @@
 import { IDX } from "@ceramicstudio/idx";
-import { loadEncrypted, setEncrypted } from "../IDX";
-import { AccountDetails } from "./types";
+import { loadEncrypted, setEncrypted } from "@thecointech/idx";
+import { AccountDetails } from "@thecointech/account";
 
 export const setDetails = (idx: IDX, details: AccountDetails) =>
   setEncrypted(idx, "details", details);

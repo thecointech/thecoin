@@ -1,10 +1,11 @@
 import React from "react";
 import { Dropdown } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
-import { useAccountStoreApi, useAccountStore, AccountState } from "@thecointech/shared/containers/AccountMap";
+import { useAccountStoreApi, useAccountStore } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
+import { AccountState } from '@thecointech/account';
 
 
 const titleMsg = { id: 'app.accountSwitcher.login', defaultMessage:'LOG IN'};
