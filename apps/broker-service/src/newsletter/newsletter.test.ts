@@ -1,6 +1,6 @@
 import { SendWelcomeEmail } from '@thecointech/email';
 import { signup, update, details } from './Newsletter'
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 
 beforeEach(() => {
   jest.resetAllMocks();
