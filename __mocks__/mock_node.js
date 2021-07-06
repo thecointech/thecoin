@@ -11,15 +11,37 @@ console.warn('--- Injecting TC mocks ---');
 require("./shim_jest");
 
 var Module = require('module').Module;
-var nodeModulePaths= Module._nodeModulePaths; //backup the original method
-Module._nodeModulePaths = function(from) {
-  // call the original method
-  const original = nodeModulePaths.call(this, from);
-  // No circular loop - don't re-import from mocks from within mocks
-  return from.includes('__mocks__')
-    ? original
-    : [
-      __dirname,
-      ...original,
-    ]
-};
+
+if (process.env.SETTINGS !== 'live') {
+  //
+  // If running in dev mode, use all available mocks
+  //
+  var nodeModulePaths= Module._nodeModulePaths; //backup the original method
+  Module._nodeModulePaths = (from) => {
+    // call the original method
+    const original = nodeModulePaths.call(this, from);
+    // No circular loop - don't re-import from mocks from within mocks
+    return from.includes('__mocks__')
+      ? original
+      : [
+        __dirname,
+        ...original,
+      ]
+  };
+}
+else {
+  //
+  // If this is a live setting, we only mock the bank API
+  // (and gmail?)
+  //
+  var resolveFilename = Module._resolveFilename;
+  const mockedModules = [
+    "@thecointech/rbcapi",
+    "googleapis",
+  ]
+  Module._resolveFilename = (request, parent, isMain) => {
+    return (mockedModules.find(m => request.startsWith(m)) && !parent.path.includes('__mocks__'))
+      ? `${__dirname}/@thecointech/rbcapi.ts`
+      : resolveFilename(request, parent, isMain)
+  }
+}
