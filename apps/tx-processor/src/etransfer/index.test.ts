@@ -2,7 +2,7 @@
 // It's not actually used, so any file will do (ie - this one...)
 process.env.DB_ACTION_PK_PATH = __filename;
 import { processUnsettledETransfers } from '.'
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '@thecointech/tx-processing';
 import { DateTime } from 'luxon';
