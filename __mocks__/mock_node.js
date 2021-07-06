@@ -35,13 +35,14 @@ else {
   // (and gmail?)
   //
   var resolveFilename = Module._resolveFilename;
-  const mockedModules = [
-    "@thecointech/rbcapi",
-    "googleapis",
-  ]
+  const mockedModules = ["@thecointech/rbcapi"];
+  // In dev:live, we do not call off the machine
+  if (process.env.CONFIG_NAME === 'devlive')
+    mockedModules.push("googleapis", "google-auth-library");
+
   Module._resolveFilename = (request, parent, isMain) => {
     return (mockedModules.find(m => request.startsWith(m)) && !parent.path.includes('__mocks__'))
-      ? `${__dirname}/@thecointech/rbcapi.ts`
+      ? `${__dirname}/${request}.ts`
       : resolveFilename(request, parent, isMain)
   }
 }
