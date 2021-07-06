@@ -202,6 +202,10 @@
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
+  "VVutoW": {
+    "defaultMessage": "Blog",
+    "description": "site.MainNavigation.blog: Title for the Blog entry in the menu"
+  },
   "VdA9HP": {
     "defaultMessage": "Your benefits",
     "description": "site.MainNavigationMobile.yourbenefits: Title for the Your benefits entry in the menu"
@@ -264,10 +268,6 @@
   "eQb99l": {
     "defaultMessage": "The remaining 1/10th is used to pay off our carbon debt",
     "description": "site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page"
-  },
-  "eZq1w1": {
-    "defaultMessage": "Blog",
-    "description": "site.MainNavigation.blog: Title for the Blog entry in the menu"
   },
   "fajUfc": {
     "defaultMessage": "We do more",
