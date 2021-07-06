@@ -7,11 +7,13 @@ import { Header, Icon } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
 import { AlternateLang, ArticleDocument } from "components/Prismic/types";
 import { useHistory } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 
-const backLink = { id:"site.blog.backLink",
-                defaultMessage:"Go back",
-                description:"Link to go back from article" };
+const translations = defineMessages({
+  backLink : {
+    defaultMessage: 'Go back',
+    description: 'site.blog.backLink: Link to go back from article'}
+});
 
 function getTranslatedArticle(filtered:ArticleDocument[],docs:ArticleDocument[]) : (ArticleDocument[]){
   // -- Look for translated version --
@@ -38,7 +40,7 @@ export const Article = ( props: { match: { params: { articleId: string; }; }; } 
   return <>{
     filtered.map(articleData => (    
       <div className={styles.containerArticle} key={articleData.id}>
-        <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left"/><FormattedMessage {...backLink} /></a></div>
+        <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left"/><FormattedMessage {...translations.backLink} /></a></div>
         { articleData.data.image_before_title.url ? <img src={ articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt}/> : "" }
         { <Header as={"h2"} className="x6spaceBefore">{articleData.data.title ? articleData.data.title[0].text : ""}</Header> }
         { RichText.render(articleData.data.content as unknown as RichTextBlock[]) }
