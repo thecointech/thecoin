@@ -1,23 +1,17 @@
 jest.mock("./emulator");
 jest.mock("./server");
-jest.mock("./mock");
 
-import { init } from '.';
+import { init, isMockedDb } from '.';
 import { init as init_debug } from './emulator';
 import { init as init_server } from './server';
-import { init as init_mock } from './mock';
-
-import data from './mock.data.json';
-import { isMockedDb } from './types';
 
 describe('We choose the right instance of firestore', () => {
-
-
   beforeEach(() => {
     // ensure we don't leak configuration each test
     //jest.resetModules()
     process.env = {};
   })
+
   it('chooses right on the server', async () => {
     process.env["GAE_ENV"] = "someval";
     await init({project: "utilities"});
@@ -36,26 +30,22 @@ describe('We choose the right instance of firestore', () => {
     expect(init_server).toBeCalled();
   })
 
-  it("chooses the right when offline-only data provided", async () => {
+  it("throws if we supply mocked data here", async () => {
     // no matter what other options there are, we only choose mock
     process.env.GAE_ENV = 'true';
     process.env.GOOGLE_APPLICATION_CREDENTIALS = 'true';
     process.env.FIRESTORE_EMULATOR_PORT = 'true';
-    // with mocked data
-    await init(data);
-    expect(init_mock).toBeCalled();
+    await expect(init({})).rejects.toThrow();
   })
-
-  it ('can differentiate mocked data', () => {
-    if (!isMockedDb(data)) {
-      throw new Error('isMocked failed');
-    }
-    if (isMockedDb({ project: 'somevalue' })) {
-      throw new Error('isMocked failed');
-    }
-  })
-
 })
 
+it ('can differentiate mocked data', () => {
+  if (!isMockedDb({})) {
+    throw new Error('isMocked failed');
+  }
+  if (isMockedDb({ project: 'somevalue' })) {
+    throw new Error('isMocked failed');
+  }
+})
 
 

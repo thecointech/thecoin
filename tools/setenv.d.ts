@@ -1,1 +1,1 @@
-export function getEnvFile(cfgName): string;
+export function getEnvFile(cfgName?: string): string;

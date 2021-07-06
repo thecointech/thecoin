@@ -21,7 +21,7 @@ it('can update Coin rates', async () => {
   await initCoinLatest(now);
 
   // Update rates for 6 hours.
-  // this should throw errors because it will update multiple
+  // this should log errors because it will update multiple
   // so we change the console warn/error fn's to keep output clean
   console.warn = jest.fn();
   console.error = jest.fn();

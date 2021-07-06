@@ -1,7 +1,7 @@
 import { BuildVerifiedXfer } from "@thecointech/utilities/VerifiedTransfer";
 import { certifiedTransfer } from "./VerifiedTransfer";
 import { Wallet } from "ethers";
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 import {current} from '../status';
 
 beforeEach(async () => {

@@ -40,6 +40,8 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
     .filter(line => !(line.startsWith('WALLET_') && !line.includes('_ADDRESS')))
     .filter(line => !line.startsWith('CERAMIC_'))
     .filter(line => !line.startsWith('GITHUB_'))
+    .filter(line => !line.endsWith('_SERVICE_ACCOUNT'))
+    .filter(line => line !== 'STORAGE_PATH')
     .filter(line => !/^\s*$/.test(line))
     .map(line => {
       const [key, val] = line.split('=')
