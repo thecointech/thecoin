@@ -3,10 +3,31 @@ import { Button, CheckboxProps, Form, InputOnChangeData } from 'semantic-ui-reac
 import queryString from 'query-string';
 import { GetNewsletterApi } from 'api';
 import { useLocation } from 'react-router';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 import { SubscriptionDetails } from '@thecointech/broker-cad';
 import { log } from '@thecointech/logging';
+
+const translations = defineMessages({
+  email : {
+    defaultMessage: 'Email',
+    description: 'site.subscribe.confirmation.form.email: label for email field'},
+  firstname : {
+    defaultMessage: 'Given Name',
+    description: 'site.subscribe.confirmation.form.firstname: label for first name field'},
+  lastname : {
+    defaultMessage: 'Family Name',
+    description: 'site.subscribe.confirmation.form.lastname: label for last name field'},
+  country : {
+    defaultMessage: 'Country',
+    description: 'site.subscribe.confirmation.form.country: label for last name field'},
+  city : {
+    defaultMessage: 'City',
+    description: 'site.subscribe.confirmation.form.city: label for city field'},
+  subcheckbox : {
+    defaultMessage: 'I want to receive the newsletter',
+    description: 'site.subscribe.confirmation.form.subcheckbox: label for subcheckbox field'}
+});
 
 const BlankSubsData : SubscriptionDetails = {
   email: "",
@@ -33,12 +54,12 @@ export const FormSubscribed = () => {
   }
 
   let intl = useIntl();
-  const emailField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.email', defaultMessage: 'Email' });
-  const firstnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.firstname', defaultMessage: 'Given Name' });
-  const lastnameField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.lastname', defaultMessage: 'Family Name' });
-  const countryField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.country', defaultMessage: 'Country' });
-  const cityField = intl.formatMessage({ id: 'site.subscribe.confirmation.form.city', defaultMessage: 'City' });
-  const subCheckbox = intl.formatMessage({ id: 'site.subscribe.confirmation.form.subcheckbox', defaultMessage: 'I want to receive the newsletter' });
+  const emailField = intl.formatMessage(translations.email);
+  const firstnameField = intl.formatMessage(translations.firstname);
+  const lastnameField = intl.formatMessage(translations.lastname);
+  const countryField = intl.formatMessage(translations.country);
+  const cityField = intl.formatMessage(translations.city);
+  const subCheckbox = intl.formatMessage(translations.subcheckbox);
 
   return (
     <>

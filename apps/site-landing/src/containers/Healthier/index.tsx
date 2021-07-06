@@ -16,8 +16,6 @@ import { useWindowDimensions } from '@thecointech/shared/components/WindowDimens
 
 import styles from './styles.module.less';
 
-
-
 const translations = defineMessages({
   title : {
     defaultMessage: 'Earth’s Healthier',
