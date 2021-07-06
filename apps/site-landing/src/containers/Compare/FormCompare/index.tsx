@@ -1,16 +1,34 @@
 import * as React from 'react';
 import { Button } from 'semantic-ui-react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { RangeFieldAndScale } from '@thecointech/site-base/components/RangeFieldAndScale';
 
 import styles from './styles.module.less';
 
+const translations = defineMessages({
+    labelStartingValueText : {
+      defaultMessage: 'Starting value:',
+      description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page'},
+    labelStartingValueCurrencyText : {
+      defaultMessage: 'CAD',
+      description: 'site.compare.label.rangeStartingCurrency: label for Starting Value Currency Text field in the compare page'},
+    rangeDuration : {
+      defaultMessage: 'Duration:',
+      description: 'site.compare.label.rangeDuration: label for range duration in the compare page'},
+    rangeDurationYear : {
+      defaultMessage: 'Years',
+      description: 'site.compare.label.rangeDurationYear: label for range Duration Year field in the compare page'},
+    button : {
+        defaultMessage: 'Show Me',
+        description: 'site.compare.button: label for the button in the compare page'}
+  });
+
 export const FormCompare = () => {
 
     const intl = useIntl();
-    const labelStartingValue = intl.formatMessage({ id: 'site.compare.label.rangeStarting', defaultMessage:'Starting value:'});
-    const labelStartingValueCurrency = intl.formatMessage({ id: 'site.compare.label.rangeStartingCurrency', defaultMessage:'CAD'});
+    const labelStartingValue = intl.formatMessage(translations.labelStartingValueText);
+    const labelStartingValueCurrency = intl.formatMessage(translations.labelStartingValueCurrencyText);
     const scaleStartingType = "currency";
     const minRangeStartingValue = 1000;
     const maxRangeStartingValue = 100000;
@@ -19,8 +37,8 @@ export const FormCompare = () => {
     const medRangeScaleStartingValue = 5000;
     const maxRangeScaleStartingValue = 100000;
 
-    const labelDurationValue = intl.formatMessage({ id: 'site.compare.label.rangeDuration', defaultMessage:'Duration:'});
-    const labelDurationYear = intl.formatMessage({ id: 'site.compare.label.rangeDurationYear', defaultMessage:' Years'});
+    const labelDurationValue = intl.formatMessage(translations.rangeDuration);
+    const labelDurationYear = intl.formatMessage(translations.rangeDurationYear);
     const scaleDurationType = "unit";
     const minRangeDurationValue = 1;
     const maxRangeDurationValue = 80;
@@ -55,9 +73,7 @@ export const FormCompare = () => {
             maxRangeScale={maxRangeScaleDurationValue}/>
 
         <Button secondary className={ `${styles.buttonContainer} x16spaceBefore` }>
-          <FormattedMessage id="site.compare.button"
-                            defaultMessage="Show Me"
-                            description="Button for the graph page" />
+          <FormattedMessage {...translations.button} />
         </Button>
       </div>
     );
