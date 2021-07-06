@@ -1,5 +1,5 @@
 import { Settings } from "luxon";
-import { init as initlog} from '@thecointech/logging';
+import { init as initlog } from '@thecointech/logging';
 import { init as initdb } from '@thecointech/firestore';
 import { seed } from "./seed";
 
@@ -9,11 +9,9 @@ export async function init() {
   // Logging (todo: connect to logs aggregator)
   initlog("broker-cad");
   // connect to DB
-  await initdb({project: "broker-cad"});
+  await initdb({ project: "broker-cad" });
 
   if (process.env.NODE_ENV !== "production") {
-    if (process.env.SETTINGS === "live") {
-      await seed();
-    }
+    await seed();
   }
 }
