@@ -66,20 +66,21 @@ function checkValidity(key: RateKey, newRate: RateType)
 
   if (newRate.validTill < current.validTill) {
     // Our new rate is no more valid than the current one: bail
-    log.error('New rate being set for {FxKey} with validUntil: new {ValidUntil} < current {ValidUntil}',
-      key, DateTime.fromMillis(newRate.validTill), DateTime.fromMillis(current.validTill));
+    log.error({FxKey: key, CurrentTill: current.validTill, NewTill: newRate.validTill },
+      'New rate being set for {FxKey} with validUntil: new {NewTill} < current {CurrentTill}');
     return false;
   }
   else if (newRate.validFrom < current.validTill) {
-    log.error('New rate being set for {FxKey} with validity overlap: new {ValidFrom} < current {ValidUntil}',
+    log.error({FxKey: key, CurrentTill: current.validTill, NewFrom: newRate.validFrom },
+      'New rate being set for {FxKey} with validity overlap: new {NewFrom} < current {CurrentTill}',
       key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(current.validTill));
     // In this case, we still increase our validity, so modify the incoming rate
     // to not overlap and continue
     newRate.validFrom = current.validTill;
   }
   else if (newRate.validFrom != current.validTill && current.validTill != 0) {
-    log.error('New rate being set for {FxKey} with validity gap: new {ValidFrom} != current {ValidUntil}',
-      key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(current.validTill));
+    log.error({FxKey: key, CurrentTill: current.validTill, NewFrom: newRate.validFrom},
+      'New rate being set for {FxKey} with validity gap: new {NewFrom} != current {CurrentTill}');
     // In this case, we have updated too late and the previous rate expired
     // We do not modify the current rate, instead extend the previous rates
     // validity period to meet the new reates validUntil
@@ -91,17 +92,18 @@ function checkValidity(key: RateKey, newRate: RateType)
   // We -must- be valid for at least 1 minute
   if (newRate.validTill - newRate.validFrom < 60000)
   {
-    log.error('New rate being set for {FxKey} with no validity: {ValidFrom} >= {ValidUntil}',
-      key, DateTime.fromMillis(newRate.validFrom), DateTime.fromMillis(newRate.validTill));
+    log.error({FxKey: key, NewFrom: newRate.validFrom, NewTill: newRate.validTill },
+      'New rate being set for {FxKey} with no validity: {NewFrom} >= {NewTill}');
     return false;
   }
 
   // if we don't have at least 5 seconds before the new rate comes into effect, then warn
   // there isn't much we can do about this, but we should be tracking possible errors
-  if (newRate.validFrom - Date.now() < 5000)
+  const now = Date.now();
+  if (newRate.validFrom - now < 5000)
   {
-    log.warn('New rate for {FxKey} takes effect too quickly: {ValidFrom} - now < 5s',
-      key, DateTime.fromMillis(newRate.validTill))
+    log.warn({FxKey: key, NewTill: newRate.validTill },
+      `New rate {FxKey} comes into force without sufficient time to allow updates to propagate: {NewTill} - ${now} < 5s`)
   }
   return true;
 }

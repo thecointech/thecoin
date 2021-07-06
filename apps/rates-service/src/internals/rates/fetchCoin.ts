@@ -3,13 +3,19 @@ import { RateOffsetFromMarket, CoinUpdateInterval, CoinRate } from "./types";
 import { nextOpenTimestamp } from '@thecointech/market-status';
 import { alignToNextBoundary } from "./fetchUtils";
 import { DateTime } from 'luxon';
+import { log } from '@thecointech/logging';
 
-export function fetchCoinData(latestUntil: number) {
-  // we fetch from 3.5 mins prior to latest validity.
+export async function fetchCoinData(latestUntil: number) {
+  // we fetch from 6.5 mins prior to latest validity.
   // This is to ensure we include the candle starting 1.5 mins
   // before our last validity expired
-  const fetchTimestamp = latestUntil - 6.5 * (60 * 1000);
-  return fetchNewCoinRates("1", fetchTimestamp, Date.now());
+  const now = DateTime.now();
+  // We can only fetch
+  let fetchTimestamp = Math.max(
+    latestUntil - 6.5 * (60 * 1000),
+    now.minus({days: 3}).toMillis()
+  );
+  return fetchNewCoinRates("1", fetchTimestamp, now.toMillis());
 }
 
 export async function fetchCoinRate(latestValidUntil: number, now: number) {
@@ -20,7 +26,8 @@ export async function fetchCoinRate(latestValidUntil: number, now: number) {
   while (nextValid < now)
   {
     const coinRate = findRateFor(nextValid, data);
-    nextValid = coinRate.validTill = await findValidUntil(nextValid);
+    const minValidity = Math.max(nextValid, data.t[0] * 1000);
+    nextValid = coinRate.validTill = await findValidUntil(minValidity);
     rates.push(coinRate);
   }
 
@@ -30,27 +37,36 @@ export async function fetchCoinRate(latestValidUntil: number, now: number) {
 
 export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 
+  const response = (idx: number) => ({
+    buy: data.l[idx] / 1000,
+    sell: data.h[idx] / 1000,
+    validFrom: lastExpired,
+    validTill: 0
+  })
+
   // We have per-minute values.  So round back to the
   // last minute, then multiply back to seconds
   const boundary = Math.floor(lastExpired / (60 * 1000)) * 60;
-  //
+
+  // If we are out-of-range, we return the earliest
+  // value we have.  This happens on init or if
+  // potentially google services went down for several days
+  if (boundary < data.t[0]) {
+    log.warn(`Out of range rates when updating from {lastExpired}`);
+    return response(0);
+  }
+
   for (var i = 1; i < 6; i++) {
     // saerch back 1m at a time
     const periodStart = boundary - (i * 60);
     const idx = data.t.indexOf(periodStart);
     if (idx >= 0) {
-      return {
-        buy: data.l[idx] / 1000,
-        sell: data.h[idx] / 1000,
-        validFrom: lastExpired,
-        validTill: 0
-      }
+      return response(idx);
     }
-    //log.debug("Could not find entry for: " + periodStart);
   }
 
-  //const cnt = data1m.t?.length ?? 0;
-  //log.fatal(`Could not find coin rate for: ${ts}.  \nWe have ${data1m.t.length} rates, from ${new Date(data1m.t[0] * 1000)} => ${new Date(data1m.t[cnt - 1] * 1000)}`)
+  const cnt = data.t?.length ?? 0;
+  log.fatal(`Could not find coin rate for: ${lastExpired}.  \nWe have ${data.t.length} rates, from ${DateTime.fromSeconds(data.t[0])} => ${DateTime.fromSeconds(data.t[cnt - 1])}`);
   throw new Error("RateNotFound");
 }
 
