@@ -12,7 +12,7 @@ require("./shim_jest");
 
 var Module = require('module').Module;
 
-if (process.env.CONFIG_NAME === 'dev') {
+if (process.env.CONFIG_NAME === 'development') {
   //
   // If running in dev mode, use all available mocks
   //

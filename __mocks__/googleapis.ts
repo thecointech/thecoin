@@ -15,7 +15,7 @@ export namespace google {
         }
       }
       getToken = () => ({tokens: []});
-      generateAuthUrl = () => process.env.BROKER_GDRIVE_CLIENT_URI
+      generateAuthUrl = () => "https://accounts.google.com/SomeKindOfKeyHere"
     }
   }
 

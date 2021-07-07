@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@thecointech/types';
 import { FormattedMessage } from 'react-intl';
-import { GetSecureApi } from 'api';
+import { GetSecureApi, clientUri } from 'api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
 import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from 'containers/StoreOnline/Google/googleUtils';
@@ -111,7 +111,7 @@ export const Restore = () => {
               <img src={ google } />
               <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
               <AccountList wallets={wallets} />
-            </ConnectButton>  
+            </ConnectButton>
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
@@ -213,7 +213,7 @@ async function fetchStoredWallets(token: string) {
   // that means it's a single-use token and we can't list/select/read
   try {
     const secureApi = GetSecureApi();
-    const wallets = await secureApi.googleRetrieve({ token });
+    const wallets = await secureApi.googleRetrieve(clientUri, { token });
     return wallets.data.wallets;
   } catch (err) {
     console.error(err);

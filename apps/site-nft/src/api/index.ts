@@ -6,3 +6,5 @@ const NftServiceAddress = process.env.URL_SERVICE_NFT;
 
 export const GetNftApi = () => new NFTApi(undefined, NftServiceAddress);
 export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
+
+export const clientUri = `${window.location.origin}/gauth`;
