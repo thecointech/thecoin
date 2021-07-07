@@ -15,3 +15,5 @@ export const GetDirectTransferApi = () => new DirectTransferApi(undefined, Broke
 export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddress);
 export const GetReferrersApi = () => new ReferralsApi(undefined, BrokerCADAddress);
 export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
+
+export const clientUri = `${window.location.origin}/gauth`;

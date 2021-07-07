@@ -1,5 +1,5 @@
 import { GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult } from '@thecointech/types';
-import { Controller, Body, Route, Get, Put, Response, Tags } from '@tsoa/runtime';
+import { Controller, Body, Route, Get, Put, Response, Tags, Query } from '@tsoa/runtime';
 import { getAuthUrl, storeOnGoogle, listWallets, fetchWallets } from '../secure/gdrive'
 import { BoolResponse } from '../types';
 
@@ -15,9 +15,9 @@ export class SecureController extends Controller {
   @Get("google")
   @Response('200', 'Google authorization URL')
   @Response('400', 'Bad request')
-  async googleAuthUrl(): Promise<GoogleAuthUrl> {
+  async googleAuthUrl(@Query() clientUri: string): Promise<GoogleAuthUrl> {
     try {
-      const url = getAuthUrl();
+      const url = getAuthUrl(clientUri);
       return { url };
     }
     catch (err) {
@@ -35,9 +35,9 @@ export class SecureController extends Controller {
   @Put("google/list")
   @Response('200', 'Account successfully listed')
   @Response('405', 'Permission Denied')
-  async googleList(@Body() token: GoogleToken): Promise<GoogleListResult> {
+  async googleList(@Query() clientUri: string, @Body() token: GoogleToken): Promise<GoogleListResult> {
     try {
-      const wallets = await listWallets(token);
+      const wallets = await listWallets(clientUri, token);
       return { wallets };
     }
     catch (err) {
@@ -55,10 +55,10 @@ export class SecureController extends Controller {
   @Put("google/put")
   @Response('200', 'Account successfully stored')
   @Response('405', 'Permission Denied')
-  async googlePut(@Body() account: GoogleStoreAccount): Promise<BoolResponse> {
+  async googlePut(@Query() clientUri: string, @Body() account: GoogleStoreAccount): Promise<BoolResponse> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await storeOnGoogle(account);
+        const result = await storeOnGoogle(clientUri, account);
         resolve({
           success: result
         });
@@ -77,9 +77,9 @@ export class SecureController extends Controller {
    * returns GoogleGetResult
    **/
   @Put("google/get")
-  async googleRetrieve(@Body() request: GoogleToken): Promise<GoogleGetResult> {
+  async googleRetrieve(@Query() clientUri: string, @Body() request: GoogleToken): Promise<GoogleGetResult> {
     try {
-      const wallets = await fetchWallets(request);
+      const wallets = await fetchWallets(clientUri, request);
       return { wallets };
     }
     catch (err) {

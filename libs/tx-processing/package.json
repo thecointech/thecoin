@@ -49,7 +49,8 @@
     "@thecointech/broker-db": "^0.2.14",
     "@thecointech/rbcapi": "^0.2.14",
     "@thecointech/tx-gmail": "^0.2.14",
-    "@thecointech/utilities": "^0.2.14"
+    "@thecointech/utilities": "^0.2.14",
+    "@thecointech/market-status": "*"
   },
   "devDependencies": {
     "jest": "*"

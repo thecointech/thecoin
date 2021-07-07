@@ -1,4 +1,4 @@
-import { GetSecureApi } from 'api';
+import { clientUri, GetSecureApi } from 'api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { getStoredAccountData } from '@thecointech/account/store';
 import messages from './messages';
@@ -135,7 +135,7 @@ async function completeStore(token: string, address: string) {
   }
 
   try {
-    const res = await secureApi.googlePut(request);
+    const res = await secureApi.googlePut(clientUri, request);
     console.log("got: " + JSON.stringify(res));
     return res.status === 200 && res.data;
   }

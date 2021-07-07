@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { GetSecureApi } from "api";
+import { clientUri, GetSecureApi } from "api";
 
 export enum UploadState {
   Waiting,
@@ -13,7 +13,7 @@ export enum UploadState {
 export async function fetchGAuthUrl() {
   try {
     const secureApi = GetSecureApi();
-    const gauth = await secureApi.googleAuthUrl();
+    const gauth = await secureApi.googleAuthUrl(clientUri);
     if (gauth?.data?.url) {
       return gauth.data.url;
     }
