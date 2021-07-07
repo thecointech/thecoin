@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.7",
+  "version": "0.2.14",
   "description": "TheCoin: Account definition & storage",
   "keywords": [
     "TheCoin",
@@ -43,9 +43,9 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "*",
-    "@thecointech/tx-blockchain": "*",
-    "@thecointech/utilities": "*"
+    "@thecointech/logging": "^0.2.14",
+    "@thecointech/tx-blockchain": "^0.2.14",
+    "@thecointech/utilities": "^0.2.14"
   },
   "devDependencies": {
     "jest": "*"
