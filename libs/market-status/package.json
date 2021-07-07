@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/market-status",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "TheCoin: Basic library to check if/when the stock market is open",
   "keywords": [
     "TheCoin",
