@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { MessageDescriptor } from "react-intl";
 import messages from '../messages';
-import { UxScoredPassword } from "@thecointech/site-base/components/UxScoredPassword";
+import { UxScoredPassword } from "../../../components/UxScoredPassword";
 
 type Props = {
   disabled?: boolean;

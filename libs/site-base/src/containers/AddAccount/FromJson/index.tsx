@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "semantic-ui-react";
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { ButtonPrimary } from '../../../components/Buttons';
 import { UploadWallet, ReadFileData } from "@thecointech/shared/containers/UploadWallet";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";

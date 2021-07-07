@@ -3,9 +3,9 @@ import { Header, Divider } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { isWeb3Enabled } from '@thecointech/shared/utils/detection';
 import styles from './styles.module.less';
-import { Decoration } from 'components/Decoration';
+import { Decoration } from '../Decoration';
 import { FormattedMessage } from 'react-intl';
-import { ButtonPrimary, ButtonSecondary } from '@thecointech/site-base/components/Buttons';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Buttons';
 
 type Props = {
   url: string

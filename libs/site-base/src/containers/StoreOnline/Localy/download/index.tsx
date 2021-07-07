@@ -4,7 +4,7 @@ import { getStoredAccountData } from '@thecointech/account/store';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
-import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
+import { ButtonSecondary } from '../../../../components/Buttons';
 
 
 type MyProps = {

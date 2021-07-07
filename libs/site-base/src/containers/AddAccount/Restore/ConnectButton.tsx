@@ -1,6 +1,6 @@
 import { Form } from "semantic-ui-react"
 import React, { useCallback } from "react"
-import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { ButtonPrimary } from "../../../components/Buttons";
 import { FormattedMessage } from "react-intl";
 
 type Props = {
@@ -22,7 +22,7 @@ export const ConnectButton : React.FC<Props> = (props)=> {
     event?.preventDefault();
     props.onClick();
   }, [props.onClick]);
-  const linkToRestore = props.children 
+  const linkToRestore = props.children
       ?   <a onClick={()=>onClick}>
             {props.children}
           </a>

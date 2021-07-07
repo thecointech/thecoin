@@ -15,8 +15,8 @@ import dropbox from "./images/dropbox.svg";
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
 import { Link } from 'react-router-dom';
-import { Decoration } from 'components/Decoration';
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { Decoration } from '../Decoration';
+import { ButtonPrimary } from '../../../components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",

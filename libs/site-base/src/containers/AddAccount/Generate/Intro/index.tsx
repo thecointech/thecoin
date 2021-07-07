@@ -4,8 +4,8 @@ import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
 import styles from './styles.module.less';
-import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { Decoration } from "../../Decoration";
+import { ButtonPrimary } from "../../../../components/Buttons";
 import { ModalOperation } from "@thecointech/shared/containers/ModalOperation";
 
 const aboveTheTitle = { id:"app.account.generate.aboveTheTitle",
