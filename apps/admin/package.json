@@ -2,7 +2,7 @@
   "name": "@thecointech/admin",
   "private": "true",
   "productName": "THECoin: Admin app",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "A Desktop application to run back-end functionality for THECoin",
   "scripts": {
     "build": "run-s build-main build-renderer",
@@ -132,7 +132,7 @@
     "@thecointech/rbcapi": "^0.2.14",
     "@thecointech/shared": "^0.2.14",
     "@thecointech/store": "^0.2.14",
-    "@thecointech/tx-processing": "^0.2.14",
+    "@thecointech/tx-processing": "^0.2.15",
     "@thecointech/utilities": "^0.2.14",
     "core-js": "^3.1.4",
     "devtron": "^1.4.0",

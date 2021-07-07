@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "keywords": [
@@ -46,8 +46,8 @@
     "@thecointech/email": "^0.2.14",
     "@thecointech/firestore": "^0.2.14",
     "@thecointech/logging": "^0.2.14",
+    "@thecointech/market-status": "^0.2.15",
     "@thecointech/utilities": "^0.2.14",
-    "@thecointech/market-status": "*",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",
     "cors": "^2.8.5",

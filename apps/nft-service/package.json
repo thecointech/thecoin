@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "private": true,
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
