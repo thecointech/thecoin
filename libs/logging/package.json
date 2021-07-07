@@ -34,7 +34,7 @@
   "types": "./build/log_browser.d.ts",
   "dependencies": {
     "browser-bunyan": "^1.6.3",
-    "bunyan": "^1.8.12",
+    "bunyan": "^1.8.13",
     "bunyan-debug-stream": "^2.0.0"
   },
   "devDependencies": {
