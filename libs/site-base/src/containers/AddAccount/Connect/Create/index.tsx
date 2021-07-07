@@ -4,9 +4,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { getWeb3Type } from "@thecointech/shared/utils/detection";
-import { Decoration } from "components/Decoration";
+import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
-import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { ButtonPrimary } from "../../../../components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.connect.create.aboveTheTitle",

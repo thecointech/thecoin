@@ -1,7 +1,6 @@
 import {
   StatusApi,
   BillPaymentsApi,
-  ReferralsApi,
   DirectTransferApi,
   SecureApi,
   ETransferApi,
@@ -13,7 +12,3 @@ export const GetStatusApi = () => new StatusApi(undefined, BrokerCADAddress);
 export const GetBillPaymentsApi = () => new BillPaymentsApi(undefined, BrokerCADAddress);
 export const GetDirectTransferApi = () => new DirectTransferApi(undefined, BrokerCADAddress);
 export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddress);
-export const GetReferrersApi = () => new ReferralsApi(undefined, BrokerCADAddress);
-export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
-
-export const clientUri = `${window.location.origin}/gauth`;

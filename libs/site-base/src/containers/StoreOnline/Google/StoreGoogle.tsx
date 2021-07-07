@@ -1,4 +1,4 @@
-import { clientUri, GetSecureApi } from 'api';
+import { clientUri, GetSecureApi } from '../../../api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { getStoredAccountData } from '@thecointech/account/store';
 import messages from './messages';
@@ -6,8 +6,8 @@ import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { Props as MessageProps } from '@thecointech/site-base/components/MaybeMessage';
-import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
+import { Props as MessageProps } from '../../../components/MaybeMessage';
+import { ButtonSecondary } from '../../../components/Buttons';
 import { Checkbox } from 'semantic-ui-react';
 
 

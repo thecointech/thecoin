@@ -8,7 +8,7 @@ import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import messages from '../messages';
 import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { useHistory } from 'react-router';
-import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import { ButtonPrimary } from '../../../components/Buttons';
 import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from '../styles.module.less';
 

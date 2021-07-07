@@ -5,8 +5,8 @@ import { Header, Container, Grid } from "semantic-ui-react";
 import Confetti from 'react-confetti';
 import styles from './styles.module.less';
 import illustration from './images/illust_congrats.svg';
-import { Decoration } from "components/Decoration";
-import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { Decoration } from "../Decoration";
+import { ButtonPrimary } from "../../../components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.create.congratulations.aboveTheTitle",

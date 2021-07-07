@@ -3,9 +3,9 @@ import { Connect } from "../../Connect";
 import { FormattedMessage } from "react-intl";
 import { Header, Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { Decoration } from "components/Decoration";
+import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
-import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
+import { ButtonPrimary } from "../../../../components/Buttons";
 
 
 const aboveTheTitle = { id:"app.account.connect.existing.aboveTheTitle",
