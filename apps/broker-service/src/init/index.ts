@@ -9,6 +9,9 @@ export async function init() {
   // Logging (todo: connect to logs aggregator)
   initlog("broker-cad");
   // connect to DB
+  if (process.env.BROKER_SERVICE_ACCOUNT) {
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
+  }
   await initdb({ project: "broker-cad" });
 
   if (process.env.NODE_ENV !== "production") {

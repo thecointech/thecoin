@@ -14,6 +14,8 @@ export namespace google {
           access_token: "TEST_TOKEN"
         }
       }
+      getToken = () => ({tokens: []});
+      generateAuthUrl = () => process.env.BROKER_GDRIVE_CLIENT_URI
     }
   }
 
@@ -69,7 +71,7 @@ export namespace google {
     }
   }
 
-  const mockedFiles = [1, 2, 3].map(f => ({
+  const mockedFiles = [0, 1, 2].map(f => ({
     id: f.toString(),
     originalFilename: `wallet${f}.wallet`,
     name: `wallet${f}`,
