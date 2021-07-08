@@ -1,6 +1,6 @@
 import { Form } from "semantic-ui-react"
 import React, { useCallback } from "react"
-import { ButtonPrimary } from "../../../components/Buttons";
+import { ButtonPrimary } from "../../../../components/Buttons";
 import { FormattedMessage } from "react-intl";
 
 type Props = {

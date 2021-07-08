@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@thecointech/types';
 import { FormattedMessage } from 'react-intl';
-import { GetSecureApi, clientUri } from '../../../api';
+import { GetSecureApi, clientUri } from '../../../../api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
-import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../../StoreOnline/Google/googleUtils';
+import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../StoreOnline/Google/googleUtils';
 
 import manually from "./images/manually.svg";
 import google from "./images/google.svg";
@@ -15,9 +15,10 @@ import dropbox from "./images/dropbox.svg";
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
 import { Link } from 'react-router-dom';
-import { Decoration } from '../Decoration';
-import { ButtonPrimary } from '../../../components/Buttons';
+import { Decoration } from '../../Decoration';
+import { ButtonPrimary } from '../../../../components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
+import { RestoreChoice } from './RestoreChoice';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
@@ -101,12 +102,10 @@ export const Restore = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-            <Link to={"/addAccount/upload"}>
-              <img src={ manually } />
-              <Header as={"h4"}><FormattedMessage {...manualy} /></Header>
-            </Link>
+            <RestoreChoice link={"/addAccount/upload"} txt={manualy} imgSrc={manually} />
           </Grid.Column>
           <Grid.Column>
+          <RestoreChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />
             <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
               <img src={ google } />
               <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>

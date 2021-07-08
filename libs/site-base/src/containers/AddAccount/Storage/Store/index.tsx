@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
-import { Props as MessageProps, MaybeMessage } from "../../../components/MaybeMessage";
+import { Props as MessageProps, MaybeMessage } from "../../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
-import { StoreGoogle, UploadState } from "../../StoreOnline/Google";
-import { onDownload } from "../../StoreOnline/Localy/download";
-import { StoreDropbox } from "../../StoreOnline/Dropbox";
-import { StoreMicrosoft } from "../../StoreOnline/Microsoft";
+import { StoreGoogle, UploadState } from "../StoreOnline/Google";
+import { onDownload } from "../StoreOnline/Localy/download";
+import { StoreDropbox } from "../StoreOnline/Dropbox";
+import { StoreMicrosoft } from "../StoreOnline/Microsoft";
 
 import manually from "./images/manually.svg";
 import google from "./images/google.svg";
@@ -16,8 +16,8 @@ import dropbox from "./images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
-import { Decoration } from "../Decoration";
-import { ButtonPrimary } from "../../../components/Buttons";
+import { Decoration } from "../../Decoration";
+import { ButtonPrimary } from "../../../../components/Buttons";
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 
