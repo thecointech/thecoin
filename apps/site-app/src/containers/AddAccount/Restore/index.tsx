@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@thecointech/types';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { GetSecureApi } from 'api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
@@ -19,36 +19,38 @@ import { Decoration } from 'components/Decoration';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
-const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
-                        defaultMessage:"Restore Account",
-                        description:"The above the title text for the restore account page"};
-const title = { id:"app.account.restore.title",
-                defaultMessage:"Welcome back to TheCoin!",
-                description:"The main title for the restore account page"};
-const manualy = { id:"app.account.restore.manualy",
-                  defaultMessage:"Upload manualy",
-                  description:"Locale link for the restore your account page"};
-const googleLink = { id:"app.account.restore.google",
-                        defaultMessage:"Restore from Google",
-                        description:"Microsoft link for the restore your account page"};
-const microsoftLink = { id:"app.account.restore.microsoft",
-                        defaultMessage:"Restore from Microsoft OneDrive",
-                        description:"Microsoft link for the restore your account page"};
-const dropboxLink = { id:"app.account.restore.dropbox",
-                      defaultMessage:"Restore from Dropbox",
-                      description:"Dropbox link for the restore your account page"};
-const otherEthereum = { id:"app.account.restore.otherEthereum.explanation",
-                        defaultMessage:"Also you can log into your account using an existing Ethereum account.",
-                        description:"The link to redirect to use your existing ethereum for the restore your account page"};
-const restoreHelp = { id:"app.account.restore.help",
-                      defaultMessage:"If you have any problems with restoring your account, contact us for help.",
-                      description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const explanation = { id:"app.account.restore.createAccount.explanation",
-                      defaultMessage:"Don’t have an account?",
-                      description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
-                              defaultMessage:"Create Account",
-                              description:"The button to redirect to the create an account page for the restore your account page"};
+const translations = defineMessages({
+  aboveTheTitle : {
+      defaultMessage: 'Restore Account',
+      description: 'app.account.restore.aboveTheTitle: The above the title text for the restore account page'},
+  title : {
+      defaultMessage: 'Welcome back to TheCoin!',
+      description: 'app.account.restore.title: The main title for the restore account page'},
+  manualy : {
+      defaultMessage: 'Upload manualy',
+      description: 'app.account.restore.manualy: Locale link for the restore your account page'},
+  googleLink : {
+      defaultMessage: 'Restore from Google',
+      description: 'app.account.restore.googleLink: google link for the restore your account page'},
+  microsoftLink : {
+      defaultMessage: 'Restore from Microsoft OneDrive',
+      description: 'app.account.restore.microsoftLink: Microsoft link for the restore your account page'},
+  dropboxLink : {
+      defaultMessage: 'Restore from Dropbox',
+      description: 'app.account.restore.dropboxLink: Dropbox link for the restore your account page'},
+  otherEthereum : {
+      defaultMessage: 'Also you can log into your account using an existing Ethereum account.',
+      description: 'app.account.restore.otherEthereum: The link to redirect to use your existing ethereum for the restore your account page'},
+  restoreHelp : {
+      defaultMessage: 'If you have any problems with restoring your account, contact us for help.',
+      description: 'app.account.restore.restoreHelp: The text before the button to redirect to the create an account page for the restore your account page'},
+  explanation : {
+      defaultMessage: 'Don’t have an account?',
+      description: 'app.account.restore.explanation: The text before the button to redirect to the create an account page for the restore your account page'},
+  buttonCreateAccount : {
+      defaultMessage: 'Create Account',
+      description: 'app.account.restore.createAccount: The button to redirect to the create an account page for the restore your account page'}
+});
 
 export const Restore = () => {
 
@@ -92,10 +94,10 @@ export const Restore = () => {
   return (
     <div className={styles.content}>
       <Header as="h5" className={`x8spaceBefore`}>
-          <FormattedMessage {...aboveTheTitle} />
+          <FormattedMessage {...translations.aboveTheTitle} />
       </Header>
       <Header as="h2" className={`x8spaceAfter`}>
-          <FormattedMessage {...title} />
+          <FormattedMessage {...translations.title} />
       </Header>
 
       <Grid stackable columns={4} id={sharedStyles.choices}>
@@ -103,13 +105,13 @@ export const Restore = () => {
           <Grid.Column>
             <Link to={"/addAccount/upload"}>
               <img src={ manually } />
-              <Header as={"h4"}><FormattedMessage {...manualy} /></Header>
+              <Header as={"h4"}><FormattedMessage {...translations.manualy} /></Header>
             </Link>
           </Grid.Column>
           <Grid.Column>
             <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
               <img src={ google } />
-              <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
+              <Header as={"h4"}><FormattedMessage {...translations.googleLink} /></Header>
               <AccountList wallets={wallets} />
             </ConnectButton>  
           </Grid.Column>
@@ -118,7 +120,7 @@ export const Restore = () => {
               <div className={sharedStyles.soon}>
                 <a className={"x8spaceAfter"}>
                   <img src={ microsoft } />
-                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
+                  <Header as={"h4"}><FormattedMessage {...translations.microsoftLink} /></Header>
                 </a>
               </div>
             </AvailableSoon>
@@ -128,7 +130,7 @@ export const Restore = () => {
               <div className={sharedStyles.soon}>
                 <a className={"x8spaceAfter"}>
                   <img src={ dropbox } />
-                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
+                  <Header as={"h4"}><FormattedMessage {...translations.dropboxLink} /></Header>
                 </a>
               </div>
             </AvailableSoon>
@@ -137,17 +139,17 @@ export const Restore = () => {
       </Grid>
       <div className={ `x8spaceBefore` }>
         <b>
-        <FormattedMessage {...otherEthereum} />
+        <FormattedMessage {...translations.otherEthereum} />
         </b>
       </div>
       <div className={ `x4spaceBefore x8spaceBefore` }>
-        <FormattedMessage {...restoreHelp} />
+        <FormattedMessage {...translations.restoreHelp} />
       </div>
       <div className={styles.createAccountContent} >
-          <FormattedMessage {...explanation} />
+          <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
           <ButtonPrimary as={Link} to="/addAccount" size='medium' >
-            <FormattedMessage {...buttonCreateAccount} />
+            <FormattedMessage {...translations.buttonCreateAccount} />
           </ButtonPrimary>
         </div>
         <Decoration />

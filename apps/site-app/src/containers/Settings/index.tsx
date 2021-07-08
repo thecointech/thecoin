@@ -2,7 +2,7 @@ import * as React from 'react';
 import {AppContainerForTabs} from 'components/AppContainers';
 
 import { Tab } from 'semantic-ui-react';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { StorageOptions } from 'containers/Settings/StorageOptions';
 import { PersonalDetails } from './PersonalDetails';
 import { UserDetails } from './UserDetails';
@@ -10,25 +10,27 @@ import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 // import { QRConnect } from './QRConnect';
 
-const main = { id:"app.settings.tabs.main",
-                defaultMessage:"User Settings",
-                description:"Title for the tabs the setting page in the app" };
-const personaldetails = { id:"app.settings.tabs.interact",
-                defaultMessage:"Personal Details",
-                description:"Title for the tabs the setting page in the app" };
-const storage = { id:"app.settings.tabs.storage",
-                defaultMessage:"Account Storage",
-                description:"Title for the tabs the setting page in the app" };
-// const qrconnect = { id:"app.settings.tabs.qrconnect",
-//                 defaultMessage:"App Connect",
-//                 description:"Page to connect to android app" };
+const translations = defineMessages({
+  main : {
+      defaultMessage: 'User Settings',
+      description: 'app.settings.tabs.main: Title for the tabs the setting page in the app'},
+  personaldetails : {
+      defaultMessage: 'Personal Details',
+      description: 'app.settings.tabs.personaldetails: Title for the tabs the setting page in the app'},
+  storage : {
+      defaultMessage: 'Account Storage',
+      description: 'app.settings.tabs.storage: Title for the tabs the setting page in the app'},
+  qrconnect : {
+      defaultMessage: 'App Connect',
+      description: 'app.settings.tabs.qrconnect: Title for the tabs the setting page in the app'}
+});
 
 export const Settings = () => {
   const intl = useIntl();
   const panes = [
-    { menuItem: intl.formatMessage({...main}), render: () => <AppContainerForTabs><UserDetails /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.main}), render: () => <AppContainerForTabs><UserDetails /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.personaldetails}), render: () => <AppContainerForTabs><PersonalDetails /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.storage}), render: () => <AppContainerForTabs><StorageOptions /></AppContainerForTabs> },
     //{ menuItem: intl.formatMessage({...qrconnect}), render: () => <AppContainerForTabs><QRConnect /></AppContainerForTabs> },
   ]
   return (
