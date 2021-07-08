@@ -5,14 +5,14 @@ import { Props as MessageProps, MaybeMessage } from "../../../../components/Mayb
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
 import { StoreGoogle, UploadState } from "../StoreOnline/Google";
-import { onDownload } from "../StoreOnline/Localy/download";
+import { onDownload } from "../Offline/Store";
 import { StoreDropbox } from "../StoreOnline/Dropbox";
 import { StoreMicrosoft } from "../StoreOnline/Microsoft";
 
-import manually from "./images/manually.svg";
-import google from "./images/google.svg";
-import microsoft from "./images/microsoft.svg";
-import dropbox from "./images/dropbox.svg";
+import manually from "../images/manually.svg";
+import google from "../images/google.svg";
+import microsoft from "../images/microsoft.svg";
+import dropbox from "../images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';

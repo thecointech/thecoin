@@ -9,7 +9,7 @@ type Props = {
   txt: MessageDescriptor
 }
 
-export const RestoreChoice = ({link, imgSrc, txt}: Props) =>
+export const ProviderChoice = ({link, imgSrc, txt}: Props) =>
   <Link to={link}>
     <img src={imgSrc} />
     <Header as={"h4"}><FormattedMessage {...txt} /></Header>
