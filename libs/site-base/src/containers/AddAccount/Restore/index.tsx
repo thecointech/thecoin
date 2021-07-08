@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
 import { GoogleWalletItem } from '@thecointech/types';
 import { FormattedMessage } from 'react-intl';
-import { GetSecureApi, clientUri } from 'api';
+import { GetSecureApi, clientUri } from '../../../api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
-import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from 'containers/StoreOnline/Google/googleUtils';
+import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../../StoreOnline/Google/googleUtils';
 
 import manually from "./images/manually.svg";
 import google from "./images/google.svg";

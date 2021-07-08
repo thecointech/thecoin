@@ -22,7 +22,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleAuthUrl(_options?: any)
+  async googleAuthUrl(_clientUri: string, _options?: any)
   {
     await delay(2500);
 
@@ -38,7 +38,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleList(token: GoogleToken, _options?: any) {
+  async googleList(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
     await delay(250);
     return buildResponse<GoogleListResult>({
@@ -53,7 +53,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googlePut(uploadPacket: GoogleStoreAccount, _options?: any) {
+  async googlePut(_clientUri: string, uploadPacket: GoogleStoreAccount, _options?: any) {
     checkCode(uploadPacket.token);
 
     await delay(2500);
@@ -73,7 +73,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleRetrieve(token: GoogleToken, _options?: any) {
+  async googleRetrieve(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
     await delay(250);
     const results: GoogleWalletItem[] = wallets.map((w) => ({

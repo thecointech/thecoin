@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { clientUri, GetSecureApi } from "api";
+import { clientUri, GetSecureApi } from "../../../api";
 
 export enum UploadState {
   Waiting,

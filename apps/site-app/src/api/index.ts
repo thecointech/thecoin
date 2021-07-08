@@ -2,7 +2,6 @@ import {
   StatusApi,
   BillPaymentsApi,
   DirectTransferApi,
-  SecureApi,
   ETransferApi,
 } from '@thecointech/broker-cad';
 

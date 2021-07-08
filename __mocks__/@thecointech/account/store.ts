@@ -3,9 +3,9 @@ import Thisismy from './Thisismy.wallet.json';
 import { Wallet } from 'ethers';
 import { ConnectContract } from '../contract';
 import { MockIDX } from '../idx';
-import { AccountMap, buildNewAccount } from '@thecointech/account';
+import { AccountMap, AccountState, buildNewAccount } from '@thecointech/account';
 
-const _devWallets: AccountMap = {};
+const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
 
 export const wallets = [
@@ -35,19 +35,28 @@ function initDevWallets() {
   const encrypted = wallets[0];
   const encryptedAccount = buildNewAccount(encrypted.name, JSON.parse(encrypted.wallet));
   // We always add one encrypted wallet
-  _devWallets[encryptedAccount.address] = encryptedAccount
+  _devAccounts[encryptedAccount.address] = encryptedAccount
 
   // Add a random decrypted wallet
   const randomAccount = buildNewAccount("Random Test", Wallet.createRandom());
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = ConnectContract();
   randomAccount.idx = new MockIDX() as any;
-  _devWallets[randomAccount.address] = randomAccount
+  _devAccounts[randomAccount.address] = randomAccount
 
   _initial = randomAccount.address;
 }
 
 // Initialize
 initDevWallets();
-export const getAllAccounts = () => _devWallets;
+
+export const getStoredAccountData = (address: string) => ({
+  ..._devAccounts[address],
+  // We don't store original wallets, so just
+  // strip the signer from the data to remove its privateKey
+  signer: { _isSigner: false }
+});
+export const storeAccount = (account: AccountState) => _devAccounts[account.address] = account;
+export const deleteAccount = (account: AccountState) => delete _devAccounts[account.address];
+export const getAllAccounts = () => _devAccounts;
 export const getInitialAddress = () => _initial;

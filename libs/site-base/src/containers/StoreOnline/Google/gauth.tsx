@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import { getUrlParameterByName } from 'utils/localState';
+import { getUrlParameterByName } from '../../../utils/localState';
 import { IWindow } from './googleUtils';
 
 export const GAuth = () => {

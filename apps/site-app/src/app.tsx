@@ -34,9 +34,6 @@ import { LanguageProvider, Languages } from '@thecointech/shared/containers/Lang
 import { configureAppStore, history } from './reducers';
 import { translations } from './translations';
 
-import { initTracking } from './utils/reactga';
-initTracking();
-
 // Create redux store with history
 const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
