@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage";
 import { Link } from "react-router-dom";
@@ -20,34 +20,35 @@ import { Decoration } from "components/Decoration";
 import { ButtonPrimary } from "@thecointech/site-base/components/Buttons";
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
-
-const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
-                        defaultMessage:"Save your account",
-                        description:"The above the main title title for the store your account page"};
-const title = { id:"app.account.create.store.title",
-                defaultMessage:"Ensure your safety",
-                description:"The main title for the store your account page"};
-const download = {  id:"app.account.create.store.button.download",
-                    defaultMessage:"Download",
-                    description:"The button to download the account for the store your account page"};
-const explain = { id:"app.account.create.store.secureExplain",
-                  defaultMessage:"To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.",
-                  description:"The text underneath the button to explain what is the most secured for the store your account page"};
-const explainDownload = { id:"app.account.create.store.explainDownload",
-                          defaultMessage:"Be sure you have access to your local files later.",
-                          description:"The text underneath the button to explain that the client need to have access to this file for the store your account page"};
-const congratulation = {  id:"app.account.create.store.button.congratulations",
-                          defaultMessage:"Next Step",
-                          description:"The button to be redirected to the congratulations page for the store your account page"};
-const googleLink = {  id:"app.account.create.store.button.google",
-                          defaultMessage:"Store on Google",
-                          description:"The button to save on google for the store your account page"};
-const microsoftLink = {  id:"app.account.create.store.button.microsoft",
-                          defaultMessage:"Store on Microsoft OneDrive",
-                          description:"The button to save on microsoft for the store your account page"};
-const dropboxLink = {  id:"app.account.create.store.button.dropbox",
-                          defaultMessage:"Store on Dropbox",
-                          description:"The button to save on dropbox for the store your account page"};
+const translations = defineMessages({
+  aboveTheTitle : {
+      defaultMessage: 'Save your account',
+      description: 'app.account.create.store.aboveTheTitle: The above the main title title for the store your account page'},
+  title : {
+      defaultMessage: 'Ensure your safety',
+      description: 'app.account.create.store.title: The main title for the store your account page'},
+  download : {
+      defaultMessage: 'Ensure your safety',
+      description: 'app.account.create.store.download: The button to download the account for the store your account page'},
+  explain : {
+      defaultMessage: 'To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.',
+      description: 'app.account.create.store.explain: The text underneath the button to explain what is the most secured for the store your account page'},
+  explainDownload : {
+      defaultMessage: 'Be sure you have access to your local files later.',
+      description: 'app.account.create.store.explainDownload: The text underneath the button to explain that the client need to have access to this file for the store your account page'},
+  congratulation : {
+      defaultMessage: 'Next Step',
+      description: 'app.account.create.store.congratulation: The button to be redirected to the congratulations page for the store your account page'},
+  googleLink : {
+      defaultMessage: 'Store on Google',
+      description: 'app.account.create.store.button.google: The button to save on google for the store your account page'},
+  microsoftLink : {
+      defaultMessage: 'Store on Microsoft OneDrive',
+      description: 'app.account.create.store.button.microsoftLink: The button to save on microsoft for the store your account page'},
+  dropboxLink : {
+      defaultMessage: 'Store on Dropbox',
+      description: 'app.account.create.store.button.dropbox: The button to save on dropbox for the store your account page'}
+});
 
 export const Store = () => {
 
@@ -74,10 +75,10 @@ export const Store = () => {
   return (
     <Container className={styles.content}>
       <Header as="h5" className={`x8spaceBefore`}>
-          <FormattedMessage {...aboveTheTitle} />
+          <FormattedMessage {...translations.aboveTheTitle} />
       </Header>
       <Header as="h2" className={`x8spaceAfter`}>
-          <FormattedMessage {...title} />
+          <FormattedMessage {...translations.title} />
       </Header>
       <MaybeMessage {...feedback} />
 
@@ -86,13 +87,13 @@ export const Store = () => {
           <Grid.Column>
               <a onClick={onDownloadClicked}>
                 <img src={ manually } />
-                <Header as={"h4"}><FormattedMessage {...download} /></Header>
+                <Header as={"h4"}><FormattedMessage {...translations.download} /></Header>
               </a>
           </Grid.Column>
           <Grid.Column>
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
                 <img src={ google } />
-                <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
+                <Header as={"h4"}><FormattedMessage {...translations.googleLink} /></Header>
               </StoreGoogle>
           </Grid.Column>
           <Grid.Column>
@@ -100,7 +101,7 @@ export const Store = () => {
               <div className={sharedStyles.soon}>
                 <StoreMicrosoft>
                   <img src={ microsoft } />
-                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
+                  <Header as={"h4"}><FormattedMessage {...translations.microsoftLink} /></Header>
                 </StoreMicrosoft>
               </div>
             </AvailableSoon>
@@ -110,7 +111,7 @@ export const Store = () => {
               <div className={sharedStyles.soon}>
                 <StoreDropbox>
                   <img src={ dropbox } />
-                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
+                  <Header as={"h4"}><FormattedMessage {...translations.dropboxLink} /></Header>
                 </StoreDropbox>
               </div>
               </AvailableSoon>
@@ -119,13 +120,13 @@ export const Store = () => {
       </Grid>
 
       <div className={ `x6spaceBefore x8spaceAfter` }>
-        <FormattedMessage {...explain} />
+        <FormattedMessage {...translations.explain} />
         <br />
-        <FormattedMessage {...explainDownload} />
+        <FormattedMessage {...translations.explainDownload} />
       </div>
 
       <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="medium">
-        <FormattedMessage {...congratulation} />
+        <FormattedMessage {...translations.congratulation} />
       </ButtonPrimary>
       <Decoration />
     </Container>
