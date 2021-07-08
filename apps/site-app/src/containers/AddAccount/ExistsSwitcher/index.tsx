@@ -2,23 +2,38 @@ import React from "react"
 import { Dropdown } from "semantic-ui-react"
 import { Link } from "react-router-dom"
 import styles from './styles.module.less'
-import messages from './messages'
-import { useIntl } from "react-intl"
+import { defineMessages, useIntl } from "react-intl"
 
 type ExistTypes = "connect"|"upload"|"restore"
+
+const translations = defineMessages({
+  existTransfer: {
+    defaultMessage: 'Load using a different method',
+    description: 'app.addAccount.existsSwitcher.existTransfer'},
+  existRestore: {
+    defaultMessage: 'Load an account stored online',
+    description: 'app.addAccount.existsSwitcher.existRestore'},
+  existConnect: {
+    defaultMessage: 'Connect to an existing Ethereum Account',
+    description: 'app.addAccount.existsSwitcher.existConnect'},
+  existUpload: {
+    id: `existRestore`,
+    defaultMessage: 'Upload an account saved manually',
+    description: 'app.addAccount.existsSwitcher.existUpload'},
+});
 
 const Options = [
   {
     name: "restore",
-    text: messages.existRestore,
+    text: translations.existRestore,
   },
   {
     name: "connect",
-    text: messages.existConnect,
+    text: translations.existConnect,
   },
   {
     name: "upload",
-    text: messages.existUpload,
+    text: translations.existUpload,
   }
 ];
 
@@ -31,7 +46,7 @@ export const ExistsSwitcher = (props: Props) => {
 
   return (
     <>
-      <Dropdown text={intl.formatMessage(messages.existTransfer)} className={styles.dropdown}>
+      <Dropdown text={intl.formatMessage(translations.existTransfer)} className={styles.dropdown}>
         <Dropdown.Menu>
           {
             Options
