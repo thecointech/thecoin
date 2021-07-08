@@ -11,7 +11,6 @@ import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from './styles.module.less';
-import sharedStyles from '../styles.module.less';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -81,7 +80,7 @@ export const Generate = (props: RouteComponentProps) => {
       <Header as="h2">
         <FormattedMessage {...title} />
       </Header>
-      <Form className={`${styles.createAccountForm} x8spaceBefore`} id={sharedStyles.createAccountForm}>
+      <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
         <div className={`container ui`}>
           <NameInput forceValidate={forceValidate} setName={setName} isRequired={true} />
         </div>

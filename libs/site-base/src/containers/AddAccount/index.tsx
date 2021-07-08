@@ -3,12 +3,12 @@ import { Switch, Route } from 'react-router-dom';
 
 import { Create as ConnectCreate } from './Connect/Create';
 import { Existing as ConnectExist } from './Connect/Existing';
-import { Restore } from './Restore';
+import { Restore } from './Storage/Restore';
 import { CreateExistingSwitch } from './CreateExistingSwitch';
 import { Generate } from './Generate';
 import { Intro } from './Generate/Intro';
 import { FromJson } from './FromJson';
-import { Store } from './Store';
+import { Store } from './Storage/Store';
 import styles from './styles.module.less';
 
 export const AddAccount = () => {
