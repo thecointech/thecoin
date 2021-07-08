@@ -3,28 +3,30 @@ import { Dropdown } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
 import { useAccountStoreApi, useAccountStore } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import styles from './styles.module.less';
 import { AccountState } from '@thecointech/account';
 
-
-const titleMsg = { id: 'app.accountSwitcher.login', defaultMessage:'LOG IN'};
-const myAccounts = {  id:"app.accountSwitcher.myAccounts",
-                      defaultMessage:"My Accounts",
-                      description:"Title for the My Accounts title in the menu"};
-const addAccount = {  id:"app.accountSwitcher.addAccount",
-                      defaultMessage:"Add an Account",
-                      description:"Title for the Add an Account in the menu"};
-const see = {   id:"app.accountSwitcher.see",
-                defaultMessage:"See",
-                description:"Title for the See in the menu"};
-const settings = {    id:"app.accountSwitcher.settings",
-                      defaultMessage:"Settings",
-                      description:"Title for the Settings in the menu"};
-const signout = {   id:"app.accountSwitcher.signout",
-                    defaultMessage:"Sign Out",
-                    description:"Title for the Sign Out in the menu"};
-
+const translations = defineMessages({
+  titleMsg : {
+      defaultMessage: 'LOG IN',
+      description: 'app.accountSwitcher.login: label for button'},
+  myAccounts : {
+      defaultMessage: 'My Accounts',
+      description: 'app.accountSwitcher.myAccounts: Title for the My Accounts title in the menu'},
+  addAccount : {
+      defaultMessage: 'Add an Account',
+      description: 'app.accountSwitcher.addAccount: Title for the Add an Account in the menu'},
+  see : {
+      defaultMessage: 'See',
+      description: 'app.accountSwitcher.see: Title for the See in the menu'},
+  settings : {
+      defaultMessage: 'Settings',
+      description: 'app.accountSwitcher.settings: Title for the Settings in the menu'},
+  signout : {
+      defaultMessage: 'Sign Out',
+      description: 'app.accountSwitcher.signout: Title for the sign out in the menu'}
+});
 
 export const AccountSwitcher = () => {
 
@@ -36,13 +38,13 @@ export const AccountSwitcher = () => {
   const intl = useIntl();
   const trigger = activeAccount
       ? <span><img src={getAvatarLink("14")} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
-      : <span>{intl.formatMessage(titleMsg)}</span>
+      : <span>{intl.formatMessage(translations.titleMsg)}</span>
 
   return (
     <Dropdown trigger={trigger}  >
       <Dropdown.Menu>
         <Dropdown.Header>
-          <FormattedMessage {...myAccounts}/>
+          <FormattedMessage {...translations.myAccounts}/>
         </Dropdown.Header>
         <ActiveAccount account={activeAccount} />
         {
@@ -63,7 +65,7 @@ export const AccountSwitcher = () => {
         }
         <Dropdown.Divider />
         <Dropdown.Item key='add' as={NavLink} to="/addAccount/">
-          <FormattedMessage {...addAccount} />
+          <FormattedMessage {...translations.addAccount} />
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
@@ -79,13 +81,13 @@ const ActiveAccount = ({account}: ActiveProps) =>
       <Dropdown trigger={<span><img src={getAvatarLink("14")} className={styles.avatars}/> {account.name.substring(0, 14) + '...'}</span>}>
         <Dropdown.Menu direction='right'>
           <Dropdown.Item key="see" account={account.name} as={Link} to="/" >
-              <FormattedMessage {...see} />
+              <FormattedMessage {...translations.see} />
           </Dropdown.Item>
           <Dropdown.Item key="sett" as={NavLink} to="settings" >
-              <FormattedMessage {...settings} />
+              <FormattedMessage {...translations.settings} />
           </Dropdown.Item>
           <Dropdown.Item key="sout" as={NavLink} to="signout" >
-              <FormattedMessage {...signout} />
+              <FormattedMessage {...translations.signout} />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

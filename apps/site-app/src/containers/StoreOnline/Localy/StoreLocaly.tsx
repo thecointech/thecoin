@@ -1,15 +1,18 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
+
+const translations = defineMessages({
+  link : {
+      defaultMessage: 'Localy',
+      description: 'app.storeOnline.localy.link'}
+});
 
 export const StoreLocaly : React.FC = (props) => {
 
     return (
       <a href="google.com">
         {props.children}
-        <FormattedMessage 
-            id="app.storeOnline.localy.link"
-            defaultMessage="Localy"
-            description=""/>
+        <FormattedMessage {...translations.link} />
       </a>
     );
   }

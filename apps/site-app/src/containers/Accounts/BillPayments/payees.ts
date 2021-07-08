@@ -1,15 +1,22 @@
 import { DropdownItemProps } from 'semantic-ui-react';
 import { number } from 'card-validator';
 import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types'
+import { defineMessages } from 'react-intl';
 
-const invalidVisaChars = { id:"app.accounts.billPayments.invalidVisaChars",
-                defaultMessage:"Your card number should be 16 digits long" };
-const invalidVisaAccount = { id:"app.accounts.billPayments.invalidVisaAccount",
-                defaultMessage:"The given number is not a valid visa card" };
-const invalidNumericChars = { id:"app.accounts.billPayments.invalidNumericChars",
-                defaultMessage:"You have entered {len} numbers, but your account requires {max}" };
-/*const invalidNumericLength = { id:"app.accounts.billPayments.invalidNumericLength",
-                defaultMessage:"Invalid account number" }; */
+const translations = defineMessages({
+  invalidVisaChars : {
+      defaultMessage: 'Your card number should be 16 digits long',
+      description: 'app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page'},
+  invalidVisaAccount : {
+      defaultMessage: 'The given number is not a valid visa card',
+      description: 'app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page'},
+  invalidNumericChars : {
+      defaultMessage: 'You have entered {len} numbers, but your account requires {max}',
+      description: 'app.accounts.billPayments.invalidNumericChars: Error message for the bill payement page'},
+  invalidNumericLength : {
+      defaultMessage: 'Invalid account number',
+      description: 'app.accounts.billPayments.invalidNumericLength: Error message for the bill payement page'}
+});
 
 export type Validatable = {
   validate: (value: string) => ValuedMessageDesc|null,
@@ -22,12 +29,12 @@ function none(_: string) { return null; }
 function visa(val: string) {
   var n = parseInt(val);
   if (n!==n || val.length !== 16)
-    return invalidVisaChars
+    return translations.invalidVisaChars
 
 	const r = number(val);
   return (r.isValid && !!r.card && r.card.type === 'visa')
     ? null
-    : invalidVisaAccount
+    : translations.invalidVisaAccount
 }
 
 function numeric(max: number) {
@@ -36,7 +43,7 @@ function numeric(max: number) {
     return ((r !== r) || (val.length !== max))
     ?
       {
-        ...invalidNumericChars,
+        ...translations.invalidNumericChars,
         values: {
           len: val.length,
           max
