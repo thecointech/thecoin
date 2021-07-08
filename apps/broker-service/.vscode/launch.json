@@ -14,25 +14,22 @@
       "port": 9232
     },
     {
-      "type": "pwa-node",
-      "request": "launch",
       "name": "Launch Program",
+      "request": "launch",
+      "runtimeArgs": [
+        "dev"
+      ],
+      "runtimeExecutable": "yarn",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "ts-node/register",
-        "${workspaceFolder}/src/main.ts",
-      ],
-      "envFile": "${workspaceFolder}/../../environments/development.env",
-      "outputCapture": "std",
+      "type": "pwa-node",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
       "resolveSourceMapLocations": [
         "**",
         "!**/node_modules/**"
       ],
+      "outputCapture": "std",
     },
     {
       "type": "node",
