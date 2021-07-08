@@ -1,4 +1,8 @@
 {
+  "+rTdcY": {
+    "defaultMessage": "To use this feature, either install the MetaMask plugin or try the new Opera browser!",
+    "description": "app.account.restore.createAccount.explanation"
+  },
   "+w7KFz": {
     "defaultMessage": "Your account is verified.",
     "description": "app.settings.verified.descriptionVerified: Description for the verfified section in the setting page in the app"
@@ -17,9 +21,6 @@
   "/bV15e": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab"
-  },
-  "/lGbT2": {
-    "defaultMessage": "Load an account stored online"
   },
   "/nG7Iv": {
     "defaultMessage": "Email money to anyone with an interac e-Transfer.",
@@ -49,9 +50,6 @@
     "defaultMessage": "Or, you can create an entirely new account!",
     "description": "app.account.connect.create.createTransfer"
   },
-  "23raqf": {
-    "defaultMessage": "Or, you can create an entirely new account!"
-  },
   "2cP6bx": {
     "defaultMessage": "You need to verify your account to obtain one",
     "description": "app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app"
@@ -63,9 +61,6 @@
   "39oNJg": {
     "defaultMessage": "Out",
     "description": "app.historygraph.tooltip.out: HistoryGraph tooltip - total transaction out"
-  },
-  "3gAgRa": {
-    "defaultMessage": "We are working hard to bring it to you though"
   },
   "3gMrt1": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
@@ -194,9 +189,6 @@
   "EmDoJa": {
     "defaultMessage": "We are {percentComplete}% done cooking your brand-new account.",
     "description": "app.account.create.whileCreatingHeader"
-  },
-  "FKNYAF": {
-    "defaultMessage": "This bit is not quite ready!"
   },
   "FV6WEb": {
     "defaultMessage": "This page expects to recieve google authentication information, but none was found."
@@ -419,6 +411,10 @@
     "defaultMessage": "Week",
     "description": "app.historyGraph.Week: button for Duration of 1 week"
   },
+  "Ro1Qqm": {
+    "defaultMessage": "Load an account stored online",
+    "description": "app.addAccount.existsSwitcher.existRestore"
+  },
   "S+5i+u": {
     "defaultMessage": "The Opera browser you are using comes with a built-in account that is compatible with TheCoin. Would you like to connect to it?",
     "description": "app.account.connect.create.checkMessageOpera"
@@ -454,9 +450,6 @@
   "U5ZvQe": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.transfer.transferOutProgress: transferOutProgress for the make a payment page / transfer tab"
-  },
-  "U6E/Kq": {
-    "defaultMessage": "Or, if you can restore an account generated previously"
   },
   "UHGS2W": {
     "defaultMessage": "Store on Google",
@@ -572,9 +565,6 @@
     "defaultMessage": "Restore from Google",
     "description": "app.addAccount.restore.connectButton: The text for the create your password text"
   },
-  "dQP0Sd": {
-    "defaultMessage": "in the meantime, feel free to contact"
-  },
   "dUeAZx": {
     "defaultMessage": "Be sure you have access to your local files later.",
     "description": "app.account.create.store.explainDownload: The text underneath the button to explain that the client need to have access to this file for the store your account page"
@@ -599,8 +589,13 @@
     "defaultMessage": "How to make a good password",
     "description": "app.account.generate.button.goodPassword: button for the information page before the create account form"
   },
-  "f82wcH": {
-    "defaultMessage": "Upload an account saved manually"
+  "existRestore": {
+    "defaultMessage": "Upload an account saved manually",
+    "description": "app.addAccount.existsSwitcher.existUpload"
+  },
+  "existTransfer": {
+    "defaultMessage": "Load using a different method",
+    "description": "app.addAccount.existsSwitcher.existTransfer"
   },
   "gFB+cq": {
     "defaultMessage": "An account must have a name.",
@@ -657,6 +652,10 @@
     "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
     "description": "app.makepayments.description: Description for the Make a payment page in the app"
   },
+  "l/vRE7": {
+    "defaultMessage": "No external providers detected!",
+    "description": "app.addAccount.connect.warnIfDisabled.warningHeader"
+  },
   "lLRGM3": {
     "defaultMessage": "Step 3 of 3: Waiting for the order to be accepted (check progress {link})...",
     "description": "app.accounts.redeem.step3: Message for the form the make a payment page / etransfert tab"
@@ -697,12 +696,20 @@
     "defaultMessage": "Contact Us",
     "description": "app.MainNavigation.contact: Title for the entry in the sidebar menu"
   },
+  "mowZfy": {
+    "defaultMessage": "This feature connects The Coin to an external Web3 account provider.",
+    "description": "app.addAccount.connect.warnIfDisabled.warningHeader"
+  },
   "mvYWfO": {
     "defaultMessage": "Cannot Upload"
   },
   "nUylG3": {
     "defaultMessage": "Please wait...",
     "description": "app.accounts.purchase.getTransferCodeHeader"
+  },
+  "nWBLuA": {
+    "defaultMessage": "At least moderate strength",
+    "description": "app.addAccount.generate.labelPasswordAtLeast"
   },
   "nY781+": {
     "defaultMessage": "Next Step",
@@ -728,9 +735,6 @@
     "defaultMessage": "Coin Transfer",
     "description": "app.makepayments.tabs.anotherCoin: Title for the tabs the Make a payment page in the app"
   },
-  "pCI+3K": {
-    "defaultMessage": "Load using a different method"
-  },
   "pJe8Es": {
     "defaultMessage": "Referral Code",
     "description": "app.addaccount.newbaseclass.referralinput.labelReferrer"
@@ -738,9 +742,6 @@
   "pfe93f": {
     "defaultMessage": "Restore from Microsoft OneDrive",
     "description": "app.account.restore.microsoftLink: Microsoft link for the restore your account page"
-  },
-  "pkNdj0": {
-    "defaultMessage": "Connect to an existing Ethereum Account"
   },
   "q0z7qW": {
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
@@ -880,6 +881,10 @@
   "yIl5k9": {
     "defaultMessage": "An email address to send the e-Transfer to",
     "description": "app.accounts.redeem.form.emailDesc: Label for the form the make a payment page / etransfert tab"
+  },
+  "yJjZre": {
+    "defaultMessage": "Connect to an existing Ethereum Account",
+    "description": "app.addAccount.existsSwitcher.existConnect"
   },
   "yXYLrz": {
     "defaultMessage": "Base",

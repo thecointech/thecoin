@@ -1,8 +1,7 @@
 import { GetSecureApi } from 'api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { getStoredAccountData } from '@thecointech/account/store';
-import messages from './messages';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
@@ -10,6 +9,32 @@ import { Props as MessageProps } from '@thecointech/site-base/components/MaybeMe
 import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { Checkbox } from 'semantic-ui-react';
 
+const translations = defineMessages({
+  messageErrorRemoteHeader: {
+    defaultMessage: 'Cannot Upload',
+    description: 'app.storeOnline.google.storeGoogle.messageErrorRemoteHeader'},
+  messageErrorRemoteMessage: {
+    defaultMessage: 'This account isn\'t stored locally, and so cannot be uploaded to Google',
+    description: 'app.storeOnline.google.storeGoogle.messageErrorRemoteMessage'},
+  messageSuccessHeader: {
+    defaultMessage: 'Congratulations',
+    description: 'app.storeOnline.google.storeGoogle.messageSuccessHeader'},
+  messageSuccessMessage: {
+    defaultMessage: 'You have successfully backed up your account to your personal Google Drive',
+    description: 'app.storeOnline.google.storeGoogle.messageSuccessMessage'},
+  messageErrorFailedUploadHeader: {
+    defaultMessage: 'Upload Failed',
+    description: 'app.storeOnline.google.storeGoogle.messageErrorFailedUploadHeader'},
+  messageErrorFailedUploadMessage: {
+    defaultMessage: 'Something went wrong, your account has not been backed up. Please contact support@thecoin.io',
+    description: 'app.storeOnline.google.storeGoogle.messageErrorFailedUploadMessage'},
+  buttonSuccess: {
+    defaultMessage: 'Uploaded',
+    description: 'app.storeOnline.google.storeGoogle.buttonSuccess'},
+  buttonConnect: {
+    defaultMessage: 'Connect to Google',
+    description: 'app.storeOnline.google.storeGoogle.buttonConnect'}
+});
 
 export type StoreCallback = (state: UploadState, message: MessageProps) => void;
 
@@ -39,8 +64,8 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
       onStateChange && onStateChange(
         UploadState.Invalid,
         {
-          header: messages.messageErrorRemoteHeader,
-          content: messages.messageErrorRemoteMessage,
+          header: translations.messageErrorRemoteHeader,
+          content: translations.messageErrorRemoteMessage,
           negative: true,
         }
       )
@@ -65,8 +90,8 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
         onStateChange && onStateChange(
           UploadState.Complete,
           {
-            header: messages.messageSuccessHeader,
-            content: messages.messageSuccessMessage,
+            header: translations.messageSuccessHeader,
+            content: translations.messageSuccessMessage,
             success: true,
           }
         )
@@ -76,8 +101,8 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
         onStateChange && onStateChange(
           UploadState.Failed,
           {
-            header: messages.messageErrorFailedUploadHeader,
-            content: messages.messageErrorFailedUploadMessage,
+            header: translations.messageErrorFailedUploadHeader,
+            content: translations.messageErrorFailedUploadMessage,
             success: true,
           }
         )
@@ -99,8 +124,8 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
                 || props.disabled;
 
   const message = state === UploadState.Complete
-    ? messages.buttonSuccess
-    : messages.buttonConnect
+    ? translations.buttonSuccess
+    : translations.buttonConnect
 
   const connectVia = (props.toggle)
     ? <Checkbox toggle disabled={disabled} onClick={onConnectClick} />
@@ -141,7 +166,7 @@ async function completeStore(token: string, address: string) {
   }
   catch (e) {
     console.error(JSON.stringify(e));
-    alert("Upload failed, please contact support@thecoin.io");
+    alert(<FormattedMessage {...translations.messageErrorFailedUploadMessage} />);
   }
   return false;
 }
@@ -149,17 +174,17 @@ async function completeStore(token: string, address: string) {
 function fetchAndVerifyWallet(address: string) {
   const account = getStoredAccountData(address);
   if (account == null) {
-    alert("Could not find local account - if you are seeing this, contact support@thecoin.io");
+    alert(<FormattedMessage {...translations.messageErrorRemoteMessage} />); 
     throw new Error("Could not find local account: " + address);
   }
 
   const wallet = account.signer;
   if (!isWallet(wallet)) {
-    alert("Cannot upload this wallet: it is not a local account");
+    alert(<FormattedMessage {...translations.messageErrorRemoteMessage} />);
     throw new Error("Could not find local account: " + address);
   }
   else if (wallet.privateKey) {
-    alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
+    alert(<FormattedMessage {...translations.messageErrorFailedUploadMessage} />);
     throw new Error("Cannot upload wallet with private key");
   }
   return { wallet, name: account.name };
