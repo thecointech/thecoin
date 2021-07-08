@@ -7,10 +7,10 @@ import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
 import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../StoreOnline/Google/googleUtils';
 
-import manually from "./images/manually.svg";
-import google from "./images/google.svg";
-import microsoft from "./images/microsoft.svg";
-import dropbox from "./images/dropbox.svg";
+import manually from "../images/manually.svg";
+import google from "../images/google.svg";
+import microsoft from "../images/microsoft.svg";
+import dropbox from "../images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
