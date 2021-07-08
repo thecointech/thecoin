@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Download } from '@thecointech/site-base/containers/StoreOnline/Localy/download';
+import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/StoreOnline/Localy/download';
 import { Container, Header } from "semantic-ui-react"
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
-import { StoreGoogle, UploadState } from '@thecointech/site-base/containers/StoreOnline/Google';
+import { StoreGoogle, UploadState } from '@thecointech/site-base/containers/AddAccount/Storage/StoreOnline/Google';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
