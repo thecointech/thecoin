@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
-import messages from '../messages';
 import { GetReferrersApi } from "api";
 import { IsValidShortCode } from "@thecointech/utilities";
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
@@ -11,7 +10,19 @@ const translations = defineMessages({
       description: 'app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input'},
   error : {
       defaultMessage: 'Registering this account failed. Please contact support@thecoin.io6 letters or numbers',
-      description: 'app.addaccount.newbaseclass.referralinput.error: Error for the referral input'}
+      description: 'app.addaccount.newbaseclass.referralinput.error: Error for the referral input'},
+  labelReferrer : {
+      defaultMessage: 'Referral Code',
+      description: 'app.addaccount.newbaseclass.referralinput.labelReferrer'},
+  errorReferrerNumChars : {
+      defaultMessage: 'A referrer ID should be 6 characters long.',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerNumChars'},
+  errorReferrerInvalidCharacters : {
+      defaultMessage: 'A referrer ID should only contain alpha-numeric characters.',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerInvalidCharacters'},
+  errorReferrerUnknown : {
+      defaultMessage: 'The entered referrer ID is not recognized',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerUnknown'}
 });
             
 type Props = {
@@ -46,7 +57,7 @@ export const ReferralInput = (props: Props) => {
   return (
     <UxInput
       uxChange={onChange}
-      intlLabel={messages.labelReferrer}
+      intlLabel={translations.labelReferrer}
       isValid={state.isValid}
       message={state.message}
       placeholder={intl.formatMessage(translations.placeholder)}
@@ -83,17 +94,17 @@ const validateReferral = async (value: string) : Promise<State> => {
     value.length !== 6
       ? {
           isValid: false,
-          message: messages.errorReferrerNumChars,
+          message: translations.errorReferrerNumChars,
         }
       : !IsValidShortCode(value)
         ? {
             isValid: false,
-            message: messages.errorReferrerInvalidCharacters,
+            message: translations.errorReferrerInvalidCharacters,
           }
         : !(await isLegalReferral(value))
           ? {
               isValid: false,
-              message: messages.errorReferrerUnknown,
+              message: translations.errorReferrerUnknown,
             }
           : {
               isValid: true,

@@ -1,7 +1,15 @@
 import React, { useState, useCallback } from "react";
-import { MessageDescriptor } from "react-intl";
-import messages from '../messages';
+import { defineMessages, MessageDescriptor, useIntl } from "react-intl";
 import { UxScoredPassword } from "@thecointech/site-base/components/UxScoredPassword";
+
+const translations = defineMessages({
+  labelPassword : {
+      defaultMessage: 'Password',
+      description: 'app.addAccount.generate.labelPassword'},
+  labelPasswordAtLeast : {
+      defaultMessage: 'At least moderate strength',
+      description: 'app.addAccount.generate.labelPasswordAtLeast'}
+});
 
 type Props = {
   disabled?: boolean;
@@ -20,7 +28,7 @@ export const PasswordInput = (props: Props) => {
 
   const [state, setState] = useState(initialState);
   const { setPassword, ...rest } = props;
-
+  const intl = useIntl();
   ////////////////////////////////
   const onChange = useCallback((value: string, score: number) => {
     const newState = validatePassword(value, score);
@@ -37,8 +45,8 @@ export const PasswordInput = (props: Props) => {
   return (
     <UxScoredPassword
     uxChange={onChange}
-    intlLabel={messages.labelPassword}
-    placeholder="At least moderate strength"
+    intlLabel={translations.labelPassword}
+    placeholder={intl.formatMessage(translations.labelPasswordAtLeast)}
     {...rest}
     {...state}
   />
