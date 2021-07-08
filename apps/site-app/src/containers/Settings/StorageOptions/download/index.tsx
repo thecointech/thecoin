@@ -1,17 +1,20 @@
 import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
-
 
 type MyProps = {
   address: string
   onComplete?: () => void
 }
 
+const translations = defineMessages({
+  buttonText : {
+      defaultMessage: 'Download',
+      description: 'app.settings.storageOptions.download.buttonTexte: Title for the button'}
+});
 
 export const onDownload = (address: string) => {
   // Do not download the decrypted wallet: instead
@@ -45,7 +48,7 @@ export const Download = (props: MyProps) => {
 
   return (
     <ButtonSecondary onClick={onClick} >
-      <FormattedMessage {...messages.buttonText} />
+      <FormattedMessage {...translations.buttonText} />
     </ButtonSecondary>
   )
 }

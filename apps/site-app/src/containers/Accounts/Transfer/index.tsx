@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
@@ -9,38 +9,38 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
 
-
-const errorMessage = { id:"app.accounts.transfer.errorMessage",
-                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
-                description:"Error Message for the make a payment page / etransfer tab" };
-const successMessage = { id:"app.accounts.transfer.successMessage",
-                defaultMessage:"Order received.\nYou should receive the transfer in 1-2 business days.",
-                description:"Success Message for the make a payment page / etransfer tab" };
-const description = { id:"app.accounts.transfer.description",
-                      defaultMessage:"Transfer directly to another account with TheCoin.",
-                      description:"Description for the make a payment page / transfer tab" };
-const transferOutHeader = { id:"app.accounts.transfer.transferHeader",
-                            defaultMessage:"Processing Transfer...",
-                            description:"transferHeader for the make a payment page / transfer tab" };
-const step1 = { id:"app.accounts.transfer.step1",
-                defaultMessage:"Step 1 of 3: Checking transfer availability...",
-                description:"Message for step1 for the make a payment page / transfer tab" };
-const step2 = { id:"app.accounts.transfer.step2",
-                defaultMessage:"Step 2 of 3: Sending transfer command to our servers...",
-                description:"Message for step2 for the make a payment page / transfer tab" };
-const step3 = { id:"app.accounts.transfer.step3",
-                defaultMessage:"Step 3 of 3: Waiting for the transfer to be accepted\n(check progress {link})...",
-                description:"Message for step3 for the make a payment page / transfer tab" };
-const transferOutProgress = { id:"app.accounts.transfer.transferOutProgress",
-                              defaultMessage:"Please wait, we are sending your order to our servers...",
-                              description:"transferOutProgress for the make a payment page / transfer tab" };
-const destinationAddress = { id:"app.accounts.transfer.destinationAddress",
-                            defaultMessage:"Destination Address",
-                            description:"destinationAddress for the make a payment page / transfer tab" };
-
-const button = { id:"app.accounts.transfer.form.button",
-                defaultMessage:"Transfer",
-                description:"Label for the form the make a payment page / transfer tab" };
+const translations = defineMessages({
+  errorMessage : {
+      defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
+      description: 'app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab'},
+  successMessage : {
+      defaultMessage: 'Order received.\nYou should receive the transfer in 1-2 business days.',
+      description: 'app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab'},
+  description : {
+      defaultMessage: 'Transfer directly to another account with TheCoin.',
+      description: 'app.accounts.transfer.description: Description for the make a payment page / transfer tab'},
+  transferOutHeader : {
+      defaultMessage: 'Processing Transfer...',
+      description: 'app.accounts.transfer.transferOutHeader: transferHeader for the make a payment page / transfer tab'},
+  step1 : {
+      defaultMessage: 'Step 1 of 3: Checking transfer availability...',
+      description: 'app.accounts.transfer.step1: Message for step1 for the make a payment page / transfer tab'},
+  step2 : {
+      defaultMessage: 'Step 2 of 3: Sending transfer command to our servers...',
+      description: 'app.accounts.transfer.step2: Message for step2 for the make a payment page / transfer tab'},
+  step3 : {
+      defaultMessage: 'Step 3 of 3: Waiting for the transfer to be accepted\n(check progress {link})...',
+      description: 'app.accounts.transfer.step3: Message for step3 for the make a payment page / transfer tab'},
+  transferOutProgress : {
+      defaultMessage: 'Please wait, we are sending your order to our servers...',
+      description: 'app.accounts.transfer.transferOutProgress: transferOutProgress for the make a payment page / transfer tab'},
+  destinationAddress : {
+      defaultMessage: 'Destination Address',
+      description: 'app.accounts.transfer.destinationAddress: destinationAddress for the make a payment page / transfer tab'},
+  button : {
+      defaultMessage: 'Transfer',
+      description: 'app.accounts.transfer.form.button: Label for the form the make a payment page / transfer tab'}
+});
 
 export const Transfer = () => {
 
@@ -49,7 +49,7 @@ export const Transfer = () => {
   const [forceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
-  const [transferMessage, setTransferMessage] = useState(transferOutProgress);
+  const [transferMessage, setTransferMessage] = useState(translations.transferOutProgress);
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
@@ -64,7 +64,7 @@ export const Transfer = () => {
 
   const doTransfer = async () => {
     // Init messages
-    setTransferMessage(step1);
+    setTransferMessage(translations.step1);
     setPercentComplete(0.0);
     // First, get the brokers fee
     const statusApi = GetStatusApi(); //undefined, "http://localhost:8080"
@@ -91,7 +91,7 @@ export const Transfer = () => {
     if (doCancel) return false;
 
     // Send the command to the server
-    setTransferMessage(step2);
+    setTransferMessage(translations.step2);
     setPercentComplete(0.25);
     const response = await transferApi.transfer(transferCommand);
 
@@ -105,7 +105,7 @@ export const Transfer = () => {
     const transferValues = {
       link: (<a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
     };
-    setTransferMessage(step3);
+    setTransferMessage(translations.step3);
     setPercentComplete(0.5);
     setTransferValues(transferValues);
 
@@ -160,12 +160,12 @@ export const Transfer = () => {
   }
   return (
     <TransferWidget
-      errorMessage={errorMessage}
+      errorMessage={translations.errorMessage}
       errorHidden={errorHidden}
-      successMessage={successMessage}
+      successMessage={translations.successMessage}
       successHidden={successHidden}
 
-      description={description}
+      description={translations.description}
       onValueChange={onValueChange}
       account={account!}
       coinTransfer={coinTransfer}
@@ -174,12 +174,12 @@ export const Transfer = () => {
       onAccountValue={onAccountValue}
       forceValidate={forceValidate}
       onSubmit={onSubmit}
-      button={button}
-      destinationAddress={intl.formatMessage(destinationAddress)}
+      button={translations.button}
+      destinationAddress={intl.formatMessage(translations.destinationAddress)}
 
       onCancelTransfer={onCancelTransfer}
       transferInProgress={transferInProgress}
-      transferOutHeader={transferOutHeader}
+      transferOutHeader={translations.transferOutHeader}
       transferMessage={transferMessage}
       percentComplete={percentComplete}
       transferValues={transferValues} />

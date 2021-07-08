@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
-import { MessageDescriptor, useIntl } from "react-intl";
+import { defineMessages, MessageDescriptor, useIntl } from "react-intl";
 import messages from '../messages';
 import { useAccountStore } from "@thecointech/shared/containers/AccountMap";
 import { AccountState } from '@thecointech/account';
 
-const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
-                        defaultMessage:"Any name you like",
-                        description:"Tooltip for the account name input"};
+const translations = defineMessages({
+  placeholder : {
+      defaultMessage: 'Any name you like',
+      description: 'app.addaccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input'}
+});
 
 type Props = {
   disabled?: boolean;
@@ -46,7 +48,7 @@ export const NameInput = (props: Props) => {
       isValid={state.isValid}
       isRequired={props.isRequired}
       message={state.message}
-      placeholder={intl.formatMessage(placeholder)}
+      placeholder={intl.formatMessage(translations.placeholder)}
       {...rest}
     />
   );
