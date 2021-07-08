@@ -37,6 +37,10 @@
     "defaultMessage": "Is this what you meant?",
     "description": "app.account.connect.create.checkHeader"
   },
+  "0vNzso": {
+    "defaultMessage": "User Settings",
+    "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
+  },
   "0wqDQX": {
     "defaultMessage": "Generate",
     "description": "app.purchase.button: Name for the button Generate in the purchase list explanation page in the app"
@@ -60,9 +64,6 @@
     "defaultMessage": "Out",
     "description": "app.historygraph.tooltip.out: HistoryGraph tooltip - total transaction out"
   },
-  "3WkdVP": {
-    "defaultMessage": "Account Name"
-  },
   "3gAgRa": {
     "defaultMessage": "We are working hard to bring it to you though"
   },
@@ -77,6 +78,10 @@
   "3q6swa": {
     "defaultMessage": "To use this feature, either install the MetaMask plugin or try the new Opera browser!"
   },
+  "40RPha": {
+    "defaultMessage": "Account Name",
+    "description": "app.addAccount.newbaseclass.labelName"
+  },
   "4PGglh": {
     "defaultMessage": "CONNECT TO GOOGLE"
   },
@@ -88,15 +93,13 @@
     "defaultMessage": "Security answer",
     "description": "app.accounts.redeem.form.answerLabel: Label for the form the make a payment page / etransfert tab"
   },
-  "5JcXdV": {
-    "defaultMessage": "Create Account"
-  },
   "5Qyb2D": {
     "defaultMessage": "Order received. Your bill payment will be processed in the next 1-2 business days. Please note that bill payments can take several days to settle, so paying a few days early ensures that payments are recieved on time",
     "description": "app.accounts.billPayments.form.successForm: Message for the form the make a payment page / bill payment tab"
   },
-  "5sg7KC": {
-    "defaultMessage": "Password"
+  "5knRxR": {
+    "defaultMessage": "Your password should have lowercase, uppercase, numbers, letters, typographic signs.",
+    "description": "app.account.generate.passwordTextCase: The text for the create your password text"
   },
   "6+/BKc": {
     "defaultMessage": "Processing Bill Payment...",
@@ -110,9 +113,6 @@
     "defaultMessage": "Account verified",
     "description": "app.settings.verified.titleVerified: Title for the verfified section in the setting page in the app"
   },
-  "6caMaA": {
-    "defaultMessage": "Referral Code"
-  },
   "6x8xv9": {
     "defaultMessage": "Processing Transfer...",
     "description": "app.accounts.transfer.transferOutHeader: transferHeader for the make a payment page / transfer tab"
@@ -120,6 +120,10 @@
   "73SQ9j": {
     "defaultMessage": "I want to create a new Account",
     "description": "app.account.create.button.newAccount: Button redirect people to create a new account on the let's get started page"
+  },
+  "78Tc76": {
+    "defaultMessage": "Family Name",
+    "description": "app.settings.personaldetails.familyname: Name field for the page setting / tab personal details in the app"
   },
   "7L9gj2": {
     "defaultMessage": "An optional message to the recipient. Should not include the security answer",
@@ -137,12 +141,24 @@
     "defaultMessage": "Secret:",
     "description": "app.accounts.purchase.yourTransferSecret"
   },
+  "9XF/65": {
+    "defaultMessage": "Any name you like",
+    "description": "app.addAccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input"
+  },
   "9ZULUQ": {
     "defaultMessage": "No external providers detected!"
   },
   "9d/cRr": {
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
+  },
+  "9h2Jcc": {
+    "defaultMessage": "Store on Microsoft OneDrive",
+    "description": "app.account.create.store.button.microsoftLink: The button to save on microsoft for the store your account page"
+  },
+  "A4mShp": {
+    "defaultMessage": "Ensure your safety",
+    "description": "app.account.create.store.download: The button to download the account for the store your account page"
   },
   "AFIxrV": {
     "defaultMessage": "Register it with TheCoin",
@@ -152,9 +168,6 @@
     "defaultMessage": "Contact Us",
     "description": "app.MainNavigation.contact: Title for the contact us entry in the menu"
   },
-  "Aac8zs": {
-    "defaultMessage": "A referrer ID should only contain alpha-numeric characters."
-  },
   "Amlyol": {
     "defaultMessage": "Your account needs to be verified for better security.",
     "description": "app.settings.verified.descriptionNotVerified: Description for the verfified section in the setting page in the app"
@@ -162,12 +175,17 @@
   "BEKB5I": {
     "defaultMessage": "If you have previously connected a Coin account to your google account, click below to restore it"
   },
+  "BP9jv4": {
+    "defaultMessage": "Make a payment",
+    "description": "app.makepayments.title: Main title for the Make a payment page in the app"
+  },
   "CBetQ2": {
     "defaultMessage": "Create Account",
     "description": "app.account.restore.createAccount.button: The button to redirect to the create an account page for the restore your account page"
   },
-  "D2FTm2": {
-    "defaultMessage": "Please enter a password of at least 'moderate' strength"
+  "DV1Vjo": {
+    "defaultMessage": "Upload manualy",
+    "description": "app.account.restore.manualy: Locale link for the restore your account page"
   },
   "Drc6Pk": {
     "defaultMessage": "Recipient email",
@@ -187,9 +205,29 @@
     "defaultMessage": "LOG IN",
     "description": "app.accountSwitcher.login: label for button"
   },
+  "G/f00/": {
+    "defaultMessage": "Restore from Dropbox",
+    "description": "app.account.restore.dropboxLink: Dropbox link for the restore your account page"
+  },
+  "GGCxth": {
+    "defaultMessage": "Personal Details",
+    "description": "app.settings.personaldetails.title: Title for the page setting / tab personal details in the app"
+  },
   "GL/pX/": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab"
+  },
+  "GgdZRh": {
+    "defaultMessage": "If you have any problems with restoring your account, contact us for help.",
+    "description": "app.account.restore.restoreHelp: The text before the button to redirect to the create an account page for the restore your account page"
+  },
+  "H+LMwK": {
+    "defaultMessage": "Templates",
+    "description": "app.makepayments.tabs.templates: Title for the tabs the Make a payment page in the app"
+  },
+  "H0iu0v": {
+    "defaultMessage": "The entered referrer ID is not recognized",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerUnknown"
   },
   "HOr2/E": {
     "defaultMessage": "Create your Account",
@@ -199,9 +237,17 @@
     "defaultMessage": "Destination Address",
     "description": "app.accounts.transfer.destinationAddress: destinationAddress for the make a payment page / transfer tab"
   },
+  "I5PO4z": {
+    "defaultMessage": "Eight characters should be the minimum.",
+    "description": "app.account.generate.passwordTextCaracters: The text for the create your password text"
+  },
   "I97ec/": {
     "defaultMessage": "Banks",
     "description": "app.accounts.billPayments.filterPayee.banks: Label for the filter payee for the form the make a payment page / bill payment tab"
+  },
+  "IDQ6vA": {
+    "defaultMessage": "Save your account",
+    "description": "app.account.create.store.aboveTheTitle: The above the main title title for the store your account page"
   },
   "IKXKQH": {
     "defaultMessage": "Send e-Transfer",
@@ -226,6 +272,10 @@
   "InBntU": {
     "defaultMessage": "Settings",
     "description": "app.accounts.sidebar.settings: Title for the Settings entry in the menu"
+  },
+  "It9lF6": {
+    "defaultMessage": "Settings",
+    "description": "app.MainNavigation.settings: Title for the entry in the sidebar menu"
   },
   "JHN0Qb": {
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
@@ -254,12 +304,29 @@
     "defaultMessage": "6 letters or numbers",
     "description": "app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input"
   },
+  "KID9KZ": {
+    "defaultMessage": "Email",
+    "description": "app.settings.personaldetails.email: Email field for the page setting / tab personal details in the app"
+  },
+  "KILB3J": {
+    "defaultMessage": "Create Account",
+    "description": "app.addAccount.connect.buttonCreate"
+  },
+  "KMhuD/": {
+    "defaultMessage": "Welcome back to TheCoin!",
+    "description": "app.account.restore.title: The main title for the restore account page"
+  },
+  "LAm9Br": {
+    "defaultMessage": "WHY ARE WE DIFFERRENT?",
+    "description": "app.account.generate.aboveTheTitle: The above the title for the information page before the create account form"
+  },
   "Lcl2H7": {
     "defaultMessage": "Contact Us",
     "description": "app.accounts.sidebar.contact: Title for the Contact Us entry in the menu"
   },
-  "MDDTmq": {
-    "defaultMessage": "The entered referrer ID is not recognized"
+  "M4HZZG": {
+    "defaultMessage": "Where is my account stored?",
+    "description": "app.account.generate.button.accountStored: button for the information page before the create account form"
   },
   "MVsy/6": {
     "defaultMessage": "Download",
@@ -269,9 +336,9 @@
     "defaultMessage": "Payee account number",
     "description": "app.accounts.billPayments.form.payeeAccount: Label for the form the make a payment page / bill payment tab"
   },
-  "MrmpCz": {
-    "defaultMessage": "Any name you like",
-    "description": "app.addaccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input"
+  "MaNfe5": {
+    "defaultMessage": "Personal Details",
+    "description": "app.settings.tabs.personaldetails: Title for the tabs the setting page in the app"
   },
   "N81UTF": {
     "defaultMessage": "You have entered {len} numbers, but your account requires {max}",
@@ -293,6 +360,10 @@
     "defaultMessage": "Create a New Account",
     "description": "app.account.connect.create.createAccount: The button to redirect to the create an account page for the restore your account page"
   },
+  "O18bEU": {
+    "defaultMessage": "Accounts with TheCoin are a little different to your regular bank. We are built on the blockchain, which means that we don't store your account keys - you do! If you've never used a blockchain account, some of these differences can seem a bit strange. We encourage you to read the short intro articles below if you would like to learn more.",
+    "description": "app.account.generate.description: Title for the information page before the create account form"
+  },
   "OFfaj+": {
     "defaultMessage": "All",
     "description": "app.historyGraph.All: button for Show entire history"
@@ -304,6 +375,18 @@
   "OoWP7t": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please contact support@thecoin.io and describe what happened",
     "description": "app.accounts.billPayments.form.errorForm: Message for the form the make a payment page / bill payment tab"
+  },
+  "Owjqk8": {
+    "defaultMessage": "We are very proud to combine the cutting-edge security and performance of blockchain with the the conveniences of traditional banking.",
+    "description": "app.account.generate.proud: Text underneath the buttons for the information page before the create account form"
+  },
+  "PCPjRE": {
+    "defaultMessage": "Account Storage",
+    "description": "app.settings.tabs.storage: Title for the tabs the setting page in the app"
+  },
+  "POzyJr": {
+    "defaultMessage": "To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.",
+    "description": "app.account.create.store.explain: The text underneath the button to explain what is the most secured for the store your account page"
   },
   "PhGigK": {
     "defaultMessage": "UPLOADED"
@@ -323,6 +406,10 @@
   "Qd0+sv": {
     "defaultMessage": "Second Step",
     "description": "app.account.create.form.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "Qi/Oy8": {
+    "defaultMessage": "Welcome to TheCoin",
+    "description": "app.account.generate.title: Title for the information page before the create account form"
   },
   "Qpm5Pd": {
     "defaultMessage": "Order received. You should receive the e-Transfer in 1-2 business days.",
@@ -344,6 +431,10 @@
     "defaultMessage": "Your card number should be 16 digits long",
     "description": "app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page"
   },
+  "SlkrJd": {
+    "defaultMessage": "Given Name",
+    "description": "app.settings.personaldetails.name: Name field for the page setting / tab personal details in the app"
+  },
   "Sp5Ik1": {
     "defaultMessage": "Step 1 of 3: Checking payment availability...",
     "description": "app.accounts.billPayments.step1: Message for the form the make a payment page / bill payment tab"
@@ -352,6 +443,14 @@
     "defaultMessage": "Topup balance",
     "description": "app.topup.title: Main title for the topup page in the app"
   },
+  "TbRPO0": {
+    "defaultMessage": "Your can choose the currency you want us to display:",
+    "description": "app.settings.personaldetails.descriptionCurrency: Description for the page setting / tab personal details in the app"
+  },
+  "TpW0Zs": {
+    "defaultMessage": "Currency",
+    "description": "app.settings.personaldetails.titleCurrency: Title for the page setting / tab personal details in the app"
+  },
   "U5ZvQe": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.transfer.transferOutProgress: transferOutProgress for the make a payment page / transfer tab"
@@ -359,12 +458,20 @@
   "U6E/Kq": {
     "defaultMessage": "Or, if you can restore an account generated previously"
   },
+  "UHGS2W": {
+    "defaultMessage": "Store on Google",
+    "description": "app.account.create.store.button.google: The button to save on google for the store your account page"
+  },
   "UKvwyv": {
     "defaultMessage": "This account isn't stored locally, and so cannot be uploaded to Google"
   },
   "V6O1Hl": {
     "defaultMessage": "Top up balance",
     "description": "app.accounts.sidebar.transferin: Title for the transfer entry in the menu"
+  },
+  "VTi6+m": {
+    "defaultMessage": "Overview",
+    "description": "app.MainNavigation.home: Title for the entry in the sidebar menu"
   },
   "VzMSxf": {
     "defaultMessage": "Compatible account detected",
@@ -381,6 +488,10 @@
     "defaultMessage": "Account not verified",
     "description": "app.settings.verified.titleNotVerified: Title for the verfified section in the setting page in the app"
   },
+  "XNv52p": {
+    "defaultMessage": "Top up balance",
+    "description": "app.MainNavigation.transferin: Title for the entry in the sidebar menu"
+  },
   "Y0jYZ8": {
     "defaultMessage": "Step 2 of 3: Sending sell order to our servers...",
     "description": "app.accounts.redeem.step2: Message for the form the make a payment page / etransfert tab"
@@ -388,6 +499,14 @@
   "Y67lRV": {
     "defaultMessage": "All categories",
     "description": "app.accounts.billPayments.filterPayee.all: Label for the filter payee for the form the make a payment page / bill payment tab"
+  },
+  "YKiHC3": {
+    "defaultMessage": "Full Address",
+    "description": "app.settings.personaldetails.address: Full Address field for the page setting / tab personal details in the app"
+  },
+  "YcVCvg": {
+    "defaultMessage": "We employ a multi-layered approach to ensure your account has complete security. Your account and it's value are secured on the blockchain, meaning that the same security that protects over $17 trillion of assets also protects your account. This security is, in practical terms, unhackable.",
+    "description": "app.account.generate.storeAccountText: The text for the create your password text"
   },
   "Z6iCOX": {
     "defaultMessage": "You can download the account file, or print it as a QR code.",
@@ -409,6 +528,14 @@
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
   },
+  "adAom9": {
+    "defaultMessage": "Create Account",
+    "description": "app.account.restore.createAccount: The button to redirect to the create an account page for the restore your account page"
+  },
+  "ai4iRi": {
+    "defaultMessage": "A referrer ID should only contain alpha-numeric characters.",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerInvalidCharacters"
+  },
   "anIZrC": {
     "defaultMessage": "Add an Account",
     "description": "app.accountSwitcher.addAccount: Title for the Add an Account in the menu"
@@ -416,6 +543,10 @@
   "b+zvsz": {
     "defaultMessage": "Create Account",
     "description": "app.account.create.form.buttonCreate: Button for the create account form page"
+  },
+  "c+odgw": {
+    "defaultMessage": "A referrer ID should be 6 characters long.",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerNumChars"
   },
   "cQy1PG": {
     "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
@@ -429,6 +560,10 @@
     "defaultMessage": "Year",
     "description": "app.historyGraph.Year: button for Duration of 1 year"
   },
+  "d5xJbS": {
+    "defaultMessage": "Save",
+    "description": "app.settings.personaldetails.button: Button for the page setting / tab personal details in the app"
+  },
   "dGPJA4": {
     "defaultMessage": "Localy",
     "description": "app.storeOnline.localy.link"
@@ -440,6 +575,10 @@
   "dQP0Sd": {
     "defaultMessage": "in the meantime, feel free to contact"
   },
+  "dUeAZx": {
+    "defaultMessage": "Be sure you have access to your local files later.",
+    "description": "app.account.create.store.explainDownload: The text underneath the button to explain that the client need to have access to this file for the store your account page"
+  },
   "dWvxu+": {
     "defaultMessage": "Step 1 of 3: Checking order availability...",
     "description": "app.accounts.redeem.step1: Message for the form the make a payment page / etransfert tab"
@@ -448,19 +587,40 @@
     "defaultMessage": "Contact Us",
     "description": "app.contactus.title: Main title for the Contact Us page in the app"
   },
+  "dggnAK": {
+    "defaultMessage": "Avoid words like your name, your location, your family name or your pet’s name.",
+    "description": "app.account.generate.passwordTextNames: The text for the create your password text"
+  },
+  "dj+QwG": {
+    "defaultMessage": "Bills",
+    "description": "app.makepayments.tabs.bills: Title for the tabs the Make a payment page in the app"
+  },
+  "eWqzXa": {
+    "defaultMessage": "How to make a good password",
+    "description": "app.account.generate.button.goodPassword: button for the information page before the create account form"
+  },
   "f82wcH": {
     "defaultMessage": "Upload an account saved manually"
+  },
+  "gFB+cq": {
+    "defaultMessage": "An account must have a name.",
+    "description": "app.addAccount.newbaseclass.errorNameTooShort"
   },
   "gVJrrM": {
     "defaultMessage": "Other",
     "description": "app.accounts.billPayments.filterPayee.other: Label for the filter payee for the form the make a payment page / bill payment tab"
   },
-  "gndVKV": {
-    "defaultMessage": "An account with this name already exists here."
+  "giKcxa": {
+    "defaultMessage": "App Connect",
+    "description": "app.settings.tabs.qrconnect: Title for the tabs the setting page in the app"
   },
   "hANbK3": {
     "defaultMessage": "Your details",
     "description": "app.accounts.purchase.haveTransferCodeHeader"
+  },
+  "hSMzXi": {
+    "defaultMessage": "Store on Dropbox",
+    "description": "app.account.create.store.button.dropbox: The button to save on dropbox for the store your account page"
   },
   "iXp/x0": {
     "defaultMessage": "Create a new recipient in your financial institution with the given details",
@@ -472,6 +632,14 @@
   "il+iEV": {
     "defaultMessage": "Registering this account failed. Please contact support@thecoin.io6 letters or numbers",
     "description": "app.addaccount.newbaseclass.referralinput.error: Error for the referral input"
+  },
+  "j/hJ0i": {
+    "defaultMessage": "Password",
+    "description": "app.addAccount.generate.labelPassword"
+  },
+  "j941L1": {
+    "defaultMessage": "Use a unique password.",
+    "description": "app.account.generate.passwordTextUnique: The text for the create your password text"
   },
   "k7l1oT": {
     "defaultMessage": "I already have an Account",
@@ -485,8 +653,9 @@
     "defaultMessage": "Compatible account detected",
     "description": "app.account.connect.existing.aboveTheTitle: Title above the main Title for the connect account form page"
   },
-  "l0BLUl": {
-    "defaultMessage": "A referrer ID should be 6 characters long."
+  "knRmks": {
+    "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
+    "description": "app.makepayments.description: Description for the Make a payment page in the app"
   },
   "lLRGM3": {
     "defaultMessage": "Step 3 of 3: Waiting for the order to be accepted (check progress {link})...",
@@ -499,6 +668,10 @@
   "lTiUZs": {
     "defaultMessage": "Creating Account...",
     "description": "app.account.create.whileCreatingHeader"
+  },
+  "llKfvl": {
+    "defaultMessage": "e-Transfer",
+    "description": "app.makepayments.tabs.etransfer: Title for the tabs the Make a payment page in the app"
   },
   "lmGLWG": {
     "defaultMessage": "First Step",
@@ -520,6 +693,10 @@
     "defaultMessage": "Your Account has been created",
     "description": "app.account.create.congratulations.aboveTheTitle: Title above the title for the congratulations page"
   },
+  "mJoiFU": {
+    "defaultMessage": "Contact Us",
+    "description": "app.MainNavigation.contact: Title for the entry in the sidebar menu"
+  },
   "mvYWfO": {
     "defaultMessage": "Cannot Upload"
   },
@@ -527,12 +704,17 @@
     "defaultMessage": "Please wait...",
     "description": "app.accounts.purchase.getTransferCodeHeader"
   },
+  "nY781+": {
+    "defaultMessage": "Next Step",
+    "description": "app.account.create.store.congratulation: The button to be redirected to the congratulations page for the store your account page"
+  },
   "nykc0n": {
     "defaultMessage": "Invalid account number",
     "description": "app.accounts.billPayments.invalidNumericLength: Error message for the bill payement page"
   },
-  "o12td2": {
-    "defaultMessage": "An account must have a name."
+  "o8vxz/": {
+    "defaultMessage": "Date of Birth",
+    "description": "app.settings.personaldetails.dob: Date of birth field for the page setting / tab personal details in the app"
   },
   "oMopOa": {
     "defaultMessage": "The given number is not a valid visa card",
@@ -542,8 +724,20 @@
     "defaultMessage": "Send payment",
     "description": "app.accounts.billPayments.form.button: Label for the form the make a payment page / bill payment tab"
   },
+  "pA7Igc": {
+    "defaultMessage": "Coin Transfer",
+    "description": "app.makepayments.tabs.anotherCoin: Title for the tabs the Make a payment page in the app"
+  },
   "pCI+3K": {
     "defaultMessage": "Load using a different method"
+  },
+  "pJe8Es": {
+    "defaultMessage": "Referral Code",
+    "description": "app.addaccount.newbaseclass.referralinput.labelReferrer"
+  },
+  "pfe93f": {
+    "defaultMessage": "Restore from Microsoft OneDrive",
+    "description": "app.account.restore.microsoftLink: Microsoft link for the restore your account page"
   },
   "pkNdj0": {
     "defaultMessage": "Connect to an existing Ethereum Account"
@@ -552,9 +746,17 @@
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
     "description": "app.accounts.billPayments.step2: Message for the form the make a payment page / bill payment tab"
   },
+  "qOYMCj": {
+    "defaultMessage": "Ensure your safety",
+    "description": "app.account.create.store.title: The main title for the store your account page"
+  },
   "qppWkL": {
     "defaultMessage": "Verify",
     "description": "app.settings.verified.buttonNotVerified: Button for the verfified section in the setting page in the app"
+  },
+  "qsTrEO": {
+    "defaultMessage": "Don’t have an account?",
+    "description": "app.account.restore.explanation: The text before the button to redirect to the create an account page for the restore your account page"
   },
   "r0+7Hx": {
     "defaultMessage": "Transfer directly to another account with TheCoin.",
@@ -587,6 +789,10 @@
     "defaultMessage": "No numbers or special characters",
     "description": "app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab"
   },
+  "t19+gS": {
+    "defaultMessage": "Make payments",
+    "description": "app.MainNavigation.makepayments: Title for the entry in the sidebar menu"
+  },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",
     "description": "app.accounts.transfer.step2: Message for step2 for the make a payment page / transfer tab"
@@ -599,6 +805,10 @@
     "defaultMessage": "Security question",
     "description": "app.accounts.redeem.form.questionLabel: Label for the form the make a payment page / etransfert tab"
   },
+  "tvmNSG": {
+    "defaultMessage": "An account with this name already exists here.",
+    "description": "app.addAccount.newbaseclass.errorNameDuplicate"
+  },
   "tzrpPi": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab"
@@ -610,9 +820,25 @@
     "defaultMessage": "Send us a secured message and we will answer as quickly as we can",
     "description": "app.contactus.description: Description for the Contact Us page in the app"
   },
+  "uHI1R0": {
+    "defaultMessage": "Edit",
+    "description": "app.settings.personaldetails.edit: Edit zone for the page setting / tab personal details in the app"
+  },
   "ulVAYv": {
     "defaultMessage": "Interac E-mail Transfer",
     "description": "app.topup.tabs.etransfer: Title for the tabs the topup page in the app"
+  },
+  "uqpQ2B": {
+    "defaultMessage": "Restore from Google",
+    "description": "app.account.restore.googleLink: google link for the restore your account page"
+  },
+  "v0uXD5": {
+    "defaultMessage": "Also you can log into your account using an existing Ethereum account.",
+    "description": "app.account.restore.otherEthereum: The link to redirect to use your existing ethereum for the restore your account page"
+  },
+  "vN4JT+": {
+    "defaultMessage": "Never give your password to anyone.",
+    "description": "app.account.generate.passwordTextKeep: The text for the create your password text"
   },
   "vP3OeB": {
     "defaultMessage": "You can pay your bills directly from The Coin. Select payee:",
@@ -632,12 +858,20 @@
   "x/RTYx": {
     "defaultMessage": "Authentication passed, please return to your account and complete connecting to google"
   },
+  "x4o9ah": {
+    "defaultMessage": "Phone Number",
+    "description": "app.settings.personaldetails.phone: Phone field for the page setting / tab personal details in the app"
+  },
   "xASOH9": {
     "defaultMessage": "Restore accounts from Google"
   },
   "xAqVcA": {
     "defaultMessage": "Generate your personalized e-Transfer recipient",
     "description": "app.purchase.generate: Content for the purchase list explanation page in the app"
+  },
+  "xo8dT5": {
+    "defaultMessage": "Create a New Account",
+    "description": "app.account.generate.button.go: The create account button for the information page before the create account form"
   },
   "yDxX7+": {
     "defaultMessage": "Taxes",
@@ -654,6 +888,10 @@
   "yfANOQ": {
     "defaultMessage": "Help",
     "description": "app.MainNavigation.help: Title for the help entry in the menu"
+  },
+  "yhUEVs": {
+    "defaultMessage": "Restore Account",
+    "description": "app.account.restore.aboveTheTitle: The above the title text for the restore account page"
   },
   "zmnLDK": {
     "defaultMessage": "Don’t have an account?",

@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@thecointech/shared/containers/Account/Web3';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
-import messages from '../messages';
 import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from '../styles.module.less';
+
+const translations = defineMessages({
+  buttonCreate : {
+      defaultMessage: 'Create Account',
+      description: 'app.addAccount.connect.buttonCreate'}
+});
 
 export const Connect = () => {
 
@@ -43,7 +48,7 @@ export const Connect = () => {
         <NameInput forceValidate={forceValidate} setName={setName} />
         <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         <ButtonPrimary onClick={onConnect} size="medium">
-          <FormattedMessage {...messages.buttonCreate} />
+          <FormattedMessage {...translations.buttonCreate} />
         </ButtonPrimary>
       </Form>
     </>
