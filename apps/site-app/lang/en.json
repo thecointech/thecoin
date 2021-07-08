@@ -15,9 +15,6 @@
     "defaultMessage": "Create your account",
     "description": "app.account.create.title: Title for the create account form page"
   },
-  "/BZiQv": {
-    "defaultMessage": "Upload Failed"
-  },
   "/bV15e": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab"
@@ -70,15 +67,9 @@
     "defaultMessage": "Don’t have an account?",
     "description": "app.account.restore.createAccount.explanation: The text before the button to redirect to the create an account page for the restore your account page"
   },
-  "3q6swa": {
-    "defaultMessage": "To use this feature, either install the MetaMask plugin or try the new Opera browser!"
-  },
   "40RPha": {
     "defaultMessage": "Account Name",
     "description": "app.addAccount.newbaseclass.labelName"
-  },
-  "4PGglh": {
-    "defaultMessage": "CONNECT TO GOOGLE"
   },
   "5F2PB8": {
     "defaultMessage": "Create a New Account",
@@ -140,9 +131,6 @@
     "defaultMessage": "Any name you like",
     "description": "app.addAccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input"
   },
-  "9ZULUQ": {
-    "defaultMessage": "No external providers detected!"
-  },
   "9d/cRr": {
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
@@ -167,9 +155,6 @@
     "defaultMessage": "Your account needs to be verified for better security.",
     "description": "app.settings.verified.descriptionNotVerified: Description for the verfified section in the setting page in the app"
   },
-  "BEKB5I": {
-    "defaultMessage": "If you have previously connected a Coin account to your google account, click below to restore it"
-  },
   "BP9jv4": {
     "defaultMessage": "Make a payment",
     "description": "app.makepayments.title: Main title for the Make a payment page in the app"
@@ -189,9 +174,6 @@
   "EmDoJa": {
     "defaultMessage": "We are {percentComplete}% done cooking your brand-new account.",
     "description": "app.account.create.whileCreatingHeader"
-  },
-  "FV6WEb": {
-    "defaultMessage": "This page expects to recieve google authentication information, but none was found."
   },
   "FdZABx": {
     "defaultMessage": "LOG IN",
@@ -224,6 +206,10 @@
   "HOr2/E": {
     "defaultMessage": "Create your Account",
     "description": "app.account.create.form.title: Title above the main Title for the create account form page"
+  },
+  "HbmGay": {
+    "defaultMessage": "Thank you for completing Google Authorization: This window can now be closed.",
+    "description": "app.storeOnline.google.tokenSuccess"
   },
   "I+PK92": {
     "defaultMessage": "Destination Address",
@@ -277,12 +263,17 @@
     "defaultMessage": "Don’t have an account?",
     "description": "app.account.restore.createAccount.explanation: Title above the main Title for the create account form page"
   },
-  "JOIoTr": {
-    "defaultMessage": "You have successfully backed up your account to your personal Google Drive"
+  "JbQ0xl": {
+    "defaultMessage": "Authentication passed, please return to your account and complete connecting to google",
+    "description": "app.storeOnline.google.cookieSuccess"
   },
   "JdpQPr": {
     "defaultMessage": "Register it with TheCoin",
     "description": "app.account.connect.existing.title: Title above the main Title for the connect account form page"
+  },
+  "Je8GXO": {
+    "defaultMessage": "This account isn't stored locally, and so cannot be uploaded to Google",
+    "description": "app.storeOnline.google.storeGoogle.messageErrorRemoteMessage"
   },
   "JgdFdU": {
     "defaultMessage": "Profile",
@@ -308,6 +299,10 @@
     "defaultMessage": "Welcome back to TheCoin!",
     "description": "app.account.restore.title: The main title for the restore account page"
   },
+  "Kaex8A": {
+    "defaultMessage": "You have successfully backed up your account to your personal Google Drive",
+    "description": "app.storeOnline.google.storeGoogle.messageSuccessMessage"
+  },
   "LAm9Br": {
     "defaultMessage": "WHY ARE WE DIFFERRENT?",
     "description": "app.account.generate.aboveTheTitle: The above the title for the information page before the create account form"
@@ -315,6 +310,10 @@
   "Lcl2H7": {
     "defaultMessage": "Contact Us",
     "description": "app.accounts.sidebar.contact: Title for the Contact Us entry in the menu"
+  },
+  "LkZzDQ": {
+    "defaultMessage": "Load using a different method",
+    "description": "app.addAccount.existsSwitcher.existTransfer"
   },
   "M4HZZG": {
     "defaultMessage": "Where is my account stored?",
@@ -380,9 +379,6 @@
     "defaultMessage": "To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.",
     "description": "app.account.create.store.explain: The text underneath the button to explain what is the most secured for the store your account page"
   },
-  "PhGigK": {
-    "defaultMessage": "UPLOADED"
-  },
   "PitVN2": {
     "defaultMessage": "Visa Card",
     "description": "app.accounts.billPayments.filterPayee.visa: Label for the filter payee for the form the make a payment page / bill payment tab"
@@ -407,6 +403,10 @@
     "defaultMessage": "Order received. You should receive the e-Transfer in 1-2 business days.",
     "description": "app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab"
   },
+  "QqtkI3": {
+    "defaultMessage": "Connect to Google",
+    "description": "app.storeOnline.google.storeGoogle.buttonConnect"
+  },
   "RJKG2v": {
     "defaultMessage": "Week",
     "description": "app.historyGraph.Week: button for Duration of 1 week"
@@ -422,6 +422,10 @@
   "S/Ujpm": {
     "defaultMessage": "In",
     "description": "app.historygraph.tooltip.in: HistoryGraph tooltip - total transaction in"
+  },
+  "S3a9RA": {
+    "defaultMessage": "Cannot Upload",
+    "description": "app.storeOnline.google.storeGoogle.messageErrorRemoteHeader"
   },
   "SKISxf": {
     "defaultMessage": "Your card number should be 16 digits long",
@@ -455,9 +459,6 @@
     "defaultMessage": "Store on Google",
     "description": "app.account.create.store.button.google: The button to save on google for the store your account page"
   },
-  "UKvwyv": {
-    "defaultMessage": "This account isn't stored locally, and so cannot be uploaded to Google"
-  },
   "V6O1Hl": {
     "defaultMessage": "Top up balance",
     "description": "app.accounts.sidebar.transferin: Title for the transfer entry in the menu"
@@ -473,9 +474,6 @@
   "WYLa4b": {
     "defaultMessage": "We are generating your individual e-Transfer recipient info",
     "description": "app.accounts.purchase.fetchTransferCode"
-  },
-  "WiKyhr": {
-    "defaultMessage": "Congratulations"
   },
   "X/fgLk": {
     "defaultMessage": "Account not verified",
@@ -541,6 +539,10 @@
     "defaultMessage": "A referrer ID should be 6 characters long.",
     "description": "app.addaccount.newbaseclass.referralinput.errorReferrerNumChars"
   },
+  "cQCZu3": {
+    "defaultMessage": "Upload Failed",
+    "description": "app.storeOnline.google.storeGoogle.messageErrorFailedUploadHeader"
+  },
   "cQy1PG": {
     "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
     "description": "app.contactus.successMessage: Success Message for the contact us page"
@@ -560,6 +562,10 @@
   "dGPJA4": {
     "defaultMessage": "Localy",
     "description": "app.storeOnline.localy.link"
+  },
+  "dJoJ7K": {
+    "defaultMessage": "This page expects to recieve google authentication information, but none was found.",
+    "description": "app.storeOnline.google.tokenFailure"
   },
   "dPMZdF": {
     "defaultMessage": "Restore from Google",
@@ -585,6 +591,10 @@
     "defaultMessage": "Bills",
     "description": "app.makepayments.tabs.bills: Title for the tabs the Make a payment page in the app"
   },
+  "dkp1DU": {
+    "defaultMessage": "Something went wrong, your account has not been backed up. Please contact support@thecoin.io",
+    "description": "app.storeOnline.google.storeGoogle.messageErrorFailedUploadMessage"
+  },
   "eWqzXa": {
     "defaultMessage": "How to make a good password",
     "description": "app.account.generate.button.goodPassword: button for the information page before the create account form"
@@ -592,10 +602,6 @@
   "existRestore": {
     "defaultMessage": "Upload an account saved manually",
     "description": "app.addAccount.existsSwitcher.existUpload"
-  },
-  "existTransfer": {
-    "defaultMessage": "Load using a different method",
-    "description": "app.addAccount.existsSwitcher.existTransfer"
   },
   "gFB+cq": {
     "defaultMessage": "An account must have a name.",
@@ -621,8 +627,9 @@
     "defaultMessage": "Create a new recipient in your financial institution with the given details",
     "description": "app.purchase.newRecipient: Content for the purchase list explanation page in the app"
   },
-  "ikuIzB": {
-    "defaultMessage": "This feature connects The Coin to an external Web3 account provider."
+  "igNjwA": {
+    "defaultMessage": "Congratulations",
+    "description": "app.storeOnline.google.storeGoogle.messageSuccessHeader"
   },
   "il+iEV": {
     "defaultMessage": "Registering this account failed. Please contact support@thecoin.io6 letters or numbers",
@@ -631,6 +638,10 @@
   "j/hJ0i": {
     "defaultMessage": "Password",
     "description": "app.addAccount.generate.labelPassword"
+  },
+  "j7iXOT": {
+    "defaultMessage": "Please wait - we are checking for authentication",
+    "description": "app.storeOnline.google.tokenWaiting"
   },
   "j941L1": {
     "defaultMessage": "Use a unique password.",
@@ -699,9 +710,6 @@
   "mowZfy": {
     "defaultMessage": "This feature connects The Coin to an external Web3 account provider.",
     "description": "app.addAccount.connect.warnIfDisabled.warningHeader"
-  },
-  "mvYWfO": {
-    "defaultMessage": "Cannot Upload"
   },
   "nUylG3": {
     "defaultMessage": "Please wait...",
@@ -783,8 +791,9 @@
     "defaultMessage": "Interac Online",
     "description": "app.topup.tabs.interact: Title for the tabs the topup page in the app"
   },
-  "s43Dg1": {
-    "defaultMessage": "Please wait - we are checking for authentication"
+  "s1QjyO": {
+    "defaultMessage": "Uploaded",
+    "description": "app.storeOnline.google.storeGoogle.buttonSuccess"
   },
   "sA8bzZ": {
     "defaultMessage": "No numbers or special characters",
@@ -813,9 +822,6 @@
   "tzrpPi": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab"
-  },
-  "u3W+xt": {
-    "defaultMessage": "Something went wrong, your account has not been backed up. Please contact support@thecoin.io"
   },
   "uEep9j": {
     "defaultMessage": "Send us a secured message and we will answer as quickly as we can",
@@ -849,22 +855,13 @@
     "defaultMessage": "Sign into your financial institution. Navigate to where you can send an Interac Email Transfer",
     "description": "app.purchase.signin: Content for the purchase list explanation page in the app"
   },
-  "wZMhOr": {
-    "defaultMessage": "Thank you for completing Google Authorization: This window can now be closed."
-  },
   "x+rlDN": {
     "defaultMessage": "Profile",
     "description": "app.accounts.sidebar.profile: Title for the Profile entry in the menu"
   },
-  "x/RTYx": {
-    "defaultMessage": "Authentication passed, please return to your account and complete connecting to google"
-  },
   "x4o9ah": {
     "defaultMessage": "Phone Number",
     "description": "app.settings.personaldetails.phone: Phone field for the page setting / tab personal details in the app"
-  },
-  "xASOH9": {
-    "defaultMessage": "Restore accounts from Google"
   },
   "xAqVcA": {
     "defaultMessage": "Generate your personalized e-Transfer recipient",
