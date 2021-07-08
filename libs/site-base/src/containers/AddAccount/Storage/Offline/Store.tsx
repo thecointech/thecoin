@@ -1,15 +1,34 @@
 import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import { defineMessage, FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
-import { ButtonSecondary } from '../../../../../../components/Buttons';
+import { ButtonSecondary } from '../../../../components/Buttons';
 
+
+const buttonText = defineMessage({defaultMessage: 'DOWNLOAD', description: "Download button in settings?"});
 
 type MyProps = {
   address: string
   onComplete?: () => void
+}
+
+export const Download = (props: MyProps) => {
+
+  ////////////////////////////////
+  const onClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (e) e.preventDefault();
+    onDownload(props.address);
+    if (props.onComplete)
+      props.onComplete();
+  }, [props.address]);
+  ////////////////////////////////
+
+  return (
+    <ButtonSecondary onClick={onClick} >
+      <FormattedMessage {...buttonText} />
+    </ButtonSecondary>
+  )
 }
 
 
@@ -30,22 +49,4 @@ export const onDownload = (address: string) => {
   else {
     alert("The active wallet is not downloadable (is this a remote wallet?)")
   }
-}
-
-export const Download = (props: MyProps) => {
-
-  ////////////////////////////////
-  const onClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    if (e) e.preventDefault();
-    onDownload(props.address);
-    if (props.onComplete)
-      props.onComplete();
-  }, [props.address]);
-  ////////////////////////////////
-
-  return (
-    <ButtonSecondary onClick={onClick} >
-      <FormattedMessage {...messages.buttonText} />
-    </ButtonSecondary>
-  )
 }

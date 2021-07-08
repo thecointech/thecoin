@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { Decoration } from '../../Decoration';
 import { ButtonPrimary } from '../../../../components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
-import { RestoreChoice } from './RestoreChoice';
+import { ProviderChoice } from '../ProviderChoice';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
@@ -102,10 +102,10 @@ export const Restore = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-            <RestoreChoice link={"/addAccount/upload"} txt={manualy} imgSrc={manually} />
+            <ProviderChoice link={"/addAccount/upload"} txt={manualy} imgSrc={manually} />
           </Grid.Column>
           <Grid.Column>
-          <RestoreChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />
+          <ProviderChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />
             <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
               <img src={ google } />
               <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
