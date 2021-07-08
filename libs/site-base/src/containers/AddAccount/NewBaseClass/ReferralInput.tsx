@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import messages from '../messages';
-import { GetReferrersApi } from "api";
+import { GetReferrersApi } from "../../../api";
 import { IsValidShortCode } from "@thecointech/utilities";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 

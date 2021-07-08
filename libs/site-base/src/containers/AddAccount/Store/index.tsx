@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
-import { StoreGoogle, UploadState } from "containers/StoreOnline/Google";
 import { Props as MessageProps, MaybeMessage } from "../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
+import { StoreGoogle, UploadState } from "../../StoreOnline/Google";
 import { onDownload } from "../../StoreOnline/Localy/download";
 import { StoreDropbox } from "../../StoreOnline/Dropbox";
 import { StoreMicrosoft } from "../../StoreOnline/Microsoft";
