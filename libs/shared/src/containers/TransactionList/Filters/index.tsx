@@ -8,10 +8,14 @@ type VisualProps={
 };
 
 const translate = defineMessages({ 
-    hide : {  defaultMessage:"Hide filters",
-              description:"shared.transactionList.filters.hide: Label for the filter show / hide system"},
-    show : {  defaultMessage:"Show filters",
-              description:"app.transactionList.filters.show: Label for the filter show / hide system"}});
+    hide : {  
+      id: "shared.transactionList.filters.hide", 
+      defaultMessage:"Hide filters",
+      description:"shared.transactionList.filters.hide: Label for the filter show / hide system"},
+    show : {  
+      id: "shared.transactionList.filters.show", 
+      defaultMessage:"Show filters",
+      description:"shared.transactionList.filters.show: Label for the filter show / hide system"}});
                 
 export const Filters = (props:VisualProps) => {
 

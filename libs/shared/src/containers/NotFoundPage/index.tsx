@@ -11,12 +11,18 @@ import { NavLink } from 'react-router-dom';
 import illustration from './images/illust_pagenotfound.svg'
 
 const translate = defineMessages({ 
-  aboveTheTitle : { defaultMessage:"Page Not Found",
-                    description:"shared.NotFoundPage.aboveTheTitle: Text above the title for the 404 page"},
-  title : { defaultMessage:"Sorry, we couldn’t find the page you are looking for",
-            description:"shared.NotFoundPage.title: Title for the 404 page"},
-  button : {  defaultMessage:"Home",
-              description:"shared.NotFoundPage.button: Go back to homepage button for the 404 page"}});
+  aboveTheTitle : { 
+    id: "shared.NotFoundPage.aboveTheTitle", 
+    defaultMessage:"Page Not Found",
+    description:"shared.NotFoundPage.aboveTheTitle: Text above the title for the 404 page"},
+  title : { 
+    id: "shared.NotFoundPage.title", 
+    defaultMessage:"Sorry, we couldn’t find the page you are looking for",
+    description:"shared.NotFoundPage.title: Title for the 404 page"},
+  button : {  
+    id: "shared.NotFoundPage.button", 
+    defaultMessage:"Home",
+    description:"shared.NotFoundPage.button: Go back to homepage button for the 404 page"}});
 
 export function NotFoundPage() {
   return (

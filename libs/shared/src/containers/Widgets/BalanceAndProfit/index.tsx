@@ -10,12 +10,18 @@ import { toHuman } from "../../../../../utils-ts/build/Conversion";
 import { defineMessages, FormattedMessage } from "react-intl";
 
 const translate = defineMessages({ 
-    balanceTitle : {  defaultMessage:"Balance",
-                      description:"shared.widgets.balanceandprofit.balance: Title for widget Balance and profit" },
-    profitTitle : { defaultMessage:"Profit",
-                    description:"shared.widgets.balanceandprofit.profit: Title for widget Balance and profit" },
-    cad : { defaultMessage:"$CAD",
-            description:"shared.widgets.balanceandprofit.cad: Title for widget Balance and profit" }});
+    balanceTitle : {  
+      id: "shared.widgets.balanceandprofit.balance",
+      defaultMessage:"Balance",
+      description:"shared.widgets.balanceandprofit.balance: Title for widget Balance and profit" },
+    profitTitle : { 
+      id: "shared.widgets.balanceandprofit.profit",
+      defaultMessage:"Profit",
+      description:"shared.widgets.balanceandprofit.profit: Title for widget Balance and profit" },
+    cad : { 
+      id: "shared.widgets.balanceandprofit.cad",
+      defaultMessage:"$CAD",
+      description:"shared.widgets.balanceandprofit.cad: Title for widget Balance and profit" }});
 
 
 export const BalanceAndProfit = () => {
