@@ -599,10 +599,6 @@
     "defaultMessage": "How to make a good password",
     "description": "app.account.generate.button.goodPassword: button for the information page before the create account form"
   },
-  "existRestore": {
-    "defaultMessage": "Upload an account saved manually",
-    "description": "app.addAccount.existsSwitcher.existUpload"
-  },
   "gFB+cq": {
     "defaultMessage": "An account must have a name.",
     "description": "app.addAccount.newbaseclass.errorNameTooShort"
@@ -614,6 +610,10 @@
   "giKcxa": {
     "defaultMessage": "App Connect",
     "description": "app.settings.tabs.qrconnect: Title for the tabs the setting page in the app"
+  },
+  "gnoeu5": {
+    "defaultMessage": "Upload an account saved manually",
+    "description": "app.addAccount.existsSwitcher.existUpload"
   },
   "hANbK3": {
     "defaultMessage": "Your details",
