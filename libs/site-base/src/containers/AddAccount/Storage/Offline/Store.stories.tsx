@@ -1,12 +1,10 @@
-import { OfflineStore as Component } from './Store';
+import { OfflineStore } from './Store';
 import { withAccounts } from '@thecointech/storybookutils';
 
 export default {
-  title: "Base/Offline/Store",
-  component: Component,
-  decorators: [
-    withAccounts(),
-  ]
+  title: "Base/Storage/Offline/Store",
+  component: OfflineStore,
+  decorators: [withAccounts()]
 };
 
 export const Store = {}

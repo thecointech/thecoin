@@ -26,9 +26,7 @@ const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
 const title = { id:"app.account.restore.title",
                 defaultMessage:"Welcome back to TheCoin!",
                 description:"The main title for the restore account page"};
-const manualy = { id:"app.account.restore.manualy",
-                  defaultMessage:"Upload manualy",
-                  description:"Locale link for the restore your account page"};
+
 const googleLink = { id:"app.account.restore.google",
                         defaultMessage:"Restore from Google",
                         description:"Microsoft link for the restore your account page"};
