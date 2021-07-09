@@ -7,8 +7,7 @@ import { ButtonSecondary } from '../../../../components/Buttons';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
 import { ProviderChoice } from '../ProviderChoice';
-import icon from "../images/manually.svg";
-
+import icon from "./images/download.svg";
 
 const buttonText = defineMessage({defaultMessage: 'DOWNLOAD', description: "Download button in settings?"});
 const download = defineMessage({  defaultMessage:"Download", description:"The button to download the account for the store your account page"});
