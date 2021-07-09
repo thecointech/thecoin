@@ -4063,12 +4063,13 @@
     "@formatjs/icu-messageformat-parser" "2.0.6"
     tslib "^2.1.0"
 
-"@formatjs/ts-transformer@^3.4.3":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.4.4.tgz#bc66e53bb4ae9ba8911b4f68a283a6c9a1992bf8"
-  integrity sha512-23QAwecL1emi0RWuV1w+FhsF7Xp6eJTSkXgWHSV94Ff0hfwfjLZMNNSiYQBT1CEHKzerRvuGi4rrbj4Zc46/pg==
+"@formatjs/ts-transformer@3.4.5":
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.4.5.tgz#53423dbb606f88e7e7637d941f9d19d508dd10c4"
+  integrity sha512-VzjT9jbpizZhwvtX/jaoTOeHQ/nvEx9ttzDrRXcFIGXyxupBZKTxr/+v6j3NjUmeiuN3JfaXhZUYmG+zsS0kxw==
   dependencies:
     "@formatjs/icu-messageformat-parser" "2.0.7"
+    chalk "^4.1.1"
     tslib "^2.1.0"
 
 "@fortawesome/fontawesome-free@^5.9.0":
@@ -11399,6 +11400,22 @@ babel-plugin-formatjs@10.3.0:
     "@babel/types" "^7.9.5"
     "@formatjs/icu-messageformat-parser" "2.0.6"
     "@formatjs/ts-transformer" "3.4.3"
+    "@types/babel__core" "^7.1.7"
+    "@types/babel__helper-plugin-utils" "7"
+    tslib "^2.1.0"
+
+babel-plugin-formatjs@^10.3.2:
+  version "10.3.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.3.2.tgz#9127c8b2b2b41a2da351a0b718276a274342fc63"
+  integrity sha512-u1A6/PpwGD4xb3X+egEb6BQ2QbumHFgJYduGCxMiRhONfEsVeD2SdvDlOsS1CWOr/03SFIB/U5j+QbUM1lh7sw==
+  dependencies:
+    "@babel/core" "^7.9.0"
+    "@babel/helper-plugin-utils" "^7.8.3"
+    "@babel/plugin-syntax-jsx" "7"
+    "@babel/traverse" "7"
+    "@babel/types" "^7.9.5"
+    "@formatjs/icu-messageformat-parser" "2.0.7"
+    "@formatjs/ts-transformer" "3.4.5"
     "@types/babel__core" "^7.1.7"
     "@types/babel__helper-plugin-utils" "7"
     tslib "^2.1.0"
