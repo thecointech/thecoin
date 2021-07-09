@@ -5,9 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { GetSecureApi, clientUri } from '../../../../api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
-import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../StoreOnline/Google/googleUtils';
+import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../GDrive/googleUtils';
 
-import manually from "../images/manually.svg";
 import google from "../images/google.svg";
 import microsoft from "../images/microsoft.svg";
 import dropbox from "../images/dropbox.svg";
@@ -19,6 +18,7 @@ import { Decoration } from '../../Decoration';
 import { ButtonPrimary } from '../../../../components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 import { ProviderChoice } from '../ProviderChoice';
+import { OfflineRestore } from '../Offline/Restore';
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
@@ -100,7 +100,7 @@ export const Restore = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-            <ProviderChoice link={"/addAccount/upload"} txt={manualy} imgSrc={manually} />
+            <OfflineRestore />
           </Grid.Column>
           <Grid.Column>
           <ProviderChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />

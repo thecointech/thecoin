@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
-import { Props as MessageProps, MaybeMessage } from "../../../../components/MaybeMessage";
+import { MaybeMessage } from "../../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
-import { StoreGoogle, UploadState } from "../StoreOnline/Google";
 import { OfflineStore } from "../Offline/Store";
 import { StoreDropbox } from "../StoreOnline/Dropbox";
 import { StoreMicrosoft } from "../StoreOnline/Microsoft";
 
-import google from "../images/google.svg";
 import microsoft from "../images/microsoft.svg";
 import dropbox from "../images/dropbox.svg";
 
@@ -18,6 +16,7 @@ import sharedStyles from '../styles.module.less';
 import { Decoration } from "../../Decoration";
 import { ButtonPrimary } from "../../../../components/Buttons";
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
+import { GDriveStore } from '../GDrive/Store';
 
 
 const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
@@ -35,9 +34,6 @@ const explainDownload = { id:"app.account.create.store.explainDownload",
 const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
-const googleLink = {  id:"app.account.create.store.button.google",
-                          defaultMessage:"Store on Google",
-                          description:"The button to save on google for the store your account page"};
 const microsoftLink = {  id:"app.account.create.store.button.microsoft",
                           defaultMessage:"Store on Microsoft OneDrive",
                           description:"The button to save on microsoft for the store your account page"};
@@ -47,8 +43,9 @@ const dropboxLink = {  id:"app.account.create.store.button.dropbox",
 
 export const Store = () => {
 
-  const [feedback, setFeedback] = useState({} as MessageProps)
-  const [uploadState, setUploadState] = useState(UploadState.Waiting);
+  const feedback = {};
+  // const [feedback, setFeedback] = useState({} as MessageProps)
+  // const [uploadState, setUploadState] = useState(UploadState.Waiting);
   //const [backedUp, setBackedUp] = useState(false);
   const activeAccount = useActiveAccount();
 
@@ -59,14 +56,6 @@ export const Store = () => {
     activeAccount?.details?.storedOnOneDrive
   );
 
-
-  ////////////////////////////////
-  const onStateChange = (state: UploadState, message: MessageProps) => {
-    setFeedback(message);
-    setUploadState(state);
-    // if (state == UploadState.Complete)
-    //   setBackedUp(true);
-  }
 
   return (
     <Container className={styles.content}>
@@ -84,10 +73,7 @@ export const Store = () => {
             <OfflineStore />
           </Grid.Column>
           <Grid.Column>
-              <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
-                <img src={ google } />
-                <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
-              </StoreGoogle>
+            <GDriveStore />
           </Grid.Column>
           <Grid.Column>
             <AvailableSoon>
