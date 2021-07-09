@@ -1,6 +1,11 @@
-var shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
+const path = require('path');
+const shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
+const mocksFolder = path.join(__dirname, '..', '__mocks__');
 
 module.exports = {
+  features: {
+    previewCsfV3: true,
+  },
   stories: [
     "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(ts|tsx)",
@@ -29,21 +34,15 @@ module.exports = {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
     // 'PRODUCTION' is used when building the static version of storybook.
-
-    // Make whatever fine-grained changes you need
-    // config.module.rules.push({
-    //   test: /semantic\.less$/,
-    //   use: ['style-loader', 'css-loader', 'less-loader'],
-    // });
-
-    config.module.rules.push(shared_loaders.semantic_less_loader);
-    config.module.rules.push(shared_loaders.css_module_loader);
     config.module.rules.push(
+      shared_loaders.semantic_less_loader,
+      shared_loaders.css_module_loader,
       {
         resolve: {
           alias: {
             "fs": false,
-          }
+          },
+          modules: [mocksFolder, 'node_modules', 'src'],
         }
       }
     );

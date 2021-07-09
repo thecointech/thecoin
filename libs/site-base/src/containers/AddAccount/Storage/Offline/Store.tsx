@@ -4,25 +4,48 @@ import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { ButtonSecondary } from '../../../../components/Buttons';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
+import { ProviderChoice } from '../ProviderChoice';
+import icon from "../images/manually.svg";
 
 
 const buttonText = defineMessage({defaultMessage: 'DOWNLOAD', description: "Download button in settings?"});
+const download = defineMessage({  defaultMessage:"Download", description:"The button to download the account for the store your account page"});
 
 type MyProps = {
   address: string
   onComplete?: () => void
 }
 
-export const Download = (props: MyProps) => {
+export const OfflineStore = () => {
+
+  const activeAccount = useActiveAccount()!;
+  const accountApi = useAccountApi(activeAccount.address);
 
   ////////////////////////////////
+  const onDownloadClicked = (e: React.MouseEvent<HTMLElement>) => {
+    if (e) e.preventDefault();
+    onDownload(activeAccount!.address);
+    accountApi.setDetails({
+      ...activeAccount.details,
+      storedOffline: true,
+    })
+  }
+
+  ////////////////////////////////
+
+  return <ProviderChoice onClick={onDownloadClicked} imgSrc={icon} txt={download} />;
+}
+
+export const Download = (props: MyProps) => {
+
   const onClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     onDownload(props.address);
     if (props.onComplete)
       props.onComplete();
   }, [props.address]);
-  ////////////////////////////////
 
   return (
     <ButtonSecondary onClick={onClick} >

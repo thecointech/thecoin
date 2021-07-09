@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 import { Props as MessageProps, MaybeMessage } from "../../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
 import { StoreGoogle, UploadState } from "../StoreOnline/Google";
-import { onDownload } from "../Offline/Store";
+import { OfflineStore } from "../Offline/Store";
 import { StoreDropbox } from "../StoreOnline/Dropbox";
 import { StoreMicrosoft } from "../StoreOnline/Microsoft";
 
-import manually from "../images/manually.svg";
 import google from "../images/google.svg";
 import microsoft from "../images/microsoft.svg";
 import dropbox from "../images/dropbox.svg";
@@ -27,9 +26,6 @@ const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
 const title = { id:"app.account.create.store.title",
                 defaultMessage:"Ensure your safety",
                 description:"The main title for the store your account page"};
-const download = {  id:"app.account.create.store.button.download",
-                    defaultMessage:"Download",
-                    description:"The button to download the account for the store your account page"};
 const explain = { id:"app.account.create.store.secureExplain",
                   defaultMessage:"To benefit from our guarantee of “the most secure account in the world”, you need to save it offline.",
                   description:"The text underneath the button to explain what is the most secured for the store your account page"};
@@ -53,23 +49,24 @@ export const Store = () => {
 
   const [feedback, setFeedback] = useState({} as MessageProps)
   const [uploadState, setUploadState] = useState(UploadState.Waiting);
-  const [backedUp, setBackedUp] = useState(false);
+  //const [backedUp, setBackedUp] = useState(false);
   const activeAccount = useActiveAccount();
 
-  ////////////////////////////////
-  const onStateChange = useCallback((state: UploadState, message: MessageProps) => {
-    setFeedback(message);
-    setUploadState(state);
-    if (state == UploadState.Complete)
-      setBackedUp(true);
-  }, [setFeedback, setBackedUp, setUploadState])
+  const isBackedUp = (
+    activeAccount?.details?.storedOffline ||
+    activeAccount?.details?.storedOnGoogle ||
+    activeAccount?.details?.storedOnDropbox ||
+    activeAccount?.details?.storedOnOneDrive
+  );
+
 
   ////////////////////////////////
-  const onDownloadClicked = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    if (e) e.preventDefault();
-    onDownload(activeAccount!.address);
-    setBackedUp(true);
-  }, [activeAccount]);
+  const onStateChange = (state: UploadState, message: MessageProps) => {
+    setFeedback(message);
+    setUploadState(state);
+    // if (state == UploadState.Complete)
+    //   setBackedUp(true);
+  }
 
   return (
     <Container className={styles.content}>
@@ -84,10 +81,7 @@ export const Store = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-              <a onClick={onDownloadClicked}>
-                <img src={ manually } />
-                <Header as={"h4"}><FormattedMessage {...download} /></Header>
-              </a>
+            <OfflineStore />
           </Grid.Column>
           <Grid.Column>
               <StoreGoogle onStateChange={onStateChange} disabled={uploadState === UploadState.Complete}>
@@ -124,7 +118,7 @@ export const Store = () => {
         <FormattedMessage {...explainDownload} />
       </div>
 
-      <ButtonPrimary as={Link} to="/congratulations" disabled={!backedUp} size="medium">
+      <ButtonPrimary as={Link} to="/congratulations" disabled={!isBackedUp} size="medium">
         <FormattedMessage {...congratulation} />
       </ButtonPrimary>
       <Decoration />
