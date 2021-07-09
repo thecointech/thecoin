@@ -64,7 +64,7 @@ libs/nft-contract/devlive.tokens.json
 
 libs/idx/src/config.devlive.json
 
-apps/site-nft/src/translations
-apps/site-nft/lang
+apps/site-nft/src/translations/fr.json
+apps/site-nft/src/translations/en.json
 
 apps/admin/app/main.prod.js.LICENSE.txt
