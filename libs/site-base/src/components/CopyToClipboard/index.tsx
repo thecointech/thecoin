@@ -10,10 +10,14 @@ interface Props {
 }
 
 const translate = defineMessages({ 
-    link : { defaultMessage:"Copy",
-              description:"base.copyToClipboard.link: Link for the button for the copy to clipboard tool"},
-    messageSuccess : { defaultMessage:"Copied to your clipboard",
-                        description:"base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"}});
+    link : { 
+      id: "base.copyToClipboard.link",
+      defaultMessage:"Copy",
+      description:"base.copyToClipboard.link: Link for the button for the copy to clipboard tool"},
+    messageSuccess : { 
+      id: "base.copyToClipboard.messageSuccess",
+      defaultMessage:"Copied to your clipboard",
+      description:"base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"}});
 
 
 export const CopyToClipboard: FunctionComponent<Props> = (props) => {
