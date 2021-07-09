@@ -20,7 +20,7 @@ RegisterRoutes(app);
 
   app.use(errorHandler);
 
-  const port = process.env.PORT ?? process.env.PORT_SERVICE_BROKER ?? 7001;
+  const port = process.env.PORT ?? process.env.PORT_SERVICE_RATES ?? 7001;
   app.listen(port, () => {
     console.log('Your server is listening on port %d (http://localhost:%d)', port, port);
     console.log('Swagger-ui is available on http://localhost:%d/docs', port);
