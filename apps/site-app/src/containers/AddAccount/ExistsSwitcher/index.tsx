@@ -17,7 +17,6 @@ const translations = defineMessages({
     defaultMessage: 'Connect to an existing Ethereum Account',
     description: 'app.addAccount.existsSwitcher.existConnect'},
   existUpload: {
-    id: `existRestore`,
     defaultMessage: 'Upload an account saved manually',
     description: 'app.addAccount.existsSwitcher.existUpload'},
 });
