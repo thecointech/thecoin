@@ -66,5 +66,9 @@ libs/idx/src/config.devlive.json
 
 apps/site-nft/src/translations/fr.json
 apps/site-nft/src/translations/en.json
+apps/site-app/src/translations/en.json
+apps/site-app/src/translations/fr.json
+apps/site-landing/src/translations/en.json
+apps/site-landing/src/translations/fr.json
 
 apps/admin/app/main.prod.js.LICENSE.txt
