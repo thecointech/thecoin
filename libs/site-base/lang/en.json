@@ -1,39 +1,39 @@
 {
-  "+VnHem": {
-    "defaultMessage": "ineffectual"
-  },
-  "BUGYWB": {
-    "defaultMessage": "moderate"
-  },
-  "D2FTm2": {
-    "defaultMessage": "Please enter a password of at least 'moderate' strength"
-  },
-  "G5dlT+": {
+  "base.copyToClipboard.link": {
     "defaultMessage": "Copy",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
-  "GfOGaW": {
-    "defaultMessage": "strong"
-  },
-  "KLgV0J": {
-    "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
-    "description": "base.footer.copyright: Copyright phrase in footer"
-  },
-  "LQQ384": {
-    "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
-    "description": "base.footer.registered.Registered Non profit phrase in footer"
-  },
-  "W9yWHk": {
-    "defaultMessage": "strength"
-  },
-  "cINV4p": {
+  "base.copyToClipboard.messageSuccess": {
     "defaultMessage": "Copied to your clipboard",
     "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
   },
-  "iaWn3u": {
+  "base.footer.copyright": {
+    "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
+    "description": "base.footer.copyright: Copyright phrase in footer"
+  },
+  "base.footer.registered": {
+    "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
+    "description": "base.footer.registered: Registered Non profit phrase in footer"
+  },
+  "base.uxScoredPassword.PasswordRequired": {
+    "defaultMessage": "Please enter a password of at least 'moderate' strength"
+  },
+  "base.uxScoredPassword.ineffectual": {
+    "defaultMessage": "ineffectual"
+  },
+  "base.uxScoredPassword.moderate": {
+    "defaultMessage": "moderate"
+  },
+  "base.uxScoredPassword.strength": {
+    "defaultMessage": "strength"
+  },
+  "base.uxScoredPassword.strong": {
+    "defaultMessage": "strong"
+  },
+  "base.uxScoredPassword.vulnerable": {
     "defaultMessage": "vulnerable"
   },
-  "mA8olw": {
+  "base.uxScoredPassword.weak": {
     "defaultMessage": "weak"
   }
 }

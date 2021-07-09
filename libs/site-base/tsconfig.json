@@ -6,12 +6,7 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "plugins": [
-      {
-        "transform": "@formatjs/ts-transformer",
-        "import": "transform",
-        "type": "config",
-        "overrideIdFn": "[sha512:contenthash:base64:6]"
-      }
+      {}
     ]
   },
   "include": ["src/**/*", "src/**/*.json"]
