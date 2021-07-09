@@ -57,6 +57,7 @@ export type AccountDetails = {
   email?: string;
 
   // Where have we persisted this account to?
+  storedOffline?: boolean;
   storedOnGoogle?: boolean,
   storedOnDropbox?: boolean,
   storedOnOneDrive?: boolean,
