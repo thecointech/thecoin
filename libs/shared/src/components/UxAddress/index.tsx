@@ -7,9 +7,11 @@ import { ChangeCB } from '../UxInput/types';
 
 const translate = defineMessages({ 
 		labelAddress : {
+				id: "shared.uxaddress.address.label",
                 defaultMessage:"Account",
                 description:"shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer" },
 		errorMessage : { 
+				id: "shared.uxaddress.address.error",
                 defaultMessage:"This address is not the right format",
                 description:"shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer" }});
 

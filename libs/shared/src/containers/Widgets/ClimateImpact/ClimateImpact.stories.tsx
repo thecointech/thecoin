@@ -7,8 +7,10 @@ import { defineMessages, IntlProvider } from 'react-intl';
 
 
 const translate = defineMessages({ 
-  title : { defaultMessage: "Climate Impact",
-            description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
+  title : { 
+    id: "shared.widgets.climateimpact.title",
+    defaultMessage: "Climate Impact",
+    description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
   }});
 
 export default {

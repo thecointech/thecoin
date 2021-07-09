@@ -5,8 +5,10 @@ import { Props as MyProps } from './types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 const translate = defineMessages({  
-              placeholder: { defaultMessage:"This field is required",
-                        description:"shared.uxinput.required.tooltip: Tooltip for the required uxinput"}});
+            placeholder: { 
+                id: "shared.uxinput.required.tooltip",
+                defaultMessage:"This field is required",
+                description:"shared.uxinput.required.tooltip: Tooltip for the required uxinput"}});
 
 
 type Props = Readonly<MyProps>;

@@ -35,8 +35,10 @@ interface Props {
 }
 
 const translate = defineMessages({  
-  waitingForWeb3:{ defaultMessage: "Connecting to your Web3 provider",
-                description:"Message to display while waiting for user to complete Web3 connection" }});
+  waitingForWeb3:{ 
+                id: "shared.account.account.waitingForWeb3",  
+                defaultMessage: "Connecting to your Web3 provider",
+                description:"shared.account.account.waitingForWeb3: Message to display while waiting for user to complete Web3 connection" }});
 
 export const Account = (props: Props) => {
 

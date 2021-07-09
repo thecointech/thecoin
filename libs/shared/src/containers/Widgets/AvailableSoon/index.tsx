@@ -4,8 +4,10 @@ import { Header } from "semantic-ui-react";
 import styles from "./styles.module.less";
 
 const translate = defineMessages({ 
-    title : { defaultMessage: "Coming Soon",
-              description: "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app",
+    title : { 
+      id: "shared.widgets.availablesoon.title", 
+      defaultMessage: "Coming Soon",
+      description: "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app",
 }});
 
 export const AvailableSoon : React.FC = (props) => {

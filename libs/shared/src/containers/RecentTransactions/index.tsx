@@ -8,8 +8,9 @@ import styles from './styles.module.less';
 
 const translate = defineMessages({ 
       title : {
-                defaultMessage:"Recent Operations",
-                description:"shared.balance.title: Title for the congratulations page"}});
+        id: "shared.balance.title", 
+        defaultMessage:"Recent Operations",
+        description:"shared.balance.title: Title for the congratulations page"}});
 
 export const RecentTransactions = ({ actions }: AccountPageProps) => {
 
