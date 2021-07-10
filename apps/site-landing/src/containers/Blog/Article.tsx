@@ -8,6 +8,7 @@ import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/se
 import { AlternateLang, ArticleDocument } from "components/Prismic/types";
 import { useHistory } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
+import { DateTime } from "luxon";
 
 const backLink = { id:"site.blog.backLink",
                 defaultMessage:"Go back",
@@ -32,15 +33,16 @@ function getTranslatedArticle(filtered:ArticleDocument[],docs:ArticleDocument[])
 export const Article = ( props: { match: { params: { articleId: string; }; }; } ) => {
   const docs = (useSelector(selectArticles));
   const { articleId } = props.match.params;
-  const filtered = getTranslatedArticle(docs.filter(entry => entry.id == articleId),docs)
+  const filtered = getTranslatedArticle(docs.filter(entry => entry.id == articleId),docs);
+  const { locale } = useSelector(selectLocale);
   let history = useHistory();
-
   return <>{
     filtered.map(articleData => (    
       <div className={styles.containerArticle} key={articleData.id}>
         <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left"/><FormattedMessage {...backLink} /></a></div>
         { articleData.data.image_before_title.url ? <img src={ articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt}/> : "" }
         { <Header as={"h2"} className="x6spaceBefore">{articleData.data.title ? articleData.data.title[0].text : ""}</Header> }
+        <p>{ DateTime.fromFormat(articleData.data.publication_date, "yyyy-mm-dd", { }).setLocale(locale).toLocaleString(DateTime.DATE_HUGE)}</p>
         { RichText.render(articleData.data.content as unknown as RichTextBlock[]) }
       </div>
     ))
