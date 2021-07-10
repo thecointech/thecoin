@@ -133,33 +133,3 @@ export async function completeStore(token: string, address: string) {
   }
   return false;
 }
-
-// waitGauthLogin = async (gauthWindow: IWindow) => {
-
-//   const myWindow : IWindow = window;
-//   var timer = setInterval(function() {
-//     if(gauthWindow.closed) {
-//         clearInterval(timer);
-//         // Check, did we get our cookie?
-//         const cookieVal = getCookie('gauth')
-//         if (cookieVal)
-//           myWindow.completeGauthLogin!(cookieVal)
-//     }
-//   }, 1000);
-//   this.setState({timer})
-// }
-
-// clearWaitingTimer = () => {
-//   // Cancel the timer (if it's running)
-//   const { timer } = this.state;
-//   if (timer) {
-//     clearInterval(timer)
-//     this.setState({timer: 0})
-//   }
-// }
-
-// tryCompleteCookie = () => {
-//   // TODO: Support instances where
-//   // we were forced to use location = gauth
-//   // instead of opening a new brower.
-// }
