@@ -11,6 +11,8 @@ import { init_node } from './node';
 export let log : BunyanLogger = null! as BunyanLogger;
 
 export function init(name: string, level?: number) {
-  log = init_node(name, level);
-  log.trace('Node logging initialized');
+  if (!log) {
+    log = init_node(name, level);
+    log.trace('Node logging initialized');
+  }
 }

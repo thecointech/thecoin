@@ -26,10 +26,10 @@ export const FormSubscribed = () => {
 
   const onInputChange = (_event: React.FormEvent<HTMLInputElement>, data: InputOnChangeData|CheckboxProps) => {
     const { value, name, checked } = data;
-    setDetails({
-      ...details,
+    setDetails(prevDetails => ({
+      ...prevDetails,
       [name]: value ?? checked
-    });
+    }));
   }
 
   let intl = useIntl();

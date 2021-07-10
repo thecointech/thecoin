@@ -1,10 +1,8 @@
-import { clientUri, GetSecureApi } from '../../../../api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { getStoredAccountData } from '@thecointech/account/store';
 import messages from './messages';
 import { FormattedMessage } from 'react-intl';
 import { isWallet } from '@thecointech/utilities/SignerIdent';
-import { onInitiateLogin, setupCallback, UploadState, doSetup } from './googleUtils';
+import { onInitiateLogin, setupCallback, UploadState, doSetup, completeStore } from './googleUtils';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Props as MessageProps } from '../../../../components/MaybeMessage';
 import { ButtonSecondary } from '../../../../components/Buttons';
@@ -21,7 +19,7 @@ type MyProps = {
 
 export const StoreGoogle : React.FC<MyProps> = (props) => {
 
-  const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
+  const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString|null);
   const [state, setState] = useState(UploadState.Waiting);
   const activeAccount = useActiveAccount();
 
@@ -46,7 +44,7 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
       )
     }
     else {
-      doSetup(setAuthUrl, setState);
+      doSetup(setAuthUrl);
     }
     // Don't leave this callback active
     //return () => myWindow.completeGauthLogin = undefined;
@@ -115,52 +113,3 @@ export const StoreGoogle : React.FC<MyProps> = (props) => {
   );
 }
 
-async function completeStore(token: string, address: string) {
-
-  // Do not upload the decrypted wallet: instead
-  // we read the wallet directly from LS and upload that
-  // This is because we trust our (soon to be sandboxed) storage to have
-  // the right account data, but we do not trust what's in-memory
-  const secureApi = GetSecureApi();
-
-  // This should succeed, all these checks should have happened already
-  const {wallet,name} = fetchAndVerifyWallet(address);
-
-  const request = {
-    token: {
-      token
-    },
-    wallet: JSON.stringify(wallet),
-    walletName: name
-  }
-
-  try {
-    const res = await secureApi.googlePut(clientUri, request);
-    console.log("got: " + JSON.stringify(res));
-    return res.status === 200 && res.data;
-  }
-  catch (e) {
-    console.error(JSON.stringify(e));
-    alert("Upload failed, please contact support@thecoin.io");
-  }
-  return false;
-}
-
-function fetchAndVerifyWallet(address: string) {
-  const account = getStoredAccountData(address);
-  if (account == null) {
-    alert("Could not find local account - if you are seeing this, contact support@thecoin.io");
-    throw new Error("Could not find local account: " + address);
-  }
-
-  const wallet = account.signer;
-  if (!isWallet(wallet)) {
-    alert("Cannot upload this wallet: it is not a local account");
-    throw new Error("Could not find local account: " + address);
-  }
-  else if (wallet.privateKey) {
-    alert("Could upload decrypted wallet - if you are seeing this, contact support@thecoin.io");
-    throw new Error("Cannot upload wallet with private key");
-  }
-  return { wallet, name: account.name };
-}

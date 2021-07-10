@@ -24,7 +24,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    */
   async googleAuthUrl(_clientUri: string, _options?: any)
   {
-    await delay(2500);
+    await delay(1500);
 
     return buildResponse<GoogleAuthUrl>({
       url: `${window.location.origin}/#/gauth?code=${MockedCode}`

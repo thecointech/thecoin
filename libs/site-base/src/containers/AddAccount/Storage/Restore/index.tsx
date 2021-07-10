@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { GetSecureApi, clientUri } from '../../../../api';
 import { AccountList } from './AccountList';
 import { ConnectButton } from './ConnectButton';
-import { onInitiateLogin, clearCallback, setupCallback, UploadState, doSetup } from '../GDrive/googleUtils';
+import { onInitiateLogin, clearCallback, setupCallback, doSetup } from '../GDrive/googleUtils';
 
 import google from "../images/google.svg";
 import microsoft from "../images/microsoft.svg";
@@ -19,6 +19,8 @@ import { ButtonPrimary } from '../../../../components/Buttons';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 import { ProviderChoice } from '../ProviderChoice';
 import { OfflineRestore } from '../Offline/Restore';
+import { GDriveRestore } from '../GDrive/Restore';
+
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
                         defaultMessage:"Restore Account",
@@ -51,8 +53,7 @@ const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
 
 export const Restore = () => {
 
-  const [state, setState] = useState(UploadState.Waiting);
-  const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString);
+  const [gauthUrl, setAuthUrl] = useState(undefined as MaybeString|null);
   const [wallets, setWallets] = useState([] as GoogleWalletItem[]);
 
   /////////////////////////////////////////
@@ -74,8 +75,8 @@ export const Restore = () => {
   /////////////////////////////////////////
   // We ask the server for the URL we use to request the login code
   useEffect(
-    () => doSetup(setAuthUrl, setState),
-    [setAuthUrl, setState]
+    () => doSetup(setAuthUrl),
+    [setAuthUrl]
   );
 
   /////////////////////////////////////////
@@ -83,10 +84,12 @@ export const Restore = () => {
 
   /////////////////////////////////////////
 
-  const loading = state === UploadState.Waiting
-    || state === UploadState.Uploading;
-  const disabled = state === UploadState.Invalid
-    || state === UploadState.Complete;
+  // const loading = state === UploadState.Waiting
+  //   || state === UploadState.Uploading;
+  // const disabled = state === UploadState.Invalid
+  //   || state === UploadState.Complete;
+  const loading = false;
+  const disabled = false;
 
   return (
     <div className={styles.content}>
@@ -103,7 +106,8 @@ export const Restore = () => {
             <OfflineRestore />
           </Grid.Column>
           <Grid.Column>
-          <ProviderChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />
+            <GDriveRestore />
+            <ProviderChoice link={"/addAccount/upload"} txt={googleLink} imgSrc={google} />
             <ConnectButton onClick={onConnectClick} disabled={disabled} loading={loading} isVisible={!wallets.length} >
               <img src={ google } />
               <Header as={"h4"}><FormattedMessage {...googleLink} /></Header>
