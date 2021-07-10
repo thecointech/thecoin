@@ -1,7 +1,6 @@
 import emaillist from './emails.list.json';
 import emailget from './emails.get.json';
-
-import { gmail_v1 } from "googleapis";
+import { gmail_v1, drive_v3 } from "googleapis";
 // file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
 
@@ -15,11 +14,17 @@ export namespace google {
           access_token: "TEST_TOKEN"
         }
       }
+      getToken = () => ({tokens: []});
+      generateAuthUrl = () => process.env.BROKER_GDRIVE_CLIENT_URI
     }
   }
 
   export function gmail() {
     return new GmailMocked();
+  }
+
+  export function drive() {
+    return new DriveMocked();
   }
 
   class GmailMocked {
@@ -62,6 +67,29 @@ export namespace google {
             .find(e => e.data.id === opts.id)
             ?.data.labelIds.push(...labelIds)
         }
+      }
+    }
+  }
+
+  const mockedFiles = [0, 1, 2].map(f => ({
+    id: f.toString(),
+    originalFilename: `wallet${f}.wallet`,
+    name: `wallet${f}`,
+  }));
+
+  class DriveMocked {
+    // Minimal implementation
+
+    files = {
+      list: () => ({ data: { files: mockedFiles }}),
+      get: ({fileId}: drive_v3.Params$Resource$Files$Get) => ({ status: 200, data: mockedFiles.find(f => f.id === fileId)}),
+      create: (p: drive_v3.Params$Resource$Files$Create) => {
+        mockedFiles.push({
+          id: mockedFiles.length.toString(),
+          originalFilename: p.requestBody?.originalFilename || "walletX.wallet",
+          name: p.requestBody?.name || "walletX"
+        })
+        return { status: 200, statusText: "ok" }
       }
     }
   }

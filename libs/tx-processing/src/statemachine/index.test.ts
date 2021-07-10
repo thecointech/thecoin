@@ -2,7 +2,7 @@ import { ActionType, BuyAction } from '@thecointech/broker-db';
 import * as Transactions from '@thecointech/broker-db/transaction';
 import { GetContract } from '@thecointech/contract';
 import { getFirestore } from "@thecointech/firestore";
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';

@@ -1,17 +1,14 @@
 import { google, drive_v3 } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
-import credentials from './gdrive_cred.json'
 import { GoogleFileIdent, GoogleStoreAccount, GoogleToken, GoogleWalletItem } from '@thecointech/types';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
-const AUTH_REDIR_IDX = process.env.NODE_ENV === 'development' ? 0 : 1;
-
-function  buildAuth()
-{
-  const {client_secret, client_id, redirect_uris} = credentials.web;
-  return new OAuth2Client(client_id, client_secret, redirect_uris[AUTH_REDIR_IDX]);
-}
+const buildAuth = () =>
+  new google.auth.OAuth2(
+    process.env.BROKER_GDRIVE_CLIENT_ID,
+    process.env.BROKER_GDRIVE_CLIENT_SECRET,
+    process.env.BROKER_GDRIVE_CLIENT_URI
+  );
 
 async function loginDrive(authToken: GoogleToken)
 {
