@@ -1,5 +1,5 @@
 import { processUnsettledDeposits } from '.'
-import { init } from '@thecointech/firestore/mock';
+import { init } from '@thecointech/firestore';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '@thecointech/tx-processing';
 import { RbcApi } from '@thecointech/rbcapi';

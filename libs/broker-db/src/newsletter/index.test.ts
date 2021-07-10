@@ -1,4 +1,4 @@
-import { init } from "@thecointech/firestore/mock";
+import { init } from "@thecointech/firestore";
 import { DateTime } from "luxon";
 import { getDetails, getDetailsByEmail, setDetails } from ".";
 import { Subscription } from "./types";

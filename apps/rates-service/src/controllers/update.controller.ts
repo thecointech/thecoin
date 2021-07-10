@@ -1,16 +1,17 @@
-import { Controller, Get, Route, Response } from '@tsoa/runtime';
+import { Controller, Get, Route, Response, Tags } from '@tsoa/runtime';
 import { updateRates }  from '../internals/rates';
 
-@Route('doUpdate')
+@Route('')
+@Tags('Updates')
 export class UpdateController extends Controller {
 
     /**
      * Get rates.
      *
      **/
-    @Get('')
+    @Get('doUpdate')
     @Response('204', 'Success')
-    @Response('405', 'unknown exception')
+    @Response('500', 'unknown exception')
     async doUpdate() {
       try {
           return await updateRates();
@@ -18,5 +19,14 @@ export class UpdateController extends Controller {
           console.error("Details fetch failed: " + JSON.stringify(e));
           throw e;
       }
+    }
+
+    /**
+     * Test exception emailing
+     */
+    @Get('throwError')
+    @Response('500', 'always throws')
+    async throwError() {
+      throw new Error('Testing Error Handling')
     }
 }
