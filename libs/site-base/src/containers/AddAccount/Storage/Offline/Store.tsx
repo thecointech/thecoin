@@ -9,8 +9,8 @@ import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
 import { ProviderChoice } from '../ProviderChoice';
 import icon from "./images/download.svg";
 
-const buttonText = defineMessage({defaultMessage: 'DOWNLOAD', description: "Download button in settings?"});
-const download = defineMessage({  defaultMessage:"Download", description:"The button to download the account for the store your account page"});
+const buttonText = defineMessage({ defaultMessage: 'DOWNLOAD', description: "Download button in settings?" });
+const download = defineMessage({ defaultMessage: "Download", description: "The button to download the account for the store your account page" });
 
 type MyProps = {
   address: string
@@ -26,10 +26,7 @@ export const OfflineStore = () => {
   const onDownloadClicked = (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     onDownload(activeAccount!.address);
-    accountApi.setDetails({
-      ...activeAccount.details,
-      storedOffline: true,
-    })
+    accountApi.setDetails({ storedOffline: true })
   }
 
   ////////////////////////////////

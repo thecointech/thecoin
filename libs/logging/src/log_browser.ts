@@ -11,6 +11,11 @@ import { init_browser } from './browser';
 export let log : BunyanLogger = null! as BunyanLogger;
 
 export function init(name: string, level?: number) {
-  log = init_browser(name, level);
-  log.trace('Web logging initialized');
+  if (!log) {
+    log = init_browser(name);
+    log.trace('Web logging initialized');
+  }
+  if (level !== undefined) {
+    log.level(level);
+  }
 }

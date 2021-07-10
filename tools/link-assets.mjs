@@ -10,7 +10,7 @@ function readTsConfig() {
     }
   }
   catch (err) {
-    console.error(`Cannot parse:\n ${cfgString}`);
+    console.error(`Cannot parse: ./tsconfig.json - ${err.message}`);
     throw err;
   }
   // if no tsconfig we just make our best guess

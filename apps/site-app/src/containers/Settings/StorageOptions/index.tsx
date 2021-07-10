@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/StoreOnline/Localy/download';
+import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline/Store';
 import { Container, Header } from "semantic-ui-react"
 import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"

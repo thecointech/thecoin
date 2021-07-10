@@ -9,9 +9,12 @@
 }
 
 .choice {
-  display: inline-block;
+  position: relative;
   // limit the size to prevent text from expanding container
   max-width: 171px;
+  // Small overflow is necessary to ensure the
+  // bottom of the 'g' in Google is covered by the dimmer
+  padding-bottom: 5px;
   img{
       margin: auto;
       display: block;
