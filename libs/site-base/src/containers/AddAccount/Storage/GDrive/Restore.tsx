@@ -8,6 +8,6 @@ const text = defineMessage({ defaultMessage: "Load from Google Drive", descripti
 export const GDriveRestore = () => {
   const [token, setToken] = useState(undefined as MaybeString);
   return token
-    ? <Redirect to={`/addAccount/restoreList?token=${token}`} />
+    ? <Redirect to={`/addAccount/restore/list?token=${token}`} />
     : <GDriveBase text={text} onAuth={setToken} />
 }

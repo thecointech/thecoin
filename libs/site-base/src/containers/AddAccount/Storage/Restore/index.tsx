@@ -1,18 +1,18 @@
 import React, {  } from 'react';
-import { Header, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
-import microsoft from "../images/microsoft.svg";
-import dropbox from "../images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
 import { Link } from 'react-router-dom';
 import { Decoration } from '../../Decoration';
+import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
-import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 import { OfflineRestore } from '../Offline/Restore';
 import { GDriveRestore } from '../GDrive/Restore';
+import { OneDriveRestore } from '../OneDrive/Restore';
+import { DropBoxRestore } from '../Dropbox/Restore';
 
 
 const aboveTheTitle = { id:"app.account.restore.aboveTheTitle",
@@ -22,12 +22,6 @@ const title = { id:"app.account.restore.title",
                 defaultMessage:"Welcome back to TheCoin!",
                 description:"The main title for the restore account page"};
 
-const microsoftLink = { id:"app.account.restore.microsoft",
-                        defaultMessage:"Restore from Microsoft OneDrive",
-                        description:"Microsoft link for the restore your account page"};
-const dropboxLink = { id:"app.account.restore.dropbox",
-                      defaultMessage:"Restore from Dropbox",
-                      description:"Dropbox link for the restore your account page"};
 const otherEthereum = { id:"app.account.restore.otherEthereum.explanation",
                         defaultMessage:"Also you can log into your account using an existing Ethereum account.",
                         description:"The link to redirect to use your existing ethereum for the restore your account page"};
@@ -45,13 +39,8 @@ export const Restore = () => {
 
   return (
     <div className={styles.content}>
-      <Header as="h5" className={`x8spaceBefore`}>
-          <FormattedMessage {...aboveTheTitle} />
-      </Header>
-      <Header as="h2" className={`x8spaceAfter`}>
-          <FormattedMessage {...title} />
-      </Header>
 
+      <PageHeader above={aboveTheTitle} title={title} />
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
@@ -61,24 +50,10 @@ export const Restore = () => {
             <GDriveRestore />
           </Grid.Column>
           <Grid.Column>
-            <AvailableSoon>
-              <div className={sharedStyles.soon}>
-                <a className={"x8spaceAfter"}>
-                  <img src={ microsoft } />
-                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
-                </a>
-              </div>
-            </AvailableSoon>
+            <OneDriveRestore />
           </Grid.Column>
           <Grid.Column>
-            <AvailableSoon>
-              <div className={sharedStyles.soon}>
-                <a className={"x8spaceAfter"}>
-                  <img src={ dropbox } />
-                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
-                </a>
-              </div>
-            </AvailableSoon>
+            <DropBoxRestore />
           </Grid.Column>
         </Grid.Row>
       </Grid>

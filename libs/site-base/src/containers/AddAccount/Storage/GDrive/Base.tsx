@@ -3,7 +3,7 @@ import { MessageDescriptor } from 'react-intl';
 import { ProviderChoice } from '../ProviderChoice';
 import { onInitiateLogin, doSetup, setupCallback, AuthCallback } from './googleUtils';
 
-import icon from '../images/google.svg'
+import icon from './images/google.svg'
 
 type Props = {
   busy?: boolean;
