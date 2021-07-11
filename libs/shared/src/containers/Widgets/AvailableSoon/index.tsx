@@ -9,13 +9,13 @@ const title = {
   description: "Title for the Widget Available Soon in the app",
 };
 
-export const AvailableSoon : React.FC = (props) => {
+export const AvailableSoon: React.FC = (props) => {
   return (
-    <div className={styles.availableSoonContainer}> 
-        <Header as="h5" id={styles.soon}><FormattedMessage {...title} /></Header>
-        <div className={`${styles.availableSoonBlur}`}>
-            {props.children}
-        </div>
+    <div className={styles.availableSoonContainer}>
+      {props.children}
+      <Header as="h5" className={styles.soon}>
+        <FormattedMessage {...title} />
+      </Header>
     </div>
   )
 }

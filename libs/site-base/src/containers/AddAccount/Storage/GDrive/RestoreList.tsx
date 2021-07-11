@@ -19,8 +19,9 @@ type LoadingWallet = {
   exists: boolean;
 }
 const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
-const noAccounts = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
-
+const noAccounts = defineMessage({ defaultMessage: 'No accounts found', description: 'AccountsList: no accounts loaded from google' })
+const goTo = defineMessage({ defaultMessage: 'Go To', description: 'AccountsList button to go to account' })
+const restore = defineMessage({ defaultMessage: 'Restore', description: 'AccountsList button to load account into site'})
 type Props = {
   url?: string
 }
@@ -80,9 +81,9 @@ export const RestoreList = ({url}: Props) => {
                       wallet={wallet}
                       onClick={onRestore}
                     >
-                      {
-                        wallet.exists ? 'GO TO' : 'RESTORE'
-                      }
+                      <FormattedMessage {...(
+                        wallet.exists ? goTo : restore
+                      )} />
                     </Button>
                   </List.Content>
                 </List.Item>
