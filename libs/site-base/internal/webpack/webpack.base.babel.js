@@ -35,15 +35,7 @@ module.exports = {
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
-            // Include the custom transformer to automate compiling out i18n messages
-            getCustomTransformers: () => ({
-              before: [
-                transform({
-                  overrideIdFn: '[sha512:contenthash:base64:6]',
-                  ast: true,
-                }),
-              ],
-            }),
+            compiler: 'ttypescript',
           },
         },
       },
