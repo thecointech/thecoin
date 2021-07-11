@@ -5,18 +5,14 @@ import { MaybeMessage } from "../../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
 import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
 import { OfflineStore } from "../Offline/Store";
-import { StoreDropbox } from "../StoreOnline/Dropbox";
-import { StoreMicrosoft } from "../StoreOnline/Microsoft";
-
-import microsoft from "../images/microsoft.svg";
-import dropbox from "../images/dropbox.svg";
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
 import { Decoration } from "../../Decoration";
 import { ButtonPrimary } from "../../../../components/Buttons";
-import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 import { GDriveStore } from '../GDrive/Store';
+import { OneDriveStore } from '../OneDrive/Store';
+import { DropBoxStore } from '../Dropbox/Store';
 
 
 const aboveTheTitle = { id:"app.account.create.store.aboveTheTitle",
@@ -34,12 +30,6 @@ const explainDownload = { id:"app.account.create.store.explainDownload",
 const congratulation = {  id:"app.account.create.store.button.congratulations",
                           defaultMessage:"Next Step",
                           description:"The button to be redirected to the congratulations page for the store your account page"};
-const microsoftLink = {  id:"app.account.create.store.button.microsoft",
-                          defaultMessage:"Store on Microsoft OneDrive",
-                          description:"The button to save on microsoft for the store your account page"};
-const dropboxLink = {  id:"app.account.create.store.button.dropbox",
-                          defaultMessage:"Store on Dropbox",
-                          description:"The button to save on dropbox for the store your account page"};
 
 export const Store = () => {
 
@@ -76,24 +66,10 @@ export const Store = () => {
             <GDriveStore />
           </Grid.Column>
           <Grid.Column>
-            <AvailableSoon>
-              <div className={sharedStyles.soon}>
-                <StoreMicrosoft>
-                  <img src={ microsoft } />
-                  <Header as={"h4"}><FormattedMessage {...microsoftLink} /></Header>
-                </StoreMicrosoft>
-              </div>
-            </AvailableSoon>
+            <OneDriveStore />
           </Grid.Column>
           <Grid.Column>
-            <AvailableSoon>
-              <div className={sharedStyles.soon}>
-                <StoreDropbox>
-                  <img src={ dropbox } />
-                  <Header as={"h4"}><FormattedMessage {...dropboxLink} /></Header>
-                </StoreDropbox>
-              </div>
-              </AvailableSoon>
+            <DropBoxStore />
           </Grid.Column>
         </Grid.Row>
       </Grid>

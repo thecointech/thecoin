@@ -9,6 +9,7 @@ import { Generate } from './Generate';
 import { Intro } from './Generate/Intro';
 import { FromJson } from './FromJson';
 import { Store } from './Storage/Store';
+import { RestoreList } from './Storage/GDrive/RestoreList';
 import styles from './styles.module.less';
 
 export const AddAccount = () => {
@@ -22,6 +23,7 @@ export const AddAccount = () => {
         <Route path={`${url}/generate`} component={Generate} />
         <Route path={`${url}/connect/exist`} component={ConnectExist} />
         <Route path={`${url}/connect/create`} component={ConnectCreate} />
+        <Route path={`${url}/restore/list`} component={RestoreList} />
         <Route path={`${url}/restore`} component={Restore} />
         <Route path={`${url}/store`} component={Store} />
         <Route render={() => <CreateExistingSwitch url={`${url}/`} />} />
