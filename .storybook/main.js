@@ -1,6 +1,8 @@
 const path = require('path');
 const shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 const mocksFolder = path.join(__dirname, '..', '__mocks__');
+const { DefinePlugin } = require('webpack');
+const { merge } = require("webpack-merge")
 
 module.exports = {
   features: {
@@ -31,24 +33,33 @@ module.exports = {
     ]
   }),
   webpackFinal: async (config, { configType }) => {
-    // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
-    // You can change the configuration based on that.
-    // 'PRODUCTION' is used when building the static version of storybook.
-    config.module.rules.push(
-      shared_loaders.semantic_less_loader,
-      shared_loaders.css_module_loader,
+    const r = merge(
       {
+        module: {
+          rules: [
+            shared_loaders.semantic_less_loader,
+            shared_loaders.css_module_loader,
+          ]
+        },
+        plugins: [
+          new DefinePlugin({ // Log Everything
+            "process.env.LOG_NAME": JSON.stringify("Storybook"),
+            "process.env.LOG_LEVEL": 0,
+          })
+        ],
+        experiments: {
+          topLevelAwait: true,
+        },
         resolve: {
           alias: {
             "fs": false,
           },
-          modules: [mocksFolder, 'node_modules', 'src'],
+          modules: [mocksFolder],
         }
-      }
-    );
-
-    // Return the altered config
-    return config;
+      },
+      config);
+    console.log(r);
+    return r;
   },
   core: {
     builder: "webpack5",

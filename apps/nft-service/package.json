@@ -17,10 +17,9 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
-    "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
+    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9233 -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
-    "run-env": "node --inspect=9233 -r ts-node/register -r dotenv/config ./src/main.ts",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "gcloud app deploy",
     "postdeploy": "ts-node --skip-project ../../tools/removeOldAppVersions",

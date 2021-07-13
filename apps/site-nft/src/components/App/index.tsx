@@ -22,8 +22,6 @@ import styles from './styles.module.less';
 
 
 export const App = () => {
-  console.log("Loading Site with config: " + process.env.CONFIG_NAME);
-
   return (
     <div id={styles.app}>
       <MainNavigation />

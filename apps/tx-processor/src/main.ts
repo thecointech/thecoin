@@ -1,4 +1,4 @@
-import { init as LogInit, log } from "@thecointech/logging";
+import { log } from "@thecointech/logging";
 import { init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, initBrowser, RbcApi } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
@@ -9,7 +9,6 @@ import { processUnsettledETransfers } from './etransfer';
 
 async function initialize() {
 
-  LogInit("tx-processor");
   FirestoreInit();
   log.debug(' --- Initializing processing --- ');
 

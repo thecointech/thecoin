@@ -125,6 +125,8 @@ module.exports = {
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
+      "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
+      "process.env.LOG_LEVEL": process.env.LOG_LEVEL,
     }),
     new ForkTsCheckerWebpackPlugin({
       typescript: {

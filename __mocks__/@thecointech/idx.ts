@@ -3,7 +3,7 @@ import type { CreateOptions, IDX } from '@ceramicstudio/idx'
 
 //
 // An in-memory IDX mock for development/testing
-export class MockIDX implements Pick<IDX, "get" | "set"> {
+class MockIDX implements Pick<IDX, "get" | "set"> {
   records: Map<string, string> = new Map();
 
   get<T = unknown>(name: string, _did?: string): Promise<T | null> {

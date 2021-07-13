@@ -29,10 +29,10 @@ export class Contract {
   }
 }
 
-export function GetContract() : TheCoin {
-  return new Contract() as unknown as TheCoin;
+export function GetContract() : Promise<TheCoin> {
+  return Promise.resolve(new Contract() as any);
 }
 
-export function ConnectContract() : TheCoin {
-  return new Contract() as unknown as TheCoin;
+export function ConnectContract() : Promise<TheCoin> {
+  return Promise.resolve(new Contract() as any);
 }
