@@ -12,8 +12,8 @@ const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const baseOptions = require('./webpack.base.babel');
 
 // In non-live dev mode, we redirect imports to mocked versions
-const projectRoot = path.join(__dirname, '..', '..', '..', '..');
-const mocksFolder = path.join(projectRoot, '__mocks__');
+const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
+const mocksFolder = path.resolve(projectRoot, '__mocks__');
 const mockOptions = process.env.SETTINGS !== 'live'
   ? getMockOptions()
   : getDevLiveOptions()
@@ -67,6 +67,9 @@ const devOptions = {
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool
   devtool: 'cheap-module-source-map',
+  experiments: {
+    topLevelAwait: true,
+  },
 
   performance: {
     hints: false,
@@ -111,9 +114,7 @@ function getDevLiveOptions() {
     },
     // Re-direct store to js file
     resolve: {
-      alias: {
-        "@thecointech/account/store": path.join(mocksFolder, "@thecointech", 'account', 'store_devlive.js')
-      }
+      conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "import", "default"],
     }
   }
 }

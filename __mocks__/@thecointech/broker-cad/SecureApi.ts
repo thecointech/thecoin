@@ -1,6 +1,7 @@
 import { SecureApi as SrcApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
 import { buildResponse, delay } from "../axios-utils";
-import { wallets } from '../account/store';
+import { wallets } from '../../wallets';
+
 
 const MockedCode = "MockedCode";
 const checkCode = ({token}: GoogleToken) => {
@@ -59,6 +60,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
     await delay(2500);
     wallets.push({
       id: wallets.length.toString(),
+      originalFilename: `${uploadPacket.walletName}.wallet`,
       name: uploadPacket.walletName,
       type: "not sure",
       wallet: uploadPacket.wallet,

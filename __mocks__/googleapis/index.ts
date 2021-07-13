@@ -2,10 +2,7 @@ import emaillist from './emails.list.json';
 import emailget from './emails.get.json';
 import { gmail_v1, drive_v3 } from "googleapis";
 
-import wallet0 from './wallet0.json';
-import wallet1 from './wallet1.json';
-import wallet2 from './wallet2.json';
-
+import {wallets } from '../wallets';
 
 // file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
@@ -78,35 +75,29 @@ export namespace google {
     }
   }
 
-  const mockedFiles = [0, 1, 2].map(f => ({
-    id: f.toString(),
-    originalFilename: `wallet${f}.wallet`,
-    name: `wallet${f}`,
-  }));
-  const mockedWallets = [JSON.stringify(wallet0), JSON.stringify(wallet1), JSON.stringify(wallet2)];
-
   class DriveMocked {
     // Minimal implementation
 
     files = {
-      list: () => ({ data: { files: mockedFiles }}),
+      list: () => ({ data: { files: wallets }}),
       get: ({fileId}: drive_v3.Params$Resource$Files$Get) => {
-        const src = mockedFiles.find(f => f.id === fileId);
-        if (!src || mockedWallets[fileId] == null) {
+        const src = wallets.find(f => f.id === fileId);
+        if (!src || wallets[fileId!] == null) {
           return { status: 400 };
         }
         return {
           status: 200,
-          data: mockedWallets[fileId]
+          data: wallets[fileId!].wallet
         }
       },
       create: (p: drive_v3.Params$Resource$Files$Create) => {
-        mockedFiles.push({
-          id: mockedFiles.length.toString(),
+        wallets.push({
+          id: wallets.length.toString(),
           originalFilename: p.requestBody?.originalFilename || "walletX.wallet",
-          name: p.requestBody?.name || "walletX"
+          name: p.requestBody?.name || "walletX",
+          type: "uploaded",
+          wallet: p.media!.body!
         })
-        mockedWallets.push(p.media.body);
         return { status: 200, statusText: "ok" }
       }
     }

@@ -29,6 +29,11 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./store": {
+      "development": "./build/development/store.js",
+      "devlive": "./build/devlive/store.js",
+      "default": "./build/store.js"
+    },
     "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",

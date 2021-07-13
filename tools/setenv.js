@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { basename, join } = require('path');
 const { existsSync } = require('fs');
 
 function getEnvFile(cfgName) {
@@ -20,10 +20,16 @@ function getEnvFile(cfgName) {
   if (existsSync(repoFile)) return repoFile;
 
   // None found, throw
-  throw new Error(`Missing cfg file for: ${cfgName} (${cfgFile})`);
+  throw new Error(`Missing cfg file for: ${cfgName} (${repoFile})`);
 }
 
 require('dotenv').config({path: getEnvFile()});
+
+//  Set default name for logging
+if (!process.env.LOG_NAME) {
+  const projectRoot = process.cwd();
+  process.env.LOG_NAME = basename(projectRoot);
+}
 
 module.exports = {
   getEnvFile: getEnvFile

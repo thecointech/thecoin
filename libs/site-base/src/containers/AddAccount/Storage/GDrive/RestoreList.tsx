@@ -105,7 +105,7 @@ const parseWallets = (wallets: GoogleWalletItem[], accounts: AccountState[]) => 
       name: w.id.name?.split('.wallet')[0] ?? w.id.id
     }
   });
-  r = r.filter((w, i) => r.findIndex(s => s.wallet.address === w.wallet.address) != i)
+  r = r.filter((w, i) => r.findIndex(s => s.wallet.address === w.wallet.address) === i)
   r = r.filter(w => w.name || w.id)
   return r;
 }

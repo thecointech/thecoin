@@ -1,18 +1,7 @@
 import { BunyanLogger } from './logger';
 import { init_node } from './node';
 
-// NOTE: our log is declared as type 'bunyan', but then
-// explicitly initialized to null (a violation of that type).
-// We do this because we treat logging as an omni-present
-// service (ie, no null checks) but require the client app
-// to manually initialize us.  In other words, we are replacing
-// the compilers guarantee with one we manage manually.  If this
-// variable is null, that means logging hasn't been init'ed (yet).
-export let log : BunyanLogger = null! as BunyanLogger;
-
-export function init(name: string, level?: number) {
-  if (!log) {
-    log = init_node(name, level);
-    log.trace('Node logging initialized');
-  }
-}
+export const log: BunyanLogger = init_node(process.env.LOG_NAME ?? process.env.CONFIG_NAME ?? "dev");
+log.trace('Node logging initialized');
+if (process.env.LOG_LEVEL)
+  log.level(Number(process.env.LOG_LEVEL));
