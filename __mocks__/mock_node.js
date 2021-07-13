@@ -5,8 +5,6 @@
 // using the same mocks as testing/dev websites.
 //
 
-console.warn('--- Injecting TC mocks ---');
-
 // Ensure any fn's that rely on jest mocking still work
 require("./shim_jest");
 
@@ -16,6 +14,7 @@ if (process.env.CONFIG_NAME === 'development') {
   //
   // If running in dev mode, use all available mocks
   //
+  console.warn('--- Injecting All TC mocks ---');
   var nodeModulePaths= Module._nodeModulePaths; //backup the original method
   Module._nodeModulePaths = (from) => {
     // call the original method
@@ -34,6 +33,7 @@ else {
   // If this is a live setting, we only mock the bank API
   // (and gmail?)
   //
+  console.warn('--- Injecting Minimal TC mocks ---');
   var resolveFilename = Module._resolveFilename;
   const mockedModules = ["@thecointech/rbcapi"];
   // In dev:live, we do not call off the machine
