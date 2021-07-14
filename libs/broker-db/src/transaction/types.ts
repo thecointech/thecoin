@@ -20,7 +20,15 @@ export type StateData = {
 
 // The changes applied to an action
 export type TransitionDelta = {
-  date: DateTime;
+  // The date the transition was created.  May differ from
+  // the applicable date of the action (eg, based on settlement dates etc)
+  created: DateTime;
+  // The date the action happened.  This will be different than
+  // the created date.  For example, the recieved date for an
+  // e-transfer will be different than when the action is created.
+  // This date is primarily for reference, and not used internally
+  date?: DateTime;
+  // The type of transition (ie, describes the effects of the transition: toCoin etc)
   type: string;
 } & StateData;
 

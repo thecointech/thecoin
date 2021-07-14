@@ -8,14 +8,14 @@
       "name": "Launch Program",
       "request": "launch",
       "runtimeArgs": [
-        "dev"
+        "dev:live"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [
         "<node_internals>/**"
       ],
+      "preLaunchTask": "build",
       "type": "pwa-node",
-      "envFile": "${workspaceFolder}/../../environments/development.env",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
       "resolveSourceMapLocations": [
         "**",

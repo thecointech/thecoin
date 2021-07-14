@@ -12,7 +12,8 @@
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register -r ../../__mocks__/mock_node ./src/main.ts",
+    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "start": "yarn build && node --inspect ./build/main.js",
     "test": "jest --coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
@@ -31,6 +32,7 @@
     "@thecointech/tx-processing": "^0.2.15"
   },
   "devDependencies": {
-    "jest": "*"
+    "jest": "*",
+    "@thecointech/site-app": "*"
   }
 }

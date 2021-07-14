@@ -29,7 +29,10 @@
   ],
   "main": "./build/index.js",
   "exports": {
-    ".": "./build/index.js",
+    ".": {
+      "node": "./build/index_node.js",
+      "default": "./build/index.js"
+    },
     "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",

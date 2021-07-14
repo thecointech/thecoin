@@ -1,9 +1,10 @@
-import { buildConverter, convertDecimal, convertDates } from "../converter";
+import { buildConverter, convertDecimal, convertDates, serverTimestamp } from "../converter";
 import { ActionDataTypes, TransitionDelta, IncompleteRef } from "./types";
 
 export const incompleteConverter = buildConverter<IncompleteRef>();
 export const transitionConverter = buildConverter<TransitionDelta>(
   convertDates<TransitionDelta>("date"),
+  serverTimestamp<TransitionDelta>("created"),
   convertDecimal<TransitionDelta>("fiat", "coin"),
 );
 export const buyActionConverter = buildConverter<ActionDataTypes["Buy"]>(
