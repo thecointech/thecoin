@@ -35,7 +35,7 @@ else {
   //
   console.warn('--- Injecting Minimal TC mocks ---');
   var resolveFilename = Module._resolveFilename;
-  const mockedModules = ["@thecointech/rbcapi"];
+  const mockedModules = ["@thecointech/rbcapi", "@thecointech/store", "@thecointech/email", "@thecointech/market-status"];
   // In dev:live, we do not call off the machine
   if (process.env.CONFIG_NAME === 'devlive')
     mockedModules.push("googleapis", "google-auth-library");
