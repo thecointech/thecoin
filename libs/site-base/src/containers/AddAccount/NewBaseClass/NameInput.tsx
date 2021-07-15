@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
-import { MessageDescriptor, useIntl } from "react-intl";
-import messages from '../messages';
+import { defineMessages, MessageDescriptor, useIntl } from "react-intl";
 import { useAccountStore } from "@thecointech/shared/containers/AccountMap";
 import { AccountState } from '@thecointech/account';
 
-const placeholder = { id:"app.addaccount.newbaseclass.nameinput.placeholder",
-                        defaultMessage:"Any name you like",
-                        description:"Tooltip for the account name input"};
+const translations = defineMessages({
+  placeholder : {
+      defaultMessage: 'Any name you like',
+      description: 'app.addAccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input'},
+  labelName : {
+      defaultMessage: 'Account Name',
+      description: 'app.addAccount.newbaseclass.labelName'},
+  errorNameTooShort : {
+      defaultMessage: 'An account must have a name.',
+      description: 'app.addAccount.newbaseclass.errorNameTooShort'},
+  errorNameDuplicate : {
+      defaultMessage: 'An account with this name already exists here.',
+      description: 'app.addAccount.newbaseclass.errorNameDuplicate'}
+});
 
 type Props = {
   disabled?: boolean;
@@ -42,11 +52,11 @@ export const NameInput = (props: Props) => {
   return (
     <UxInput
       uxChange={onChange}
-      intlLabel={messages.labelName}
+      intlLabel={translations.labelName}
       isValid={state.isValid}
       isRequired={props.isRequired}
       message={state.message}
-      placeholder={intl.formatMessage(placeholder)}
+      placeholder={intl.formatMessage(translations.placeholder)}
       {...rest}
     />
   );
@@ -59,12 +69,12 @@ const validateName = (value: string, accounts: AccountState[]) : State =>  {
     value.length === 0
       ? {
         isValid: false,
-        message: messages.errorNameTooShort,
+        message: translations.errorNameTooShort,
       }
       : accounts.find(account => account.name === value)
         ? {
           isValid: false,
-          message: messages.errorNameDuplicate,
+          message: translations.errorNameDuplicate,
         }
         : {
           isValid: true,

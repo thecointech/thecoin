@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
 import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
 import { GetStatusApi, GetETransferApi } from 'api'
@@ -10,54 +10,56 @@ import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
 import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 
-const errorMessage = { id:"app.accounts.redeem.errorMessage",
-                defaultMessage:"We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
-                description:"Error Message for the make a payment page / etransfer tab" };
-const successMessage = { id:"app.accounts.redeem.successMessage",
-                defaultMessage:"Order received.\nYou should receive the e-Transfer in 1-2 business days.",
-                description:"Success Message for the make a payment page / etransfer tab" };
-const description = { id:"app.accounts.redeem.description",
-                defaultMessage:"Email money to anyone with an interac e-Transfer.",
-                description:"Description for the make a payment page / etransfert tab" };
-const emailLabel = { id:"app.accounts.redeem.form.email",
-                defaultMessage:"Recipient email",
-                description:"Label for the form the make a payment page / etransfert tab" };
-const emailDesc = { id:"app.accounts.redeem.form.emailDesc",
-                defaultMessage:"An email address to send the e-Transfer to",
-                description:"Label for the form the make a payment page / etransfert tab" };
-const questionLabel = { id:"app.accounts.redeem.form.question",
-                defaultMessage:"Security question",
-                description:"Label for the form the make a payment page / etransfert tab" };
-const answerLabel = { id:"app.accounts.redeem.form.answer",
-                defaultMessage:"Security answer",
-                description:"Label for the form the make a payment page / etransfert tab" };
-const messageLabel = { id:"app.accounts.redeem.form.message",
-                defaultMessage:"Message (optional)",
-                description:"Label for the form the make a payment page / etransfert tab" };
-const messageDesc = { id:"app.accounts.redeem.form.messageDesc",
-                defaultMessage:"An optional message to the recipient. Should not include the security answer",
-                description:"Label for the form the make a payment page / etransfert tab" };
-
-const noSpecialCaractDesc = { id:"app.accounts.redeem.form.noSpecialCaractDesc",
-                defaultMessage:"No numbers or special characters ",
-                description:"Label for the form the make a payment page / etransfert tab" };
-
-const step1= { id:"app.accounts.redeem.step1",
-                defaultMessage:"Step 1 of 3: Checking order availability..." };
-const step2= { id:"app.accounts.redeem.step2",
-                defaultMessage:"Step 2 of 3: Sending sell order to our servers..." };
-const step3= { id:"app.accounts.redeem.step3",
-                defaultMessage:"Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})..." };
-
-const transferOutHeader= { id:"app.accounts.redeem.transferOutHeader",
-                defaultMessage:"Processing Transfer out..." };
-const transferOutProgress= { id:"app.accounts.redeem.transferOutHeader",
-                defaultMessage:"Please wait, we are sending your order to our servers..." };
-
-const button = { id:"app.accounts.redeem.form.button",
-                defaultMessage:"Send e-Transfer",
-                description:"For the button in the make a payment page / etransfer tab" };
-
+const translations = defineMessages({
+  errorMessage : {
+      defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
+      description: 'app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab'},
+  successMessage : {
+      defaultMessage: 'Order received.\nYou should receive the e-Transfer in 1-2 business days.',
+      description: 'app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab'},
+  description : {
+      defaultMessage: 'Email money to anyone with an interac e-Transfer.',
+      description: 'app.accounts.redeem.description: Description for the make a payment page / etransfert tab'},
+  emailLabel : {
+      defaultMessage: 'Recipient email',
+      description: 'app.accounts.redeem.form.emailLabel: Label for the form the make a payment page / etransfert tab'},
+  emailDesc : {
+      defaultMessage: 'An email address to send the e-Transfer to',
+      description: 'app.accounts.redeem.form.emailDesc: Label for the form the make a payment page / etransfert tab'},
+  questionLabel : {
+      defaultMessage: 'Security question',
+      description: 'app.accounts.redeem.form.questionLabel: Label for the form the make a payment page / etransfert tab'},
+  answerLabel : {
+      defaultMessage: 'Security answer',
+      description: 'app.accounts.redeem.form.answerLabel: Label for the form the make a payment page / etransfert tab'},
+  messageLabel : {
+      defaultMessage: 'Message (optional)',
+      description: 'app.accounts.redeem.form.messageLabel: Label for the form the make a payment page / etransfert tab'},
+  messageDesc : {
+      defaultMessage: 'An optional message to the recipient. Should not include the security answer',
+      description: 'app.accounts.redeem.form.messageDesc: Label for the form the make a payment page / etransfert tab'},
+  noSpecialCaractDesc : {
+      defaultMessage: 'No numbers or special characters',
+      description: 'app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab'},
+  step1 : {
+      defaultMessage: 'Step 1 of 3: Checking order availability...',
+      description: 'app.accounts.redeem.step1: Message for the form the make a payment page / etransfert tab'},
+  step2 : {
+      defaultMessage: 'Step 2 of 3: Sending sell order to our servers...',
+      description: 'app.accounts.redeem.step2: Message for the form the make a payment page / etransfert tab'},
+  step3 : {
+      defaultMessage: 'Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})...',
+      description: 'app.accounts.redeem.step3: Message for the form the make a payment page / etransfert tab'},
+  transferOutHeader : {
+      defaultMessage: 'Processing Transfer out...',
+      description: 'app.accounts.redeem.transferOutHeader: Message for the form the make a payment page / etransfert tab'},
+  transferOutProgress : {
+      defaultMessage: 'Please wait, we are sending your order to our servers...',
+      description: 'app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab'},
+  button : {
+      defaultMessage: 'Send e-Transfer',
+      description: 'app.accounts.redeem.form.button: For the button in the make a payment page / etransfer tab'}
+});
 
 export const Redeem = () => {
 
@@ -71,7 +73,7 @@ export const Redeem = () => {
   const [forceValidate, setForceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
-  const [transferMessage, setTransferMessage] = useState(transferOutProgress);
+  const [transferMessage, setTransferMessage] = useState(translations.transferOutProgress);
   const [transferValues, setTransferValues] = useState(undefined as any);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
@@ -91,7 +93,7 @@ export const Redeem = () => {
   const doSale = async () => {
     // Init messages
     setForceValidate(true);
-    setTransferMessage(step1);
+    setTransferMessage(translations.step1);
     setPercentComplete(0.0);
 
     // First, get the brokers fee
@@ -125,7 +127,7 @@ export const Redeem = () => {
       return false;
 
     // Send the command to the server
-    setTransferMessage(step2);
+    setTransferMessage(translations.step2);
     setPercentComplete(0.25);
     const response = await eTransferApi.eTransfer(command);
 
@@ -139,7 +141,7 @@ export const Redeem = () => {
       link: (
         <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
     };
-    setTransferMessage(step3);
+    setTransferMessage(translations.step3);
     setPercentComplete(0.5);
     setTransferValues(transferValues);
 
@@ -188,37 +190,37 @@ export const Redeem = () => {
 
   return (
       <RedeemWidget
-        errorMessage={errorMessage}
+        errorMessage={translations.errorMessage}
         errorHidden={errorHidden}
-        successMessage={successMessage}
+        successMessage={translations.successMessage}
         successHidden={successHidden}
 
         coinToSell={coinToSell}
-        description={description}
+        description={translations.description}
         onValueChange={onValueChange}
         account={account}
         rate={rate}
 
-        emailLabel={emailLabel}
+        emailLabel={translations.emailLabel}
         setEmail={(value: string) => setEmail(value)}
-        emailDes={intl.formatMessage(emailDesc)}
+        emailDes={intl.formatMessage(translations.emailDesc)}
 
-        questionLabel={questionLabel}
+        questionLabel={translations.questionLabel}
         setQuestion={(value: string) => setQuestion(value)}
-        noSpecialCaractDesc={intl.formatMessage(noSpecialCaractDesc)}
+        noSpecialCaractDesc={intl.formatMessage(translations.noSpecialCaractDesc)}
 
-        answerLabel={answerLabel}
+        answerLabel={translations.answerLabel}
         setAnswer={(value: string) => setAnswer(value)}
-        messageLabel={messageLabel}
+        messageLabel={translations.messageLabel}
         setMessage={(value: string) => setMessage(value)}
-        messageDesc={intl.formatMessage(messageDesc)}
+        messageDesc={intl.formatMessage(translations.messageDesc)}
 
-        button={button}
+        button={translations.button}
         onSubmit={onSubmit}
 
         cancelCallback={onCancelTransfer}
         transferInProgress={transferInProgress}
-        transferOutHeader={transferOutHeader}
+        transferOutHeader={translations.transferOutHeader}
         transferMessage={transferMessage}
         percentComplete={percentComplete}
         transferValues={transferValues}

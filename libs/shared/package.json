@@ -21,7 +21,9 @@
     "build": "run-p build:src build:copy build:link",
     "build:src": "yarn ttsc -b tsconfig.build.json",
     "build:copy": "cpx \"./src/**/*.svg\" ./build/",
-    "build:link": "node ../../tools/link-assets.mjs **/*.module.less"
+    "build:link": "node ../../tools/link-assets.mjs **/*.module.less",
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"  
   },
   "files": [
     "./build/**/*"
@@ -66,7 +68,8 @@
     "react-dates": "^21.5.1",
     "react-input-mask": "2.0.4",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b"
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b",
+    "ttypescript": "^1.5.12"
   },
   "devDependencies": {
     "@babel/runtime": "^7.7.7",

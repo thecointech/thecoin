@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
@@ -13,43 +13,41 @@ import { Grid, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 
-const title = { id:"site.homepage.underwater.title", 
-                defaultMessage:"Earths’ Healthier",
-                description:"Title for that homepage underwater part"};
-const description = { id:"site.homepage.underwater.description", 
-                      defaultMessage:"You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
-                      description:"Title for the homepage underwater part"};
-
-const differenceTitle = {  id:"site.homepage.underwater.difference.title", 
-                      defaultMessage:"Make a Difference",
-                      description:"Title for the homepage underwater difference subpart"};
-const differenceDescription = {  id:"site.homepage.underwater.difference.description", 
-                      defaultMessage:"Offsetting CO2 is effective. Extremely effective!",
-                      description:"Description for the homepage underwater difference subpart"};
-const differenceLink = {  id:"site.homepage.underwater.difference.link", 
-                      defaultMessage:"Compare Outcomes",
-                      description:"Link for the homepage underwater difference subpart"};
-
-const scienceTitle = {  id:"site.homepage.underwater.science.title", 
-                        defaultMessage:"Scientifically Verified",
-                        description:"Title for the homepage underwater science subpart"};
-const scienceDescription = {  id:"site.homepage.underwater.science.description", 
-                              defaultMessage:"Prove it? We’d love to!",
-                              description:"Description for the homepage underwater science subpart"};
-const scienceLink = {   id:"site.homepage.underwater.science.link", 
-                        defaultMessage:"Why We Can Be So Confident",
-                        description:"Link for the homepage underwater science subpart"};
-
-const treesTitle = {  id:"site.homepage.underwater.trees.title", 
-                        defaultMessage:"We Do More",
-                        description:"Title for the homepage underwater trees subpart"};
-const treesDescription = {  id:"site.homepage.underwater.trees.description", 
-                      defaultMessage:"It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
-                      description:"Description for the homepage underwater trees subpart"};
-const treesLink = {  id:"site.homepage.underwater.trees.link", 
-                      defaultMessage:"What We Do",
-                      description:"Link for the homepage underwater trees subpart"};
-
+const translations = defineMessages({
+  title : {
+    defaultMessage: 'Earths’ Healthier',
+    description: 'site.homepage.underwater.title: Title for that homepage underwater part'},
+  description : {
+    defaultMessage: 'You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.',
+    description: 'site.homepage.underwater.description: Description for the homepage underwater part'},
+  differenceTitle : {
+    defaultMessage: 'Make a Difference',
+    description: 'site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart'},
+  differenceDescription : {
+    defaultMessage: 'Offsetting CO2 is effective. Extremely effective!',
+    description: 'site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart'},
+  differenceLink : {
+    defaultMessage: 'Compare Outcomes',
+    description: 'site.homepage.underwater.difference.link: Link for the homepage underwater difference subpart'},
+  scienceTitle : {
+    defaultMessage: 'Scientifically Verified',
+    description: 'site.homepage.underwater.science.title: Title for the homepage underwater science subpart'},
+  scienceDescription : {
+    defaultMessage: 'Prove it? We’d love to!',
+    description: 'site.homepage.underwater.science.description: Description for the homepage underwater science subpart'},
+  scienceLink : {
+    defaultMessage: 'Why We Can Be So Confident',
+    description: 'site.homepage.underwater.science.link: Link for the homepage underwater science subpart'},
+  treesTitle : {
+    defaultMessage: 'We Do More',
+    description: 'site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart'},
+  treesDescription : {
+    defaultMessage: 'It’s not just CO2. The projects we fund are vital to restoring our ecosystem.',
+    description: 'site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart'},
+  treesLink : {
+    defaultMessage: 'What We Do',
+    description: 'site.homepage.underwater.trees.link: Link for the homepage underwater trees subpart'}
+});
 
 export const UnderwaterMobile = () => {
 
@@ -58,9 +56,9 @@ export const UnderwaterMobile = () => {
       <div id={sharedStyles.underwaterPart} className={styles.landscapeUnderwater}>
         <div className={ `${styles.header} x30spaceBefore` }>
               <Header as='h2' className={ `x1spaceAfter` }>
-                <FormattedMessage {...title} />
+                <FormattedMessage {...translations.title} />
                 <Header.Subheader>
-                  <FormattedMessage {...description} />
+                  <FormattedMessage {...translations.description} />
                 </Header.Subheader>
               </Header>
           </div>
@@ -69,34 +67,34 @@ export const UnderwaterMobile = () => {
             <Grid.Column>
                 <img src={co2} />
                 <Header as='h4'className={ `x1spaceAfter` }>
-                  <FormattedMessage {...differenceTitle} />
+                  <FormattedMessage {...translations.differenceTitle} />
                 </Header>
                 <p>
-                  <FormattedMessage {...differenceDescription} />
+                  <FormattedMessage {...translations.differenceDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...differenceLink} /></Link>
+                <Link to="/healthier"><FormattedMessage {...translations.differenceLink} /></Link>
             </Grid.Column>
 
             <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={science} />
                 <Header as='h4'className={ `x1spaceAfter` }>
-                  <FormattedMessage {...scienceTitle} />
+                  <FormattedMessage {...translations.scienceTitle} />
                 </Header>
                 <p>
-                  <FormattedMessage {...scienceDescription} />
+                  <FormattedMessage {...translations.scienceDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...scienceLink} /></Link>
+                <Link to="/healthier"><FormattedMessage {...translations.scienceLink} /></Link>
             </Grid.Column>
 
             <Grid.Column columns={3} className={styles.mobileLine} >
                 <img src={trees} />
                 <Header as='h4'className={ `x1spaceAfter` }>
-                  <FormattedMessage {...treesTitle} />
+                  <FormattedMessage {...translations.treesTitle} />
                 </Header>
                 <p>
-                  <FormattedMessage {...treesDescription} />
+                  <FormattedMessage {...translations.treesDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...treesLink} /></Link>
+                <Link to="/healthier"><FormattedMessage {...translations.treesLink} /></Link>
             </Grid.Column>
           </Grid.Row>
         </Grid>

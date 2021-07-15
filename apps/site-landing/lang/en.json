@@ -1,124 +1,103 @@
 {
-  "+VnHem": {
-    "defaultMessage": "ineffectual"
+  "+yxUhg": {
+    "defaultMessage": "We help to restore the planet’s ecosystem",
+    "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
   },
-  "+iipxf": {
-    "defaultMessage": "The following is your personalized e-Transfer info:"
+  "0FXCvv": {
+    "defaultMessage": "Maximum Growth",
+    "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
   },
-  "/BZiQv": {
-    "defaultMessage": "Upload Failed"
+  "0GZP57": {
+    "defaultMessage": "Re-forestation",
+    "description": "site.wedomore.tree.title: Title for the tree photo for the We Do More page"
   },
-  "/lGbT2": {
-    "defaultMessage": "Load an account stored online"
+  "0N2o+s": {
+    "defaultMessage": "Your benefits",
+    "description": "site.homepage.advantages.benefits: Your benefits"
   },
-  "0R7FNW": {
-    "defaultMessage": "Transfer money into your account"
+  "0VyBpa": {
+    "defaultMessage": "Prove it? We’d love to!",
+    "description": "site.homepage.underwater.science.description: Description for the homepage underwater science subpart"
   },
-  "14DySm": {
-    "defaultMessage": "You have entered {len} numbers, but your account requires {max}"
+  "0W1Mb5": {
+    "defaultMessage": "Why settle? Our time-tested strategy has the best long-term results.",
+    "description": "site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier"
   },
-  "172N3w": {
-    "defaultMessage": "Please wait..."
+  "1PFQTi": {
+    "defaultMessage": "We do more",
+    "description": "site.MainNavigationMobile.wedomore: Title for the We do more entry in the menu"
   },
-  "23raqf": {
-    "defaultMessage": "Or, you can create an entirely new account!"
+  "1jRkZO": {
+    "defaultMessage": "Earths’ Healthier",
+    "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
-  "3WkdVP": {
-    "defaultMessage": "Account Name"
+  "2+ZDlf": {
+    "defaultMessage": "Country",
+    "description": "site.subscribe.confirmation.form.country: label for last name field"
   },
-  "3gAgRa": {
-    "defaultMessage": "We are working hard to bring it to you though"
+  "2E2eVK": {
+    "defaultMessage": "Keep Your Profits",
+    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
   },
-  "3gQmcL": {
-    "defaultMessage": "For more information on account backup and security, we recommend reading the FAQs"
+  "2yk0Rt": {
+    "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
+    "description": "site.compare.description: Main description for the How much will you make? graph page"
   },
-  "3i9R/h": {
-    "defaultMessage": "Which direction to you choose?"
+  "43E4EL": {
+    "defaultMessage": "We fund clean energy projects to replace dirty coal power",
+    "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
   },
-  "3q6swa": {
-    "defaultMessage": "To use this feature, either install the MetaMask plugin or try the new Opera browser!"
+  "4DkjpT": {
+    "defaultMessage": "It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
+    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
   },
-  "43Sa3t": {
-    "defaultMessage": "Or, for a quick overview of our company try the below items"
+  "4MHk2t": {
+    "defaultMessage": "We Do More",
+    "description": "site.wedomore.title: Title for the We Do More page"
   },
-  "4PGglh": {
-    "defaultMessage": "CONNECT TO GOOGLE"
+  "4N/YNr": {
+    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter",
+    "description": "site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter"
   },
-  "4STA1J": {
-    "defaultMessage": "Name your account anything you like, and give it a valid password."
+  "4fyTGb": {
+    "defaultMessage": "Add $250000 to your retirement - with no money down.",
+    "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
-  "4wDpCC": {
-    "defaultMessage": "Processing Transfer out..."
+  "60WgI1": {
+    "defaultMessage": "Home",
+    "description": "site.MainNavigationMobile.home: Title for the Home entry in the menu"
   },
-  "5HDxHE": {
-    "defaultMessage": "You can use The Coin pretty much the same as a regular bank account. You can make payments on your bills, including your credit card and taxes. The only difference is that your money keeps growing."
+  "7bpwYe": {
+    "defaultMessage": "Years",
+    "description": "site.compare.label.rangeDurationYear: label for range Duration Year field in the compare page"
   },
-  "5mPgq6": {
-    "defaultMessage": "Send an e-Transfer"
+  "81qKOv": {
+    "defaultMessage": "Please enter a valid email",
+    "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
   },
-  "5qGaHu": {
-    "defaultMessage": "Step 2 of 3: Sending bill payment to our servers..."
+  "8WNRbJ": {
+    "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part"
   },
-  "5sg7KC": {
-    "defaultMessage": "Password"
+  "8rHqL+": {
+    "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
+    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
   },
-  "6T4lO3": {
-    "defaultMessage": "You get 90% of the dividends. We keep 10% and put it towards fighting climate change: {bold}.",
-    "description": "Tree planting"
+  "92T+TI": {
+    "defaultMessage": "Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
+    "description": "site.healthier.description: Description underneath the title for the Earth’s Healthier page"
   },
-  "6caMaA": {
-    "defaultMessage": "Referral Code"
+  "B7gcLo": {
+    "defaultMessage": "Better Farming",
+    "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
   },
-  "6eyzmf": {
-    "defaultMessage": "If you prefer, you may download and manage your own backups."
+  "Db9gTm": {
+    "defaultMessage": "Learn More",
+    "description": "site.homepage.landscape.stickers.right.link: Link name for sticker for the homepage landscape right sticker"
   },
-  "7d06eh": {
-    "defaultMessage": "Deposit Instructions"
-  },
-  "9ZULUQ": {
-    "defaultMessage": "No external providers detected!"
-  },
-  "A17djw": {
-    "defaultMessage": "Step 2 of 3: Sending transfer command to our servers..."
-  },
-  "Aac8zs": {
-    "defaultMessage": "A referrer ID should only contain alpha-numeric characters."
-  },
-  "BEKB5I": {
-    "defaultMessage": "If you have previously connected a Coin account to your google account, click below to restore it"
-  },
-  "BPAyrI": {
-    "defaultMessage": "Pay bills and make purchases"
-  },
-  "BUGYWB": {
-    "defaultMessage": "moderate"
-  },
-  "Bmb0JR": {
-    "defaultMessage": "We are very proud to combine the cutting-edge security and performance of blockchain with the the conveniences of traditional banking."
-  },
-  "CLGvqF": {
-    "defaultMessage": "Invalid account number"
-  },
-  "D2FTm2": {
-    "defaultMessage": "Please enter a password of at least 'moderate' strength"
-  },
-  "DjxGFE": {
-    "defaultMessage": "Payee Account Number"
-  },
-  "DlOmlM": {
-    "defaultMessage": "CREATE ACCOUNT"
-  },
-  "Dt/yrs": {
-    "defaultMessage": "All the while paying no fees whatsoever, and enjoying the world's most secure accounts."
-  },
-  "ESXtGQ": {
-    "defaultMessage": "Secret:"
-  },
-  "ETKY11": {
-    "defaultMessage": "Step 3 of 3: Waiting for the bill payment to be accepted (check progress {link})..."
-  },
-  "EyLkgO": {
-    "defaultMessage": "Transfer funds from your Canadian bank to your account."
+  "F/FnXv": {
+    "defaultMessage": "Home",
+    "description": "site.MainNavigation.home: Title for the Home entry in the menu"
   },
   "FAWgn/": {
     "defaultMessage": "Show me the Potential!"
@@ -126,528 +105,324 @@
   "FIhD/V": {
     "defaultMessage": "Over your lifetime, how much can you expect the value of your account grow?"
   },
-  "FKNYAF": {
-    "defaultMessage": "This bit is not quite ready!"
-  },
-  "FV6WEb": {
-    "defaultMessage": "This page expects to recieve google authentication information, but none was found."
+  "FJ1aEy": {
+    "defaultMessage": "The major banks take an average of $1000 in profits each year from every Canadian.",
+    "description": "site.healthier.majorbanks: text for the banks taking money for the Earth’s Healthier page"
   },
   "GM3YzV": {
     "defaultMessage": "{months} months"
   },
-  "GfOGaW": {
-    "defaultMessage": "strong"
-  },
   "Gv2G2+": {
     "defaultMessage": "Starting Amount"
   },
-  "H+iY/Z": {
-    "defaultMessage": "Bill Payments"
+  "HnvT/Q": {
+    "defaultMessage": "FAQ",
+    "description": "site.MainNavigationMobile.blog: Title for the Blog entry in the menu"
+  },
+  "IJP8Tt": {
+    "defaultMessage": "TheCoin is a revolutionary new kind of account.",
+    "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
   },
   "J3ca41": {
     "defaultMessage": "Play"
   },
-  "JOIoTr": {
-    "defaultMessage": "You have successfully backed up your account to your personal Google Drive"
+  "JRnwgC": {
+    "defaultMessage": "You’re Wealthier",
+    "description": "site.homepage.wealthier.title: The title for the homepage wealthier"
   },
-  "Js8g8o": {
-    "defaultMessage": "Creating Account..."
+  "JSlNYc": {
+    "defaultMessage": "Duration:",
+    "description": "site.compare.label.rangeDuration: label for range duration in the compare page"
   },
   "JsOO1l": {
     "defaultMessage": "If you opened an account at a random date any time in the past 80 years, the bottom axis shows the possible account values and the vertical axis is the probablility you would get that return"
   },
-  "KXSupW": {
-    "defaultMessage": "What would you like to know?"
+  "Kn2j7O": {
+    "defaultMessage": "Clean Water",
+    "description": "site.wedomore.water.title: Title for the water photo for the We Do More page"
   },
-  "LKTnOm": {
-    "defaultMessage": "Step 3 of 3: Waiting for the transfer to be accepted (check progress {link})..."
+  "LXSHgo": {
+    "defaultMessage": "It only costs about $100 per person to offset the CO2 for our current lifestyle.",
+    "description": "site.healthier.lifestyle: text for the lifestyle part for the Earth’s Healthier page"
   },
   "LxanTq": {
     "defaultMessage": "Calculate"
   },
-  "MDDTmq": {
-    "defaultMessage": "The entered referrer ID is not recognized"
+  "M+yWKJ": {
+    "defaultMessage": "Compare Outcomes",
+    "description": "site.homepage.underwater.difference.link: Link for the homepage underwater difference subpart"
   },
-  "MQFqtY": {
-    "defaultMessage": "Step 1 of 3: Checking payment availability..."
+  "NtaMxG": {
+    "defaultMessage": "Your money is always earning. Make it earn for you.",
+    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
-  "McqBUL": {
-    "defaultMessage": "We have detected a compatible account in your browser. To register it with TheCoin, enter a name and your referral code"
+  "NwufPh": {
+    "defaultMessage": "Start Now",
+    "description": "site.homepage.landscape.button: Button label for the landscape"
   },
-  "OhDFsa": {
-    "defaultMessage": "It’s easy! All you need is a valid referrer code."
-  },
-  "PhGigK": {
-    "defaultMessage": "UPLOADED"
-  },
-  "QtdzKm": {
-    "defaultMessage": "It is very important that you backup your account somewhere safe to avoid losing it."
+  "P82KCx": {
+    "defaultMessage": "Earth’s Healthier",
+    "description": "site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker"
   },
   "RR4faR": {
     "defaultMessage": "{years} years"
   },
-  "S+SHB1": {
-    "defaultMessage": "We give you instructions on how to save your account. To benefit from our guarantee of “the most secure account in the world”, you need to save it offline. That’s easy, too."
+  "RSzn+F": {
+    "defaultMessage": "Scientifically Verified",
+    "description": "site.homepage.underwater.science.title: Title for the homepage underwater science subpart"
   },
-  "SZxCrQ": {
-    "defaultMessage": "Transfer back to any Canadian bank."
+  "RceNpc": {
+    "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
+    "description": "site.homepage.landscape.description: The description for the homepage"
   },
-  "TlqtAg": {
-    "defaultMessage": "Step 2 of 3: Sending sell order to our servers..."
+  "RldC0Y": {
+    "defaultMessage": "Go back",
+    "description": "site.blog.backLink: Link to go back from article"
   },
-  "Ttubnu": {
-    "defaultMessage": "Step 1 of 3: Checking order availability..."
+  "S/Lh3i": {
+    "defaultMessage": "Family Name",
+    "description": "site.subscribe.confirmation.form.lastname: label for last name field"
   },
-  "U+Ta8i": {
-    "defaultMessage": "Grow your wealth alongside Wall Street without taking away access to your finances."
+  "SS292h": {
+    "defaultMessage": "FAQ",
+    "description": "site.MainNavigationMobile.faq: Title for the FAQ entry in the menu"
   },
-  "U6E/Kq": {
-    "defaultMessage": "Or, if you can restore an account generated previously"
+  "Th2OVj": {
+    "defaultMessage": "Read More",
+    "description": "site.blog.articleLink: Link to access article page in blog"
   },
-  "UFdq1P": {
-    "defaultMessage": "Step 3 of 3: Waiting for the order to be accepted (check progress {link})..."
+  "U623eE": {
+    "defaultMessage": "Your benefits",
+    "description": "site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu"
   },
-  "UKvwyv": {
-    "defaultMessage": "This account isn't stored locally, and so cannot be uploaded to Google"
-  },
-  "UnCCmm": {
-    "defaultMessage": "No compatible account detected!"
+  "UTXdBk": {
+    "defaultMessage": "Given Name",
+    "description": "site.subscribe.confirmation.form.firstname: label for first name field"
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
-  "W1oE6n": {
-    "defaultMessage": "To begin, let us quickly explain how we are different"
+  "VVutoW": {
+    "defaultMessage": "Blog",
+    "description": "site.MainNavigation.blog: Title for the Blog entry in the menu"
   },
-  "W9yWHk": {
-    "defaultMessage": "strength"
+  "VdA9HP": {
+    "defaultMessage": "Your benefits",
+    "description": "site.MainNavigationMobile.yourbenefits: Title for the Your benefits entry in the menu"
   },
-  "WaL/Lz": {
-    "defaultMessage": "Save your account"
-  },
-  "WiKyhr": {
-    "defaultMessage": "Congratulations"
-  },
-  "XUSb2W": {
-    "defaultMessage": "Is this what you meant?"
-  },
-  "YEEy3s": {
-    "defaultMessage": "{bold} here is backed by the S&P500. Annual return of 9.8% over the last 90 years Fight inflation and maintain purchasing power.",
-    "description": "TheCoin"
+  "W8cvxr": {
+    "defaultMessage": "We Do More",
+    "description": "site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart"
   },
   "Ycz6kB": {
     "defaultMessage": "This graph shows how The Coin account values will probably grow after"
   },
-  "Z5Xvgo": {
-    "defaultMessage": "First, you open an account."
+  "YpYP+S": {
+    "defaultMessage": "SUBSCRIPTION",
+    "description": "site.subscribe.confirmation.aboveTheTitle: Text above the title for the 'Thank you for subscribing!' page"
   },
-  "ZahuDB": {
-    "defaultMessage": "You can transfer from The Coin back to Canadian dollars at any time. Transfer the money you need out of your account with interac e-Transfer quickly and cheaply."
+  "YwCHN1": {
+    "defaultMessage": "Why We Can Be So Confident",
+    "description": "site.homepage.underwater.science.link: Link for the homepage underwater science subpart"
   },
-  "akySEF": {
-    "defaultMessage": "We are excited to have you join us."
+  "ZNzJYq": {
+    "defaultMessage": "In-depth",
+    "description": "site.MainNavigationMobile.indepth: Title for the In-depth entry in the menu"
   },
-  "bSJwkd": {
-    "defaultMessage": "Creating an account with {bold} WILL help stop climate change.",
-    "description": "TheCoin"
+  "ZiBD6K": {
+    "defaultMessage": "Monthly Fees",
+    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
   },
-  "cNeP55": {
-    "defaultMessage": "How It Works!"
+  "b+5LjH": {
+    "defaultMessage": "Clean Energy",
+    "description": "site.wedomore.energy.title: Title for the energy photo for the We Do More page"
   },
-  "cdo2Ho": {
-    "defaultMessage": "Please wait, we are sending your order to our servers..."
+  "b8wQuI": {
+    "defaultMessage": "What We Do",
+    "description": "site.homepage.underwater.trees.link: Link for the homepage underwater trees subpart"
   },
-  "dQP0Sd": {
-    "defaultMessage": "in the meantime, feel free to contact"
+  "bx4TI0": {
+    "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
+    "description": "site.compare.graph.description: Graph description for the How much will you make? graph page"
   },
-  "dr2M1y": {
-    "defaultMessage": "The Coin Website"
+  "cdFqR/": {
+    "defaultMessage": "Create Account",
+    "description": "site.MainNavigation.button,createAccount: Button to create account in app"
   },
-  "eWSs5G": {
-    "defaultMessage": "LEARN MORE"
+  "d0yXyK": {
+    "defaultMessage": "Minimums",
+    "description": "site.homepage.advantages.minimum: Minimums"
   },
-  "f5IXUm": {
-    "defaultMessage": "The Opera browser you are using comes with a built-in account that is compatible with TheCoin. Would you like to connect to it?"
+  "dP8QDa": {
+    "defaultMessage": "We do more than just offset CO2. The projects we fund are the WWF’s gold standard, the highest global standard for maximum impact.",
+    "description": "site.wedomore.description: Description for the We Do More page"
   },
-  "f82wcH": {
-    "defaultMessage": "Upload an account saved manually"
+  "dr0Wpp": {
+    "defaultMessage": "Earth’s Healthier",
+    "description": "site.healthier.title: Main title for the Earth’s Healthier page"
+  },
+  "eD3nRg": {
+    "defaultMessage": "Learn More",
+    "description": "site.homepage.landscape.stickers.left.link: Link name for sticker for the homepage landscape left sticker"
+  },
+  "eQb99l": {
+    "defaultMessage": "The remaining 1/10th is used to pay off our carbon debt",
+    "description": "site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page"
+  },
+  "fajUfc": {
+    "defaultMessage": "We do more",
+    "description": "site.MainNavigation.wedomore: Title for the We do more entry in the menu"
   },
   "feSg9K": {
     "defaultMessage": "Your Age"
   },
-  "flaX9K": {
-    "defaultMessage": "Create a New Account"
+  "hB3xnP": {
+    "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
+    "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
-  "fsyYx5": {
-    "defaultMessage": "Your Done - Lets Go!"
+  "hfXNxT": {
+    "defaultMessage": "We would love to get to know you better! Would you mind letting us know your details?",
+    "description": "site.subscribe.confirmation.description: Descriton for the 'Thank you for subscribing!' page"
   },
-  "gndVKV": {
-    "defaultMessage": "An account with this name already exists here."
+  "iCleoo": {
+    "defaultMessage": "Prevent soil damage and erosion and improve peoples lives",
+    "description": "site.wedomore.smallPlant.description: Title for the smallPlant photo for the We Do More page"
   },
-  "hVEkSt": {
-    "defaultMessage": "Transfer money in using interac e-Transfer and an email address specific to only your account. Your dollars will be converted into The Coin, a digital currency based on the stockmarket, and powered by blockchain technology (which helps make it super-safe!). Its value is tied to the best stocks on Wall Street (the S&P 500)."
+  "jJ1YVo": {
+    "defaultMessage": "The Best Investment",
+    "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
   },
-  "iaWn3u": {
-    "defaultMessage": "vulnerable"
+  "jK5Jc0": {
+    "defaultMessage": "Your possible benefits",
+    "description": "site.compare.graph.title: Graph title for the How much will you make? graph page"
   },
-  "ikuIzB": {
-    "defaultMessage": "This feature connects The Coin to an external Web3 account provider."
+  "jTYRs0": {
+    "defaultMessage": "Compare Us",
+    "description": "site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier"
   },
   "jXd/F7": {
     "defaultMessage": "Step"
   },
-  "jtobUu": {
-    "defaultMessage": "Spend your money at the supermarket or your favorite restaurant."
-  },
-  "kY7iG5": {
-    "defaultMessage": "Where would you like to store your account?"
-  },
-  "kntOZ2": {
-    "defaultMessage": "If you've never used a blockchain account, some of these differences can seem a bit strange. We encourate you to read the short intro articles below if you would like to learn more."
-  },
-  "l0BLUl": {
-    "defaultMessage": "A referrer ID should be 6 characters long."
-  },
-  "lJffX+": {
-    "defaultMessage": "Backup your new account."
-  },
-  "mA8olw": {
-    "defaultMessage": "weak"
-  },
-  "mAZSC/": {
-    "defaultMessage": "Accounts with TheCoin are a little different to your regular bank. We are built on the blockchain, which means that we don't store your account keys - you do!"
-  },
-  "mIDr0u": {
-    "defaultMessage": "We are generating your individual e-Transfer recipient info"
-  },
-  "messages.subscribe.description": {
-    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter:"
-  },
-  "mvYWfO": {
-    "defaultMessage": "Cannot Upload"
-  },
-  "nUnauq": {
-    "defaultMessage": "You can pay your bills directly from The Coin."
-  },
-  "o12td2": {
-    "defaultMessage": "An account must have a name."
-  },
-  "oMD1Mm": {
-    "defaultMessage": "We are {percentComplete}% done cooking your brand-new account."
-  },
-  "oZAQpg": {
-    "defaultMessage": "Welcome to TheCoin"
-  },
-  "of+tIg": {
-    "defaultMessage": "Your details:"
-  },
-  "or8mM7": {
-    "defaultMessage": "Your browser has a compatible account, would you like to connect to it?"
-  },
-  "otKM13": {
-    "defaultMessage": "Processing Transfer..."
-  },
-  "pCI+3K": {
-    "defaultMessage": "Load using a different method"
-  },
-  "pNrX8u": {
-    "defaultMessage": "DOWNLOAD"
-  },
-  "pkNdj0": {
-    "defaultMessage": "Connect to an existing Ethereum Account"
-  },
-  "rU9ewe": {
-    "defaultMessage": "Email money to anyone with an interac e-Transfer."
-  },
-  "rWVhgO": {
-    "defaultMessage": "Processing Bill Payment..."
-  },
-  "rs3naL": {
-    "defaultMessage": "Your card number should be 16 digits long"
-  },
-  "s43Dg1": {
-    "defaultMessage": "Please wait - we are checking for authentication"
-  },
-  "sWeByE": {
-    "defaultMessage": "We cannot detect a compatible account in this browser. If you would like to use an external account provider, we recommend installing Metamask or using the Opera Browser"
-  },
-  "site.AccountSwitcher.MyAccounts": {
-    "defaultMessage": "My Accounts",
-    "description": "Title for the My Accounts title in the menu"
-  },
-  "site.AccountSwitcher.addAccount": {
-    "defaultMessage": "Add an Account",
-    "description": "Title for the Add an Account in the menu"
-  },
-  "site.AccountSwitcher.login": {
-    "defaultMessage": "LOG IN"
-  },
-  "site.AccountSwitcher.see": {
-    "defaultMessage": "See",
-    "description": "Title for the See in the menu"
-  },
-  "site.AccountSwitcher.settings": {
-    "defaultMessage": "Settings",
-    "description": "Title for the Settings in the menu"
-  },
-  "site.AccountSwitcher.signout": {
-    "defaultMessage": "Sign Out",
-    "description": "Title for the Sign Out in the menu"
-  },
-  "site.MainNavigation.home": {
-    "defaultMessage": "Home",
-    "description": "Title for the Home entry in the menu"
-  },
-  "site.MainNavigation.indepth": {
-    "defaultMessage": "In-depth",
-    "description": "Title for the In-depth entry in the menu"
-  },
-  "site.MainNavigation.wedomore": {
-    "defaultMessage": "We do more",
-    "description": "Title for the We do more entry in the menu"
-  },
-  "site.MainNavigation.yourbenefits": {
-    "defaultMessage": "Your benefits",
-    "description": "Title for the Your benefits entry in the menu"
-  },
-  "site.NotFoundPage.aboveTheTitle": {
-    "defaultMessage": "PAGE NOT FOUND",
-    "description": "Text above the title for the 404 page"
-  },
-  "site.NotFoundPage.button": {
-    "defaultMessage": "Home",
-    "description": "Go back to homepage button for the 404 page"
-  },
-  "site.NotFoundPage.title": {
-    "defaultMessage": "Sorry, we couldn’t find the page you are looking for",
-    "description": "Title for the 404 page"
-  },
-  "site.createAccountBanner.button": {
-    "defaultMessage": "Create Account",
-    "description": "Create Account button for the create account banner for interior pages"
-  },
-  "site.createAccountBanner.title": {
+  "kEiX9n": {
     "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
-    "description": "The benefits of a chequing, savings, and investing account all in one!"
+    "description": "site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!"
   },
-  "site.footer.copyright": {
-    "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
-    "description": "Copyright phrase in footer"
+  "kWd+Qa": {
+    "defaultMessage": "Thank you for subscribing!",
+    "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
   },
-  "site.footer.registered": {
-    "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
-    "description": "Registered Non profit phrase in footer"
-  },
-  "site.footer.subscribe.button": {
-    "defaultMessage": "Subscribe"
-  },
-  "site.homepage.advantages.benefits": {
-    "defaultMessage": "Your benefits",
-    "description": "Your benefits"
-  },
-  "site.homepage.advantages.minimum": {
-    "defaultMessage": "Minimums",
-    "description": "Minimums"
-  },
-  "site.homepage.advantages.monthlyFees": {
-    "defaultMessage": "Monthly Fees",
-    "description": "Monthly Fees"
-  },
-  "site.homepage.createAccountBig.button": {
-    "defaultMessage": "Create Account",
-    "description": "Create Account button for the big create account banner for the home pages"
-  },
-  "site.homepage.createAccountBig.title": {
-    "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
-    "description": "Title"
-  },
-  "site.homepage.createAccountSmall.button": {
-    "defaultMessage": "Create Account",
-    "description": "Create Account button for the small create account banner for the home pages"
-  },
-  "site.homepage.createAccountSmall.title": {
-    "defaultMessage": "TheCoin is a revolutionary new kind of account.",
-    "description": "Title"
-  },
-  "site.homepage.landscape.description": {
-    "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
-    "description": "Description following the main title"
-  },
-  "site.homepage.landscape.stickers.left.description": {
-    "defaultMessage": "Your money is always earning. Make it earn for you.",
-    "description": "Description for left sticker"
-  },
-  "site.homepage.landscape.stickers.left.link": {
-    "defaultMessage": "Learn More",
-    "description": "Link name for left sticker"
-  },
-  "site.homepage.landscape.stickers.left.title": {
-    "defaultMessage": "You’re Wealthier",
-    "description": "Title for left sticker"
-  },
-  "site.homepage.landscape.stickers.right.description": {
-    "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
-    "description": "Description for left sticker"
-  },
-  "site.homepage.landscape.stickers.right.link": {
-    "defaultMessage": "Learn More",
-    "description": "Link name for right sticker"
-  },
-  "site.homepage.landscape.stickers.right.title": {
-    "defaultMessage": "Earth’s Healthier",
-    "description": "Title for right sticker"
-  },
-  "site.homepage.landscape.title": {
-    "defaultMessage": "The future is brighter",
-    "description": "The future is brighter"
-  },
-  "site.homepage.underwater.description": {
-    "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
-    "description": "Description for that part"
-  },
-  "site.homepage.underwater.difference.description": {
+  "lrlibv": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
-    "description": "Description for that part"
+    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
   },
-  "site.homepage.underwater.difference.link": {
-    "defaultMessage": "Compare Outcomes",
-    "description": "Link name for that part"
-  },
-  "site.homepage.underwater.difference.title": {
-    "defaultMessage": "Make a Difference",
-    "description": "Title for that part"
-  },
-  "site.homepage.underwater.science.description": {
-    "defaultMessage": "Prove it? We’d love to!",
-    "description": "Description for that part"
-  },
-  "site.homepage.underwater.science.link": {
-    "defaultMessage": "Why We Can Be So Confident",
-    "description": "Link name for that part"
-  },
-  "site.homepage.underwater.science.title": {
-    "defaultMessage": "Scientifically Verified",
-    "description": "Title for that part"
-  },
-  "site.homepage.underwater.title": {
-    "defaultMessage": "Earths’ Healthier",
-    "description": "Title for that part"
-  },
-  "site.homepage.underwater.trees.description": {
-    "defaultMessage": "It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
-    "description": "Description for that part"
-  },
-  "site.homepage.underwater.trees.link": {
-    "defaultMessage": "What We Do",
-    "description": "Link name for that part"
-  },
-  "site.homepage.underwater.trees.title": {
-    "defaultMessage": "We Do More",
-    "description": "Title for that part"
-  },
-  "site.homepage.wealthier.description": {
+  "n0wGb/": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
-    "description": "Description"
+    "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
   },
-  "site.homepage.wealthier.growth.description": {
-    "defaultMessage": "Add $250000 to your retirement - with no money down.",
-    "description": "Description"
+  "p695DK": {
+    "defaultMessage": "The future is brighter",
+    "description": "site.homepage.landscape.title: The title for the homepage"
   },
-  "site.homepage.wealthier.growth.link": {
-    "defaultMessage": "How Anyone Can Get Rich Slow",
-    "description": "Link"
+  "pQMOTC": {
+    "defaultMessage": "Subscribe",
+    "description": "site.subscribe.button: Button for the bottom subscription part for the site"
   },
-  "site.homepage.wealthier.growth.title": {
-    "defaultMessage": "Maximum Growth",
-    "description": "Title"
+  "pRmrf0": {
+    "defaultMessage": "Make a Difference",
+    "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
   },
-  "site.homepage.wealthier.investment.description": {
-    "defaultMessage": "Why settle? Our time-tested strategy has the best long-term results.",
-    "description": "Description"
-  },
-  "site.homepage.wealthier.investment.link": {
-    "defaultMessage": "Compare Us",
-    "description": "Link"
-  },
-  "site.homepage.wealthier.investment.title": {
-    "defaultMessage": "The Best Investment",
-    "description": "Title"
-  },
-  "site.homepage.wealthier.profits.description": {
-    "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
-    "description": "Description"
-  },
-  "site.homepage.wealthier.profits.link": {
-    "defaultMessage": "Who Wins?",
-    "description": "Link"
-  },
-  "site.homepage.wealthier.profits.title": {
-    "defaultMessage": "Keep Your Profits",
-    "description": "Title"
-  },
-  "site.homepage.wealthier.startnow.description": {
+  "q8J1XZ": {
     "defaultMessage": "The most important ingredient is time. You’re young - maximize your benefit!",
-    "description": "Description"
+    "description": "site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier"
   },
-  "site.homepage.wealthier.startnow.link": {
-    "defaultMessage": "Learn Your Edge",
-    "description": "Link"
+  "qGeaPp": {
+    "defaultMessage": "We invest our clients’ accounts and give them 90% of the profit.",
+    "description": "site.healthier.invest: text for the investment part for the Earth’s Healthier page"
   },
-  "site.homepage.wealthier.startnow.title": {
-    "defaultMessage": "Start Now",
-    "description": "Title"
+  "qKjeDB": {
+    "defaultMessage": "Who Wins?",
+    "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
   },
-  "site.homepage.wealthier.title": {
-    "defaultMessage": "You’re Wealthier",
-    "description": "Title"
+  "quX+ke": {
+    "defaultMessage": "I want to receive the newsletter",
+    "description": "site.subscribe.confirmation.form.subcheckbox: label for subcheckbox field"
   },
-  "site.subscribe.confirm.button": {
+  "rplP0T": {
+    "defaultMessage": "Show Me",
+    "description": "site.compare.button: label for the button in the compare page"
+  },
+  "site.subscribe.confirmation.button": {
     "defaultMessage": "Update Details!"
   },
   "tFFMkF": {
     "defaultMessage": "Pause"
   },
-  "u3W+xt": {
-    "defaultMessage": "Something went wrong, your account has not been backed up. Please contact support@thecoin.io"
+  "tKAFVB": {
+    "defaultMessage": "Success: check your emails",
+    "description": "site.subscribe.success: Message we give a user when the subscription is a success"
   },
-  "uIBFEQ": {
-    "defaultMessage": "For most accounts, we recommend you backup your account to an online storage like Google Drive."
+  "tk3UgV": {
+    "defaultMessage": "CAD",
+    "description": "site.compare.label.rangeStartingCurrency: label for Starting Value Currency Text field in the compare page"
   },
-  "v14Bg2": {
-    "defaultMessage": "Direct Transfer"
+  "tzKdah": {
+    "defaultMessage": "Start Now",
+    "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
   },
-  "vZp6iw": {
-    "defaultMessage": "Recipient:"
+  "u1YH39": {
+    "defaultMessage": "City",
+    "description": "site.subscribe.confirmation.form.city: label for city field"
   },
-  "wZMhOr": {
-    "defaultMessage": "Thank you for completing Google Authorization: This window can now be closed."
+  "uGt+BZ": {
+    "defaultMessage": "Safe drinking water without boiling protects people and forests",
+    "description": "site.wedomore.water.description: Title for the water photo for the We Do More page"
   },
-  "x/RTYx": {
-    "defaultMessage": "Authentication passed, please return to your account and complete connecting to google"
+  "vLjur9": {
+    "defaultMessage": "You’re Wealthier",
+    "description": "site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker"
   },
-  "xASOH9": {
-    "defaultMessage": "Restore accounts from Google"
+  "vMhtx9": {
+    "defaultMessage": "Email",
+    "description": "site.subscribe.confirmation.form.email: label for email field"
   },
-  "yP6K1p": {
-    "defaultMessage": "The Coin in 5 easy steps!"
+  "w9xyw0": {
+    "defaultMessage": "Signup failed: please contact support@thecoin.io",
+    "description": "site.subscribe.error: Message we give a user when the subscription failed (already subscribed or server)"
   },
-  "yg/Kq3": {
-    "defaultMessage": "The given number is not a valid visa card"
+  "wLTPa8": {
+    "defaultMessage": "How much will you make?",
+    "description": "site.compare.title: Main title for the How much will you make? graph page"
   },
-  "yigZRd": {
-    "defaultMessage": "Transfer directly to another account with TheCoin."
+  "wPzBUV": {
+    "defaultMessage": "Learn Your Edge",
+    "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
   },
-  "yyvNlB": {
-    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter:",
-    "description": "TheCoin"
+  "wUf7lJ": {
+    "defaultMessage": "FAQ",
+    "description": "site.MainNavigation.faq: Title for the FAQ entry in the menu"
   },
-  "z0x/pl": {
-    "defaultMessage": "Compatible account detected"
+  "wwo/lO": {
+    "defaultMessage": "In-depth",
+    "description": "site.MainNavigation.indepth: Title for the In-depth entry in the menu"
   },
-  "z46huI": {
-    "defaultMessage": "See what interests you from the menu on the left"
+  "xWWo6h": {
+    "defaultMessage": "Blog",
+    "description": "site.blog.title: Title for the In-depth blog page"
   },
-  "zASFF1": {
-    "defaultMessage": "Step 1 of 3: Checking transfer availability..."
+  "xoodDX": {
+    "defaultMessage": "FAQ",
+    "description": "site.helpDocs.title: title for the FAQ page"
+  },
+  "yZZmtI": {
+    "defaultMessage": "Starting value:",
+    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
+  },
+  "yqcj84": {
+    "defaultMessage": "How Anyone Can Get Rich Slow",
+    "description": "site.homepage.wealthier.growth.link: The link for the growth for the homepage wealthier"
+  },
+  "zj5EI2": {
+    "defaultMessage": "LOG IN",
+    "description": "site.MainNavigation.loginLink: Button to log in in app"
   }
 }
