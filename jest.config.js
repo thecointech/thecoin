@@ -23,6 +23,7 @@ module.exports = {
         // Relax ts restrictions
         noUnusedLocals: false,
         noUnusedParameters: false,
+        noImplicitAny: false,
         // typeRoots needs to be set absolutely because we lose the relative import of tsconfig.base.json
         typeRoots: [path.join(__dirname, "node_modules", "@types")],
         // Disable incremental (as our tests aren't built anyway)

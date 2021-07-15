@@ -1,7 +1,7 @@
 import { toDepositData } from "./convert";
 import { log } from '@thecointech/logging';
 //@ts-ignore Import directly from mocks to skip auth part.
-import emails from '../../../__mocks__/emails.get.json';
+import emails from '../../../__mocks__/googleapis/emails.get.json';
 
 it('processes emails correctly', async () => {
   const error = jest.spyOn(log, 'error').mockImplementation();

@@ -31,7 +31,8 @@ export const TransferRow = ({ transfer, active, setActive, render }: Props) => {
   }
 
   const settlement = action.history.find(h => h.type == 'toCoin');
-  const processOn = settlement ? <div>Process On: {settlement.date.toSQLDate()}</div> : null;
+  const date = settlement?.date ?? settlement?.created;
+  const processOn = date ? <div>Process On: {date.toSQLDate()}</div> : null;
 
   return (
     <Accordion>
