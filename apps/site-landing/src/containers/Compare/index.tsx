@@ -3,7 +3,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
 import { FormCompare } from './FormCompare';
@@ -12,14 +12,14 @@ import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateA
 
 import styles from './styles.module.less';
 
-
-const title = { id:"site.compare.title",
-                defaultMessage:"How much will you make?",
-                description:"Main title for the How much will you make? graph page"};
-
-const description = { id:"site.compare.description",
-                      defaultMessage:"Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
-                      description:"Main description for the How much will you make? graph page"};
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'How much will you make?',
+      description: 'site.compare.title: Main title for the How much will you make? graph page'},
+  description : {
+    defaultMessage: 'Your chequing account will be with you longer than your retirement savings will. This is what that could look like.',
+    description: 'site.compare.description: Main description for the How much will you make? graph page'}
+  });
 
 export function Compare() {
 
@@ -27,9 +27,9 @@ export function Compare() {
     <>
       <div className={styles.wrapper}>
         <Header as="h2" className={`x10spaceBefore x10spaceAfter`}>
-            <FormattedMessage {...title} />
+            <FormattedMessage {...translations.title} />
             <Header.Subheader className={`x5spaceBefore`}>
-              <FormattedMessage  {...description} />
+              <FormattedMessage  {...translations.description} />
             </Header.Subheader>
         </Header>
 

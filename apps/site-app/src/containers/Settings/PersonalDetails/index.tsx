@@ -1,69 +1,48 @@
 import React, { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
 import { UxInput } from '@thecointech/shared/components/UxInput';
 import { useAccountApi } from '@thecointech/shared/containers/Account';
 
-const title = {
-  id: "app.settings.personaldetails.title",
-  defaultMessage: "Personal Details",
-  description: "Title for the page setting / tab personal details in the app"
-};
-const titleCurrency = {
-  id: "app.settings.personaldetails.titleCurrency",
-  defaultMessage: "Currency",
-  description: "Title for the currency section of the page setting / tab personal details in the app"
-};
-const descriptionCurrency = {
-  id: "app.settings.personaldetails.descriptionCurrency",
-  defaultMessage: "Your can choose the currency you want us to display:",
-  description: "Title for the currency section of the page setting / tab personal details in the app"
-};
-
-const edit = {
-  id: "app.settings.personaldetails.edit",
-  defaultMessage: "Edit",
-  description: "Edit zone for the page setting / tab personal details in the app"
-};
-const name = {
-  id: "app.settings.personaldetails.name",
-  defaultMessage: "Given Name",
-  description: "Name field for the page setting / tab personal details in the app"
-};
-const familyname = {
-  id: "app.settings.personaldetails.familyname",
-  defaultMessage: "Family Name",
-  description: "Name field for the page setting / tab personal details in the app"
-};
-const email = {
-  id: "app.settings.personaldetails.email",
-  defaultMessage: "Email",
-  description: "Email field for the page setting / tab personal details in the app"
-};
-const dob = {
-  id: "app.settings.personaldetails.dob",
-  defaultMessage: "Date of Birth",
-  description: "Date of birth field for the page setting / tab personal details in the app"
-};
-const phone = {
-  id: "app.settings.personaldetails.phone",
-  defaultMessage: "Phone Number",
-  description: "Phone field for the page setting / tab personal details in the app"
-};
-const address = {
-  id: "app.settings.personaldetails.address",
-  defaultMessage: "Full Address",
-  description: "Address field for the page setting / tab personal details in the app"
-};
-const button = {
-  id: "app.settings.personaldetails.button",
-  defaultMessage: "Save",
-  description: "Content for the page setting / tab personal details in the app"
-};
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'Personal Details',
+      description: 'app.settings.personaldetails.title: Title for the page setting / tab personal details in the app'},
+  titleCurrency : {
+      defaultMessage: 'Currency',
+      description: 'app.settings.personaldetails.titleCurrency: Title for the page setting / tab personal details in the app'},
+  descriptionCurrency : {
+      defaultMessage: 'Your can choose the currency you want us to display:',
+      description: 'app.settings.personaldetails.descriptionCurrency: Description for the page setting / tab personal details in the app'},
+  edit : {
+      defaultMessage: 'Edit',
+      description: 'app.settings.personaldetails.edit: Edit zone for the page setting / tab personal details in the app'},
+  name : {
+      defaultMessage: 'Given Name',
+      description: 'app.settings.personaldetails.name: Name field for the page setting / tab personal details in the app'},
+  familyname : {
+      defaultMessage: 'Family Name',
+      description: 'app.settings.personaldetails.familyname: Name field for the page setting / tab personal details in the app'},
+  email : {
+      defaultMessage: 'Email',
+      description: 'app.settings.personaldetails.email: Email field for the page setting / tab personal details in the app'},
+  dob : {
+      defaultMessage: 'Date of Birth',
+      description: 'app.settings.personaldetails.dob: Date of birth field for the page setting / tab personal details in the app'},
+  phone : {
+      defaultMessage: 'Phone Number',
+      description: 'app.settings.personaldetails.phone: Phone field for the page setting / tab personal details in the app'},
+  address : {
+      defaultMessage: 'Full Address',
+      description: 'app.settings.personaldetails.address: Full Address field for the page setting / tab personal details in the app'},
+  button : {
+      defaultMessage: 'Save',
+      description: 'app.settings.personaldetails.button: Button for the page setting / tab personal details in the app'}
+});
 
 export const PersonalDetails = () => {
 
@@ -97,16 +76,16 @@ export const PersonalDetails = () => {
   return (
     <div>
       <Header as="h5" className={`appTitles`}>
-        <FormattedMessage {...title} />
+        <FormattedMessage {...translations.title} />
       </Header>
       <Form id={styles.personalInfo}>
 
         <UxInput
             className={"half left"}
             intlLabel={<div>
-                        <FormattedMessage {...name} />
+                        <FormattedMessage {...translations.name} />
                         <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
-                          <Icon name={"edit"} /><FormattedMessage {...edit} />
+                          <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                         </span>
                     </div>}
             uxChange={(value: string) => onDetailsChange(value,"given_name")}
@@ -119,9 +98,9 @@ export const PersonalDetails = () => {
         <UxInput
           className={"half right"}
           intlLabel={<div>
-                    <FormattedMessage {...familyname} />
+                    <FormattedMessage {...translations.familyname} />
                     <span onClick={()=>setFamilyNameEdit(!familyNameEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                      <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                 </div>}
           value={details.family_name}
@@ -134,9 +113,9 @@ export const PersonalDetails = () => {
           className={"half left"}
           value={details.DOB}
           label={<div>
-                    <FormattedMessage {...dob} />
+                    <FormattedMessage {...translations.dob} />
                     <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                      <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                   </div>}
           uxChange={(value: string) => onDetailsChange(value,"DOB")}
@@ -147,9 +126,9 @@ export const PersonalDetails = () => {
         <UxInput
           className={"borderTop borderBottom"}
           intlLabel={<div>
-                    <FormattedMessage {...address} />
+                    <FormattedMessage {...translations.address} />
                     <span onClick={()=>setAddressEdit(!addressEdit)} className={styles.edit}>
-                      <Icon name={"edit"} /><FormattedMessage {...edit} />
+                      <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                   </div>}
           uxChange={(value: string) => onDetailsChange(value,"address")}
@@ -163,9 +142,9 @@ export const PersonalDetails = () => {
             value={details.email}
             uxChange={(value: string) => onDetailsChange(value,"email")}
             intlLabel={<div>
-                <FormattedMessage {...email} />
+                <FormattedMessage {...translations.email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
-                  <Icon name={"edit"} /><FormattedMessage {...edit} />
+                  <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                 </span>
               </div>} 
             name="email" 
@@ -177,18 +156,18 @@ export const PersonalDetails = () => {
             value={details.phone}
             uxChange={(value: string) => onDetailsChange(value,"phone")}
             intlLabel={<div>
-                <FormattedMessage {...phone} />
+                <FormattedMessage {...translations.phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
-                  <Icon name={"edit"} /><FormattedMessage {...edit} />
+                  <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                 </span>
               </div>} 
             name="phone" 
             readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>
-          <FormattedMessage {...titleCurrency} />
+          <FormattedMessage {...translations.titleCurrency} />
           <Header.Subheader>
-            <FormattedMessage  {...descriptionCurrency} />
+            <FormattedMessage  {...translations.descriptionCurrency} />
           </Header.Subheader>
         </Header>
 
@@ -198,7 +177,7 @@ export const PersonalDetails = () => {
         </div>
         <div className={"x6spaceBefore"}>
           <ButtonTertiary onClick={onSetDetails} loading={account.idxIO}>
-            <FormattedMessage {...button} />
+            <FormattedMessage {...translations.button} />
           </ButtonTertiary>
         </div>
       </Form>

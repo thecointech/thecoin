@@ -5,7 +5,7 @@ import { GreaterThanMobileSegment, MobileSegment, breakpointsValues } from '@the
 
 import { Grid, Header, StrictGridColumnProps } from 'semantic-ui-react';
 import { ColumnWithTwoTitles } from './ColumnWithTwoTitles';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import illustration from './images/healthier-illustration.svg';
 
@@ -16,25 +16,26 @@ import { useWindowDimensions } from '@thecointech/shared/components/WindowDimens
 
 import styles from './styles.module.less';
 
-
-const title = { id:"site.healthier.title",
-                defaultMessage:"Earth’s Healthier",
-                description:"Main title for the Earth’s Healthier page" };
-const description = { id:"site.healthier.description",
-                      defaultMessage:"Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
-                      description:"Description underneath title for the We Do More mobile page" };
-const majorBanks = {  id:"site.healthier.majorbanks",
-                      defaultMessage:"The major banks take an average of $1000 in profits each year from every Canadian.",
-                      description:"The major banks take an average of $1000 in profits each year from every Canadian." };
-const investments = { id:"site.healthier.invest",
-                      defaultMessage:"We invest our clients’ accounts and give them 90% of the profit.",
-                      description:"We invest our clients’ accounts and give them 90% of the profit." };
-const lifestyle = {   id:"site.healthier.lifestyle",
-                      defaultMessage:"It only costs about $100 per person to offset the CO2 for our current lifestyle.",
-                      description:"It only costs about $100 per person to offset the CO2 for our current lifestyle." };
-const carbon = {  id:"site.healthier.carbon",
-                  defaultMessage:"The remaining 1/10th is used to pay off our carbon debt",
-                  description:"The remaining 1/10th is used to pay off our carbon debt" };
+const translations = defineMessages({
+  title : {
+    defaultMessage: 'Earth’s Healthier',
+    description: 'site.healthier.title: Main title for the Earth’s Healthier page'},
+  description : {
+    defaultMessage: 'Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.',
+    description: 'site.healthier.description: Description underneath the title for the Earth’s Healthier page'},
+  majorBanks : {
+    defaultMessage: 'The major banks take an average of $1000 in profits each year from every Canadian.',
+    description: 'site.healthier.majorbanks: text for the banks taking money for the Earth’s Healthier page'},
+  investments : {
+    defaultMessage: 'We invest our clients’ accounts and give them 90% of the profit.',
+    description: 'site.healthier.invest: text for the investment part for the Earth’s Healthier page'},
+  lifestyle : {
+      defaultMessage: 'It only costs about $100 per person to offset the CO2 for our current lifestyle.',
+      description: 'site.healthier.lifestyle: text for the lifestyle part for the Earth’s Healthier page'},
+  carbon : {
+      defaultMessage: 'The remaining 1/10th is used to pay off our carbon debt',
+      description: 'site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page'}
+});
 
 const styleLeft: React.CSSProperties = {
   float: 'left',
@@ -75,26 +76,26 @@ export function Healthier() {
         </MobileSegment>
           <Grid id={ `${styles.healthierContent}` } columns='equal' textAlign='left' verticalAlign='top' stackable>
             <Header as="h2" className={ `x2spaceBefore` }>
-                <FormattedMessage {...title} />
+                <FormattedMessage {...translations.title} />
                 <Header.Subheader className={`x5spaceBefore`}>
-                  <FormattedMessage  {...description} />
+                  <FormattedMessage  {...translations.description} />
                 </Header.Subheader>
             </Header>
             <Grid.Row className={ `${styles.numberContent}` }>
               <Grid.Column textAlign={textAligntValueLeft as StrictGridColumnProps["textAlign"]}>
                 <ColumnWithTwoTitles
                   FirstTitle = "$1000"
-                  FirstHeaderMessage = { majorBanks }
+                  FirstHeaderMessage = { translations.majorBanks }
                   SecondTitle= "90%"
-                  SecondHeaderMessage = { investments }
+                  SecondHeaderMessage = { translations.investments }
                   CssForSeparator = { cssForSeparatorLeft } />
               </Grid.Column>
               <Grid.Column className={styles.rightColumn} textAlign={textAligntValueRight as StrictGridColumnProps["textAlign"]}>
                 <ColumnWithTwoTitles
                     FirstTitle = "$100"
-                    FirstHeaderMessage = { lifestyle }
+                    FirstHeaderMessage = { translations.lifestyle }
                     SecondTitle= "1/10"
-                    SecondHeaderMessage = { carbon }
+                    SecondHeaderMessage = { translations.carbon }
                     CssForSeparator = { cssForSeparatorRight }/>
                 </Grid.Column>
             </Grid.Row>

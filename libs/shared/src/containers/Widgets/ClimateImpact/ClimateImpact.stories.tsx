@@ -3,21 +3,22 @@ import { Story, Meta } from '@storybook/react';
 
 import { Visual, VisualProps } from './Visual';
 import { options } from '.';
-import { IntlProvider } from 'react-intl';
+import { defineMessages, IntlProvider } from 'react-intl';
 
 
-const title = {
+const translate = defineMessages({ 
+  title : { 
     id: "shared.widgets.climateimpact.title",
     defaultMessage: "Climate Impact",
-    description: "Title for the Widget Climate impact in the app"
-  };
+    description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
+  }});
 
 export default {
   title: 'App/ClimateImpact',
   component: Visual,
   args: {
     quantity: "80",
-    title: {...title}
+    title: {...translate.title}
   },
   argTypes: {
     itemChosen: {

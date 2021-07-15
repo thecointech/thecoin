@@ -2,25 +2,29 @@ import React, { FunctionComponent, useState } from 'react';
 import {Clipboard} from 'ts-clipboard';
 import { Icon, Popup } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 interface Props {
   payload: string;
   label?: MessageDescriptor;
 }
 
-const link = { id:"base.copyToClipboard.link",
-                defaultMessage:"Copy",
-                description:"Link for the button for the copy to clipboard tool" };
-const messageSuccess = { id:"base.copyToClipboard.messageSuccess",
-                defaultMessage:"Copied to your clipboard",
-                description:"Success message for the button for the copy to clipboard tool" };
+const translate = defineMessages({ 
+    link : { 
+      id: "base.copyToClipboard.link",
+      defaultMessage:"Copy",
+      description:"base.copyToClipboard.link: Link for the button for the copy to clipboard tool"},
+    messageSuccess : { 
+      id: "base.copyToClipboard.messageSuccess",
+      defaultMessage:"Copied to your clipboard",
+      description:"base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"}});
+
 
 export const CopyToClipboard: FunctionComponent<Props> = (props) => {
 
   const intl = useIntl();
   const [open, setOpen] = useState(false)
-  const copyLabel = props.label ? props.label : link;
+  const copyLabel = props.label ? props.label : translate.link;
 
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     Clipboard.copy(props.payload);
@@ -35,7 +39,7 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
           undefined
       }
       <Popup
-        content={intl.formatMessage(messageSuccess)}
+        content={intl.formatMessage(translate.messageSuccess)}
         on='click'
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}

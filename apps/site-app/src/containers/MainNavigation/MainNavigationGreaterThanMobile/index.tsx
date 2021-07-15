@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import HeaderLink from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
@@ -9,15 +9,17 @@ import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitc
 import Logo from './images/logoAndName.svg';
 import styles from './styles.module.less';
 
-const home = { id:"app.MainNavigation.home",
-                defaultMessage:"Home",
-                description:"Title for the Home entry in the menu"};
-//const help = { id:"app.MainNavigation.help",
-//                defaultMessage:"Help",
-//                description:"Title for the help entry in the menu"};
-const contact = { id:"app.MainNavigation.contact",
-                defaultMessage:"Contact Us",
-                description:"Title for the contact entry in the menu"};
+const translations = defineMessages({
+  home : {
+      defaultMessage: 'Home',
+      description: 'app.MainNavigation.home: Title for the Home entry in the menu'},
+  help : {
+      defaultMessage: 'Help',
+      description: 'app.MainNavigation.help: Title for the help entry in the menu'},
+  contact : {
+      defaultMessage: 'Contact Us',
+      description: 'app.MainNavigation.contact: Title for the contact us entry in the menu'}
+});
 
   export const MainNavigationGreaterThanMobile = () => {
     return (
@@ -32,13 +34,13 @@ const contact = { id:"app.MainNavigation.contact",
                     </div>
                   </Menu.Menu>
                   <HeaderLink to="/" exact>
-                    <FormattedMessage {...home} />
+                    <FormattedMessage {...translations.home} />
                   </HeaderLink>
                   {/* <HeaderLink to="/" exact>
                     <FormattedMessage {...help} />
                   </HeaderLink>*/}
                   <HeaderLink to="/contact" exact>
-                    <FormattedMessage {...contact} />
+                    <FormattedMessage {...translations.contact} />
                   </HeaderLink>
                   <Menu.Menu position='right'>
                     <Menu.Item>

@@ -1,10 +1,43 @@
 import * as React from 'react';
 import { Form, Input, Grid, Label, Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
-import messages from '../messages';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import styles from './styles.module.less';
+
+
+const translations = defineMessages({
+  header: {
+    defaultMessage: 'Show me the Potential!',
+  },
+  starting: {
+    defaultMessage: 'Starting Amount',
+  },
+  age: {
+    defaultMessage: 'Your Age',
+  },
+  calculate: {
+    defaultMessage: 'Calculate',
+  },
+  averageReturn: {
+    defaultMessage: 'Average value after ',
+  },
+  averageReturnMonths: {
+    defaultMessage: '{months} months',
+  },
+  averageReturnYears: {
+    defaultMessage: '{years} years',
+  },
+  play: {
+    defaultMessage: 'Play',
+  },
+  pause: {
+    defaultMessage: 'Pause',
+  },
+  step: {
+    defaultMessage: 'Step',
+  },
+});
 
 type Props = RouteComponentProps;
 
@@ -42,7 +75,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
     <>
       <Header>
         <div className={styles.header}>
-          <FormattedMessage {...messages.header} />
+          <FormattedMessage {...translations.header} />
         </div>
       </Header>
 
@@ -52,7 +85,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
             <Grid.Column>
               <Form.Field>
                 <Label className={styles.label}>
-                  <FormattedMessage {...messages.Starting} />
+                  <FormattedMessage {...translations.starting} />
                 </Label>
                 <Input
                   type="number"
@@ -65,7 +98,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
             <Grid.Column>
               <Form.Field>
                 <Label className={styles.label}>
-                  <FormattedMessage {...messages.Age} />
+                  <FormattedMessage {...translations.age} />
                 </Label>
                 <Form.Input
                   type="number"
@@ -81,7 +114,7 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
             <Grid.Column verticalAlign="bottom" className={styles.getinfo}>
               <div className={styles.button}>
                 <Form.Button onClick={showCalculate}>
-                  <FormattedMessage {...messages.calculate} />
+                  <FormattedMessage {...translations.calculate} />
                 </Form.Button>
               </div>
             </Grid.Column>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Connect } from "../../Connect";
-import { FormattedMessage, useIntl } from "react-intl";
+import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { getWeb3Type } from "@thecointech/shared/utils/detection";
@@ -8,35 +8,35 @@ import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";
 
-
-const aboveTheTitle = { id:"app.account.connect.create.aboveTheTitle",
-                defaultMessage:"Compatible account detected",
-                description:"Title above the main Title for the create account form page"};
-const title = { id:"app.account.connect.create.title",
-                defaultMessage:"Register it with TheCoin",
-                description:"Title above the main Title for the create account form page"};
-//const createTransfer = {  id:"app.account.create.createTransfer",
-//                            defaultMessage:"Or, you can create an entirely new account!",
-//                           description:""};
-const checkHeader = { id:"app.account.connect.create.checkHeader",
-                      defaultMessage:"Is this what you meant?",
-                      description:""};
-const checkMessageOpera = { id:"app.account.connect.create.checkMessageOpera",
-                            defaultMessage:"The Opera browser you are using comes with a built-in account that is compatible with TheCoin. Would you like to connect to it?",
-                            description:""};
-const checkHeaderFailed = { id:"app.account.connect.create.checkHeaderFailed",
-                            defaultMessage:"No compatible account detected!",
-                            description:""};
-const checkMessageFailed = { id:"app.account.connect.create.checkMessageFailed",
-                              defaultMessage:"We cannot detect a compatible account in this browser.  If you would like to use an external account provider, we recommend installing Metamask or using the Opera Browser",
-                              description:""};
-const explanation = { id:"app.account.restore.createAccount.explanation",
-                      defaultMessage:"Don’t have an account?",
-                      description:"The text before the button to redirect to the create an account page for the restore your account page"};
-const buttonCreateAccount = { id:"app.account.restore.button.createAccount",
-                              defaultMessage:"Create a New Account",
-                              description:"The button to redirect to the create an account page for the restore your account page"};
-
+const translations = defineMessages({
+  aboveTheTitle : {
+      defaultMessage: 'Compatible account detected',
+      description: 'app.account.connect.create.aboveTheTitle: Title above the main Title for the create account form page'},
+  title : {
+      defaultMessage: 'Register it with TheCoin',
+      description: 'app.account.connect.create.title: Title above the main Title for the create account form page'},
+  createTransfer : {
+      defaultMessage: 'Or, you can create an entirely new account!',
+      description: 'app.account.connect.create.createTransfer'},
+  checkHeader : {
+      defaultMessage: 'Is this what you meant?',
+      description: 'app.account.connect.create.checkHeader'},
+  checkMessageOpera : {
+      defaultMessage: 'The Opera browser you are using comes with a built-in account that is compatible with TheCoin. Would you like to connect to it?',
+      description: 'app.account.connect.create.checkMessageOpera'},
+  checkHeaderFailed : {
+      defaultMessage: 'No compatible account detected!',
+      description: 'app.account.connect.create.checkHeaderFailed'},
+  checkMessageFailed : {
+      defaultMessage: 'We cannot detect a compatible account in this browser.  If you would like to use an external account provider, we recommend installing Metamask or using the Opera Browser',
+      description: 'app.account.connect.create.checkMessageFailed'},
+  explanation : {
+      defaultMessage: 'Don’t have an account?',
+      description: 'app.account.connect.create.explanation: The text before the button to redirect to the create an account page for the restore your account page'},
+  buttonCreateAccount : {
+      defaultMessage: 'Create a New Account',
+      description: 'app.account.connect.create.createAccount: The button to redirect to the create an account page for the restore your account page'}
+});
 
 //const BounceLink = () =>
 //  <Link to="/addAccount/generate/">
@@ -50,35 +50,35 @@ export const Create = () => {
   return (
     <Container className={styles.content}>
       <Header as="h5" className={`x8spaceBefore`}>
-          <FormattedMessage {...aboveTheTitle} />
+          <FormattedMessage {...translations.aboveTheTitle} />
       </Header>
       <Header as="h2" className={`x8spaceAfter`}>
-          <FormattedMessage {...title} />
+          <FormattedMessage {...translations.title} />
       </Header>
 
       {
         (web3Type === "Opera") &&
           <Message
             info
-            header={intl.formatMessage(checkHeader)}
-            content={intl.formatMessage(checkMessageOpera)}
+            header={intl.formatMessage(translations.checkHeader)}
+            content={intl.formatMessage(translations.checkMessageOpera)}
           />
       }
       {
         !web3Type &&
           <Message
             warning
-            header={intl.formatMessage(checkHeaderFailed)}
-            content={intl.formatMessage(checkMessageFailed)}
+            header={intl.formatMessage(translations.checkHeaderFailed)}
+            content={intl.formatMessage(translations.checkMessageFailed)}
           />
       }
 
       <Connect />
       <div className={`x8spaceBefore x12spaceAfter`}>
-          <FormattedMessage {...explanation} />
+          <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
           <ButtonPrimary as={Link} to="/addAccount/generate/intro" size='medium' >
-            <FormattedMessage {...buttonCreateAccount} />
+            <FormattedMessage {...translations.buttonCreateAccount} />
           </ButtonPrimary>
       </div>
       <Decoration />

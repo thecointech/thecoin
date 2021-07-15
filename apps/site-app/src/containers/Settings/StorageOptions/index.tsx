@@ -5,31 +5,27 @@ import { isWallet } from '@thecointech/utilities/SignerIdent';
 // import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
 // import { UploadState } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { FormattedMessage } from 'react-intl';
+import { defineMessage, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 
 import google from './images/icon_google_drive_small.svg';
 
-const title = {
-  id: "app.settings.storageOptions.title",
+const title = defineMessage({
   defaultMessage: "Back up",
   description: "Title for the tab Storage options in the setting page in the app"
-};
-const description = {
-  id: "app.settings.storageOptions.description",
+});
+const description = defineMessage({
   defaultMessage: "Your account backed up with:",
   description: "Description for the tab Storage options in the setting page in the app"
-};
-const descriptionSave = {
-  id: "app.settings.storageOptions.descriptionSave",
+});
+const descriptionSave = defineMessage({
   defaultMessage: "You can download the account file, or print it as a QR code.",
   description: "Label for the info for the tab Storage options in the setting page in the app"
-};
-const labelGoogle = {
-  id: "app.settings.storageOptions.labelGoogle",
+});
+const labelGoogle = defineMessage({
   defaultMessage: "Google Drive",
   description: "Label for Google Drive in the tab Storage options in the setting page in the app"
-};
+});
 
 export function StorageOptions() {
 

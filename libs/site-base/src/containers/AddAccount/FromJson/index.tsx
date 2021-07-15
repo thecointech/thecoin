@@ -2,16 +2,17 @@ import React from "react";
 import { Container } from "semantic-ui-react";
 import { ButtonPrimary } from '../../../components/Buttons';
 import { UploadWallet, ReadFileData } from "@thecointech/shared/containers/UploadWallet";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
-const explanation = { id:"app.account.restore.createAccount.explanation",
-                        defaultMessage:"Don’t have an account?",
-                        description:"The text before the button to redirect to the create an account page for the restore your account page"};
-
-const buttonCreate = { id:"app.account.restore.createAccount.button",
-                        defaultMessage:"Create Account",
-                        description:"The button to redirect to the create an account page for the restore your account page"};
+const translations = defineMessages({
+  explanation : {
+      defaultMessage: 'Don’t have an account?',
+      description: 'app.account.restore.createAccount.explanation: Title above the main Title for the create account form page'},
+  buttonCreate : {
+      defaultMessage: 'Create Account',
+      description: 'app.account.restore.createAccount.button: The button to redirect to the create an account page for the restore your account page'}
+});
 
 function readFile(file: File): Promise<ReadFileData> {
   return new Promise((resolve, reject) => {
@@ -33,10 +34,10 @@ export const FromJson = () => {
     <Container>
       <UploadWallet readFile={readFile}/>
       <div>
-          <FormattedMessage {...explanation} />
+          <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
           <ButtonPrimary as={Link} to="/addAccount" size='medium' >
-            <FormattedMessage {...buttonCreate}/>
+            <FormattedMessage {...translations.buttonCreate}/>
           </ButtonPrimary>
         </div>
     </Container>

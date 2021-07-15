@@ -1,9 +1,21 @@
 import React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { FormSubscribed } from './FormSubscribed/formSubscribed';
 
 import illustration from './images/ill_subscription.svg'
+
+const translations = defineMessages({
+  aboveTheTitle : {
+    defaultMessage: 'SUBSCRIPTION',
+    description: 'site.subscribe.confirmation.aboveTheTitle: Text above the title for the \'Thank you for subscribing!\' page'},
+  title : {
+    defaultMessage: 'Thank you for subscribing!',
+    description: 'site.subscribe.confirmation.title: Title for the \'Thank you for subscribing!\' page'},
+  description : {
+    defaultMessage: 'We would love to get to know you better!  Would you mind letting us know your details?',
+    description: 'site.subscribe.confirmation.description: Descriton for the \'Thank you for subscribing!\' page'}
+});
 
 export const Confirm = () => {
 
@@ -13,18 +25,14 @@ export const Confirm = () => {
           <Grid.Row>
             <Grid.Column>
                 <Header as='h5'>
-                  <FormattedMessage id="site.subscribe.confirmation.aboveTheTitle"
-                                  defaultMessage="SUBSCRIPTION"
-                                  description="Text above the title for the 'Thank you for subscribing!' page"/>
+                  <FormattedMessage {...translations.aboveTheTitle}/>
                 </Header>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
                 <Header as='h3'>
-                  <FormattedMessage id="site.subscribe.confirmation.title"
-                                  defaultMessage="Thank you for subscribing!"
-                                  description="Title for the 'Thank you for subscribing!' page"/>
+                  <FormattedMessage {...translations.title}/>
                 </Header>
             </Grid.Column>
           </Grid.Row>
@@ -35,9 +43,7 @@ export const Confirm = () => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <FormattedMessage id="site.subscribe.confirmation.description"
-                                  defaultMessage="We would love to get to know you better!  Would you mind letting us know your details?"
-                                  description="Descriton for the 'Thank you for subscribing!' page"/>
+              <FormattedMessage  {...translations.description}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

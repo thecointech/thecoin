@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Wallet } from 'ethers';
 import { Header, Form } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
@@ -15,20 +15,23 @@ import styles from './styles.module.less';
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
 
-const aboveTheTitle = { id:"app.account.create.form.aboveTheTitle",
-                        defaultMessage:"Second Step",
-                        description:"Title above the main Title for the create account form page"};
-const title = { id:"app.account.create.form.title",
-                defaultMessage:"Create your Account",
-                description:"Title above the main Title for the create account form page"};
-const buttonCreate = {  id:"app.account.create.form.button",
-                        defaultMessage:"Create Account",
-                        description:"Button for the create account form page"};
-
-const whileCreatingHeader = { id: `app.account.create.whileCreatingHeader`,
-                              defaultMessage: 'Creating Account...',};
-const whileCreatingMessage = { id: `app.account.create.whileCreatingMessage`,
-                                defaultMessage: "We are {percentComplete}% done cooking your brand-new account."};
+const translations = defineMessages({
+  aboveTheTitle : {
+      defaultMessage: 'Second Step',
+      description: 'app.account.create.form.aboveTheTitle: Title above the main Title for the create account form page'},
+  title : {
+      defaultMessage: 'Create your Account',
+      description: 'app.account.create.form.title: Title above the main Title for the create account form page'},
+  buttonCreate : {
+      defaultMessage: 'Create Account',
+      description: 'app.account.create.form.buttonCreate: Button for the create account form page'},
+  whileCreatingHeader : {
+      defaultMessage: 'Creating Account...',
+      description: 'app.account.create.whileCreatingHeader'},
+  whileCreatingMessage : {
+      defaultMessage: 'We are {percentComplete}% done cooking your brand-new account.',
+      description: 'app.account.create.whileCreatingHeader'}
+});
 
 export const Generate = (props: RouteComponentProps) => {
 
@@ -75,10 +78,10 @@ export const Generate = (props: RouteComponentProps) => {
   return (
     <div className={`${styles.wrapper}`}>
       <Header as="h5" className={`x8spaceBefore `}>
-          <FormattedMessage {...aboveTheTitle} />
+          <FormattedMessage {...translations.aboveTheTitle} />
       </Header>
       <Header as="h2">
-        <FormattedMessage {...title} />
+        <FormattedMessage {...translations.title} />
       </Header>
       <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
         <div className={`container ui`}>
@@ -89,7 +92,7 @@ export const Generate = (props: RouteComponentProps) => {
           <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         </div>
         <ButtonPrimary className={`x8spaceBefore`} onClick={onGenerate} size="medium">
-          <FormattedMessage {...buttonCreate} />
+          <FormattedMessage {...translations.buttonCreate} />
         </ButtonPrimary>
         <Decoration />
       </Form>
@@ -97,9 +100,9 @@ export const Generate = (props: RouteComponentProps) => {
         cancelCallback={setCancelled}
         //okCallback={cbOk}
         isOpen={progress !== undefined}
-        header={whileCreatingHeader}
+        header={translations.whileCreatingHeader}
         progressPercent={progress!}
-        progressMessage={whileCreatingMessage}
+        progressMessage={translations.whileCreatingMessage}
       />
     </div>
   );

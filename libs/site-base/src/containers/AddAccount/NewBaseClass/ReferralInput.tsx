@@ -1,16 +1,29 @@
 import React, { useState, useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
-import messages from '../messages';
 import { GetReferrersApi } from "../../../api";
 import { IsValidShortCode } from "@thecointech/utilities";
-import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
+import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 
-const placeholder = { id:"app.addaccount.newbaseclass.referralinput.placeholder",
-                        defaultMessage:"6 letters or numbers",
-                        description:"Tooltip for the referral input"};
-const error = { id:"app.addaccount.newbaseclass.referralinput.error",
-                        defaultMessage:"Registering this account failed. Please contact support@thecoin.io6 letters or numbers",
-                        description:"Error for the referral input"};
+const translations = defineMessages({
+  placeholder : {
+      defaultMessage: '6 letters or numbers',
+      description: 'app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input'},
+  error : {
+      defaultMessage: 'Registering this account failed. Please contact support@thecoin.io6 letters or numbers',
+      description: 'app.addaccount.newbaseclass.referralinput.error: Error for the referral input'},
+  labelReferrer : {
+      defaultMessage: 'Referral Code',
+      description: 'app.addaccount.newbaseclass.referralinput.labelReferrer'},
+  errorReferrerNumChars : {
+      defaultMessage: 'A referrer ID should be 6 characters long.',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerNumChars'},
+  errorReferrerInvalidCharacters : {
+      defaultMessage: 'A referrer ID should only contain alpha-numeric characters.',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerInvalidCharacters'},
+  errorReferrerUnknown : {
+      defaultMessage: 'The entered referrer ID is not recognized',
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerUnknown'}
+});
 
 type Props = {
   disabled?: boolean,
@@ -44,10 +57,10 @@ export const ReferralInput = (props: Props) => {
   return (
     <UxInput
       uxChange={onChange}
-      intlLabel={messages.labelReferrer}
+      intlLabel={translations.labelReferrer}
       isValid={state.isValid}
       message={state.message}
-      placeholder={intl.formatMessage(placeholder)}
+      placeholder={intl.formatMessage(translations.placeholder)}
       {...rest}
     />
   );
@@ -62,7 +75,7 @@ export const registerReferral = async (address: string, code: string) => {
   });
 
   if (!isRegistered.data?.success) {
-    alert(<FormattedMessage {...error} />);
+    alert(<FormattedMessage {...translations.error} />);
     return false;
   }
   return true;
@@ -81,17 +94,17 @@ const validateReferral = async (value: string) : Promise<State> => {
     value.length !== 6
       ? {
           isValid: false,
-          message: messages.errorReferrerNumChars,
+          message: translations.errorReferrerNumChars,
         }
       : !IsValidShortCode(value)
         ? {
             isValid: false,
-            message: messages.errorReferrerInvalidCharacters,
+            message: translations.errorReferrerInvalidCharacters,
           }
         : !(await isLegalReferral(value))
           ? {
               isValid: false,
-              message: messages.errorReferrerUnknown,
+              message: translations.errorReferrerUnknown,
             }
           : {
               isValid: true,

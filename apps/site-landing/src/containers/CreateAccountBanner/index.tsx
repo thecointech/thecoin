@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
@@ -16,9 +16,11 @@ export type Props = {
     Type: TypeCreateAccountBanner;
 }
 
-const title = { id:"site.createAccountBanner.title",
-                defaultMessage:"The benefits of a chequing, savings, and investing account all in one!",
-                description:"The benefits of a chequing, savings, and investing account all in one!"};
+const translations = defineMessages({
+    title : {
+        defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
+        description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'}
+    });
 
 export const CreateAccountBanner = (props: Props) => {
 
@@ -31,7 +33,7 @@ export const CreateAccountBanner = (props: Props) => {
             <Grid.Row>
                 <Grid.Column>
                     <Header as='h3'>
-                        <FormattedMessage {...title} />
+                        <FormattedMessage {...translations.title} />
                     </Header>
                     <CreateAccountButton size='large' />
                 </Grid.Column>
