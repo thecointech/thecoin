@@ -51,6 +51,7 @@
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@thecointech/contract": "^0.2.14",
     "@thecointech/signers": "^0.2.14",
+    "@thecointech/utilities": "*",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v4": "^4.0.0",
     "@typechain/truffle-v5": "^4.0.1",

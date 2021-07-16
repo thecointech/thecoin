@@ -14,5 +14,5 @@
       }
     ]
   },
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": ["src/**/*", "src/**/*.json", "./declarations/*.*"]
 }

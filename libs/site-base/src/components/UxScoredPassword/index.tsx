@@ -1,6 +1,5 @@
 import React from 'react';
 import { MessageDescriptor, FormattedMessage, defineMessages } from 'react-intl';
-import { Color } from 'csstype';
 import { Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import type { ZXCVBNResult } from 'zxcvbn';
@@ -84,7 +83,7 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
 
   /*==========  STYLES  ==========*/
 
-  getMeterStyle(validColor: Color, invalidColor: Color) {
+  getMeterStyle(validColor: string, invalidColor: string) {
     const { stats } = this.state;
     const { isValid } = this.props;
     var width = (stats) ? 24 * stats.score + 4 : 0;

@@ -1,7 +1,6 @@
 const path = require('path');
 const { compilerOptions } = require('./tsconfig.base.json');
 const { cwd } = require('process');
-
 const getTool = (name) => path.join(__dirname, 'tools', name);
 const getRoots = () => [
   path.join(__dirname, '__mocks__'),
@@ -11,6 +10,7 @@ const getRoots = () => [
 ]
 
 module.exports = {
+  preset: 'ts-jest',
   verbose: true,
   transform: {
     "^.+\\.tsx?$": "ts-jest",
@@ -32,7 +32,19 @@ module.exports = {
         rootDir: __dirname,
         // do not write files during testing
         noEmit: true,
-      }
+      },
+      astTransformers: {
+        before: [
+          {
+            path: '@formatjs/ts-transformer/ts-jest-integration',
+            options: {
+              // options
+              overrideIdFn: '[sha512:contenthash:base64:6]',
+              ast: true,
+            },
+          },
+        ],
+      },
     }
   },
   roots: getRoots(),

@@ -49,6 +49,7 @@
     "@thecointech/broker-db": "^0.2.14",
     "@thecointech/market-status": "^0.2.15",
     "@thecointech/rbcapi": "^0.2.14",
+    "@thecointech/shared": "*",
     "@thecointech/tx-gmail": "^0.2.14",
     "@thecointech/utilities": "^0.2.14"
   },

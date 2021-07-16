@@ -133,6 +133,7 @@
     "@thecointech/shared": "^0.2.14",
     "@thecointech/store": "^0.2.14",
     "@thecointech/tx-processing": "^0.2.15",
+    "@thecointech/tx-reconciliation": "*",
     "@thecointech/utilities": "^0.2.14",
     "core-js": "^3.1.4",
     "devtron": "^1.4.0",

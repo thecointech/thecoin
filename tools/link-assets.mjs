@@ -21,7 +21,7 @@ function readTsConfig() {
 }
 
 const {rootDir, outDir} = readTsConfig();
-const typesGlob = process.argv[2];
+const typesGlob = process.argv[2] ?? "./**/*.+(svg|png|module.less)";
 for (const f of glob.sync(path.join(rootDir, typesGlob)))
 {
   const {base, dir} = path.parse(f);
