@@ -28,24 +28,12 @@
     "build/**/*"
   ],
   "exports": {
-    ".": "./build/index.js",
-    "./store": {
-      "development": "./build/development/store.js",
-      "devlive": "./build/devlive/store.js",
-      "default": "./build/store.js"
-    },
-    "./*": "./build/*.js"
-  },
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts"
-      ]
+    ".": {
+      "development": "./build/development/index.js",
+      "default": "./build/index.js"
     }
   },
+  "types":  "build/index.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.16",
     "@thecointech/pricing": "*"
