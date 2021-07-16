@@ -1,4 +1,4 @@
-import { CurrencyCode } from '@thecointech/utilities/CurrencyCodes'
+import { CurrencyCode } from '@thecointech/fx-rates'
 import { AnySigner } from '@thecointech/utilities/SignerIdent'
 import { Transaction } from '@thecointech/tx-blockchain';
 import { AccountDetails } from './details';

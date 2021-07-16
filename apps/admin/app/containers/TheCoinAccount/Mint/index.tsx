@@ -3,10 +3,11 @@ import { Form, Header, Confirm } from 'semantic-ui-react';
 import messages from './messages';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { useFxRates, weSellAt } from '@thecointech/shared/containers/FxRate';
+import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { toHuman } from '@thecointech/utilities';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap'
 import { useAccountApi } from '@thecointech/shared/containers/Account';
+import { weSellAt } from '@thecointech/fx-rates';
 
 enum MintStatus {
   WAITING,

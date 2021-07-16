@@ -4,7 +4,7 @@
 //
 
 import { CoinRate, FxRates, RateKey, RateType } from "./types";
-import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
+import { CurrencyCode } from "@thecointech/fx-rates";
 import { getLatestStored } from "./db";
 import { DateTime } from "luxon";
 import { log } from '@thecointech/logging';
