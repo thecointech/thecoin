@@ -2,10 +2,11 @@ import { FXRate } from "@thecointech/pricing";
 import { Transaction } from "@thecointech/tx-blockchain";
 import { toHuman } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit";
-import { IFxRates, weSellAt } from "../../containers/FxRate";
+import { IFxRates } from "../../containers/FxRate";
 import { DateTime } from "luxon";
 import { GraphHistoryProps } from ".";
 import { TxDatum } from "./types";
+import { weSellAt } from '@thecointech/fx-rates';
 
 export const MarketTZ = "America/New_York";
 

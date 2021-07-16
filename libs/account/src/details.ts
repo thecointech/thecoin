@@ -5,7 +5,7 @@
 // without requiring full KYC again.  However, we'll
 // need to figure out how we can manage verified details
 
-import { CurrencyCode } from "@thecointech/utilities";
+import { CurrencyCode } from "@thecointech/fx-rates";
 
 // However, we will need to validate this data against
 export type AccountDetails = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormattedNumber} from 'react-intl';
-import { CurrencyKey } from '@thecointech/utilities/CurrencyCodes'
+import { CurrencyKey } from '@thecointech/fx-rates'
 
 type DisplayLength = "long" | "short" | undefined;
 type CurrencyDisplay = "symbol" | "code" | "name" | "narrowSymbol" | undefined;

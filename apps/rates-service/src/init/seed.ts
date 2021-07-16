@@ -3,7 +3,7 @@
 // Used for dev:live.   If we are running on development,
 // then seed our database with random values.
 
-import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
+import { CurrencyCode } from "@thecointech/fx-rates";
 import { DateTime, Duration } from "luxon";
 import { getLatestStored, setRate } from "../internals/rates/db";
 import { CoinRate, FxRates } from "../internals/rates/types";

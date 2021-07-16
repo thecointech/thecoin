@@ -50,7 +50,8 @@
   "dependencies": {
     "@thecointech/logging": "^0.2.16",
     "@thecointech/tx-blockchain": "^0.2.16",
-    "@thecointech/utilities": "^0.2.16"
+    "@thecointech/utilities": "^0.2.16",
+    "@thecointech/fx-rates": "*"
   },
   "devDependencies": {
     "jest": "*"

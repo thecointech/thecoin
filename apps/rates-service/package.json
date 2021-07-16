@@ -46,6 +46,7 @@
     "@thecointech/firestore": "^0.2.16",
     "@thecointech/logging": "^0.2.16",
     "@thecointech/market-status": "^0.2.16",
+    "@thecointech/fx-rates": "*",
     "@thecointech/utilities": "^0.2.16",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",

@@ -54,7 +54,7 @@
     "@nivo/tooltip": "0.73.0",
     "@thecointech/account": "^0.2.16",
     "@thecointech/logging": "^0.2.16",
-    "@thecointech/pricing": "^0.2.16",
+    "@thecointech/fx-rates": "*",
     "@thecointech/site-semantic-theme": "^0.2.16",
     "@thecointech/store": "^0.2.16",
     "@thecointech/tx-blockchain": "^0.2.16",
