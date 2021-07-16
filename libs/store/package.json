@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store",
-  "version": "0.2.14",
+  "version": "0.2.16",
   "description": "The Coin: Base storage mechanisms",
   "keywords": [
     "TheCoin",
@@ -30,7 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.14",
+    "@thecointech/logging": "^0.2.16",
     "pouchdb": "*",
     "pouchdb-upsert": "*"
   },
