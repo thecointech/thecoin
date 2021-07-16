@@ -65,8 +65,7 @@
     "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
-    "zxcvbn": "^4.4.2",
-    "ttypescript": "^1.5.12"
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/intl": "^1.2.0",
