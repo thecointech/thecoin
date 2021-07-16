@@ -68,7 +68,6 @@
     "react-input-mask": "2.0.4",
     "react-with-direction": "^1.3.1",
     "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b",
-    "ttypescript": "^1.5.12"
   },
   "devDependencies": {
     "@babel/runtime": "^7.7.7",
