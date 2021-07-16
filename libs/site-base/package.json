@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -12,8 +12,8 @@
   "license": "MIT",
   "scripts": {
     "build": "run-p build:src build:link",
-    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
-    "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
+    "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
+    "build:link": "node ../../tools/link-assets.mjs",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -26,7 +26,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "yarn compile lang/en.json --out-file src/translations/en.json --format ./internals/scripts/format-intl.js"
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"
   },
   "files": [
     "build/**/*"
@@ -53,9 +53,9 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.13",
-    "@thecointech/site-semantic-theme": "^0.2.6",
-    "@thecointech/utilities": "^0.2.13",
+    "@thecointech/shared": "^0.2.14",
+    "@thecointech/site-semantic-theme": "^0.2.14",
+    "@thecointech/utilities": "^0.2.14",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",

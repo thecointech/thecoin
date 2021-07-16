@@ -1,4 +1,4 @@
-import { init as LogInit, log } from "@thecointech/logging";
+import { log } from "@thecointech/logging";
 import { init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, initBrowser, RbcApi } from "@thecointech/rbcapi";
 import { ConfigStore } from "@thecointech/store";
@@ -8,19 +8,18 @@ import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
 
 async function initialize() {
-
-  LogInit("tx-processor");
-  FirestoreInit();
   log.debug(' --- Initializing processing --- ');
-
+  FirestoreInit();
   RbcStore.initialize();
   ConfigStore.initialize();
 
   const signer = await getSigner('BrokerCAD');
+  const address = await signer.getAddress();
   const contract = await ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
+  log.debug(`Initialized contract to address: ${address}`);
 
   await initBrowser({
     headless: false

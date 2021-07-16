@@ -6,6 +6,7 @@ export const DepositRenderer = (props : BuyActionContainer) => {
 
   const { action, instructions } = props;
   const state = getCurrentState(props);
+  const date = state.delta.date ?? state.delta.created;
   return (
     <Segment>
     <div>Name: {instructions?.name} - {action.type}</div>
@@ -17,7 +18,7 @@ export const DepositRenderer = (props : BuyActionContainer) => {
         : "Warning: No matching email"
     }
     </div>
-    <div>State: ${state.name} - {state.delta.date.toSQLDate()}</div>
+    <div>State: ${state.name} - {date.toSQLDate()}</div>
     {/* <div>
     {
       deposit.bank

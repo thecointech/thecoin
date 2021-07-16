@@ -1,6 +1,7 @@
 import { SecureApi as SrcApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
 import { buildResponse, delay } from "../axios-utils";
-import { wallets } from '../account/store';
+import { wallets } from '../../wallets';
+
 
 const MockedCode = "MockedCode";
 const checkCode = ({token}: GoogleToken) => {
@@ -22,9 +23,9 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleAuthUrl(_options?: any)
+  async googleAuthUrl(_clientUri: string, _options?: any)
   {
-    await delay(2500);
+    await delay(1500);
 
     return buildResponse<GoogleAuthUrl>({
       url: `${window.location.origin}/#/gauth?code=${MockedCode}`
@@ -38,7 +39,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleList(token: GoogleToken, _options?: any) {
+  async googleList(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
     await delay(250);
     return buildResponse<GoogleListResult>({
@@ -53,12 +54,13 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googlePut(uploadPacket: GoogleStoreAccount, _options?: any) {
+  async googlePut(_clientUri: string, uploadPacket: GoogleStoreAccount, _options?: any) {
     checkCode(uploadPacket.token);
 
     await delay(2500);
     wallets.push({
       id: wallets.length.toString(),
+      originalFilename: `${uploadPacket.walletName}.wallet`,
       name: uploadPacket.walletName,
       type: "not sure",
       wallet: uploadPacket.wallet,
@@ -73,7 +75,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    * @throws {RequiredError}
    * @memberof SecureApi
    */
-  async googleRetrieve(token: GoogleToken, _options?: any) {
+  async googleRetrieve(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
     await delay(250);
     const results: GoogleWalletItem[] = wallets.map((w) => ({

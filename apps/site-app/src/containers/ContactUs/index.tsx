@@ -10,25 +10,25 @@ import { PageHeader } from '../../components/PageHeader';
 import styles from './styles.module.less';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
+import { defineMessages } from 'react-intl';
 
-const title = { id:"app.contactus.title",
-                defaultMessage:"Contact Us",
-                description:"Main title for the Contact Us page in the app" };
-const description = { id:"app.contactus.description",
-                      defaultMessage:"Send us a secured message and we will answer as quickly as we can",
-                      description:"Description for the Contact Us page in the app" };
-
-const errorMessage = { id:"app.contactus.errorMessage",
-                defaultMessage:"We have encountered an error. Don't worry, your message is safe, but please still contact support@thecoin.io",
-                description:"Error Message for the contact us page" };
-const successMessage = { id:"app.contactus.successMessage",
-                defaultMessage:"Message received.\nYou should receive an answer in 1-2 business days.",
-                description:"Success Message for the contact us page" };
-
-const button = { id:"app.contactus.form.button",
-                defaultMessage:"Send",
-                description:"For the button in the contact us page" };
-
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'Contact Us',
+      description: 'app.contactus.title: Main title for the Contact Us page in the app'},
+  description : {
+      defaultMessage: 'Send us a secured message and we will answer as quickly as we can',
+      description: 'app.contactus.description: Description for the Contact Us page in the app'},
+  errorMessage : {
+      defaultMessage: 'We have encountered an error. Don\'t worry, your message is safe, but please still contact support@thecoin.io',
+      description: 'app.contactus.errorMessage: Error Message for the contact us page'},
+  successMessage : {
+      defaultMessage: 'Message received.\nYou should receive an answer in 1-2 business days.',
+      description: 'app.contactus.successMessage: Success Message for the contact us page'},
+  button : {
+      defaultMessage: 'Send',
+      description: 'app.contactus.form.button: For the button in the contact us page'}
+});
 
 export const ContactUs = () => {
   const [message, setMessage] = useState('');
@@ -47,8 +47,8 @@ export const ContactUs = () => {
       <ColumnRightTop />
       <PageHeader 
           illustration={illustration}
-          title={title}
-          description= {description}
+          title={translations.title}
+          description= {translations.description}
       />
       <AppContainerWithShadow className={`${styles.containerContactUs}`}>
 
@@ -57,12 +57,12 @@ export const ContactUs = () => {
           <div>
             <div className={styles.contactFormLine}>
               <ContactForm
-                errorMessage={errorMessage}
+                errorMessage={translations.errorMessage}
                 errorHidden={errorHidden}
-                successMessage={successMessage}
+                successMessage={translations.successMessage}
                 successHidden={successHidden}
 
-                button={button}
+                button={translations.button}
                 onSubmit={onSubmit}
               />
               </div>

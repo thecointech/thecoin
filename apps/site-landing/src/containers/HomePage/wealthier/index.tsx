@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
 import coffeePerson from './images/3_illustration.svg';
@@ -11,54 +11,50 @@ import profits from './images/icon3_04.svg';
 import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
 import { Link } from 'react-router-dom';
 
-
-const title = { id:"site.homepage.wealthier.title",
-                defaultMessage:"You’re Wealthier",
-                description:"The title for the homepage wealthier"};
-const description = { id:"site.homepage.wealthier.description",
-                defaultMessage:"Enjoy the benefits of investment growth on every dollar with our online spending account.",
-                description:"The description for the homepage wealthier"};
-
-const startnowTitle = { id:"site.homepage.wealthier.startnow.title",
-                        defaultMessage:"Start Now",
-                        description:"The title for the star now for the homepage wealthier"};
-const startnowDescription = { id:"site.homepage.wealthier.startnow.description",
-                        defaultMessage:"The most important ingredient is time. You’re young - maximize your benefit!",
-                        description:"The description for the star now for the homepage wealthier"};
-const startnowLink = { id:"site.homepage.wealthier.startnow.link",
-                        defaultMessage:"Learn Your Edge",
-                        description:"The link for the star now for the homepage wealthier"};
-
-const investmentTitle = { id:"site.homepage.wealthier.investment.title",
-                          defaultMessage:"The Best Investment",
-                          description:"The title for the investment for the homepage wealthier"};
-const investmentDescription = { id:"site.homepage.wealthier.investment.description",
-                                defaultMessage:"Why settle? Our time-tested strategy has the best long-term results.",
-                                description:"The description for the investment for the homepage wealthier"};
-const investmentLink = {  id:"site.homepage.wealthier.investment.link",
-                          defaultMessage:"Compare Us",
-                          description:"The link for the investment for the homepage wealthier"};
-
-const growthTitle = { id:"site.homepage.wealthier.growth.title",
-                      defaultMessage:"Maximum Growth",
-                      description:"The title for the growth for the homepage wealthier"};
-const growthDescription = { id:"site.homepage.wealthier.growth.description",
-                            defaultMessage:"Add $250000 to your retirement - with no money down.",
-                            description:"The description for the growth for the homepage wealthier"};
-const growthLink = {  id:"site.homepage.wealthier.growth.link",
-                      defaultMessage:"How Anyone Can Get Rich Slow",
-                      description:"The link for the growth for the homepage wealthier"};
-
-const profitsTitle = { id:"site.homepage.wealthier.profits.title",
-                          defaultMessage:"Keep Your Profits",
-                          description:"The title for the profits for the homepage wealthier"};
-const profitsDescription = { id:"site.homepage.wealthier.profits.description",
-                                defaultMessage:"Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
-                                description:"The description for the profits for the homepage wealthier"};
-const profitsLink = {  id:"site.homepage.wealthier.profits.link",
-                          defaultMessage:"Who Wins?",
-                          description:"The link for the profits for the homepage wealthier"};
-
+const translations = defineMessages({
+  title : {
+    defaultMessage: 'You’re Wealthier',
+    description: 'site.homepage.wealthier.title: The title for the homepage wealthier'},
+  description : {
+    defaultMessage: 'Enjoy the benefits of investment growth on every dollar with our online spending account.',
+    description: 'site.homepage.wealthier.description: The description for the homepage wealthier'},
+  startnowTitle : {
+    defaultMessage: 'Start Now',
+    description: 'site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier'},
+  startnowDescription : {
+    defaultMessage: 'The most important ingredient is time. You’re young - maximize your benefit!',
+    description: 'site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier'},
+  startnowLink : {
+    defaultMessage: 'Learn Your Edge',
+    description: 'site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier'},
+  investmentTitle : {
+    defaultMessage: 'The Best Investment',
+    description: 'site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier'},
+  investmentDescription : {
+    defaultMessage: 'Why settle? Our time-tested strategy has the best long-term results.',
+    description: 'site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier'},
+  investmentLink : {
+    defaultMessage: 'Compare Us',
+    description: 'site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier'},
+  growthTitle : {
+    defaultMessage: 'Maximum Growth',
+    description: 'site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier'},
+  growthDescription : {
+    defaultMessage: 'Add $250000 to your retirement - with no money down.',
+    description: 'site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier'},
+  growthLink : {
+    defaultMessage: 'How Anyone Can Get Rich Slow',
+    description: 'site.homepage.wealthier.growth.link: The link for the growth for the homepage wealthier'},
+  profitsTitle : {
+    defaultMessage: 'Keep Your Profits',
+    description: 'site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier'},
+  profitsDescription : {
+    defaultMessage: 'Every dollar earns every day. As a non-profit, we want you to keep that benefit.',
+    description: 'site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier'},
+  profitsLink : {
+    defaultMessage: 'Who Wins?',
+    description: 'site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier'}
+});
 
 export const Wealthier = () => {
 
@@ -68,9 +64,9 @@ export const Wealthier = () => {
         <Grid.Row columns={3}>
           <Grid.Column>
               <Header as='h2'>
-                <FormattedMessage {...title} />
+                <FormattedMessage {...translations.title} />
                 <Header.Subheader className={`x5spaceBefore`}>
-                  <FormattedMessage {...description} />
+                  <FormattedMessage {...translations.description} />
                 </Header.Subheader>
               </Header>
           </Grid.Column>
@@ -78,24 +74,24 @@ export const Wealthier = () => {
           <Grid.Column columns={3}>
               <img src={startnow} />
               <Header as='h4'>
-                <FormattedMessage {...startnowTitle} />
+                <FormattedMessage {...translations.startnowTitle} />
               </Header>
               <p>
-                <FormattedMessage {...startnowDescription} />
+                <FormattedMessage {...translations.startnowDescription} />
               </p>
 
-              <Link to="/compare"><FormattedMessage {...startnowLink} /></Link>
+              <Link to="/compare"><FormattedMessage {...translations.startnowLink} /></Link>
           </Grid.Column>
 
           <Grid.Column columns={3}>
               <img src={investment} />
               <Header as='h4'>
-                <FormattedMessage {...investmentTitle} />
+                <FormattedMessage {...translations.investmentTitle} />
               </Header>
               <p>
-                <FormattedMessage {...investmentDescription} />
+                <FormattedMessage {...translations.investmentDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...investmentLink} /></Link>
+              <Link to="/compare"><FormattedMessage {...translations.investmentLink} /></Link>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -112,23 +108,23 @@ export const Wealthier = () => {
           <Grid.Column columns={3} >
               <img src={growth} />
               <Header as='h4'>
-                <FormattedMessage {...growthTitle} />
+                <FormattedMessage {...translations.growthTitle} />
               </Header>
               <p>
-                <FormattedMessage {...growthDescription} />
+                <FormattedMessage {...translations.growthDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...growthLink} /></Link>
+              <Link to="/compare"><FormattedMessage {...translations.growthLink} /></Link>
           </Grid.Column>
 
           <Grid.Column columns={3} >
               <img src={profits} />
               <Header as='h4'>
-                <FormattedMessage {...profitsTitle} />
+                <FormattedMessage {...translations.profitsTitle} />
               </Header>
               <p>
-                <FormattedMessage {...profitsDescription} />
+                <FormattedMessage {...translations.profitsDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...profitsLink} /></Link>
+              <Link to="/compare"><FormattedMessage {...translations.profitsLink} /></Link>
           </Grid.Column>
         </Grid.Row>
       </Grid>

@@ -19,7 +19,9 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 
   // Ensure required values
   const withMeta = {
-    date: DateTime.now(),
+    // Init meta with now, but value will be
+    // overwritten with server timestamp on submission
+    created: DateTime.now(),
     type: transition.name,
     ...delta
   }
@@ -45,6 +47,8 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
   }
 
   return async (container, currentState, replay?) => {
+    log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: !!replay },
+       `${replay ? '(replay: {replay}): ' : ''}{initialId} transitioning via {transition} to state {state}`);
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {
@@ -70,6 +74,7 @@ const initialState = <States extends string>(date: DateTime): StateSnapshot<Stat
   data: {},
   delta: {
     type: "no prior state",
+    created: date,
     date,
   },
 })
@@ -156,16 +161,14 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       else {
         // no problems, iterate to the next state
         nextState = await transitions.next(container, currentState, replay);
-        log.trace({ initialId, state: nextState?.name, transition: transitions.next.name },
-          `Action {initialId} transitioning via {transition} to state {state}`);
       }
 
       // If our transition has not generated a state for us, we break.
       // This can happen when a transition cannot be completed (eg, calling
       // tocoin before the tx has a chance to settle), but there is no error.
       if (!nextState) {
-        log.debug({ initialId, state, transition: transitions.next.name },
-          'Pausing action {initialId}: Transition {transition} did not generate a delta in state {state}');
+        log.debug({ initialId, state },
+          'Pausing action {initialId}: Last transition did not generate a delta in state {state}');
         break;
       }
 

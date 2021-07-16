@@ -1,18 +1,24 @@
 import { google, drive_v3 } from 'googleapis';
 import { GoogleFileIdent, GoogleStoreAccount, GoogleToken, GoogleWalletItem } from '@thecointech/types';
+import { log } from '@thecointech/logging';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
-const buildAuth = () =>
-  new google.auth.OAuth2(
+const buildAuth = (clientUri: string) => {
+  if (!process.env.BROKER_GDRIVE_CLIENT_URIS?.split(';').includes(clientUri)) {
+    log.error({Uri: clientUri }, 'Invalid ClientURI passed: {Uri}')
+    throw new Error('Cannot Login to GDrive');
+  }
+  return new google.auth.OAuth2(
     process.env.BROKER_GDRIVE_CLIENT_ID,
     process.env.BROKER_GDRIVE_CLIENT_SECRET,
-    process.env.BROKER_GDRIVE_CLIENT_URI
+    clientUri
   );
+}
 
-async function loginDrive(authToken: GoogleToken)
+async function loginDrive(clientUri: string, authToken: GoogleToken)
 {
-  const auth = buildAuth();
+  const auth = buildAuth(clientUri);
   const res = await auth.getToken(authToken.token);
   if (!res || !res.tokens) {
     throw new Error("Could not retrieve token: " + JSON.stringify(res));
@@ -21,9 +27,9 @@ async function loginDrive(authToken: GoogleToken)
   return google.drive({version: 'v3', auth});
 }
 
-export function getAuthUrl()
+export function getAuthUrl(clientUri: string)
 {
-  const auth = buildAuth();
+  const auth = buildAuth(clientUri);
   return auth.generateAuthUrl({
     access_type: 'online',
     scope: SCOPES,
@@ -31,7 +37,7 @@ export function getAuthUrl()
 }
 
 
-export async function storeOnGoogle(account: GoogleStoreAccount) {
+export async function storeOnGoogle(clientUri: string, account: GoogleStoreAccount) {
   const {walletName, wallet, token } = account;
   if (!walletName || !wallet)
     throw new Error("Missing data from gdrive save");
@@ -39,7 +45,7 @@ export async function storeOnGoogle(account: GoogleStoreAccount) {
   // Throw if wallet is not valid JSON
   const walletObject = JSON.parse(wallet);
   console.log(`Storing wallet for user: ${walletObject.address}`)
-  const drive = await loginDrive(token);
+  const drive = await loginDrive(clientUri, token);
 
   var fileMetadata = {
     name: walletName + ".wallet",
@@ -60,9 +66,9 @@ export async function storeOnGoogle(account: GoogleStoreAccount) {
   return r.status == 200;
 }
 
-export async function listWallets(token: GoogleToken) : Promise<GoogleFileIdent[]>
+export async function listWallets(clientUri: string, token: GoogleToken) : Promise<GoogleFileIdent[]>
 {
-  const drive = await loginDrive(token);
+  const drive = await loginDrive(clientUri, token);
   const wallets = await doListWallets(drive);
   return wallets.map(file => ({
       name: file.originalFilename || file.name || "<err>",
@@ -81,9 +87,9 @@ export async function doListWallets(drive: drive_v3.Drive) : Promise<drive_v3.Sc
     [];
 }
 
-export async function fetchWallets(request: GoogleToken) : Promise<GoogleWalletItem[]>
+export async function fetchWallets(clientUri: string, request: GoogleToken) : Promise<GoogleWalletItem[]>
 {
-  const drive = await loginDrive(request);
+  const drive = await loginDrive(clientUri, request);
   const wallets = await doListWallets(drive);
   const fetchArray = wallets.map(async (file) => {
 

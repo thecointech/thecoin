@@ -4,7 +4,6 @@
   "references": [
     { "path": "../broker-db/tsconfig.build.json" },
     { "path": "../rbcapi/tsconfig.build.json" },
-    { "path": "../shared/tsconfig.build.json" },
     { "path": "../tx-gmail/tsconfig.build.json" },
     { "path": "../utils-ts/tsconfig.build.json" }
   ]

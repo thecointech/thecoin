@@ -6,6 +6,7 @@ import { combineReducers, ReducersMapObject } from 'redux';
 import { buildAccountStoreReducer, AccountMapState } from '@thecointech/shared/containers/AccountMap';
 import { useLanguageProvider } from '@thecointech/shared/containers/LanguageProvider/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
 export function withStore(initialState?: Partial<ApplicationBaseState>) {
   const createReducer = (injectedReducers?: ReducersMapObject) =>
@@ -16,9 +17,14 @@ export function withStore(initialState?: Partial<ApplicationBaseState>) {
   return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
 }
 
-export function withAccounts(initialState: AccountMapState) {
+export function withAccounts(initialState?: AccountMapState) {
+  // If no accounts passed, default to dev accounts
+  const init = initialState ?? {
+    active: getInitialAddress(),
+    map: getAllAccounts(),
+  }
   const createReducer = (injectedReducers?: ReducersMapObject) => {
-    const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers, initialState);
+    const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers, init);
     return combineReducers({
       accounts: accountStoreReducer,
       ...rest,

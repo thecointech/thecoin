@@ -1,26 +1,28 @@
 import * as React from 'react';
 import { Header } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 
 //TODO: replace by the real graph
 import Graph from './images/Group576.svg';
 
-const title = { id:"site.compare.graph.title",
-                defaultMessage:"Your possible benefits",
-                description:"Graph title for the How much will you make? graph page"};
-const description = { id:"site.compare.graph.description",
-                      defaultMessage:"There is a 95% chance you're return will be in that area.",
-                      description:"Graph description for the How much will you make? graph page"};
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'Your possible benefits',
+      description: 'site.compare.graph.title: Graph title for the How much will you make? graph page'},
+  description : {
+    defaultMessage: 'Your chequing account will be with you longer than your retirement savings will. This is what that could look like.',
+    description: 'site.compare.graph.description: Graph description for the How much will you make? graph page'}
+  });
 
 export const GraphCompare = () => {
 
     return (
       <div className={styles.graphContainer}>
           <Header as="h4">
-            <FormattedMessage {...title} />
+            <FormattedMessage {...translations.title} />
           </Header>
-          <FormattedMessage {...description} />
+          <FormattedMessage {...translations.description} />
                   <br /> <br /> <br />
           <img src={Graph} />
       </div>

@@ -16,8 +16,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
 // initialize logging first
-import { log, init } from '@thecointech/logging';
-init('site-landing');
+import { log } from '@thecointech/logging';
 log.info(`Loading App: ${__VERSION__}`);
 
 // Import root app

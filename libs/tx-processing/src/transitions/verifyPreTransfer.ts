@@ -14,8 +14,8 @@ export const verifyPreTransfer = (container: AnyActionContainer) => {
     return { error: 'Running transfer without matching per-transfer' };
 
   // How long ago was it registered?
-  const age = state.delta.date.diffNow();
-  if (age.as('seconds') > 120) {
+  const age = state.delta.created.diffNow();
+  if (age.as('seconds') < -120) { // 2 minutes ago
     return { error: 'Timeout from pre-transfer'}
   }
   return null;

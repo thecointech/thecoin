@@ -1,5 +1,5 @@
 import { Settings } from "luxon";
-import { init as initlog, log } from '@thecointech/logging';
+import { log } from '@thecointech/logging';
 import { init as initdb } from '@thecointech/firestore';
 import { initLatest } from '../internals/rates/latest';
 import { update } from '../internals/rates/UpdateDb';
@@ -8,8 +8,6 @@ import { seed } from "./seed";
 export async function init() {
   // Init luxon to use the right timezone
   Settings.defaultZoneName = "America/New_York";
-  // Logging (todo: connect to logs aggregator)
-  initlog('rates-service');
   // connect to DB
   if (process.env.RATES_SERVICE_ACCOUNT) {
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.RATES_SERVICE_ACCOUNT

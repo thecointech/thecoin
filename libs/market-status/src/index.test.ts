@@ -1,9 +1,15 @@
 import { getCalendar, nextOpenTimestamp } from '.';
 import { DateTime, Settings } from 'luxon';
 import { describe } from '@thecointech/jestutils';
+import { getEnvFile } from '../../../tools/setenv';
 
 Settings.defaultZoneName = "America/New_York";
 const jan1st2019 = DateTime.fromObject({year: 2019, month: 1, day: 1});
+jest.unmock('axios');
+
+try {
+  require('dotenv').config({path: getEnvFile('prod')});
+} catch {}
 
 describe("Live MarketStatus tests", () => {
 

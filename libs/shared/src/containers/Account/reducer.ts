@@ -74,7 +74,11 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     }
   };
 
-  *setDetails(details: AccountDetails) {
+  *setDetails(newDetails: Partial<AccountDetails>) {
+    const details = {
+      ...this.state.details,
+      ...newDetails,
+    }
     yield this.storeValues({ details, idxIO: true });
     if (this.state.idx) {
       yield call(setDetails, this.state.idx, details);

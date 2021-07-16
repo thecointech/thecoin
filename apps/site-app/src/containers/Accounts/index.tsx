@@ -10,58 +10,60 @@ import { Settings } from 'containers/Settings';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
 import { ContactUs } from 'containers/ContactUs';
+import { defineMessages } from 'react-intl';
 
-
-const home = { id:"app.accounts.sidebar.home",
-                defaultMessage:"Overview",
-                description:"Title for the Home entry in the menu"};
-const transferin = { id:"app.accounts.sidebar.transferin",
-                  defaultMessage:"Top up balance",
-                  description:"Title for the Top up balance entry in the menu"};
-const makepayments = {  id:"app.accounts.sidebar.makepayments",
-                    defaultMessage:"Make payments",
-                    description:"Title for the Make payments entry in the menu"};
-const settings = {  id:"app.accounts.sidebar.settings",
-                    defaultMessage:"Settings",
-                    description:"Title for the Settings entry in the menu"};
-const contact = {  id:"app.accounts.sidebar.contact",
-                    defaultMessage:"Contact Us",
-                    description:"Title for the Contact Us entry in the menu"};
-const profile = {  id:"app.accounts.sidebar.profile",
-                    defaultMessage:"Profile",
-                    description:"Title for the Profile entry in the menu"};
-const copyLink = { id:"shared.pagesidebar.copy",
-                defaultMessage:"Copy my address",
-                description:"Title for the Home entry in the menu"};
+const translations = defineMessages({
+  home : {
+      defaultMessage: 'Overview',
+      description: 'app.accounts.sidebar.home: Title for the Home entry in the menu'},
+  transferin : {
+      defaultMessage: 'Top up balance',
+      description: 'app.accounts.sidebar.transferin: Title for the transfer entry in the menu'},
+  makepayments : {
+      defaultMessage: 'Make payments',
+      description: 'app.accounts.sidebar.makepayments: Title for the Make payments entry in the menu'},
+  settings : {
+      defaultMessage: 'Settings',
+      description: 'app.accounts.sidebar.settings: Title for the Settings entry in the menu'},
+  contact : {
+      defaultMessage: 'Contact Us',
+      description: 'app.accounts.sidebar.contact: Title for the Contact Us entry in the menu'},
+  profile : {
+      defaultMessage: 'Profile',
+      description: 'app.accounts.sidebar.profile: Title for the Profile entry in the menu'},
+  copyLink : {
+      defaultMessage: 'Profile',
+      description: 'app.accounts.sidebar.copy: Title for the copy button in the menu'}
+  });
 
 const AccountRoutes: RouterPath[] = [
   {
-    name: home,
+    name: translations.home,
     urlFragment: '/',
     creator: (routerProps: AccountPageProps) => ((props) => <HomePage {...props} {...routerProps} />),
     exact: true,
     icon: "home",
   },
   {
-    name: transferin,
+    name: translations.transferin,
     urlFragment: 'transferIn',
     creator: (routerProps: AccountPageProps) => ((props) => <Topup {...props} {...routerProps} />),
     icon: "arrow circle up",
   },
   {
-    name: makepayments,
+    name: translations.makepayments,
     urlFragment: 'makepayments',
     creator: (routerProps: AccountPageProps) => (() => <MakePayments {...routerProps} />),
     icon: "arrow circle right",
   },
   {
-    name: settings,
+    name: translations.settings,
     urlFragment: 'settings',
     creator: () => (() => <Settings />),
     icon: "setting",
   },
   {
-    name: contact,
+    name: translations.contact,
     urlFragment: 'contact',
     creator: () => (() => <ContactUs />),
     icon: "envelope outline",
@@ -79,16 +81,16 @@ export const Accounts = (props: RouteComponentProps) => {
     if (!AccountRoutes[0].header){
       AccountRoutes.unshift(
         {
-          name: profile,
+          name: translations.profile,
           header: { avatar: getAvatarLink("14"),
                     primaryDescription: activeAccount?.name ?? "Unknown",
-                    secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> },
+                    secondaryDescription: <><CopyToClipboard label={translations.copyLink} payload={activeAccount?.address!} /></> },
       });
     } else {
       AccountRoutes[0].header = {
         avatar: getAvatarLink("14"),
         primaryDescription: activeAccount?.name ?? "Unknown",
-        secondaryDescription: <><CopyToClipboard label={copyLink} payload={activeAccount?.address!} /></> };
+        secondaryDescription: <><CopyToClipboard label={translations.copyLink} payload={activeAccount?.address!} /></> };
     }
   }
 
