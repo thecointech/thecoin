@@ -12,10 +12,20 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   log.trace({ transition: transition.name, initialId: container.action.data.initialId },
     `Calculating transition {transition} for {initialId}`);
 
-  const delta = await transition(container);
-  // If we have a null response, transition did not complete
-  if (!delta)
-    return null;
+  let delta : Partial<TransitionDelta> = {};
+  try {
+    const delta = await transition(container);
+    // If we have a null response, transition did not complete
+    if (!delta)
+      return null;
+  }
+  catch (error) {
+    // For any exception, we transition to an error state and await a manual fix.
+    log.error({ transition: transition.name, initialId: container.action.data, error},
+      "Error running {transition} on {initialId}: {error}");
+    delta = { error: error.message }
+  }
+
 
   // Ensure required values
   const withMeta = {
@@ -23,7 +33,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
     // overwritten with server timestamp on submission
     created: DateTime.now(),
     type: transition.name,
-    ...delta
+    ...delta,
   }
 
   log.trace({ delta, transition: transition.name, initialId: container.action.data.initialId },
@@ -47,8 +57,14 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
   }
 
   return async (container, currentState, replay?) => {
-    log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: !!replay },
-       `${replay ? '(replay: {replay}): ' : ''}{initialId} transitioning via {transition} to state {state}`);
+    if (replay) {
+      log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: true },
+        `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
+    }
+    else {
+      log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.name },
+        `{initialId} transitioning via {transition} to state {state}`);
+    }
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {

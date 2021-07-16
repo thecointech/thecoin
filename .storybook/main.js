@@ -58,7 +58,6 @@ module.exports = {
         }
       },
       config);
-    console.log(r);
     return r;
   },
   core: {
