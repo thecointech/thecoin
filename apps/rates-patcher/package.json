@@ -1,12 +1,12 @@
 {
   "name": "rates-patcher",
-  "version": "0.2.14",
+  "version": "0.2.16",
   "private": "true",
   "main": "./build/index.js",
   "license": "MIT",
   "dependencies": {
     "@google-cloud/datastore": "^5.1.0",
-    "@thecointech/utilities": "^0.2.14"
+    "@thecointech/utilities": "^0.2.16"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development && yarn build && yarn start",

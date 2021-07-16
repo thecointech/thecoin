@@ -1,6 +1,6 @@
 import { GetContract } from "@thecointech/contract";
 import { RbcApi } from "@thecointech/rbcapi";
-import { FXRate, weBuyAt } from "@thecointech/shared/containers/FxRate";
+import { FXRate, weBuyAt } from "@thecointech/fx-rates";
 import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@thecointech/tx-reconciliation";
 import { toHuman } from "@thecointech/utilities";
 import { Contract } from "ethers";

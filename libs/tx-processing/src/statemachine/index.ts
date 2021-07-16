@@ -12,9 +12,9 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   log.trace({ transition: transition.name, initialId: container.action.data.initialId },
     `Calculating transition {transition} for {initialId}`);
 
-  let delta : Partial<TransitionDelta> = {};
+  let delta : Partial<TransitionDelta>|null = null;
   try {
-    const delta = await transition(container);
+    delta = await transition(container);
     // If we have a null response, transition did not complete
     if (!delta)
       return null;

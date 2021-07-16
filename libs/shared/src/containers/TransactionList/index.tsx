@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Menu, Icon, Dimmer, Grid, Segment, Header } from 'semantic-ui-react';
 import { toHuman } from '@thecointech/utilities/Conversion'
-import { FXRate } from '@thecointech/pricing';
-import { weBuyAt } from '../FxRate/reducer';
+import { FXRate, weBuyAt } from '@thecointech/fx-rates';
 import { fiatChange } from '../Account/profit';
 import iconThecoin from "./images/icon_thecoin.svg";
 import iconCard from "./images/icon_card.svg";
@@ -21,29 +20,29 @@ type MyProps = {
   rates: FXRate[];
 }
 
-const translate = defineMessages({  
-        sent : { 
-          id: "shared.transactionList.sent", 
+const translate = defineMessages({
+        sent : {
+          id: "shared.transactionList.sent",
           defaultMessage:"Sent",
           description:"shared.transactionList.sent: For title in comment section for the transaction history"},
-        received : {  
-          id: "shared.transactionList.received", 
+        received : {
+          id: "shared.transactionList.received",
           defaultMessage:"Received",
           description:"shared.transactionList.received: For title in comment section for the transaction history"},
-        to : {  
-          id: "shared.transactionList.to", 
+        to : {
+          id: "shared.transactionList.to",
           defaultMessage:"To",
           description:"shared.transactionList.to: For description in comment section for the transaction history"},
-        from : {  
-          id: "shared.transactionList.from", 
+        from : {
+          id: "shared.transactionList.from",
           defaultMessage:"From",
           description:"shared.transactionList.from: For description in comment section for the transaction history"},
-        notransactions : {  
-          id: "shared.transactionList.notransactions", 
+        notransactions : {
+          id: "shared.transactionList.notransactions",
           defaultMessage:"We don't have any transactions matching your query.",
           description:"app.transactionList.notransactions: For when we have no transactions to display for the transaction history"},
-        loading : { 
-          id: "shared.transactionList.loading", 
+        loading : {
+          id: "shared.transactionList.loading",
           defaultMessage:"Loading...",
           description:"shared.transactionList.loading: For loading in comment section for the transaction history"}});
 
@@ -124,21 +123,21 @@ export const TransactionList = (props: MyProps) => {
         yearToDisplay={yearToDisplay}
         monthTodisplay={monthTodisplay}
         dayToDisplay={dayToDisplay}
-      
+
         imgForLine={imgForLine}
         contentForComment={contentForComment}
         addressComment={addressComment}
         descForComment={descForComment}
-      
+
         classForMoneyCell={classForMoneyCell}
         changeCad={changeCad}
         timeToDisplay={timeToDisplay}
-      
+
         balanceCad={balanceCad}
       />
   )});
-  const transactionsListZone = txJsxRows.length > 0 
-      ? <Grid padded>{...txJsxRows}{jsxFooter}</Grid> 
+  const transactionsListZone = txJsxRows.length > 0
+      ? <Grid padded>{...txJsxRows}{jsxFooter}</Grid>
       : <Segment placeholder><Header as="h4" icon><Icon name='search' /><FormattedMessage {...translate.notransactions} /></Header></Segment> ;
 
   return (
