@@ -13,7 +13,9 @@ const userActionCollection = <Type extends ActionType>(address: string, type: Ty
 // Get event collection of single action, ordered by timestamp
 export async function getActionHistory(action: DocumentReference<AnyActionData>) {
   const history = await historyCollection(action).get();
-  return [...history.docs].map(doc => doc.data());
+  return [...history.docs]
+    .map(doc => doc.data())
+    .sort((a, b) => a.created.toMillis() - b.created.toMillis())
 }
 
 //
@@ -126,9 +128,11 @@ const toAction = async <Type extends ActionType>(address: string, type: Type, sn
 })
 
 // Decompose a path to an action into /address/type/id
-function decomposeActionPath(path: string) {
+function decomposeActionPath(path: string|DocumentReference) {
   // Split into components
-  const asDoc = getFirestore().doc(path);
+  const asDoc = (typeof path == "string")
+    ? getFirestore().doc(path)
+    : path;
   const id = asDoc.id;
   const type = asDoc.parent.id;
   const address = asDoc.parent.parent?.id;

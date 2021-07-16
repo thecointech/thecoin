@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter, toDateTime, toTimestamp } from "@thecointech/firestore";
+import { DocumentData, FirestoreDataConverter, FieldValue, toDateTime, toTimestamp } from "@thecointech/firestore";
 import { Decimal } from "decimal.js-light";
 import { isPlainObject } from 'lodash';
 
@@ -21,6 +21,13 @@ type converter = {
   keys: string[];
 };
 
+export function serverTimestamp<T>(...keys: (keyof T)[]) {
+  return {
+    toFirestore: () => FieldValue.serverTimestamp(),
+    fromFirestore: toDateTime,
+    keys,
+  }
+}
 export function convertDates<T>(...keys: (keyof T)[]) {
   return {
     toFirestore: toTimestamp,

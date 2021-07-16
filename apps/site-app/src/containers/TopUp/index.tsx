@@ -5,41 +5,42 @@ import illustration from './images/icon_topup_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
 
 import { Tab } from 'semantic-ui-react';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { PageHeader } from 'components/PageHeader';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 
-
-const title = { id:"app.topup.title",
-                defaultMessage:"Topup balance",
-                description:"Main title for the topup page in the app" };
-const description = { id:"app.topup.description",
-                      defaultMessage:"Transfer funds from your Canadian bank to your account.",
-                      description:"Description for the topup page in the app" };
-const etransfer = { id:"app.topup.tabs.etransfer",
-                defaultMessage:"Interac E-mail Transfer",
-                description:"Title for the tabs the topup page in the app" };
-const interact = { id:"app.topup.tabs.interact",
-                defaultMessage:"Interac Online",
-                description:"Title for the tabs the topup page in the app" };
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'Topup balance',
+      description: 'app.topup.title: Main title for the topup page in the app'},
+  description : {
+      defaultMessage: 'Transfer funds from your Canadian bank to your account.',
+      description: 'app.topup.description: Description for the topup page in the app'},
+  etransfer : {
+      defaultMessage: 'Interac E-mail Transfer',
+      description: 'app.topup.tabs.etransfer: Title for the tabs the topup page in the app'},
+  interact : {
+      defaultMessage: 'Interac Online',
+      description: 'app.topup.tabs.interact: Title for the tabs the topup page in the app'}
+});
 
 export const Topup = (routerProps:AccountPageProps) => {
   const intl = useIntl();
   const activeAccount = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...etransfer}), render: () => <AppContainerForTabs><Purchase signer={activeAccount!.signer!} /></AppContainerForTabs> },
-    { menuItem: intl.formatMessage({...interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Purchase signer={activeAccount!.signer!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
   ]
   return (
     <React.Fragment>
       <ColumnRightTop />
       <PageHeader 
           illustration={illustration}
-          title={title}
-          description= {description}
+          title={translations.title}
+          description= {translations.description}
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useHistory } from "react-router";
 import { Button, Form, Header } from "semantic-ui-react";
 
@@ -27,28 +27,47 @@ enum LoginState {
 }
 
 
-const aboveTheTitle = { id:"shared.login.aboveTheTitle",
-                        defaultMessage:"WELCOME BACK TO THE COIN",
-                        description:"Title above the main Title for the create account form page"};
-const title = { id:"shared.login.title",
+const translate = defineMessages({  
+              aboveTheTitle : { 
+                id: "shared.login.aboveTheTitle",  
+                defaultMessage:"WELCOME BACK TO THE COIN",
+                description:"shared.login.aboveTheTitle: Title above the main Title for the create account form page"},
+              title : { 
+                id: "shared.login.title", 
                 defaultMessage:"Log into",
-                description:"Title for the create account form page"};
-const button = { id:"shared.login.button",
+                description:"shared.login.title: Title for the create account form page"},
+              button : { 
+                id: "shared.login.button", 
                 defaultMessage:"Log In",
-                description:"Text of the button for the login page"};
-const textAtTheBottom = { id:"shared.login.textAtTheBottom",
-                          defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
-                          description:"Text at the bottom for the login page before the account name"};
-const placeholderPassword = { id: 'shared.login.placeholder.wallet',
-                              defaultMessage:'Wallet Password',
-                              description:"PLaceholder for the Passford field in the create account form"};
+                description:"shared.login.button: Text of the button for the login page"},                  
+              textAtTheBottom : { 
+                id: "shared.login.textAtTheBottom", 
+                defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
+                description:"shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"},
+              placeholderPassword : { 
+                id: "shared.login.placeholder.wallet",
+                defaultMessage:'Wallet Password',
+                description:"shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"},
+              passwordLabel : { 
+                id: "shared.login.passwordLabel",
+                defaultMessage:'Password',
+                description:"shared.login.passwordLabel"},  
+              decryptHeader : { 
+                id: "shared.login.decryptHeader",
+                defaultMessage:'Logging into your account.',
+                description:"shared.login.decryptHeader"},
+              decryptIncorrectPwd : { 
+                id: "shared.login.decryptIncorrectPwd",
+                defaultMessage:'Unlock failed: Please check your password and try again.',
+                description:"shared.login.decryptIncorrectPwd"},
+              decryptInProgress : { 
+                id: "shared.login.decryptInProgress",
+                defaultMessage:'Please wait, We are {percentComplete}% done opening your account.',
+                description:"shared.login.decryptInProgress"}      
+});
 
-const passwordLabel = { id: 'shared.login.passwordLabel', defaultMessage:'Password'};
-const decryptHeader = { id: 'shared.login.decryptHeader', defaultMessage:'Logging into your account.'};
-const decryptIncorrectPwd = { id: 'shared.login.decryptIncorrectPwd', defaultMessage:'Unlock failed: Please check your password and try again.'};
 //const decryptCancelled = { id: 'shared.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
 //const decryptSuccess = { id: 'shared.login.decryptSuccess', defaultMessage:'Unlock successful!  Please wait while we load your account info'};
-const decryptInProgress = { id: 'shared.login.decryptInProgress', defaultMessage:'Please wait, We are {percentComplete}% done opening your account.'};
 
 
 let __cancel = false;
@@ -67,7 +86,7 @@ export const Login = (props: Props) => {
   }
 
   const intl = useIntl();
-  const placeholderPasswordTranslated = intl.formatMessage(placeholderPassword);
+  const placeholderPasswordTranslated = intl.formatMessage(translate.placeholderPassword);
 
   /////////////////////////////////
   const onPasswordChange = useCallback((value: string) => {
@@ -127,23 +146,23 @@ export const Login = (props: Props) => {
     //case LoginState.Cancelled:
     //  message = decryptCancelled;
     case LoginState.Failed:
-      message = decryptIncorrectPwd;
+      message = translate.decryptIncorrectPwd;
   }
 
   return (
     <>
       <div className={`${styles.wrapper} x6spaceAfter`}>
         <Header as='h5' className={ `x4spaceBefore` }>
-          <FormattedMessage {...aboveTheTitle}/>
+          <FormattedMessage {...translate.aboveTheTitle}/>
         </Header>
         <Header as="h2" className={ `x4spaceBefore` }>
-          <FormattedMessage {...title} /> <br />
+          <FormattedMessage {...translate.title} /> <br />
             { account.name }
         </Header>
         <Form id={styles.loginForm}>
           <UxPassword
             uxChange={onPasswordChange}
-            intlLabel={passwordLabel}
+            intlLabel={translate.passwordLabel}
             placeholder={placeholderPasswordTranslated}
             message={message}
             isValid={isValid}
@@ -151,19 +170,19 @@ export const Login = (props: Props) => {
           />
           <Button primary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <FormattedMessage {...button} />
+            <FormattedMessage {...translate.button} />
               &nbsp;&nbsp;&nbsp;&nbsp;
           </Button>
 
           <div className={ `x10spaceBefore x8spaceAfter` } >
-            <FormattedMessage {...textAtTheBottom} />
+            <FormattedMessage {...translate.textAtTheBottom} />
           </div>
         </Form>
         <ModalOperation
           cancelCallback={onCancel}
           isOpen={isDecrypting}
-          header={decryptHeader}
-          progressMessage={decryptInProgress}
+          header={translate.decryptHeader}
+          progressMessage={translate.decryptInProgress}
           progressPercent={percentComplete}
         />
       </div>

@@ -1,23 +1,25 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .availableSoonContainer{
-    height: 100%;
-    margin-top: -60px;
-}
+  position: relative;
+  display: inline-block;
+  > * {
+    filter: blur(2px) !important;
+  }
 
-.availableSoonBlur{
-    z-index: 100;
-    filter: blur(3px);
-}
-
-h5#soon {
-    position: relative;
-    z-index: 100;
+  > h5.soon {
+    position: absolute;
+    top: 35%;
+    left: 10%;
+    right: 10%;
+    margin: 0;
     background-color: white;
     text-align: center;
     border-radius: 10px;
     box-shadow: @subtleShadow;
     transform: rotate(-10deg);
     padding: 10px;
-    top: 100px;
+    filter: blur(0px) !important;
+  }
 }
+

@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useActiveAccount } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { DateTime } from 'luxon';
 import { Filters } from './Filters';
 import { TransactionLine } from './TransactionLine';
@@ -21,26 +21,31 @@ type MyProps = {
   rates: FXRate[];
 }
 
-const sent = { id:"shared.transactionList.sent",
-                defaultMessage:"Sent",
-                description:"For title in comment section for the transaction history"};
-const received = { id:"app.transactionList.received",
-                defaultMessage:"Received",
-                description:"For title in comment section for the transaction history"};
-
-const to = { id:"shared.transactionList.to",
-                defaultMessage:"To",
-                description:"For description in comment section for the transaction history"};
-const from = { id:"app.transactionList.from",
-                defaultMessage:"From",
-                description:"For description in comment section for the transaction history"};
-
-const notransactions = { id:"app.transactionList.notransactions",
-                defaultMessage:"We don't have any transactions matching your query.",
-                description:"For when we have no transactions to display for the transaction history"};
-const loading = { id:"app.transactionList.loading",
-                defaultMessage:"Loading...",
-                description:"For loading in comment section for the transaction history"};
+const translate = defineMessages({  
+        sent : { 
+          id: "shared.transactionList.sent", 
+          defaultMessage:"Sent",
+          description:"shared.transactionList.sent: For title in comment section for the transaction history"},
+        received : {  
+          id: "shared.transactionList.received", 
+          defaultMessage:"Received",
+          description:"shared.transactionList.received: For title in comment section for the transaction history"},
+        to : {  
+          id: "shared.transactionList.to", 
+          defaultMessage:"To",
+          description:"shared.transactionList.to: For description in comment section for the transaction history"},
+        from : {  
+          id: "shared.transactionList.from", 
+          defaultMessage:"From",
+          description:"shared.transactionList.from: For description in comment section for the transaction history"},
+        notransactions : {  
+          id: "shared.transactionList.notransactions", 
+          defaultMessage:"We don't have any transactions matching your query.",
+          description:"app.transactionList.notransactions: For when we have no transactions to display for the transaction history"},
+        loading : { 
+          id: "shared.transactionList.loading", 
+          defaultMessage:"Loading...",
+          description:"shared.transactionList.loading: For loading in comment section for the transaction history"}});
 
 function buildPagination(transactions: Transaction[], maxRowCount: number, currentPage: number) :[Transaction[], any]
 {
@@ -102,8 +107,8 @@ export const TransactionList = (props: MyProps) => {
 
     const imgForLine = changeCad < 0 ? iconCard : iconThecoin;
     const classForMoneyCell = changeCad < 0 ? styles.moneyNegative : styles.moneyPositive;
-    const contentForComment = changeCad < 0 ? <FormattedMessage {...sent} /> : <FormattedMessage {...received} />;
-    const descForComment = changeCad < 0 ? <FormattedMessage {...to} /> : <FormattedMessage {...from} />;
+    const contentForComment = changeCad < 0 ? <FormattedMessage {...translate.sent} /> : <FormattedMessage {...translate.received} />;
+    const descForComment = changeCad < 0 ? <FormattedMessage {...translate.to} /> : <FormattedMessage {...translate.from} />;
 
     const monthTodisplay = tx.date.setLocale(locale).monthShort;
     const yearToDisplay = tx.date.setLocale(locale).year;
@@ -134,14 +139,14 @@ export const TransactionList = (props: MyProps) => {
   )});
   const transactionsListZone = txJsxRows.length > 0 
       ? <Grid padded>{...txJsxRows}{jsxFooter}</Grid> 
-      : <Segment placeholder><Header as="h4" icon><Icon name='search' /><FormattedMessage {...notransactions} /></Header></Segment> ;
+      : <Segment placeholder><Header as="h4" icon><Icon name='search' /><FormattedMessage {...translate.notransactions} /></Header></Segment> ;
 
   return (
     <React.Fragment>
       <Filters onDateRangeChange={onDateRangeChange} />
 
       <Dimmer.Dimmable>
-        <Dimmer active={transactionLoading}><FormattedMessage {...loading} /></Dimmer>
+        <Dimmer active={transactionLoading}><FormattedMessage {...translate.loading} /></Dimmer>
       </Dimmer.Dimmable>
 
       {transactionsListZone}

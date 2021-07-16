@@ -1,4 +1,4 @@
-import { Transaction } from "@thecointech/tx-blockchain/";
+import { Transaction } from "@thecointech/tx-blockchain";
 import { AllData, User, ReconciledRecord } from "types";
 
 // Next, the tx hash should match blockchain

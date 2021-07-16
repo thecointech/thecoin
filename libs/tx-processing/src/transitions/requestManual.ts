@@ -24,7 +24,8 @@ const printHistory = (action: AnyActionContainer) =>
   action.history.map(h => {
     const { name, delta } = h;
     const sb = [
-      `${delta.date.toString()}`,
+      `${delta.created.toString()}`,
+      `${delta.date?.toString()}`,
       `${delta.type} ==> ${name}`,
     ]
     if (delta.meta) sb.push(`meta: ${delta.meta}`);

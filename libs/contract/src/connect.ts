@@ -1,27 +1,41 @@
-import { Signer, Wallet } from "ethers";
+import { Signer, Wallet, utils } from "ethers";
 import type { TheCoin } from "./types/TheCoin";
 import { GetContract } from "./contract";
+import { log } from '@thecointech/logging';
 
-async function ConnectWallet(wallet: Wallet) {
-	const contract = await GetContract();
-	return wallet.connect(contract.provider);
+function ConnectWallet(wallet: Wallet) {
+  const contract = GetContract();
+  return wallet.connect(contract.provider);
 }
 
-export async function ConnectContract(signer: Signer) : Promise<TheCoin> {
-	// First fetch contract
-	const contract = await GetContract();
-	if (!!(signer as Wallet).connect) {
-	  // Ensure wallet is connected to the same network as the contract
-		signer = await ConnectWallet(signer as Wallet);
-	}
-	else {
-		// Validate that signer and contract are connected to the same network
-		if (!signer.provider)
-			throw new Error("Unsupported: cannot have signer without a network")
-		const signerNetwork = await signer.provider.getNetwork()
-		const contractNetwork = await contract.provider.getNetwork();
-		if (signerNetwork.ensAddress !== contractNetwork.ensAddress)
-			throw new Error(`Contract network ${contractNetwork.name} does not match signer network ${signerNetwork.name}`)
-	}
-	return contract.connect(signer);
+export function ConnectContract(signer: Signer, onFailure?: (err: Error) => void): TheCoin {
+  // First fetch contract
+  const contract = GetContract();
+  if (!!(signer as Wallet).connect) {
+    // Ensure wallet is connected to the same network as the contract
+    signer = ConnectWallet(signer as Wallet);
+  }
+  else {
+    // Validate that signer and contract are connected to the same network
+    if (!signer.provider)
+      throw new Error("Unsupported: cannot have signer without a network");
+
+    let signerNetwork = undefined as utils.Network | undefined;
+    signer.provider.getNetwork()
+      .then(network => {
+        signerNetwork = network;
+        return contract.provider.getNetwork()
+      })
+      .then(network => {
+        if (signerNetwork?.ensAddress !== network.ensAddress) {
+          // TODO: Graceful failure here
+          throw new Error(`Contract network ${network.name} does not match signer network ${signerNetwork?.name}`);
+        }
+      })
+      .catch(err => {
+        log.error(err, "Cannot connect");
+        onFailure?.(err);
+      })
+  }
+  return contract.connect(signer);
 }

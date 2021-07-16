@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.13",
+  "version": "0.2.15",
   "private": true,
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
@@ -17,10 +17,9 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "yarn run-env dotenv_config_path=../../environments/development.env",
-    "dev:live": "yarn run-env dotenv_config_path=../../environments/devlive.env",
+    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9233 -r ts-node/register ./src/main.ts",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
-    "run-env": "node --inspect=9233 -r ts-node/register -r dotenv/config ./src/main.ts",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "gcloud app deploy",
     "postdeploy": "ts-node --skip-project ../../tools/removeOldAppVersions",
@@ -41,10 +40,10 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.20",
-    "@thecointech/signers": "^0.2.13",
-    "@thecointech/logging": "^0.2.13",
-    "@thecointech/nft-contract": "^0.2.13",
-    "@thecointech/utilities": "^0.2.13",
+    "@thecointech/logging": "^0.2.14",
+    "@thecointech/nft-contract": "^0.2.14",
+    "@thecointech/signers": "^0.2.14",
+    "@thecointech/utilities": "^0.2.14",
     "@tsoa/runtime": "^3.8.0",
     "axios": "*",
     "cors": "^2.8.5",

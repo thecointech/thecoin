@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
 import { Grid } from 'semantic-ui-react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 interface Props {
   xferRecipient?: string;
@@ -11,18 +11,26 @@ interface Props {
   onCloseDlg: () => void;
 }
 
-const getTransferCodeHeader = { id:"app.accounts.purchase.getTransferCodeHeader",
-                defaultMessage:"Please wait..."};
-const haveTransferCodeHeader = { id:"app.accounts.purchase.haveTransferCodeHeader",
-                defaultMessage:"Your details" };
-const fetchTransferCode = { id:"app.accounts.purchase.fetchTransferCode",
-                defaultMessage:"We are generating your individual e-Transfer recipient info"};
-const yourTransferCode = { id:"app.accounts.purchase.yourTransferCode",
-                defaultMessage:"The following is your personalized e-Transfer info:" };
-const yourTransferRecipient = { id:"app.accounts.purchase.yourTransferRecipient",
-                defaultMessage:"Recipient:"};
-const yourTransferSecret = { id:"app.accounts.purchase.yourTransferSecret",
-                defaultMessage:"Secret:" };
+const translations = defineMessages({
+  getTransferCodeHeader : {
+      defaultMessage: 'Please wait...',
+      description: 'app.accounts.purchase.getTransferCodeHeader'},
+  haveTransferCodeHeader : {
+      defaultMessage: 'Your details',
+      description: 'app.accounts.purchase.haveTransferCodeHeader'},
+  fetchTransferCode : {
+      defaultMessage: 'We are generating your individual e-Transfer recipient info',
+      description: 'app.accounts.purchase.fetchTransferCode'},
+  yourTransferCode : {
+      defaultMessage: 'The following is your personalized e-Transfer info:',
+      description: 'app.accounts.purchase.yourTransferCode'},
+  yourTransferRecipient : {
+      defaultMessage: 'Recipient:',
+      description: 'app.accounts.purchase.yourTransferRecipient'},
+  yourTransferSecret : {
+      defaultMessage: 'Secret:',
+      description: 'app.accounts.purchase.yourTransferSecret'}
+});
 
 export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
 {
@@ -31,17 +39,17 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
   (
     <ModalOperation
       isOpen={props.showDlg}
-      header={haveTransferCodeHeader}
+      header={translations.haveTransferCodeHeader}
       okCallback={props.onCloseDlg}
       closeIconFct={props.onCloseDlg}
     >
       <Grid stackable columns={2}>
         <Grid.Row>
-          <FormattedMessage {...yourTransferCode} />
+          <FormattedMessage {...translations.yourTransferCode} />
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width="4">
-            <FormattedMessage {...yourTransferRecipient} />
+            <FormattedMessage {...translations.yourTransferRecipient} />
           </Grid.Column>
           <Grid.Column width="12">
           <CopyToClipboard payload={xferRecipient}>
@@ -51,7 +59,7 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width="4">
-            <FormattedMessage {...yourTransferSecret} />
+            <FormattedMessage {...translations.yourTransferSecret} />
           </Grid.Column>
           <Grid.Column width="12">
             <CopyToClipboard payload={xferSecret}>
@@ -64,11 +72,11 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
   ) : (
     <ModalOperation
       isOpen={props.showDlg}
-      header={getTransferCodeHeader}
+      header={translations.getTransferCodeHeader}
       okCallback={props.onCloseDlg}
       closeIconFct={props.onCloseDlg}
     >
-      <FormattedMessage {...fetchTransferCode} />
+      <FormattedMessage {...translations.fetchTransferCode} />
     </ModalOperation>
   )
 }

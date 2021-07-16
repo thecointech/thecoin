@@ -21,8 +21,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
 // initialize logging first
-import { log, init } from '@thecointech/logging';
-init('site-app');
+import { log } from '@thecointech/logging';
 log.info(`Loading App: ${__VERSION__}`);
 
 // Import root app
@@ -33,9 +32,6 @@ import { LanguageProvider, Languages } from '@thecointech/shared/containers/Lang
 
 import { configureAppStore, history } from './reducers';
 import { translations } from './translations';
-
-import { initTracking } from './utils/reactga';
-initTracking();
 
 // Create redux store with history
 const store = configureAppStore();

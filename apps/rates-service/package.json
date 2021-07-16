@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.2.13",
+  "version": "0.2.15",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "keywords": [
@@ -17,10 +17,9 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "yarn run-env",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn run-env",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn run-env",
-    "run-env": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9231 -r ts-node/register -r ./src/main.ts",
+    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9231 -r ts-node/register -r ./src/main.ts",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "predeploy": "ts-node --skip-project predeploy",
     "deploy": "run-s deploy:src deploy:cron",
     "deploy:src": "gcloud app deploy",
@@ -43,10 +42,11 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@thecointech/firestore": "^0.2.13",
-    "@thecointech/logging": "^0.2.13",
-    "@thecointech/utilities": "^0.2.13",
-    "@thecointech/email": "^0.2.13",
+    "@thecointech/email": "^0.2.14",
+    "@thecointech/firestore": "^0.2.14",
+    "@thecointech/logging": "^0.2.14",
+    "@thecointech/market-status": "^0.2.15",
+    "@thecointech/utilities": "^0.2.14",
     "@tsoa/runtime": "^3.5.2",
     "axios": "*",
     "cors": "^2.8.5",
