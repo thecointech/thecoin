@@ -4,21 +4,22 @@ import { Header, Icon } from "semantic-ui-react";
 import illustration from "./images/illust_balance.svg";
 import illustrationMobile from "./images/mob_illust_balance.svg";
 import styles from "./styles.module.less";
-import { getFxRate, useFxRates } from "../../FxRate";
+import { useFxRates } from "../../FxRate";
 import { calculateProfit } from "../../Account/profit";
-import { toHuman } from "../../../../../utils-ts/build/Conversion";
+import { toHuman } from "@thecointech/utilities/Conversion";
 import { defineMessages, FormattedMessage } from "react-intl";
+import { getFxRate } from '@thecointech/fx-rates';
 
-const translate = defineMessages({ 
-    balanceTitle : {  
+const translate = defineMessages({
+    balanceTitle : {
       id: "shared.widgets.balanceandprofit.balance",
       defaultMessage:"Balance",
       description:"shared.widgets.balanceandprofit.balance: Title for widget Balance and profit" },
-    profitTitle : { 
+    profitTitle : {
       id: "shared.widgets.balanceandprofit.profit",
       defaultMessage:"Profit",
       description:"shared.widgets.balanceandprofit.profit: Title for widget Balance and profit" },
-    cad : { 
+    cad : {
       id: "shared.widgets.balanceandprofit.cad",
       defaultMessage:"$CAD",
       description:"shared.widgets.balanceandprofit.cad: Title for widget Balance and profit" }});

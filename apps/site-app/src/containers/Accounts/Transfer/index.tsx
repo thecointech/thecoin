@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
-import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
+import { weBuyAt } from '@thecointech/fx-rates';
 import { useState } from 'react';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';

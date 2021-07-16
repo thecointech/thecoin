@@ -1,4 +1,4 @@
-import { fetchRate, FXRate } from "@thecointech/shared/containers/FxRate";
+import type { fetchRate, FXRate } from "@thecointech/shared/containers/FxRate";
 export * from "@thecointech/shared/containers/FxRate";
 
 const fn: typeof fetchRate = async (date?: Date) : Promise<FXRate> => {

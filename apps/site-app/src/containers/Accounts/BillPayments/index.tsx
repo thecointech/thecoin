@@ -3,7 +3,7 @@ import { Form, Dropdown, DropdownProps, Message} from 'semantic-ui-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
-import { weBuyAt } from '@thecointech/shared/containers/FxRate/reducer';
+import { weBuyAt } from '@thecointech/fx-rates';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { payees, validate } from './payees';
 import { BillPayeePacket } from '@thecointech/types';
