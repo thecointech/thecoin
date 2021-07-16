@@ -1,4 +1,4 @@
-import { RateKey, CombinedRates, RateType, CoinRate, FxRates } from "./types";
+import { RateKey, CombinedRates, CoinRate, FxRates, RateTypes } from "./types";
 import { getLatest } from "./latest";
 import { CurrencyCode } from "@thecointech/utilities/CurrencyCodes";
 import { validFor } from "@thecointech/utilities/FxRates";
@@ -11,7 +11,7 @@ export { updateRates } from './UpdateDb'
 // entry point for anything external to the rates folder
 //
 
-async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null> {
+async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<RateTypes[K]|null> {
   console.log("getting rates for {FxKey} at {Timestamp}", key, timestamp);
 
   // We don't support future times
@@ -23,21 +23,23 @@ async function getRates(key: RateKey, timestamp: number) : Promise<RateType|null
 
   // If latest matches, return it
   if (validFor(latest, timestamp)) {
-    return latest;
+    return latest as RateTypes[K];
   }
 
   // get from DB
   let rate = await getRate(key, timestamp);
   if (rate != null)
-    return rate;
+    return rate as RateTypes[K];
 
   // Finally, if something has gone really wrong with our updates, try forcing it.
   // This shouldn't happen, it is most likely an error condition.
   console.warn("Could not find {FxKey} for {Timestamp}, forcing update",
     key, timestamp);
 
-  if (await update())
-    return await getRate(key, timestamp);
+  const updated = await update();
+  if (updated) {
+    return await getRates(key, timestamp) as any;
+  }
   // Nothing doing, return null
   return null;
 }
@@ -49,9 +51,8 @@ export async function getCombinedRates(timestamp?: number) : Promise<CombinedRat
     ? Date.now()
     : timestamp;
 
-  const coinWait = getRates("Coin", cleants);
-  const fxWait = getRates("FxRates", cleants);
-  var [coin, fx] = await Promise.all([coinWait, fxWait]) as [CoinRate|null, FxRates|null];
+  var coin = await getRates("Coin", cleants);
+  var fx = await getRates("FxRates", cleants);
 
   if (!coin || !fx)
     return null;

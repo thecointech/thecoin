@@ -41,7 +41,7 @@ export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"|"collection
 };
 
 // Test if we currently have an emulator running
-export const isEmulatorAvailable = () => process.env.FIRESTORE_EMULATOR_PORT && process.env.FIRESTORE_EMULATOR_PORT !== 'false'
+export const isEmulatorAvailable = () => !!(process.env.FIRESTORE_EMULATOR_PORT && process.env.FIRESTORE_EMULATOR_PORT !== 'false')
 
 // Mocked DB structure
 export type MockedDocument = {

@@ -1,28 +1,35 @@
 import React, { useCallback } from "react";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 import { Button, ButtonProps } from "semantic-ui-react";
 import styles from "./styles.module.less";
 
+const translations = defineMessages({
+  seven : {
+      defaultMessage: 'Week',
+      description: 'app.historyGraph.Week: button for Duration of 1 week'},
+  thirtyOne : {
+      defaultMessage: 'Month',
+      description: 'app.historyGraph.Month: button for Duration of 1 month'},
+  year : {
+      defaultMessage: 'Year',
+      description: 'app.historyGraph.Year: button for Duration of 1 year'},
+  all : {
+      defaultMessage: 'All',
+      description: 'app.historyGraph.All: button for Show entire history'}
+});
+
 const Durations = {
   7: {
-    id:"app.historyGraph.Week",
-    defaultMessage:"Week",
-    description:"button for Duration of 1 week"
+    ...translations.seven
   },
   31: {
-    id:"app.historyGraph.Month",
-    defaultMessage:"Month",
-    description:"button for Duration of 1 month"
+    ...translations.thirtyOne
   },
   365: {
-    id:"app.historyGraph.Year",
-    defaultMessage:"Year",
-    description:"button for Duration of 1 year"
+    ...translations.year
   },
   [Number.POSITIVE_INFINITY]: {
-    id:"app.historyGraph.All",
-    defaultMessage:"All",
-    description:"button for Show entire history"
+    ...translations.all
   }
 }
 export type Duration = keyof typeof Durations;

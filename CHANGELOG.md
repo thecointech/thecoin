@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.15](https://github.com/thecointech/thecoin/compare/v0.2.14...v0.2.15) (2021-07-07)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.14](https://github.com/thecointech/thecoin/compare/v0.2.13...v0.2.14) (2021-07-07)
+
+
+### Bug Fixes
+
+* libs/email/package.json to reduce vulnerabilities ([d9b7683](https://github.com/thecointech/thecoin/commit/d9b7683179b8b4954eb82678d1d255fb03b7654b))
+* libs/nft-contract/package.json to reduce vulnerabilities ([c16afd2](https://github.com/thecointech/thecoin/commit/c16afd284eef892192dfa5dfa4cddb877b72e698))
+* package.json to reduce vulnerabilities ([dca9438](https://github.com/thecointech/thecoin/commit/dca94384aa4eaa7b3d5835344a661a8a64cc6726))
+
+
+
+
+
 ## [0.2.13](https://github.com/thecointech/thecoin/compare/v0.2.12...v0.2.13) (2021-06-18)
 
 **Note:** Version bump only for package the-coin

@@ -3,7 +3,6 @@ import { RbcStore } from './store';
 import PouchDB from 'pouchdb';
 import { initBrowser } from './action';
 import { ConfigStore } from '@thecointech/store';
-import { init } from '@thecointech/logging'
 import { describe } from '@thecointech/jestutils';
 
 beforeAll(() => {
@@ -16,8 +15,6 @@ beforeAll(() => {
     adapter: "memory"
   })
   jest.setTimeout(500000);
-
-  init("rbcapi");
 });
 
 afterAll(() => {

@@ -24,7 +24,7 @@ export interface IActions extends ImmerReducer<AccountState> {
 
   // Save/load private details
   loadDetails(): SagaIterator;
-  setDetails(newDetails: AccountDetails):SagaIterator;
+  setDetails(newDetails: Partial<AccountDetails>):SagaIterator;
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number):SagaIterator;

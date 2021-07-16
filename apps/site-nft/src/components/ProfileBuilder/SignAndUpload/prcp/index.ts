@@ -65,7 +65,7 @@ export function hash(image: ImageData, precision: number = 8): string {
     throw new Error('Hash precision should be a positive number')
   }
 
-  const blocks = [];
+  const blocks: number[] = [];
 
   // Compute the number of pixels per block
   const blockWidth = Math.floor(image.width / precision);

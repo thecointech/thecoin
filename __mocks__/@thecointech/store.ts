@@ -7,9 +7,7 @@ export class ConfigStore {
 
   static initialize() {};
 
-  static set(_key: string, _value: string) {
-    throw new Error('sdf');
-  }
+  static set(_key: string, _value: string) {}
 
   static async get(key: string) : Promise<string|undefined> {
     // auth expects a JSON structure here

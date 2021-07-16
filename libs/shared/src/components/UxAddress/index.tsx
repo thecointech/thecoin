@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
-import { MessageDescriptor } from 'react-intl';
+import { defineMessages, MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
 import { ChangeCB } from '../UxInput/types';
 
-const labelAddress = { id:"shared.uxaddress.address.label",
+const translate = defineMessages({ 
+		labelAddress : {
+				id: "shared.uxaddress.address.label",
                 defaultMessage:"Account",
-                description:"Label for the address field in make a payment / coin transfer" };
-
-const errorMessage = { id:"shared.uxaddress.address.error",
+                description:"shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer" },
+		errorMessage : { 
+				id: "shared.uxaddress.address.error",
                 defaultMessage:"This address is not the right format",
-                description:"Error Message for the address field in make a payment / coin transfer" };
+                description:"shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer" }});
 
 type MyProps = {
 	forceValidate?: boolean,
@@ -31,7 +33,7 @@ export const UxAddress = (props:MyProps) => {
 		setAccount(value);
 		setIsValid(isValidTemp);
 		if (!isValidTemp){
-			setMessage(errorMessage);
+			setMessage(translate.errorMessage);
 		}
 		if (isValid)
 			props.uxChange(value)
@@ -39,7 +41,7 @@ export const UxAddress = (props:MyProps) => {
 
 	return(
 		<UxInput
-			intlLabel={labelAddress}
+			intlLabel={translate.labelAddress}
 			value={account}
 			isValid={isValid}
 			message={message}

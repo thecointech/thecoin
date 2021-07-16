@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { AddAccount } from 'components/AddAccount';
-import { Congratulations } from 'components/AddAccount/Congratulations';
-import { GAuth } from 'components/AddAccount/Store/Providers/Google/gauth';
+import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
+import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
+import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
 import { Claim } from '../Claim';
 import { AuthRoute } from '../AuthRoute';
 import { ProfileBuilder } from '../ProfileBuilder';

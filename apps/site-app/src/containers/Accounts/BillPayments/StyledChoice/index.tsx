@@ -7,7 +7,7 @@ export type Props = {
     name: string,
     value: string,
     img: string,
-    message: {id:string,defaultMessage:string,description?:string }
+    message: {id?:string,defaultMessage:string,description?:string }
 }
 
 export const StyledChoice = (props: Props) => {

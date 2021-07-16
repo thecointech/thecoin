@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 export { Timestamp };
+export const FieldValue = firebase.firestore.FieldValue;
 
 export async function init(projectId?: string) : Promise<boolean> {
 
