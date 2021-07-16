@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { GetNewsletterApi } from '../../api';
 import styles from './styles.module.less';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Result, StatusMessage } from './status';
 
-
-const description = {  id:"site.subscribe.description",
-                      defaultMessage:"The future is better because of you & us. Subscribe to our newsletter",
-                      description:"Title for the bottom subscription part for the site"};
-const button = {  id:"site.subscribe.button",
-                      defaultMessage:"Subscribe",
-                      description:"Button for the bottom subscription part for the site"};
+const translations = defineMessages({
+  description : {
+    defaultMessage: 'The future is better because of you & us. Subscribe to our newsletter',
+    description: 'site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter'},
+  button : {
+    defaultMessage: 'Subscribe',
+    description: 'site.subscribe.button: Button for the bottom subscription part for the site'}
+});
 
 export const Subscribe = () => {
   const [result, setResult] = useState(Result.Initial)
@@ -37,7 +38,7 @@ export const Subscribe = () => {
     <div id={styles.subscribeBlock}>
       <span className={ `${styles.subContainer} x2spaceBefore x6spaceAfter` }>
           <h3>
-            <FormattedMessage {...description} />
+            <FormattedMessage {...translations.description} />
           </h3>
       </span>
       <span className={styles.search}>
@@ -47,7 +48,7 @@ export const Subscribe = () => {
           placeholder="Your email" />
 
         <Button onClick={doSubscribe} secondary>
-          <FormattedMessage {...button} />
+          <FormattedMessage {...translations.button} />
         </Button>
       </span>
     </div>

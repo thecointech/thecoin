@@ -10,6 +10,8 @@ import { Confirm } from 'containers/Subscribe/Confirm';
 import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
 import { Blog } from 'containers/Blog';
+import { TOS } from 'containers/TOS';
+import { Privacy } from 'containers/Privacy';
 
 export const MainRouter = () => {
   return (
@@ -22,6 +24,8 @@ export const MainRouter = () => {
       <Route path="/compare" component={Compare} />
       <Route path="/FAQ" component={HelpDocs} />
       <Route path="/blog" component={Blog} />
+      <Route path="/tos" component={TOS} />
+      <Route path="/privacy" component={Privacy} />
       <Route component={NotFoundPage} />
     </Switch>
   )

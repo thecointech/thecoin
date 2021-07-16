@@ -5,20 +5,24 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Header, Grid, Button } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
-import illustration from './illust_pagenotfound.svg'
+import illustration from './images/illust_pagenotfound.svg'
 
-const aboveTheTitle = { id:"shared.NotFoundPage.aboveTheTitle",
-                        defaultMessage:"Page Not Found",
-                        description:"Text above the title for the 404 page"};
-const title = { id:"shared.NotFoundPage.title",
-                defaultMessage:"Sorry, we couldn’t find the page you are looking for",
-                description:"Title for the 404 page"};
-const button = {  id:"shared.NotFoundPage.button",
-                  defaultMessage:"Home",
-                  description:"Go back to homepage button for the 404 page"};
+const translate = defineMessages({ 
+  aboveTheTitle : { 
+    id: "shared.NotFoundPage.aboveTheTitle", 
+    defaultMessage:"Page Not Found",
+    description:"shared.NotFoundPage.aboveTheTitle: Text above the title for the 404 page"},
+  title : { 
+    id: "shared.NotFoundPage.title", 
+    defaultMessage:"Sorry, we couldn’t find the page you are looking for",
+    description:"shared.NotFoundPage.title: Title for the 404 page"},
+  button : {  
+    id: "shared.NotFoundPage.button", 
+    defaultMessage:"Home",
+    description:"shared.NotFoundPage.button: Go back to homepage button for the 404 page"}});
 
 export function NotFoundPage() {
   return (
@@ -27,21 +31,21 @@ export function NotFoundPage() {
           <Grid.Row>
             <Grid.Column>
                 <Header as='h5'className={ `x8spaceBefore` }>
-                  <FormattedMessage {...aboveTheTitle} />
+                  <FormattedMessage {...translate.aboveTheTitle} />
                 </Header>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
                 <Header as='h3'>
-                  <FormattedMessage {...title} />
+                  <FormattedMessage {...translate.title} />
                 </Header>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
                 <Button primary as={NavLink} to="/" size='big' >
-                    <FormattedMessage {...button} />
+                    <FormattedMessage {...translate.button} />
                 </Button>
             </Grid.Column>
           </Grid.Row>

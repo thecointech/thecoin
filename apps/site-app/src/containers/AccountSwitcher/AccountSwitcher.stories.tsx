@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { AccountSwitcher as AccountSwitcherComponent } from '.';
-import { AccountState } from '@thecointech/shared/containers/Account';
+import { AccountState } from '@thecointech/account';
 import { withAccounts } from '@thecointech/storybookutils';
 
 export default {

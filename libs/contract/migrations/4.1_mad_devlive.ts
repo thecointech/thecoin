@@ -15,6 +15,9 @@ export async function initializeDevLive(contract: TheCoinInstance, accounts: Nam
   await seedAccount(contract, accounts.TheCoin, accounts.client2);
   // Also seed TestAccNoT so we can test tx's with a wallet vs a signer
   await seedAccount(contract, accounts.TheCoin, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
+
+  // Send a decent amount to BrokerCAD
+  await contract.coinPurchase(accounts.BrokerCAD, 5000 * COIN_EXP, 0, 0, { from: accounts.TheCoin });
 }
 
 async function seedAccount(contract: TheCoinInstance, theCoin: string, client: string, onlyBuy=false) {

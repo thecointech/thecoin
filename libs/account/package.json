@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.7",
+  "version": "0.2.14",
   "description": "TheCoin: Account definition & storage",
   "keywords": [
     "TheCoin",
@@ -29,6 +29,11 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./store": {
+      "development": "./build/development/store.js",
+      "devlive": "./build/devlive/store.js",
+      "default": "./build/store.js"
+    },
     "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",
@@ -43,9 +48,9 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "*",
-    "@thecointech/tx-blockchain": "*",
-    "@thecointech/utilities": "*"
+    "@thecointech/logging": "^0.2.14",
+    "@thecointech/tx-blockchain": "^0.2.14",
+    "@thecointech/utilities": "^0.2.14"
   },
   "devDependencies": {
     "jest": "*"

@@ -9,15 +9,19 @@ each(@lineHeights, {
 });
 
 
-  h1.ui.header .sub.header, h2.ui.header .sub.header, h3.ui.header .sub.header {
-    font-family: @pageFont;
-    font-size: @fontSizeBig;
-    line-height: 30px;
-  }
-  
-  h5.ui.header.app{
-    color: @theCoinPalettePaleGreen2;
-  }
+h1.ui.header .sub.header, h2.ui.header .sub.header, h3.ui.header .sub.header {
+  font-family: @pageFont;
+  font-size: @fontSizeBig;
+  line-height: 30px;
+}
+
+h5.ui.header.app{
+  color: @theCoinPalettePaleGreen2;
+}
+
+h4.ui.header {
+  margin-top: 20px;
+}
 
 @media only screen and (max-width: 768px) {
   h1.ui.header {

@@ -52,7 +52,7 @@ async function doConversion(container: AnyActionContainer, from: Currency, to: C
 
 // Fetch conversion rate from server
 async function getConvertAt(date: DateTime) {
-  const ratesApi = new RatesApi();
+  const ratesApi = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
   const rate = await ratesApi.getSingle(124, date.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${date}`);

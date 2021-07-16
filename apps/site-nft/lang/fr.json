@@ -1,0 +1,213 @@
+{
+  "/BZiQv": {
+    "defaultMessage": "Upload Failed"
+  },
+  "/g3mtw": {
+    "defaultMessage": "ID of token purchased",
+    "description": "Placeholder for claim/tokenID input"
+  },
+  "/lGbT2": {
+    "defaultMessage": "Load an account stored online"
+  },
+  "1c6VPV": {
+    "defaultMessage": "NFT Offsets",
+    "description": "NFT Offsets listings page title"
+  },
+  "23raqf": {
+    "defaultMessage": "Or, you can create an entirely new account!"
+  },
+  "3WkdVP": {
+    "defaultMessage": "Account Name"
+  },
+  "3q6swa": {
+    "defaultMessage": "To use this feature, either install the MetaMask plugin or try the new Opera browser!"
+  },
+  "4PGglh": {
+    "defaultMessage": "CONNECT TO GOOGLE"
+  },
+  "4nX+Zh": {
+    "defaultMessage": "Home",
+    "description": "MainNav asd Home page link"
+  },
+  "5sg7KC": {
+    "defaultMessage": "Password"
+  },
+  "6caMaA": {
+    "defaultMessage": "Referral Code"
+  },
+  "7pQvs3": {
+    "defaultMessage": "Validate",
+    "description": "MainNav Link to validate page"
+  },
+  "9ZULUQ": {
+    "defaultMessage": "No external providers detected!"
+  },
+  "9lZl4M": {
+    "defaultMessage": "Claim Failed: Please contact support",
+    "description": "Show on claim failed"
+  },
+  "Aac8zs": {
+    "defaultMessage": "A referrer ID should only contain alpha-numeric characters."
+  },
+  "BEKB5I": {
+    "defaultMessage": "If you have previously connected a Coin account to your google account, click below to restore it"
+  },
+  "D2FTm2": {
+    "defaultMessage": "Please enter a password of at least 'moderate' strength"
+  },
+  "DlOmlM": {
+    "defaultMessage": "CREATE ACCOUNT"
+  },
+  "FOvXug": {
+    "defaultMessage": "Home",
+    "description": "MainNav Home page link"
+  },
+  "FV6WEb": {
+    "defaultMessage": "This page expects to recieve google authentication information, but none was found."
+  },
+  "G47pMZ": {
+    "defaultMessage": "Sign & Upload",
+    "description": "Profile upload button"
+  },
+  "JOIoTr": {
+    "defaultMessage": "You have successfully backed up your account to your personal Google Drive"
+  },
+  "LxZBuj": {
+    "defaultMessage": "Create and sign an image to show your carbon-neutral status",
+    "description": "Profile instructions"
+  },
+  "MDDTmq": {
+    "defaultMessage": "The entered referrer ID is not recognized"
+  },
+  "OH5jjt": {
+    "defaultMessage": "Review the offsets each NFT has completed",
+    "description": "NFT Offsets listing description"
+  },
+  "PReNN0": {
+    "defaultMessage": "Claim",
+    "description": "Claim button"
+  },
+  "PhGigK": {
+    "defaultMessage": "UPLOADED"
+  },
+  "QSinwC": {
+    "defaultMessage": "Validate Image",
+    "description": "page title"
+  },
+  "U6E/Kq": {
+    "defaultMessage": "Or, if you can restore an account generated previously"
+  },
+  "UKvwyv": {
+    "defaultMessage": "This account isn't stored locally, and so cannot be uploaded to Google"
+  },
+  "UuIcMg": {
+    "defaultMessage": "No Tokens Available",
+    "description": "Profile default message for no tokens"
+  },
+  "VrZyS8": {
+    "defaultMessage": "Success: <link>View the Transaction</link>",
+    "description": "Show on claim success"
+  },
+  "WiKyhr": {
+    "defaultMessage": "Congratulations"
+  },
+  "Zb1I9l": {
+    "defaultMessage": "Profile",
+    "description": "MainNav page to set Profile image on NFT"
+  },
+  "app.storeOnline.localy.link": {
+    "defaultMessage": "Localy",
+    "description": ""
+  },
+  "app.storeOnline.microsoft.link": {
+    "defaultMessage": "Microsoft",
+    "description": ""
+  },
+  "f3dfTo": {
+    "defaultMessage": "Select Token ID",
+    "description": "Profile option to select owned token"
+  },
+  "f82wcH": {
+    "defaultMessage": "Upload an account saved manually"
+  },
+  "gndVKV": {
+    "defaultMessage": "An account with this name already exists here."
+  },
+  "i0eKSQ": {
+    "defaultMessage": "Validate the images cryptographic signature",
+    "description": "page instructions"
+  },
+  "ikuIzB": {
+    "defaultMessage": "This feature connects The Coin to an external Web3 account provider."
+  },
+  "l0BLUl": {
+    "defaultMessage": "A referrer ID should be 6 characters long."
+  },
+  "mrcmOo": {
+    "defaultMessage": "Years",
+    "description": "Profile option to overlay years of neutrality"
+  },
+  "mvYWfO": {
+    "defaultMessage": "Cannot Upload"
+  },
+  "mwkdRP": {
+    "defaultMessage": "Unlock code for the token purchased",
+    "description": "Placeholder for claim/code input"
+  },
+  "o12td2": {
+    "defaultMessage": "An account must have a name."
+  },
+  "octd+0": {
+    "defaultMessage": "Token ID",
+    "description": "Profile toggle option years of neutrality"
+  },
+  "oec51k": {
+    "defaultMessage": "Offsets",
+    "description": "MainNav Link to offsets page"
+  },
+  "pCI+3K": {
+    "defaultMessage": "Load using a different method"
+  },
+  "pkNdj0": {
+    "defaultMessage": "Connect to an existing Ethereum Account"
+  },
+  "qIk7CG": {
+    "defaultMessage": "Claim",
+    "description": "MainNav page to claim an NFT"
+  },
+  "s43Dg1": {
+    "defaultMessage": "Please wait - we are checking for authentication"
+  },
+  "sMY2/N": {
+    "defaultMessage": "Claim Your Token",
+    "description": "Title message on claim page"
+  },
+  "u3W+xt": {
+    "defaultMessage": "Something went wrong, your account has not been backed up. Please contact support@thecoin.io"
+  },
+  "v1H5oX": {
+    "defaultMessage": "Validate",
+    "description": "Page action Button"
+  },
+  "w5Me7z": {
+    "defaultMessage": "Enter the code we sent you and the token ID it is for to assign it to your account",
+    "description": "Claim instructions"
+  },
+  "wZMhOr": {
+    "defaultMessage": "Thank you for completing Google Authorization: This window can now be closed."
+  },
+  "x/RTYx": {
+    "defaultMessage": "Authentication passed, please return to your account and complete connecting to google"
+  },
+  "x5KkWJ": {
+    "defaultMessage": "Create Profile Image",
+    "description": "Title message on profile page"
+  },
+  "xASOH9": {
+    "defaultMessage": "Restore accounts from Google"
+  },
+  "zw1LCw": {
+    "defaultMessage": "Frame",
+    "description": "Profile option to overlay TC border"
+  }
+}

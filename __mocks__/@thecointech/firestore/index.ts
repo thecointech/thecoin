@@ -12,7 +12,10 @@ export function init(database: MockedDb = {}) {
   const {immutable, ...rest} = database;
   // Clone the DB (not modifying the source)
   const clone = JSON.parse(JSON.stringify(rest));
-  const db = new mocks.FakeFirestore(clone, {mutable: !immutable});
+  const db = new mocks.FakeFirestore(clone, {
+    simulateQueryFilters: true,
+    mutable: !immutable,
+  } as any);
 
   // Import the mocked db, and assign.
   Timestamp.init(mocks.FakeFirestore.Timestamp as any);

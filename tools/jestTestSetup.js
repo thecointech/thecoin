@@ -1,7 +1,7 @@
-const logging = require('@thecointech/logging');
 const path = require('path');
 
+// Hide debug logging
 var cwd = process.cwd();
 var name = cwd.split(path.sep).pop();
-//var name = path.split(process.cwd())
-logging.init(`${name}-jest`, 40);
+process.env.LOG_NAME = `${name}-jest`;
+process.env.LOG_LEVEL = 40

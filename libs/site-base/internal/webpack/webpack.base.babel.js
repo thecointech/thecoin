@@ -35,15 +35,7 @@ module.exports = {
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
-            // Include the custom transformer to automate compiling out i18n messages
-            getCustomTransformers: () => ({
-              before: [
-                transform({
-                  overrideIdFn: '[sha512:contenthash:base64:6]',
-                  ast: true,
-                }),
-              ],
-            }),
+            compiler: 'ttypescript',
           },
         },
       },
@@ -133,6 +125,8 @@ module.exports = {
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
+      "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
+      "process.env.LOG_LEVEL": process.env.LOG_LEVEL,
     }),
     new ForkTsCheckerWebpackPlugin({
       typescript: {

@@ -37,7 +37,11 @@ export type FxRates = {
 } & RatesMapping;
 
 export type RateType = CoinRate|FxRates;
-export type RateKey = "Coin"|"FxRates";
+export type RateTypes = {
+  Coin: CoinRate,
+  FxRates: FxRates,
+}
+export type RateKey = keyof RateTypes;
 
 // Required to be interface for correct parsing by tsoa in swagger2.  Could be converted back to type once we jump to 3.
 export interface CombinedRates extends RatesMapping, CoinRate {

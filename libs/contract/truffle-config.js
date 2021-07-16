@@ -17,6 +17,10 @@ module.exports = {
   contracts_build_directory: path.join(__dirname, "src", "contracts"),
 
   networks: {
+    // Applies to both dev & devlive
+    develop: {
+      blockTime: 1,
+    },
     // dev:live environment
     devlive: {
       host: "127.0.0.1",

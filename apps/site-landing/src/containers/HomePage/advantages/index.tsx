@@ -2,19 +2,19 @@ import * as React from 'react';
 import styles from './styles.module.less';
 
 import { Grid } from 'semantic-ui-react'
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
-
-const monthlyFees = { id:"site.homepage.advantages.monthlyFees", 
-                defaultMessage:"Monthly Fees",
-                description:"Monthly Fees"};
-const minimum = { id:"site.homepage.advantages.minimum", 
-                  defaultMessage:"Minimums",
-                  description:"Minimums"};
-const benefits = { id:"site.homepage.advantages.benefits", 
-                  defaultMessage:"Your benefits",
-                  description:"Your benefits"};
-
+const translations = defineMessages({
+  monthlyFees : {
+      defaultMessage: 'Monthly Fees',
+      description: 'site.homepage.advantages.monthlyFees: Monthly Fees'},
+  minimum : {
+      defaultMessage: 'Minimums',
+      description: 'site.homepage.advantages.minimum: Minimums'},
+  benefits : {
+      defaultMessage: 'Your benefits',
+      description: 'site.homepage.advantages.benefits: Your benefits'}
+  });
 
 export const Advantages = () => {
 
@@ -25,17 +25,17 @@ export const Advantages = () => {
           <Grid.Row>
             <Grid.Column width={2}>
               <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage {...monthlyFees} />
+              <FormattedMessage {...translations.monthlyFees} />
             </Grid.Column>
             <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
             <Grid.Column width={2}>
               <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage {...minimum} />
+              <FormattedMessage {...translations.minimum} />
             </Grid.Column>
             <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
             <Grid.Column width={3}>
               <h2>100</h2><h4>%</h4><br />
-              <FormattedMessage {...benefits} />
+              <FormattedMessage {...translations.benefits} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

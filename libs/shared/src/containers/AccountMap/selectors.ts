@@ -4,7 +4,7 @@ import { AccountMapStore } from './types';
 
 // Select array of all accounts
 export const selectAccountArray = (state: AccountMapStore) =>
-  Object.values(state.accounts.map)
+  Object.values<AccountState>(state.accounts.map)
 
 export const useAccountStore = () =>
   useSelector((state: AccountMapStore) => ({

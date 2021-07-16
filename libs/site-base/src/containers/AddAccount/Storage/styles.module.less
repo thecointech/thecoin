@@ -1,0 +1,29 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+#choices{
+  margin-bottom: 10px;
+}
+
+.choice {
+  position: relative;
+  display: inline-block;
+  // limit the size to prevent text from expanding container
+  max-width: 171px;
+  // Small overflow is necessary to ensure the
+  // bottom of the 'g' in Google is covered by the dimmer
+  padding-bottom: 5px;
+  img{
+      margin: auto;
+      display: block;
+  }
+  a{
+      text-transform: none;
+      color: @theCoinPaletteGreen5;
+      border-bottom: none;
+      cursor: pointer;
+      h4{
+        margin-top: 5px;
+        text-align: center;
+      }
+  }
+}

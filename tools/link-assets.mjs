@@ -10,7 +10,7 @@ function readTsConfig() {
     }
   }
   catch (err) {
-    console.error(`Cannot parse:\n ${cfgString}`);
+    console.error(`Cannot parse: ./tsconfig.json - ${err.message}`);
     throw err;
   }
   // if no tsconfig we just make our best guess
@@ -21,7 +21,7 @@ function readTsConfig() {
 }
 
 const {rootDir, outDir} = readTsConfig();
-const typesGlob = process.argv[2];
+const typesGlob = process.argv[2] ?? "./**/*.+(svg|png|module.less)";
 for (const f of glob.sync(path.join(rootDir, typesGlob)))
 {
   const {base, dir} = path.parse(f);

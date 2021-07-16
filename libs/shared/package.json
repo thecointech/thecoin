@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/shared",
   "private": "true",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -18,10 +18,11 @@
   "scripts": {
     "test": "yarn jest",
     "clean": "rimraf ./build",
-    "build": "run-p build:src build:copy build:link",
-    "build:src": "yarn tsc -b tsconfig.build.json",
-    "build:copy": "cpx \"./src/**/*.svg\" ./build/",
-    "build:link": "node ../../tools/link-assets.mjs **/*.module.less"
+    "build": "run-p build:src build:link",
+    "build:src": "yarn ttsc -b tsconfig.build.json",
+    "build:link": "node ../../tools/link-assets.mjs",
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "files": [
     "./build/**/*"
@@ -47,18 +48,18 @@
     }
   },
   "dependencies": {
-    "@nivo/bar": "^0.67.0",
-    "@nivo/core": "^0.67.0",
-    "@nivo/line": "^0.67.0",
-    "@nivo/tooltip": "^0.67.0",
-    "@thecointech/account": "*",
-    "@thecointech/logging": "^0.2.13",
-    "@thecointech/pricing": "^0.2.12",
-    "@thecointech/site-semantic-theme": "^0.2.6",
-    "@thecointech/store": "^0.2.7",
-    "@thecointech/types": "^0.2.6",
-    "@thecointech/tx-blockchain": "^0.2.13",
-    "@thecointech/utilities": "^0.2.13",
+    "@nivo/bar": "0.73.1",
+    "@nivo/core": "0.73.0",
+    "@nivo/line": "0.73.0",
+    "@nivo/tooltip": "0.73.0",
+    "@thecointech/account": "^0.2.14",
+    "@thecointech/logging": "^0.2.14",
+    "@thecointech/pricing": "^0.2.14",
+    "@thecointech/site-semantic-theme": "^0.2.14",
+    "@thecointech/store": "^0.2.14",
+    "@thecointech/tx-blockchain": "^0.2.14",
+    "@thecointech/types": "^0.2.14",
+    "@thecointech/utilities": "^0.2.14",
     "axios": "*",
     "history": "4.9.0",
     "hoist-non-react-statics": "^3.3.1",

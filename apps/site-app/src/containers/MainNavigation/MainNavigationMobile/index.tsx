@@ -3,26 +3,28 @@ import { Menu, Container, Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { AccountSwitcher } from '../../../containers/AccountSwitcher';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from "react-intl";
 import Logo from './images/logo.svg';
 import { NavLink } from 'react-router-dom';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 
-const home = { id:"app.MainNavigation.home",
-                defaultMessage:"Overview",
-                description:"Title for the Home entry in the menu"};
-const transferin = { id:"app.MainNavigation.transferin",
-                  defaultMessage:"Top up balance",
-                  description:"Title for the Top up balance entry in the menu"};
-const makepayments = {  id:"app.MainNavigation.makepayments",
-                    defaultMessage:"Make payments",
-                    description:"Title for the Make payments entry in the menu"};
-const settings = {  id:"app.MainNavigation.settings",
-                    defaultMessage:"Settings",
-                    description:"Title for the Settings entry in the menu"};
-const contact = {  id:"app.MainNavigation.contact",
-                    defaultMessage:"Contact Us",
-                    description:"Title for the Contact Us entry in the menu"};
+const translations = defineMessages({
+  home : {
+      defaultMessage: 'Overview',
+      description: 'app.MainNavigation.home: Title for the entry in the sidebar menu'},
+  transferin : {
+      defaultMessage: 'Top up balance',
+      description: 'app.MainNavigation.transferin: Title for the entry in the sidebar menu'},
+  makepayments : {
+      defaultMessage: 'Make payments',
+      description: 'app.MainNavigation.makepayments: Title for the entry in the sidebar menu'},
+  settings : {
+      defaultMessage: 'Settings',
+      description: 'app.MainNavigation.settings: Title for the entry in the sidebar menu'},
+  contact : {
+      defaultMessage: 'Contact Us',
+      description: 'app.MainNavigation.contact: Title for the entry in the sidebar menu'}
+});
 
 export const MainNavigationMobile = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -48,19 +50,19 @@ export const MainNavigationMobile = () => {
                       <ModalOperation isOpen={modalVisible} closeIconFct={()=>setModalVisible(false)}>
                         <Menu vertical id={styles.userMenu}>
                             <Menu.Item as={ NavLink } to='/' onClick={()=>setModalVisible(false)}>
-                              <Icon name="home" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...home} />
+                              <Icon name="home" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...translations.home} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/transferIn' onClick={()=>setModalVisible(false)}>
-                              <Icon name="arrow circle up" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...transferin} />
+                              <Icon name="arrow circle up" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...translations.transferin} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/makepayments' onClick={()=>setModalVisible(false)}>
-                              <Icon name="arrow circle right" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...makepayments} />
+                              <Icon name="arrow circle right" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...translations.makepayments} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/settings' onClick={()=>setModalVisible(false)}>
-                              <Icon name="setting" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...settings} />
+                              <Icon name="setting" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...translations.settings} />
                             </Menu.Item>
                             <Menu.Item as={ NavLink } to='/contact' onClick={()=>setModalVisible(false)}>
-                              <Icon name="envelope outline" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...contact} />
+                              <Icon name="envelope outline" size={"big"} className={"x1spaceBefore"}/><FormattedMessage {...translations.contact} />
                             </Menu.Item>
                         </Menu>
                       </ModalOperation>

@@ -3,7 +3,6 @@ import { DateTime } from 'luxon';
 import axios from 'axios';
 
 const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
-const AccessToken = process.env.TRADIER_API_KEY;
 const MarketTZ = "America/New_York";
 
 type DayData = {
@@ -31,7 +30,7 @@ async function queryCalendar(url: string) {
   try {
     const r = await axios.get<TradierResponse>(url, {
       headers: {
-        Authorization: AccessToken,
+        Authorization: process.env.TRADIER_API_KEY,
         Accept: 'application/json'
       }
     });

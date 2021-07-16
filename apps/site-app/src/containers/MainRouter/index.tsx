@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Location } from 'history';
 import { Switch, Route } from 'react-router-dom';
 import { Accounts } from 'containers/Accounts';
-import { AddAccount } from 'containers/AddAccount';
-import { Congratulations } from 'containers/AddAccount/Congratulations';
-import { GAuth } from 'containers/StoreOnline/Google/gauth';
+import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
+import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
+import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
 
 
 export const MainRouter = (props: { location: Location }) => {
