@@ -14,6 +14,7 @@ export namespace google {
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {
+          //  deepcode ignore HardcodedNonCryptoSecret: Not A Secret
           access_token: "TEST_TOKEN"
         }
       }

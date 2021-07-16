@@ -13,7 +13,7 @@
   "scripts": {
     "build": "run-p build:src build:link",
     "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
-    "build:link": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|d.ts|ts|tsx|js|jsx)\"",
+    "build:link": "node ../../tools/link-assets.mjs",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -26,7 +26,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"  
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"
   },
   "files": [
     "build/**/*"

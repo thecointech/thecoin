@@ -1,7 +1,7 @@
 import { Contract } from 'ethers/contract';
 import { TheCoin } from './types/TheCoin';
 import { getProvider } from './provider';
-
+import TheCoinSpec from './contracts/TheCoin.json';
 //
 // Multiplier of base values to human-readable fractions (eg $ and c)
 export const COIN_EXP = 1000000;
@@ -11,26 +11,20 @@ export const COIN_EXP = 1000000;
 // (used in fetching history to prevent searching too far back!)
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
-const getAbi = async () => {
-	const TheCoinSpec = await import('./contracts/TheCoin.json');
-	if (!TheCoinSpec)
-		throw new Error('Cannot create contract: missing contract spec');
+const getAbi = () => TheCoinSpec.abi;
 
-  return TheCoinSpec.abi;
-}
-
-const getContractAddress = async () => {
-  const deployment = await import(`./deployed/${process.env.CONFIG_NAME}.json`);
+const getContractAddress = () => {
+  const deployment = require(`./deployed/${process.env.CONFIG_NAME}.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
   return deployment.proxy;
 }
 
-const buildContract = async () =>
+const buildContract = () =>
   new Contract(
-    await getContractAddress(),
-    await getAbi(),
+    getContractAddress(),
+    getAbi(),
     getProvider()
   ) as TheCoin
 
@@ -38,9 +32,9 @@ declare module globalThis {
   let __contract: TheCoin|undefined;
 }
 
-export async function GetContract() : Promise<TheCoin> {
+export function GetContract() : TheCoin {
   if (!globalThis.__contract) {
-    globalThis.__contract= await buildContract();
+    globalThis.__contract= buildContract();
   }
-  return globalThis.__contract!;
+  return globalThis.__contract;
 }

@@ -5,7 +5,7 @@ import { isWeb3Enabled } from '@thecointech/shared/utils/detection';
 import styles from './styles.module.less';
 import { Decoration } from '../Decoration';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { ButtonPrimary, ButtonSecondary } from '@thecointech/site-base/components/Buttons';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Buttons';
 
 type Props = {
   url: string

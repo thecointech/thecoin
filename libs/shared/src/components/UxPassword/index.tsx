@@ -23,7 +23,7 @@ export class UxPassword extends React.PureComponent<Props, State> {
   state = initialState;
 
   // callback to trigger toggling password masking
-  maskPassword: Function & DebouncedFunc<() => void>;
+  maskPassword: DebouncedFunc<() => void>;
 
   constructor(props: Props) {
     super(props);
