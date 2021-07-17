@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.17](https://github.com/thecointech/thecoin/compare/v0.2.16...v0.2.17) (2021-07-17)
+
+**Note:** Version bump only for package @thecointech/site-nft
+
+
+
+
+
 ## [0.2.16](https://github.com/thecointech/thecoin/compare/v0.2.15...v0.2.16) (2021-07-16)
 
 **Note:** Version bump only for package @thecointech/site-nft
