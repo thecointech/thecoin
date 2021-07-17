@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/tx-blockchain",
   "private": "true",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "keywords": [
     "THECoin"
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@thecointech/contract": "^0.2.16",
-    "@thecointech/utilities": "^0.2.16"
+    "@thecointech/utilities": "^0.2.17"
   },
   "devDependencies": {
     "jest": "*"
