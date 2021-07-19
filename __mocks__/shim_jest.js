@@ -5,6 +5,12 @@
 // (where we don't necessarily have/want the full emulator)
 if (!globalThis.jest) {
   globalThis.jest = {
-    fn: () => () => {}
+    fn: (original) => {
+      // Allow overriding return values in node.
+      let returnVal = null;
+      const caller = (...args) => returnVal ?? original(...args);
+      caller.mockReturnValue = (v) => returnVal = v;
+      return caller;
+    }
   };
 }
