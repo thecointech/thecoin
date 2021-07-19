@@ -30,7 +30,7 @@ export const SendDepositConfirmation = (to: string, vars: DepositConfirmationVar
 
 export const SendWelcomeEmail = (to: string, id: string) =>
   SendTemplate(to, TemplateId.WelcomeConfirm, {
-    confirmUrl: "https://thecoin.io/#/newsletter/confirm?id=" + encodeURI(id)
+    confirmUrl: `${process.env.URL_SITE_LANDING}/#/newsletter/confirm?id=${encodeURI(id)}`
   });
 
 export { SendMail };
