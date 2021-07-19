@@ -1,7 +1,6 @@
 import { RateKey, CombinedRates, CoinRate, FxRates, RateTypes } from "./types";
 import { getLatest } from "./latest";
-import { CurrencyCode } from "@thecointech/fx-rates";
-import { validFor } from "@thecointech/utilities/FxRates";
+import { CurrencyCode, validFor } from "@thecointech/fx-rates";
 import { getRate } from "./db";
 import { update } from "./UpdateDb";
 import { log } from "@thecointech/logging";

@@ -10,7 +10,7 @@ export const EmptyRate: FXRate = {
   validTill: 0,
 };
 
-export const validFor = (rate: FXRate, ts: number) =>
+export const validFor = (rate: Pick<FXRate, "validFrom"|"validTill">, ts: number) =>
   rate.validFrom <= ts && rate.validTill > ts;
 
 // Always returns an object
