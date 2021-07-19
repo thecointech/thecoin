@@ -21,7 +21,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@thecointech/utilities/*":  ["../../libs/utils-ts/src/*"]
+      "@thecointech/fx-rates":  ["../../libs/fx-rates/src"]
     }
   }
 }
