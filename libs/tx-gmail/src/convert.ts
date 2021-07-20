@@ -152,11 +152,9 @@ function getBody(email: gmail_v1.Schema$Message) {
     mp = mp?.parts?.[0]
   }
   const tp = mp?.body?.data;
-  if (!tp)
-    return null;
-  //const textPart = email.payload.parts[0].parts[0].parts[0];
-  const decoded = Base64.decode(tp);
-  return decoded;
+  return (tp)
+    ? Base64.decode(tp)
+    : null;
 }
 
 // Get a unique identifier for this deposit
