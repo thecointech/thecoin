@@ -6,6 +6,8 @@ import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import currency from 'currency.js';
 
+const DEPOSIT_DOMAIN = process.env.TX_GMAIL_DEPOSIT_DOMAIN
+if (!DEPOSIT_DOMAIN) throw new Error("Missing processing domain");
 
 export const trimQuotes = (s?: string) => s?.replace(/(^")|("$)/g, '');
 
@@ -51,7 +53,8 @@ const findHeader = (email: gmail_v1.Schema$Message, header: string) =>
 function getAddressCoin(email: gmail_v1.Schema$Message) {
   const toField = findHeader(email, "To");
   if (toField) {
-    const match = /<([A-Fx0-9]+)@thecoin.io>\s*$/gi.exec(toField);
+    const re = new RegExp(`([A-Fx0-9]+)@${DEPOSIT_DOMAIN}`, "gi")
+    const match = re.exec(toField);
     if (match)
       return match[1]
   }
@@ -140,16 +143,17 @@ function getSubjectFrancais(subject: string) {
   return subject.substr(redirectHeader.length);
 }
 
-function getBody(email: gmail_v1.Schema$Message): string {
+function getBody(email: gmail_v1.Schema$Message) {
   let mp = email.payload;
+  // Find raw text version of the email
   for (let i = 0; i < 3; i++) {
-    if (!mp || !mp.parts)
-      return "";
-    mp = mp.parts[0]
+    if (mp?.mimeType === 'text/plain')
+      break;
+    mp = mp?.parts?.[0]
   }
   const tp = mp?.body?.data;
   if (!tp)
-    return "";
+    return null;
   //const textPart = email.payload.parts[0].parts[0].parts[0];
   const decoded = Base64.decode(tp);
   return decoded;

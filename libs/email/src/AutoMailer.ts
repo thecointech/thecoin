@@ -9,7 +9,7 @@ async function getClient() {
   return connect(key, secret)
 }
 
-async function SendMail(subject: string, message: string) {
+async function SendMail(subject: string, message: string, toEmail?: string) {
 	const options = {
 		Messages: [
 			{
@@ -19,7 +19,7 @@ async function SendMail(subject: string, message: string) {
 				},
 				To: [
 					{
-						Email: "stephen.taylor.dev@gmail.com",
+						Email: toEmail ?? "stephen.taylor.dev@gmail.com",
 					},
 				],
 				Subject: subject,
