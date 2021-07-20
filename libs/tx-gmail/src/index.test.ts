@@ -1,5 +1,4 @@
 import { fetchNewDepositEmails } from './index'
-import { log } from '@thecointech/logging';
 
 // Don't go to the server for this
 jest.mock('./auth')
@@ -10,17 +9,12 @@ beforeAll(async () => {
 });
 
 it('Can fetch new emails (mocked)', async () => {
-  const error = jest.spyOn(log, 'error').mockImplementation();
   const deposits = await fetchNewDepositEmails();
   expect(deposits).not.toBeUndefined();
   // ensure these are all test emails;
-  const allTests = deposits.every(d => d.name.indexOf('TEST') >= 0);
-  expect(allTests).toBe(true);
-  const allRaw = deposits.every(d => d.raw !== undefined);
-  expect(allRaw).toBe(true);
-  expect(error).toBeCalledTimes(2);
+  expect(deposits.map(d => d.name)).toEqual(['Not found', 'Not found', 'Some Person', 'Not found']);
+  expect(deposits.every(d => d.raw !== undefined)).toBeTruthy();
 
   // ensure we have sourceID;
-  const allSources = deposits.every(d => !!d.id);
-  expect(allSources).toBe(true);
+  expect(deposits.every(d => !!d.id)).toBeTruthy();
 })
