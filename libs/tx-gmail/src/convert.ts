@@ -4,6 +4,7 @@ import { Base64 } from 'js-base64';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
+import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import currency from 'currency.js';
 
 const DEPOSIT_DOMAIN = process.env.TX_GMAIL_DEPOSIT_DOMAIN
@@ -55,8 +56,8 @@ function getAddressCoin(email: gmail_v1.Schema$Message) {
   if (toField) {
     const re = new RegExp(`([A-Fx0-9]+)@${DEPOSIT_DOMAIN}`, "gi")
     const match = re.exec(toField);
-    if (match)
-      return match[1]
+    if (match && IsValidAddress(match[1]))
+      return NormalizeAddress(match[1])
   }
   return null;
 }

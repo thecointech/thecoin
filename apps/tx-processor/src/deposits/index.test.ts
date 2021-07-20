@@ -2,7 +2,7 @@ import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore';
 import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '@thecointech/tx-processing';
-import { RbcApi } from '@thecointech/rbcapi';
+import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 
 jest.setTimeout(900000);
@@ -14,18 +14,21 @@ it("Can complete deposits", async () => {
 
   const theContract = await GetContract();
   const bank = new RbcApi();
+
+  // We have 5 deposits, and
+  setupReturnValues(bank)
   const deposits = await processUnsettledDeposits(theContract, bank);
+  expect(deposits.length).toEqual(4);
   // First, ensure that we have added our users to the DB
   for (const deposit of deposits) {
     // seed the deposit so it's visible in our emulator
     await deposit.action.doc.parent.parent!.set({ visible: true });
   }
+
+  // We have 1 success, 3 failures
   const results = deposits.map(getCurrentState);
-  // At least one passed
-  expect(results.find(d => d.name == "complete")).toBeTruthy();
-  // We should have a few failures too
-  expect(results.find(d => d.name != "complete")).toBeTruthy();
-  expect(error).toBeCalledTimes(6);
+  expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
+  expect(error).toBeCalledTimes(3);
 
   // If passed, balance is 0
   for (let i = 0; i < deposits.length; i++) {
@@ -49,3 +52,29 @@ it("Can complete deposits", async () => {
     }
   }
 })
+
+function setupReturnValues(bank: RbcApi) {
+  const mockDeposit = bank.depositETransfer as jest.Mock;
+  mockDeposit
+    .mockReturnValueOnce(
+      {
+        message:  "Success",
+        code:  ETransferErrorCode.Success,
+        confirmation: 1234,
+      })
+    .mockReturnValueOnce(
+      {
+        message:  "Already Deposited",
+        code:  ETransferErrorCode.AlreadyDeposited,
+      })
+    .mockReturnValueOnce(
+      {
+        message:  "This transfer was cancelled",
+        code:  ETransferErrorCode.Cancelled,
+      })
+    .mockReturnValueOnce(
+      {
+        message:  "This transfer cannot be processed",
+        code:  ETransferErrorCode.InvalidInput,
+      })
+}
