@@ -1,6 +1,6 @@
 import { AnyActionContainer } from "../statemachine/types";
 import { SendMail } from '@thecointech/email';
-import { removeIncomplete } from '@thecointech/broker-db'
+//import { removeIncomplete } from '@thecointech/broker-db'
 
 //
 // Something has gone wrong, and we can't handle it automatically.
@@ -15,7 +15,9 @@ export async function requestManual(action: AnyActionContainer) {
   );
 
   // Remove from our list of active transctions(?)
-  await removeIncomplete(action.action.type, action.action.doc.path);
+  // TODO: For now we leave failed tx's in the incomplete list
+  // Until they are dealt with we should be reminded that they are not completed
+  //await removeIncomplete(action.action.type, action.action.doc);
   // Make no state changes.
   return {};
 }

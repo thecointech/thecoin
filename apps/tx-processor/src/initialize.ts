@@ -10,7 +10,11 @@ import { getCode } from './auth';
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
 
+  // We have to load (and cache) signers before setting
+  // the GOOGLE_APPLICATION_CREDENTIALS env variable below
+  // to ensure prodtest loads from the right location
   const signer = await getSigner('BrokerCAD');
+  await getSigner('BrokerTransferAssistant');
   const address = await signer.getAddress();
   const contract = await ConnectContract(signer);
   if (!contract) {

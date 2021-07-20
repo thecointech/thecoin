@@ -3,6 +3,8 @@ import { setFirestore } from './firestore';
 import { Timestamp } from './timestamp';
 // Create a new client
 
+export { FieldValue } from '@google-cloud/firestore';
+
 export async function init() {
   const db = new Firestore();
   setFirestore(db);
