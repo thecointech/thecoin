@@ -161,23 +161,30 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
 //
 // Complete this action.  Adds a completed event, and removes it from the
 // list of unsettled actions
-export async function removeIncomplete(type: ActionType, path: string) {
+export async function removeIncomplete(type: ActionType, doc: DocumentReference) {
   // Find the ref in the uncomplete listing and delete it
   const collection = incompleteCollection(type);
   const snapshot = await collection
-    .where("ref", "==", path)
+    .where("ref", "==", doc)
     .get();
 
   // mocked db does not implement 'where' clause, so manually filter here so tests pass
   let docs = [...snapshot.docs];
   if (process.env.NODE_ENV === 'test') {
-    docs = docs.filter(d => d.get('ref') == path);
+    docs = docs.filter(d => d.get('ref') == doc);
   }
 
-  if (docs.length > 1) {
-    throw new Error(`Multiple incomplete refs found with path ${path}`);
-  }
-  if (docs.length == 1) {
-    await collection.doc(docs[0].id).delete();
+  switch(docs.length) {
+    case 0:
+      log.warn({ action: type }, `No records found when removing incomplete {type} action with path: ${doc.path}`)
+      break;
+    case 1:
+      log.debug({ action: type }, `Marking {type} action complete for path: ${doc.path}`)
+      await docs[0].ref.delete();
+      break;
+    default:
+      log.error({ action: type }, `Multiple incomplete {type} actions found with path ${doc.path}`);
+      // Do not delete multiples
+      throw new Error(`removeIncomplete failed`)
   }
 }

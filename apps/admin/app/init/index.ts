@@ -2,7 +2,7 @@ import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
 import { initBrowser } from '@thecointech/rbcapi';
 import { initialize } from '@thecointech/tx-gmail';
-import { shell } from 'electron';
+import open from 'open';
 
 //
 // Initialize (most of) the application
@@ -15,11 +15,12 @@ export function Initialize() {
   initialize(initGmail);
 }
 
-function initGmail(authUrl: string) {
-  if (shell)
-    shell.openExternal(authUrl);
-  else {
-    const start = (process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open');
-    require('child_process').exec(start + ' ' + authUrl);
-  }
+async function initGmail(authUrl: string) {
+  open(authUrl);
+  return new Promise<string>((_resolve, reject) => {
+    // TODO: We can't open a server to listen to the
+    // reply, but we already have one running.  We should
+    // be able to figure out how to collect the reply
+    reject("TODO");
+  })
 }

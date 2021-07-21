@@ -1,29 +1,21 @@
 import { ETransferErrorCode, RbcApi as SrcApi } from "@thecointech/rbcapi";
-
 export { ETransferErrorCode };
 
-let results = [
-  ETransferErrorCode.Success,
-  ETransferErrorCode.AlreadyDeposited,
-  ETransferErrorCode.InvalidInput,
-  ETransferErrorCode.Cancelled,
-  ETransferErrorCode.UnknownError
-];
-let result = 0;
+let result = 1234;
 export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
-  depositETransfer() {
-    const code = results[result % results.length];
+  depositETransfer = jest.fn(() => {
     result += 1;
+    // Always succeeds (but can be mocked for failure if necessary)
     return Promise.resolve({
-      message: code.toString(),
-      code,
-      confirmation: code == ETransferErrorCode.Success ? result : undefined,
+      message:  ETransferErrorCode.Success.toString(),
+      code:  ETransferErrorCode.Success,
+      confirmation: result += 1,
     });
-  }
-  sendETransfer = () => Promise.resolve(123);
-  fetchLatestTransactions = () => Promise.resolve([]);
-  getTransactions = () => Promise.resolve([]);
-  initialize = () => { };
+  });
+  sendETransfer = jest.fn(() => Promise.resolve(result += 1));
+  fetchLatestTransactions = jest.fn(() => Promise.resolve([]));
+  getTransactions = jest.fn(() => Promise.resolve([]));
+  initialize = jest.fn(() => { });
 }
 
 // Mock store does nothing
