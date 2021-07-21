@@ -5,7 +5,7 @@
 // using the same mocks as testing/dev websites.
 //
 
-// Ensure any fn's that rely on jest mocking still work iun regular node environment
+// Ensure any fn's that rely on jest mocking still work in regular node environment
 require("./shim_jest");
 
 var Module = require('module').Module;

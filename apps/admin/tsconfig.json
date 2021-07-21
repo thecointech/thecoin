@@ -4,11 +4,10 @@
     "module": "commonjs",
     "tsBuildInfoFile": "./build/.buildinfo",
     "outDir": "./build/",
-    "rootDir": "./app/",
-    "baseUrl": "./app/",
-    "skipLibCheck": true
+    "rootDir": "./src/",
+    "baseUrl": "./src/"
   },
-  "include": ["./app/**/*"],
+  "include": ["src/**/*"],
   "references": [
     { "path": "../../libs/shared/tsconfig.build.json" },
     { "path": "../../libs/tx-reconciliation/tsconfig.build.json" },
