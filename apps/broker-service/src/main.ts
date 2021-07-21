@@ -59,6 +59,7 @@ export function errorHandler(
     return res.status(422).json(r);
   }
   if (err instanceof Error) {
+    log.error(`Caught ${err.message} on ${req.path}:`);
     return res.status(500).json({
       message: "Internal Server Error",
     });
