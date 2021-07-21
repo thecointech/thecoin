@@ -109,9 +109,6 @@ function getMockOptions() {
 
 function getDevLiveOptions() {
   return {
-    experiments: {
-      topLevelAwait: true,
-    },
     // Re-direct store to js file
     resolve: {
       conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "import", "default"],
