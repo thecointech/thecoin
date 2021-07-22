@@ -7,7 +7,7 @@ import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
 import { setUserVerified } from '@thecointech/broker-db/user';
 import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
 import { DateTime } from 'luxon';
-import { signer } from '@ethersproject/abstract-signer';
+import { Signer } from '@ethersproject/abstract-signer';
 
 interface OwnProps {
 	signer: Signer,

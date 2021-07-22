@@ -1,11 +1,11 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
-    "module": "commonjs",
     "tsBuildInfoFile": "./build/.buildinfo",
     "outDir": "./build/",
     "rootDir": "./src/",
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "references": [

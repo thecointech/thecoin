@@ -4,9 +4,9 @@ import { buildResponse, delay } from '../axios-utils';
 import { GetContract } from '../contract';
 
 export class ETransferApi implements Pick<SrcApi, keyof SrcApi> {
-  async eTransfer(_request: CertifiedTransfer): Promise<AxiosResponse<CertifiedTransferResponse>> {
+  async eTransfer(request: CertifiedTransfer): Promise<AxiosResponse<CertifiedTransferResponse>> {
     const contract = await GetContract();
-    const xfer = await contract.certifiedTransfer();
+    const xfer = await contract.certifiedTransfer("", request.transfer.to, request.transfer.value, 5000, 1230, request.signature);
     await delay(250);
     return buildResponse({
       message: "Success",
