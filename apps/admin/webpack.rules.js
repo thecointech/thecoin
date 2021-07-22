@@ -20,7 +20,11 @@ module.exports = [
     use: {
       loader: 'ts-loader',
       options: {
-        transpileOnly: true
+        configFile: __dirname + '/tsconfig.build.json',
+        transpileOnly: true,
+        experimentalWatchApi: true,
+        projectReferences: true,
+        compiler: 'ttypescript',
       }
     }
   },
