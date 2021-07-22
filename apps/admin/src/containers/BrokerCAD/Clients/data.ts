@@ -1,10 +1,9 @@
-import { GetContract } from "@thecointech/contract";
+import { GetContract, TheCoin } from "@thecointech/contract";
 import { RbcApi } from "@thecointech/rbcapi";
 import { FXRate, weBuyAt } from "@thecointech/fx-rates";
 import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@thecointech/tx-reconciliation";
 import { toHuman } from "@thecointech/utilities";
-import { Contract } from "ethers";
-import { BigNumber } from "ethers/utils";
+import { BigNumber } from "ethers";
 import { UserState } from "./types";
 
 export async function getAllUserData(fxRates: FXRate[]) {
@@ -33,7 +32,7 @@ async function addBalances(users: Reconciliations, fxRates: FXRate[]): Promise<U
   return addBalanceCad(balanceCoin, fxRates);
 }
 
-const addBalanceCoin = async (users: Reconciliations, contract: Contract) => Promise.all(
+const addBalanceCoin = async (users: Reconciliations, contract: TheCoin) => Promise.all(
   users.map(async (user) => ({
     ...user,
     balanceCoin: await getBalance(user.address, contract)
@@ -49,7 +48,7 @@ const addBalanceCad = (users: Coined, fxRates: FXRate[]) =>
     balanceCad: toHuman(user.balanceCoin * weBuyAt(fxRates), true)
   }))
 
-async function getBalance(address: string, contract: Contract) {
+async function getBalance(address: string, contract: TheCoin) {
   const balance = await contract.balanceOf(address) as BigNumber;
   return balance.toNumber()
 }

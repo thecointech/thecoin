@@ -7,7 +7,6 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { PageHeader } from 'components/PageHeader';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
@@ -29,15 +28,14 @@ const translations = defineMessages({
 
 export const Topup = (routerProps:AccountPageProps) => {
   const intl = useIntl();
-  const activeAccount = useActiveAccount();
   const panes = [
-    { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Purchase signer={activeAccount!.signer!} /></AppContainerForTabs> },
+    { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Purchase /></AppContainerForTabs> },
     { menuItem: intl.formatMessage({...translations.interact}), render: () => <AppContainerForTabs>Coming soon</AppContainerForTabs> },
   ]
   return (
     <React.Fragment>
       <ColumnRightTop />
-      <PageHeader 
+      <PageHeader
           illustration={illustration}
           title={translations.title}
           description= {translations.description}

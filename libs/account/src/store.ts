@@ -1,6 +1,6 @@
 import { AccountState, DefaultAccountValues } from './state';
 import { AccountMap } from './map';
-import { isSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
+import { isSigner } from '@thecointech/utilities/SignerIdent';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
 const ThrowIfNotValid = (data: any) => {
@@ -17,8 +17,7 @@ export function storeAccount(account: AccountState) {
   if (isSigner(toStore.signer)) {
     // We can't directly save a signer (it has a circular reference)
     // but also it's data isn't particularily useful.
-    let signerIdent: SignerIdent = {
-      address,
+    let signerIdent = {
       _isSigner: true,
     };
     toStore.signer = signerIdent as any;
@@ -49,7 +48,7 @@ export function getStoredAccountData(address: string): AccountState | null {
       address: normAddress,
     }
 
-    if (NormalizeAddress(r.signer.address) === normAddress) {
+    if (NormalizeAddress(r.address) === normAddress) {
       return r;
     }
   }
@@ -69,10 +68,7 @@ export function getAllAccounts(): AccountMap {
       const { address, signer } = account;
 
       // Rough check that this is, indeed, a valid account
-      if (address &&
-        IsValidAddress(address) &&
-        address == NormalizeAddress(signer.address)
-      ) {
+      if (address && IsValidAddress(address) && signer._isSigner !== undefined) {
         allAccounts[address] = account!;
       }
     }

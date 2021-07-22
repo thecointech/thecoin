@@ -34,9 +34,9 @@ interface Props {
   addressMatch?: (address: string) => boolean;
 }
 
-const translate = defineMessages({  
-  waitingForWeb3:{ 
-                id: "shared.account.account.waitingForWeb3",  
+const translate = defineMessages({
+  waitingForWeb3:{
+                id: "shared.account.account.waitingForWeb3",
                 defaultMessage: "Connecting to your Web3 provider",
                 description:"shared.account.account.waitingForWeb3: Message to display while waiting for user to complete Web3 connection" }});
 
@@ -125,13 +125,13 @@ export const Account = (props: Props) => {
 
 const connectSigner = async (accountState: AccountState, accountActions: IActions) => {
   const { address } = accountState;
-  const theSigner = await ConnectWeb3();
-  if ( theSigner?.address ) {
-    if (NormalizeAddress(theSigner.address) !== address) {
+  const web3 = await ConnectWeb3();
+  if ( web3?.address ) {
+    if (NormalizeAddress(web3.address) !== address) {
       alert("Warning: cannot connect - remote account has a different address to the local store");
       return;
     }
-    accountActions.setSigner(theSigner);
+    accountActions.setSigner(web3.signer);
   }
 }
 

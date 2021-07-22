@@ -1,4 +1,4 @@
-import { ProgressCallback } from 'ethers/utils';
+import { utils } from 'ethers';
 import { AccountName } from './names';
 import { baseSigner } from './index_base';
 export * from './names';
@@ -11,6 +11,6 @@ async function loadSigner(name: AccountName) {
   throw new Error("Cannot load wallets by default in web in production");
 }
 
-export const getSigner = (name: AccountName, _callback?: ProgressCallback) =>
+export const getSigner = (name: AccountName, _callback?: utils.ProgressCallback) =>
   baseSigner(name, () => loadSigner(name));
 

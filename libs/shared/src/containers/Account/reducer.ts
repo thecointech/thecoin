@@ -1,5 +1,5 @@
 import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract';
-import { Wallet } from 'ethers';
+import { Signer, Wallet } from 'ethers';
 import { call, StrictEffect } from 'redux-saga/effects';
 import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
@@ -8,7 +8,7 @@ import { DecryptCallback, IActions } from './types';
 import { buildSagas } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer } from '../../store/immerReducer';
-import { isSigner, TheSigner } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/utilities/SignerIdent';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
@@ -29,7 +29,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     this.draftState.name = name;
   }
 
-  *setSigner(signer: TheSigner) {
+  *setSigner(signer: Signer) {
     yield this.storeValues({ signer });
     yield this.sendValues(this.actions().connect);
   }
@@ -93,12 +93,12 @@ export class AccountReducer extends TheCoinReducer<AccountState>
   ///////////////////////////////////////////////////////////////////////////////////
   // Get the balance of the account in Coin
   *updateBalance(): SagaIterator {
-    const { signer, contract } = this.state;
+    const { signer, address, contract } = this.state;
     if (!contract || !signer) {
+      log.warn('Cannot update balance: missing contract or signer');
       return;
     }
     try {
-      const { address } = signer;
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber() });
     } catch (err) {
@@ -156,11 +156,12 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
-    if (isSigner(signer)) {
-      throw new Error(`Attempting to decrypt a non-wallet signer: ${name}`)
+    if (isWallet(signer)) {
+      if (signer.privateKey)
+        throw new Error(`Attempting decryption of already-decrypted wallet: ${name}`);
     }
-    if (signer.privateKey) {
-      throw new Error(`Attempting decryption of already-decrypted wallet: ${name}`);
+    else {
+      throw new Error(`Attempting to decrypt a non-wallet signer: ${name}`)
     }
 
     try {

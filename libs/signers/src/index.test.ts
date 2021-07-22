@@ -1,5 +1,5 @@
 import { getSigner } from "./index_node";
-import { Wallet } from 'ethers/wallet';
+import { Wallet } from '@ethersproject/wallet';
 
 it("generates random account in dev mode", async () => {
   // development env, should create random account

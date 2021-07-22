@@ -1,4 +1,4 @@
-import { utils, Signer } from "ethers";
+import { utils, Signer, Bytes } from "ethers";
 import { SignedMessage } from "@thecointech/types";
 
 export function GetHash(
@@ -33,7 +33,7 @@ export async function GetSigner(signedMessage: SignedMessage) {
 // the signature.  We normalize the generated signature here to follow
 // the standard, and quietly curse the fragmented landscape that makes this possible.
 // https://ethereum.stackexchange.com/questions/76810/sign-message-with-web3-and-verify-with-openzeppelin-solidity-ecdsa-sol
-export async function sign(message: utils.Arrayish, signer: Signer) {
+export async function sign(message: Bytes | string, signer: Signer) {
   const signature = await signer.signMessage(message);
 
   // We expect sig to either be 0-1, or 27-28.  Normalize to 27-28 by

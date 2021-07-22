@@ -9,10 +9,8 @@ let _initial = null as string|null;
 async function addRemoteAccount(name: AccountName, active: boolean) {
   const signer = connectAccount(name)  as any;
   const address = NormalizeAddress(await signer.getAddress());
-  signer.address = address;
-  signer._isSigner = true;
 
-  _devWallets[address] = buildNewAccount(name, signer);
+  _devWallets[address] = buildNewAccount(name, address, signer);
   console.log('Loaded remote account: ' + address);
   if (active) { _initial = address }
 }

@@ -3,8 +3,8 @@ import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
-import { AnySigner, isWallet } from "@thecointech/utilities/SignerIdent";
-import { Wallet } from 'ethers';
+import { isWallet } from "@thecointech/utilities/SignerIdent";
+import { Wallet, Signer } from 'ethers';
 import { TheCoinReducer } from "../../store/immerReducer";
 import { createActionCreators, createReducerFunction } from "immer-reducer";
 import { useDispatch } from "react-redux";
@@ -25,13 +25,13 @@ export class AccountMapReducer extends TheCoinReducer<AccountMapState> implement
   }
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
-  addAccount(name: string, signer: AnySigner, store: boolean = true, setActive: boolean = true, unlocked?: Wallet) {
+  addAccount(name: string, address: string, signer: Signer, store: boolean = true, setActive: boolean = true, unlocked?: Wallet) {
     // Check the signer & unlocked are actually the same account
-    if (unlocked && NormalizeAddress(signer.address) != NormalizeAddress(unlocked?.address)) {
+    if (unlocked && NormalizeAddress(address) != NormalizeAddress(unlocked?.address)) {
       throw new Error("Accounts being stored are mis-matched");
     }
     // Create the account with default values
-    const newAccount = buildNewAccount(name, signer);
+    const newAccount = buildNewAccount(name, address, signer);
     // If asked to store, push to storage
     if (store) {
       storeAccount(newAccount);
@@ -43,12 +43,13 @@ export class AccountMapReducer extends TheCoinReducer<AccountMapState> implement
       newAccount.signer = unlocked;
     }
     // Now for live storage
-    this.draftState.map = {
-      ...this.state.map,
-      [newAccount.address]: newAccount,
-    }
-    if (setActive)
-      this.draftState.active = newAccount.address;
+    this.draftState = {
+      map: {
+        ...this.state.map,
+        [newAccount.address]: newAccount,
+      } as any, // Requires use of any as the draftState automatically marks all members as mutable
+      active: setActive ? newAccount.address : this.state.active,
+    };
   }
 
   // Remove the given account from list & storage

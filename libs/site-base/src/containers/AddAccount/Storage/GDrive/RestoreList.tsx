@@ -55,7 +55,7 @@ export const RestoreList = ({url}: Props) => {
       setRedirect('/');
     }
     else {
-      accountsApi.addAccount(name, wallet);
+      accountsApi.addAccount(name, wallet.address, wallet);
     }
   }
 

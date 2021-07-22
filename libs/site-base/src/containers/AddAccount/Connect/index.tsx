@@ -5,10 +5,9 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
-import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from '../styles.module.less';
 
 const translations = defineMessages({
@@ -31,9 +30,10 @@ export const Connect = () => {
       setForceValidate(true);
       return false;
     }
-    const theSigner = await ConnectWeb3();
-    if (theSigner) {
-      storeSigner(accountsApi, theSigner, name, referral);
+    const web3 = await ConnectWeb3();
+    if (web3) {
+      accountsApi.addAccount(name, web3.address, web3.signer);
+      registerReferral(web3.address, referral);
       // We redirect directly to the now-active account
       history.push('/');
     }
@@ -53,9 +53,4 @@ export const Connect = () => {
       </Form>
     </>
   );
-}
-
-const storeSigner = async (accountsApi: IAccountStoreAPI, wallet: TheSigner, name: string, referralCode: string) => {
-  accountsApi.addAccount(name, wallet);
-  registerReferral(wallet.address, referralCode);
 }

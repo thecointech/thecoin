@@ -4,14 +4,13 @@ import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import messages from './messages'
 import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
-import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { setUserVerified } from '@thecointech/broker-db/user';
-import { createReferrer, getReferrersCollection } from '@thecointech/broker-db/referrals';
+import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
 import { DateTime } from 'luxon';
-import { VerifiedReferrer } from '@thecointech/broker-db/referrals.types';
+import { signer } from '@ethersproject/abstract-signer';
 
 interface OwnProps {
-	signer: TheSigner,
+	signer: Signer,
 }
 type Props = OwnProps;
 

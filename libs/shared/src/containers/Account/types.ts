@@ -1,8 +1,8 @@
 import { ImmerReducer } from 'immer-reducer';
-import { TheSigner } from '@thecointech/utilities/SignerIdent'
 import { DateTime } from 'luxon';
 import { SagaIterator } from 'redux-saga';
 import { AccountState, AccountDetails } from '@thecointech/account';
+import { Signer } from '@ethersproject/abstract-signer';
 
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
@@ -17,7 +17,7 @@ export type AccountPageProps = {
 export interface IActions extends ImmerReducer<AccountState> {
 
   setName(name: string): void;
-  setSigner(signer: TheSigner): SagaIterator;
+  setSigner(signer: Signer): SagaIterator;
 
   // create contract, connect to services, load details
   connect(): SagaIterator;

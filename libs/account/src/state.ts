@@ -1,11 +1,11 @@
 import { CurrencyCode } from '@thecointech/fx-rates'
-import { AnySigner } from '@thecointech/utilities/SignerIdent'
 import { Transaction } from '@thecointech/tx-blockchain';
 import { AccountDetails } from './details';
 import { IDX } from '@ceramicstudio/idx';
 import { DateTime } from 'luxon';
 import { TheCoin } from '@thecointech/contract';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
+import { Signer } from '@ethersproject/abstract-signer';
 
 
 // An account state holds all relevant info
@@ -16,7 +16,7 @@ export type AccountState = {
  // A normalized version of the accounts address
  address: string;
  // Possibly encrypted raw ethers wallet or metamask account
- signer: AnySigner;
+ signer: Signer;
  // Contract connected to this wallet as a signer
  contract: TheCoin | null;
  // Current balance in Coin
@@ -53,12 +53,11 @@ export const DefaultAccountValues = {
  }
 };
 
-export function buildNewAccount(name: string, signer: AnySigner) : AccountState {
-  const address = NormalizeAddress(signer.address);
+export function buildNewAccount(name: string, address: string, signer: Signer) : AccountState {
   return {
     ...DefaultAccountValues,
     name,
-    address,
+    address: NormalizeAddress(address),
     signer,
   }
 }

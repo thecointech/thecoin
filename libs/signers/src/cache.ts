@@ -1,4 +1,4 @@
-import { Signer } from "ethers/abstract-signer"
+import { Signer } from "@ethersproject/abstract-signer"
 import { AccountName } from "./names"
 
 type AccountCache = {
