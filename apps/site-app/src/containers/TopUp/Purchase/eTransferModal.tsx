@@ -5,8 +5,8 @@ import { Grid } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 interface Props {
-  xferRecipient?: string;
-  xferSecret?: string;
+  recipient?: string;
+  secret?: string;
   showDlg: boolean;
   onCloseDlg: () => void;
 }
@@ -34,8 +34,8 @@ const translations = defineMessages({
 
 export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
 {
-  const {xferRecipient, xferSecret} = props;
-  return (xferSecret && xferRecipient) ?
+  const {recipient, secret} = props;
+  return (secret && recipient) ?
   (
     <ModalOperation
       isOpen={props.showDlg}
@@ -52,8 +52,8 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
             <FormattedMessage {...translations.yourTransferRecipient} />
           </Grid.Column>
           <Grid.Column width="12">
-          <CopyToClipboard payload={xferRecipient}>
-            {xferRecipient+ " "}
+          <CopyToClipboard payload={recipient}>
+            {recipient+ " "}
           </CopyToClipboard>
           </Grid.Column>
         </Grid.Row>
@@ -62,8 +62,8 @@ export const ETransferModal: FunctionComponent<Props> = (props: Props) =>
             <FormattedMessage {...translations.yourTransferSecret} />
           </Grid.Column>
           <Grid.Column width="12">
-            <CopyToClipboard payload={xferSecret}>
-              {xferSecret+ " "}
+            <CopyToClipboard payload={secret}>
+              {secret+ " "}
             </CopyToClipboard>
           </Grid.Column>
         </Grid.Row>

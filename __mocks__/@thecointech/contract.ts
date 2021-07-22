@@ -1,16 +1,16 @@
 
-import { TheCoin as SrcTheCoin } from '@thecointech/contract';
-import { utils } from 'ethers'
+import * as Src from  '@thecointech/contract';
+import { BigNumber } from 'ethers'
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
-export class TheCoin implements Pick<SrcTheCoin, 'coinPurchase'|'balanceOf'|'certifiedTransfer'>{
+export class TheCoin implements Pick<Src.TheCoin, 'coinPurchase'|'balanceOf'|'certifiedTransfer'>{
 
   coinPurchase = (_address: string, _amount: number) => Promise.resolve({
     wait: () => { },
     hash: `0x${genRanHex(64)}`,
   } as any)
-  balanceOf = () => Promise.resolve(new utils.BigNumber(1000000000));
+  balanceOf = () => Promise.resolve(BigNumber.from(1000000000));
   certifiedTransfer = () => Promise.resolve({
     confirmations: 1,
     hash: `0x${genRanHex(64)}`,
@@ -29,10 +29,5 @@ export class TheCoin implements Pick<SrcTheCoin, 'coinPurchase'|'balanceOf'|'cer
   }
 }
 
-export function GetContract() : Promise<TheCoin> {
-  return Promise.resolve(new TheCoin() as any);
-}
-
-export function ConnectContract() : Promise<TheCoin> {
-  return Promise.resolve(new TheCoin() as any);
-}
+export const GetContract : typeof Src.GetContract = () => new TheCoin() as any;
+export const ConnectContract : typeof Src.ConnectContract = () => new TheCoin() as any;

@@ -1,5 +1,5 @@
-import { Signer, Wallet, utils } from "ethers";
-import type { TheCoin } from "./types/TheCoin";
+import { Signer, Wallet, providers } from "ethers";
+import { TheCoin } from "./types/TheCoin";
 import { GetContract } from "./contract";
 import { log } from '@thecointech/logging';
 
@@ -20,7 +20,7 @@ export function ConnectContract(signer: Signer, onFailure?: (err: Error) => void
     if (!signer.provider)
       throw new Error("Unsupported: cannot have signer without a network");
 
-    let signerNetwork = undefined as utils.Network | undefined;
+    let signerNetwork = undefined as providers.Network | undefined;
     signer.provider.getNetwork()
       .then(network => {
         signerNetwork = network;

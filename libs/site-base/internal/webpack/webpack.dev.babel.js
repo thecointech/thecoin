@@ -99,6 +99,9 @@ function getMockOptions() {
     // Show progress when running dev
     plugins: [
       new webpack.ProgressPlugin(),
+      new webpack.ProvidePlugin({
+        jest: path.join(mocksFolder, 'shim_jest')
+      })
     ],
     // Re-use our jest mocks inside our website (neat, huh?)
     resolve: {

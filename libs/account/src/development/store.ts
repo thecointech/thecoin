@@ -10,12 +10,13 @@ let _initial: null|string = null;
 // Make some wallets to test with.  There should be at
 // least 1 unlocked wallet, and the locked TestAccNoT
 async function initDevWallets() {
-  const encryptedAccount = buildNewAccount("TestAccNoT", testWallet as any);
+  const encryptedAccount = buildNewAccount("TestAccNoT", testWallet.address, testWallet as any);
   // We always add one encrypted wallet
   _devAccounts[encryptedAccount.address] = encryptedAccount
 
   // Add a random decrypted wallet
-  const randomAccount = buildNewAccount("Random Test", Wallet.createRandom());
+  const randomWallet = Wallet.createRandom();
+  const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
   // It is OK for these calls to complete after this fn exits
   randomAccount.contract = ConnectContract(randomAccount.signer);

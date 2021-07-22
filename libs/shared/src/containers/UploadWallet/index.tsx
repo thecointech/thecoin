@@ -9,17 +9,17 @@ import { useHistory } from 'react-router';
 import illustration from "./images/illust_flowers.svg";
 
 
-const translate = defineMessages({ 
-      aboveTheTitle : { 
-        id: "shared.account.uploadWallet.aboveTheTitle", 
+const translate = defineMessages({
+      aboveTheTitle : {
+        id: "shared.account.uploadWallet.aboveTheTitle",
         defaultMessage:"Restore Account",
         description:"shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"},
-      title : { 
-        id: "shared.account.uploadWallet.title", 
+      title : {
+        id: "shared.account.uploadWallet.title",
         defaultMessage:"Load an Account",
         description:"shared.account.uploadWallet.title: Title for the upload your account page"},
-      dropZone : {  
-        id: "shared.account.uploadWallet.dropZone", 
+      dropZone : {
+        id: "shared.account.uploadWallet.dropZone",
         defaultMessage:"Drag 'n' drop a wallet file here, or click to browse",
         description:"shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"}});
 
@@ -48,7 +48,7 @@ export const UploadWallet = (props: Props) => {
     const isValid = await ValidateFile(wallet, props.validate);
 
     if (isValid) {
-      accountsApi.addAccount(name, wallet);
+      accountsApi.addAccount(name, wallet.address, wallet);
       history.push("/accounts");
     } else {
       alert('Bad Wallet');

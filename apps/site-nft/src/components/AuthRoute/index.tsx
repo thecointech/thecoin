@@ -45,15 +45,3 @@ export const AuthRoute = (routeProps: RouteProps)  => {
     <Route {...routeProps} />
   )
 }
-
-// const connectSigner = async (accountState: AccountState, accountActions: IActions) => {
-//   const { address } = accountState;
-//   const theSigner = await ConnectWeb3();
-//   if ( theSigner?.address ) {
-//     if (NormalizeAddress(theSigner.address) !== address) {
-//       alert("Warning: cannot connect - remote account has a different address to the local store");
-//       return;
-//     }
-//     accountActions.setSigner(theSigner);
-//   }
-// }

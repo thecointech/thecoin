@@ -1,8 +1,8 @@
 //
 // Get the named wallet, either from env variables
 
-import { ProgressCallback } from "ethers/utils";
-import { Wallet } from "ethers/wallet";
+import { Wallet, utils } from "ethers";
+import {  } from "ethers";
 import { existsSync, readFileSync } from "fs";
 import { AccountName } from "./names";
 
@@ -43,12 +43,12 @@ export function loadFromPK(name: AccountName) {
   return undefined;
 }
 
-export async function loadAndDecrypt(name: AccountName, callback?: ProgressCallback) {
+export async function loadAndDecrypt(name: AccountName, callback?: utils.ProgressCallback) {
   const encrypted = loadEncrypted(name);
   const key = getPassword(name);
   return Wallet.fromEncryptedJson(encrypted, key, callback);
 }
 
-export async function loadFromEnv(name: AccountName, callback?: ProgressCallback) {
+export async function loadFromEnv(name: AccountName, callback?: utils.ProgressCallback) {
   return loadFromPK(name) ?? await loadAndDecrypt(name, callback);
 }

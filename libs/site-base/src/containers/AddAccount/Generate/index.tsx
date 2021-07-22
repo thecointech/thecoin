@@ -56,7 +56,7 @@ export const Generate = (props: RouteComponentProps) => {
     const generated = await generateNewWallet(password, setProgress);
     if (generated) {
       const { wallet, decrypted } = generated;
-      accountsApi.addAccount(name, wallet, true, true, decrypted);
+      accountsApi.addAccount(name, wallet.address, wallet, true, true, decrypted);
       registerReferral(wallet.address, referral);
 
       const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");
