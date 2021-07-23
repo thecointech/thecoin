@@ -4,6 +4,7 @@
 // This is a simple hack to allow our NodeJS apps to run in dev mode
 // using the same mocks as testing/dev websites.
 //
+const Module = require('module').Module;
 
 function mockAll() {
   var nodeModulePaths = Module._nodeModulePaths; //backup the original method
@@ -21,8 +22,6 @@ function mockAll() {
 }
 
 function enhancedModuleResolve(...modules) {
-  const Module = require('module').Module;
-
   // NOTE: __dirname is where I keep some external mocks
   const resolver = require('enhanced-resolve').create.sync({
       conditionNames: [process.env.CONFIG_NAME, 'require', 'node', 'default'],

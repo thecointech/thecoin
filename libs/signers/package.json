@@ -32,7 +32,7 @@
       "node": "./build/index_node.js"
     }
   },
-  "types": "./build/index.d.ts",
+  "types": "./build/index_node.d.ts",
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "^0.2.16"
