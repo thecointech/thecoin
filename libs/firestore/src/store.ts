@@ -1,5 +1,4 @@
 import { Firestore } from "./types";
-export * from "./types";
 
 type TheCoinGlobals = {
   firestore: Firestore|null;

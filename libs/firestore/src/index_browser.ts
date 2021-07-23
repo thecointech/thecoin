@@ -5,11 +5,11 @@ import firebase from 'firebase/app';
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
-import { setFirestore } from './firestore';
+import { setFirestore } from './store';
 import firebaseConfig from "./password.config.json";
 import { log } from '@thecointech/logging';
 
-export * from './firestore';
+export * from './store';
 export const Timestamp = firebase.firestore.Timestamp;
 export const FieldValue = firebase.firestore.FieldValue;
 
