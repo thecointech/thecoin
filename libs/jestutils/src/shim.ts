@@ -4,15 +4,14 @@
 // can import the our mock DB in dev mode
 // (where we don't necessarily have/want the full emulator)
 
-console.log('importing');
 globalThis.jest = globalThis.jest ?? {
-  fn: (original) => {
+  fn: (original: any) => {
     // Allow overriding return values in node.
-    let returnVal = null;
-    const caller = (...args) => returnVal ?? original(...args);
-    caller.mockReturnValue = (v) => returnVal = v;
+    let returnVal: any = null;
+    const caller = (...args: any) => returnVal ?? original?.(...args);
+    caller.mockReturnValue = (v: any) => returnVal = v;
     return caller;
   }
 };
 
-module.exports = globalThis.jest;
+export {}

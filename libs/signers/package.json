@@ -25,8 +25,14 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index_node.js",
-  "browser": "./build/index_web.js",
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "browser": "./build/index_web.js",
+      "node": "./build/index_node.js"
+    }
+  },
+  "types": "./build/index.d.ts",
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "^0.2.16"

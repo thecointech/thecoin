@@ -42,9 +42,12 @@
   ],
   "main": "./build/index.js",
   "exports": {
-    ".": "./build/index.js",
-    "./": "./build/"
+    ".": {
+      "development": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
   },
+  "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",

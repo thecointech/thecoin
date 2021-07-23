@@ -1,5 +1,11 @@
+// Unify client-side & server-side API's so our libraries
+// can be agnostic of the environment they run in.
+
 import type firestore from '@google-cloud/firestore';
 import type firebase from 'firebase/app';
+import { BrowserInit } from './index_browser';
+import { EmulatorInit } from './index_emulator';
+import { MockedInit } from './index_mocked';
 
 export type FirestoreClient = firebase.firestore.Firestore;
 export type FirestoreAdmin = firestore.Firestore;
@@ -10,6 +16,8 @@ export type QueryDocumentSnapshot<T = DocumentData> = firebase.firestore.QueryDo
 export type FirestoreDataConverter<T> = firebase.firestore.FirestoreDataConverter<T>|firestore.FirestoreDataConverter<T>;
 export type DocumentData = firebase.firestore.DocumentData|firestore.DocumentData;
 export type SetOptions = firebase.firestore.SetOptions|firestore.SetOptions;
+export type Timestamp = firebase.firestore.Timestamp|firestore.Timestamp;
+export type FieldValue = firebase.firestore.FieldValue|firestore.FieldValue;
 
 // Typescript cannot workout both generics/overloads/union simultaneously
 export type CollectionReference<T=DocumentData> = Omit<firebase.firestore.CollectionReference<T>|firestore.CollectionReference<T>, "withConverter"> & {
@@ -40,40 +48,9 @@ export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"|"collection
   //collection: <T>(path: string) => CollectionReference<T>;
 };
 
-// Test if we currently have an emulator running
-export const isEmulatorAvailable = () => !!(process.env.FIRESTORE_EMULATOR_PORT && process.env.FIRESTORE_EMULATOR_PORT !== 'false')
 
-// Mocked DB structure
-export type MockedDocument = {
-  id: string,
-  _collections?: {
-    [name: string]: MockedDocument[],
-  }
-  [param: string]: unknown,
-}
 
-// Mocked db may be used by our unit tests to supply test data
-export type MockedData = {
-  [name: string]: MockedDocument[]
-}
-export type MockedDb = {
-  // Can our DB connection be established to a live
-  // db if available?  This is useful for mocked tests
-  // that may also be run against live data.  When set,
-  // the data will be made immutable to ensure that a test
-  // will not modify the live DB.  This is useful for
-  // tests that should always run but may be beneficial
-  // to run against live data.  Eg tests that verify that
-  // input data is correct are also nice-to-run against live data.
-  immutable?: boolean, // NOTE: mutable by default
-} & MockedData;
+export type InitParams = BrowserInit|MockedInit|EmulatorInit;
 
-export type ConnectionParams = { project?: string; username?: string; password?: string; };
-
-export type InitParams = ConnectionParams|MockedDb;
-
-export const isMockedDb = (t?: InitParams) : t is MockedDb =>
-  t !== undefined && Object.entries(t).every(kv => (
-    kv[0] === "mutable" ||
-    (Array.isArray(kv[1]) && kv[1].every((doc: MockedDocument) => doc.id))
-  ))
+// Define type of init function here, all versions must comply to this.
+export function init(_params?: InitParams) {}

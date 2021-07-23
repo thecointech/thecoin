@@ -1,7 +1,7 @@
 
 
 import { DateTime } from 'luxon';
-import type * as MarketStatus from '@thecointech/market-status';
+import type * as MarketStatus from './index';
 
 export const nextOpenTimestamp: typeof MarketStatus.nextOpenTimestamp = (date: DateTime, offset: number = 120 * 1000) =>
   Promise.resolve(nextLikelyOpen(date, offset).toMillis())
