@@ -34,7 +34,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
 @media not all and (min-width:1192px) and (max-width:1919px){.fresnel-between-largeScreen-widescreen{display:none!important;}}
   </style>
   <div>
-    <Unknown />
+    <MainNavigation />
   </div>
   <div
     className="undefined"
@@ -47,8 +47,8 @@ exports[`<App /> should render and match the snapshot 1`] = `
         }
       }
     >
-      <Unknown>
-        <Unknown>
+      <MainPageTransition>
+        <GreaterThanMobileSegment>
           <Rail
             internal={true}
             position="left"
@@ -64,10 +64,10 @@ exports[`<App /> should render and match the snapshot 1`] = `
               offset={0}
               scrollContext={[Window]}
             >
-              <Unknown />
+              <PageSidebar />
             </Sticky>
           </Rail>
-        </Unknown>
+        </GreaterThanMobileSegment>
         <Ref
           innerRef={
             Object {
@@ -79,9 +79,9 @@ exports[`<App /> should render and match the snapshot 1`] = `
             <MainRouter />
           </section>
         </Ref>
-      </Unknown>
+      </MainPageTransition>
     </Container>
   </div>
-  <Unknown />
+  <Footer />
 </MediaContextProvider>
 `;
