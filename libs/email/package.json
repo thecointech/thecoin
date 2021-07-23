@@ -27,7 +27,13 @@
     "build/**/*"
   ],
   "main": "./build/index.js",
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "devlive": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
   "dependencies": {
     "@thecointech/logging": "^0.2.16",
     "node-mailjet": "^3.3.4"

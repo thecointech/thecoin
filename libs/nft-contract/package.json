@@ -44,7 +44,13 @@
     "build/**/*"
   ],
   "main": "./build/index.js",
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",

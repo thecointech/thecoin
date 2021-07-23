@@ -30,7 +30,14 @@
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "devlive": "./build/index_mocked.js",
+      "prodtest": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.16",

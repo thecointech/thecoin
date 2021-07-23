@@ -6,21 +6,31 @@ import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 import { setFirestore } from './firestore';
-import { Timestamp } from './timestamp';
 import firebaseConfig from "./password.config.json";
+import { log } from '@thecointech/logging';
+
+export * from './firestore';
+export const Timestamp = firebase.firestore.Timestamp;
+export const FieldValue = firebase.firestore.FieldValue;
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-export const init = async (name: string, password: string) =>
+export type BrowserInit = {
+  name: string,
+  password: string
+}
+
+export const init = async ({name, password}: BrowserInit) =>
 {
+  log.debug('Connecting client-side db');
+
   const _auth = firebase.auth();
   const cred = await _auth.signInWithEmailAndPassword(name, password);
   if (cred != null)
   {
     const db = firebase.firestore();
     setFirestore(db);
-    Timestamp.init(firebase.firestore.Timestamp);
     return true;
   }
   return false;

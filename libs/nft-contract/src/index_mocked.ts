@@ -1,6 +1,6 @@
 import { ContractTransaction } from 'ethers';
 import { utils } from 'ethers';
-import type { TheCoinNFT } from '@thecointech/nft-contract';
+import type { TheCoinNFT } from '.';
 
 class MockNFT implements Pick<TheCoinNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];

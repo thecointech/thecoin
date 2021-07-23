@@ -27,7 +27,7 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./shim": "./build/shim.js"
   },
   "devDependencies": {
     "jest": "*"
