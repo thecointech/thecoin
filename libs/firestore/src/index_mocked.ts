@@ -1,9 +1,9 @@
 import '@thecointech/jestutils/shim';
 import mocks from 'firestore-jest-mock';
-import { setFirestore } from './firestore';
+import { setFirestore } from './store';
 import { log } from '@thecointech/logging';
 
-export * from './firestore';
+export * from './store';
 export const Timestamp = mocks.FakeFirestore.Timestamp
 export const FieldValue = mocks.FakeFirestore.FieldValue;
 

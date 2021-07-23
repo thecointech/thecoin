@@ -33,10 +33,10 @@
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_emulator.js",
       "browser": "./build/index_browser.js",
-      "default": "./build/index_node.js"
+      "node": "./build/index_node.js"
     }
   },
-  "types": "./build/types.d.ts",
+  "types": "./build/index_common.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.16"
   },

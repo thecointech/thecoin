@@ -1,8 +1,8 @@
 import { Firestore  } from '@google-cloud/firestore';
-import { setFirestore } from './firestore';
+import { setFirestore } from './store';
 import { log } from '@thecointech/logging';
 
-export * from './types';
+export * from './store';
 export { FieldValue, Timestamp } from '@google-cloud/firestore';
 
 export async function init() {

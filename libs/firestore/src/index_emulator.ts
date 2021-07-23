@@ -1,10 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import { setFirestore } from './firestore';
+import { setFirestore } from './store';
 import { isEmulatorAvailable } from '@thecointech/jestutils'
 import { log } from '@thecointech/logging';
 
-export * from './firestore';
+export * from './store';
 export const Timestamp = firebase.firestore.Timestamp
 export const FieldValue = firebase.firestore.FieldValue;
 

@@ -3,9 +3,6 @@
 
 import type firestore from '@google-cloud/firestore';
 import type firebase from 'firebase/app';
-import { BrowserInit } from './index_browser';
-import { EmulatorInit } from './index_emulator';
-import { MockedInit } from './index_mocked';
 
 export type FirestoreClient = firebase.firestore.Firestore;
 export type FirestoreAdmin = firestore.Firestore;
@@ -16,8 +13,6 @@ export type QueryDocumentSnapshot<T = DocumentData> = firebase.firestore.QueryDo
 export type FirestoreDataConverter<T> = firebase.firestore.FirestoreDataConverter<T>|firestore.FirestoreDataConverter<T>;
 export type DocumentData = firebase.firestore.DocumentData|firestore.DocumentData;
 export type SetOptions = firebase.firestore.SetOptions|firestore.SetOptions;
-export type Timestamp = firebase.firestore.Timestamp|firestore.Timestamp;
-export type FieldValue = firebase.firestore.FieldValue|firestore.FieldValue;
 
 // Typescript cannot workout both generics/overloads/union simultaneously
 export type CollectionReference<T=DocumentData> = Omit<firebase.firestore.CollectionReference<T>|firestore.CollectionReference<T>, "withConverter"> & {
@@ -47,10 +42,3 @@ export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"|"collection
   collection: (path: string) => CollectionReference;
   //collection: <T>(path: string) => CollectionReference<T>;
 };
-
-
-
-export type InitParams = BrowserInit|MockedInit|EmulatorInit;
-
-// Define type of init function here, all versions must comply to this.
-export function init(_params?: InitParams) {}
