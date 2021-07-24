@@ -28,7 +28,7 @@
     "description": "site.MainNavigationMobile.wedomore: Title for the We do more entry in the menu"
   },
   "1jRkZO": {
-    "defaultMessage": "Earths’ Healthier",
+    "defaultMessage": "La terre se porte mieux",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
   "2+ZDlf": {
@@ -161,7 +161,7 @@
     "description": "site.homepage.landscape.button: Button label for the landscape"
   },
   "P82KCx": {
-    "defaultMessage": "La Terre se porte mieux",
+    "defaultMessage": "La terre se porte mieux",
     "description": "site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker"
   },
   "RR4faR": {
