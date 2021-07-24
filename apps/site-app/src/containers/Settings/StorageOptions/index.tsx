@@ -1,7 +1,7 @@
 import React from 'react';
 import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline/Store';
 import { Container, Header } from "semantic-ui-react"
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 // import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
 // import { UploadState } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';

@@ -3,7 +3,7 @@ import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
-import { isWallet } from "@thecointech/utilities/SignerIdent";
+import { isWallet } from "@thecointech/signers";
 import { Wallet, Signer } from 'ethers';
 import { TheCoinReducer } from "../../store/immerReducer";
 import { createActionCreators, createReducerFunction } from "immer-reducer";

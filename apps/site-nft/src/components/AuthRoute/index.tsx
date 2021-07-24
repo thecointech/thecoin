@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Login } from "@thecointech/shared/containers/Login";
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 import { FormattedMessage } from 'react-intl';
 import { useAccount } from '@thecointech/shared/containers/Account';
 

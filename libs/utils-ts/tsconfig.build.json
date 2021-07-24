@@ -2,8 +2,6 @@
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
-    { "path": "../contract/tsconfig.build.json" },
-    { "path": "../logging/tsconfig.build.json" },
-    { "path": "../jestutils/tsconfig.build.json" }
+    { "path": "../logging/tsconfig.build.json" }
   ]
 }

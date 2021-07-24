@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 import { ButtonSecondary } from '../../../../components/Buttons';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';

@@ -51,7 +51,8 @@
     "@thecointech/fx-rates": "^0.2.17",
     "@thecointech/logging": "^0.2.16",
     "@thecointech/tx-blockchain": "^0.2.17",
-    "@thecointech/utilities": "^0.2.17"
+    "@thecointech/signers": "*",
+    "@thecointech/contract": "*"
   },
   "devDependencies": {
     "jest": "*"
