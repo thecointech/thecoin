@@ -9,7 +9,7 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { IActions, AccountPageProps } from "./types";
 import { useAccount, useAccountApi } from "./reducer";
-import { isSigner, isWallet } from "@thecointech/utilities/SignerIdent";
+import { isSigner, isWallet } from "@thecointech/signers";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";

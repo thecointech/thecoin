@@ -8,7 +8,7 @@ import { DecryptCallback, IActions } from './types';
 import { buildSagas } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer } from '../../store/immerReducer';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';

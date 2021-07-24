@@ -62,7 +62,7 @@ switch (process.env.CONFIG_NAME) {
     break;
   default:
     enhancedModuleResolve();
-    throw new Error('Unknown testing environment');
+    break;
 }
 
 

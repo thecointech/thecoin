@@ -3,7 +3,7 @@ import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { defineMessage } from 'react-intl';
 import { completeStore } from './googleUtils';
 import { log } from '@thecointech/logging';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
 import { GDriveBase } from './Base';
 

@@ -1,6 +1,6 @@
 import { AccountState, DefaultAccountValues } from './state';
 import { AccountMap } from './map';
-import { isSigner } from '@thecointech/utilities/SignerIdent';
+import { isSigner } from '@thecointech/signers';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
 const ThrowIfNotValid = (data: any) => {

@@ -140,11 +140,12 @@ module.exports = {
   ],
   resolve: {
     modules: ['node_modules', 'src'],
+    conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "default"],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
-    mainFields: ['browser', 'jsnext:main', 'main'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),
+      "vm": false,
     }
   },
   target: 'web', // Make web variables accessible to webpack, e.g. window

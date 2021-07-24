@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { clientUri, GetSecureApi } from '../../../../api';
 import { getStoredAccountData } from '@thecointech/account/store';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isWallet } from '@thecointech/signers';
 
 export enum UploadState {
   Waiting,
