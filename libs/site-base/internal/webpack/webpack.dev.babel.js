@@ -99,9 +99,6 @@ function getMockOptions() {
     // Show progress when running dev
     plugins: [
       new webpack.ProgressPlugin(),
-      new webpack.ProvidePlugin({
-        jest: path.join(mocksFolder, 'shim_jest')
-      })
     ],
     // Re-use our jest mocks inside our website (neat, huh?)
     resolve: {
@@ -114,7 +111,7 @@ function getDevLiveOptions() {
   return {
     // Re-direct store to js file
     resolve: {
-      conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "import", "default"],
+      conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "default"],
     }
   }
 }
