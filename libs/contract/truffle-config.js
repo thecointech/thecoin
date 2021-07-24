@@ -1,15 +1,17 @@
 'use strict';
-var path = require('path');
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-// Allow using typescript in deployments
-loadTypescript();
 // Load environment for the network we are deploying to
 require('../../tools/setenv');
-const { AccountId } = require('@thecointech/signers');
-// Load directly from path to side-step the limitations imposed
-// by the new package.exports module resolution
-const { loadFromPK } = require('../signers/build/encrypted');
+require('../../__mocks__/mock_node');
+// Allow using typescript in deployments
+loadTypescript();
 
+var path = require('path');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const { AccountId, getSigner } = require('@thecointech/signers');
+
+const numBuiltIn = AccountId.BrokerCAD + 1;
+const testAccounts = [];
+loadAccounts(numBuiltIn).then(v => testAccounts = v);
 
 module.exports = {
   // We output into our src directory so we can directly import
@@ -30,10 +32,6 @@ module.exports = {
     // prod:test environment
     prodtest: {
       provider: () => {
-        // Load config variables.  This mnemonic is not normally
-        // included in our env files, ensure you define it
-        const numBuiltIn = AccountId.BrokerCAD + 1;
-        const testAccounts = loadAccounts(numBuiltIn);
         return new HDWalletProvider(
           testAccounts,
           `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
@@ -67,10 +65,10 @@ module.exports = {
   }
 };
 
-function loadAccounts(maxIdx) {
+async function loadAccounts(maxIdx) {
   const testAccountKeys = [];
   for (let i = 0; i < maxIdx; i++) {
-    const wallet = loadFromPK(AccountId[i]);
+    const wallet = await getSigner(AccountId[i]);
     if (!wallet)
       throw new Error(`Cannot deploy: missing account ${AccountId[i]}`);
     testAccountKeys.push(wallet.privateKey.slice(2));

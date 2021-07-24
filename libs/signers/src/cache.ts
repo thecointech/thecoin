@@ -1,23 +1,22 @@
 import { Signer } from "@ethersproject/abstract-signer"
 import { AccountName } from "./names"
 
-type AccountCache = {
-  [name in AccountName]?: Signer
-}
-
 declare global {
   namespace globalThis {
     //  deepcode ignore no-var-keyword: var is necessary for this typing to work
-    var __signers: AccountCache
+    var __signers: Map<string, Signer>;
   }
 }
 
 // initialize to empty
-globalThis.__signers = {}
+globalThis.__signers = new Map<string, Signer>();
 
-export function cacheSigner(name: AccountName, signer: Signer) {
-  globalThis.__signers = {
-    ...globalThis.__signers,
-    [name]: signer
-  }
+export async function getAndCacheSigner(name: AccountName, creator: () => Promise<Signer>|Signer) : Promise<Signer> {
+  const cached = globalThis.__signers.get(name);
+  if (cached) return cached;
+
+  const signer = await creator();
+  return __signers
+    .set(name, signer)
+    .get(name)!;
 }

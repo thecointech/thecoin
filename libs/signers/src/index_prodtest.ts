@@ -2,9 +2,11 @@
 // Get the named wallet, either from env variables
 
 import { Wallet, utils } from "ethers";
-import {  } from "ethers";
 import { existsSync, readFileSync } from "fs";
+import { getAndCacheSigner } from './cache';
 import { AccountName } from "./names";
+
+export * from './names';
 
 // or from file system if name is a path.
 function loadEncrypted(name: AccountName) {
@@ -49,6 +51,5 @@ export async function loadAndDecrypt(name: AccountName, callback?: utils.Progres
   return Wallet.fromEncryptedJson(encrypted, key, callback);
 }
 
-export async function loadFromEnv(name: AccountName, callback?: utils.ProgressCallback) {
-  return loadFromPK(name) ?? await loadAndDecrypt(name, callback);
-}
+export const getSigner = (name: AccountName) =>
+  getAndCacheSigner(name, () => loadFromPK(name) || loadAndDecrypt(name));
