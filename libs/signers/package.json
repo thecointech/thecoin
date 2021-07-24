@@ -19,7 +19,6 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
-    "test": "yarn jest",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -37,7 +36,8 @@
   "types": "./build/index_node.d.ts",
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/logging": "^0.2.16"
+    "@thecointech/logging": "^0.2.16",
+    "ethers": "^5.4.1"
   },
   "devDependencies": {
     "jest": "*"

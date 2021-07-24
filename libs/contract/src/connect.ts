@@ -2,7 +2,7 @@ import { Signer, Wallet, providers } from "ethers";
 import { TheCoin } from "./types/TheCoin";
 import { GetContract } from "./contract";
 import { log } from '@thecointech/logging';
-import { isWallet } from '@thecointech/signers'
+import { isLocal } from '@thecointech/signers'
 
 function ConnectWallet(wallet: Wallet) {
   const contract = GetContract();
@@ -12,7 +12,7 @@ function ConnectWallet(wallet: Wallet) {
 export function ConnectContract(signer: Signer, onFailure?: (err: Error) => void): TheCoin {
   // First fetch contract
   const contract = GetContract();
-  if (isWallet(signer)) {
+  if (isLocal(signer)) {
     // Ensure wallet is connected to the same network as the contract
     signer = ConnectWallet(signer as Wallet);
   }

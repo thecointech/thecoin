@@ -17019,7 +17019,7 @@ firebase-tools@^9.10.2:
     winston-transport "^4.4.0"
     ws "^7.2.3"
 
-firebase@^8.2.9, firebase@^8.5.0:
+firebase@^8.5.0:
   version "8.5.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-8.5.0.tgz#185d16bb3a8f302e87d9e517d73828af55eacb3f"
   integrity sha512-dsyONwJ6y4f7OL7MjqzFtRwbkwkni2Xx4pubzPqSyYEjLfqJOrUNIhUf6U7G7fsTLqBI71hdRmUEMt/Bukl8QA==

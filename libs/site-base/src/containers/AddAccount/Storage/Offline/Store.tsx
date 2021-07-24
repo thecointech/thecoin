@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { isWallet } from '@thecointech/signers';
+import { isLocal } from '@thecointech/signers';
 import { ButtonSecondary } from '../../../../components/Buttons';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
@@ -60,7 +60,7 @@ export const onDownload = (address: string) => {
     return;
   }
   const { signer } = account;
-  if (isWallet(signer)) {
+  if (isLocal(signer)) {
     const walletStr = JSON.stringify(signer);
     const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
     FileSaver.saveAs(blob, `${account.name}.wallet.json`);

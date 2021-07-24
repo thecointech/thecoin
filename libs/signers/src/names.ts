@@ -16,5 +16,6 @@ export enum AccountId {
 
 export type AccountName = keyof typeof AccountId;
 
-export const isSigner = (signer: Signer): signer is Signer => !isWallet(signer);
-export const isWallet = (signer: Signer): signer is Wallet => (signer as Wallet)._mnemonic != null;
+// Better names for these functions would be isLocal/isRemote
+export const isRemote = (signer: Signer): signer is Signer => !isLocal(signer);
+export const isLocal = (signer: Signer): signer is Wallet => (signer as Wallet).address != null;

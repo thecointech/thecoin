@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
 import { Login } from "@thecointech/shared/containers/Login";
-import { isWallet } from '@thecointech/signers';
+import { isLocal } from '@thecointech/signers';
 import { FormattedMessage } from 'react-intl';
 import { useAccount } from '@thecointech/shared/containers/Account';
 
@@ -29,7 +29,7 @@ export const AuthRoute = (routeProps: RouteProps)  => {
   const {signer } = account;
 
   // Enforce login before showing sub-page
-  if (isWallet(signer)) {
+  if (isLocal(signer)) {
     if (!signer.privateKey)
       return (
         <Login account={account} />

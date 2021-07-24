@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { clientUri, GetSecureApi } from '../../../../api';
 import { getStoredAccountData } from '@thecointech/account/store';
-import { isWallet } from '@thecointech/signers';
+import { isLocal } from '@thecointech/signers';
 
 export enum UploadState {
   Waiting,
@@ -91,7 +91,7 @@ function fetchAndVerifyWallet(address: string) {
   }
 
   const wallet = account.signer;
-  if (!isWallet(wallet)) {
+  if (!isLocal(wallet)) {
     alert("Cannot upload this wallet: it is not a local account");
     throw new Error("Could not find local account: " + address);
   }
