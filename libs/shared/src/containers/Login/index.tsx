@@ -7,7 +7,7 @@ import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
 
 import { useState, useCallback } from "react";
-import { isWallet } from "@thecointech/signers";
+import { isLocal } from "@thecointech/signers";
 import { useAccountApi } from "../Account/reducer";
 
 import styles from "./styles.module.less";
@@ -81,7 +81,7 @@ export const Login = (props: Props) => {
   const history = useHistory();
   const { account } = props;
   const { signer, address }= account;
-  if (!isWallet(signer) || signer.privateKey) {
+  if (!isLocal(signer) || signer.privateKey) {
     history.push('/');
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline/Store';
 import { Container, Header } from "semantic-ui-react"
-import { isWallet } from '@thecointech/signers';
+import { isLocal } from '@thecointech/signers';
 // import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
 // import { UploadState } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
 import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
@@ -30,7 +30,7 @@ const labelGoogle = defineMessage({
 export function StorageOptions() {
 
   const activeAccount = useActiveAccount();
-  const isLocal = isWallet(activeAccount!.signer);
+  const isLocal = isLocal(activeAccount!.signer);
 
   // const [feedback, setFeedback] = useState({} as MessageProps)
   // const onStateChange = useCallback((_state: UploadState, message: MessageProps) => {

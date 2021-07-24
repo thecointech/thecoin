@@ -9,7 +9,7 @@ import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { IActions, AccountPageProps } from "./types";
 import { useAccount, useAccountApi } from "./reducer";
-import { isSigner, isWallet } from "@thecointech/signers";
+import { isRemote, isLocal } from "@thecointech/signers";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { SemanticICONS } from "semantic-ui-react";
 import { DateTime } from "luxon";
@@ -64,7 +64,7 @@ export const Account = (props: Props) => {
   // prepare account for usage
   useEffect(() => {
     // Is this a remote account?
-    if (isSigner(signer)) {
+    if (isRemote(signer)) {
       if (!signer.provider)
         connectSigner(account, accountActions);
       else if (!account.contract) {
@@ -84,7 +84,7 @@ export const Account = (props: Props) => {
   }, [signer])
 
 
-  if (isWallet(signer)) {
+  if (isLocal(signer)) {
     if (!signer.privateKey)
       return (
         <Login account={account} />

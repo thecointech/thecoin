@@ -1,6 +1,6 @@
 import { AccountState, DefaultAccountValues } from './state';
 import { AccountMap } from './map';
-import { isSigner } from '@thecointech/signers';
+import { isRemote } from '@thecointech/signers';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
 const ThrowIfNotValid = (data: any) => {
@@ -14,13 +14,12 @@ export function storeAccount(account: AccountState) {
   // Strip the contract from the account.
   let { contract, ...toStore } = account;
   const { address } = toStore;
-  if (isSigner(toStore.signer)) {
+  if (isRemote(toStore.signer)) {
     // We can't directly save a signer (it has a circular reference)
     // but also it's data isn't particularily useful.
-    let signerIdent = {
-      _isSigner: true,
-    };
-    toStore.signer = signerIdent as any;
+    toStore.signer = {
+      _isRemote: true,
+    } as any;
   }
   // And that's it - write to local storage
   localStorage[address] = JSON.stringify(toStore);

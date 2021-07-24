@@ -3,7 +3,7 @@ import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
-import { isWallet } from "@thecointech/signers";
+import { isLocal } from "@thecointech/signers";
 import { Wallet, Signer } from 'ethers';
 import { TheCoinReducer } from "../../store/immerReducer";
 import { createActionCreators, createReducerFunction } from "immer-reducer";
@@ -65,7 +65,7 @@ export class AccountMapReducer extends TheCoinReducer<AccountMapState> implement
     // Finally, remove from the website entirely.
     deleteAccount(account);
     // For good measure, we clear the data in the JS object.
-    if (isWallet(signer)) {
+    if (isLocal(signer)) {
       delete (signer as any).privateKey;
     }
   }

@@ -8,7 +8,7 @@ import { DecryptCallback, IActions } from './types';
 import { buildSagas } from './actions';
 import { actions as FxActions } from '../../containers/FxRate/reducer';
 import { TheCoinReducer } from '../../store/immerReducer';
-import { isWallet } from '@thecointech/signers';
+import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
@@ -156,7 +156,7 @@ export class AccountReducer extends TheCoinReducer<AccountState>
     if (!signer) {
       throw (`Could not decrypt ${name} because it is not in local storage`);
     }
-    if (isWallet(signer)) {
+    if (isLocal(signer)) {
       if (signer.privateKey)
         throw new Error(`Attempting decryption of already-decrypted wallet: ${name}`);
     }
