@@ -23,31 +23,24 @@ type Props = Readonly<MyProps>;
 
 const translate = defineMessages({
   default: {
-    id: "base.uxScoredPassword.strength",
     defaultMessage: 'strength',
   },
   0: {
-    id: "base.uxScoredPassword.ineffectual",
     defaultMessage: 'ineffectual',
   },
   1: {
-    id: "base.uxScoredPassword.vulnerable",
     defaultMessage: 'vulnerable',
   },
   2: {
-    id: "base.uxScoredPassword.weak",
     defaultMessage: 'weak',
   },
   3: {
-    id: "base.uxScoredPassword.moderate",
     defaultMessage: 'moderate',
   },
   4: {
-    id: "base.uxScoredPassword.strong",
     defaultMessage: 'strong',
   },
   PasswordRequired: {
-    id: "base.uxScoredPassword.PasswordRequired",
     defaultMessage: "Please enter a password of at least 'moderate' strength",
   },
 });

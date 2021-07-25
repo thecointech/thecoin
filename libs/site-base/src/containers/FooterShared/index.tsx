@@ -11,11 +11,9 @@ import { breakpointsValues } from '@thecointech/shared/components/ResponsiveTool
 
 const translate = defineMessages({ 
     registered : { 
-      id: "base.footer.registered",
       defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
       description:"base.footer.registered: Registered Non profit phrase in footer"},
     copyright : { 
-      id: "base.footer.copyright",
       defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
       description:"base.footer.copyright: Copyright phrase in footer"}});
 
