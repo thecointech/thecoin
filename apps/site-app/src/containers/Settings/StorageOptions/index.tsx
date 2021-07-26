@@ -30,14 +30,14 @@ const labelGoogle = defineMessage({
 export function StorageOptions() {
 
   const activeAccount = useActiveAccount();
-  const isLocal = isLocal(activeAccount!.signer);
+  const local = isLocal(activeAccount!.signer);
 
   // const [feedback, setFeedback] = useState({} as MessageProps)
   // const onStateChange = useCallback((_state: UploadState, message: MessageProps) => {
   //   setFeedback(message);
   // }, [setFeedback])
 
-  return isLocal
+  return local
     ? <Container>
         {/* <MaybeMessage {...feedback} /> */}
         <Header as='h5' className={"appTitles"}>

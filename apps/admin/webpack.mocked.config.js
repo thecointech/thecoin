@@ -23,13 +23,9 @@ module.exports = {
       }
     ],
   },
-  plugins: [
-    new ProvidePlugin({
-      jest: path.join(mocksFolder, 'shim_jest')
-    })
-  ],
   // Re-use our jest mocks inside our website (neat, huh?)
   resolve: {
+    conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "import", "default"],
     modules: [mocksFolder]
   }
 }
