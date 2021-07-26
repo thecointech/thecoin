@@ -7,11 +7,7 @@ import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
 import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
 
-// Either import CSS or LESS;
-// - LESS is slower, but offers on-save hot-reload
-// - CSS is faster, but requires manual recompile
-import '../../semantic/semantic.css';
-//import '@thecointech/site-semantic-theme/semantic.less';
+import 'semantic-ui-css/semantic.min.css'
 
 export const App = () => {
   useFxRatesStore();

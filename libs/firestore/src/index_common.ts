@@ -16,4 +16,4 @@ export { FieldValue, Timestamp } from '@google-cloud/firestore';
 export type InitParams = BrowserInit|MockedInit|EmulatorInit;
 
 // Define type of init function here, all versions must comply to this.
-export function init(_params?: InitParams) {}
+export function init(_params?: InitParams) { return false; }

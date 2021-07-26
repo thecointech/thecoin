@@ -1,4 +1,4 @@
-import {init} from '@thecointech/firestore';
+import { init } from '@thecointech/firestore';
 import { ConfigStore } from '@thecointech/store';
 
 //

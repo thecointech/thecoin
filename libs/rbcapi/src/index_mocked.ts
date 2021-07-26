@@ -1,4 +1,5 @@
-import { ETransferErrorCode, RbcApi as SrcApi } from "./index";
+import { ETransferErrorCode } from "./types";
+import type { RbcApi as SrcApi } from "./index";
 export { ETransferErrorCode };
 
 let result = 1234;

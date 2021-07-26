@@ -5,8 +5,9 @@ const { merge } = require("webpack-merge")
 const path = require('path');
 
 rules.push(
+  // Default CSS processing (anything not named *.module.css)
   {
-    test: /\.css$/,
+    test: /(?<!module)\.css$/,
     use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
   },
   // Explicitly process Semantics Less files.
@@ -14,17 +15,8 @@ rules.push(
   // Loaders for module files
   less_loaders.css_module_loader,
   {
-    test: /\.svg$/,
-    use: [
-      {
-        loader: 'svg-url-loader',
-        options: {
-          // Inline files smaller than 10 kB
-          limit: 10 * 1024,
-          noquotes: true,
-        },
-      },
-    ],
+    test: /\.(svg|png|jpg|ttf|eot|woff2?)$/,
+    type: 'asset'
   },
 );
 

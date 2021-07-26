@@ -8,11 +8,11 @@ export * from './names';
 
 // If running on GAE, check in secrets manager
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
-if (!PrivilegedEnv())
-  throw new Error('Running this version requires Secrets');
 
 // Get Secrets.  Currently only used on TCCC Broker
 export async function getSecret(name: string) {
+  if (!PrivilegedEnv())
+    throw new Error('Cannot get signer outside PrivilegedEnv');
   const client = new SecretManagerServiceClient();
   const [accessResponse] = await client.accessSecretVersion({
     name: `projects/${process.env.GOOGLE_CLOUD_PROJECT}/secrets/${name}/versions/latest`,

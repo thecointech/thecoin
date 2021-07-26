@@ -17,16 +17,16 @@ export const FieldValue = firebase.firestore.FieldValue;
 firebase.initializeApp(firebaseConfig);
 
 export type BrowserInit = {
-  name: string,
+  username: string,
   password: string
 }
 
-export const init = async ({name, password}: BrowserInit) =>
+export const init = async ({username, password}: BrowserInit) =>
 {
   log.debug('Connecting client-side db');
 
   const _auth = firebase.auth();
-  const cred = await _auth.signInWithEmailAndPassword(name, password);
+  const cred = await _auth.signInWithEmailAndPassword(username, password);
   if (cred != null)
   {
     const db = firebase.firestore();
