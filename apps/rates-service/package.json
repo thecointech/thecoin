@@ -48,7 +48,7 @@
     "@thecointech/logging": "^0.2.16",
     "@thecointech/market-status": "^0.2.16",
     "@thecointech/utilities": "^0.2.17",
-    "@tsoa/runtime": "^3.5.2",
+    "@tsoa/runtime": "^3.8.0",
     "axios": "*",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -62,6 +62,6 @@
     "@types/node-fetch": "^2.5.5",
     "@types/swagger-ui-express": "^4.1.1",
     "jest": "*",
-    "tsoa": "^3.5.2"
+    "tsoa": "^3.8.0"
   }
 }

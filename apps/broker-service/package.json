@@ -58,6 +58,6 @@
     "@types/cors": "^2.8.10",
     "@types/swagger-ui-express": "^4.1.1",
     "jest": "*",
-    "tsoa": "^3.5.2"
+    "tsoa": "^3.8.0"
   }
 }
