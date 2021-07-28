@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
-import { AuthRouter } from '@thecointech/shared/containers/AuthRoute';
+import { AuthSwitch } from '@thecointech/shared/containers/AuthRoute';
 import { Claim } from '../Claim';
 import { ProfileBuilder } from '../ProfileBuilder';
 import { HomePage } from '../HomePage';
@@ -27,4 +27,4 @@ export const SiteMap = {
   },
   default: HomePage,
 }
-export const MainRouter = () => <AuthRouter {...SiteMap} />
+export const MainRouter = () => <AuthSwitch path='/' {...SiteMap} />
