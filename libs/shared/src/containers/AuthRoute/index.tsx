@@ -54,13 +54,14 @@ type AuthSwitchProps = {
 };
 
 export const AuthSwitch = ({path, auth, open, fallback} : AuthSwitchProps) => {
+  const trimmed = path.endsWith('/') ? path.slice(0, -1) : path;
   return (
     <Switch>
       {open ? Object.entries(open).map(
-        ([key, component]) => <Route key={key} path={`${path}/${key}`} component={component} />
+        ([key, component]) => <Route key={key} path={`${trimmed}/${key}`} component={component} />
       ) : null}
       {auth ? Object.entries(auth).map(
-        ([key, component]) => <AuthRoute key={key} path={`${path}/${key}`} component={component} />
+        ([key, component]) => <AuthRoute key={key} path={`${trimmed}/${key}`} component={component} />
       ) : null}
       {fallback ? <Route component={fallback} /> : null}
     </Switch>
