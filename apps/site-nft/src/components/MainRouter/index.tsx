@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Switch, Route } from 'react-router-dom';
 import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
+import { AuthRouter } from '@thecointech/shared/containers/AuthRoute';
 import { Claim } from '../Claim';
-import { AuthRoute } from '../AuthRoute';
 import { ProfileBuilder } from '../ProfileBuilder';
 import { HomePage } from '../HomePage';
 import { Validate } from '../Validate';
@@ -15,11 +14,11 @@ import { Offsets } from '../Offsets';
 // This struct is exported so the keys (paths)
 // can be referenced elsewhere in the project.
 export const SiteMap = {
-  Auth: {
+  auth: {
     claim: Claim,
     profile: ProfileBuilder,
   },
-  Public: {
+  open: {
     gauth: GAuth,
     addAccount: AddAccount,
     validate: Validate,
@@ -28,13 +27,4 @@ export const SiteMap = {
   },
   default: HomePage,
 }
-
-export const MainRouter = () => {
-  return (
-    <Switch>
-      {Object.entries(SiteMap.Auth).map(([key, component]) => <AuthRoute key={key} path={`/${key}`} component={component} />)}
-      {Object.entries(SiteMap.Public).map(([key, component]) => <Route key={key} path={`/${key}`} component={component} />)}
-      <Route path="/" component={SiteMap.default} />
-    </Switch>
-  )
-}
+export const MainRouter = () => <AuthRouter {...SiteMap} />

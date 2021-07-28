@@ -37,15 +37,16 @@ export const PageSidebar: React.FC<Props> = (props) => {
 }
 
 const useMenuItems = () => {
-  let items: SidebarMenuItem[] = [];
   const appState = useSelector(s => s as ApplicationBaseState);
-  const generators = selectSidebar(appState);
+  const state = selectSidebar(appState);
 
-  Object.entries(generators.generators).forEach(([_, generator]) => {
-    items = generator(items, appState);
-  });
-
-  return buildMenuArray(items);
+  let items = state.items;
+  if (!items && state.generators) {
+    Object.entries(state.generators).forEach(([_, generator]) => {
+      items = generator(items ?? [], appState);
+    });
+  }
+  return buildMenuArray(items ?? []);
 }
 
 const getAsItem = (item: SidebarMenuItem) => {
@@ -93,9 +94,12 @@ const getAsHeader = (item: SidebarMenuItem) =>
 
 
 const getAsDivider = (item: SidebarMenuItem) =>
-  <Divider horizontal key={`Divider${item.link.name}`}>
-    {item.link.name}
-  </Divider>
+  <React.Fragment key={`Divider${item.link.name}`}>
+    <Divider horizontal>
+      {item.link.name}
+    </Divider>
+    {buildSubMenuArray(item)}
+  </React.Fragment>
 
 // Utility function builds a list of menu items
 // from the props set to this components store state

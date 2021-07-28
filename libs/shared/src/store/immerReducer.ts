@@ -6,7 +6,7 @@ interface Action {
   type: string;
 }
 
-export class TheCoinReducer<T> extends ImmerReducer<T> {
+export abstract class TheCoinReducer<T> extends ImmerReducer<T> {
 
   ///////////////////////////////////////////////////////////////////////////////////
   //
@@ -65,4 +65,3 @@ export class TheCoinReducer<T> extends ImmerReducer<T> {
   // }
 
 }
-

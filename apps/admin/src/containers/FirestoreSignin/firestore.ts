@@ -16,7 +16,7 @@ export async function signIn() {
     if (!username || !password)
         return false;
 
-    return await init({username, password});
+    return init({username, password});
 }
 
 export async function trySignIn(username: string, password: string) {

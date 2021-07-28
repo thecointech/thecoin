@@ -1,15 +1,15 @@
 import React from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { Login } from "@thecointech/shared/containers/Login";
+import { Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 import { isLocal } from '@thecointech/signers';
-import { FormattedMessage } from 'react-intl';
-import { useAccount } from '@thecointech/shared/containers/Account';
+import { defineMessage, FormattedMessage } from 'react-intl';
+import { useActiveAccount } from '../AccountMap';
+import { Login } from "../Login";
+import { useAccount } from '../Account';
 
-const waitingForWeb3 = {
+const waitingForWeb3 = defineMessage({
   defaultMessage: "Connecting to your Web3 provider",
   description:"Message to display while waiting for user to complete Web3 connection"
-};
+});
 
 // An authorized route is one that requires the use of an unlocked account
 export const AuthRoute = (routeProps: RouteProps)  => {
@@ -43,5 +43,26 @@ export const AuthRoute = (routeProps: RouteProps)  => {
 
   return (
     <Route {...routeProps} />
+  )
+}
+
+type AuthSwitchProps = {
+  auth?: Record<string, React.ComponentType>,
+  open?: Record<string, React.ComponentType>,
+  fallback?: React.ComponentType,
+  path: string,
+};
+
+export const AuthSwitch = ({path, auth, open, fallback} : AuthSwitchProps) => {
+  return (
+    <Switch>
+      {open ? Object.entries(open).map(
+        ([key, component]) => <Route key={key} path={`${path}/${key}`} component={component} />
+      ) : null}
+      {auth ? Object.entries(auth).map(
+        ([key, component]) => <AuthRoute key={key} path={`${path}/${key}`} component={component} />
+      ) : null}
+      {fallback ? <Route component={fallback} /> : null}
+    </Switch>
   )
 }

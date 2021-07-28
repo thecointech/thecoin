@@ -4,7 +4,7 @@ import { RUrl } from '@thecointech/utilities/RUrl';
 import { Login } from "../Login";
 import { NotFoundPage } from "../NotFoundPage";
 import { ApplicationBaseState } from "../../types";
-import { useSidebar } from "../PageSidebar/actions";
+import { useSidebarApi } from "../PageSidebar/reducer";
 import { SidebarMenuItem, FindItem } from "../PageSidebar/types";
 import { ConnectWeb3 } from "./Web3";
 import { IActions, AccountPageProps } from "./types";
@@ -55,10 +55,10 @@ export const Account = (props: Props) => {
   );
 
   // Initialize sidebar
-  const sidebar = useSidebar();
+  const sidebar = useSidebarApi();
   useEffect(() => {
     sidebar.addGenerator(account.name, sidebarCb);
-    return () => sidebar.removeGenerator(account.name);
+    return () => { sidebar.removeGenerator(account.name) };
   }, [account, sidebarCb])
 
   // prepare account for usage

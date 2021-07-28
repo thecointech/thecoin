@@ -1,17 +1,20 @@
-import { ImmerReducer, createReducerFunction } from 'immer-reducer';
-import { injectReducer, useInjectReducer } from "redux-injectors";
-import { SidebarGenerators, IActions, SidebarGenerator } from './types';
+import { useInjectReducer } from "redux-injectors";
+import { SidebarState, IActions, SidebarGenerator } from './types';
 import { ApplicationBaseState } from '../../types';
+import { TheCoinReducer } from '../../store/immerReducer';
+import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
+import { ActionCreators } from 'immer-reducer';
 
 const SIDEBAR_KEY : keyof ApplicationBaseState = "sidebar";
 
-// The initial state of the App
-export const initialState: SidebarGenerators = {
+export const initialState = {
+  items: [],
   generators: {}
-};
-
-export class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
+}
+export class SidebarItemsReducer extends TheCoinReducer<SidebarState>
   implements IActions {
+
 
   addGenerator(name: string, generator: SidebarGenerator): void {
     this.draftState.generators[name] = generator;
@@ -19,17 +22,18 @@ export class SidebarItemsReducer extends ImmerReducer<SidebarGenerators>
   removeGenerator(name: string): void {
     delete this.draftState.generators[name];
   }
+
+  static reducer: any;
+  static actions: ActionCreators<typeof SidebarItemsReducer>;
+  static initialize(state: Partial<SidebarState>) {
+    const r = SidebarItemsReducer.buildReducers(SidebarItemsReducer, {
+      ...initialState,
+      ...state
+    });
+    SidebarItemsReducer.reducer = r.reducer;
+    SidebarItemsReducer.actions = r.actions;
+  }
 }
 
-const reducer = createReducerFunction(SidebarItemsReducer, initialState) as any;
-
-export const useSidebar = () => {
-  useInjectReducer({ key: SIDEBAR_KEY, reducer: reducer });
-}
-
-export function buildReducer() {
-  return injectReducer({
-    key: SIDEBAR_KEY,
-    reducer: reducer
-  });
-}
+export const useSidebar = () => useInjectReducer({ key: SIDEBAR_KEY, reducer: SidebarItemsReducer.reducer });
+export const useSidebarApi = () => bindActionCreators(SidebarItemsReducer.actions, useDispatch());

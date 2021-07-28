@@ -1,5 +1,7 @@
-import '@thecointech/jestutils/shim';
+import { register } from '@thecointech/jestutils/shim';
+register.on() // If running in node, add to global namespace while importing firestore
 import mocks from 'firestore-jest-mock';
+register.off()
 import { setFirestore } from './store';
 import { log } from '@thecointech/logging';
 
