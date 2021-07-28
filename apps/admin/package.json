@@ -15,6 +15,7 @@
 
     "build:semantic": "node ./internals/buildSemantic",
     "dev": "electron-forge start",
+    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
