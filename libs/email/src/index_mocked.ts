@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import '@thecointech/jestutils/shim';
+import { jest } from '@thecointech/jestutils/shim';
 
 // Set log.level(20) to test if things are breaking.
 export const SendMail = jest.fn((subject: string, message: string) => {

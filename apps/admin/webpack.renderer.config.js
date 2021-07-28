@@ -41,6 +41,9 @@ const baseOptions = {
       "vm": false
     }
   },
+  experiments: {
+    topLevelAwait: true,
+  }
 }
 
 module.exports = merge(mocked, baseOptions);

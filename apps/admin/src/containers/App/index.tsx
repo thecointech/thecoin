@@ -5,9 +5,11 @@ import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
 import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
-import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
-
+import { useSidebar, SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
 import 'semantic-ui-css/semantic.min.css'
+import { items } from './sidebar';
+
+SidebarItemsReducer.initialize({items})
 
 export const App = () => {
   useFxRatesStore();

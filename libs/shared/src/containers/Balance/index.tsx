@@ -1,22 +1,21 @@
 import * as React from "react";
 import { Button, Popup, Icon } from "semantic-ui-react";
-
 import { toHuman } from "@thecointech/utilities";
 import { getFxRate } from "@thecointech/fx-rates";
-import { AccountPageProps } from "../Account/types";
-
 import { TransactionList } from "../TransactionList";
-import styles from "./styles.module.less";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
+import { useActiveAccount } from '../AccountMap';
+import { useAccountApi } from '../Account';
+import styles from "./styles.module.less";
 
-
-export const Balance = ({ account, actions }: AccountPageProps) => {
-
+export const Balance = () => {
+  const account = useActiveAccount()!;
+  const api = useAccountApi(account.address);
   const doUpdateBalance = React.useCallback((e?: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
-    actions.updateBalance();
-  }, [actions]);
+    api.updateBalance();
+  }, [api]);
   React.useEffect(() => {
     doUpdateBalance();
   }, [])

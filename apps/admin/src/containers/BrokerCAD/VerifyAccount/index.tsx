@@ -7,12 +7,7 @@ import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
 import { setUserVerified } from '@thecointech/broker-db/user';
 import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
 import { DateTime } from 'luxon';
-import { Signer } from '@ethersproject/abstract-signer';
-
-interface OwnProps {
-	signer: Signer,
-}
-type Props = OwnProps;
+import { getSigner } from '@thecointech/signers';
 
 const initialState = {
 	account: '',
@@ -22,7 +17,7 @@ const initialState = {
 
 //
 //
-class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
+class VerifyAccount extends React.PureComponent<{}, typeof initialState> {
 
 	state = initialState;
 
@@ -52,7 +47,7 @@ class VerifyAccount extends React.PureComponent<Props, typeof initialState> {
 
 	async verifyAccount(_e: React.MouseEvent<HTMLElement>) {
 
-		const { signer } = this.props;
+    const signer = await getSigner("BrokerCAD")
 		const { account } = this.state;
 		if (!account)
 			return;

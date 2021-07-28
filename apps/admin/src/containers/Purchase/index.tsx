@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Form, Header, Confirm, Select } from 'semantic-ui-react';
-import { Moment } from 'moment';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
@@ -11,127 +10,79 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
 import { getCurrentState } from '@thecointech/tx-processing/statemachine';
-import { AccountState } from '@thecointech/account';
+import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { useAccountApi } from '@thecointech/shared/containers/Account';
+const typeOptions = ["deposit", "other"].map(k => ({
+  key: k,
+  value: k,
+  text: k
+}));
 
+export const Purchase = () => {
 
-type Props = AccountState & {
-  updateBalance: Function
-}
+  const [purchaser, setPurchaser] = React.useState("0x1234");
+  const [forceValidate, setForceValidate] = React.useState(false);
+  const [type, setType] = React.useState<PurchaseType>("deposit");
+  const [fiat, setFiat] = React.useState(0);
+  const [confirm, setConfirm] = React.useState(false);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+  const [step, setStep] = React.useState("");
 
-const initialState = {
-  fiat: 0,
-  address: "",
-  purchaserCode: "---",
+  const account = useActiveAccount()!;
+  const api = useAccountApi(account.address!);
 
-  recievedDate: new Date(),
-
-  type: "deposit" as PurchaseType,
-
-  txHash: '',
-  step: "",
-  isProcessing: false,
-
-  doConfirm: false
-}
-
-export class Purchase extends React.PureComponent<Props> {
-
-  state = initialState;
-
-
-  async buildPurchaseEntry(): Promise<BuyAction> {
-    const { fiat, recievedDate, address, type } = this.state;
-    if (type != 'deposit') throw new Error("We don't have a good method for supporting this yet");
-    // This is as good as we can get...
-    const initialId = `${type}-${recievedDate.getTime()}-${fiat}`;
-    return await getActionFromInitial(address, "Buy", {
-      initialId,
-      date: DateTime.fromJSDate(recievedDate),
-      initial: {
-        amount: new Decimal(fiat),
-        type,
-      }
-    })
-  }
-
-  async sendPurchase() {
+  const onConfirm = async () => {
+    setConfirm(false);
+    setIsProcessing(true);
+    setForceValidate(true);
     throw new Error("Just because it compiles, doesn't mean it works.  Check properly");
-    this.setState({isProcessing: true});
-    const buy = await this.buildPurchaseEntry();
-    const processor = Processor(this.props.contract!);
+    const buy = await buildPurchaseEntry(fiat, DateTime.now(), purchaser, type);
+    const processor = Processor(account.contract!);
     const result = await processor.execute(null, buy);
     // Update with the step we get to.
     // TODO: Could we make this a callback?
     const current = getCurrentState(result);
-    this.setState({ txHash: current.data.hash, step: current.name});
+    //setState({ txHash: current.data.hash, step: current.name});
+    alert('You could be done' + current.data.hash);
+    setStep(current.name);
+    api.updateHistory(DateTime.now(), DateTime.now());
+    setIsProcessing(false);
   }
 
-  onSetDate = async (value: string|Moment) => {
-    if (typeof value !== 'string') {
-      this.setState({
-        recievedDate: value.toDate(),
-      });
+
+  return (
+    <>
+      <Header>Purchase</Header>
+      <p>Current Balance: {toHuman(account.balance, true)} </p>
+      <Form>
+        {/* <Datetime value={recievedDate} onChange={this.onSetDate} /> */}
+        <UxAddress
+          uxChange={setPurchaser}
+          intlLabel={messages.labelAccount}
+          forceValidate={forceValidate}
+          placeholder="Purchaser Account"
+        />
+        <Select value={type} options={typeOptions} onChange={event => setType(event.currentTarget.innerText as PurchaseType)} />
+        <DualFxInput onChange={setFiat} maxValue={account.balance} value={fiat} fxRate={1} />
+        <Form.Button onClick={() => setConfirm(true)}>SEND</Form.Button>
+      </Form>
+      <Confirm open={confirm} onCancel={() => setConfirm(false)} onConfirm={onConfirm} />
+      <ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{ step }} />
+    </>
+  )
+}
+
+async function buildPurchaseEntry(fiat: number, date: DateTime, address: string, type: string): Promise<BuyAction> {
+  if (type != 'deposit') throw new Error("We don't have a good method for supporting this yet");
+  // Our goal is to create an initial ID that is unique for the client.
+  // The following should be good enough (?).
+  const initialId = `${type}-${date.toMillis()}-${fiat}`;
+  return await getActionFromInitial(address, "Buy", {
+    initialId,
+    date,
+    initial: {
+      amount: new Decimal(fiat),
+      type,
     }
-  }
-
-  resetInputs() {
-    this.setState(initialState)
-  }
-
-  // Validate our inputs
-  onAccountValue = (value: string) => {
-    this.setState({
-      address: value,
-    });
-  }
-  onSetType = (event: React.SyntheticEvent<HTMLElement, Event>) => {
-    this.setState({
-      type: event.currentTarget.innerText
-    })
-  }
-  handleCoinChange = (value: number) => this.setState({ coin: value })
-  confirmOpen = () => this.setState({ doConfirm: true })
-  confirmClose = () => this.setState({ doConfirm: false })
-  handleConfirm = async () => {
-    this.setState({ doConfirm: false })
-    await this.sendPurchase()
-    this.resetInputs();
-  }
-
-  renderShortDate = (date: Date) => date.toLocaleDateString("en-US", { day: "numeric", hour: "numeric", minute: "numeric" })
-
-  getTypeOptions = () => ["deposit", "other"].map(k => ({
-    key: k,
-    value: k,
-    text: k
-  }));
-
-
-  render() {
-    const { fiat, isProcessing, step, purchaserCode, type } = this.state
-    const { balance } = this.props;
-    const forceValidate = false;
-
-    return (
-      <React.Fragment>
-        <Header>Purchase</Header>
-        <p>Current Balance: {toHuman(balance, true)} </p>
-        <Form>
-          {/* <Datetime value={recievedDate} onChange={this.onSetDate} /> */}
-          <UxAddress
-            uxChange={this.onAccountValue}
-            intlLabel={messages.labelAccount}
-            forceValidate={forceValidate}
-            placeholder="Purchaser Account"
-          />
-          <p>Purchaser Code: {purchaserCode}</p>
-          <Select value={type} options={this.getTypeOptions()} onChange={this.onSetType}/>
-          <DualFxInput onChange={this.handleCoinChange} maxValue={balance} value={fiat} fxRate={1} />
-          <Form.Button onClick={this.confirmOpen}>SEND</Form.Button>
-        </Form>
-        <Confirm open={this.state.doConfirm} onCancel={this.confirmClose} onConfirm={this.handleConfirm} />
-        <ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{ step }} />
-      </React.Fragment>
-    );
-  }
+  })
 }
