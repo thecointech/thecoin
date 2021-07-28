@@ -27,5 +27,5 @@ class HeightMeasureReducer extends TheCoinReducer<ContentState>
 const { reducer, actions} = HeightMeasureReducer.buildReducers(HeightMeasureReducer, initialState);
 export const useHeightMeasure = () => {
   useInjectReducer({ key: CONTENT_KEY, reducer });
-  return (bindActionCreators(actions, useDispatch()) as any) as IActions;
+  return bindActionCreators(actions, useDispatch());
 }

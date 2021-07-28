@@ -28,5 +28,5 @@ export const useLanguageProvider = () => {
   useInjectReducer({ key: LANGUAGE_KEY, reducer });
 }
 export const useLanguageProviderApi = () => {
-  return (bindActionCreators(actions, useDispatch()) as IActions) as IActions;
+  return (bindActionCreators(actions, useDispatch()));
 };
