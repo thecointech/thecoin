@@ -4,10 +4,11 @@
   "productName": "admin",
   "workspaces": {
     "nohoist": [
-      "**/electron**"
+      "**/electron**",
+      "**/electron-devtools-installer/**"
     ]
   },
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -36,12 +37,9 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.58",
     "@electron-forge/maker-zip": "^6.0.0-beta.58",
     "@electron-forge/plugin-webpack": "6.0.0-beta.58",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
     "@vercel/webpack-asset-relocator-loader": "1.6.0",
     "electron": "13.1.7",
-    "eslint": "^7.6.0",
-    "eslint-plugin-import": "^2.20.0",
+    "electron-devtools-installer": "^3.2.0",
     "node-loader": "^2.0.0"
   },
   "dependencies": {
