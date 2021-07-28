@@ -36,7 +36,8 @@ module.exports = {
               name: "main_window"
             }
           ]
-        }
+        },
+        "port": 3002
       }
     ]
   ]
