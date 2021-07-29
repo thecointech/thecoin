@@ -8,7 +8,7 @@ import { ModalOperation } from "../ModalOperation";
 
 import { useState, useCallback } from "react";
 import { isLocal } from "@thecointech/signers";
-import { useAccountApi } from "../Account/reducer";
+import { Account } from "../Account/reducer";
 
 import styles from "./styles.module.less";
 import { AccountState } from '@thecointech/account';
@@ -98,7 +98,7 @@ export const Login = (props: Props) => {
   }, [loginState, setLoginState, setPassword]);
 
   ////////////////////////////////
-  const accountApi = useAccountApi(address);
+  const accountApi = Account(address).useApi();
   const onDecryptWallet = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     __cancel = false;

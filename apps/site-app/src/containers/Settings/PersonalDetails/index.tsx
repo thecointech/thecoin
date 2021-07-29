@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { Account } from '@thecointech/shared/containers/Account';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { useAccountApi } from '@thecointech/shared/containers/Account';
 
 const translations = defineMessages({
   title : {
@@ -46,8 +46,8 @@ const translations = defineMessages({
 
 export const PersonalDetails = () => {
 
-  const account = useActiveAccount()!;
-  const accountApi = useAccountApi(account.address);
+  const account = AccountMap.useActive()!;
+  const accountApi = Account(account.address).useApi();
   const [details, setDetails] = useState(account.details);
   const [givenNameEdit, setGivenNameEdit] = useState(false);
   const [familyNameEdit, setFamilyNameEdit] = useState(false);
@@ -91,7 +91,7 @@ export const PersonalDetails = () => {
             uxChange={(value: string) => onDetailsChange(value,"given_name")}
             details={details}
             value={details.given_name}
-            name="given_name" 
+            name="given_name"
             readOnly={!givenNameEdit}
           />
 
@@ -106,7 +106,7 @@ export const PersonalDetails = () => {
           value={details.family_name}
           uxChange={(value: string) => onDetailsChange(value,"family_name" )}
           details={details}
-          name="family_name" 
+          name="family_name"
           readOnly={!familyNameEdit} />
 
         <UxDate
@@ -146,11 +146,11 @@ export const PersonalDetails = () => {
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                 </span>
-              </div>} 
-            name="email" 
+              </div>}
+            name="email"
             readOnly={!emailEdit} />
-          
-        <UxInput 
+
+        <UxInput
             className={"half right"}
             details={details}
             value={details.phone}
@@ -160,8 +160,8 @@ export const PersonalDetails = () => {
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
                   <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                 </span>
-              </div>} 
-            name="phone" 
+              </div>}
+            name="phone"
             readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>

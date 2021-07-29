@@ -1,25 +1,20 @@
-import { IActions } from './types';
+import { IActions, AccountState } from './types';
 import { takeLatest, debounce } from 'redux-saga/effects'
-import { makeAccountSelector } from './selectors';
-import { buildSaga } from '../../store/sagas';
-import { ActionCreators } from 'immer-reducer';
+import { SagaBuilder, buildSaga } from '../../store/immerReducer';
 
 
-export function buildSagas(address: string, actions: ActionCreators<any>, reducerClass: any) {
-  const selectAccount = makeAccountSelector(address);
-  const accountSaga = (fn: keyof IActions) => buildSaga<any>(reducerClass, selectAccount, fn)
-
+export const buildSagas : SagaBuilder<IActions, AccountState> = (sagaReducer) => {
+  const { actions } = sagaReducer;
   // Root saga
   function* rootSaga() {
-    yield takeLatest(actions.decrypt.type, accountSaga("decrypt"));
-    yield takeLatest(actions.updateBalance.type, accountSaga("updateBalance"))
-    yield debounce(750, actions.updateHistory.type, accountSaga("updateHistory"))
-    yield takeLatest(actions.setSigner.type, accountSaga("setSigner"))
-    yield takeLatest(actions.connect.type, accountSaga("connect"))
-    yield takeLatest(actions.loadDetails.type, accountSaga("loadDetails"))
-    yield takeLatest(actions.setDetails.type, accountSaga("setDetails"))
+    yield takeLatest(actions.decrypt.type, buildSaga(sagaReducer, "decrypt"));
+    yield takeLatest(actions.updateBalance.type, buildSaga(sagaReducer, "updateBalance"))
+    yield debounce(750, actions.updateHistory.type, buildSaga(sagaReducer, "updateHistory"))
+    yield takeLatest(actions.setSigner.type, buildSaga(sagaReducer, "setSigner"))
+    yield takeLatest(actions.connect.type, buildSaga(sagaReducer, "connect"))
+    yield takeLatest(actions.loadDetails.type, buildSaga(sagaReducer, "loadDetails"))
+    yield takeLatest(actions.setDetails.type, buildSaga(sagaReducer, "setDetails"))
   }
-
   return rootSaga;
 }
 

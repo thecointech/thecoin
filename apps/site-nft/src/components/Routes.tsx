@@ -3,11 +3,11 @@ import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
 import { AuthSwitch } from '@thecointech/shared/containers/AuthRoute';
-import { Claim } from '../Claim';
-import { ProfileBuilder } from '../ProfileBuilder';
-import { HomePage } from '../HomePage';
-import { Validate } from '../Validate';
-import { Offsets } from '../Offsets';
+import { Claim } from './Claim';
+import { ProfileBuilder } from './ProfileBuilder';
+import { HomePage } from './HomePage';
+import { Validate } from './Validate';
+import { Offsets } from './Offsets';
 
 //
 // Trialing a more well-defined routing system
@@ -25,6 +25,6 @@ export const SiteMap = {
     offsets: Offsets,
     congrats: Congratulations,
   },
-  default: HomePage,
+  fallback: HomePage,
 }
 export const MainRouter = () => <AuthSwitch path='/' {...SiteMap} />

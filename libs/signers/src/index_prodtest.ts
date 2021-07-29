@@ -16,7 +16,6 @@ function loadEncrypted(name: AccountName) {
   if (!wallet)
   {
     const path = process.env[`WALLET_${name}_PATH`];
-    console.log(path);
     if (path) {
       if (!existsSync(path))
         throw new Error(`Could not load ${name} from path: ${path}`);

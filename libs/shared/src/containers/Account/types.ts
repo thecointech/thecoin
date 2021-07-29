@@ -4,6 +4,8 @@ import { SagaIterator } from 'redux-saga';
 import { AccountState, AccountDetails } from '@thecointech/account';
 import { Signer } from '@ethersproject/abstract-signer';
 
+export type { AccountState };
+
 /* --- CALLBACKS ---*/
 export type DecryptCallback = (percent: number) => boolean;
 

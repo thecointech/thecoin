@@ -1,15 +1,15 @@
 import React from "react";
-import { Sidebar, Menu, MenuItem, Divider, Icon, Header } from "semantic-ui-react";
-import { useSelector } from "react-redux";
+import { Sidebar, Menu, MenuItem, Divider, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { SidebarMenuItem } from "./types";
-import styles from "./styles.module.less";
-import { ApplicationBaseState } from "../../types";
-import { selectSidebar } from "./selector";
+import { SidebarLink } from "./types";
 import { useWindowDimensions } from '../../components/WindowDimensions';
 import { breakpointsValues } from '../../components/ResponsiveTool';
+import { SidebarItemsReducer } from './reducer';
+import styles from "./styles.module.less";
+import { SidebarHeader } from './SidebarHeader';
+import { FormattedMessage } from 'react-intl';
 
-type Props = {
+export type Props = {
   visible?: boolean;
   inverted?: boolean;
   width?: 'very thin' | 'thin' | 'wide' | 'very wide';
@@ -17,40 +17,63 @@ type Props = {
 
 export const PageSidebar: React.FC<Props> = (props) => {
   const { visible, inverted } = props;
-  const menuItems = useMenuItems();
   const { width } = useWindowDimensions();
 
   return (
-      <Sidebar
-        as={Menu}
-        animation="push"
-        direction="left"
-        vertical
-        visible={isVisible(menuItems, width, visible)}
-        className={styles.mainPageSidebar}
-        inverted={inverted}
-        width={props.width}
-      >
-        {menuItems}
-      </Sidebar>
+    <Sidebar
+      as={Menu}
+      animation="push"
+      direction="left"
+      vertical
+      visible={isVisible(width, visible)}
+      className={styles.mainPageSidebar}
+      inverted={inverted}
+      width={props.width}
+    >
+      <MenuItems />
+    </Sidebar>
   );
 }
 
-const useMenuItems = () => {
-  const appState = useSelector(s => s as ApplicationBaseState);
-  const state = selectSidebar(appState);
+// Utility function builds a list of menu items
+// from the props set to this components store state
+const MenuItems = () => {
+  const state = SidebarItemsReducer.useData();
+  let items = Object
+    .values(state.generators) // If we ever go back to multiple generators, we should sort by priority
+    .reduce((prev, generator) => generator(prev), state.items);
 
-  let items = state.items;
-  if (!items && state.generators) {
-    Object.entries(state.generators).forEach(([_, generator]) => {
-      items = generator(items ?? [], appState);
-    });
-  }
-  return buildMenuArray(items ?? []);
+  return (
+    <>
+      {items.header ? <SidebarHeader {...items.header} /> : null}
+      <MenuLinks links={items.links} />
+    </>
+  );
 }
 
-const getAsItem = (item: SidebarMenuItem) => {
-  let url = item.link.to.toString();
+const MenuLinks = (props: { links: SidebarLink[] }) =>
+  <>
+    {props.links.map(item => (
+      item.to === false
+        ? MenuDivider(item)
+        : MenuLink(item)
+    ))}
+  </>
+
+// Display if requested, or if not Small Screen / Mobile
+const isVisible = (pageWidth: number, visible?: boolean): boolean =>
+  visible ?? pageWidth > breakpointsValues.tablet
+
+const MenuDivider = (item: SidebarLink) =>
+  <React.Fragment key={`Divider${item.name}`}>
+    <Divider horizontal>
+      <FormattedMessage {...item.name} />
+    </Divider>
+    {buildSubMenuArray(item)}
+  </React.Fragment>
+
+const MenuLink = (item: SidebarLink) => {
+  let url = item.to.toString();
   if (!url.startsWith('/'))
     url = '/' + url;;
 
@@ -62,66 +85,18 @@ const getAsItem = (item: SidebarMenuItem) => {
         key={url}
         to={url}
       >
-        <Icon name={item.link.icon} />
-        {item.link.name}
+        <Icon name={item.icon} />
+        <FormattedMessage {...item.name} />
       </MenuItem>
       {buildSubMenuArray(item)}
     </React.Fragment>
   )
 }
 
-  // Display if requested, or if not Small Screen / Mobile
-const isVisible = (menuItems: unknown[], pageWidth: number, visible?: boolean): boolean =>
-  visible ?? (
-    (menuItems && menuItems.length > 0) &&
-    pageWidth > breakpointsValues.tablet
-  );
 
-const getAsHeader = (item: SidebarMenuItem) =>
-  <div className={styles.headerSidebar} key={`Header${item.link.name}`}>
-    <Header as="h5" className={ `appTitles x4spaceBefore` } >
-      {item.link.name}
-    </Header>
-    <div className={`${styles.containerAvatar}` }>
-      <img className={styles.avatarSidebar} src={item.link.header?.avatar} />
-    </div>
-    <div className={`${styles.hozizontalScrollingTextBox} ${styles.primaryDescriptionSidebar}` }>
-      <span>{item.link.header?.primaryDescription}</span>
-    </div>
-    <Icon name="caret right" disabled size='tiny' id={ `${styles.moreToSee}` } />
-    <div className={ `${styles.secondaryDescriptionSidebar} x2spaceBefore` }><span>{item.link.header?.secondaryDescription}</span></div>
-  </div>
-
-
-const getAsDivider = (item: SidebarMenuItem) =>
-  <React.Fragment key={`Divider${item.link.name}`}>
-    <Divider horizontal>
-      {item.link.name}
-    </Divider>
-    {buildSubMenuArray(item)}
-  </React.Fragment>
-
-// Utility function builds a list of menu items
-// from the props set to this components store state
-const buildMenuArray = (items: SidebarMenuItem[]): React.ReactChild[] => {
-  return items.map(item => {
-    //item.link.to !== false ? getAsItem(item) : getAsDivider(item)
-      if (item.link.header !== undefined ){
-        return getAsHeader(item);
-      }
-      else if (item.link.to === false){
-        return getAsDivider(item);
-      }
-      else {
-        return getAsItem(item);
-      }
-    }
-  );
-}
-
-const buildSubMenuArray = (item: SidebarMenuItem) => {
-  const { subItems } = item;
-  return subItems
-    ? <Menu.Menu>{buildMenuArray(subItems)}</Menu.Menu>
+const buildSubMenuArray = (link: SidebarLink) =>
+  link.subItems
+    ? <Menu.Menu>
+      <MenuLinks links={link.subItems} />
+    </Menu.Menu>
     : undefined;
-}

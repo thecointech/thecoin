@@ -12,8 +12,8 @@ import { UxInput } from '@thecointech/shared/components/UxInput';
 import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { useFxRates } from '@thecointech/shared/containers/FxRate';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 
 const translations = defineMessages({
   description : {
@@ -56,8 +56,8 @@ const translations = defineMessages({
 
 export const BillPayments = () => {
   const intl = useIntl();
-  const account = useActiveAccount();
-  const { rates } = useFxRates();
+  const account = AccountMap.useActive();
+  const { rates } = FxRateReducer.useData();
   const rate = weBuyAt(rates);
 
   const [coinToSell, setCoinToSell] = useState(null as number | null);
@@ -142,7 +142,6 @@ export const BillPayments = () => {
         return false;
 
       // Get our variables
-      const account = useActiveAccount();
       const { signer, contract } = account!;
       if (coinToSell === null || !signer || !contract || !payee) return false;
 

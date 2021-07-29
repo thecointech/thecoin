@@ -1,11 +1,11 @@
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AccountVerified } from '../Verified';
 import { Avatars } from '@thecointech/shared/components/Avatars';
 import { Grid } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
+import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
 import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
 
 const translations = defineMessages({
@@ -24,7 +24,7 @@ const translations = defineMessages({
 });
 
 export const UserDetails = () => {
-  const activeAccount = useActiveAccount();
+  const activeAccount = AccountMap.useActive();
   return (
     <React.Fragment>
         <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >

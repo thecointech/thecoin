@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import Measure, { ContentRect } from 'react-measure';
-import { useHeightMeasure } from './reducer';
+import { HeightMeasureReducer } from './reducer';
 
 
 export const ContentHeightMeasure: React.FC = (props) => {
   const [timestamp] = useState(new Date().getTime());
-  const actions = useHeightMeasure();
+  HeightMeasureReducer.useStore();
+  const actions = HeightMeasureReducer.useApi();
   const onContentSized = useCallback((contentRect: ContentRect) => {
     const height = contentRect.bounds?.height;
     if (height)

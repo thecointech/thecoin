@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import {Clipboard} from 'ts-clipboard';
+import { Clipboard } from 'ts-clipboard';
 import { Icon, Popup } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
@@ -9,15 +9,18 @@ interface Props {
   label?: MessageDescriptor;
 }
 
-const translate = defineMessages({ 
-    link : { 
-      id: "base.copyToClipboard.link",
-      defaultMessage:"Copy",
-      description:"base.copyToClipboard.link: Link for the button for the copy to clipboard tool"},
-    messageSuccess : { 
-      id: "base.copyToClipboard.messageSuccess",
-      defaultMessage:"Copied to your clipboard",
-      description:"base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"}});
+const translate = defineMessages({
+  link: {
+    id: "base.copyToClipboard.link",
+    defaultMessage: "Copy",
+    description: "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
+  },
+  messageSuccess: {
+    id: "base.copyToClipboard.messageSuccess",
+    defaultMessage: "Copied to your clipboard",
+    description: "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
+  }
+});
 
 
 export const CopyToClipboard: FunctionComponent<Props> = (props) => {
@@ -28,6 +31,8 @@ export const CopyToClipboard: FunctionComponent<Props> = (props) => {
 
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     Clipboard.copy(props.payload);
+    setOpen(true);
+    setTimeout(() => setOpen(false), 7000);
     event.stopPropagation();
   };
 

@@ -1,16 +1,20 @@
-import { bindActionCreators, Reducer, ReducersMapObject } from "redux";
+import { ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { isLocal } from "@thecointech/signers";
 import { Wallet, Signer } from 'ethers';
-import { TheCoinReducer } from "../../store/immerReducer";
-import { createActionCreators, createReducerFunction } from "immer-reducer";
-import { useDispatch } from "react-redux";
+import { BaseReducer } from "../../store/immerReducer";
 import { mappedReducer, splitAccountFromRest } from "./mappedReducer";
+import { useSelector } from 'react-redux';
+import { activeAccountSelector, selectAccountArray } from './selectors';
 
-export class AccountMapReducer extends TheCoinReducer<AccountMapState> implements IAccountStoreAPI {
+export class AccountMap extends BaseReducer<IAccountStoreAPI, AccountMapState>('accounts', initialState) implements IAccountStoreAPI {
+
+  // Additional Selectors
+  static useActive = () => useSelector(activeAccountSelector);
+  static useAsArray = () => useSelector(selectAccountArray);
 
   setActiveAccount(address: string | null) {
     if (address) {
@@ -74,13 +78,9 @@ export class AccountMapReducer extends TheCoinReducer<AccountMapState> implement
 // This should be called by createReducers to manually create the accounts reducers.
 // Our accountMapReducer is a little different than most, as it cannot be injected.
 // This is because it shares it's state tree with the account reducers
-export function buildAccountStoreReducer(injectedReducers?: ReducersMapObject, initial?: AccountMapState) {
+export function buildAccountStoreReducer(injectedReducers?: ReducersMapObject) {
   const { accounts, rest } = splitAccountFromRest(injectedReducers);
-  const accountMapReducer = createReducerFunction(AccountMapReducer, initial ?? initialState) as unknown as Reducer;
+  const accountMapReducer = AccountMap._reducer;
   const accountStoreReducer = mappedReducer(accountMapReducer, accounts);
   return { accountStoreReducer, rest };
 }
-
-const actions = createActionCreators(AccountMapReducer);
-export const useAccountStoreApi = () =>
-  bindActionCreators(actions, useDispatch()) as IAccountStoreAPI;;

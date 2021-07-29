@@ -2,18 +2,21 @@ import * as React from 'react';
 import { Routes } from './Routes';
 import { Container, Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
-import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
+import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
-import { useSidebar, SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
-import 'semantic-ui-css/semantic.min.css'
+import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { items } from './sidebar';
+import { AccountMapReducer } from '@thecointech/shared/containers/AccountMap';
+import { initialAccounts } from './accounts';
+import 'semantic-ui-css/semantic.min.css'
 
 SidebarItemsReducer.initialize({items})
+AccountMapReducer.initialize(await initialAccounts())
 
 export const App = () => {
-  useFxRatesStore();
-  useSidebar();
+  FxRateReducer.useStore();
+  SidebarItemsReducer.useStore();
 
   const divStyle = {
     minHeight: "500px"

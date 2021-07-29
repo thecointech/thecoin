@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@thecointech/shared/containers/Account/Web3';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from '../styles.module.less';
 
 const translations = defineMessages({
@@ -22,7 +22,7 @@ export const Connect = () => {
   const [referral, setReferral] = useState(undefined as MaybeString);
   const [forceValidate, setForceValidate] = useState(false);
 
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
   const history = useHistory();
   const onConnect = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();

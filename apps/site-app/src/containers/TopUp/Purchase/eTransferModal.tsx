@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { CopyToClipboard } from '@thecointech/site-base/components/CopyToClipboard';
+import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
 import { Grid } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
