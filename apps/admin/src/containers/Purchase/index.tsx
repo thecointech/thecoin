@@ -10,8 +10,8 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
 import { getCurrentState } from '@thecointech/tx-processing/statemachine';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { useAccountApi } from '@thecointech/shared/containers/Account';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { Account } from '@thecointech/shared/containers/Account';
 const typeOptions = ["deposit", "other"].map(k => ({
   key: k,
   value: k,
@@ -28,8 +28,8 @@ export const Purchase = () => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [step, setStep] = React.useState("");
 
-  const account = useActiveAccount()!;
-  const api = useAccountApi(account.address!);
+  const account = AccountMap.useActive()!;
+  const api = Account(account.address).useApi();
 
   const onConfirm = async () => {
     setConfirm(false);

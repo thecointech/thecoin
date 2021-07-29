@@ -9,7 +9,7 @@ import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import styles from './styles.module.less';
 
 let _isCancelled = false;
@@ -44,7 +44,7 @@ export const Generate = (props: RouteComponentProps) => {
 
   ////////////////////////////////
   // Callback to actually generate the account
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
   const { history } = props;
   const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();

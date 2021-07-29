@@ -7,9 +7,6 @@ const renderer = createRenderer();
 jest.mock('react-router', () => ({
   useLocation: () => { key: "TESTING"}
 }));
-jest.mock('../../../components/Prismic/reducer', () => ({
-  usePrismic: jest.fn(),
-}));
 // This import can trigger a compilation of the entire app
 // (with numerous side-effects) so we skip it entirely
 jest.mock('../../MainRouter', () => ({

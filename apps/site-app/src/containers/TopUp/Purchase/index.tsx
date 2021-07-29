@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { GetETransferApi } from '../../../api';
 import { ETransferModal } from './eTransferModal';
@@ -35,7 +35,7 @@ const translations = defineMessages({
 
 export const Purchase = () => {
 
-  const account = useActiveAccount()!;
+  const account = AccountMap.useActive()!;
   const [showDlg, setShowDlg] = useState(false);
   const [recipient, setRecipient] = useState('');
   const [secret, setSecret] = useState('');

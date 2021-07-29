@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button, Form } from 'semantic-ui-react';
@@ -20,7 +20,7 @@ const messages = defineMessages({
 })
 
 export const Claim = () => {
-  const account = useActiveAccount()!;
+  const account = AccountMap.useActive()!;
   const [code, setCode] = useState('');
   const [tokenId, setTokenId] = useState('');
   const [success, setSuccess] = useState<string | boolean | undefined>();

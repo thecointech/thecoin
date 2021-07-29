@@ -8,7 +8,6 @@ import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContain
 
 import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
-import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
 import { PageHeader } from 'components/PageHeader';
 import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
@@ -34,7 +33,7 @@ const translations = defineMessages({
       description: 'app.makepayments.tabs.templates: Title for the tabs the Make a payment page in the app'}
 });
 
-export const MakePayments = (routerProps:AccountPageProps) => {
+export const MakePayments = () => {
   const intl = useIntl();
   const panes = [
     { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Redeem /></AppContainerForTabs> },
@@ -45,14 +44,14 @@ export const MakePayments = (routerProps:AccountPageProps) => {
   return (
     <React.Fragment>
       <ColumnRightTop />
-      <PageHeader 
+      <PageHeader
           illustration={illustration}
           title={translations.title}
           description= {translations.description}
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...routerProps} />
+        <RecentTransactions />
       </AppContainerWithShadow>
       <ColumnRightBottom />
     </React.Fragment>

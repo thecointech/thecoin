@@ -1,9 +1,7 @@
-import { AccountPageProps } from '@thecointech/shared/containers/Account/types';
-import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import * as React from 'react';
 import illustration from './images/icon_topup_big.svg';
+import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
-
 import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
@@ -26,7 +24,7 @@ const translations = defineMessages({
       description: 'app.topup.tabs.interact: Title for the tabs the topup page in the app'}
 });
 
-export const Topup = (routerProps:AccountPageProps) => {
+export const Topup = () => {
   const intl = useIntl();
   const panes = [
     { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Purchase /></AppContainerForTabs> },
@@ -42,7 +40,7 @@ export const Topup = (routerProps:AccountPageProps) => {
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions {...routerProps} />
+        <RecentTransactions />
       </AppContainerWithShadow>
       <ColumnRightBottom />
     </React.Fragment>

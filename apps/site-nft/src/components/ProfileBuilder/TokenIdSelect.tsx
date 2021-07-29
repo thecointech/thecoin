@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connectNFT } from '@thecointech/nft-contract';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
 import { defineMessage, useIntl } from 'react-intl';
 import { Select } from 'semantic-ui-react';
@@ -15,7 +15,7 @@ type Props = {
 export const TokenIdSelect = ({ tokenIds, setTokenIds }: Props) => {
   let cancelled = false;
   const [loading, setLoading] = useState(false);
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   const {address} = account!
 
   useEffect(() => {

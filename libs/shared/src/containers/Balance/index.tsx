@@ -5,13 +5,13 @@ import { getFxRate } from "@thecointech/fx-rates";
 import { TransactionList } from "../TransactionList";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
-import { useActiveAccount } from '../AccountMap';
-import { useAccountApi } from '../Account';
+import { AccountMap } from '../AccountMap';
+import { Account } from '../Account';
 import styles from "./styles.module.less";
 
 export const Balance = () => {
-  const account = useActiveAccount()!;
-  const api = useAccountApi(account.address);
+  const account = AccountMap.useActive()!;
+  const api = Account(account.address).useApi();
   const doUpdateBalance = React.useCallback((e?: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     api.updateBalance();

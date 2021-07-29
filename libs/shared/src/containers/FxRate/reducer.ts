@@ -1,9 +1,8 @@
 import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
-import { useInjectReducer, useInjectSaga } from "redux-injectors";
 import { ApplicationBaseState } from '../../types';
-import { TheCoinReducer } from '../../store/immerReducer';
+import { SagaReducer, buildSaga, SagaBuilder } from '../../store/immerReducer';
 import { FxRatesState, IFxRates } from './types';
-import { buildSaga, sendValues } from '../../store/sagas';
+import { sendValues } from '../../store/sagas';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
@@ -16,7 +15,20 @@ const initialState: FxRatesState = {
 }
 
 
-class FxRateReducer extends TheCoinReducer<FxRatesState>
+const buildSagas: SagaBuilder<IFxRates, FxRatesState> = (sagaReducer) => {
+
+  function* rootSaga() {
+    const saga = buildSaga(sagaReducer, "fetchRateAtDate")
+    yield fork(loopFxUpdates);
+    yield takeEvery(sagaReducer.actions.fetchRateAtDate.type, saga)
+    yield sendValues(sagaReducer.actions.fetchRateAtDate);
+  }
+
+  return rootSaga;
+}
+
+
+export class FxRateReducer extends SagaReducer<IFxRates, FxRatesState>(FXRATES_KEY, initialState, buildSagas)
   implements IFxRates {
 
   *fetchRateAtDate(date?: Date): Generator<any> {
@@ -67,8 +79,6 @@ class FxRateReducer extends TheCoinReducer<FxRatesState>
   }
 }
 
-const { reducer, actions } = FxRateReducer.buildReducers(FxRateReducer, initialState);
-
 //////////////////////////////////////////////////////////////////////////
 
 //
@@ -80,8 +90,8 @@ function* loopFxUpdates() : Generator<Effect> {
   let endPolling = false;
   while (!endPolling) {
     // Wait until sets new update and stores values
-    const rateAction = yield take(actions.updateWithValues.type);
-    const {rates} = (rateAction as ReturnType<typeof actions.updateWithValues>).payload;
+    const rateAction = yield take(FxRateReducer.actions.updateWithValues.type);
+    const {rates} = (rateAction as ReturnType<typeof FxRateReducer.prototype.actions.updateWithValues>).payload;
     if (!rates)
       continue;
 
@@ -96,30 +106,6 @@ function* loopFxUpdates() : Generator<Effect> {
     console.log("Fx fetched - now sleeping mins: " + waitTime / (1000 * 60));
     yield delay(waitTime);
     // Then tell the FxRate to update
-    yield sendValues(actions.fetchRateAtDate);
+    yield sendValues(FxRateReducer.actions.fetchRateAtDate);
   }
 }
-
-function createRootEntitySelector<T>(rootKey: keyof ApplicationBaseState, initialState: T) {
-  return (state: ApplicationBaseState): T => state[rootKey] as any || initialState;
-}
-
-function buildSagas(name: keyof ApplicationBaseState) {
-
-  const selectAccount = createRootEntitySelector(name, initialState);
-
-  function* rootSaga() {
-    yield fork(loopFxUpdates);
-    yield takeEvery(actions.fetchRateAtDate.type, buildSaga<FxRateReducer>(FxRateReducer, selectAccount, "fetchRateAtDate"))
-    yield sendValues(actions.fetchRateAtDate);
-  }
-
-  return rootSaga;
-}
-
-export const useFxRatesStore = () => {
-  useInjectReducer({ key: FXRATES_KEY, reducer: reducer });
-  useInjectSaga({ key: FXRATES_KEY, saga: buildSagas(FXRATES_KEY) });
-}
-
-export { actions };

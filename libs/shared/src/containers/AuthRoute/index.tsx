@@ -2,18 +2,18 @@ import React from 'react';
 import { Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 import { isLocal } from '@thecointech/signers';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { useActiveAccount } from '../AccountMap';
+import { AccountMap } from '../AccountMap';
 import { Login } from "../Login";
-import { useAccount } from '../Account';
+import { Account } from '../Account';
 
 const waitingForWeb3 = defineMessage({
   defaultMessage: "Connecting to your Web3 provider",
-  description:"Message to display while waiting for user to complete Web3 connection"
+  description: "Message to display while waiting for user to complete Web3 connection"
 });
 
 // An authorized route is one that requires the use of an unlocked account
-export const AuthRoute = (routeProps: RouteProps)  => {
-  const account = useActiveAccount();
+export const AuthRoute = (routeProps: RouteProps) => {
+  const account = AccountMap.useActive();
 
   // If no account, suggest adding one (?)
   // NOTE: this _looks_ like it violates the principals
@@ -25,8 +25,8 @@ export const AuthRoute = (routeProps: RouteProps)  => {
   }
 
   // Inject reducers/sagas.
-  useAccount(account);
-  const {signer } = account;
+  Account(account.address).useStore();
+  const { signer } = account;
 
   // Enforce login before showing sub-page
   if (isLocal(signer)) {
@@ -53,7 +53,7 @@ type AuthSwitchProps = {
   path: string,
 };
 
-export const AuthSwitch = ({path, auth, open, fallback} : AuthSwitchProps) => {
+export const AuthSwitch = ({ path, auth, open, fallback }: AuthSwitchProps) => {
   const trimmed = path.endsWith('/') ? path.slice(0, -1) : path;
   return (
     <Switch>

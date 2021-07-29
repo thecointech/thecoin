@@ -14,7 +14,7 @@ import {MainNavigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { MainRouter } from 'containers/MainRouter';
-import { usePrismic } from 'components/Prismic/reducer';
+import { Prismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
@@ -25,7 +25,7 @@ import '../../semantic/semantic.css';
 import styles from './styles.module.less';
 
 export const App = () => {
-  usePrismic();
+  Prismic.useStore();
 
   return (
     <div id={styles.app}>

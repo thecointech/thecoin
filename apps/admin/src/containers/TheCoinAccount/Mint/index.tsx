@@ -5,8 +5,8 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { toHuman } from '@thecointech/utilities';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap'
-import { useAccountApi } from '@thecointech/shared/containers/Account';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap'
+import { Account } from '@thecointech/shared/containers/Account';
 import { weSellAt } from '@thecointech/fx-rates';
 
 enum MintStatus {
@@ -23,11 +23,11 @@ export const Mint = () => {
   const [txHash, setTxHash] = useState(undefined as MaybeString);
 
   const {rates} = useFxRates();
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   if (!account)
     throw new Error("Account Required");
 
-  const accountApi = useAccountApi(account.address);
+  const accountApi = Account(account.address).useApi();
 
   /////////////////////////////////////////////////////////
   const onMintCoins = useCallback(async () => {

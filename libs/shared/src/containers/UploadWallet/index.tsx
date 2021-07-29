@@ -3,7 +3,7 @@ import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@thecointech/utilities';
 import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useAccountStoreApi } from '../AccountMap';
+import { AccountMap } from '../AccountMap';
 import { useHistory } from 'react-router';
 
 import illustration from "./images/illust_flowers.svg";
@@ -41,7 +41,7 @@ const id = '__upload26453312f';
 export const UploadWallet = (props: Props) => {
 
   const history = useHistory();
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
 
   const onRecieveFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
