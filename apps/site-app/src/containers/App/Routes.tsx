@@ -11,9 +11,9 @@ import { HomePage } from '../HomePage';
 
 export const AppRoutes = {
   auth: {
-    home: Settings,
+    home: HomePage,
     transferIn: Topup,
-    payments: MakePayments,
+    makePayments: MakePayments,
     settings: Settings,
     contact: ContactUs,
   },
