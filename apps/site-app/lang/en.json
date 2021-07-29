@@ -167,10 +167,6 @@
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
     "description": "app.topup.description: Description for the topup page in the app"
   },
-  "'JgdFdU'": {
-    "defaultMessage": "Profile",
-    "description": "app.accounts.sidebar.copy: Title for the copy button in the menu"
-  },
   "'K7rhf2'": {
     "defaultMessage": "Settings",
     "description": "app.accountSwitcher.settings: Title for the Settings in the menu"
@@ -290,6 +286,10 @@
   "'X/fgLk'": {
     "defaultMessage": "Account not verified",
     "description": "app.settings.verified.titleNotVerified: Title for the verfified section in the setting page in the app"
+  },
+  "'XEmqRg'": {
+    "defaultMessage": "No Account Loaded",
+    "description": "app.accounts.sidebar.profile: Default account name to show in sidebar when no accounts loaded"
   },
   "'XNv52p'": {
     "defaultMessage": "Top up balance",

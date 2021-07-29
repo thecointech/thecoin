@@ -1,23 +1,20 @@
 import React from "react";
 import { Sidebar, Menu, MenuItem, Divider, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { SidebarLink } from "./types";
-import { useWindowDimensions } from '../../components/WindowDimensions';
-import { breakpointsValues } from '../../components/ResponsiveTool';
+import { SidebarLink, SidebarState } from "./types";
 import { SidebarItemsReducer } from './reducer';
 import styles from "./styles.module.less";
 import { SidebarHeader } from './SidebarHeader';
 import { FormattedMessage } from 'react-intl';
 
 export type Props = {
-  visible?: boolean;
   inverted?: boolean;
   width?: 'very thin' | 'thin' | 'wide' | 'very wide';
 }
 
 export const PageSidebar: React.FC<Props> = (props) => {
-  const { visible, inverted } = props;
-  const { width } = useWindowDimensions();
+  const { inverted } = props;
+  const state = SidebarItemsReducer.useData();
 
   return (
     <Sidebar
@@ -25,28 +22,27 @@ export const PageSidebar: React.FC<Props> = (props) => {
       animation="push"
       direction="left"
       vertical
-      visible={isVisible(width, visible)}
+      visible={state.visible}
       className={styles.mainPageSidebar}
       inverted={inverted}
       width={props.width}
     >
-      <MenuItems />
+      <MenuItems {...state} />
     </Sidebar>
   );
 }
 
 // Utility function builds a list of menu items
 // from the props set to this components store state
-const MenuItems = () => {
-  const state = SidebarItemsReducer.useData();
-  let items = Object
-    .values(state.generators) // If we ever go back to multiple generators, we should sort by priority
-    .reduce((prev, generator) => generator(prev), state.items);
+const MenuItems = ({generators, items}: SidebarState) => {
+  let final = Object
+    .values(generators) // If we ever go back to multiple generators, we should sort by priority
+    .reduce((prev, generator) => generator(prev), items);
 
   return (
     <>
-      {items.header ? <SidebarHeader {...items.header} /> : null}
-      <MenuLinks links={items.links} />
+      {final.header ? <SidebarHeader {...final.header} /> : null}
+      <MenuLinks links={final.links} />
     </>
   );
 }
@@ -59,10 +55,6 @@ const MenuLinks = (props: { links: SidebarLink[] }) =>
         : MenuLink(item)
     ))}
   </>
-
-// Display if requested, or if not Small Screen / Mobile
-const isVisible = (pageWidth: number, visible?: boolean): boolean =>
-  visible ?? pageWidth > breakpointsValues.tablet
 
 const MenuDivider = (item: SidebarLink) =>
   <React.Fragment key={`Divider${item.name}`}>

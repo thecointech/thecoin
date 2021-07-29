@@ -4,6 +4,10 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
 import type { SidebarLink } from '@thecointech/shared/containers/PageSidebar/types';
 import { defineMessages, useIntl } from 'react-intl';
+import { isLocal } from '@thecointech/signers';
+
+import { AppRoutes } from '../App/Routes';
+import { useLocation } from 'react-router';
 
 const translations = defineMessages({
   home: {
@@ -36,26 +40,38 @@ const translations = defineMessages({
   },
 })
 
+// To ensure links are safe, we re-use
+// the keys from the routes object.
+type AuthKey = keyof typeof AppRoutes.auth;
+type AuthKeys = {
+  [index in AuthKey]: string
+}
+const authRoutes = Object
+  .keys(AppRoutes.auth)
+  .reduce(
+    (obj, k) => { obj[k as AuthKey] = k; return obj },
+    {} as AuthKeys
+  );
 
 const sidebarLinks: SidebarLink[] = [
   {
     name: translations.home,
-    to: "/",
+    to: `/${authRoutes.home}`,
     icon: "home"
   },
   {
     name: translations.transferin,
-    to: "/transferIn",
+    to: `/${authRoutes.transferIn}`,
     icon: "arrow circle up"
   },
   {
     name: translations.makepayments,
-    to: "/payment",
+    to: `/${authRoutes.makePayments}`,
     icon: "arrow circle right"
   },
   {
     name: translations.settings,
-    to: "/settings",
+    to: `/${authRoutes.settings}`,
     icon: "setting"
   },
   {
@@ -77,7 +93,9 @@ export function useSidebar() {
   const active = AccountMap.useActive();
   SidebarItemsReducer.useStore();
   const sidebarApi = SidebarItemsReducer.useApi();
+  const location = useLocation();
   const intl = useIntl();
+
 
   // Update the header whenever the active account is changed.
   React.useEffect(() => {
@@ -89,4 +107,17 @@ export function useSidebar() {
     })
   }, [active?.address]);
 
+  // We do not want the sidebar to display when in an open route
+  React.useEffect(() => {
+    // Do not show sidebar if not signed in
+    let showSidebar = !!(active && isLocal(active.signer) && active.signer.mnemonic);
+    // Do not show sidebar if on open route
+    if (showSidebar) {
+      const openRoutes = Object.keys(AppRoutes.open);
+      const pathStarts = location.pathname.slice(1);
+      showSidebar = !(pathStarts && openRoutes.find(r => pathStarts.startsWith(r)));
+    }
+    console.log("Should I Show Sidebar? ", showSidebar);
+    sidebarApi.setVisible(showSidebar);
+  }, [location.pathname, active?.signer]);
 }
