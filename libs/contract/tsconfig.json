@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
+    "module": "esnext",
 
     "outDir": "./build",
 

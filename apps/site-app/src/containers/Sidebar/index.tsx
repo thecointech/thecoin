@@ -110,14 +110,19 @@ export function useSidebar() {
   // We do not want the sidebar to display when in an open route
   React.useEffect(() => {
     // Do not show sidebar if not signed in
-    let showSidebar = !!(active && isLocal(active.signer) && active.signer.mnemonic);
+    let showSidebar = !!(
+      active &&
+      (
+        (isLocal(active.signer) && active.signer.mnemonic) ||
+        (active.signer.provider)
+      )
+    );
     // Do not show sidebar if on open route
     if (showSidebar) {
       const openRoutes = Object.keys(AppRoutes.open);
       const pathStarts = location.pathname.slice(1);
       showSidebar = !(pathStarts && openRoutes.find(r => pathStarts.startsWith(r)));
     }
-    console.log("Should I Show Sidebar? ", showSidebar);
     sidebarApi.setVisible(showSidebar);
   }, [location.pathname, active?.signer]);
 }
