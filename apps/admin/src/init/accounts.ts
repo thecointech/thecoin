@@ -2,6 +2,7 @@ import { AccountName, getSigner } from '@thecointech/signers';
 import { buildNewAccount } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
 
 async function buildMapEntry(name: AccountName) {
@@ -23,3 +24,5 @@ export async function initialAccounts() {
     }
   }
 }
+const initial = await initialAccounts();
+export const initAccounts = () => AccountMap.initialize(initial)

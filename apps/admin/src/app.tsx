@@ -10,9 +10,11 @@ import { translations } from './translations';
 
 // initialize logging first
 import { log } from '@thecointech/logging';
+import { Initialize } from './init';
 log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
 // Create redux store with history
+Initialize()
 const store = configureAdminStore();
 
 function render() {
