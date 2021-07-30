@@ -72,7 +72,6 @@ export function BaseReducer<U, T>(key: string, initialState: T) {
   r.useStore = function() {
     // Default init takes care of circumstances where
     // there is no need for explicit initialization
-    // @ts-ignore -  An outer value of 'this' is shadowed by this container.
     if (!BaseReducer._reducer) r.initialize.call(this);
     useInjectReducer({ key, reducer: BaseReducer._reducer });
   }
