@@ -1,5 +1,7 @@
 import { ETransferErrorCode } from "./types";
 import type { RbcApi as SrcApi } from "./index";
+import { jest } from '@thecointech/jestutils/shim';
+
 export { ETransferErrorCode };
 
 let result = 1234;

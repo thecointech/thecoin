@@ -2,7 +2,6 @@ import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
 import { initBrowser } from '@thecointech/rbcapi';
 import { initialize } from '@thecointech/tx-gmail';
-// import open from 'open';
 import { initAccounts } from './accounts';
 import { initSidebar } from './sidebar';
 import { log } from '@thecointech/logging';
@@ -24,7 +23,7 @@ export function Initialize() {
 
 async function initGmail(authUrl: string) {
   log.warn("You should visit: " + authUrl);
-  // open(authUrl);
+  window.open(authUrl);
   return new Promise<string>((_resolve, reject) => {
     // TODO: We can't open a server to listen to the
     // reply, but we already have one running.  We should
