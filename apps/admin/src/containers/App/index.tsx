@@ -6,13 +6,8 @@ import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { FirestoreCheck } from '../FirestoreSignin';
 import styles from './styles.module.less';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
-import { items } from './sidebar';
-import { AccountMapReducer } from '@thecointech/shared/containers/AccountMap';
-import { initialAccounts } from './accounts';
-import 'semantic-ui-css/semantic.min.css'
 
-SidebarItemsReducer.initialize({items})
-AccountMapReducer.initialize(await initialAccounts())
+import 'semantic-ui-css/semantic.min.css'
 
 export const App = () => {
   FxRateReducer.useStore();
@@ -24,7 +19,7 @@ export const App = () => {
 
   return (
     <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
-      <PageSidebar visible={true} inverted width='thin' />
+      <PageSidebar inverted width='thin' />
       <Sidebar.Pusher className={styles.minHeight}>
         <Container style={divStyle}>
           <FirestoreCheck />

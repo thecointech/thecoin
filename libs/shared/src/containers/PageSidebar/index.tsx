@@ -57,7 +57,7 @@ const MenuLinks = (props: { links: SidebarLink[] }) =>
   </>
 
 const MenuDivider = (item: SidebarLink) =>
-  <React.Fragment key={`Divider${item.name}`}>
+  <React.Fragment key={`Divider${item.name.id}`}>
     <Divider horizontal>
       <FormattedMessage {...item.name} />
     </Divider>
