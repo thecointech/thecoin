@@ -1,3 +1,4 @@
+import { ConnectContract } from '@thecointech/contract';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountState, buildNewAccount } from '../state';
@@ -10,6 +11,7 @@ async function addRemoteAccount(name: AccountName, active: boolean) {
   const address = NormalizeAddress(await signer.getAddress());
 
   _devWallets[address] = buildNewAccount(name, address, signer);
+  _devWallets[address].contract = ConnectContract(signer);
   console.log('Loaded remote account: ' + address);
   if (active) { _initial = address }
 }

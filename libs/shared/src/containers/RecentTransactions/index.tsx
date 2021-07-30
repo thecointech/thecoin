@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage } from "react-intl";
 import styles from './styles.module.less';
 import { AccountMap } from '../AccountMap';
 import { Account } from '../Account';
+import { DateTime } from 'luxon';
 
 const translate = defineMessages({
       title : {
@@ -18,8 +19,8 @@ export const RecentTransactions = () => {
   const active = AccountMap.useActive()
   const api = Account(active!.address).useApi();
   React.useEffect(() => {
-    api.updateBalance();
-  }, [api])
+    api.updateHistory(DateTime.fromMillis(0), DateTime.now());
+  }, [active?.address])
 
   const { rates } = useFxRates();
 

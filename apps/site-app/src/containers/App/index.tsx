@@ -44,7 +44,6 @@ export const App = () => {
       <div className={`${styles.contentContainer}`}>
         <Container style={{ width: '100%' }} className={``}>
           <MainPageTransition>
-
             <GreaterThanMobileSegment>
               <Rail internal position='left'>
                 <Sticky context={contextRef}>
@@ -52,7 +51,6 @@ export const App = () => {
                 </Sticky>
               </Rail>
             </GreaterThanMobileSegment>
-
 
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>

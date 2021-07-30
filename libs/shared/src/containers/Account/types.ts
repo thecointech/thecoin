@@ -26,12 +26,12 @@ export interface IActions extends ImmerReducer<AccountState> {
 
   // Save/load private details
   loadDetails(): SagaIterator;
-  setDetails(newDetails: Partial<AccountDetails>):SagaIterator;
+  setDetails(newDetails: Partial<AccountDetails>): SagaIterator;
 
   // Get the balance of the account in Coin
-  updateBalance(newBalance?: number):SagaIterator;
+  updateBalance(newBalance?: number): SagaIterator;
   updateHistory(from: DateTime, until: DateTime): SagaIterator;
 
-  decrypt(password: string, callback: DecryptCallback | undefined):SagaIterator;
+  decrypt(password: string, callback: DecryptCallback | undefined): SagaIterator;
 }
 

@@ -42,7 +42,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       // store the contract prior to trying update history.
       yield this.storeValues({ contract });
       // Load history info by default
-      yield this.sendValues(this.actions.updateHistory, [new Date(0), new Date()]);
+      yield this.sendValues(this.actions.updateHistory, [DateTime.fromMillis(0), DateTime.now()]);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
