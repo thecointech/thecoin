@@ -45,7 +45,7 @@
   "main": "./build/index.js",
   "exports": {
     ".": {
-      "development": "./build/cjs/yarn index_mocked.js",
+      "development": "./build/cjs/index_mocked.js",
       "electron": "./build/mjs/index.js",
       "default": "./build/cjs/index.js"
     }
