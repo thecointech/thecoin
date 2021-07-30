@@ -25,7 +25,7 @@ module.exports = {
   },
   // Re-use our jest mocks inside our website (neat, huh?)
   resolve: {
-    conditionNames: [process.env.CONFIG_NAME, "browser", "require", "default"],
+    conditionNames: [process.env.CONFIG_NAME, "electron", "browser", "require", "default"],
     modules: [mocksFolder]
   }
 }

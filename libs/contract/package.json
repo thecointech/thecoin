@@ -20,17 +20,19 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "migrate:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build": "run-s build:contracts generate-types build:copy build:src",
+    "build": "run-s build:contracts generate-types build:src",
     "build:contracts": "truffle compile",
-    "build:src": "yarn tsc --project tsconfig.build.json",
-    "build:copy": "cpx \"./src/types/*.d.ts\" ./build/types",
+    "build:src": "run-p build:src:*",
+    "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "build:src:copy": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev:live:migrate",
-    "dev:live:emulator": "start yarn truffle develop",
+    "dev:live:emulator": "yarn truffle develop",
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
     "generate-types": "run-p generate-types:*",
     "generate-types:truffle": "yarn typechain --out-dir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
@@ -43,11 +45,12 @@
   "main": "./build/index.js",
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "default": "./build/index.js"
+      "development": "./build/cjs/yarn index_mocked.js",
+      "electron": "./build/mjs/index.js",
+      "default": "./build/cjs/index.js"
     }
   },
-  "types": "./build/index.d.ts",
+  "types": "./build/cjs/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",

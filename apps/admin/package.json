@@ -1,7 +1,7 @@
 {
-  "name": "admin",
+  "name": "@thecointech/admin",
   "private": true,
-  "productName": "admin",
+  "productName": "TheCoin - Admin",
   "workspaces": {
     "nohoist": [
       "**/electron**",
@@ -9,7 +9,7 @@
     ]
   },
   "version": "0.1.0",
-  "description": "My Electron application description",
+  "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
 
