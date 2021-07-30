@@ -11,7 +11,7 @@ const { AccountId, getSigner } = require('@thecointech/signers');
 
 const numBuiltIn = AccountId.BrokerCAD + 1;
 const testAccounts = [];
-loadAccounts(numBuiltIn).then(v => testAccounts = v);
+loadAccounts(numBuiltIn).then(v => testAccounts = v).catch(console.error);
 
 module.exports = {
   // We output into our src directory so we can directly import
