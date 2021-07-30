@@ -40,7 +40,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
     <Container>
       <MainPageTransition>
         <section>
-          <MainRouter />
+          <Routes />
         </section>
       </MainPageTransition>
     </Container>

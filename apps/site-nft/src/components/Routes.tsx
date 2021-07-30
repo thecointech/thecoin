@@ -9,10 +9,6 @@ import { HomePage } from './HomePage';
 import { Validate } from './Validate';
 import { Offsets } from './Offsets';
 
-//
-// Trialing a more well-defined routing system
-// This struct is exported so the keys (paths)
-// can be referenced elsewhere in the project.
 export const SiteMap = {
   auth: {
     claim: Claim,
@@ -27,4 +23,4 @@ export const SiteMap = {
   },
   fallback: HomePage,
 }
-export const MainRouter = () => <AuthSwitch path='/' {...SiteMap} />
+export const Routes = () => <AuthSwitch path='/' {...SiteMap} />
