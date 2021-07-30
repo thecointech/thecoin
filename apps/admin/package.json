@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/admin",
   "private": true,
-  "productName": "TheCoin - Admin",
+  "productName": "tcadmin",
   "workspaces": {
     "nohoist": [
       "**/electron**",
