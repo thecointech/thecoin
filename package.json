@@ -156,7 +156,6 @@
     "install": "^0.13.0",
     "jest": "27.0.5",
     "jest-cli": "27.0.5",
-    "jest-environment-uint8array": "^1.0.0",
     "lerna": "^3.20.2",
     "less": "^3.10.3",
     "less-loader": "^9.1.0",
