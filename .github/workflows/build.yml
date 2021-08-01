@@ -34,5 +34,7 @@ jobs:
          # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn rebuild
+    - name: Check no build outputs changing in git
+      - run: yarn check-changes
     - name: Test all
       run: yarn test:ci
