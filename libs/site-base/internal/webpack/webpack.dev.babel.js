@@ -10,13 +10,8 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
 const baseOptions = require('./webpack.base.babel');
-
-// In non-live dev mode, we redirect imports to mocked versions
-const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
-const mocksFolder = path.resolve(projectRoot, '__mocks__');
-const mockOptions = process.env.SETTINGS !== 'live'
-  ? getMockOptions()
-  : {}
+// Import options for mocking external modules
+const mockOptions = require("../../../../__mocks__/mock_webpack");
 
 const devOptions = {
   mode: 'development',
@@ -76,35 +71,13 @@ const devOptions = {
   },
 };
 
-
-function getMockOptions() {
-  return {
-    module: {
-      rules: [
-        // Allow ts-loader to parse mocks
-        {
-          test: /\.ts(x?)$/,
-          include: mocksFolder,
-          use: {
-            loader: 'ts-loader',
-            options: {
-              configFile: path.join(mocksFolder, '..', 'tsconfig.base.json'),
-              transpileOnly: true,
-              experimentalWatchApi: true,
-            },
-          },
-        }
-      ],
-    },
-    // Show progress when running dev
-    plugins: [
-      new webpack.ProgressPlugin(),
-    ],
-    // Re-use our jest mocks inside our website (neat, huh?)
-    resolve: {
-      modules: [mocksFolder],
-    }
-  }
+// We only post progress in dev mode, not dev:live
+// This is because dev:live is streaming all packages
+// at once, and the progress updates confuse the terminal
+if (process.env.SETTINGS !== 'live') {
+  devOptions.plugins.push(
+    new webpack.ProgressPlugin(),
+  )
 }
 
 module.exports = merge(

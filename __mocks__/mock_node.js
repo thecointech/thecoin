@@ -4,6 +4,7 @@
 // This is a simple hack to allow our NodeJS apps to run in dev mode
 // using the same mocks as testing/dev websites.
 //
+
 const Module = require('module').Module;
 
 function mockAll() {
