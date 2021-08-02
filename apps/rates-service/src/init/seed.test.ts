@@ -23,7 +23,7 @@ it('seeds the DB appropriately', async () => {
 
       const data = entry.data();
       expect(data).toBeDefined();
-      expect(Object.keys(data!).length).toBe(numKeys);
+      expect(Object.keys(data!).filter(k => k !== '_converter').length).toBe(numKeys);
       expect(data!.validTill).toBeDefined();
       expect(data!.validFrom).toBeDefined();
 
