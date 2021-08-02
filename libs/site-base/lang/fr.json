@@ -1,39 +1,395 @@
 {
-  "base.copyToClipboard.link": {
-    "defaultMessage": "Copy",
+  "+rTdcY": {
+    "defaultMessage": "Pour utiliser cette fonctionnalité, installez le plugin MetaMask ou essayez la derniÈre version d'Opera !",
+    "description": "app.account.restore.createAccount.explanation"
+  },
+  "/A6iDU": {
+    "defaultMessage": "Créez votre compte",
+    "description": "app.account.create.title: Title for the create account form page"
+  },
+  "0Up9ik": {
+    "defaultMessage": "Vous pouvez également vous connecter à l'aide d'un compte Ethereum existant.",
+    "description": "The link to redirect to use your existing ethereum for the restore your account page"
+  },
+  "0gOuQN": {
+    "defaultMessage": "Est-ce que c'est ce que vous vouliez dire ?",
+    "description": "app.account.connect.create.checkHeader"
+  },
+  "1jWSoJ": {
+    "defaultMessage": "Ou, vous pouvez créer un tout nouveau compte !",
+    "description": "app.account.connect.create.createTransfer"
+  },
+  "3hZCNt": {
+    "defaultMessage": "Vous n'avez pas de compte ?",
+    "description": "app.account.restore.createAccount.explanation: The text before the button to redirect to the create an account page for the restore your account page"
+  },
+  "40RPha": {
+    "defaultMessage": "Nom du compte",
+    "description": "app.addAccount.newbaseclass.labelName"
+  },
+  "4H3sQ0": {
+    "defaultMessage": "Télécharger",
+    "description": "Download button in settings?"
+  },
+  "5F2PB8": {
+    "defaultMessage": "Créer un nouveau compte",
+    "description": "app.account.restore.button.createAccount: The button to redirect to the create an account page for the restore your account page"
+  },
+  "5knRxR": {
+    "defaultMessage": "Votre mot de passe doit comporter des minuscules, des majuscules, des chiffres, des lettres, des caractères spéciaux",
+    "description": "app.account.generate.passwordTextCase: The text for the create your password text"
+  },
+  "6oWXKE": {
+    "defaultMessage": "Sauvegarder votre compte",
+    "description": "The above the main title title for the store your account page"
+  },
+  "73SQ9j": {
+    "defaultMessage": "Je veux créer un nouveau compte",
+    "description": "app.account.create.button.newAccount: Button redirect people to create a new account on the let's get started page"
+  },
+  "83H7l5": {
+    "defaultMessage": "Nous ne pouvons pas détecter un compte compatible dans ce navigateur. Si vous souhaitez utiliser un fournisseur de compte externe, nous vous recommandons d'installer Metamask ou d'utiliser le navigateur Opera",
+    "description": "app.account.connect.create.checkMessageFailed"
+  },
+  "9KUkfL": {
+    "defaultMessage": "Restaurer",
+    "description": "AccountsList button to load account into site"
+  },
+  "9XF/65": {
+    "defaultMessage": "N'importe quel nom",
+    "description": "app.addAccount.newbaseclass.nameinput.placeholder: Tooltip for the account name input"
+  },
+  "ADIAYE": {
+    "defaultMessage": "Prochaine étape",
+    "description": "The button to be redirected to the congratulations page for the store your account page"
+  },
+  "AFIxrV": {
+    "defaultMessage": "Enregistrez-le avec TheCoin",
+    "description": "app.account.connect.create.title: Title above the main Title for the create account form page"
+  },
+  "CBetQ2": {
+    "defaultMessage": "Créer un compte",
+    "description": "app.account.restore.createAccount.button: The button to redirect to the create an account page for the restore your account page"
+  },
+  "EE4Nv0": {
+    "defaultMessage": "Veuillez patienter s'il vous plaît : Chargement des comptes;",
+    "description": "Loading message when fetching wallets"
+  },
+  "EmDoJa": {
+    "defaultMessage": "Nous préparons votre compte flambant neuf : {percentComplete} % fini.",
+    "description": "app.account.create.whileCreatingHeader"
+  },
+  "H0iu0v": {
+    "defaultMessage": "Le code de parrainage saisi n'est pas reconnu",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerUnknown"
+  },
+  "HOr2/E": {
+    "defaultMessage": "Créer votre compte",
+    "description": "app.account.create.form.title: Title above the main Title for the create account form page"
+  },
+  "HTsW98": {
+    "defaultMessage": "Si vous rencontrez des problèmes pour restaurer votre compte, contactez-nous pour obtenir de l'aide.",
+    "description": "The text before the button to redirect to the create an account page for the restore your account page"
+  },
+  "HbmGay": {
+    "defaultMessage": "Merci d'avoir complété l'autorisation Google : cette fenêtre peut maintenant être fermée.",
+    "description": "app.storeOnline.google.tokenSuccess"
+  },
+  "I5PO4z": {
+    "defaultMessage": "Huit caractères minimum.",
+    "description": "app.account.generate.passwordTextCaracters: The text for the create your password text"
+  },
+  "JKo065": {
+    "defaultMessage": "Vous n'avez pas de compte ?",
+    "description": "app.account.restore.createAccount.explanation: Title above the main Title for the create account form page"
+  },
+  "JbQ0xl": {
+    "defaultMessage": "Authentification réussie, veuillez revenir à votre compte et terminer la connexion à google",
+    "description": "app.storeOnline.google.cookieSuccess"
+  },
+  "JdpQPr": {
+    "defaultMessage": "Enregistrez-le avec TheCoin",
+    "description": "app.account.connect.existing.title: Title above the main Title for the connect account form page"
+  },
+  "K0CWB+": {
+    "defaultMessage": "Restaurer le compte",
+    "description": "The above the title text for the restore account page"
+  },
+  "KGyt2G": {
+    "defaultMessage": "6 lettres et/ou chiffres",
+    "description": "app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input"
+  },
+  "KILB3J": {
+    "defaultMessage": "Créer un compte",
+    "description": "app.addAccount.connect.buttonCreate"
+  },
+  "LAm9Br": {
+    "defaultMessage": "Pourquoi sommes-nous différent ?",
+    "description": "app.account.generate.aboveTheTitle: The above the title for the information page before the create account form"
+  },
+  "LkZzDQ": {
+    "defaultMessage": "Charger votre compte en utilisant une autre méthode",
+    "description": "app.addAccount.existsSwitcher.existTransfer"
+  },
+  "M4HZZG": {
+    "defaultMessage": "Où est stocké mon compte ?",
+    "description": "app.account.generate.button.accountStored: button for the information page before the create account form"
+  },
+  "O174rv": {
+    "defaultMessage": "Créer un nouveau compte",
+    "description": "app.account.connect.create.createAccount: The button to redirect to the create an account page for the restore your account page"
+  },
+  "O18bEU": {
+    "defaultMessage": "Les comptes avec TheCoin sont un peu différents de votre banque habituelle. Nous sommes construits sur la blockchain, ce qui signifie que nous ne stockons pas vos clés de compte - vous le faites ! Si vous n'avez jamais utilisé de compte blockchain, certaines de ces différences peuvent sembler un peu étranges. Nous vous encourageons à lire les courts articles d'introduction ci-dessous si vous souhaitez en savoir plus.",
+    "description": "app.account.generate.description: Title for the information page before the create account form"
+  },
+  "Owjqk8": {
+    "defaultMessage": "We are very proud to combine the cutting-edge security and performance of blockchain with the the conveniences of traditional banking.",
+    "description": "app.account.generate.proud: Text underneath the buttons for the information page before the create account form"
+  },
+  "P21J9i": {
+    "defaultMessage": "Aller à",
+    "description": "AccountsList button to go to account"
+  },
+  "Qd0+sv": {
+    "defaultMessage": "Deuxième étape",
+    "description": "app.account.create.form.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "Qi/Oy8": {
+    "defaultMessage": "Bienvenue chez TheCoin",
+    "description": "app.account.generate.title: Title for the information page before the create account form"
+  },
+  "QsTZ/N": {
+    "defaultMessage": "Créer un compte",
+    "description": "The button to redirect to the create an account page for the restore your account page"
+  },
+  "Ro1Qqm": {
+    "defaultMessage": "Charger un compte stocké en ligne",
+    "description": "app.addAccount.existsSwitcher.existRestore"
+  },
+  "S+5i+u": {
+    "defaultMessage": "Le navigateur Opera que vous utilisez est livré avec un compte intégré compatible avec TheCoin. Souhaitez-vous vous y connecter ?",
+    "description": "app.account.connect.create.checkMessageOpera"
+  },
+  "SLaqzP": {
+    "defaultMessage": "Assurez votre sécurité",
+    "description": "The main title for the store your account page"
+  },
+  "VzMSxf": {
+    "defaultMessage": "Compte compatible détecté",
+    "description": "app.account.connect.create.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "WoRDcy": {
+    "defaultMessage": "Pour bénéficier de notre garantie de « compte le plus sécurisé au monde », vous devez l'enregistrer hors ligne.",
+    "description": "The text underneath the button to explain what is the most secured for the store your account page"
+  },
+  "YcVCvg": {
+    "defaultMessage": "Nous utilisons une approche à plusieurs niveaux pour garantir que votre compte bénéficie d'une sécurité totale. Votre compte et sa valeur sont sécurisés sur la blockchain, ce qui signifie que la même sécurité qui protège plus de 17 000 milliards de dollars d'actifs protège également votre compte. Cette sécurité est, en pratique, inviolable.",
+    "description": "app.account.generate.storeAccountText: The text for the create your password text"
+  },
+  "aX8xuk": {
+    "defaultMessage": "Vous êtes maintenant prêt à commencer avec TheCoin. Rechargez votre solde pour commencer à obtenir des avantages et faire de l'avenir un endroit meilleur.",
+    "description": "app.account.create.congratulations.description: The description for the congratulations page"
+  },
+  "ai4iRi": {
+    "defaultMessage": "Un identifiant de parrainage ne doit contenir que des caractères alphanumériques.",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerInvalidCharacters"
+  },
+  "b+zvsz": {
+    "defaultMessage": "Créer un compte",
+    "description": "app.account.create.form.buttonCreate: Button for the create account form page"
+  },
+  "G5dlT": {
+    "defaultMessage": "Copier",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
-  "base.copyToClipboard.messageSuccess": {
-    "defaultMessage": "Copied to your clipboard",
+  "cINV4p": {
+    "defaultMessage": "Copier dans votre presse-papiers",
     "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
   },
-  "base.footer.copyright": {
-    "defaultMessage": "Copyright 2020. TheCoin. All Right Reserved.",
+  "KLgV0J": {
+    "defaultMessage": "Copyright 2020. TheCoin. Tous droits réservés.",
     "description": "base.footer.copyright: Copyright phrase in footer"
   },
-  "base.footer.registered": {
-    "defaultMessage": "The Coin Collaborative Canada is a registered non-profit",
+  "onsfvq": {
+    "defaultMessage": "TheCoin Collaborative Canada est un organisme à but non lucratif enregistré",
     "description": "base.footer.registered: Registered Non profit phrase in footer"
   },
-  "base.uxScoredPassword.PasswordRequired": {
-    "defaultMessage": "Please enter a password of at least 'moderate' strength"
+  "D2FTm2": {
+    "defaultMessage": "Veuillez saisir un mot de passe de force au moins « modérée »"
   },
-  "base.uxScoredPassword.ineffectual": {
-    "defaultMessage": "ineffectual"
+  "+VnHem": {
+    "defaultMessage": "inefficace"
   },
-  "base.uxScoredPassword.moderate": {
-    "defaultMessage": "moderate"
+  "BUGYWB": {
+    "defaultMessage": "modérée"
   },
-  "base.uxScoredPassword.strength": {
-    "defaultMessage": "strength"
+  "W9yWHk": {
+    "defaultMessage": "force"
   },
-  "base.uxScoredPassword.strong": {
-    "defaultMessage": "strong"
+  "GfOGaW": {
+    "defaultMessage": "fort"
   },
-  "base.uxScoredPassword.vulnerable": {
-    "defaultMessage": "vulnerable"
+  "iaWn3u": {
+    "defaultMessage": "vulnérable"
   },
-  "base.uxScoredPassword.weak": {
-    "defaultMessage": "weak"
-  }
+  "mA8olw": {
+    "defaultMessage": "faible"
+  },
+  "c+odgw": {
+    "defaultMessage": "Un identifiant de référent doit comporter 6 caractères.",
+    "description": "app.addaccount.newbaseclass.referralinput.errorReferrerNumChars"
+  },
+  "dJoJ7K": {
+    "defaultMessage": "Cette page s'attend à recevoir des informations d'authentification Google, mais aucune n'a été trouvée.",
+    "description": "app.storeOnline.google.tokenFailure"
+  },
+  "dN5K4L": {
+    "defaultMessage": "Charger depuis Google Drive",
+    "description": "Store Account: Option to store on GDrive"
+  },
+  "dggnAK": {
+    "defaultMessage": "Évitez les mots comme votre nom, votre emplacement, votre nom de famille ou le nom de votre animal de compagnie.",
+    "description": "app.account.generate.passwordTextNames: The text for the create your password text"
+  },
+  "dgxOao": {
+    "defaultMessage": "Vous n'avez pas de compte ?",
+    "description": "The text before the button to redirect to the create an account page for the restore your account page"
+  },
+  "eWqzXa": {
+    "defaultMessage": "Comment choisir un bon mot de passe",
+    "description": "app.account.generate.button.goodPassword: button for the information page before the create account form"
+  },
+  "gFB+cq": {
+    "defaultMessage": "Un compte doit avoir un nom.",
+    "description": "app.addAccount.newbaseclass.errorNameTooShort"
+  },
+  "gnoeu5": {
+    "defaultMessage": "Télécharger un compte enregistré manuellement",
+    "description": "app.addAccount.existsSwitcher.existUpload"
+  },
+  "h5dwyN": {
+    "defaultMessage": "Télécharger le portefeuille",
+    "description": "Restore Account: Option to restore wallet from JSON file"
+  },
+  "hA92mZ": {
+    "defaultMessage": "Télécharger",
+    "description": "The button to download the account for the store your account page"
+  },
+  "hUDimZ": {
+    "defaultMessage": "Assurez-vous d'avoir accès à vos fichiers locaux plus tard.",
+    "description": "The text underneath the button to explain that the client need to have access to this file for the store your account page"
+  },
+  "ie4SAk": {
+    "defaultMessage": "Stocker sur Microsoft OneDrive",
+    "description": "The button to save on microsoft for the store your account page"
+  },
+  "dyGQkB": {
+    "defaultMessage": "L'enregistrement de ce compte a échoué. Veuillez contacter support@thecoin.io",
+    "description": "app.addaccount.newbaseclass.referralinput.error: Error for the referral input"
+  },
+  "j/hJ0i": {
+    "defaultMessage": "Mot de passe",
+    "description": "app.addAccount.generate.labelPassword"
+  },
+  "j7iXOT": {
+    "defaultMessage": "Veuillez patienter - nous vérifions l'authentification",
+    "description": "app.storeOnline.google.tokenWaiting"
+  },
+  "j941L1": {
+    "defaultMessage": "Utilisez un mot de passe unique.",
+    "description": "app.account.generate.passwordTextUnique: The text for the create your password text"
+  },
+  "k7l1oT": {
+    "defaultMessage": "J'ai déjà un compte",
+    "description": "app.account.create.button.account: Button redirect people to connect their existing account on the let's get started page"
+  },
+  "kldiFz": {
+    "defaultMessage": "Compte compatible détecté",
+    "description": "app.account.connect.existing.aboveTheTitle: Title above the main Title for the connect account form page"
+  },
+  "l/vRE7": {
+    "defaultMessage": "Aucun fournisseur externe détecté !",
+    "description": "app.addAccount.connect.warnIfDisabled.warningHeader"
+  },
+  "lTiUZs": {
+    "defaultMessage": "Creation du compte ...",
+    "description": "app.account.create.whileCreatingHeader"
+  },
+  "lmGLWG": {
+    "defaultMessage": "Prmière étape",
+    "description": "app.account.create.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "ltQDpC": {
+    "defaultMessage": "Restaurer à partir de Dropbox",
+    "description": "Dropbox link for the restore your account page"
+  },
+  "lwxch1": {
+    "defaultMessage": "Aucun compte compatible détecté !",
+    "description": "app.account.connect.create.checkHeaderFailed"
+  },
+  "m0GZq1": {
+    "defaultMessage": "Restaurer à partir de Microsoft OneDrive",
+    "description": "Microsoft link for the restore your account page"
+  },
+  "m31o7W": {
+    "defaultMessage": "Votre compte a été créé",
+    "description": "app.account.create.congratulations.aboveTheTitle: Title above the title for the congratulations page"
+  },
+  "mowZfy": {
+    "defaultMessage": "Cette fonctionnalité connecte TheCoin à un fournisseur de compte Web3 externe.",
+    "description": "app.addAccount.connect.warnIfDisabled.warningHeader"
+  },
+  "nWBLuA": {
+    "defaultMessage": "Au moins une force modérée",
+    "description": "app.addAccount.generate.labelPasswordAtLeast"
+  },
+  "neGBfT": {
+    "defaultMessage": "Stocker sur Dropbox",
+    "description": "The button to save on dropbox for the store your account page"
+  },
+  "oB6sg1": {
+    "defaultMessage": "Stocker sur Google Drive",
+    "description": "Store Account: Option to store on GDrive"
+  },
+  "pJe8Es": {
+    "defaultMessage": "Code de parrainage",
+    "description": "app.addaccount.newbaseclass.referralinput.labelReferrer"
+  },
+  "rBQOlU": {
+    "defaultMessage": "Félicitation !",
+    "description": "app.account.create.congratulations.title: Title for the congratulations page"
+  },
+  "rwJdid": {
+    "defaultMessage": "Aucun compte trouvé",
+    "description": "AccountsList: no accounts loaded from google"
+  },
+  "rzVxfG": {
+    "defaultMessage": "Bienvenue sur TheCoin !",
+    "description": "The main title for the restore account page"
+  },
+  "tXg4Dx": {
+    "defaultMessage": "Aller au compte",
+    "description": "app.account.create.congratulations.button.goToAccount: The button to be redirected to the account for the congratulations page"
+  },
+  "tvmNSG": {
+    "defaultMessage": "Un compte portant ce nom existe déjà ici.",
+    "description": "app.addAccount.newbaseclass.errorNameDuplicate"
+  },
+  "vN4JT+": {
+    "defaultMessage": "Ne donnez jamais votre mot de passe à qui que ce soit.",
+    "description": "app.account.generate.passwordTextKeep: The text for the create your password text"
+  },
+  "xo8dT5": {
+    "defaultMessage": "Créer un nouveau compte",
+    "description": "app.account.generate.button.go: The create account button for the information page before the create account form"
+  },
+  "yJjZre": {
+    "defaultMessage": "Connectez-vous à un compte Ethereum existant",
+    "description": "app.addAccount.existsSwitcher.existConnect"
+  },
+  "zmnLDK": {
+    "defaultMessage": "Vous n'avez pas de compte ?",
+    "description": "app.account.connect.create.explanation: The text before the button to redirect to the create an account page for the restore your account page"
+  }  
 }

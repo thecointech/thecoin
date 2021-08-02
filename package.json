@@ -49,7 +49,7 @@
     "test:ci": "lerna run test -- --ci --forceExit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "check-changes": "git diff-index --quiet HEAD -- "
+    "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -156,7 +156,6 @@
     "install": "^0.13.0",
     "jest": "27.0.5",
     "jest-cli": "27.0.5",
-    "jest-environment-uint8array": "^1.0.0",
     "lerna": "^3.20.2",
     "less": "^3.10.3",
     "less-loader": "^9.1.0",
