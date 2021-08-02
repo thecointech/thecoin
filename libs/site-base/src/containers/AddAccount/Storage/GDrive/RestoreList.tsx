@@ -14,7 +14,6 @@ import styles from './styles.module.less';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
 
-
 type LoadingWallet = {
   wallet: Wallet;
   name: string;
@@ -22,17 +21,8 @@ type LoadingWallet = {
   exists: boolean;
 }
 
-
-const aboveTheTitle = defineMessage({
-  defaultMessage: "Restore Account from Google Drive",
-  description: "The above the title text for the restore account page"
-});
-const title = defineMessage({
-  defaultMessage: "Available Accounts",
-  description: "The main title for the restore account page"
-});
-
-
+const aboveTheTitle = defineMessage({defaultMessage: "Restore Account", description: "The above the title text for the restore account page"});
+const title = defineMessage({defaultMessage: "Accounts in your Google Drive", description: "The main title for the restore account page"});
 const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
 const noAccounts = defineMessage({ defaultMessage: 'No accounts found', description: 'AccountsList: no accounts loaded from google' })
 const goTo = defineMessage({ defaultMessage: 'Go To This Account', description: 'AccountsList button to go to account' })
@@ -86,14 +76,14 @@ export const RestoreList = ({url}: Props) => {
       : (
         <>
           <PageHeader above={aboveTheTitle} title={title} />
-          <div className={`${styles.listAccount} x6spaceAfter`}>
+          <div className={`${styles.listAccount} x10spaceAfter`}>
             <List divided verticalAlign='middle' >
               {parseWallets(wallets, accounts)
                 .map(wallet => (
                   <List.Item key={wallet.id}>
                     <List.Content className={styles.accountRow}>
                       <div className={styles.nameWallet}>{wallet.name}</div>
-                      <ButtonPrimary className={`x2spaceBefore x2spaceAfter`} floated='right'
+                      <ButtonPrimary className={`${styles.buttonRestore} x2spaceBefore x2spaceAfter`} floated='right'
                         wallet={wallet}
                         onClick={onRestore}
                       >
