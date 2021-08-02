@@ -9,7 +9,7 @@ const translations = defineMessages({
       defaultMessage: '6 letters or numbers',
       description: 'app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input'},
   error : {
-      defaultMessage: 'Registering this account failed. Please contact support@thecoin.io6 letters or numbers',
+      defaultMessage: 'Registering this account failed. Please contact support@thecoin.io',
       description: 'app.addaccount.newbaseclass.referralinput.error: Error for the referral input'},
   labelReferrer : {
       defaultMessage: 'Referral Code',
