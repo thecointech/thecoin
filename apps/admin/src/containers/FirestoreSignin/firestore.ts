@@ -1,5 +1,6 @@
 import { init } from '@thecointech/firestore';
 import { ConfigStore } from '@thecointech/store';
+import sample from './sampledb.dev.json';
 
 //
 // Username & password for firestore
@@ -16,6 +17,9 @@ export async function signIn() {
     if (!username || !password)
         return false;
 
+    // In development mode, initialize with sample data
+    if (process.env.CONFIG_NAME == 'development')
+      return init(sample);
     return init({username, password});
 }
 

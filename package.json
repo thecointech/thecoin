@@ -50,7 +50,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "dedup": "yarn yarn-deduplicate -s fewer",
-    "check-changes": "git diff-index --quiet HEAD -- "
+    "check-changes": "git diff-index --quiet HEAD -- ",
+    "dump-firestore": "cross-env CONFIG_NAME=devlive ts-node --project ./tsconfig.dev.json ./tools/dumpFirestore.ts"
   },
   "dependencies": {
     "axios": "^0.21.1",

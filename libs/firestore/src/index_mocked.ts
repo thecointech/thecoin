@@ -47,7 +47,7 @@ const isMockedDb = (t?: any) : t is MockedDb =>
   ))
 
 export type MockedInit = MockedDb;
-export function init(init?: MockedDb) {
+export async function init(init?: MockedDb) {
   log.debug('Connecting to mocked firestore');
 
   const {immutable, ...rest} = isMockedDb(init)

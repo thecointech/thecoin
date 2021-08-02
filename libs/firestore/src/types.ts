@@ -14,7 +14,7 @@ export type FirestoreDataConverter<T> = firebase.firestore.FirestoreDataConverte
 export type DocumentData = firebase.firestore.DocumentData|firestore.DocumentData;
 export type SetOptions = firebase.firestore.SetOptions|firestore.SetOptions;
 
-// Typescript cannot workout both generics/overloads/union simultaneously
+// Typescript cannot work out both generics/overloads/union simultaneously
 export type CollectionReference<T=DocumentData> = Omit<firebase.firestore.CollectionReference<T>|firestore.CollectionReference<T>, "withConverter"> & {
   withConverter<U>(
     converter: FirestoreDataConverter<U>
@@ -23,7 +23,8 @@ export type CollectionReference<T=DocumentData> = Omit<firebase.firestore.Collec
   listDocuments?: () => Promise<Array<DocumentReference<T>>>;
 }
 export type DocumentReference<T=DocumentData> = Omit<firebase.firestore.DocumentReference<T>|firestore.DocumentReference<T>, "collection"> & {
-  collection(id: string): CollectionReference
+  collection(id: string): CollectionReference;
+  listCollections?: () => Promise<Array<CollectionReference<DocumentData>>>;
 };
 
 // WriteBatch cannot be merged (self-referentiality breaks on union) so we define a stripped-down version
@@ -40,5 +41,15 @@ export interface WriteBatch {
 export type Firestore = Omit<FirestoreAdmin|FirestoreClient, "batch"|"collection"> & {
   batch: () => WriteBatch;
   collection: (path: string) => CollectionReference;
-  //collection: <T>(path: string) => CollectionReference<T>;
+
+  ////////////////////////////////////////////////////////////////
+  // The following functions are only available on the server
+  // Batch get, only availalbe on server
+  getAll?: (
+    ...documentRefsOrReadOptions: Array<
+      DocumentReference<DocumentData>|any
+    >
+  ) => Promise<Array<DocumentSnapshot<DocumentData>>>;
+
+  listCollections?: () => Promise<Array<CollectionReference<DocumentData>>>;
 };
