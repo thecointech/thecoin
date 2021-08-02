@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { usePrismicActions } from "components/Prismic/reducer";
-import { ApplicationRootState } from "types";
+import { Prismic } from "components/Prismic";
 import { useSelector } from "react-redux";
 import { Switch, Route, RouteComponentProps } from "react-router";
 import { ArticleList } from "./ArticleList";
@@ -13,8 +12,8 @@ import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/
 import { Article } from "./Article";
 
 const BlogInternal = (props: RouteComponentProps) => {
-  const actions = usePrismicActions();
-  const docs = useSelector((s: ApplicationRootState) => s.documents);
+  const actions = Prismic.useApi();
+  const docs = Prismic.useData();
   const { match } = props;
   const buildUrl = (id: string) => {
     let sub = id.replace(/ /g, '-')

@@ -1,6 +1,18 @@
-import { DocumentData, FirestoreDataConverter, FieldValue, toDateTime, toTimestamp } from "@thecointech/firestore";
+import { DocumentData, FirestoreDataConverter, Timestamp, FieldValue } from "@thecointech/firestore";
 import { Decimal } from "decimal.js-light";
 import { isPlainObject } from 'lodash';
+import { DateTime } from 'luxon';
+
+
+const toTimestamp = (d?: DateTime) =>
+  d
+    ? Timestamp.fromMillis(d.toMillis())
+    : d;
+const toDateTime = (d?: Timestamp) =>
+  d
+    ? DateTime.fromMillis(d.toMillis())
+    : d;
+
 
 function convertObject(obj: DocumentData, keys: string[], converter: (v: any) => any) {
   // do a deep clone

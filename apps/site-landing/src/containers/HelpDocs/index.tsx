@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import { usePrismicActions } from "components/Prismic/reducer";
+import { Prismic, FAQDocument, PrismicState  } from "components/Prismic";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
 import { Switch, Route, RouteComponentProps } from "react-router";
 import { FaqList } from "./FaqList";
 import { RUrl } from "@thecointech/utilities/RUrl";
 import { Dictionary } from "lodash";
-import { FAQDocument, PrismicState } from "components/Prismic/types";
 import { Welcome } from "./Welcome";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
@@ -14,7 +13,7 @@ import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/
 
 
 const HelpDocsInternal = (props: RouteComponentProps) => {
-  const actions = usePrismicActions();
+  const actions = Prismic.useApi();
   const docs = useSelector((s: ApplicationRootState) => s.documents);
   const { match } = props;
   const buildUrl = (id: string) => {
@@ -29,7 +28,6 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
   }, []);
 
   const categories = buildCategories(docs);
-  console.log("categories",categories)
   return (
     <>
       <Switch>

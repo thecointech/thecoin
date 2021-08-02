@@ -16,7 +16,7 @@ const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
 const mocksFolder = path.resolve(projectRoot, '__mocks__');
 const mockOptions = process.env.SETTINGS !== 'live'
   ? getMockOptions()
-  : getDevLiveOptions()
+  : {}
 
 const devOptions = {
   mode: 'development',
@@ -103,18 +103,6 @@ function getMockOptions() {
     // Re-use our jest mocks inside our website (neat, huh?)
     resolve: {
       modules: [mocksFolder],
-    }
-  }
-}
-
-function getDevLiveOptions() {
-  return {
-    experiments: {
-      topLevelAwait: true,
-    },
-    // Re-direct store to js file
-    resolve: {
-      conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "import", "default"],
     }
   }
 }

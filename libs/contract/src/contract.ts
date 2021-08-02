@@ -1,4 +1,4 @@
-import { Contract } from 'ethers/contract';
+import { Contract } from 'ethers';
 import { TheCoin } from './types/TheCoin';
 import { getProvider } from './provider';
 import TheCoinSpec from './contracts/TheCoin.json';

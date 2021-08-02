@@ -3,23 +3,23 @@ import { Label, Container, Header, Grid } from 'semantic-ui-react';
 import { IsValidAddress } from '@thecointech/utilities';
 import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useAccountStoreApi } from '../AccountMap';
+import { AccountMap } from '../AccountMap';
 import { useHistory } from 'react-router';
 
 import illustration from "./images/illust_flowers.svg";
 
 
-const translate = defineMessages({ 
-      aboveTheTitle : { 
-        id: "shared.account.uploadWallet.aboveTheTitle", 
+const translate = defineMessages({
+      aboveTheTitle : {
+        id: "shared.account.uploadWallet.aboveTheTitle",
         defaultMessage:"Restore Account",
         description:"shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"},
-      title : { 
-        id: "shared.account.uploadWallet.title", 
+      title : {
+        id: "shared.account.uploadWallet.title",
         defaultMessage:"Load an Account",
         description:"shared.account.uploadWallet.title: Title for the upload your account page"},
-      dropZone : {  
-        id: "shared.account.uploadWallet.dropZone", 
+      dropZone : {
+        id: "shared.account.uploadWallet.dropZone",
         defaultMessage:"Drag 'n' drop a wallet file here, or click to browse",
         description:"shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"}});
 
@@ -41,14 +41,14 @@ const id = '__upload26453312f';
 export const UploadWallet = (props: Props) => {
 
   const history = useHistory();
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
 
   const onRecieveFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { wallet, name } = await ReadFile(e, props.readFile);
     const isValid = await ValidateFile(wallet, props.validate);
 
     if (isValid) {
-      accountsApi.addAccount(name, wallet);
+      accountsApi.addAccount(name, wallet.address, wallet);
       history.push("/accounts");
     } else {
       alert('Bad Wallet');

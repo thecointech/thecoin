@@ -66,8 +66,8 @@ async function doClaimToken(tokenId: number, nft: TheCoinNFT, code: string, clai
   console.log("Claim Sig: " + signature);
   try {
  const r = await nft.claimToken(tokenId, claimant, signature);
-    log.debug({address: claimant, tokenId, hash: r.hash}, `Token {tokenId} assigned in {hash} - gasPrice: ${r.gasPrice.toString()}, limit: ${r.gasLimit.toString()}`);
-    console.log(`Token ${tokenId} assigned in ${r.hash} - gasPrice: ${r.gasPrice.toString()}, limit: ${r.gasLimit.toString()}`);
+    log.debug({address: claimant, tokenId, hash: r.hash}, `Token {tokenId} assigned in {hash} - gasPrice: ${r.gasPrice?.toString()}, limit: ${r.gasLimit.toString()}`);
+    console.log(`Token ${tokenId} assigned in ${r.hash} - gasPrice: ${r.gasPrice?.toString()}, limit: ${r.gasLimit.toString()}`);
     return r.hash ?? false;
   }
   catch(err) {

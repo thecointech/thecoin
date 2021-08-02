@@ -1,7 +1,7 @@
 import { getAllActions } from '.';
 import { getAllUsers } from '../users';
 import { init } from '@thecointech/firestore';
-import { describe, filterByEmulator } from '@thecointech/firestore/jest.emulator';
+import { describe, filterByEmulator } from '@thecointech/jestutils';
 
 describe('Transaction Fetch' , () => {
   it('Can fetch all transactions', async () => {

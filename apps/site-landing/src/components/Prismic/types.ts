@@ -1,4 +1,4 @@
-import {Document} from 'prismic-javascript/d.ts/documents'
+import type {Document} from 'prismic-javascript/d.ts/documents'
 
 export type RenderableType = {
   type: string;
@@ -22,17 +22,17 @@ export type ImageObj = {
   ​​​​​url: string
 }
 
-export type AlternateLang = { 
-  id: string, 
-  type: string, 
-  lang: string 
+export type AlternateLang = {
+  id: string,
+  type: string,
+  lang: string
 }
 
 export type ArticleResult = {
   thumbnail: ImageObj,
   image_before_title: ImageObj,
   title: RenderableType[]|null;
-  publication_date: string; 
+  publication_date: string;
   short_content: RenderableType[]|null;
   content: RenderableType[]|null;
   author: RenderableType[]|null;
@@ -40,14 +40,14 @@ export type ArticleResult = {
   fr_categories: [],
   id: string
 }
-export type FAQDocument = 
-  Omit<Document, "data"> & 
+export type FAQDocument =
+  Omit<Document, "data"> &
   {
     data: FAQResult
   }
 
-export type ArticleDocument = 
-  Omit<Document, "data"> & 
+export type ArticleDocument =
+  Omit<Document, "data"> &
   {
     data: ArticleResult
   }

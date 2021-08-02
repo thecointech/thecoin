@@ -42,5 +42,24 @@
       ],
       "outputCapture": "std"
     },
+    {
+      "name": "Launch Prod",
+      "request": "launch",
+      "runtimeArgs": [
+        "prod"
+      ],
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "preLaunchTask": "build",
+      "type": "pwa-node",
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
+      "resolveSourceMapLocations": [
+        "**",
+        "!**/node_modules/**"
+      ],
+      "outputCapture": "std"
+    },
   ]
 }

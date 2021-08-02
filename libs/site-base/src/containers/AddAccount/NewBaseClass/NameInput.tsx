@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { UxInput } from "@thecointech/shared/components/UxInput";
 import { defineMessages, MessageDescriptor, useIntl } from "react-intl";
-import { useAccountStore } from "@thecointech/shared/containers/AccountMap";
+import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { AccountState } from '@thecointech/account';
 
 const translations = defineMessages({
@@ -38,7 +38,7 @@ export const NameInput = (props: Props) => {
   const intl = useIntl();
   const [state, setState] = useState(initialState);
   const { setName, ...rest } = props;
-  const {accounts} = useAccountStore();
+  const accounts = AccountMap.useAsArray();
 
   const onChange = (value: string) => {
     const newState = validateName(value, accounts);

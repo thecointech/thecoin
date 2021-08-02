@@ -2,10 +2,10 @@ import React, { useCallback } from 'react'
 import FileSaver from 'file-saver';
 import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
+import { isLocal } from '@thecointech/signers';
 import { ButtonSecondary } from '../../../../components/Buttons';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
-import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { Account } from '@thecointech/shared/containers/Account';
 import { ProviderChoice } from '../ProviderChoice';
 import icon from "./images/download.svg";
 
@@ -19,13 +19,13 @@ type MyProps = {
 
 export const OfflineStore = () => {
 
-  const activeAccount = useActiveAccount()!;
-  const accountApi = useAccountApi(activeAccount.address);
+  const account = AccountMap.useActive()!;
+  const accountApi = Account(account.address).useApi();
 
   ////////////////////////////////
   const onDownloadClicked = (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
-    onDownload(activeAccount!.address);
+    onDownload(account.address);
     accountApi.setDetails({ storedOffline: true })
   }
 
@@ -60,7 +60,7 @@ export const onDownload = (address: string) => {
     return;
   }
   const { signer } = account;
-  if (isWallet(signer)) {
+  if (isLocal(signer)) {
     const walletStr = JSON.stringify(signer);
     const blob = new Blob([walletStr], { type: "text/plain;charset=utf-8" });
     FileSaver.saveAs(blob, `${account.name}.wallet.json`);

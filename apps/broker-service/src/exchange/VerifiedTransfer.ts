@@ -1,5 +1,5 @@
 import { GetContract } from './Wallet';
-import { TransactionResponse } from 'ethers/providers';
+import { TransactionResponse } from '@ethersproject/providers';
 import { CertifiedTransferRequest } from '@thecointech/types';
 import { log } from '@thecointech/logging';
 import { validateTransfer } from './CertifiedActionVerify';

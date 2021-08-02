@@ -8,7 +8,7 @@ import iconCard from "./images/icon_card.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { useState } from 'react';
-import { useActiveAccount } from '../AccountMap';
+import { AccountMap } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -90,7 +90,7 @@ export const TransactionList = (props: MyProps) => {
 
   const maxRowCount = 50;
   const { rates } = props;
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   const transactions = account!.history;
   const transactionLoading = account?.historyLoading;
 

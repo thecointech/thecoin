@@ -5,7 +5,7 @@ import { weBuyAt } from '@thecointech/fx-rates';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@thecointech/types';
 import { useState } from 'react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
 import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
@@ -81,7 +81,7 @@ export const Redeem = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
 
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   const { rates } = useFxRates();
   const rate = weBuyAt(rates);
 

@@ -1,7 +1,7 @@
 import { GetContract } from "@thecointech/contract";
 import { log } from "@thecointech/logging";
 import { AnyActionContainer, getCurrentState } from "../statemachine/types";
-import { TransactionReceipt } from 'ethers/providers'
+import { TransactionReceipt } from '@ethersproject/providers'
 
 //
 // Wait for a transfer to complete

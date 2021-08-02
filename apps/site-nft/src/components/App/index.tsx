@@ -11,7 +11,8 @@ import * as React from 'react';
 import { MainNavigation } from '../MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { MainRouter } from '../MainRouter';
+import { Routes } from '../Routes';
+import { init } from './init'
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -20,6 +21,7 @@ import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
+init();
 
 export const App = () => {
   return (
@@ -28,7 +30,7 @@ export const App = () => {
       <div className={styles.contentContainer}>
         <MainPageTransition>
           <section id={styles.mainContent}>
-            <MainRouter />
+            <Routes />
           </section>
         </MainPageTransition>
       </div>
