@@ -27,7 +27,7 @@ type Props = {
 }
 export const RestoreList = ({url}: Props) => {
 
-  const [wallets, setWallets] = useState(undefined as (LoadingWallet[]) | undefined)
+  const [wallets, setWallets] = useState(undefined as (GoogleWalletItem[]) | undefined)
   const [redirect, setRedirect] = useState('');
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
@@ -39,8 +39,7 @@ export const RestoreList = ({url}: Props) => {
     if (token) {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
-        .then(r => parseWallets(r.data.wallets, accounts))
-        .then(r => setWallets(r))
+        .then(({data}) => setWallets(data.wallets))
         .catch(log.error)
     }
   }, [token]);
@@ -72,8 +71,8 @@ export const RestoreList = ({url}: Props) => {
       : (
         <List divided relaxed>
           {
-            wallets.map(wallet => {
-              return (
+            parseWallets(wallets, accounts)
+              .map(wallet => (
                 <List.Item key={wallet.id}>
                   <List.Content className={styles.accountRow}>
                     {wallet.name}
@@ -88,7 +87,7 @@ export const RestoreList = ({url}: Props) => {
                   </List.Content>
                 </List.Item>
               )
-            })
+            )
           }
         </List>
       )
