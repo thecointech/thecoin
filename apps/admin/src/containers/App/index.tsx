@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Routes } from './Routes';
-import { Container, Segment, Sidebar } from 'semantic-ui-react';
+import { Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { FirestoreCheck } from '../FirestoreSignin';
@@ -13,18 +13,12 @@ export const App = () => {
   FxRateReducer.useStore();
   SidebarItemsReducer.useStore();
 
-  const divStyle = {
-    minHeight: "500px"
-  };
-
   return (
-    <Sidebar.Pushable as={Segment} className={styles.mainPageContainer}>
+    <Sidebar.Pushable as={Segment} id={styles.mainPageContainer}>
       <PageSidebar inverted width='thin' />
       <Sidebar.Pusher className={styles.minHeight}>
-        <Container style={divStyle}>
           <FirestoreCheck />
           <Routes />
-        </Container>
       </Sidebar.Pusher>
     </Sidebar.Pushable>
   );

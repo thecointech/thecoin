@@ -1,10 +1,14 @@
+import { GetContract } from '@thecointech/contract';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getAllUserData } from './data';
 
 describe('Live data fetches', () => {
   it('fetches data appropriately' , async () => {
     jest.setTimeout(10 * 60 * 1000);
-    const users = await getAllUserData([]);
+    const users = await getAllUserData([], {
+      contract: await GetContract(),
+      history: [],
+    } as any);
     expect(users).toBeTruthy();
   })
 }, IsManualRun);

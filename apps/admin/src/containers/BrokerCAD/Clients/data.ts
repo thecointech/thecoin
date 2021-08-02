@@ -1,54 +1,66 @@
-import { GetContract, TheCoin } from "@thecointech/contract";
-import { RbcApi } from "@thecointech/rbcapi";
+import { AccountState } from '@thecointech/account';
+import { AnyAction, BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import { FXRate, weBuyAt } from "@thecointech/fx-rates";
-import { matchAll, readDataCache, fetchAllRecords, writeDataCache, Reconciliations } from "@thecointech/tx-reconciliation";
-import { toHuman } from "@thecointech/utilities";
-import { BigNumber } from "ethers";
-import { UserState } from "./types";
+import { getSigner } from '@thecointech/signers';
+import { eTransferData, fetchETransfers } from '@thecointech/tx-gmail';
+import { Decimal } from 'decimal.js-light';
 
-export async function getAllUserData(fxRates: FXRate[]) {
-  const rawData = await getRawData();
-  const reconciled = await matchAll(rawData);
-  const full = await addBalances(reconciled, fxRates);
-  full.forEach(user => user.transactions.sort(
-    (a, b) => a.action.data.date.toMillis() - b.action.data.date.toMillis()
-  ));
-  return full;
+export type UserData = {
+  address: string,
+  name: string,
+  buy: BuyAction[],
+  sell: SellAction[],
+  bill: BillAction[],
+  transactions: AnyAction[],
+  balanceCoin: Decimal;
+  balanceCad: Decimal;
+};
+export type AllDataArray = UserData[];
+
+function findName(address: string, etransfers: eTransferData[]) {
+  return etransfers.find(et => et.address === address)?.name
 }
 
-async function getRawData() {
-  let data = readDataCache();
-  if (data == null) {
-    const api = new RbcApi();
-    data = await fetchAllRecords(api)
-    writeDataCache(data);
-  }
-  return data;
+async function getUsers(emails: eTransferData[], account: AccountState) {
+  // Get users from DB
+  const usersDb = await getAllUsers();
+  // Get all users that have interacted with our contract
+  // We still need this step because there is no
+  // guarantee that every active has gone through broker-service
+  const theCoin = await getSigner('TheCoin');
+  const tcAddr = await theCoin.getAddress();
+  const history = account.history;
+  const usersBC = history.map(h => h.counterPartyAddress).filter(addr => addr != tcAddr);
+  // Get any other users present in emails.  Mostly to keep devlive happy
+  const usersET = emails.map(e => e.address);
+  const users = new Set([...usersET, ...usersDb, ...usersBC]);
+  return [...users];
 }
 
-async function addBalances(users: Reconciliations, fxRates: FXRate[]): Promise<UserState[]> {
-  const contract = await GetContract();
-  const balanceCoin = await addBalanceCoin(users, contract);
-  return addBalanceCad(balanceCoin, fxRates);
+export async function getAllUserData(rates: FXRate[], account: AccountState) {
+  const etransfers = await fetchETransfers();
+  // Get all users logged in the database
+  const users = await getUsers(etransfers, account);
+
+  // Our users will be
+  const contract = account.contract!;
+  const data = await getAllActions(users);
+  const balances = await Promise.all(users.map(user => contract.balanceOf(user)));
+  const now = new Date();
+
+  return users.reduce((acc, user, idx) => ([
+    ...acc,
+    {
+      address: user,
+      name: findName(user, etransfers) ?? "NOT FOUND",
+      buy: data.Buy[user],
+      sell: data.Sell[user],
+      bill: data.Bill[user],
+      transactions: [...data.Buy[user], ...data.Sell[user], ...data.Bill[user]].sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis()),
+      balanceCoin: new Decimal(balances[idx].toNumber()),
+      balanceCad: new Decimal(balances[idx].toNumber()).mul(weBuyAt(rates, now))
+    }
+  ]), [] as AllDataArray)
 }
 
-const addBalanceCoin = async (users: Reconciliations, contract: TheCoin) => Promise.all(
-  users.map(async (user) => ({
-    ...user,
-    balanceCoin: await getBalance(user.address, contract)
-  })
-  )
-)
 
-type UnPromisify<T> = T extends Promise<infer U> ? U : T;
-type Coined = UnPromisify<ReturnType<typeof addBalanceCoin>>;
-const addBalanceCad = (users: Coined, fxRates: FXRate[]) =>
-  users.map(user => ({
-    ...user,
-    balanceCad: toHuman(user.balanceCoin * weBuyAt(fxRates), true)
-  }))
-
-async function getBalance(address: string, contract: TheCoin) {
-  const balance = await contract.balanceOf(address) as BigNumber;
-  return balance.toNumber()
-}

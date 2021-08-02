@@ -7,12 +7,12 @@ import { log } from '@thecointech/logging';
 export * from './store';
 export const Timestamp = firebase.firestore.Timestamp
 export const FieldValue = firebase.firestore.FieldValue;
-
 export type EmulatorInit = {
   project: string;
 }
-export async function init(projectId?: EmulatorInit) : Promise<boolean> {
-  log.debug('Attempting to connect to Firestore emulator');
+
+export async function init(projectId?: EmulatorInit) {
+  log.debug('Connecting to Firestore emulator');
   if (!isEmulatorAvailable())
     throw new Error('Cannot connect to Emulator: Port is not open');
 
