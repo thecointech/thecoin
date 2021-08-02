@@ -20,13 +20,18 @@ rules.push(
   },
 );
 
-const mocked = require('./webpack.mocked.config');
+// In development mode, we mock most external libraries
+const mockOptions = process.env.NODE_ENV !== 'production'
+  ? require('../../__mocks__/mock_webpack')
+  : {};
+
 const baseOptions = {
   module: {
     rules,
   },
   plugins,
   resolve: {
+    conditionNames: [process.env.CONFIG_NAME, "electron", "browser", "require", "default"],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     fallback: {
@@ -46,4 +51,4 @@ const baseOptions = {
   }
 }
 
-module.exports = merge(mocked, baseOptions);
+module.exports = merge(mockOptions, baseOptions);
