@@ -1,5 +1,4 @@
-import { ethers } from 'ethers';
-import { TheSigner, SignerIdent } from '@thecointech/utilities/SignerIdent';
+import { Web3Provider } from '@ethersproject/providers';
 import { GetContract } from '@thecointech/contract';
 import { getWeb3Type } from '../../utils/detection';
 
@@ -53,7 +52,7 @@ export async function ConnectWeb3() {
       // Request account access if needed
       await ethereum.enable();
       console.log("Ethereum Enabled");
-      var provider = new ethers.providers.Web3Provider(web3.currentProvider);
+      var provider = new Web3Provider(web3.currentProvider);
       var signer = provider.getSigner();
       console.log(`Connecting to signer: ${signer}`);
       if (type === 'Metamask') {
@@ -64,12 +63,7 @@ export async function ConnectWeb3() {
       // Our local/stored version remembers it's address
       var address = await signer.getAddress();
       console.log(`Got Address: ${address}`);
-      const ident: SignerIdent = {
-        address,
-        _isSigner: true
-      }
-      const theSigner: TheSigner = Object.assign(signer, ident);
-      return theSigner;
+      return { signer, address };
 
     } catch (error) {
       NotifyUserOfError(error);

@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@thecointech/shared/store';
 import { ApplicationBaseState } from '@thecointech/shared/types';
 import { combineReducers, ReducersMapObject } from 'redux';
-import { buildAccountStoreReducer, AccountMapState } from '@thecointech/shared/containers/AccountMap';
-import { useLanguageProvider } from '@thecointech/shared/containers/LanguageProvider/reducer';
+import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { LanguageProviderReducer } from '@thecointech/shared/containers/LanguageProvider/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
@@ -19,12 +19,12 @@ export function withStore(initialState?: Partial<ApplicationBaseState>) {
 
 export function withAccounts(initialState?: AccountMapState) {
   // If no accounts passed, default to dev accounts
-  const init = initialState ?? {
+  AccountMap.initialize(initialState ?? {
     active: getInitialAddress(),
     map: getAllAccounts(),
-  }
+  })
   const createReducer = (injectedReducers?: ReducersMapObject) => {
-    const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers, init);
+    const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers);
     return combineReducers({
       accounts: accountStoreReducer,
       ...rest,
@@ -36,7 +36,7 @@ export function withAccounts(initialState?: AccountMapState) {
 
 // Simple decorators that are used in a few places
 export const withLanguageProvider = (Story: React.ElementType) => {
-  useLanguageProvider();
+  LanguageProviderReducer.useStore();
   return <Story />
 }
 

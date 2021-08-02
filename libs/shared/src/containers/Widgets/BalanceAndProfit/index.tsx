@@ -1,4 +1,4 @@
-import { useActiveAccount } from "../../AccountMap";
+import { AccountMap } from "../../AccountMap";
 import React from "react";
 import { Header, Icon } from "semantic-ui-react";
 import illustration from "./images/illust_balance.svg";
@@ -26,7 +26,7 @@ const translate = defineMessages({
 
 
 export const BalanceAndProfit = () => {
-  const activeAccount = useActiveAccount();
+  const activeAccount = AccountMap.useActive();
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
   const balance = activeAccount?.balance ?? 0;

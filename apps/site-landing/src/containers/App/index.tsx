@@ -13,8 +13,8 @@ import { Container } from 'semantic-ui-react';
 import {MainNavigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { MainRouter } from 'containers/MainRouter';
-import { usePrismic } from 'components/Prismic/reducer';
+import { Routes } from './Routes';
+import { Prismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
@@ -25,7 +25,7 @@ import '../../semantic/semantic.css';
 import styles from './styles.module.less';
 
 export const App = () => {
-  usePrismic();
+  Prismic.useStore();
 
   return (
     <div id={styles.app}>
@@ -38,7 +38,7 @@ export const App = () => {
         <Container className={styles.appContainer}>
           <MainPageTransition>
             <section id={styles.mainContent} className={styles.pageMainInner}>
-              <MainRouter />
+              <Routes />
             </section>
           </MainPageTransition>
         </Container>

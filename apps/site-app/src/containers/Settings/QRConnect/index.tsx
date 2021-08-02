@@ -1,9 +1,9 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 
 export const QRConnect = () => {
-  const active = useActiveAccount();
+  const active = AccountMap.useActive();
   if (!active) return <div>Account Needed</div>;
   const encryptedAccount = getCurrentAccountEncrypted(active.address);
   return (

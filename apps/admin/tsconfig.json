@@ -1,14 +1,15 @@
 {
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
-    "module": "commonjs",
     "tsBuildInfoFile": "./build/.buildinfo",
+    "module": "ESNext",
+    "target": "ES2019",
     "outDir": "./build/",
-    "rootDir": "./app/",
-    "baseUrl": "./app/",
+    "rootDir": "./src/",
+    "baseUrl": "./src/",
     "skipLibCheck": true
   },
-  "include": ["./app/**/*"],
+  "include": ["src/**/*"],
   "references": [
     { "path": "../../libs/shared/tsconfig.build.json" },
     { "path": "../../libs/tx-reconciliation/tsconfig.build.json" },

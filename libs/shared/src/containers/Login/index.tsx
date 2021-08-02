@@ -7,8 +7,8 @@ import { UxPassword } from "../../components/UxPassword";
 import { ModalOperation } from "../ModalOperation";
 
 import { useState, useCallback } from "react";
-import { isWallet } from "@thecointech/utilities/SignerIdent";
-import { useAccountApi } from "../Account/reducer";
+import { isLocal } from "@thecointech/signers";
+import { Account } from "../Account/reducer";
 
 import styles from "./styles.module.less";
 import { AccountState } from '@thecointech/account';
@@ -27,43 +27,43 @@ enum LoginState {
 }
 
 
-const translate = defineMessages({  
-              aboveTheTitle : { 
-                id: "shared.login.aboveTheTitle",  
+const translate = defineMessages({
+              aboveTheTitle : {
+                id: "shared.login.aboveTheTitle",
                 defaultMessage:"WELCOME BACK TO THE COIN",
                 description:"shared.login.aboveTheTitle: Title above the main Title for the create account form page"},
-              title : { 
-                id: "shared.login.title", 
+              title : {
+                id: "shared.login.title",
                 defaultMessage:"Log into",
                 description:"shared.login.title: Title for the create account form page"},
-              button : { 
-                id: "shared.login.button", 
+              button : {
+                id: "shared.login.button",
                 defaultMessage:"Log In",
-                description:"shared.login.button: Text of the button for the login page"},                  
-              textAtTheBottom : { 
-                id: "shared.login.textAtTheBottom", 
+                description:"shared.login.button: Text of the button for the login page"},
+              textAtTheBottom : {
+                id: "shared.login.textAtTheBottom",
                 defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
                 description:"shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"},
-              placeholderPassword : { 
+              placeholderPassword : {
                 id: "shared.login.placeholder.wallet",
                 defaultMessage:'Wallet Password',
                 description:"shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"},
-              passwordLabel : { 
+              passwordLabel : {
                 id: "shared.login.passwordLabel",
                 defaultMessage:'Password',
-                description:"shared.login.passwordLabel"},  
-              decryptHeader : { 
+                description:"shared.login.passwordLabel"},
+              decryptHeader : {
                 id: "shared.login.decryptHeader",
                 defaultMessage:'Logging into your account.',
                 description:"shared.login.decryptHeader"},
-              decryptIncorrectPwd : { 
+              decryptIncorrectPwd : {
                 id: "shared.login.decryptIncorrectPwd",
                 defaultMessage:'Unlock failed: Please check your password and try again.',
                 description:"shared.login.decryptIncorrectPwd"},
-              decryptInProgress : { 
+              decryptInProgress : {
                 id: "shared.login.decryptInProgress",
                 defaultMessage:'Please wait, We are {percentComplete}% done opening your account.',
-                description:"shared.login.decryptInProgress"}      
+                description:"shared.login.decryptInProgress"}
 });
 
 //const decryptCancelled = { id: 'shared.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
@@ -81,7 +81,7 @@ export const Login = (props: Props) => {
   const history = useHistory();
   const { account } = props;
   const { signer, address }= account;
-  if (!isWallet(signer) || signer.privateKey) {
+  if (!isLocal(signer) || signer.privateKey) {
     history.push('/');
   }
 
@@ -98,7 +98,7 @@ export const Login = (props: Props) => {
   }, [loginState, setLoginState, setPassword]);
 
   ////////////////////////////////
-  const accountApi = useAccountApi(address);
+  const accountApi = Account(address).useApi();
   const onDecryptWallet = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     __cancel = false;

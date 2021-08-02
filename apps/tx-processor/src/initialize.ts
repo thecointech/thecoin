@@ -16,7 +16,7 @@ export async function initialize() {
   const signer = await getSigner('BrokerCAD');
   await getSigner('BrokerTransferAssistant');
   const address = await signer.getAddress();
-  const contract = await ConnectContract(signer);
+  const contract = ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
@@ -27,7 +27,7 @@ export async function initialize() {
   if (process.env.BROKER_SERVICE_ACCOUNT)
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
 
-  await FirestoreInit();
+  FirestoreInit();
   RbcStore.initialize();
   ConfigStore.initialize();
 

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@thecointech/shared/containers/Account/Web3';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
-import { TheSigner } from '@thecointech/utilities/SignerIdent';
 import { useHistory } from 'react-router';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { IAccountStoreAPI, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
 import styles from '../styles.module.less';
 
 const translations = defineMessages({
@@ -23,7 +22,7 @@ export const Connect = () => {
   const [referral, setReferral] = useState(undefined as MaybeString);
   const [forceValidate, setForceValidate] = useState(false);
 
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
   const history = useHistory();
   const onConnect = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -31,9 +30,10 @@ export const Connect = () => {
       setForceValidate(true);
       return false;
     }
-    const theSigner = await ConnectWeb3();
-    if (theSigner) {
-      storeSigner(accountsApi, theSigner, name, referral);
+    const web3 = await ConnectWeb3();
+    if (web3) {
+      accountsApi.addAccount(name, web3.address, web3.signer);
+      registerReferral(web3.address, referral);
       // We redirect directly to the now-active account
       history.push('/');
     }
@@ -53,9 +53,4 @@ export const Connect = () => {
       </Form>
     </>
   );
-}
-
-const storeSigner = async (accountsApi: IAccountStoreAPI, wallet: TheSigner, name: string, referralCode: string) => {
-  accountsApi.addAccount(name, wallet);
-  registerReferral(wallet.address, referralCode);
 }

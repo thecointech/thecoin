@@ -3,11 +3,10 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import { Transaction } from "./types";
-import { Contract, EventFilter } from "ethers";
+import { TheCoin } from '@thecointech/contract';
+import { EventFilter, providers, BigNumber } from "ethers";
 import { toHuman } from "@thecointech/utilities";
-import { Log } from "ethers/providers";
 import { DateTime } from "luxon";
-import { BigNumber } from "ethers/utils";
 
 
 // Load account history and merge with local
@@ -27,7 +26,7 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   // return history;
 }
 
-async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, contract: Contract): Promise<boolean> {
+async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, contract: TheCoin): Promise<boolean> {
   const { txHash } = transaction;
   if (!txHash)
     return false;
@@ -42,7 +41,7 @@ async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, co
   for (let i = 0; i < txReceipt.logs.length; i++) {
     const extra = contract.interface.parseLog(txReceipt.logs[i]);
     if (extra && extra.name == "Purchase") {
-      const { balance, timestamp } = extra.values;
+      const { balance, timestamp } = extra.args;
       transaction.date = DateTime.fromMillis(timestamp.toNumber() * 1000);
       transaction.completed = DateTime.fromMillis(blockData.timestamp * 1000);
       const change = toHuman(transaction.change, true);
@@ -59,9 +58,9 @@ async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, co
   return false;
 }
 
-async function transferToTransaction(toWallet: boolean, ethersLog: Log, contract: Contract): Promise<Transaction> {
+async function transferToTransaction(toWallet: boolean, ethersLog: providers.Log, contract: TheCoin): Promise<Transaction> {
   const res = contract.interface.parseLog(ethersLog);
-  const { from, to, value } = res.values;
+  const { from, to, value } = res.args;
   var r: Transaction = {
     txHash: ethersLog.transactionHash,
     date: DateTime.local(),
@@ -79,7 +78,7 @@ async function transferToTransaction(toWallet: boolean, ethersLog: Log, contract
   return r;
 }
 
-export async function readTransfers(contract: Contract, filter: EventFilter, to:boolean) {
+export async function readTransfers(contract: TheCoin, filter: EventFilter, to:boolean) {
   // Retrieve logs
   const txLogs = await contract.provider.getLogs(filter)
   // Convert logs to our transactions
@@ -91,7 +90,7 @@ export async function readTransfers(contract: Contract, filter: EventFilter, to:
   return txs;
 }
 
-async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: Contract, history: Transaction[]) {
+async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: TheCoin, history: Transaction[]) {
   // construct filter to get tx either from or to
   const args = to ? [null, account] : [account, null];
   let filter = contract.filters.Transfer(...args);
@@ -134,7 +133,7 @@ async function readAndMergeTransfers(account: string, to: boolean, fromBlock: nu
 //   return mergeTransactions(history, txs);
 // }
 
-export async function loadAndMergeHistory(address: string, fromBlock: number, contract: Contract, history: Transaction[]) {
+export async function loadAndMergeHistory(address: string, fromBlock: number, contract: TheCoin, history: Transaction[]) {
   try {
     //history = await readAndMergePurchases(address, fromBlock, contract, history);
     history = await readAndMergeTransfers(address, true, fromBlock, contract, history);

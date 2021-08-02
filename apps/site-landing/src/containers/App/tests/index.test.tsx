@@ -3,17 +3,12 @@ import { createRenderer } from 'react-test-renderer/shallow';
 
 const renderer = createRenderer();
 
-// Mock the various API's we hook here
-jest.mock('react-router', () => ({
-  useLocation: () => { key: "TESTING"}
-}));
-jest.mock('../../../components/Prismic/reducer', () => ({
-  usePrismic: jest.fn(),
-}));
+// Mock redux hooks
+jest.mock('redux-injectors');
 // This import can trigger a compilation of the entire app
 // (with numerous side-effects) so we skip it entirely
-jest.mock('../../MainRouter', () => ({
-  MainRouter: () => <div>Router</div>
+jest.mock('../Routes', () => ({
+  Routes: () => <div>Router</div>
 }));
 
 import { App } from '../index';

@@ -21,7 +21,6 @@ module.exports = {
   babel: async (options) => ({
     ...options,
     plugins: [
-      ["@babel/plugin-proposal-class-properties", { loose: true }],
       ...options.plugins,
       [
         "formatjs",

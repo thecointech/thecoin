@@ -1,12 +1,9 @@
 
-import { TheCoinReducer } from '@thecointech/shared/store/immerReducer'
+import { BaseReducer } from '@thecointech/shared/store/immerReducer'
 import { ContentState, IActions } from './types';
 import { SiteBaseStore } from '../../SiteBaseStore';
-import { useInjectReducer } from 'redux-injectors';
-import { useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-const CONTENT_KEY : keyof SiteBaseStore = "content";
+const CONTENT_KEY: keyof SiteBaseStore = "content";
 
 // The initial state of the App
 export const initialState: ContentState = {
@@ -14,7 +11,7 @@ export const initialState: ContentState = {
 };
 
 let lastTimestamp = 0;
-class HeightMeasureReducer extends TheCoinReducer<ContentState>
+export class HeightMeasureReducer extends BaseReducer<IActions, ContentState>(CONTENT_KEY, initialState)
   implements IActions {
   setHeight(newHeight: number, timestamp: number) {
     if (timestamp < lastTimestamp)
@@ -22,10 +19,4 @@ class HeightMeasureReducer extends TheCoinReducer<ContentState>
     this.draftState.height = newHeight;
     lastTimestamp = timestamp;
   }
-}
-
-const { reducer, actions} = HeightMeasureReducer.buildReducers(HeightMeasureReducer, initialState);
-export const useHeightMeasure = () => {
-  useInjectReducer({ key: CONTENT_KEY, reducer });
-  return (bindActionCreators(actions, useDispatch()) as any) as IActions;
 }

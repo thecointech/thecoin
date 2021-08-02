@@ -1,4 +1,4 @@
-import { Contract } from 'ethers/contract';
+import { Contract } from '@ethersproject/contracts';
 import { TheCoinNFT } from './types/TheCoinNFT';
 import { getProvider } from './provider';
 import TheCoinNFTSpec from './contracts/TheCoinNFT.json';

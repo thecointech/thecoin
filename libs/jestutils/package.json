@@ -24,10 +24,16 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./": "./build/"
+    "./*": "./build/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
   },
   "devDependencies": {
     "jest": "*"
