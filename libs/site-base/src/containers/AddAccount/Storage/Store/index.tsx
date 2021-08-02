@@ -3,7 +3,7 @@ import { Header, Grid, Container } from "semantic-ui-react";
 import { defineMessage, FormattedMessage } from "react-intl";
 import { MaybeMessage } from "../../../../components/MaybeMessage";
 import { Link } from "react-router-dom";
-import { useActiveAccount } from "@thecointech/shared/containers/AccountMap";
+import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { OfflineStore } from "../Offline/Store";
 
 import styles from './styles.module.less';
@@ -42,7 +42,7 @@ export const Store = () => {
   // const [feedback, setFeedback] = useState({} as MessageProps)
   // const [uploadState, setUploadState] = useState(UploadState.Waiting);
   //const [backedUp, setBackedUp] = useState(false);
-  const activeAccount = useActiveAccount();
+  const activeAccount = AccountMap.useActive();
 
   const isBackedUp = (
     activeAccount?.details?.storedOffline ||

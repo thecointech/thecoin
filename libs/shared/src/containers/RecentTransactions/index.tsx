@@ -1,22 +1,26 @@
 import * as React from "react";
 import { Header } from "semantic-ui-react";
-import { AccountPageProps } from "../Account/types";
 import { TransactionList } from "../TransactionList";
 import { useFxRates } from "../FxRate/selectors";
 import { defineMessages, FormattedMessage } from "react-intl";
 import styles from './styles.module.less';
+import { AccountMap } from '../AccountMap';
+import { Account } from '../Account';
+import { DateTime } from 'luxon';
 
-const translate = defineMessages({ 
+const translate = defineMessages({
       title : {
-        id: "shared.balance.title", 
+        id: "shared.balance.title",
         defaultMessage:"Recent Operations",
         description:"shared.balance.title: Title for the congratulations page"}});
 
-export const RecentTransactions = ({ actions }: AccountPageProps) => {
+export const RecentTransactions = () => {
 
+  const active = AccountMap.useActive()
+  const api = Account(active!.address).useApi();
   React.useEffect(() => {
-    actions.updateBalance();
-  }, [actions])
+    api.updateHistory(DateTime.fromMillis(0), DateTime.now());
+  }, [active?.address])
 
   const { rates } = useFxRates();
 

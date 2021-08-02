@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useActiveAccount } from "@thecointech/shared/containers/AccountMap/selectors";
+import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { GraphTxHistory, Theme } from '@thecointech/shared/components/GraphTxHistory'
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 import { DateTime } from "luxon";
@@ -29,7 +29,7 @@ const theme: Theme = {
 export const HistoryGraph = () => {
   const [duration, setDuration] = useState(31 as Duration);
 
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   const txs = account?.history ?? [];
   const from = Number.isFinite(duration)
     ? DateTime.local().minus({days: duration})

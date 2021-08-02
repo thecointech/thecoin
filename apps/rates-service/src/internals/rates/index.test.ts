@@ -12,7 +12,7 @@ var mockStart = 1593696900000;
 const sixHrs = 6 * 60 * 60 * 1000;
 
 jest
-  .useFakeTimers('modern')
+  .useFakeTimers()
   .setSystemTime(mockStart + sixHrs);
 
 it('can get combined rates', async () => {

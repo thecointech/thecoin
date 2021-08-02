@@ -1,5 +1,5 @@
 import { accounts, contract } from '@openzeppelin/test-environment';
-import { BigNumber } from 'ethers/utils';
+import { BigNumber } from 'ethers';
 import { TheCoinNFTContract } from '../migrations/types';
 
 // Loads a compiled contract using OpenZeppelin test-environment

@@ -1,17 +1,9 @@
 import { AccountState } from '@thecointech/account';
-import { useSelector } from "react-redux";
 import { AccountMapStore } from './types';
 
 // Select array of all accounts
 export const selectAccountArray = (state: AccountMapStore) =>
   Object.values<AccountState>(state.accounts.map)
-
-export const useAccountStore = () =>
-  useSelector((state: AccountMapStore) => ({
-    accounts: selectAccountArray(state as AccountMapStore),
-    active: state.accounts.active
-  }));
-
 
 // Select the active account
 export const activeAccountSelector = (state: AccountMapStore) : AccountState|undefined => {
@@ -23,6 +15,3 @@ export const activeAccountSelector = (state: AccountMapStore) : AccountState|und
   // If we have no active account, just return the first one.
   return selectAccountArray(state)[0];
 }
-
-export const useActiveAccount = () =>
-  useSelector(activeAccountSelector);

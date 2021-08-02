@@ -9,7 +9,7 @@ import { NameInput } from '../NewBaseClass/NameInput';
 import { PasswordInput } from './PasswordInput';
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import styles from './styles.module.less';
 
 let _isCancelled = false;
@@ -44,7 +44,7 @@ export const Generate = (props: RouteComponentProps) => {
 
   ////////////////////////////////
   // Callback to actually generate the account
-  const accountsApi = useAccountStoreApi();
+  const accountsApi = AccountMap.useApi();
   const { history } = props;
   const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ export const Generate = (props: RouteComponentProps) => {
     const generated = await generateNewWallet(password, setProgress);
     if (generated) {
       const { wallet, decrypted } = generated;
-      accountsApi.addAccount(name, wallet, true, true, decrypted);
+      accountsApi.addAccount(name, wallet.address, wallet, true, true, decrypted);
       registerReferral(wallet.address, referral);
 
       const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");

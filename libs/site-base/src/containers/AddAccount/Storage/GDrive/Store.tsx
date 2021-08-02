@@ -1,20 +1,20 @@
 import React from 'react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { Account } from '@thecointech/shared/containers/Account/reducer';
 import { defineMessage } from 'react-intl';
 import { completeStore } from './googleUtils';
 import { log } from '@thecointech/logging';
-import { isWallet } from '@thecointech/utilities/SignerIdent';
-import { useAccountApi } from '@thecointech/shared/containers/Account/reducer';
+import { isLocal } from '@thecointech/signers';
 import { GDriveBase } from './Base';
 
 const text = defineMessage({ defaultMessage: "Store on Google Drive", description: "Store Account: Option to store on GDrive" });
 
 export const GDriveStore = () => {
 
-  const account = useActiveAccount();
-  const api = useAccountApi(account!.address);
+  const account = AccountMap.useActive();
+  const api = Account(account!.address).useApi();
 
-  const wallet = (account && isWallet(account.signer))
+  const wallet = (account && isLocal(account.signer))
   ? account.signer
   : undefined;
 

@@ -1,7 +1,8 @@
-import { Signer, Wallet, utils } from "ethers";
-import type { TheCoin } from "./types/TheCoin";
+import { Signer, Wallet, providers } from "ethers";
+import { TheCoin } from "./types/TheCoin";
 import { GetContract } from "./contract";
 import { log } from '@thecointech/logging';
+import { isLocal } from '@thecointech/signers'
 
 function ConnectWallet(wallet: Wallet) {
   const contract = GetContract();
@@ -11,7 +12,7 @@ function ConnectWallet(wallet: Wallet) {
 export function ConnectContract(signer: Signer, onFailure?: (err: Error) => void): TheCoin {
   // First fetch contract
   const contract = GetContract();
-  if (!!(signer as Wallet).connect) {
+  if (isLocal(signer)) {
     // Ensure wallet is connected to the same network as the contract
     signer = ConnectWallet(signer as Wallet);
   }
@@ -20,7 +21,7 @@ export function ConnectContract(signer: Signer, onFailure?: (err: Error) => void
     if (!signer.provider)
       throw new Error("Unsupported: cannot have signer without a network");
 
-    let signerNetwork = undefined as utils.Network | undefined;
+    let signerNetwork = undefined as providers.Network | undefined;
     signer.provider.getNetwork()
       .then(network => {
         signerNetwork = network;

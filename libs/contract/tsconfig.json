@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-
     "outDir": "./build",
 
     "isolatedModules": false,

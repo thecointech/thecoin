@@ -1,7 +1,8 @@
-import { Signer, Wallet } from "ethers";
+import { Network } from '@ethersproject/networks'
+import { Signer } from "@ethersproject/abstract-signer"
+import { Wallet } from "@ethersproject/wallet"
 import type { TheCoinNFT } from "./types/TheCoinNFT";
 import { getContract } from "./contract";
-import { Network } from 'ethers/utils';
 import { log } from '@thecointech/logging';
 
 export function connectNFT(signer: Signer, onFailure?: (err: Error) => void): TheCoinNFT {

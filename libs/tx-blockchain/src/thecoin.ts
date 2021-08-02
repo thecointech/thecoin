@@ -1,6 +1,5 @@
-import { GetContract } from "@thecointech/contract";
-import { Contract } from "ethers";
-import { BigNumber } from "ethers/utils";
+import { GetContract, TheCoin } from "@thecointech/contract";
+import { BigNumber } from "ethers";
 import { loadAndMergeHistory, calculateTxBalances } from "./fetch";
 import { Transaction } from "./types";
 
@@ -9,7 +8,7 @@ import { Transaction } from "./types";
 export const cadbrokerOut = "0x2fe3cbf59a777e8f4be4e712945ffefc6612d46f";
 export const cadbrokerIn = "0x38de1b6515663dbe145cc54179addcb963bb606a";
 
-export async function fetchCoinHistory(contract?: Contract) {
+export async function fetchCoinHistory(contract?: TheCoin) {
   const tc = contract ?? await GetContract();
 
   let history : Transaction[] = [];

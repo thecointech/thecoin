@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
-import { useAccountStoreApi, useAccountStore } from "@thecointech/shared/containers/AccountMap";
+import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import styles from './styles.module.less';
@@ -30,9 +30,9 @@ const translations = defineMessages({
 
 export const AccountSwitcher = () => {
 
-  const {active, accounts} = useAccountStore();
-  const accountStore = useAccountStoreApi();
-  const activeAccount = accounts.find(account => account.address === active)
+  const accounts = AccountMap.useAsArray();
+  const accountStore = AccountMap.useApi();
+  const activeAccount = AccountMap.useActive();
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();

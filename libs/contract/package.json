@@ -20,21 +20,23 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "migrate:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build": "run-s build:contracts generate-types build:copy build:src",
+    "build": "run-s build:contracts generate-types build:src",
     "build:contracts": "truffle compile",
-    "build:src": "yarn tsc --project tsconfig.build.json",
-    "build:copy": "cpx \"./src/types/*.d.ts\" ./build/types",
+    "build:src": "run-p build:src:*",
+    "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "build:src:copy": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev:live:migrate",
-    "dev:live:emulator": "start yarn truffle develop",
+    "dev:live:emulator": "yarn truffle develop",
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
     "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
-    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\"",
+    "generate-types:truffle": "yarn typechain --out-dir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
+    "generate-types:ethers": "yarn typechain --out-dir ./src/types --target=ethers-v5 \"src/contracts/*.json\"",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "files": [
@@ -42,22 +44,26 @@
   ],
   "main": "./build/index.js",
   "exports": {
-    ".": "./build/index.js",
-    "./": "./build/"
+    ".": {
+      "development": "./build/cjs/index_mocked.js",
+      "electron": "./build/mjs/index.js",
+      "default": "./build/cjs/index.js"
+    }
   },
+  "types": "./build/cjs/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@thecointech/signers": "^0.2.16",
     "@truffle/hdwallet-provider": "^1.2.3",
-    "@typechain/ethers-v4": "^4.0.0",
-    "@typechain/truffle-v5": "^4.0.1",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/truffle-v5": "^5.0.0",
     "jest": "*",
     "truffle": "^5.1.67",
-    "typechain": "^4.0.2"
+    "typechain": "^5.1.2"
   },
   "dependencies": {
-    "ethers": "4.0.48"
+    "ethers": "^5.4.1"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

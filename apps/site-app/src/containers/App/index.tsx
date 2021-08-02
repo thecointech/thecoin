@@ -9,16 +9,16 @@
 
 import * as React from 'react';
 import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
-import { useLocation } from 'react-router';
 import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { MainRouter } from 'containers/MainRouter';
-import { useFxRatesStore } from '@thecointech/shared/containers/FxRate/reducer';
-import { useSidebar } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { FxRateReducer } from '@thecointech/shared/containers/FxRate/reducer';
 import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { createRef } from 'react';
+import { useSidebar } from '../Sidebar';
+import { init } from './init'
+import { Routes } from './Routes';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -27,10 +27,11 @@ import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
+init();
+
 export const App = () => {
-  useFxRatesStore();
-  useSidebar();
-  const location = useLocation();
+  FxRateReducer.useStore();
+  useSidebar()
   const contextRef = createRef<HTMLDivElement>();
 
   return (
@@ -43,7 +44,6 @@ export const App = () => {
       <div className={`${styles.contentContainer}`}>
         <Container style={{ width: '100%' }} className={``}>
           <MainPageTransition>
-
             <GreaterThanMobileSegment>
               <Rail internal position='left'>
                 <Sticky context={contextRef}>
@@ -52,10 +52,9 @@ export const App = () => {
               </Rail>
             </GreaterThanMobileSegment>
 
-
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>
-                <MainRouter location={location} />
+                <Routes />
               </section>
             </Ref>
           </MainPageTransition>

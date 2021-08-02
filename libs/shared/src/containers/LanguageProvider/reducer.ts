@@ -1,12 +1,7 @@
 /*
- *
  * LanguageProvider reducer
- *
  */
-import { TheCoinReducer } from '../../store/immerReducer';
-import { useInjectReducer } from 'redux-injectors';
-import { useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { BaseReducer } from '../../store/immerReducer';
 import { LanguageProviderState, DEFAULT_LOCALE, IActions, Locale } from './types';
 import { ApplicationBaseState } from '../../types';
 
@@ -16,17 +11,9 @@ export const initialState: LanguageProviderState = {
 
 const LANGUAGE_KEY : keyof ApplicationBaseState = "language";
 
-export class LanguageProviderReducer extends TheCoinReducer<LanguageProviderState>
+export class LanguageProviderReducer extends BaseReducer<IActions, LanguageProviderState>(LANGUAGE_KEY, initialState)
   implements IActions {
     setLocale(locale: Locale) {
       this.draftState.locale = locale;
     }
 }
-
-const { reducer, actions} = LanguageProviderReducer.buildReducers(LanguageProviderReducer, initialState);
-export const useLanguageProvider = () => {
-  useInjectReducer({ key: LANGUAGE_KEY, reducer });
-}
-export const useLanguageProviderApi = () => {
-  return (bindActionCreators(actions, useDispatch()) as IActions) as IActions;
-};

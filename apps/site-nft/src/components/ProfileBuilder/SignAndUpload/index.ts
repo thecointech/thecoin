@@ -15,9 +15,6 @@ export async function signAndUpload(editor: ImageEditorComponent | null, tokenId
   // Download it
   downloadBlob(blob);
 
-  const address = await signer.getAddress();
-  console.log(address);
-
   // Upload to IPFS
   const avatarHash = await uploadAvatar(blob, signer);
   // Upload metadata

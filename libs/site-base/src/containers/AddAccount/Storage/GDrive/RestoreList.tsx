@@ -4,7 +4,7 @@ import { GoogleWalletItem } from '@thecointech/types';
 import { clientUri, GetSecureApi } from '../../../../api';
 import { log } from '@thecointech/logging';
 import { Button, ButtonProps, List } from 'semantic-ui-react';
-import { useAccountStore, useAccountStoreApi } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { AccountState } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
@@ -29,8 +29,8 @@ export const RestoreList = ({url}: Props) => {
 
   const [wallets, setWallets] = useState(undefined as (LoadingWallet[]) | undefined)
   const [redirect, setRedirect] = useState('');
-  const accountsApi = useAccountStoreApi();
-  const { accounts } = useAccountStore();
+  const accountsApi = AccountMap.useApi();
+  const accounts = AccountMap.useAsArray();
 
   ///////////////////////////////////////////////
   // Load Wallets
@@ -55,7 +55,7 @@ export const RestoreList = ({url}: Props) => {
       setRedirect('/');
     }
     else {
-      accountsApi.addAccount(name, wallet);
+      accountsApi.addAccount(name, wallet.address, wallet);
     }
   }
 

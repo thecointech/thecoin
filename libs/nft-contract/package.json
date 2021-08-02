@@ -36,15 +36,21 @@
     "dev:live:emulator": "start yarn truffle develop",
     "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
     "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --outDir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
-    "generate-types:ethers": "yarn typechain --outDir ./src/types --target=ethers-v4 \"src/contracts/*.json\"",
+    "generate-types:truffle": "yarn typechain --out-dir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
+    "generate-types:ethers": "yarn typechain --out-dir ./src/types --target=ethers-v5 \"src/contracts/*.json\"",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "files": [
     "build/**/*"
   ],
   "main": "./build/index.js",
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
@@ -53,12 +59,12 @@
     "@thecointech/signers": "^0.2.16",
     "@thecointech/utilities": "^0.2.17",
     "@truffle/hdwallet-provider": "^1.2.3",
-    "@typechain/ethers-v4": "^4.0.0",
-    "@typechain/truffle-v5": "^4.0.1",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/truffle-v5": "^5.0.0",
     "@types/bs58": "^4.0.1",
     "jest": "*",
     "truffle": "^5.1.67",
-    "typechain": "^4.0.2"
+    "typechain": "^5.1.2"
   },
   "dependenciesComments": {
     "@thecointech/contract": [
@@ -69,7 +75,7 @@
   },
   "dependencies": {
     "bs58": "^4.0.1",
-    "ethers": "4.0.48"
+    "ethers": "^5.4.1"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }

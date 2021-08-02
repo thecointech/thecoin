@@ -8,13 +8,13 @@ import { Editor } from './Editor';
 import { TokenIdSelect } from './TokenIdSelect';
 import { OptionToggles } from './OptionToggles';
 import { getContract } from '@thecointech/nft-contract';
-import { BigNumber } from 'ethers/utils';
+import { BigNumber } from 'ethers';
 import { Options } from './types';
 import { log } from '@thecointech/logging';
 import { ImageEditorComponent } from '@toast-ui/react-image-editor';
 import { signAndUpload } from './SignAndUpload';
 import { Button } from 'semantic-ui-react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 
 const title = defineMessage({ defaultMessage: "Create Profile Image", description: "Title message on profile page" });
 const description = defineMessage({ defaultMessage: "Create and sign an image to show your carbon-neutral status", description: "Profile instructions" });
@@ -25,7 +25,7 @@ export const ProfileBuilder = () => {
   const [options, setOptions] = useState<Options>({})
   const [years, setYears] = useState<[number, number] | undefined>();
 
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
 
   const editorRef = React.createRef<ImageEditorComponent>();
 
