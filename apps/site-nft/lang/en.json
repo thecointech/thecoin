@@ -1,105 +1,105 @@
 {
-  "'/g3mtw'": {
+  "/g3mtw": {
     "defaultMessage": "ID of token purchased",
     "description": "Placeholder for claim/tokenID input"
   },
-  "'1c6VPV'": {
+  "1c6VPV": {
     "defaultMessage": "NFT Offsets",
     "description": "NFT Offsets listings page title"
   },
-  "'4nX+Zh'": {
+  "4nX+Zh": {
     "defaultMessage": "Home",
     "description": "MainNav asd Home page link"
   },
-  "'7pQvs3'": {
+  "7pQvs3": {
     "defaultMessage": "Validate",
     "description": "MainNav Link to validate page"
   },
-  "'9lZl4M'": {
+  "9lZl4M": {
     "defaultMessage": "Claim Failed: Please contact support",
     "description": "Show on claim failed"
   },
-  "'FOvXug'": {
+  "FOvXug": {
     "defaultMessage": "Home",
     "description": "MainNav Home page link"
   },
-  "'G47pMZ'": {
+  "G47pMZ": {
     "defaultMessage": "Sign & Upload",
     "description": "Profile upload button"
   },
-  "'LxZBuj'": {
+  "LxZBuj": {
     "defaultMessage": "Create and sign an image to show your carbon-neutral status",
     "description": "Profile instructions"
   },
-  "'OH5jjt'": {
+  "OH5jjt": {
     "defaultMessage": "Review the offsets each NFT has completed",
     "description": "NFT Offsets listing description"
   },
-  "'PReNN0'": {
+  "PReNN0": {
     "defaultMessage": "Claim",
     "description": "Claim button"
   },
-  "'QSinwC'": {
+  "QSinwC": {
     "defaultMessage": "Validate Image",
     "description": "page title"
   },
-  "'UuIcMg'": {
+  "UuIcMg": {
     "defaultMessage": "No Tokens Available",
     "description": "Profile default message for no tokens"
   },
-  "'VrZyS8'": {
+  "VrZyS8": {
     "defaultMessage": "Success: <link>View the Transaction</link>",
     "description": "Show on claim success"
   },
-  "'Zb1I9l'": {
+  "Zb1I9l": {
     "defaultMessage": "Profile",
     "description": "MainNav page to set Profile image on NFT"
   },
-  "'f3dfTo'": {
+  "f3dfTo": {
     "defaultMessage": "Select Token ID",
     "description": "Profile option to select owned token"
   },
-  "'i0eKSQ'": {
+  "i0eKSQ": {
     "defaultMessage": "Validate the images cryptographic signature",
     "description": "page instructions"
   },
-  "'mrcmOo'": {
+  "mrcmOo": {
     "defaultMessage": "Years",
     "description": "Profile option to overlay years of neutrality"
   },
-  "'mwkdRP'": {
+  "mwkdRP": {
     "defaultMessage": "Unlock code for the token purchased",
     "description": "Placeholder for claim/code input"
   },
-  "'octd+0'": {
+  "octd+0": {
     "defaultMessage": "Token ID",
     "description": "Profile toggle option years of neutrality"
   },
-  "'oec51k'": {
+  "oec51k": {
     "defaultMessage": "Offsets",
     "description": "MainNav Link to offsets page"
   },
-  "'qIk7CG'": {
+  "qIk7CG": {
     "defaultMessage": "Claim",
     "description": "MainNav page to claim an NFT"
   },
-  "'sMY2/N'": {
+  "sMY2/N": {
     "defaultMessage": "Claim Your Token",
     "description": "Title message on claim page"
   },
-  "'v1H5oX'": {
+  "v1H5oX": {
     "defaultMessage": "Validate",
     "description": "Page action Button"
   },
-  "'w5Me7z'": {
+  "w5Me7z": {
     "defaultMessage": "Enter the code we sent you and the token ID it is for to assign it to your account",
     "description": "Claim instructions"
   },
-  "'x5KkWJ'": {
+  "x5KkWJ": {
     "defaultMessage": "Create Profile Image",
     "description": "Title message on profile page"
   },
-  "'zw1LCw'": {
+  "zw1LCw": {
     "defaultMessage": "Frame",
     "description": "Profile option to overlay TC border"
   }
