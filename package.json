@@ -49,7 +49,7 @@
     "test:ci": "lerna run test -- --ci --forceExit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "check-changes": "git diff-index --compact-summary HEAD && git diff-index --quiet HEAD -- "
+    "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
     "axios": "^0.21.1",
