@@ -1,4 +1,4 @@
-import { Timestamp } from "@thecointech/firestore/timestamp";
+import { Timestamp } from "@thecointech/firestore";
 import Decimal from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { DateTime } from "luxon";

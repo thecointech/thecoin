@@ -5,7 +5,7 @@ import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { useState } from 'react';
-import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
 
@@ -57,7 +57,7 @@ export const Transfer = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
 
-  const account = useActiveAccount();
+  const account = AccountMap.useActive();
   const { rates } = useFxRates();
   const rate = weBuyAt(rates);
   const intl = useIntl();

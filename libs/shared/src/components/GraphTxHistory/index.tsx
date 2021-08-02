@@ -8,7 +8,7 @@ import { linearGradientDef } from "@nivo/core";
 import { StepLineLayer } from "./StepLineLayer";
 import { getAccountSerie } from "./data";
 import { Placeholder } from "semantic-ui-react";
-import { useFxRates, useFxRatesApi } from "../../containers/FxRate";
+import { useFxRates, FxRateReducer } from "../../containers/FxRate";
 import { Decimal } from 'decimal.js-light';
 import styles from './styles.module.less';
 
@@ -62,7 +62,7 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
   const [datum, setDatum] = useState([] as TxDatum[]);
   const {rates, fetching} = useFxRates();
-  const ratesApi = useFxRatesApi();
+  const ratesApi = FxRateReducer.useApi();
 
   // Run once on page load.  Pass in ratesApi to allow querying missing rates
   useEffect(() => {

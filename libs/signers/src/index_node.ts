@@ -1,25 +1,33 @@
-import { ProgressCallback } from 'ethers/utils';
+// Import the Secret Manager client and instantiate it:
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { Wallet } from 'ethers';
 import { AccountName } from './names';
-import { baseSigner } from './index_base';
+import { getAndCacheSigner } from './cache'
+
 export * from './names';
 
 // If running on GAE, check in secrets manager
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
 
-async function loadSigner(name: AccountName, callback?: ProgressCallback) {
-  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-    const { connectAccount } = await import('./development');
-    return connectAccount(name);
-  }
-  else if (PrivilegedEnv()) {
-    const { loadWallet } = await import('./server');
-    return loadWallet(name);
-  }
-  else {
-    const { loadFromEnv } = await import('./encrypted');
-    return loadFromEnv(name, callback);
-  }
+// Get Secrets.  Currently only used on TCCC Broker
+export async function getSecret(name: string) {
+  if (!PrivilegedEnv())
+    throw new Error('Cannot get signer outside PrivilegedEnv');
+  const client = new SecretManagerServiceClient();
+  const [accessResponse] = await client.accessSecretVersion({
+    name: `projects/${process.env.GOOGLE_CLOUD_PROJECT}/secrets/${name}/versions/latest`,
+  });
+
+  return accessResponse.payload?.data?.toString();
 }
 
-export const getSigner = (name: AccountName, callback?: ProgressCallback) =>
-  baseSigner(name, () => loadSigner(name, callback));
+export async function loadWallet(name: AccountName) {
+  const privatekey = await getSecret(`WALLET_${name}_KEY`);
+  if (!privatekey)
+    throw new Error(`Wallet ${name} not found in secrets`);
+
+  return new Wallet(privatekey);
+}
+
+export const getSigner = (name: AccountName) =>
+  getAndCacheSigner(name, () => loadWallet(name));

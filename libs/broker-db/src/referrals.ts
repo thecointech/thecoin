@@ -6,6 +6,8 @@ import { referrerConverter, VerifiedReferrer } from "./referrals.types";
 import { ReferralData } from "./user.types";
 import { getUserDoc, getUserData } from "./user";
 
+export type { VerifiedReferrer } from './referrals.types';
+
 export function getReferrersCollection() : CollectionReference<VerifiedReferrer> {
   return getFirestore().collection("Referrer").withConverter(referrerConverter);
 }

@@ -8,6 +8,7 @@
 /secrets
 **/vscode-chrome-debug-userdatadir
 **/.vs/
+**/.webpack/
 
 !**/summary.txt
 **/*.module.css.map
@@ -71,4 +72,4 @@ apps/site-app/src/translations/fr.json
 apps/site-landing/src/translations/en.json
 apps/site-landing/src/translations/fr.json
 
-apps/admin/app/main.prod.js.LICENSE.txt
+

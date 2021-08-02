@@ -1,12 +1,11 @@
 import { Wallet } from "ethers";
 import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
 import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
-import { TheCoinContract } from '../../contract/migrations/types/TheCoin';
 import { contract } from '@openzeppelin/test-environment';
 
 // Loads a compiled contract using OpenZeppelin test-environment
 contract.artifactsDir = "../contract/src/contracts";
-const factory: TheCoinContract = contract.fromArtifact('TheCoin');
+const factory = contract.fromArtifact('TheCoin');
 
 const wallet = Wallet.createRandom();
 const value = 100000;

@@ -1,43 +1,53 @@
 import "@thecointech/site-semantic-theme/semantic.less"
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { PageSidebar } from '.';
-import { Route } from 'react-router';
+import { PageSidebar, Props } from '.';
 import { withStore } from '@thecointech/storybookutils';
-import { ApplicationBaseState } from 'types';
 import ConstantSidebarItems from './Sidebar.stories.data.json';
-import { MapMenuItems } from './types';
+import { SemanticICONS } from 'semantic-ui-react';
 
-export type SidebardProps = {
-    text: string
-    visible: boolean
-    minimize: boolean
-    links: Route
-    inverted: boolean
-    header: { title: string, avatar: string, primaryDescription: string, secondaryDescription: string }
-  }
+const header = ConstantSidebarItems.header;
+const links = ConstantSidebarItems.links.map(l => ({
+  ...l,
+  icon: l.icon as SemanticICONS,
+}))
 
 export default {
   title: 'Shared/Sidebar',
   component: PageSidebar,
-  args: {
-    visible: true,
-    minimize: false,
-    inverted: false
-  }
 } as Meta;
 
-const Template: Story<SidebardProps> = (args) => <PageSidebar {...args} />
+const Template: Story<Props> = (args) => <PageSidebar {...args} />
 
 export const Basic = Template.bind({});
 Basic.args = {}
 Basic.decorators = [
-  withStore<ApplicationBaseState>({
+  withStore({
     sidebar: {
-      generators: {
-        SampleGenerator: () => MapMenuItems(ConstantSidebarItems as any, "/")
-      },
+      generators: {},
+      items: { header, links },
+      visible: true,
     }
   })
 ]
 
+export const WithGenerator = Template.bind({});
+WithGenerator.args = {}
+WithGenerator.decorators = [
+  withStore({
+    sidebar: {
+      visible: true,
+      items: {
+        header: null,
+        links,
+      },
+      generators: {
+        header: (items) => ({
+          ...items,
+          header,
+          visible: true,
+        })
+      }
+    }
+  })
+]

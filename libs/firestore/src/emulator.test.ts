@@ -1,5 +1,5 @@
-import { describe, filterByEmulator } from './jest.emulator';
-import { getFirestore, Timestamp } from '.';
+import { describe, filterByEmulator } from '@thecointech/jestutils';
+import { getFirestore, Timestamp, init } from './index_emulator';
 import { log } from '@thecointech/logging';
 
 //
@@ -8,9 +8,8 @@ describe('Our testing correctly connects to Firestore Emulator', () => {
 
   it("connects", async () => {
     log.debug("Connecting to Firestore Emulator");
-    // const { init } = await import('./emulator');
-    // const isValid = await init('broker-cad');
-    // expect(isValid).toBeTruthy();
+    const isValid = await init({ project: 'jest-test'});
+    expect(isValid).toBeTruthy();
 
     const db = getFirestore();
     expect(db).toBeDefined();

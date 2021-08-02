@@ -1,7 +1,7 @@
 import { Decimal } from "decimal.js-light";
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../statemachine/types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TransactionResponse } from 'ethers/providers';
+import { TransactionResponse } from '@ethersproject/providers';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";

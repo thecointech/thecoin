@@ -4,20 +4,8 @@
 // This is a simple hack to allow our NodeJS apps to run in dev mode
 // using the same mocks as testing/dev websites.
 //
+const Module = require('module').Module;
 
-// Ensure any fn's that rely on jest mocking still work iun regular node environment
-require("./shim_jest");
-
-var Module = require('module').Module;
-
-function mockModules(...mockedModules) {
-  var resolveFilename = Module._resolveFilename;
-  Module._resolveFilename = (request, parent, isMain) => {
-    return (mockedModules.find(m => request.startsWith(m)) && !parent.path.includes('__mocks__'))
-      ? `${__dirname}/${request}.ts`
-      : resolveFilename(request, parent, isMain)
-  }
-}
 function mockAll() {
   var nodeModulePaths = Module._nodeModulePaths; //backup the original method
   Module._nodeModulePaths = (from) => {
@@ -33,7 +21,28 @@ function mockAll() {
   };
 }
 
+function enhancedModuleResolve(...modules) {
+  // NOTE: __dirname is where I keep some external mocks
+  const resolver = require('enhanced-resolve').create.sync({
+      conditionNames: [process.env.CONFIG_NAME, 'require', 'node', 'default'],
+      extensions: ['.js', '.json', '.node', '.ts', '.tsx'],
+      modules: [__dirname, 'node_modules'],
+    })
+
+  // NOTE: If we redirect all resolutions, breakpoints stop working
+  // Just redirect my own packages (and whichever external API's
+  // I want to have mocked) and everything works correctly
+  const toResolve = ['@thecointech', ...modules]
+  const oldResolve = Module._resolveFilename
+  Module._resolveFilename = (request, parent, isMain) => {
+    return toResolve.find(m => request.startsWith(m))//paths
+      ? resolver(parent.path, request)
+      : oldResolve(request, parent, isMain)
+  }
+}
+
 ////////////////////////////////////////////////////////////////
+
 
 switch (process.env.CONFIG_NAME) {
   case 'development':
@@ -42,30 +51,18 @@ switch (process.env.CONFIG_NAME) {
     //
     console.warn('--- Injecting All TC mocks ---');
     mockAll();
+    enhancedModuleResolve();
     break;
   case 'devlive':
     //
     // Dev live is internally connected, but all external connections are mocked
     //
     console.warn('--- Injecting external TC mocks ---');
-    mockModules(
-      "googleapis",
-      "google-auth-library",
-      "@thecointech/rbcapi",
-      "@thecointech/store",
-      "@thecointech/email",
-      "@thecointech/market-status"
-    );
-    break;
-  case 'prodtest':
-    //
-    // ProdTest is fully live (just no real money)
-    //
-    console.warn('--- Injecting Bank mocks ---');
-    mockModules("@thecointech/rbcapi");
+    enhancedModuleResolve("googleapis", "google-auth-library");
     break;
   default:
-    throw new Error('Unknown testing environment');
+    enhancedModuleResolve();
+    break;
 }
 
 

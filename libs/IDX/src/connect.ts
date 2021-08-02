@@ -1,5 +1,5 @@
 import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
-import { Signer } from 'ethers/abstract-signer'
+import { Signer } from '@ethersproject/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays';
 import { sign } from "@thecointech/utilities/SignedMessages";
