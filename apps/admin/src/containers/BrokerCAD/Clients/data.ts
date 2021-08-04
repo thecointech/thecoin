@@ -15,7 +15,6 @@ export type UserData = {
   balanceCoin: Decimal;
   balanceCad: Decimal;
 };
-export type AllDataArray = UserData[];
 
 function findName(address: string, etransfers: eTransferData[]) {
   return etransfers.find(et => et.address === address)?.name
@@ -60,7 +59,7 @@ export async function getAllUserData(rates: FXRate[], account: AccountState) {
       balanceCoin: new Decimal(balances[idx].toNumber()),
       balanceCad: new Decimal(balances[idx].toNumber()).mul(weBuyAt(rates, now))
     }
-  ]), [] as AllDataArray)
+  ]), [] as UserData[])
 }
 
 
