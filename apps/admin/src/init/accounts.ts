@@ -25,4 +25,4 @@ export async function initialAccounts() {
   }
 }
 const initial = await initialAccounts();
-export const initAccounts = () => AccountMap.initialize(initial)
+export const initAccounts = () => AccountMap.initialize(initial);

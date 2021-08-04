@@ -21,6 +21,4 @@ import { buildAccountStoreReducer } from '@thecointech/shared/containers/Account
   });
 }
 
-
-export { history };
 export const configureAdminStore = () => configureStore(createReducer);

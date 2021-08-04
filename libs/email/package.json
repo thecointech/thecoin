@@ -29,6 +29,7 @@
   "main": "./build/index.js",
   "exports": {
     ".": {
+      "electron": "./build/index_mocked.js",
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_mocked.js",
       "default": "./build/index.js"

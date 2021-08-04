@@ -1,33 +1,32 @@
 import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
 import { initBrowser } from '@thecointech/rbcapi';
-import { initialize } from '@thecointech/tx-gmail';
+import { initialize as initGmail } from '@thecointech/tx-gmail';
+import { log } from '@thecointech/logging';
 import { initAccounts } from './accounts';
 import { initSidebar } from './sidebar';
-import { log } from '@thecointech/logging';
+import { configureAdminStore } from './reducers';
+import { gmailSignIn } from './gmail/renderer';
+import { initFirestore } from './firestore';
 
 //
 // Initialize (most of) the application
 // Does not initialize accounts or contract
-export function Initialize() {
+export function initialize() {
+
+  // initialize logging first
+  log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
   initSidebar();
   initAccounts();
 
-  RbcStore.initialize({ adapter: "leveldb" });
-  ConfigStore.initialize({ adapter: "leveldb" });
+  RbcStore.initialize();
+  ConfigStore.initialize();
 
   initBrowser({ headless: true });
-  initialize(initGmail);
-}
+  initGmail(gmailSignIn);
 
-async function initGmail(authUrl: string) {
-  log.warn("You should visit: " + authUrl);
-  window.open(authUrl);
-  return new Promise<string>((_resolve, reject) => {
-    // TODO: We can't open a server to listen to the
-    // reply, but we already have one running.  We should
-    // be able to figure out how to collect the reply
-    reject("TODO");
-  })
+  initFirestore();
+
+  return configureAdminStore();
 }

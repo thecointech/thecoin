@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/admin",
   "private": true,
-  "productName": "tcadmin",
+  "productName": "TheCoin - Admin",
   "workspaces": {
     "nohoist": [
       "**/electron**",
@@ -14,6 +14,7 @@
   "scripts": {
     "dev": "electron-forge start",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
