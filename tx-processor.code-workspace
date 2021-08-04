@@ -21,10 +21,6 @@
 			"path": "libs\\tx-statemachine"
 		},
 		{
-			"name": "tx-processing",
-			"path": "libs\\tx-processing"
-		},
-		{
 			"name": "broker-db",
 			"path": "libs\\broker-db"
 		},

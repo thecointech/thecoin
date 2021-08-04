@@ -5,8 +5,8 @@
 			"path": "apps/broker-service"
 		},
 		{
-			"name": "tx-processing",
-			"path": "libs/tx-processing"
+			"name": "tx-statemachine",
+			"path": "libs/tx-statemachine"
 		},
 		{
 			"name": "broker-db",

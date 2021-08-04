@@ -5,11 +5,11 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { toHuman } from '@thecointech/utilities';
 import { BuyAction, getActionFromInitial, PurchaseType } from '@thecointech/broker-db';
-import { Processor } from '@thecointech/tx-processing/deposit';
+import { Processor } from '@thecointech/tx-deposit';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
-import { getCurrentState } from '@thecointech/tx-processing/statemachine';
+import { getCurrentState } from '@thecointech/tx-statemachine';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { Account } from '@thecointech/shared/containers/Account';
 const typeOptions = ["deposit", "other"].map(k => ({
