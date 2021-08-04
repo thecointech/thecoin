@@ -26,6 +26,7 @@ const mockOptions = process.env.NODE_ENV !== 'production'
   : {};
 
 const baseOptions = {
+  mode: process.env.NODE_ENV,
   module: {
     rules,
   },
@@ -35,20 +36,27 @@ const baseOptions = {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     fallback: {
-      "crypto": require.resolve("crypto-browserify"),
-      "http": require.resolve("stream-http"),
-      "https": require.resolve("https-browserify"),
-      "zlib": require.resolve("browserify-zlib"),
-      "stream": require.resolve("stream-browserify"),
-      "path": require.resolve("path-browserify"),
-      "os": false,
-      "fs": false,
-      "vm": false
+      // "crypto": require.resolve("crypto-browserify"),
+      // "http": require.resolve("stream-http"),
+      // "https": require.resolve("https-browserify"),
+      // "zlib": require.resolve("browserify-zlib"),
+      // "stream": require.resolve("stream-browserify"),
+      // "path": require.resolve("path-browserify"),
+      // "os": false,
+      // "fs": false,
+      // "vm": false,
+      // Loading google-auth-library
+      // "child_process": false,
+      // "http2": require.resolve("http2-browserify"),
+      // "net": false,
+      // "tls": false,
+
     }
   },
   experiments: {
     topLevelAwait: true,
-  }
+  },
+  performance: { hints: false }
 }
 
 module.exports = merge(mockOptions, baseOptions);
