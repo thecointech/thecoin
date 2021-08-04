@@ -1,8 +1,8 @@
 import { getIncompleteActions } from '@thecointech/broker-db';
 import { TheCoin } from '@thecointech/contract';
 import { fetchNewDepositEmails } from '@thecointech/tx-gmail';
-import { Processor, getBuyAction } from '@thecointech/tx-processing/deposit';
-import { TypedActionContainer } from '@thecointech/tx-processing/statemachine';
+import { Processor, getBuyAction } from '@thecointech/tx-deposit';
+import { TypedActionContainer } from '@thecointech/tx-statemachine';
 import { RbcApi } from '@thecointech/rbcapi';
 
 export async function processUnsettledDeposits(contract: TheCoin, bank: RbcApi)
