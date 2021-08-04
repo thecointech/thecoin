@@ -13,10 +13,6 @@
       "path": "libs\\tx-reconciliation"
     },
     {
-      "name": "tx-processing",
-      "path": "libs\\tx-processing"
-    },
-    {
       "name": "tx-gmail",
       "path": "libs\\tx-gmail"
     },
