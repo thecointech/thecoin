@@ -2,7 +2,8 @@ import testWallet from './testAccount1.json';
 import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract';
 import { IDX } from '@thecointech/idx';
-import { AccountMap, AccountState, buildNewAccount } from '..';
+import { AccountMap } from '../map';
+import { AccountState, buildNewAccount } from '../state';
 
 const _devAccounts: AccountMap = {};
 let _initial: null|string = null;

@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter, Timestamp, FieldValue } from "@thecointech/firestore";
+import { DocumentData, FirestoreDataConverter, Timestamp, FieldValue, QueryDocumentSnapshot } from "@thecointech/firestore";
 import { Decimal } from "decimal.js-light";
 import { isPlainObject } from 'lodash';
 import { DateTime } from 'luxon';
@@ -62,8 +62,8 @@ export function buildConverter<T>(...converters: converter[]): FirestoreDataConv
     toFirestore(data: T) {
       return converters.reduce((obj, cv) => convertObject(obj, cv.keys, cv.toFirestore), data as DocumentData);
     },
-    fromFirestore(snapshot: DocumentData): T {
-      return converters.reduce((obj, cv) => convertObject(obj, cv.keys, cv.fromFirestore), snapshot.data());
+    fromFirestore(snapshot: QueryDocumentSnapshot): T {
+      return converters.reduce((obj, cv) => convertObject(obj, cv.keys, cv.fromFirestore), snapshot.data()) as T;
     }
   }
 }
