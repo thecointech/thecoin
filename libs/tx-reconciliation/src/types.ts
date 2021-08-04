@@ -1,4 +1,4 @@
-import { eTransferData } from "@thecointech/tx-gmail";
+import type { eTransferData } from "@thecointech/tx-gmail";
 import { ActionDictionary, AnyAction } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
 import { Transaction } from "@thecointech/tx-blockchain/";
