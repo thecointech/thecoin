@@ -7,7 +7,7 @@ import { getNewTokens } from './token';
 import { log } from '@thecointech/logging';
 
 const fns: functions = {
-  bridge: async (ipc) => { registerIpcListeners(ipc as IpcMain); },
+  bridge: (ipc) => { registerIpcListeners(ipc as IpcMain); },
   initialize: async (token) => {
     const auth = getAuthClient();
     const credentials = token ? JSON.parse(token) : await getNewTokens(auth);
