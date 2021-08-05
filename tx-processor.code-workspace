@@ -5,8 +5,20 @@
 			"path": "apps\\tx-processor"
 		},
 		{
-			"name": "tx-processing",
-			"path": "libs\\tx-processing"
+			"name": "tx-bill",
+			"path": "libs\\tx-bill"
+		},
+		{
+			"name": "tx-etransfer",
+			"path": "libs\\tx-etransfer"
+		},
+		{
+			"name": "tx-deposit",
+			"path": "libs\\tx-deposit"
+		},
+		{
+			"name": "tx-statemachine",
+			"path": "libs\\tx-statemachine"
 		},
 		{
 			"name": "broker-db",

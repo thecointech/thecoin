@@ -30,7 +30,8 @@
   "dependencies": {
     "@thecointech/logging": "^0.2.16",
     "@thecointech/rbcapi": "^0.2.17",
-    "@thecointech/tx-processing": "^0.2.17",
+    "@thecointech/tx-deposit": "*",
+    "@thecointech/tx-etransfer": "*",
     "open": "^8.2.1"
   },
   "devDependencies": {

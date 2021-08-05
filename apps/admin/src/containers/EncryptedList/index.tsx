@@ -3,7 +3,7 @@ import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList, TransferRenderer } from "../TransferList";
 import { Confirm } from "semantic-ui-react";
 import { ActionType, getAllActions, getAllUsers } from '@thecointech/broker-db';
-import { TypedActionContainer } from '@thecointech/tx-processing/statemachine';
+import { TypedActionContainer } from '@thecointech/tx-statemachine';
 
 type Props<Type extends ActionType> = {
   render: TransferRenderer<Type>,

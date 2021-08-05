@@ -2,7 +2,7 @@ import React from "react";
 import { EncryptedList } from "containers/EncryptedList";
 import { Segment } from "semantic-ui-react";
 import { RefundButton } from 'containers/Refund';
-import { getCurrentState, SellActionContainer } from '@thecointech/tx-processing/statemachine';
+import { getCurrentState, SellActionContainer } from '@thecointech/tx-statemachine';
 
 const RenderETransfer = (props: SellActionContainer) => {
   const eTransfer = props.instructions;
