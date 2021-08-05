@@ -1,9 +1,9 @@
 import { validateAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
-import { Processor } from "@thecointech/tx-processing/bill";
+import { Processor } from "@thecointech/tx-bill";
 import { GetContract } from './Wallet';
-import { getCurrentState } from '@thecointech/tx-processing/statemachine';
+import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 import { CertifiedTransfer } from '@thecointech/types';

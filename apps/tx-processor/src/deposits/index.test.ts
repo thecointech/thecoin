@@ -1,7 +1,7 @@
 import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore';
 import { GetContract } from '@thecointech/contract';
-import { getCurrentState } from '@thecointech/tx-processing';
+import { getCurrentState } from '@thecointech/tx-statemachine';
 import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 

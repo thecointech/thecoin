@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { DropdownProps, Select } from "semantic-ui-react";
 import { Client } from "./Client";
 import { useFxRates } from "@thecointech/shared/containers/FxRate";
-import { AllDataArray, getAllUserData } from "./data";
+import { UserData, getAllUserData } from "./data";
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 
 export const ClientSelect = () => {
 
-  const [users, setUsers] = useState<AllDataArray>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
   const [address, setAddress] = useState(undefined as string | undefined);
   const [loading, setLoading] = useState(false);
   const fxRates = useFxRates();
@@ -48,7 +48,7 @@ export const ClientSelect = () => {
   );
 }
 
-const buildOptions = (users: AllDataArray) =>
+const buildOptions = (users: UserData[]) =>
   users.map(user => ({
     key: user.address,
     value: user.address,
