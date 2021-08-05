@@ -26,8 +26,13 @@
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "electron": "./build/index_electron.js",
+      "node": "./build/index_node.js"
+    }
+  },
+  "types": "./build/index_common.d.ts",
   "dependencies": {
     "@thecointech/utilities": "^0.2.17",
     "currency.js": "^2.0.4",

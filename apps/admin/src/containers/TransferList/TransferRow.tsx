@@ -1,7 +1,7 @@
 import React from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import { TransferRenderer } from "./types";
-import { AnyActionContainer } from '@thecointech/tx-processing/statemachine';
+import { AnyActionContainer } from '@thecointech/tx-statemachine';
 import { ActionType } from '@thecointech/broker-db';
 
 type Props = {

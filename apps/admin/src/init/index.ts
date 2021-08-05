@@ -1,13 +1,12 @@
 import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
 import { initBrowser } from '@thecointech/rbcapi';
-import { initialize as initGmail } from '@thecointech/tx-gmail';
 import { log } from '@thecointech/logging';
 import { initAccounts } from './accounts';
 import { initSidebar } from './sidebar';
 import { configureAdminStore } from './reducers';
-import { gmailSignIn } from './gmail/renderer';
 import { initFirestore } from './firestore';
+import { initGmail } from './gmail';
 
 //
 // Initialize (most of) the application
@@ -24,9 +23,8 @@ export function initialize() {
   ConfigStore.initialize();
 
   initBrowser({ headless: true });
-  initGmail(gmailSignIn);
-
   initFirestore();
+  initGmail();
 
   return configureAdminStore();
 }
