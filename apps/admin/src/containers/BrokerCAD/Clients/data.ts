@@ -2,7 +2,7 @@ import { AccountState } from '@thecointech/account';
 import { AnyAction, BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import { FXRate, weBuyAt } from "@thecointech/fx-rates";
 import { getSigner } from '@thecointech/signers';
-import { eTransferData, fetchETransfers } from '@thecointech/tx-gmail';
+import gmail, { eTransferData } from '@thecointech/tx-gmail';
 import { Decimal } from 'decimal.js-light';
 
 export type UserData = {
@@ -37,7 +37,7 @@ async function getUsers(emails: eTransferData[], account: AccountState) {
 }
 
 export async function getAllUserData(rates: FXRate[], account: AccountState) {
-  const etransfers = await fetchETransfers();
+  const etransfers = await gmail.queryETransfers();
   // Get all users logged in the database
   const users = await getUsers(etransfers, account);
 

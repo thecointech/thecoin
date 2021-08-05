@@ -1,7 +1,7 @@
 // reset env
 process.env.CONFIG_NAME='prod';
 import { getEnvFile } from "../../../tools/setenv";
-import { fetchETransfers, fetchNewDepositEmails } from './index'
+import { queryETransfers, queryNewDepositEmails } from './query'
 import { ConfigStore } from '@thecointech/store';
 import { IsValidAddress } from '@thecointech/utilities';
 import { describe, IsManualRun } from '@thecointech/jestutils';
@@ -27,14 +27,14 @@ describe("Live service queries for gmail", () => {
     ConfigStore.release();
   });
 
-  it('Can fetch emails', async () => {
+  it('Can query emails', async () => {
 
-    const deposits = await fetchNewDepositEmails();
+    const deposits = await queryNewDepositEmails();
     expect(deposits).not.toBeUndefined();
   })
 
   it('We have valid deposits', async () => {
-    const deposits = await fetchETransfers();
+    const deposits = await queryETransfers();
     expect(deposits).not.toBeUndefined();
 
     for (const deposit of deposits) {
