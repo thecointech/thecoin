@@ -1,11 +1,10 @@
 import { log } from "@thecointech/logging";
 import { init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, initBrowser } from "@thecointech/rbcapi";
-import { initialize as initGmail } from '@thecointech/tx-gmail';
+import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract } from '@thecointech/contract';
-import { getCode } from './auth';
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
@@ -31,7 +30,7 @@ export async function initialize() {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  await initGmail(getCode);
+  await gmail.initialize();
 
   await initBrowser({
     headless: false

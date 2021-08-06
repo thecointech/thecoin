@@ -1,13 +1,13 @@
 import { getIncompleteActions } from '@thecointech/broker-db';
 import { TheCoin } from '@thecointech/contract';
-import { fetchNewDepositEmails } from '@thecointech/tx-gmail';
+import gmail from '@thecointech/tx-gmail';
 import { Processor, getBuyAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';
 import { RbcApi } from '@thecointech/rbcapi';
 
 export async function processUnsettledDeposits(contract: TheCoin, bank: RbcApi)
 {
-  const raw = await fetchNewDepositEmails();
+  const raw = await gmail.queryNewDepositEmails();
 
   // Get all incomplete actions, to ensure that we finish
   // processing (even if data is no longer present in email list)

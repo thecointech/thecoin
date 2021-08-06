@@ -1,5 +1,5 @@
 import { getAuthClient, isValid } from './auth';
-import { initializeApi } from './fetch';
+import { initializeApi, setETransferLabel } from './fetch';
 import type { IpcMain } from './electron_types';
 import { functions, messages } from './index_common';
 import { queryETransfers, queryNewDepositEmails } from './query';
@@ -23,6 +23,7 @@ const fns: functions = {
   },
   queryETransfers,
   queryNewDepositEmails,
+  setETransferLabel,
 }
 
 export default fns;
