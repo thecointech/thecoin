@@ -18,9 +18,17 @@
     "defaultMessage": "Is this what you meant?",
     "description": "app.account.connect.create.checkHeader"
   },
+  "0p1d80": {
+    "defaultMessage": "Go To This Account",
+    "description": "AccountsList button to go to account"
+  },
   "1jWSoJ": {
     "defaultMessage": "Or, you can create an entirely new account!",
     "description": "app.account.connect.create.createTransfer"
+  },
+  "1jxvsD": {
+    "defaultMessage": "You can also log into your TheCoin account using an existing Ethereum account.",
+    "description": "app.account.create.ethereum: link redirect people to connect their existing eth account"
   },
   "3hZCNt": {
     "defaultMessage": "Don’t have an account?",
@@ -87,10 +95,6 @@
   "EmDoJa": {
     "defaultMessage": "We are {percentComplete}% done cooking your brand-new account.",
     "description": "app.account.create.whileCreatingHeader"
-  },
-  "G5dlT+": {
-    "defaultMessage": "Copy",
-    "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
   "GfOGaW": {
     "defaultMessage": "strong"
@@ -167,10 +171,6 @@
     "defaultMessage": "We are very proud to combine the cutting-edge security and performance of blockchain with the the conveniences of traditional banking.",
     "description": "app.account.generate.proud: Text underneath the buttons for the information page before the create account form"
   },
-  "P21J9i": {
-    "defaultMessage": "Go To",
-    "description": "AccountsList button to go to account"
-  },
   "Qd0+sv": {
     "defaultMessage": "Second Step",
     "description": "app.account.create.form.aboveTheTitle: Title above the main Title for the create account form page"
@@ -190,6 +190,10 @@
   "S+5i+u": {
     "defaultMessage": "The Opera browser you are using comes with a built-in account that is compatible with TheCoin. Would you like to connect to it?",
     "description": "app.account.connect.create.checkMessageOpera"
+  },
+  "S3XtB5": {
+    "defaultMessage": "Accounts in your Google Drive",
+    "description": "The main title for the restore account page"
   },
   "SLaqzP": {
     "defaultMessage": "Ensure your safety",
@@ -225,10 +229,6 @@
   "c+odgw": {
     "defaultMessage": "A referrer ID should be 6 characters long.",
     "description": "app.addaccount.newbaseclass.referralinput.errorReferrerNumChars"
-  },
-  "cINV4p": {
-    "defaultMessage": "Copied to your clipboard",
-    "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
   },
   "dJoJ7K": {
     "defaultMessage": "This page expects to recieve google authentication information, but none was found.",
@@ -375,6 +375,10 @@
   "tvmNSG": {
     "defaultMessage": "An account with this name already exists here.",
     "description": "app.addAccount.newbaseclass.errorNameDuplicate"
+  },
+  "uPhkBo": {
+    "defaultMessage": "You can create a new TheCoin account using an existing Ethereum account.",
+    "description": "app.account.create.ethereum: link redirect people to connect their existing eth account"
   },
   "vN4JT+": {
     "defaultMessage": "Never give your password to anyone.",
