@@ -3,7 +3,7 @@ import { getUrlParameterByName } from '../../../../utils/localState'
 import { GoogleWalletItem } from '@thecointech/types';
 import { clientUri, GetSecureApi } from '../../../../api';
 import { log } from '@thecointech/logging';
-import { Button, ButtonProps, List } from 'semantic-ui-react';
+import { ButtonProps, List } from 'semantic-ui-react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { AccountState } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
@@ -11,6 +11,8 @@ import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import styles from './styles.module.less';
+import { PageHeader } from '../../../../components/PageHeader';
+import { ButtonPrimary } from '../../../../components/Buttons';
 
 type LoadingWallet = {
   wallet: Wallet;
@@ -18,16 +20,19 @@ type LoadingWallet = {
   id: string;
   exists: boolean;
 }
+
+const aboveTheTitle = defineMessage({defaultMessage: "Restore Account", description: "The above the title text for the restore account page"});
+const title = defineMessage({defaultMessage: "Accounts in your Google Drive", description: "The main title for the restore account page"});
 const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
 const noAccounts = defineMessage({ defaultMessage: 'No accounts found', description: 'AccountsList: no accounts loaded from google' })
-const goTo = defineMessage({ defaultMessage: 'Go To', description: 'AccountsList button to go to account' })
+const goTo = defineMessage({ defaultMessage: 'Go To This Account', description: 'AccountsList button to go to account' })
 const restore = defineMessage({ defaultMessage: 'Restore', description: 'AccountsList button to load account into site'})
 type Props = {
   url?: string
 }
 export const RestoreList = ({url}: Props) => {
 
-  const [wallets, setWallets] = useState(undefined as (LoadingWallet[]) | undefined)
+  const [wallets, setWallets] = useState(undefined as (GoogleWalletItem[]) | undefined)
   const [redirect, setRedirect] = useState('');
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
@@ -39,8 +44,7 @@ export const RestoreList = ({url}: Props) => {
     if (token) {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
-        .then(r => parseWallets(r.data.wallets, accounts))
-        .then(r => setWallets(r))
+        .then(({data}) => setWallets(data.wallets))
         .catch(log.error)
     }
   }, [token]);
@@ -70,27 +74,30 @@ export const RestoreList = ({url}: Props) => {
     : wallets.length === 0
       ? <FormattedMessage {...noAccounts} />
       : (
-        <List divided relaxed>
-          {
-            wallets.map(wallet => {
-              return (
-                <List.Item key={wallet.id}>
-                  <List.Content className={styles.accountRow}>
-                    {wallet.name}
-                    <Button
-                      wallet={wallet}
-                      onClick={onRestore}
-                    >
-                      <FormattedMessage {...(
-                        wallet.exists ? goTo : restore
-                      )} />
-                    </Button>
-                  </List.Content>
-                </List.Item>
-              )
-            })
-          }
-        </List>
+        <>
+          <PageHeader above={aboveTheTitle} title={title} />
+          <div className={`${styles.listAccount} x10spaceAfter`}>
+            <List divided verticalAlign='middle' >
+              {parseWallets(wallets, accounts)
+                .map(wallet => (
+                  <List.Item key={wallet.id}>
+                    <List.Content className={styles.accountRow}>
+                      <div className={styles.nameWallet}>{wallet.name}</div>
+                      <ButtonPrimary className={`${styles.buttonRestore} x2spaceBefore x2spaceAfter`} floated='right'
+                        wallet={wallet}
+                        onClick={onRestore}
+                      >
+                        <FormattedMessage {...(
+                          wallet.exists ? goTo : restore
+                        )} />
+                      </ButtonPrimary>
+                    </List.Content>
+                  </List.Item>
+                )
+                )}
+            </List>
+          </div>
+        </>
       )
 }
 
