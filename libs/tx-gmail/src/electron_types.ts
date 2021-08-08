@@ -4,76 +4,52 @@
 // Duplicate the electron IPC class here
 // Unfortunately electron can't be hoisted, so we
 // don't have access to its definitions anywhere
-export interface IpcMainEvent extends Event {
+interface IpcMainInvokeEvent extends Event {
 
-  // Docs: https://electronjs.org/docs/api/structures/ipc-main-event
+  // Docs: https://electronjs.org/docs/api/structures/ipc-main-invoke-event
 
   /**
    * The ID of the renderer frame that sent this message
    */
   frameId: number;
   /**
-   * A list of MessagePorts that were transferred with this message
-   */
-  //ports: MessagePortMain[];
-  /**
    * The internal ID of the renderer process that sent this message
    */
   processId: number;
   /**
-   * A function that will send an IPC message to the renderer frame that sent the
-   * original message that you are currently handling.  You should use this method to
-   * "reply" to the sent message in order to guarantee the reply will go to the
-   * correct process and frame.
-   */
-  reply: Function;
-  /**
-   * Set this to the value to be returned in a synchronous message
-   */
-  returnValue: any;
-  /**
    * Returns the `webContents` that sent the message
    */
-  sender: {
-    send: Function;
-  }; //WebContents;
+  sender: any;
   /**
    * The frame that sent this message
    *
    */
-  //readonly senderFrame: WebFrameMain;
+  readonly senderFrame: any;
 }
-
 export interface IpcMain {
-  on(channel: string, listener: (event: IpcMainEvent, ...args: any[]) => void): this;
+   /**
+     * Adds a handler for an `invoke`able IPC. This handler will be called whenever a
+     * renderer calls `ipcRenderer.invoke(channel, ...args)`.
+     *
+     * If `listener` returns a Promise, the eventual result of the promise will be
+     * returned as a reply to the remote caller. Otherwise, the return value of the
+     * listener will be used as the value of the reply.
+     *
+     * The `event` that is passed as the first argument to the handler is the same as
+     * that passed to a regular event listener. It includes information about which
+     * WebContents is the source of the invoke request.
+     *
+     * Errors thrown through `handle` in the main process are not transparent as they
+     * are serialized and only the `message` property from the original error is
+     * provided to the renderer process. Please refer to #24427 for details.
+     */
+    handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void;
+
 }
 
 //////////////////////////////////////////////////////////////////
 
-
-export interface IpcRendererEvent extends Event {
-
-  // Docs: https://electronjs.org/docs/api/structures/ipc-renderer-event
-
-  /**
-   * A list of MessagePorts that were transferred with this message
-   */
-  ports: MessagePort[];
-  /**
-   * The `IpcRenderer` instance that emitted the event originally
-   */
-  sender: IpcRenderer;
-  /**
-   * The `webContents.id` that sent the message, you can call
-   * `event.sender.sendTo(event.senderId, ...)` to reply to the message, see
-   * ipcRenderer.sendTo for more information. This only applies to messages sent from
-   * a different renderer. Messages sent directly from the main process set
-   * `event.senderId` to `0`.
-   */
-  senderId: number;
-}
-
-export interface IpcRenderer extends NodeJS.EventEmitter {
+export interface IpcRenderer {
 
   // Docs: https://electronjs.org/docs/api/ipc-renderer
 
@@ -104,96 +80,4 @@ export interface IpcRenderer extends NodeJS.EventEmitter {
    * If you do not need a response to the message, consider using `ipcRenderer.send`.
    */
   invoke(channel: string, ...args: any[]): Promise<any>;
-  /**
-   * Listens to `channel`, when a new message arrives `listener` would be called with
-   * `listener(event, args...)`.
-   */
-  on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
-  /**
-   * Adds a one time `listener` function for the event. This `listener` is invoked
-   * only the next time a message is sent to `channel`, after which it is removed.
-   */
-  once(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
-  /**
-   * Send a message to the main process, optionally transferring ownership of zero or
-   * more `MessagePort` objects.
-   *
-   * The transferred `MessagePort` objects will be available in the main process as
-   * `MessagePortMain` objects by accessing the `ports` property of the emitted
-   * event.
-   *
-   * For example:
-   *
-   * For more information on using `MessagePort` and `MessageChannel`, see the MDN
-   * documentation.
-   */
-  postMessage(channel: string, message: any, transfer?: MessagePort[]): void;
-  /**
-   * Removes all listeners, or those of the specified `channel`.
-   */
-  removeAllListeners(channel: string): this;
-  /**
-   * Removes the specified `listener` from the listener array for the specified
-   * `channel`.
-   */
-  removeListener(channel: string, listener: (...args: any[]) => void): this;
-  /**
-   * Send an asynchronous message to the main process via `channel`, along with
-   * arguments. Arguments will be serialized with the Structured Clone Algorithm,
-   * just like `window.postMessage`, so prototype chains will not be included.
-   * Sending Functions, Promises, Symbols, WeakMaps, or WeakSets will throw an
-   * exception.
-   *
-   * > **NOTE:** Sending non-standard JavaScript types such as DOM objects or special
-   * Electron objects will throw an exception.
-   *
-   * Since the main process does not have support for DOM objects such as
-   * `ImageBitmap`, `File`, `DOMMatrix` and so on, such objects cannot be sent over
-   * Electron's IPC to the main process, as the main process would have no way to
-   * decode them. Attempting to send such objects over IPC will result in an error.
-   *
-   * The main process handles it by listening for `channel` with the `ipcMain`
-   * module.
-   *
-   * If you need to transfer a `MessagePort` to the main process, use
-   * `ipcRenderer.postMessage`.
-   *
-   * If you want to receive a single response from the main process, like the result
-   * of a method call, consider using `ipcRenderer.invoke`.
-   */
-  send(channel: string, ...args: any[]): void;
-  /**
-   * The value sent back by the `ipcMain` handler.
-   *
-   * Send a message to the main process via `channel` and expect a result
-   * synchronously. Arguments will be serialized with the Structured Clone Algorithm,
-   * just like `window.postMessage`, so prototype chains will not be included.
-   * Sending Functions, Promises, Symbols, WeakMaps, or WeakSets will throw an
-   * exception.
-   *
-   * > **NOTE:** Sending non-standard JavaScript types such as DOM objects or special
-   * Electron objects will throw an exception.
-   *
-   * Since the main process does not have support for DOM objects such as
-   * `ImageBitmap`, `File`, `DOMMatrix` and so on, such objects cannot be sent over
-   * Electron's IPC to the main process, as the main process would have no way to
-   * decode them. Attempting to send such objects over IPC will result in an error.
-   *
-   * The main process handles it by listening for `channel` with `ipcMain` module,
-   * and replies by setting `event.returnValue`.
-   *
-   * > :warning: **WARNING**: Sending a synchronous message will block the whole
-   * renderer process until the reply is received, so use this method only as a last
-   * resort. It's much better to use the asynchronous version, `invoke()`.
-   */
-  sendSync(channel: string, ...args: any[]): any;
-  /**
-   * Sends a message to a window with `webContentsId` via `channel`.
-   */
-  sendTo(webContentsId: number, channel: string, ...args: any[]): void;
-  /**
-   * Like `ipcRenderer.send` but the event will be sent to the `<webview>` element in
-   * the host page instead of the main process.
-   */
-  sendToHost(channel: string, ...args: any[]): void;
 }

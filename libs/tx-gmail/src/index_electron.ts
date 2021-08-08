@@ -1,7 +1,6 @@
 
 import { functions, messages } from './index_common';
 import { IpcRenderer } from './electron_types';
-import { eTransferData } from './types';
 import { log } from '@thecointech/logging';
 
 //
@@ -11,56 +10,22 @@ import { log } from '@thecointech/logging';
 // node thread (we assume initialized at the start)
 let _ipc: IpcRenderer | undefined = undefined;
 
+function runf(name: string, ...args: any[]) {
+  if (!_ipc) throw new Error("Initialize IPC");
+  return _ipc.invoke(name, ...args);
+}
+
 const fns: functions = {
 
   bridge: async (ipc?: any) => {
-    log.debug("Initiating tx-gmail bridge: Renderer")
+    log.debug("Initializing tx-gmail IPC:invoke...");
     if (!ipc) throw new Error("Cannot initialize without IPC renderer")
     _ipc = ipc as IpcRenderer;
   },
-
-  initialize: (token) => {
-    const ipc = _ipc;
-    if (!ipc) throw new Error("Initialize IPC");
-    return new Promise((resolve, reject) => {
-      ipc.send(messages.INITIALIZE_REQ, token);
-      ipc.on(messages.INITIALIZE_RESP, (_event, data: string) => {
-        if (data) resolve(data);
-        else reject("No data fetched");
-      })
-    })
-  },
-  queryETransfers: async (query?) => {
-    const ipc = _ipc;
-    if (!ipc) throw new Error("Initialize IPC");
-    return new Promise((resolve, reject) => {
-      ipc.send(messages.QUERY_ETRANSFERS_REQ, query);
-      ipc.on(messages.QUERY_ETRANSFERS_RESP, (_event, data: string) => {
-        if (data) resolve(JSON.parse(data) as eTransferData[]);
-        else reject("No data fetched");
-      })
-    })
-  },
-  queryNewDepositEmails: async () => {
-    const ipc = _ipc;
-    if (!ipc) throw new Error("Initialize IPC");
-    return new Promise((resolve, reject) => {
-      ipc.send(messages.QUERY_NEW_DEPOSITS_REQ);
-      ipc.on(messages.QUERY_NEW_DEPOSITS_RESP, (_event, data: string) => {
-        if (data) resolve(JSON.parse(data) as eTransferData[]);
-        else reject("No data fetched");
-      })
-    })
-  },
-  setETransferLabel: async(...args: any[]) => {
-    const ipc = _ipc;
-    if (!ipc) throw new Error("Initialize IPC");
-    return new Promise((resolve) => {
-      ipc.send(messages.SET_LABEL_REQ, ...args);
-      ipc.on(messages.SET_LABEL_RESP, (_event) => {
-        resolve();
-      })
-    })
-  }
+  // No need to type these, at TS exports types from index_common
+  initialize: (...args: any[]) => runf(messages.INITIALIZE, ...args),
+  queryETransfers: (...args: any[]) => runf(messages.QUERY_ETRANSFERS, ...args),
+  queryNewDepositEmails: (...args: any[]) => runf(messages.QUERY_ETRANSFERS, ...args),
+  setETransferLabel: (...args: any[]) => runf(messages.QUERY_ETRANSFERS, ...args),
 }
 export default fns;
