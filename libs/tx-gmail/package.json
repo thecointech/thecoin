@@ -28,6 +28,7 @@
   ],
   "exports": {
     ".": {
+      "development": "./build/index_mocked.js",
       "electron": "./build/index_electron.js",
       "node": "./build/index_node.js"
     }
