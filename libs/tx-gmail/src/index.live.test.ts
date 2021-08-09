@@ -7,7 +7,6 @@ import { IsValidAddress } from '@thecointech/utilities';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
 jest.unmock("googleapis")
-jest.unmock("auth")
 jest.disableAutomock()
 
 describe("Live service queries for gmail", () => {
