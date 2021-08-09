@@ -1,3 +1,4 @@
+import fns from './index_mocked';
 import { queryNewDepositEmails } from './query'
 
 // Don't go to the server for this
@@ -6,6 +7,7 @@ jest.mock('./auth')
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
+  await fns.initialize();
 });
 
 it('Can fetch new emails (mocked)', async () => {
