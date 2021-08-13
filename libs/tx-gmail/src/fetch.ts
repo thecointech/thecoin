@@ -68,7 +68,7 @@ export async function fetchEmails(ids: Array<string | undefined | null>) {
   return emails.map(email => email.data);
 }
 
-export async function setETransferLabel(email: gmail_v1.Schema$Message, labelName: Labels) {
+export async function setETransferLabel(id: string, labelName: Labels) {
 
   log.debug("Setting transfer label to: " + labelName);
   const labelId = __labels[labelName];
@@ -76,7 +76,7 @@ export async function setETransferLabel(email: gmail_v1.Schema$Message, labelNam
     throw new Error("Labels not initialized, please check init");
 
   await getGmail().users.messages.modify({
-    id: email.id!,
+    id: id,
     userId: "me",
     requestBody: {
       addLabelIds: [

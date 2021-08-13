@@ -1,4 +1,4 @@
-import {gmail_v1} from 'googleapis';
+import type { gmail_v1 } from 'googleapis';
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 
