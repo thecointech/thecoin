@@ -5,7 +5,7 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { toHuman } from '@thecointech/utilities';
 import { BuyAction, getActionFromInitial, PurchaseType } from '@thecointech/broker-db';
-import { Processor } from '@thecointech/tx-deposit';
+import { manualProcessor } from '@thecointech/tx-deposit';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
@@ -36,8 +36,13 @@ export const Purchase = () => {
     setIsProcessing(true);
     setForceValidate(true);
     throw new Error("Just because it compiles, doesn't mean it works.  Check properly");
-    const buy = await buildPurchaseEntry(fiat, DateTime.now(), purchaser, type);
-    const processor = Processor(account.contract!);
+    const date = DateTime.now();
+    const buy = await buildPurchaseEntry(fiat, date, purchaser, type);
+    const processor = manualProcessor(account.contract!, {
+      fiat: new Decimal(fiat),
+      meta: "Fill this in",
+      date
+    });
     const result = await processor.execute(null, buy);
     // Update with the step we get to.
     // TODO: Could we make this a callback?

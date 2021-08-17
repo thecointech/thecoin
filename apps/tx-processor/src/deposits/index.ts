@@ -1,7 +1,7 @@
 import { getIncompleteActions } from '@thecointech/broker-db';
 import { TheCoin } from '@thecointech/contract';
 import gmail from '@thecointech/tx-gmail';
-import { Processor, getBuyAction } from '@thecointech/tx-deposit';
+import { Processor, getBuyETransferAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';
 import { RbcApi } from '@thecointech/rbcapi';
 
@@ -18,7 +18,7 @@ export async function processUnsettledDeposits(contract: TheCoin, bank: RbcApi)
   const processed: TypedActionContainer<"Buy">[] = []
   // Process each raw deposit.
   for (const eTransfer of raw) {
-    const action = await getBuyAction(eTransfer);
+    const action = await getBuyETransferAction(eTransfer);
     // Subtract from our list of incomplete
     incomplete = incomplete.filter(i => i.doc.path != action.doc.path);
     const r = await processor.execute(eTransfer, action);
