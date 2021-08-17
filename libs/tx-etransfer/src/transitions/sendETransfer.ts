@@ -6,7 +6,7 @@ import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
 import { Decimal } from "decimal.js-light";
 
 // NOTE: server does not have private key, and will not pass this step
-const privateKeyPath = process.env.DB_ACTION_PK_PATH;
+const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
 const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : null;
 
 //
@@ -25,17 +25,25 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
   const {bank} = container;
   if (!bank) return { error: 'Cannot deposit fiat, no bank API present'};
 
-  // Get sending instructions
-  const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
-  if (!isValid(decrypted))
-    return { error: "e-Transfer packet is invalid" };
-  // Store decrypted instructions (mostly for manual verification in the admin app)
-  container.instructions = decrypted;
+  // instructions must be decoded within this action in case the transition
+  // is interrupted; this action is atomic and the decoded actions cannot be serialized.
+  if (!container.instructions) {
+      // Get sending instructions
+    const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
+    if (!isValid(decrypted))
+      return { error: "e-Transfer packet is invalid" };
+    // Keep track of decrypted instructions
+    // (mostly for manual verification in the admin app)
+    // NOTE: this doesn't work for replay tx's, so this
+    // probably doesn't make any sense...
+    container.instructions = decrypted!;
+  }
+
 
   // Send the transfer
   const {address} = container.action;
-  const toName = decrypted!.email.split('@')[0];
-  const confirmation = await bank.sendETransfer(address, fiat.toNumber(), toName, decrypted!, progressCb);
+  const toName = container.instructions.email.split('@')[0];
+  const confirmation = await bank.sendETransfer(address, fiat.toNumber(), toName, container.instructions, progressCb);
 
   // If we have confirmation code, return success
   return (confirmation > 0)

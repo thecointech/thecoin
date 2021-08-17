@@ -1,12 +1,9 @@
 import { transitionTo, StateGraph } from "@thecointech/tx-statemachine";
 import * as core from '@thecointech/tx-statemachine/transitions';
-import * as deposit from './transitions';
+import { makeDeposit, Deposit } from './transitions/depositFiatManual';
 
 type States =
   "initial" |
-  "labelledETransfer" |
-  "depositReady" |
-  "depositResult" |
   "deposited" |
   "converted" |
   "tcReady" |
@@ -14,32 +11,16 @@ type States =
   "tcResult" |
   "error" |
   "complete";
-//"refunding" |
-//"refundReady";
 
+export type { Deposit };
 
-export const graph : StateGraph<States, "Buy"> = {
+export const manual = (deposit: Deposit): StateGraph<States, "Buy"> => ({
   initial: {
-    next: transitionTo<States, "Buy">(deposit.labelEmailETransfer, "labelledETransfer"),
-  },
-  labelledETransfer:{
-    onTimeout: transitionTo<States>(core.timeout, "complete"),
-    next: transitionTo<States>(core.preTransfer, "depositReady"),
-  },
-
-  depositReady: {
-    next: transitionTo<States, "Buy">(deposit.depositFiat, "depositResult"),
-  },
-  depositResult: {
-    // Our depositResult should be able to (eventually) handle
-    // a wide range of errors automatically (eg cancelled eTransfers etc)
-    onError: transitionTo<States>(core.requestManual, "error"),
-    next: transitionTo<States, "Buy">(deposit.labelEmailDeposited, "deposited"),
+    next: transitionTo<States, "Buy">(makeDeposit(deposit), "deposited"),
   },
   deposited: {
     next: transitionTo<States>(core.toCoin, "converted"),
   },
-
   converted: {
     onError: transitionTo<States>(core.requestManual, "error"),
     onTimeout: transitionTo<States>(core.requestManual, "error"),
@@ -59,12 +40,6 @@ export const graph : StateGraph<States, "Buy"> = {
     next: transitionTo<States>(core.markComplete, "complete"),
   },
 
-  // refunding: {
-  //   next: transitionTo(noop, "complete"),
-  // },
-  // refundReady: {
-  //   next: transitionTo(noop, "complete"),
-  // },
   error: null,
   complete: null
-}
+})

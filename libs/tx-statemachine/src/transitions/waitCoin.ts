@@ -1,4 +1,4 @@
-import { GetContract } from "@thecointech/contract";
+import { TheCoin } from "@thecointech/contract";
 import { log } from "@thecointech/logging";
 import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'
@@ -10,7 +10,7 @@ export async function waitCoin(container: AnyActionContainer) {
   const currentState = getCurrentState(container)
   const hash = currentState.delta.hash;
   if (!hash) return { error: "Cannot await transaction, no hash present"};
-  const receipt = await waitTransaction(hash);
+  const receipt = await waitTransaction(container.contract, hash);
   return receipt
     ? {
         meta: `status: ${receipt.status}`,
@@ -22,9 +22,8 @@ export async function waitCoin(container: AnyActionContainer) {
 
 //
 // Poll the provider to see if the transaction here has been mined.
-async function waitTransaction(hash: string, confirmations: number = 2) : Promise<TransactionReceipt> {
+async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 2) : Promise<TransactionReceipt> {
   log.trace({hash}, `Awaiting transfer: {hash}`);
-  const contract = await GetContract();
   const receipt = await contract.provider.waitForTransaction(hash, confirmations);
   if (!receipt) {
     log.warn({hash}, `Wait timed out for transfer: {hash}`);
