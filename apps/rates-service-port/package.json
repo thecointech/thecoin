@@ -1,12 +1,12 @@
 {
-  "name": "@thecointech/broker-service-port",
+  "name": "@thecointech/rates-service-port",
   "version": "0.27.0",
   "license": "MIT",
   "dependencies": {
-    "@thecointech/broker-service": "*"
+    "@thecointech/rates-service": "*"
   },
   "scripts": {
-    "dev": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9234 -r ts-node/register ./src/main.ts",
+    "dev": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9235 -r ts-node/register ./src/main.ts",
     "devlive": "cross-env CONFIG_NAME=devlive yarn dev",
     "prodtest": "cross-env CONFIG_NAME=prodtest yarn dev",
     "start": "node -r dotenv/config ./build/index.js",
