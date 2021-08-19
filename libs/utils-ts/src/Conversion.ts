@@ -17,7 +17,7 @@ function toHuman(val: number, doRound?: boolean): number {
 }
 
 function toHumanDecimal(val: Decimal) : Decimal {
-	return val.div(Multiplier).toDecimalPlaces(2, Decimal.ROUND_DOWN);
+	return val.div(Multiplier).toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN);
 }
 
 function roundPlaces(value?: number, places?: number) {
