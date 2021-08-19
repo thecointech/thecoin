@@ -16,6 +16,8 @@ declare global {
 }
 
 async function initialize() {
+  if (process.env.BROKER_SERVICE_ACCOUNT)
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
   await init();
 }
 
@@ -36,7 +38,7 @@ async function updateFirestore() {
 
   await initialize();
   // Do we have a unique ID for every purchase?
-  for (let i = 0; i < cache.length; i++) {
+  for (let i = 21; i < cache.length; i++) {
     const client = cache[i];
     if (builtInAccounts.includes(NormalizeAddress(client.address)))
       continue;
@@ -52,7 +54,7 @@ async function updateFirestore() {
       referredBy: data.referrer,
     })
 
-
+    console.log(`-- Processing [${i} of ${cache.length}]: ${client.address} --`)
     for (let t = 0; t < client.transactions.length; t++) {
       const tx = client.transactions[t];
       switch(tx.action) {

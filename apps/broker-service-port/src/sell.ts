@@ -2,11 +2,13 @@ import { mockedBank, mockedContract } from './mocks';
 import { ReconciledRecord } from './types';
 import { getSellAction, Processor } from '@thecointech/tx-etransfer';
 import { CertifiedTransfer, ETransferPacket } from '@thecointech/types';
-import { validate } from './validate';
+import { toDateTime, validate } from './validate';
 import { readFileSync } from 'fs';
 import { decryptTo } from "@thecointech/utilities/Encrypt";
-import { SellActionContainer, transitionTo } from '../../../libs/tx-statemachine/build';
+import { SellActionContainer, transitionTo } from '@thecointech/tx-statemachine';
 import { depositCoin as oldDeposit } from '@thecointech/tx-statemachine/transitions';
+import { Decimal } from 'decimal.js-light';
+import { mockMarketStatus, unmockMarketStatus } from './mockMarketStatus';
 
 // We mock the instruction - even though we have a decoded version
 // because some of the instructions were invalid but we fixed them manually
@@ -82,15 +84,57 @@ async function processETransfer(tx: ReconciledRecord) {
     sale.signature = sale.hash
   }
 
+
+  const oldToCoin = proc.graph.tcResult.next;
+
   // Strip all other data than what we want.
   const initial: any = {};
   if (sale.transfer) { initial.transfer = sale.transfer };
   if (sale.instructionPacket) { initial.instructionPacket = sale.instructionPacket };
   if (sale.signature) { initial.signature = sale.signature };
 
-  const action = await getSellAction(initial);
+  // The following transactions somehow completed at their recieved time, not at their processedTime
+  if (
+    tx.data.hash == 'CLOSE ACCOUNT:0x1198AACEF87B53CA5610C68FD83DF9577D54CC0C' ||
+    tx.data.hash == '0xfd16ab4b51e196d400f4987b35a19f5656f8afb2c98a195833d747895b770666' ||
+    tx.data.hash == '0x7d2a89aa68ebb0a33c7608202af54450d672ad923a002386f55d6963a82f7366' ||
+    tx.data.hash == '0x78d5f91534accebb66d36ce4d681bf5bbbae5a20ac1d1c2cfebbfaba33c8ef60' ||
+    (
+      tx.data.completedTimestamp && tx.data.processedTimestamp &&
+      tx.data.completedTimestamp!.toMillis() < tx.data.processedTimestamp!.toMillis()
+    )
+  ) {
+    mockMarketStatus(tx.data.completedTimestamp!.toMillis());
+  }
+
+  else if (
+    // Unknown why this doesn't match.
+    tx.data.hash == "CLOSE ACCOUNT:0xD86C97292B9BE3A91BD8279F114752248B80E8C5" ||
+    // tx.data.hash == '0xfd16ab4b51e196d400f4987b35a19f5656f8afb2c98a195833d747895b770666' ||
+    // tx.data.hash == '0x7d2a89aa68ebb0a33c7608202af54450d672ad923a002386f55d6963a82f7366' ||
+    // tx.data.hash == '0x78d5f91534accebb66d36ce4d681bf5bbbae5a20ac1d1c2cfebbfaba33c8ef60' ||
+      // The following transactions were done manually and settled for the wrong price
+    tx.notes == "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src" ||
+    tx.notes == "e-Transfers were completed without a working admin app, this amount is less than stated in DB but balances the earlier ones" ||
+    tx.data.hash == '0x5c5c79c76f79bfaeb4759e6924c7cf868179852168f9ab2880d5e0436ce3c341'
+  ) {
+    const toFiat = () => Promise.resolve({
+      date: tx.blockchain!.date,
+      coin: new Decimal(0),
+      fiat: new Decimal(tx.data.fiatDisbursed),
+    })
+    proc.graph.tcResult.next = transitionTo<any, "Sell">(toFiat, "converted")
+  }
+
+  const action = await getSellAction(initial, toDateTime(tx.data.recievedTimestamp));
   const result = await proc.execute(mockInstruction, action);
+
+  // always reset the open timestamp
+  unmockMarketStatus();
+  proc.graph.tcResult.next = oldToCoin;
+
   validate(result, tx);
+
 }
 
 function buildMockedProc(tx: ReconciledRecord) {

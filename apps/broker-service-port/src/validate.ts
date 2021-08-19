@@ -25,10 +25,23 @@ export function validate(result: AnyActionContainer, tx: ReconciledRecord) {
 
   // get results.  This relies on accurate tx data, so only functional in prod environments
   if (process.env.NODE_ENV === 'production') {
-    const fiat = result.history.find(s => s.data.fiat?.gt(0))?.data.fiat;
-    const coin = result.history.find(s => s.data.coin?.gt(0))?.data.coin;
+    // equivalent values?
+    const toFiat = result.history.find(s => s.delta.fiat?.gt(0));
+    const toCoin =  result.history.find(s => s.delta.coin?.gt(0));
+    assert(toFiat?.delta.fiat?.eq(tx.data.fiatDisbursed));
+    assert(toCoin?.delta.coin?.eq(tx.data.transfer.value));
 
-    assert(fiat?.eq(tx.data.fiatDisbursed));
-    assert(coin?.eq(tx.data.transfer.value));
+    // When processed?  Don't check for txs where the time was manually tweaked
+    if (
+      tx.data.hash != '0x7d2a89aa68ebb0a33c7608202af54450d672ad923a002386f55d6963a82f7366' &&
+      tx.data.hash != '0x78d5f91534accebb66d36ce4d681bf5bbbae5a20ac1d1c2cfebbfaba33c8ef60' &&
+      (tx.data.processedTimestamp && tx.data.completedTimestamp && tx.data.completedTimestamp.toMillis() > tx.data.processedTimestamp.toMillis())
+    ) {
+      const converted = result.history.find(s => s.name == "converted");
+      const newc = converted?.delta.date?.toMillis();
+      const oldc = tx.data.processedTimestamp?.toMillis() ?? tx.blockchain?.date.toMillis();
+      // Same day?
+      assert(!!newc && !!oldc && (Math.abs(newc - oldc) < (24 * 60 * 60 * 1000)));
+    }
   }
 }
