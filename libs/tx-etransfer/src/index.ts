@@ -8,9 +8,9 @@ import { DateTime } from 'luxon';
 
 export const Processor = (contract: TheCoin, bank: RbcApi|null = null) => new StateMachineProcessor(graph, contract, bank);
 
-export const getSellAction = (sale: CertifiedTransfer) =>
+export const getSellAction = (sale: CertifiedTransfer, date: DateTime) =>
   getActionFromInitial(sale.transfer.from, "Sell", {
     initial: sale,
-    date: DateTime.fromMillis(sale.transfer.timestamp),
+    date,
     initialId: sale.signature
   })
