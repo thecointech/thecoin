@@ -1,6 +1,6 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
-import { BuyActionContainer, getCurrentState } from '@thecointech/tx-processing/statemachine';
+import { BuyActionContainer, getCurrentState } from '@thecointech/tx-statemachine';
 
 export const DepositRenderer = (props : BuyActionContainer) => {
 

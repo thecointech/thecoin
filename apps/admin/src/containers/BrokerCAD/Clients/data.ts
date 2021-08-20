@@ -2,7 +2,7 @@ import { AccountState } from '@thecointech/account';
 import { AnyAction, BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import { FXRate, weBuyAt } from "@thecointech/fx-rates";
 import { getSigner } from '@thecointech/signers';
-import { eTransferData, fetchETransfers } from '@thecointech/tx-gmail';
+import gmail, { eTransferData } from '@thecointech/tx-gmail';
 import { Decimal } from 'decimal.js-light';
 
 export type UserData = {
@@ -15,7 +15,6 @@ export type UserData = {
   balanceCoin: Decimal;
   balanceCad: Decimal;
 };
-export type AllDataArray = UserData[];
 
 function findName(address: string, etransfers: eTransferData[]) {
   return etransfers.find(et => et.address === address)?.name
@@ -38,7 +37,7 @@ async function getUsers(emails: eTransferData[], account: AccountState) {
 }
 
 export async function getAllUserData(rates: FXRate[], account: AccountState) {
-  const etransfers = await fetchETransfers();
+  const etransfers = await gmail.queryETransfers();
   // Get all users logged in the database
   const users = await getUsers(etransfers, account);
 
@@ -60,7 +59,7 @@ export async function getAllUserData(rates: FXRate[], account: AccountState) {
       balanceCoin: new Decimal(balances[idx].toNumber()),
       balanceCad: new Decimal(balances[idx].toNumber()).mul(weBuyAt(rates, now))
     }
-  ]), [] as AllDataArray)
+  ]), [] as UserData[])
 }
 
 

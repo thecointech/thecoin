@@ -1,15 +1,14 @@
-import { fetchNewDepositEmails } from './index'
-
-// Don't go to the server for this
-jest.mock('./auth')
+import fns from './index_mocked';
+import { queryNewDepositEmails } from './query'
 
 beforeAll(async () => {
   const timeout = 30 * 60 * 1000;
   jest.setTimeout(timeout);
+  await fns.initialize();
 });
 
 it('Can fetch new emails (mocked)', async () => {
-  const deposits = await fetchNewDepositEmails();
+  const deposits = await queryNewDepositEmails();
   expect(deposits).not.toBeUndefined();
   // ensure these are all test emails;
   expect(deposits.map(d => d.name)).toEqual(['Not found', 'Not found', 'Some Person', 'Not found']);

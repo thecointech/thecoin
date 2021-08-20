@@ -3,6 +3,6 @@
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
     { "path": "../../libs/email/tsconfig.build.json" },
-    { "path": "../../libs/tx-processing/tsconfig.build.json" },
+    { "path": "../../libs/tx-etransfer/tsconfig.build.json" },
   ]
 }
