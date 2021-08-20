@@ -1,6 +1,7 @@
 {
   "projects": {
     "prodtest": "tccc-testing",
+    "prodbeta": "tccc-beta",
     "prod": "tccc-release"
   },
   "targets": {
@@ -8,6 +9,13 @@
       "hosting": {
         "landing": [
           "tccc-testing-landing"
+        ]
+      }
+    },
+    "tccc-beta": {
+      "hosting": {
+        "app": [
+          "tccc-beta-app"
         ]
       }
     },
