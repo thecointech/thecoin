@@ -9,10 +9,5 @@
     "baseUrl": "./src/",
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../../libs/shared/tsconfig.build.json" },
-    { "path": "../../libs/tx-reconciliation/tsconfig.build.json" },
-    { "path": "../../libs/tx-processing/tsconfig.build.json" }
-  ]
+  "include": ["src/**/*"]
 }

@@ -31,14 +31,14 @@
     "forge": "./config.forge.js"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.58",
-    "@electron-forge/maker-deb": "^6.0.0-beta.58",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.58",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.58",
-    "@electron-forge/maker-zip": "^6.0.0-beta.58",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.58",
+    "@electron-forge/cli": "6.0.0-beta.59",
+    "@electron-forge/maker-deb": "6.0.0-beta.59",
+    "@electron-forge/maker-rpm": "6.0.0-beta.59",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.59",
+    "@electron-forge/maker-zip": "6.0.0-beta.59",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.59",
     "@vercel/webpack-asset-relocator-loader": "1.6.0",
-    "electron": "13.1.7",
+    "electron": "13.1.8",
     "electron-devtools-installer": "^3.2.0",
     "node-loader": "^2.0.0"
   },

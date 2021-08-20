@@ -1,4 +1,4 @@
-import { fetchETransfers } from '@thecointech/tx-gmail';
+import gmail from '@thecointech/tx-gmail';
 import { getAllActions, getAllUsers } from "@thecointech/broker-db";
 import { RbcApi } from '@thecointech/rbcapi';
 import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
@@ -31,7 +31,7 @@ export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
 }
 
 async function fetchAndCleanETransfers() {
-  const eTransfers = await fetchETransfers();
+  const eTransfers = await gmail.queryETransfers();
   return eTransfers.map(et => ({
     ...et,
     address: NormalizeAddress(et.address)

@@ -1,8 +1,9 @@
 import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore';
 import { GetContract } from '@thecointech/contract';
-import { getCurrentState } from '@thecointech/tx-processing';
+import { getCurrentState } from '@thecointech/tx-statemachine';
 import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
+import gmail from '@thecointech/tx-gmail';
 import { log } from '@thecointech/logging';
 
 jest.setTimeout(900000);
@@ -10,6 +11,7 @@ jest.setTimeout(900000);
 it("Can complete deposits", async () => {
 
   init({});
+  await gmail.initialize();
   const error = jest.spyOn(log, 'error').mockImplementation();
 
   const theContract = await GetContract();
