@@ -2,10 +2,12 @@ TheCoin is (currently) a series of micro-services connected together.
 
 ## System setup require prior to deployment
 
-Each deployment app (rates/broker/site/nft) needs a GAE configuration.  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
+Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
-There needs to be a configuration for every deployment target.  That means that there could be a configuration for each of app/site/service/nft, multiplied by prod / prodtesting.  In practive, a lot of projects use the same configuration (eg site-landing/site-app/brokerCAD).
+#### Caveate BETA|PROD:
+Unfortunately, we cannot specify a version using configs on GAE.   This means we cannot destinguish between beta/prod using this technique.  We work around this by forwarding on the arguments in the deploy command.  TODO: How do we differentiate versions in websites?
 
+#### Selecting the right Config when deploying an app.
 The configuration name to switch to when deploying an app should be set in the .env file.  This is how we send prodtest to `tc-nft-testing`, and prod to `tc-nft` using the same deploy command.  Eg, if you create a config for deploying rates-service to the prodtest project, in the prodtest file set:
 
 `GCLOUD_RATES_CONFIG=rates-testing`
@@ -16,6 +18,8 @@ In the deployment script for rates-service, there is a setup call to `SetGCloudC
 Because the app/landing websites are a pair, they are hosted under the same project.  This means these sites also have a connection in their `.firebaserc` files to specify which app in the hosting they deploy to.
 
 The NFT site does not have this connection because it is a stand-alone website.
+
+
 
 ## Building
 
