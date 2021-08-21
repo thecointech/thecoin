@@ -25,6 +25,12 @@ function getEnvFile(cfgName) {
 
 require('dotenv').config({path: getEnvFile()});
 
+// Our CONFIG_ENV is the CONFIG_NAME without a beta.
+// This is mostly to give us an env variable that drops
+// the 'beta' tag so it can be beta-agnostic
+// (ie - for contract address etc.)
+process.env.CONFIG_ENV = process.env.CONFIG_NAME.match(/(.*)beta/)?.[1] ?? process.env.CONFIG_NAME
+
 //  Set default name for logging
 if (!process.env.LOG_NAME) {
   const projectRoot = process.cwd();
