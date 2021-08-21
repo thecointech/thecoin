@@ -10,12 +10,17 @@
       "conventionalCommits": true,
       "message": "chore(release): publish",
       "registry": "https://npm.pkg.github.com",
-      "allowBranch": "master"
+      "allowBranch": [
+        "publish/beta",
+        "publish/release",
+        "dev"
+      ]
     },
     "version": {
       "noChangelog": true,
       "allowBranch": [
-        "release",
+        "publish/beta",
+        "publish/release",
         "dev"
       ],
       "ignoreChanges": [
