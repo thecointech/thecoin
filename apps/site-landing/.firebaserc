@@ -14,8 +14,8 @@
     },
     "tccc-beta": {
       "hosting": {
-        "app": [
-          "tccc-beta-app"
+        "landing": [
+          "tccc-beta"
         ]
       }
     },
