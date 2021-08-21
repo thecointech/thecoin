@@ -55,5 +55,5 @@
     "@types/puppeteer": "^2.0.1",
     "jest": "*"
   },
-  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
+  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }
