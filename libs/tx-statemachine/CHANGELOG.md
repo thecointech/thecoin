@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.18](https://github.com/thecointech/thecoin/compare/v0.2.17...v0.2.18) (2021-08-21)
 
-**Note:** Version bump only for package @thecointech/fx-rates
-
-
-
-
-
-## [0.2.17](https://github.com/thecointech/thecoin/compare/v0.2.16...v0.2.17) (2021-07-17)
-
-**Note:** Version bump only for package @thecointech/fx-rates
+**Note:** Version bump only for package @thecointech/tx-statemachine

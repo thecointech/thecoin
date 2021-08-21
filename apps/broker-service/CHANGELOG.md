@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.18](https://github.com/thecointech/thecoin/compare/v0.2.17...v0.2.18) (2021-08-21)
+
+
+### Bug Fixes
+
+* apps/broker-service/package.json to reduce vulnerabilities ([0f7df28](https://github.com/thecointech/thecoin/commit/0f7df2851e0a2b1891e08e8d02037f2510dcce4c))
+
+
+
+
+
 ## [0.2.17](https://github.com/thecointech/thecoin/compare/v0.2.16...v0.2.17) (2021-07-17)
 
 **Note:** Version bump only for package @thecointech/broker-service
