@@ -2,7 +2,7 @@
   "name": "@thecointech/site-landing",
   "productName": "THECoin: Website - Landing",
   "private": true,
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
