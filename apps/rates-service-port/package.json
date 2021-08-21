@@ -1,10 +1,10 @@
 {
   "name": "@thecointech/rates-service-port",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@thecointech/rates-service": "^0.2.20"
+    "@thecointech/rates-service": "^0.2.21"
   },
   "scripts": {
     "dev": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9235 -r ts-node/register ./src/main.ts",
