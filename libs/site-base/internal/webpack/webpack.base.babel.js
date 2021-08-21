@@ -12,6 +12,8 @@ const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
 const dotenv = require('dotenv').config({ path: getEnvFile() });
 
+console.log(`Building ${dotenv.parsed.CONFIG_NAME} site`);
+
 module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
   externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
