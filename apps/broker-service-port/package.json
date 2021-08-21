@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/broker-service-port",
   "version": "0.2.18",
+  "private": true,
   "license": "MIT",
   "dependencies": {
     "@thecointech/broker-service": "^0.2.18"
@@ -12,5 +13,6 @@
     "start": "node -r dotenv/config ./build/index.js",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build"
-  }
+  },
+  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }
