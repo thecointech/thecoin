@@ -1,9 +1,9 @@
 {
   "name": "@thecointech/broker-service-port",
-  "version": "0.2.0",
+  "version": "0.2.18",
   "license": "MIT",
   "dependencies": {
-    "@thecointech/broker-service": "*"
+    "@thecointech/broker-service": "^0.2.18"
   },
   "scripts": {
     "dev": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9234 -r ts-node/register ./src/main.ts",

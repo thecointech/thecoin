@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.18](https://github.com/thecointech/thecoin/compare/v0.2.17...v0.2.18) (2021-08-21)
+
+
+### Bug Fixes
+
+* libs/logging/package.json to reduce vulnerabilities ([2573157](https://github.com/thecointech/thecoin/commit/2573157cab17d50010378d9ce37a694917056bad))
+
+
+
+
+
 ## [0.2.16](https://github.com/thecointech/thecoin/compare/v0.2.15...v0.2.16) (2021-07-16)
 
 **Note:** Version bump only for package @thecointech/logging
