@@ -43,14 +43,16 @@ Environments:
     * production accounts
     * mainnet ethereum connection (TODO: gas prices are prohibitive.  We will remain on ropsten until EthV2)
     * public, but not default traffic.
-    * Deployment: merge to 'release'
-    * THIS ONLY APPLIES TO THE WEBSITES - NO 'BETA' SERVICE DEPLOYMENTS
+    * Deployment:  Currently - manual.  TODO: merge to 'release'
+
  - prod
     *env: NODE_ENV=production, SETTINGS: release*
     Once prod:staging has been tested & verified, we update default version
     on GAE to direct public traffic to this version.  No actual deployment happens
     Reverting an update happens by moving live version back one step.
     * Deployment: yarn script to update all versions to latest.
+
+NOTE: All environments also have a variable CONFIG_ENV, which is just CONFIG_NAME with 'beta' stripped.  It's purpose is to have a variable that is beta-agnostic for targetting contract/IDX files.
 
 How it works:
 

@@ -10,11 +10,11 @@ const getAbi = () => {
 const getContractAddress = () => {
   console.log(`Loading NFT contract for: ${process.env.CONFIG_NAME}`);
   try {
-    const deployment = require(`./deployed/${process.env.CONFIG_NAME}.json`);
+    const deployment = require(`./deployed/${process.env.CONFIG_ENV}.json`);
     console.log('Loaded succesfully');
     return deployment.contract;
   } catch (err) {
-    console.error(`We failed to load ./deployed/${process.env.CONFIG_NAME}.json`)
+    console.error(`We failed to load ./deployed/${process.env.CONFIG_ENV}.json`)
     throw new Error('Cannot create contract: missing deployment');
   }
 }
@@ -38,6 +38,6 @@ export function getContract(): TheCoinNFT {
 //
 // A simple workaround to force the TS compiler to copy the file
 export async function forceCompilerToCopyFile() {
-  const deployment = await import(`./deployed/${process.env.CONFIG_NAME}.json`);
+  const deployment = await import(`./deployed/${process.env.CONFIG_ENV}.json`);
   return deployment.contract;
 }
