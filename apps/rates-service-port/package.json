@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service-port",
-  "version": "0.27.0",
+  "version": "0.2.0",
   "license": "MIT",
   "dependencies": {
     "@thecointech/rates-service": "*"
