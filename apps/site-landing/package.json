@@ -2,7 +2,7 @@
   "name": "@thecointech/site-landing",
   "productName": "THECoin: Website - Landing",
   "private": true,
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -55,7 +55,7 @@
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
     "@thecointech/shared": "^0.2.19",
-    "@thecointech/site-base": "^0.2.19",
+    "@thecointech/site-base": "^0.2.20",
     "@thecointech/utilities": "^0.2.19",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
