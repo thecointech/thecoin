@@ -46,7 +46,7 @@ switch (process.env.CONFIG_NAME) {
     // If running in dev mode, use all available mocks
     //
     console.warn('--- Injecting All TC mocks ---');
-    useAllMocks(true);
+    useAllMocks();
     break;
   case 'devlive':
     //
