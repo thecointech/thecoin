@@ -20,7 +20,7 @@
     "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9233 -r ts-node/register ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
-    "deploy": "ts-node --skip-project predeploy",
+    "deploy": "ts-node --skip-project deploy",
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "run-p clean:*",
