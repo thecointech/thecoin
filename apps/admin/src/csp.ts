@@ -1,6 +1,8 @@
 
 const connectRates = new URL(process.env.URL_SERVICE_RATES ?? "https://localhost").origin
-const connectInfura =  `https://${process.env.DEPLOY_NETWORK}.infura.io`;
+const connectInfura = process.env.CONFIG_NAME == "devlive"
+  ? `http://localhost:*`
+  : `https://${process.env.DEPLOY_NETWORK}.infura.io`;
 const connectFirestore = "https://firestore.googleapis.com"
 const appCSP = `
   default-src 'self';

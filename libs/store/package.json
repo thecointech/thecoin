@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store",
-  "version": "0.2.16",
+  "version": "0.2.19",
   "description": "The Coin: Base storage mechanisms",
   "keywords": [
     "TheCoin",
@@ -36,7 +36,7 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.16",
+    "@thecointech/logging": "^0.2.19",
     "pouchdb": "*",
     "pouchdb-upsert": "*"
   },
@@ -44,5 +44,5 @@
     "jest": "*",
     "pouchdb-adapter-memory": "*"
   },
-  "gitHead": "885bf5d14f5abada699fdbc469387e9892f2dbaf"
+  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

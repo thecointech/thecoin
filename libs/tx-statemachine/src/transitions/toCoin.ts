@@ -13,7 +13,7 @@ type Converter = (v: Decimal, rate: FXRate) => Decimal;
 export function toCoin(container: AnyActionContainer) {
   return doConversion(container, "fiat", "coin", (val, rate) =>
     toCoinDecimal(val
-      .div(rate.fxRate * rate.buy)
+      .div(rate.fxRate * rate.sell) // the rate we sell at
     ))
 };
 
@@ -22,7 +22,7 @@ export function toCoin(container: AnyActionContainer) {
 export function toFiat(container: AnyActionContainer) {
   return doConversion(container, "coin", "fiat", (val, rate) =>
     toHumanDecimal(val
-      .mul(rate.fxRate * rate.sell))
+      .mul(rate.fxRate * rate.buy)) // the rate we buy at
     );
 }
 

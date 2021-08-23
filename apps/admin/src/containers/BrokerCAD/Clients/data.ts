@@ -51,7 +51,7 @@ export async function getAllUserData(rates: FXRate[], account: AccountState) {
     ...acc,
     {
       address: user,
-      name: findName(user, etransfers) ?? "NOT FOUND",
+      name: findName(user, etransfers) ?? user,
       buy: data.Buy[user],
       sell: data.Sell[user],
       bill: data.Bill[user],

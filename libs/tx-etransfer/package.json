@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-etransfer",
-  "version": "0.2.17",
+  "version": "0.2.19",
   "description": "The Coin: A library for processing eTransfer withdrawals",
   "keywords": [
     "THECoin"
@@ -27,10 +27,11 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/tx-statemachine": "^0.2.17",
-    "@thecointech/rbcapi": "^0.2.17"
+    "@thecointech/rbcapi": "^0.2.19",
+    "@thecointech/tx-statemachine": "^0.2.19"
   },
   "devDependencies": {
     "jest": "*"
-  }
+  },
+  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

@@ -1,6 +1,7 @@
 {
   "projects": {
     "prodtest": "tc-nft-testing",
-    "prod": "tccc-release"
+    "prodbeta": "tc-nft",
+    "prod": "tc-nft"
   }
 }

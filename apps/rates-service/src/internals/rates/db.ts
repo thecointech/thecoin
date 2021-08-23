@@ -62,9 +62,9 @@ export async function getRate(key: RateKey, ts: number) : Promise<RateType|null>
 
   const candidate = toRateType(snapshot.docs[0].data())
   // If we have ts, ensure that our entry is not too late
-  if (ts && candidate.validFrom > ts)
-    return null;
-
+  if (ts && candidate.validFrom > ts) {
+    log.error(`Warning: Cannot find valid entry for ${new Date(ts)}`);
+  }
   return candidate;
 }
 

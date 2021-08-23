@@ -7,27 +7,19 @@
 
 const Module = require('module').Module;
 
-function mockAll() {
-  var nodeModulePaths = Module._nodeModulePaths; //backup the original method
-  Module._nodeModulePaths = (from) => {
-    // call the original method
-    const original = nodeModulePaths.call(this, from);
-    // No circular loop - don't re-import from mocks from within mocks
-    return from.includes('__mocks__')
-      ? original
-      : [
-        __dirname,
-        ...original,
-      ]
-  };
-}
-
-function enhancedModuleResolve(...modules) {
+//
+// Allows using CONFIG_NAME-specific implementations returned
+// from packages, and can also include mocks from __mocks__ for
+// specified modules
+//
+function enhancedModuleResolve(useAllMocks, ...modules) {
   // NOTE: __dirname is where I keep some external mocks
   const resolver = require('enhanced-resolve').create.sync({
       conditionNames: [process.env.CONFIG_NAME, 'require', 'node', 'default'],
       extensions: ['.js', '.json', '.node', '.ts', '.tsx'],
-      modules: [__dirname, 'node_modules'],
+      modules: useAllMocks
+        ? [__dirname, 'node_modules']
+        : ['node_modules']
     })
 
   // NOTE: If we redirect all resolutions, breakpoints stop working
@@ -36,11 +28,14 @@ function enhancedModuleResolve(...modules) {
   const toResolve = ['@thecointech', ...modules]
   const oldResolve = Module._resolveFilename
   Module._resolveFilename = (request, parent, isMain) => {
-    return toResolve.find(m => request.startsWith(m))//paths
+    return (toResolve.length == 0 || toResolve.find(m => request.startsWith(m)))//paths
       ? resolver(parent.path, request)
       : oldResolve(request, parent, isMain)
   }
 }
+
+const useAllMocks = () => enhancedModuleResolve(true);
+const useSomeMocks = (...modules) => enhancedModuleResolve(false, ...modules);
 
 ////////////////////////////////////////////////////////////////
 
@@ -51,18 +46,22 @@ switch (process.env.CONFIG_NAME) {
     // If running in dev mode, use all available mocks
     //
     console.warn('--- Injecting All TC mocks ---');
-    mockAll();
-    enhancedModuleResolve();
+    useAllMocks();
     break;
   case 'devlive':
     //
     // Dev live is internally connected, but all external connections are mocked
     //
     console.warn('--- Injecting external TC mocks ---');
-    enhancedModuleResolve("googleapis", "google-auth-library");
+    useSomeMocks("googleapis", "google-auth-library");
     break;
   default:
-    enhancedModuleResolve();
+    //
+    // Production environments only use config-specific mocks
+    // (namely, signers/rbcapi in prodtest)
+    //
+    console.warn(`--- Injecting ${process.env.CONFIG_NAME}-specific implementations ---`);
+    useSomeMocks();
     break;
 }
 
