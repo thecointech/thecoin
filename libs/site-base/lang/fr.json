@@ -15,9 +15,17 @@
     "defaultMessage": "Est-ce que c'est ce que vous vouliez dire ?",
     "description": "app.account.connect.create.checkHeader"
   },
+  "0p1d80": {
+    "defaultMessage": "Allez à ce compte",
+    "description": "AccountsList button to go to account"
+  },
   "1jWSoJ": {
     "defaultMessage": "Ou, vous pouvez créer un tout nouveau compte !",
     "description": "app.account.connect.create.createTransfer"
+  },  
+  "1jxvsD": {
+    "defaultMessage": "Vous pouvez également vous connecter à votre compte TheCoin en utilisant un compte Ethereum existant.",
+    "description": "app.account.create.ethereum: link redirect people to connect their existing eth account"
   },
   "3hZCNt": {
     "defaultMessage": "Vous n'avez pas de compte ?",
@@ -170,6 +178,10 @@
   "S+5i+u": {
     "defaultMessage": "Le navigateur Opera que vous utilisez est livré avec un compte intégré compatible avec TheCoin. Souhaitez-vous vous y connecter ?",
     "description": "app.account.connect.create.checkMessageOpera"
+  },  
+  "S3XtB5": {
+    "defaultMessage": "Comptes dans votre Google Drive",
+    "description": "The main title for the restore account page"
   },
   "SLaqzP": {
     "defaultMessage": "Assurez votre sécurité",
@@ -375,6 +387,10 @@
   "tvmNSG": {
     "defaultMessage": "Un compte portant ce nom existe déjà ici.",
     "description": "app.addAccount.newbaseclass.errorNameDuplicate"
+  },
+  "uPhkBo": {
+    "defaultMessage": "Vous pouvez créer un nouveau compte TheCoin en utilisant un compte Ethereum existant.",
+    "description": "app.account.create.ethereum: link redirect people to connect their existing eth account"
   },
   "vN4JT+": {
     "defaultMessage": "Ne donnez jamais votre mot de passe à qui que ce soit.",

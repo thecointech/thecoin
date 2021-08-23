@@ -1,7 +1,6 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
-import { isWeb3Enabled } from '@thecointech/shared/utils/detection';
+import { Link, NavLink } from 'react-router-dom';
 import styles from './styles.module.less';
 import { Decoration } from '../Decoration';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -23,21 +22,17 @@ const translations = defineMessages({
       description: 'app.account.create.button.newAccount: Button redirect people to create a new account on the let\'s get started page'},
   buttonAccount : {
       defaultMessage: 'I already have an Account',
-      description: 'app.account.create.button.account: Button redirect people to connect their existing account on the let\'s get started page'}
+      description: 'app.account.create.button.account: Button redirect people to connect their existing account on the let\'s get started page'},
+  ethereumExistingAccount : {
+      defaultMessage: 'You can also log into your TheCoin account using an existing Ethereum account.',
+      description: 'app.account.create.ethereum: link redirect people to connect their existing eth account'},
+  ethereumNewAccount : {
+      defaultMessage: 'You can create a new TheCoin account using an existing Ethereum account.',
+      description: 'app.account.create.ethereum: link redirect people to connect their existing eth account'}
 });
 
 export const CreateExistingSwitch = (props: Props) => {
-
   const {url} = props;
-  const doConnect = isWeb3Enabled();
-  const createUrl = doConnect
-    ? `${url}connect/create`
-    : `${url}generate/intro`
-
-  const existingUrl = doConnect
-    ? `${url}connect/exist`
-    : `${url}restore/`
-
   return (
     <>
       <div id={ `${styles.buttonsContainer}` }>
@@ -47,13 +42,23 @@ export const CreateExistingSwitch = (props: Props) => {
         <Header as="h1" className={` x12spaceAfter`}>
           <FormattedMessage {...translations.title} />
         </Header>
-        <ButtonPrimary as={NavLink} to={createUrl} className={styles.button}>
+        <ButtonPrimary as={NavLink} to={`${url}generate/intro`} className={styles.button}>
           <FormattedMessage {...translations.buttonNewAccount} />
         </ButtonPrimary>
         <Divider horizontal>Or</Divider>
-        <ButtonSecondary as={NavLink} to={existingUrl} className={styles.button}>
+        <ButtonSecondary as={NavLink} to={`${url}restore/`} className={styles.button}>
           <FormattedMessage {...translations.buttonAccount} />
         </ButtonSecondary>
+        <div className={`x8spaceBefore`}>
+            <Link className={styles.linkEthereum} to={`${url}connect/create`}>
+              <FormattedMessage {...translations.ethereumNewAccount} />
+            </Link>
+        </div>
+        <div>
+            <Link className={styles.linkEthereum} to={`${url}connect/exist`}>
+              <FormattedMessage {...translations.ethereumExistingAccount} />
+            </Link>
+        </div>
       </div>
       <Decoration />
     </>
