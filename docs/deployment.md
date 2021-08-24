@@ -2,6 +2,8 @@ TheCoin is (currently) a series of micro-services connected together.
 
 ## System setup require prior to deployment
 
+Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
+
 Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
 #### Caveate BETA|PROD:
