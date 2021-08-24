@@ -8,10 +8,10 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "prebuild": "rimraf ./build",
-    "build": "run-s build:imgs build:src",
-    "build:imgs": "ts-node --skip-project buildimgs",
-    "build:src": "webpack --mode production",
-    "pre_deploy": "yarn build",
+    "_build": "run-s build:imgs build:src",
+    "_build:imgs": "ts-node --skip-project buildimgs",
+    "_build:src": "webpack --mode production",
+    "pre_deploy": "yarn _build",
     "_deploy": "ts-node --skip-project deploy"
   }
 }
