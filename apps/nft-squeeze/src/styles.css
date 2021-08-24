@@ -138,6 +138,10 @@ button:hover{
   top: 17%;
 }
 
+.learn-more {
+  font-size: smaller;
+}
+
 @keyframes autoplay1 {
   0% {visibility: visible}
   33.33% {visibility: hidden}
@@ -156,6 +160,9 @@ button:hover{
   }
   .illustration{
     display: none;
+  }
+  p{
+    font-size: 16px;
   }
   #mailjet-frame-container {
     height: 200px;
