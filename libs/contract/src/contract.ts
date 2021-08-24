@@ -13,8 +13,9 @@ export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 
 
 const getAbi = () => TheCoinSpec.abi;
 
+const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
 const getContractAddress = () => {
-  const deployment = require(`./deployed/${process.env.CONFIG_ENV}.json`);
+  const deployment = require(`./deployed/${config_env}.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
