@@ -7,14 +7,15 @@ const getAbi = () => {
   return TheCoinNFTSpec.abi;
 }
 
+const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
 const getContractAddress = () => {
-  console.log(`Loading NFT contract for: ${process.env.CONFIG_NAME}`);
+  console.log(`Loading NFT contract for: ${config_env}`);
   try {
-    const deployment = require(`./deployed/${process.env.CONFIG_ENV}.json`);
+    const deployment = require(`./deployed/${config_env}.json`);
     console.log('Loaded succesfully');
     return deployment.contract;
   } catch (err) {
-    console.error(`We failed to load ./deployed/${process.env.CONFIG_ENV}.json`)
+    console.error(`We failed to load ./deployed/${config_env}.json`)
     throw new Error('Cannot create contract: missing deployment');
   }
 }
@@ -33,11 +34,4 @@ declare module globalThis {
 export function getContract(): TheCoinNFT {
   globalThis.__contractNFT = globalThis.__contractNFT ?? buildContract();
   return globalThis.__contractNFT!;
-}
-
-//
-// A simple workaround to force the TS compiler to copy the file
-export async function forceCompilerToCopyFile() {
-  const deployment = await import(`./deployed/${process.env.CONFIG_ENV}.json`);
-  return deployment.contract;
 }
