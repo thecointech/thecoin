@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const { getEnvFile } = require('../../tools/setenv')
 const dotenv = require('dotenv').config({ path: getEnvFile() });
+const { merge } = require("webpack-merge")
+const mockOptions = require('./webpack.mocks');
 
-module.exports = {
+const baseOptions = {
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
@@ -23,3 +25,6 @@ module.exports = {
   ],
   performance: { hints: false }
 };
+
+
+module.exports = merge(mockOptions, baseOptions);

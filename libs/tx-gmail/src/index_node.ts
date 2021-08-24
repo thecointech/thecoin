@@ -14,7 +14,7 @@ const fns: functions = {
     auth.setCredentials(credentials);
 
     if (!credentials || !isValid(auth)) {
-      log.fatal(`Cannot run tx-gmail without auth: credentials ${credentials}`)
+      log.fatal(`Cannot run tx-gmail without auth: credentials ${JSON.stringify(credentials)}`)
       throw new Error("NoAuth");
     }
 

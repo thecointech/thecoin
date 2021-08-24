@@ -1,8 +1,10 @@
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
+const mockOptions = require('./webpack.mocks');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 const { merge } = require("webpack-merge")
 const path = require('path');
+
 
 rules.push(
   // Default CSS processing (anything not named *.module.css)
@@ -19,11 +21,6 @@ rules.push(
     type: 'asset'
   },
 );
-
-// In development mode, we mock most external libraries
-const mockOptions = process.env.NODE_ENV !== 'production'
-  ? require('../../__mocks__/mock_webpack')
-  : {};
 
 const baseOptions = {
   mode: process.env.NODE_ENV,

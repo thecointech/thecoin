@@ -32,6 +32,7 @@
     "dev:live:bootstrap": "yarn wait-port 7007 && yarn idx bootstrap && ts-node --skip-project ./tools/bootstrapIdx.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prodbeta": "cross-env CONFIG_NAME=prodbeta yarn _deploy",
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
     "pre_deploy": "run-s check-changes build:all",
     "_deploy": "run-s _deploy:lib _deploy:app",

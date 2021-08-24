@@ -1,12 +1,11 @@
 import { validateAction } from './CertifiedActionVerify';
 import { CertifiedTransfer } from '@thecointech/types';
-import { createAction } from '@thecointech/broker-db/transaction';
-import { DateTime } from 'luxon';
-import { Processor } from "@thecointech/tx-etransfer";
+import { Processor, getSellAction } from "@thecointech/tx-etransfer";
 import { GetContract } from './Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
+import { DateTime } from 'luxon';
 
 export async function  ProcessSale(sale: CertifiedTransfer) {
   const user = sale.transfer.from;
@@ -15,11 +14,7 @@ export async function  ProcessSale(sale: CertifiedTransfer) {
   await validateAction(sale);
 
   // First, create/register the action
-  const action = await createAction(user, "Sell", {
-    initial: sale,
-    date: DateTime.now(),
-    initialId: sale.signature
-  })
+  const action = await getSellAction(sale, DateTime.now());
 
   // Process the sale
   const contract = await GetContract();

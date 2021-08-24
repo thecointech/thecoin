@@ -1,8 +1,10 @@
 import { getEnvFile } from "./setenv";
-import { exec } from "child_process";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from 'path';
+import { spawn } from 'child_process';
+import { promisify } from 'util';
+const exec = promisify(require('child_process').exec);
 
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
 
@@ -30,6 +32,13 @@ export function SetGCloudConfig(envName: string) {
 // Requires there be a matching profile defined in firebase.json
 export function FirebaseUseEnv() {
   return ShellCmd(`firebase use ${process.env.CONFIG_NAME}`)
+}
+
+export function gCloudDeploy() {
+  const deploy = (process.env.SETTINGS == 'beta')
+    ? "gcloud app deploy --version=beta --no-promote"
+    : "gcloud app deploy"
+  return ShellCmd(deploy);
 }
 
 export async function copyEnvVarsLocal(outYamlFile: string) {
@@ -66,25 +75,42 @@ export async function copyNpmTokenHere(folder: string) {
   return "NPM token copied here";
 }
 
-function ShellCmd(cmd: string) {
-  return new Promise<string>((resolve) => {
-    exec(cmd, (error, stdout, stderr) => {
-      if (error) {
-        console.error(error.message);
-        console.log(stdout);
-        exit(1);
+//
+// Remove old versions of the currently selected service
+// Will leave 2 versions in prodtest, and 4 in prod
+export async function removeOldAppVersions() {
+  const { stdout } = await exec(`gcloud app versions list --format="value(version.id)" --sort-by="~version.createTime"`);
+  // How many versions do we want to keep?
+  const numToKeep = process.env.CONFIG_NAME == "prodtest"
+    ? 2
+    : 4;
+  const versions = stdout
+    .split('\n')
+    .filter(v => v.length);
+
+  const numVersions = versions.length;
+  if (numVersions > numToKeep) {
+    const versionArg = versions.slice(numToKeep).join(' ');
+    console.log(`Deleting ${numVersions} versions: ${versionArg}`);
+    await exec(`gcloud app versions delete ${versionArg} --quiet`)
+  }
+  else {
+    console.log(`Not deleting old versions: only ${numVersions} of ${numToKeep} available`);
+  }
+}
+
+
+export function ShellCmd(cmd: string, args: string[]=[]) {
+  console.log("Running: " + cmd);
+  return new Promise<void>((resolve) => {
+    const proc = spawn(cmd, args, { shell: true, stdio: 'inherit' });
+    proc.on('exit', function (code) {
+      if (code == 0)
+        resolve();
+      else {
+        console.error(`Exit code: ${code}`);
+        exit(code);
       }
-      if (stderr) {
-        resolve(stderr);
-        return;
-      }
-      resolve(stdout);
     });
   })
 }
-
-// // print process.argv
-// Consider removing custom scripts in favour of just calling this one.
-// process.argv.forEach(function (val, index, array) {
-//   console.log(index + ': ' + val);
-// });

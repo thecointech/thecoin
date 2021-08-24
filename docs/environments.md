@@ -32,24 +32,27 @@ Environments:
     * testnet (ropsten) ethereum connection, live IDX/rates etc
     * Deployment: merge to 'dev'
     * (?) periodically new contract, with data duplicated from back live contract
- - prod:next
-    *env: NODE_ENV=production, SETTINGS: release*
+ - prod:beta
+    *env: NODE_ENV=production, SETTINGS: beta*
     System-wide deployment to projects in GAE.  Automatically
     deployed on merge to 'main'.  Live data with live $$$.
     Used to do final sanity check before enabling live traffic.
-    Identical code to what runs live.  Restricted(?s) access.
+    Mostly-identical code, with additional logging.  Unrestricted access.
     * full data persistence
     * live system, identical to prod
     * production accounts
     * mainnet ethereum connection (TODO: gas prices are prohibitive.  We will remain on ropsten until EthV2)
     * public, but not default traffic.
-    * Deployment: merge to 'release'
+    * Deployment:  Currently - manual.  TODO: merge to 'release'
+
  - prod
     *env: NODE_ENV=production, SETTINGS: release*
     Once prod:staging has been tested & verified, we update default version
     on GAE to direct public traffic to this version.  No actual deployment happens
     Reverting an update happens by moving live version back one step.
     * Deployment: yarn script to update all versions to latest.
+
+NOTE: All environments also have a variable CONFIG_ENV, which is just CONFIG_NAME with 'beta' stripped.  It's purpose is to have a variable that is beta-agnostic for targetting contract/IDX files.
 
 How it works:
 

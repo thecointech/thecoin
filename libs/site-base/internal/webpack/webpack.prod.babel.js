@@ -3,7 +3,6 @@ const path = require('path');
 const { merge } = require("webpack-merge")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
-const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 const baseOptions = require('./webpack.base.babel');
@@ -24,23 +23,6 @@ const prodOptions = {
 
   optimization: {
     minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          warnings: false,
-          compress: {
-            comparisons: false,
-          },
-          parse: {},
-          mangle: true,
-          output: {
-            comments: false,
-            ascii_only: true,
-          },
-        },
-        parallel: true,
-      }),
-    ],
     nodeEnv: 'production',
     sideEffects: true,
     concatenateModules: true,
