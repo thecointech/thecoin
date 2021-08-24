@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "description": "THECoin NFT: some neat tagline",
   "author": "Marie Goursalas",
-  "license": "GPL",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "prebuild": "rimraf ./build",
     "build": "run-s build:imgs build:src",
