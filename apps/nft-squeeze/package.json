@@ -1,0 +1,16 @@
+{
+  "name": "@thecointech/site-nft-squeeze",
+  "productName": "THECoin: NFT Squeeze",
+  "private": true,
+  "version": "0.1.0",
+  "description": "THECoin NFT: some neat tagline",
+  "author": "Marie Goursalas",
+  "license": "GPL",
+  "scripts": {
+    "prebuild": "rimraf ./build",
+    "build": "run-s build:imgs build:src",
+    "build:imgs": "ts-node --skip-project buildimgs",
+    "build:src": "webpack --mode production",
+    "start": "yarn http-server ./build"
+  }
+}
