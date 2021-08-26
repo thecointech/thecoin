@@ -16,7 +16,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn dev",
-    "start": "yarn build && cross-env CONFIG_NAME=prod node --inspect ./build/main.js",
+    "start": "yarn build && cross-env CONFIG_NAME=prod node ./build/main.js",
     "test": "jest --coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
