@@ -28,9 +28,15 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
-      "prodtest": "./build/index_prodtest.js",
-      "node": "./build/index_node.js",
-      "browser": "./build/index_devlive.js"
+      "browser": {
+        "default": "./build/names.js"
+      },
+      "node": {
+        "prodtest": "./build/index_prodtest.js",
+        "prodbeta": "./build/index_prod.js",
+        "prod": "./build/index_prod.js",
+        "default": "./build/index_node.js"
+      }
     }
   },
   "types": "./build/index_node.d.ts",

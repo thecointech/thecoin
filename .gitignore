@@ -73,3 +73,4 @@ apps/site-landing/src/translations/en.json
 apps/site-landing/src/translations/fr.json
 
 
+apps/tx-processor/run_service.cmd
