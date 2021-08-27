@@ -1,8 +1,12 @@
 const { basename, join } = require('path');
 const { existsSync } = require('fs');
+const de = require('dotenv')
+
+const projectRoot = process.cwd();
+LOG_NAME = basename(projectRoot);
 
 function getEnvFiles(cfgName) {
-  const filename = cfgName || process.env.CONFIG_NAME || (
+  const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
       ? "prod"
       : "development"
@@ -11,12 +15,12 @@ function getEnvFiles(cfgName) {
   // Does the user have files on the system
   const systemFolder = process.env.THECOIN_ENVIRONMENTS;
   if (systemFolder) {
-    const systemFile = join(systemFolder, `${filename}.private.env`);
+    const systemFile = join(systemFolder, `${envName}.private.env`);
     if (existsSync(systemFile)) files.push(systemFile);
   }
 
   // If none found, is there any in the local repo folder?
-  const repoFile = join(__dirname, '..', 'environments', `${filename}.public.env`);
+  const repoFile = join(__dirname, '..', 'environments', `${envName}.public.env`);
   if (existsSync(repoFile)) files.push(repoFile);
 
 
@@ -26,24 +30,39 @@ function getEnvFiles(cfgName) {
   }
 
   // Beta versions share a lot with non-beta environments, so we merge them together
-  if (filename.endsWith("beta")) {
-    const nonBeta = getEnvFiles(cfgName.slice(0, -4))
-    files.push(...getEnvFiles(nonBeta))
+  if (envName.endsWith("beta")) {
+    const nonBeta = getEnvFiles(envName.slice(0, -4))
+    files.push(...nonBeta)
   }
   return files;
 }
 
-// Load all environment files.
-const de = require('dotenv')
-const files = getEnvFiles();
-files.forEach(path => de.config({path}))
-
-//  Set default name for logging
-if (!process.env.LOG_NAME) {
-  const projectRoot = process.cwd();
-  process.env.LOG_NAME = basename(projectRoot);
+function getEnvVars(cfgName) {
+  const files = getEnvFiles(cfgName);
+  return files.reduce((acc, path) => ({
+    ...de.config({path}).parsed,
+    ...acc, // later files have lower priority, do not overwrite existing balues
+  }), {
+    LOG_NAME,
+  });
 }
 
+function loadEnvVars(cfgName) {
+  // Load all environment files.
+  const files = getEnvFiles(cfgName);
+  files.forEach(path => de.config({path}))
+
+    //  Set default name for logging
+  if (!process.env.LOG_NAME) {
+    const projectRoot = process.cwd();
+    process.env.LOG_NAME = LOG_NAME;
+  }
+}
+
+// By default, load envVars
+loadEnvVars();
+
 module.exports = {
-  getEnvFile: getEnvFile
+  getEnvFiles: getEnvFiles,
+  getEnvVars: getEnvVars,
 }
