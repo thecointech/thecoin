@@ -6,6 +6,7 @@ import { processUnsettledETransfers } from './etransfer';
 import { getIncompleteActions } from '@thecointech/broker-db';
 import { SendMail } from '@thecointech/email';
 import { initialize } from './initialize';
+import { exit } from 'process';
 
 //
 // Process deposits: Make 'em Rain!!!
@@ -44,5 +45,6 @@ async function Process() {
   await ProcessBillPayments();
 
   log.debug(` --- Completed processing --- `);
+  exit(0);
 }
 Process();

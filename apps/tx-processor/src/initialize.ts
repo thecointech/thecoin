@@ -30,7 +30,9 @@ export async function initialize() {
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  await gmail.initialize();
+  let token = await ConfigStore.get("gmail.token")
+  token = await gmail.initialize(token);
+  await ConfigStore.set("gmail.token", token)
 
   await initBrowser({
     headless: false
