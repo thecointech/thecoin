@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
-import { init as FirestoreInit } from '@thecointech/firestore';
-import { RbcStore, initBrowser } from "@thecointech/rbcapi";
+import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
+import { RbcStore, initBrowser, closeBrowser } from "@thecointech/rbcapi";
 import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
@@ -26,16 +26,32 @@ export async function initialize() {
   if (process.env.BROKER_SERVICE_ACCOUNT)
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
 
-  FirestoreInit();
+  await FirestoreInit();
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  await gmail.initialize();
+  let token = await ConfigStore.get("gmail.token")
+  token = await gmail.initialize(token);
+  await ConfigStore.set("gmail.token", token)
 
   await initBrowser({
-    headless: false
+    headless: true
   })
 
-  log.debug('Init Complete');
+  log.debug('Init complete');
   return contract;
+}
+
+export async function release() {
+  log.trace('Closing browser');
+  await closeBrowser();
+
+  log.trace('Closing dbs');
+  await RbcStore.release();
+  await ConfigStore.release();
+
+  log.trace('Closing firestore');
+  await getFirestore().terminate();
+
+  log.debug(' --- Release complete --- ');
 }

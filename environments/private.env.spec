@@ -1,17 +1,6 @@
 #
-# Environment configuration for deployments to the testing GAE project
+# The list of env variables that the private version should define
 #
-
-NODE_ENV=production
-SETTINGS=testing
-
-#
-# Cross-site references
-URL_SITE_APP=https://tccc-testing.web.app
-URL_SITE_LANDING=https://tccc-testing-landing.web.app
-
-URL_SERVICE_BROKER=https://tccc-testing.nn.r.appspot.com/api/v1
-URL_SERVICE_RATES=https://rates-service-testing.nn.r.appspot.com/api/v1
 
 #
 # prod:test fetches live stockmarket data, so needs this key
@@ -21,7 +10,6 @@ TRADIER_API_KEY=<SetAPIKey>
 
 #
 # The ethereum network our contract will be deployed to
-DEPLOY_NETWORK=goerli
 INFURA_PROJECT_ID=<AddThisHere>
 INITIAL_COIN_BLOCK=<ContractDeployedBlock>
 
@@ -32,16 +20,6 @@ INITIAL_COIN_BLOCK=<ContractDeployedBlock>
 # node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 CERAMIC_API=https://ceramic-clay.3boxlabs.com
 CERAMIC_SEED=<SemiPermanentSeed>
-
-#
-# GCloud configurations should be setup to allow deploying to each target.
-# See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a
-GCLOUD_LANDING_CONFIG=landing-testing
-GCLOUD_APP_CONFIG=app-testing
-GCLOUD_RATES_CONFIG=rates-testing
-GCLOUD_BROKER_CONFIG=broker-testing
-GCLOUD_NFT_SERVICE_CONFIG=nft-service-testing
-GCLOUD_NFT_SITE_CONFIG=nft-site-testing
 
 #
 # Wallets used by testing environment
