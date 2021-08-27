@@ -5,7 +5,8 @@ import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
 import { getIncompleteActions } from '@thecointech/broker-db';
 import { SendMail } from '@thecointech/email';
-import { initialize } from './initialize';
+import { initialize, release } from './initialize';
+
 import { exit } from 'process';
 
 //
@@ -44,7 +45,23 @@ async function Process() {
   await ProcessETransfers(contract, bank);
   await ProcessBillPayments();
 
-  log.debug(` --- Completed processing --- `);
-  exit(0);
+  log.debug(`Completed processing`);
 }
-Process();
+
+async function run() {
+  try {
+    await Process();
+  }
+  catch(e) {
+    log.fatal(e);
+    SendMail("tx-processor exception", `${e.message}\n${e.stack}`);
+  }
+  finally {
+    await release();
+    // I have been unable to figure out why we still have handles open
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    exit(0);
+  }
+}
+run();
+

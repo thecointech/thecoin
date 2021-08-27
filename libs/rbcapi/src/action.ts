@@ -15,6 +15,13 @@ export async function initBrowser(options?: puppeteer.LaunchOptions) {
   return _browser;
 }
 
+export async function closeBrowser() {
+  if (_browser) {
+    await _browser.close();
+    _browser = null;
+  }
+}
+
 async function getPage() {
   const browser = _browser ?? await initBrowser();
   return browser.newPage();
