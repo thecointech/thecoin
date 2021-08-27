@@ -1,5 +1,5 @@
 const { basename, join } = require('path');
-const { existsSync } = require('fs');
+const { existsSync, readFileSync } = require('fs');
 const de = require('dotenv')
 
 const projectRoot = process.cwd();
@@ -39,8 +39,10 @@ function getEnvFiles(cfgName) {
 
 function getEnvVars(cfgName) {
   const files = getEnvFiles(cfgName);
-  return files.reduce((acc, path) => ({
-    ...de.config({path}).parsed,
+  return files
+    .map(file => readFileSync(file))
+    .reduce((acc, contents) => ({
+    ...de.parse(contents),
     ...acc, // later files have lower priority, do not overwrite existing balues
   }), {
     LOG_NAME,
