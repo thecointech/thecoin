@@ -1,4 +1,4 @@
-import { getEnvFile } from "./setenv";
+import { getEnvVars } from "./setenv";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from 'path';
@@ -42,18 +42,15 @@ export function gCloudDeploy() {
 }
 
 export async function copyEnvVarsLocal(outYamlFile: string) {
-  const envFile = getEnvFile();
-  const contents = readFileSync(envFile, 'utf8');
-  const yamlVars = contents.split('\n')
-    .filter(line => !line.startsWith('#'))
-    .filter(line => !(line.startsWith('WALLET_') && !line.includes('_ADDRESS')))
-    .filter(line => !line.startsWith('CERAMIC_'))
-    .filter(line => !line.startsWith('GITHUB_'))
-    .filter(line => !line.includes('_SERVICE_ACCOUNT='))
-    .filter(line => line !== 'STORAGE_PATH')
-    .filter(line => !/^\s*$/.test(line))
-    .map(line => {
-      const [key, val] = line.split('=')
+  const env = getEnvVars();
+  const yamlVars = Object.values(env)
+    .filter((key) => !key.startsWith('#'))
+    .filter((key) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
+    .filter((key) => !key.startsWith('CERAMIC_'))
+    .filter((key) => !key.startsWith('GITHUB_'))
+    .filter((key) => !key.includes('_SERVICE_ACCOUNT='))
+    .filter((key) => key !== 'STORAGE_PATH')
+    .map((key, val) => {
       const sval = JSON.stringify(val);
       return [key, sval].join(': ');
     })

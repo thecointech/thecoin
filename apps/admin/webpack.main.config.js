@@ -1,6 +1,5 @@
 const webpack = require('webpack');
-const { getEnvFile } = require('../../tools/setenv')
-const dotenv = require('dotenv').config({ path: getEnvFile() });
+const { getEnvVars } = require('../../tools/setenv')
 const { merge } = require("webpack-merge")
 const mockOptions = require('./webpack.mocks');
 
@@ -21,7 +20,7 @@ const baseOptions = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
   },
   plugins: [
-    new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
+    new webpack.EnvironmentPlugin(Object.keys(getEnvVars())),
   ],
   performance: { hints: false }
 };

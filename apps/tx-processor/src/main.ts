@@ -28,7 +28,7 @@ async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
 // Get notified if you need to address something
 async function ProcessBillPayments() {
   log.debug("Processing Bill Payments");
-  let incomplete = await getIncompleteActions("Sell");
+  let incomplete = await getIncompleteActions("Bill");
   log.debug(`You need to settle: ${incomplete.length} bill payments`);
   if (incomplete.length > 0) {
     SendMail('You have bills to settle', incomplete.map(p => p.data.date.toSQLDate()).join("\n"));

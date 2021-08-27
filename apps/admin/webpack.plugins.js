@@ -2,15 +2,15 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
-const { getEnvFile } = require('../../tools/setenv')
-const dotenv = require('dotenv').config({ path: getEnvFile() });
+const { getEnvVars } = require('../../tools/setenv')
 const packageFile = path.join(__dirname, 'package.json');
 
-const keys = Object.keys(dotenv.parsed)
+const env = getEnvVars();
+const keys = Object.keys(env)
 
 const envObj = keys.reduce((prev, key) => ({
   ...prev,
-  [key]: JSON.stringify(dotenv.parsed[key])
+  [key]: JSON.stringify(env[key])
 }), {});
 
 module.exports = [
