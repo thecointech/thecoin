@@ -1,9 +1,7 @@
-const { getEnvFile } = require('./setenv');
-const { readFileSync } = require('fs');
+const { getEnvVars } = require('./setenv');
 const  netstat = require('node-netstat');
 
-const env = readFileSync(getEnvFile('devlive'));
-const config = require('dotenv').parse(env)
+const config = getEnvVars('devlive');
 const FirestorePort = config.FIRESTORE_EMULATOR_PORT;
 const BlockchainPort = config.DEPLOY_NETWORK_PORT;
 

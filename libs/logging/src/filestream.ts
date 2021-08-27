@@ -7,10 +7,10 @@ export const getFileStream = (name: string, folder: string, rotate: boolean) : S
   const filepath = `${folder}/${name}.log`
 
   return {
-    level: 'debug',
+    level: 'trace',
     type: rotate ? 'rotating-file' : 'file',
     path: filepath,
     period: '1d',   // daily rotation
-    count: 3        // keep 3 back copies
+    count: 30        // keep 3 back copies
   };
 }

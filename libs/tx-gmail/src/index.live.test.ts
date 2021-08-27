@@ -1,6 +1,6 @@
 // reset env
 process.env.CONFIG_NAME='prod';
-import { getEnvFile } from "../../../tools/setenv";
+import { getEnvVars } from "../../../tools/setenv";
 import { queryETransfers, queryNewDepositEmails } from './query'
 import { ConfigStore } from '@thecointech/store';
 import { IsValidAddress } from '@thecointech/utilities';
@@ -16,9 +16,9 @@ describe("Live service queries for gmail", () => {
     jest.setTimeout(timeout);
 
     // Initialize config with production data
-    const prodEnv = require('dotenv').config({path: getEnvFile("prod")})
+    const prodEnv = getEnvVars('prod');
     ConfigStore.initialize({
-      prefix: prodEnv.parsed['STORAGE_PATH']
+      prefix: prodEnv['STORAGE_PATH']
     });
   });
 

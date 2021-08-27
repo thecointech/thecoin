@@ -1,7 +1,7 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-const { getEnvFile } = require('../../../../tools/setenv')
+const { getEnvVars } = require('../../../../tools/setenv')
 const path = require('path');
 const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -10,9 +10,7 @@ const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
-const dotenv = require('dotenv').config({ path: getEnvFile() });
-
-console.log(`Building ${dotenv.parsed.CONFIG_NAME} site`);
+const env = getEnvVars();
 
 module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
@@ -122,7 +120,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed)),
+    new webpack.EnvironmentPlugin(Object.keys(env)),
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
       "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
