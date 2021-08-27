@@ -26,10 +26,11 @@ function getEnvFiles(cfgName) {
   }
 
   // Beta versions share a lot with non-beta environments, so we merge them together
-  if (cfgName.endsWith("beta")) {
+  if (filename.endsWith("beta")) {
     const nonBeta = getEnvFiles(cfgName.slice(0, -4))
     files.push(...getEnvFiles(nonBeta))
   }
+  return files;
 }
 
 // Load all environment files.
