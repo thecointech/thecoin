@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH});
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

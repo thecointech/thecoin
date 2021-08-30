@@ -7,5 +7,6 @@ export async function matchAll(data: AllData) {
   const txs = matchDB(data);
   const ext = await reconcileExternal(data);
   addReconciled(txs, ext);
+
   return txs;
 }

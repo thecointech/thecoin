@@ -93,14 +93,26 @@
         "amount": 193.88,
         "date": "2021-01-22T00:00:00.000-06:00",
         "notes": "e-Transfer manually completed to fix expired xfer of May 8th"
+      },
+      {
+        "action": "Buy",
+        "hash": "0x4d2c50bf9f1b15307fc85a68e21b1490aa50b39353934cf69e93baa736628d1f",
+        "amount": 2000,
+        "date": "2019-05-27T00:00:00.000-05:00",
+        "notes": "Slightly-off deposit value screws up matching"
       }
-
     ],
     "blockchain": [
       {
         "action": "Refund",
         "hash": "0xab38262081326e427e8d1532c1d2bbedfe4b157f77b3a1210f22c85ac73597a8",
         "refund": "0xfae8af589e8bfeb21915922330ca1f506f16d9a42b78728ce92376fe111029b5",
+        "notes": "Refund put here temporarily while we run the DB updating portion"
+      },
+      {
+        "action": "Refund",
+        "hash": "0xe97f8a03399ce40b12203be04e62af5890ec1d2850c26c4e0c89ae423f2031a5",
+        "refund": "0x1954b74d181172a4014ece1888cac878598d136397ad5e2150066ad5232f6782",
         "notes": "Refund put here temporarily while we run the DB updating portion"
       }
     ]
@@ -119,6 +131,10 @@
     {
       "hash": "0x2cf020d5ff600f484942c02dc6baf16313bb1dd2228dc348239c432dae87ce8b",
       "notes": "To Fix - purchase missing from bank - part of external builk deposit"
+    },
+    {
+      "hash": "0xa2f28e9537666297826adbfa567973fae1b68dd2732d7ff2a8bd251da6c77362",
+      "notes": "Mistake: Double withdrawal paid despite insufficient funds"
     },
     {
       "hash": "1588609939423",

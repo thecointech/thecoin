@@ -3,9 +3,9 @@ import { toHuman } from "@the-coin/utilities";
 import { NextOpenTimestamp } from "@the-coin/utilities/MarketStatus";
 import { ReconciledRecord } from "types";
 
-const getSettlementDate = async (r: ReconciledRecord) =>
-r.data.processedTimestamp?.toDate() ??
-new Date(await NextOpenTimestamp(r.data.recievedTimestamp.toDate()));
+export const getSettlementDate = async (r: ReconciledRecord) =>
+  r.data.processedTimestamp?.toDate() ??
+  new Date(await NextOpenTimestamp(r.data.recievedTimestamp.toDate()));
 
 const rates: FXRate[] = [];
 
@@ -23,7 +23,7 @@ const updateRate = async (date: Date) => {
   }
 }
 
-async function fetchFiat(coin: number, action: string, date: Date) {
+export async function fetchFiat(coin: number, action: string, date: Date) {
   await updateRate(date);
   return toHuman(coin * (
     action === "Buy"
@@ -32,6 +32,10 @@ async function fetchFiat(coin: number, action: string, date: Date) {
     )
   , true)
 }
-export const getFiat = async (r: ReconciledRecord) =>
-  r.data.fiatDisbursed || fetchFiat(r.data.transfer.value, r.action, await getSettlementDate(r));
 
+export const getFiat = async (r: ReconciledRecord) => {
+  if (r.data.fiatDisbursed)
+    return r.data.fiatDisbursed;
+  const settled = await getSettlementDate(r);
+  return fetchFiat(r.data.transfer.value, r.action, settled);
+}

@@ -17,7 +17,7 @@ type ConnectBlockchainEntry = typeof manual["connect"]["blockchain"][0];
 export function matchManual(r: Reconciliations, data: AllData) {
   manual.connect.bank.forEach(entry => doConnectBank(entry, data, r));
   manual.connect.blockchain.forEach(entry => doConnectBlockchain(entry, data, r));
-  manual.insert.forEach(entry => doInsert(entry, r));
+  manual.insert.forEach(entry => doInsert(entry, r, data));
 }
 
 function findRecord(r: Reconciliations, hash: string, data?: AllData) {
@@ -29,15 +29,15 @@ function findRecord(r: Reconciliations, hash: string, data?: AllData) {
   // Create new entry from blockchain
   const bc = data?.blockchain.find(bc => bc.txHash === hash);
   if (bc)
-    return buildNewUserRecord(r, bc);
+    return buildNewUserRecord(r, data!, bc);
   throw new Error(`Cannot find entry: ${hash}`);
 }
 
-function doInsert(entry: InsertEntry, r: Reconciliations) {
+function doInsert(entry: InsertEntry, r: Reconciliations, data: AllData) {
   const dt = DateTime.fromISO(entry.date)
   switch (entry.where) {
     case 'email': {
-      const { user, record } = findRecord(r, entry.hash);
+      const { user, record } = findRecord(r, entry.hash, data);
       record.email = {
         name: user.names[0],
         id: (entry as any).sourceId,
@@ -47,6 +47,7 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
         email: "Manual Entry - not set",
         depositUrl: "Manual Entry - not set",
       }
+      record.notes = entry.notes;
       break;
     }
     case 'bank': {
@@ -58,6 +59,7 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
         Details: entry.currency,
         Date: dt,
       }]
+      record.notes = entry.notes;
       break;
     }
     case "blockchain": {
@@ -70,7 +72,12 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
           hash: `CLOSE ACCOUNT:${entry.hash}`,
           recievedTimestamp: Timestamp.fromMillis(dt.toMillis()),
           completedTimestamp: Timestamp.fromMillis(dt.toMillis()),
-          transfer: { value: entry.amount },
+          transfer: {
+            fee: 0,
+            from: entry.hash,
+            timestamp: dt.toMillis(),
+            value: entry.amount,
+          } as any,
         },
         bank: [],
         database: null,
@@ -82,7 +89,8 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
           date: dt,
           counterPartyAddress: entry.hash,
           logEntry: entry.notes,
-        }
+        },
+        notes: entry.notes,
       })
       break;
     }
@@ -94,14 +102,11 @@ function doInsert(entry: InsertEntry, r: Reconciliations) {
 function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliations) {
   // Force connecting to a given record
   const { user, record } = findRecord(r, entry.hash, data);
-  record.bank = spliceBank(data, user, {
-    data: {
-      fiatDisbursed: entry.amount,
-      completedTimestamp: Timestamp.fromMillis(DateTime.fromISO(entry.date).toMillis()),
-    },
-    bank: [],
-    action: entry.action,
-  } as any, 1);
+  record.data.fiatDisbursed = entry.amount;
+  record.data.completedTimestamp = Timestamp.fromMillis(DateTime.fromISO(entry.date).toMillis());
+  record.action = entry.action as any;
+  record.notes = entry.notes;
+  record.bank = spliceBank(data, user, record, 1);
 }
 
 function doConnectBlockchain(entry: ConnectBlockchainEntry, data: AllData, r: Reconciliations) {

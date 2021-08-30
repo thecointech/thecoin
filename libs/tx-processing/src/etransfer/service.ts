@@ -6,6 +6,7 @@ import { OfflineFxRates } from "../base/fxrates";
 import { log } from "@the-coin/logging";
 import { RbcApi } from "@the-coin/rbcapi";
 import { ETransferPacket } from "@the-coin/types";
+import { SendMail } from '@the-coin/email';
 
 export async function processUnsettledETransfers(api: RbcApi): Promise<CertifiedTransferRecord[]> {
 
@@ -24,9 +25,15 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
       continue;
 
     const instruction = instructions[i] as ETransferPacket;
+
+    // TEMP Hack, unstick tx's to allow them to complete
+    //instruction.message = instruction.message?.replace('&', 'and');
     if (!isValid(instruction))
     {
+      console.log(JSON.stringify(record.fiatDisbursed));
+      console.log(JSON.stringify(instruction));
       log.error({hash: record.hash}, "e-Transfer packet for {hash} is invalid: requires manual resolution");
+      SendMail('Failed e-Transfer', `e-Transfer packet for ${record.hash} send ${record.recievedTimestamp.toDate()}is invalid: requires manual resolution`);
       continue;
     }
 
@@ -49,10 +56,11 @@ function isValid(packet: ETransferPacket) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
   const invalidChars = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
-    packet.question?.length > 0 &&
-    packet.answer?.length > 0 &&
+    packet.question?.length >= 2 &&
+    !packet.question?.match(invalidChars) &&
+    packet.answer?.length >= 3 &&
     !packet.answer.match(invalidChars) &&
-    packet.email?.length > 3 &&
+    packet.email?.length >= 3 &&
     packet.email?.includes("@") &&
     !packet.message?.match(invalidChars)
 }

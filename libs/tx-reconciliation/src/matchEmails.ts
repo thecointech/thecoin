@@ -32,9 +32,16 @@ export function findEmail(data: AllData, user: User, deposit: DepositRecord, max
   let candidates = data.eTransfers.filter(et => et.address === user.address);
   candidates = candidates.filter(et => et.cad.eq(fiatDisbursed));
 
-  candidates = filterCandidates(candidates, "recieved", toDateTime(recievedTimestamp), maxDays);
-  if (candidates.length === 1 || (maxDays === 0 && candidates.length > 0))
+  const recieved = toDateTime(recievedTimestamp);
+  candidates = filterCandidates(candidates, "recieved", recieved, maxDays);
+  if (candidates.length === 1 ||
+    (candidates.length > 0 && (
+      (Math.abs(candidates[0].recieved.diff(recieved).as("days")) < 1) ||
+      (maxDays === 0 && candidates.length > 0)
+    ))
+  ) {
     return candidates[0];
+  }
 
   return null;
 

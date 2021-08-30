@@ -68,7 +68,9 @@ export function findBank(data: AllData, maxDays: number, amount: number, date?: 
     candidates = filterCandidates(candidates, "Date", date, maxDays);
 
   // Do we have a candidate?
-  if (candidates.length === 1 || (maxDays < 2 && date && candidates.length > 0))
+  if (candidates.length === 1 ||
+    (date && candidates.length > 0 && (Math.abs(candidates[0].Date.diff(date).as("days"))) < 1) ||
+    (maxDays < 2 && date && candidates.length > 0))
     return candidates[0];
 
   return null;

@@ -21,6 +21,7 @@ export type AllData = {
   blockchain: Transaction[];
 
   obsolete: ObsoleteRecords;
+  userData: any;
 }
 
 ////////////////////////////////
@@ -37,11 +38,14 @@ export type ReconciledRecord = {
 
   refund?: Transaction; // If this tx was refunded, fill this out
   cancelled?: BankRecord; // If this etransfer was cancelled, fill this out
+
+  notes?: string;
 }
 
 export type User = {
   names: string[];
   address: string;
+  data?: any;
 }
 export type UserReconciled = {
   transactions: ReconciledRecord[];

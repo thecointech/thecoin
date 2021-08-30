@@ -1,6 +1,10 @@
 {
 	"folders": [
     {
+      "name": "tx-fetch",
+      "path": "apps\\tx-fetch"
+    },
+    {
       "name": "tx-reconciliation",
       "path": "libs\\tx-reconciliation"
     },

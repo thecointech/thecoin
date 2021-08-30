@@ -8,6 +8,7 @@ import { Obsolete } from "@the-coin/tx-firestore/obsolete";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
 
+declare var raw: any;
 
 // Match all DB entries with raw data
 export function matchDB(data: AllData) {
@@ -98,7 +99,7 @@ function convertObsolete(data: AllData) {
       const value = ob.coin ?? dp.transfer.value;
       const fiat = ob.fiat ?? dp.fiatDisbursed;
       const hash = ob.txHash ?? dp.hash;
-      const type = PurchaseType.etransfer;
+      const type = dp.type ?? PurchaseType.etransfer;
       const record :DepositRecord = {
         type,
         confirmed: true,
