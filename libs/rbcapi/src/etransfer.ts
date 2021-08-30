@@ -11,7 +11,7 @@ export async function send(prefix: string, amount: number, name:string, packet: 
   const { message, email, question, answer } = packet;
 
   // Navigate to old account page
-  await act.clickOnText(ApiAction.Credentials.accountNo, "a");
+  await act.clickOnText("Current Account", "a");
 
   await act.clickOnText("Pay Bills & Transfer Funds", "a")
   await page.type('#amount', amount.toString());

@@ -34,9 +34,9 @@ export async function getTransactions(from: Date, to = new Date(), accountNo = A
   to.setTime(Math.min(to.getTime(), maxDate.getTime()));
 
   // Go to CAD account
-  await act.clickOnText(accountNo, 'a', '#search-transaction');
+  await act.clickOnText("Current Account", 'a', ".search-title");
   // To to download transactions
-  await act.clickOnText('Download Transactions', 'a', '#ACCOUNT_INFO1');
+  await act.clickOnText('Download transactions', "a");
 
   // Select the right format
   await page.click('#EXCEL');
