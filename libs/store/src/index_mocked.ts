@@ -1,11 +1,13 @@
 // Not used, but required to import rbcapi
 export function BaseStore(_name: string) {
-  return class BaseStore {}
+  return class BaseStore {
+    static initialize() {};
+    static release() {};
+  }
 }
 
 export class ConfigStore {
 
-  static initialize() {};
 
   static set(_key: string, _value: string) {}
 

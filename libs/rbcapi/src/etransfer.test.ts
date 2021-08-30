@@ -1,6 +1,8 @@
+process.env.CONFIG_NAME = "prod";
+require("../../../tools/setenv");
+
 import { RbcStore } from './store';
-import * as PouchDB from 'pouchdb';
-import { initBrowser } from './action';
+import { ApiAction, initBrowser } from './action';
 import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
@@ -10,10 +12,9 @@ import { describe, IsManualRun } from '@thecointech/jestutils';
 describe("Live tests on live account", () => {
 
   beforeAll(() => {
-    PouchDB.plugin(require('pouchdb-adapter-memory'));
-    RbcStore.initialize({
-        adapter: "memory"
-    });
+    // Will init mocked store
+    ApiAction.initCredentials();
+    RbcStore.initialize();
   });
 
   afterAll(() => {
