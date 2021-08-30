@@ -29,17 +29,14 @@ function readFile(file: File): Promise<ReadFileData> {
   });
 }
 
-export const FromJson = () => {
-  return (
-    <Container>
-      <UploadWallet readFile={readFile}/>
-      <div>
-          <FormattedMessage {...translations.explanation} />
+export const FromJson = () =>
+  <Container>
+    <UploadWallet readFile={readFile} />
+    <div>
+      <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
           <ButtonPrimary as={Link} to="/addAccount" size='medium' >
-            <FormattedMessage {...translations.buttonCreate}/>
-          </ButtonPrimary>
-        </div>
-    </Container>
-  );
-}
+        <FormattedMessage {...translations.buttonCreate} />
+      </ButtonPrimary>
+    </div>
+  </Container>
