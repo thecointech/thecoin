@@ -3,7 +3,7 @@ const { existsSync, readFileSync } = require('fs');
 const de = require('dotenv')
 
 const projectRoot = process.cwd();
-LOG_NAME = basename(projectRoot);
+const LOG_NAME = basename(projectRoot);
 
 function getEnvFiles(cfgName) {
   const envName = cfgName || process.env.CONFIG_NAME || (
