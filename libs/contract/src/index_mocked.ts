@@ -31,3 +31,4 @@ export class TheCoin implements Pick<Src.TheCoin, 'coinPurchase'|'balanceOf'|'ce
 
 export const GetContract : typeof Src.GetContract = () => new TheCoin() as any;
 export const ConnectContract : typeof Src.ConnectContract = () => new TheCoin() as any;
+export const InitialCoinBlock = 0;
