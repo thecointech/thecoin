@@ -13,14 +13,15 @@ module.exports = {
   preset: 'ts-jest',
   verbose: true,
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.(t|j)sx?$": "ts-jest",
   },
+  transformIgnorePatterns: ["node_modules/(?!(@thecointech)/)"],
   globals: {
     'ts-jest': {
       tsconfig: {
         ...compilerOptions,
         // Relax ts restrictions
+        allowJs: true,
         noUnusedLocals: false,
         noUnusedParameters: false,
         noImplicitAny: false,

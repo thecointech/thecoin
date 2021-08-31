@@ -1,7 +1,6 @@
 import { GetContract, TheCoin } from "@thecointech/contract";
 import { BigNumber } from "ethers";
-import { loadAndMergeHistory, calculateTxBalances } from "./fetch";
-import { Transaction } from "./types";
+import { loadAndMergeHistory, calculateTxBalances, mergeTransactions } from "./fetch";
 
 
 // we have 2 accounts (in & out) for the same entity
@@ -11,9 +10,9 @@ export const cadbrokerIn = "0x38de1b6515663dbe145cc54179addcb963bb606a";
 export async function fetchCoinHistory(contract?: TheCoin) {
   const tc = contract ?? await GetContract();
 
-  let history : Transaction[] = [];
-  history = await loadAndMergeHistory(cadbrokerOut, 0, tc, history);
-  history = await loadAndMergeHistory(cadbrokerIn, 0, tc, history);
+  const historyOut = await loadAndMergeHistory(cadbrokerOut, 0, tc);
+  const historyIn = await loadAndMergeHistory(cadbrokerIn, 0, tc);
+  const history = mergeTransactions(historyOut, historyIn);
 
   const balanceOut = await tc.balanceOf(cadbrokerOut) as BigNumber;
   const balanceIn = await tc.balanceOf(cadbrokerIn) as BigNumber;

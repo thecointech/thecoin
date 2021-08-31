@@ -67,7 +67,7 @@ export function getAllAccounts(): AccountMap {
       const { address, signer } = account;
 
       // Rough check that this is, indeed, a valid account
-      if (address && IsValidAddress(address) && signer._isSigner !== undefined) {
+      if (address && IsValidAddress(address) && signer !== undefined) {
         allAccounts[address] = account!;
       }
     }

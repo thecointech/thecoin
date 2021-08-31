@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "semantic-ui-react";
 import { ButtonPrimary } from '../../../components/Buttons';
-import { UploadWallet, ReadFileData } from "@thecointech/shared/containers/UploadWallet";
+import { UploadWallet, ReadFileData } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 
@@ -29,17 +29,14 @@ function readFile(file: File): Promise<ReadFileData> {
   });
 }
 
-export const FromJson = () => {
-  return (
-    <Container>
-      <UploadWallet readFile={readFile}/>
-      <div>
-          <FormattedMessage {...translations.explanation} />
+export const FromJson = () =>
+  <Container>
+    <UploadWallet readFile={readFile} />
+    <div>
+      <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <ButtonPrimary as={Link} to="/addAccount" size='medium' >
-            <FormattedMessage {...translations.buttonCreate}/>
-          </ButtonPrimary>
-        </div>
-    </Container>
-  );
-}
+      <ButtonPrimary as={Link} to="/addAccount" size='medium' >
+        <FormattedMessage {...translations.buttonCreate} />
+      </ButtonPrimary>
+    </div>
+  </Container>
