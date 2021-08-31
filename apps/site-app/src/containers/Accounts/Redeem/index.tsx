@@ -148,12 +148,6 @@ export const Redeem = () => {
     const tx = await contract.provider.getTransaction(response.data.hash);
     // Wait at least 2 confirmations
     tx.wait(2);
-    const receipt = await contract.provider.getTransactionReceipt(
-      response.data.hash,
-    );
-    console.log(
-      `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
-    );
     setPercentComplete(1);
     return true;
   }
