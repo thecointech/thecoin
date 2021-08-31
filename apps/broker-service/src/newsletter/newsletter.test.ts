@@ -1,10 +1,13 @@
 import { SendWelcomeEmail } from '@thecointech/email';
 import { signup, update, details } from './Newsletter'
 import { init } from '@thecointech/firestore';
+import { log } from '@thecointech/logging';
 
 beforeEach(() => {
   jest.resetAllMocks();
   init({});
+  // disable logging
+  log.level(100);
 })
 
 const RandomEmail = () => `${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}@asdjflkj.co`;

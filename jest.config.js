@@ -13,9 +13,12 @@ module.exports = {
   preset: 'ts-jest',
   verbose: true,
   transform: {
-    "^.+\\.(t|j)sx?$": "ts-jest",
+    "^.+\\.tsx?$": "ts-jest",
+    // Our components are compiled to modules, which are not yet compatible with jest.
+    // until we update to support ESM, re-process the builds of these two projects.
+    "libs.shared.build.+\\.jsx?$": "ts-jest",
+    "libs.site-base.build.+\\.jsx?$": "ts-jest",
   },
-  transformIgnorePatterns: ["node_modules/(?!(@thecointech)/)"],
   globals: {
     'ts-jest': {
       tsconfig: {
