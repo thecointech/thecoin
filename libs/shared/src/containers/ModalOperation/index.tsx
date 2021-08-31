@@ -1,25 +1,25 @@
 import { Modal, Loader, Button, Icon } from 'semantic-ui-react';
 import * as React from 'react';
 import { MessageDescriptor, FormattedMessage, defineMessages } from 'react-intl';
+import { MessageWithValues } from '../../types';
 
 interface ModalProps {
   isOpen: boolean;
   header?: MessageDescriptor;
   progressPercent?: number;
-  progressMessage?: MessageDescriptor;
-  messageValues?: any;
+  progressMessage?: MessageWithValues;
   closeIconFct?: (value:string) => void;
   cancelCallback?: () => void;
   okCallback?: () => void;
 }
 
-const translate = defineMessages({ 
-  ok : {  
-    id: "shared.modalOperation.ok",  
+const translate = defineMessages({
+  ok : {
+    id: "shared.modalOperation.ok",
     defaultMessage:"Ok",
     description:"shared.modalOperation.ok: Text for the ok button for the modal tool"},
-  cancel : {  
-    id: "shared.modalOperation.cancel",  
+  cancel : {
+    id: "shared.modalOperation.cancel",
     defaultMessage:"Cancel",
     description:"shared.modalOperation.cancel: Text for the cancel button for the modal tool"}});
 
@@ -62,16 +62,16 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
 
   function renderContent(progressPercent?: number) {
     return (progressPercent || (progressPercent! < 1) ? <Loader>{renderMessage()}</Loader> : renderMessage());
-  } 
+  }
 
   function renderProgress() {
-   return ( 
+   return (
       <h3>
         <FormattedMessage
           {...props.progressMessage!}
           values={{
             percentComplete: props.progressPercent,
-            ...(props.messageValues || {})
+            ...(props.progressMessage?.values || {})
           }}
         />
       </h3>);
@@ -92,5 +92,5 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
       {renderButtons()}
     </Modal>
   );
-  
+
 }

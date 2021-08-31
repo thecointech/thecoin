@@ -12,6 +12,7 @@ import messages from './messages';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { Account } from '@thecointech/shared/containers/Account';
+
 const typeOptions = ["deposit", "other"].map(k => ({
   key: k,
   value: k,
@@ -26,7 +27,6 @@ export const Purchase = () => {
   const [fiat, setFiat] = React.useState(0);
   const [confirm, setConfirm] = React.useState(false);
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [step, setStep] = React.useState("");
 
   const account = AccountMap.useActive()!;
   const api = Account(account.address).useApi();
@@ -49,7 +49,6 @@ export const Purchase = () => {
     const current = getCurrentState(result);
     //setState({ txHash: current.data.hash, step: current.name});
     alert('You could be done' + current.data.hash);
-    setStep(current.name);
     api.updateHistory(DateTime.now(), DateTime.now());
     setIsProcessing(false);
   }
@@ -72,7 +71,7 @@ export const Purchase = () => {
         <Form.Button onClick={() => setConfirm(true)}>SEND</Form.Button>
       </Form>
       <Confirm open={confirm} onCancel={() => setConfirm(false)} onConfirm={onConfirm} />
-      <ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} messageValues={{ step }} />
+      <ModalOperation isOpen={isProcessing} header={messages.mintingHeader} progressMessage={messages.mintingInProgress} />
     </>
   )
 }

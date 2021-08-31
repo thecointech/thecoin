@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
+import type { MessageWithValues } from '@thecointech/shared/types';
 
 const translations = defineMessages({
   errorMessage : {
@@ -67,14 +67,13 @@ export const Redeem = () => {
   const [email, setEmail] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [message, setMessage] = useState(undefined as string | undefined);
+  const [message, setMessage] = useState<MaybeString>();
 
-  const [validationMessage] = useState(null as ValuedMessageDesc|null);
+  const [validationMessage] = useState<MessageWithValues|null>(null);
   const [forceValidate, setForceValidate] = useState(false);
 
   const [transferInProgress, setTransferInProgress] = useState(false);
-  const [transferMessage, setTransferMessage] = useState(translations.transferOutProgress);
-  const [transferValues, setTransferValues] = useState(undefined as any);
+  const [transferMessage, setTransferMessage] = useState<MessageWithValues>(translations.transferOutProgress);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
 
@@ -137,13 +136,14 @@ export const Redeem = () => {
     }
 
     // Wait on the given hash
-    const transferValues = {
-      link: (
-        <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
-    };
-    setTransferMessage(translations.step3);
+    setTransferMessage({
+      ...translations.step3,
+      values: {
+        link: (
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
+      }
+    });
     setPercentComplete(0.5);
-    setTransferValues(transferValues);
 
     const tx = await contract.provider.getTransaction(response.data.hash);
     // Wait at least 2 confirmations
@@ -161,7 +161,6 @@ export const Redeem = () => {
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     setDoCancel(false);
-    setTransferValues(undefined);
     setTransferInProgress(true);
 
     try {
@@ -223,7 +222,6 @@ export const Redeem = () => {
         transferOutHeader={translations.transferOutHeader}
         transferMessage={transferMessage}
         percentComplete={percentComplete}
-        transferValues={transferValues}
 
         isValid={isValid}
         forceValidate={forceValidate}
