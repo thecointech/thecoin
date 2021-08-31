@@ -74,10 +74,11 @@ function isValid(packet: ETransferPacket|null) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
   const invalidChars = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
-    packet.question?.length > 0 &&
-    packet.answer?.length > 0 &&
+    packet.question?.length >= 2 &&
+    !packet.question?.match(invalidChars) &&
+    packet.answer?.length >= 3 &&
     !packet.answer.match(invalidChars) &&
-    packet.email?.length > 3 &&
+    packet.email?.length >= 3 &&
     packet.email?.includes("@") &&
     !packet.message?.match(invalidChars)
 }

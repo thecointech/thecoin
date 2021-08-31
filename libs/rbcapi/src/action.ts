@@ -1,7 +1,7 @@
 import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
-import { Credentials } from './types';
+import { AuthOptions, Credentials, isCredentials } from './types';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -30,6 +30,28 @@ async function getPage() {
 export class ApiAction {
 
   static Credentials: Credentials;
+
+  static initCredentials(options?: AuthOptions) {
+    if (isCredentials(options))
+      ApiAction.Credentials = options;
+    else if (options?.authFile) {
+      // it's a json file
+      const cred = readFileSync(options.authFile, 'utf8');
+      ApiAction.Credentials = JSON.parse(cred);
+    }
+    else if (process.env.RBCAPI_CREDENTIALS) {
+      // Use environment vars if available
+      ApiAction.Credentials = JSON.parse(process.env.RBCAPI_CREDENTIALS);
+    }
+    else if (process.env.RBCAPI_CREDENTIALS_PATH) {
+      // Use environment vars if available
+      const cred = readFileSync(process.env.RBCAPI_CREDENTIALS_PATH, 'utf8');
+      ApiAction.Credentials = JSON.parse(cred);
+    }
+    else {
+      throw new Error('Cannot use RbcApi without credentials');
+    }
+  }
 
   page!: Page;
   navigationPromise!: Promise<puppeteer.Response>;
