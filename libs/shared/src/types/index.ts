@@ -3,6 +3,7 @@ import { SidebarState } from '../containers/PageSidebar/types';
 import { FxRatesState } from '../containers/FxRate/types';
 import { Saga, Task } from 'redux-saga';
 import { LanguageProviderState } from '../containers/LanguageProvider/types';
+import { MessageDescriptor } from 'react-intl';
 
 // Your root reducer type, which is your redux state types also
 // TODO: Rename to SharedBaseStore (more accurate name)
@@ -34,3 +35,8 @@ export interface InjectSagaParams<S extends Saga> {
   saga: S;
   mode?: string | undefined;
 }
+
+// Allow passing values directly into MessageDescriptor
+export type MessageWithValues = {
+  values?: Record<string, any>
+} & MessageDescriptor;

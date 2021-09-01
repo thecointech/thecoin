@@ -7,8 +7,9 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import interact from './images/icon_payment_big.svg';
 import { UxInput } from '@thecointech/shared/components/UxInput';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types';
 import { AccountState } from '@thecointech/account';
+import { MessageWithValues } from '@thecointech/shared/types';
+
 
 type VisualProps={
 
@@ -43,14 +44,13 @@ type VisualProps={
 
     cancelCallback: () => void,
     transferInProgress: boolean,
-    transferOutHeader: MessageDescriptor | undefined,
-    transferMessage: MessageDescriptor | undefined,
+    transferOutHeader?: MessageDescriptor,
+    transferMessage?: MessageWithValues,
     percentComplete: number,
-    transferValues: string,
 
     isValid: boolean,
     forceValidate: boolean,
-    validationMessage?: ValuedMessageDesc
+    validationMessage?: MessageWithValues
 };
 
 
@@ -126,7 +126,6 @@ export const RedeemWidget = (props: VisualProps) => {
         header={props.transferOutHeader}
         progressMessage={props.transferMessage}
         progressPercent={props.percentComplete}
-        messageValues={props.transferValues}
       />
     </React.Fragment>
   );
