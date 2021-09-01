@@ -16768,9 +16768,9 @@ firebase@^8.5.0:
     "@firebase/storage" "0.5.2"
     "@firebase/util" "1.1.0"
 
-"firestore-jest-mock@https://github.com/thecointech/firestore-jest-mock#cd98a228":
+"firestore-jest-mock@https://github.com/thecointech/firestore-jest-mock#effee473ed7b386177dabbcefd3b8d5bddc374ef":
   version "0.15.0"
-  resolved "https://github.com/thecointech/firestore-jest-mock#cd98a22868dcd83ad685474428fe08335ad3a999"
+  resolved "https://github.com/thecointech/firestore-jest-mock#effee473ed7b386177dabbcefd3b8d5bddc374ef"
 
 flagged-respawn@^1.0.0:
   version "1.0.1"

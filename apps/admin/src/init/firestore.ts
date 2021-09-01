@@ -1,8 +1,9 @@
 import { init } from '@thecointech/firestore';
 import sampledb from './sampledb.dev.json';
 
-export async function initFirestore() {
-
-  // Pass sample data, in dev mode it will
-  return await init(sampledb);
+export function initFirestore() {
+  // Initialize with sample tx's in development mode
+  return (process.env.CONFIG_NAME === 'development')
+    ? init(sampledb)
+    : init();
 }
