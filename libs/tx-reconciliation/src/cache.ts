@@ -101,15 +101,17 @@ const mkCachePath = (path?: string) => {
   return cachePath;
 }
 
-const convertTimestamp = (obj: any) =>
+const convertTimestamp = (obj: any, prefix = "") =>
   obj
-    ? Timestamp.fromMillis(obj._seconds * 1000 + obj._nanoseconds / 100000)
+    ? Timestamp.fromMillis(obj[`${prefix}seconds`] * 1000 + obj[`${prefix}nanoseconds`]  / 100000)
     : undefined;
 const convertTimestamps = (tx: any) => {
   if (tx) {
     Object.entries(tx).forEach(([s, v]) => {
       const maybeTs : any = v;
       if (!!maybeTs?._seconds)
+        tx[s] = convertTimestamp(maybeTs, "_")
+      else if (!!maybeTs?.seconds)
         tx[s] = convertTimestamp(maybeTs)
     })
   }
