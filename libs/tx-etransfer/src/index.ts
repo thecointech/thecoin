@@ -6,8 +6,8 @@ import { CertifiedTransfer } from '@thecointech/types';
 import { getActionFromInitial } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
 
+export { graph };
 export const Processor = (contract: TheCoin, bank: RbcApi|null = null) => new StateMachineProcessor(graph, contract, bank);
-
 export const getSellAction = (sale: CertifiedTransfer, date: DateTime) =>
   getActionFromInitial(sale.transfer.from, "Sell", {
     initial: sale,
