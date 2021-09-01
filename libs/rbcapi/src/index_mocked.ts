@@ -5,6 +5,7 @@ import { jest } from '@thecointech/jestutils/shim';
 export { ETransferErrorCode };
 export { RbcStore } from './store'
 export function initBrowser() {};
+export function closeBrowser() {}
 
 let result = 1234;
 export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
