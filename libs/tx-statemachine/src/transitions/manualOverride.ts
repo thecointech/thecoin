@@ -2,6 +2,7 @@
 // On error, we allow a manual transition to any existing state
 import { ActionType } from '@thecointech/broker-db'
 import { log } from '@thecointech/logging';
+import { DateTime } from 'luxon';
 import { Transition } from '../types'
 
 export const manualOverride: Transition<any, ActionType> = async (container, currentState, replay?) => {
@@ -24,3 +25,9 @@ export const manualOverride: Transition<any, ActionType> = async (container, cur
     }
   }
 }
+
+export const manualOverrideTransition = (newState: string) => ({
+  created: DateTime.now(),
+  meta: newState,
+  type: "manualOverride",
+})
