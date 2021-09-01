@@ -11,7 +11,10 @@ const { AccountId, getSigner } = require('@thecointech/signers');
 
 const numBuiltIn = AccountId.BrokerCAD + 1;
 const testAccounts = [];
-loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
+if (process.env.CONFIG_NAME !== 'devlive') {
+  // devlive accounts are hosted on our local blockchain, so already available
+  loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
+}
 
 module.exports = {
   // We output into our src directory so we can directly import

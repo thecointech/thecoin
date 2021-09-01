@@ -14,13 +14,17 @@ module.exports = {
   verbose: true,
   transform: {
     "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest",
+    // Our components are compiled to modules, which are not yet compatible with jest.
+    // until we update to support ESM, re-process the builds of these two projects.
+    "libs.shared.build.+\\.jsx?$": "ts-jest",
+    "libs.site-base.build.+\\.jsx?$": "ts-jest",
   },
   globals: {
     'ts-jest': {
       tsconfig: {
         ...compilerOptions,
         // Relax ts restrictions
+        allowJs: true,
         noUnusedLocals: false,
         noUnusedParameters: false,
         noImplicitAny: false,

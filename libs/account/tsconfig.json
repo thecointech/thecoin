@@ -2,7 +2,7 @@
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
     "module": "ESNext",
-    "target": "ES2019",
+    "target": "ES2017",
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",

@@ -12,3 +12,4 @@ export { NotFoundPage } from './containers/NotFoundPage';
 export { PageSidebar } from './containers/PageSidebar';
 export { TransactionList } from './containers/TransactionList';
 export { UploadWallet } from './containers/UploadWallet';
+export type { ReadFileData } from './containers/UploadWallet';

@@ -98,6 +98,9 @@ const prodOptions = {
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
+  experiments: {
+    topLevelAwait: true,
+  }
 };
 
 module.exports = merge(
