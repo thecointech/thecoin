@@ -1,5 +1,6 @@
 import { MessageDescriptor } from 'react-intl';
 import { ReactNode } from 'react';
+import type { MessageWithValues } from '../../types';
 
 export const initialState = {
   value: '',
@@ -14,18 +15,13 @@ export enum ErrorState {
   Warning,
 }
 
-// Allow embedding values directly into MessageDescriptor
-export type ValuedMessageDesc = {
-  values?: Object
-} & MessageDescriptor;
-
 export type ChangeCB = (value: string, name?: string) => void;
 
 export interface Props {
   uxChange: ChangeCB;
   footer?: ReactNode;
   isValid?: boolean;
-  message?: ValuedMessageDesc;
+  message?: MessageWithValues;
   tooltip?: MessageDescriptor;
   forceValidate?: boolean;
   isRequired?: boolean;

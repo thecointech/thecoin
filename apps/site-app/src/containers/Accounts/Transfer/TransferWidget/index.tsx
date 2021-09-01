@@ -5,8 +5,9 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import { ChangeCB } from '@thecointech/shared/components/UxInput/types';
-import { AccountState } from '@thecointech/account';
+import type { ChangeCB } from '@thecointech/shared/components/UxInput/types';
+import type { AccountState } from '@thecointech/account';
+import type { MessageWithValues } from '@thecointech/shared/types';
 
 type VisualProps={
 
@@ -30,7 +31,7 @@ type VisualProps={
   onCancelTransfer: () => void,
   transferInProgress: boolean,
   transferOutHeader: MessageDescriptor | undefined,
-  transferMessage: MessageDescriptor | undefined,
+  transferMessage: MessageWithValues | undefined,
   percentComplete: number,
   transferValues: string,
 };
@@ -74,7 +75,6 @@ export const TransferWidget = (props: VisualProps) => {
         header={props.transferOutHeader}
         progressMessage={props.transferMessage}
         progressPercent={props.percentComplete}
-        messageValues={props.transferValues}
       />
     </React.Fragment>
   );

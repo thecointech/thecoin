@@ -64,8 +64,10 @@ export const Mint = () => {
       <ModalOperation
         isOpen={status === MintStatus.PROCESSING}
         header={messages.mintingHeader}
-        progressMessage={messages.mintingInProgress}
-        messageValues={{ txHash }}
+        progressMessage={{
+          ...messages.mintingInProgress,
+          values: { txHash }
+        }}
       />
     </React.Fragment>
   );

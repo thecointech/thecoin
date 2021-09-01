@@ -1,7 +1,7 @@
 import { DropdownItemProps } from 'semantic-ui-react';
 import { number } from 'card-validator';
-import { ValuedMessageDesc } from '@thecointech/shared/components/UxInput/types'
 import { defineMessages } from 'react-intl';
+import type { MessageWithValues } from '@thecointech/shared/types';
 
 const translations = defineMessages({
   invalidVisaChars : {
@@ -19,7 +19,7 @@ const translations = defineMessages({
 });
 
 export type Validatable = {
-  validate: (value: string) => ValuedMessageDesc|null,
+  validate: (value: string) => MessageWithValues|null,
   parameter?: any,
 }
 type ValidatedItemProps = DropdownItemProps & Validatable;
@@ -58,7 +58,7 @@ export function findPayee(text: string): Validatable|undefined {
   return item;
 }
 
-export function validate(name: string, value: string) : ValuedMessageDesc|undefined
+export function validate(name: string, value: string) : MessageWithValues|undefined
 {
   const payee = findPayee(name);
   return payee?.validate(value) ?? undefined;
