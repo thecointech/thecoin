@@ -68,7 +68,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {
-      throw new Error('Replay event does not match next transition');
+      throw new Error(`Replay event ${replay.type} does not match next transition ${transition.name}`);
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta
@@ -114,6 +114,8 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
     )
     : Promise<TypedActionContainer<Type>>
   {
+    const { initialId } = action.data;
+    log.debug({ initialId }, 'Begin processing action {initialId}')
 
     // We always start in the initial state with zero'ed entries
     let currentState = initialState<States>(action.data.date);
@@ -131,10 +133,9 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
     const priorTransitions = [...container.action.history];
 
     // Now, execute the graph till we are all done
-    while (currentState.name != 'complete' && currentState.name != 'error') {
+    while (currentState.name != 'complete') {
       // Our meta-programming has passed typescripts limit: manually cast to get rid of false errors
       const state = currentState.name as keyof StateGraph<States, Type>;
-      const { initialId } = action.data;
       const transitions = this.graph[state];
 
       // Manual early-exit.  Online service explicitly breaks

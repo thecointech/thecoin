@@ -8,4 +8,4 @@ export * from './noop';
 export * from './verifyPreTransfer';
 export * from './requestManual';
 export * from './markComplete';
-export * from './doBillPayment';
+export * from './manualOverride';

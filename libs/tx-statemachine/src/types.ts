@@ -29,7 +29,7 @@ export type StateGraph<States extends string, Type extends ActionType> =
   > &
   {
     complete: null,
-    error: null,
+    error: null|StateTransitions<States, Type>,
   };
 
 export type InstructionDataTypes = {
