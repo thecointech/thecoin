@@ -8,7 +8,7 @@ import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import * as FSM from '.';
 import { getCurrentState, StateGraph } from './types';
-import { manualOverride } from './transitions/manualOverride';
+import { manualOverride, manualOverrideTransition } from './transitions/manualOverride';
 
 const transitionBase = (type: string) =>({
   timestamp: DateTime.now(),
@@ -92,11 +92,7 @@ it("Error replay is handled appropriately", async () => {
 
   // Manually push a new state onto the stack
   // This is the equivalent of storeTransition in ManualOverride.tsx
-  action.history.push({
-    created: DateTime.now(),
-    meta: "initial",
-    type: "manualOverride",
-  })
+  action.history.push(manualOverrideTransition("initial"));
 
   // Same error occurs, we haven't actually fixed it.
   await runTest('error', 2, 2);
@@ -106,11 +102,7 @@ it("Error replay is handled appropriately", async () => {
   await runTest('error', 0, 2);
 
   // Manually restart again.  This time the issue is fixed.
-  action.history.push({
-    created: DateTime.now(),
-    meta: "initial",
-    type: "manualOverride",
-  })
+  action.history.push(manualOverrideTransition("initial"));
 
   // Should now complete
   const container = await runTest('complete', 2, 2);
