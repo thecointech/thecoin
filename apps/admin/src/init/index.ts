@@ -11,19 +11,27 @@ import { initGmail } from './gmail';
 //
 // Initialize (most of) the application
 // Does not initialize accounts or contract
-export function initialize() {
+export async function initialize() {
 
-  // initialize logging first
-  log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
+  try {
+    // initialize logging first
+    log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
-  RbcStore.initialize();
-  ConfigStore.initialize();
+    RbcStore.initialize();
+    ConfigStore.initialize();
 
-  initSidebar();
-  initAccounts();
-  initBrowser({ headless: true });
-  initFirestore();
-  initGmail();
+    initSidebar();
+    initAccounts();
+    await initBrowser({ headless: true });
+    await initFirestore();
+    await initGmail();
 
-  return configureAdminStore();
+    log.trace("Initialization complete");
+    return configureAdminStore();
+  }
+  catch (e) {
+    log.fatal(e, "Couldn't complete initialization");
+    alert(e.message);
+    throw e;
+  }
 }

@@ -3,6 +3,8 @@ import type { RbcApi as SrcApi } from "./index";
 import { jest } from '@thecointech/jestutils/shim';
 
 export { ETransferErrorCode };
+export { RbcStore } from './store'
+export function initBrowser() {};
 
 let result = 1234;
 export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
@@ -20,11 +22,3 @@ export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
   getTransactions = jest.fn(() => Promise.resolve([]));
   initialize = jest.fn(() => { });
 }
-
-// Mock store does nothing
-export class RbcStore {
-  static initialize() {};
-}
-
-// No browser
-export function initBrowser() {};

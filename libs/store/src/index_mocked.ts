@@ -6,13 +6,10 @@ export function BaseStore(_name: string) {
   }
 }
 
-export class ConfigStore {
-
-
+export class ConfigStore extends BaseStore("config") {
   static set(_key: string, _value: string) {}
-
-  static async get(key: string) : Promise<string|undefined> {
+  static get(key: string) : Promise<string|undefined> {
     // auth expects a JSON structure here
-    return `{ "${key}": "value" }`;
+    return Promise.resolve(`{ "${key}": "value" }`);
   }
 }

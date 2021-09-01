@@ -5,6 +5,10 @@
       "path": "apps\\admin"
     },
     {
+      "name": "tx-etransfer",
+      "path": "libs\\tx-etransfer"
+    },
+    {
       "name": "shared",
       "path": "libs\\shared"
     },
@@ -15,6 +19,10 @@
     {
       "name": "tx-gmail",
       "path": "libs\\tx-gmail"
+    },
+    {
+      "name": "broker-db",
+      "path": "libs\\broker-db"
     },
     {
       "name": "utils-ts",
