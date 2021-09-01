@@ -7,7 +7,7 @@ import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
-import { loadAndMergeHistory, calculateTxBalances, Transaction } from '@thecointech/tx-blockchain';
+import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
@@ -119,22 +119,18 @@ function AccountReducer(address: string, initialState: AccountState) {
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
-      // Lets not push ahead too quickly with this saga,
-      // allow a 500 ms delay so we don't update too quickly
-      //yield delay(250);
-      console.log(`Updating from ${from} -> ${until}`);
-
-      const origHistory = this.state.history;
+      log.trace(`Updating from ${from} -> ${until}`);
+      const oldHistory = this.state.history;
       const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
       // Retrieve transactions for all time
-      const newHistory: Transaction[] = yield call(loadAndMergeHistory, address, fromBlock, contract, origHistory);
+      const newHistory: Transaction[] = yield call(loadAndMergeHistory, address, fromBlock, contract);
       // Take current balance and use it plus Tx to reconstruct historical balances.
       calculateTxBalances(balance, newHistory);
       // Get the current block (save it so we know where we were up to in the future.)
       const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
 
       yield this.storeValues({
-        history: newHistory,
+        history: mergeTransactions(oldHistory, newHistory),
         historyLoading: false,
         historyStart: from,
         historyStartBlock: 0,

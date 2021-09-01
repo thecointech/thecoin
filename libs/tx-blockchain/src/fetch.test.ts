@@ -8,7 +8,7 @@ import { describe, IsManualRun } from '@thecointech/jestutils';
 jest.unmock('@thecointech/contract');
 
 async function fetchAndTestBalance(adress: string, contract: TheCoin) {
-  const history = await loadAndMergeHistory(adress, 0, contract, []);
+  const history = await loadAndMergeHistory(adress, 0, contract);
   const balance = await contract.balanceOf(adress) as BigNumber;
   validateHistory(history, balance);
   return history;
