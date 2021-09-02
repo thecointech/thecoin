@@ -29,10 +29,6 @@
       "path": "libs/utils-ts"
     },
     {
-      "name": "rbcapi",
-      "path": "libs/rbcapi"
-    },
-    {
       "name": "store",
       "path": "libs/store"
     },
