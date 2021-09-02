@@ -1,4 +1,3 @@
-// Not used, but required to import rbcapi
 export function BaseStore(_name: string) {
   return class BaseStore {
     static initialize() {};

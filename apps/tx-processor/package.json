@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@thecointech/logging": "^0.2.19",
-    "@thecointech/rbcapi": "^0.2.19",
     "@thecointech/tx-deposit": "^0.2.19",
     "@thecointech/tx-etransfer": "^0.2.19",
     "open": "^8.2.1"

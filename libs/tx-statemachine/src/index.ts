@@ -3,7 +3,7 @@ import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
 import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
 import type { TheCoin } from '@thecointech/contract';
-import type { RbcApi } from '@thecointech/rbcapi';
+import type { IBank } from '@thecointech/bank-interface';
 export * from './types';
 
 //
@@ -99,9 +99,9 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
 
   graph: StateGraph<States, Type>;
   contract: TheCoin;
-  bank: RbcApi|null;
+  bank: IBank|null;
 
-  constructor(graph: StateGraph<States, Type>, contract: TheCoin, bank: RbcApi|null) {
+  constructor(graph: StateGraph<States, Type>, contract: TheCoin, bank: IBank|null) {
     this.graph = graph;
     this.bank = bank;
     this.contract = contract;

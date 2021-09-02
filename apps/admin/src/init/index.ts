@@ -1,6 +1,4 @@
-import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
-import { initBrowser } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 import { initAccounts } from './accounts';
 import { initSidebar } from './sidebar';
@@ -17,12 +15,10 @@ export async function initialize() {
     // initialize logging first
     log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
-    RbcStore.initialize();
     ConfigStore.initialize();
 
     initSidebar();
     initAccounts();
-    await initBrowser({ headless: true });
     await initFirestore();
     await initGmail();
 
