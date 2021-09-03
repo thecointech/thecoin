@@ -39,6 +39,9 @@
     {
       "name": "contract",
       "path": "libs/contract"
+    },
+    {
+      "path": "libs/signers"
     }
   ],
   "settings": {

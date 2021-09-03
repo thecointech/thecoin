@@ -8,7 +8,6 @@ import { initGmail } from './gmail';
 
 //
 // Initialize (most of) the application
-// Does not initialize accounts or contract
 export async function initialize() {
 
   try {
@@ -18,7 +17,7 @@ export async function initialize() {
     ConfigStore.initialize();
 
     initSidebar();
-    initAccounts();
+    await initAccounts();
     await initFirestore();
     await initGmail();
 

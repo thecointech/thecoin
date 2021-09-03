@@ -15,6 +15,7 @@ const baseOptions = {
     rules: require('./webpack.rules'),
   },
   resolve: {
+    mainFields: ["main"],
     conditionNames: [process.env.CONFIG_NAME, "node", "require", "default"],
     modules: ['node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
