@@ -37,7 +37,7 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.19",
-    "axios": "*"
+    "axios": "0.21.3"
   },
   "devDependencies": {
     "jest": "*"
