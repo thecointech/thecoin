@@ -43,7 +43,7 @@
     "@thecointech/signers": "^0.2.19",
     "@thecointech/utilities": "^0.2.19",
     "@tsoa/runtime": "^3.8.0",
-    "axios": "*",
+    "axios": "0.21.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
