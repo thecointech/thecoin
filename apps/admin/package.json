@@ -8,7 +8,7 @@
       "**/electron-devtools-installer/**"
     ]
   },
-  "version": "0.2.18",
+  "version": "0.2.22",
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {

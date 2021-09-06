@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.22](https://github.com/thecointech/thecoin/compare/v0.2.21...v0.2.22) (2021-09-06)
 
-**Note:** Version bump only for package @thecointech/admin
-
-
-
-
-
-## [0.2.18](https://github.com/thecointech/thecoin/compare/v0.2.17...v0.2.18) (2021-08-21)
-
-**Note:** Version bump only for package @thecointech/admin
+**Note:** Version bump only for package @thecointech/bank-interface
