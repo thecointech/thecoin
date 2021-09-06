@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-statemachine",
-  "version": "0.2.22",
+  "version": "0.2.24",
   "description": "The Coin: The execution statemachine for processing coin transactions",
   "keywords": [
     "THECoin"
@@ -53,7 +53,7 @@
     "@thecointech/utilities": "^0.2.22"
   },
   "devDependencies": {
-    "@thecointech/bank-interface": "^0.2.22",
+    "@thecointech/bank-interface": "^0.2.24",
     "@thecointech/tx-gmail": "^0.2.22",
     "jest": "*"
   },
