@@ -2,7 +2,6 @@
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
-    { "path": "../rbcapi/tsconfig.build.json" },
     { "path": "../tx-statemachine/tsconfig.build.json" },
   ]
 }

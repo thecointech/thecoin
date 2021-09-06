@@ -1,6 +1,6 @@
 import { Page } from "puppeteer";
 import { DateTime } from "luxon";
-import { RbcTransaction } from "./types";
+import { BankTx } from "@thecointech/bank-interface"
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
 import { RbcStore } from "./store";
@@ -22,7 +22,7 @@ export async function fetchLatestTransactions() {
 
 //
 // Get all transactions between from & to from bank acc
-export async function getTransactions(from: Date, to = new Date(), accountNo = ApiAction.Credentials.accountNo): Promise<RbcTransaction[]> {
+export async function getTransactions(from: Date, to = new Date(), accountNo = ApiAction.Credentials.accountNo): Promise<BankTx[]> {
   const act = await ApiAction.New('getTransactions', true);
   const { page } = act;
 
@@ -75,13 +75,13 @@ export async function getTransactions(from: Date, to = new Date(), accountNo = A
   return obj.map(cleanTransaction);
 }
 
-const newTransaction  = (): RbcTransaction => ({
+const newTransaction  = (): BankTx => ({
   AccountType: "DEFAULT_VALUE",
   AccountNumber: "DEFAULT_VALUE",
   TransactionDate: DateTime.fromMillis(0)
 })
 const cleanName = (name: string) => name.replace(/[\s\$]/g, '');
-const cleanTransaction = (obj: object) : RbcTransaction =>
+const cleanTransaction = (obj: object) : BankTx =>
   Object.entries(obj)
     .reduce((r, et) => ({
       ...r,

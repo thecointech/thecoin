@@ -58,6 +58,8 @@ export const graph : StateGraph<States, "Sell"> = {
   // refundReady: {
   //   next: transitionTo(noop, "complete"),
   // },
-  error: null,
-  complete: null
+  error: {
+    next: core.manualOverride,
+  },
+  complete: null,
 }

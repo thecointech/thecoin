@@ -7,9 +7,9 @@ import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import * as FSM from '.';
-import { AnyActionContainer, StateGraph } from './types';
+import { AnyActionContainer, getCurrentState, StateGraph } from './types';
+import { manualOverride } from './transitions/manualOverride';
 
-const getLast = (cont: AnyActionContainer) => cont.history.slice(-1)[0];
 const transitionBase = (type: string) =>({
   timestamp: DateTime.now(),
   type,
@@ -27,8 +27,8 @@ const addFiat = async () => ({ ...transitionBase('addFiat'), fiat: new Decimal(1
 const addCoin = async () => ({ ...transitionBase('addCoin'), coin: new Decimal(10), fiat: new Decimal(0) })
 // Simulate an error occuring
 const makeError = async () => ({ ...transitionBase('makeError'), error: "An error occurs" })
-const logSuccess = async (cont: AnyActionContainer) => { log.trace(getLast(cont).data.meta!); return transitionBase('logSuccess'); }
-const logError = async (cont: AnyActionContainer) => { log.warn(getLast(cont).data.error!); return transitionBase('logError'); }
+const logSuccess = async (cont: AnyActionContainer) => { log.trace(getCurrentState(cont).data.meta!); return transitionBase('logSuccess'); }
+const logError = async (cont: AnyActionContainer) => { log.warn(getCurrentState(cont).data.error!); return transitionBase('logError'); }
 
 type States = "initial"|"withFiat"|"withCoin"|"finalize"|"error"|"complete";
 
@@ -45,7 +45,7 @@ const graph : StateGraph<States, ActionType> = {
   finalize: {
     next: FSM.transitionTo<States>(logSuccess, "complete"),
   },
-  error: null,
+  error: { next: manualOverride },
   complete: null,
 }
 
@@ -90,7 +90,7 @@ it("Pauses and resumes running a processing graph on an action", async () => {
     expect(spyOnRunTransitions).toHaveBeenCalledTimes(executedTransitions);
     expect(spyOnLogError).toHaveBeenCalledTimes(numErrors);
 
-    const result1 = getLast(container);
+    const result1 = getCurrentState(container);
     expect(result1.name).toEqual(expectedState);
     expect(result1.data.coin?.toNumber()).toEqual(expectedValues.coin?.toNumber());
     expect(result1.data.fiat?.toNumber()).toBe(expectedValues.fiat?.toNumber());

@@ -28,6 +28,7 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
+      "electron": "./build/electron/index.js",
       "browser": {
         "default": "./build/names.js"
       },
@@ -37,9 +38,23 @@
         "prod": "./build/index_prod.js",
         "default": "./build/index_node.js"
       }
+    },
+    "./electron": {
+      "browser": "./build/electron/bridge_browser.js",
+      "node": "./build/electron/bridge_node.js"
     }
   },
-  "types": "./build/index_node.d.ts",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "./build/index_prod.d.ts"
+      ],
+      "*": [
+        "build/electron/bridge_browser.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "^0.2.19",

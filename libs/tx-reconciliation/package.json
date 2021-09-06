@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@thecointech/broker-db": "^0.2.19",
-    "@thecointech/rbcapi": "^0.2.19",
+    "@thecointech/bank-interface": "^0.2.19",
     "@thecointech/shared": "^0.2.19",
     "@thecointech/tx-blockchain": "^0.2.19",
     "@thecointech/tx-gmail": "^0.2.19",

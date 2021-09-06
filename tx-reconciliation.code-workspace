@@ -2,19 +2,19 @@
 	"folders": [
     {
       "name": "tx-reconciliation",
-      "path": "libs\\tx-reconciliation"
+      "path": "libs/tx-reconciliation"
     },
     {
       "name": "tx-gmail",
-      "path": "libs\\tx-gmail"
+      "path": "libs/tx-gmail"
     },
     {
       "name": "tx-blockchain",
-      "path": "libs\\tx-blockchain"
+      "path": "libs/tx-blockchain"
     },
     {
       "name": "rbcapi",
-      "path": "libs\\rbcapi"
+      "path": "libs/rbcapi"
     }
   ],
   "settings": {

@@ -53,7 +53,7 @@
     "@thecointech/utilities": "^0.2.19"
   },
   "devDependencies": {
-    "@thecointech/rbcapi": "^0.2.19",
+    "@thecointech/bank-interface": "^0.2.19",
     "@thecointech/tx-gmail": "^0.2.19",
     "jest": "*"
   },

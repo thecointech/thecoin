@@ -33,22 +33,12 @@ export const init = async () =>
   log.debug('Connecting client-side db');
 
   const auth = firebase.auth();
-  //const cred = await auth.signInWithEmailAndPassword(username, password);
   var provider = new firebase.auth.GoogleAuthProvider();
   const cred = await auth.signInWithPopup(provider);
   if (cred) {
     var db = firebase.firestore();
     setFirestore(db);
+    return true;
   }
   return false;
-
-  // const _auth = firebase.auth();
-  // const cred = await _auth.signInWithEmailAndPassword(username, password);
-  // if (cred != null)
-  // {
-  //   const db = firebase.firestore();
-  //   setFirestore(db);
-  //   return true;
-  // }
-  // return false;
 }

@@ -18,7 +18,7 @@ function loadEncrypted(name: AccountName) {
     if (path) {
       if (!existsSync(path))
         throw new Error(`Could not load ${name} from path: ${path}`);
-      wallet = readFileSync(path, 'utf8');
+      wallet = readFileSync(path, 'ascii');
     }
   }
   if (!wallet)

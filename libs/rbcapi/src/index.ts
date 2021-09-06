@@ -1,14 +1,14 @@
 import { log } from '@thecointech/logging';
+import { IBank, ProgressCallback} from '@thecointech/bank-interface';
+import { ETransferPacket } from '@thecointech/types';
 import { RbcStore } from './store';
 import { ApiAction } from './action';
-import { ProgressCallback, AuthOptions } from './types';
-
+import { AuthOptions } from './types';
 import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
-import { ETransferPacket } from '@thecointech/types';
 import { send } from './etransfer';
 
-export class RbcApi {
+export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not
   // specified, attempt to read the RBCAPI_CREDENTIALS environment variable
@@ -41,4 +41,5 @@ export class RbcApi {
 
 export { RbcStore } from './store';
 export * from './types';
+export * from '@thecointech/bank-interface';
 export { initBrowser, closeBrowser } from './action';

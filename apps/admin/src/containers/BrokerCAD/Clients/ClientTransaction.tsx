@@ -1,8 +1,9 @@
-import type { AnyAction, TransitionDelta } from '@thecointech/broker-db'
+import React from "react"
+import { AnyAction, TransitionDelta } from '@thecointech/broker-db'
 import { RefundButton } from "containers/Refund"
 import { DateTime } from 'luxon'
-import React from "react"
-import { Icon, List } from "semantic-ui-react"
+import { Icon, List } from "semantic-ui-react";
+import { ManualOverride } from './ManualOverride';
 
 export const ClientTransaction = (props: AnyAction) => {
   const date = props.data.date;
@@ -23,6 +24,7 @@ export const ClientTransaction = (props: AnyAction) => {
         : <RefundButton action={props} />
       }
       {history.map(TransactionEntry)}
+      <ManualOverride {...props} />
     </List.Item>
   )
 }

@@ -1,6 +1,4 @@
-import { RbcStore } from "@thecointech/rbcapi";
 import { ConfigStore } from '@thecointech/store';
-import { initBrowser } from '@thecointech/rbcapi';
 import { log } from '@thecointech/logging';
 import { initAccounts } from './accounts';
 import { initSidebar } from './sidebar';
@@ -10,20 +8,25 @@ import { initGmail } from './gmail';
 
 //
 // Initialize (most of) the application
-// Does not initialize accounts or contract
-export function initialize() {
+export async function initialize() {
 
-  // initialize logging first
-  log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
+  try {
+    // initialize logging first
+    log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
-  RbcStore.initialize();
-  ConfigStore.initialize();
+    ConfigStore.initialize();
 
-  initSidebar();
-  initAccounts();
-  initBrowser({ headless: true });
-  initFirestore();
-  initGmail();
+    initSidebar();
+    await initAccounts();
+    await initFirestore();
+    await initGmail();
 
-  return configureAdminStore();
+    log.trace("Initialization complete");
+    return configureAdminStore();
+  }
+  catch (e) {
+    log.fatal(e, "Couldn't complete initialization");
+    alert(e.message);
+    throw e;
+  }
 }

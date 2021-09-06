@@ -6,7 +6,7 @@
     { "path": "../../libs/broker-db/tsconfig.build.json" },
     { "path": "../../libs/tx-gmail/tsconfig.build.json" },
     { "path": "../../libs/tx-blockchain/tsconfig.build.json" },
-    { "path": "../../libs/rbcapi/tsconfig.build.json" }
+    { "path": "../../libs/bank-interface/tsconfig.json" }
   ]
 }
 

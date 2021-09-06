@@ -1,7 +1,6 @@
 import type { IpcRenderer } from 'electron';
 import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from '@thecointech/store';
-// const { ipcRenderer } = window.require('electron');
 
 declare let window: Window & {
   ipcRenderer: Pick<IpcRenderer, "invoke">

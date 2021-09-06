@@ -9,8 +9,7 @@ import { translations } from './translations';
 import { initialize } from './init';
 import { App } from './containers/App';
 
-const store = initialize()
-
+const store = await initialize()
 function render() {
   ReactDOM.render(
     <Provider store={store}>

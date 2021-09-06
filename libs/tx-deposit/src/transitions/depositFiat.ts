@@ -1,6 +1,6 @@
 import { getSigner } from "@thecointech/signers";
 import { log } from "@thecointech/logging";
-import { DepositResult, ETransferErrorCode, RbcApi } from "@thecointech/rbcapi";
+import { DepositResult, ETransferErrorCode, IBank } from "@thecointech/bank-interface";
 import type { eTransferData } from "@thecointech/tx-gmail";
 import { IsValidAddress, getAddressShortCode } from "@thecointech/utilities";
 import Decimal from "decimal.js-light";
@@ -40,7 +40,7 @@ async function doDeposit(container: BuyActionContainer) {
   }
 }
 
-async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressCb: (v: string) => void) : Promise<DepositResult> {
+async function depositInBank(etransfer: eTransferData, bank: IBank, progressCb: (v: string) => void) : Promise<DepositResult> {
 
   const {address, name, depositUrl, cad, recieved } = etransfer;
   log.debug(`Attempting deposit of: $${cad}, recieved on ${recieved.toSQLDate()}`);
@@ -63,7 +63,7 @@ async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressC
   const bta = await getSigner("BrokerTransferAssistant");
   const code = await getAddressShortCode(address, bta);
   const prefix = `${name}/${recieved.toSQLDate()}`;
-  const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
+  const result = await bank.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);
   return result;
 }
