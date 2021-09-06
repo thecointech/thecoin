@@ -9,11 +9,10 @@ import { DateTime } from 'luxon';
 import { getSigner } from '@thecointech/signers';
 import { usePromiseSubscription } from '@thecointech/shared';
 
-const header = defineMessage({defaultMessage: 'Verify an Account'});
-const subHeader = defineMessage({defaultMessage: 'A verified account can refer other accounts.'});
-const labelAccount = defineMessage({ defaultMessage: 'Account to Verify' });
-const buttonVerify = defineMessage({ defaultMessage: 'VERIFY ACCOUNT' });
-
+const header = defineMessage({defaultMessage: 'Verify an Account', description: "Title message on Verify page"});
+const subHeader = defineMessage({defaultMessage: 'A verified account can refer other accounts.', description: "Subtitle explains what verified accounts can do"});
+const labelAccount = defineMessage({ defaultMessage: 'Account to Verify', description: "Label for account number input" });
+const buttonVerify = defineMessage({ defaultMessage: 'VERIFY ACCOUNT', description: "Button sets account number as verified" });
 
 export const VerifyAccount = () => {
 
