@@ -11,17 +11,13 @@
       "message": "chore(release): publish",
       "registry": "https://npm.pkg.github.com",
       "allowBranch": [
-        "publish/beta",
-        "publish/release",
-        "dev"
+        "publish/*"
       ]
     },
     "version": {
       "noChangelog": true,
       "allowBranch": [
-        "publish/beta",
-        "publish/release",
-        "dev"
+        "publish/*"
       ],
       "ignoreChanges": [
         "**/__fixtures__/**",
