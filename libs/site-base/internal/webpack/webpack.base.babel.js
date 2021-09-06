@@ -12,6 +12,8 @@ const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
 const env = getEnvVars();
 
+console.log(`\n--- Building ${process.env.LOG_NAME} for ${process.env.CONFIG_NAME} ---\n`);
+
 module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
   externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
