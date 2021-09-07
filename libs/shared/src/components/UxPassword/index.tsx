@@ -1,105 +1,33 @@
-import React from 'react';
-import { debounce, DebouncedFunc } from 'lodash';
+import React, { useState } from 'react';
 import { Container, Icon } from 'semantic-ui-react';
-import { UxInput } from '../../components/UxInput';
-import { Props, State, initialState } from './types';
+import { UxInput } from '../UxInput';
+import { Props } from '../UxInput/types';
 import styles from './styles.module.less';
 
 const UnMasked = "text";
 const Masked = "password";
-const hideStyle = {
+const hideStyle: React.CSSProperties = {
   display: 'none',
-} as React.CSSProperties;
-const showStyle = {
+};
+const showStyle: React.CSSProperties = {
   display: 'block',
-} as React.CSSProperties;
+}
 
-export class UxPassword extends React.PureComponent<Props, State> {
+export const UxPassword = (props: Props) => {
 
-  // Set default
-  static defaultProps = {
-    unMaskTime: 1400
-  };
-  state = initialState;
-
-  // callback to trigger toggling password masking
-  maskPassword: DebouncedFunc<() => void>;
-
-  constructor(props: Props) {
-    super(props);
-
-    // set debouncer for password
-    this.maskPassword = debounce(this.addPasswordType, props.unMaskTime);
-    this.uxChange = this.uxChange.bind(this);
-    this.toggleMask = this.toggleMask.bind(this);
-  }
-
-  componentDidMount() {
-    const { unMaskTime } = this.props;
-    if (unMaskTime! > 0) {
-      this.maskPassword = debounce(this.addPasswordType, unMaskTime);
-    }
-  }
-
-  /*==========  METHODS  ==========*/
-
-  addPasswordType() {
-    this.setState({
-      isPassword: true
-    });
-  }
-
-  /*==========  HANDLERS  ==========*/
-
-  onToggleInputType() {
-    this.setState({
-      isPassword: !this.state.isPassword
-    });
-  }
-
-  uxChange(value: string): void {
-    const returnValue = this.props.uxChange(value);
-    return returnValue;
-  }
-
-  //
-  //////////////////////////////////////////////////////////////////////////////
-  toggleMask() {
-    this.setState({
-      isPassword: !this.state.isPassword
-    });
-  }
-
-  componentWillUnmount() {
-    // cancel the debouncer when component is not used anymore. This to avoid
-    // setting the state  unnecessarily, see issue #24
-    if (this.maskPassword) {
-      this.maskPassword.cancel()
-    }
-  }
-
-  render() {
-    const {
-      uxChange,
-      unMaskTime,
-      toggleMask,
-      ...inputProps
-    } = this.props;
-
-    const { isPassword } = this.state;
-
-    return (
-      <Container id={styles.containerPasswordField}>
-        <div onClick={this.toggleMask} id={styles.togglePassword} unselectable="on">
-          <p style={ isPassword ? showStyle : hideStyle }><Icon name='hide' />&nbsp;Show Password</p>
-          <p style={ isPassword ? hideStyle : showStyle }><Icon name='unhide' />&nbsp;Hide Password</p>
-        </div>
-        <UxInput
-          type={isPassword ? Masked : UnMasked}
-          uxChange={this.uxChange}
-          {...inputProps}
-        />
-      </Container>
-    )
-  }
+  // Show/hide toggle for pwd
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword(val => !val);
+  return (
+    <Container id={styles.containerPasswordField}>
+      <div onClick={togglePassword} id={styles.togglePassword} unselectable="on">
+        <p style={showPassword ? showStyle : hideStyle}><Icon name='hide' />&nbsp;Show Password</p>
+        <p style={showPassword ? hideStyle : showStyle}><Icon name='unhide' />&nbsp;Hide Password</p>
+      </div>
+      <UxInput
+        type={showPassword ? Masked : UnMasked}
+        {...props}
+      />
+    </Container>
+  )
 }

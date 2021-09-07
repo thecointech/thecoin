@@ -1,49 +1,33 @@
 import * as React from 'react';
 import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../UxInput';
-import { defineMessages, MessageDescriptor } from 'react-intl';
-import { useState } from 'react';
-import { ChangeCB } from '../UxInput/types';
+import { defineMessage } from 'react-intl';
+import { Props as BaseProps, ValidateCB } from '../UxInput/types';
 
-const translate = defineMessages({
-		labelAddress : {
-                defaultMessage:"Account",
-                description:"shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer" },
-		errorMessage : {
-                defaultMessage:"This address is not the right format",
-                description:"shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer" }});
+const error = defineMessage({
+  defaultMessage: "An address is 40 characters long, and consists only of numbers and the letters A-F",
+  description: "Describe a valid format for an ethereum address"
+});
+const localPlaceholder = defineMessage({
+  defaultMessage: "An ethereum address",
+  description: "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
+});
 
-type MyProps = {
-	forceValidate?: boolean,
-	placeholder?: string,
-	intlLabel?: MessageDescriptor,
-	uxChange: ChangeCB
-}
+type localProps = "onValidate"|"placeholder";
+type Props = Omit<BaseProps, localProps> & Partial<Pick<BaseProps, localProps>>
+export const UxAddress = (props: Props) => {
 
-export const UxAddress = (props:MyProps) => {
-	const [account, setAccount] = useState("");
-	const [isValid, setIsValid] = useState(false);
-	const [message, setMessage] = useState(undefined as MessageDescriptor | undefined);
+  const { onValidate, placeholder, ...rest } = props;
+  const addressValidate: ValidateCB = (value) =>
+    IsValidAddress(value) && (onValidate?.(value) ?? true)
+      ? error
+      : null;
 
-	// Validate our inputs
-	const onAccountValue = (value: string) => {
-		const isValidTemp = IsValidAddress(value)
-		setAccount(value);
-		setIsValid(isValidTemp);
-		if (!isValidTemp){
-			setMessage(translate.errorMessage);
-		}
-    else props.uxChange(value)
-	}
-
-	return(
-		<UxInput
-			intlLabel={translate.labelAddress}
-			value={account}
-			isValid={isValid}
-			message={message}
-			{...props}
-			uxChange={onAccountValue}
-		/>
-	);
+  return (
+    <UxInput
+      onValidate={addressValidate}
+      placeholder={placeholder ?? localPlaceholder}
+      {...rest}
+    />
+  );
 }
