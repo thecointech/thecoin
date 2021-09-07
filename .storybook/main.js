@@ -1,6 +1,7 @@
 const path = require('path');
 const shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
-const mocksFolder = path.join(__dirname, '..', '__mocks__');
+const rootFolder = path.join(__dirname, '..');
+const mocksFolder = path.join(rootFolder, '__mocks__');
 const { DefinePlugin } = require('webpack');
 const { merge } = require("webpack-merge")
 
@@ -57,6 +58,11 @@ module.exports = {
         }
       },
       config);
+    // Exclude our build folder from compilation.
+    // This is because shared/site-base build to ES2017
+    // which somehow breaks the FormatJS babel plugin.
+    const babelRule = r.module.rules.find(rule => rule.include?.includes?.(rootFolder));
+    babelRule.exclude = /(node_modules)|(build)/
     return r;
   },
   core: {
