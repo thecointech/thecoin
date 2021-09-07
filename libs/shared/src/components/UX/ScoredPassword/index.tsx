@@ -5,10 +5,11 @@ import styles from './styles.module.less';
 import type { ZXCVBNResult } from 'zxcvbn';
 import { Props as MyProps } from './types';
 import { UxPassword } from '@thecointech/shared/components/UxPassword';
+import type { MessageWithValues } from '@thecointech/shared/types';
 
 const initialState = {
   message: undefined as MessageDescriptor | undefined,
-  tooltip: undefined as MessageDescriptor | undefined,
+  tooltip: undefined as MessageWithValues | undefined,
   stats: null as ZXCVBNResult | null,
 }
 
@@ -43,6 +44,9 @@ const translate = defineMessages({
   PasswordRequired: {
     defaultMessage: "Please enter a password of at least 'moderate' strength",
   },
+  Tooltip: {
+    defaultMessage: `This password requires {time} to crack`
+  }
 });
 
 export class UxScoredPassword extends React.PureComponent<Props, State> {
@@ -94,12 +98,13 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
     const stats = this.getScore(value);
     const isValid = this.props.uxChange(value, stats ? stats.score : -1);
 
-
     if (stats !== null) {
       const hasWarning = stats.feedback.warning.length > 0;
       let newState = {
+        stats,
         tooltip: {
-          defaultMessage: `This password requires ${stats.crack_times_display.offline_slow_hashing_1e4_per_second} to crack`
+          ...translate.Tooltip,
+          values: { time: stats.crack_times_display.offline_slow_hashing_1e4_per_second }
         },
         message: hasWarning
           ? {
@@ -157,7 +162,6 @@ export class UxScoredPassword extends React.PureComponent<Props, State> {
     return (
       <UxPassword
         intlLabel={intlLabel}
-        id="uxPasswordField"
         uxChange={this.uxChange}
         footer={infoBarComponent}
         {...inputProps}
