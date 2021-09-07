@@ -1,112 +1,99 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, { useState } from 'react';
+import { defineMessage, FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UxAddress';
-import messages from './messages'
 import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
 import { setUserVerified } from '@thecointech/broker-db/user';
 import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
 import { DateTime } from 'luxon';
 import { getSigner } from '@thecointech/signers';
+import { usePromiseSubscription } from '@thecointech/shared';
 
-const initialState = {
-	account: '',
-	forceValidate: false,
-	verifiedAccounts: [] as VerifiedReferrer[]
+const header = defineMessage({defaultMessage: 'Verify an Account', description: "Title message on Verify page"});
+const subHeader = defineMessage({defaultMessage: 'A verified account can refer other accounts.', description: "Subtitle explains what verified accounts can do"});
+const labelAccount = defineMessage({ defaultMessage: 'Account to Verify', description: "Label for account number input" });
+const buttonVerify = defineMessage({ defaultMessage: 'VERIFY ACCOUNT', description: "Button sets account number as verified" });
+
+export const VerifyAccount = () => {
+
+  const [account, setAccount] = useState('');
+  const [forceValidate, setForceValidate] = useState(false);
+  const [verifiedAccounts, error, isPending] = usePromiseSubscription(async () => {
+    const allDocs = await getReferrersCollection().get();
+    return [...allDocs.docs].map(d => d.data())
+  }, undefined);
+
+  return (
+    <React.Fragment>
+      <Form>
+        <Header as="h1">
+          <Header.Content>
+            <FormattedMessage {...header} />
+          </Header.Content>
+          <Header.Subheader>
+            <FormattedMessage {...subHeader} />
+          </Header.Subheader>
+        </Header>
+        <UxAddress
+          intlLabel={labelAccount}
+          uxChange={setAccount}
+          forceValidate={forceValidate}
+        />
+        <Button disabled={isPending} onClick={async () => {
+          setForceValidate(true);
+          const code = await verifyAccount(account);
+          if (code) setAccount('');
+        }}>
+          <FormattedMessage {...buttonVerify} />
+        </Button>
+      </Form>
+      <Message
+        hidden={!error}
+        header="An error occured"
+        content={error?.toString()}
+      />
+      <VerifiedAccountList accounts={verifiedAccounts} />
+    </React.Fragment>
+  );
 }
 
-//
-//
-class VerifyAccount extends React.PureComponent<{}, typeof initialState> {
+const VerifiedAccountList = ({accounts}: { accounts?: VerifiedReferrer[] }) => {
+  if (accounts === undefined)
+    return <Message>Please wait, loading</Message>
+  if (accounts.length === 0)
+    return <Message>No verified accounts found</Message>
 
-	state = initialState;
-
-	componentWillMount() {
-		this.fetchExistingAccounts();
-	}
-
-	onAccountValue = (value: string) => {
-		this.setState({
-			account: value,
-		});
-	}
-	onVerifyAccount = async (e: React.MouseEvent<HTMLElement>) => {
-		e.preventDefault();
-		await this.verifyAccount(e);
-		this.setState(initialState);
-		await this.fetchExistingAccounts();
-	}
-
-	async fetchExistingAccounts() {
-		const referrers = getReferrersCollection();
-		const allDocs = await referrers.get();
-		this.setState({
-			verifiedAccounts: [...allDocs.docs].map(d => d.data())
-		})
-  }
-
-	async verifyAccount(_e: React.MouseEvent<HTMLElement>) {
-
-    const signer = await getSigner("BrokerCAD")
-		const { account } = this.state;
-		if (!account)
-			return;
-
-		// We sign this account to show we approve of it
-		const address = NormalizeAddress(account);
-		const signature = await signer.signMessage(address)
-
-		await setUserVerified(signature, address, DateTime.now());
-		await createReferrer(signature, address);
-		alert('Done');
-	}
-
-	renderVerifiedAccounts()
-	{
-		const { verifiedAccounts } = this.state;
-		if (verifiedAccounts === undefined)
-			return <Message>Please wait, loading</Message>
-		if (verifiedAccounts.length === 0)
-			return <Message>No verified accounts found</Message>
-
-		const verifiedList = verifiedAccounts.map(account => {
-			const code = getShortCode(account.signature);
-			return <List.Item key={account.address}>
-				<List.Content>
-					<List.Header>{code}</List.Header>
-					{account.address}
-				</List.Content>
-			</List.Item>
-		});
-		return <List divided relaxed>{verifiedList}</List>
-	}
-
-	render() {
-		const { forceValidate } = this.state;
-		const verifiedAccounts = this.renderVerifiedAccounts();
-		return (
-			<React.Fragment>
-				<Form>
-					<Header as="h1">
-						<Header.Content>
-							<FormattedMessage {...messages.header} />
-						</Header.Content>
-						<Header.Subheader>
-							<FormattedMessage {...messages.subHeader} />
-						</Header.Subheader>
-					</Header>
-					<UxAddress
-						uxChange={this.onAccountValue}
-						forceValidate={forceValidate}
-					/>
-					<Button onClick={this.onVerifyAccount}>
-						<FormattedMessage {...messages.buttonVerify} />
-					</Button>
-				</Form>
-				{verifiedAccounts}
-			</React.Fragment>
-		);
-	}
+  return (
+    <List divided relaxed>
+    {
+      accounts.map(account => {
+        const code = getShortCode(account.signature);
+        return (
+          <List.Item key={account.address}>
+            <List.Content>
+              <List.Header>{code}</List.Header>
+              {account.address}
+            </List.Content>
+          </List.Item>
+        )
+      })
+    }
+    </List>
+  )
 }
 
-export { VerifyAccount }
+async function verifyAccount(address: string) {
+
+  if (!address || address.length === 0)
+    return false;
+
+  // We sign this address to show we approve of it
+  const signer = await getSigner("BrokerCAD")
+  const naddress = NormalizeAddress(address);
+  const signature = await signer.signMessage(naddress)
+
+  await setUserVerified(signature, address, DateTime.now());
+  const code = await createReferrer(signature, address);
+  alert('Done');
+  return code;
+}

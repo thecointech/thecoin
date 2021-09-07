@@ -26,10 +26,9 @@ export function bridge(ipc: IpcMain) {
   log.debug("Initializing signers IPC:handle...");
   // Listen for incoming requests
   ipc.handle(SIGNER_CHANNEL, async (_event, signerName: AccountName, func: SignerFn, args: any[]) => {
-    log.trace(`Calling: ${signerName}:${func}(${JSON.stringify(args)})`);
     const signer = await getSigner(signerName);
     if (typeof signer[func] != 'function')
-      throw new Error(`Unknown function requested: ${func}`);
+      throw new Error(`Unknown function requested: ${signerName}):${func}`);
     //@ts-ignore - I can't figure out how to get TS to like this line
     return signer[func].apply(signer, args);
   });
