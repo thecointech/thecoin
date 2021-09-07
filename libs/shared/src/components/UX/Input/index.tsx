@@ -1,13 +1,13 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
-import { Props } from '../types';
+import { BaseProps } from '../types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
-const isMessage = (messageOrComponent: Props["intlLabel"]): messageOrComponent is MessageDescriptor =>
+const isMessage = (messageOrComponent: BaseProps["intlLabel"]): messageOrComponent is MessageDescriptor =>
   messageOrComponent.hasOwnProperty("defaultMessage")
 
-export const UxInput = (props: Props) => {
+export const UxInput = (props: BaseProps) => {
 
   const {
     onValue,
@@ -15,7 +15,6 @@ export const UxInput = (props: Props) => {
 
     defaultValue,
     forceValidate,
-    footer,
 
     placeholder,
     type
@@ -23,7 +22,7 @@ export const UxInput = (props: Props) => {
 
   const [value, setValue] = useState(defaultValue ?? "");
   const [showState, setShowState] = useState(false);
-  const [message, setMessage] = useState<MessageDescriptor | null>(null);
+  const [errorMessage, setErrorMessage] = useState<MessageDescriptor | null>(null);
 
   const onBlur = () => {
     setShowState(true);
@@ -31,9 +30,9 @@ export const UxInput = (props: Props) => {
 
   const localChange = (value: string) => {
     setValue(value);
-    const errorMessage = onValidate(value, props.name)
-    setMessage(errorMessage);
-    onValue(errorMessage ? undefined : value, props.name);
+    const validateResult = onValidate(value, props.name)
+    setErrorMessage(validateResult);
+    onValue(validateResult ? undefined : value, props.name);
   }
 
   // If we must force-validate, but we not already
@@ -47,12 +46,12 @@ export const UxInput = (props: Props) => {
     setValue(defaultValue ?? "");
   }, [defaultValue])
 
-  const isValid = !message;
+  const isValid = !errorMessage;
   const doShowState = forceValidate || showState;
 
   const intl = useIntl();
   const label = isMessage(props.intlLabel) ? <FormattedMessage {...props.intlLabel} /> : props.intlLabel;
-  const tooltip = intl.formatMessage(props.tooltip);
+  const tooltip = intl.formatMessage(props.tooltip, props.tooltip.values);
   const formClassName = doShowState
     ? isValid ? 'success' : 'error'
     : ''
@@ -63,33 +62,26 @@ export const UxInput = (props: Props) => {
     borderColor: LessVars.errorBorderColor,
   }
 
-  const inputElement = (
-    <span ref={contextRef}>
-      <Input
-        onChange={(_, { value }) => localChange(value)}
-        onBlur={onBlur}
-        value={value}
-        placeholder={intl.formatMessage(placeholder)}
-        type={type}
-        data-tooltip={tooltip}
-      />
-    </span>
-  );
-  const messageElement = (
-    <Popup
-      context={contextRef}
-      position='top right'
-      content={message ? intl.formatMessage(message) : undefined}
-      open={doShowState && !isValid}
-      style={styleError} />
-  );
-
   return (
     <Form.Field className={`${formClassName} ${props.className}`} >
       <Label>{label}</Label>
-      {messageElement}
-      {inputElement}
-      {footer}
+      <Popup
+        context={contextRef}
+        position='top right'
+        content={errorMessage ? <FormattedMessage {...errorMessage} /> : undefined}
+        open={doShowState && !isValid}
+        style={styleError}
+      />
+      <span ref={contextRef}>
+        <Input
+          onChange={(_, { value }) => localChange(value)}
+          onBlur={onBlur}
+          value={value}
+          placeholder={intl.formatMessage(placeholder)}
+          type={type}
+          data-tooltip={tooltip}
+        />
+      </span>
     </Form.Field>
   );
 }

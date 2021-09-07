@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Container, Icon } from 'semantic-ui-react';
 import { UxInput } from '../Input';
-import { Props as BaseProps } from '../types';
+import { BaseProps, SomeOptional } from '../types';
 import styles from './styles.module.less';
 
 const UnMasked = "text";
@@ -16,10 +16,11 @@ const showStyle: React.CSSProperties = {
 
 const showLabel = defineMessage({defaultMessage: "Show Password", description: "Label for toggle showing password in input"})
 const hideLabel = defineMessage({defaultMessage: "Hide Password", description: "Label for toggle hiding password in input"})
+const noValidation = () => null;
 
-type Props = Omit<BaseProps, "defaultValue"|"onValidate">;
+type Props = SomeOptional<BaseProps, "defaultValue"|"onValidate">
 export const UxPassword = (props: Props) => {
-
+  const { onValidate, defaultValue, ...rest } = props;
   // Show/hide toggle for pwd
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword(val => !val);
@@ -31,8 +32,8 @@ export const UxPassword = (props: Props) => {
       </div>
       <UxInput
         type={showPassword ? UnMasked : Masked}
-        onValidate={() => null}
-        {...props}
+        onValidate={onValidate ?? noValidation}
+        {...rest}
       />
     </Container>
   )
