@@ -1,4 +1,5 @@
 export * from './Input'
 export * from './Password'
 export * from './Address'
+export * from './Email'
 export * from './types'

@@ -9,8 +9,9 @@ import type { MessageWithValues } from '../../../types';
 
 const passwordRequired = defineMessage({ defaultMessage: "Please enter a password of at least 'moderate' strength", description: "default password entry tooltip" })
 const complexity = defineMessage({ defaultMessage: `This password requires {time} to crack`, description: "Password complexity tooltip feedback" });
+const placeholder = defineMessage({ defaultMessage: 'At least moderate strength', description: 'New password entry placeholder'});
 
-type Props = Omit<BaseProps, "onValidate" | "defaultValue" | "tooltip">;
+type Props = Omit<BaseProps, "onValidate" | "defaultValue" | "tooltip" | "placeholder"|"intlLabel">;
 export const UxScoredPassword = (props: Props) => {
 
   const [tooltip, setTooltip] = useState<MessageWithValues>(passwordRequired);
@@ -50,6 +51,7 @@ export const UxScoredPassword = (props: Props) => {
       <UxPassword
         onValidate={onValidate}
         tooltip={tooltip ?? passwordRequired}
+        placeholder={placeholder}
         {...props}
       />
       <StrengthBar score={stats?.score} valid={valid} />

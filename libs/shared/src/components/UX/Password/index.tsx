@@ -16,7 +16,7 @@ const showStyle: React.CSSProperties = {
 
 const showLabel = defineMessage({defaultMessage: "Show Password", description: "Label for toggle showing password in input"})
 const hideLabel = defineMessage({defaultMessage: "Hide Password", description: "Label for toggle hiding password in input"})
-const enterPassword = defineMessage({defaultMessage: "Please enter your password", description: "Label for toggle hiding password in input"})
+const enterPassword = defineMessage({defaultMessage: "Please enter your password", description: "Popup error message if no password entered before submit"})
 const noValidation = (val: string) => val.length == 0 ? enterPassword : null;
 
 type Props = SomeOptional<BaseProps, "defaultValue"|"onValidate">

@@ -12,11 +12,15 @@ const localPlaceholder = defineMessage({
   defaultMessage: "An ethereum address",
   description: "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
 });
+const localLabel = defineMessage({
+  defaultMessage: "Address",
+  description: "Default label for ethereum address field"
+});
 
-type Props = SomeOptional<BaseProps, "onValidate"|"placeholder"|"tooltip">
+type Props = SomeOptional<BaseProps, "onValidate"|"placeholder"|"tooltip"|"intlLabel">
 export const UxAddress = (props: Props) => {
 
-  const { onValidate, tooltip, placeholder, ...rest } = props;
+  const { onValidate, tooltip, placeholder, intlLabel, ...rest } = props;
   const addressValidate: ValidateCB = (value) =>
     IsValidAddress(value) && (onValidate?.(value) ?? true)
       ? null
@@ -27,6 +31,7 @@ export const UxAddress = (props: Props) => {
       onValidate={addressValidate}
       placeholder={placeholder ?? localPlaceholder}
       tooltip={tooltip ?? format}
+      intlLabel={intlLabel ?? localLabel}
       {...rest}
     />
   );

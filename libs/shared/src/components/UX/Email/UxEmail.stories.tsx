@@ -1,28 +1,21 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react';
-import { UxScoredPassword } from '.';
+import { UxEmail } from '.';
 import { Button, Form } from 'semantic-ui-react';
 
 export default {
-  title: 'shared/UX/ScoredPassword',
-  component: UxScoredPassword,
+  title: 'shared/UX/Email',
+  component: UxEmail,
 } as Meta;
 
-const defaultArgs = {
-  defaultValue: "",
-  intlLabel: "Password",
-  placeholder: "Enter your password"
-};
 
-const makeIntl = (el: string, args: any) => ({ id: el, defaultMessage: args[el] })
-const Template: Story<typeof defaultArgs> = (args) => {
+const Template: Story = () => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
 
   return (
     <Form style={{paddingTop: 50}}>
-      <UxScoredPassword
-        intlLabel={makeIntl("intlLabel", args)}
+      <UxEmail
         onValue={setValue}
         forceValidate={validate}
       />
@@ -30,13 +23,11 @@ const Template: Story<typeof defaultArgs> = (args) => {
       <div>
         Validating: {validate.toString()}
         <br />
-        defaultValue: {args.defaultValue}
-        <br />
         value: {value}
       </div>
     </Form>
   )
 }
 
-export const ScoredPassword = Template.bind({});
-ScoredPassword.args = defaultArgs
+export const Email = Template.bind({});
+Email.args = {}
