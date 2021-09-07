@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IsValidAddress } from '@thecointech/utilities';
 import { UxInput } from '../Input';
 import { defineMessage } from 'react-intl';
-import { Props as BaseProps, ValidateCB } from '../types';
+import { BaseProps, SomeOptional, ValidateCB } from '../types';
 
 const format = defineMessage({
   defaultMessage: "An address is 40 characters long, and consists only of numbers and the letters A-F",
@@ -13,8 +13,7 @@ const localPlaceholder = defineMessage({
   description: "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
 });
 
-type localProps = "onValidate"|"placeholder"|"tooltip";
-type Props = Omit<BaseProps, localProps> & Partial<Pick<BaseProps, localProps>>
+type Props = SomeOptional<BaseProps, "onValidate"|"placeholder"|"tooltip">
 export const UxAddress = (props: Props) => {
 
   const { onValidate, tooltip, placeholder, ...rest } = props;

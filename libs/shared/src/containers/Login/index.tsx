@@ -1,31 +1,18 @@
-import * as React from "react";
-import { defineMessages, FormattedMessage, useIntl } from "react-intl";
+import React, { useState } from "react";
+import { defineMessages, FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
 import { Button, Form, Header } from "semantic-ui-react";
-
-import { UxPassword } from "../../components/UxPassword";
-import { ModalOperation } from "../ModalOperation";
-
-import { useState, useCallback } from "react";
 import { isLocal } from "@thecointech/signers";
-import { Account } from "../Account/reducer";
-
-import styles from "./styles.module.less";
 import { AccountState } from '@thecointech/account';
+import { UxPassword } from "../../components/UX/Password";
+import { ValidateCB } from '../../components/UX/types';
+import { ModalOperation } from "../ModalOperation";
+import { Account } from "../Account/reducer";
+import styles from "./styles.module.less";
 
-interface OwnProps {
+export type Props = {
   account: AccountState;
 }
-type Props = OwnProps;
-
-enum LoginState {
-  Entry,
-  Decrypting,
-  Failed,
-  Cancelled,
-  Complete
-}
-
 
 const translate = defineMessages({
               aboveTheTitle : {
@@ -56,6 +43,9 @@ const translate = defineMessages({
                 id: "shared.login.decryptHeader",
                 defaultMessage:'Logging into your account.',
                 description:"shared.login.decryptHeader"},
+              decryptNoPwd : {
+                  defaultMessage:'Please enter your password',
+                  description:"Error when logging in without password"},
               decryptIncorrectPwd : {
                 id: "shared.login.decryptIncorrectPwd",
                 defaultMessage:'Unlock failed: Please check your password and try again.',
@@ -72,83 +62,54 @@ const translate = defineMessages({
 
 let __cancel = false;
 const onCancel = () => __cancel = true;
+const badPwdValid = (pwd: string) => (value: string) => (value === pwd) ? translate.decryptIncorrectPwd : null;
 
 export const Login = (props: Props) => {
-  const [loginState, setLoginState] = useState(LoginState.Entry);
-  const [password, setPassword] = useState(undefined as string|undefined);
+  const [password, setPassword] = useState<MaybeString>();
   const [percentComplete, setPercentComplete] = useState(0);
+  const [validateFn, setValidateFn] = useState<ValidateCB|undefined>();
 
-  const history = useHistory();
   const { account } = props;
   const { signer, address }= account;
+  const accountApi = Account(address).useApi();
+  const history = useHistory();
+
   if (!isLocal(signer) || signer.privateKey) {
     history.push('/');
   }
 
-  const intl = useIntl();
-  const placeholderPasswordTranslated = intl.formatMessage(translate.placeholderPassword);
-
-  /////////////////////////////////
-  const onPasswordChange = useCallback((value: string) => {
-    setPassword(value);
-    // If we are in a failed state, reset state with new keystroke
-    if (loginState == LoginState.Cancelled || loginState == LoginState.Failed) {
-      setLoginState(LoginState.Entry);
-    }
-  }, [loginState, setLoginState, setPassword]);
-
   ////////////////////////////////
-  const accountApi = Account(address).useApi();
-  const onDecryptWallet = useCallback((e: React.MouseEvent<HTMLElement>) => {
+  const onDecryptWallet = (e: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     __cancel = false;
-
-    setLoginState(LoginState.Decrypting);
+    // Reset validation to be always valid
+    setValidateFn(undefined);
     if (password)
       accountApi.decrypt(password, decryptWalletCallback);
-  }, [password, accountApi]);
+  }
+
   ////////////////////////////////
-  const decryptWalletCallback = useCallback((percent: number): boolean => {
+  const decryptWalletCallback = (percent: number): boolean => {
     if (__cancel) {
-      setLoginState(LoginState.Cancelled);
+      setValidateFn(undefined);
+      setPercentComplete(0);
       return false;
     }
     else if (percent === -1) {
       // Invalid password?
       if (!__cancel) {
-        setLoginState(LoginState.Failed);
+        setValidateFn(() => badPwdValid(password!));
       }
       return false;
-    }
-    else if (percent === 100) {
-      setLoginState(LoginState.Complete);
     }
     else {
       setPercentComplete(percent);
     }
     return true;
-  }, [setPercentComplete, setLoginState]);
-  ////////////////////////////////
-
-  const isDecrypting = loginState == LoginState.Decrypting;
-  const forceValidate =
-    loginState == LoginState.Decrypting ||
-    loginState == LoginState.Cancelled ||
-    loginState == LoginState.Failed;
-  const isValid = !(
-    loginState == LoginState.Cancelled || loginState == LoginState.Failed
-  );
-  let message = undefined;
-  //getMessage(loginState);
-
-
-  switch (loginState) {
-    //case LoginState.Cancelled:
-    //  message = decryptCancelled;
-    case LoginState.Failed:
-      message = translate.decryptIncorrectPwd;
   }
 
+  ////////////////////////////////
+  const isDecrypting = percentComplete > 0 && percentComplete < 100;
   return (
     <>
       <div className={`${styles.wrapper} x6spaceAfter`}>
@@ -161,12 +122,12 @@ export const Login = (props: Props) => {
         </Header>
         <Form id={styles.loginForm}>
           <UxPassword
-            uxChange={onPasswordChange}
+            onValue={setPassword}
+            onValidate={validateFn}
             intlLabel={translate.passwordLabel}
-            placeholder={placeholderPasswordTranslated}
-            message={message}
-            isValid={isValid}
-            forceValidate={forceValidate}
+            placeholder={translate.placeholderPassword}
+            tooltip={translate.decryptNoPwd}
+            forceValidate={false}
           />
           <Button primary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
             &nbsp;&nbsp;&nbsp;&nbsp;
