@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react';
-import { UxInput as UxInput } from '.';
+import { UxPassword } from '.';
 import { Button, Form } from 'semantic-ui-react';
-import { ValidateCB } from '../types';
 
 export default {
-  title: 'shared/UX/Input',
-  component: UxInput,
+  title: 'shared/UX/Password',
+  component: UxPassword,
 } as Meta;
 
 const defaultArgs = {
   defaultValue: "",
-  validValue: "string match",
-  placeholder: "placeholder",
-  intlLabel: "Label",
-  message: "Error Message: should match validValue",
-  tooltip: "Input Tooltip",
+  intlLabel: "Password",
+  tooltip: "At least medium complexity",
+  placeholder: "Enter your password"
 };
 
 const makeIntl = (el: string, args: any) => ({ id: el, defaultMessage: args[el] })
@@ -23,22 +20,16 @@ const Template: Story<typeof defaultArgs> = (args) => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
 
-  const onValidate: ValidateCB = (val) => (val == args.validValue) ? null : makeIntl("message", args)
-
   return (
     <Form style={{paddingTop: 50}}>
-      <UxInput
-        placeholder={makeIntl("placeholder", args)}
+      <UxPassword
         intlLabel={makeIntl("intlLabel", args)}
-        tooltip={makeIntl("tooltip", args)}
 
-        defaultValue={args.defaultValue}
+        tooltip={makeIntl("tooltip", args)}
+        placeholder={makeIntl("placeholder", args)}
         onValue={setValue}
-        onValidate={onValidate}
         forceValidate={validate}
       />
-      {/* <UxPassword {...messages} {...args} />
-      <UxAddress {...messages} {...args} /> */}
       <Button onClick={() => setValidate(true)}>SUBMIT</Button>
       <div>
         Validating: {validate.toString()}
@@ -51,5 +42,5 @@ const Template: Story<typeof defaultArgs> = (args) => {
   )
 }
 
-export const Input = Template.bind({});
-Input.args = defaultArgs
+export const Password = Template.bind({});
+Password.args = defaultArgs

@@ -1,7 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
-import { Props } from './types';
+import { Props } from '../types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 const isMessage = (messageOrComponent: Props["intlLabel"]): messageOrComponent is MessageDescriptor =>
@@ -18,6 +18,7 @@ export const UxInput = (props: Props) => {
     footer,
 
     placeholder,
+    type
   } = props;
 
   const [value, setValue] = useState(defaultValue ?? "");
@@ -69,6 +70,7 @@ export const UxInput = (props: Props) => {
         onBlur={onBlur}
         value={value}
         placeholder={intl.formatMessage(placeholder)}
+        type={type}
         data-tooltip={tooltip}
       />
     </span>
