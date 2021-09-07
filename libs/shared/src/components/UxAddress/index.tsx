@@ -5,11 +5,11 @@ import { defineMessages, MessageDescriptor } from 'react-intl';
 import { useState } from 'react';
 import { ChangeCB } from '../UxInput/types';
 
-const translate = defineMessages({ 
+const translate = defineMessages({
 		labelAddress : {
                 defaultMessage:"Account",
                 description:"shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer" },
-		errorMessage : { 
+		errorMessage : {
                 defaultMessage:"This address is not the right format",
                 description:"shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer" }});
 
@@ -26,15 +26,14 @@ export const UxAddress = (props:MyProps) => {
 	const [message, setMessage] = useState(undefined as MessageDescriptor | undefined);
 
 	// Validate our inputs
-	function onAccountValue(value: string) {
+	const onAccountValue = (value: string) => {
 		const isValidTemp = IsValidAddress(value)
 		setAccount(value);
 		setIsValid(isValidTemp);
 		if (!isValidTemp){
 			setMessage(translate.errorMessage);
 		}
-		if (isValid)
-			props.uxChange(value)
+    else props.uxChange(value)
 	}
 
 	return(
