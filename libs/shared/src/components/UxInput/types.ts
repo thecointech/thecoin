@@ -1,6 +1,7 @@
 import { MessageDescriptor } from 'react-intl';
 import { ReactNode } from 'react';
 import type { MessageWithValues } from '../../types';
+import { StrictInputProps } from 'semantic-ui-react';
 
 export const initialState = {
   value: '',
@@ -15,25 +16,27 @@ export enum ErrorState {
   Warning,
 }
 
-export type ChangeCB = (value: string, name?: string) => void;
+export type ChangeCB = (value: string|undefined, name?: string) => void;
+//
+// Supplied by the client to run validations on the value
+// as the user is typing.  Returns an error message in the
+// form of a message descriptor, or null if value is valid.
+// @param name if name is passed in props, it will be passed to this callback
+export type ValidateCB = (value: string, name?: string) => MessageDescriptor|null;
+export type Props = {
+  // Called once a valid value has been entered
+  onValue: ChangeCB;
+  // Called each keystroke to validate current data
+  onValidate: ValidateCB;
 
-export interface Props {
-  uxChange: ChangeCB;
+  tooltip: MessageWithValues;
+  placeholder: MessageDescriptor;
+
+  defaultValue?: string;
   footer?: ReactNode;
-  isValid?: boolean;
-  message?: MessageWithValues;
-  tooltip?: MessageDescriptor;
+  name?: string;
   forceValidate?: boolean;
-  isRequired?: boolean;
+  readOnly?: boolean;
 
-  // pass through additional props to underlying type
-  [id: string]: any;
-}
-interface LabelWithIntl extends Props{
-  intlLabel?: MessageDescriptor;
-}
-interface LabelWithElements extends Props{
-  elementLabel?: JSX.Element;
-}
-
-export type UxLabel = LabelWithIntl | LabelWithElements;
+  intlLabel: MessageDescriptor|JSX.Element;
+} & StrictInputProps
