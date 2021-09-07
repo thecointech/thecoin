@@ -1,6 +1,6 @@
 import { MessageDescriptor } from 'react-intl';
 import { ReactNode } from 'react';
-import type { MessageWithValues } from '../../types';
+import type { MessageWithValues } from '../../../types';
 import { StrictInputProps } from 'semantic-ui-react';
 
 export const initialState = {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Icon } from 'semantic-ui-react';
-import { UxInput } from '../UxInput';
-import { Props } from '../UxInput/types';
+import { UxInput } from '../UX/UxInput';
+import { Props } from '../UX/UxInput/types';
 import styles from './styles.module.less';
 
 const UnMasked = "text";

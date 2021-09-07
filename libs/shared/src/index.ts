@@ -1,6 +1,6 @@
 export { DateRangeSelect } from './components/DateRangeSelect';
 export { DualFxInput } from './components/DualFxInput';
-export { UxInput } from './components/UxInput';
+export { UxInput } from './components/UX/UxInput';
 export { UxPassword } from './components/UxPassword';
 
 // Export all react containers
