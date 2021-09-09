@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react';
 import { UxInput as UxInput } from '.';
 import { Button, Form } from 'semantic-ui-react';
-import { ValidateCB } from '../types';
 
 export default {
   title: 'shared/UX/Input',
@@ -10,6 +9,7 @@ export default {
 } as Meta;
 
 const defaultArgs = {
+  validationDelay: 3000,
   defaultValue: "",
   validValue: "string match",
   placeholder: "placeholder",
@@ -22,8 +22,14 @@ const makeIntl = (el: string, args: any) => ({ id: el, defaultMessage: args[el] 
 const Template: Story<typeof defaultArgs> = (args) => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
+  const [currently, setCurrently] = useState(false);
 
-  const onValidate: ValidateCB = (val) => (val == args.validValue) ? null : makeIntl("message", args)
+  const onValidate = async (val: string) => {
+    setCurrently(true);
+    await new Promise(resolve => setTimeout(resolve, args.validationDelay));
+    setCurrently(false);
+    return (val == args.validValue) ? null : makeIntl("message", args);
+  }
 
   return (
     <Form style={{paddingTop: 50}}>
@@ -41,6 +47,8 @@ const Template: Story<typeof defaultArgs> = (args) => {
       <UxAddress {...messages} {...args} /> */}
       <Button onClick={() => setValidate(true)}>SUBMIT</Button>
       <div>
+        Currently: {currently.toString()}
+        <br />
         Validating: {validate.toString()}
         <br />
         defaultValue: {args.defaultValue}

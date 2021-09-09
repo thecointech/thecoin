@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IsValidAddress } from '@thecointech/utilities';
+import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { UxInput } from '../Input';
 import { defineMessage } from 'react-intl';
 import { BaseProps, SomeOptional, ValidateCB } from '../types';
@@ -20,15 +20,19 @@ const localLabel = defineMessage({
 type Props = SomeOptional<BaseProps, "onValidate"|"placeholder"|"tooltip"|"intlLabel">
 export const UxAddress = (props: Props) => {
 
-  const { onValidate, tooltip, placeholder, intlLabel, ...rest } = props;
+  const { onValidate, tooltip, placeholder, intlLabel, onValue, ...rest } = props;
   const addressValidate: ValidateCB = (value) =>
     IsValidAddress(value) && (onValidate?.(value) ?? true)
       ? null
       : format;
+  const onAddress = (value?: string) => {
+    onValue(value ? NormalizeAddress(value) : value)
+  }
 
   return (
     <UxInput
       onValidate={addressValidate}
+      onValue={onAddress}
       placeholder={placeholder ?? localPlaceholder}
       tooltip={tooltip ?? format}
       intlLabel={intlLabel ?? localLabel}

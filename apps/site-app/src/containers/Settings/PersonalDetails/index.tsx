@@ -6,7 +6,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import styles from './styles.module.less';
-import { UxInput } from '@thecointech/shared/components/UxInput';
+import { UxInput, UxEmail } from '@thecointech/shared/components/UX';
 
 const translations = defineMessages({
   title : {
@@ -56,12 +56,13 @@ export const PersonalDetails = () => {
   const [emailEdit, setEmailEdit] = useState(false);
   const [phoneEdit, setPhoneEdit] = useState(false);
 
-  const onDetailsChange = (value: string, name?: string) => {
+  const onDetailsChange = (value?: string, name?: string) => {
     setDetails({
       ...details,
       [name as string]: value,
     });
   }
+  const noValidation = () => null;
 
   const onSetDetails = () => {
     setGivenNameEdit(false);
@@ -88,9 +89,11 @@ export const PersonalDetails = () => {
                           <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                         </span>
                     </div>}
-            uxChange={(value: string) => onDetailsChange(value,"given_name")}
-            details={details}
-            value={details.given_name}
+            onValue={onDetailsChange}
+            onValidate={noValidation}
+            placeholder={translations.name}
+            tooltip={translations.name}
+            defaultValue={details.given_name}
             name="given_name"
             readOnly={!givenNameEdit}
           />
@@ -103,23 +106,23 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                 </div>}
-          value={details.family_name}
-          uxChange={(value: string) => onDetailsChange(value,"family_name" )}
-          details={details}
+          defaultValue={details.family_name}
+          onValue={onDetailsChange}
+          onValidate={noValidation}
+          placeholder={translations.familyname}
+          tooltip={translations.familyname}
           name="family_name"
           readOnly={!familyNameEdit} />
 
         <UxDate
           className={"half left"}
-          value={details.DOB}
           label={<div>
                     <FormattedMessage {...translations.dob} />
                     <span onClick={()=>setDobEdit(!dobEdit)} className={styles.edit}>
                       <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                   </div>}
-          uxChange={(value: string) => onDetailsChange(value,"DOB")}
-          details={details}
+          uxChange={onDetailsChange}
           defaultValue={details.DOB}
           name="DOB" readOnly={!dobEdit} />
 
@@ -131,16 +134,17 @@ export const PersonalDetails = () => {
                       <Icon name={"edit"} /><FormattedMessage {...translations.edit} />
                     </span>
                   </div>}
-          uxChange={(value: string) => onDetailsChange(value,"address")}
-          details={details}
-          value={details.address}
+          onValue={onDetailsChange}
+          onValidate={noValidation}
+          placeholder={translations.address}
+          tooltip={translations.address}
+          defaultValue={details.address?.address}
           name="address" readOnly={!addressEdit} />
 
-        <UxInput
+        <UxEmail
             className={"half left"}
-            details={details}
-            value={details.email}
-            uxChange={(value: string) => onDetailsChange(value,"email")}
+            defaultValue={details.email}
+            onValue={onDetailsChange}
             intlLabel={<div>
                 <FormattedMessage {...translations.email} />
                 <span onClick={()=>setEmailEdit(!emailEdit)} className={styles.edit}>
@@ -152,9 +156,8 @@ export const PersonalDetails = () => {
 
         <UxInput
             className={"half right"}
-            details={details}
-            value={details.phone}
-            uxChange={(value: string) => onDetailsChange(value,"phone")}
+            defaultValue={details.phone?.phoneNumber}
+            onValue={onDetailsChange}
             intlLabel={<div>
                 <FormattedMessage {...translations.phone} />
                 <span onClick={()=>setPhoneEdit(!phoneEdit)} className={styles.edit}>
@@ -162,6 +165,9 @@ export const PersonalDetails = () => {
                 </span>
               </div>}
             name="phone"
+            onValidate={noValidation}
+            placeholder={translations.address}
+            tooltip={translations.address}
             readOnly={!phoneEdit} />
 
         <Header as="h5" className={`appTitles x6spaceBefore`}>

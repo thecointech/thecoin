@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { GetStatusApi, GetETransferApi } from 'api'
@@ -9,68 +9,36 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { RedeemWidget } from './RedeemWidget';
 import type { MessageWithValues } from '@thecointech/shared/types';
+import { log } from '@thecointech/logging';
 
 const translations = defineMessages({
-  errorMessage : {
-      defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
-      description: 'app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab'},
-  successMessage : {
-      defaultMessage: 'Order received.\nYou should receive the e-Transfer in 1-2 business days.',
-      description: 'app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab'},
-  description : {
-      defaultMessage: 'Email money to anyone with an interac e-Transfer.',
-      description: 'app.accounts.redeem.description: Description for the make a payment page / etransfert tab'},
-  emailLabel : {
-      defaultMessage: 'Recipient email',
-      description: 'app.accounts.redeem.form.emailLabel: Label for the form the make a payment page / etransfert tab'},
-  emailDesc : {
-      defaultMessage: 'An email address to send the e-Transfer to',
-      description: 'app.accounts.redeem.form.emailDesc: Label for the form the make a payment page / etransfert tab'},
-  questionLabel : {
-      defaultMessage: 'Security question',
-      description: 'app.accounts.redeem.form.questionLabel: Label for the form the make a payment page / etransfert tab'},
-  answerLabel : {
-      defaultMessage: 'Security answer',
-      description: 'app.accounts.redeem.form.answerLabel: Label for the form the make a payment page / etransfert tab'},
-  messageLabel : {
-      defaultMessage: 'Message (optional)',
-      description: 'app.accounts.redeem.form.messageLabel: Label for the form the make a payment page / etransfert tab'},
-  messageDesc : {
-      defaultMessage: 'An optional message to the recipient. Should not include the security answer',
-      description: 'app.accounts.redeem.form.messageDesc: Label for the form the make a payment page / etransfert tab'},
-  noSpecialCaractDesc : {
-      defaultMessage: 'No numbers or special characters',
-      description: 'app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab'},
-  step1 : {
-      defaultMessage: 'Step 1 of 3: Checking order availability...',
-      description: 'app.accounts.redeem.step1: Message for the form the make a payment page / etransfert tab'},
-  step2 : {
-      defaultMessage: 'Step 2 of 3: Sending sell order to our servers...',
-      description: 'app.accounts.redeem.step2: Message for the form the make a payment page / etransfert tab'},
-  step3 : {
-      defaultMessage: 'Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})...',
-      description: 'app.accounts.redeem.step3: Message for the form the make a payment page / etransfert tab'},
-  transferOutHeader : {
-      defaultMessage: 'Processing Transfer out...',
-      description: 'app.accounts.redeem.transferOutHeader: Message for the form the make a payment page / etransfert tab'},
-  transferOutProgress : {
-      defaultMessage: 'Please wait, we are sending your order to our servers...',
-      description: 'app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab'},
-  button : {
-      defaultMessage: 'Send e-Transfer',
-      description: 'app.accounts.redeem.form.button: For the button in the make a payment page / etransfer tab'}
-});
-
+  step1: {
+    defaultMessage: 'Step 1 of 3: Checking order availability...',
+    description: 'app.accounts.redeem.step1: Message for the form the make a payment page / etransfert tab'
+  },
+  step2: {
+    defaultMessage: 'Step 2 of 3: Sending sell order to our servers...',
+    description: 'app.accounts.redeem.step2: Message for the form the make a payment page / etransfert tab'
+  },
+  step3: {
+    defaultMessage: 'Step 3 of 3: Waiting for the order to be accepted\n(check progress {link})...',
+    description: 'app.accounts.redeem.step3: Message for the form the make a payment page / etransfert tab'
+  },
+  transferOutProgress: {
+    defaultMessage: 'Please wait, we are sending your order to our servers...',
+    description: 'app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab'
+  },
+})
 export const Redeem = () => {
 
   const [coinToSell, setCoinToSell] = useState(null as number | null);
-  const [email, setEmail] = useState('');
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [email, setEmail] = useState<MaybeString>();
+  const [question, setQuestion] = useState<MaybeString>();
+  const [answer, setAnswer] = useState<MaybeString>();
   const [message, setMessage] = useState<MaybeString>();
 
-  const [validationMessage] = useState<MessageWithValues|null>(null);
   const [forceValidate, setForceValidate] = useState(false);
+  const [resetToDefault, setResetDefault] = useState(Date.now());
 
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [transferMessage, setTransferMessage] = useState<MessageWithValues>(translations.transferOutProgress);
@@ -84,28 +52,35 @@ export const Redeem = () => {
   const { rates } = useFxRates();
   const rate = weBuyAt(rates);
 
-  const intl = useIntl();
-
-  const isValid = !validationMessage;
-  //const canSubmit = isValid && coinToSell;
+  const resetForm = () => {
+    setCoinToSell(null);
+    setResetDefault(Date.now());
+    setForceValidate(false);
+  }
 
   const doSale = async () => {
-    // Init messages
-    setForceValidate(true);
+    if (!email || !question || !answer || !coinToSell) {
+      log.info("Cannot submit: missing one of the required fields");
+      return false;
+    }
+
     setTransferMessage(translations.step1);
     setPercentComplete(0.0);
 
     // First, get the brokers fee
     const statusApi = GetStatusApi();
-    var {data} = await statusApi.status();
+    var { data } = await statusApi.status();
     // Check out if we have the right values
-    if (!data.certifiedFee) return false;
+    if (!data.certifiedFee) {
+      setErrorHidden(false)
+      return false;
+    }
 
     if (doCancel) return false;
 
     // Get our variables
     const { signer, contract } = account!;
-    if (coinToSell === null || !signer || !contract)
+    if (!signer || !contract)
       return false;
 
     // To redeem, we construct & sign a message that
@@ -129,9 +104,9 @@ export const Redeem = () => {
     setTransferMessage(translations.step2);
     setPercentComplete(0.25);
     const response = await eTransferApi.eTransfer(command);
-
     if (!response.data?.hash) {
-      console.log(`Error: ${JSON.stringify(response)}`);
+      log.error(`Error: missing response data: ${JSON.stringify(response)}`);
+      setErrorHidden(false);
       return false;
     }
 
@@ -156,25 +131,23 @@ export const Redeem = () => {
     if (e) e.preventDefault();
     setDoCancel(false);
     setTransferInProgress(true);
+    // Init messages
+    setForceValidate(true);
+    setErrorHidden(true);
+    setSuccessHidden(true);
 
     try {
       const results = await doSale();
-      if (!results) {
-        setSuccessHidden(true);
-        setErrorHidden(false);
-      } else
+      if (results) {
         setSuccessHidden(false);
-        setErrorHidden(true);
-    } catch (e) {
-      console.error(e);
-      alert(e);
+        resetForm();
+      }
+    } catch (e: any) {
+      log.error(`Exception on Submit eTransfer: ${e.message}`);
+      setErrorHidden(false);
     }
     setDoCancel(false);
     setTransferInProgress(false);
-  }
-
-  const onValueChange = (value: number) => {
-    setCoinToSell(value);
   }
 
   const onCancelTransfer = () => {
@@ -182,44 +155,29 @@ export const Redeem = () => {
   }
 
   return (
-      <RedeemWidget
-        errorMessage={translations.errorMessage}
-        errorHidden={errorHidden}
-        successMessage={translations.successMessage}
-        successHidden={successHidden}
+    <RedeemWidget
+      errorHidden={errorHidden}
+      successHidden={successHidden}
 
-        coinToSell={coinToSell}
-        description={translations.description}
-        onValueChange={onValueChange}
-        account={account}
-        rate={rate}
+      coinToSell={coinToSell}
+      onValueChange={setCoinToSell}
+      account={account}
+      rate={rate}
 
-        emailLabel={translations.emailLabel}
-        setEmail={(value: string) => setEmail(value)}
-        emailDes={intl.formatMessage(translations.emailDesc)}
+      setEmail={setEmail}
+      setQuestion={setQuestion}
+      setAnswer={setAnswer}
+      setMessage={setMessage}
+      resetToDefault={resetToDefault}
 
-        questionLabel={translations.questionLabel}
-        setQuestion={(value: string) => setQuestion(value)}
-        noSpecialCaractDesc={intl.formatMessage(translations.noSpecialCaractDesc)}
+      onSubmit={onSubmit}
 
-        answerLabel={translations.answerLabel}
-        setAnswer={(value: string) => setAnswer(value)}
-        messageLabel={translations.messageLabel}
-        setMessage={(value: string) => setMessage(value)}
-        messageDesc={intl.formatMessage(translations.messageDesc)}
+      cancelCallback={onCancelTransfer}
+      transferInProgress={transferInProgress}
+      percentComplete={percentComplete}
 
-        button={translations.button}
-        onSubmit={onSubmit}
-
-        cancelCallback={onCancelTransfer}
-        transferInProgress={transferInProgress}
-        transferOutHeader={translations.transferOutHeader}
-        transferMessage={transferMessage}
-        percentComplete={percentComplete}
-
-        isValid={isValid}
-        forceValidate={forceValidate}
-        validationMessage={undefined}
-      />
+      forceValidate={forceValidate}
+      transferMessage={transferMessage}
+    />
   );
 }

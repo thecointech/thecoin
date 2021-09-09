@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { Form, Dropdown, DropdownProps, Message } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Form, Dropdown, Message } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
@@ -8,12 +8,13 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { payees, validate } from './payees';
 import { BillPayeePacket } from '@thecointech/types';
 import { GetStatusApi, GetBillPaymentsApi } from 'api';
-import { UxInput } from '@thecointech/shared/components/UxInput';
+import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import type { MessageWithValues } from '@thecointech/shared/types';
+import { log } from '@thecointech/logging';
 
 const translations = defineMessages({
   description: {
@@ -73,12 +74,11 @@ export const BillPayments = () => {
   const rate = weBuyAt(rates);
 
   const [coinToSell, setCoinToSell] = useState(null as number | null);
-  const [payee, setPayee] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  //const [payeeName, setPayeeName] = useState("");
+  const [payee, setPayee] = useState<MaybeString>();
+  const [accountNumber, setAccountNumber] = useState<MaybeString>();
 
-  const [validationMessage, setValidationMessage] = useState<MessageWithValues | undefined>(undefined);
   const [forceValidate, setForceValidate] = useState(false);
+  const [resetToDefault, setResetDefault] = useState(Date.now());
 
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [paymentMessage, setPaymentMessage] = useState<MessageWithValues>(translations.transferOutProgress);
@@ -88,55 +88,23 @@ export const BillPayments = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
 
-  const isValid = !validationMessage;
-  const canSubmit = isValid && coinToSell;
-
-  const resetState = useCallback(
-    () => {
-      setCoinToSell(null);
-      setPayee("");
-      setAccountNumber("");
-      //setPayeeName("");
-      setValidationMessage(undefined);
-      setForceValidate(false);
-      setTransferInProgress(false);
-      setPaymentMessage(translations.transferOutProgress);
-      setPercentComplete(0);
-      setDoCancel(false);
-    },
-    [],
-  );
-
-  function onValueChange(value: number) {
-    setCoinToSell(value);
+  const resetForm = () => {
+    setCoinToSell(null);
+    setResetDefault(Date.now());
+    setForceValidate(false);
   }
 
   function onCancelTransfer() {
     setDoCancel(true);
   }
 
-  function onSubmit() {
-    async (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      doSubmit();
-    };
-  }
-
-  function onPayeeSelect(_: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) {
-    setPayee((data.value as string) || '');
-  }
-
-  //function onNameChange (_: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) {
-  //   setPayeeName(data.value);
-  //}
-
-  function onAccountNumber(value: string) {
-    const validation = validate(payee, value);
-    setValidationMessage(validation);
-    setAccountNumber(value);
-  };
-
   async function doBillPayment() {
+
+    // Get our variables
+    if (!coinToSell || !payee || !accountNumber) {
+      log.info("Cannot submit: missing one of the required fields");
+      return false;
+    }
     // Init messages
     setPaymentMessage(translations.step1);
     setPercentComplete(0.0);
@@ -145,15 +113,18 @@ export const BillPayments = () => {
     const statusApi = GetStatusApi();
     var { data } = await statusApi.status();
     // Check out if we have the right values
-    if (!data?.certifiedFee)
+    if (!data?.certifiedFee) {
+      setErrorHidden(false);
       return false;
+    }
 
     if (doCancel)
       return false;
 
     // Get our variables
     const { signer, contract } = account!;
-    if (coinToSell === null || !signer || !contract || !payee) return false;
+    if (!signer || !contract)
+      return false;
 
     const packet: BillPayeePacket = {
       accountNumber,
@@ -175,9 +146,10 @@ export const BillPayments = () => {
     setPaymentMessage(translations.step2);
     setPercentComplete(0.25);
     const response = await billPayApi.billPayment(billPayCommand);
-    const txHash = response.data?.hash;
-    if (!txHash) {
-      alert(JSON.stringify(response));
+    const hash = response.data?.hash
+    if (!hash) {
+      log.error(`Error: missing response data: ${JSON.stringify(response)}`);
+      setErrorHidden(false);
       return false;
     }
 
@@ -186,48 +158,45 @@ export const BillPayments = () => {
       ...translations.step3,
       values: {
         link: (
-          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${txHash}`}>here</a>
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${hash}`}>here</a>
         ),
       }
     });
     setPercentComplete(0.5);
-    const tx = await contract.provider.getTransaction(txHash);
+    const tx = await contract.provider.getTransaction(hash);
     // Wait at least 2 confirmations
     tx.wait(2);
-    const receipt = await contract.provider.getTransactionReceipt(txHash);
-    console.log(
-      `Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,
-    );
     setPercentComplete(1);
     return true;
   }
 
-  async function doSubmit() {
+
+  async function onSubmit(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
     setDoCancel(false);
     setTransferInProgress(true);
+    // Init messages
     setForceValidate(true);
-
-    // Validate inputs
-    const isValid = !validationMessage;
-    if (!coinToSell || !payee || !accountNumber || !isValid) return;
+    setErrorHidden(true);
+    setSuccessHidden(true);
 
     try {
       const results = await doBillPayment();
-      if (!results) {
-        setErrorHidden(false);
-        setSuccessHidden(true);
-      } else
+      if (results) {
         setSuccessHidden(false);
-      setErrorHidden(true);
-      // Reset back to default state
-      resetState();
-    } catch (e) {
-      console.error(e);
-      alert(e);
+        resetForm();
+      }
+    } catch (e: any) {
+      log.error(`Exception on submit Bill: ${e.message}`);
+      setErrorHidden(false);
     }
-    resetState();
+    setDoCancel(false);
+    setTransferInProgress(false);
   }
-
+  const uxProps = {
+    resetToDefault: resetToDefault,
+    forceValidate: forceValidate,
+  }
 
   return (
     <React.Fragment>
@@ -246,27 +215,27 @@ export const BillPayments = () => {
           fluid
           search
           selection
-          allowAdditions
           options={payees}
-          onChange={onPayeeSelect}
+          onChange={(_, data) => setPayee(data.value as string)}
         />
         <UxInput
           intlLabel={translations.accountNumer}
-          uxChange={onAccountNumber}
-          isValid={isValid}
-          forceValidate={forceValidate}
-          message={validationMessage}
-          placeholder={intl.formatMessage(translations.payeeAccount)}
+          onValue={setAccountNumber}
+          onValidate={value => validate(payee, value)}
+          placeholder={translations.payeeAccount}
+          tooltip={translations.payeeAccount}
+          {...uxProps}
         />
         {/*<Form.Input label="Bill Name" onChange={onNameChange} placeholder="An optional name to remember this payee by" /> */}
         <DualFxInput
-          onChange={onValueChange}
+          onChange={setCoinToSell}
           asCoin={true}
           maxValue={account!.balance}
           value={coinToSell}
           fxRate={rate}
+          {...uxProps}
         />
-        <ButtonTertiary onClick={onSubmit} disabled={!canSubmit}>
+        <ButtonTertiary onClick={onSubmit}>
           <FormattedMessage {...translations.button} />
         </ButtonTertiary>
       </Form>

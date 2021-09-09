@@ -62,12 +62,18 @@ const translate = defineMessages({
 
 let __cancel = false;
 const onCancel = () => __cancel = true;
-const badPwdValid = (pwd: string) => (value: string) => (value === pwd) ? translate.decryptIncorrectPwd : null;
+const badPwdValid = (pwd: string) => {
+  return (value: string) =>
+    (value === pwd)
+      ? translate.decryptIncorrectPwd
+      : null;
+}
 
 export const Login = (props: Props) => {
   const [password, setPassword] = useState<MaybeString>();
-  const [percentComplete, setPercentComplete] = useState(0);
+  const [percentComplete, setPercentComplete] = useState(-1);
   const [validateFn, setValidateFn] = useState<ValidateCB|undefined>();
+  const [forceValidate, setForceValidate] = useState(false);
 
   const { account } = props;
   const { signer, address }= account;
@@ -84,19 +90,23 @@ export const Login = (props: Props) => {
     __cancel = false;
     // Reset validation to be always valid
     setValidateFn(undefined);
-    if (password)
+    setForceValidate(true);
+    if (password?.length) {
+      setPercentComplete(0);
       accountApi.decrypt(password, decryptWalletCallback);
+    }
   }
 
   ////////////////////////////////
   const decryptWalletCallback = (percent: number): boolean => {
     if (__cancel) {
       setValidateFn(undefined);
-      setPercentComplete(0);
+      setPercentComplete(-1);
       return false;
     }
     else if (percent === -1) {
       // Invalid password?
+      setPercentComplete(-1);
       if (!__cancel) {
         setValidateFn(() => badPwdValid(password!));
       }
@@ -109,7 +119,7 @@ export const Login = (props: Props) => {
   }
 
   ////////////////////////////////
-  const isDecrypting = percentComplete > 0 && percentComplete < 100;
+  const isDecrypting = percentComplete >= 0 && percentComplete < 100;
   return (
     <>
       <div className={`${styles.wrapper} x6spaceAfter`}>
@@ -127,7 +137,7 @@ export const Login = (props: Props) => {
             intlLabel={translate.passwordLabel}
             placeholder={translate.placeholderPassword}
             tooltip={translate.decryptNoPwd}
-            forceValidate={false}
+            forceValidate={forceValidate}
           />
           <Button primary onClick={onDecryptWallet} size='medium' className={ `x4spaceBefore` } >
             &nbsp;&nbsp;&nbsp;&nbsp;

@@ -3,6 +3,7 @@ import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { BaseProps } from '../types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
+import { MessageWithValues } from '../../../types';
 
 const isMessage = (messageOrComponent: BaseProps["intlLabel"]): messageOrComponent is MessageDescriptor =>
   messageOrComponent.hasOwnProperty("defaultMessage")
@@ -14,6 +15,7 @@ export const UxInput = (props: BaseProps) => {
     onValidate,
 
     defaultValue,
+    resetToDefault,
     forceValidate,
 
     placeholder,
@@ -22,15 +24,15 @@ export const UxInput = (props: BaseProps) => {
 
   const [value, setValue] = useState(defaultValue ?? "");
   const [showState, setShowState] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<MessageDescriptor | null>(null);
+  const [errorMessage, setErrorMessage] = useState<MessageWithValues | null>(null);
 
   const onBlur = () => {
     setShowState(true);
   }
 
-  const localChange = (value: string) => {
+  const localChange = async (value: string) => {
     setValue(value);
-    const validateResult = onValidate(value, props.name)
+    const validateResult = await onValidate(value, props.name)
     setErrorMessage(validateResult);
     onValue(validateResult ? undefined : value, props.name);
   }
@@ -38,20 +40,29 @@ export const UxInput = (props: BaseProps) => {
   // If we must force-validate, but we not already
   // run, then check the validation
   useEffect(() => {
-    localChange(value);
-  }, [forceValidate])
+    if (!forceValidate) {
+      setErrorMessage(null);
+    }
+    else {
+      localChange(value);
+    }
+  }, [forceValidate, onValidate])
 
-  // if defaultValue changes, then update our value to reflect that
+  // Reset to default value either if requested, or if defaultValue changes
   useEffect(() => {
     setValue(defaultValue ?? "");
-  }, [defaultValue])
+    onValue(defaultValue);
+  }, [defaultValue, resetToDefault])
 
   const isValid = !errorMessage;
   const doShowState = forceValidate || showState;
+  const showingError = doShowState && !isValid;
 
   const intl = useIntl();
   const label = isMessage(props.intlLabel) ? <FormattedMessage {...props.intlLabel} /> : props.intlLabel;
-  const tooltip = intl.formatMessage(props.tooltip, props.tooltip.values);
+  const tooltip = showingError
+    ? undefined
+    : intl.formatMessage(props.tooltip, props.tooltip.values);
   const formClassName = doShowState
     ? isValid ? 'success' : 'error'
     : ''
@@ -69,7 +80,7 @@ export const UxInput = (props: BaseProps) => {
         context={contextRef}
         position='top right'
         content={errorMessage ? <FormattedMessage {...errorMessage} /> : undefined}
-        open={doShowState && !isValid}
+        open={showingError}
         style={styleError}
       />
       <span ref={contextRef}>

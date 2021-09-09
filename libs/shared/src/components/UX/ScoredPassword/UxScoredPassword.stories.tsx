@@ -8,29 +8,19 @@ export default {
   component: UxScoredPassword,
 } as Meta;
 
-const defaultArgs = {
-  defaultValue: "",
-  intlLabel: "Password",
-  placeholder: "Enter your password"
-};
-
-const makeIntl = (el: string, args: any) => ({ id: el, defaultMessage: args[el] })
-const Template: Story<typeof defaultArgs> = (args) => {
+const Template: Story = () => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
 
   return (
-    <Form style={{paddingTop: 50}}>
+    <Form style={{paddingTop: 50, width: 300, margin: "auto"}}>
       <UxScoredPassword
-        intlLabel={makeIntl("intlLabel", args)}
         onValue={setValue}
         forceValidate={validate}
       />
       <Button onClick={() => setValidate(true)}>SUBMIT</Button>
       <div>
         Validating: {validate.toString()}
-        <br />
-        defaultValue: {args.defaultValue}
         <br />
         value: {value}
       </div>
@@ -39,4 +29,4 @@ const Template: Story<typeof defaultArgs> = (args) => {
 }
 
 export const ScoredPassword = Template.bind({});
-ScoredPassword.args = defaultArgs
+ScoredPassword.args = {}

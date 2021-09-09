@@ -23,7 +23,7 @@ export type ChangeCB = (value: string|undefined, name?: string) => void;
 // as the user is typing.  Returns an error message in the
 // form of a message descriptor, or null if value is valid.
 // @param name if name is passed in props, it will be passed to this callback
-export type ValidateCB = (value: string, name?: string) => MessageDescriptor|null;
+export type ValidateCB = (value: string, name?: string) => Promise<MessageWithValues|null>|MessageWithValues|null;
 export type BaseProps = {
   // Called once a valid value has been entered
   onValue: ChangeCB;
@@ -34,6 +34,7 @@ export type BaseProps = {
   placeholder: MessageDescriptor;
 
   defaultValue?: string;
+  resetToDefault?: number;
   name?: string;
   forceValidate?: boolean;
   readOnly?: boolean;
