@@ -12,7 +12,10 @@ const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
 const env = getEnvVars();
 
-console.log(`\n--- Building ${process.env.LOG_NAME} for ${process.env.CONFIG_NAME} ---\n`);
+const version = require(packageFile).version;
+const configName = process.env.CONFIG_NAME
+
+console.log(`\n--- Building ${process.env.LOG_NAME}:${version} for ${configName} ---\n`);
 
 module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
@@ -124,7 +127,7 @@ module.exports = {
   plugins: [
     new webpack.EnvironmentPlugin(Object.keys(env)),
     new webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(require(packageFile).version),
+      __VERSION__: JSON.stringify(version),
       "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
       "process.env.LOG_LEVEL": process.env.LOG_LEVEL,
     }),
@@ -142,7 +145,7 @@ module.exports = {
   ],
   resolve: {
     modules: ['node_modules', 'src'],
-    conditionNames: [process.env.CONFIG_NAME, "browser", "webpack", "default"],
+    conditionNames: [configName, "browser", "webpack", "default"],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),
