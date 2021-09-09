@@ -74,3 +74,5 @@ apps/site-landing/src/translations/fr.json
 
 
 apps/tx-processor/run_service.cmd
+
+storybook-static/

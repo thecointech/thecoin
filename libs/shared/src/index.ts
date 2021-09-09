@@ -1,7 +1,6 @@
 export { DateRangeSelect } from './components/DateRangeSelect';
 export { DualFxInput } from './components/DualFxInput';
-export { UxInput } from './components/UxInput';
-export { UxPassword } from './components/UxPassword';
+export * from './components/UX';
 
 // Export all react containers
 export { Balance } from './containers/Balance';
@@ -13,3 +12,5 @@ export { PageSidebar } from './containers/PageSidebar';
 export { TransactionList } from './containers/TransactionList';
 export { UploadWallet } from './containers/UploadWallet';
 export type { ReadFileData } from './containers/UploadWallet';
+
+export { usePromiseSubscription } from './utils/usePromiseSubscription';

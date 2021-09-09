@@ -4,6 +4,9 @@ import { defineMessages } from 'react-intl';
 import type { MessageWithValues } from '@thecointech/shared/types';
 
 const translations = defineMessages({
+  missingData : {
+    defaultMessage: 'Please select payee and enter account number',
+    description: 'Bill payment error message when missing payee or account'},
   invalidVisaChars : {
       defaultMessage: 'Your card number should be 16 digits long',
       description: 'app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page'},
@@ -58,25 +61,13 @@ export function findPayee(text: string): Validatable|undefined {
   return item;
 }
 
-export function validate(name: string, value: string) : MessageWithValues|undefined
+export function validate(name?: string, value?: string) : MessageWithValues|null
 {
+  if (!name || !value)
+    return translations.missingData
   const payee = findPayee(name);
-  return payee?.validate(value) ?? undefined;
+  return payee?.validate(value) ?? null;
 }
-
-//   const validatable = findType(name)
-//   if (validatable !== undefined)
-//   {
-//     const {type, parameter} = validatable;
-//     switch(type)
-//     {
-//       case "visa": return validateVisa(value);
-//       case "numeric": return validateNumber(value, parameter);
-//       case "none": return true;
-//     }
-//   }
-// 	return false;
-// }
 
 export const payees: ValidatedItemProps[] = [
 	{ validate: visa, text: "BEST BUY REWARD ZONE VISA", value: "BEST BUY REWARD ZONE VISA" },

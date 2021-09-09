@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
-import { NormalizeAddress } from '@thecointech/utilities';
+import { defineMessages } from 'react-intl';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from 'api';
 import { weBuyAt } from '@thecointech/fx-rates';
@@ -8,6 +7,8 @@ import { useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
+import { log } from '@thecointech/logging';
+import { MessageWithValues } from '@thecointech/shared/types';
 
 const translations = defineMessages({
   errorMessage : {
@@ -45,12 +46,13 @@ const translations = defineMessages({
 export const Transfer = () => {
 
   const [coinTransfer, setCoinTransfer] = useState(null as number | null);
-  const [toAddress, setToAddress] = useState('');
-  const [forceValidate] = useState(false);
+  const [toAddress, setToAddress] = useState<MaybeString>();
+
+  const [forceValidate, setForceValidate] = useState(false);
+  const [resetToDefault, setResetDefault] = useState(Date.now());
 
   const [transferInProgress, setTransferInProgress] = useState(false);
-  const [transferMessage, setTransferMessage] = useState(translations.transferOutProgress);
-  const [transferValues, setTransferValues] = useState(undefined as any);
+  const [transferMessage, setTransferMessage] = useState<MessageWithValues>(translations.transferOutProgress);
   const [percentComplete, setPercentComplete] = useState(0);
   const [doCancel, setDoCancel] = useState(false);
 
@@ -60,31 +62,43 @@ export const Transfer = () => {
   const account = AccountMap.useActive();
   const { rates } = useFxRates();
   const rate = weBuyAt(rates);
-  const intl = useIntl();
+
+  const resetForm = () => {
+    setCoinTransfer(null);
+    setResetDefault(Date.now());
+    setForceValidate(false);
+  }
 
   const doTransfer = async () => {
+    if (!toAddress || !coinTransfer) {
+      log.info("Cannot transfer: missing required field");
+      return;
+    }
     // Init messages
     setTransferMessage(translations.step1);
     setPercentComplete(0.0);
-    // First, get the brokers fee
-    const statusApi = GetStatusApi(); //undefined, "http://localhost:8080"
-    var status = await statusApi.status();
-    // Check out if we have the right values
-    if (!status.data.certifiedFee) return false;
 
+    // First, get the brokers fee
+    const statusApi = GetStatusApi();
+    var { data } = await statusApi.status();
+    // Check out if we have the right values
+    if (!data.certifiedFee) {
+      setErrorHidden(false)
+      return false;
+    }
     if (doCancel) return false;
 
     // Get our variables
     const { signer, contract } = account!;
-    if (coinTransfer === null || !signer || !contract) return false;
+    if (!signer || !contract) return false;
 
     // To transfer, we construct & sign a message that
     // that allows the broker to transfer TheCoin to another address
     const transferCommand = await BuildVerifiedXfer(
       signer,
-      NormalizeAddress(toAddress),
+      toAddress,
       coinTransfer,
-      status.data.certifiedFee,
+      data.certifiedFee,
     );
     const transferApi = GetDirectTransferApi();
 
@@ -94,28 +108,25 @@ export const Transfer = () => {
     setTransferMessage(translations.step2);
     setPercentComplete(0.25);
     const response = await transferApi.transfer(transferCommand);
-
-    console.log(`TxResponse: ${response.data.message}`);
-    if (!response.data.hash) {
-      alert(response.data.message);
+    if (!response.data?.hash) {
+      log.error(`Error: missing response data: ${JSON.stringify(response)}`);
+      setErrorHidden(false);
       return false;
     }
 
     // Wait on the given hash
-    const transferValues = {
-      link: (<a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
-    };
-    setTransferMessage(translations.step3);
+    setTransferMessage({
+      ...translations.step3,
+      values: {
+        link: (
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
+      }
+    });
     setPercentComplete(0.5);
-    setTransferValues(transferValues);
 
     const tx = await contract.provider.getTransaction(response.data.hash);
     // Wait at least 2 confirmations
     tx.wait(2);
-    const receipt = await contract.provider.getTransactionReceipt(
-      response.data.hash,
-    );
-    console.log(`Transfer mined in ${receipt.blockNumber} - ${receipt.blockHash}`,);
     setPercentComplete(1);
     return true;
   }
@@ -124,40 +135,26 @@ export const Transfer = () => {
     if (e) e.preventDefault();
 
     setDoCancel(false);
-    setTransferValues(undefined);
     setTransferInProgress(true);
+    // Init messages
+    setForceValidate(true);
+    setErrorHidden(true);
+    setSuccessHidden(true);
 
     try {
       const result = await doTransfer();
-      if (!result) {
-        setErrorHidden(false);
-        setSuccessHidden(true);
-      }
-      else {
-        setErrorHidden(true);
+      if (result) {
         setSuccessHidden(false);
+        resetForm();
       }
-    } catch (err) {
-      console.error(err);
+    } catch (e: any) {
+      log.error(`Exception on Submit eTransfer: ${e.message}`);
       setErrorHidden(false);
-      setSuccessHidden(true);
     }
-    setPercentComplete(1);
+    setDoCancel(false);
     setTransferInProgress(false);
   }
 
-  function onValueChange(value: number) {
-    setCoinTransfer(value);
-  }
-
-  // Validate our inputs
-  function onAccountValue(value: string) {
-    setToAddress(value);
-  }
-
-  function onCancelTransfer() {
-    setDoCancel(true);
-  }
   return (
     <TransferWidget
       errorMessage={translations.errorMessage}
@@ -166,22 +163,23 @@ export const Transfer = () => {
       successHidden={successHidden}
 
       description={translations.description}
-      onValueChange={onValueChange}
+      onValueChange={setCoinTransfer}
       account={account!}
       coinTransfer={coinTransfer}
       rate={rate}
 
-      onAccountValue={onAccountValue}
+      onAccountValue={setToAddress}
       forceValidate={forceValidate}
+      resetToDefault={resetToDefault}
       onSubmit={onSubmit}
       button={translations.button}
-      destinationAddress={intl.formatMessage(translations.destinationAddress)}
+      destinationAddress={translations.destinationAddress}
 
-      onCancelTransfer={onCancelTransfer}
+      onCancelTransfer={() => setDoCancel(true)}
       transferInProgress={transferInProgress}
       transferOutHeader={translations.transferOutHeader}
       transferMessage={transferMessage}
       percentComplete={percentComplete}
-      transferValues={transferValues} />
+      />
   );
 }

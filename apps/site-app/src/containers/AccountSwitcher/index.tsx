@@ -3,7 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import { NavLink, Link } from "react-router-dom";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import styles from './styles.module.less';
 import { AccountState } from '@thecointech/account';
 
@@ -35,10 +35,9 @@ export const AccountSwitcher = () => {
   const activeAccount = AccountMap.useActive();
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
-  const intl = useIntl();
   const trigger = activeAccount
       ? <span><img src={getAvatarLink("14")} className={styles.avatars}/> {activeAccount.name.substring(0, 10)}</span>
-      : <span>{intl.formatMessage(translations.titleMsg)}</span>
+      : <FormattedMessage {...translations.titleMsg} />
 
   return (
     <Dropdown trigger={trigger}  >
