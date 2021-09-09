@@ -75,10 +75,6 @@
     "defaultMessage": "Family Name",
     "description": "app.settings.personaldetails.familyname: Name field for the page setting / tab personal details in the app"
   },
-  "7L9gj2": {
-    "defaultMessage": "An optional message to the recipient. Should not include the security answer",
-    "description": "app.accounts.redeem.form.messageDesc: Label for the form the make a payment page / etransfert tab"
-  },
   "8jxTzX": {
     "defaultMessage": "Secret:",
     "description": "app.accounts.purchase.yourTransferSecret"
@@ -231,6 +227,10 @@
     "defaultMessage": "Payee Account Number",
     "description": "app.accounts.billPayments.form.accNumber: Label for the form the make a payment page / bill payment tab"
   },
+  "QhJgeB": {
+    "defaultMessage": "An optional message to the recipient",
+    "description": "Placeholder text for optional message to be included in e-transfer"
+  },
   "Qpm5Pd": {
     "defaultMessage": "Order received. You should receive the e-Transfer in 1-2 business days.",
     "description": "app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab"
@@ -282,6 +282,10 @@
   "WYLa4b": {
     "defaultMessage": "We are generating your individual e-Transfer recipient info",
     "description": "app.accounts.purchase.fetchTransferCode"
+  },
+  "WZjSt/": {
+    "defaultMessage": "Should not include the security answer",
+    "description": "tooltip for optional message to be included in e-transfer"
   },
   "X/fgLk": {
     "defaultMessage": "Account not verified",
@@ -367,9 +371,21 @@
     "defaultMessage": "Your details",
     "description": "app.accounts.purchase.haveTransferCodeHeader"
   },
+  "hv6CwE": {
+    "defaultMessage": "Please select payee and enter account number",
+    "description": "Bill payment error message when missing payee or account"
+  },
   "iXp/x0": {
     "defaultMessage": "Create a new recipient in your financial institution with the given details",
     "description": "app.purchase.newRecipient: Content for the purchase list explanation page in the app"
+  },
+  "iemHv8": {
+    "defaultMessage": "This field is required",
+    "description": "Error on attempted submission without completing field"
+  },
+  "jQ13+Z": {
+    "defaultMessage": "Invalid characters are: < or >, '{ or }', [ or ], %, &, #, \\ or \"",
+    "description": "app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab"
   },
   "knRmks": {
     "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
@@ -454,6 +470,10 @@
   "sA8bzZ": {
     "defaultMessage": "No numbers or special characters",
     "description": "app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab"
+  },
+  "sHCZI2": {
+    "defaultMessage": "The following invalid characters were found: {chars}",
+    "description": "error message on invalid characters"
   },
   "t19+gS": {
     "defaultMessage": "Make payments",
