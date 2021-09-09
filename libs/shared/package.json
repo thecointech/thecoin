@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/shared",
   "private": "true",
-  "version": "0.2.26",
+  "version": "0.2.27",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -52,7 +52,7 @@
     "@nivo/core": "0.73.0",
     "@nivo/line": "0.73.0",
     "@nivo/tooltip": "0.73.0",
-    "@thecointech/account": "^0.2.26",
+    "@thecointech/account": "^0.2.27",
     "@thecointech/fx-rates": "^0.2.22",
     "@thecointech/logging": "^0.2.22",
     "@thecointech/site-semantic-theme": "^0.2.16",
