@@ -7,7 +7,7 @@ import * as Browser from '../store';
 const _devWallets = Browser.getAllAccounts();
 let _initial = null as string|null;
 
-async function addRemoteAccount(name: AccountName, active: boolean) {
+const addRemoteAccount = async (name: AccountName, active: boolean) => {
   const signer = await getSigner(name);
   const address = NormalizeAddress(await signer.getAddress());
 
