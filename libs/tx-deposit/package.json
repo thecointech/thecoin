@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-deposit",
-  "version": "0.2.24",
+  "version": "0.2.26",
   "description": "The Coin: A library for e-transfer deposits",
   "keywords": [
     "THECoin"
@@ -29,8 +29,8 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/bank-interface": "^0.2.24",
-    "@thecointech/tx-gmail": "^0.2.22",
-    "@thecointech/tx-statemachine": "^0.2.24"
+    "@thecointech/tx-gmail": "^0.2.26",
+    "@thecointech/tx-statemachine": "^0.2.26"
   },
   "devDependencies": {
     "jest": "*"
