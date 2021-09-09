@@ -28,7 +28,6 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/rbcapi": "^0.2.19",
     "@thecointech/tx-statemachine": "^0.2.19"
   },
   "devDependencies": {

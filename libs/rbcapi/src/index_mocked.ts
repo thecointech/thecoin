@@ -1,11 +1,13 @@
-import { ETransferErrorCode } from "./types";
-import type { RbcApi as SrcApi } from "./index";
+import { ETransferErrorCode, IBank } from "@thecointech/bank-interface";
 import { jest } from '@thecointech/jestutils/shim';
 
 export { ETransferErrorCode };
+export { RbcStore } from './store'
+export function initBrowser() {};
+export function closeBrowser() {}
 
 let result = 1234;
-export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
+export class RbcApi implements IBank {
   depositETransfer = jest.fn(() => {
     result += 1;
     // Always succeeds (but can be mocked for failure if necessary)
@@ -20,11 +22,3 @@ export class RbcApi implements Pick<SrcApi, keyof SrcApi> {
   getTransactions = jest.fn(() => Promise.resolve([]));
   initialize = jest.fn(() => { });
 }
-
-// Mock store does nothing
-export class RbcStore {
-  static initialize() {};
-}
-
-// No browser
-export function initBrowser() {};

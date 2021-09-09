@@ -4,6 +4,12 @@ import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
+import { bridge } from '@thecointech/signers/electron';
+import type { IpcRenderer } from 'electron';
+
+declare let window: Window & {
+  ipcRenderer: Pick<IpcRenderer, "invoke">
+};
 
 async function buildMapEntry(name: AccountName) {
   const signer = await getSigner(name);
@@ -15,7 +21,7 @@ async function buildMapEntry(name: AccountName) {
 }
 
 export async function initialAccounts() {
-  log.debug('loading initial accounts');
+  // open IPC bridge to node process.
   return {
     active: null,
     map: {
@@ -24,5 +30,9 @@ export async function initialAccounts() {
     }
   }
 }
-const initial = await initialAccounts();
-export const initAccounts = () => AccountMap.initialize(initial);
+export const initAccounts = async () => {
+  log.debug('loading initial accounts');
+  bridge(window.ipcRenderer);
+  const initial = await initialAccounts();
+  AccountMap.initialize(initial);
+}

@@ -1,4 +1,4 @@
-import { DepositResult, ETransferErrorCode } from "./types";
+import { DepositResult, ETransferErrorCode } from "@thecointech/bank-interface";
 import { ApiAction } from "./action";
 import { Page } from "puppeteer";
 

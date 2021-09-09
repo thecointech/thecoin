@@ -1,17 +1,17 @@
 import gmail from '@thecointech/tx-gmail';
 import { getAllActions, getAllUsers } from "@thecointech/broker-db";
-import { RbcApi } from '@thecointech/rbcapi';
+import { IBank } from '@thecointech/bank-interface';
 import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { AllData } from './types';
 import { log } from '@thecointech/logging';
 
-export async function fetchAllRecords(rbcApi: RbcApi) : Promise<AllData>{
+export async function fetchAllRecords(bankApi: IBank) : Promise<AllData>{
 
   log.debug('Fetching all raw data');
 
-  const bank = await fetchBankTransactions(rbcApi);
+  const bank = await fetchBankTransactions(bankApi);
   log.trace('Fetched raw banking data');
   const eTransfers = await fetchAndCleanETransfers();
   log.trace('Fetched raw e-Transfer mails');

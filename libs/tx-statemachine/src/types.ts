@@ -2,7 +2,7 @@ import { ActionType, TransitionDelta, TypedAction, StateData } from "@thecointec
 import type { TheCoin } from "@thecointech/contract";
 import type { eTransferData } from "@thecointech/tx-gmail";
 import type { BillPayeePacket, ETransferPacket } from "@thecointech/types";
-import type { RbcApi } from '@thecointech/rbcapi';
+import type { IBank } from '@thecointech/bank-interface';
 
 export type RequiredStates = "initial" | "complete" | "error";
 
@@ -29,7 +29,7 @@ export type StateGraph<States extends string, Type extends ActionType> =
   > &
   {
     complete: null,
-    error: null,
+    error: null|StateTransitions<States, Type>,
   };
 
 export type InstructionDataTypes = {
@@ -49,7 +49,7 @@ export interface TypedActionContainer<Type extends ActionType> {
   // contract any coin actions are executed against.
   contract: TheCoin,
   // Access to the bank (may be null)
-  bank: RbcApi|null,
+  bank: IBank|null,
 }
 
 export type SellActionContainer = TypedActionContainer<"Sell">;

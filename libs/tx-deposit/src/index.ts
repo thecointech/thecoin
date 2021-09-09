@@ -7,10 +7,10 @@ import { DateTime } from 'luxon';
 
 import type { TheCoin } from '@thecointech/contract';
 import type { eTransferData } from "@thecointech/tx-gmail";
-import type { RbcApi } from '@thecointech/rbcapi';
+import type { IBank } from '@thecointech/bank-interface';
 
 // deposit eTransfers
-export const eTransferProcessor = (contract: TheCoin, bank: RbcApi | null = null) => new StateMachineProcessor(etransfer, contract, bank);
+export const eTransferProcessor = (contract: TheCoin, bank: IBank | null = null) => new StateMachineProcessor(etransfer, contract, bank);
 // Used to handle deposits/other.
 export const manualProcessor = (contract: TheCoin, deposit: Deposit) => new StateMachineProcessor(manual(deposit), contract, null);
 

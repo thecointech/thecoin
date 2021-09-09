@@ -11,7 +11,7 @@ const appCSP = `
   style-src 'self' 'unsafe-inline' fonts.googleapis.com;
   connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectFirestore} ${connectInfura} ${connectRates};
   font-src 'self' data: fonts.gstatic.com;
-  frame-src https://app-clay.3idconnect.org/ https://broker-cad.firebaseapp.com/ https://tccc-testing.firebaseapp.com/;
+  frame-src https://app-clay.3idconnect.org/ https://broker-cad.firebaseapp.com/ https://${process.env.TCCC_FIRESTORE_AUTH_DOMAIN}/;
 `;
 
 const devtoolsCSP = `

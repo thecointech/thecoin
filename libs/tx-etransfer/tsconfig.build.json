@@ -3,7 +3,7 @@
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
     { "path": "../tx-statemachine/tsconfig.build.json" },
-    { "path": "../rbcapi/tsconfig.build.json" },
+    { "path": "../bank-interface/tsconfig.json" },
   ]
 }
 

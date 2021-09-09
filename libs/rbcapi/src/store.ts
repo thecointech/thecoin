@@ -1,11 +1,11 @@
-import { RbcTransaction } from "./types";
+import { BankTx } from "@thecointech/bank-interface";
 import { DateTime, DateTimeOptions } from "luxon";
 import { BaseStore, ConfigStore } from "@thecointech/store";
 
 const lastSyncKey = 'LastSync';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
-type StoredTx = Overwrite<RbcTransaction, {TransactionDate: number}> & {
+type StoredTx = Overwrite<BankTx, {TransactionDate: number}> & {
   incr?: number;
 }
 
@@ -15,7 +15,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
 
   public static Options: DateTimeOptions;
 
-  static async storeTransactions(txs: RbcTransaction[], syncDate: Date) {
+  static async storeTransactions(txs: BankTx[], syncDate: Date) {
     let counter = 0;
     let daySwitcher = 0;
     // We only store if we have actual data
@@ -59,7 +59,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
     RbcStore.lastSync = syncDate;
   }
 
-  static async fetchStoredTransactions(): Promise<{ txs: RbcTransaction[], syncedTill: Date}> {
+  static async fetchStoredTransactions(): Promise<{ txs: BankTx[], syncedTill: Date}> {
     const allDocs = await RbcStore.db.allDocs<StoredTx>({include_docs: true});
     const txs = allDocs.rows.map(doc => mapStoredToTx(doc.doc!));
 
@@ -79,7 +79,7 @@ export class RbcStore extends BaseStore<StoredTx>("rbc_data")
   }
 }
 
-const mapStoredToTx = (doc: StoredTx) : RbcTransaction => ({
+const mapStoredToTx = (doc: StoredTx) : BankTx => ({
   ...doc,
   TransactionDate: DateTime.fromMillis(doc?.TransactionDate ?? 0, RbcStore.Options)
 })
