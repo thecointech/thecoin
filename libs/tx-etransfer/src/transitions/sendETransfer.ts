@@ -1,5 +1,6 @@
 import { log } from "@thecointech/logging";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
+import { invalidChars } from '@thecointech/utilities/VerifiedSale';
 import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
@@ -72,7 +73,6 @@ function decryptInstructions(packet: EncryptedPacket) {
 // Checks eTransfer for minimum viability
 function isValid(packet: ETransferPacket|null) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
-  const invalidChars = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
     packet.question?.length >= 2 &&
     !packet.question?.match(invalidChars) &&

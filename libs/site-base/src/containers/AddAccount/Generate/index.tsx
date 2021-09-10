@@ -6,7 +6,7 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
-import { PasswordInput } from './PasswordInput';
+import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPassword';
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
@@ -85,9 +85,9 @@ export const Generate = (props: RouteComponentProps) => {
       </Header>
       <Form className={`${styles.createAccountForm} x8spaceBefore`} id={styles.createAccountForm}>
         <div className={`container ui`}>
-          <NameInput forceValidate={forceValidate} setName={setName} isRequired={true} />
+          <NameInput forceValidate={forceValidate} setName={setName} />
         </div>
-        <PasswordInput forceValidate={forceValidate} setPassword={setPassword} />
+        <UxScoredPassword forceValidate={forceValidate} onValue={setPassword} />
         <div className={`container ui`}>
           <ReferralInput forceValidate={forceValidate} setReferral={setReferral} />
         </div>

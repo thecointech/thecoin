@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Header, Confirm, Select } from 'semantic-ui-react';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
-import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { toHuman } from '@thecointech/utilities';
 import { BuyAction, getActionFromInitial, PurchaseType } from '@thecointech/broker-db';
 import { manualProcessor } from '@thecointech/tx-deposit';
@@ -21,7 +21,7 @@ const typeOptions = ["deposit", "other"].map(k => ({
 
 export const Purchase = () => {
 
-  const [purchaser, setPurchaser] = React.useState("0x1234");
+  const [purchaser, setPurchaser] = React.useState<MaybeString>();
   const [forceValidate, setForceValidate] = React.useState(false);
   const [type, setType] = React.useState<PurchaseType>("deposit");
   const [fiat, setFiat] = React.useState(0);
@@ -33,11 +33,14 @@ export const Purchase = () => {
 
   const onConfirm = async () => {
     setConfirm(false);
-    setIsProcessing(true);
     setForceValidate(true);
+    if (!purchaser || !fiat)
+      return false;
+
+    setIsProcessing(true);
     throw new Error("Just because it compiles, doesn't mean it works.  Check properly");
     const date = DateTime.now();
-    const buy = await buildPurchaseEntry(fiat, date, purchaser, type);
+    const buy = await buildPurchaseEntry(fiat, date, purchaser!, type);
     const processor = manualProcessor(account.contract!, {
       fiat: new Decimal(fiat),
       meta: "Fill this in",
@@ -61,10 +64,9 @@ export const Purchase = () => {
       <Form>
         {/* <Datetime value={recievedDate} onChange={this.onSetDate} /> */}
         <UxAddress
-          uxChange={setPurchaser}
+          onValue={setPurchaser}
           intlLabel={messages.labelAccount}
           forceValidate={forceValidate}
-          placeholder="Purchaser Account"
         />
         <Select value={type} options={typeOptions} onChange={event => setType(event.currentTarget.innerText as PurchaseType)} />
         <DualFxInput onChange={setFiat} maxValue={account.balance} value={fiat} fxRate={1} />

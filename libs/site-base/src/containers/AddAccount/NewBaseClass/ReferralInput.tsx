@@ -1,13 +1,16 @@
-import React, { useState, useCallback } from "react";
-import { UxInput } from "@thecointech/shared/components/UxInput";
+import React from "react";
+import { UxInput } from "@thecointech/shared/components/UX/Input";
 import { GetReferrersApi } from "../../../api";
 import { IsValidShortCode } from "@thecointech/utilities";
-import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 
 const translations = defineMessages({
   placeholder : {
       defaultMessage: '6 letters or numbers',
       description: 'app.addaccount.newbaseclass.referralinput.placeholder: Tooltip for the referral input'},
+  tooltip: {
+        defaultMessage: 'A referral code from an existing client is required to create an account',
+        description: 'Referral tooltip when creating a new account'},
   error : {
       defaultMessage: 'Registering this account failed. Please contact support@thecoin.io',
       description: 'app.addaccount.newbaseclass.referralinput.error: Error for the referral input'},
@@ -31,36 +34,16 @@ type Props = {
   setReferral: (value: MaybeString) => void;
 }
 
-const initialState = {
-  isValid: undefined as boolean | undefined,
-  message: undefined as MessageDescriptor | undefined,
-  value: '',
-}
-
-type State = typeof initialState;
-
 export const ReferralInput = (props: Props) => {
 
-  const intl = useIntl();
-  const [state, setState] = useState(initialState);
   const { setReferral, ...rest} = props;
-
-  const onChange = useCallback(async (value: string) => {
-    const newState = await validateReferral(value);
-    setState(newState);
-    setReferral(newState.isValid
-      ? newState.value
-      : undefined);
-
-  }, [setState, setReferral]);
-
   return (
     <UxInput
-      uxChange={onChange}
+      onValue={props.setReferral}
+      onValidate={validateReferral}
       intlLabel={translations.labelReferrer}
-      isValid={state.isValid}
-      message={state.message}
-      placeholder={intl.formatMessage(translations.placeholder)}
+      tooltip={translations.tooltip}
+      placeholder={translations.placeholder}
       {...rest}
     />
   );
@@ -89,29 +72,12 @@ const isLegalReferral = async (code: string) => {
   return isValid.data?.success;
 }
 
-const validateReferral = async (value: string) : Promise<State> => {
-  const validation =
-    value.length !== 6
-      ? {
-          isValid: false,
-          message: translations.errorReferrerNumChars,
-        }
+const validateReferral = async (value: string) => {
+  return value.length !== 6
+      ? translations.errorReferrerNumChars
       : !IsValidShortCode(value)
-        ? {
-            isValid: false,
-            message: translations.errorReferrerInvalidCharacters,
-          }
+        ? translations.errorReferrerInvalidCharacters
         : !(await isLegalReferral(value))
-          ? {
-              isValid: false,
-              message: translations.errorReferrerUnknown,
-            }
-          : {
-              isValid: true,
-              message: undefined,
-            };
-  return {
-    value: value,
-    ...validation,
-  };
+          ? translations.errorReferrerUnknown
+          : null;
 };

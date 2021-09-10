@@ -9,8 +9,8 @@ import { SetGCloudConfig, copyEnvVarsLocal, copyNpmTokenHere, gCloudDeploy, Shel
   await removeOldAppVersions();
 
   // Don't forget to deploy our CRON file
-  if (process.env.SETTINGS != 'beta') {
-    await ShellCmd("gcloud app deploy cron.yaml")
-  }
+  // if (process.env.SETTINGS != 'beta') {
+  //   await ShellCmd("gcloud app deploy cron.yaml")
+  // }
 })();
 
