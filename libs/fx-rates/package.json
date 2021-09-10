@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/fx-rates",
-  "version": "0.2.22",
+  "version": "0.2.29",
   "description": "TheCoin: Client library for fetching fx-rates",
   "keywords": [
     "TheCoin",
@@ -33,7 +33,7 @@
   },
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.22",
+    "@thecointech/logging": "^0.2.29",
     "@thecointech/pricing": "*"
   },
   "devDependencies": {
