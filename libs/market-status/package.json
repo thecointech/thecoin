@@ -36,7 +36,9 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.19",
+    "@thecointech/logging": "^0.2.19"
+  },
+  "peerDependencies": {
     "axios": "*"
   },
   "devDependencies": {
