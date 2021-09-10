@@ -6,7 +6,7 @@ import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
-import { UxScoredPassword } from '@thecointech/shared/components/Ux/ScoredPassword';
+import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPassword';
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
