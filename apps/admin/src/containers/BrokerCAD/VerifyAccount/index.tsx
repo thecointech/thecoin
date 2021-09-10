@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
-import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
 import { setUserVerified } from '@thecointech/broker-db/user';
 import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
@@ -16,7 +16,7 @@ const buttonVerify = defineMessage({ defaultMessage: 'VERIFY ACCOUNT', descripti
 
 export const VerifyAccount = () => {
 
-  const [account, setAccount] = useState('');
+  const [account, setAccount] = useState<MaybeString>();
   const [forceValidate, setForceValidate] = useState(false);
   const [verifiedAccounts, error, isPending] = usePromiseSubscription(async () => {
     const allDocs = await getReferrersCollection().get();
@@ -36,11 +36,13 @@ export const VerifyAccount = () => {
         </Header>
         <UxAddress
           intlLabel={labelAccount}
-          uxChange={setAccount}
+          onValue={setAccount}
           forceValidate={forceValidate}
         />
         <Button disabled={isPending} onClick={async () => {
           setForceValidate(true);
+          if (!account)
+            return;
           const code = await verifyAccount(account);
           if (code) setAccount('');
         }}>
