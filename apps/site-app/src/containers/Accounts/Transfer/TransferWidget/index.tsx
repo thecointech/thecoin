@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Form, Header, Message, StrictButtonProps } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
-import { UxAddress } from '@thecointech/shared/components/UxAddress';
+import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import type { ChangeCB } from '@thecointech/shared/components/UxInput/types';
+import type { ChangeCB } from '@thecointech/shared/components/UX/types';
 import type { AccountState } from '@thecointech/account';
 import type { MessageWithValues } from '@thecointech/shared/types';
 
@@ -23,20 +23,24 @@ type VisualProps={
   rate: number,
 
   onAccountValue: ChangeCB,
+  resetToDefault: number;
   forceValidate: boolean,
   onSubmit: StrictButtonProps["onClick"],
   button: MessageDescriptor,
-  destinationAddress: string,
+  destinationAddress: MessageDescriptor,
 
   onCancelTransfer: () => void,
   transferInProgress: boolean,
   transferOutHeader: MessageDescriptor | undefined,
   transferMessage: MessageWithValues | undefined,
   percentComplete: number,
-  transferValues: string,
 };
 
 export const TransferWidget = (props: VisualProps) => {
+  const commonProps = {
+    resetToDefault: props.resetToDefault,
+    forceValidate: props.forceValidate,
+  }
   return (
     <React.Fragment>
       <Form>
@@ -61,9 +65,9 @@ export const TransferWidget = (props: VisualProps) => {
           fxRate={props.rate}
         />
         <UxAddress
-          uxChange={props.onAccountValue}
-          forceValidate={props.forceValidate}
+          onValue={props.onAccountValue}
           placeholder={props.destinationAddress}
+          {...commonProps}
         />
         <ButtonTertiary onClick={props.onSubmit}>
             <FormattedMessage {...props.button} />
