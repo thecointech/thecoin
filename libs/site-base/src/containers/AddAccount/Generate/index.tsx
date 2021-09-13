@@ -3,7 +3,6 @@ import { Wallet } from 'ethers';
 import { Header, Form } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { RouteComponentProps } from 'react-router-dom';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPassword';
@@ -11,6 +10,7 @@ import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import styles from './styles.module.less';
+import { CompleteInit } from '../CompleteInit';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -33,7 +33,7 @@ const translations = defineMessages({
       description: 'app.account.create.whileCreatingHeader'}
 });
 
-export const Generate = (props: RouteComponentProps) => {
+export const Generate = () => {
 
   const [name, setName] = useState(undefined as MaybeString);
   const [password, setPassword] = useState(undefined as MaybeString);
@@ -41,11 +41,11 @@ export const Generate = (props: RouteComponentProps) => {
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
+  const [wallet, setWallet] = useState<Wallet|undefined>();
 
   ////////////////////////////////
   // Callback to actually generate the account
   const accountsApi = AccountMap.useApi();
-  const { history } = props;
   const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     if (!(password && referral && name)) {
@@ -56,16 +56,19 @@ export const Generate = (props: RouteComponentProps) => {
     const generated = await generateNewWallet(password, setProgress);
     if (generated) {
       const { wallet, decrypted } = generated;
-      accountsApi.addAccount(name, wallet.address, wallet, true, true, decrypted);
+      accountsApi.addAccount(name, wallet.address, wallet);
       registerReferral(wallet.address, referral);
-
-      const toStoragePage = "/addAccount/store" ; //new RUrl(location.pathname, "..", "store");
-      history.push(toStoragePage);
+      setWallet(decrypted);
     }
 
     // Else, we probably cancelled, so do nothing...
     return undefined;
   }
+
+  // Create a new component to finish initialization.  This
+  // is because we cannot add additional hooks to this component to start the account
+  if (wallet)
+    return <CompleteInit signer={wallet} address={wallet.address} redirect={'/addAccount/store'} />
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)

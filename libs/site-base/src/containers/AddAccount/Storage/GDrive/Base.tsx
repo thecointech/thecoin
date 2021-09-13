@@ -1,3 +1,4 @@
+import { log } from '@thecointech/logging';
 import React, { useEffect, useState } from 'react';
 import { MessageDescriptor } from 'react-intl';
 import { ProviderChoice } from '../ProviderChoice';
@@ -24,8 +25,12 @@ export const GDriveBase = ({busy, text, onAuth}: Props) => {
     setupCallback((token) => {
       const r = onAuth(token);
       if (r) {
-        r.then(() => setIsUploading(false))
-         .catch(() => setIsUploading(false))
+        r.then(() => log.info("Completed account backup to google drive"))
+         .catch(e => {
+           log.error({exception: e.message}, `Exception GDrive::onAuth: {exception} - ${e.stack}`);
+           alert("An error occured during upload.  We recommend backing up this account locally and contacting support@thecoin.io")
+         })
+         .finally(() => setIsUploading(false))
       }
       else {
         setIsUploading(false);

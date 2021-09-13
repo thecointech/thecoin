@@ -44,12 +44,17 @@ export function BaseReducer<U, T>(key: string, initialState: T) {
   // So we create a new type here separate from the
   // class and then just directly set it's members for faux-statics
   type InjectedStatics = {
+    // Initialize the store ready for use (inject reducers/sagas etc)
     useStore: () => void,
+    // Return the API for interacting with this store
     useApi:() => U,
+    // Return the data held by this store.
     useData: () => T,
+    // Init to a particular state
     initialize: (state?: Partial<T>, derived?: any) => void,
     actions: ActionsType<U>,
     reducer: Reducer,
+    // Selector selects this reducers data from app store
     selector: (state: any) => T,
     // Capture a pointer to the derived class here.
     // We can't type it properly so don't even try
@@ -76,7 +81,7 @@ export function BaseReducer<U, T>(key: string, initialState: T) {
     useInjectReducer({ key, reducer: BaseReducer._reducer });
   }
   r.useApi = () => bindActionCreators(BaseReducer._actions, useDispatch());
-  r.useData = () => useSelector(r.selector);
+  r.useData = () => useSelector(r.derived.selector);
   r.selector = (state) => state[key] || initialState;
 
   return r;

@@ -1,5 +1,4 @@
 import { AccountState, AccountMap} from '@thecointech/account';
-import { Wallet } from '@ethersproject/wallet';
 import { Signer } from '@ethersproject/abstract-signer';
 
 export type AccountMapState =  {
@@ -23,7 +22,7 @@ export interface IAccountStoreAPI {
   setActiveAccount(account: string|null): void;
 
   // Add a new account, optionally store in LocalStorate, in unlocked state
-  addAccount(name: string, address: string, signer: Signer, store?: boolean, setActive?: boolean, unlocked?: Wallet): void;
+  addAccount(name: string, address: string, signer: Signer): void;
 
   // Remove the given account from list & storage
   deleteAccount(account: AccountState): void;
