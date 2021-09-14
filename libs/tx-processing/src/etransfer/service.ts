@@ -28,12 +28,13 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
 
     // TEMP Hack, unstick tx's to allow them to complete
     //instruction.message = instruction.message?.replace('&', 'and');
+    //instruction.answer = instruction.answer.replace(' ', '');
     if (!isValid(instruction))
     {
       console.log(JSON.stringify(record.fiatDisbursed));
       console.log(JSON.stringify(instruction));
       log.error({hash: record.hash}, "e-Transfer packet for {hash} is invalid: requires manual resolution");
-      SendMail('Failed e-Transfer', `e-Transfer packet for ${record.hash} send ${record.recievedTimestamp.toDate()}is invalid: requires manual resolution`);
+      await SendMail('Failed e-Transfer', `e-Transfer packet for ${record.hash} send ${record.recievedTimestamp.toDate()}is invalid: requires manual resolution`);
       continue;
     }
 
@@ -48,13 +49,16 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
     {
       await MarkCertComplete("Sell", record);
     }
+    else {
+      await SendMail('Incomplete e-Transfer', `e-Transfer incomplete\nto: ${instruction.email}\nfiat: ${record.fiatDisbursed.toFixed(2)}\nrecieved: ${record.recievedTimestamp.toDate()}\nhash: ${record.hash.slice(0, 8)}\nconfirmation: ${confirmation}`);
+    }
   }
   return toComplete;
 }
 
 function isValid(packet: ETransferPacket) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
-  const invalidChars = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
+  const invalidChars = /[\s\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
     packet.question?.length >= 2 &&
     !packet.question?.match(invalidChars) &&
