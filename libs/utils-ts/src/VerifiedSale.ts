@@ -6,7 +6,7 @@ import { BuildVerifiedAction } from "./VerifiedAction";
 
 // We cannot use the following characters in the question/answer
 // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
-export const invalidChars = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
+export const invalidChars = /[\s\<\>\{\}\[\]\%\&\#\\\"]/g;
 
 export const BuildVerifiedSale = async (
   eTransfer: ETransferPacket,
