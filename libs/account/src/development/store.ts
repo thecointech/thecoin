@@ -28,13 +28,8 @@ async function initDevWallets() {
 }
 initDevWallets();
 
-export const getStoredAccountData = (address: string) => ({
-  ..._devAccounts[address],
-  // We don't store original wallets, so just
-  // strip the signer from the data to remove its privateKey
-  signer: { _isRemote: false }
-});
-export const storeAccount = (account: AccountState) => _devAccounts[account.address] = account;
+export const getStoredAccountData = (address: string) => _devAccounts[address];
+export const storeAccount = (account: AccountState) => _devAccounts[account.address] = {...account};
 export const deleteAccount = (account: AccountState) => delete _devAccounts[account.address];
 export const getAllAccounts = () => _devAccounts;
 export const getInitialAddress = () => _initial;

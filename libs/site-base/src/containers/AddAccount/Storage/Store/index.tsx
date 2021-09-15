@@ -14,7 +14,6 @@ import { GDriveStore } from '../GDrive/Store';
 import { OneDriveStore } from '../OneDrive/Store';
 import { DropBoxStore } from '../Dropbox/Store';
 
-
 const aboveTheTitle = defineMessage({
   defaultMessage: "Save your account",
   description: "The above the main title title for the store your account page"
@@ -50,7 +49,6 @@ export const Store = () => {
     activeAccount?.details?.storedOnDropbox ||
     activeAccount?.details?.storedOnOneDrive
   );
-
 
   return (
     <Container className={styles.content}>

@@ -11,7 +11,6 @@ TRADIER_API_KEY=<SetAPIKey>
 #
 # The ethereum network our contract will be deployed to
 INFURA_PROJECT_ID=<AddThisHere>
-INITIAL_COIN_BLOCK=<ContractDeployedBlock>
 
 #
 # Connection to the IDX testnet.  This testnet is periodically wiped

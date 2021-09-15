@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract",
-  "version": "0.2.19",
+  "version": "0.2.29",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [
     "TheCoin",
@@ -25,7 +25,9 @@
     "build:src": "run-p build:src:*",
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "build:src:copy": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
+    "build:src:copy": "run-p build:src:copy:*",
+    "build:src:copy:types": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
+    "build:src:copy:deploy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
@@ -54,7 +56,7 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^3.4.0",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/signers": "^0.2.19",
+    "@thecointech/signers": "^0.2.29",
     "@truffle/hdwallet-provider": "^1.2.3",
     "@typechain/ethers-v5": "^7.0.1",
     "@typechain/truffle-v5": "^5.0.0",

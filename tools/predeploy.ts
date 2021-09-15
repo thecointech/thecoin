@@ -43,14 +43,14 @@ export function gCloudDeploy() {
 
 export async function copyEnvVarsLocal(outYamlFile: string) {
   const env = getEnvVars();
-  const yamlVars = Object.values(env)
-    .filter((key) => !key.startsWith('#'))
-    .filter((key) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
-    .filter((key) => !key.startsWith('CERAMIC_'))
-    .filter((key) => !key.startsWith('GITHUB_'))
-    .filter((key) => !key.includes('_SERVICE_ACCOUNT='))
-    .filter((key) => key !== 'STORAGE_PATH')
-    .map((key, val) => {
+  const yamlVars = Object.entries(env)
+    .filter(([key]) => !key.startsWith('#'))
+    .filter(([key]) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
+    .filter(([key]) => !key.startsWith('CERAMIC_'))
+    .filter(([key]) => !key.startsWith('GITHUB_'))
+    .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))
+    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER')
+    .map(([key, val]) => {
       const sval = JSON.stringify(val);
       return [key, sval].join(': ');
     })

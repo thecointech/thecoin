@@ -1,17 +1,25 @@
 {
   "name": "@thecointech/bank-interface",
-  "private": true,
-  "version": "0.2.19",
-  "description": "The Coin: An interface to any bank. ",
+  "version": "0.2.29",
+  "description": "The Coin: Generic banking interface.  Contains no implementation.",
   "keywords": [
-    "THECoin",
+    "TheCoin",
     "Bank",
     "API"
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/tx-statemachine"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.json",
     "clean": "rimraf ./build"
   },

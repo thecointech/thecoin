@@ -84,7 +84,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         yield this.storeValues({ idxIO: false });
       }
       else {
-        log.warn("No IDX connection present, changes may not be preserved");
+        log.error("No IDX connection present, changes will not be preserved");
       }
     }
 
