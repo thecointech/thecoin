@@ -56,7 +56,6 @@ function loadEnvVars(cfgName) {
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {
-    const projectRoot = process.cwd();
     process.env.LOG_NAME = LOG_NAME;
   }
 }
