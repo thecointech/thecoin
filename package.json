@@ -39,7 +39,7 @@
     "_deploy": "run-s _deploy:lib _deploy:app",
     "_deploy:lib": "lerna publish",
     "_deploy:app": "run-s _deploy:app:rebuild _deploy:app:gcloud",
-    "_deploy:app:rebuild": "lerna run deploy:rebuild",
+    "_deploy:app:rebuild": "lerna run deploy:rebuild --concurrency 1",
     "_deploy:app:gcloud": "lerna run deploy --stream --concurrency 1",
     "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
     "prod:test:deposit": "cross-env CONFIG_NAME=prodtest ts-node --project ./tsconfig.dev.json ./tools/fakeDeposit",
@@ -56,7 +56,7 @@
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "0.21.4",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "dotenv": "^8.2.0",
