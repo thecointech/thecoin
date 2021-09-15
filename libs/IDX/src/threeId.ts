@@ -7,7 +7,7 @@ declare module globalThis {
 // 3ID Connect uses an iframe to connect.  Does this mean
 // we cannot have multiple active accounts simultaneously?
 // TODO: Test account switching!
-globalThis.__threeID = new ThreeIdConnect()
+globalThis.__threeID = new ThreeIdConnect(process.env.THREEID_NETWORK)
 
 
 export function get3idConnect() {
