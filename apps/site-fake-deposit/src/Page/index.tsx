@@ -24,7 +24,7 @@ export const Page = () => {
       return;
     }
 
-    var link = `mailto:${getEmailAddress(address)}`
+    var link = `mailto:${getEmailAddress(address)}?`
     + "&subject=" + encodeURIComponent(getEmailTitle())
     + "&body=" + encodeURIComponent(getEmailBody(amount));
 

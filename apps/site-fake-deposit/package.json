@@ -1,9 +1,9 @@
 {
-  "name": "@thecointech/site-landing",
-  "productName": "THECoin: Website - Landing",
+  "name": "@thecointech/site-test-deposit",
+  "productName": "THECoin: Website - Test Deposit",
   "private": true,
   "version": "0.2.21",
-  "description": "THECoin: Future-proof currency",
+  "description": "THECoin: simple email generator to trigger deposits on testnet",
   "repository": {
     "type": "git",
     "url": "git://github.com/thecointech/thecoin.git"
@@ -19,67 +19,13 @@
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
-    "predeploy": "ts-node --skip-project predeploy",
-    "deploy": "firebase deploy --only hosting",
+    "pre_deploy": "ts-node --skip-project predeploy",
+    "_deploy": "firebase deploy --only hosting",
     "dev": "yarn node internals/server --port=3004",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "yarn lint:src:fix",
-      "git add --force"
-    ],
-    "*.{md,json}": [
-      "git add --force"
-    ]
-  },
   "dependencies": {
-    "@artsy/fresnel": "^1.2.2",
-    "@thecointech/shared": "^0.2.19",
-    "@thecointech/site-base": "^0.2.20",
-    "@thecointech/utilities": "^0.2.19",
-    "card-validator": "^6.2.0",
-    "compression": "1.7.4",
-    "connected-react-router": "^6.6.1",
-    "file-saver": "^2.0.2",
-    "intl": "^1.2.5",
-    "ip": "1.1.5",
-    "papaparse": "^5.1.1",
-    "prismic-javascript": "^2.1.5",
-    "prismic-reactjs": "^1.2.0",
-    "query-string": "^6.9.0",
-    "react-animate-height": "^2.0.18",
-    "react-confetti": "^6.0.0",
-    "react-ga": "^2.7.0",
-    "react-helmet": "6.0.0-beta",
-    "react-measure": "^2.3.0",
-    "react-semantic-ui-range": "^0.7.0",
-    "react-transition-group": "^4.3.0",
-    "reselect": "4.0.0",
-    "sanitize.css": "10.0.0",
-    "ts-clipboard": "^1.0.17"
-  },
-  "devDependencies": {
-    "@octokit/rest": "16.33.1",
-    "@types/card-validator": "^4.1.0",
-    "@types/expect": "1.20.4",
-    "@types/papaparse": "^5.0.3",
-    "@types/query-string": "^6.3.0",
-    "@types/react-helmet": "5.0.9",
-    "@types/react-measure": "^2.0.5",
-    "@types/react-test-renderer": "^16.9.0",
-    "@types/react-transition-group": "^4.2.3",
-    "@types/systemjs": "0.20.6",
-    "coveralls": "3.0.4",
-    "esm": "3.2.25",
-    "jest": "*",
-    "ngrok": "3.2.1",
-    "node-plop": "0.19.0",
-    "plop": "2.4.0",
-    "react-app-polyfill": "1.0.1",
-    "react-test-renderer": "16.8.6",
-    "shelljs": "0.8.3",
-    "whatwg-fetch": "3.0.0"
+    "@thecointech/site-base": "^0.2.20"
   }
 }
