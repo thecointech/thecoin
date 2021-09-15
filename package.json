@@ -28,7 +28,7 @@
     "rebuild": "cross-env CONFIG_NAME=prod yarn build:src",
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "dev:live:ceramic": "yarn ceramic daemon --network=inmemory",
-    "dev:live:blockchain": "cd libs/contract && yarn dev:live:emulator --network=devlive",
+    "dev:live:blockchain": "cd libs/contract && yarn dev:live:emulator",
     "dev:live:projects": "yarn wait-port 9377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live:bootstrap": "yarn wait-port 7007 && yarn idx bootstrap && ts-node --skip-project ./tools/bootstrapIdx.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive run-p dev:live:*",
