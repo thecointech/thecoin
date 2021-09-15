@@ -91,6 +91,7 @@ export const UxInput = (props: BaseProps) => {
           placeholder={intl.formatMessage(placeholder)}
           type={type}
           data-tooltip={tooltip}
+          readOnly={props.readOnly}
         />
       </span>
     </Form.Field>

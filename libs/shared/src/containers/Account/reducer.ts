@@ -62,10 +62,11 @@ function AccountReducer(address: string, initialState: AccountState) {
       const idx = yield* this.getIDX()
       if (idx) {
         yield this.storeValues({ idx, idxIO: true });
+        log.trace("IDX: Restoring account details");
         const payload = yield call(loadDetails, idx);
         const details = payload?.data || DefaultAccountValues.details;
+        log.trace("IDX: read complete");
         yield this.storeValues({ details, idxIO: false });
-        log.trace("Restored account details from IDX");
       }
       else {
         log.warn("No IDX connection present, details may not be loaded correctly");
@@ -79,8 +80,9 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
       yield this.storeValues({ details, idxIO: true });
       if (this.state.idx) {
+        log.trace("IDX: persisting account details");
         yield call(setDetails, this.state.idx, details);
-        log.trace("Persisted new details to IDX");
+        log.debug("IDX: account details write complete");
         yield this.storeValues({ idxIO: false });
       }
       else {
