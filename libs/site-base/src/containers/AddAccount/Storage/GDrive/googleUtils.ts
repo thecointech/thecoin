@@ -122,14 +122,7 @@ export async function completeStore(token: string, address: string) {
     walletName: name
   }
 
-  try {
-    const res = await secureApi.googlePut(clientUri, request);
-    console.log("got: " + JSON.stringify(res));
-    return res.status === 200 && res.data;
-  }
-  catch (e) {
-    console.error(JSON.stringify(e));
-    alert("Upload failed, please contact support@thecoin.io");
-  }
-  return false;
+  const res = await secureApi.googlePut(clientUri, request);
+  log.trace(`googlePut status: ${res.status}`);
+  return res.status === 200 && res.data;
 }

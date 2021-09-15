@@ -20,7 +20,7 @@ export namespace google {
       }
       getToken = () => ({tokens: []});
       // In dev-live, redirect straight to the reciever page.
-      generateAuthUrl = () => "http://localhost:3001/gauth?code=MockedCode"
+      generateAuthUrl = () => "http://localhost:3001/#/gauth?code=MockedCode"
     }
   }
 
