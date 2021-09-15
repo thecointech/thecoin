@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.29",
+  "version": "0.2.30",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "keywords": [
     "TheCoin",
@@ -36,11 +36,11 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@3id/connect": "^0.2.0",
-    "@ceramicnetwork/http-client": "^1.2.0",
     "@ceramicnetwork/3id-did-resolver": "^1.4.0",
+    "@ceramicnetwork/http-client": "^1.2.0",
     "@ceramicstudio/idx": "^0.12.2",
-    "@thecointech/logging": "^0.2.29",
-    "@thecointech/utilities": "^0.2.29",
+    "@thecointech/logging": "^0.2.30",
+    "@thecointech/utilities": "^0.2.30",
     "dids": "^2.4.0"
   },
   "devDependencies": {
