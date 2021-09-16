@@ -63,7 +63,7 @@ export const Redeem = () => {
       log.info("Cannot submit: missing one of the required fields");
       return false;
     }
-
+    log.trace("Commencing eTransfer");
     setTransferMessage(translations.step1);
     setPercentComplete(0.0);
 
@@ -95,8 +95,9 @@ export const Redeem = () => {
       coinToSell,
       data.certifiedFee,
     );
-    const eTransferApi = GetETransferApi();
+    log.trace("Built Packet");
 
+    const eTransferApi = GetETransferApi();
     if (doCancel)
       return false;
 
@@ -109,20 +110,28 @@ export const Redeem = () => {
       setErrorHidden(false);
       return false;
     }
+    log.trace({hash: response.data?.hash}, "Sent to servers, hash: {hash}");
 
     // Wait on the given hash
     setTransferMessage({
       ...translations.step3,
       values: {
         link: (
-          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${response.data.hash}`}> here </a>),
+          <a target="_blank" href={`https://${process.env.DEPLOY_NETWORK}.etherscan.io/tx/${response.data.hash}`}> here </a>),
       }
     });
     setPercentComplete(0.5);
 
     const tx = await contract.provider.getTransaction(response.data.hash);
-    // Wait at least 2 confirmations
-    tx.wait(2);
+    if (tx) {
+      // Wait at least 2 confirmations
+      await tx.wait(2);
+    }
+    else {
+      // tx registered, but may not be visible on the blockchain.  Show link anyway
+      await sleep(2500);
+    }
+
     setPercentComplete(1);
     return true;
   }
@@ -181,3 +190,5 @@ export const Redeem = () => {
     />
   );
 }
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
