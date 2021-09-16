@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.2.30",
+  "version": "0.2.32",
   "private": true,
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
@@ -41,8 +41,8 @@
     "@thecointech/logging": "^0.2.30",
     "@thecointech/pricing": "^0.2.30",
     "@thecointech/signers": "^0.2.30",
-    "@thecointech/tx-bill": "^0.2.30",
-    "@thecointech/tx-etransfer": "^0.2.30",
+    "@thecointech/tx-bill": "^0.2.32",
+    "@thecointech/tx-etransfer": "^0.2.32",
     "@thecointech/utilities": "^0.2.30",
     "@tsoa/runtime": "^3.8.0",
     "cors": "^2.8.5",
