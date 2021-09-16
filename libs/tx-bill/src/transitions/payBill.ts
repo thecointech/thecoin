@@ -2,7 +2,7 @@ import { BillActionContainer, TransitionCallback } from "@thecointech/tx-statema
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 
 //
-// Deposit an eTransfer and update fiat balance
+// Process a bill payment
 export const payBill: TransitionCallback<"Bill"> = async (container) =>
   verifyPreTransfer(container) ?? await doPayBill(container);
 

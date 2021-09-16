@@ -22,7 +22,7 @@ async function SendMail(subject: string, message: string, toEmail?: string) {
 						Email: toEmail ?? "stephen.taylor.dev@gmail.com",
 					},
 				],
-				Subject: subject,
+				Subject: `${process.env.CONFIG_NAME}: ${subject}`,
 				TextPart: message
 			},
 		],
