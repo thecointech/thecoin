@@ -15,8 +15,8 @@
     "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod": "cross-env CONFIG_NAME=prod yarn dev",
-    "start": "cross-env CONFIG_NAME=prod node -r ../../tools/setenv -r ../../__mocks__/mock_node ./build/main.js",
+    "prod": "cross-env CONFIG_NAME=prod yarn start",
+    "start": "node -r ../../tools/setenv -r ../../__mocks__/mock_node ./build/main.js",
     "test": "jest --coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
