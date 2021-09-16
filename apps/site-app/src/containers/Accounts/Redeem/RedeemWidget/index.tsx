@@ -9,7 +9,7 @@ import interact from './images/icon_payment_big.svg';
 import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { AccountState } from '@thecointech/account';
 import { UxEmail } from '@thecointech/shared/components/UX';
-import { invalidChars } from '@thecointech/utilities/VerifiedSale';
+import { invalidQnA, invalidMessage } from '@thecointech/utilities/VerifiedSale';
 import { MessageWithValues } from '@thecointech/shared/types';
 
 
@@ -90,18 +90,22 @@ type VisualProps={
 
 };
 
-const validateChars = (value: string) => {
+const validateChars = (re: RegExp) => (value: string) => {
   if (!value?.length) {
     return translations.entryIsRequired
   }
-  const match = invalidChars.exec(value);
+  const match = re.exec(value);
   return match
     ? {
         ...translations.containsInvalidCharacters,
-        values: { chars: match.join(',') }
+        values: {
+          chars: match.map(c => c.replace(' ', "(space)")).join(', ')
+        }
       }
     : null;
 }
+const validateQnA = validateChars(invalidQnA);
+const validateMessage = validateChars(invalidMessage);
 
 export const RedeemWidget = (props: VisualProps) => {
   const commonProps = {
@@ -149,7 +153,7 @@ export const RedeemWidget = (props: VisualProps) => {
             className={"half left"}
             intlLabel={translations.questionLabel}
             onValue={props.setQuestion}
-            onValidate={validateChars}
+            onValidate={validateQnA}
             placeholder={translations.noSpecialCaractDesc}
             tooltip={translations.invalidCharacters}
             {...commonProps}
@@ -158,14 +162,14 @@ export const RedeemWidget = (props: VisualProps) => {
             className={"half right"}
             intlLabel={translations.answerLabel}
             onValue={props.setAnswer}
-            onValidate={validateChars}
+            onValidate={validateQnA}
             placeholder={translations.noSpecialCaractDesc}
             tooltip={translations.invalidCharacters}
             {...commonProps}
           />
         <UxInput
             className={"borderTop"}
-            onValidate={() => null}
+            onValidate={validateMessage}
             intlLabel={translations.messageLabel}
             onValue={props.setMessage}
             placeholder={translations.messageDesc}
