@@ -1,9 +1,9 @@
 import testWallet from './testAccount1.json';
 import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract';
-import { IDX } from '@thecointech/idx';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
+import { connectIDX } from '@thecointech/idx';
 
 const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
@@ -21,7 +21,7 @@ async function initDevWallets() {
   // connect to mocked services - normally this is done by "connect" call
   // It is OK for these calls to complete after this fn exits
   randomAccount.contract = ConnectContract(randomAccount.signer);
-  randomAccount.idx = new IDX({} as any);
+  randomAccount.idx = await connectIDX(randomWallet);
   _devAccounts[randomAccount.address] = randomAccount
 
   _initial = randomAccount.address;
