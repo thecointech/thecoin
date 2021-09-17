@@ -26,7 +26,7 @@ export type AccountState = {
 
 
  // IDX vars
- idx?: IDX;
+ idx: IDX|null;
  // Are we saving/loading something from IDX?
  idxIO?: boolean;
 
@@ -47,6 +47,7 @@ export const DefaultAccountValues = {
  contract: null,
  balance: -1,
  history: [],
+ idx: null,
 
  details: {
    displayCurrency: CurrencyCode.CAD,
