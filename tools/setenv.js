@@ -13,7 +13,7 @@ function getEnvFiles(cfgName, onlyPublic) {
   );
   const files = [];
   // Does the user have files on the system
-  if (!onlyPublic) {
+  if (!onlyPublic && process.env.THECOIN_ENVIRONMENTS) {
     const systemFolder = process.env.THECOIN_ENVIRONMENTS;
     const systemFile = join(systemFolder, `${envName}.private.env`);
     if (existsSync(systemFile)) files.push(systemFile);
