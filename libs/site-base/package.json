@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.34",
+  "version": "0.2.35",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
