@@ -14,7 +14,7 @@ const projectRoot = process.cwd();
 const configFile = path.join(projectRoot, 'tsconfig.build.json');
 const packageFile = path.join(projectRoot, 'package.json');
 
-const envFiles = getEnvFiles(configName, true);
+const envFiles = getEnvFiles(configName);
 const version = require(packageFile).version;
 
 module.exports = {
