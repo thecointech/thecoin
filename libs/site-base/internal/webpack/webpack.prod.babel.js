@@ -50,6 +50,7 @@ const prodOptions = {
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      favicon: 'src/images/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
