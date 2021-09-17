@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.30",
+  "version": "0.2.34",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "keywords": [
     "TheCoin"
