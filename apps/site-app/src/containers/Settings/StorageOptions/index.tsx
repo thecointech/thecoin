@@ -9,7 +9,7 @@ import styles from './styles.module.less';
 import google from './images/icon_google_drive_small.svg';
 
 const title = defineMessage({
-  defaultMessage: "Back up",
+  defaultMessage: "Backup",
   description: "Title for the tab Storage options in the setting page in the app"
 });
 const description = defineMessage({
