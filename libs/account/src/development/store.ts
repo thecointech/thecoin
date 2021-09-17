@@ -5,7 +5,7 @@ import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
 import { IDX } from '@thecointech/idx';
 
-let _devAccounts: AccountMap = {};
+const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
 
 // Make some wallets to test with.  There should be at
@@ -19,7 +19,6 @@ function initDevWallets() {
   const randomWallet = Wallet.createRandom();
   const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
-  // It is OK for these calls to complete after this fn exits
   randomAccount.contract = ConnectContract(randomAccount.signer);
 
   randomAccount.idx = new IDX({} as any);
