@@ -3,7 +3,7 @@ import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
-import { connectIDX } from '@thecointech/IDX';
+import { connectIDX } from '@thecointech/idx';
 
 let _devAccounts: AccountMap = {};
 let _initial: null|string = null;
