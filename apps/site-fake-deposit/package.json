@@ -11,8 +11,8 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
-    "prebuild": "run-p build:*",
-    "build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",
+    "pre_build": "run-p build:*",
+    "_build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",
     "build:semantic": "node ./internals/buildSemantic",
     "build:i18n": "run-s extract compile",
     "clean": "run-p clean:*",
