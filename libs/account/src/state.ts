@@ -5,7 +5,7 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import type { TheCoin } from '@thecointech/contract';
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from '@ethersproject/abstract-signer';
-import type { IDX } from '@thecointech/IDX';
+import type { IDX } from '@thecointech/idx';
 
 
 // An account state holds all relevant info
