@@ -1,2 +1,2 @@
-export function getEnvFiles(cfgName?: string): string[];
-export function getEnvVars(cfgName?: string): { [name: string]: string};
+export function getEnvFiles(cfgName?: string, onlyPublic?: boolean): string[];
+export function getEnvVars(cfgName?: string, onlyPublic?: boolean): { [name: string]: string};

@@ -49,7 +49,7 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
     .filter(([key]) => !key.startsWith('CERAMIC_'))
     .filter(([key]) => !key.startsWith('GITHUB_'))
     .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))
-    .filter(([key]) => key !== 'STORAGE_PATH')
+    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER')
     .map(([key, val]) => {
       const sval = JSON.stringify(val);
       return [key, sval].join(': ');

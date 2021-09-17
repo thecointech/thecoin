@@ -5,7 +5,7 @@ const de = require('dotenv')
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
 
-function getEnvFiles(cfgName) {
+function getEnvFiles(cfgName, onlyPublic) {
   const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
       ? "prod"
@@ -13,8 +13,8 @@ function getEnvFiles(cfgName) {
   );
   const files = [];
   // Does the user have files on the system
-  const systemFolder = process.env.THECOIN_ENVIRONMENTS;
-  if (systemFolder) {
+  if (!onlyPublic) {
+    const systemFolder = process.env.THECOIN_ENVIRONMENTS;
     const systemFile = join(systemFolder, `${envName}.private.env`);
     if (existsSync(systemFile)) files.push(systemFile);
   }
@@ -23,7 +23,6 @@ function getEnvFiles(cfgName) {
   const repoFile = join(__dirname, '..', 'environments', `${envName}.public.env`);
   if (existsSync(repoFile)) files.push(repoFile);
 
-
   // None found, throw
   if (files.length == 0) {
     throw new Error(`Missing cfg files for: ${cfgName} (${repoFile})`);
@@ -31,14 +30,14 @@ function getEnvFiles(cfgName) {
 
   // Beta versions share a lot with non-beta environments, so we merge them together
   if (envName.endsWith("beta")) {
-    const nonBeta = getEnvFiles(envName.slice(0, -4))
+    const nonBeta = getEnvFiles(envName.slice(0, -4), onlyPublic)
     files.push(...nonBeta)
   }
   return files;
 }
 
-function getEnvVars(cfgName) {
-  const files = getEnvFiles(cfgName);
+function getEnvVars(cfgName, onlyPublic) {
+  const files = getEnvFiles(cfgName, onlyPublic);
   return files
     .map(file => readFileSync(file))
     .reduce((acc, contents) => ({
@@ -56,12 +55,11 @@ function loadEnvVars(cfgName) {
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {
-    const projectRoot = process.cwd();
     process.env.LOG_NAME = LOG_NAME;
   }
 }
 
-// By default, load envVars
+// By default, load envVars with private variables.
 loadEnvVars();
 
 module.exports = {
