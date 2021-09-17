@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline/Store';
 import { Checkbox, Container, Dimmer, Header, Loader } from "semantic-ui-react"
 import { isLocal } from '@thecointech/signers';
-import { Props as MessageProps, MaybeMessage } from "@thecointech/site-base/components/MaybeMessage"
-import { useGoogleStore, useGoogle } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
+import { useGoogleStore } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
-
 import google from './images/icon_google_drive_small.svg';
-import { Account } from '@thecointech/shared/containers/Account';
 
 const title = defineMessage({
   defaultMessage: "Back up",
@@ -33,13 +30,11 @@ export function StorageOptions() {
   const activeAccount = AccountMap.useActive()!;
   const local = isLocal(activeAccount.signer);
 
-  const [feedback, setFeedback] = useState<MessageProps | undefined>();
   const [loading, doUpload] = useGoogleStore(activeAccount.address);
 
   const checked = activeAccount?.details.storedOnGoogle;
   return local
     ? <Container>
-      <MaybeMessage {...feedback} />
       <Header as='h5' className={"appTitles"}>
         <FormattedMessage {...title} />
         <Header.Subheader>
@@ -67,7 +62,6 @@ export function StorageOptions() {
                 // TODO: IMPLEMENT THIS;
                 alert("Deleting the backup is not yet implemented")
               }
-              setFeedback(undefined);
             }}
           />
         </span>
@@ -85,24 +79,4 @@ export function StorageOptions() {
     : <Container>
       This account has no locally editable settings
     </Container>
-}
-
-////////////////////////////////////////////////////////////////
-const onAuth = async (token: string, address: string, api: IActions) => {
-  log.trace({address: address}, "Commencing backup of {address} to GDrive");
-  if (await completeStore(token, address))
-  {
-    log.trace({address: address}, 'GDrive backup of {address} complete');
-    api.setDetails({storedOnGoogle: true})
-  }
-  else {
-    log.error({address: address}, 'Backup of {address} failed');
-    throw new Error(`GDrive backup failed`)
-  }
-};
-
-export const useGoogleDelete = (address: string) : [boolean, () => void] => {
-const api = Account(address).useApi();
-const [loading, doUpload] = useGoogle();
-return [loading, () => doUpload(token => onAuth(token, address, api))];
 }
