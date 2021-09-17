@@ -5,7 +5,7 @@ import { IDX } from '@thecointech/idx';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
 
-let _devAccounts: AccountMap = {};
+const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
 
 // Make some wallets to test with.  There should be at
