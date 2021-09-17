@@ -1,6 +1,5 @@
 import { IDX } from '@ceramicstudio/idx';
 import type { JWE } from 'did-jwt';
-import { getDID } from './did';
 import { IdxAlias } from './idx';
 
 export interface EncryptedPayload<T> {
@@ -15,7 +14,7 @@ export interface EncryptedPayload<T> {
 export const setEncrypted = async <T>(idx: IDX, definition: IdxAlias, data: T|null, recipients = [] as string[]) => {
 
   const owners = new Set([idx.id, ...recipients]) // always make ourselves a recipient
-  const did = getDID();
+  const did = idx.ceramic.did!;
   // Remember who has access to this record
   const payload: EncryptedPayload<T> = {
     data,
@@ -28,7 +27,7 @@ export const setEncrypted = async <T>(idx: IDX, definition: IdxAlias, data: T|nu
 
 // Load the encrypted record and decrypt
 export const loadEncrypted = async <T>(idx: IDX, definition: IdxAlias) : Promise<EncryptedPayload<T>|null> => {
-  const did = getDID();
+  const did = idx.ceramic.did!;
   const record = await idx.get<JWE>(definition);
   if (record) {
     try {
