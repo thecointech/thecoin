@@ -107,10 +107,6 @@
     "defaultMessage": "LOG IN",
     "description": "app.accountSwitcher.login: label for button"
   },
-  "Fl5wDN": {
-    "defaultMessage": "Back up",
-    "description": "Title for the tab Storage options in the setting page in the app"
-  },
   "GGCxth": {
     "defaultMessage": "Personal Details",
     "description": "app.settings.personaldetails.title: Title for the page setting / tab personal details in the app"
@@ -358,6 +354,10 @@
   "dj+QwG": {
     "defaultMessage": "Bills",
     "description": "app.makepayments.tabs.bills: Title for the tabs the Make a payment page in the app"
+  },
+  "eIGanl": {
+    "defaultMessage": "Backup",
+    "description": "Title for the tab Storage options in the setting page in the app"
   },
   "gVJrrM": {
     "defaultMessage": "Other",
