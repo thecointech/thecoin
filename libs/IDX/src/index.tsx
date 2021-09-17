@@ -1,3 +1,3 @@
 export { connectIDX } from "./idx";
 export * from './encrypted';
-export type { IDX } from '@ceramicstudio/idx'
+export { IDX } from '@ceramicstudio/idx'
