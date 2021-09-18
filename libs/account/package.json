@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.37",
+  "version": "0.2.38",
   "description": "TheCoin: Account definition & storage",
   "keywords": [
     "TheCoin",
@@ -50,7 +50,7 @@
   "dependencies": {
     "@thecointech/contract": "^0.2.37",
     "@thecointech/fx-rates": "^0.2.37",
-    "@thecointech/idx": "^0.2.37",
+    "@thecointech/idx": "^0.2.38",
     "@thecointech/logging": "^0.2.37",
     "@thecointech/signers": "^0.2.37",
     "@thecointech/tx-blockchain": "^0.2.37",
