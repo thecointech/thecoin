@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.38",
+  "version": "0.2.39",
   "private": "true",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
@@ -29,13 +29,13 @@
     "./": "./build/"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.37",
-    "@thecointech/tx-deposit": "^0.2.37",
-    "@thecointech/tx-etransfer": "^0.2.37",
+    "@thecointech/logging": "^0.2.39",
+    "@thecointech/tx-deposit": "^0.2.39",
+    "@thecointech/tx-etransfer": "^0.2.39",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "^0.2.38",
+    "@thecointech/site-app": "^0.2.39",
     "jest": "*"
   }
 }

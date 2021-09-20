@@ -6,7 +6,7 @@ import { log } from '@thecointech/logging';
 import { ButtonProps, List } from 'semantic-ui-react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { AccountState } from '@thecointech/account';
-import { NormalizeAddress } from '@thecointech/utilities';
+import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
@@ -45,7 +45,7 @@ export const RestoreList = ({url}: Props) => {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
         .then(({data}) => setWallets(data.wallets))
-        .catch(log.error)
+        .catch(err => log.error(err, `Error fetching wallets: ${err.message}`))
     }
   }, [token]);
 
@@ -103,7 +103,11 @@ export const RestoreList = ({url}: Props) => {
 
 const parseWallets = (wallets: GoogleWalletItem[], accounts: AccountState[]) => {
   let r = wallets.map(w => {
-    const wallet = JSON.parse(w.wallet!) as Wallet;
+    if (!w.wallet) {
+      log.error(`Wallet missing from stored account: ${w.id}`);
+      return;
+    }
+    const wallet: Wallet = JSON.parse(w.wallet);
     const address = NormalizeAddress(wallet.address);
     return {
       wallet,
@@ -112,7 +116,8 @@ const parseWallets = (wallets: GoogleWalletItem[], accounts: AccountState[]) => 
       name: w.id.name?.split('.wallet')[0] ?? w.id.id
     }
   });
-  r = r.filter((w, i) => r.findIndex(s => s.wallet.address === w.wallet.address) === i)
-  r = r.filter(w => w.name || w.id)
-  return r;
+  return r
+    .filter((w, i) => r.findIndex(s => s?.wallet.address === w?.wallet.address) === i)
+    .filter(isPresent)
+    .filter(w => w.name || w.id)
 }
