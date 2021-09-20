@@ -1,4 +1,4 @@
-import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
+import { EthereumAuthProvider } from '@3id/connect'
 import { Signer } from '@ethersproject/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays';
@@ -30,23 +30,8 @@ class EthereumProvider extends EventEmitter {
   }
 }
 
-// Singleton
-declare module globalThis {
-  let __threeID: ThreeIdConnect;
-}
-// 3ID Connect uses an iframe to connect.  Does this mean
-// we cannot have multiple active accounts simultaneously?
-// TODO: Test account switching!
-globalThis.__threeID = new ThreeIdConnect()
-
 export async function createAuthProvider(signer: Signer) {
   const address = await signer.getAddress();
   const ethProvider = new EthereumProvider(signer);
   return new EthereumAuthProvider(ethProvider, address);
-}
-
-export async function get3idConnect(authProvider: EthereumAuthProvider) {
-    // TODO: how do we connect to multiple accounts at the same time?!?
-    await globalThis.__threeID.connect(authProvider)
-    return globalThis.__threeID;
 }

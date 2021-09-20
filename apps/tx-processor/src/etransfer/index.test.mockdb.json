@@ -35,8 +35,8 @@
             },
             "decrypted": {
               "email":"someone@somewhere.com",
-              "question":"are you deaf?",
-              "answer":"I'm just a real bad listener",
+              "question":"AreYouDeaf",
+              "answer":"ImJustARealBadListener",
               "message":"I'll be banging my head till my brain rots..."
             }
           }

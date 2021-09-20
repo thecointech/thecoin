@@ -50,6 +50,7 @@ const prodOptions = {
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      favicon: 'src/images/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -73,20 +74,20 @@ const prodOptions = {
     }),
 
     new WebpackPwaManifest({
-      name: 'React Boilerplate',
-      short_name: 'React BP',
-      description: 'My React Boilerplate-based project!',
+      name: 'TheCoin',
+      short_name: 'TheCoin',
+      description: 'CO2-Neutrality without personal sacrifice',
       background_color: '#fafafa',
       theme_color: '#b1624d',
       inject: true,
       ios: true,
       icons: [
         {
-          src: path.resolve('src/images/icon-512x512.png'),
+          src: path.resolve('src/images/favicon.png'),
           sizes: [72, 96, 128, 144, 192, 384, 512],
         },
         {
-          src: path.resolve('src/images/icon-512x512.png'),
+          src: path.resolve('src/images/favicon.png'),
           sizes: [120, 152, 167, 180],
           ios: true,
         },

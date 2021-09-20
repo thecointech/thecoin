@@ -65,7 +65,12 @@ function getAddressCoin(email: gmail_v1.Schema$Message) {
 function getUserInfo(email: gmail_v1.Schema$Message) {
   // We use the "Reply-To" header here because some banks (ex-RBC)
   // put their clients email address in this field.
-  const toField = findHeader(email, "Reply-To");
+  // This is debugging info and will not be used for processing
+  let toField = findHeader(email, "Reply-To");
+  if (!toField && process.env.CONFIG_NAME === "prodtest") {
+    // In prodtest the emails are sent from personal email accounts
+    toField = toField ?? findHeader(email, "From");
+  }
   if (toField) {
     const match = /<([^<>]+)>$/gi.exec(toField);
     if (match) {

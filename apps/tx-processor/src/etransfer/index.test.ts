@@ -28,7 +28,9 @@ it('Succesfully Processes Sell', async ()=> {
   ev.date = DateTime.fromMillis(ev.date.seconds * 1000) as any;
 
   // decryption returns the values spec'ed in our json file.
-  mockedEncrypt.mockReturnValueOnce(ev.decrypted);
+  mockedEncrypt.mockImplementation(() => {
+    return ev.decrypted
+  });
 
   const contract = await GetContract();
   const bank = new RbcApi();

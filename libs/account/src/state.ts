@@ -1,11 +1,11 @@
 import { CurrencyCode } from '@thecointech/fx-rates'
-import { Transaction } from '@thecointech/tx-blockchain';
 import { AccountDetails } from './details';
-import { IDX } from '@ceramicstudio/idx';
 import { DateTime } from 'luxon';
-import { TheCoin } from '@thecointech/contract';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import { Signer } from '@ethersproject/abstract-signer';
+import type { TheCoin } from '@thecointech/contract';
+import type { Transaction } from '@thecointech/tx-blockchain';
+import type { Signer } from '@ethersproject/abstract-signer';
+import type { IDX } from '@thecointech/idx';
 
 
 // An account state holds all relevant info
@@ -26,7 +26,7 @@ export type AccountState = {
 
 
  // IDX vars
- idx?: IDX;
+ idx: IDX|null;
  // Are we saving/loading something from IDX?
  idxIO?: boolean;
 
@@ -47,6 +47,7 @@ export const DefaultAccountValues = {
  contract: null,
  balance: -1,
  history: [],
+ idx: null,
 
  details: {
    displayCurrency: CurrencyCode.CAD,
