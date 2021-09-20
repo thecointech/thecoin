@@ -39,12 +39,24 @@ liveMocks = {
   }
 }
 
+function getMocks() {
+  switch (process.env.CONFIG_NAME) {
+    case 'development': {
+      console.log(" *** Injecting all webpack mocks");
+      return allMocks;
+    }
+    case 'devlive': {
+      console.log(" *** Injecting external webpack mocks");
+      return liveMocks;
+    }
+    default: {
+      console.log(" *** WARNING: Not injecting mocks");
+      return undefined;
+    }
+  }
+}
 
 module.exports = {
   module: compileMocks,
-  ...(
-    process.env.SETTINGS === "live"
-      ? liveMocks
-      : allMocks
-  )
+  ...getMocks(),
 }
