@@ -6,7 +6,7 @@ import { log } from '@thecointech/logging';
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
 const buildAuth = (clientUri: string) => {
   if (!process.env.BROKER_GDRIVE_CLIENT_URIS?.split(';').includes(clientUri)) {
-    log.error({Uri: clientUri }, 'Invalid ClientURI passed: {Uri}')
+    log.error({ Uri: clientUri }, 'Invalid ClientURI passed: {Uri}')
     throw new Error('Cannot Login to GDrive');
   }
   return new google.auth.OAuth2(
@@ -16,19 +16,17 @@ const buildAuth = (clientUri: string) => {
   );
 }
 
-async function loginDrive(clientUri: string, authToken: GoogleToken)
-{
+async function loginDrive(clientUri: string, authToken: GoogleToken) {
   const auth = buildAuth(clientUri);
   const res = await auth.getToken(authToken.token);
   if (!res || !res.tokens) {
     throw new Error("Could not retrieve token: " + JSON.stringify(res));
   }
   auth.setCredentials(res.tokens);
-  return google.drive({version: 'v3', auth});
+  return google.drive({ version: 'v3', auth });
 }
 
-export function getAuthUrl(clientUri: string)
-{
+export function getAuthUrl(clientUri: string) {
   const auth = buildAuth(clientUri);
   return auth.generateAuthUrl({
     access_type: 'online',
@@ -38,7 +36,7 @@ export function getAuthUrl(clientUri: string)
 
 
 export async function storeOnGoogle(clientUri: string, account: GoogleStoreAccount) {
-  const {walletName, wallet, token } = account;
+  const { walletName, wallet, token } = account;
   if (!walletName || !wallet)
     throw new Error("Missing data from gdrive save");
 
@@ -66,18 +64,16 @@ export async function storeOnGoogle(clientUri: string, account: GoogleStoreAccou
   return r.status == 200;
 }
 
-export async function listWallets(clientUri: string, token: GoogleToken) : Promise<GoogleFileIdent[]>
-{
+export async function listWallets(clientUri: string, token: GoogleToken): Promise<GoogleFileIdent[]> {
   const drive = await loginDrive(clientUri, token);
   const wallets = await doListWallets(drive);
   return wallets.map(file => ({
-      name: file.originalFilename || file.name || "<err>",
-      id: file.id || "<err>"
-    }));
+    name: file.originalFilename || file.name || "<err>",
+    id: file.id || "<err>"
+  }));
 }
 
-export async function doListWallets(drive: drive_v3.Drive) : Promise<drive_v3.Schema$File[]>
-{
+export async function doListWallets(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[]> {
   const params: drive_v3.Params$Resource$Files$List = {
     spaces: 'appDataFolder',
   }
@@ -87,8 +83,7 @@ export async function doListWallets(drive: drive_v3.Drive) : Promise<drive_v3.Sc
     [];
 }
 
-export async function fetchWallets(clientUri: string, request: GoogleToken) : Promise<GoogleWalletItem[]>
-{
+export async function fetchWallets(clientUri: string, request: GoogleToken): Promise<GoogleWalletItem[]> {
   const drive = await loginDrive(clientUri, request);
   const wallets = await doListWallets(drive);
   const fetchArray = wallets.map(async (file) => {
@@ -97,18 +92,19 @@ export async function fetchWallets(clientUri: string, request: GoogleToken) : Pr
       fileId: file.id ?? undefined,
       alt: 'media',
     }
-    const r = await drive.files.get(get, {responseType: 'json'});
+    const r = await drive.files.get(get, { responseType: 'text' });
+    log.debug(`Fetched wallet: ${r.statusText} - ${JSON.parse(r.data as string).address}`);
 
     return <GoogleWalletItem>{
-        id: {
-          id: file.id!,
-          name: file.originalFilename || file.name,
-          type: "pwd" // Means it's protected by a password...
-        },
-        wallet: (r.status == 200)
-          ? r.data
-          : `{ "error": "Error Fetching" }`
-      }
+      id: {
+        id: file.id!,
+        name: file.originalFilename || file.name,
+        type: "pwd" // Means it's protected by a password...
+      },
+      wallet: (r.status == 200)
+        ? r.data
+        : `{ "error": "Error Fetching" }`
+    }
   })
 
   const all = Promise.all(fetchArray);
