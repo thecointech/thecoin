@@ -46,7 +46,7 @@ export const UxInput = (props: BaseProps) => {
     else {
       localChange(value);
     }
-  }, [forceValidate, onValidate])
+  }, [forceValidate])
 
   // Reset to default value either if requested, or if defaultValue changes
   useEffect(() => {

@@ -47,7 +47,6 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Save/load private details
-
     *getIDX() {
       let idx = this.state.idx;
       if (!idx) {
@@ -165,26 +164,19 @@ function AccountReducer(address: string, initialState: AccountState) {
           undefined :
           (per: number) => {
             const percent = Math.floor(per * 100);
-            if (!callback(percent)) {
-              throw ("Operation cancelled");
-            }
+            return !callback(percent);
           }
         const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(signer), password, cb);
         // Ensure callback is called with 100% result so caller knows we are done
-        console.log("Account decrypted successfully");
+        log.trace("Account decrypted successfully");
         if (callback) {
           callback(1);
         }
-
-        // Connect to the contract
-        //const contract = yield call(ConnectContract, decrypted);
-        // Store the live data
-        //yield this.storeValues({contract, signer: decrypted})
-        // Now, update balance
+        // Store the result
         yield this.sendValues(this.actions.setSigner, [decrypted]);
       }
-      catch (error) {
-        console.error(error);
+      catch (error: any) {
+        log.warn(error.message);
         if (callback)
           callback(-1);
       }
