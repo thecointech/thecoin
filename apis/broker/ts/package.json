@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-cad",
-  "version": "0.2.40",
+  "version": "0.2.41",
   "description": "OpenAPI client for @thecointech/broker-cad",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
