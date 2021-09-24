@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnyAction } from 'redux';
 import { ActionType, storeTransition } from '@thecointech/broker-db';
 import { graph } from '@thecointech/tx-etransfer';
+import { etransfer } from '@thecointech/tx-deposit';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
@@ -22,10 +23,10 @@ export const ManualOverride = (props: AnyAction) => {
   )
 }
 
-function buildOptions(_type: ActionType) {
+function buildOptions(type: ActionType) {
   // What states can we go to?
-  // Assume eTransfer for now
-  const states = Object.keys(graph);
+  // We may need to consider a cleaner view than the raw to-any-state
+  const states = type == "Buy" ? Object.keys(etransfer) : Object.keys(graph);
   return states.map(state => ({ key: state, value: state, text: state }))
 }
 
