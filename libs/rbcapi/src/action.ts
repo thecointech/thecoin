@@ -2,6 +2,7 @@ import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
+import { tmpdir } from 'os';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -59,7 +60,9 @@ export class ApiAction {
   step: number = 0;
 
   private constructor(identifier: string) {
-    this.outCache = `/temp/TheCoin/logs/rbcapi/Screenshots/${identifier}`;
+    const base = process.env.TC_LOG_FOLDER ?? tmpdir()
+    const ident = identifier.replace('/', '_');
+    this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
     fs.mkdirSync(this.outCache, { recursive: true });
   }
 
