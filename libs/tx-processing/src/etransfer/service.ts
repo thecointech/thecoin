@@ -59,6 +59,7 @@ export async function processUnsettledETransfers(api: RbcApi): Promise<Certified
 function isValid(packet: ETransferPacket) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
   const invalidChars = /[\s\<\>\{\}\[\]\%\&\#\\\"]/g;
+  const invalidMessage = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
     packet.question?.length >= 2 &&
     !packet.question?.match(invalidChars) &&
@@ -66,7 +67,7 @@ function isValid(packet: ETransferPacket) {
     !packet.answer.match(invalidChars) &&
     packet.email?.length >= 3 &&
     packet.email?.includes("@") &&
-    !packet.message?.match(invalidChars)
+    !packet.message?.match(invalidMessage)
 }
 
 export async function fetchActionsToComplete() : Promise<CertifiedTransferRecord[]>
