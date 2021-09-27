@@ -109,6 +109,9 @@ export const Login = (props: Props) => {
       setPercentComplete(-1);
       if (!__cancel) {
         setValidateFn(() => badPwdValid(password!));
+        // Force validation update by toggling forceValidate
+        setForceValidate(v => !v);
+        setForceValidate(v => !v);
       }
       return false;
     }
