@@ -40,6 +40,8 @@ export const manual = (deposit: Deposit): StateGraph<States, "Buy"> => ({
     next: transitionTo<States>(core.markComplete, "complete"),
   },
 
-  error: null,
+  error: {
+    next: core.manualOverride,
+  },
   complete: null
 })

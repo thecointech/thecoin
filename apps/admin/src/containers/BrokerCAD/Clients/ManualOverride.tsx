@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AnyAction } from 'redux';
-import { ActionType, storeTransition } from '@thecointech/broker-db';
+import { ActionDataTypes, ActionType, AnyAction, AnyActionData, storeTransition } from '@thecointech/broker-db';
 import { graph } from '@thecointech/tx-etransfer';
-import { etransfer } from '@thecointech/tx-deposit';
+import { etransfer, manual } from '@thecointech/tx-deposit';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
@@ -13,7 +12,7 @@ export const ManualOverride = (props: AnyAction) => {
     <div>
       <Select
         placeholder='Manual Override'
-        options={buildOptions(props.type)}
+        options={buildOptions(props.type, props.data)}
         onChange={(_, data) => setNewState(data.value?.toString())}
       />
       <Button disabled={!newState} onClick={() => overrideCurrentState(props, newState)}>
@@ -23,11 +22,17 @@ export const ManualOverride = (props: AnyAction) => {
   )
 }
 
-function buildOptions(type: ActionType) {
+function buildOptions(type: ActionType, data: AnyActionData) {
   // What states can we go to?
   // We may need to consider a cleaner view than the raw to-any-state
-  const states = type == "Buy" ? Object.keys(etransfer) : Object.keys(graph);
-  return states.map(state => ({ key: state, value: state, text: state }))
+  const stategraph = type == "Sell"
+      ? graph
+      : (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
+        ? etransfer
+        : manual
+  return Object
+    .keys(stategraph)
+    .map(state => ({ key: state, value: state, text: state }))
 }
 
 function overrideCurrentState(action: AnyAction, newState: MaybeString) {
