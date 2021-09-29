@@ -2,7 +2,6 @@ import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
-import { tmpdir } from 'os';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
