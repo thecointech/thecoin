@@ -3,11 +3,11 @@ import  { getEnvVars } from "../../../../tools/setenv";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';
-import { ApiAction, initBrowser } from '../action';
+import { ApiAction, initBrowser, closeBrowser } from '../action';
 
 const vars = getEnvVars("prod");
 
-jest.setTimeout(1000 * 60 * 1000);
+jest.setTimeout(5 * 60 * 1000);
 
 // We run this test on the live website to catch any changes to RBC website.
 describe("Live website testing", () => {
@@ -20,6 +20,9 @@ describe("Live website testing", () => {
     process.env.RBCAPI_CREDENTIALS_PATH = vars.RBCAPI_CREDENTIALS_PATH;
     ApiAction.initCredentials();
     await initBrowser({headless: !IsManualRun});
+  })
+  afterAll(async () => {
+    await closeBrowser();
   })
 
   it ('correctly prepares to payee page', async () => {

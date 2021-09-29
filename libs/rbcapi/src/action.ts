@@ -56,18 +56,19 @@ export class ApiAction {
 
   page!: Page;
   navigationPromise!: Promise<puppeteer.Response>;
-  outCache: string;
+  outCache?: string;
   step: number = 0;
 
   private constructor(identifier: string) {
-    const base = process.env.TC_LOG_FOLDER ?? tmpdir()
-    const ident = identifier.replace('/', '_');
-    this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
-    fs.mkdirSync(this.outCache, { recursive: true });
+    if (process.env.TC_LOG_FOLDER) {
+      const base = process.env.TC_LOG_FOLDER;
+      const ident = identifier.replace('/', '_');
+      this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
+      fs.mkdirSync(this.outCache, { recursive: true });
+    }
   }
 
-  private async init()
-  {
+  private async init() {
     this.page = await getPage();
     this.navigationPromise = this.page.waitForNavigation()
   }
@@ -178,7 +179,9 @@ export class ApiAction {
 
   public async writeStep(action: string) {
     log.debug(`step${this.step} - ${action}`);
-    await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
+    if (this.outCache) {
+      await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
+    }
     this.step = this.step + 1;
   }
 
