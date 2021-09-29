@@ -7,6 +7,7 @@ import { AuthOptions } from './types';
 import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
 import { send } from './etransfer';
+import { payBill } from './bills';
 
 export class RbcApi implements IBank {
 
@@ -20,6 +21,7 @@ export class RbcApi implements IBank {
   depositETransfer = depositETransfer;
   fetchLatestTransactions = fetchLatestTransactions;
   getTransactions = getTransactions;
+  payBill = payBill;
 
   sendETransfer = async (prefix: string, amount: number, name: string, packet: ETransferPacket, progressCb: ProgressCallback) => {
     try {

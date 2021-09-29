@@ -27,3 +27,8 @@ export type DepositResult = {
   code: ETransferErrorCode,
   confirmation?: number,
 }
+
+export type BillResult = {
+  error?: string,
+  confirmation?: string,
+}

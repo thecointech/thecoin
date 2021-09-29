@@ -1,11 +1,15 @@
-import { DepositResult, ProgressCallback, BankTx } from './types';
-import { ETransferPacket } from '@thecointech/types';
-
+import type { DepositResult, ProgressCallback, BankTx, BillResult } from './types';
+import type { ETransferPacket } from '@thecointech/types';
+import type { Decimal } from 'decimal.js-light';
 export interface IBank {
 
   //
   // Attempt to deposit eTransfer from url
   depositETransfer(prefix: string, url: string, code: string, progressCb: ProgressCallback): Promise < DepositResult >;
+
+  //
+  // Make a bill payment for the person
+  payBill(prefix: string, name: string, payee: string, accountNo: string, amount: Decimal, progressCb?: ProgressCallback): Promise< BillResult >;
 
   //
   // Get most recent transactions posted.
