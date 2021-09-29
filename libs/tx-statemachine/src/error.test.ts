@@ -70,7 +70,7 @@ it("Error replay is handled appropriately", async () => {
   const runTest = async (expectedState: States, executedTransitions: number, numErrors: number, breakAt?: States) => {
 
     jest.resetAllMocks();
-    const container = await processor.execute({}, action, breakAt);
+    const container = await processor.execute(null, action, breakAt);
 
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
