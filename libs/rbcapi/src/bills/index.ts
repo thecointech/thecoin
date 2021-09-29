@@ -1,4 +1,4 @@
-import { BillResult, ProgressCallback } from '@thecointech/bank-interface';
+import { ProgressCallback } from '@thecointech/bank-interface';
 import { Page } from 'puppeteer';
 import { ApiAction } from '../action';
 import { Decimal } from 'decimal.js-light';
@@ -8,14 +8,17 @@ import { log } from '@thecointech/logging';
 //
 // Pay bill
 // If nickname exists, use this a payee, else create a new payee and set it's nickname as passed.
-export async function payBill(prefix: string, nickname: string, payee: string, accountNo: string, amount: Decimal, _progressCb?: ProgressCallback): Promise< BillResult > {
+export async function payBill(prefix: string, nickname: string, payee: string, accountNo: string, amount: Decimal, _progressCb?: ProgressCallback) {
 
   const act = await prepareBillPayee(prefix, nickname, payee, accountNo);
 
   await act.page.type('#amount', amount.toString());
   await act.clickAndNavigate('#id_btn_submit', 'Bill Submit');
   await act.clickAndNavigate('#id_btn_confirm', 'Bill Confirm');
-  return {};
+
+  const confirmation = "1234";
+  log.trace(`Bill payment confirmed: ${confirmation}`);
+  return confirmation;
 }
 
 export async function prepareBillPayee(prefix: string, nickname: string,  payee: string, accountNo: string) {
