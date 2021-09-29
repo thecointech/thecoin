@@ -15,9 +15,13 @@ export async function payBill(prefix: string, nickname: string, payee: string, a
   await act.page.type('#amount', amount.toString());
   await act.clickAndNavigate('#id_btn_submit', 'Bill Submit');
   await act.clickAndNavigate('#id_btn_confirm', 'Bill Confirm');
+  log.trace(`Bill payment confirmed`);
 
-  const confirmation = "1234";
-  log.trace(`Bill payment confirmed: ${confirmation}`);
+  // get confirmation number;
+  const [confirmHeader] = await act.findElementsWithText("th", "Confirmation Number");
+  const confirmation = await act.page.evaluate(th => th.nextElementSibling.textContent, confirmHeader);
+  log.debug(`Bill payment confirmation: ${confirmation}`);
+
   return confirmation;
 }
 
