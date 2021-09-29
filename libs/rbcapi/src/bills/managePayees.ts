@@ -3,9 +3,8 @@ import { ApiAction } from '../action';
 import { openBillPaymentPage } from './index';
 
 const Errors = {
-  MissingAccountNumber: "MISSING-ACCOUNT-NUMBER",
-  MissingAccountNickname: "MISSING-ACCOUNT-NICKNAME",
-  DuplicateAccountNumber: "DUPLICATE-ACCOUNT-NUMBERS",
+  MissingAccountIdent: "MISSING-ACCOUNT-IDENTIFIER",
+  DuplicateAccountIdent: "DUPLICATE-ACCOUNT-IDENTIFIER",
   SetAccountNumberFailed: "SET-ACC-NO-FAILED",
   DuplicateNameError: "DUPLICATE-NAME-ERROR",
   MissingLink: "MISSING-LINK",
@@ -43,24 +42,12 @@ export async function addPayee(act: ApiAction, nickname: string, payee: string, 
   // Go to payee page to change it's name
   await act.clickOnText("Manage Payees", "a", "#id_btn_sortpayeelist");
 
-  // Click the edit button
-  const res = await act.page.evaluate((n) => {
-    // Find the payee in the list
-    const cells = document.getElementsByTagName("td");
-    const [td, ...rest] = Array.from(cells).filter(c => c.innerText === n);
-    if (!td || !td.parentElement) return Errors.MissingAccountNumber;
-    if (rest.length > 0) throw Errors.DuplicateAccountNumber;
-    const links = Array.from(td.parentElement.getElementsByTagName("a"))
-    const edit =  links.find(l => l.text == "Edit");
-    if (!edit) return Errors.MissingLink;
-    edit.click();
-    return null;
-  }, accountNumber);
+  // click on the edit link for this account
+  const res = await clickPayeeLink(act, accountNumber, "Edit");
   if (res) {
-    log.error("Couldn't click the edit button: ${res}");
+    log.error("Couldn't click the ${link} button: ${res}");
     throw new Error(res);
   }
-
   await act.page.waitForNavigation();
   await act.page.waitForSelector("#payeenickname");
 
@@ -80,24 +67,13 @@ export async function deletePayee(nickname: string) {
   await act.clickOnText("Manage Payees", "a", "#id_btn_sortpayeelist");
 
   // Click the delete button
-  const res = await act.page.evaluate((n) => {
-    // Find the payee in the list
-    const cells = document.getElementsByTagName("td");
-    const [td, ...rest] = Array.from(cells).filter(c => c.innerText === n);
-    if (!td || !td.parentElement) return Errors.MissingAccountNickname;
-    if (rest.length > 0) throw Errors.DuplicateAccountNumber;
-    const links = Array.from(td.parentElement.getElementsByTagName("a"))
-    const edit =  links.find(l => l.text == "Delete");
-    if (!edit) return Errors.MissingLink;
-    edit.click();
-    return null;
-  }, nickname);
+  const res = await clickPayeeLink(act, nickname, "Delete");
   if (res) {
-    if (res == Errors.MissingAccountNickname) {
-      log.warn(`Couldn't find payee: ${nickname} - skipping delete`)
-      return;
+    if (res == Errors.MissingAccountIdent) {
+      log.info(`Couldn't find payee: ${nickname} - skipping delete`)
+      return false;
     }
-    log.error("Couldn't click the delete button: ${res}");
+    log.error(`Couldn't click the delete button: ${res}`);
     throw new Error(res);
   }
   log.trace("Clicked Delete button");
@@ -108,4 +84,22 @@ export async function deletePayee(nickname: string) {
   // Confirm result
   const comfirmed = await act.findElementsWithText("td", "Delete Payee Completed");
   if (!comfirmed) throw new Error("Couldn't find confirmation message for deleting payee");
+  return true;
+}
+
+async function clickPayeeLink(act: ApiAction, accountIdent: string, link: string) {
+  // Click the edit button
+  const params = {accountIdent, Errors, link};
+  return act.page.evaluate(({accountIdent, Errors, link}: typeof params) => {
+    // Find the payee in the list
+    const cells = document.getElementsByTagName("td");
+    const [td, ...rest] = Array.from(cells).filter(c => c.innerText === accountIdent);
+    if (!td || !td.parentElement) return Errors.MissingAccountIdent;
+    if (rest.length > 0) return Errors.DuplicateAccountIdent;
+    const links = Array.from(td.parentElement.getElementsByTagName("a"))
+    const edit =  links.find(l => l.text == link);
+    if (!edit) return Errors.MissingLink;
+    edit.click();
+    return null;
+  }, params);
 }

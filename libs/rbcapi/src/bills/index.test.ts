@@ -30,6 +30,9 @@ describe("Live website testing", () => {
     const p2 = await prepareBillPayee("test-preparePayee", fakeVisaName, fakeVisaIssuer, fakeVisaNumber);
     expect(p2).toBeTruthy();
     expect(addPayeeSpy).not.toHaveBeenCalled();
+
+    // Clean up after ourselves
+    await manage.deletePayee(fakeVisaName);
   })
 
 }, !!vars.RBCAPI_CREDENTIALS_PATH)

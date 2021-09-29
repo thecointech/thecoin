@@ -33,6 +33,12 @@ describe("Live website testing", () => {
     await expect(addPayee(act, fakeVisaName, fakeVisaIssuer, invalidVisaNumber)).rejects.toThrow("SET-ACC-NO-FAILED");
   })
 
+  it ('ignores deleting invalid payee', async () => {
+    const invalidVisaName = "im not really here";
+    const r = await deletePayee(invalidVisaName);
+    expect(r).toBeFalsy();
+  })
+
 
   it('can add and remove a payee', async () => {
 
