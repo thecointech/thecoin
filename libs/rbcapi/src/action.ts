@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
@@ -9,7 +9,7 @@ import { AuthOptions, Credentials, isCredentials } from './types';
 // action do not affect synchronous actions.
 
 let _browser: Browser | null = null;
-export async function initBrowser(options?: puppeteer.LaunchOptions) {
+export async function initBrowser(options?: puppeteer.BrowserLaunchArgumentOptions) {
   _browser = await puppeteer.launch(options);
   _browser.on('disconnected', initBrowser);
   return _browser;
@@ -54,7 +54,7 @@ export class ApiAction {
   }
 
   page!: Page;
-  navigationPromise!: Promise<puppeteer.Response>;
+  navigationPromise!: Promise<puppeteer.HTTPResponse|null>;
   outCache?: string;
   step: number = 0;
 
@@ -147,7 +147,7 @@ export class ApiAction {
 
   //////////////////////////////////////////
 
-  async clickAndNavigate(selector: string, stepName: string, options?: NavigationOptions) {
+  async clickAndNavigate(selector: string, stepName: string, options?: puppeteer.WaitForOptions) {
     const navigationWaiter = this.page.waitForNavigation({
       timeout: 90000, // MB internet means this can timeout prematurely
       ...options

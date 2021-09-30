@@ -3,14 +3,14 @@ import  { getEnvVars } from "../../../../tools/setenv";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';
-import { ApiAction, initBrowser, closeBrowser } from '../action';
+import { ApiAction, closeBrowser, initBrowser } from '../action';
 
 const vars = getEnvVars("prod");
 
 jest.setTimeout(5 * 60 * 1000);
 
 // We run this test on the live website to catch any changes to RBC website.
-describe("Live website testing", () => {
+describe("Testing Pay Bill", () => {
 
   const fakeVisaNumber = "4520356320843708";
   const fakeVisaIssuer = "VISA - TORONTO DOMINION";
