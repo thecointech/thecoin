@@ -4,7 +4,8 @@
   "references": [
     { "path": "../../libs/tx-deposit/tsconfig.build.json" },
     { "path": "../../libs/tx-etransfer/tsconfig.build.json" },
-    { "path": "../../libs/tx-deposit/tsconfig.build.json" }
+    { "path": "../../libs/tx-bill/tsconfig.build.json" },
+    { "path": "../../libs/rbcapi/tsconfig.build.json" }
   ]
 }
 

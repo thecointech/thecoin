@@ -1,8 +1,7 @@
-import puppeteer, { Browser, Page, NavigationOptions } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
-import { tmpdir } from 'os';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -10,7 +9,7 @@ import { tmpdir } from 'os';
 // action do not affect synchronous actions.
 
 let _browser: Browser | null = null;
-export async function initBrowser(options?: puppeteer.LaunchOptions) {
+export async function initBrowser(options?: puppeteer.BrowserLaunchArgumentOptions) {
   _browser = await puppeteer.launch(options);
   _browser.on('disconnected', initBrowser);
   return _browser;
@@ -55,19 +54,20 @@ export class ApiAction {
   }
 
   page!: Page;
-  navigationPromise!: Promise<puppeteer.Response>;
-  outCache: string;
+  navigationPromise!: Promise<puppeteer.HTTPResponse|null>;
+  outCache?: string;
   step: number = 0;
 
   private constructor(identifier: string) {
-    const base = process.env.TC_LOG_FOLDER ?? tmpdir()
-    const ident = identifier.replace('/', '_');
-    this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
-    fs.mkdirSync(this.outCache, { recursive: true });
+    if (process.env.TC_LOG_FOLDER) {
+      const base = process.env.TC_LOG_FOLDER;
+      const ident = identifier.replace('/', '_');
+      this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
+      fs.mkdirSync(this.outCache, { recursive: true });
+    }
   }
 
-  private async init()
-  {
+  private async init() {
     this.page = await getPage();
     this.navigationPromise = this.page.waitForNavigation()
   }
@@ -147,7 +147,7 @@ export class ApiAction {
 
   //////////////////////////////////////////
 
-  async clickAndNavigate(selector: string, stepName: string, options?: NavigationOptions) {
+  async clickAndNavigate(selector: string, stepName: string, options?: puppeteer.WaitForOptions) {
     const navigationWaiter = this.page.waitForNavigation({
       timeout: 90000, // MB internet means this can timeout prematurely
       ...options
@@ -178,7 +178,9 @@ export class ApiAction {
 
   public async writeStep(action: string) {
     log.debug(`step${this.step} - ${action}`);
-    await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
+    if (this.outCache) {
+      await this.page.screenshot({ path: `${this.outCache}/step${this.step} - ${action}.png` });
+    }
     this.step = this.step + 1;
   }
 

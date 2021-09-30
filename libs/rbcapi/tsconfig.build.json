@@ -5,6 +5,7 @@
     { "path": "../utils-ts/tsconfig.build.json" },
     { "path": "../store/tsconfig.build.json" },
     { "path": "../logging/tsconfig.build.json" },
+    { "path": "../bank-interface/tsconfig.json" },
   ]
 }
 

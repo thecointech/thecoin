@@ -3,9 +3,9 @@ import { TheCoin } from '@thecointech/contract';
 import gmail from '@thecointech/tx-gmail';
 import { eTransferProcessor, getBuyETransferAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';
-import { RbcApi } from '@thecointech/rbcapi';
+import { IBank } from '@thecointech/bank-interface';
 
-export async function processUnsettledDeposits(contract: TheCoin, bank: RbcApi)
+export async function processUnsettledDeposits(contract: TheCoin, bank: IBank)
 {
   const raw = await gmail.queryNewDepositEmails();
 
