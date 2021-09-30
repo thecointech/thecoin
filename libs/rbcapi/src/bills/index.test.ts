@@ -10,7 +10,7 @@ const vars = getEnvVars("prod");
 jest.setTimeout(5 * 60 * 1000);
 
 // We run this test on the live website to catch any changes to RBC website.
-describe("Testing Pay Bill", () => {
+describe("Testing Pay Bills", () => {
 
   const fakeVisaNumber = "4520356320843708";
   const fakeVisaIssuer = "VISA - TORONTO DOMINION";
