@@ -24,7 +24,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage --runInband",
+    "test": "jest --coverage --runInBand",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
