@@ -3,7 +3,7 @@ import { RbcApi } from "@thecointech/rbcapi";
 import { TheCoin } from '@thecointech/contract';
 import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
-import { getIncompleteActions } from '@thecointech/broker-db';
+import { processUnsettledBillPayments } from './bills';
 import { SendMail } from '@thecointech/email';
 import { initialize, release } from './initialize';
 
@@ -28,13 +28,10 @@ async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
 
 //
 // Get notified if you need to address something
-async function ProcessBillPayments() {
+async function ProcessBillPayments(contract: TheCoin, bank: RbcApi) {
   log.debug("Processing Bill Payments");
-  let incomplete = await getIncompleteActions("Bill");
-  log.debug(`You need to settle: ${incomplete.length} bill payments`);
-  if (incomplete.length > 0) {
-    SendMail('You have bills to settle', incomplete.map(p => p.data.date.toSQLDate()).join("\n"));
-  }
+  const billPayments = await processUnsettledBillPayments(contract, bank);
+  log.debug(`Processed ${billPayments.length} eTransfers`);
 }
 
 
@@ -43,7 +40,7 @@ async function Process() {
   const bank = new RbcApi();
   await ProcessDeposits(contract, bank);
   await ProcessETransfers(contract, bank);
-  await ProcessBillPayments();
+  await ProcessBillPayments(contract, bank);
 
   log.debug(`Completed processing`);
 }
@@ -52,9 +49,9 @@ async function run() {
   try {
     await Process();
   }
-  catch(e) {
+  catch(e: any) {
     log.fatal(e);
-    SendMail("tx-processor exception", `${e.message}\n${e.stack}`);
+    await SendMail("tx-processor exception", `${e.message}\n${e.stack}`);
   }
   finally {
     await release();

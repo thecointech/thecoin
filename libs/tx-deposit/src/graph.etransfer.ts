@@ -65,6 +65,8 @@ export const etransfer : StateGraph<States, "Buy"> = {
   // refundReady: {
   //   next: transitionTo(noop, "complete"),
   // },
-  error: null,
+  error: {
+    next: core.manualOverride,
+  },
   complete: null
 }

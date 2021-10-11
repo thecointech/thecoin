@@ -18,6 +18,7 @@ export class RbcApi implements IBank {
     });
   });
   sendETransfer = jest.fn(() => Promise.resolve(result += 1));
+  payBill = jest.fn(() => Promise.resolve(result += 1));
   fetchLatestTransactions = jest.fn(() => Promise.resolve([]));
   getTransactions = jest.fn(() => Promise.resolve([]));
   initialize = jest.fn(() => { });

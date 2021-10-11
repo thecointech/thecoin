@@ -62,6 +62,6 @@ export interface BrokerStatus {
   certifiedFee: number;
 }
 export interface BillPayeePacket {
-  payee?: string;
-  accountNumber?: string;
+  payee: string;
+  accountNumber: string;
 }

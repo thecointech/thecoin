@@ -24,7 +24,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "jest --runInBand --forceExit",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -45,7 +45,7 @@
     "@thecointech/store": "^0.2.41",
     "@thecointech/utilities": "^0.2.41",
     "csvtojson": "^2.0.10",
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^10.4.0"
   },
   "peerDependencies": {
     "axios": "*",
@@ -53,7 +53,6 @@
   },
   "devDependencies": {
     "@thecointech/types": "^0.2.16",
-    "@types/puppeteer": "^2.0.1",
     "jest": "*"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"

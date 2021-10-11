@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import type { TheCoin } from '@thecointech/contract';
 import type { eTransferData } from "@thecointech/tx-gmail";
 import type { IBank } from '@thecointech/bank-interface';
+export { etransfer, manual };
 
 // deposit eTransfers
 export const eTransferProcessor = (contract: TheCoin, bank: IBank | null = null) => new StateMachineProcessor(etransfer, contract, bank);
