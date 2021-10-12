@@ -21,6 +21,15 @@
 **/*secret*
 **/.firebase/hosting.*.cache
 
+# Yarn 2.0 ignore
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # VS cache files
 .dtbcache.v2
 .suo

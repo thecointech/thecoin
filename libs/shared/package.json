@@ -1,6 +1,5 @@
 {
   "name": "@thecointech/shared",
-  "private": "true",
   "version": "0.2.42",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [

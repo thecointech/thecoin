@@ -28,7 +28,7 @@
     "build:src:copy": "run-p build:src:copy:*",
     "build:src:copy:types": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
     "build:src:copy:deploy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",

@@ -1,6 +1,5 @@
 {
   "name": "@thecointech/storybookutils",
-  "private": "true",
   "version": "0.2.42",
   "description": "The Coin: common storybook decorators",
   "author": "Stephen Taylor <stephen@thecoin.io>",
