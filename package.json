@@ -182,5 +182,6 @@
     "webpack-merge": "5.8.0",
     "webpack-pwa-manifest": "4.3.0",
     "yarn-deduplicate": "^3.1.0"
-  }
+  },
+  "packageManager": "yarn@3.0.2"
 }
