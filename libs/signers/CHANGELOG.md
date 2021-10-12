@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.42](https://github.com/thecointech/thecoin/compare/v0.2.41...v0.2.42) (2021-10-12)
+
+
+### Bug Fixes
+
+* libs/signers/package.json to reduce vulnerabilities ([6a40c9b](https://github.com/thecointech/thecoin/commit/6a40c9b2bfa50660aca1322370bc3dd5013b9120))
+
+
+
+
+
 ## [0.2.41](https://github.com/thecointech/thecoin/compare/v0.2.40...v0.2.41) (2021-09-22)
 
 **Note:** Version bump only for package @thecointech/signers
