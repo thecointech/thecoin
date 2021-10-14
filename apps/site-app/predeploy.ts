@@ -1,7 +1,7 @@
-import { SetGCloudConfig, FirebaseUseEnv } from "../../tools/predeploy";
+import { SetGCloudConfig, FirebaseDeploy } from "../../tools/predeploy";
 
 (async () => {
-  console.log(await SetGCloudConfig("GCLOUD_APP_CONFIG"));
-  console.log(await FirebaseUseEnv());
+  await SetGCloudConfig("GCLOUD_APP_CONFIG");
+  await FirebaseDeploy("GCLOUD_APP_CONFIG");
 })();
 
