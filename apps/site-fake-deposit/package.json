@@ -19,8 +19,7 @@
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
-    "pre_deploy": "ts-node --skip-project predeploy",
-    "_deploy": "firebase deploy --only hosting",
+    "_deploy": "ts-node --skip-project predeploy",
     "dev": "yarn node internals/server --port=3004",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"

@@ -1,7 +1,7 @@
-import { SetGCloudConfig, FirebaseUseEnv } from "../../tools/predeploy";
+import { SetGCloudConfig, FirebaseDeploy } from "../../tools/predeploy";
 
 (async () => {
-  console.log(await SetGCloudConfig("GCLOUD_NFT_SITE_CONFIG"));
-  console.log(await FirebaseUseEnv());
+  await SetGCloudConfig("GCLOUD_NFT_SITE_CONFIG");
+  await FirebaseDeploy("GCLOUD_NFT_SITE_CONFIG");
 })();
 
