@@ -5,18 +5,26 @@ import sys
 import os
 import shutil
 
-if not os.environ.get('THECOIN_ENVIRONMENTS'):
-    print("Cannot Deploy without Environments")
-    exit(1)
-
-base = Path.home() / 'thecoin' / 'deploy'
+home = Path.home()
+base = home / 'thecoin' / 'deploy'
 deploy = base / 'current'
 old_deploy = base / 'old'
 new_deploy = base / 'new'
+
+if not os.environ.get('THECOIN_ENVIRONMENTS'):
+    tc_env = home / 'thecoin' / 'env'
+    print(f"Setting default evironment location: {tc_env}")
+    os.putenv('THECOIN_ENVIRONMENTS', tc_env)
+
 print(f"Deploying to {new_deploy}")
 
+# check no existing checkout
+if new_deploy.exists():
+    print("Cannot deploy: existing installation found")
+    exit(1)
+
 # First, create a new checkout,
-Path(new_deploy).mkdir(parents=True, exist_ok=True)
+new_deploy.mkdir(parents=True, exist_ok=True)
 os.chdir(new_deploy)
 os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
 
