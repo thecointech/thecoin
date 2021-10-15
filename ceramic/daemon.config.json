@@ -1,0 +1,25 @@
+{
+  "anchor": {
+    "ethereum-rpc-url": "https://mainnet.infura.io/v3/$INFURA_PROJECT_ID"
+  },
+  "http-api": {
+    "cors-allowed-origins": [
+      ".*"
+    ]
+  },
+  "ipfs": {
+    "mode": "remote",
+    "host": "http://$ipAddress:5011"
+  },
+  "logger": {
+    "log-level": 2,
+    "log-to-files": true
+  },
+  "network": {
+    "name": "elp"
+  },
+  "node": {},
+  "state-store": {
+    "mode": "fs"
+  }
+}
