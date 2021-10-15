@@ -1,0 +1,115 @@
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #F5F5F5;
+}
+h1{
+  font-family: 'Volkhov', cursive;
+  font-size: 54px;
+  text-align: left;
+}
+p{
+  font-size: 20px; 
+}
+form{
+}
+input {
+  background: #fff;
+  color: #525865;
+  border-radius: 4px;
+  border: 1px solid #61C1B8;
+  box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.07);
+  font-family: inherit;
+  font-size: 1em;
+  line-height: 1.45;
+  outline: none;
+  padding: 0.6em 1.45em 0.7em;
+  -webkit-transition: .18s ease-out;
+  -moz-transition: .18s ease-out;
+  -o-transition: .18s ease-out;
+  transition: .18s ease-out;
+}
+input:hover {
+  box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.02);
+}
+input:focus {
+  color: #4b515d;
+  border: 1px solid #61C1B8;
+  box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+button{
+  background-color: #318161;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  padding: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: 20px;
+  border-radius: 10px;
+}
+button:hover{
+  background-color: #318161;
+  cursor: pointer;
+}
+.logo{
+  background: url("./images/Logo_green.svg") no-repeat;
+  height: 50px;
+  margin-left: 5%;
+  margin-top: 15px;
+}
+
+.content-container{
+  width: 65%;
+  min-height: 400px;
+  max-height: 500px;
+  z-index: 100;
+  margin-left: 5%;
+  margin-top: 200px;
+  padding-top:0;
+}
+
+.illustration{
+  max-width: 550px;
+  z-index: 100;
+  right: 0px;
+  position: absolute;
+  top: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  h1{
+    font-size: 55px;
+  }
+  .content-container{
+    left: 5%;
+    top: 12%;
+    width: 70%;
+    height: 65%;
+  }
+  .illustration{
+    display: none;
+  }
+}
+@media only screen and (max-width: 1265px) and (min-width: 601px) {
+  .content-container{
+    left: 15%;
+    top: 12%;
+    width: 70%;
+    height: 65%;
+  }
+  .illustration{
+    display: none;
+  }
+}
+@media only screen and (max-width: 3000px) and (min-width: 1669px) {
+  .content-container{
+    left: 12%;
+    top: 20%;
+  }
+  .illustration{
+    right: 15%;
+    top: 17%;
+  }
+}
