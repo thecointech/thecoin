@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.43",
+  "version": "0.2.45",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
