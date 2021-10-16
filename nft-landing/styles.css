@@ -15,6 +15,18 @@ h1{
   text-align: left;
   margin-bottom: 30px;
 }
+h2{
+  font-family: 'Volkhov', cursive;
+  font-size: 40px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+h3{
+  font-family: 'Volkhov', cursive;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 40px;
+}
 p{
   font-size: 20px; 
 }
@@ -83,6 +95,10 @@ button:hover{
   padding-top:0;
 }
 
+.jacketPart{
+  height: 800px;
+}
+
 .jacketText{
   margin-top: 150px;
   max-width: 800px;
@@ -90,18 +106,80 @@ button:hover{
 
 .jacketText p{
   width: 58%;
+  line-height: 35px;
+  font-size: 20px;
 }
 
-.illustration{
+.illustrationJacket{
   z-index: 100;
   right: 0px;
   position: absolute;
-  top: 20px;
+  top: 10px;
   width: 40%;
   right: -5px;
 }
-.illustration img{
+.illustrationJacket img{
   width: 100%;
+}
+
+.arrowPart{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 150px;
+}
+
+.facesPart{
+  min-height: 900px;
+}
+
+.facesText{        
+  width: 60%;
+  left: 10%;
+  position: relative;
+}
+
+.facesText p{
+  width: 100%;
+  line-height: 30px;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.facesText p.smaller{
+  font-size: 16px;
+}
+
+.facesText .logoText{
+  margin-top: 25px;
+}
+
+.illustrationFaces{
+  max-width: 550px;
+  width: 50%;
+  float: left;
+}
+.illustrationFaces img{
+  width: 100%;
+}
+
+.weirdPart{
+  height: 400px;
+  background-image: linear-gradient(transparent 40%, #D9E6E2 0%);
+}
+
+.weirdPart .card{
+  text-align: center;
+  background-color: white;
+  width: 370px;
+  height: 368px;
+  border-radius: 20px;
+  margin-left: 10%;
+  display: inline-block;
+}
+
+.weirdPart .card img{
+  margin-top: 40px;
+  margin-bottom: 30px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -124,8 +202,9 @@ button:hover{
   }
 }
 @media only screen and (max-width: 3000px) and (min-width: 1669px) {
-  .content-container{
-    left: 12%;
-    top: 20%;
+
+  .illustrationJacket{
+    top: -20px;
+    right: -30px;
   }
 }
