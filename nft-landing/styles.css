@@ -9,7 +9,6 @@ body {
   height: 1000px;
   color: #2B5250;
 }
-
 h1,h2,h3,h4,h5{
   font-family: 'Volkhov', cursive;
 }
@@ -87,6 +86,7 @@ button:hover{
   background-color: #318161;
   cursor: pointer;
 }
+
 .logo{
   background: url("./images/Logo_green.svg") no-repeat;
   height: 50px;
@@ -105,18 +105,15 @@ button:hover{
 .jacketPart{
   height: 800px;
 }
-
 .jacketText{
   margin-top: 150px;
   max-width: 800px;
 }
-
 .jacketText p{
   width: 58%;
   line-height: 35px;
   font-size: 20px;
 }
-
 .illustrationJacket{
   z-index: 100;
   right: 0px;
@@ -138,29 +135,24 @@ button:hover{
 .facesPart{
   min-height: 900px;
 }
-
 .facesText{        
   width: 60%;
   left: 10%;
   position: relative;
 }
-
 .facesText p{
   width: 100%;
   line-height: 30px;
   font-size: 20px;
   margin-top: 20px;
 }
-
 .facesText p.smaller{
   font-size: 16px;
   color: #6F6571;
 }
-
 .facesText .logoText{
   margin-top: 35px;
 }
-
 .illustrationFaces{
   max-width: 550px;
   width: 50%;
@@ -174,7 +166,6 @@ button:hover{
   height: 450px;
   background-image: linear-gradient(transparent 28%, #D9E6E2 0%);
 }
-
 .weirdPart .card{
   text-align: center;
   background-color: rgb(255, 255, 255, 0.5);
@@ -194,7 +185,6 @@ button:hover{
   background-color: rgba(255, 255, 255, 0.8);
   filter: drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.02)) drop-shadow(0px 64.8148px 46.8519px rgba(0, 0, 0, 0.0151852)) drop-shadow(0px 38.5185px 25.4815px rgba(0, 0, 0, 0.0121481)) drop-shadow(0px 20px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 8.14815px 6.51852px rgba(0, 0, 0, 0.00785185)) drop-shadow(0px 1.85185px 3.14815px rgba(0, 0, 0, 0.00481481));
 }
-
 .weirdPart .card img{
   margin-top: 65px;
   margin-bottom: 30px;
@@ -204,7 +194,6 @@ button:hover{
   padding-top: 100px;
   min-height: 667px;
 }
-
 .actualContentPart p{
   padding-top: 60px;
   max-width: 770px;
@@ -216,11 +205,43 @@ button:hover{
 .actualContentPart h2{
   margin-bottom: 64px;
 }
-
 .actualContentPart h4#uselessTitle{
   max-width: 770px;
   margin: auto;
   line-height: 32px;
+}
+
+.founderPart{
+  min-height: 700px;
+}
+.founderContainer{
+  margin: auto;
+  border-radius: 20px;
+  background-color: white;
+  max-width: 1100px;
+  min-height: 369px;
+  padding: 50px;
+}
+.founderPart .founderText{
+  width: 50%;
+  max-width: 435px;
+  min-height: 268px;
+  float: right;
+  -ms-transform: translateY(20%);
+  transform: translateY(20%);
+}
+.founderPart .founderImage{
+  max-width: 570px;
+  max-height: 368px;
+  float: left;
+}
+.founderPart .founderContainer p{
+  margin-top: 69px;
+  margin-bottom: 20px;
+  color: #6F6571;
+  font-size: 16px;
+  line-height: 24px;
+
 }
 
 .uglyFooterText{
@@ -228,16 +249,18 @@ button:hover{
   width: 100%;
   background-color: #31484B;
 }
-
 .uglyFooterText h2{
   color: white;
   padding-top: 48px;
 }
-
 .uglyFooterLogo{
   height:85px;
   width: 100%;
   background-color: #012429;
+}
+.uglyFooterLogo img.logoFooter{
+  padding: 25px;
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(276deg) brightness(106%) contrast(102%);
 }
 
 @media only screen and (max-width: 600px) {
@@ -263,6 +286,6 @@ button:hover{
 
   .illustrationJacket{
     top: -20px;
-    right: -30px;
+    right: 2px;
   }
 }
