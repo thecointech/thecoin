@@ -1,0 +1,21 @@
+{
+  "name": "@thecointech/site-nft-landing",
+  "productName": "THECoin: NFT Landing  ",
+  "private": true,
+  "version": "0.1.0",
+  "description": "THECoin NFT: some neat tagline",
+  "author": "Marie Goursolas",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "prebuild": "rimraf ./build",
+    "_build": "run-s _build:imgs _build:src",
+    "_build:imgs": "ts-node --skip-project buildimgs",
+    "_build:src": "webpack --mode production",
+    "pre_deploy": "yarn _build",
+    "_deploy": "ts-node --skip-project deploy"
+  },
+  "devDependencies": {
+    "sharp": "^0.29.1",
+    "mini-css-extract-plugin": "^2.4.2"
+  }
+}
