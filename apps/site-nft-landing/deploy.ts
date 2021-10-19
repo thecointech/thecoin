@@ -1,9 +1,7 @@
-import { SetGCloudConfig, FirebaseUseEnv, ShellCmd } from "../../tools/predeploy";
+import { SetGCloudConfig, FirebaseDeploy } from "../../tools/predeploy";
 
 (async () => {
   await SetGCloudConfig("GCLOUD_NFT_SITE_CONFIG");
-  await FirebaseUseEnv();
-
-  await ShellCmd("firebase deploy --only hosting")
+  await FirebaseDeploy("GCLOUD_NFT_SITE_CONFIG");
 })();
 
