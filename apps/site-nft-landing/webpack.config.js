@@ -21,8 +21,24 @@ module.exports = {
         use: 'html-loader',
       },
       {
-        test: /\.(png|jpe?g|webp|git|svg|)$/i,
-        type: "asset/resource",
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [{
+          loader: 'image-webpack-loader',
+          options: {
+            mozjpeg: {
+              progressive: true,
+            },
+            optipng: {
+              enabled: true,
+            },
+            // the webp option will enable WEBP
+            webp: {
+              quality: 100
+            },
+            svgo: {},
+          }
+        }],
+        type: "asset",
       },
     ],
   },
