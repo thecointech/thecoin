@@ -17,7 +17,7 @@ docker volume create ipfs-data --storage-account ceramicstore
 
 docker run `
   -d `
-  -p 4011:4011 `
+  -p 4012:4012 `
   -p 5011:5011 `
   -v ceramicstore/ipfs-data:ipfs-data `
   -e CERAMIC_NETWORK=ELP `
