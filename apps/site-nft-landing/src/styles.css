@@ -164,6 +164,10 @@ button:hover{
 .illustrationFaces img{
   width: 100%;
 }
+.illustrationFacesMobile{
+  display: none;
+  max-width: 500px;
+}
 
 .weirdPart{
   height: 450px;
@@ -189,6 +193,7 @@ button:hover{
 .weirdPart .cardsContainer{
   display: inline-block;
   width: auto;
+  display: inline-flex;
 }
 .weirdPart .card:nth-child(2) {
   margin-left: 30px;
@@ -253,7 +258,7 @@ button:hover{
   float: left;
 }
 .founderPart .founderContainer p{
-  margin-top: 69px;
+  margin-top: 35px;
   margin-bottom: 20px;
   color: #6F6571;
   font-size: 16px;
@@ -280,20 +285,135 @@ button:hover{
   filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(276deg) brightness(106%) contrast(102%);
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
+  .content-container{
+    margin-left: 0;
+    padding-left: 5%;
+    padding-right: 5%;
+    max-height: 2000px;
+    margin-bottom: 40px;
+  }
+
+  form {
+    width: auto;
+    display: grid;
+  
+  }
+
+  form input{
+    width: auto;
+  }
+
+  form button{
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+
+  .jacketPart {
+    height: 500px;
+  }
+  .jacketText{
+    margin-top: 35px;
+    max-width: 800px;
+  }
+  .jacketText h1{
+    width: 70%;
+  }
+  .jacketText p{
+    width: 60%;
+  }
+  .illustrationJacket{
+    display: none;
+  }
+  .illustrationJacketMobile{
+    display: block;
+    top: 40px;
+    position: absolute;
+    right: 0;
+    width: 40%;
+  }
+  .illustrationJacketMobile img{
+    width: 100%;
+    right: 0;
+    position: relative;
+  }
+
+  .arrowPart{
+    display: none;
+  }
+  
+  .illustrationFaces{
+    display: none;
+  }
+  .illustrationFacesMobile{
+    display: block;
+  }
+  .illustrationFacesMobile img{
+    width: 100%;
+  }
+
+  .facesText{
+    left: 0;
+    width: 100%;
+  }
+
+  .facesText h3{
+    margin-top: 20px;
+  }
+  .facesText p{
+    font-size: 18px;
+  }
+
+  .weirdPart{
+    display: none;
+  }
+
+  .actualContentPart{
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: right;
+  }
+  .actualContentPart h2{
+    line-height: 34px;
+  }
+  .actualContentPart p{
+    text-align: left;
+  }
+
+  .founderContainer{
+    padding: 16px;
+    min-height: auto;
+  }
+  .founderImage{
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  .founderPart{
+    height: auto;
+    min-height: 500px;
+  }
+  .founderPart .founderText{
+    width: 100%;
+    display: contents;
+  }
 
   h1{
     font-size: 32px;
     line-height: 32px;
+    text-align: left;
   }
   h2{
     font-size: 28px;
+    text-align: left;
   }
   h3{
     font-size: 28px;
+    text-align: left;
   }
   h4{
     font-size: 20px;
+    text-align: left;
   }
 }
 
