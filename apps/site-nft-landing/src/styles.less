@@ -6,7 +6,6 @@
 body {
   font-family     : 'Montserrat', sans-serif;
   background-color: #F5F5F5;
-  height          : 1000px;
   color           : #2B5250;
 }
 
@@ -33,8 +32,8 @@ h2 {
 }
 
 h3 {
-  font-size    : 40px;
-  text-align   : left;
+  font-size  : 40px;
+  text-align : left;
   line-height: 52px;
 }
 
@@ -54,8 +53,8 @@ form {
   padding         : 32px;
   margin-top      : 37px;
   width           : 600px;
-  position: relative;
-  left: -15px;
+  position        : relative;
+  left            : -15px;
   text-align      : center;
 }
 
@@ -105,17 +104,52 @@ button:hover {
   cursor          : pointer;
 }
 
+@desktop   : ~"only screen and (min-width: 1185px) and (max-width: 1920px)";
+@mobile   : ~"only screen and (max-width: 800px)";
+@big-size  : 1440;
+@small-size: 375;
+
+/** linear interpolate value from small to big as screen goes from small-size to big-size */
+.scalable(@property, @small, @big) {
+  @{property}: clamp(unit(@small, px),
+      calc(unit(@small, px) + (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
+      unit(@big, px),
+    );
+}
+
+.reverse-scalable(@property, @small, @big) {
+  @{property}: clamp(unit(@big, px),
+      calc(unit(@small, px) + (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
+      unit(@small, px),
+    );
+}
+
+.scalable-unit(@property, @small, @big, @units) {
+  @{property}: clamp(~"@{small}@{units}",
+    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
+    ~"@{big}@{units}"
+  );
+}
+
+.reverse-scalable-unit(@property, @small, @big, @units) {
+  @{property}: clamp(~"@{big}@{units}",
+    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - ~"@{small-size}@{units}") / (@big-size - @small-size)),
+    ~"@{small}@{units}"
+  );
+}
+
 .logo {
   background           : url("./images/Logo_green.svg") no-repeat;
+  background-size      : contain;
   background-position-x: 5px;
-  height               : 48px;
-  margin-top           : 27px;
-  padding-bottom       : 11px;
+  .scalable(height, 32, 48);
+  .scalable(margin-top, 8, 27);
+  .scalable(padding-bottom, 8, 11);
 }
 
 .content-container {
+  .scalable(margin-left, 15, 130);
   z-index    : 100;
-  margin-left: 9%;
   padding-top: 0;
 }
 
@@ -124,25 +158,31 @@ button:hover {
 }
 
 .jacketText {
-  padding-top: 128px;
-  max-width : 800px;
-}
+  .scalable(padding-top, 48, 128);
+  max-width: 800px;
+  width: 75%;
 
-.jacketText p {
-  width      : 58%;
-  line-height: 32px;
-  font-size  : 20px;
+  >p {
+    .scalable(width, 343, 570);
+    .reverse-scalable(margin-top, 52, 27);
+    line-height: 32px;
+    font-size  : 20px;
+  }
+
+  >h1 {
+    :first-child {
+    @media @desktop {
+        display: block;
+      }
+    }
+  }
 }
 
 .illustrationJacket {
   z-index : 100;
-  right   : 0px;
   position: absolute;
-  width   : 40%;
-}
-
-.illustrationJacketMobile {
-  display: none;
+  .scalable(width, 197, 532);
+  .scalable(right, -72, 0);
 }
 
 .illustrationJacket img {
@@ -150,50 +190,61 @@ button:hover {
 }
 
 .arrowPart {
-  text-align   : center;
-  margin-top   : 118px;
+  text-align: center;
+  .scalable(margin-top, 0, 118);
 }
 
 .facesPart {
   min-height: 900px;
-  display: flex;
+  display   : flex;
+
+  @media @mobile {
+    margin-top: 48px;
+    flex-direction: column;
+    margin-right: 16px;
+  }
 }
 
 .facesText {
-  margin-left: calc(100vw * 0.059);
+  .scalable(margin-left, 0, 85);
   margin-right: calc(100vw * 0.093);
-  margin-top: calc(100vw * 0.0722);
-  position: relative;
+  margin-top  : calc(100vw * 0.0722);
+  position    : relative;
 }
+
 .facesText h3 {
-  margin-bottom: 32px
+  margin-bottom: 32px;
+
+  @media @mobile {
+    line-height: 32px;
+  }
 }
 
 p.larger {
   line-height: 32px;
-  margin-top: 32px;
+  margin-top : 32px;
   font-size  : 20px;
 }
 
 p.smaller {
-  font-size: 16px;
+  font-size  : 16px;
   line-height: 24px;
-  color    : #6F6571;
-  margin-top: 24px;
+  color      : #6F6571;
+  margin-top : 24px;
 }
 
 .facesText .logoText {
-  margin-top: 54px;
+  .scalable(margin-top, 24, 54);
   margin-bottom: 16px;
 }
 
 .illustrationFaces {
-  float    : left;
+  float: left;
 }
 
 .illustrationFaces img {
   margin-top: 48px;
-  width: calc(100vw * 0.4389);
+  width     : calc(100vw * 0.4389);
 }
 
 .illustrationFacesMobile {
@@ -202,7 +253,7 @@ p.smaller {
 }
 
 .weirdPart {
-  margin-top: 96px;
+  margin-top      : 96px;
   height          : 450px;
   background-image: linear-gradient(transparent 28%, #D9E6E2 0%);
   text-align      : center;
@@ -220,21 +271,23 @@ p.smaller {
   -moz-transition        : .5s ease-out;
   -o-transition          : .5s ease-out;
   transition             : .5s ease-out;
-  background: linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
+  background             : linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
   backdrop-filter        : blur(80px);
   -webkit-backdrop-filter: blur(80px);
 }
 
 .weirdPart .card p {
-  margin-top:16px;
-  margin-left: 15%;
+  margin-top  : 16px;
+  margin-left : 15%;
   margin-right: 15%;
 }
+
 .weirdPart .cardsContainer {
-  display: flex;
-  padding-left : 135px;
-  padding-right: 135px;
-  justify-content : space-between;
+  display        : flex;
+  padding-left   : .scalable(padding-left, 24, 135);
+  padding-left   : .scalable(padding-right, 24, 135);
+  justify-content: space-between;
+  overflow-x : scroll;
 }
 
 .weirdPart .card:nth-child(2) {
@@ -249,7 +302,7 @@ p.smaller {
 
 .weirdPart .card:hover {
   background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2)), linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
-  filter: drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.02)) drop-shadow(0px 64.8148px 46.8519px rgba(0, 0, 0, 0.0151852)) drop-shadow(0px 38.5185px 25.4815px rgba(0, 0, 0, 0.0121481)) drop-shadow(0px 20px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 8.14815px 6.51852px rgba(0, 0, 0, 0.00785185)) drop-shadow(0px 1.85185px 3.14815px rgba(0, 0, 0, 0.00481481));
+  filter    : drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.02)) drop-shadow(0px 64.8148px 46.8519px rgba(0, 0, 0, 0.0151852)) drop-shadow(0px 38.5185px 25.4815px rgba(0, 0, 0, 0.0121481)) drop-shadow(0px 20px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 8.14815px 6.51852px rgba(0, 0, 0, 0.00785185)) drop-shadow(0px 1.85185px 3.14815px rgba(0, 0, 0, 0.00481481));
 
 }
 
@@ -265,7 +318,7 @@ p.smaller {
 .actualContentPart h4 {
   max-width  : 770px;
   margin     : auto;
-  margin-top: 48px;
+  margin-top : 48px;
   line-height: 32px;
 }
 
@@ -273,7 +326,7 @@ p.smaller {
   max-width  : 770px;
   text-align : center;
   margin     : auto;
-  margin-top: 48px;
+  margin-top : 48px;
   line-height: 24px;
   font-size  : 16px;
 }
@@ -285,16 +338,17 @@ p.smaller {
 .founderContainer {
   margin          : auto;
   border-radius   : 20px;
-  margin-left : 116px;
-  margin-right: 116px;
+  margin-left     : 116px;
+  margin-right    : 116px;
   background-color: white;
   padding         : 48px;
-  display: flex;
+  display         : flex;
 }
 
 .founderPart .founderText {
   margin-left: 48px;
 }
+
 .founderPart .founderText :first-child {
   margin-top: 0px;
 }
@@ -302,12 +356,13 @@ p.smaller {
 .founderImg h3 {
   margin-top: 28px;
 }
+
 .founderImg p {
   margin-top: 16px;
 }
 
 .uglyFooterText {
-  padding-left: 135px;
+  padding-left    : 135px;
   min-height      : 300px;
   width           : 100%;
   background-color: #31484B;
@@ -316,17 +371,19 @@ p.smaller {
 .uglyFooterText h2 {
   color      : white;
   padding-top: 48px;
-  text-align: left;
+  text-align : left;
 }
 
 .footerForm {
   display: flex;
 }
+
 .footerForm p {
-  color: white;
+  color      : white;
   line-height: 32px;
-  width: 40%;
+  width      : 40%;
 }
+
 .uglyFooterLogo {
   width           : 100%;
   background-color: #012429;
@@ -335,23 +392,18 @@ p.smaller {
 .uglyFooterLogo img.logoFooter {
   display: block;
   padding: 19px;
-  margin: auto;
+  margin : auto;
 }
 
 /** Mobile styles */
 @media only screen and (max-width: 800px) {
-  .content-container {
-    margin-left  : 0;
-    padding-left : 5%;
-    padding-right: 5%;
-    max-height   : 2000px;
-    margin-bottom: 40px;
-  }
 
   form {
-    width  : auto;
-    display: grid;
-
+    .scalable(width, 300, 1050);
+    .scalable(margin-top, 24, 37);
+    padding: 32px;
+    display  : flex;
+    flex-direction: column;
   }
 
   form input {
@@ -359,44 +411,9 @@ p.smaller {
   }
 
   form button {
+    margin-top: 16px;
     margin-left : 0;
     margin-right: 0;
-  }
-
-
-  .jacketPart {
-    height: 500px;
-  }
-
-  .jacketText {
-    margin-top: 35px;
-    max-width : 800px;
-  }
-
-  .jacketText h1 {
-    width: 70%;
-  }
-
-  .jacketText p {
-    width: 60%;
-  }
-
-  .illustrationJacket {
-    display: none;
-  }
-
-  .illustrationJacketMobile {
-    display : block;
-    top     : 40px;
-    position: absolute;
-    right   : 0;
-    width   : 40%;
-  }
-
-  .illustrationJacketMobile img {
-    width   : 100%;
-    right   : 0;
-    position: relative;
   }
 
   .arrowPart {
@@ -426,10 +443,6 @@ p.smaller {
 
   .facesText p {
     font-size: 18px;
-  }
-
-  .weirdPart {
-    display: none;
   }
 
   .actualContentPart {
@@ -468,7 +481,7 @@ p.smaller {
 
   h1 {
     font-size  : 32px;
-    line-height: 32px;
+    line-height: 42px;
     text-align : left;
   }
 
@@ -489,18 +502,6 @@ p.smaller {
 }
 
 @media only screen and (max-width: 1131px) and (min-width: 600px) {
-  .content-container {
-    margin-left: 5%;
-  }
-
-  .jacketPart {
-    height: 450px;
-  }
-
-  .illustrationJacket {
-    top  : 50px;
-    right: -150px;
-  }
 
   .facesText {
     width: 90%;
@@ -508,18 +509,6 @@ p.smaller {
 }
 
 @media only screen and (max-width: 1181px) and (min-width: 1130px) {
-  .content-container {
-    margin-left: 5%;
-  }
-
-  .jacketPart {
-    height: 450px;
-  }
-
-  .illustrationJacket {
-    top  : 50px;
-    right: -50px;
-  }
 
   .facesText {
     width: 90%;
@@ -527,33 +516,8 @@ p.smaller {
 }
 
 @media only screen and (max-width: 1317px) and (min-width: 1180px) {
-  .content-container {
-    margin-left: 5%;
-  }
-
-  .jacketPart {
-    height: 500px;
-  }
 
   .facesText {
     width: 80%;
-  }
-}
-
-@media only screen and (max-width: 1434px) and (min-width: 1316px) {
-  .content-container {
-    margin-left: 10%;
-    margin-top : 20px;
-  }
-
-  .jacketPart {
-    height: 500px;
-  }
-}
-
-@media only screen and (max-width: 3000px) and (min-width: 1669px) {
-  .illustrationJacket {
-    top  : -20px;
-    right: 2px;
   }
 }
