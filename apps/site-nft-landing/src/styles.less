@@ -1,3 +1,8 @@
+@desktop   :~"only screen and (min-width: 1185px) and (max-width: 1920px)";
+@mobile    :~"only screen and (max-width: 800px)";
+@big-size  : 1440;
+@small-size: 375;
+
 * {
   margin : 0;
   padding: 0;
@@ -29,6 +34,10 @@ h2 {
   text-align   : center;
   margin-bottom: 20px;
   line-height  : 64px;
+
+  @media @mobile {
+      line-height: 36px;
+  }
 }
 
 h3 {
@@ -41,6 +50,11 @@ h4 {
   font-size    : 28px;
   text-align   : center;
   margin-bottom: 40px;
+
+  @media @mobile {
+    font-size : 20px;
+    text-align: left;
+  }
 }
 
 p {
@@ -104,11 +118,6 @@ button:hover {
   cursor          : pointer;
 }
 
-@desktop   : ~"only screen and (min-width: 1185px) and (max-width: 1920px)";
-@mobile   : ~"only screen and (max-width: 800px)";
-@big-size  : 1440;
-@small-size: 375;
-
 /** linear interpolate value from small to big as screen goes from small-size to big-size */
 .scalable(@property, @small, @big) {
   @{property}: clamp(unit(@small, px),
@@ -149,18 +158,19 @@ button:hover {
 
 .content-container {
   .scalable(margin-left, 15, 130);
-  z-index    : 100;
   padding-top: 0;
+  overflow: hidden;
 }
 
 .jacketPart {
   position: relative;
+  .scalable(padding-bottom, 0, 118);
 }
 
 .jacketText {
   .scalable(padding-top, 48, 128);
   max-width: 800px;
-  width: 75%;
+  width    : 75%;
 
   >p {
     .scalable(width, 343, 570);
@@ -171,7 +181,7 @@ button:hover {
 
   >h1 {
     :first-child {
-    @media @desktop {
+      @media @desktop {
         display: block;
       }
     }
@@ -179,10 +189,11 @@ button:hover {
 }
 
 .illustrationJacket {
-  z-index : 100;
+  z-index: 100;
   position: absolute;
   .scalable(width, 197, 532);
   .scalable(right, -72, 0);
+  overflow: hidden;
 }
 
 .illustrationJacket img {
@@ -191,7 +202,6 @@ button:hover {
 
 .arrowPart {
   text-align: center;
-  .scalable(margin-top, 0, 118);
 }
 
 .facesPart {
@@ -199,9 +209,9 @@ button:hover {
   display   : flex;
 
   @media @mobile {
-    margin-top: 48px;
+    margin-top    : 48px;
     flex-direction: column;
-    margin-right: 16px;
+    margin-right  : 16px;
   }
 }
 
@@ -230,7 +240,7 @@ p.smaller {
   font-size  : 16px;
   line-height: 24px;
   color      : #6F6571;
-  margin-top : 24px;
+  .scalable(margin-top, 16, 24);
 }
 
 .facesText .logoText {
@@ -253,139 +263,164 @@ p.smaller {
 }
 
 .weirdPart {
-  margin-top      : 96px;
+  .scalable(margin-top, 36, 96);
   height          : 450px;
   background-image: linear-gradient(transparent 28%, #D9E6E2 0%);
   text-align      : center;
-}
 
-.weirdPart .card {
-  text-align             : center;
-  width                  : 30%;
-  max-width              : 370px;
-  min-width              : 270px;
-  height                 : 368px;
-  border-radius          : 25px;
-  display                : inline-table;
-  -webkit-transition     : .5s ease-out;
-  -moz-transition        : .5s ease-out;
-  -o-transition          : .5s ease-out;
-  transition             : .5s ease-out;
-  background             : linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
-  backdrop-filter        : blur(80px);
-  -webkit-backdrop-filter: blur(80px);
-}
+  .cardsContainer {
+    display        : flex;
+    .scalable(margin-left, 24, 135);
+    .scalable(margin-right, 24, 135);
+    justify-content: space-between;
+    overflow-x: auto;
+  }
 
-.weirdPart .card p {
-  margin-top  : 16px;
-  margin-left : 15%;
-  margin-right: 15%;
-}
+  .card {
+    text-align             : center;
+    width                  : 30%;
+    max-width              : 370px;
+    min-width              : 270px;
+    height                 : 368px;
+    border-radius          : 25px;
+    display                : inline-table;
+    -webkit-transition     : .5s ease-out;
+    -moz-transition        : .5s ease-out;
+    -o-transition          : .5s ease-out;
+    transition             : .5s ease-out;
+    background             : linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
+    backdrop-filter        : blur(80px);
+    -webkit-backdrop-filter: blur(80px);
 
-.weirdPart .cardsContainer {
-  display        : flex;
-  padding-left   : .scalable(padding-left, 24, 135);
-  padding-left   : .scalable(padding-right, 24, 135);
-  justify-content: space-between;
-  overflow-x : scroll;
-}
-
-.weirdPart .card:nth-child(2) {
-  margin-left : 30px;
-  margin-right: 30px;
-}
-
-.weirdPart .card h4 {
-  width : 70%;
-  margin: auto;
-}
-
-.weirdPart .card:hover {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2)), linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
-  filter    : drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.02)) drop-shadow(0px 64.8148px 46.8519px rgba(0, 0, 0, 0.0151852)) drop-shadow(0px 38.5185px 25.4815px rgba(0, 0, 0, 0.0121481)) drop-shadow(0px 20px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 8.14815px 6.51852px rgba(0, 0, 0, 0.00785185)) drop-shadow(0px 1.85185px 3.14815px rgba(0, 0, 0, 0.00481481));
-
-}
-
-.weirdPart .card img {
-  margin-top   : 65px;
-  margin-bottom: 30px;
+    p {
+      margin-top  : 16px;
+      margin-left : 15%;
+      margin-right: 15%;
+    }
+    h4 {
+      width : 70%;
+      margin: auto;
+      text-align: center;
+      font-size: 32px;
+    }
+    img {
+      margin-top   : 65px;
+      margin-bottom: 30px;
+    }
+    &:nth-child(2) {
+      margin-left : 30px;
+      margin-right: 30px;
+    }
+    &:hover {
+      background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2)), linear-gradient(132.82deg, rgba(255, 255, 255, 0.2) 25.95%, rgba(255, 255, 255, 0) 135.13%);
+      filter    : drop-shadow(0px 100px 80px rgba(0, 0, 0, 0.02)) drop-shadow(0px 64.8148px 46.8519px rgba(0, 0, 0, 0.0151852)) drop-shadow(0px 38.5185px 25.4815px rgba(0, 0, 0, 0.0121481)) drop-shadow(0px 20px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 8.14815px 6.51852px rgba(0, 0, 0, 0.00785185)) drop-shadow(0px 1.85185px 3.14815px rgba(0, 0, 0, 0.00481481));
+    }
+  }
 }
 
 .actualContentPart {
-  padding-top: 100px;
-}
+  .scalable(width, 344, 770);
+  .scalable(padding-top, 64, 100);
+  margin-left: auto;
+  margin-right: auto;
 
-.actualContentPart h4 {
-  max-width  : 770px;
-  margin     : auto;
-  margin-top : 48px;
-  line-height: 32px;
-}
+  h4 {
+    margin     : auto;
+    .scalable(margin-top, 32, 48);
+    line-height: 32px;
+  }
 
-.actualContentPart p {
-  max-width  : 770px;
-  text-align : center;
-  margin     : auto;
-  margin-top : 48px;
-  line-height: 24px;
-  font-size  : 16px;
+  p {
+    text-align : center;
+    margin     : auto;
+    .scalable(margin-top, 26, 48);
+    line-height: 24px;
+    font-size  : 16px;
+    @media @mobile {
+      text-align: left;
+    }
+  }
 }
 
 .founderPart {
-  margin-top: 130px;
-}
-
-.founderContainer {
   margin          : auto;
+  .scalable(margin-top, 62, 130);
+  .scalable(padding, 16, 48);
+  .scalable(padding-top, 32, 48);
+
   border-radius   : 20px;
-  margin-left     : 116px;
-  margin-right    : 116px;
+  margin-left     : auto;
+  margin-right    : auto;
   background-color: white;
-  padding         : 48px;
   display         : flex;
+  flex-direction: row;
+
+  @media @mobile {
+    flex-direction: column;
+  }
+
+  .founderText {
+    margin-left: 48px;
+
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
 }
 
-.founderPart .founderText {
-  margin-left: 48px;
+.founderImg {
+  .profileImage {
+    .scalable(width, 350, 540);
+    @media @mobile {
+      width: 100%;
+    }
+  }
+  h3 {
+    margin-top: 28px;
+    line-height: 28px;
+  }
+  p {
+    margin-top: 16px;
+  }
 }
-
-.founderPart .founderText :first-child {
-  margin-top: 0px;
-}
-
-.founderImg h3 {
-  margin-top: 28px;
-}
-
-.founderImg p {
-  margin-top: 16px;
-}
-
 .uglyFooterText {
-  padding-left    : 135px;
-  min-height      : 300px;
-  width           : 100%;
+  .scalable(padding-left, 16, 135);
+  .scalable(padding-right, 16, 135);
+  .scalable(padding-bottom, 32, 64);
   background-color: #31484B;
-}
 
-.uglyFooterText h2 {
-  color      : white;
-  padding-top: 48px;
-  text-align : left;
+  h2 {
+    width: 80%;
+    color      : white;
+    padding-top: 48px;
+    text-align : left;
+  }
 }
 
 .footerForm {
   display: flex;
-}
+  @media @mobile {
+    flex-direction: column;
 
-.footerForm p {
-  color      : white;
-  line-height: 32px;
-  width      : 40%;
+    input {
+      width: unset;
+      margin-top: 48px;
+    }
+    button {
+      width: unset;
+      margin-left: 0px;
+      margin-top: 24px;
+    }
+  }
+
+  p {
+    color      : white;
+    line-height: 32px;
+    .scalable(width, 343, 570);
+  }
 }
 
 .uglyFooterLogo {
-  width           : 100%;
   background-color: #012429;
 }
 
@@ -401,8 +436,8 @@ p.smaller {
   form {
     .scalable(width, 300, 1050);
     .scalable(margin-top, 24, 37);
-    padding: 32px;
-    display  : flex;
+    padding       : 32px;
+    display       : flex;
     flex-direction: column;
   }
 
@@ -411,7 +446,7 @@ p.smaller {
   }
 
   form button {
-    margin-top: 16px;
+    margin-top  : 16px;
     margin-left : 0;
     margin-right: 0;
   }
@@ -445,28 +480,23 @@ p.smaller {
     font-size: 18px;
   }
 
-  .actualContentPart {
-    padding-left : 5%;
-    padding-right: 5%;
-    text-align   : right;
-  }
+  // .actualContentPart {
+  //   padding-left : 5%;
+  //   padding-right: 5%;
+  //   text-align   : right;
+  // }
 
-  .actualContentPart h2 {
-    line-height: 34px;
-  }
+  // .actualContentPart h2 {
+  //   line-height: 34px;
+  // }
 
-  .actualContentPart p {
-    text-align: left;
-  }
+  // .actualContentPart p {
+  //   text-align: left;
+  // }
 
   .founderContainer {
     padding   : 16px;
     min-height: auto;
-  }
-
-  .founderImage {
-    width        : 100%;
-    margin-bottom: 30px;
   }
 
   .founderPart {
@@ -492,11 +522,6 @@ p.smaller {
 
   h3 {
     font-size : 28px;
-    text-align: left;
-  }
-
-  h4 {
-    font-size : 20px;
     text-align: left;
   }
 }
