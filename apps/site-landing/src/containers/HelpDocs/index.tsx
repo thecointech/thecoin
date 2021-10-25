@@ -23,9 +23,10 @@ const HelpDocsInternal = (props: RouteComponentProps) => {
     return new RUrl(match.url, encodeURIComponent(sub));
   }
 
+  const { locale } = useSelector(selectLocale);
   useEffect(() => {
-    actions.fetchAllDocs();
-  }, []);
+    actions.fetchAllDocs(locale);
+  }, [locale]);
 
   const categories = buildCategories(docs);
   return (

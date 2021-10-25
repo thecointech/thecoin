@@ -30,9 +30,13 @@ import {configureLandingStore, history } from './reducers';
 // Import i18n messages
 import { translations } from './translations';
 import { initTracking } from './utils/reactga';
-
 initTracking();
 
+// Allow Preview docs on testing site.
+import { injectPrismicPreviewScript } from './components/Prismic/inject';
+if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodtest') {
+  injectPrismicPreviewScript();
+}
 
 // Create redux store with history
 const store = configureLandingStore();

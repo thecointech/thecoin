@@ -1,4 +1,4 @@
-import type {Document} from 'prismic-javascript/d.ts/documents'
+import type { Document } from '@prismicio/client/types/documents'
 
 export type RenderableType = {
   type: string;
@@ -19,7 +19,7 @@ export type ImageObj = {
   alt: string
   copyright: string
   dimensions: { width: number, height: number }
-  ​​​​​url: string
+  url: string
 }
 
 export type AlternateLang = {
@@ -31,11 +31,11 @@ export type AlternateLang = {
 export type ArticleResult = {
   thumbnail: ImageObj,
   image_before_title: ImageObj,
-  title: RenderableType[]|null;
+  title: RenderableType[] | null;
   publication_date: string;
-  short_content: RenderableType[]|null;
-  content: RenderableType[]|null;
-  author: RenderableType[]|null;
+  short_content: RenderableType[] | null;
+  content: RenderableType[] | null;
+  author: RenderableType[] | null;
   categories: [],
   fr_categories: [],
   id: string
@@ -59,5 +59,5 @@ export const initialState = {
 export type PrismicState = typeof initialState;
 
 export interface IActions {
-  fetchAllDocs() : Iterator<any>;
+  fetchAllDocs(locale: string): Iterator<any>;
 }
