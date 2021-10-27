@@ -43,6 +43,7 @@
     "_deploy:app:gcloud": "lerna run deploy --stream --concurrency 1",
     "prod:test:bootstrap": "cross-env CONFIG_NAME=prodtest node ./tools/bootstrapIdx.js",
     "prod:test:deposit": "cross-env CONFIG_NAME=prodtest ts-node --project ./tsconfig.dev.json ./tools/fakeDeposit",
+    "prod:bootstrapIdx": "cross-env CONFIG_NAME=prod ts-node --skip-project ./tools/bootstrapIdx.ts",
     "clean": "run-p clean:src clean:apis",
     "clean:src": "lerna run clean",
     "clean:ceramic": "rimraf ~/.ceramic && ~/.jsipfs",
