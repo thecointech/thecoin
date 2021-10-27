@@ -80,7 +80,7 @@ export const Wealthier = () => {
                 <FormattedMessage {...translations.startnowDescription} />
               </p>
 
-              <Link to="/compare"><FormattedMessage {...translations.startnowLink} /></Link>
+              <Link to="/blog/start-now"><FormattedMessage {...translations.startnowLink} /></Link>
           </Grid.Column>
 
           <Grid.Column columns={3}>

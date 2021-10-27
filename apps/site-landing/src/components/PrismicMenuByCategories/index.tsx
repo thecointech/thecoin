@@ -2,42 +2,41 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { List, Rail, SemanticFLOATS } from "semantic-ui-react";
 import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
-import { Dictionary } from "lodash";
-import { ArticleDocument, FAQDocument } from "components/Prismic/types";
 
 type Props = {
-    categories: Dictionary<ArticleDocument[]>|Dictionary<FAQDocument[]>,
-    idForMenu: string,
-    railPosition: SemanticFLOATS,
-    pathBeforeTheId: string
-  }
-  
-function displayEntry(index: number, name: string, pathBeforeTheId: string ){
-    return <List.Item key={index}>
-                <Link to={pathBeforeTheId+((name)?.split("-"))[0].replace(/ /g, '')}>{((name.split("-"))[1])}</Link>
-            </List.Item>
+  categories: string[],
+  idForMenu: string,
+  railPosition: SemanticFLOATS,
+  pathBeforeTheId: string
 }
 
-export const CategoryMenu = ({ categories,idForMenu,railPosition,pathBeforeTheId }: Props ) => {
-    return (
-        <>
-            <GreaterThanMobileSegment>
-                <Rail position={railPosition}>
-                    <div id={idForMenu}>
-                        <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
-                            { Object.entries(categories).map((entry, index) => ( displayEntry(index, entry[0], pathBeforeTheId ))) }
-                        </List>
-                    </div>
-                </Rail>
-            </GreaterThanMobileSegment>
+function displayEntry(index: number, name: string, pathBeforeTheId: string) {
+  return <List.Item key={index}>
+    <Link to={pathBeforeTheId + name}>{name}</Link>
+  </List.Item>
+}
 
-            <MobileSegment>
-                <div id={idForMenu}>
-                    <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
-                        { Object.entries(categories).map((entry, index) => ( displayEntry(index, entry[0], pathBeforeTheId ))) }
-                    </List>
-                </div>
-            </MobileSegment>
-        </>
-    )
+export const CategoryMenu = ({ categories, idForMenu, railPosition, pathBeforeTheId }: Props) => {
+  categories.sort();
+  return (
+    <>
+      <GreaterThanMobileSegment>
+        <Rail position={railPosition}>
+          <div id={idForMenu}>
+            <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
+              {categories.map((entry, index) => (displayEntry(index, entry, pathBeforeTheId)))}
+            </List>
+          </div>
+        </Rail>
+      </GreaterThanMobileSegment>
+
+      <MobileSegment>
+        <div id={idForMenu}>
+          <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
+            {categories.map((entry, index) => (displayEntry(index, entry, pathBeforeTheId)))}
+          </List>
+        </div>
+      </MobileSegment>
+    </>
+  )
 }

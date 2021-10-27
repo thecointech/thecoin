@@ -21,8 +21,8 @@ export const Routes = () =>
     <Route path="/healthier" component={Healthier} />
     <Route path="/wedomore" component={WeDoMore} />
     <Route path="/compare" component={Compare} />
-    <Route path="/FAQ" component={HelpDocs} />
     <Route path="/blog" component={Blog} />
+    <Route path="/faq/:category?" component={HelpDocs} />
     <Route path="/tos" component={TOS} />
     <Route path="/privacy" component={Privacy} />
     <Route component={NotFoundPage} />
