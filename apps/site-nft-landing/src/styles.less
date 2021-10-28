@@ -62,17 +62,6 @@ p {
   font-size: 20px;
 }
 
-form {
-  background-color: white;
-  border-radius   : 10px;
-  padding         : 32px;
-  margin-top      : 37px;
-  width           : 600px;
-  position        : relative;
-  left            : -15px;
-  text-align      : center;
-}
-
 input {
   width             : 320px;
   background        : #fff;
@@ -190,6 +179,39 @@ span.avoidwrap { display:inline-block; }
     }
   }
 }
+
+.jacketForm {
+  .scalable(margin-right, 13, 135);
+  background-color: white;
+  border-radius   : 10px;
+  padding         : 32px;
+  margin-top      : 37px;
+  width           : 600px;
+  position        : relative;
+  left            : -15px;
+  text-align      : center;
+
+  @media @mobile {
+    .scalable(width, 300, 1050);
+    .scalable(margin-top, 24, 37);
+    padding       : 32px;
+    display       : flex;
+    flex-direction: column;
+  }
+}
+
+.prefinery-form-embed {
+  // Set height explicitly to remove FOUC
+  height: 120px;
+
+  // force embeded iframe to a specific size
+  iframe {
+    height: 120px !important;
+  }
+}
+
+
+
 
 .illustrationJacket {
   z-index: 100;
@@ -436,24 +458,6 @@ p.smaller {
 
 /** Mobile styles */
 @media only screen and (max-width: 800px) {
-
-  form {
-    .scalable(width, 300, 1050);
-    .scalable(margin-top, 24, 37);
-    padding       : 32px;
-    display       : flex;
-    flex-direction: column;
-  }
-
-  form input {
-    width: auto;
-  }
-
-  form button {
-    margin-top  : 16px;
-    margin-left : 0;
-    margin-right: 0;
-  }
 
   .arrowPart {
     display: none;
