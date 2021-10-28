@@ -1,5 +1,6 @@
 @desktop   :~"only screen and (min-width: 1185px) and (max-width: 1920px)";
 @mobile    :~"only screen and (max-width: 800px)";
+@small-mobile    :~"only screen and (max-width: 515px)";
 @big-size  : 1440;
 @small-size: 375;
 
@@ -118,7 +119,17 @@ button:hover {
   cursor          : pointer;
 }
 
+span.avoidwrap { display:inline-block; }
+
 /** linear interpolate value from small to big as screen goes from small-size to big-size */
+.scalable(@property, @small, @big, @s-size, @b-size) {
+  @{property}: clamp(unit(@small, px),
+      calc(unit(@small, px) + (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
+      unit(@big, px),
+    );
+}
+
+
 .scalable(@property, @small, @big) {
   @{property}: clamp(unit(@small, px),
       calc(unit(@small, px) + (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
@@ -133,19 +144,6 @@ button:hover {
     );
 }
 
-.scalable-unit(@property, @small, @big, @units) {
-  @{property}: clamp(~"@{small}@{units}",
-    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
-    ~"@{big}@{units}"
-  );
-}
-
-.reverse-scalable-unit(@property, @small, @big, @units) {
-  @{property}: clamp(~"@{big}@{units}",
-    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - ~"@{small-size}@{units}") / (@big-size - @small-size)),
-    ~"@{small}@{units}"
-  );
-}
 
 .logo {
   background           : url("./images/Logo_green.svg") no-repeat;
@@ -177,6 +175,11 @@ button:hover {
     .reverse-scalable(margin-top, 52, 27);
     line-height: 32px;
     font-size  : 20px;
+    >span {
+      @media @small-mobile {
+        display: block;
+      }
+    }
   }
 
   >h1 {
@@ -193,6 +196,7 @@ button:hover {
   position: absolute;
   .scalable(width, 197, 532);
   .scalable(right, -72, 0);
+  // .scalable(top, -35, 0);
   overflow: hidden;
 }
 
