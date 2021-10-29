@@ -16,10 +16,18 @@ if (process.env.CONFIG_NAME !== 'devlive') {
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
 
+const isPolygon = process.env.npm_lifecycle_script?.endsWith("polygon");
+const deployType = isPolygon ? "polygon" : "ethereum";
+
 module.exports = {
   // We output into our src directory so we can directly import
   // the JSON artifacts into our TS code.
-  contracts_build_directory: path.join(__dirname, "src", "contracts"),
+  contracts_build_directory: path.join(__dirname, "src", "contracts", deployType),
+
+  /**
+  * contracts_directory tells Truffle where the contracts you want to compile are located
+  */
+  contracts_directory: path.join(__dirname, 'contracts', deployType),
 
   networks: {
     // dev:live environment
@@ -29,11 +37,24 @@ module.exports = {
       network_id: "*",
     },
     // prod:test environment
-    prodtest: {
+    polygon: {
       provider: () => {
         return new HDWalletProvider(
           testAccounts,
-          `https://${process.env.DEPLOY_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+          `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+          0,
+          numBuiltIn
+        );
+      },
+      network_id: '*', // eslint-disable-line camelcase
+      confirmations: 2,
+      skipDryRun: true
+    },
+    ethereum: {
+      provider: () => {
+        return new HDWalletProvider(
+          testAccounts,
+          `https://${process.env.DEPLOY_ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
           0,
           numBuiltIn
         );
@@ -61,6 +82,9 @@ module.exports = {
         evmVersion: "constantinople"
       }
     }
+  },
+  db: {
+    enabled: true
   }
 };
 
