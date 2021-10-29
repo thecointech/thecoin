@@ -34,7 +34,7 @@ initTracking();
 
 // Allow Preview docs on testing site.
 import { injectPrismicPreviewScript } from './components/Prismic/inject';
-if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodtest') {
+if (process.env.CONFIG_NAME === 'prodtest') {
   injectPrismicPreviewScript();
 }
 
