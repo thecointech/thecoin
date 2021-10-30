@@ -1,4 +1,4 @@
-export type { TheCoinNFT } from './types/TheCoinNFT';
+export type { TheGreenNFTL1  as TheGreenNFT } from './types/TheGreenNFTL1';
 export * from './connect';
 export * from './contract';
 export * from './ipfs';

@@ -5,7 +5,7 @@ import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 
 // Loads a compiled contract using OpenZeppelin test-environment
 contract.artifactsDir = "src/contracts";
-const nft: MintableContract = contract.fromArtifact('Mintable');
+const nft: MintableContract = contract.fromArtifact('TheGreenNFTL1');
 
 // Ethereum accounts used in these tests
 

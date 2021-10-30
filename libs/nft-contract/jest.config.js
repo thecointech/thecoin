@@ -1,5 +1,6 @@
 const defaults = require('../../jest.config');
 
 module.exports = {
-  ...defaults
+  ...defaults,
+  roots: ['./src', './contracts']
 };

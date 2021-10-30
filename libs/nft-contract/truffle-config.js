@@ -22,12 +22,12 @@ const deployType = isPolygon ? "polygon" : "ethereum";
 module.exports = {
   // We output into our src directory so we can directly import
   // the JSON artifacts into our TS code.
-  contracts_build_directory: path.join(__dirname, "src", "contracts", deployType),
+  contracts_build_directory: path.join(__dirname, "src", "contracts"),
 
   /**
   * contracts_directory tells Truffle where the contracts you want to compile are located
   */
-  contracts_directory: path.join(__dirname, 'contracts', deployType),
+  contracts_directory: path.join(__dirname, 'contracts'),
 
   networks: {
     // dev:live environment

@@ -3,14 +3,14 @@ import { MigrationStep } from './step';
 import { getSigner } from '@thecointech/signers';
 import { getTokenClaimCode } from '../src/tokenCodes';
 import { join } from 'path';
+import { getContract } from './deploy';
 
-const step: MigrationStep = (artifacts) =>
-  async (_, network, _accounts) => {
+const step: MigrationStep = () =>
+  async (deployer, network, _accounts) => {
     if (network === 'devlive' || network === 'prodtest') {
       const minter = await getSigner("NFTMinter");
       const minterAddress = await minter.getAddress();
-      const contract = artifacts.require("TheCoinNFT");
-      const nft = await contract.deployed();
+      const nft = await getContract(deployer, network);
       // Mint 10 NFT's from 10-20 and print out a claim code for each
       const ids = [0];
       for (let i = 0; i < 5; i++) {

@@ -25,7 +25,7 @@ contract Mintable is BaseData {
    /**
    * Mint a whole lotta tokens at once.  Cheaper than individual minting calls
    */
-  function bulkMinting(uint256[] calldata ids, uint16 year) external onlyRole(MINTER_ROLE) {
+  function _bulkMinting(uint256[] calldata ids, uint16 year) internal onlyRole(MINTER_ROLE) {
     for (uint i = 0; i < ids.length; i++) {
       require(ids[i] < tokenSupply, "Invalid ID supplied");
       // Create the token
@@ -41,7 +41,7 @@ contract Mintable is BaseData {
    * Update the metadata associated with a token.  A user will use this when signing an image
    * It is only legal to call this function once every 3 months.
    */
-  function claimToken(uint256 tokenId, address claimant, bytes calldata signature) external {
+  function _claimToken(uint256 tokenId, address claimant, bytes calldata signature) internal {
     // First, get the signer
     address signer = recoverClaimSigner(tokenId, signature);
     // Was a legitimate owner of this token?

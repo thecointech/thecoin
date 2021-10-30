@@ -11,10 +11,9 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "./IPFS.sol";
 import "./UpdateMeta.sol";
 import "./Mintable.sol";
-import "./BaseData.sol";
 
 
-contract TheCoinNFT is BaseData, Mintable, UpdateMeta, IPFSUriGenerator {
+contract TheCoinNFT is Mintable, UpdateMeta, IPFSUriGenerator {
   using ECDSA for bytes32;
 
   constructor(address minter)

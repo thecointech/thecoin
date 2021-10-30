@@ -66,7 +66,7 @@
     "@typechain/truffle-v5": "^5.0.0",
     "@types/bs58": "^4.0.1",
     "jest": "*",
-    "truffle": "^5.1.67",
+    "truffle": "^5.4.17",
     "typechain": "^5.1.2"
   },
   "dependenciesComments": {

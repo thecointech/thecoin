@@ -1,8 +1,8 @@
 import { ContractTransaction } from 'ethers';
 import { BigNumber, BigNumberish } from 'ethers';
-import type { TheCoinNFT } from '.';
+import type { TheGreenNFT } from '.';
 
-class MockNFT implements Pick<TheCoinNFT, "balanceOf"|"claimToken"> {
+class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];
 
   balanceOf(owner: string): Promise<BigNumber> {
@@ -20,11 +20,11 @@ class MockNFT implements Pick<TheCoinNFT, "balanceOf"|"claimToken"> {
   }
 }
 
-export function getContract(): TheCoinNFT {
-  return new MockNFT() as unknown as TheCoinNFT;
+export function getContract(): TheGreenNFT {
+  return new MockNFT() as unknown as TheGreenNFT;
 }
 
 
-export function connectNFT(): TheCoinNFT {
-  return new MockNFT() as unknown as TheCoinNFT;
+export function connectNFT(): TheGreenNFT {
+  return new MockNFT() as unknown as TheGreenNFT;
 }

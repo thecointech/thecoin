@@ -1,18 +1,12 @@
 import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { MigrationStep } from './step';
-import { getSigner } from '@thecointech/signers';
+import { getContract } from './deploy';
 
-const step: MigrationStep = (artifacts) =>
+const step: MigrationStep = () =>
   async (deployer, network, _accounts) => {
 
-    const nftContract = artifacts.require("TheCoinNFT");
-
-    // Create with minter assigned.
-    const minter = await getSigner('NFTMinter');
-    const mintAddress = await minter.getAddress();
-    // Deploy the NFT contract.  IGNORE the type that says this not a promise (it is);
-    await deployer.deploy(nftContract, mintAddress);
+    const nftContract = await getContract(deployer, network);
 
     // Serialize our contract addresses
     writeOutputFile('src', network, nftContract.address);
