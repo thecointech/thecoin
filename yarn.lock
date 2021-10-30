@@ -8587,10 +8587,25 @@
   resolved "https://registry.yarnpkg.com/@typechain/ethers-v5/-/ethers-v5-7.0.1.tgz#f9ae60ae5bd9e8ea8a996f66244147e8e74034ae"
   integrity sha512-mXEJ7LG0pOYO+MRPkHtbf30Ey9X2KAsU0wkeoVvjQIn7iAY6tB3k3s+82bbmJAUMyENbQ04RDOZit36CgSG6Gg==
 
+"@typechain/ethers-v5@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@typechain/ethers-v5/-/ethers-v5-8.0.0.tgz#1321a441d473b588826561daa9e57be889e67c93"
+  integrity sha512-i2H/G6YZs8fAxXwQ2jtkrsuH9mbZ6TqIzt0j208dX0rnDD66Dllk9lJcJpSuLYzTvf+o5tNe75si1dFLbjMmZQ==
+  dependencies:
+    lodash "^4.17.15"
+    ts-essentials "^7.0.1"
+
 "@typechain/truffle-v5@^5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@typechain/truffle-v5/-/truffle-v5-5.0.0.tgz#01ab526b3986e06f8f2720d4a88dd11b6d0fe11d"
   integrity sha512-iyXay2ImCB6ATNvkW5w6ojm0Si0kU4kb7g480O/PzSNOYO1b2MovZHrQbVS+KBMrRlcy7UaFTdrVPpg8j3vUZQ==
+
+"@typechain/truffle-v5@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@typechain/truffle-v5/-/truffle-v5-6.0.0.tgz#5d70fc6370269bf77bb43ff09a248f3cbf8da627"
+  integrity sha512-6tiBYdFv4AOf5NuqsIEkvA1LgIU+U4YoZLNkuk5O6tJNibum/6O4lBvPN3d2tWtfVUrkbFhr4lM+VbU8IUHO4w==
+  dependencies:
+    lodash "^4.17.15"
 
 "@types/abstract-leveldown@^5.0.1":
   version "5.0.1"
@@ -36664,6 +36679,22 @@ typechain@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/typechain/-/typechain-5.1.2.tgz#c8784d6155a8e69397ca47f438a3b4fb2aa939da"
   integrity sha512-FuaCxJd7BD3ZAjVJoO+D6TnqKey3pQdsqOBsC83RKYWKli5BDhdf0TPkwfyjt20TUlZvOzJifz+lDwXsRkiSKA==
+  dependencies:
+    "@types/prettier" "^2.1.1"
+    command-line-args "^4.0.7"
+    debug "^4.1.1"
+    fs-extra "^7.0.0"
+    glob "^7.1.6"
+    js-sha3 "^0.8.0"
+    lodash "^4.17.15"
+    mkdirp "^1.0.4"
+    prettier "^2.1.2"
+    ts-essentials "^7.0.1"
+
+typechain@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/typechain/-/typechain-6.0.2.tgz#0a1d6328aa934dfd66c8941cd94c1d3491cc34f0"
+  integrity sha512-fphYQ2+r5z38eq02qr4KjgU9/Xdda8Cj+eV2QHSRXhDPyhEVv+ln9123iGjjDLEhGyROb3DQkbvjm3Dl0GtUeQ==
   dependencies:
     "@types/prettier" "^2.1.1"
     command-line-args "^4.0.7"
