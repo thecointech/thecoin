@@ -1,11 +1,11 @@
 import { accounts, contract, privateKeys } from '@openzeppelin/test-environment';
 import { Wallet } from 'ethers';
-import { MintableContract, MintableInstance } from '../migrations/types';
+import { TheGreenNFTL2Contract, TheGreenNFTL2Instance } from '../migrations/types';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 
 // Loads a compiled contract using OpenZeppelin test-environment
 contract.artifactsDir = "src/contracts";
-const nft: MintableContract = contract.fromArtifact('TheGreenNFTL1');
+const nft: TheGreenNFTL2Contract = contract.fromArtifact('TheGreenNFTL2');
 
 // Ethereum accounts used in these tests
 
@@ -45,5 +45,5 @@ it("Can claim tokens", async () => {
   expect(owner).toEqual(users[1]);
 })
 
-const mintTokens = (nft: MintableInstance, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022, {from: minter});
-const getContract = () => nft.new(minter, {from: owner});
+const mintTokens = (nft: TheGreenNFTL2Instance, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022, {from: minter});
+const getContract = () => nft.new(minter, owner, {from: owner});

@@ -13,7 +13,7 @@ import "./UpdateMeta.sol";
 import "./Mintable.sol";
 
 
-contract TheCoinNFT is Mintable, UpdateMeta, IPFSUriGenerator {
+contract TheGreenNFT is Mintable, UpdateMeta, IPFSUriGenerator {
   using ECDSA for bytes32;
 
   constructor(address minter)

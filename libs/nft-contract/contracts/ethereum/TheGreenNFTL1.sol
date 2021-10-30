@@ -1,13 +1,13 @@
 /// @title IPFS Uri Generator
 /// @author Stephen Taylor
 /// @notice Simple utils class handles generating a URI for IPFS content from our raw storage
-/// @dev This class is imported by our NFT to simplify the testing etc. 
+/// @dev This class is imported by our NFT to simplify the testing etc.
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
 import "./IMintableERC721.sol";
-import "../TheCoinNFT.sol";
+import "../TheGreenNFT.sol";
 import "../IMintable.sol";
 
 //
@@ -15,7 +15,7 @@ import "../IMintable.sol";
 // Allows L1 <=> L2 compatibility
 // Src: https://github.com/maticnetwork/pos-portal/blob/master/flat/ChildMintableERC721.sol
 //
-contract TheGreenNFTL1 is TheCoinNFT, IMintableERC721, IMintable {
+contract TheGreenNFTL1 is TheGreenNFT, IMintableERC721, IMintable {
 
   // Depositor is the child chain manager
   bytes32 public constant PREDICATE_ROLE = keccak256("PREDICATE_ROLE");
@@ -29,11 +29,11 @@ contract TheGreenNFTL1 is TheCoinNFT, IMintableERC721, IMintable {
   constructor(
       address minter,
       address predicate
-  ) TheCoinNFT(minter) {
+  ) TheGreenNFT(minter) {
     _setupRole(PREDICATE_ROLE, predicate);
   }
 
-  // We can either mint on 
+  // We can either mint on
 
     // We cannot mint raw functions without the metadata
     function mint(address /*user*/, uint256 /*tokenId*/) external pure override {
@@ -42,7 +42,7 @@ contract TheGreenNFTL1 is TheCoinNFT, IMintableERC721, IMintable {
 
     /**
         * @dev See {IMintableERC721-mint}.
-        * 
+        *
         * If you're attempting to bring metadata associated with token
         * from L2 to L1, you must implement this method
         */

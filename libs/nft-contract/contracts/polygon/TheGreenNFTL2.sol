@@ -1,12 +1,12 @@
 /// @title IPFS Uri Generator
 /// @author Stephen Taylor
 /// @notice Simple utils class handles generating a URI for IPFS content from our raw storage
-/// @dev This class is imported by our NFT to simplify the testing etc. 
+/// @dev This class is imported by our NFT to simplify the testing etc.
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
-import "../TheCoinNFT.sol";
+import "../TheGreenNFT.sol";
 import "../IMintable.sol";
 
 //
@@ -14,7 +14,7 @@ import "../IMintable.sol";
 // Allows L1 <=> L2 compatibility
 // Src: https://github.com/maticnetwork/pos-portal/blob/master/flat/ChildMintableERC721.sol
 //
-contract TheGreenNFTL2 is TheCoinNFT, IMintable {
+contract TheGreenNFTL2 is TheGreenNFT, IMintable {
 
   // Depositor is the child chain manager
   bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE");
@@ -33,10 +33,10 @@ contract TheGreenNFTL2 is TheCoinNFT, IMintable {
   constructor(
     address minter,
     address depositor
-  ) TheCoinNFT(minter) {
+  ) TheGreenNFT(minter) {
     _setupRole(DEPOSITOR_ROLE, depositor);
   }
-  
+
   /**
       * @notice called when token is deposited on root chain
       * @dev Should be callable only by ChildChainManager
