@@ -1,10 +1,10 @@
 import { Contract } from '@ethersproject/contracts';
-import { TheCoinNFT } from './types/TheCoinNFT';
+import { TheGreenNFT } from '.';
 import { getProvider } from './provider';
-import TheCoinNFTSpec from './contracts/TheCoinNFT.json';
+import TheGreenNFTSpec from './contracts/TheGreenNFTL2.json';
 
 const getAbi = () => {
-  return TheCoinNFTSpec.abi;
+  return TheGreenNFTSpec.abi;
 }
 
 const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
@@ -25,13 +25,13 @@ const buildContract = () =>
     getContractAddress(),
     getAbi(),
     getProvider()
-  ) as TheCoinNFT
+  ) as TheGreenNFT
 
 declare module globalThis {
-  let __contractNFT: TheCoinNFT | undefined;
+  let __contractNFT: TheGreenNFT | undefined;
 }
 
-export function getContract(): TheCoinNFT {
+export function getContract(): TheGreenNFT {
   globalThis.__contractNFT = globalThis.__contractNFT ?? buildContract();
   return globalThis.__contractNFT!;
 }

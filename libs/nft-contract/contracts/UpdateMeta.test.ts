@@ -1,11 +1,11 @@
 import { accounts, privateKeys, contract } from '@openzeppelin/test-environment';
 import { Wallet } from 'ethers';
-import { TheCoinNFTContract } from '../migrations/types';
+import { TheGreenNFTL2Contract } from '../migrations/types';
 import { signGasslessUpdate, splitIpfsUri } from '../src';
 
 // Loads a compiled contract using OpenZeppelin test-environment
 contract.artifactsDir = "src/contracts";
-const factory: TheCoinNFTContract = contract.fromArtifact('TheCoinNFT');
+const factory: TheGreenNFTL2Contract = contract.fromArtifact('TheGreenNFTL2');
 
 // Ethereum accounts used in these tests
 const [
@@ -54,7 +54,7 @@ it('Can reset token', async () => {
 })
 
 const init = async () => {
-  const nft = await factory.new(minter, {from: owner});
+  const nft = await factory.new(minter, owner, {from: owner});
   await nft.bulkMinting([id], 2022, {from: minter});
   await nft.transferFrom(minter, user, id, {from: minter})
   return nft;

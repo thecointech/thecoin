@@ -1,11 +1,11 @@
 import { Network } from '@ethersproject/networks'
 import { Signer } from "@ethersproject/abstract-signer"
 import { Wallet } from "@ethersproject/wallet"
-import type { TheCoinNFT } from "./types/TheCoinNFT";
+import type { TheGreenNFT } from ".";
 import { getContract } from "./contract";
 import { log } from '@thecointech/logging';
 
-export function connectNFT(signer: Signer, onFailure?: (err: Error) => void): TheCoinNFT {
+export function connectNFT(signer: Signer, onFailure?: (err: Error) => void): TheGreenNFT {
   const contract = getContract();
   if (signer instanceof Wallet) {
     // Ensure wallet is connected to the same network as the contract
