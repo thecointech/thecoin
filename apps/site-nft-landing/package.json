@@ -10,7 +10,8 @@
     "pre_build": "rimraf ./build",
     "_build": "webpack --mode production",
     "pre_deploy": "yarn _build",
-    "_deploy": "ts-node --skip-project deploy"
+    "_deploy": "ts-node --skip-project deploy",
+    "dev": "yarn webpack serve --mode=development"
   },
   "devDependencies": {
     "mini-css-extract-plugin": "^2.4.2"

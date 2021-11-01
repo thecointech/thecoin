@@ -21,6 +21,14 @@ module.exports = {
         use: 'html-loader',
       },
       {
+        test: /\.less$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "less-loader",
+        ],
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [{
           loader: 'image-webpack-loader',
