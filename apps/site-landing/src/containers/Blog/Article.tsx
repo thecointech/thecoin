@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.module.less";
 import { RichText, RichTextBlock } from 'prismic-reactjs';
 import { useSelector } from "react-redux";
-import { Prismic, AlternateLang, ArticleDocument } from "components/Prismic";
+import { Prismic } from "components/Prismic";
 import { Header, Icon } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
-import { useHistory } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { DateTime } from "luxon";
 import { defineMessages, FormattedMessage } from "react-intl";
+import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 
 const translations = defineMessages({
   backLink: {
@@ -16,37 +17,33 @@ const translations = defineMessages({
   }
 });
 
-function getTranslatedArticle(filtered: ArticleDocument[], docs: ArticleDocument[]): (ArticleDocument[]) {
-  // -- Look for translated version --
-  const { locale } = useSelector(selectLocale);
-  let translation = filtered;
-  for (let i = 0; i < filtered.length; i++) {
-    const altLang = filtered[i].alternate_languages;
-    for (let i = 0; i < altLang.length; i++) {
-      const altLangLine = (altLang[i] as unknown as AlternateLang);
-      if (((altLangLine.lang)?.split("-"))[0] === locale) {
-        translation = (docs.filter(entry => entry.id == altLangLine.id))
-      }
-    }
-  }
-  return translation;
-}
-
-export const Article = (props: { match: { params: { articleId: string; }; }; }) => {
-  const { articles } = Prismic.useData();
-  const { articleId } = props.match.params;
-  const filtered = getTranslatedArticle(articles.filter(entry => entry.id == articleId), articles);
+export const Article = (props: RouteComponentProps<{articleId: string}>) => {
+  const prismic = Prismic.useData();
+  const actions = Prismic.useApi();
   const { locale } = useSelector(selectLocale);
   let history = useHistory();
-  return <>{
-    filtered.map(articleData => (
-      <div className={styles.containerArticle} key={articleData.id}>
-        <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left" /><FormattedMessage {...translations.backLink} /></a></div>
-        { articleData.data.image_before_title.url ? <img src={articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt} /> : ""}
-        { <Header as={"h2"} className="x6spaceBefore">{articleData.data.title ? articleData.data.title[0].text : ""}</Header>}
-        <p>{DateTime.fromFormat(articleData.data.publication_date, "yyyy-mm-dd", {}).setLocale(locale).toLocaleString(DateTime.DATE_HUGE)}</p>
-        { RichText.render(articleData.data.content as unknown as RichTextBlock[])}
-      </div>
-    ))
-  }</>
+
+  const articles = prismic[locale].articles;
+  const { articleId } = props.match.params;
+  const articleData = articles.get(articleId);
+
+  // If we haven't fetched this article yet, do so now.
+  useEffect(() => {
+    if (!articleData) {
+      actions.fetchDoc(articleId, locale);
+    }
+  }, [articleId, locale]);
+
+  // Display
+  return articleData
+    ? <>
+        <div className={styles.containerArticle} key={articleData.id}>
+          <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left" /><FormattedMessage {...translations.backLink} /></a></div>
+          { articleData.data.image_before_title.url ? <img src={articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt} /> : undefined }
+          <Header as={"h2"} className="x6spaceBefore">{articleData.data.title ? articleData.data.title[0].text : ""}</Header>
+          <p>{DateTime.fromFormat(articleData.data.publication_date, "yyyy-mm-dd", {}).setLocale(locale).toLocaleString(DateTime.DATE_HUGE)}</p>
+          { RichText.render(articleData.data.content as unknown as RichTextBlock[])}
+        </div>
+      </>
+    : <NotFoundPage />
 }

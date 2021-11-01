@@ -1,67 +1,63 @@
 import React, { useEffect } from "react";
-import { Prismic, FAQDocument, PrismicState  } from "components/Prismic";
+import { Prismic, FAQDocument, } from "components/Prismic";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
-import { Switch, Route, RouteComponentProps } from "react-router";
-import { FaqList } from "./FaqList";
-import { RUrl } from "@thecointech/utilities/RUrl";
-import { Dictionary } from "lodash";
-import { Welcome } from "./Welcome";
+import { RouteComponentProps } from "react-router";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
-import { DEFAULT_LOCALE } from '@thecointech/shared/containers/LanguageProvider/types';
+import styles from "./styles.module.less";
+import { Header } from 'semantic-ui-react';
+import { FaqItem } from './FaqItem';
+import { Decoration } from '../../components/Decoration';
+import { CategoryMenu } from '../../components/PrismicMenuByCategories';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'FAQ',
+      description: 'site.helpDocs.title: title for the FAQ page'}
+  });
 
 
-
-const HelpDocsInternal = (props: RouteComponentProps) => {
+const HelpDocsInternal = (props: RouteComponentProps<{category: string|undefined}>) => {
   const actions = Prismic.useApi();
   const docs = useSelector((s: ApplicationRootState) => s.documents);
-  const { match } = props;
-  const buildUrl = (id: string) => {
-    let sub = id.replace(/ /g, '-')
-                .replace('&', 'n')
-                .toLocaleLowerCase();
-    return new RUrl(match.url, encodeURIComponent(sub));
-  }
-
+  const { locale } = useSelector(selectLocale);
   useEffect(() => {
-    actions.fetchAllDocs();
-  }, []);
+    actions.fetchAllDocs(locale);
+  }, [locale]);
 
-  const categories = buildCategories(docs);
+  const { category } = props.match.params;
+  const allFaqs = [...docs[locale].faqs.values()];
+  const categories = buildCategories(allFaqs);
+  const faqs = allFaqs.filter(faq => {
+    return category
+      ? faq.data.category == category
+      : faq.data.show_on_faq_home
+  })
+
   return (
     <>
-      <Switch>
-        {
-          Object.entries(categories)
-            .map((entry, index) => {
-              const url = buildUrl("theme-"+((entry[0])?.split("-"))[0].replace(/ /g,'')).toString()
-              return <Route key={index} path={url} render={() => <FaqList menu={categories} title={entry[0]} faqs={entry[1]} />} />
-            })
-        }
-        <Route path={buildUrl("").toString()} exact={true} render={()=> <Welcome faqs={docs.faqs} menu={categories} />} />
-      </Switch>
+      <div className={styles.containerFaq}>
+        <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} pathBeforeTheId="/faq/" />
+        <Header as="h2" className={"x10spaceBefore"}>
+          <Header.Content>
+            {category ?? <FormattedMessage {...translations.title} />}
+          </Header.Content>
+        </Header>
+        {faqs.map(faq => (<FaqItem key={faq.id} {...faq} />))}
+      </div>
+      <Decoration />
     </>
   );
 }
 
 // https://github.com/react-boilerplate/redux-injectors/issues/16
-export const HelpDocs = (props: RouteComponentProps) => {
+export const HelpDocs = (props: RouteComponentProps<{category: string|undefined}>) => {
   return <HelpDocsInternal {...props} /> // The rest of the code
 }
 
-export function buildCategories(docs: PrismicState) {
-  const { faqs } = docs;
-  const { locale } = useSelector(selectLocale);
-  const categories: Dictionary<FAQDocument[]> = {};
-  for (const faq of faqs) {
-    const lang = ((faq.lang)?.split("-")) ? ((faq.lang)?.split("-"))[0] : DEFAULT_LOCALE;
-    const cat = (locale === DEFAULT_LOCALE) ? faq.data.category : faq.data.fr_category;
-    if (locale === lang){
-      if (!categories[cat])
-        categories[cat] = [faq]
-      else
-        categories[cat].push(faq);
-    }
-  }
-  return categories;
+export function buildCategories(faqs: FAQDocument[]) {
+  return Array.from(
+    new Set(faqs.map(faq => faq.data.category))
+  )
 }

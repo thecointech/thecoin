@@ -46,7 +46,7 @@ gcloud iam service-accounts add-iam-policy-binding \
     --project=$project_name
 
 # generate key file
-key_file="./service-accounts/testing/$project_name.json"
+key_file="./service-accounts/testing/$config_name.json"
 gcloud iam service-accounts keys create $key_file \
     --project=$project_name \
     --iam-account="publish-agent@$project_name.iam.gserviceaccount.com"
