@@ -9,29 +9,54 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="facebook-domain-verification" content="gi19pkzx2wljlei76oovh85mqv3qxy" />
   <title>TheGreenNFT</title>
+  <script>
+    async function initABTesting() {
+      // ensure fingerprinting and statsig are both available
+      if (!window.FingerprintJS || !window.statsig) return;
+
+      window.testsInit = new Promise(async (resolve, reject) => {
+        // Initialize an agent at application startup.
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+
+        await statsig.initialize("client-ITBu94LMFbQAfQdMfw4gCFugk5L8EdM1caf37TUdZX4", { userID: result.visitorId });
+        console.log('Tests loaded: ' + result.visitorId);
+        resolve();
+      });
+    }
+  </script>
+  <script onload="initABTesting()" async
+    src="https://cdn.jsdelivr.net/npm/statsig-js/dist/statsig-prod-web-sdk.min.js"></script>
+  <script onload="initABTesting()" async
+    src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Volkhov:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
   <script>prefinery = window.prefinery || function () { (window.prefinery.q = window.prefinery.q || []).push(arguments) };</script>
   <script src="https://widget.prefinery.com/widget/v2/rpfuwzir.js" defer></script>
 
   <!-- Facebook Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '4686536498108112');
-  fbq('track', 'PageView');
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '4686536498108112');
+    fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=4686536498108112&ev=PageView&noscript=1"
-  /></noscript>
+      src="https://www.facebook.com/tr?id=4686536498108112&ev=PageView&noscript=1" /></noscript>
   <!-- End Facebook Pixel Code -->
 </head>
 
@@ -46,7 +71,7 @@
       </div>
       <div class="jacketText">
         <h1>
-          <span>One 'fair-trade' jacket</span>
+          <span id="headerL1">One 'fair-trade' jacket</span>
           <span>won't solve climate change.</span>
         </h1>
         <p>
@@ -72,7 +97,7 @@
       <div class="illustrationFacesMobile">
         <img title="faces" src="images/facesMobile.png">
       </div>
-      <div class="facesText">
+      <div class="facesText" id="facesText">
         <h3>You be the hero<br />you’re looking for</h3>
         <p class='larger'>
           Climate change has been increasing at an alarming rate in the recent past. In fact, the extreme weather
@@ -116,8 +141,10 @@
 
   <div class="actualContentPart">
     <h2>The world's first and only NFT that makes YOU carbon-neutral</h2>
-    <h4>We'll drop a numbered series of GreenNFTs of different values. Each of them will correspond to a different level of carbon offsetting with a time validity.</h4>
-    <p class="smaller">For a limited time, 100% of the purchase price of your NFT will go towards eliminating your carbon footprint by
+    <h4>We'll drop a numbered series of GreenNFTs of different values. Each of them will correspond to a different level
+      of carbon offsetting with a time validity.</h4>
+    <p class="smaller">For a limited time, 100% of the purchase price of your NFT will go towards eliminating your
+      carbon footprint by
       removing C02 from the atmosphere. We purchase offsets of the highest quality from GoldStandard.org. These offsets
       may be more expensive than some, but the rigorous vetting process ensures that your claim is genuine. You will
       have proof of this - every dollar, every tonne of C02, is publicly accounted for. Your peace of mind comes from
@@ -125,39 +152,39 @@
   </div>
 
   <div class="founderPart">
-      <div class="founderImg">
-        <img src="images/profile.png" title="Stephen Taylor: Founder" alt="Stephen Taylor: Founder"
-          class="profileImage" />
-        <h3>Stephen Taylor</h3>
-        <p class="larger">Founder</p>
-        <p class="founderSocial">
-          <a href="https://www.linkedin.com/in/stephen-taylor-356b6010/" target="_blank"><img src="images/linkedin.svg"
-              title="LinkedIn" /></a>
-        </p>
-      </div>
-      <div class="founderText">
-        <p class='smaller'>
-          Climate change is a problem that affects us all. Every one of us needs to move towards carbon neutrality as
-          quickly as possible.
-        </p>
-        <p class='smaller'>
-          Unfortunately, this isn't happening. Even though it's so important, there isn't any
-          individual profit for your effort. The cost is yours, and in the scope of the problem, the sacrifice seems
-          meaningless. There has to be a solution that rewards the right action.
-        </p>
-        <p class='larger'>
-          We believe we have found a pathway for individuals to reach carbon-neutrality that is rewarding. You
-          don't need to wait for the government to step up and force us to change or corporations to put
-          philanthropy over profit. TheGreenNFT is the first step on the path. It is one way to make it better for
-          us to be carbon-neutral - changing what we should do into what we want to do.
-        </p>
-        <p class='smaller'>
-          Once being carbon-neutral makes you better off, will the climate crisis still be a crisis?
-        </p>
-        <p class='smaller'>
-          P.S. We are a registered NPO in Canada; every dollar raised goes towards reducing CO2 emissions.
-        </p>
-      </div>
+    <div class="founderImg">
+      <img src="images/profile.png" title="Stephen Taylor: Founder" alt="Stephen Taylor: Founder"
+        class="profileImage" />
+      <h3>Stephen Taylor</h3>
+      <p class="larger">Founder</p>
+      <p class="founderSocial">
+        <a href="https://www.linkedin.com/in/stephen-taylor-356b6010/" target="_blank"><img src="images/linkedin.svg"
+            title="LinkedIn" /></a>
+      </p>
+    </div>
+    <div class="founderText">
+      <p class='smaller'>
+        Climate change is a problem that affects us all. Every one of us needs to move towards carbon neutrality as
+        quickly as possible.
+      </p>
+      <p class='smaller'>
+        Unfortunately, this isn't happening. Even though it's so important, there isn't any
+        individual profit for your effort. The cost is yours, and in the scope of the problem, the sacrifice seems
+        meaningless. There has to be a solution that rewards the right action.
+      </p>
+      <p class='larger'>
+        We believe we have found a pathway for individuals to reach carbon-neutrality that is rewarding. You
+        don't need to wait for the government to step up and force us to change or corporations to put
+        philanthropy over profit. TheGreenNFT is the first step on the path. It is one way to make it better for
+        us to be carbon-neutral - changing what we should do into what we want to do.
+      </p>
+      <p class='smaller'>
+        Once being carbon-neutral makes you better off, will the climate crisis still be a crisis?
+      </p>
+      <p class='smaller'>
+        P.S. We are a registered NPO in Canada; every dollar raised goes towards reducing CO2 emissions.
+      </p>
+    </div>
   </div>
 
   <footer>
