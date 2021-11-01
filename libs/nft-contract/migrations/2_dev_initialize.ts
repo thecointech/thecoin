@@ -7,7 +7,8 @@ import { getContract } from './deploy';
 
 const step: MigrationStep = () =>
   async (deployer, network, _accounts) => {
-    if (network === 'devlive' || network === 'prodtest') {
+    const config = process.env.CONFIG_NAME ?? "development";
+    if (config === 'devlive' || config === 'prodtest') {
       const minter = await getSigner("NFTMinter");
       const minterAddress = await minter.getAddress();
       const nft = await getContract(deployer, network);

@@ -25,9 +25,7 @@
     "build:src": "run-p build:src:*",
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "build:src:copy": "run-p build:src:copy:*",
-    "build:src:copy:types": "cpx \"./src/types/*.d.ts\" ./build/cjs/types && cpx \"./src/types/*.d.ts\" ./build/mjs/types",
-    "build:src:copy:deploy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
+    "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
@@ -58,11 +56,11 @@
     "@openzeppelin/truffle-upgrades": "^1.5.0",
     "@thecointech/signers": "^0.2.42",
     "@truffle/hdwallet-provider": "^1.2.3",
-    "@typechain/ethers-v5": "^7.0.1",
-    "@typechain/truffle-v5": "^5.0.0",
+    "@typechain/ethers-v5": "^8.0.0",
+    "@typechain/truffle-v5": "^6.0.0",
     "jest": "*",
-    "truffle": "^5.1.67",
-    "typechain": "^5.1.2"
+    "truffle": "^5.4.17",
+    "typechain": "^6.0.2"
   },
   "dependencies": {
     "ethers": "^5.4.7"

@@ -19,6 +19,10 @@ if (process.env.CONFIG_NAME !== 'devlive') {
 const isPolygon = process.env.npm_lifecycle_script?.endsWith("polygon");
 const deployType = isPolygon ? "polygon" : "ethereum";
 
+const networks = process.env.CONFIG_NAME === "devlive"
+  ? getDevNetworks()
+  : getLiveNetworks()
+
 module.exports = {
   // We output into our src directory so we can directly import
   // the JSON artifacts into our TS code.
@@ -29,14 +33,46 @@ module.exports = {
   */
   contracts_directory: path.join(__dirname, 'contracts'),
 
-  networks: {
-    // dev:live environment
-    devlive: {
+  // Generate networks depending on configurations
+  networks: networks,
+
+  compilers: {
+    solc: {
+      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
+      docker: false,
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200
+        },
+        evmVersion: "constantinople"
+      }
+    }
+  },
+  db: {
+    enabled: true
+  }
+};
+
+// Dev networks run on local net
+function getDevNetworks() {
+  return {
+    polygon: {
       host: "127.0.0.1",
       port: process.env.DEPLOY_NETWORK_PORT,
       network_id: "*",
     },
-    // prod:test environment
+    ethereum: {
+      host: "127.0.0.1",
+      port: process.env.DEPLOY_NETWORK_PORT,
+      network_id: "*",
+    }
+  }
+}
+
+function getLiveNetworks() {
+  return {
+    // remote environments (both test & mainnet)
     polygon: {
       provider: () => {
         return new HDWalletProvider(
@@ -62,31 +98,8 @@ module.exports = {
       network_id: '*', // eslint-disable-line camelcase
       skipDryRun: true
     },
-    // TODO: we are stuck on ropsten till the price of gas comes down.
-    ropsten: {
-      host: 'localhost',
-      port: 9545,
-      network_id: '*'
-    },
-
-  },
-  compilers: {
-    solc: {
-      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
-      docker: false,
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
-        },
-        evmVersion: "constantinople"
-      }
-    }
-  },
-  db: {
-    enabled: true
   }
-};
+}
 
 async function loadAccounts(maxIdx) {
   const testAccountKeys = [];

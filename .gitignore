@@ -56,6 +56,7 @@
 libs/contract/.openzeppelin/unknown-1337.json
 libs/contract/src/deployed/*-fork.json
 libs/contract/src/deployed/devlive.json
+libs/*/src/deployed/devlive-polygon.json
 
 libs/nft-contract/src/deployed/devlive.json
 libs/nft-contract/src/contracts/*.json

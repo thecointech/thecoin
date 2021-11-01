@@ -4,7 +4,9 @@
     "outDir": "./build",
 
     "isolatedModules": false,
-    "tsBuildInfoFile": "./build/.buildinfo"
+    "tsBuildInfoFile": "./build/.buildinfo",
+    // typechain generates .ts files with unused locals
+    "noUnusedLocals": false,
   },
   "include": ["**/*.ts", "**/*.json"],
   "exclude": ["node_modules", "build", "cache", "artifacts"]

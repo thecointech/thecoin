@@ -11,7 +11,8 @@ const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
 const getContractAddress = () => {
   console.log(`Loading NFT contract for: ${config_env}`);
   try {
-    const deployment = require(`./deployed/${config_env}.json`);
+    // For now, we run exclusively on Polygon
+    const deployment = require(`./deployed/${config_env}-polygon.json`);
     console.log('Loaded succesfully');
     return deployment.contract;
   } catch (err) {
