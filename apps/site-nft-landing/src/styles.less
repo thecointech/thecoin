@@ -91,6 +91,8 @@ input:focus {
 }
 
 button {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  transition: box-shadow 0.15s ease-in-out;
   background-color: #318161;
   font-size       : 16px;
   font-weight     : bold;
@@ -105,6 +107,7 @@ button {
 
 button:hover {
   background-color: #318161;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   cursor          : pointer;
 }
 
@@ -295,6 +298,7 @@ p.smaller {
     overflow-x: auto;
   }
 
+
   .card {
     text-align             : center;
     width                  : 30%;
@@ -311,6 +315,7 @@ p.smaller {
     backdrop-filter        : blur(80px);
     -webkit-backdrop-filter: blur(80px);
 
+
     p {
       margin-top  : 16px;
       margin-left : 15%;
@@ -325,6 +330,19 @@ p.smaller {
     img {
       margin-top   : 65px;
       margin-bottom: 30px;
+      &.goldStandarsLogo{
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+        border-radius: 10px;
+        height: 50px;
+        width: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        transition: box-shadow 0.15s ease-in-out;
+      }
+      &.goldStandarsLogo:hover{
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+      }
     }
     &:nth-child(2) {
       margin-left : 30px;
