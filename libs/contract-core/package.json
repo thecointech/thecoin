@@ -1,5 +1,5 @@
 {
-  "name": "@thecointech/contract",
+  "name": "contract-core",
   "version": "0.2.42",
   "description": "The Coin: Solidity contract for The Universal Currency",
   "keywords": [

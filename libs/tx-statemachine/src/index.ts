@@ -2,7 +2,7 @@ import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thec
 import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
 import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
-import type { TheCoin } from '@thecointech/contract';
+import type { TheCoin } from 'contract-core';
 import type { IBank } from '@thecointech/bank-interface';
 export * from './types';
 

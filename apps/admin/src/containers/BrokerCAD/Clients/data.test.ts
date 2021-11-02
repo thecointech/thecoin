@@ -1,4 +1,4 @@
-import { GetContract } from '@thecointech/contract';
+import { GetContract } from 'contract-core';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getAllUserData } from './data';
 

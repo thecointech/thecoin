@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract';
+import { InitialCoinBlock, ConnectContract, TheCoin } from 'contract-core';
 import { Signer, Wallet } from 'ethers';
 import { call, StrictEffect } from 'redux-saga/effects';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
