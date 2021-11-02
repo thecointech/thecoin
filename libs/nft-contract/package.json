@@ -41,7 +41,9 @@
 
     "migrate": "yarn migrate:polygon",
     "migrate:polygon": "truffle migrate --network polygon",
-    "migrate:ethereum": "truffle migrate --network ethereum"
+    "migrate:ethereum": "truffle migrate --network ethereum",
+
+    "verify": "yarn ts-node --skip-project verify-contract"
   },
   "files": [
     "build/**/*"
@@ -67,6 +69,7 @@
     "@types/bs58": "^4.0.1",
     "jest": "*",
     "truffle": "^5.4.17",
+    "truffle-plugin-verify": "^0.5.16",
     "typechain": "^6.0.2"
   },
   "dependenciesComments": {

@@ -16,7 +16,7 @@ if (process.env.CONFIG_NAME !== 'devlive') {
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
 
-const networks = process.env.CONFIG_NAME === "devlive"
+const configs = process.env.CONFIG_NAME === "devlive"
   ? getDevNetworks()
   : getLiveNetworks()
 
@@ -31,7 +31,7 @@ module.exports = {
   contracts_directory: path.join(__dirname, 'contracts'),
 
   // Generate networks depending on configurations
-  networks: networks,
+  ...configs,
 
   compilers: {
     solc: {
@@ -54,15 +54,17 @@ module.exports = {
 // Dev networks run on local net
 function getDevNetworks() {
   return {
-    polygon: {
-      host: "127.0.0.1",
-      port: process.env.DEPLOY_NETWORK_PORT,
-      network_id: "*",
-    },
-    ethereum: {
-      host: "127.0.0.1",
-      port: process.env.DEPLOY_NETWORK_PORT,
-      network_id: "*",
+    networks: {
+      polygon: {
+        host: "127.0.0.1",
+        port: process.env.DEPLOY_NETWORK_PORT,
+        network_id: "*",
+      },
+      ethereum: {
+        host: "127.0.0.1",
+        port: process.env.DEPLOY_NETWORK_PORT,
+        network_id: "*",
+      }
     }
   }
 }
@@ -70,31 +72,40 @@ function getDevNetworks() {
 function getLiveNetworks() {
   return {
     // remote environments (both test & mainnet)
-    polygon: {
+    networks: {
+      polygon: {
       provider: () => {
-        return new HDWalletProvider(
-          testAccounts,
-          `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-          0,
-          numBuiltIn
-        );
+          return new HDWalletProvider(
+            testAccounts,
+            `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+            0,
+            numBuiltIn
+          );
+        },
+        network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
+        confirmations: 2,
+        skipDryRun: true
       },
-      network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
-      confirmations: 2,
-      skipDryRun: true
-    },
-    ethereum: {
-      provider: () => {
-        return new HDWalletProvider(
-          testAccounts,
-          `https://${process.env.DEPLOY_ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-          0,
-          numBuiltIn
-        );
+      ethereum: {
+        provider: () => {
+          return new HDWalletProvider(
+            testAccounts,
+            `https://${process.env.DEPLOY_ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+            0,
+            numBuiltIn
+          );
+        },
+        network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
+        skipDryRun: true
       },
-      network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
-      skipDryRun: true
     },
+    plugins: [
+      'truffle-plugin-verify'
+    ],
+    api_keys: {
+      etherscan: process.env.ETHERSCAN_API_KEY,
+      polygonscan: process.env.POLYGONSCAN_API_KEY
+    }
   }
 }
 
