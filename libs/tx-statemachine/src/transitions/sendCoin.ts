@@ -2,7 +2,7 @@ import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
 import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TheCoin } from 'contract-core';
+import { TheCoin } from '@thecointech/contract-core';
 import { DateTime } from "luxon";
 import { toCoin } from "./toCoin";
 

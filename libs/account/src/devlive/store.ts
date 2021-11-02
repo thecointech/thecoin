@@ -1,4 +1,4 @@
-import { ConnectContract } from 'contract-core';
+import { ConnectContract } from '@thecointech/contract-core';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountState, buildNewAccount } from '../state';
