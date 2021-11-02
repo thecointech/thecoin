@@ -1,5 +1,5 @@
 import { getContract, getMinterAddress } from './contract';
-import { getTokenClaimAuthority, getTokenClaimSig, TheGreenNFT } from '@thecointech/nft-contract';
+import { getTokenClaimAuthority, getTokenClaimSig, TheGreenNFT } from '@thecointech/contract-nft';
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { log } from '@thecointech/logging';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@thecointech/nft-contract",
+  "name": "@thecointech/contract-nft",
   "version": "0.2.42",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/nft-contract"
+    "directory": "libs/contract-nft"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

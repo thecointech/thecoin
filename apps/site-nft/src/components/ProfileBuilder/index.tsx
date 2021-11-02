@@ -7,7 +7,7 @@ import styles from './styles.module.less';
 import { Editor } from './Editor';
 import { TokenIdSelect } from './TokenIdSelect';
 import { OptionToggles } from './OptionToggles';
-import { getContract } from '@thecointech/nft-contract';
+import { getContract } from '@thecointech/contract-nft';
 import { BigNumber } from 'ethers';
 import { Options } from './types';
 import { log } from '@thecointech/logging';

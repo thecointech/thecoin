@@ -17,7 +17,7 @@
     "./src/**/*.*", "./types/*.*",
   ],
   "references": [
-    { "path": "../../libs/nft-contract/tsconfig.build.json" },
+    { "path": "../../libs/contract-nft/tsconfig.build.json" },
     { "path": "../../libs/logging/tsconfig.build.json" }
   ]
 }

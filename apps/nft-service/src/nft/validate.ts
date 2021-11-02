@@ -2,7 +2,7 @@ import { log } from '@thecointech/logging';
 import { utils } from 'ethers';
 import { getContract } from './contract';
 import imageType from 'image-type';
-import { MetadataJson } from '@thecointech/nft-contract';
+import { MetadataJson } from '@thecointech/contract-nft';
 
 // Max JSON size: 4KB.  Should be OK, our default file is 400B
 const MAX_JSON_LENGTH = 4086

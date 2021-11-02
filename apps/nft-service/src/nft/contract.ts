@@ -1,5 +1,5 @@
 import { getSigner } from '@thecointech/signers';
-import { connectNFT } from '@thecointech/nft-contract';
+import { connectNFT } from '@thecointech/contract-nft';
 
 export async function getContract() {
   const signer = await getSigner("BrokerTransferAssistant");

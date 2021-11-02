@@ -57,10 +57,10 @@ libs/*/.openzeppelin/unknown-1337.json
 libs/contract-*/src/contracts
 libs/contract-*/src/types
 libs/contract-*/migrations/types
-libs/*/src/deployed/*-fork.json
-libs/*/src/deployed/devlive.json
-libs/*/src/deployed/devlive-polygon.json
-libs/nft-contract/devlive.tokens.json
+libs/contract-*/src/deployed/*-fork.json
+libs/contract-*/src/deployed/devlive.json
+libs/contract-*/src/deployed/devlive-polygon.json
+libs/contract-*/devlive.tokens.json
 
 
 libs/idx/src/config.devlive.json

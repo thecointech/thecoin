@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { GasslessUpdateRequest, getGasslessSigner, TheGreenNFT } from '@thecointech/nft-contract';
+import { GasslessUpdateRequest, getGasslessSigner, TheGreenNFT } from '@thecointech/contract-nft';
 import { getContract } from "./contract";
 
 export async function gasslessUpdate(request: GasslessUpdateRequest): Promise<boolean> {
