@@ -1,7 +1,8 @@
 {
-  "name": "@thecointech/contract-base",
+  "name": "@thecointech/contract-tools",
   "version": "0.2.42",
-  "description": "TheCoin: Contract utilities",
+  "private": "true",
+  "description": "TheCoin: Build & deploy tools for our smart contracts",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -12,10 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/contract-base"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "directory": "libs/contract-tools"
   },
   "bin": {
     "contract-build" : "./src/build.js",
@@ -24,17 +22,9 @@
     "contract-gen-types": "./src/gen-types.js"
   },
   "scripts": {
-    "build": "yarn tsc",
-    "build:copy": "cpx \"./src/deployed\" ./build/",
-    "clean": "run-p clean:*",
-    "clean:src": "rimraf ./build",
-
     "emulator": "start yarn truffle develop",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
-  "files": [
-    "src/**/*"
-  ],
   "exports": {
     "./truffle": "./src/truffle.js",
     "./jest.config": "./src/jest.config.js"
