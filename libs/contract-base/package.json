@@ -1,0 +1,51 @@
+{
+  "name": "@thecointech/contract-base",
+  "version": "0.2.42",
+  "description": "TheCoin: Contract utilities",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-base"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "bin": {
+    "contract-build" : "./src/build.js",
+    "contract-verify" : "./src/verify.js",
+    "contract-migrate": "./src/migrate.js",
+    "contract-gen-types": "./src/gen-types.js"
+  },
+  "scripts": {
+    "build": "yarn tsc",
+    "build:copy": "cpx \"./src/deployed\" ./build/",
+    "clean": "run-p clean:*",
+    "clean:src": "rimraf ./build",
+
+    "emulator": "start yarn truffle develop",
+    "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
+  },
+  "files": [
+    "src/**/*"
+  ],
+  "exports": {
+    "./truffle": "./src/truffle.js",
+    "./jest.config": "./src/jest.config.js"
+  },
+  "dependencies": {
+    "@thecointech/signers": "*",
+    "@truffle/hdwallet-provider": "^1.5.1",
+    "@typechain/ethers-v5": "^8.0.0",
+    "@typechain/truffle-v5": "^6.0.0",
+    "typechain": "^6.0.2",
+    "truffle": "^5.4.17",
+    "truffle-plugin-verify": "^0.5.16"
+  }
+}

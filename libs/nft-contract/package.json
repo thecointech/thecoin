@@ -22,7 +22,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts generate-types build:copy build:src",
-    "build:contracts": "truffle compile",
+    "build:contracts": "contract-build",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed\" ./build/",
     "clean": "run-p clean:*",
@@ -33,17 +33,9 @@
     "test": "yarn jest",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn migrate",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn migrate",
-    "dev:live:emulator": "start yarn truffle develop",
-    "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --out-dir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
-    "generate-types:ethers": "yarn typechain --out-dir ./src/types --target=ethers-v5 \"src/contracts/*.json\"",
-    "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest",
+    "generate-types": "yarn contract-gen-types",
 
-    "migrate": "yarn migrate:polygon",
-    "migrate:polygon": "truffle migrate --network polygon",
-    "migrate:ethereum": "truffle migrate --network ethereum",
-
-    "verify": "yarn ts-node --skip-project verify-contract"
+    "_deploy": "yarn contract-migrate && yarn contract-verify"
   },
   "files": [
     "build/**/*"
@@ -63,14 +55,8 @@
     "@thecointech/contract": "^0.2.42",
     "@thecointech/signers": "^0.2.42",
     "@thecointech/utilities": "^0.2.42",
-    "@truffle/hdwallet-provider": "^1.5.1",
-    "@typechain/ethers-v5": "^8.0.0",
-    "@typechain/truffle-v5": "^6.0.0",
     "@types/bs58": "^4.0.1",
-    "jest": "*",
-    "truffle": "^5.4.17",
-    "truffle-plugin-verify": "^0.5.16",
-    "typechain": "^6.0.2"
+    "jest": "*"
   },
   "dependenciesComments": {
     "@thecointech/contract": [
@@ -80,8 +66,8 @@
     ]
   },
   "dependencies": {
-    "bs58": "^4.0.1",
-    "ethers": "^5.4.7"
+    "@thecointech/contract-base": "*",
+    "bs58": "^4.0.1"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

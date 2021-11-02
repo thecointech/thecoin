@@ -1,13 +1,14 @@
 'use strict';
 // Load environment for the network we are deploying to
-require('../../tools/setenv');
-require('../../__mocks__/mock_node');
-// Allow using typescript in deployments
-loadTypescript();
+require('../../../tools/setenv');
+require('../../../__mocks__/mock_node');
 
 var path = require('path');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { AccountId, getSigner } = require('@thecointech/signers');
+
+// Allow using typescript in deployments
+loadTypescript();
 
 const numBuiltIn = AccountId.BrokerCAD + 1;
 const testAccounts = [];
@@ -15,41 +16,6 @@ if (process.env.CONFIG_NAME !== 'devlive') {
   // devlive accounts are hosted on our local blockchain, so already available
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
-
-const configs = process.env.CONFIG_NAME === "devlive"
-  ? getDevNetworks()
-  : getLiveNetworks()
-
-module.exports = {
-  // We output into our src directory so we can directly import
-  // the JSON artifacts into our TS code.
-  contracts_build_directory: path.join(__dirname, "src", "contracts"),
-
-  /**
-  * contracts_directory tells Truffle where the contracts you want to compile are located
-  */
-  contracts_directory: path.join(__dirname, 'contracts'),
-
-  // Generate networks depending on configurations
-  ...configs,
-
-  compilers: {
-    solc: {
-      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
-      docker: false,
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
-        },
-        evmVersion: "constantinople"
-      }
-    }
-  },
-  db: {
-    enabled: true
-  }
-};
 
 // Dev networks run on local net
 function getDevNetworks() {
@@ -121,7 +87,44 @@ async function loadAccounts(maxIdx) {
 }
 
 function loadTypescript() {
-  require("ts-node").register({
-    project: "tsconfig.migrate.json"
-  });
+  const project = path.join(__dirname, "tsconfig.migrate.json")
+  require("ts-node").register({project});
 }
+
+const cwd = process.cwd();
+const configs = process.env.CONFIG_NAME === "devlive"
+? getDevNetworks()
+: getLiveNetworks()
+
+module.exports = {
+
+  // We output into our src directory so we can directly import
+  // the JSON artifacts into our TS code.
+  contracts_build_directory: path.join(cwd, "src", "contracts"),
+
+  /**
+  * contracts_directory tells Truffle where the contracts you want to compile are located
+  */
+  contracts_directory: path.join(cwd, 'contracts'),
+
+  // Generate networks depending on configurations
+  ...configs,
+
+  compilers: {
+    solc: {
+      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
+      docker: false,
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200
+        },
+        evmVersion: "constantinople"
+      }
+    }
+  },
+  db: {
+    enabled: true
+  }
+}
+

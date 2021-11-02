@@ -1,6 +1,1 @@
-const defaults = require('../../jest.config');
-
-module.exports = {
-  ...defaults,
-  roots: ['./src', './contracts']
-};
+module.exports = require('@thecointech/contract-base/jest.config');
