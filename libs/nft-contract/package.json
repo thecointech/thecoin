@@ -21,8 +21,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts generate-types build:copy build:src",
+    "build": "run-s build:contracts build:types build:copy build:src",
     "build:contracts": "contract-build",
+    "build:types": "yarn contract-gen-types",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed\" ./build/",
     "clean": "run-p clean:*",
@@ -31,9 +32,8 @@
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "test": "yarn jest",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn migrate",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn migrate",
-    "generate-types": "yarn contract-gen-types",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
 
     "_deploy": "yarn contract-migrate && yarn contract-verify"
   },
