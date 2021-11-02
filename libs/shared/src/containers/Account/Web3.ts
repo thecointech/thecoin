@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { GetContract } from 'contract-core;
+import { GetContract } from '@thecointech/contract';
 import { getWeb3Type } from '../../utils/detection';
 
 async function AddTheCoin(ethereum: any) {

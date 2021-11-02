@@ -48,7 +48,7 @@
     }
   },
   "dependencies": {
-    "contract-core: "^0.2.42",
+    "@thecointech/contract": "^0.2.42",
     "@thecointech/fx-rates": "^0.2.41",
     "@thecointech/idx": "^0.2.42",
     "@thecointech/logging": "^0.2.41",

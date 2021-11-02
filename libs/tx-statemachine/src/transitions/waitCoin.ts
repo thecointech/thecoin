@@ -1,4 +1,4 @@
-import { TheCoin } from "contract-core;
+import { TheCoin } from "@thecointech/contract";
 import { log } from "@thecointech/logging";
 import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'

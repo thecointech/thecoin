@@ -1,5 +1,5 @@
 import { Transaction } from "./types";
-import { TheCoin } from 'contract-core;
+import { TheCoin } from '@thecointech/contract';
 import { EventFilter, providers, BigNumber } from "ethers";
 import { toHuman } from "@thecointech/utilities";
 import { DateTime } from "luxon";

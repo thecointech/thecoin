@@ -3,7 +3,7 @@
 process.env.USERDATA_INSTRUCTION_PK = __filename;
 import { processUnsettledETransfers } from '.'
 import { init } from '@thecointech/firestore';
-import { GetContract } from 'contract-core;
+import { GetContract } from '@thecointech/contract';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';

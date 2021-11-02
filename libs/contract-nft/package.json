@@ -52,14 +52,14 @@
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "contract-core: "^0.2.42",
+    "@thecointech/contract": "^0.2.42",
     "@thecointech/signers": "^0.2.42",
     "@thecointech/utilities": "^0.2.42",
     "@types/bs58": "^4.0.1",
     "jest": "*"
   },
   "dependenciesComments": {
-    "contract-core: [
+    "@thecointech/contract": [
       "We do not have an actual dependency, but truffle can",
       "break on simultaneous compilation so we list this so",
       "lerna doesn't try and build both at the same time"

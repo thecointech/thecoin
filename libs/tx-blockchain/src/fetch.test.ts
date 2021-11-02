@@ -1,11 +1,11 @@
 import { loadAndMergeHistory, calculateTxBalances } from "./fetch";
-import { GetContract, TheCoin } from 'contract-core;
+import { GetContract, TheCoin } from '@thecointech/contract';
 import { BigNumber } from "ethers";
 import { Transaction } from "./types";
 import { cadbrokerIn, cadbrokerOut } from "./thecoin";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
-jest.unmock('contract-core);
+jest.unmock('@thecointech/contract');
 
 async function fetchAndTestBalance(adress: string, contract: TheCoin) {
   const history = await loadAndMergeHistory(adress, 0, contract);
