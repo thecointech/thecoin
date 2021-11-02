@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
 import { TheGreenNFT } from '.';
-import { getProvider } from './provider';
+import { getProvider } from '@thecointech/contract-base/provider';
 import TheGreenNFTSpec from './contracts/TheGreenNFTL2.json';
 
 const getAbi = () => {
