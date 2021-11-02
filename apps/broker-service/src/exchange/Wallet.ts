@@ -1,6 +1,6 @@
 
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract';
+import { ConnectContract } from 'contract-core;
 
 const walletName = 'BrokerTransferAssistant';
 export const GetWallet = () => getSigner(walletName);

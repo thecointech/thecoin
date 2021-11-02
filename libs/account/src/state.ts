@@ -2,7 +2,7 @@ import { CurrencyCode } from '@thecointech/fx-rates'
 import { AccountDetails } from './details';
 import { DateTime } from 'luxon';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import type { TheCoin } from '@thecointech/contract';
+import type { TheCoin } from 'contract-core;
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from '@ethersproject/abstract-signer';
 import type { IDX } from '@thecointech/idx';

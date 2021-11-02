@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { RbcApi } from "@thecointech/rbcapi";
-import { TheCoin } from '@thecointech/contract';
+import { TheCoin } from 'contract-core;
 import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
 import { processUnsettledBillPayments } from './bills';

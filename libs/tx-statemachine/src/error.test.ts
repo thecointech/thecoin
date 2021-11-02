@@ -1,6 +1,6 @@
 import { ActionType, BuyAction } from '@thecointech/broker-db';
 import * as Transactions from '@thecointech/broker-db/transaction';
-import { GetContract } from '@thecointech/contract';
+import { GetContract } from 'contract-core;
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
 import { log } from '@thecointech/logging';

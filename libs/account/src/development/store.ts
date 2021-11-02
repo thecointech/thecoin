@@ -1,6 +1,6 @@
 import testWallet from './testAccount1.json';
 import { Wallet } from 'ethers';
-import { ConnectContract } from '@thecointech/contract';
+import { ConnectContract } from 'contract-core;
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
 import { IDX } from '@thecointech/idx';

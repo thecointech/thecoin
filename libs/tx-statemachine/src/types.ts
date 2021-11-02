@@ -1,5 +1,5 @@
 import { ActionType, TransitionDelta, TypedAction, StateData } from "@thecointech/broker-db";
-import type { TheCoin } from "@thecointech/contract";
+import type { TheCoin } from "contract-core;
 import type { eTransferData } from "@thecointech/tx-gmail";
 import type { BillPayeePacket, ETransferPacket } from "@thecointech/types";
 import type { IBank } from '@thecointech/bank-interface';

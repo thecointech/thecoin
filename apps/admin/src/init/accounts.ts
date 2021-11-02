@@ -1,7 +1,7 @@
 import { AccountName, getSigner } from '@thecointech/signers';
 import { buildNewAccount } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
-import { ConnectContract } from '@thecointech/contract';
+import { ConnectContract } from 'contract-core;
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
 import { bridge } from '@thecointech/signers/electron';
