@@ -16,9 +16,6 @@ if (process.env.CONFIG_NAME !== 'devlive') {
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
 
-const isPolygon = process.env.npm_lifecycle_script?.endsWith("polygon");
-const deployType = isPolygon ? "polygon" : "ethereum";
-
 const networks = process.env.CONFIG_NAME === "devlive"
   ? getDevNetworks()
   : getLiveNetworks()
@@ -82,7 +79,7 @@ function getLiveNetworks() {
           numBuiltIn
         );
       },
-      network_id: '*', // eslint-disable-line camelcase
+      network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
       confirmations: 2,
       skipDryRun: true
     },
@@ -95,7 +92,7 @@ function getLiveNetworks() {
           numBuiltIn
         );
       },
-      network_id: '*', // eslint-disable-line camelcase
+      network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
       skipDryRun: true
     },
   }
