@@ -16,10 +16,10 @@
     "directory": "libs/contract-tools"
   },
   "bin": {
-    "contract-build" : "./src/build.js",
-    "contract-verify" : "./src/verify.js",
-    "contract-migrate": "./src/migrate.js",
-    "contract-gen-types": "./src/gen-types.js"
+    "contract-build" : "./src/contract-build.js",
+    "contract-verify" : "./src/contract-verify.js",
+    "contract-migrate": "./src/contract-migrate.js",
+    "contract-gen-types": "./src/contract-gen-types.js"
   },
   "scripts": {
     "emulator": "start yarn truffle develop --config=./src/truffle.js",
@@ -27,6 +27,7 @@
   },
   "exports": {
     "./truffle": "./src/truffle.js",
+    "./migrations": "./src/migrations.js",
     "./jest.config": "./src/jest.config.js"
   },
   "dependencies": {

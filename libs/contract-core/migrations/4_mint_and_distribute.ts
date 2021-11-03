@@ -9,11 +9,14 @@ const deploy: MigrationStep = (artifacts) =>
     const proxy = await contract.deployed();
     const namedAccounts = toNamedAccounts(accounts);
     // On development blockchain, seed accounts with random data
-    if (network === 'devlive') {
-      await initializeDevLive(proxy, namedAccounts)
-    }
-    else if (network.startsWith('prodtest')) {
-      await initializeTestNet(proxy, namedAccounts);
+    const config = process.env.CONFIG_NAME;
+    if (network == "polygon") {
+      if (config === 'devlive') {
+        await initializeDevLive(proxy, namedAccounts)
+      }
+      else if (config === "prodtest") {
+        await initializeTestNet(proxy, namedAccounts);
+      }
     }
   }
 
