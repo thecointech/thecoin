@@ -1,5 +1,6 @@
 @desktop   :~"only screen and (min-width: 1185px) and (max-width: 1920px)";
 @mobile    :~"only screen and (max-width: 800px)";
+@small-mobile    :~"only screen and (max-width: 515px)";
 @big-size  : 1440;
 @small-size: 375;
 
@@ -61,18 +62,6 @@ p {
   font-size: 20px;
 }
 
-
-form {
-  background-color: white;
-  border-radius   : 10px;
-  padding         : 32px;
-  margin-top      : 37px;
-  width           : 600px;
-  position        : relative;
-  left            : -15px;
-  text-align      : center;
-}
-
 input {
   width             : 320px;
   background        : #fff;
@@ -122,6 +111,8 @@ button:hover {
   cursor          : pointer;
 }
 
+span.avoidwrap { display:inline-block; }
+
 /** linear interpolate value from small to big as screen goes from small-size to big-size */
 .scalable(@property, @small, @big) {
   @{property}: clamp(unit(@small, px),
@@ -137,19 +128,6 @@ button:hover {
     );
 }
 
-.scalable-unit(@property, @small, @big, @units) {
-  @{property}: clamp(~"@{small}@{units}",
-    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - unit(@small-size, px)) / (@big-size - @small-size)),
-    ~"@{big}@{units}"
-  );
-}
-
-.reverse-scalable-unit(@property, @small, @big, @units) {
-  @{property}: clamp(~"@{big}@{units}",
-    calc(~"@{small}@{units}"+ (@big - @small) * (100vw - ~"@{small-size}@{units}") / (@big-size - @small-size)),
-    ~"@{small}@{units}"
-  );
-}
 
 .logo {
   background           : url("./images/Logo_green.svg") no-repeat;
@@ -181,6 +159,11 @@ button:hover {
     .reverse-scalable(margin-top, 52, 27);
     line-height: 32px;
     font-size  : 20px;
+    >span {
+      @media @small-mobile {
+        display: block;
+      }
+    }
   }
 
   >h1 {
@@ -191,6 +174,39 @@ button:hover {
     }
   }
 }
+
+.jacketForm {
+  .scalable(margin-right, 13, 135);
+  background-color: white;
+  border-radius   : 10px;
+  padding         : 32px;
+  margin-top      : 37px;
+  width           : 600px;
+  position        : relative;
+  left            : -15px;
+  text-align      : center;
+
+  @media @mobile {
+    .scalable(width, 300, 1050);
+    .scalable(margin-top, 24, 37);
+    padding       : 32px;
+    display       : flex;
+    flex-direction: column;
+  }
+}
+
+.prefinery-form-embed {
+  // Set height explicitly to remove FOUC
+  height: 120px;
+
+  // force embeded iframe to a specific size
+  iframe {
+    height: 120px !important;
+  }
+}
+
+
+
 
 .illustrationJacket {
   z-index: 100;
@@ -451,24 +467,6 @@ p.smaller {
 
 /** Mobile styles */
 @media only screen and (max-width: 800px) {
-
-  form {
-    .scalable(width, 300, 1050);
-    .scalable(margin-top, 24, 37);
-    padding       : 32px;
-    display       : flex;
-    flex-direction: column;
-  }
-
-  form input {
-    width: auto;
-  }
-
-  form button {
-    margin-top  : 16px;
-    margin-left : 0;
-    margin-right: 0;
-  }
 
   .arrowPart {
     display: none;
