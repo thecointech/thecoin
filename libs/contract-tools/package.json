@@ -22,13 +22,21 @@
     "contract-gen-types": "./src/contract-gen-types.js"
   },
   "scripts": {
+    "build": "yarn tsc",
     "emulator": "start yarn truffle develop --config=./src/truffle.js",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "exports": {
     "./truffle": "./src/truffle.js",
-    "./migrations": "./src/migrations.ts",
+    "./migrations": "./build/migrations.js",
     "./jest.config": "./src/jest.config.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
   },
   "dependencies": {
     "@thecointech/signers": "*",
