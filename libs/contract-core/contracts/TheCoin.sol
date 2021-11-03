@@ -5,10 +5,10 @@
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
@@ -87,8 +87,7 @@ contract TheCoin is ERC20Upgradeable {
     function initialize(address _sender) public
         initializer()
     {
-      __ERC20_init("THE: Coin", "THE");
-      _setupDecimals(6);
+      __ERC20_init("TheCoin", "THE");
 
         // We initialize all roles to owner.
         // It is expected that Owner will distribute
@@ -97,6 +96,10 @@ contract TheCoin is ERC20Upgradeable {
         role_Minter = _sender;
         role_TheCoin = _sender;
         role_Police = _sender;
+    }
+
+    function decimals() public view virtual override returns (uint8) {
+      return 6;
     }
 
     function getRoles() public view returns(address,address,address,address)
@@ -126,7 +129,7 @@ contract TheCoin is ERC20Upgradeable {
     // Coins currently owned by clients (not TheCoin)
     function coinsCirculating() public view returns(uint)
     {
-        return totalSupply().sub(balanceOf(role_TheCoin));
+        return totalSupply() - balanceOf(role_TheCoin);
     }
 
     // Coins available for sale to the public
@@ -146,7 +149,6 @@ contract TheCoin is ERC20Upgradeable {
     public
     timestampIncreases(from, timestamp)
     isTransferable(from, value + fee)
-    returns (bool)
     {
         address signer = recoverSigner(from, to, value, fee, timestamp, signature);
         require(signer == from, "Invalid signature for address");
@@ -217,128 +219,6 @@ contract TheCoin is ERC20Upgradeable {
     {
         return freezeUntil[account];
     }
-
-
-    // ------------------------------------------------------------------------
-    // Implement escrow 'accounts' for holding amounts in escrow to be used
-    // in offline transactions
-    // ------------------------------------------------------------------------
-
-    // TODO: Spending _balances are amounts that
-    // are transfered from the _balances into
-    // escrow accounts.  These escrow accounts can then
-    // be spent against and tracked with local databases
-    // and are synced back to the main chain once per week (or so)
-    struct TapCapData
-    {
-        uint TransactionId; // Last processed TC transaction
-        uint TapCapEscrow; // How much is currently held in escrow?
-        uint TapCapRefill;  // How much should be refilled each week?
-    }
-
-    mapping(address => TapCapData) tapCaps;
-
-    event TapCapTopUp(address client, uint topup);
-    event TapCapSetWeekly(address client, uint weeklyLimit);
-    event TapCapClear(address client);
-    event TapCapUserUpdated(address client, int change, uint toppedUp);
-
-    // Event emitted when manually processing TC's
-    event TapCapProcessed(address client, address dest, uint amount);
-
-    // Topup the escrow.  NOTE: This will implicitly increase the amount registered by
-    // the spending manager.  Those records are separate and not directly
-    // linked to the amounts here.
-    // NOTE: THIS WHOLE FEATURE COULD BE IMPLEMENTED USING
-    //   ALLOWANCE & TRANSFER.
-    // function tapCapTopUp(uint topup) public
-    // balanceAvailable(topup)
-    // {
-    //     TapCapData storage userAccount = tapCaps[msg.sender];
-    //     _balances[msg.sender] = _balances[msg.sender].sub(topup);
-    //     userAccount.TapCapEscrow = userAccount.TapCapEscrow.add(topup);
-    //     emit TapCapTopUp(msg.sender, topup);
-    // }
-
-    // Set's the weekly TapCap for the user.  Does not affect the current weeks TapCap
-    function tapCapSetRefill(uint amount) public
-    {
-        tapCaps[msg.sender].TapCapRefill = amount;
-        emit TapCapSetWeekly(msg.sender, amount);
-    }
-
-    // Clear a users TapCap account.  A user may not directly
-    // clear an account, as the user may have a TC debit
-    // pending from the spending manager.
-    function tapCapClear() public
-    {
-        tapCaps[msg.sender].TapCapRefill = uint(-1);
-        emit TapCapClear(msg.sender);
-    }
-
-    // Get current values for spending...
-    function tapCapUser(address user) public view returns(uint TransactionId, uint TapCapEscrow, uint TapCapRefill)
-    {
-        return (tapCaps[user].TransactionId, tapCaps[user].TapCapEscrow, tapCaps[user].TapCapRefill);
-    }
-
-    //
-    // The big puppy.  Update all accounts with changes from spending
-    //
-    // function processSpending(address[] memory users, int[] memory amountChange) public
-    // onlyTapCapManager()
-    // {
-    //     uint numChanges = users.length;
-    //     require(numChanges == amountChange.length, "Each entry in users must be matched by an amountChange");
-
-    //     int totalChange = 0;
-    //     int newTotal = 0;
-    //     for (uint i = 0; i < numChanges; i++)
-    //     {
-    //         address user = users[i];
-    //         int delta = amountChange[i];
-    //         TapCapData storage userAccount = tapCaps[user];
-    //         // Apply the delta to the users account
-    //         if (delta > 0) {
-    //             // Get abs(delta)
-    //             uint pdelta = uint(delta);
-    //             // Add directly to the users regular account.  We may not
-    //             // have permission to interact with the users TapCap
-    //             _balances[user].add(pdelta);
-
-    //             // Update total.  Can't use safe-math for this, as
-    //             // newTotal is a signed int to allow it to go negative.
-    //             newTotal = totalChange + delta;
-    //             require(newTotal > totalChange, "int Overflow in processSpending: newTotal <= totalChange");
-    //             totalChange = newTotal;
-    //         }
-    //         else {
-    //             // Get abs(delta)
-    //             uint ndelta = uint(-delta);
-    //             userAccount.TapCapEscrow = userAccount.TapCapEscrow.sub(ndelta);
-
-    //             // Topup the account by an appropriate amount
-    //             if (userAccount.TapCapEscrow < userAccount.TapCapRefill)
-    //             {
-    //                 uint topup = userAccount.TapCapRefill.sub(userAccount.TapCapEscrow);
-    //                 if (topup > _balances[user])
-    //                 {
-    //                     topup = _balances[user];
-    //                 }
-    //                 _balances[user] = _balances[user].sub(topup);
-    //                 userAccount.TapCapEscrow = userAccount.TapCapEscrow.add(topup);
-    //                 emit TapCapUserUpdated(user, delta, topup);
-    //             }
-
-    //             // Update total
-    //             newTotal = totalChange + delta;
-    //             require(newTotal <= totalChange, "int Underflow in processSpending: newTotal > totalChange");
-    //             totalChange = newTotal;
-    //         }
-    //     }
-
-    //     require(totalChange == 0, "Cannot resolve spending, amounts do not balance to 0");
-    // }
 
     // ------------------------------------------------------------------------
     // Don't accept ETH
@@ -423,7 +303,7 @@ contract TheCoin is ERC20Upgradeable {
 
     modifier isTransferable(address from, uint amount) {
         //require(_balances[from] >= amount, "Caller has insufficient balance");
-        require(freezeUntil[from] < now, "Caller's account is currently frozen");
+        require(freezeUntil[from] < block.timestamp, "Caller's account is currently frozen");
         _;
     }
 

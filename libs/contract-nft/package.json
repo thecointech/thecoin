@@ -32,9 +32,9 @@
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
     "test": "yarn jest",
+
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
-
     "_deploy": "yarn contract-migrate && yarn contract-verify"
   },
   "files": [
@@ -51,7 +51,7 @@
   "devDependencies": {
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
-    "@openzeppelin/truffle-upgrades": "^1.5.0",
+    "@openzeppelin/truffle-upgrades": "^1.11.0",
     "@thecointech/contract-core": "^0.2.42",
     "@thecointech/signers": "^0.2.42",
     "@thecointech/utilities": "^0.2.42",

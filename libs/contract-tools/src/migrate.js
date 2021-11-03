@@ -6,7 +6,7 @@ const path = require("path");
 function migrate(network) {
   console.log(`Migrating to ${network}`);
   const truffleCmd = path.join(__dirname, '..', 'node_modules', '.bin', 'truffle');
-  return spawn(truffleCmd,
+  const child = spawn(truffleCmd,
     [
       `migrate`,
       `--config=${__dirname}/truffle.js`,
@@ -14,12 +14,12 @@ function migrate(network) {
     ],
     { stdio: 'inherit', shell: true, cwd: process.cwd() }
   );
+  return new Promise(resolve => child.on("close", resolve));
 }
 
-migrate("polygon")
-  .then(() => {
-    if (process.env.CONFIG_NAME != "devlive") {
-      migrate("ethereum");
-    }
-  })
-
+(async () => {
+  await migrate("polygon");
+  if (process.env.CONFIG_NAME != "devlive") {
+    await migrate("ethereum");
+  }
+})()

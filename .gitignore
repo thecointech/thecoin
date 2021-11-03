@@ -60,8 +60,7 @@ libs/contract-*/migrations/types
 libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/src/deployed/devlive.json
 libs/contract-*/src/deployed/devlive-polygon.json
-libs/contract-*/devlive.tokens.json
-
+libs/contract-*/devlive-polygon.tokens.json
 
 libs/idx/src/config.devlive.json
 

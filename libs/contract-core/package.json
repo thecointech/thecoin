@@ -20,8 +20,9 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "migrate:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
-    "build": "run-s build:contracts generate-types build:src",
-    "build:contracts": "truffle compile",
+    "build": "run-s build:contracts build:types build:src",
+    "build:contracts": "contract-build",
+    "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
@@ -31,13 +32,10 @@
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev:live:migrate",
-    "dev:live:emulator": "yarn truffle develop",
-    "dev:live:migrate": "yarn wait-port 9545 && yarn truffle migrate --network devlive",
-    "generate-types": "run-p generate-types:*",
-    "generate-types:truffle": "yarn typechain --out-dir ./migrations/types --target=truffle-v5 \"src/contracts/*.json\"",
-    "generate-types:ethers": "yarn typechain --out-dir ./src/types --target=ethers-v5 \"src/contracts/*.json\"",
-    "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
+
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
+    "_deploy": "yarn contract-migrate && yarn contract-verify"
   },
   "files": [
     "build/**/*"
@@ -52,18 +50,12 @@
   },
   "types": "./build/cjs/index.d.ts",
   "devDependencies": {
-    "@openzeppelin/contracts-upgradeable": "^3.4.0",
-    "@openzeppelin/truffle-upgrades": "^1.5.0",
-    "@thecointech/signers": "^0.2.42",
-    "@truffle/hdwallet-provider": "^1.2.3",
-    "@typechain/ethers-v5": "^8.0.0",
-    "@typechain/truffle-v5": "^6.0.0",
-    "jest": "*",
-    "truffle": "^5.4.17",
-    "typechain": "^6.0.2"
+    "@openzeppelin/contracts-upgradeable": "^4.3.2",
+    "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "jest": "*"
   },
   "dependencies": {
-    "ethers": "^5.4.7"
+    "@thecointech/contract-base": "*"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

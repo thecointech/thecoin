@@ -87,8 +87,13 @@ async function loadAccounts(maxIdx) {
 }
 
 function loadTypescript() {
-  const project = path.join(__dirname, "tsconfig.migrate.json")
-  require("ts-node").register({project});
+  require("ts-node").register({
+    dir: process.cwd(),
+    files: true,
+    compilerOptions: {
+      typeRoots: ["./migrations/types"]
+    }
+  });
 }
 
 const cwd = process.cwd();

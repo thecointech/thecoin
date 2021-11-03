@@ -1,8 +1,0 @@
-{
-  "extends": "../../tsconfig.libs.json",
-  "ts-node": {  "files": true },
-  "compilerOptions": {
-    "typeRoots": ["./migrations/types"]
-  },
-  "include": ["**/*.ts", "**/*.json"],
-}
