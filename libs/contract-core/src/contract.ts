@@ -15,11 +15,11 @@ const getAbi = () => TheCoinSpec.abi;
 
 const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
 const getContractAddress = () => {
-  const deployment = require(`./deployed/${config_env}.json`);
+  const deployment = require(`./deployed/${config_env}-polygon.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
-  return deployment.proxy;
+  return deployment.contract;
 }
 
 const buildContract = () =>

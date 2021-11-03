@@ -16,7 +16,7 @@ const getContractAddress = () => {
     console.log('Loaded succesfully');
     return deployment.contract;
   } catch (err) {
-    console.error(`We failed to load ./deployed/${config_env}.json`)
+    console.error(`We failed to load ./deployed/${config_env}-polygon.json`)
     throw new Error('Cannot create contract: missing deployment');
   }
 }
