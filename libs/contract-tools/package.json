@@ -27,7 +27,7 @@
   },
   "exports": {
     "./truffle": "./src/truffle.js",
-    "./migrations": "./src/migrations.js",
+    "./migrations": "./src/migrations.ts",
     "./jest.config": "./src/jest.config.js"
   },
   "dependencies": {
