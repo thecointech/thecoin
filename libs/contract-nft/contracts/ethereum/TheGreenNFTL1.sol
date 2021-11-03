@@ -13,7 +13,7 @@ import "../IMintable.sol";
 //
 // Polygon compatibility.
 // Allows L1 <=> L2 compatibility
-// Src: https://github.com/maticnetwork/pos-portal/blob/master/flat/ChildMintableERC721.sol
+// Src: https://github.com/maticnetwork/pos-portal/blob/master/flat/DummyMintableERC20.sol
 //
 contract TheGreenNFTL1 is TheGreenNFT, IMintableERC721, IMintable {
 

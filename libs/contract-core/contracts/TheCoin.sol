@@ -7,6 +7,7 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
@@ -32,7 +33,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is ERC20Upgradeable {
+contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 
     // An account may be subject to a timeout, during which
     // period it is forbidden from transferring its value
@@ -84,8 +85,7 @@ contract TheCoin is ERC20Upgradeable {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function initialize(address _sender) public
-        initializer()
+    function initialize(address _sender) public initializer
     {
       __ERC20_init("TheCoin", "THE");
 

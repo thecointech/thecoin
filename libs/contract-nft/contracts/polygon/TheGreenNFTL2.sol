@@ -1,7 +1,7 @@
-/// @title IPFS Uri Generator
+/// @title TheGreenNFTL2
 /// @author Stephen Taylor
-/// @notice Simple utils class handles generating a URI for IPFS content from our raw storage
-/// @dev This class is imported by our NFT to simplify the testing etc.
+/// @notice L2 version of TheGreenNFT
+/// @dev adds the ability to deposit/withdraw from L2
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
