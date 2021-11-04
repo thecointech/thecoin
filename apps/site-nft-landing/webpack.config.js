@@ -56,5 +56,9 @@ module.exports = {
       template: "./src/index.html",
       inject: "body"
     }),
+    new HtmlWebpackPlugin({
+      filename: 'index-fr.html',
+      template: './src/index-fr.html',
+    })
   ]
 };
