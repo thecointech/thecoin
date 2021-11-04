@@ -5,6 +5,7 @@ import { TheGreenNFTL2Contract } from '../migrations/types';
 contract.artifactsDir = "src/contracts";
 const factory: TheGreenNFTL2Contract = contract.fromArtifact('TheGreenNFTL2');
 const minter = accounts[0];
+jest.setTimeout(120000);
 
 it('Returns relevant validity', async () => {
   const nft = await factory.new(minter, minter);

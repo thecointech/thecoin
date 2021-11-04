@@ -1,1 +1,1 @@
-module.exports = require('@thecointech/contract-base/jest.config');
+module.exports = require('@thecointech/contract-tools/jest.config');
