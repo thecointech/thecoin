@@ -129,14 +129,43 @@ span.avoidwrap { display:inline-block; }
 }
 
 
-.logo {
-  background           : url("./images/Logo_green.svg") no-repeat;
-  background-size      : contain;
-  background-position-x: 5px;
+.header {
+
   .scalable(height, 32, 48);
   .scalable(margin-top, 8, 27);
   .scalable(padding-bottom, 8, 11);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .logo {
+    left: 5px;
+    height: 100%;
+  }
+  .translate {
+    height: 100%;
+    float: right;
+    padding-right: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 18px;
+    color: #525865;
+    text-decoration: none;
+
+
+    span {
+      margin-bottom: 4px;
+      margin-right: 8px;
+      border-bottom: 2px solid #2B5250;
+    }
+    img {
+      height: 80%;
+    }
+  }
 }
+
 
 .content-container {
   .scalable(margin-left, 15, 130);
@@ -297,7 +326,7 @@ p.smaller {
     justify-content: space-between;
     overflow-x: auto;
   }
-  
+
   .card {
     text-align             : center;
     width                  : 30%;
