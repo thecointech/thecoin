@@ -62,7 +62,7 @@ function isValid(packet: ETransferPacket) {
   const invalidMessage = /[\<\>\{\}\[\]\%\&\#\\\"]/g;
   return packet &&
     packet.question?.length >= 2 &&
-    !packet.question?.match(invalidChars) &&
+    !packet.question?.match(invalidMessage) &&
     packet.answer?.length >= 3 &&
     !packet.answer.match(invalidChars) &&
     packet.email?.length >= 3 &&
