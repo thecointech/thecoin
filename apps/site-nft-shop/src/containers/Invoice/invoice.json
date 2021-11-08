@@ -1,0 +1,112 @@
+{
+    "invoices":[
+        {
+            "id":"1",
+            "name":"NFT1",
+            "descriptionBig":"NFT1 Description Big for the full product card",
+            "descriptionSmall":"NFT1 Description Small",
+            "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "price":95,
+            "status":"paid",
+            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+            "active":true,
+            "client":{
+                "id":"1",
+                "firstName":"Marie",
+                "lastName":"Test",
+                "email":"marie@test.com",
+                "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                "active":true
+            },
+            "address":{
+                "id":"1",
+                "firstLine":"10 rue du test",
+                "secondLine":"apt 002",
+                "postalCode":"H1L3N2",
+                "city":"Montreal",
+                "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                "active":true,
+                "country":{
+                    "id":"1",
+                    "name":"Canada",
+                    "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                    "active":true
+                }
+            },
+            "invoiceLines":[
+                {
+                    "idInvoice":"1",
+                    "idDiscount":"1",
+                    "quantity":1,
+                    "unitPrice":"30000",
+                    "comment":"Test de commentaire sur une ligne de la facture",
+                    "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                    "active":true,
+                    "product":{
+                        "id":"1",
+                        "name":"NFT1",
+                        "descriptionBig":"NFT1 Description Big for the full product card",
+                        "descriptionSmall":"NFT1 Description Small",
+                        "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+                        "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+                        "price":95,
+                        "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                        "active":true
+                    },
+                    "taxes":[
+                        {
+                            "id":"1",
+                            "name":"TPS",
+                            "tax":5,
+                            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                            "active":true
+                        },
+                        {
+                            "id":"2",
+                            "name":"TVQ",
+                            "tax":2.5,
+                            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                            "active":true
+                        }
+                    ]
+                },{
+                    "idInvoice":"1",
+                    "idDiscount":"1",
+                    "quantity":1,
+                    "unitPrice":"50000",
+                    "comment":"Test de commentaire sur une ligne de la facture",
+                    "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                    "active":true,
+                    "product":{
+                        "id":"2",
+                        "name":"NFT2",
+                        "descriptionBig":"NFT2 Description Big for the full product card",
+                        "descriptionSmall":"NFT2 Description Small",
+                        "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+                        "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+                        "price":95,
+                        "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                        "active":true
+                    },
+                    "taxes":[
+                        {
+                            "id":"1",
+                            "name":"TPS",
+                            "tax":5,
+                            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                            "active":true
+                        },
+                        {
+                            "id":"2",
+                            "name":"TVQ",
+                            "tax":2.5,
+                            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+                            "active":true
+                        }
+                    ]
+                }    
+            ]
+        }
+    ]  
+}

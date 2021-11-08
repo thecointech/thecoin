@@ -1,0 +1,54 @@
+{
+  "ATYl3e": {
+    "defaultMessage": "Contact Us",
+    "description": "app.MainNavigation.contact: Title for the contact us entry in the menu"
+  },
+  "It9lF6": {
+    "defaultMessage": "Settings",
+    "description": "app.MainNavigation.settings: Title for the entry in the sidebar menu"
+  },
+  "VTi6+m": {
+    "defaultMessage": "Overview",
+    "description": "app.MainNavigation.home: Title for the entry in the sidebar menu"
+  },
+  "XNv52p": {
+    "defaultMessage": "Top up balance",
+    "description": "app.MainNavigation.transferin: Title for the entry in the sidebar menu"
+  },
+  "cQy1PG": {
+    "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
+    "description": "app.contactus.successMessage: Success Message for the contact us page"
+  },
+  "de9YB+": {
+    "defaultMessage": "Contact Us",
+    "description": "app.contactus.title: Main title for the Contact Us page in the app"
+  },
+  "lLw19l": {
+    "defaultMessage": "We have encountered an error. Don't worry, your message is safe, but please still contact support@thecoin.io",
+    "description": "app.contactus.errorMessage: Error Message for the contact us page"
+  },
+  "m0DPoc": {
+    "defaultMessage": "Home",
+    "description": "app.MainNavigation.home: Title for the Home entry in the menu"
+  },
+  "mJoiFU": {
+    "defaultMessage": "Contact Us",
+    "description": "app.MainNavigation.contact: Title for the entry in the sidebar menu"
+  },
+  "rjDKFC": {
+    "defaultMessage": "Send",
+    "description": "app.contactus.form.button: For the button in the contact us page"
+  },
+  "t19+gS": {
+    "defaultMessage": "Make payments",
+    "description": "app.MainNavigation.makepayments: Title for the entry in the sidebar menu"
+  },
+  "uEep9j": {
+    "defaultMessage": "Send us a secured message and we will answer as quickly as we can",
+    "description": "app.contactus.description: Description for the Contact Us page in the app"
+  },
+  "yfANOQ": {
+    "defaultMessage": "Help",
+    "description": "app.MainNavigation.help: Title for the help entry in the menu"
+  }
+}

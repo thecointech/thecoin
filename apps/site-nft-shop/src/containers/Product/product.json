@@ -1,0 +1,49 @@
+{
+    "products":[
+        {
+            "id":"1",
+            "name":"NFT1",
+            "descriptionBig":"NFT1 Description Big for the full product card",
+            "descriptionSmall":"NFT1 Description Small",
+            "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "price":95,
+            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+            "active":true
+        },
+        {
+            "id":"2",
+            "name":"NFT2",
+            "descriptionBig":"NFT2 Description Big for the full product card",
+            "descriptionSmall":"NFT2 Description Small",
+            "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "price":895,
+            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+            "active":true
+        },
+        {
+            "id":"3",
+            "name":"NFT3",
+            "descriptionBig":"NFT3 Description Big for the full product card",
+            "descriptionSmall":"NFT3 Description Small",
+            "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "price":1895,
+            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+            "active":false
+        },
+        {
+            "id":"4",
+            "name":"NFT4",
+            "descriptionBig":"NFT4 Description Big for the full product card",
+            "descriptionSmall":"NFT4 Description Small",
+            "imageBig":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "imageSmall":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png",
+            "price":54895,
+            "datetimeCreation":"2015-05-16T05:50:06.7199222-04:00",
+            "active":true
+        }
+    ]
+    
+}
