@@ -34,7 +34,7 @@ export const Mint = () => {
     setStatus(MintStatus.PROCESSING);
     try {
       const { contract } = account;
-      const tx = await contract!.mintCoins(toMint);
+      const tx = await contract!.mintCoins(toMint, DateTime.now().toSeconds());
       setTxHash(tx.hash);
       await tx.wait();
       accountApi.updateBalance();

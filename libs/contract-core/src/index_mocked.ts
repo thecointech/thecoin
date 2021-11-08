@@ -5,15 +5,16 @@ const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.r
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-export class TheCoin implements Pick<Src.TheCoin, 'coinPurchase'|'balanceOf'|'certifiedTransfer'>{
+export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer'|'balanceOf'|'certifiedTransfer'>{
 
-  coinPurchase = (_address: string, _amount: number) => Promise.resolve({
+  exactTransfer = (_address: string, _to: string, _amount: number) => Promise.resolve({
     wait: () => { },
     hash: `0x${genRanHex(64)}`,
   } as any)
   balanceOf = () => Promise.resolve(BigNumber.from(1000000000));
   certifiedTransfer = () => Promise.resolve({
     confirmations: 1,
+    wait: () => { },
     hash: `0x${genRanHex(64)}`,
   } as any)
 

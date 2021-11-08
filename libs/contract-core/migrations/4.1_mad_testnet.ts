@@ -8,12 +8,12 @@ export async function initializeTestNet(proxy: TheCoin, accounts: NamedAccounts)
   // For testnet: we immediately mint 10K coins
   console.log("Minting coins");
   const balance = 10000 * COIN_EXP;
-  await proxy.mintCoins(balance, {from: accounts.Minter });
+  await proxy.mintCoins(balance, 0, {from: accounts.Minter });
 
   // The coins are all in TheCoin's account.  Lets move them to BrokerCAD
   console.log("Transfer to BrokerCAD");
   const timestamp = Math.floor(Date.now() / 1000);
-  proxy.coinPurchase(accounts.BrokerCAD, balance, 0, timestamp, { from: accounts.TheCoin });
+  proxy.exactTransfer(accounts.TheCoin, accounts.BrokerCAD, balance, timestamp, { from: accounts.TheCoin });
 
   // TODO: Replicate live account statuses
 }

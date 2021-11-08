@@ -1,4 +1,4 @@
-/// @title THE:Coin: Future-proof currency
+/// @title TheCoin: Future-proof currency
 /// @author Stephen Taylor
 /// @notice TheCoin is a stablecoin, backed by the S&P500 and designed as a day-to-day currency.
 /// @dev Explain to a developer any extra details
@@ -13,17 +13,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
-
-// ----------------------------------------------------------------------------
-// THE:Coin - A crypto-currency pegged to the S&P500
-//
-// Symbol      : SPY
-// Name        : SpyCoin - A cryptocurrency that tracks the S&P500
-// Decimals    : 6
-//
-// Enjoy.
-//
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // ERC20 Token, with the addition of symbol, name and decimals
@@ -73,14 +62,13 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     address new_TheCoin;
     address new_Police;
 
-    // Two special-case events include extra information (balance & timestamp)
-    // for tracking & tax record reasons
-    event Purchase(address purchaser, uint amount, uint balance, uint timestamp);
-    event Redeem(address purchaser, uint amount, uint balance, uint timestamp);
-
     // ------------------------------------------------------------------------
     // Events
     // ------------------------------------------------------------------------
+
+    // We record the exact timestamp a transaction was initiated
+    // to ensure our tracking is precise (for tax etc).
+    event ExactTransfer(address from, address to, uint amount, uint timestamp);
 
     // ------------------------------------------------------------------------
     // Constructor
@@ -113,17 +101,19 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 
     // The owner will periodically add new coins to match
     // shares purchased of SPY
-    function mintCoins(uint amount) public
+    function mintCoins(uint amount, uint timestamp) public
         onlyMinter
     {
         _mint(role_TheCoin, amount);
+        emit ExactTransfer(address(0), role_TheCoin, amount, timestamp);
     }
 
     // Remove coins
-    function meltCoins(uint amount) public
+    function meltCoins(uint amount, uint timestamp) public
         onlyMinter
     {
         _burn(role_TheCoin, amount);
+        emit ExactTransfer(role_TheCoin, address(0), amount, timestamp);
     }
 
     // Coins currently owned by clients (not TheCoin)
@@ -155,6 +145,7 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
         _transfer(from, to, value);
         _transfer(from, msg.sender, fee);
 
+        emit ExactTransfer(from, to, value, timestamp);
         lastTxTimestamp[from] = timestamp;
     }
 
@@ -178,25 +169,10 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     // Client interactions with TheCoin
     // ------------------------------------------------------------------------
 
-    // Users purchase coin from brokers.  This function is used to declare
-    // a transfer with a precise timestamp to ensure we can reconstruct the fx price
-    // of this transaction later.
-    // NOTE: timestamp is in seconds
-    function coinPurchase(address purchaser, uint amount, uint /*timeout*/, uint timestamp) public
-    {
-        _transfer(msg.sender, purchaser, amount);
-        //freezeUntil[purchaser] = timeout;
-        emit Purchase(purchaser, amount, balanceOf(purchaser), timestamp);
-    }
-
-    // A user returns their coins to us (this will trigger disbursement externally)
-    // We record the precise timestamp to ensure we can reconstruct the price
-    // of this transaction later
-    function coinRedeem(uint amount, address redeemer, uint timestamp) public
-    {
-        // first, we recover the coins back to our own account
-        _transfer(msg.sender, redeemer, amount);
-        emit Redeem(msg.sender, amount, balanceOf(msg.sender), timestamp);
+  // Allow specifying exact timestamp.  This is to allow specifying the timestamp for purchase/sale
+  function exactTransfer(address from, address to, uint amount, uint256 timestamp) public onlyTheCoin {
+      _transfer(from, to, amount);
+      emit ExactTransfer(from, to, amount, timestamp);
     }
 
     // ------------------------------------------------------------------------

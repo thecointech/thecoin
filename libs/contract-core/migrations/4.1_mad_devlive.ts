@@ -8,7 +8,7 @@ export async function initializeDevLive(contract: TheCoin, accounts: NamedAccoun
 
   const tcBal = await contract.balanceOf(accounts.TheCoin);
   if (tcBal.toNumber() === 0) {
-    await contract.mintCoins(10000 * COIN_EXP, { from: accounts.Minter });
+    await contract.mintCoins(10000 * COIN_EXP, 0, { from: accounts.Minter });
   }
 
   await seedAccount(contract, accounts.TheCoin, accounts.client1);
@@ -17,7 +17,7 @@ export async function initializeDevLive(contract: TheCoin, accounts: NamedAccoun
   await seedAccount(contract, accounts.TheCoin, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 
   // Send a decent amount to BrokerCAD
-  await contract.coinPurchase(accounts.BrokerCAD, 5000 * COIN_EXP, 0, 0, { from: accounts.TheCoin });
+  await contract.exactTransfer(accounts.TheCoin, accounts.BrokerCAD, 5000 * COIN_EXP, 0, { from: accounts.TheCoin });
 }
 
 async function seedAccount(contract: TheCoin, theCoin: string, client: string, onlyBuy=false) {
@@ -36,12 +36,12 @@ async function seedAccount(contract: TheCoin, theCoin: string, client: string, o
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
     const balance = await contract.balanceOf(client);
     if (onlyBuy || balance.toNumber() <= amount || Math.random() < 0.6) {
-      await contract.coinPurchase(client, amount, 0, toSeconds(ts), { from: theCoin });
+      await contract.exactTransfer(theCoin, client, amount, toSeconds(ts), { from: theCoin });
     }
     else {
       // TODO: Our redemption function is not gass-less.  We need
       // to unify our functionality to enable processing these functions
-      await contract.coinPurchase(theCoin, amount, 0, toSeconds(ts), { from: client });
+      await contract.exactTransfer(client, theCoin, amount, toSeconds(ts), { from: client });
     }
   }
 }
