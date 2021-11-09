@@ -1,11 +1,11 @@
-import { join, resolve as _resolve } from 'path';
-
+import { join, dirname, resolve as _resolve } from 'path';
 //
 // Mocking packages for webpack (used by sites & admin)
 //
 
+const __dirname = dirname(new URL(import.meta.url).pathname);
 // Typescript compilation on __mocks__ folder
-compileMocks = {
+const compileMocks = {
   rules: [
     // Allow ts-loader to parse mocks
     {
@@ -21,16 +21,16 @@ compileMocks = {
       },
     }
   ],
-},
+}
 
-allMocks = {
+const allMocks = {
   // Expose all mocks
   resolve: {
     modules: [__dirname]
   }
 }
 
-liveMocks = {
+const liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {

@@ -97,7 +97,7 @@ export async function loadAndMergeHistory(address: string, fromBlock: number, co
     history = await readAndMergeTransfers(address, false, fromBlock, contract, history);
     return history;
   }
-  catch (err: unknown) {
+  catch (err) {
     log.error(err);
   }
   return [];

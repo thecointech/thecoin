@@ -5,7 +5,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
 
-import baseOptions from './webpack.base.babel';
+import baseOptions from './webpack.base.mjs';
+import signerOptions from './webpack.signer.mjs';
+
 const prodOptions = {
   mode: 'production',
 
@@ -99,12 +101,10 @@ const prodOptions = {
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
-  experiments: {
-    topLevelAwait: true,
-  }
 };
 
 export default merge(
-  baseOptions,
+  signerOptions,
   prodOptions,
+  baseOptions,
 );

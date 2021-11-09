@@ -3,7 +3,9 @@
 // This file defines the LESS loaders common to our site build and
 // to our storybook webpack based at the root
 //
-const { paths, modifyVars } = await import('./vars');
+import { createRequire } from "module"; // Bring in the ability to create the 'require' method
+const require = createRequire(import.meta.url); // construct the require method
+const { paths, modifyVars } = require('./vars.js');
 
 export const css_module_loader = {
   // CSS/LESS module matching
