@@ -1,18 +1,18 @@
 // Important modules this config uses
-const path = require('path');
-const { merge } = require("webpack-merge")
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const CompressionPlugin = require('compression-webpack-plugin');
+import { join, resolve } from 'path';
+import { merge } from "webpack-merge";
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import WebpackPwaManifest from 'webpack-pwa-manifest';
+import CompressionPlugin from 'compression-webpack-plugin';
 
-const baseOptions = require('./webpack.base.babel');
+import baseOptions from './webpack.base.babel';
 const prodOptions = {
   mode: 'production',
 
   // In production, we skip all hot-reloading stuff
   entry: [
     require.resolve('react-app-polyfill/ie11'),
-    path.join(process.cwd(), 'src/app.tsx'),
+    join(process.cwd(), 'src/app.tsx'),
   ],
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
@@ -83,11 +83,11 @@ const prodOptions = {
       ios: true,
       icons: [
         {
-          src: path.resolve('src/images/favicon.png'),
+          src: resolve('src/images/favicon.png'),
           sizes: [72, 96, 128, 144, 192, 384, 512],
         },
         {
-          src: path.resolve('src/images/favicon.png'),
+          src: resolve('src/images/favicon.png'),
           sizes: [120, 152, 167, 180],
           ios: true,
         },
@@ -104,7 +104,7 @@ const prodOptions = {
   }
 };
 
-module.exports = merge(
+export default merge(
   baseOptions,
   prodOptions,
 );

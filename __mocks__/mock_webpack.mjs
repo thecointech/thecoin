@@ -1,4 +1,4 @@
-const path = require('path');
+import { join, resolve as _resolve } from 'path';
 
 //
 // Mocking packages for webpack (used by sites & admin)
@@ -14,7 +14,7 @@ compileMocks = {
       use: {
         loader: 'ts-loader',
         options: {
-          configFile: path.join(__dirname, '..', 'tsconfig.base.json'),
+          configFile: join(__dirname, '..', 'tsconfig.base.json'),
           transpileOnly: true,
           experimentalWatchApi: true,
         },
@@ -34,7 +34,7 @@ liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {
-      "googleapis": path.resolve(__dirname, "googleapis.ts"),
+      "googleapis": _resolve(__dirname, "googleapis.ts"),
     }
   }
 }
@@ -56,7 +56,7 @@ function getMocks() {
   }
 }
 
-module.exports = {
+export default {
   module: compileMocks,
   ...getMocks(),
 }
