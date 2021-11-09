@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
 const Dotenv = require('dotenv-webpack');
+const { getSigner } = require('@thecointech/signers');
 
 const configName = process.env.CONFIG_NAME
 
@@ -16,6 +17,9 @@ const packageFile = path.join(projectRoot, 'package.json');
 
 const envFiles = getEnvFiles(configName);
 const version = require(packageFile).version;
+
+const brokerCad = await getSigner("BrokerCAD");
+const xferAsst = await getSigner("BrokerTransferAssistant");
 
 module.exports = {
   // see https://github.com/trentm/node-bunyan#webpack
@@ -127,6 +131,9 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(version),
+      // We need wallet addresses for loading tx's correctly
+      'process.env.WALLET_BrokerCAD_ADDRESS': await brokerCad.getAddress(),
+      'process.env.WALLET_BrokerTransferAssistant_ADDRESS': await xferAsst.getAddress(),
     }),
     ...envFiles.map(path => new Dotenv({path, ignoreStub: true})),
 
