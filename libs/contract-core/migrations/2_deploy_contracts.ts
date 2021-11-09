@@ -7,7 +7,7 @@ const step: MigrationStep = () =>
 
     const contract = await getContract(deployer, network);
     // Serialize our contract addresses
-    storeContractAddress(__dirname, network, contract.address);
+    storeContractAddress(__dirname, network, contract.address, ['cjs', 'mjs']);
   }
 
 module.exports = step

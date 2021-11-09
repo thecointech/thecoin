@@ -35,9 +35,9 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
 {
   log.debug({address}, `Transfering ${value.toString()} to {address}`);
 
-  const tx = await contract.coinPurchase(
+  const tx = await contract.exactTransfer(
     address,
-    value.toString(),
+    value.toNumber(),
     0,
     settled.toSeconds(),
   );

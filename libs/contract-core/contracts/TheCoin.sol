@@ -39,9 +39,6 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 
     // The following addresses have different roles
 
-    // TapCapManager is responsible for periodically
-    // processing the externally managed TapCap feature
-    address role_TapCapManager;
     // The Minter is permitted to mint/melt coins.
     // All coins minted/melted by the minter are
     // from/to TheReserves address
@@ -57,7 +54,6 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     // Enforcing a set/accept 2 step process for setting roles
     // creates a strong guarantee that we can't f* up and set
     // the roles to an invalid address
-    address new_TapCapManager;
     address new_Minter;
     address new_TheCoin;
     address new_Police;
@@ -68,6 +64,7 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 
     // We record the exact timestamp a transaction was initiated
     // to ensure our tracking is precise (for tax etc).
+    // NOTE: timestamp here is in millis (not seconds)
     event ExactTransfer(address from, address to, uint amount, uint timestamp);
 
     // ------------------------------------------------------------------------
@@ -80,19 +77,27 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
         // We initialize all roles to owner.
         // It is expected that Owner will distribute
         // these roles to others
-        role_TapCapManager = _sender;
         role_Minter = _sender;
         role_TheCoin = _sender;
         role_Police = _sender;
+    }
+
+  // Clone function is used on initialization to define
+    function runCloneTransfer(address from, address to, uint amount, uint fee, uint timestamp) public {
+        _transfer(from, to, amount);
+        if (fee > 0) {
+          _transfer(from, msg.sender, fee);
+        }
+        emit ExactTransfer(from, to, amount, timestamp);
     }
 
     function decimals() public view virtual override returns (uint8) {
       return 6;
     }
 
-    function getRoles() public view returns(address,address,address,address)
+    function getRoles() public view returns(address,address,address)
     {
-        return (role_TapCapManager, role_Minter, role_TheCoin, role_Police);
+        return (role_Minter, role_TheCoin, role_Police);
     }
 
     // ------------------------------------------------------------------------
@@ -160,7 +165,7 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 	public pure returns (address)
 	{
 		// This recreates the message that was signed on the client.
-    	bytes32 message = buildMessage(from, to, value, fee, timestamp);
+    bytes32 message = buildMessage(from, to, value, fee, timestamp);
 		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
 		return ECDSAUpgradeable.recover(signedMessage, signature);
 	}
@@ -170,9 +175,9 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     // ------------------------------------------------------------------------
 
   // Allow specifying exact timestamp.  This is to allow specifying the timestamp for purchase/sale
-  function exactTransfer(address from, address to, uint amount, uint256 timestamp) public onlyTheCoin {
-      _transfer(from, to, amount);
-      emit ExactTransfer(from, to, amount, timestamp);
+  function exactTransfer(address to, uint amount, uint256 timestamp) public onlyTheCoin {
+      _transfer(_msgSender(), to, amount);
+      emit ExactTransfer(_msgSender(), to, amount, timestamp);
     }
 
     // ------------------------------------------------------------------------
@@ -206,17 +211,6 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     // ------------------------------------------------------------------------
     // Allow updating our key users
     // ------------------------------------------------------------------------
-    function setTapCapManager(address newManager) public
-    onlyTapCapManager
-    {
-        new_TapCapManager = newManager;
-    }
-    function acceptTapCapManager() public
-    {
-        require(msg.sender == new_TapCapManager, "Permission Denied");
-        role_TapCapManager = new_TapCapManager;
-        new_TapCapManager = address(0);
-    }
 
     function setMinter(address newMinter) public
     onlyMinter
@@ -263,10 +257,10 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     }
 
     // ------------------------------------------------------------------------
-    // Override hooks to ensure
+    // Override hooks to ensure isTransferable is called for every transfer
     // ------------------------------------------------------------------------
     function _beforeTokenTransfer(address from, address to, uint256 amount) isTransferable(from, amount)
-        internal virtual override // Add virtual here!
+        internal virtual override
     {
       super._beforeTokenTransfer(from, to, amount);
     }
@@ -280,12 +274,6 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     modifier isTransferable(address from, uint amount) {
         //require(_balances[from] >= amount, "Caller has insufficient balance");
         require(freezeUntil[from] < block.timestamp, "Caller's account is currently frozen");
-        _;
-    }
-
-    modifier onlyTapCapManager()
-    {
-        require(msg.sender == role_TapCapManager, "Invalid sender");
         _;
     }
 

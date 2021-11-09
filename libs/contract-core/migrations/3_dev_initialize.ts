@@ -20,11 +20,6 @@ async function assignRoles(proxy: TheCoin, accounts: NamedAccounts) {
   await proxy.setPolice(Police, { from: TheCoin });
   await proxy.acceptPolice({ from: Police });
   console.log(`Set Police: ${Police}`);
-
-  await proxy.setTapCapManager(TCManager, { from: TheCoin });
-  await proxy.acceptTapCapManager({ from: TCManager });
-  console.log(`Set TCManager: ${TCManager}`);
 }
-
 
 module.exports = deploy;

@@ -4,6 +4,7 @@ import { isType, AnyAction, BuyAction, getActionFromInitial, removeIncomplete, s
 import { getSigner } from '@thecointech/signers';
 import { init } from '@thecointech/firestore';
 import { log } from '@thecointech/logging';
+import { changeInit, toIgnore, toChange } from './changes';
 
 // Read cached src data and load into whatever chain is currently running
 async function copyOntoCurrentDeployment() {
@@ -13,6 +14,7 @@ async function copyOntoCurrentDeployment() {
   log.debug(`Cloning stored data onto chain: ${process.env.CONFIG_NAME}`);
   process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
   await init();
+  await changeInit();
 
   const theCoin = await getSigner("TheCoin");
   const brokerCad = await getSigner("BrokerCAD");
@@ -29,6 +31,7 @@ async function copyOntoCurrentDeployment() {
     ])
   );
   for (const address of allAddresses) {
+    if (toIgnore(address)) continue;
     const userActions = [
       ...data.Buy[address],
       ...data.Sell[address],
@@ -48,19 +51,22 @@ async function copyOntoCurrentDeployment() {
 
 async function cloneBuy(original: BuyAction, contract: TheCoin, brokerAddress: string) {
   const clone = await getActionFromInitial(original.address, "Buy", original.data);
+  if (clone.history.length > 0) return;
   let state: TransitionDelta = {} as any;
   for (const delta of original.history) {
     if (delta.type === "sendCoin") {
       // the "coin" amount is the number that should be transfered
       if (delta.hash && state.coin) {
         if (!state.coin || !state.date) throw new Error("fasdfsa");
-        const tx = await contract.exactTransfer(
+        const tx = await contract.cloneTransaction(
           brokerAddress,
-          original.address,
+          toChange(original.address),
           state.coin.toNumber(),
-          state.date.toSeconds(),
+          0,
+          state.date.toMillis(),
         );
         await tx.wait(1);
+        delta.hash = tx.hash;
       }
     }
 
@@ -79,22 +85,23 @@ async function cloneBuy(original: BuyAction, contract: TheCoin, brokerAddress: s
 
 async function cloneSell(original: TypedAction<"Bill"|"Sell">, contract: TheCoin) {
   const clone = await getActionFromInitial(original.address, "Sell", original.data);
-  let state = {};
+  if (clone.history.length > 0) return;
+  let state: TransitionDelta = {} as any;
   for (const delta of original.history) {
 
     if (delta.type === "depositCoin") {
       // the "coin" amount is the number that should be transfered
       if (delta.hash) {
-        const { signature, transfer } = original.data.initial;
-        const tx = await contract.certifiedTransfer(
-          transfer.from,
-          transfer.to,
-          transfer.value,
-          transfer.fee,
-          transfer.timestamp,
-          signature
+        const { from, to, value, fee, timestamp } = original.data.initial.transfer;
+        const tx = await contract.cloneTransaction(
+          from,
+          to,
+          value,
+          fee,
+          timestamp
         );
         await tx.wait(1);
+        delta.hash = tx.hash;
       }
     }
 
@@ -108,6 +115,7 @@ async function cloneSell(original: TypedAction<"Bill"|"Sell">, contract: TheCoin
       ...delta,
     }
   }
+  await markComplete(state, clone);
 }
 
 async function markComplete(state: TransitionDelta, action: AnyAction) {
