@@ -70,3 +70,4 @@ apps/*/src/translations/en.json
 apps/tx-processor/run_service.cmd
 
 storybook-static/
+apps/cloner/src/prod.json

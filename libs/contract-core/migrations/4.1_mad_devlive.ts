@@ -41,7 +41,7 @@ async function seedAccount(contract: TheCoin, theCoin: string, client: string, o
     else {
       // TODO: Our redemption function is not gass-less.  We need
       // to unify our functionality to enable processing these functions
-      await contract.exactTransfer(client, theCoin, amount, toSeconds(ts), { from: client });
+      await contract.exactTransfer(client, theCoin, amount, toSeconds(ts), { from: theCoin });
     }
   }
 }
