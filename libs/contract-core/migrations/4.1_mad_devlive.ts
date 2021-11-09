@@ -17,7 +17,7 @@ export async function initializeDevLive(contract: TheCoin, accounts: NamedAccoun
   await seedAccount(contract, accounts.TheCoin, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 
   // Send a decent amount to BrokerCAD
-  await contract.runCloneTransfer(accounts.TheCoin, accounts.BrokerCAD, 50000 * COIN_EXP, 0, { from: accounts.TheCoin });
+  await contract.runCloneTransfer(accounts.TheCoin, accounts.BrokerCAD, 50000 * COIN_EXP, 0, 0, { from: accounts.TheCoin });
 }
 
 async function seedAccount(contract: TheCoin, theCoin: string, client: string, onlyBuy=false) {
@@ -35,12 +35,12 @@ async function seedAccount(contract: TheCoin, theCoin: string, client: string, o
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
     const balance = await contract.balanceOf(client);
     if (onlyBuy || balance.toNumber() <= amount || Math.random() < 0.6) {
-      await contract.runCloneTransfer(theCoin, client, amount, ts.toMillis(), { from: theCoin });
+      await contract.runCloneTransfer(theCoin, client, amount, ts.toMillis(), 0, { from: theCoin });
     }
     else {
       // TODO: Our redemption function is not gass-less.  We need
       // to unify our functionality to enable processing these functions
-      await contract.runCloneTransfer(client, theCoin, amount, ts.toMillis(), { from: theCoin });
+      await contract.runCloneTransfer(client, theCoin, amount, ts.toMillis(), 0, { from: theCoin });
     }
   }
 }

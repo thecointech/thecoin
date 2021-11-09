@@ -3,16 +3,16 @@
 /**
  * Front-end middleware
  */
-module.exports = (app, options) => {
+export async function setup(app, options) {
   const isProd = process.env.NODE_ENV === 'production';
 
   if (isProd) {
-    const addProdMiddlewares = require('./addProdMiddlewares');
+    const { addProdMiddlewares } = await import('./addProdMiddlewares.mjs');
     addProdMiddlewares(app, options);
   } else {
-    const addDevMiddlewares = require('./addDevMiddlewares');
-    import('../../webpack/webpack.dev.mjs')
-      .then(config => addDevMiddlewares(app, config.default))
+    const { addDevMiddlewares } = await import('./addDevMiddlewares.mjs');
+    const config = await import('../../webpack/webpack.dev.mjs')
+    addDevMiddlewares(app, config.default);
   }
 
   return app;

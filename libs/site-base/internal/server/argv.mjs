@@ -1,1 +1,2 @@
-module.exports = require('minimist')(process.argv.slice(2));
+import minimist from 'minimist';
+export default minimist(process.argv.slice(2));

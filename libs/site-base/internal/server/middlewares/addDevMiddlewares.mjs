@@ -1,8 +1,8 @@
-const path = require('path');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const nocache = require('nocache')
+import path from 'path';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import nocache from 'nocache';
 
 function createWebpackMiddleware(compiler, publicPath) {
   return webpackDevMiddleware(compiler, {
@@ -11,7 +11,7 @@ function createWebpackMiddleware(compiler, publicPath) {
   });
 }
 
-module.exports = function addDevMiddlewares(app, webpackConfig) {
+export function addDevMiddlewares(app, webpackConfig) {
   const compiler = webpack(webpackConfig);
   const middleware = createWebpackMiddleware(
     compiler,

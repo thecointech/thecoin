@@ -58,7 +58,7 @@ async function cloneBuy(original: BuyAction, contract: TheCoin, brokerAddress: s
       // the "coin" amount is the number that should be transfered
       if (delta.hash && state.coin) {
         if (!state.coin || !state.date) throw new Error("fasdfsa");
-        const tx = await contract.cloneTransaction(
+        const tx = await contract.runCloneTransfer(
           brokerAddress,
           toChange(original.address),
           state.coin.toNumber(),
@@ -93,7 +93,7 @@ async function cloneSell(original: TypedAction<"Bill"|"Sell">, contract: TheCoin
       // the "coin" amount is the number that should be transfered
       if (delta.hash) {
         const { from, to, value, fee, timestamp } = original.data.initial.transfer;
-        const tx = await contract.cloneTransaction(
+        const tx = await contract.runCloneTransfer(
           from,
           to,
           value,

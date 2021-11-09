@@ -12,7 +12,7 @@ export async function initializeTestNet(proxy: TheCoin, accounts: NamedAccounts)
 
   // The coins are all in TheCoin's account.  Lets move them to BrokerCAD
   console.log("Transfer to BrokerCAD");
-  proxy.runCloneTransfer(accounts.TheCoin, accounts.BrokerCAD, balance, Date.now(), { from: accounts.TheCoin });
+  proxy.runCloneTransfer(accounts.TheCoin, accounts.BrokerCAD, balance, 0, Date.now(), { from: accounts.TheCoin });
 
   // TODO: Replicate live account statuses
 }
