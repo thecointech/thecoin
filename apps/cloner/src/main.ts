@@ -188,20 +188,23 @@ class Processor {
       ? second.value
       : 0;
     const { from, to, value } = first;
+    const redirFrom = toChange(from);
 
     console.log(chalk.blue(`${date.toSQLDate()} - Doing Transfer: ${value}`));
 
     // if from has no money, it hasn't processed yet, so run it instead
-    const fromBalance = await this.xaCore.balanceOf(from);
+    const fromBalance = await this.xaCore.balanceOf(redirFrom);
     if (fromBalance.toNumber() == 0) {
-      await this.processAddress(from);
+      await this.processAddress(redirFrom);
       // check that 'from' processed original correctly
-      if (bcHistory.indexOf(initial) >= 0)
+      if (bcHistory.indexOf(initial) >= 0) {
+        debugger;
         throw new Error("Processing did not remove ")
+      }
     }
     else {
       const tx = await this.xaCore.runCloneTransfer(
-        toChange(from),
+        redirFrom,
         toChange(to),
         value,
         fee,
