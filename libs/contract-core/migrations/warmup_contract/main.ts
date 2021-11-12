@@ -336,7 +336,3 @@ async function markComplete(state: TransitionDelta, action: AnyAction) {
     }
   }
 }
-
-const processor = new Processor();
-processor.init()
-  .then(() => processor.process())
