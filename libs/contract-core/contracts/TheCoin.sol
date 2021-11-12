@@ -115,10 +115,9 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
 
     // Remove coins
     function meltCoins(uint amount, uint timestamp) public
-        onlyMinter
     {
         _burn(role_TheCoin, amount);
-        emit ExactTransfer(role_TheCoin, address(0), amount, timestamp);
+        emit ExactTransfer(msg.sender, address(0), amount, timestamp);
     }
 
     // Coins currently owned by clients (not TheCoin)

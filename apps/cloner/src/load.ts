@@ -2,7 +2,11 @@ import { ActionDictionary } from "@thecointech/broker-db";
 import { Decimal } from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import { existsSync, readFileSync } from 'fs';
+import Papa from 'papaparse';
+import { NormalizeAddress } from '@thecointech/utilities';
 
+export const cacheFile = __dirname + '/prod.json';
+export const mintFile = __dirname + '/mint.csv';
 export type AllActions = {
   Buy: ActionDictionary<"Buy">;
   Sell: ActionDictionary<"Sell">;
@@ -28,7 +32,7 @@ function convertCommon(action: any) {
   }
 }
 
-export const cacheFile = __dirname + '/prod.json';
+
 export function loadCurrent() {
   if (!existsSync(cacheFile))
     return null;
@@ -53,4 +57,39 @@ export function loadCurrent() {
     }
   }
   return json as AllActions;
+}
+
+
+
+export type MintData = {
+  originator: string,
+  currency: "CAD"|"USD",
+  date: DateTime,
+  method: string,
+  fiat: Decimal,
+}
+
+export function loadMinting() : MintData[]|undefined {
+  if (!existsSync(mintFile))
+    return undefined;
+
+  const raw = readFileSync(mintFile, 'utf8');
+  const csv = Papa.parse(raw, {
+    header: true,
+    transform: transformData,
+  });
+
+  return csv.data.filter(row => row?.originator)
+}
+
+function transformData(value: string, name: string) {
+  const v = value.trim();
+  if (v.length != 0) {
+    switch (name) {
+      case "originator": return NormalizeAddress(v);
+      case "date": return DateTime.fromSQL(v);
+      case "fiat": return new Decimal(v);
+    }
+  }
+  return v;
 }

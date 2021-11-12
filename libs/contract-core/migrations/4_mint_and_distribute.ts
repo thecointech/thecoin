@@ -10,7 +10,7 @@ const deploy: MigrationStep = () =>
     const namedAccounts = toNamedAccounts(accounts);
     // On development blockchain, seed accounts with random data
     const config = process.env.CONFIG_NAME;
-    if (network == "polygon") {
+    if (false && network == "polygon") {
       if (config === 'devlive') {
         await initializeDevLive(contract, namedAccounts)
       }

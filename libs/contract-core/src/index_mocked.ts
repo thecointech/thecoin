@@ -1,5 +1,7 @@
 import * as Src from  '.';
-import { BigNumber } from 'ethers'
+import { BigNumber, ContractTransaction } from 'ethers'
+
+export const COIN_EXP = 1000000;
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 function delay(ms: number) {
@@ -7,16 +9,21 @@ function delay(ms: number) {
 }
 export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer'|'balanceOf'|'certifiedTransfer'>{
 
-  exactTransfer = (_address: string, _to: string, _amount: number) => Promise.resolve({
+  genReceipt = (opts?: any) => Promise.resolve({
     wait: () => { },
     hash: `0x${genRanHex(64)}`,
-  } as any)
+    ...opts,
+  } as any as ContractTransaction)
+
+  mintCoins = () => this.genReceipt();
+  meltCoins = () => this.genReceipt();
+  exactTransfer = () => this.genReceipt();
   balanceOf = () => Promise.resolve(BigNumber.from(1000000000));
-  certifiedTransfer = () => Promise.resolve({
-    confirmations: 1,
-    wait: () => { },
-    hash: `0x${genRanHex(64)}`,
-  } as any)
+  certifiedTransfer = () => this.genReceipt({confirmations: 1})
+  // Run during testing.  Remove once deployement is secure.
+  runCloneTransfer = () => this.genReceipt();
+
+
 
   provider = {
     waitForTransaction: () => Promise.resolve({}),
