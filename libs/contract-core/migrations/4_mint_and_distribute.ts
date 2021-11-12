@@ -1,21 +1,26 @@
 import { toNamedAccounts } from "./accounts";
 import { initializeDevLive } from "./4.1_mad_devlive";
-import { initializeTestNet } from "./4.1_mad_testnet";
 import { MigrationStep } from './step';
 import { getContract } from './deploy';
+import { Processor } from './warmup_contract/processor';
 
 const deploy: MigrationStep = () =>
   async (deployer, network, accounts) => {
     const contract = await getContract(deployer, network);
     const namedAccounts = toNamedAccounts(accounts);
-    // On development blockchain, seed accounts with random data
-    const config = process.env.CONFIG_NAME;
-    if (false && network == "polygon") {
-      if (config === 'devlive') {
-        await initializeDevLive(contract, namedAccounts)
+    if (network == "polygon") {
+      // If we are asked to clone onto this contract try to do so.
+      if (process.env.DEPLOY_CONTRACT_INIT == "clone")
+      {
+        const processor = new Processor();
+        if (await processor.init()) {
+          await processor.process();
+          return;
+        }
       }
-      else if (config === "prodtest") {
-        await initializeTestNet(contract, namedAccounts);
+      const config = process.env.CONFIG_NAME;
+      if (config == "devlive" || config == "prodtest") {
+        await initializeDevLive(contract, namedAccounts)
       }
     }
   }

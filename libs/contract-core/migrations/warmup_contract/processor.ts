@@ -14,7 +14,7 @@ import { DateTime } from 'luxon';
 import { toCoin } from './pricing';
 
 // Read cached src data and load into whatever chain is currently running
-class Processor {
+export class Processor {
   data: AllActions = null!;
   brokerAddress: string = "";
   tcCore: TheCoin = null!;
@@ -25,7 +25,7 @@ class Processor {
 
   async init() {
     this.data = loadCurrent()!;
-    if (!this.data) return;
+    if (!this.data) return false;
 
     log.level(100); // disable logging
 
@@ -48,6 +48,7 @@ class Processor {
         ...Object.keys(this.data.Bill),
       ])
     );
+    return true;
   }
 
   async process() {
