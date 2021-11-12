@@ -71,3 +71,4 @@ apps/tx-processor/run_service.cmd
 
 storybook-static/
 apps/cloner/src/prod.json
+apps/cloner/src/blockchain.json

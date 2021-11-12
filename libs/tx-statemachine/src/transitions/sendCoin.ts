@@ -38,8 +38,7 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
   const tx = await contract.exactTransfer(
     address,
     value.toNumber(),
-    0,
-    settled.toSeconds(),
+    settled.toMillis(),
   );
   return tx.hash;
 }

@@ -8,7 +8,7 @@ run(app => {
 
   // serve CSV data needed by comparison graph
   const csvpath = resolve(__dirname, '..', 'src', 'sp500_monthly.csv');
-  console.log(`1: __dirname\n2: ${csvpath}`);
+  console.log(`1: ${__dirname}\n2: ${csvpath}`);
   const sp500buffer = readFileSync(csvpath);
   const sp500string = sp500buffer.toString();
 

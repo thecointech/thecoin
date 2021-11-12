@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "yarn tsc",
-    "emulator": "start yarn truffle develop --config=./src/truffle.js",
+    "emulator": "truffle develop --config=./src/truffle.js",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "exports": {

@@ -3,7 +3,7 @@ import { Decimal } from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import { existsSync, readFileSync } from 'fs';
 
-type AllActions = {
+export type AllActions = {
   Buy: ActionDictionary<"Buy">;
   Sell: ActionDictionary<"Sell">;
   Bill: ActionDictionary<"Bill">;

@@ -34,13 +34,14 @@ async function seedAccount(contract: TheCoin, theCoin: string, client: string, o
     // either purchase or sell up to 100 coins
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
     const balance = await contract.balanceOf(client);
+    const timestamp = Math.floor(ts.toMillis());
     if (onlyBuy || balance.toNumber() <= amount || Math.random() < 0.6) {
-      await contract.runCloneTransfer(theCoin, client, amount, ts.toMillis(), 0, { from: theCoin });
+      await contract.runCloneTransfer(theCoin, client, amount, 0, timestamp, { from: theCoin });
     }
     else {
       // TODO: Our redemption function is not gass-less.  We need
       // to unify our functionality to enable processing these functions
-      await contract.runCloneTransfer(client, theCoin, amount, ts.toMillis(), 0, { from: theCoin });
+      await contract.runCloneTransfer(client, theCoin, amount, 0, timestamp, { from: theCoin });
     }
   }
 }
