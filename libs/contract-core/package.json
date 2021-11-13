@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.42",
+  "version": "0.2.46",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -32,11 +32,9 @@
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
-
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
     "_deploy": "yarn contract-migrate && yarn contract-verify",
-
     "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
   },
   "files": [
@@ -57,7 +55,7 @@
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "*"
+    "@thecointech/contract-base": "^0.2.46"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }
