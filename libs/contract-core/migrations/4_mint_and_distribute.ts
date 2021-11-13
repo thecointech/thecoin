@@ -8,10 +8,13 @@ const deploy: MigrationStep = () =>
   async (deployer, network, accounts) => {
     const contract = await getContract(deployer, network);
     const namedAccounts = toNamedAccounts(accounts);
+    console.log(`Distributing on ${network}`);
     if (network == "polygon") {
       // If we are asked to clone onto this contract try to do so.
+      console.log("Initialization: " + process.env.DEPLOY_CONTRACT_INIT);
       if (process.env.DEPLOY_CONTRACT_INIT == "clone")
       {
+        console.log("Cloning production...");
         const processor = new Processor();
         if (await processor.init()) {
           await processor.process();

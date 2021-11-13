@@ -16,7 +16,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer'|'balanceOf'|'c
   } as any as ContractTransaction)
 
   mintCoins = () => this.genReceipt();
-  meltCoins = () => this.genReceipt();
+  burnCoins = () => this.genReceipt();
   exactTransfer = () => this.genReceipt();
   balanceOf = () => Promise.resolve(BigNumber.from(1000000000));
   certifiedTransfer = () => this.genReceipt({confirmations: 1})

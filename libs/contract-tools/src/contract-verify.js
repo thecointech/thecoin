@@ -12,7 +12,7 @@ function verify(network) {
   const cwd = process.cwd();
   const file = `${cwd}/src/deployed/${config}-${network}.json`;
   const {contract} = require(file);
-  return spawn(path.join(__dirname, '..', 'node_modules', '.bin', 'truffle'),
+  return spawn(path.join(__dirname, '..', '..', '..', 'node_modules', '.bin', 'truffle'),
     [
         `run verify TheGreenNFTL2@${contract}`,
         ` --config=${__dirname}/truffle.js`,

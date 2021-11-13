@@ -1,208 +1,40 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0xD136752D32cc0Fd5f551045c40d3A0090f9f5fc9",
-    "txHash": "0xe693b59ef10898c1dc92c5d9a9340556c7ef71d5d8ce5ba6fb947e8f3830ee84"
+    "address": "0xA8a314d7a0C073da3A297140D9201bFce29CAFeB",
+    "txHash": "0x04733b9b64cdc03b918a8b3e62226fc2f94619e2c44ff9ce96683a3dff4bd0b5"
   },
   "proxies": [
     {
-      "address": "0x5fBB36C0F4cdD01A250916b167acFfd395DC9be5",
-      "txHash": "0xdee4412a383cd7ae6f385e6b5eb877e5a2d03dfcd9472c2f6dfa729e118aa95c",
+      "address": "0x43F0F8b03F464DA6e09Db9552E1E25fb4eFbBE89",
+      "txHash": "0x5432d116363729eba49252994b61af7c2409de0445efcb3325631c80894c1939",
       "kind": "transparent"
     },
     {
-      "address": "0xd3571574A511D3fA02e3d35D6E050D8159044652",
-      "txHash": "0x3490a8bcb7a1f5451d6399f12491ad36873f2c8506a5d066cfae7f2cef82118d",
+      "address": "0x3b6CaD7089Af45e7c8e6563831c4FEBbbEc6E412",
+      "txHash": "0x72d0f47d01ca4ebf2434b3e5bc004221661135003d7d19d327bb23cee29f7bef",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x78a18F5F6A5Dc8178AAfF77fA48861a56df30Fed",
+      "txHash": "0x9029c4a7082b61255b92b4a03d8e7d96df63f8caf12428e54f7325211ae1add8",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xB57A10799D8FF3eA91AA03AB581A7a5Be28FdC2d",
+      "txHash": "0xfdc66d49f62630e691b93280e266f067ec84f97df86385f98f0fbb7796c0248e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x105a7701B8Aa24D3aF1e26D7D9dc99F68329910d",
+      "txHash": "0xac8f9bc12fd11d24c22077a6a9e73b5d1b363047cf1887265fd19b87bbbe8167",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "690885bdd4027024fb895381c7142cd7d252a26dcf14ca3439c4264a7746bd26": {
-      "address": "0x87952A7B4aa323662916d1C73587E01029C8ae86",
-      "txHash": "0x46d185184d7fe83c6cb1cce877e23450ebe8daf22278a9a1d3758af298fd42bb",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\Initializable.sol:25"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\proxy\\Initializable.sol:30"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:31"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_balances",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:37"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_allowances",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:39"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_totalSupply",
-            "type": "t_uint256",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:41"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_name",
-            "type": "t_string_storage",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:43"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_symbol",
-            "type": "t_string_storage",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:44"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "_decimals",
-            "type": "t_uint8",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:45"
-          },
-          {
-            "contract": "ERC20Upgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)44_storage",
-            "src": "..\\@openzeppelin\\contracts-upgradeable\\token\\ERC20\\ERC20Upgradeable.sol:312"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "freezeUntil",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:39"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "lastTxTimestamp",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:48"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "role_TapCapManager",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:54"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "role_Minter",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:58"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "role_TheCoin",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:62"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "role_Police",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:65"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "new_TapCapManager",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:70"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "new_Minter",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:71"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "new_TheCoin",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:72"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "new_Police",
-            "type": "t_address",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:73"
-          },
-          {
-            "contract": "TheCoin",
-            "label": "tapCaps",
-            "type": "t_mapping(t_address,t_struct(TapCapData)413_storage)",
-            "src": "..\\..\\..\\..\\..\\C\\src\\TheCoin\\libs\\contract\\contracts\\TheCoin.sol:238"
-          }
-        ],
-        "types": {
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_address": {
-            "label": "address"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_mapping(t_address,t_struct(TapCapData)413_storage)": {
-            "label": "mapping(address => struct TheCoin.TapCapData)"
-          },
-          "t_struct(TapCapData)413_storage": {
-            "label": "struct TheCoin.TapCapData",
-            "members": [
-              {
-                "label": "TransactionId",
-                "type": "t_uint256"
-              },
-              {
-                "label": "TapCapEscrow",
-                "type": "t_uint256"
-              },
-              {
-                "label": "TapCapRefill",
-                "type": "t_uint256"
-              }
-            ]
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
-            "label": "mapping(address => mapping(address => uint256))"
-          },
-          "t_string_storage": {
-            "label": "string"
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_array(t_uint256)44_storage": {
-            "label": "uint256[44]"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          },
-          "t_bool": {
-            "label": "bool"
-          }
-        }
-      }
-    },
-    "05e62622a3755e3333b78ac848c39bc7849141cceb6f5e1dc4408172fb600f12": {
-      "address": "0xB69a750ed3DF9A163F191e48e817E1dcEDFb7614",
-      "txHash": "0xd3221c077be70993376e85cc683446c423b936cc54356f5a9a162419ae015816",
+    "637d9be2362635404f069cc79e71ef1907e575877a3fd2bef738f55d2839e01e": {
+      "address": "0xCD3D8401e05511b14E4b18565e09D9465cAE010c",
+      "txHash": "0x10d9869bb95e52c88d4aaf886d2d15cbb4cc69411681075fcdd147c97099e336",
       "layout": {
         "storage": [
           {
@@ -379,9 +211,9 @@
         }
       }
     },
-    "f4251abab9710f8baf7827581ff916bc6f20705c071f739d3794c2913fb486c6": {
-      "address": "0x7aDFBebC22c5Dd3DF1AA31E25C7e18b22aA399F9",
-      "txHash": "0x9175a90fe93b4cf70c59779120a425321ef0a4624a508faed09f7107e4bf8189",
+    "f4816bc7f7ee3fea2123cdcd9487fb13fad13ca4704c590e64dd1c89b11f73e0": {
+      "address": "0x137e4087276dDcb2A5c374aBb1949aFcE030D98a",
+      "txHash": "0xfec58184f4afdc1e2d78203191914d196cc7ef613df05db33ac1b339af328d29",
       "layout": {
         "storage": [
           {

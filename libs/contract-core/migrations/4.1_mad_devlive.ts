@@ -10,9 +10,9 @@ export async function initializeDevLive(contract: TheCoin, accounts: NamedAccoun
   if (tcBal.toNumber() === 0) {
     await contract.mintCoins(100000 * COIN_EXP, 0, { from: accounts.Minter });
   }
-
-  await seedAccount(contract, accounts.TheCoin, accounts.client1);
-  await seedAccount(contract, accounts.TheCoin, accounts.client2);
+  // If we have
+  if (accounts.client1) await seedAccount(contract, accounts.TheCoin, accounts.client1);
+  if (accounts.client2) await seedAccount(contract, accounts.TheCoin, accounts.client2);
   // Also seed TestAccNoT so we can test tx's with a wallet vs a signer
   await seedAccount(contract, accounts.TheCoin, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 

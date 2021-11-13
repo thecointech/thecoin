@@ -1,5 +1,5 @@
 import { AllActions, loadCurrent, loadMinting } from './load';
-import { ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { ConnectContract, TheCoin } from '../../src';
 import { isType, AnyAction, BuyAction, getActionFromInitial, removeIncomplete, storeTransition, TransitionDelta, TypedAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { init } from '@thecointech/firestore';
@@ -17,11 +17,15 @@ import { toCoin } from './pricing';
 export class Processor {
   data: AllActions = null!;
   brokerAddress: string = "";
+  theCoinAddress: string = "";
   tcCore: TheCoin = null!;
   xaCore: TheCoin = null!;
+  mtCore: TheCoin = null!;
+  bcCore: TheCoin = null!;
   allAddresses: string[] = [];
 
   spaces = 0;
+
 
   async init() {
     this.data = loadCurrent()!;
@@ -37,10 +41,14 @@ export class Processor {
     const theCoin = await getSigner("TheCoin");
     const brokerCad = await getSigner("BrokerCAD");
     const xferAssit = await getSigner("BrokerTransferAssistant");
+    const minter = await getSigner("Minter");
 
     this.brokerAddress = await brokerCad.getAddress();
+    this.theCoinAddress = await theCoin.getAddress();
     this.tcCore = ConnectContract(theCoin);
     this.xaCore = ConnectContract(xferAssit);
+    this.mtCore= ConnectContract(minter);
+    this.bcCore = ConnectContract(brokerCad);
     this.allAddresses = new Array(
       ...new Set([
         ...Object.keys(this.data.Buy),
@@ -53,7 +61,11 @@ export class Processor {
 
   async process() {
 
-    await this.processMinting();
+    const brokerBalance = await this.bcCore.balanceOf(this.brokerAddress);
+    // Do not re-mint if minting is done.
+    if (brokerBalance.eq(0)) {
+      await this.processMinting();
+    }
 
     for (const address of this.allAddresses) {
       await this.processAddress(address)
@@ -66,14 +78,6 @@ export class Processor {
     if (!minting) return; // TODO: default?
     console.log(chalk.yellow(`Minting ${minting.length} items`))
 
-    const minter = await getSigner("Minter");
-    const mtCore= ConnectContract(minter);
-    const theCoin = await getSigner("TheCoin");
-    const tcCore = ConnectContract(theCoin);
-    const brokerCad = await getSigner("BrokerCAD");
-    const bcCore = ConnectContract(brokerCad);
-    const theCoinAddress = await theCoin.getAddress();
-
     for (const {originator, date, fiat, currency} of minting) {
       console.log(chalk.yellowBright(`Minting ${fiat.toString()} at ${date.toSQLDate()}`))
 
@@ -82,19 +86,19 @@ export class Processor {
       const coin = await toCoin(date, fiat, currency);
       if (coin.gt(0)) {
         // Create new $$$
-        let waiter = await mtCore.mintCoins(coin.toNumber(), date.toMillis());
+        let waiter = await this.mtCore.mintCoins(coin.toNumber(), date.toMillis());
         await waiter.wait(1);
         // If not intended for Core, forward this onto final recipient
-        waiter = await tcCore.runCloneTransfer(theCoinAddress, to, coin.toNumber(), 0, date.toMillis());
+        waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, date.toMillis());
         await waiter.wait(1);
 
       } else {
         const abs = coin.abs().toNumber();
         // Transfer back to broker for burning
-        const waiter = await bcCore.runCloneTransfer(to, theCoinAddress, abs, 0, date.toMillis());
+        const waiter = await this.bcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, date.toMillis());
         await waiter.wait(1);
         // Burn coins
-        const w = await tcCore.meltCoins(abs, date.toMillis());
+        const w = await this.tcCore.burnCoins(abs, date.toMillis());
         await w.wait(1);
       }
     }
