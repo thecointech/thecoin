@@ -8,7 +8,7 @@ import icon from './images/icon_topup_big.svg';
 import { Upload } from '../Upload';
 import { getHash, readExif } from '../ProfileBuilder/SignAndUpload/sign';
 import { utils  } from 'ethers';
-import { getContract } from '@thecointech/nft-contract';
+import { getContract } from '@thecointech/contract-nft';
 
 const title = defineMessage({ defaultMessage: "Validate Image", description: "page title" });
 const description = defineMessage({ defaultMessage: "Validate the images cryptographic signature", description: "page instructions" });

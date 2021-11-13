@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { getContract, signGasslessUpdate, splitIpfsUri } from '@thecointech/nft-contract';
+import { getContract, signGasslessUpdate, splitIpfsUri } from '@thecointech/contract-nft';
 import { Signer } from 'ethers';
 import { GetNftApi } from '../../../api';
 import { sign } from "@thecointech/utilities/SignedMessages";

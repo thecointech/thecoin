@@ -13,8 +13,8 @@
       "path": "apps\\nft-service"
     },
     {
-      "name": "nft-contract",
-      "path": "libs\\nft-contract"
+      "name": "contract-nft",
+      "path": "libs\\contract-nft"
     }
   ],
 	"settings": {}

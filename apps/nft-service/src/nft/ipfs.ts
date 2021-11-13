@@ -4,7 +4,7 @@
 import pinataSDK from '@pinata/sdk';
 import { log } from '@thecointech/logging';
 import { validateImage, validateJson } from './validate';
-import type { MetadataJson } from '@thecointech/nft-contract';
+import type { MetadataJson } from '@thecointech/contract-nft';
 import { Readable } from 'stream';
 
 const pinata = pinataSDK(process.env.PINATA_API_KEY!, process.env.PINATA_API_SECRET!);

@@ -1,5 +1,5 @@
 import { Transaction } from "./types";
-import { TheCoin } from '@thecointech/contract';
+import { TheCoin } from '@thecointech/contract-core';
 import { EventFilter, providers, BigNumber } from "ethers";
 import { toHuman } from "@thecointech/utilities";
 import { DateTime } from "luxon";
@@ -12,7 +12,7 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   return mergedHistory;
 }
 
-async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, contract: TheCoin): Promise<boolean> {
+async function addAdditionalInfo(transaction: Transaction, contract: TheCoin): Promise<boolean> {
   const { txHash } = transaction;
   if (!txHash)
     return false;
@@ -26,17 +26,19 @@ async function addAdditionalInfo(transaction: Transaction, toWallet: boolean, co
 
   for (let i = 0; i < txReceipt.logs.length; i++) {
     const extra = contract.interface.parseLog(txReceipt.logs[i]);
-    if (extra && extra.name == "Purchase") {
-      const { balance, timestamp } = extra.args;
-      transaction.date = DateTime.fromMillis(timestamp.toNumber() * 1000);
-      transaction.completed = DateTime.fromMillis(blockData.timestamp * 1000);
+    if (extra && extra.name == "ExactTransfer") {
+      const { from, to, timestamp } = extra.args
+      transaction.date = DateTime.fromMillis(timestamp.toNumber());
+      transaction.completed = DateTime.fromSeconds(blockData.timestamp);
       const change = toHuman(transaction.change, true);
-      if (toWallet) {
-        transaction.balance = balance.toNumber();
+      if (from == process.env.WALLET_BrokerCAD_ADDRESS) {
         transaction.logEntry = `Purchase: ${change}`
       }
-      else {
+      else if (to == process.env.WALLET_BrokerCAD_ADDRESS) {
         transaction.logEntry = `Sell: ${change}`
+      }
+      else {
+        transaction.logEntry = `Transfer: ${change}`
       }
       return true;
     }
@@ -56,7 +58,7 @@ async function transferToTransaction(toWallet: boolean, ethersLog: providers.Log
     counterPartyAddress: toWallet ? from : to
   }
 
-  if (!await addAdditionalInfo(r, toWallet, contract)) {
+  if (!await addAdditionalInfo(r, contract)) {
     const block = await contract.provider.getBlock(ethersLog.blockNumber!);
     r.date = DateTime.fromMillis(block.timestamp * 1000)
     r.logEntry = `Transfer: ${toWallet ? from : to}`
@@ -78,7 +80,7 @@ export async function readTransfers(contract: TheCoin, filter: EventFilter, to:b
 
 async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: TheCoin, history: Transaction[]) {
   // construct filter to get tx either from or to
-  const args = to ? [null, account] : [account, null];
+  const args = to ? [account, account] : [account, null];
   let filter = contract.filters.Transfer(...args);
   (filter as any).fromBlock = fromBlock || 0;
 

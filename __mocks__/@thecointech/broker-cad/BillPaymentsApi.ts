@@ -1,7 +1,7 @@
 import { CertifiedTransfer, CertifiedTransferResponse, BillPaymentsApi as SrcApi } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
 import { buildResponse, delay } from '../axios-utils';
-import { GetContract } from '@thecointech/contract';
+import { GetContract } from '@thecointech/contract-core';
 
 export class BillPaymentsApi implements Pick<SrcApi, keyof SrcApi> {
   async billPayment(request: CertifiedTransfer, options?: any): Promise<AxiosResponse<CertifiedTransferResponse>> {

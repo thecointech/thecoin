@@ -1,6 +1,6 @@
 import { processUnsettledDeposits } from '.'
 import { init } from '@thecointech/firestore';
-import { GetContract } from '@thecointech/contract';
+import { GetContract } from '@thecointech/contract-core';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import gmail from '@thecointech/tx-gmail';

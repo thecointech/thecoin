@@ -1,35 +1,65 @@
-import React from "react";
-//import { Article } from "./Article";
+import React, { useEffect } from "react";
 import { Header, SemanticFLOATS } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
-import styles from "./styles.module.less";
 import { CategoryMenu } from "components/PrismicMenuByCategories";
-import { Dictionary } from "lodash";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";
+import { RouteComponentProps } from 'react-router';
+import { Prismic } from '../../components/Prismic/reducer';
+import styles from "./styles.module.less";
+import { defineMessages, FormattedMessage } from 'react-intl';
 
-type Props = {
-  title?: string,
-  articles: ArticleDocument[],
-  menu: Dictionary<ArticleDocument[]>
-}
+const translations = defineMessages({
+  title : {
+      defaultMessage: 'Blog',
+      description: 'site.blog.title: Title for the In-depth blog page'}
+  });
 
-export const ArticleList = ({ title, articles, menu }: Props) => {
+
+export const ArticleList = ({ match }: RouteComponentProps<{ category?: string }>) => {
   const { locale } = useSelector(selectLocale);
+  const prismic = Prismic.useData();
+  const actions = Prismic.useApi();
+  useEffect(() => {
+    actions.fetchAllDocs(locale);
+  }, [locale]);
+
+  const allArticles = [...prismic[locale].articles.values()];
+  const categories = buildCategories(allArticles);
+  const { category } = match.params;
+
+  const articles = category
+    ? allArticles.filter(article => article.data.categories.find(c => c.category === category))
+    : allArticles;
   return (
     <>
       <div className={styles.containerArticle}>
-        <CategoryMenu categories={menu} idForMenu={styles.menuArticle} railPosition={"left" as SemanticFLOATS} pathBeforeTheId="/blog/theme-" />
+        <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left" as SemanticFLOATS} pathBeforeTheId="/blog/category/" />
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
-            {title ? ((title.split("-"))[1]) : ""}
+            {category
+              ? category
+              : <FormattedMessage {...translations.title} />
+            }
           </Header.Content>
         </Header>
-        {articles.filter(article => locale === ((article.lang!).split("-"))[0]).map(article => (<ArticleItem key={article.id} {...article} />))}
+        {articles.map(article => (<ArticleItem key={article.id} {...article} />))}
       </div>
       <Decoration />
     </>
+  )
+}
+
+export function buildCategories(faqs: ArticleDocument[]) {
+  return Array.from(
+    new Set(
+      faqs
+        .map(faq => faq.data.categories)
+        .reduce((acc, category) => acc.concat(
+          category.map(c => c.category)
+        ), [] as string[])
+    )
   )
 }

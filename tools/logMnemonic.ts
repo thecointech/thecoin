@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { Wallet } from 'ethers';
-import { GetContract } from '@thecointech/contract'
+import { GetContract } from '@thecointech/contract-core'
 process.env.CONFIG_NAME='prodtest';
 import './setenv';
 

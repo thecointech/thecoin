@@ -1,0 +1,20 @@
+{
+  "name": "@thecointech/site-nft-landing",
+  "productName": "THECoin: NFT Landing  ",
+  "private": true,
+  "version": "0.1.0",
+  "description": "THECoin NFT: some neat tagline",
+  "author": "Stephen Taylor",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "pre_build": "rimraf ./build",
+    "_build": "webpack --mode production",
+    "pre_deploy": "yarn _build",
+    "_deploy": "ts-node --skip-project deploy",
+    "dev": "yarn webpack serve --mode=development"
+  },
+  "devDependencies": {
+    "mini-css-extract-plugin": "^2.4.2",
+    "firebase": "^9.2.0"
+  }
+}

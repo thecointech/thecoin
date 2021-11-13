@@ -33,7 +33,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./internal/server": "./internal/server/index.js",
+    "./internal/server": "./internal/server/index.mjs",
     "./jest.config": "./jest.config.js",
     "./*": [
       "./build/*.js",

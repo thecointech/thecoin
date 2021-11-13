@@ -29,7 +29,7 @@ async function publish(ceramic: Ceramic) {
 //
 // Connect to the Ceramic node
 async function connect() {
-  const ceramic = new Ceramic(process.env.CERAMIC_API)
+  const ceramic = new Ceramic(process.env.CERAMIC_URL)
   // Provide the DID Resolver and Provider to Ceramic
   const resolver = new Resolver({
     ...KeyDidResolver.getResolver(),

@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
-import { invalidQnA, invalidMessage } from '@thecointech/utilities/VerifiedSale';
+import { invalidQuestion, invalidAnswer } from '@thecointech/utilities/VerifiedSale';
 import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
@@ -75,11 +75,11 @@ function isValid(packet: ETransferPacket|null) {
   // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
   return packet &&
     packet.question?.length >= 2 &&
-    !packet.question?.match(invalidQnA) &&
+    !packet.question?.match(invalidQuestion) &&
     packet.answer?.length >= 3 &&
-    !packet.answer.match(invalidQnA) &&
+    !packet.answer.match(invalidAnswer) &&
     packet.email?.length >= 3 &&
     packet.email?.includes("@") &&
-    !packet.message?.match(invalidMessage)
+    !packet.message?.match(invalidQuestion)
 }
 
