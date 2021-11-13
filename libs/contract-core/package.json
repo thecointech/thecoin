@@ -35,7 +35,9 @@
 
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
-    "_deploy": "yarn contract-migrate && yarn contract-verify"
+    "_deploy": "yarn contract-migrate && yarn contract-verify",
+
+    "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
   },
   "files": [
     "build/**/*"

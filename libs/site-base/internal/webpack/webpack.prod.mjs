@@ -6,14 +6,13 @@ import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
 
 import baseOptions from './webpack.base.mjs';
-import signerOptions from './webpack.signer.mjs';
+import signerOptions from './webpack.signers.mjs';
 
 const prodOptions = {
   mode: 'production',
 
   // In production, we skip all hot-reloading stuff
   entry: [
-    require.resolve('react-app-polyfill/ie11'),
     join(process.cwd(), 'src/app.tsx'),
   ],
 

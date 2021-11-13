@@ -114,7 +114,7 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     }
 
     // Remove coins
-    function meltCoins(uint amount, uint timestamp) public
+    function burnCoins(uint amount, uint timestamp) public
     {
         _burn(role_TheCoin, amount);
         emit ExactTransfer(msg.sender, address(0), amount, timestamp);
