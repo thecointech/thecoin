@@ -4,7 +4,7 @@ import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
 import { contract } from '@openzeppelin/test-environment';
 
 // Loads a compiled contract using OpenZeppelin test-environment
-contract.artifactsDir = "../contract/src/contracts";
+contract.artifactsDir = "../contract-core/src/contracts";
 const factory = contract.fromArtifact('TheCoin');
 
 const wallet = Wallet.createRandom();

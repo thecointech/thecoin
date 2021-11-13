@@ -35,7 +35,7 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract": "^0.2.42",
+    "@thecointech/contract-core": "^0.2.42",
     "@thecointech/utilities": "^0.2.42"
   },
   "devDependencies": {

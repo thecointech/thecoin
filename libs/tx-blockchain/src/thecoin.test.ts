@@ -1,6 +1,6 @@
 import { cadbrokerIn, cadbrokerOut, fetchCoinHistory } from "./thecoin";
 import { BigNumber } from "ethers";
-import { GetContract } from "@thecointech/contract";
+import { GetContract } from "@thecointech/contract-core";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
 //

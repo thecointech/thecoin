@@ -9,7 +9,7 @@ import interact from './images/icon_payment_big.svg';
 import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { AccountState } from '@thecointech/account';
 import { UxEmail } from '@thecointech/shared/components/UX';
-import { invalidQnA, invalidMessage } from '@thecointech/utilities/VerifiedSale';
+import { invalidAnswer, invalidQuestion } from '@thecointech/utilities/VerifiedSale';
 import { MessageWithValues } from '@thecointech/shared/types';
 
 
@@ -104,8 +104,8 @@ const validateChars = (re: RegExp) => (value: string) => {
       }
     : null;
 }
-const validateQnA = validateChars(invalidQnA);
-const validateMessage = validateChars(invalidMessage);
+const validateAnswer = validateChars(invalidAnswer);
+const validateQuestion = validateChars(invalidQuestion);
 
 export const RedeemWidget = (props: VisualProps) => {
   const commonProps = {
@@ -153,7 +153,7 @@ export const RedeemWidget = (props: VisualProps) => {
             className={"half left"}
             intlLabel={translations.questionLabel}
             onValue={props.setQuestion}
-            onValidate={validateQnA}
+            onValidate={validateQuestion}
             placeholder={translations.noSpecialCaractDesc}
             tooltip={translations.invalidCharacters}
             {...commonProps}
@@ -162,14 +162,14 @@ export const RedeemWidget = (props: VisualProps) => {
             className={"half right"}
             intlLabel={translations.answerLabel}
             onValue={props.setAnswer}
-            onValidate={validateQnA}
+            onValidate={validateAnswer}
             placeholder={translations.noSpecialCaractDesc}
             tooltip={translations.invalidCharacters}
             {...commonProps}
           />
         <UxInput
             className={"borderTop"}
-            onValidate={validateMessage}
+            onValidate={validateQuestion}
             intlLabel={translations.messageLabel}
             onValue={props.setMessage}
             placeholder={translations.messageDesc}

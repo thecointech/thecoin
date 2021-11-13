@@ -44,6 +44,7 @@
     "node-loader": "^2.0.0"
   },
   "dependencies": {
+    "@thecointech/contract-core": "*",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

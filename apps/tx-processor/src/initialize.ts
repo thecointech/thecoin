@@ -4,7 +4,7 @@ import { RbcStore, initBrowser, closeBrowser } from "@thecointech/rbcapi";
 import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract';
+import { ConnectContract } from '@thecointech/contract-core';
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');

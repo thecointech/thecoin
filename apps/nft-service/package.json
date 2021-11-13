@@ -39,7 +39,7 @@
   "dependencies": {
     "@pinata/sdk": "1.1.23",
     "@thecointech/logging": "^0.2.41",
-    "@thecointech/nft-contract": "^0.2.42",
+    "@thecointech/contract-nft": "^0.2.42",
     "@thecointech/signers": "^0.2.42",
     "@thecointech/utilities": "^0.2.42",
     "@tsoa/runtime": "^3.8.0",

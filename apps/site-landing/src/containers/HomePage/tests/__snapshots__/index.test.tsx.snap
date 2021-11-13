@@ -282,7 +282,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             The most important ingredient is time. You’re young - maximize your benefit!
           </p>
           <a
-            href="/compare"
+            href="/blog/start-now"
           >
             Learn Your Edge
           </a>

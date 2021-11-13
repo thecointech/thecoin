@@ -3,13 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.45](https://github.com/thecointech/thecoin/compare/v0.2.43...v0.2.45) (2021-10-15)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.44](https://github.com/thecointech/thecoin/compare/v0.2.43...v0.2.44) (2021-10-15)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.43](https://github.com/thecointech/thecoin/compare/v0.2.42...v0.2.43) (2021-10-14)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
 ## [0.2.42](https://github.com/thecointech/thecoin/compare/v0.2.41...v0.2.42) (2021-10-12)
 
 
 ### Bug Fixes
 
 * libs/contract/package.json to reduce vulnerabilities ([08df2da](https://github.com/thecointech/thecoin/commit/08df2da373e87726cee62b04b29d7dc300127995))
-* libs/nft-contract/package.json to reduce vulnerabilities ([888f151](https://github.com/thecointech/thecoin/commit/888f151377d345a846bc84ba97db491fe26460e5))
+* libs/contract-nft/package.json to reduce vulnerabilities ([888f151](https://github.com/thecointech/thecoin/commit/888f151377d345a846bc84ba97db491fe26460e5))
 * libs/signers/package.json to reduce vulnerabilities ([6a40c9b](https://github.com/thecointech/thecoin/commit/6a40c9b2bfa50660aca1322370bc3dd5013b9120))
 
 
@@ -245,7 +269,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * libs/email/package.json to reduce vulnerabilities ([d9b7683](https://github.com/thecointech/thecoin/commit/d9b7683179b8b4954eb82678d1d255fb03b7654b))
-* libs/nft-contract/package.json to reduce vulnerabilities ([c16afd2](https://github.com/thecointech/thecoin/commit/c16afd284eef892192dfa5dfa4cddb877b72e698))
+* libs/contract-nft/package.json to reduce vulnerabilities ([c16afd2](https://github.com/thecointech/thecoin/commit/c16afd284eef892192dfa5dfa4cddb877b72e698))
 * package.json to reduce vulnerabilities ([dca9438](https://github.com/thecointech/thecoin/commit/dca94384aa4eaa7b3d5835344a661a8a64cc6726))
 
 

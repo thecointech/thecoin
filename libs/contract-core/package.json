@@ -1,0 +1,63 @@
+{
+  "name": "@thecointech/contract-core",
+  "version": "0.2.42",
+  "description": "The Coin: Solidity contract for TheCoin currency",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "migrate:prod:test": "cross-env CONFIG_NAME=prodtest truffle migrate --network prodtest",
+    "build": "run-s build:contracts build:types build:src",
+    "build:contracts": "contract-build",
+    "build:types": "yarn contract-gen-types",
+    "build:src": "run-p build:src:*",
+    "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
+    "clean": "run-p clean:*",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/contracts",
+    "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
+    "test:contract": "truffle test",
+
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy",
+    "_deploy": "yarn contract-migrate && yarn contract-verify",
+
+    "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/cjs/index_mocked.js",
+      "electron": "./build/mjs/index.js",
+      "default": "./build/cjs/index.js"
+    }
+  },
+  "types": "./build/cjs/index.d.ts",
+  "devDependencies": {
+    "@openzeppelin/contracts-upgradeable": "^4.3.2",
+    "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "jest": "*"
+  },
+  "dependencies": {
+    "@thecointech/contract-base": "*"
+  },
+  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+}

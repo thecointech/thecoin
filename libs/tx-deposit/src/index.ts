@@ -5,7 +5,7 @@ import { manual, Deposit } from "./graph.manual";
 import { Decimal } from 'decimal.js-light';
 import { DateTime } from 'luxon';
 
-import type { TheCoin } from '@thecointech/contract';
+import type { TheCoin } from '@thecointech/contract-core';
 import type { eTransferData } from "@thecointech/tx-gmail";
 import type { IBank } from '@thecointech/bank-interface';
 export { etransfer, manual };

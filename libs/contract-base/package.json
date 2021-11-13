@@ -1,0 +1,44 @@
+{
+  "name": "@thecointech/contract-base",
+  "version": "0.2.42",
+  "description": "TheCoin: Basic contract management for NFT & Core contracts",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-base"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+
+  "scripts": {
+    "build": "yarn tsc",
+    "clean": "rimraf ./build"
+  },
+  "files": [
+    "src/**/*"
+  ],
+  "exports": {
+    "./*": "./build/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "@thecointech/signers": "*"
+  }
+}

@@ -28,12 +28,28 @@ export function SetGCloudConfig(envName: string) {
 }
 
 //
-// Set firebase to a profile matching the current config
-// Requires there be a matching profile defined in firebase.json
-export function FirebaseUseEnv() {
-  return ShellCmd(`firebase use ${process.env.CONFIG_NAME}`)
+// Set the GCLOUD_APPLICATION_CREDENTIAL env variable
+// Necessary for deploying to firebase with service accounts
+export function SetGCloudAppCred(envName: string) {
+  if (!process.env.GCLOUD_CREDENTIAL_STORE) {
+    console.warn("Not setting AppCred - missing store from env variables");
+  }
+  else {
+    process.env.GOOGLE_APPLICATION_CREDENTIALS=`${process.env.GCLOUD_CREDENTIAL_STORE}/${process.env[envName]}.json`;
+  }
 }
 
+//
+// Deploy a firebase project
+// Set firebase to a profile matching the current config
+// Requires there be a matching profile defined in firebase.json
+export async function FirebaseDeploy(envName: string) {
+  SetGCloudAppCred(envName);
+  await ShellCmd(`firebase use ${process.env.CONFIG_NAME}`)
+  await ShellCmd("firebase deploy --only hosting");
+}
+
+//
 export function gCloudDeploy() {
   const deploy = (process.env.SETTINGS == 'beta')
     ? "gcloud app deploy --version=beta --no-promote"
@@ -49,7 +65,7 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
     .filter(([key]) => !key.startsWith('CERAMIC_'))
     .filter(([key]) => !key.startsWith('GITHUB_'))
     .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))
-    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER')
+    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER' && key != 'USERDATA_INSTRUCTION_PK')
     .map(([key, val]) => {
       const sval = JSON.stringify(val);
       return [key, sval].join(': ');
