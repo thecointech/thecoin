@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { GasslessUpdateRequest, getGasslessSigner, TheCoinNFT } from '@thecointech/nft-contract';
+import { GasslessUpdateRequest, getGasslessSigner, TheGreenNFT } from '@thecointech/contract-nft';
 import { getContract } from "./contract";
 
 export async function gasslessUpdate(request: GasslessUpdateRequest): Promise<boolean> {
@@ -21,7 +21,7 @@ export async function gasslessUpdate(request: GasslessUpdateRequest): Promise<bo
   return true;
 }
 
-const isBadSignature = async (contract: TheCoinNFT, request: GasslessUpdateRequest) => {
+const isBadSignature = async (contract: TheGreenNFT, request: GasslessUpdateRequest) => {
   const address = getGasslessSigner(request);
   const owner = await contract.ownerOf(request.tokenId);
   if (owner !== address) {
@@ -31,7 +31,7 @@ const isBadSignature = async (contract: TheCoinNFT, request: GasslessUpdateReque
   return false;
 }
 
-const isTimeLocked = async (contract: TheCoinNFT, tokenId: number) => {
+const isTimeLocked = async (contract: TheGreenNFT, tokenId: number) => {
   const canUpdate = await contract.canUpdate(tokenId);
   if (!canUpdate) {
     log.warn({TokenID: tokenId}, `Invalid request to update {TokenID}: NFT is still timelocked`);
@@ -40,7 +40,7 @@ const isTimeLocked = async (contract: TheCoinNFT, tokenId: number) => {
   return false;
 }
 
-const isReplay = async (contract: TheCoinNFT, request: GasslessUpdateRequest) => {
+const isReplay = async (contract: TheGreenNFT, request: GasslessUpdateRequest) => {
   const lastUpdate = await contract.lastUpdate(request.tokenId);
   if (lastUpdate != request.lastUpdate) {
     log.warn({TokenID: request.tokenId}, `Invalid request to update {TokenID}: lastUpdate (${request.lastUpdate}) does not match blockchain value`);

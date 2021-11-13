@@ -1,7 +1,7 @@
 import { CertifiedTransfer, CertifiedTransferRequest, CertifiedTransferResponse, DirectTransferApi as SrcApi } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
 import { buildResponse, delay } from '../axios-utils';
-import { GetContract } from '@thecointech/contract';
+import { GetContract } from '@thecointech/contract-core';
 
 export class DirectTransferApi implements Pick<SrcApi, keyof SrcApi> {
   async transfer(request: CertifiedTransferRequest, options?: any): Promise<AxiosResponse<CertifiedTransferResponse>> {

@@ -2,7 +2,7 @@ import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
 import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TheCoin } from '@thecointech/contract';
+import { TheCoin } from '@thecointech/contract-core';
 import { DateTime } from "luxon";
 import { toCoin } from "./toCoin";
 
@@ -35,11 +35,10 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
 {
   log.debug({address}, `Transfering ${value.toString()} to {address}`);
 
-  const tx = await contract.coinPurchase(
+  const tx = await contract.exactTransfer(
     address,
-    value.toString(),
-    0,
-    settled.toSeconds(),
+    value.toNumber(),
+    settled.toMillis(),
   );
   return tx.hash;
 }

@@ -18,7 +18,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@thecointech/nft-contract":  ["../../libs/nft-contract/src"]
+      "@thecointech/contract-nft":  ["../../libs/contract-nft/src"]
     }
   }
 }

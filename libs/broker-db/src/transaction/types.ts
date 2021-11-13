@@ -77,5 +77,8 @@ export type BillAction = TypedAction<'Bill'>;
 export type AnyAction = TypedAction<ActionType>;
 
 // Store a mapping of address => Actions[]
-export type ActionDictionary<Type extends ActionType> = { [address: string]: TypedAction<Type>[] }
+export type ActionDictionary<Type extends ActionType> = Record<string, TypedAction<Type>[]>;
 
+export function isType<Type extends ActionType>(action: AnyAction, type: Type): action is TypedAction<Type> {
+  return action.type === type;
+}
