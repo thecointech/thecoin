@@ -5,8 +5,10 @@ import sys
 import os
 import shutil
 
+config_name = "prodtest"
+
 home = Path.home()
-base = home / 'thecoin' / 'deploy'
+base = home / 'thecoin' / 'deploy' / config_name
 deploy = base / 'current'
 old_deploy = base / 'old'
 new_deploy = base / 'new'
@@ -29,7 +31,7 @@ os.chdir(new_deploy)
 os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
 
 # switch to publish/Test
-os.system('git checkout publish/prod')
+os.system(f'git checkout publish/{config_name}')
 
 # Merge in latest changes
 success = os.system('git merge origin/dev --no-ff')
@@ -38,24 +40,24 @@ if success != 0:
     exit(1)
 
 # Try to run a publish
-os.environ["CONFIG_NAME"] = "prodtest"
+os.environ["CONFIG_NAME"] = config_name
 success = os.system('yarn');
-if success != 0: throw Exception("Couldn't install")
+if success != 0: raise RuntimeError("Couldn't install")
 
 success = os.system('yarn build')
-if success != 0: throw Exception("Couldn't build")
+if success != 0: raise RuntimeError("Couldn't build")
 
 # First, deploy the libraries
 success = os.system('yarn _deploy:lib')
-if success != 0: throw Exception("Couldn't deploy libraries")
+if success != 0: raise RuntimeError("Couldn't deploy libraries")
 
 # Rebuild apps so we get the right versions
 success = os.system('yarn _deploy:app:rebuild')
-if success != 0: throw Exception("Couldn't re-build")
+if success != 0: raise RuntimeError("Couldn't re-build")
 
 # deploy online services
 success = os.system('yarn _deploy:app:gcloud')
-if success != 0: throw Exception("Error deploying to gcloud")
+if success != 0: raise RuntimeError("Error deploying to gcloud")
 
 # Try to run a publish
 print(f"Deploy Success: {success}")
