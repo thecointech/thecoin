@@ -38,7 +38,26 @@ if success != 0:
     exit(1)
 
 # Try to run a publish
-success = os.system('yarn && yarn deploy:prodbeta')
+os.environ["CONFIG_NAME"] = "prodtest"
+success = os.system('yarn');
+if success != 0: throw Exception("Couldn't install")
+
+success = os.system('yarn build')
+if success != 0: throw Exception("Couldn't build")
+
+# First, deploy the libraries
+success = os.system('yarn _deploy:lib')
+if success != 0: throw Exception("Couldn't deploy libraries")
+
+# Rebuild apps so we get the right versions
+success = os.system('yarn _deploy:app:rebuild')
+if success != 0: throw Exception("Couldn't re-build")
+
+# deploy online services
+success = os.system('yarn _deploy:app:gcloud')
+if success != 0: throw Exception("Error deploying to gcloud")
+
+# Try to run a publish
 print(f"Deploy Success: {success}")
 if success == 0:
     if Path(old_deploy).exists():
