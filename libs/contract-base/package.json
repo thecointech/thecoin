@@ -18,11 +18,12 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc",
     "clean": "rimraf ./build"
   },
   "files": [
-    "src/**/*"
+    "build/**/*"
   ],
   "exports": {
     "./*": "./build/*.js"

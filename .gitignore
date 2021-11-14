@@ -58,9 +58,11 @@ libs/contract-*/src/contracts
 libs/contract-*/src/types
 libs/contract-*/migrations/types
 libs/contract-*/src/deployed/*-fork.json
-libs/contract-*/src/deployed/devlive.json
-libs/contract-*/src/deployed/devlive-polygon.json
-libs/contract-*/devlive-polygon.tokens.json
+libs/contract-*/**/devlive-polygon*
+
+libs/contract-core/migrations/warmup_contract/blockchain.json
+libs/contract-core/migrations/warmup_contract/mint.csv
+libs/contract-core/migrations/warmup_contract/prod.json
 
 libs/idx/src/config.devlive.json
 
@@ -70,5 +72,3 @@ apps/*/src/translations/en.json
 apps/tx-processor/run_service.cmd
 
 storybook-static/
-apps/cloner/src/prod.json
-apps/cloner/src/blockchain.json
