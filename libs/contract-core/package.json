@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.46",
+  "version": "0.2.47",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -55,7 +55,7 @@
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.46"
+    "@thecointech/contract-base": "^0.2.47"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }
