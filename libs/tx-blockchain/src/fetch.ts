@@ -80,7 +80,7 @@ export async function readTransfers(contract: TheCoin, filter: EventFilter, to:b
 
 async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: TheCoin, history: Transaction[]) {
   // construct filter to get tx either from or to
-  const args = to ? [account, account] : [account, null];
+  const args = to ? [null, account] : [account, null];
   let filter = contract.filters.Transfer(...args);
   (filter as any).fromBlock = fromBlock || 0;
 

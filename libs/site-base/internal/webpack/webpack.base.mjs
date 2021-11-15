@@ -9,7 +9,7 @@ const { getEnvFiles } = require('../../../../tools/setenv');
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
+import webpack_less from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 
 const configName = process.env.CONFIG_NAME;
@@ -49,8 +49,8 @@ export default {
         test: /(?<!module)\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      semantic_less_loader,
-      css_module_loader,
+      webpack_less.semantic_less_loader,
+      webpack_less.css_module_loader,
       ////////////////////////////////////////////////////////////////
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,

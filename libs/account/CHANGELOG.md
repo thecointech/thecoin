@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.50](https://github.com/thecointech/thecoin/compare/v0.2.49...v0.2.50) (2021-11-14)
+
+**Note:** Version bump only for package @thecointech/account
+
+
+
+
+
+## [0.2.49](https://github.com/thecointech/thecoin/compare/v0.2.48...v0.2.49) (2021-11-14)
+
+**Note:** Version bump only for package @thecointech/account
+
+
+
+
+
+## [0.2.48](https://github.com/thecointech/thecoin/compare/v0.2.47...v0.2.48) (2021-11-14)
+
+**Note:** Version bump only for package @thecointech/account
+
+
+
+
+
+## [0.2.47](https://github.com/thecointech/thecoin/compare/v0.2.46...v0.2.47) (2021-11-14)
+
+**Note:** Version bump only for package @thecointech/account
+
+
+
+
+
+## [0.2.46](https://github.com/thecointech/thecoin/compare/v0.2.45...v0.2.46) (2021-11-13)
+
+
+### Reverts
+
+* Revert "rename to core" ([12b26de](https://github.com/thecointech/thecoin/commit/12b26de33e580b077344a94b74f7587b0f9409eb))
+
+
+
+
+
 ## [0.2.42](https://github.com/thecointech/thecoin/compare/v0.2.41...v0.2.42) (2021-10-12)
 
 **Note:** Version bump only for package @thecointech/account
