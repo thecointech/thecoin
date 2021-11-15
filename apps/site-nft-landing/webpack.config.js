@@ -53,8 +53,12 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      inject: "body"
+      template: "./src/en.html",
+      filename: 'en.html',
     }),
+    new HtmlWebpackPlugin({
+      filename: 'fr.html',
+      template: './src/fr.html',
+    })
   ]
 };

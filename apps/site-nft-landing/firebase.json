@@ -9,12 +9,12 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/en.html"
       }
     ],
     "headers": [
       {
-        "source": "/index.html",
+        "source": "/en.html",
         "headers": [
           {
             "key": "Cache-Control",

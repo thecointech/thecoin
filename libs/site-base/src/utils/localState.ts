@@ -11,14 +11,3 @@ export function getUrlParameterByName(name: string, url?: string) {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
-
-// Given a cookie key `name`, returns the value of
-// the cookie or `null`, if the key is not found.
-export function getCookie(name: string) {
-  const value = "; " + document.cookie;
-  const parts = value.split("; " + name + "=");
-	return (parts.length == 2) ?
-		decodeURI(parts.pop()!.split(";").shift()!) :
-		'';
-}

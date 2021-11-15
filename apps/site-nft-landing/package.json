@@ -11,7 +11,9 @@
     "_build": "webpack --mode production",
     "pre_deploy": "yarn _build",
     "_deploy": "ts-node --skip-project deploy",
-    "dev": "yarn webpack serve --mode=development"
+    "watch": "webpack --watch --mode=development",
+    "serve": "firebase emulators:start --only hosting",
+    "dev": "run-p watch serve"
   },
   "devDependencies": {
     "firebase": "^9.2.0",
