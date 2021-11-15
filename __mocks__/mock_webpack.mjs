@@ -1,4 +1,5 @@
 import { join, dirname, resolve as _resolve } from 'path';
+import { fileURLToPath } from "url";
 //
 // Mocking packages for webpack (used by sites & admin)
 //
