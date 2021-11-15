@@ -1,6 +1,5 @@
 import './reset.css'
 import './styles.less'
-import "./index.html";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
