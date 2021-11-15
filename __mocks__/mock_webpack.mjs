@@ -2,8 +2,9 @@ import { join, dirname, resolve as _resolve } from 'path';
 //
 // Mocking packages for webpack (used by sites & admin)
 //
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const __dirname = dirname(new URL(import.meta.url).pathname);
 // Typescript compilation on __mocks__ folder
 const compileMocks = {
   rules: [
