@@ -1,5 +1,5 @@
 import { AllActions, loadCurrent, loadMinting } from './load';
-import { ConnectContract, TheCoin } from '../../src';
+import { ConnectContract, TheCoin } from '@thecointech/contract-core';
 import { isType, AnyAction, BuyAction, getActionFromInitial, removeIncomplete, storeTransition, TransitionDelta, TypedAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { init } from '@thecointech/firestore';
@@ -127,7 +127,6 @@ export class Processor {
       else if (action.type)
         didProcess = await this.cloneSell(action) || didProcess;
       else if (didProcess) {
-        // Do we need to process this one first?
         await this.cloneTransfer(action)
       }
     }
@@ -292,9 +291,17 @@ export class Processor {
 
 function getTransfers(address: string, actions: AnyAction[]) {
   // Find all transfers not already accounted for
+  const src = bcHistory.filter(h =>
+    (h.transfers[0].from == address || h.transfers[0].to == address) &&
+    (!actions.find(a => a.history.find(o => o.hash == h.hash))) &&
+    !toIgnore(h.transfers[0].to)
+  );
+  if (src.find(h => toIgnore(h.transfers[0].to)))
+    debugger;
   const typeFixed = bcHistory.filter(h =>
     (h.transfers[0].from == address || h.transfers[0].to == address) &&
-    (!actions.find(a => a.history.find(o => o.hash == h.hash)))
+    !actions.find(a => a.history.find(o => o.hash == h.hash)) &&
+    !toIgnore(h.transfers[0].to)
   ).map(tx => {
     return {
       data: {
