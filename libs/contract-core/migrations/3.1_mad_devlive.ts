@@ -2,9 +2,9 @@
 import { COIN_EXP } from "../src/contract";
 import { DateTime } from 'luxon';
 import { NamedAccounts } from "./accounts";
-import { TheCoin } from './deploy';
+import { TheCoinInstance } from './types/TheCoin';
 
-export async function initializeDevLive(contract: TheCoin, accounts: NamedAccounts) {
+export async function initializeDevLive(contract: TheCoinInstance, accounts: NamedAccounts) {
 
   const tcBal = await contract.balanceOf(accounts.TheCoin);
   if (tcBal.toNumber() === 0) {
@@ -20,7 +20,7 @@ export async function initializeDevLive(contract: TheCoin, accounts: NamedAccoun
   await contract.runCloneTransfer(accounts.TheCoin, accounts.BrokerCAD, 50000 * COIN_EXP, 0, 0, { from: accounts.TheCoin });
 }
 
-async function seedAccount(contract: TheCoin, theCoin: string, client: string, onlyBuy=false) {
+async function seedAccount(contract: TheCoinInstance, theCoin: string, client: string, onlyBuy=false) {
 
   // Assign ~15 transactions to client randomly in the past
   console.log("Seeding account: " + client);

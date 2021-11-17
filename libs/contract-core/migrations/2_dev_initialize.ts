@@ -1,15 +1,16 @@
 import { NamedAccounts, toNamedAccounts } from "./accounts";
+import { getDeployed } from './deploy';
 import { MigrationStep } from './step';
-import { getContract, TheCoin } from './deploy';
+import { TheCoinInstance } from './types/TheCoin'
 
-const deploy: MigrationStep = () =>
-  async (deployer, network, accounts) => {
-    const contract = await getContract(deployer, network);
+const deploy: MigrationStep = (artifacts) =>
+  async (_, network, accounts) => {
+    const contract = await getDeployed(artifacts, network)
     const namedAccounts = toNamedAccounts(accounts);
     await assignRoles(contract, namedAccounts);
   };
 
-async function assignRoles(proxy: TheCoin, accounts: NamedAccounts) {
+async function assignRoles(proxy: TheCoinInstance, accounts: NamedAccounts) {
   console.log('Assigning roles...');
   const { TheCoin, Minter, TCManager, Police } = accounts;
 
