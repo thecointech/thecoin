@@ -2,7 +2,7 @@ import { providers } from "ethers";
 
 export const getProvider = () => {
 
-  const network = process.env.DEPLOY_POLYGON_NETWORK == "polygon-mumbai"
+  const network = process.env.DEPLOY_POLYGON_NETWORK == "polygon-testnet"
     ? "maticmum"
     : process.env.DEPLOY_POLYGON_NETWORK;
   if (!network)

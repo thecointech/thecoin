@@ -1,9 +1,11 @@
 import { Transaction } from "./types";
 import { TheCoin } from '@thecointech/contract-core';
-import { EventFilter, providers, BigNumber } from "ethers";
-import { toHuman } from "@thecointech/utilities";
+import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
+import { Decimal } from "decimal.js-light";
 import { log } from '@thecointech/logging';
+import { ChainProvider, ERC20Response } from '@thecointech/ethers-provider';
+import {NormalizeAddress} from '@thecointech/utilities';
 
 // Load account history and merge with local
 export function mergeTransactions(history: Transaction[], moreHistory: Transaction[]) {
@@ -12,95 +14,57 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   return mergedHistory;
 }
 
-async function addAdditionalInfo(transaction: Transaction, contract: TheCoin): Promise<boolean> {
-  const { txHash } = transaction;
-  if (!txHash)
-    return false;
 
-  // Parse out additional purchase/redeem info
-  const txReceipt = await contract.provider.getTransactionReceipt(txHash);
-  if (!txReceipt.logs || !txReceipt.blockHash)
-    return false;
-
-  const blockData = await contract.provider.getBlock(txReceipt.blockHash)
-
-  for (let i = 0; i < txReceipt.logs.length; i++) {
-    const extra = contract.interface.parseLog(txReceipt.logs[i]);
-    if (extra && extra.name == "ExactTransfer") {
-      const { from, to, timestamp } = extra.args
-      transaction.date = DateTime.fromMillis(timestamp.toNumber());
-      transaction.completed = DateTime.fromSeconds(blockData.timestamp);
-      const change = toHuman(transaction.change, true);
-      if (from == process.env.WALLET_BrokerCAD_ADDRESS) {
-        transaction.logEntry = `Purchase: ${change}`
-      }
-      else if (to == process.env.WALLET_BrokerCAD_ADDRESS) {
-        transaction.logEntry = `Sell: ${change}`
-      }
-      else {
-        transaction.logEntry = `Transfer: ${change}`
-      }
-      return true;
-    }
-  }
-  return false;
-}
-
-async function transferToTransaction(toWallet: boolean, ethersLog: providers.Log, contract: TheCoin): Promise<Transaction> {
-  const res = contract.interface.parseLog(ethersLog);
-  const { from, to, value } = res.args;
-  var r: Transaction = {
-    txHash: ethersLog.transactionHash,
-    date: DateTime.local(),
-    change: toWallet ? value.toNumber() : -value.toNumber(),
-    logEntry: "---",
-    balance: -1,
-    counterPartyAddress: toWallet ? from : to
-  }
-
-  if (!await addAdditionalInfo(r, contract)) {
-    const block = await contract.provider.getBlock(ethersLog.blockNumber!);
-    r.date = DateTime.fromMillis(block.timestamp * 1000)
-    r.logEntry = `Transfer: ${toWallet ? from : to}`
-  }
-  return r;
-}
-
-export async function readTransfers(contract: TheCoin, filter: EventFilter, to:boolean) {
-  // Retrieve logs
-  const txLogs = await contract.provider.getLogs(filter)
-  // Convert logs to our transactions
-  let txs: Transaction[] = [];
-  for (let i = 0; i < txLogs.length; i++) {
-    const tx = await transferToTransaction(to, txLogs[i], contract);
-    txs.push(tx);
-  }
-  return txs;
-}
-
-async function readAndMergeTransfers(account: string, to: boolean, fromBlock: number, contract: TheCoin, history: Transaction[]) {
-  // construct filter to get tx either from or to
-  const args = to ? [null, account] : [account, null];
-  let filter = contract.filters.Transfer(...args);
-  (filter as any).fromBlock = fromBlock || 0;
-
-  const txs = await readTransfers(contract, filter, to);
-
-  // merge and remove duplicates for complete array
-  return mergeTransactions(history, txs);
-}
+const toTransaction = (tx: ERC20Response) : Transaction => ({
+  txHash: tx.hash,
+  balance: 0,
+  change: tx.value.toNumber(),
+  counterPartyAddress: tx.from,
+  date: DateTime.fromSeconds(tx.timestamp),
+  from: tx.from,
+  to: tx.to,
+  value: new Decimal(tx.value.toNumber()),
+})
 
 export async function loadAndMergeHistory(address: string, fromBlock: number, contract: TheCoin) {
+
+  const provider = new ChainProvider(
+    process.env.DEPLOY_POLYGON_NETWORK,
+    process.env.POLYGONSCAN_API_KEY
+  );
   try {
-    let history: Transaction[] = [];
-    history = await readAndMergeTransfers(address, true, fromBlock, contract, history);
-    history = await readAndMergeTransfers(address, false, fromBlock, contract, history);
+    const contractAddress = contract.address;
+    const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
+    const history = allTxs.map(toTransaction);
+
+    const exact = await fetchExactTimestamps(provider, contract, fromBlock, address);
+    for (const tx of history) {
+      if (exact[tx.txHash])
+        tx.date = DateTime.fromMillis(exact[tx.txHash]);
+      if (NormalizeAddress(tx.from) == address)
+        tx.change = -tx.change;
+    }
     return history;
   }
   catch (err) {
     log.error(err);
   }
   return [];
+}
+
+async function fetchExactTimestamps(provider: ChainProvider, contract: TheCoin, fromBlock: number, address: string) {
+  const exactFrom = await filterExactTransfers(provider, contract, fromBlock, [address, null]);
+  const exactTo = await filterExactTransfers(provider, contract, fromBlock, [null, address]);
+  return [...exactTo, ...exactFrom].reduce((acc, item) => ({
+    ...acc,
+    [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()
+  }), {} as Record<string, number>);
+}
+
+async function filterExactTransfers(provider: ChainProvider, contract: TheCoin, fromBlock: number, addresses: [string|null, string|null]) {
+  const filter = contract.filters.ExactTransfer(...addresses);
+  (filter as any).startBlock = fromBlock;
+  return provider.getEtherscanLogs(filter, "and")
 }
 
 export function calculateTxBalances(currentBalance: BigNumber, history: Transaction[]) {

@@ -12,7 +12,7 @@ describe('Testing provider', () => {
 
   it ('can fetch logs', async () => {
     process.env.CONFIG_ENV = 'prodtest';
-    process.env.DEPLOY_POLYGON_NETWORK = 'polygon-mumbai';
+    process.env.DEPLOY_POLYGON_NETWORK = 'polygon-testnet';
     process.env.POLYGONSCAN_API_KEY = prodVars.POLYGONSCAN_API_KEY;
 
     const contract = GetContract();

@@ -13,8 +13,8 @@ async function getAddresses() {
   const brokerCad = await getSigner("BrokerCAD");
   const xferAsst = await getSigner("BrokerTransferAssistant");
   return {
-    'process.env.WALLET_BrokerCAD_ADDRESS': await brokerCad.getAddress(),
-    'process.env.WALLET_BrokerTransferAssistant_ADDRESS': await xferAsst.getAddress(),
+    'process.env.WALLET_BrokerCAD_ADDRESS': JSON.stringify(await brokerCad.getAddress()),
+    'process.env.WALLET_BrokerTransferAssistant_ADDRESS': JSON.stringify(await xferAsst.getAddress()),
   }
 }
 

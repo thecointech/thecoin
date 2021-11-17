@@ -1,5 +1,6 @@
 import { utils, Signer, Bytes } from "ethers";
 import { SignedMessage } from "@thecointech/types";
+import type {JsonRpcSigner} from "@ethersproject/providers";
 
 export function GetHash(
   value: string
@@ -34,7 +35,13 @@ export async function GetSigner(signedMessage: SignedMessage) {
 // the standard, and quietly curse the fragmented landscape that makes this possible.
 // https://ethereum.stackexchange.com/questions/76810/sign-message-with-web3-and-verify-with-openzeppelin-solidity-ecdsa-sol
 export async function sign(message: Bytes | string, signer: Signer) {
-  const signature = await signer.signMessage(message);
+  const rpcSigner: JsonRpcSigner = signer as any;
+  // Ethers 5.5 updated from using eth_sign to personal_sign
+  // Ganache in Truffle 5 doesn't support personal_sign.
+  // Sigh.... https://github.com/trufflesuite/ganache/issues/540
+  const signature: string = (rpcSigner._legacySignMessage)
+    ? await rpcSigner._legacySignMessage(message)
+    : await signer.signMessage(message)
 
   // We expect sig to either be 0-1, or 27-28.  Normalize to 27-28 by
   // adding 27 if the value < 16 (ie, higher 4 bits are 0)
