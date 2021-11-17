@@ -1,13 +1,11 @@
 import './setenv';
 import { join } from 'path';
 import { promises } from "fs";
-import Ceramic from '@ceramicnetwork/http-client';
-import { createDefinition, publishSchema } from '@ceramicstudio/idx-tools';
+import { CeramicClient } from '@ceramicnetwork/http-client'
+import { ModelManager } from '@glazed/devtools'
 import { Ed25519Provider } from 'key-did-provider-ed25519';
 import { fromString } from 'uint8arrays';
-import KeyDidResolver from 'key-did-resolver';
-import { Resolver } from 'did-resolver';
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
+import { getResolver } from 'key-did-resolver'
 import { DID } from 'dids';
 
 const idxFolder = join(__dirname, '..', 'libs', 'IDX', 'src');
@@ -16,35 +14,35 @@ const { writeFile, readFile } = promises;
 
 //
 // Publish our schema to the node (must happen once per deploy)
-async function publish(ceramic: Ceramic) {
+async function publish(manager: ModelManager) {
   // Publish the two schemas
   const schema = await readFile(`${idxFolder}/schemaJWE.json`, 'utf8');
   const SchemaJWE = JSON.parse(schema);
-  return publishSchema(ceramic, {
-    name: "UserData",
-    content: SchemaJWE
+  const schemaId =  await manager.createSchema("jwe", SchemaJWE);
+
+  const privateDetails = await manager.createDefinition("AccountDetails", {
+    name: 'AccountDetails',
+    description: 'Verified account details',
+    schema: manager.getSchemaURL(schemaId),
   })
+  return privateDetails;
 }
 
 //
 // Connect to the Ceramic node
 async function connect() {
-  const ceramic = new Ceramic(process.env.CERAMIC_URL)
-  // Provide the DID Resolver and Provider to Ceramic
-  const resolver = new Resolver({
-    ...KeyDidResolver.getResolver(),
-    ...ThreeIdResolver.getResolver(ceramic)
+  // Create and authenticate the DID
+  const seed = fromString(process.env.CERAMIC_SEED, 'base16')
+  const did = new DID({
+    provider: new Ed25519Provider(seed),
+    resolver: getResolver(),
   })
+  // Authenticate the Ceramic instance with the provider
+  await did.authenticate()
 
   // The seed must be provided as an environment variable
-  console.log(`Config: ${process.env.CONFIG_NAME}`);
-  console.log(`Seed: ${process.env.CERAMIC_SEED}`);
-  const seed = fromString(process.env.CERAMIC_SEED, 'base16')
-  const provider = new Ed25519Provider(seed)
-  const did = new DID({ provider, resolver })
+  const ceramic = new CeramicClient(process.env.CERAMIC_URL)
   await ceramic.setDID(did)
-  // Authenticate the Ceramic instance with the provider
-  await ceramic.did.authenticate();
   return ceramic;
 }
 
@@ -52,26 +50,18 @@ async function run() {
 
   // Connect to local node
   const ceramic = await connect();
-  // Publish schema to node
-  const schemaJwe = await publish(ceramic);
+  // Create a manager for the model
+  const manager = new ModelManager(ceramic)
 
-  // Create the definition using the created schema ID
-  const privateDetails = await createDefinition(ceramic, {
-    name: 'privateDetails',
-    description: 'Verified account details',
-    schema: schemaJwe.commitId.toUrl(),
-  })
+  // prepare schema for publishing
+  await publish(manager);
 
-  // Write config to JSON file
-  const config = {
-    definitions: {
-      privateDetails: privateDetails.id.toString(),
-    },
-    schemas: {
-      jwe: schemaJwe.commitId.toUrl(),
-    },
-  }
-  await writeFile(schemaPath, JSON.stringify(config, null, 2));
+  // Publish and store details
+  const model = await manager.toPublished()
+
+  // Write details to path
+  const config = JSON.stringify(model, null, 2)
+  await writeFile(schemaPath, config);
 
   console.log(`Config written to ${schemaPath}`, config)
   process.exit(0)

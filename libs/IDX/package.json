@@ -35,10 +35,9 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@3id/connect": "^0.2.0",
-    "@ceramicnetwork/3id-did-resolver": "^1.4.0",
-    "@ceramicnetwork/http-client": "^1.2.0",
-    "@ceramicstudio/idx": "^0.12.2",
+    "@self.id/web": "^0.1.0",
+    "@ceramicnetwork/3id-did-resolver": "^1.4.8",
+    "@ceramicnetwork/http-client": "^1.4.4",
     "@thecointech/logging": "^0.2.41",
     "@thecointech/utilities": "^0.2.46",
     "dids": "^2.4.0"

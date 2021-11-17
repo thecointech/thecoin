@@ -3,13 +3,14 @@ import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract-core';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
-import { IDX } from '@thecointech/idx';
+import { connectIDX } from '@thecointech/idx';
 
 let _devAccounts: AccountMap = {};
 let _initial: null|string = null;
 
 // Make some wallets to test with.  There should be at
 // least 1 unlocked wallet, and the locked TestAccNoT
+// We cannot use top-level await because it breaks Storybook (v6)
 function initDevWallets() {
   const encryptedAccount = buildNewAccount("TestAccNoT", testWallet.address, testWallet as any);
   // We always add one encrypted wallet
@@ -21,13 +22,21 @@ function initDevWallets() {
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = ConnectContract(randomAccount.signer);
 
-  randomAccount.idx = new IDX({} as any);
+
   _devAccounts[randomAccount.address] = randomAccount
   _initial = randomAccount.address;
+  // Complete
+  connectIDX(randomWallet)
+    .then(idx => {
+      _devAccounts[randomAccount.address] = {
+        ..._devAccounts[randomAccount.address],
+        idx,
+      }
+    });
   randomWallet.encrypt("Random Test")
     .then(encrypted =>
       _devAccounts[randomAccount.address] = {
-        ...randomAccount,
+        ..._devAccounts[randomAccount.address],
         signer: JSON.parse(encrypted)
       })
     .catch(console.error)
