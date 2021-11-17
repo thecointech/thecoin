@@ -25,14 +25,8 @@ function initDevWallets() {
 
   _devAccounts[randomAccount.address] = randomAccount
   _initial = randomAccount.address;
-  // Complete
-  connectIDX(randomWallet)
-    .then(idx => {
-      _devAccounts[randomAccount.address] = {
-        ..._devAccounts[randomAccount.address],
-        idx,
-      }
-    });
+
+  connectIDX(randomWallet).then(idx => randomAccount.idx = idx)
   randomWallet.encrypt("Random Test")
     .then(encrypted =>
       _devAccounts[randomAccount.address] = {
