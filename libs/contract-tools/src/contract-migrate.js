@@ -10,7 +10,8 @@ function migrate(network) {
     [
       `migrate`,
       `--config=${__dirname}/truffle.js`,
-      `--network ${network}`
+      `--network ${network}`,
+      '--reset'
     ],
     { stdio: 'inherit', shell: true, cwd: process.cwd() }
   );

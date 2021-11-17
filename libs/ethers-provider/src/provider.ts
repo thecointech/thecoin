@@ -1,9 +1,11 @@
-import { BlockTag, EtherscanProvider } from '@ethersproject/providers'
+import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproject/providers'
 import type { Networkish, Network } from '@ethersproject/providers'
 import { getNetwork } from './networks'
 import { logger, errors } from './logger'
 import { getDefaultApiKey } from './getDefaultApiKey'
 import { convert, ERC20Response } from './erc20response'
+
+const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 
 export class ChainProvider extends EtherscanProvider {
 
@@ -95,14 +97,19 @@ export class ChainProvider extends EtherscanProvider {
     })
   }
 
-  async getERC20History(addressOrName: string | Promise<string>, startBlock?: BlockTag, endBlock?: BlockTag) {
-    const params = {
+
+
+
+  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+    const {address, contractAddress, startBlock, endBlock} = args;
+    const params: Record<string, any> = {
       action: "tokentx",
-      address: (await this.resolveName(addressOrName)),
-      startblock: ((startBlock == null) ? 0 : startBlock),
+      startblock: ((startBlock == null) ? initBlock : startBlock),
       endblock: ((endBlock == null) ? 99999999 : endBlock),
-      sort: "asc"
+      sort: "asc",
     };
+    if (address) params.address = address;
+    if (contractAddress) params.contractAddress = contractAddress;
 
     const result = await this.fetch("account", params);
 
@@ -111,5 +118,30 @@ export class ChainProvider extends EtherscanProvider {
       const result = convert(tx);
       return result;
     });
+  }
+
+  async getEtherscanLogs(filter: Filter, conditional: "or"|"and") : Promise<Array<Log>>{
+    const { startBlock, endBlock } = filter as any;
+    const params: Record<string, any> = {
+      action: "getLogs",
+      address: filter.address,
+      startblock: !startBlock ? initBlock : startBlock,
+      endblock: !endBlock ? 99999999 : endBlock,
+      topic1_2_opr: conditional
+    };
+    const topicsAdded: number[] = [];
+    if (filter.topics) {
+      for (let i = 0; i < filter.topics.length; i++) {
+        if (filter.topics[i]) {
+          params[`topic${i}`] = filter.topics[i];
+          topicsAdded.forEach(v => params[`topic${v}_${i}_opr`] = conditional)
+          topicsAdded.push(i);
+        }
+      }
+    }
+
+    const result = await this.fetch("logs", params);
+
+    return Formatter.arrayOf(this.formatter.filterLog.bind(this.formatter))(result);
   }
 }
