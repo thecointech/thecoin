@@ -97,9 +97,6 @@ export class ChainProvider extends EtherscanProvider {
     })
   }
 
-
-
-
   async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
     const {address, contractAddress, startBlock, endBlock} = args;
     const params: Record<string, any> = {

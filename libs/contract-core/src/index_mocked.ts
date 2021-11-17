@@ -36,7 +36,8 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer'|'balanceOf'|'c
     certifiedTransfer: () => Promise.resolve(1000)
   }
   filters = {
-    Transfer: () => () => {}
+    Transfer: () => () => {},
+    ExactTransfer: () => () => {}
   }
 }
 
