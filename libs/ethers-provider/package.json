@@ -21,8 +21,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc",
-    "clean": "rimraf ./build",
-    "test": "yarn jest"
+    "clean": "rimraf ./build"
   },
   "files": [
     "build/**/*"
