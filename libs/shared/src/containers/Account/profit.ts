@@ -5,7 +5,7 @@ import { weSellAt, weBuyAt, FXRate } from "@thecointech/fx-rates";
 // What is the CAD value of the money coming into the account?
 // If it is a purchase, it is valued at our sell rate, otherwise at our buy rate.
 export const isPurchase = (tx: Transaction) => tx.from== process.env.WALLET_BrokerCAD_ADDRESS;
-export const isFee = (tx: Transaction) => tx.to == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
+export const isNotFee = (tx: Transaction) => tx.to != process.env.WALLET_BrokerTransferAssistant_ADDRESS;
 
 // What was the value of this transaction in fiat?
 // NOTE: This does not convert toHuman.
@@ -23,7 +23,7 @@ export const fiatChange = (tx: Transaction, rates: FXRate[]) =>
 // benefit the client (cannot be included in account base)
 export const totalCad = (history: Transaction[], rates: FXRate[]) =>
   toHuman(history
-    .filter(isFee)
+    .filter(isNotFee)
     .reduce((total, tx) => total + fiatChange(tx, rates), 0)
   );
 
