@@ -13,12 +13,12 @@ const translations = defineMessages({
   invalidVisaAccount : {
       defaultMessage: 'The given number is not a valid visa card',
       description: 'app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page'},
-  invalidNumericChars : {
+  invalidNumericLength : {
       defaultMessage: 'You have entered {len} numbers, but your account requires {max}',
       description: 'app.accounts.billPayments.invalidNumericChars: Error message for the bill payement page'},
-  invalidNumericLength : {
-      defaultMessage: 'Invalid account number',
-      description: 'app.accounts.billPayments.invalidNumericLength: Error message for the bill payement page'}
+  invalidNumericChars : {
+        defaultMessage: 'Your account id should only contain numbers',
+        description: 'Invalid characters entered for bill payee'},
 });
 
 export type Validatable = {
@@ -40,13 +40,15 @@ function visa(val: string) {
     : translations.invalidVisaAccount
 }
 
+const onlyNumbers = /^\d+$/;
 function numeric(max: number) {
   return (val: string) => {
+    if (!onlyNumbers.test(val)) return translations.invalidNumericChars
     const r = parseInt(val);
     return ((r !== r) || (val.length !== max))
     ?
       {
-        ...translations.invalidNumericChars,
+        ...translations.invalidNumericLength,
         values: {
           len: val.length,
           max
@@ -56,8 +58,8 @@ function numeric(max: number) {
   }
 }
 
-export function findPayee(text: string): Validatable|undefined {
-  const item = payees.find(item => item.text === text)
+export function findPayee(value: string): Validatable|undefined {
+  const item = payees.find(item => item.value === value)
   return item;
 }
 
@@ -108,6 +110,7 @@ export const payees: ValidatedItemProps[] = [
 	{ validate: none, text: "CRA (REVENUE) 2018 TAX RETURN", value: "CRA (REVENUE) 2018 TAX RETURN" },
 	{ validate: none, text: "CRA CHILD AND FAMILY BENEFITS", value: "CRA CHILD AND FAMILY BENEFITS" },
   { validate: none, text: "CRA REVENUE TAX INSTALMENT", value: "CRA REVENUE TAX INSTALMENT" },
+  { validate: numeric(14), text: "MANITOBA HYDRO", value: "MANITOBA HYDRO - 14 DIGIT ACCT" },
   { validate: numeric(9), text: "FIDO", value: "FIDO" },
   { validate: numeric(11), text: "ENERGIR", value: "ENERGIR" }
 ];
