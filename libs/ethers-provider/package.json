@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/ethers-provider",
   "version": "0.2.47",
+  "private": true,
   "description": "TheCoin: A custom ethers.js provider with access to Polygon and improved Etherscan support",
   "keywords": [
     "ethereum",
