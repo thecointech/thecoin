@@ -40,9 +40,9 @@ function visa(val: string) {
     : translations.invalidVisaAccount
 }
 
-const onlyNumbers = /^\d+$/;
 function numeric(max: number) {
   return (val: string) => {
+    const onlyNumbers = /^\d+$/;
     if (!onlyNumbers.test(val)) return translations.invalidNumericChars
     const r = parseInt(val);
     return ((r !== r) || (val.length !== max))
