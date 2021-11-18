@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.47",
+  "version": "0.2.52",
   "private": true,
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
@@ -38,10 +38,10 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.23",
-    "@thecointech/contract-nft": "^0.2.47",
+    "@thecointech/contract-nft": "^0.2.52",
     "@thecointech/logging": "^0.2.41",
-    "@thecointech/signers": "^0.2.46",
-    "@thecointech/utilities": "^0.2.46",
+    "@thecointech/signers": "^0.2.52",
+    "@thecointech/utilities": "^0.2.52",
     "@tsoa/runtime": "^3.8.0",
     "axios": "0.21.4",
     "cors": "^2.8.5",
