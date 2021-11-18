@@ -1,6 +1,6 @@
-import { IDX } from '@ceramicstudio/idx';
-import type { JWE } from 'did-jwt';
-import { IdxAlias } from './idx';
+// import { IDX } from '@ceramicstudio/idx';
+import { SelfID } from '@self.id/web'
+import { IdxAlias } from './types';
 
 export interface EncryptedPayload<T> {
   // It is legal for the data to be null
@@ -11,24 +11,24 @@ export interface EncryptedPayload<T> {
 
 // Call to set some data to an encrypted
 // IDX definition on the users account
-export const setEncrypted = async <T>(idx: IDX, definition: IdxAlias, data: T|null, recipients = [] as string[]) => {
+export const setEncrypted = async <T>(self: SelfID, definition: IdxAlias, data: T|null, recipients = [] as string[]) => {
 
-  const owners = new Set([idx.id, ...recipients]) // always make ourselves a recipient
-  const did = idx.ceramic.did!;
+  const owners = new Set([self.id, ...recipients]) // always make ourselves a recipient
+  const did = self.client.ceramic.did!;
   // Remember who has access to this record
   const payload: EncryptedPayload<T> = {
     data,
     recipients,
   }
   const encrypted = await did.createDagJWE(payload, [...owners])
-  const id = await idx.set(definition, encrypted);
+  const id = await self.set(definition, encrypted);
   return id;
 }
 
 // Load the encrypted record and decrypt
-export const loadEncrypted = async <T>(idx: IDX, definition: IdxAlias) : Promise<EncryptedPayload<T>|null> => {
-  const did = idx.ceramic.did!;
-  const record = await idx.get<JWE>(definition);
+export const loadEncrypted = async <T>(self: SelfID, definition: IdxAlias) : Promise<EncryptedPayload<T>|null> => {
+  const did = self.client.ceramic.did!;
+  const record = await self.get(definition);
   if (record) {
     try {
       const decrypted = await did.decryptDagJWE(record);

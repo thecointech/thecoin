@@ -15,6 +15,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { DateTime } from 'luxon';
 import { Filters } from './Filters';
 import { TransactionLine } from './TransactionLine';
+import { NormalizeAddress } from '@thecointech/utilities';
 
 type MyProps = {
   rates: FXRate[];
@@ -96,6 +97,13 @@ export const TransactionList = (props: MyProps) => {
 
   let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
   filteredTx.reverse();
+  // Don't display the fee's
+  const xferAssistAddress = process.env.WALLET_BrokerTransferAssistant_ADDRESS;
+  if (xferAssistAddress) {
+    const filterAddress = NormalizeAddress(xferAssistAddress);
+    filteredTx = filteredTx.filter((tx) => NormalizeAddress(tx.to) != filterAddress);
+  }
+
   let [ txOutput, jsxFooter ] = buildPagination(filteredTx, maxRowCount, 0);
 
   let txJsxRows = txOutput.map((tx, index) => {
@@ -114,7 +122,7 @@ export const TransactionList = (props: MyProps) => {
     const dayToDisplay = tx.date.setLocale(locale).day;
 
     const timeToDisplay = tx.date.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE);
-    const addressComment = tx.counterPartyAddress;
+    const addressComment = NormalizeAddress(tx.to) == account?.address ? tx.from : tx.to;
     return (
       <TransactionLine
         key={index}

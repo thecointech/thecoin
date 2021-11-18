@@ -65,7 +65,7 @@ contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
     // We record the exact timestamp a transaction was initiated
     // to ensure our tracking is precise (for tax etc).
     // NOTE: timestamp here is in millis (not seconds)
-    event ExactTransfer(address from, address to, uint amount, uint timestamp);
+    event ExactTransfer(address indexed from, address indexed to, uint amount, uint timestamp);
 
     // ------------------------------------------------------------------------
     // Constructor

@@ -35,8 +35,13 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer'|'balanceOf'|'c
   estimate = {
     certifiedTransfer: () => Promise.resolve(1000)
   }
+  interface = {
+    // Only used by fetchExactTimestamps
+    parseLog: (item: any) => ({ args: { timestamp: BigNumber.from(`0x${item.data.slice(66)}`) } })
+  }
   filters = {
-    Transfer: () => () => {}
+    Transfer: (...addresses: string[]) => ({topics: [null, ...addresses]}),
+    ExactTransfer: (...addresses: string[]) => ({topics: [null, ...addresses]}),
   }
 }
 

@@ -1,4 +1,7 @@
-import { calculateProfit, fiatChange, totalCad, currentValue, filterFees } from "./profit";
+process.env.WALLET_BrokerCAD_ADDRESS = "broker";
+process.env.WALLET_BrokerTransferAssistant_ADDRESS = "assist";
+
+import { calculateProfit, fiatChange, totalCad, currentValue, isNotFee } from "./profit";
 import { toHuman } from "@thecointech/utilities";
 import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
 
@@ -33,7 +36,7 @@ test('calculate real profit correctly', () => {
   const {balance} = txs[0];
 
   var txInFiat = txs
-    .filter(filterFees)
+    .filter(isNotFee)
     .map(tx => fiatChange(tx, rates))
     .map(fiat => toHuman(fiat, true));
 
