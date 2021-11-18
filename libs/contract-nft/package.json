@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-nft",
-  "version": "0.2.52",
+  "version": "0.2.53",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "keywords": [
     "TheCoin",
@@ -34,11 +34,9 @@
     "test": "yarn jest",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy && yarn verify",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
-
     "_deploy": "runs-s _deploy:*",
     "_deploy:polygon": "truffle migrate --network polygon",
     "_deploy:ethereum": "truffle migrate --network polygon",
-
     "verify": "yarn contract-verify"
   },
   "files": [
@@ -56,7 +54,7 @@
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
-    "@thecointech/contract-core": "^0.2.52",
+    "@thecointech/contract-core": "^0.2.53",
     "@thecointech/signers": "^0.2.52",
     "@thecointech/utilities": "^0.2.52",
     "@types/bs58": "^4.0.1",

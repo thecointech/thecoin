@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.52",
+  "version": "0.2.53",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -36,7 +36,6 @@
     "_deploy": "run-s _deploy:*",
     "_deploy:polygon": "truffle migrate --network polygon",
     "_deploy:ethereum": "truffle migrate --network polygon",
-
     "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
   },
   "files": [
