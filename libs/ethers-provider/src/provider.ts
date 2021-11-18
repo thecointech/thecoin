@@ -1,5 +1,4 @@
 import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproject/providers'
-import type { Networkish, Network } from '@ethersproject/providers'
 import { getNetwork } from './networks'
 import { logger, errors } from './logger'
 import { convert, ERC20Response } from './erc20response'
@@ -12,9 +11,13 @@ const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 
 export class ChainProvider extends EtherscanProvider {
 
-  constructor(network: Networkish, apiKey: string) {
-    const standardNetwork = getNetwork(network == null ? 'optimism-mainnet' : network)
+  constructor() {
+    // For now we exclusively use hte polygon network
+    const network = process.env.DEPLOY_POLYGON_NETWORK;
+    const apiKey = process.env.POLYGONSCAN_API_KEY;
+    if (!network || !apiKey) throw new Error("Cannot use Provider without network & key");
 
+    const standardNetwork = getNetwork(network);
     switch (standardNetwork?.name) {
       case 'optimism-mainnet':
       case 'optimism-testnet':
@@ -50,7 +53,7 @@ export class ChainProvider extends EtherscanProvider {
         })
     }
 
-    super(<Network>standardNetwork, apiKey)
+    super(standardNetwork, apiKey)
   }
   isCommunityResource(): boolean {
     return false;

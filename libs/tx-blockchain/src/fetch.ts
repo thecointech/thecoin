@@ -27,10 +27,7 @@ const toTransaction = (tx: ERC20Response) : Transaction => ({
 
 export async function loadAndMergeHistory(address: string, fromBlock: number, contract: TheCoin) {
 
-  const provider = new ChainProvider(
-    process.env.DEPLOY_POLYGON_NETWORK!,
-    process.env.POLYGONSCAN_API_KEY!
-  );
+  const provider = new ChainProvider();
   try {
     const contractAddress = contract.address;
     const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
