@@ -108,6 +108,7 @@ export const payees: ValidatedItemProps[] = [
 	{ validate: none, text: "CRA (REVENUE) 2018 TAX RETURN", value: "CRA (REVENUE) 2018 TAX RETURN" },
 	{ validate: none, text: "CRA CHILD AND FAMILY BENEFITS", value: "CRA CHILD AND FAMILY BENEFITS" },
   { validate: none, text: "CRA REVENUE TAX INSTALMENT", value: "CRA REVENUE TAX INSTALMENT" },
+  { validate: numeric(14), text: "MANITOBA HYDRO - 14 DIGIT ACCT", value: "Manitoba Hydro" },
   { validate: numeric(9), text: "FIDO", value: "FIDO" },
   { validate: numeric(11), text: "ENERGIR", value: "ENERGIR" }
 ];
