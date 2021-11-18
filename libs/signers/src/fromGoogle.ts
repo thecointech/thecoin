@@ -1,5 +1,5 @@
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
-import { Wallet } from 'ethers';
+import { Wallet } from '@ethersproject/wallet';
 import { AccountName } from './names';
 
 // If running on GAE, check in secrets manager

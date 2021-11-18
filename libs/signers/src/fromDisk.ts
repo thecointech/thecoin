@@ -1,8 +1,9 @@
-import { utils, Wallet } from 'ethers';
+import type { ProgressCallback } from '@ethersproject/json-wallets';
+import { Wallet } from "@ethersproject/wallet";
 import { existsSync, readFileSync } from 'fs';
 import { AccountName } from './names';
 
-export async function loadFromDisk(name: AccountName, callback?: utils.ProgressCallback) {
+export async function loadFromDisk(name: AccountName, callback?: ProgressCallback) {
   const encrypted = loadEncrypted(name);
   const key = getPassword(name);
   return Wallet.fromEncryptedJson(encrypted, key, callback);

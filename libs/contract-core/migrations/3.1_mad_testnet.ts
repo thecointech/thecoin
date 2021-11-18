@@ -1,9 +1,9 @@
 import { COIN_EXP } from "../src";
 import { NamedAccounts } from "./accounts";
-import { TheCoin } from './deploy';
+import { TheCoinInstance } from './types/TheCoin';
 
 // Because we don't know where the system is deploying to
-export async function initializeTestNet(proxy: TheCoin, accounts: NamedAccounts) {
+export async function initializeTestNet(proxy: TheCoinInstance, accounts: NamedAccounts) {
 
   // For testnet: we immediately mint 10K coins
   console.log("Minting coins");
