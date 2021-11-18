@@ -2,14 +2,17 @@ import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproj
 import type { Networkish, Network } from '@ethersproject/providers'
 import { getNetwork } from './networks'
 import { logger, errors } from './logger'
-import { getDefaultApiKey } from './getDefaultApiKey'
 import { convert, ERC20Response } from './erc20response'
+
+//
+// ATTRIBUTION:
+// This class was heavily inspired by https://github.com/talentlessguy/chain-provider
 
 const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 
 export class ChainProvider extends EtherscanProvider {
 
-  constructor(network?: Networkish, apiKey?: string) {
+  constructor(network: Networkish, apiKey: string) {
     const standardNetwork = getNetwork(network == null ? 'optimism-mainnet' : network)
 
     switch (standardNetwork?.name) {
@@ -47,10 +50,10 @@ export class ChainProvider extends EtherscanProvider {
         })
     }
 
-    super(<Network>standardNetwork, apiKey || getDefaultApiKey(standardNetwork.name))
+    super(<Network>standardNetwork, apiKey)
   }
   isCommunityResource(): boolean {
-    return this.apiKey === getDefaultApiKey(this.network.name)
+    return false;
   }
   getBaseUrl() :string {
     switch (this.network.name) {
