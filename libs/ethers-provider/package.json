@@ -38,6 +38,7 @@
     "@ethersproject/providers": "*"
   },
   "devDependencies": {
-    "jest": "*"
+    "jest": "*",
+    "@thecointech/signers": "*"
   }
 }

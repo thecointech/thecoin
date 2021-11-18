@@ -7,6 +7,7 @@ import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
 import exactFrom from './logs-exact-from.json'
 import exactTo from './logs-exact-to.json'
+import { getSigner } from '@thecointech/signers';
 
 export class ChainProvider extends BaseProvider {
 
@@ -60,9 +61,6 @@ export class ChainProvider extends BaseProvider {
 }
 
 async function getRemapping(clientAddress: string) : Promise<Record<string, string>> {
-  // We make this a dynamic import so we can avoid putting a dependency
-  // on the signers project.
-  const { getSigner } = await import('@thecointech/signers');
   const brokerCad = await getSigner('BrokerCAD');
   return {
     client: clientAddress,
