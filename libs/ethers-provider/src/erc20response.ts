@@ -8,11 +8,12 @@ export interface ERC20Response {
   hash: string;
   nonce: number;
   blockHash: string;
-  from: string;
   contractAddress: string;
-  to: string;
 
+  to: string;
+  from: string;
   value: BigNumber;
+
   tokenName: string,
   tokenSymbol: string,
   tokenDecimal: number,
