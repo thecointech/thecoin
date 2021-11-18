@@ -1,4 +1,4 @@
-import { SelfID } from '@self.id/web';
+import { ConnectNetwork, SelfID } from '@self.id/web';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
 import { createAuthProvider } from './authProvider';
@@ -13,7 +13,7 @@ export async function connectIDX(signer: Signer) : Promise<SelfID> {
   const self = await SelfID.authenticate({
     authProvider: await createAuthProvider(signer),
     ceramic: CERAMIC_URL,
-    connectNetwork: 'testnet-clay',
+    connectNetwork: process.env.THREEID_NETWORK as ConnectNetwork|undefined,
     model: config,
   });
 
