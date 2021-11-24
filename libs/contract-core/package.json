@@ -53,6 +53,7 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "@thecointech/contract-tools": "*",
     "jest": "*"
   },
   "dependencies": {
