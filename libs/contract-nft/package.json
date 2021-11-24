@@ -22,7 +22,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:types build:copy build:src",
-    "build:contracts": "contract-build",
+    "build:contracts": "truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed\" ./build/",
