@@ -12,7 +12,8 @@ loadTypescript();
 
 const numBuiltIn = AccountId.BrokerCAD + 1;
 const testAccounts = [];
-if (process.env.CONFIG_NAME !== 'devlive') {
+if (process.env.NODE_ENV === 'production') {
+
   // devlive accounts are hosted on our local blockchain, so already available
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
