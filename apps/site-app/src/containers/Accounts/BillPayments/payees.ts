@@ -44,8 +44,7 @@ const onlyNumbers = /^\d+$/;
 function numeric(max: number) {
   return (val: string) => {
     if (!onlyNumbers.test(val)) return translations.invalidNumericChars
-    const r = parseInt(val);
-    return ((r !== r) || (val.length !== max))
+    return (val.length !== max)
     ?
       {
         ...translations.invalidNumericLength,
