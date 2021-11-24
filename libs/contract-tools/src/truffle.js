@@ -12,7 +12,8 @@ loadTypescript();
 
 const numBuiltIn = AccountId.BrokerCAD + 1;
 const testAccounts = [];
-if (process.env.CONFIG_NAME !== 'devlive') {
+const isMigrating = process.env.npm_lifecycle_script?.includes("migrate")
+if (isMigrating && process.env.NODE_ENV === 'production') {
   // devlive accounts are hosted on our local blockchain, so already available
   loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
 }
@@ -40,7 +41,7 @@ function getLiveNetworks() {
     // remote environments (both test & mainnet)
     networks: {
       polygon: {
-      provider: () => {
+        provider: () => {
           return new HDWalletProvider(
             testAccounts,
             `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
@@ -98,8 +99,8 @@ function loadTypescript() {
 
 const cwd = process.cwd();
 const configs = process.env.CONFIG_NAME === "devlive"
-? getDevNetworks()
-: getLiveNetworks()
+  ? getDevNetworks()
+  : getLiveNetworks()
 
 module.exports = {
 
