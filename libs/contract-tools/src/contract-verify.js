@@ -1,4 +1,4 @@
-#! node
+#!/usr/bin/env node
 
 require('../../../tools/setenv');
 const { spawn } = require("child_process");

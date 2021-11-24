@@ -20,7 +20,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:types build:src",
-    "build:contracts": "contract-build",
+    "build:contracts": "truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
@@ -31,8 +31,8 @@
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "truffle test",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
     "_deploy:polygon": "truffle migrate --network polygon",
     "_deploy:ethereum": "truffle migrate --network polygon",
@@ -53,6 +53,7 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "@thecointech/contract-tools": "*",
     "jest": "*"
   },
   "dependencies": {
