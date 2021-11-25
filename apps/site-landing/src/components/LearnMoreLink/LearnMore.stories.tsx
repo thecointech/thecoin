@@ -2,9 +2,11 @@ import React from 'react';
 import { LearnMoreLink } from '.';
 import { Meta } from '@storybook/react';
 
-export default {
+const meta: Meta = {
   title: "Base/LearnMore",
   component: LearnMoreLink,
-  args: {children: "string"}
+  args: { text: "Learn More" }
 } as Meta;
 
+export default meta;
+export const LearnMore = (args: typeof meta.args) => <LearnMoreLink to=".">{args?.text}</LearnMoreLink>

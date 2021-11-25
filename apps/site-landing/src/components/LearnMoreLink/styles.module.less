@@ -1,9 +1,27 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .learnMoreLink {
-  font-size: 12px;
-  font-weight: @bold;
+  font-size     : 12px;
+  font-weight   : @bold;
   text-transform: uppercase;
-  padding-bottom: 5px;
-  border-bottom: 2px solid @primaryColor;
+  display       : inline-block;
+  color         : @theCoinPrimaryGreenNeutral;
+  transition    : color @pageTransitionDuration @defaultEasing;
+
+  .bottomBorder {
+    margin-top      : 5px;
+    height          : 4px;
+    border-radius   : 2px;
+    width           : 85px;
+    background-color: @primaryColor;
+    transition      : width @pageTransitionDuration @defaultEasing;
+  }
+
+  &:hover {
+    color: @theCoinPrimaryGreenPale;
+
+    .bottomBorder {
+      width: 100%;
+    }
+  }
 }

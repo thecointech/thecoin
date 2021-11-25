@@ -21,7 +21,6 @@ export class AbsolutePathRemapper {
         // does the path exist as an absolute path?
         const absPath = `${match[1]}${sep}${result.request}`
         if (existsSync(absPath)) {
-          console.log(`Replacing ${result.request} with ${absPath}`);
           result.request = absPath;
         }
       });
