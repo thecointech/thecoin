@@ -10,7 +10,7 @@ import trees from '../images/icon_5_3.svg';
 import illustrationDeco from '../images/smallillustration_right.svg';
 
 import { Grid, Header } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { LearnMoreLink } from 'components/LearnMoreLink';
 
 const translations = defineMessages({
   title : {
@@ -72,7 +72,7 @@ export const Underwater = () => {
                 <p>
                   <FormattedMessage {...translations.differenceDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...translations.differenceLink} /></Link>
+                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.differenceLink} /></LearnMoreLink>
             </Grid.Column>
 
             <Grid.Column columns={3} >
@@ -83,7 +83,7 @@ export const Underwater = () => {
                 <p>
                   <FormattedMessage {...translations.scienceDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...translations.scienceLink} /></Link>
+                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.scienceLink} /></LearnMoreLink>
             </Grid.Column>
 
             <Grid.Column columns={3} >
@@ -94,7 +94,7 @@ export const Underwater = () => {
                 <p>
                   <FormattedMessage {...translations.treesDescription} />
                 </p>
-                <Link to="/healthier"><FormattedMessage {...translations.treesLink} /></Link>
+                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.treesLink} /></LearnMoreLink>
             </Grid.Column>
           </Grid.Row>
         </Grid>
