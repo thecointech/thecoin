@@ -3,6 +3,7 @@ const shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, '__mocks__');
 const { DefinePlugin } = require('webpack');
+const { AbsolutePathRemapper } = require('@thecointech/storybook-abs-paths');
 const { merge } = require("webpack-merge")
 
 module.exports = {
@@ -32,7 +33,7 @@ module.exports = {
       ],
     ]
   }),
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async (config) => {
     const r = merge(
       {
         module: {
@@ -55,7 +56,10 @@ module.exports = {
             "fs": false,
           },
           modules: [mocksFolder],
-        }
+        },
+        plugins: [
+          new AbsolutePathRemapper()
+        ]
       },
       config);
     // Exclude our build folder from compilation.

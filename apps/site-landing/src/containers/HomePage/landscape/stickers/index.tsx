@@ -3,7 +3,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
-import { Link } from 'react-router-dom';
+import { LearnMoreLink } from 'components/LearnMoreLink';
 
 export type Props = {
     Mobile: boolean;
@@ -16,7 +16,7 @@ const translations = defineMessages({
     descriptionLeft : {
       defaultMessage: 'Your money is always earning. Make it earn for you.',
       description: 'site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker'},
-    linkLeft : {
+    learnMore : {
       defaultMessage: 'Learn More',
       description: 'site.homepage.landscape.stickers.left.link: Link name for sticker for the homepage landscape left sticker'},
     titleRight : {
@@ -25,9 +25,6 @@ const translations = defineMessages({
     descriptionRight : {
       defaultMessage: 'Be part of the solution. We offset our clients’ CO2.',
       description: 'site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker'},
-    linkRight : {
-      defaultMessage: 'Learn More',
-      description: 'site.homepage.landscape.stickers.right.link: Link name for sticker for the homepage landscape right sticker'}
   });
 
 export const Stickers = (props: Props) => {
@@ -48,7 +45,7 @@ export const Stickers = (props: Props) => {
                     <FormattedMessage {...translations.descriptionLeft} />
                 </p>
 
-                <Link to="/compare"><FormattedMessage {...translations.linkLeft} /></Link>
+                <LearnMoreLink to="/compare"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
                 </Grid.Column>
                 <Grid.Column className={ `${styles.card} x6spaceLeft` }>
                     <Header as='h4'>
@@ -57,7 +54,7 @@ export const Stickers = (props: Props) => {
                     <p>
                         <FormattedMessage {...translations.descriptionRight} />
                     </p>
-                    <Link to="/wedomore"><FormattedMessage {...translations.linkRight} /></Link>
+                    <LearnMoreLink to="/wedomore"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
                 </Grid.Column>
             </Grid.Row>
         </Grid>
