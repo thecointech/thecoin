@@ -8,6 +8,6 @@ type Props = {
 export const LearnMoreLink: React.FC<Props> = ({ to, children }) =>
   <Link to={to} className={styles.learnMoreLink}>
     {children}
-    <div className={styles.bottomBorder} />
+    <div className={`${styles.bottomBorder} x1spaceBefore`} />
   </Link>
 
