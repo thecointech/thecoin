@@ -35,7 +35,7 @@ const replaceSpaces = (chunks:  React.ReactNode) => (
   }</>
 )
 
-export const MainNavigationGreaterThanMobile = () => {
+export const MainNavigation = () => {
   return (
     <div className={styles.navContainer}>
       <Menu.Menu>
