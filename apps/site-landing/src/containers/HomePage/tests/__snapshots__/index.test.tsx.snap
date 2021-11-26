@@ -60,7 +60,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               >
                 Learn More
                 <div
-                  class="undefined x1spaceBefore"
+                  class="undefined x2spaceBefore"
                 />
               </a>
             </div>
@@ -80,7 +80,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               >
                 Learn More
                 <div
-                  class="undefined x1spaceBefore"
+                  class="undefined x2spaceBefore"
                 />
               </a>
             </div>
@@ -169,7 +169,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               >
                 Learn More
                 <div
-                  class="undefined x1spaceBefore"
+                  class="undefined x2spaceBefore"
                 />
               </a>
             </div>
@@ -189,7 +189,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               >
                 Learn More
                 <div
-                  class="undefined x1spaceBefore"
+                  class="undefined x2spaceBefore"
                 />
               </a>
             </div>
@@ -298,7 +298,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           >
             Learn Your Edge
             <div
-              class="undefined x1spaceBefore"
+              class="undefined x2spaceBefore"
             />
           </a>
         </div>
@@ -322,7 +322,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           >
             Compare Us
             <div
-              class="undefined x1spaceBefore"
+              class="undefined x2spaceBefore"
             />
           </a>
         </div>
@@ -369,7 +369,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           >
             How Anyone Can Get Rich Slow
             <div
-              class="undefined x1spaceBefore"
+              class="undefined x2spaceBefore"
             />
           </a>
         </div>
@@ -393,7 +393,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           >
             Who Wins?
             <div
-              class="undefined x1spaceBefore"
+              class="undefined x2spaceBefore"
             />
           </a>
         </div>
@@ -478,7 +478,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             >
               Compare Outcomes
               <div
-                class="undefined x1spaceBefore"
+                class="undefined x2spaceBefore"
               />
             </a>
           </div>
@@ -502,7 +502,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             >
               Why We Can Be So Confident
               <div
-                class="undefined x1spaceBefore"
+                class="undefined x2spaceBefore"
               />
             </a>
           </div>
@@ -526,7 +526,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             >
               What We Do
               <div
-                class="undefined x1spaceBefore"
+                class="undefined x2spaceBefore"
               />
             </a>
           </div>
