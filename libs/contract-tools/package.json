@@ -16,7 +16,6 @@
     "directory": "libs/contract-tools"
   },
   "bin": {
-    "contract-build": "./src/contract-build.js",
     "contract-verify": "./src/contract-verify.js",
     "contract-migrate": "./src/contract-migrate.js",
     "contract-gen-types": "./src/contract-gen-types.js"

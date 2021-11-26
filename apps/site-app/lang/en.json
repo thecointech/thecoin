@@ -1,4 +1,8 @@
 {
+  "+ZWc/o": {
+    "defaultMessage": "Your account id should only contain numbers",
+    "description": "Invalid characters entered for bill payee"
+  },
   "+w7KFz": {
     "defaultMessage": "Your account is verified.",
     "description": "app.settings.verified.descriptionVerified: Description for the verfified section in the setting page in the app"
@@ -418,10 +422,6 @@
   "nUylG3": {
     "defaultMessage": "Please wait...",
     "description": "app.accounts.purchase.getTransferCodeHeader"
-  },
-  "nykc0n": {
-    "defaultMessage": "Invalid account number",
-    "description": "app.accounts.billPayments.invalidNumericLength: Error message for the bill payement page"
   },
   "o8vxz/": {
     "defaultMessage": "Date of Birth",
