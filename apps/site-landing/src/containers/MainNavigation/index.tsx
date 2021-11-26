@@ -4,9 +4,9 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
+import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
+import { LoginLink } from '../../components/AppLinks/Login';
 import styles from './styles.module.less';
-import { CreateAccountButton } from '../../../components/AppLinks/CreateAccount';
-import { LoginLink } from '../../../components/AppLinks/Login';
 
 const menuItems = defineMessages({
   healthier: {
