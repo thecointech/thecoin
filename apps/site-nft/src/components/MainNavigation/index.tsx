@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'semantic-ui-react';
 import { AccountSwitcher } from '../AccountSwitcher';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import HeaderLink from '@thecointech/site-base/components/HeaderLink';
+import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import Logo from './images/logoAndName.svg';
 import styles from './styles.module.less';
