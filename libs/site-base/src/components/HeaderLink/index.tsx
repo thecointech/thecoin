@@ -1,20 +1,22 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
+import styles from './styles.module.less';
 
-interface HeaderLinkProps {
+interface Props {
   to: string;
   exact?: boolean;
-  children: ReactNode;
+  className?: string;
 }
 
-export default (props: HeaderLinkProps) => (
+export const HeaderLink: React.FC<Props> =  ({to, exact, children, className=""}) => (
   <Menu.Item
     as={NavLink}
-    to={props.to}
-    exact={props.exact}
+    to={to}
+    exact={exact}
     activeClassName="active"
+    className={`${styles.headerLink} ${className}`}
   >
-    {props.children}
+    {children}
   </Menu.Item>
 );

@@ -6,13 +6,27 @@
         Page
 --------------------*/
 
-@pageBackground: @white;
-@maxContentWidth: 1440px;
+// Override major breakpoints to match the width of our page
+@mobileWidth                 : 415;
+@tabletWidth                 : 768;
+@desktopWidth                : 1440;
+@mobileBreakpoint            : unit(415, px);
+@tabletBreakpoint            : unit(768, px);
+@largeMonitorBreakpoint      : unit(1440, px);
+
+// We switch to mobile half-way in between tablet & mobile
+@midBreakpoint: 750px;
+//@midBreakpoint: @tabletBreakpoint;
+.smallScreen(@rules) { @media only screen and (max-width: (@midBreakpoint - 1px)) { @rules(); } }
+.bigScreen(@rules) { @media only screen and (min-width: @midBreakpoint) { @rules(); } }
+
 .smallerThanDesktop(@rules) { @media only screen and (max-width: @tabletBreakpoint) { @rules(); } }
-.biggerThanMobile(@rules) { @media only screen and (min-width: @tabletBreakpoint) { @rules(); } }
 .biggerThanSmallComputer(@rules) { @media only screen and (min-width: @computerBreakpoint) { @rules(); } }
 .biggerThanMediumComputer(@rules) { @media only screen and (min-width: @largeMonitorBreakpoint) { @rules(); } }
 .biggerThanMostComputer(@rules) { @media only screen and (min-width: @widescreenMonitorBreakpoint) { @rules(); } }
+
+@pageBackground: @white;
+@maxContentWidth: 1440px;
 
 /*-------------------
        Fonts
@@ -72,7 +86,7 @@
 @violet           : @blue; // no violet
 @purple           : @blue; // no purple
 @pink             : @red;  // no pink
-@brown            : #6F6571;
+@brown            : @theCoinPaletteGray1;
 @grey             : @theCoinPaletteGray1;
 @black            : @theCoinPaletteGreen5; // no actual blacks on our site
 
@@ -325,7 +339,7 @@
 /*-------------------
      Page variables
 --------------------*/
-@pageTransitionDuration: 300;
+@pageTransitionDuration: 0.3s;
 @SidebarWidth: 230px;
 
 /*--------------

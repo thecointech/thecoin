@@ -59,7 +59,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/compare"
               >
                 Learn More
-                <div />
+                <div
+                  class="undefined x1spaceBefore"
+                />
               </a>
             </div>
             <div
@@ -77,7 +79,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/wedomore"
               >
                 Learn More
-                <div />
+                <div
+                  class="undefined x1spaceBefore"
+                />
               </a>
             </div>
           </div>
@@ -164,7 +168,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/compare"
               >
                 Learn More
-                <div />
+                <div
+                  class="undefined x1spaceBefore"
+                />
               </a>
             </div>
             <div
@@ -182,7 +188,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/wedomore"
               >
                 Learn More
-                <div />
+                <div
+                  class="undefined x1spaceBefore"
+                />
               </a>
             </div>
           </div>
@@ -289,7 +297,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/blog/start-now"
           >
             Learn Your Edge
-            <div />
+            <div
+              class="undefined x1spaceBefore"
+            />
           </a>
         </div>
         <div
@@ -311,7 +321,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             Compare Us
-            <div />
+            <div
+              class="undefined x1spaceBefore"
+            />
           </a>
         </div>
       </div>
@@ -356,7 +368,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             How Anyone Can Get Rich Slow
-            <div />
+            <div
+              class="undefined x1spaceBefore"
+            />
           </a>
         </div>
         <div
@@ -378,7 +392,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             Who Wins?
-            <div />
+            <div
+              class="undefined x1spaceBefore"
+            />
           </a>
         </div>
       </div>
@@ -461,7 +477,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               Compare Outcomes
-              <div />
+              <div
+                class="undefined x1spaceBefore"
+              />
             </a>
           </div>
           <div
@@ -483,7 +501,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               Why We Can Be So Confident
-              <div />
+              <div
+                class="undefined x1spaceBefore"
+              />
             </a>
           </div>
           <div
@@ -505,7 +525,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               What We Do
-              <div />
+              <div
+                class="undefined x1spaceBefore"
+              />
             </a>
           </div>
         </div>
