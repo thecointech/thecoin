@@ -1,11 +1,10 @@
 import React from 'react';
 import { Dropdown, Menu } from 'semantic-ui-react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessage, defineMessages, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
-import { LoginLink } from '../../components/AppLinks/Login';
 import styles from './styles.module.less';
 
 const menuItems = defineMessages({
@@ -25,6 +24,11 @@ const menuItems = defineMessages({
     defaultMessage: 'Help',
     description: 'site.MainNavigation.faq: Help Link'
   },
+});
+
+const loginLink = defineMessage({
+  defaultMessage: 'LOG IN',
+  description: 'site.MainNavigation.loginLink: Button to log in in app'
 });
 
 // We want our text to wrap on the first word break only
@@ -51,7 +55,9 @@ export const MainNavigation = () => {
         )}
       </Menu.Menu>
       <Menu.Menu position="right" className={styles.menuRight}>
-        <LoginLink />
+        <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
+          <FormattedMessage {...loginLink} />
+        </HeaderLink>
         <Menu.Item className={`${styles.createButton} onlyBigScreen`}>
           <CreateAccountButton />
         </Menu.Item>
