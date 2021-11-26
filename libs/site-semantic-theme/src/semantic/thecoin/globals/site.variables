@@ -339,7 +339,8 @@
 /*-------------------
      Page variables
 --------------------*/
-@pageTransitionDuration: 0.3s;
+@pageTransitionMillis: 300;
+@pageTransitionDuration: unit(@pageTransitionMillis, ms);
 @SidebarWidth: 230px;
 
 /*--------------

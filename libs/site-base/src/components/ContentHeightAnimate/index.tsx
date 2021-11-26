@@ -9,7 +9,7 @@ export const ContentHeightAnimate: React.FC = (props)=> {
 
   const mainHeightDivStyle = useSelector(selectContent);
   return (
-    <AnimateHeight duration={LessVars.pageTransitionDuration} height={mainHeightDivStyle.height}>
+    <AnimateHeight duration={LessVars.pageTransitionMillis} height={mainHeightDivStyle.height}>
       <div className={styles.mainHeightDivStyle} style={mainHeightDivStyle}>
         {props.children}
       </div>
