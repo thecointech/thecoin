@@ -5,9 +5,12 @@ import { Link, NavLink } from 'react-router-dom';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
+import type { AllRoutes } from "../App/Routes"
 import styles from './styles.module.less';
 
-const menuItems = defineMessages({
+// Typescript here is used to enforce that all our entries match actual routes.
+type MainRoutes = Extract<AllRoutes, "healthier"|"wedomore"|"compare"|"help">
+const menuItems = defineMessages<MainRoutes>({
   healthier: {
     defaultMessage: 'In-depth',
     description: 'site.MainNavigation.indepth: Title for the In-depth entry in the menu'
@@ -55,7 +58,7 @@ export const MainNavigation = () => {
         )}
       </Menu.Menu>
       <Menu.Menu position="right" className={styles.menuRight}>
-        <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
+        <HeaderLink external to={process.env.URL_SITE_APP ?? "/AppLogin"}>
           <FormattedMessage {...loginLink} />
         </HeaderLink>
         <Menu.Item className={`${styles.createButton} onlyBigScreen`}>

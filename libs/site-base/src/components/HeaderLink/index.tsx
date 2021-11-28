@@ -5,18 +5,23 @@ import styles from './styles.module.less';
 
 interface Props {
   to: string;
+  external?: boolean,
   exact?: boolean;
   className?: string;
 }
 
-export const HeaderLink: React.FC<Props> =  ({to, exact, children, className=""}) => (
+// Select the appropriate props for an external link (raw anchor)
+// vs an internal link (NavLink)
+const selectProps = ({external, to, exact}: Props) =>
+  external
+    ? { href: to, as: "a" }
+    : { exact, to, activeClassName: "active", as: NavLink }
+
+export const HeaderLink: React.FC<Props> =  (props) => (
   <Menu.Item
-    as={NavLink}
-    to={to}
-    exact={exact}
-    activeClassName="active"
-    className={`${styles.headerLink} ${className}`}
+    {...selectProps(props)}
+    className={`${styles.headerLink} ${props.className}`}
   >
-    {children}
+    {props.children}
   </Menu.Item>
 );
