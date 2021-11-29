@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AuthRoute, AuthSwitch } from '@thecointech/shared/containers/AuthRoute';
+import { AuthRoute } from '@thecointech/shared/containers/AuthRoute';
 import { MakePayments } from '../MakePayments';
 import { ContactUs } from '../ContactUs';
 import { Settings } from '../Settings';
@@ -9,7 +9,7 @@ import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { HomePage } from '../HomePage';
 
-export const AppRoutes = {
+export const routes = {
   auth: {
     home: HomePage,
     transferIn: Topup,
@@ -25,4 +25,4 @@ export const AppRoutes = {
   fallback: () => <AuthRoute component={HomePage} />
 }
 
-export const Routes = () => <AuthSwitch path="/" {...AppRoutes} />
+export type AllRoutes = keyof typeof routes["auth"]|keyof typeof routes["open"];
