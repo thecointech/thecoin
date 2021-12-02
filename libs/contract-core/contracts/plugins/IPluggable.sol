@@ -6,14 +6,14 @@
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 pragma solidity ^0.8.0;
 
 /// @title Interface to allow plugins to interop with base contract
 /// @author TheCoin
 /// @dev Plugin-specific versions allow plugins to do stuff ordinary users can't do.
-interface IPluggable is IERC20 {
+interface IPluggable is IERC20Upgradeable {
 
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
   function pl_assignPlugin(address user, address plugin, uint128 permissions) external;
