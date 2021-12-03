@@ -7,9 +7,9 @@
 
 pragma solidity ^0.8.0;
 
-import "../plugins/IPlugin.sol";
-import "../plugins/IPluggable.sol";
-import "../plugins/permissions.sol";
+import "../interfaces/IPlugin.sol";
+import "../interfaces/IPluggable.sol";
+import "../interfaces/permissions.sol";
 import "./Freezable.sol";
 
 // TODO: Pack this tightly

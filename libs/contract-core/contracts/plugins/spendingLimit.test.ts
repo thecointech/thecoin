@@ -1,7 +1,7 @@
 import { accounts, contract, web3 } from '@openzeppelin/test-environment';
-import { toNamedAccounts } from '../../../migrations/accounts';
+import { toNamedAccounts } from '../../migrations/accounts';
 import { join } from 'path';
-import type { TheCoinInstance, SpxCadOracleInstance, SpendingLimitInstance } from '../../../migrations/types';
+import type { TheCoinInstance, SpxCadOracleInstance, SpendingLimitInstance } from '../../migrations/types';
 
 jest.setTimeout(5 * 60 * 1000);
 

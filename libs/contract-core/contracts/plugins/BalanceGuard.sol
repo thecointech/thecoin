@@ -16,10 +16,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import '../BasePlugin.sol';
-import '../OracleClient.sol';
-import '../permissions.sol';
-import '../IPluggable.sol';
+import './BasePlugin.sol';
+import './oracle/OracleClient.sol';
+import '../interfaces/permissions.sol';
+import '../interfaces/IPluggable.sol';
 
 
 // ----------------------------------------------------------------------------

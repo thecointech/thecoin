@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./IPlugin.sol";
+import "../interfaces/IPlugin.sol";
 
 abstract contract BasePlugin is IPlugin {
 
