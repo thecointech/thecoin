@@ -128,7 +128,7 @@ abstract contract Pluggable is Freezable, IPluggable {
     notifyWithdraw(from, amount, timestamp);
     notifyDeposit(to, amount, timestamp);
   }
-  function transfer(address to, uint amount) public override(ERC20Upgradeable, IERC20Upgradeable) returns (bool) {
+  function transfer(address to, uint amount) public override returns (bool) {
     super.transfer(to, amount);
     notifyWithdraw(msg.sender, amount, block.timestamp);
     notifyDeposit(to, amount, block.timestamp);

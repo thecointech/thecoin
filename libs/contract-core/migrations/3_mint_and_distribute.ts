@@ -1,5 +1,5 @@
 import { toNamedAccounts } from "./accounts";
-import { initializeDevLive } from "./3.1_mad_devlive";
+import { defaultDistribution } from "./3.1_mad_default";
 import { MigrationStep } from './step';
 import { getDeployed } from './deploy';
 import { Processor } from './warmup_contract/processor';
@@ -22,7 +22,7 @@ const deploy: MigrationStep = (artifacts) =>
       }
       const config = process.env.CONFIG_NAME;
       if (config == "devlive" || config == "prodtest") {
-        await initializeDevLive(contract, namedAccounts)
+        await defaultDistribution(contract, namedAccounts)
       }
     }
   }

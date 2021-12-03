@@ -1,26 +1,41 @@
-import { describe } from '@thecointech/jestutils';
-import { GetContract } from '../src';
+import { accounts, contract, web3 } from '@openzeppelin/test-environment';
+import { join } from 'path';
+import * as initial from './1_initial_migration';
+import { getDeployed } from './deploy';
+import config from '../truffle-config';
+
+jest.setTimeout(5 * 60 * 1000);
+(globalThis as any).config = config;
+contract.artifactsDir = join(__dirname, "../src/contracts");
+const network = "polygon";
+var artifacts = {
+  require: contract.fromArtifact.bind(contract)
+};
+
+const callStep = (step: any) => step.default(artifacts, web3)(contract as any, network, accounts);
 
 //
 // Simple sanity test for a contract
 // deployed in development environment
-describe('Current Migration Tests', () => {
-  test('Contract has migrated correctly', async () => {
-    // Note, this test assumes that migrations have occured and truffle develop is running
-    process.env.SETTINGS = 'live';
-    const contract = await GetContract();
-    expect(contract.address).toBeDefined();
+test('Contract has migrated correctly', async () => {
 
-    const minted = await contract.totalSupply();
-    expect(minted.toNumber()).toBeGreaterThan(0);
+  // deploy contract
+  await callStep(initial);
+  const deployed = await getDeployed(artifacts, network);
 
-    const roles = await contract.getRoles();
-    expect(roles).toHaveLength(4)
-    console.log(roles);
+  expect(deployed).toBeTruthy();
+  // // Test to see if this is functional
 
-    const theCoin = roles[2];
-    const balance = await contract.balanceOf(theCoin);
-    expect(balance.toNumber()).toBeGreaterThanOrEqual(0);
-  });
-}, !!process.env.DEPLOY_NETWORK_PORT)
+  // // Note, this test assumes that migrations have occured and truffle develop is running
+  // // process.env.SETTINGS = 'live';
+  // // const contract = await GetContract();
+  // // expect(contract.address).toBeDefined();
+
+  // const minted = await contract.totalSupply();
+  // expect(minted.toNumber()).toBeGreaterThan(0);
+
+  // const pluginMgr = await contract.PLUGINMGR_ROLE();
+  // expect(pluginMgr).toBeDefined();
+});
+
 

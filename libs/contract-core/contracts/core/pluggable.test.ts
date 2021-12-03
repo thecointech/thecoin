@@ -1,7 +1,8 @@
-import { accounts, contract, web3 } from '@openzeppelin/test-environment';
+import { accounts, contract } from '@openzeppelin/test-environment';
 import { toNamedAccounts } from '../../migrations/accounts';
 import { join } from 'path';
 import type { TheCoinInstance, DebugPrintInstance } from '../../migrations/types';
+import { PLUGINMGR_ROLE, ALL_PERMISSIONS, MINTER_ROLE } from '../../src/constants'
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -9,9 +10,6 @@ contract.artifactsDir = join(__dirname, "../../src/contracts");
 const DebugPrint = contract.fromArtifact('DebugPrint');
 const TheCoin = contract.fromArtifact('TheCoin');
 const named = toNamedAccounts(accounts);
-const ALL_PERMISSIONS = web3.utils.toBN("0xFFFFFFFFFFFFFFFFFFFFFFFF");
-const PLUGINMGR_ROLE = web3.utils.soliditySha3('PLUGINMGR_ROLE')!;
-const MINTER_ROLE = web3.utils.soliditySha3('MINTER_ROLE')!;
 
 function expectEvent(response: Truffle.TransactionResponse<Truffle.AnyEvent>, ...events: string[]) {
   const allEvents = [

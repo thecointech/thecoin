@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import { NamedAccounts } from "./accounts";
 import { TheCoinInstance } from './types/TheCoin';
 
-export async function initializeDevLive(contract: TheCoinInstance, accounts: NamedAccounts) {
+export async function defaultDistribution(contract: TheCoinInstance, accounts: NamedAccounts) {
 
   const tcBal = await contract.balanceOf(accounts.TheCoin);
   if (tcBal.toNumber() === 0) {

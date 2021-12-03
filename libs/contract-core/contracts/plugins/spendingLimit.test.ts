@@ -2,6 +2,7 @@ import { accounts, contract, web3 } from '@openzeppelin/test-environment';
 import { toNamedAccounts } from '../../migrations/accounts';
 import { join } from 'path';
 import type { TheCoinInstance, SpxCadOracleInstance, SpendingLimitInstance } from '../../migrations/types';
+import { PLUGINMGR_ROLE, ALL_PERMISSIONS, MINTER_ROLE } from '../../src/constants'
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -10,9 +11,6 @@ const SpxCadOracle = contract.fromArtifact('SpxCadOracle');
 const SpendingLimit = contract.fromArtifact('SpendingLimit');
 const TheCoin = contract.fromArtifact('TheCoin');
 const named = toNamedAccounts(accounts);
-const PLUGINMGR_ROLE = web3.utils.soliditySha3('PLUGINMGR_ROLE')!;
-const MINTER_ROLE = web3.utils.soliditySha3('MINTER_ROLE')!;
-const ALL_PERMISSIONS = "0xFFFFFFFFFFFFFFFFFFFFFFFF";
 
 it('Correctly limits spending', async () => {
 
