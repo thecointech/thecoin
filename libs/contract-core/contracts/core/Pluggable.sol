@@ -14,13 +14,14 @@ import "./Freezable.sol";
 
 // TODO: Pack this tightly
 struct PluginAndPermissions {
-  // The amount of the users balance that we protect.
-  // Equates (loosely) to cost basis
-  // uint32 for cents means a max value of approx $21 million
+  // Plugin address (20bytes)
   IPlugin plugin;
 
-  // The last time we updated the guard amount.
-  uint128 permissions;
+  // The permissions the user has granted to
+  // the plugin.  These permissions persist
+  // even if the plugin changes to request
+  // other permissions.
+  uint96 permissions;
 }
 
 
@@ -39,7 +40,9 @@ abstract contract Pluggable is Freezable, IPluggable {
   // ------------------------------------------------------------------------
 
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
-  function pl_assignPlugin(address user, address plugin, uint128 permissions) public onlyPluginMgr {
+  function pl_assignPlugin(address user, address plugin, uint96 permissions, bytes memory /*signature*/) public
+    onlyPluginMgr
+  {
     IPlugin _p = IPlugin(plugin);
     _p.userAttached(user, msg.sender);
 
@@ -52,7 +55,9 @@ abstract contract Pluggable is Freezable, IPluggable {
   }
 
   // Remove plugin from user.  As above
-  function pl_removePlugin(address user, uint index) public onlyPluginMgr {
+  function pl_removePlugin(address user, uint index, bytes memory /*signature*/) public
+    onlyPluginMgr
+  {
     PluginAndPermissions[] storage pnps = userPlugins[user];
     pnps[index].plugin.userDetached(user, msg.sender);
     for (uint i = index; i < pnps.length-1; i++){
@@ -149,14 +154,4 @@ abstract contract Pluggable is Freezable, IPluggable {
     require(hasRole(PLUGINMGR_ROLE, msg.sender), "Action requires Plugin Manager role");
     _;
   }
-
-  // modifier isTransferable(address from, uint amount) {
-  //   // This hook is called on mint/burn, make sure we skip checks then
-  //   if (from != address(0)) {
-  //     // include any plugin effects here.
-  //     uint256 senderBalance = pl_balanceOf(from);
-  //     require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
-  //   }
-  //   _;
-  // }
 }

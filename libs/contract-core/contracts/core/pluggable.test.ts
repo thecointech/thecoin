@@ -9,7 +9,7 @@ contract.artifactsDir = join(__dirname, "../../src/contracts");
 const DebugPrint = contract.fromArtifact('DebugPrint');
 const TheCoin = contract.fromArtifact('TheCoin');
 const named = toNamedAccounts(accounts);
-const ALL_PERMISSIONS = web3.utils.toBN("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+const ALL_PERMISSIONS = web3.utils.toBN("0xFFFFFFFFFFFFFFFFFFFFFFFF");
 const PLUGINMGR_ROLE = web3.utils.soliditySha3('PLUGINMGR_ROLE')!;
 const MINTER_ROLE = web3.utils.soliditySha3('MINTER_ROLE')!;
 
@@ -33,7 +33,7 @@ it('Calls appropriate methods on a plugin', async () => {
   const logger: DebugPrintInstance = await DebugPrint.new();
 
   // Assign to user, grant all permissions, limit user to $100
-  const tx_assign = await core.pl_assignPlugin(named.client1, logger.address, ALL_PERMISSIONS, { from: named.TheCoin });
+  const tx_assign = await core.pl_assignPlugin(named.client1, logger.address, ALL_PERMISSIONS, "0x1234", { from: named.TheCoin });
   expectEvent(tx_assign, "PluginAttached", "PrintAttached");
 
   // Was it assigned with the right permissions?
@@ -56,7 +56,7 @@ it('Calls appropriate methods on a plugin', async () => {
   const tx_withdraw = await core.transfer(named.TheCoin, balance, {from: named.client1});
   expectEvent(tx_withdraw, "Transfer", "PrintPreWithdraw");
 
-  const detached = await core.pl_removePlugin(named.client1, 0, { from: named.TheCoin });
+  const detached = await core.pl_removePlugin(named.client1, 0, "0x1234", { from: named.TheCoin });
   expectEvent(detached, "PluginDetached", "PrintDetached");
 
 });
