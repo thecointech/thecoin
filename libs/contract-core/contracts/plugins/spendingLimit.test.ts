@@ -5,7 +5,7 @@ import type { TheCoinInstance, SpxCadOracleInstance, SpendingLimitInstance } fro
 
 jest.setTimeout(5 * 60 * 1000);
 
-contract.artifactsDir = join(__dirname, "../../../src/contracts");
+contract.artifactsDir = join(__dirname, "../../src/contracts");
 const SpxCadOracle = contract.fromArtifact('SpxCadOracle');
 const SpendingLimit = contract.fromArtifact('SpendingLimit');
 const TheCoin = contract.fromArtifact('TheCoin');
