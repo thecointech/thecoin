@@ -15,6 +15,9 @@ pragma solidity ^0.8.0;
 /// @dev Plugin-specific versions allow plugins to do stuff ordinary users can't do.
 interface IPluggable is IERC20Upgradeable {
 
+  event PluginAttached(address add, address plugin);
+  event PluginDetached(address add, address plugin);
+
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
   function pl_assignPlugin(address user, address plugin, uint128 permissions) external;
 

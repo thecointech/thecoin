@@ -11,12 +11,16 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 import '../BasePlugin.sol';
 import '../OracleClient.sol';
 import '../permissions.sol';
 import '../IPluggable.sol';
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/Math.sol";
+
 
 // ----------------------------------------------------------------------------
 // TheCoin plugin
@@ -72,7 +76,7 @@ contract AccountGuardV0 is BasePlugin, OracleClient, Ownable {
     // only initialize if new user.
     if (userFiatBalance[newUser].costBasis == 0) {
       uint currentBalance = theCoin.pl_balanceOf(newUser);
-      userFiatBalance[newUser].costBasis = toFiat(currentBalance);
+      userFiatBalance[newUser].costBasis = toFiat(currentBalance, block.timestamp);
     }
   }
 
@@ -87,7 +91,7 @@ contract AccountGuardV0 is BasePlugin, OracleClient, Ownable {
   function balanceOf(address user, uint currentBalance) external view override returns(uint)
   {
     // We work directly in coin for this function
-    int fxAdjBalance = toCoin(userFiatBalance[user].costBasis);
+    int fxAdjBalance = toCoin(userFiatBalance[user].costBasis, block.timestamp);
     if (int(currentBalance) > fxAdjBalance) {
       // users account has grown.  Subtract up to 2% growth
       int twoPercent = fxAdjBalance / 50;
@@ -110,15 +114,15 @@ contract AccountGuardV0 is BasePlugin, OracleClient, Ownable {
 
   //
   // On deposit we update the users current balance
-  function preDeposit(address user, uint coin) external override onlyOwner {
+  function preDeposit(address user, uint coin, uint timestamp) external override onlyOwner {
     // Update users ACB
-    int32 fiat = toFiat(coin);
+    int32 fiat = toFiat(coin, timestamp);
     userFiatBalance[user].costBasis += fiat;
   }
 
-  function preWithdraw(address user, uint coin) external override onlyOwner {
-    int32 fiat = toFiat(coin);
-    uint currentBalance = theCoin.balanceOf(user);
+  function preWithdraw(address user, uint coin, uint timestamp) external override onlyOwner {
+    int32 fiat = toFiat(coin, timestamp);
+    uint currentBalance = IERC20Upgradeable(theCoin).balanceOf(user);
     // We may need to transfer some coin into the users account.
     // This only is necessary if the user doesn't have coin to cover it,
     // and the total amount is between 90 & 100%

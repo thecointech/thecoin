@@ -20,7 +20,7 @@ abstract contract ExactDateable is Base {
   event ExactTransfer(address indexed from, address indexed to, uint amount, uint timestamp);
 
   // Allow specifying exact timestamp.  This is to allow specifying the timestamp for purchase/sale
-  function exactTransfer(address to, uint amount, uint256 timestamp) public onlyBroker {
+  function exactTransfer(address to, uint amount, uint256 timestamp) virtual public onlyBroker {
     _transfer(_msgSender(), to, amount);
     emit ExactTransfer(_msgSender(), to, amount, timestamp);
   }

@@ -38,6 +38,17 @@ abstract contract Freezable is Gassless {
   }
 
   // ------------------------------------------------------------------------
+  // Override hooks
+  // ------------------------------------------------------------------------
+
+  // Disallow transfers from frozen accounts
+  function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override
+    onlyUnfrozen(from)
+  {
+    super._beforeTokenTransfer(from, to, amount);
+  }
+
+  // ------------------------------------------------------------------------
   // Modifiers
   // ------------------------------------------------------------------------
   modifier onlyMrFreeze()

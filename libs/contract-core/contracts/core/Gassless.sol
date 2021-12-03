@@ -27,7 +27,7 @@ abstract contract Gassless is Mintable {
   // Apparently this is now a thing (gass-less transactions), but our
   // implementation appears significantly more efficient.
   // ------------------------------------------------------------------------
-  function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature) public
+  function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature) public virtual
     timestampIncreases(from, timestamp)
   {
       address signer = recoverSigner(from, to, value, fee, timestamp, signature);

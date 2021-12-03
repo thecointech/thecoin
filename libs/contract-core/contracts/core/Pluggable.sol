@@ -47,16 +47,21 @@ abstract contract Pluggable is Freezable, IPluggable {
     pnp.plugin = _p;
     pnp.permissions = permissions;
     userPlugins[user].push(pnp);
+
+    emit PluginAttached(user, plugin);
   }
 
   // Remove plugin from user.  As above
   function pl_removePlugin(address user, uint index) public onlyPluginMgr {
     PluginAndPermissions[] storage pnps = userPlugins[user];
+    pnps[index].plugin.userDetached(user, msg.sender);
     for (uint i = index; i < pnps.length-1; i++){
       pnps[i] = pnps[i+1];
     }
     delete pnps[pnps.length-1];
     pnps.pop();
+
+    emit PluginDetached(user, address(this));
   }
 
   // Users balance as reported by plugins
@@ -103,6 +108,40 @@ abstract contract Pluggable is Freezable, IPluggable {
   }
 
   // ------------------------------------------------------------------------
+  // Notification. Override
+  // ------------------------------------------------------------------------
+
+  // We cannot use the _beforeTokenTransfer hook because it does
+  // not include the timestamp information.  Therefore we override
+  // all transfer functions and put our hooks in beside them
+  function exactTransfer(address to, uint amount, uint256 timestamp) public override {
+    super.exactTransfer(to, amount, timestamp);
+    notifyDeposit(to, amount, timestamp);
+  }
+  function certifiedTransfer(address from, address to, uint256 amount, uint256 fee, uint256 timestamp, bytes memory signature) public override {
+    super.certifiedTransfer(from, to, amount, fee, timestamp, signature);
+    notifyWithdraw(from, amount, timestamp);
+    notifyDeposit(to, amount, timestamp);
+  }
+  function transfer(address to, uint amount) public override(ERC20Upgradeable, IERC20Upgradeable) returns (bool) {
+    super.transfer(to, amount);
+    notifyWithdraw(msg.sender, amount, block.timestamp);
+    notifyDeposit(to, amount, block.timestamp);
+    return true;
+  }
+
+  function notifyDeposit(address to, uint256 amount, uint256 timestamp) private {
+    for (uint i =0; i < userPlugins[to].length; i++) {
+      userPlugins[to][i].plugin.preDeposit(to, amount, timestamp);
+    }
+  }
+  function notifyWithdraw(address from, uint256 amount, uint256 timestamp) private {
+    for (uint i =0; i < userPlugins[from].length; i++) {
+      userPlugins[from][i].plugin.preWithdraw(from, amount, timestamp);
+    }
+  }
+
+  // ------------------------------------------------------------------------
   // Modifiers
   // ------------------------------------------------------------------------
   modifier onlyPluginMgr()
@@ -111,13 +150,13 @@ abstract contract Pluggable is Freezable, IPluggable {
     _;
   }
 
-  modifier isTransferable(address from, uint amount) {
-    // This hook is called on mint/burn, make sure we skip checks then
-    if (from != address(0)) {
-      // include any plugin effects here.
-      uint256 senderBalance = pl_balanceOf(from);
-      require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
-    }
-    _;
-  }
+  // modifier isTransferable(address from, uint amount) {
+  //   // This hook is called on mint/burn, make sure we skip checks then
+  //   if (from != address(0)) {
+  //     // include any plugin effects here.
+  //     uint256 senderBalance = pl_balanceOf(from);
+  //     require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
+  //   }
+  //   _;
+  // }
 }

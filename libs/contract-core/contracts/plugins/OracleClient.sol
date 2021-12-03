@@ -18,9 +18,9 @@ contract OracleClient {
   }
 
   // Convert to fiat with 2 decimal places (ie, floor to cent)
-  function toFiat(uint coin) public view returns(int32) { return toFiat(int(coin)); }
-  function toFiat(int coin) public view returns(int32) {
-    int price = getLatestPrice();
+  function toFiat(uint coin, uint timestamp) public view returns(int32) { return toFiat(int(coin), timestamp); }
+  function toFiat(int coin, uint timestamp) public view returns(int32) {
+    int price = getLatestPrice(timestamp);
     // coin is 6 decimal places, price is 8 decimal places
     // 1 coin at exchange of 4 would be 1*10e6 * 4*10e8
     // to be 4*10e14 / 10e12 to be 400 cents.
@@ -28,16 +28,16 @@ contract OracleClient {
   }
 
   // convert to coin.  Fiat should be denominated in cents
-  function toCoin(uint32 fiat) public view returns(int) { return toCoin(int32(fiat)); }
-  function toCoin(int32 fiat) public view returns(int) {
-    int price = getLatestPrice();
+  function toCoin(uint32 fiat, uint timestamp) public view returns(int) { return toCoin(int32(fiat), timestamp); }
+  function toCoin(int32 fiat, uint timestamp) public view returns(int) {
+    int price = getLatestPrice(timestamp);
     return int(fiat) * 10e12 / price;
   }
 
   /**
     * Returns the latest price
     */
-  function getLatestPrice() public view returns(int) {
+  function getLatestPrice(uint /*timestamp*/) public view returns(int) {
     (
         , /*roundID*/
         int price,

@@ -52,16 +52,6 @@ contract TheCoin is Pluggable {
   }
 
   // ------------------------------------------------------------------------
-  // Override hooks to ensure isTransferable is called for every transfer
-  // ------------------------------------------------------------------------
-  function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override
-    isTransferable(from, amount)
-    onlyUnfrozen(from)
-  {
-    super._beforeTokenTransfer(from, to, amount);
-  }
-
-  // ------------------------------------------------------------------------
   // Don't accept ETH
   // ------------------------------------------------------------------------
   fallback () external {
@@ -73,8 +63,6 @@ contract TheCoin is Pluggable {
   // ------------------------------------------------------------------------
   function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyTheCoin returns (bool success) {
       IERC20Upgradeable tokenContract = IERC20Upgradeable(tokenAddress);
-      address theCoin = getRoleMember(THECOIN_ROLE, 0);
-      require(theCoin != address(0), "Cannot transfer out without TC address");
-      return tokenContract.transfer(theCoin, tokens);
+      return tokenContract.transfer(msg.sender, tokens);
   }
 }

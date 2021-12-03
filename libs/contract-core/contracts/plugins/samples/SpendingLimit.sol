@@ -68,8 +68,8 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable {
     delete userData[exClient];
   }
 
-  function preWithdraw(address user, uint coin) external override {
-    uint32 fiat = uint32(toFiat(int(coin)));
+  function preWithdraw(address user, uint coin, uint timestamp) external override {
+    uint32 fiat = uint32(toFiat(int(coin), timestamp));
 
     UserData storage data = userData[user];
     if (data.periodStart + periodLength < block.timestamp) {

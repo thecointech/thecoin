@@ -32,6 +32,6 @@ interface IPlugin is IERC165 {
   // automatically top up the account, restrict the transfer, or perform
   // some other kind of action.
   // requires PERMISSION_DEPOSIT/PERMISSION_WITHDRAWAL/PERMISSION_APPROVAL
-  function preDeposit(address user, uint fiat) external;
-  function preWithdraw(address user, uint fiat) external;
+  function preDeposit(address user, uint coin, uint timestamp) external;
+  function preWithdraw(address user, uint coin, uint timestamp) external;
 }
