@@ -12,7 +12,6 @@ const step: MigrationStep =  (artifacts) =>
     const contractArgs = await getArguments(network)
     //@ts-ignore
     const proxy = await deployProxy(contract, contractArgs, { deployer });
-    console.log(`Deployed core contract.  Proxy ${proxy.address}`)
     // Serialize our contract addresses
     storeContractAddress(__dirname, network, proxy.address, ['cjs', 'mjs']);
   }

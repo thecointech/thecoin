@@ -3,6 +3,7 @@ import { COIN_EXP } from "../src/contract";
 import { DateTime } from 'luxon';
 import { NamedAccounts } from "./accounts";
 import { TheCoinInstance } from './types/TheCoin';
+import { log } from '@thecointech/logging';
 
 export async function defaultDistribution(contract: TheCoinInstance, accounts: NamedAccounts) {
 
@@ -23,7 +24,7 @@ export async function defaultDistribution(contract: TheCoinInstance, accounts: N
 async function seedAccount(contract: TheCoinInstance, theCoin: string, client: string, onlyBuy=false) {
 
   // Assign ~15 transactions to client randomly in the past
-  console.log("Seeding account: " + client);
+  log.info("Seeding account: " + client);
   const now = DateTime.local();
 
   for (

@@ -53,7 +53,7 @@ abstract contract Freezable is Gassless {
   // ------------------------------------------------------------------------
   modifier onlyMrFreeze()
   {
-    require(IAccessControlUpgradeable(this).hasRole(MRFREEZE_ROLE, msg.sender), "Action requires MrFreeze role");
+    require(hasRole(MRFREEZE_ROLE, msg.sender), "Action requires MrFreeze role");
     _;
   }
 

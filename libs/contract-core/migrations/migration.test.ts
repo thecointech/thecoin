@@ -7,21 +7,21 @@ import { getDeployed } from './deploy';
 import { ContractClass, ContractInstance } from '@openzeppelin/truffle-upgrades/dist/utils/truffle';
 import { MINTER_ROLE, THECOIN_ROLE } from '../src/constants';
 import { toNamedAccounts } from './accounts';
+import { log } from '@thecointech/logging';
 
 // Global variables
 jest.setTimeout(5 * 60 * 1000);
 (globalThis as any).config = require('../truffle-config');
 contract.artifactsDir = join(__dirname, "../src/contracts");
 const network = "polygon";
-let chainId = 1234;
+log.level(0);
 
 //
 // Simple sanity test for a contract
 // deployed in development environment
-test('Contract has migrated correctly', async () => {
+it.skip('Contract has migrated correctly', async () => {
 
   const named = toNamedAccounts(accounts);
-  chainId = await web3.eth.getChainId()
   // deploy contract
   await callStep(initial);
   // Assign roles
@@ -39,11 +39,12 @@ test('Contract has migrated correctly', async () => {
 
 // Fake truffle deployment objects
 const deployed : Record<string, string> = {}
+const deployedAddress = (name: string) => deployed[name.startsWith("TheCoin") ? "TransparentUpgradeableProxy" : name];
 var artifacts = {
   require: (name: string) => {
     const r = contract.fromArtifact(name);
     r.contractName = name;
-    r.deployed = () => contract.fromArtifact(name, deployed[name])
+    r.deployed = () => contract.fromArtifact(name, deployedAddress(name))
     return r;
   }
 };
@@ -52,6 +53,7 @@ var deployer = {
   async deploy(Contract: ContractClass, ...args: unknown[]): Promise<ContractInstance> {
     const r = await Contract.new(...args);
     deployed[Contract.contractName] = r.address;
+    log.info(`Deployed: ${Contract.contractName} - ${Contract.address}`);
     return r;
   }
 }
