@@ -1,1 +1,1 @@
-module.exports = require(`./2_dev_initialize.ts`)(artifacts, web3);
+module.exports = require(`./2_assign_roles.ts`)(artifacts, web3);

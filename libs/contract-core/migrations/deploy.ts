@@ -6,7 +6,7 @@ export const getName = (network: string) =>
   : "TheCoinL1" as "TheCoin";
 
 export const getDeployed = (artifacts: Truffle.Artifacts, network: string) => {
-  const theCoin = artifacts.require(getName(network))
+  const theCoin = artifacts.require(getName(network));
   return theCoin.deployed();
 }
 // ChildChainManager calls the deposit function on the polygon chain

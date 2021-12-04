@@ -19,7 +19,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import './BasePlugin.sol';
 import './oracle/OracleClient.sol';
 import '../interfaces/permissions.sol';
-import '../TheCoin.sol';
+import '../interfaces/IPluggable.sol';
 
 
 // ----------------------------------------------------------------------------
@@ -51,17 +51,17 @@ struct UserData {
   uint128 reserved;
 }
 
-contract AccountGuardV0 is BasePlugin, OracleClient, Ownable {
+contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   mapping(address => UserData) userFiatBalance;
 
   // Link back to core contract.
-  TheCoin internal theCoin;
+  IPluggable internal theCoin;
 
   constructor(address baseContract, address oracle)
-    OracleClient(oracle)
   {
-    theCoin = TheCoin(baseContract);
+    setFeed(oracle);
+    theCoin = IPluggable(baseContract);
   }
 
   // We modify the users balance to reflect what they can actually spend.

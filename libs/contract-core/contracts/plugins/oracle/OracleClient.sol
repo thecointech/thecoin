@@ -13,7 +13,7 @@ contract OracleClient {
   // Only valuable for use with TheCoin
   AggregatorV3Interface internal priceFeed;
 
-  constructor(address oracle) {
+  function setFeed(address oracle) internal {
     priceFeed = AggregatorV3Interface(oracle);
   }
 

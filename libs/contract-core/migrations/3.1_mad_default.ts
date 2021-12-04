@@ -8,7 +8,7 @@ export async function defaultDistribution(contract: TheCoinInstance, accounts: N
 
   const tcBal = await contract.balanceOf(accounts.TheCoin);
   if (tcBal.toNumber() === 0) {
-    await contract.mintCoins(100000 * COIN_EXP, 0, { from: accounts.Minter });
+    await contract.mintCoins(100000 * COIN_EXP, accounts.TheCoin, Date.now(), { from: accounts.Minter });
   }
   // If we have
   if (accounts.client1) await seedAccount(contract, accounts.TheCoin, accounts.client1);

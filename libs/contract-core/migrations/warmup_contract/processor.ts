@@ -86,7 +86,7 @@ export class Processor {
       const coin = await toCoin(date, fiat, currency);
       if (coin.gt(0)) {
         // Create new $$$
-        let waiter = await this.mtCore.mintCoins(coin.toNumber(), date.toMillis());
+        let waiter = await this.mtCore.mintCoins(coin.toNumber(), this.theCoinAddress, date.toMillis());
         await waiter.wait(1);
         // If not intended for Core, forward this onto final recipient
         waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, date.toMillis());

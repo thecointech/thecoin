@@ -25,7 +25,7 @@ struct PluginAndPermissions {
 }
 
 
-abstract contract Pluggable is Freezable, IPluggable {
+abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 
   // A plugin manager is allowed to assign/remove built-in plugins
   bytes32 public constant PLUGINMGR_ROLE = keccak256("PLUGINMGR_ROLE");
@@ -128,7 +128,7 @@ abstract contract Pluggable is Freezable, IPluggable {
     notifyWithdraw(from, amount, timestamp);
     notifyDeposit(to, amount, timestamp);
   }
-  function transfer(address to, uint amount) public override returns (bool) {
+  function transfer(address to, uint amount) public override(ERC20Upgradeable, IERC20Upgradeable) returns (bool) {
     super.transfer(to, amount);
     notifyWithdraw(msg.sender, amount, block.timestamp);
     notifyDeposit(to, amount, block.timestamp);

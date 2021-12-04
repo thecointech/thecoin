@@ -2,15 +2,17 @@ import { MigrationStep } from './step';
 import "../../../tools/setenv";
 import { storeContractAddress } from '@thecointech/contract-tools/migrations';
 import { getArguments, getName } from './deploy';
-const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+import { deployProxy } from '@openzeppelin/truffle-upgrades';
 
 const step: MigrationStep =  (artifacts) =>
   async (deployer, network) => {
     const name = getName(network);
-    const contract = artifacts.require(name as "TheCoin");
+    const contract = artifacts.require(name);
 
     const contractArgs = await getArguments(network)
+    //@ts-ignore
     const proxy = await deployProxy(contract, contractArgs, { deployer });
+    console.log(`Deployed core contract.  Proxy ${proxy.address}`)
     // Serialize our contract addresses
     storeContractAddress(__dirname, network, proxy.address, ['cjs', 'mjs']);
   }

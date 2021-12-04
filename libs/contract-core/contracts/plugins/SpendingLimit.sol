@@ -31,13 +31,15 @@ struct UserData {
 
 uint constant ONE_WEEK = 604800;
 
-contract SpendingLimit is BasePlugin, OracleClient, Ownable {
+contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   mapping(address => UserData) userData;
 
   uint periodLength = ONE_WEEK;
 
-  constructor(address oracle) OracleClient(oracle) Ownable() {}
+  constructor(address oracle) {
+    setFeed(oracle);
+  }
 
   // fill-in function allows owner to set user limit.  To be replaced
   // with user-signed version of the same.
