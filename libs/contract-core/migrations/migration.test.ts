@@ -2,7 +2,6 @@ import { accounts, contract, web3, provider } from '@openzeppelin/test-environme
 import { join } from 'path';
 import * as initial from './1_initial_migration';
 import * as roles from './2_assign_roles';
-import * as mint from './3_mint_and_distribute';
 import { getDeployed } from './deploy';
 import { ContractClass, ContractInstance } from '@openzeppelin/truffle-upgrades/dist/utils/truffle';
 import { MINTER_ROLE, THECOIN_ROLE } from '../src/constants';
@@ -26,8 +25,6 @@ it.skip('Contract has migrated correctly', async () => {
   await callStep(initial);
   // Assign roles
   await callStep(roles);
-  // Mint & Distribute
-  await callStep(mint);
 
   // Are the roles assigned?
   const deployed = await getDeployed(artifacts, network);
@@ -35,6 +32,8 @@ it.skip('Contract has migrated correctly', async () => {
   expect(tc).toEqual(named.TheCoin);
   const isMinter = await deployed.hasRole(MINTER_ROLE, named.Minter);
   expect(isMinter).toBeTruthy();
+
+  // try minting
 });
 
 // Fake truffle deployment objects

@@ -26,18 +26,18 @@
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
-    "test": "yarn jest",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
+    "test": "yarn jest",
     "test:contract": "truffle test",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon",
+    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
     "_deploy:ethereum": "truffle migrate --network polygon",
-    "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
+    "seed": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./seed/main.ts"
   },
   "files": [
     "build/**/*"
@@ -45,8 +45,8 @@
   "main": "./build/index.js",
   "exports": {
     ".": {
-      "development": "./build/cjs/index_mocked.js",
       "electron": "./build/mjs/index.js",
+      "development": "./build/cjs/index_mocked.js",
       "default": "./build/cjs/index.js"
     }
   },

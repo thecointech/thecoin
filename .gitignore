@@ -61,9 +61,9 @@ libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/**/devlive-polygon*
 libs/contract-*/**/development-polygon*
 
-libs/contract-core/migrations/warmup_contract/blockchain.json
-libs/contract-core/migrations/warmup_contract/mint.csv
-libs/contract-core/migrations/warmup_contract/prod.json
+libs/contract-core/seed/clone/blockchain.json
+libs/contract-core/seed/clone/mint.csv
+libs/contract-core/seed/clone/prod.json
 
 libs/idx/src/config.devlive.json
 

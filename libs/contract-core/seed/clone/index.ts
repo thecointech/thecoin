@@ -95,7 +95,7 @@ export class Processor {
       } else {
         const abs = coin.abs().toNumber();
         // Transfer back to broker for burning
-        const waiter = await this.bcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, date.toMillis());
+        const waiter = await this.tcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, date.toMillis());
         await waiter.wait(1);
         // Burn coins
         const w = await this.tcCore.burnCoins(abs, date.toMillis());
@@ -153,7 +153,7 @@ export class Processor {
       : this.brokerAddress;
 
     const settled = findSettledDate(original);
-    const state = await this.doTransfer(original, from, original.address, 0, settled.toMillis(), this.tcCore);
+    const state = await this.doTransfer(original, from, original.address, 0, settled.toMillis());
 
     for (const delta of original.history) {
       if (delta.type == "depositFiat" && delta.fiat && !delta.date) {
@@ -172,7 +172,7 @@ export class Processor {
     if (clone.history.length > 0) return false;
 
     const { from, to, fee, timestamp } = original.data.initial.transfer;
-    const state = await this.doTransfer(original, from, to, fee, timestamp, this.xaCore);
+    const state = await this.doTransfer(original, from, to, fee, timestamp);
 
     for (const delta of original.history) {
       if (delta.fiat && (delta.type == "sendETransfer" || delta.type == "payBill")) {
@@ -207,7 +207,7 @@ export class Processor {
       }
     }
     else {
-      const tx = await this.xaCore.runCloneTransfer(
+      const tx = await this.tcCore.runCloneTransfer(
         redirFrom,
         toChange(to),
         value,
@@ -221,7 +221,7 @@ export class Processor {
   }
 
 
-  async doTransfer(action: AnyAction, from: string, to: string, fee: number, timestamp: number, contract: TheCoin) {
+  async doTransfer(action: AnyAction, from: string, to: string, fee: number, timestamp: number) {
     const transfers = action.history.filter(tx => tx.hash);
     if (transfers.length > 1) {
       debugger;
@@ -234,7 +234,7 @@ export class Processor {
       if (delta.hash) {
 
         let amount = state.coin ?? delta.coin!;
-        const balance = await contract.balanceOf(from);
+        const balance = await this.tcCore.balanceOf(from);
 
         const oldTx = bcHistory.find(bc => bc.hash == delta.hash);
         if (!oldTx) {
@@ -264,12 +264,13 @@ export class Processor {
 
 
         if (balance.lt(amount.toNumber())) {
+          log.warn(`Address ${from} with balance ${balance.toNumber()} is xfer: ${amount.toNumber()}`)
           debugger;
         }
 
         console.log(chalk.blue(`${action.data.date.toString()} - Doing ${action.type}: ${amount.toString()}`));
 
-        const tx = await contract.runCloneTransfer(
+        const tx = await this.tcCore.runCloneTransfer(
           toChange(from),
           toChange(to),
           amount.toNumber(),
