@@ -13,15 +13,15 @@ import { Container } from 'semantic-ui-react';
 import {MainNavigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { Routes } from './Routes';
+import { routes } from './Routes';
 import { Prismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
-import '../../semantic/semantic.css';
-//import '@thecointech/site-semantic-theme/semantic.less';
+//import '../../semantic/semantic.css';
+import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
 export const App = () => {
@@ -34,11 +34,7 @@ export const App = () => {
         <MainNavigation />
 
         <Container className={styles.appContainer}>
-          <MainPageTransition>
-            <section id={styles.mainContent} className={styles.pageMainInner}>
-              <Routes />
-            </section>
-          </MainPageTransition>
+          <MainPageTransition routes={routes} />
         </Container>
         <Footer />
       </MediaContextProvider>

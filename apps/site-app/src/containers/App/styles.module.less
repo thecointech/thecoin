@@ -1,47 +1,56 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#mainContent{
+#app {
+
+  display              : grid;
+  grid-template-rows   : 60px minmax(450px, auto) 32px;
+  grid-template-columns: 135px 171px minmax(auto, 837px) 173px 135px;
+  grid-template-areas  :
+    "lgap header  header header rgap"
+    "lgap sidebar main   widgets  rgap"
+    "lgap footer  footer footer rgap";
+
+  .menuPanel {
+    grid-area: sidebar;
+  }
+
+  .mainContent {
+    grid-area: main;
+  }
+
+  .widgets {
+    grid-area: widgets;
+  }
+}
+
+#mainContent {
   padding: 10px;
-  padding-left: 66px;
-  margin: auto;
-  width: 62%;
-  padding-top: 70px;
 }
 
-.contentContainer{
-  max-width: 1300px;
-  margin: auto;
-}
-
-.pageMainInner {
-  min-height: 450px;
-  padding: 0em;
-}
-
-#headerDecoration{
-  border-bottom: 1px solid @theCoinPalettePaleGreen2Faded50;
-  width: 100%;
+#headerDecoration {
+  border-bottom   : 1px solid @theCoinPalettePaleGreen2Faded50;
+  width           : 100%;
   background-color: @white;
-  box-shadow: @subtleShadow;
-  
+  box-shadow      : @subtleShadow;
+
   position: fixed;
-  z-index: 200;
+  z-index : 200;
 }
 
-.smallerThanDesktop({
-  #mainContent{
-    padding-left: 0;
-    padding-right: 0;
-    width: 100%;
-    margin: auto;
-  }
-});
+// .smallerThanDesktop({
+//   #mainContent{
+//     padding-left: 0;
+//     padding-right: 0;
+//     width: 100%;
+//     margin: auto;
+//   }
+// });
 
-.biggerThanSmallComputer({
-  #mainContent{
-    width: 65%;
-    padding-right: 22px;
-    margin-top: 50px;
-    padding-top: 20px;
-  }
-});
+// .biggerThanSmallComputer({
+//   #mainContent{
+//     width: 65%;
+//     padding-right: 22px;
+//     margin-top: 50px;
+//     padding-top: 20px;
+//   }
+// });

@@ -5,6 +5,11 @@
 //
 const { paths, modifyVars } = require('./vars.js');
 
+// In dev mode, leave the modules classnames intact so we can debug easier
+const modules = process.env.NODE_ENV !== 'production'
+  ? { localIdentName: "[name]__[local]--[hash:base64:5]" }
+  : true;
+
 module.exports = {
 
   css_module_loader: {
@@ -19,7 +24,7 @@ module.exports = {
         options: {
           importLoaders: 1,
           sourceMap: true,
-          modules: true,
+          modules,
         },
       },
       {

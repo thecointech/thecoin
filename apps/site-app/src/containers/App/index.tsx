@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
+import { Rail, Ref, Sticky } from 'semantic-ui-react';
 import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
@@ -18,13 +18,13 @@ import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@th
 import { createRef } from 'react';
 import { useSidebar } from '../Sidebar';
 import { init } from './init'
-import { Routes } from './Routes';
+import { routes } from './Routes';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
-import '../../semantic/semantic.css';
-//import '@thecointech/site-semantic-theme/semantic.less';
+//import '../../semantic/semantic.css';
+import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
 init();
@@ -37,30 +37,33 @@ export const App = () => {
   return (
     <MediaContextProvider>
       <style>{mediaStyles}</style>
-      <div id={styles.headerDecoration}>
+      <div id={styles.app}>
+
         <MainNavigation />
-      </div>
 
-      <div className={`${styles.contentContainer}`}>
-        <Container style={{ width: '100%' }} className={``}>
-          <MainPageTransition>
-            <GreaterThanMobileSegment>
-              <Rail internal position='left'>
-                <Sticky context={contextRef}>
-                  <PageSidebar />
-                </Sticky>
-              </Rail>
-            </GreaterThanMobileSegment>
 
-            <Ref innerRef={contextRef}>
-              <section id={styles.mainContent} className={styles.pageMainInner}>
-                <Routes />
-              </section>
-            </Ref>
-          </MainPageTransition>
-        </Container>
+        <div className={styles.menuPanel}>
+          <GreaterThanMobileSegment>
+            <Rail internal position='left'>
+              <Sticky context={contextRef}>
+                <PageSidebar />
+              </Sticky>
+            </Rail>
+          </GreaterThanMobileSegment>
+        </div>
+
+        <div className={styles.mainContent}>
+          <Ref innerRef={contextRef}>
+            <MainPageTransition routes={routes} contentId={styles.mainContent}>
+            </MainPageTransition>
+          </Ref>
+        </div>
+
+        <div className={styles.widgets}>
+          TODO Extra Widges
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </MediaContextProvider>
   );
 }
