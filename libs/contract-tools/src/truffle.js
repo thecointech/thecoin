@@ -36,7 +36,12 @@ function getDevNetworks() {
   }
 }
 
+const getPolygonInfuraSubdomain = () => process.env.DEPLOY_POLYGON_NETWORK == "polygon-testnet"
+  ? "polygon-mumbai"
+  : process.env.DEPLOY_POLYGON_NETWORK;
+
 function getLiveNetworks() {
+
   return {
     // remote environments (both test & mainnet)
     networks: {
@@ -44,7 +49,7 @@ function getLiveNetworks() {
         provider: () => {
           return new HDWalletProvider(
             testAccounts,
-            `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+            `https://${getPolygonInfuraSubdomain()}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
             0,
             numBuiltIn
           );
@@ -118,7 +123,7 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
+      version: "^0.8.0",
       docker: false,
       settings: {
         optimizer: {

@@ -35,9 +35,10 @@
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
+    "_deploy:polygon": "truffle migrate --network polygon --reset && yarn seed",
     "_deploy:ethereum": "truffle migrate --network polygon",
-    "seed": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./seed/main.ts"
+    "seed": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./seed/main.ts",
+    "seed:fetch": "cross-env CONFIG_NAME=prodbeta TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./seed/clone/fetch.ts"
   },
   "files": [
     "build/**/*"

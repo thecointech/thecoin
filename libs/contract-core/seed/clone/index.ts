@@ -88,10 +88,12 @@ export class Processor {
         // Create new $$$
         let waiter = await this.mtCore.mintCoins(coin.toNumber(), this.theCoinAddress, date.toMillis());
         await waiter.wait(1);
-        // If not intended for Core, forward this onto final recipient
-        waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, date.toMillis());
-        await waiter.wait(1);
 
+        // If not intended for Core, forward this onto final recipient
+        if (to !== this.theCoinAddress) {
+          waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, date.toMillis());
+          await waiter.wait(1);
+        }
       } else {
         const abs = coin.abs().toNumber();
         // Transfer back to broker for burning
@@ -144,6 +146,10 @@ export class Processor {
   }
 
   async cloneBuy(original: BuyAction) {
+    // Our updater has mixed up some timestamps, and we
+    // ended up with some duplicates in our prod db
+    if (original.data.initialId == "other:1064:1585947651462") return false;
+
     const clone = await getActionFromInitial(original.address, "Buy", original.data);
     if (clone.history.length > 0) return false;
 
@@ -239,7 +245,8 @@ export class Processor {
         const oldTx = bcHistory.find(bc => bc.hash == delta.hash);
         if (!oldTx) {
           if (!delta.hash.startsWith("CLOSE ACCOUNT:")) {
-            throw new Error;
+            debugger;
+            throw new Error(`Cannot find tx for ${action.type}: ${delta.hash}`);
           } else {
             amount = new Decimal(balance.toNumber());
             delta.coin = amount;

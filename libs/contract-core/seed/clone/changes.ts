@@ -28,6 +28,8 @@ export async function changeInit() {
     [NormalizeAddress('0x2fe3cbf59a777e8f4be4e712945ffefc6612d46f')]: brokerCadAddress,
     [NormalizeAddress('0x8B40D01D2bcFFef5CF3441a8197cD33e9eD6e836')]: NormalizeAddress('ca8eea33826f9ada044d58cac4869d0a6b4e90e4'),
     "0x0E53B70A831003D3714AEBC36F33C98A5F848872": "0x4D397E03E28B6041D8BC559DEBDC1742D33F59AD",
+    "0x4DCB7A5591AA8844CB6F4AAF890753CA261CC135": "0x7A8B466C4ABE76ED32F8D934607B0DEDD24D2EA6",
+    "0x6C0120EB19B1052823DB9174AD265133B7189E79": "0x7A8B466C4ABE76ED32F8D934607B0DEDD24D2EA6",
   }
 
 }
@@ -39,7 +41,10 @@ export const tweakBalance = (address: string, balance: number) => {
   if (address == "0xD86C97292B9BE3A91BD8279F114752248B80E8C5") return 0; // closed manually
   if (address == "0x8B40D01D2BCFFEF5CF3441A8197CD33E9ED6E836") return 0; // account swept into another account
   if (address == "0x0E53B70A831003D3714AEBC36F33C98A5F848872") return 0; // account swept into another account
-  if (address == "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4") return balance + 28495311 + 5000; // skipped refund & sweep
+  if (address == "0x4DCB7A5591AA8844CB6F4AAF890753CA261CC135") return 0; // account swept into another account
+  if (address == "0x6C0120EB19B1052823DB9174AD265133B7189E79") return 0; // account swept into another account
+  if (address == "0x7A8B466C4ABE76ED32F8D934607B0DEDD24D2EA6") return balance + (12645961 +12729113); // swept
+  if (address == "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4") return balance + 28495311 + 5000 + 5122718; // sweep & skipped refund & ?
   if (address == "0x4F860CC3A249D1072AE569F2103906BD787EA1E5") return balance + 5000; // skipped refund
   return balance;
 }
