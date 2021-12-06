@@ -1,6 +1,7 @@
 import { AccountName } from './names';
 import { getAndCacheSigner } from './cache'
 import { loadFromDisk } from './fromDisk';
+import { loadHardware } from './fromHardware';
 
 //
 // NodeJS (?) environments running locally.
@@ -8,4 +9,10 @@ import { loadFromDisk } from './fromDisk';
 // allows restricting access based on account running.
 export * from './names';
 export const getSigner = (name: AccountName) =>
-  getAndCacheSigner(name, () => loadFromDisk(name));
+  getAndCacheSigner(name, () => {
+    switch(name) {
+      case 'TheCoin': return loadHardware(name);
+      case 'Owner': return loadHardware(name);
+      default: return loadFromDisk(name);
+    }
+  });
