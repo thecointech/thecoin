@@ -1,10 +1,23 @@
 {
 	"folders": [
 		{
-			"path": "libs/contract"
+			"name": "contract-core",
+			"path": "libs/contract-core"
 		},
 		{
-			"path": "libs/accounts"
+			"name": "contract-nft",
+			"path": "libs/contract-nft"
+		},
+		{
+			"name": "contract-base",
+			"path": "libs/contract-base"
+		},
+		{
+			"name": "contract-tools",
+			"path": "libs/contract-tools"
+		},
+		{
+			"path": "libs/signers"
 		}
 	],
 	"settings": {
