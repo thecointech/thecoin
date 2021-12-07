@@ -16,7 +16,6 @@
     "directory": "libs/contract-tools"
   },
   "bin": {
-    "contract-verify": "./src/contract-verify.js",
     "contract-migrate": "./src/contract-migrate.js",
     "contract-gen-types": "./src/contract-gen-types.js"
   },
@@ -28,6 +27,7 @@
   "exports": {
     "./truffle": "./src/truffle.js",
     "./migrations": "./build/migrations.js",
+    "./verify": "./build/verify.js",
     "./jest.config": "./src/jest.config.js"
   },
   "typesVersions": {

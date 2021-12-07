@@ -4,15 +4,12 @@ require('../../../tools/setenv');
 require('../../../__mocks__/mock_node');
 
 var path = require('path');
-const { AccountId, getSigner } = require('@thecointech/signers');
+const { getSigner } = require('@thecointech/signers');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
 const { deployProvider } = require("@thecointech/ethers-provider");
 
 // Allow using typescript in deployments
 loadTypescript();
-
-const numBuiltIn = AccountId.BrokerCAD + 1;
-const testAccounts = [];
 
 // Dev networks run on local net
 function getDevNetworks() {
@@ -67,17 +64,6 @@ function getLiveNetworks() {
     }
   }
 }
-
-// async function loadAccounts(maxIdx) {
-//   const testAccountKeys = [];
-//   for (let i = 0; i < maxIdx; i++) {
-//     const wallet = await getSigner(AccountId[i]);
-//     if (!wallet)
-//       throw new Error(`Cannot deploy: missing account ${AccountId[i]}`);
-//     testAccountKeys.push(wallet.privateKey.slice(2));
-//   }
-//   return testAccountKeys;
-// }
 
 function loadTypescript() {
   require("ts-node").register({
