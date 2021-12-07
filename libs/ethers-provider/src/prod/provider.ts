@@ -1,4 +1,5 @@
 import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproject/providers'
+import type { Signer } from '@ethersproject/abstract-signer'
 import { getNetwork } from './networks'
 import { logger, errors } from './logger'
 import { convert, ERC20Response } from './erc20response'
@@ -146,5 +147,11 @@ export class Erc20Provider extends EtherscanProvider {
     const result = await this.fetch("logs", params);
 
     return Formatter.arrayOf(this.formatter.filterLog.bind(this.formatter))(result);
+  }
+
+  // We define the getSigner method from BaseRpcProvider because we share
+  // the type definition with devlive provider and devlive signers use it.
+  getSigner(_id: number): Promise<Signer> {
+    throw new Error("Cannot call getSigner on an Erc20Provider");
   }
 }
