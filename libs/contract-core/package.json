@@ -36,7 +36,7 @@
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "prod": "cross-env CONFIG_NAME=prod yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon",
+    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
     "_deploy:ethereum": "truffle migrate --network polygon",
     "seed": "yarn run-script ./seed/main.ts",
     "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",

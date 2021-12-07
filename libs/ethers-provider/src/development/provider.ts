@@ -2,12 +2,11 @@ import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../prod/erc20response';
-
+import { log } from '@thecointech/logging';
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
 import exactFrom from './logs-exact-from.json'
 import exactTo from './logs-exact-to.json'
-import { getSigner } from '@thecointech/signers';
 
 export class Erc20Provider extends BaseProvider {
 
@@ -61,9 +60,11 @@ export class Erc20Provider extends BaseProvider {
 }
 
 async function getRemapping(clientAddress: string) : Promise<Record<string, string>> {
-  const brokerCad = await getSigner('BrokerCAD');
+  // This remapping will not work in development node scripts
+  // As this function currently only happens on the website that shouldn't be a problem
+  if (!process.env.WALLET_BrokerCAD_ADDRESS) log.warn("Expected BrokerCAD address is missing, remapping will not work");
   return {
     client: clientAddress,
-    broker: await brokerCad.getAddress(),
+    broker: process.env.WALLET_BrokerCAD_ADDRESS ?? "BROKER_ADDRESS_MISSING",
   }
 }

@@ -1,7 +1,5 @@
 import { getSigner } from '@thecointech/signers';
 import constant from './constant.json';
-import production from './production.json';
-import prodtest from './prodtest.json';
 
 type Status = {
   certifiedFee: number,
@@ -16,16 +14,9 @@ export async function current() : Promise<Status> {
 
 export async function getBrokerCADAddress() {
   if (process.env.NODE_ENV === 'development') {
-    // In dev live, we can simply load the BrokerCAD to get it's address
-    if (process.env.SETTINGS === 'live') {
-      const brokerCad = await getSigner('BrokerCAD');
-      return brokerCad.getAddress();
-    }
-    // In dev, it doesn't matter (so just use production)
+    // In dev, we can simply load the BrokerCAD to get it's address
+    const brokerCad = await getSigner('BrokerCAD');
+    return brokerCad.getAddress();
   }
-  // Choose the correct account for test/prod
-  else if (process.env.SETTINGS === 'testing') {
-    return prodtest.BrokerCAD;
-  }
-  return production.BrokerCAD;
+  return process.env.WALLET_BrokerCAD_ADDRESS ?? "BROKER_ADDRESS_MISSING";
 }
