@@ -1,4 +1,5 @@
-export { };
+import { GetContract } from '../src';
+import {assignRoles} from './assignRoles';
 
 //
 // Seed a new contract.  This script should
@@ -7,14 +8,25 @@ export { };
 // only allows the use of a single hardware wallet,
 // and both TheCoin & Owner will be hardware in prod
 (async () => {
-  if (process.env.DEPLOY_CONTRACT_INIT === 'clone') {
-    const { Processor } = await import('./clone');
-    const p = new Processor();
-    await p.init();
-    await p.process();
+  const method = process.env.DEPLOY_CONTRACT_INIT;
+  const contract = GetContract();
+  switch (method) {
+    case 'clone': {
+      await assignRoles(contract);
+      const { Processor } = await import('./clone');
+      const p = new Processor();
+      await p.init();
+      await p.process();
+      break;
+    }
+    case 'seed': {
+      await assignRoles(contract);
+      const { devliveDistribution } = await import('./devlive');
+      await devliveDistribution();
+      break;
+    }
+    default:
+      console.log("No initialization method chosen, exiting")
   }
-  else {
-    const { devliveDistribution } = await import('./devlive');
-    await devliveDistribution();
-  }
+
 })();

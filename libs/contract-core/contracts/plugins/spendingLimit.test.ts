@@ -1,5 +1,5 @@
 import { accounts, contract, web3 } from '@openzeppelin/test-environment';
-import { toNamedAccounts } from '../../migrations/accounts';
+import { toNamedAccounts } from '../../test-utils/accounts';
 import { join } from 'path';
 import type { TheCoinInstance, SpxCadOracleInstance, SpendingLimitInstance } from '../../migrations/types';
 import { PLUGINMGR_ROLE, ALL_PERMISSIONS, MINTER_ROLE } from '../../src/constants'
