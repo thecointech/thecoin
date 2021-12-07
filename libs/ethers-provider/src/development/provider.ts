@@ -1,7 +1,7 @@
 import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../erc20response';
+import { ERC20Response } from '../prod/erc20response';
 
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
@@ -9,7 +9,7 @@ import exactFrom from './logs-exact-from.json'
 import exactTo from './logs-exact-to.json'
 import { getSigner } from '@thecointech/signers';
 
-export class ChainProvider extends BaseProvider {
+export class Erc20Provider extends BaseProvider {
 
   constructor() {
     super('any')

@@ -4,10 +4,9 @@ require('../../../tools/setenv');
 require('../../../__mocks__/mock_node');
 
 var path = require('path');
-// const HDWalletProvider = require("@truffle/hdwallet-provider");
 const { AccountId, getSigner } = require('@thecointech/signers');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
-const { InfuraProvider } = require("@ethersproject/providers");
+const { deployProvider } = require("@thecointech/ethers-provider");
 
 // Allow using typescript in deployments
 loadTypescript();
@@ -33,10 +32,6 @@ function getDevNetworks() {
   }
 }
 
-const getPolygonInfuraSubdomain = () => process.env.DEPLOY_POLYGON_NETWORK == "polygon-testnet"
-  ? "maticmum"
-  : process.env.DEPLOY_POLYGON_NETWORK;
-
 function getLiveNetworks() {
 
   return {
@@ -45,7 +40,7 @@ function getLiveNetworks() {
       polygon: {
         provider: () => new TruffleEthersProvider(
           { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
-          new InfuraProvider(getPolygonInfuraSubdomain(), process.env.INFURA_PROJECT_ID)
+          deployProvider("POLYGON"),
         ),
         network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
         confirmations: 2,
@@ -55,14 +50,10 @@ function getLiveNetworks() {
         networkCheckTimeout: 10 * 60 * 1000,
       },
       ethereum: {
-        provider: () => {
-          return new HDWalletProvider(
-            testAccounts,
-            `https://${process.env.DEPLOY_ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-            0,
-            numBuiltIn
-          );
-        },
+        provider: () => new TruffleEthersProvider(
+          { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
+          deployProvider("ETHEREUM"),
+        ),
         network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
         skipDryRun: true
       },

@@ -9,7 +9,7 @@ import { convert, ERC20Response } from './erc20response'
 
 const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 
-export class ChainProvider extends EtherscanProvider {
+export class Erc20Provider extends EtherscanProvider {
 
   constructor() {
     // For now we exclusively use hte polygon network

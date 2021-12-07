@@ -2,9 +2,9 @@ import { BlockTag, Filter, JsonRpcProvider, Log } from '@ethersproject/providers
 import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../erc20response';
+import { ERC20Response } from '../prod/erc20response';
 
-export class ChainProvider extends JsonRpcProvider {
+export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`)
