@@ -13,7 +13,7 @@ log.level(0);
 //
 // Simple sanity test for a contract
 // deployed in development environment
-it('has assigned roles correctly', async () => {
+it.skip('has assigned roles correctly', async () => {
   const named = toNamedAccounts(accounts);
   const TheCoin = contract.fromArtifact("TheCoin");
   const tcCore = await TheCoin.new();
