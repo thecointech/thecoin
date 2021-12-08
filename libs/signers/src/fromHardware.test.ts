@@ -14,5 +14,15 @@ describe("Hardware connection", () => {
 
     const signed = await signer.signMessage("test");
     expect(signed).toBeTruthy();;
+
+    // the following doesn't work, but was useful for testing'
+    const tx = await signer.signTransaction({
+      chainId: 137,
+      data: "0x00001234",
+      gasLimit: 10,
+      gasPrice: 10,
+      nonce: 1,
+    });
+    tx;
   })
 }, IsManualRun)

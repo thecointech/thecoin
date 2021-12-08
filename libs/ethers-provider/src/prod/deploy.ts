@@ -1,7 +1,16 @@
 import { InfuraProvider } from "@ethersproject/providers";
 
+function getInfuraNetwork(deployTo: "POLYGON"|"ETHERUM") {
+  switch(process.env[`DEPLOY_${deployTo}_NETWORK`])
+  {
+    case "polygon-testnet": return "maticmum";
+    case "polygon-mainnet": return "matic";
+    default: return process.env[`DEPLOY_${deployTo}_NETWORK`];
+  }
+};
+
 export const deployProvider = (deployTo: "POLYGON"|"ETHERUM") => {
-  const network = process.env[`DEPLOY_${deployTo}_NETWORK`]
+  const network = getInfuraNetwork(deployTo)
   if (!network)
     throw new Error("Missing deploy network, cannot connect to blockchain");
 
@@ -9,10 +18,6 @@ export const deployProvider = (deployTo: "POLYGON"|"ETHERUM") => {
   if (!projectId)
     throw new Error(`Missing INFURA project ID, cannot connect to ${network}`);
 
-  return new InfuraProvider(
-    network == "polygon-testnet"
-      ? "maticmum"
-      : network,
-    projectId
-  );
+  return new InfuraProvider(network, projectId);
+
 }

@@ -59,7 +59,7 @@
     "@google-cloud/secret-manager": "^3.5.0",
     "@thecointech/logging": "^0.2.41",
     "@thecointech/ethers-provider": "0.2.52",
-    "@ethersproject/hardware-wallets": "^5.5.0",
+    "@thecointech/hardware-wallet": "*",
     "ethers": "^5.5.1"
   },
   "devDependencies": {

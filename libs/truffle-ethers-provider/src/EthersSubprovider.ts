@@ -39,13 +39,47 @@ export class EthersSubprovider {
     const from = txParams.from.toLowerCase();
     this.doWith(from, cb, async (signer) => {
       const chainId = await signer.getChainId()
-      const r = await signer.signTransaction({
+      const txData = {
         data: txParams.data,
         nonce: txParams.nonce,
         gasLimit: txParams.gas,
         gasPrice: txParams.gasPrice,
         chainId,
-      });
+      }
+
+      // const tx = new EthereumTx(txData, { chain: chainId });
+      // // Set the EIP155 bits
+      // tx.raw[6] = Buffer.from([chainId]); // v
+      // tx.raw[7] = Buffer.from([]); // r
+      // tx.raw[8] = Buffer.from([]); // s
+      // const serializedTx = tx.serialize().toString('hex');
+
+      // const le = signer as LedgerSigner;
+      // const eth = await le._eth;
+      // const result = await eth.signTransaction(
+      //   le.path,
+      //   serializedTx
+      // );
+      // console.log(`BE: ${JSON.stringify(result)}`)
+      // // Store signature in transaction
+      // tx.v = Buffer.from(result.v, "hex");
+      // tx.r = Buffer.from(result.r, "hex");
+      // tx.s = Buffer.from(result.s, "hex");
+
+      // const signedChainId = Math.floor((tx.v[0] - 35) / 2);
+      // const validChainId = chainId & 0x7F;
+      // if (signedChainId !== validChainId) {
+      //   throw new Error(
+      //     "Invalid networkId signature returned. Expected: " +
+      //       chainId +
+      //       ", Got: " +
+      //       signedChainId
+      //   );
+      // }
+
+      // return `0x${tx.serialize().toString("hex")}`;
+
+      const r = await signer.signTransaction(txData);
       return r;
     })
   }

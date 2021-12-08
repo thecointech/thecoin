@@ -1,6 +1,7 @@
 import { AccountName } from './names';
-import { LedgerSigner } from "@ethersproject/hardware-wallets";
+import { LedgerSigner } from "@thecointech/hardware-wallet";
 import { log } from "@thecointech/logging";
+import { Erc20Provider } from "@thecointech/ethers-provider";
 
 export async function loadHardware(name: AccountName) {
   // Leave a trace just in case someone tries this in an unexpected situation
@@ -11,5 +12,5 @@ export async function loadHardware(name: AccountName) {
   if (address != process.env[`WALLET_${name}_ADDRESS`]) {
     throw new Error(`Cannot load ${name} - matching hardware device is not connected`);
   }
-  return signer;
+  return signer.connect(new Erc20Provider());
 }
