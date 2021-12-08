@@ -1,9 +1,10 @@
 import { AllActions, loadCurrent, loadMinting } from './load';
-import { ConnectContract, TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '../../src';
 import { isType, AnyAction, BuyAction, getActionFromInitial, removeIncomplete, storeTransition, TransitionDelta, TypedAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { init } from '@thecointech/firestore';
 import { log } from '@thecointech/logging';
+import { connect } from '@thecointech/contract-base/connect';
 import { changeInit, toIgnore, toChange, isRefund, tweakBalance } from './changes';
 import Decimal from 'decimal.js-light';
 import chalk from "chalk";
@@ -12,6 +13,7 @@ import blockchain from './blockchain.json';
 const bcHistory = blockchain.history.filter(h => !isRefund(h.hash))
 import { DateTime } from 'luxon';
 import { toCoin } from './pricing';
+import { fetchRate } from '@thecointech/fx-rates';
 
 // Read cached src data and load into whatever chain is currently running
 export class Processor {
@@ -27,7 +29,7 @@ export class Processor {
   spaces = 0;
 
 
-  async init() {
+  async init(contract: TheCoin) {
     this.data = loadCurrent()!;
     if (!this.data) return false;
 
@@ -45,10 +47,10 @@ export class Processor {
 
     this.brokerAddress = await brokerCad.getAddress();
     this.theCoinAddress = await theCoin.getAddress();
-    this.tcCore = ConnectContract(theCoin);
-    this.xaCore = ConnectContract(xferAssit);
-    this.mtCore= ConnectContract(minter);
-    this.bcCore = ConnectContract(brokerCad);
+    this.tcCore = connect(theCoin, contract);
+    this.xaCore = connect(xferAssit, contract);
+    this.mtCore= connect(minter, contract);
+    this.bcCore = connect(brokerCad, contract);
     this.allAddresses = new Array(
       ...new Set([
         ...Object.keys(this.data.Buy),
@@ -83,24 +85,34 @@ export class Processor {
 
       const to = toChange(originator);
       // First; convert from fiat to token
-      const coin = await toCoin(date, fiat, currency);
+      const d = date.toJSDate();
+      const rate = await fetchRate(d);
+      if (!rate) throw new Error("Kerplewey");
+      const coin = await toCoin(rate, fiat, currency);
+
+      // We adjust our date to be aligned with the rate fetched.
+      // This is to be compatible with dates calculated in 2018
+      const mintDate =  (date.toMillis() < rate.validFrom)
+        ? DateTime.fromMillis(rate.validFrom)
+        : date;
+
       if (coin.gt(0)) {
         // Create new $$$
-        let waiter = await this.mtCore.mintCoins(coin.toNumber(), this.theCoinAddress, date.toMillis());
+        let waiter = await this.mtCore.mintCoins(coin.toNumber(), this.theCoinAddress, mintDate.toMillis());
         await waiter.wait(1);
 
         // If not intended for Core, forward this onto final recipient
         if (to !== this.theCoinAddress) {
-          waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, date.toMillis());
+          waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, mintDate.toMillis());
           await waiter.wait(1);
         }
       } else {
         const abs = coin.abs().toNumber();
         // Transfer back to broker for burning
-        const waiter = await this.tcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, date.toMillis());
+        const waiter = await this.tcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, mintDate.toMillis());
         await waiter.wait(1);
         // Burn coins
-        const w = await this.tcCore.burnCoins(abs, date.toMillis());
+        const w = await this.tcCore.burnCoins(abs, mintDate.toMillis());
         await w.wait(1);
       }
     }

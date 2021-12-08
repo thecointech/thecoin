@@ -1,3 +1,4 @@
+import { log } from '@thecointech/logging';
 import { GetContract } from '../src';
 import {assignRoles} from './assignRoles';
 
@@ -10,12 +11,13 @@ import {assignRoles} from './assignRoles';
 (async () => {
   const method = process.env.DEPLOY_CONTRACT_INIT;
   const contract = GetContract();
+  log.info(`Initializing ${contract.address}: method: ${method}`);
   switch (method) {
     case 'clone': {
       await assignRoles(contract);
       const { Processor } = await import('./clone');
       const p = new Processor();
-      await p.init();
+      await p.init(contract);
       await p.process();
       break;
     }
@@ -28,5 +30,4 @@ import {assignRoles} from './assignRoles';
     default:
       console.log("No initialization method chosen, exiting")
   }
-
 })();

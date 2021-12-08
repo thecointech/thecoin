@@ -1,11 +1,8 @@
-import {fetchRate, CurrencyKey} from "@thecointech/fx-rates";
+import { CurrencyKey, FXRate } from "@thecointech/fx-rates";
 import { Decimal } from 'decimal.js-light';
 import { COIN_EXP } from '@thecointech/contract-core';
-import { DateTime } from 'luxon';
 
-export const toCoin = async (date: DateTime, fiat: Decimal, currency: CurrencyKey) => {
-  const d = date.toJSDate();
-  const rate = await fetchRate(d);
+export const toCoin = async (rate: FXRate, fiat: Decimal, currency: CurrencyKey) => {
   if (!rate) throw new Error("Missing FXRate");
   let usd = fiat;
   // Convert to USD
