@@ -36,5 +36,6 @@
     "@types/web3-provider-engine": "^14.0.1",
     "ethereum-protocol": "^1.0.1",
     "jest": "*"
-  }
+  },
+  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }
