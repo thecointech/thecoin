@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/hardware-wallet",
-  "version": "0.2.54",
+  "version": "0.2.55",
   "description": "TheCoin: An Ethers.js signer implemented for Ledger",
   "keywords": [
     "ethereum",

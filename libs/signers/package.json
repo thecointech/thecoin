@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.54",
+  "version": "0.2.55",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "keywords": [
     "TheCoin"
@@ -57,8 +57,8 @@
   },
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.54",
-    "@thecointech/hardware-wallet": "^0.2.54",
+    "@thecointech/ethers-provider": "^0.2.55",
+    "@thecointech/hardware-wallet": "^0.2.55",
     "@thecointech/logging": "^0.2.41",
     "ethers": "^5.5.1"
   },

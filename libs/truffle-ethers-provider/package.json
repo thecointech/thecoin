@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/truffle-ethers-provider",
-  "version": "0.2.54",
+  "version": "0.2.55",
   "description": "Truffle provider wrapping ethers signers",
   "keywords": [
     "TheCoin",
