@@ -23,10 +23,6 @@
     "defaultMessage": "Why settle? Our time-tested strategy has the best long-term results.",
     "description": "site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier"
   },
-  "1PFQTi": {
-    "defaultMessage": "We do more",
-    "description": "site.MainNavigationMobile.wedomore: Title for the We do more entry in the menu"
-  },
   "1jRkZO": {
     "defaultMessage": "Earths’ Healthier",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
@@ -63,10 +59,6 @@
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
     "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
-  "60WgI1": {
-    "defaultMessage": "Home",
-    "description": "site.MainNavigationMobile.home: Title for the Home entry in the menu"
-  },
   "7bpwYe": {
     "defaultMessage": "Years",
     "description": "site.compare.label.rangeDurationYear: label for range Duration Year field in the compare page"
@@ -91,14 +83,6 @@
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
   },
-  "Db9gTm": {
-    "defaultMessage": "Learn More",
-    "description": "site.homepage.landscape.stickers.right.link: Link name for sticker for the homepage landscape right sticker"
-  },
-  "F/FnXv": {
-    "defaultMessage": "Home",
-    "description": "site.MainNavigation.home: Title for the Home entry in the menu"
-  },
   "FAWgn/": {
     "defaultMessage": "Show me the Potential!"
   },
@@ -114,10 +98,6 @@
   },
   "Gv2G2+": {
     "defaultMessage": "Starting Amount"
-  },
-  "HnvT/Q": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigationMobile.blog: Title for the Blog entry in the menu"
   },
   "IJP8Tt": {
     "defaultMessage": "TheCoin is a revolutionary new kind of account.",
@@ -183,10 +163,6 @@
     "defaultMessage": "Family Name",
     "description": "site.subscribe.confirmation.form.lastname: label for last name field"
   },
-  "SS292h": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigationMobile.faq: Title for the FAQ entry in the menu"
-  },
   "Th2OVj": {
     "defaultMessage": "Read More",
     "description": "site.blog.articleLink: Link to access article page in blog"
@@ -202,14 +178,6 @@
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
-  "VVutoW": {
-    "defaultMessage": "Blog",
-    "description": "site.MainNavigation.blog: Title for the Blog entry in the menu"
-  },
-  "VdA9HP": {
-    "defaultMessage": "Your benefits",
-    "description": "site.MainNavigationMobile.yourbenefits: Title for the Your benefits entry in the menu"
-  },
   "W8cvxr": {
     "defaultMessage": "We Do More",
     "description": "site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart"
@@ -224,10 +192,6 @@
   "YwCHN1": {
     "defaultMessage": "Why We Can Be So Confident",
     "description": "site.homepage.underwater.science.link: Link for the homepage underwater science subpart"
-  },
-  "ZNzJYq": {
-    "defaultMessage": "In-depth",
-    "description": "site.MainNavigationMobile.indepth: Title for the In-depth entry in the menu"
   },
   "ZiBD6K": {
     "defaultMessage": "Monthly Fees",
@@ -315,6 +279,10 @@
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
     "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
   },
+  "mLXVxC": {
+    "defaultMessage": "Help",
+    "description": "site.MainNavigation.faq: Help Link"
+  },
   "n0wGb/": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
     "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
@@ -396,10 +364,6 @@
   "wPzBUV": {
     "defaultMessage": "Learn Your Edge",
     "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
-  },
-  "wUf7lJ": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigation.faq: Title for the FAQ entry in the menu"
   },
   "wwo/lO": {
     "defaultMessage": "In-depth",
