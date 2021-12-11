@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.52",
+  "version": "0.2.54",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "keywords": [
     "TheCoin",
@@ -39,7 +39,7 @@
     "@ceramicnetwork/http-client": "^1.4.4",
     "@self.id/web": "^0.1.0",
     "@thecointech/logging": "^0.2.41",
-    "@thecointech/utilities": "^0.2.52",
+    "@thecointech/utilities": "^0.2.54",
     "dids": "^2.4.0"
   },
   "devDependencies": {
