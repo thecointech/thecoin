@@ -1,0 +1,27 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.learnMoreLink {
+  font-size     : 12px;
+  font-weight   : @bold;
+  text-transform: uppercase;
+  display       : inline-block;
+  color         : @theCoinPrimaryGreenNeutral;
+  transition    : color @pageTransitionDuration @defaultEasing;
+
+  .bottomBorder {
+    margin: 0;
+    height          : 4px;
+    border-radius   : 2px;
+    width           : 85px;
+    background-color: @primaryColor;
+    transition      : width @pageTransitionDuration @defaultEasing;
+  }
+
+  &:hover {
+    color: @theCoinPrimaryGreenPale;
+
+    .bottomBorder {
+      width: 100%;
+    }
+  }
+}

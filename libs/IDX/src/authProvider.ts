@@ -1,4 +1,4 @@
-import { EthereumAuthProvider } from '@3id/connect'
+import { EthereumAuthProvider } from '@self.id/web';
 import { Signer } from '@ethersproject/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays';

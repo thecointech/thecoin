@@ -34,9 +34,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
 @media not all and (min-width:1024px) and (max-width:1919px){.fresnel-between-computer-widescreen{display:none!important;}}
 @media not all and (min-width:1192px) and (max-width:1919px){.fresnel-between-largeScreen-widescreen{display:none!important;}}
     </style>
-    <div>
-      <MainNavigation />
-    </div>
+    <MainNavigation />
     <Container>
       <MainPageTransition>
         <section>

@@ -30,7 +30,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               </h1>
               <a
                 class="ui red large button undefined x6spaceBefore"
-                href="undefined"
+                href="http://localhost:3001"
                 role="button"
               >
                 Start Now
@@ -59,6 +59,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/compare"
               >
                 Learn More
+                <div
+                  class="undefined x2spaceBefore"
+                />
               </a>
             </div>
             <div
@@ -76,6 +79,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/wedomore"
               >
                 Learn More
+                <div
+                  class="undefined x2spaceBefore"
+                />
               </a>
             </div>
           </div>
@@ -133,7 +139,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               </h1>
               <a
                 class="ui red large button undefined x2spaceBefore"
-                href="undefined"
+                href="http://localhost:3001"
                 role="button"
               >
                 Start Now
@@ -162,6 +168,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/compare"
               >
                 Learn More
+                <div
+                  class="undefined x2spaceBefore"
+                />
               </a>
             </div>
             <div
@@ -179,6 +188,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
                 href="/wedomore"
               >
                 Learn More
+                <div
+                  class="undefined x2spaceBefore"
+                />
               </a>
             </div>
           </div>
@@ -285,6 +297,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/blog/start-now"
           >
             Learn Your Edge
+            <div
+              class="undefined x2spaceBefore"
+            />
           </a>
         </div>
         <div
@@ -306,6 +321,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             Compare Us
+            <div
+              class="undefined x2spaceBefore"
+            />
           </a>
         </div>
       </div>
@@ -350,6 +368,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             How Anyone Can Get Rich Slow
+            <div
+              class="undefined x2spaceBefore"
+            />
           </a>
         </div>
         <div
@@ -371,6 +392,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             href="/compare"
           >
             Who Wins?
+            <div
+              class="undefined x2spaceBefore"
+            />
           </a>
         </div>
       </div>
@@ -399,7 +423,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         >
           <a
             class="ui red large button"
-            href="undefined/#/addAccount"
+            href="http://localhost:3001/#/addAccount"
             role="button"
           >
             Create Account
@@ -453,6 +477,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               Compare Outcomes
+              <div
+                class="undefined x2spaceBefore"
+              />
             </a>
           </div>
           <div
@@ -474,6 +501,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               Why We Can Be So Confident
+              <div
+                class="undefined x2spaceBefore"
+              />
             </a>
           </div>
           <div
@@ -495,6 +525,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               href="/healthier"
             >
               What We Do
+              <div
+                class="undefined x2spaceBefore"
+              />
             </a>
           </div>
         </div>
@@ -522,7 +555,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           </h3>
           <a
             class="ui red large button"
-            href="undefined/#/addAccount"
+            href="http://localhost:3001/#/addAccount"
             role="button"
           >
             Create Account

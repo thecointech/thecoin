@@ -1,7 +1,7 @@
 import { Contract } from 'ethers';
-import { TheCoin } from './types/TheCoin';
-import { getProvider } from '@thecointech/contract-base/provider';
+import { TheCoin } from './types';
 import TheCoinSpec from './contracts/TheCoin.json';
+import { Erc20Provider } from '@thecointech/ethers-provider';
 //
 // Multiplier of base values to human-readable fractions (eg $ and c)
 export const COIN_EXP = 1000000;
@@ -13,8 +13,8 @@ export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 
 
 const getAbi = () => TheCoinSpec.abi;
 
-const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
 const getContractAddress = () => {
+  const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
   const deployment = require(`./deployed/${config_env}-polygon.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
@@ -26,7 +26,7 @@ const buildContract = () =>
   new Contract(
     getContractAddress(),
     getAbi(),
-    getProvider()
+    new Erc20Provider()
   ) as TheCoin
 
 declare module globalThis {

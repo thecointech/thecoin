@@ -5,7 +5,7 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import type { TheCoin } from '@thecointech/contract-core';
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from '@ethersproject/abstract-signer';
-import type { IDX } from '@thecointech/idx';
+import type { SelfID } from '@thecointech/idx';
 
 
 // An account state holds all relevant info
@@ -26,7 +26,7 @@ export type AccountState = {
 
 
  // IDX vars
- idx: IDX|null;
+ idx: SelfID|null;
  // Are we saving/loading something from IDX?
  idxIO?: boolean;
 

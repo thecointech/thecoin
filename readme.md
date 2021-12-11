@@ -6,36 +6,6 @@ for node-gyp errors on windows, ensure that it's (node-gyp is) looking in the ri
 
 https://github.com/nodejs/node-gyp/issues/1753
 
-3) Execute the following 3 commands from the root of the-umbrella repository
-yarn install
-cd site
-yarn dev
-
-========================================================================================
-==================================== Firebase ==========================================
-========================================================================================
-
-To run firebase locally for testing & development:
-1) install firebase-cli: https://firebase.google.com/docs/cli#windows-npm
- > npm install -g firebase-tool
-2) login (any google account)
- > firebase login
-2) Setup emulator suite (accept all defaults, optionally also EmulatorUI)
- > firebase init emulators
-3) Once done, start firebase (I had to do this twice to complete UI start)
- > yarn start:firebase
-4) (optional) Open emulator UI
- > http://localhost:4000/firestore
-
-========================================================================================
-====================================== API =============================================
-================================= 2nd march 2020 =======================================
-========================================================================================
-cd apps/broker-service
-yarn install
-yarn dev
-Navigate to localhost:4000/docs for swagger
-
 
 ========================================================================================
 ====================================== JEST ============================================

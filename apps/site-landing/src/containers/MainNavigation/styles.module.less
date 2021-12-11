@@ -1,9 +1,98 @@
-.mainMenu{
-    width: auto;
-    display: inline-block;
-    height: 60px;
-    margin-bottom: 50px;
-    .ui.secondary.pointing.menu{
-        border-bottom: none;
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+
+/** linear interpolate value from small to big as screen goes from small-size to big-size */
+.scalable-unit(@property, @small, @big, @unit) {
+  @{property}: clamp(unit(@small, @unit),
+      calc(unit(@small, @unit) + (@big - @small) * ((100vw - @tabletBreakpoint) / (@desktopWidth - @tabletWidth))),
+      unit(@big, @unit),
+    );
+}
+
+.scalable(@property, @small, @big) {
+  .scalable-unit(@property, @small, @big, px)
+}
+
+.navContainer {
+  .scalable(padding-left, 15, 135);
+  .scalable(padding-right, 5, 100);
+  .scalable(height, 80, 90);
+
+  background-color: @white;
+  position        : sticky;
+  z-index         : 100000;
+  top             : 0;
+  border-bottom   : 1px solid fade(@theCoinPrimaryGreenPale, 20%);
+  box-shadow      : 1px 1px 2px 0px #00000040;
+
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+
+
+  >* {
+    display    : flex;
+    align-items: center;
+    .scalable(height, 30, 50);
+
+    >* {
+      transition: color @pageTransitionDuration @defaultEasing;
+
+      &:not(:first-child) {
+        .scalable(margin-left, 10, 30);
+      }
+
+      &:hover {
+        color: @primaryColor2;
+      }
     }
+  }
+
+  // Tweak the styles for the text a little
+  :global(.item) {
+    min-width : 30px;
+    text-align: center;
+  }
+
+  // This prevents the text in language switcher wrapping
+  // In very compressed scenarios
+  :global(.text) {
+    white-space: nowrap;
+  }
+
+  :global(.active) {
+    color: @black;
+  }
+
+  .createButton {
+    white-space: nowrap;
+
+    >a {
+      .scalable(padding-left, 5, 30);
+      .scalable(padding-right, 5, 30);
+    }
+  }
+
+  .logoLink {
+    height: 100%;
+
+    .logo {
+      height: 100%;
+      .scalable(width, 105, 174);
+      background-image: url(./logoAndName.svg);
+
+      background-size    : contain;
+      background-repeat  : no-repeat;
+      background-position: left center;
+
+      position          : relative;
+      transition        : opacity @pageTransitionDuration @defaultEasing;
+      -moz-transition   : opacity @pageTransitionDuration @defaultEasing;
+      -webkit-transition: opacity @pageTransitionDuration @defaultEasing;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
 }

@@ -90,11 +90,11 @@ type VisualProps={
 
 };
 
-const validateChars = (re: RegExp) => (value: string) => {
+const validateChars = (re: () => RegExp) => (value: string) => {
   if (!value?.length) {
     return translations.entryIsRequired
   }
-  const match = re.exec(value);
+  const match = re().exec(value);
   return match
     ? {
         ...translations.containsInvalidCharacters,

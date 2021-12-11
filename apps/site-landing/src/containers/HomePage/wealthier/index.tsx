@@ -9,7 +9,7 @@ import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
 import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
-import { Link } from 'react-router-dom';
+import { LearnMoreLink } from 'components/LearnMoreLink';
 
 const translations = defineMessages({
   title : {
@@ -80,7 +80,7 @@ export const Wealthier = () => {
                 <FormattedMessage {...translations.startnowDescription} />
               </p>
 
-              <Link to="/blog/start-now"><FormattedMessage {...translations.startnowLink} /></Link>
+              <LearnMoreLink to="/blog/start-now"><FormattedMessage {...translations.startnowLink} /></LearnMoreLink>
           </Grid.Column>
 
           <Grid.Column columns={3}>
@@ -91,7 +91,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...translations.investmentDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...translations.investmentLink} /></Link>
+              <LearnMoreLink to="/compare"><FormattedMessage {...translations.investmentLink} /></LearnMoreLink>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -113,7 +113,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...translations.growthDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...translations.growthLink} /></Link>
+              <LearnMoreLink to="/compare"><FormattedMessage {...translations.growthLink} /></LearnMoreLink>
           </Grid.Column>
 
           <Grid.Column columns={3} >
@@ -124,7 +124,7 @@ export const Wealthier = () => {
               <p>
                 <FormattedMessage {...translations.profitsDescription} />
               </p>
-              <Link to="/compare"><FormattedMessage {...translations.profitsLink} /></Link>
+              <LearnMoreLink to="/compare"><FormattedMessage {...translations.profitsLink} /></LearnMoreLink>
           </Grid.Column>
         </Grid.Row>
       </Grid>

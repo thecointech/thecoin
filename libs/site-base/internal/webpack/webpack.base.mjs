@@ -134,7 +134,7 @@ export default {
   ],
   resolve: {
     modules: ['node_modules', 'src'],
-    conditionNames: [configName, "browser", "webpack", "default"],
+    conditionNames: [configName, "browser", "webpack", "require", "default"],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),

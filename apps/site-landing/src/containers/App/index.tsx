@@ -31,9 +31,7 @@ export const App = () => {
     <div id={styles.app}>
       <MediaContextProvider>
         <style>{mediaStyles}</style>
-        <div id={styles.headerDecoration}>
-          <MainNavigation />
-        </div>
+        <MainNavigation />
 
         <Container className={styles.appContainer}>
           <MainPageTransition>
