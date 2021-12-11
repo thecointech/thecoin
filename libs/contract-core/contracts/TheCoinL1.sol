@@ -7,7 +7,7 @@
 pragma solidity ^0.8.0;
 
 import "./TheCoin.sol";
-import "./IMintableERC20.sol";
+import "./interfaces/IMintableERC20.sol";
 //
 // Polygon compatibility.
 // Allows L1 <=> L2 compatibility

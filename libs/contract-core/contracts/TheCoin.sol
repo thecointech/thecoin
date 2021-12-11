@@ -7,12 +7,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-
+import './core/Pluggable.sol';
 
 // ----------------------------------------------------------------------------
 // ERC20 Token, with the addition of symbol, name and decimals
@@ -22,281 +17,52 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 // and with 6 decimal places 100,000,000 tokens is 1 share,
 // and 1 token has an approximate value of 0.00027c USD
 // ----------------------------------------------------------------------------
-contract TheCoin is ERC20Upgradeable, AccessControlUpgradeable {
+contract TheCoin is Pluggable {
 
-    // An account may be subject to a timeout, during which
-    // period it is forbidden from transferring its value
-    mapping(address => uint) freezeUntil;
+  // ------------------------------------------------------------------------
+  // Constructor
+  // ------------------------------------------------------------------------
+  function initialize(address sender) public initializer
+  {
+    __ERC20_init("TheCoin", "THE");
+    __AccessControl_init();
 
-    // A stored list of timestamps that are used to uniquely
-    // specify transactions running through paidTransaction.
-    // Each tx comes with a timestamp that must be higher than
-    // the last tx timestamp, and (more or less) be in the
-    // same time as the block being mined.  This ensures
-    // tx authentications are unique, and expire
-    // relatively shortly after issue
-    mapping(address => uint) lastTxTimestamp;
+    // We only setup the default role here
+    _setupRole(THECOIN_ROLE, sender);
+    _setupRole(BROKER_ROLE, sender);
+  }
 
-    // The following addresses have different roles
+  function decimals() public view virtual override returns (uint8) {
+    return 6;
+  }
 
-    // The Minter is permitted to mint/melt coins.
-    // All coins minted/melted by the minter are
-    // from/to TheReserves address
-    address role_Minter;
-    // THE Coin reserve address.  This is the address
-    // directly managed by the THE Coin Inc.  Users
-    // interact with this address when purchase/redeem coins
-    address role_TheCoin;
-    // The Police have very limited powers, they may
-    // freeze accounts but nothing else
-    address role_Police;
-
-    // Enforcing a set/accept 2 step process for setting roles
-    // creates a strong guarantee that we can't f* up and set
-    // the roles to an invalid address
-    address new_Minter;
-    address new_TheCoin;
-    address new_Police;
-
-    // ------------------------------------------------------------------------
-    // Events
-    // ------------------------------------------------------------------------
-
-    // We record the exact timestamp a transaction was initiated
-    // to ensure our tracking is precise (for tax etc).
-    // NOTE: timestamp here is in millis (not seconds)
-    event ExactTransfer(address indexed from, address indexed to, uint amount, uint timestamp);
-
-    // ------------------------------------------------------------------------
-    // Constructor
-    // ------------------------------------------------------------------------
-    function initialize(address _sender) public initializer
-    {
-      __ERC20_init("TheCoin", "THE");
-
-        // We initialize all roles to owner.
-        // It is expected that Owner will distribute
-        // these roles to others
-        role_Minter = _sender;
-        role_TheCoin = _sender;
-        role_Police = _sender;
+  // ------------------------------------------------------------------------
+  // Clone function is used to clone existing txs on initialization
+  // It can (and should) be removed after intialization
+  // ------------------------------------------------------------------------
+  function runCloneTransfer(address from, address to, uint amount, uint fee, uint timestamp) public onlyTheCoin {
+    // Simple check to ensure this only occurs on new accounts
+    // This function should be removed once the system is active
+    require(lastTxTimestamp[from] == 0, "Cannot clone transfer on active account");
+    _transfer(from, to, amount);
+    if (fee > 0) {
+      _transfer(from, msg.sender, fee);
     }
+    emit ExactTransfer(from, to, amount, timestamp);
+  }
 
-  // Clone function is used on initialization to define
-    function runCloneTransfer(address from, address to, uint amount, uint fee, uint timestamp) public {
-        _transfer(from, to, amount);
-        if (fee > 0) {
-          _transfer(from, msg.sender, fee);
-        }
-        emit ExactTransfer(from, to, amount, timestamp);
-    }
+  // ------------------------------------------------------------------------
+  // Don't accept ETH
+  // ------------------------------------------------------------------------
+  fallback () external {
+      revert("This contract does not run on Ether");
+  }
 
-    function decimals() public view virtual override returns (uint8) {
-      return 6;
-    }
-
-    function getRoles() public view returns(address,address,address)
-    {
-        return (role_Minter, role_TheCoin, role_Police);
-    }
-
-    // ------------------------------------------------------------------------
-    // Total supply management
-    // ------------------------------------------------------------------------
-
-    // The owner will periodically add new coins to match
-    // shares purchased of SPY
-    function mintCoins(uint amount, uint timestamp) public
-        onlyMinter
-    {
-        _mint(role_TheCoin, amount);
-        emit ExactTransfer(address(0), role_TheCoin, amount, timestamp);
-    }
-
-    // Remove coins
-    function burnCoins(uint amount, uint timestamp) public
-    {
-        _burn(role_TheCoin, amount);
-        emit ExactTransfer(msg.sender, address(0), amount, timestamp);
-    }
-
-    // Coins currently owned by clients (not TheCoin)
-    function coinsCirculating() public view returns(uint)
-    {
-        return totalSupply() - balanceOf(role_TheCoin);
-    }
-
-    // Coins available for sale to the public
-    function reservedCoins() public view returns (uint balance)
-    {
-        return balanceOf(role_TheCoin);
-    }
-
-    // ------------------------------------------------------------------------
-    // Additional paid-transfer functions allows a client to sign a request
-    // and for the request to be paid by someone else (likely us)
-    // Apparently this is now a thing (gass-less transactions), but our
-    // implementation appears significantly more efficient.
-    // ------------------------------------------------------------------------
-
-    function certifiedTransfer(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
-    public
-    timestampIncreases(from, timestamp)
-    isTransferable(from, value + fee)
-    {
-        address signer = recoverSigner(from, to, value, fee, timestamp, signature);
-        require(signer == from, "Invalid signature for address");
-        _transfer(from, to, value);
-        _transfer(from, msg.sender, fee);
-
-        emit ExactTransfer(from, to, value, timestamp);
-        lastTxTimestamp[from] = timestamp;
-    }
-
-	function buildMessage(address from, address to, uint256 value, uint256 fee, uint256 timestamp)
-	public pure returns (bytes32)
-	{
-		bytes memory packed = abi.encodePacked(from, to, value, fee, timestamp);
-		return keccak256(packed);
-	}
-
-	function recoverSigner(address from, address to, uint256 value, uint256 fee, uint256 timestamp, bytes memory signature)
-	public pure returns (address)
-	{
-		// This recreates the message that was signed on the client.
-    bytes32 message = buildMessage(from, to, value, fee, timestamp);
-		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
-		return ECDSAUpgradeable.recover(signedMessage, signature);
-	}
-
-    // ------------------------------------------------------------------------
-    // Client interactions with TheCoin
-    // ------------------------------------------------------------------------
-
-  // Allow specifying exact timestamp.  This is to allow specifying the timestamp for purchase/sale
-  function exactTransfer(address to, uint amount, uint256 timestamp) public onlyTheCoin {
-      _transfer(_msgSender(), to, amount);
-      emit ExactTransfer(_msgSender(), to, amount, timestamp);
-    }
-
-    // ------------------------------------------------------------------------
-    // Sets a timeout, until which time the user will not
-    // account may not be transacted against.
-    // ------------------------------------------------------------------------
-    function setAccountFreezeTime(address account, uint time) public
-    onlyPolice
-    {
-        freezeUntil[account] = time;
-    }
-
-    // ------------------------------------------------------------------------
-    // Returns the timestamp of when this account will
-    // be unfrozen (able to be transacted against)
-    // ------------------------------------------------------------------------
-    function accountUnfreezeTime(address account) public
-    view
-    returns(uint)
-    {
-        return freezeUntil[account];
-    }
-
-    // ------------------------------------------------------------------------
-    // Don't accept ETH
-    // ------------------------------------------------------------------------
-    fallback () external {
-        revert("This contract does not run on Ether");
-    }
-
-    // ------------------------------------------------------------------------
-    // Allow updating our key users
-    // ------------------------------------------------------------------------
-
-    function setMinter(address newMinter) public
-    onlyMinter
-    {
-        new_Minter = newMinter;
-    }
-    function acceptMinter() public
-    {
-        require(msg.sender == new_Minter, "Permission Denied");
-        role_Minter = new_Minter;
-        new_Minter = address(0);
-    }
-
-    function setTheCoin(address newCoinManager) public
-    onlyTheCoin
-    {
-        new_TheCoin = newCoinManager;
-    }
-    function acceptTheCoin() public
-    {
-        require(msg.sender == new_TheCoin, "Permission Denied");
-        role_TheCoin = new_TheCoin;
-        new_TheCoin = address(0);
-    }
-
-    function setPolice(address newPolice) public
-    onlyPolice
-    {
-        new_Police = newPolice;
-    }
-    function acceptPolice() public
-    {
-        require(msg.sender == new_Police, "Permission Denied");
-        role_Police = new_Police;
-        new_Police = address(0);
-    }
-
-    // ------------------------------------------------------------------------
-    // Owner can transfer out any ERC20 tokens accidentally assigned to this contracts address
-    // ------------------------------------------------------------------------
-    function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyTheCoin returns (bool success) {
-        IERC20Upgradeable tokenContract = IERC20Upgradeable(tokenAddress);
-        return tokenContract.transfer(role_TheCoin, tokens);
-    }
-
-    // ------------------------------------------------------------------------
-    // Override hooks to ensure isTransferable is called for every transfer
-    // ------------------------------------------------------------------------
-    function _beforeTokenTransfer(address from, address to, uint256 amount) isTransferable(from, amount)
-        internal virtual override
-    {
-      super._beforeTokenTransfer(from, to, amount);
-    }
-
-    ///////////////////////////////
-    // modifier balanceAvailable(uint amount) {
-    //     require(_balances[msg.sender] >= amount, "Caller has insufficient balance");
-    //     _;
-    // }
-
-    modifier isTransferable(address from, uint amount) {
-        //require(_balances[from] >= amount, "Caller has insufficient balance");
-        require(freezeUntil[from] < block.timestamp, "Caller's account is currently frozen");
-        _;
-    }
-
-    modifier onlyMinter()
-    {
-        require(msg.sender == role_Minter, "Invalid sender");
-        _;
-    }
-
-    modifier onlyTheCoin()
-    {
-        require(msg.sender == role_TheCoin, "Invalid sender");
-        _;
-    }
-
-    modifier onlyPolice()
-    {
-        require(msg.sender == role_Police, "Invalid sender");
-        _;
-    }
-
-    modifier timestampIncreases(address from, uint256 timestamp)
-    {
-        require(timestamp > lastTxTimestamp[from], "Provided timestamp is lower than recorded timestamp");
-        _;
-    }
+  // ------------------------------------------------------------------------
+  // Owner can transfer out any ERC20 tokens accidentally assigned to this contracts address
+  // ------------------------------------------------------------------------
+  function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyTheCoin returns (bool success) {
+      IERC20Upgradeable tokenContract = IERC20Upgradeable(tokenAddress);
+      return tokenContract.transfer(msg.sender, tokens);
+  }
 }
