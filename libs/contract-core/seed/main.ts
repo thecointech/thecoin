@@ -28,6 +28,6 @@ import {assignRoles} from './assignRoles';
       break;
     }
     default:
-      console.log("No initialization method chosen, exiting")
+      log.error("No initialization method chosen, exiting")
   }
 })();

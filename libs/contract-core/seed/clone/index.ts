@@ -8,16 +8,25 @@ import { connect } from '@thecointech/contract-base/connect';
 import { changeInit, toIgnore, toChange, isRefund, tweakBalance } from './changes';
 import Decimal from 'decimal.js-light';
 import chalk from "chalk";
+import { NormalizeAddress } from "@thecointech/utilities";
+import { nextOpenTimestamp } from '@thecointech/market-status';
 
 import blockchain from './blockchain.json';
 const bcHistory = blockchain.history.filter(h => !isRefund(h.hash))
 import { DateTime } from 'luxon';
 import { toCoin } from './pricing';
 import { fetchRate } from '@thecointech/fx-rates';
+import { loadAndMergeHistory, Transaction } from '@thecointech/tx-blockchain';
+import { THECOIN_ROLE } from '../../src/constants';
+import { deployProvider } from '@thecointech/ethers-provider';
+
+const nullAddress = "0x0000000000000000000000000000000000000000";
+const thirtyGwei = 30 * Math.pow(10, 9);
 
 // Read cached src data and load into whatever chain is currently running
 export class Processor {
   data: AllActions = null!;
+  xaAddress: string = "";
   brokerAddress: string = "";
   theCoinAddress: string = "";
   tcCore: TheCoin = null!;
@@ -27,13 +36,12 @@ export class Processor {
   allAddresses: string[] = [];
 
   spaces = 0;
+  history: Transaction[] = [];
 
 
   async init(contract: TheCoin) {
     this.data = loadCurrent()!;
     if (!this.data) return false;
-
-    log.level(100); // disable logging
 
     log.debug(`Cloning stored data onto chain: ${process.env.CONFIG_NAME}`);
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
@@ -45,12 +53,14 @@ export class Processor {
     const xferAssit = await getSigner("BrokerTransferAssistant");
     const minter = await getSigner("Minter");
 
-    this.brokerAddress = await brokerCad.getAddress();
-    this.theCoinAddress = await theCoin.getAddress();
+    const infura = deployProvider("POLYGON");
+    this.xaAddress = NormalizeAddress(await xferAssit.getAddress());
+    this.brokerAddress = NormalizeAddress(await brokerCad.getAddress());
+    this.theCoinAddress = NormalizeAddress(await theCoin.getAddress());
     this.tcCore = connect(theCoin, contract);
-    this.xaCore = connect(xferAssit, contract);
-    this.mtCore= connect(minter, contract);
-    this.bcCore = connect(brokerCad, contract);
+    this.xaCore = connect(xferAssit, contract.connect(infura));
+    this.mtCore = connect(minter, contract.connect(infura));
+    this.bcCore = connect(brokerCad, contract.connect(infura));
     this.allAddresses = new Array(
       ...new Set([
         ...Object.keys(this.data.Buy),
@@ -58,71 +68,159 @@ export class Processor {
         ...Object.keys(this.data.Bill),
       ])
     );
+
+    const history: Transaction[] = await loadAndMergeHistory(null as any, 22291140, contract);
+    this.history = history.map(h => ({
+      ...h,
+      from: NormalizeAddress(h.from),
+      to: NormalizeAddress(h.to),
+      counterPartyAddress: NormalizeAddress(h.counterPartyAddress),
+    }));
     return true;
   }
 
   async process() {
 
-    const brokerBalance = await this.bcCore.balanceOf(this.brokerAddress);
-    // Do not re-mint if minting is done.
-    if (brokerBalance.eq(0)) {
-      await this.processMinting();
+    // We use xa to do all clone transfers, so temporarily grant super-privilges
+    if (!await this.tcCore.hasRole(THECOIN_ROLE, this.xaAddress)) {
+      const granting = await this.tcCore.grantRole(THECOIN_ROLE, this.xaAddress);
+      log.trace(`Granting super-privilges: ${granting.hash}`);
+      granting.wait(1);
     }
 
-    for (const address of this.allAddresses) {
+    await this.processMinting();
+
+    for (let i = 0; i <  this.allAddresses.length; i++) {
+      const address = this.allAddresses[i];
+      log.info(`[${i}:${this.allAddresses.length}] ${address}`);
       await this.processAddress(address)
     }
+    const revoking = await this.tcCore.revokeRole(THECOIN_ROLE, this.xaAddress);
+    log.trace(`Revoking super-privilges: ${revoking.hash}`);
+    revoking.wait(1);
     log.debug('All Done');
+  }
+
+  legalDuplicates = [
+    "0x7A8B466C4ABE76ED32F8D934607B0DEDD24D2EA6",
+    "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4",
+  ]
+  duplicator: Record<string, number> = {};
+  hasAlreadyHappened(from: string, to: string, value: number, date: DateTime) {
+    from = NormalizeAddress(from);
+    to = NormalizeAddress(to);
+    const allSimilar = this.history.filter(e =>
+      e.date.equals(date) &&
+      e.value.eq(value) &&
+      e.from == from &&
+      e.to == to);
+    if (allSimilar.length > 1) {
+      if (!this.legalDuplicates.includes(from) && !this.legalDuplicates.includes(to)) {
+        debugger;
+        throw new Error("Bad Ass Here");
+      }
+      const key = `${from}${to}${value}${date.toMillis()}`;
+      const cnt = this.duplicator[key] ?? 0;
+
+      let d = allSimilar[cnt];
+      this.duplicator[key] = cnt + 1;
+      return d;
+    }
+    return allSimilar[0];
+  }
+
+  async getGasPrice() {
+    const srcGasPrice = await this.xaCore.provider.getGasPrice();
+    return { gasPrice: Math.max(thirtyGwei, srcGasPrice.toNumber()) };
+  }
+
+  async runCloneTransfer(from: string, to: string, value: number, fee: number, timestamp: DateTime) {
+    const hasHappened = this.hasAlreadyHappened(from, to, value, timestamp);
+    if (hasHappened?.txHash)
+      return hasHappened.txHash;
+
+    const gasPrice = await this.getGasPrice();
+    const waiter = await this.xaCore.runCloneTransfer(from, to, value, fee, timestamp.toMillis(), gasPrice);
+    log.info(`runCloneTransfer: ${waiter.hash}`);
+    await waiter.wait(1);
+    log.trace('done');
+    return waiter.hash;
+  }
+
+  async mintCoins(value: Decimal, to: string, date: DateTime) {
+    const hasHappened = this.hasAlreadyHappened(nullAddress, to, value.toNumber(), date);
+    if (hasHappened?.txHash)
+      return hasHappened.txHash;
+
+    const gasPrice = await this.getGasPrice();
+    const waiter = await this.mtCore.mintCoins(value.toNumber(), to, date.toMillis(), gasPrice);
+    log.info(`mintCoins: ${waiter.hash}`);
+    await waiter.wait(1);
+    log.trace('done');
+    return waiter.hash;
+  }
+
+  async burnCoins(value: Decimal, date: DateTime) {
+    const hasHappened = this.hasAlreadyHappened(this.theCoinAddress, nullAddress, value.toNumber(), date);
+    if (hasHappened?.txHash)
+      return hasHappened.txHash;
+
+    const gasPrice = await this.getGasPrice();
+    const waiter = await this.tcCore.burnCoins(value.toNumber(), date.toMillis(), gasPrice);
+    log.info(`burnCoins: ${waiter.hash}`);
+    await waiter.wait(1);
+    log.trace('done');
+    return waiter.hash;
   }
 
   async processMinting() {
     const minting = loadMinting();
-    if (!minting) return; // TODO: default?
-    console.log(chalk.yellow(`Minting ${minting.length} items`))
 
-    for (const {originator, date, fiat, currency} of minting) {
-      console.log(chalk.yellowBright(`Minting ${fiat.toString()} at ${date.toSQLDate()}`))
+    if (!minting) return; // TODO: default?
+    log.info(`Minting ${minting.length} items`)
+    for (const { originator, date, fiat, currency } of minting) {
+      log.trace(`Minting ${fiat.toString()} at ${date.toSQLDate()}`);
 
       const to = toChange(originator);
       // First; convert from fiat to token
-      const d = date.toJSDate();
-      const rate = await fetchRate(d);
+      const nextOpen = await nextOpenTimestamp(date);
+      const rate = await fetchRate(new Date(nextOpen));
       if (!rate) throw new Error("Kerplewey");
       const coin = await toCoin(rate, fiat, currency);
 
       // We adjust our date to be aligned with the rate fetched.
       // This is to be compatible with dates calculated in 2018
-      const mintDate =  (date.toMillis() < rate.validFrom)
-        ? DateTime.fromMillis(rate.validFrom)
-        : date;
+      if (rate.validFrom > nextOpen || rate.validTill < nextOpen) {
+        log.error("WRRRRTTTTFFFFFF?????");
+        debugger;
+        throw new Error("give up and go home");
+      }
+      const mintDate = DateTime.fromMillis(nextOpen);
+      // let mintDate = date;
+      // if (date.toMillis() < rate.validFrom) {
+      //   mintDate = DateTime.fromMillis(rate.validFrom)
+      //   log.warn(`Adjusting mint date from ${date.toString()} to ${mintDate.toString()}`);
+      // }
 
       if (coin.gt(0)) {
-        // Create new $$$
-        let waiter = await this.mtCore.mintCoins(coin.toNumber(), this.theCoinAddress, mintDate.toMillis());
-        await waiter.wait(1);
-
+        await this.mintCoins(coin, this.theCoinAddress, mintDate);
         // If not intended for Core, forward this onto final recipient
-        if (to !== this.theCoinAddress) {
-          waiter = await this.tcCore.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, mintDate.toMillis());
-          await waiter.wait(1);
-        }
+        await this.runCloneTransfer(this.theCoinAddress, to, coin.toNumber(), 0, mintDate);
+
       } else {
-        const abs = coin.abs().toNumber();
+        const abs = coin.abs();
         // Transfer back to broker for burning
-        const waiter = await this.tcCore.runCloneTransfer(to, this.theCoinAddress, abs, 0, mintDate.toMillis());
-        await waiter.wait(1);
+        await this.runCloneTransfer(to, this.theCoinAddress, abs.toNumber(), 0, mintDate);
         // Burn coins
-        const w = await this.tcCore.burnCoins(abs, mintDate.toMillis());
-        await w.wait(1);
+        await this.burnCoins(abs, mintDate);
       }
     }
-    console.log(chalk.yellow(`Minting done`))
+    log.info(`Minting done`)
   }
 
   async processAddress(address: string) {
     if (toIgnore(address)) return;
 
-    console.group();
     const userActions = [
       ...this.data.Buy[address],
       ...this.data.Sell[address],
@@ -132,7 +230,7 @@ export class Processor {
     const transfers = getTransfers(address, userActions);
     userActions.push(...transfers as any[]);
     userActions.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
-    console.log(chalk.green(`Converting ${userActions.length} actions for ${address}`));
+    log.trace(`Converting ${userActions.length} actions for ${address}`);
 
     let didProcess = false;
     for (const action of userActions) {
@@ -149,12 +247,19 @@ export class Processor {
     const bcBalance = blockchain.balances[address as keyof typeof blockchain.balances];
     const oldBalance = tweakBalance(address, bcBalance);
 
-    console.log(chalk.green(`Completed ${newBalance.toString()} of ${oldBalance} for ${address}`))
+    log.info(`Completed ${newBalance.toString()} of ${oldBalance} for ${address}`);
     if (process.env.CONFIG_NAME !== "development") {
       if (!newBalance.eq(oldBalance)) debugger;
     }
+  }
 
-    console.groupEnd();
+  async deleteHistory(action: AnyAction) {
+    const history = await action.doc.collection("History").listDocuments?.();
+    if (history) {
+      for (const transition of history) {
+        await transition.delete();
+      }
+    }
   }
 
   async cloneBuy(original: BuyAction) {
@@ -163,7 +268,7 @@ export class Processor {
     if (original.data.initialId == "other:1064:1585947651462") return false;
 
     const clone = await getActionFromInitial(original.address, "Buy", original.data);
-    if (clone.history.length > 0) return false;
+    await this.deleteHistory(clone);
 
     // Some transfers
     const from = (original.data.initial.type == "other" && original.address != "0x8B40D01D2BCFFEF5CF3441A8197CD33E9ED6E836")
@@ -171,13 +276,13 @@ export class Processor {
       : this.brokerAddress;
 
     const settled = findSettledDate(original);
-    const state = await this.doTransfer(original, from, original.address, 0, settled.toMillis());
+    const state = await this.doTransfer(original, from, original.address, 0, settled);
 
-    for (const delta of original.history) {
+    for (let i = 0; i < original.history.length; i++) {
+      const delta = original.history[i];
       if (delta.type == "depositFiat" && delta.fiat && !delta.date) {
         delta.date = delta.created;
       }
-      // push delta
 
       await storeTransition(clone.doc, delta);
     }
@@ -187,12 +292,13 @@ export class Processor {
 
   async cloneSell(original: TypedAction<"Bill" | "Sell">) {
     const clone = await getActionFromInitial(original.address, "Sell", original.data);
-    if (clone.history.length > 0) return false;
+    await this.deleteHistory(clone);
 
     const { from, to, fee, timestamp } = original.data.initial.transfer;
-    const state = await this.doTransfer(original, from, to, fee, timestamp);
+    const state = await this.doTransfer(original, from, to, fee, DateTime.fromMillis(timestamp));
 
-    for (const delta of original.history) {
+    for (let i = 0; i < original.history.length; i++) {
+      const delta = original.history[i];
       if (delta.fiat && (delta.type == "sendETransfer" || delta.type == "payBill")) {
         delta.date = delta.created;
       }
@@ -212,7 +318,13 @@ export class Processor {
     const { from, to, value } = first;
     const redirFrom = toChange(from);
 
-    console.log(chalk.blue(`${date.toSQLDate()} - Doing Transfer: ${value}`));
+    // Has this already happened?
+    log.trace(`${date.toSQLDate()} - Doing Transfer: ${value}`);
+
+    // Because we process both 2 and from, this can loop
+    const hasHappened = this.hasAlreadyHappened(redirFrom, to, value, date);
+    if (hasHappened?.txHash)
+      return;
 
     // if from has no money, it hasn't processed yet, so run it instead
     const fromBalance = await this.xaCore.balanceOf(redirFrom);
@@ -225,21 +337,19 @@ export class Processor {
       }
     }
     else {
-      const tx = await this.tcCore.runCloneTransfer(
+      await this.runCloneTransfer(
         redirFrom,
         toChange(to),
         value,
         fee,
-        date.toMillis(),
+        date,
       );
-      await tx.wait(1);
       // We assume we'll complete successfully
       removeProcessedItem(initial);
     }
   }
 
-
-  async doTransfer(action: AnyAction, from: string, to: string, fee: number, timestamp: number) {
+  async doTransfer(action: AnyAction, from: string, to: string, fee: number, date: DateTime) {
     const transfers = action.history.filter(tx => tx.hash);
     if (transfers.length > 1) {
       debugger;
@@ -282,22 +392,20 @@ export class Processor {
         }
 
 
-        if (balance.lt(amount.toNumber())) {
-          log.warn(`Address ${from} with balance ${balance.toNumber()} is xfer: ${amount.toNumber()}`)
-          debugger;
-        }
+        // if (balance.lt(amount.toNumber())) {
+        //   log.warn(`Address ${from} with balance ${balance.toNumber()} is xfer: ${amount.toNumber()}`)
+        //   debugger;
+        // }
 
-        console.log(chalk.blue(`${action.data.date.toString()} - Doing ${action.type}: ${amount.toString()}`));
+        log.trace(`${action.data.date.toString()} - Doing ${action.type}: ${amount.toString()}`);
 
-        const tx = await this.tcCore.runCloneTransfer(
+        delta.hash = await this.runCloneTransfer(
           toChange(from),
           toChange(to),
           amount.toNumber(),
           fee,
-          timestamp
+          date
         );
-        await tx.wait(1);
-        delta.hash = tx.hash;
         removeProcessedItem(oldTx);
       }
       state = {

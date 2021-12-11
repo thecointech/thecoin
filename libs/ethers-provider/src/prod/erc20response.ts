@@ -51,4 +51,4 @@ const erc20formatter = {
   gasPrice: f_bigNumber,
   gasUsed: f_bigNumber,
 }
-export const convert = (tx: any) => Formatter.check(erc20formatter, tx)
+export const convert = (tx: any) => Formatter.check(erc20formatter, tx) as ERC20Response
