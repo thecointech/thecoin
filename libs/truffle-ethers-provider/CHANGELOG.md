@@ -5,7 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.55](https://github.com/thecointech/thecoin/compare/v0.2.54...v0.2.55) (2021-12-11)
 
-**Note:** Version bump only for package @thecointech/ethers-provider
+**Note:** Version bump only for package @thecointech/truffle-ethers-provider
 
 
 
@@ -13,12 +13,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.54](https://github.com/thecointech/thecoin/compare/v0.2.53...v0.2.54) (2021-12-11)
 
-**Note:** Version bump only for package @thecointech/ethers-provider
-
-
-
-
-
-## [0.2.52](https://github.com/thecointech/thecoin/compare/v0.2.51...v0.2.52) (2021-11-18)
-
-**Note:** Version bump only for package @thecointech/ethers-provider
+**Note:** Version bump only for package @thecointech/truffle-ethers-provider

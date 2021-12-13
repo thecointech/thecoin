@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.53",
+  "version": "0.2.55",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -40,7 +40,6 @@
     "_deploy:ethereum": "truffle migrate --network ethereum",
     "seed": "yarn run-script ./seed/main.ts",
     "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",
-
     "verify": "yarn run-script ./internal/verify.ts",
     "run-script": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register "
   },
@@ -59,11 +58,11 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
-    "@thecointech/contract-tools": "*",
+    "@thecointech/contract-tools": "^0.2.55",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.52"
+    "@thecointech/contract-base": "^0.2.55"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }
