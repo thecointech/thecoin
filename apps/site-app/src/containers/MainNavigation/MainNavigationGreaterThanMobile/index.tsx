@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Container } from 'semantic-ui-react';
-import { AccountSwitcher } from '../../../containers/AccountSwitcher';
+import { AccountSwitcher } from '@thecointech/site-base/components/AccountSwitcher';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';

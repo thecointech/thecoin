@@ -6,34 +6,30 @@ import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
 import { AccountState } from '@thecointech/account';
+import { defineMessage } from '@formatjs/intl';
 
 
-const titleMsg = { id: 'app.accountSwitcher.login', defaultMessage: 'LOG IN' };
-const myAccounts = {
-  id: "app.accountSwitcher.myAccounts",
+const titleMsg = defineMessage({ defaultMessage: 'LOG IN' });
+const myAccounts = defineMessage({
   defaultMessage: "My Accounts",
   description: "Title for the My Accounts title in the menu"
-};
-const addAccount = {
-  id: "app.accountSwitcher.addAccount",
+});
+const addAccount = defineMessage({
   defaultMessage: "Add an Account",
   description: "Title for the Add an Account in the menu"
-};
-const see = {
-  id: "app.accountSwitcher.see",
+});
+const see = defineMessage({
   defaultMessage: "See",
   description: "Title for the See in the menu"
-};
-const settings = {
-  id: "app.accountSwitcher.settings",
+});
+const settings = defineMessage({
   defaultMessage: "Settings",
   description: "Title for the Settings in the menu"
-};
-const signout = {
-  id: "app.accountSwitcher.signout",
+});
+const signout = defineMessage({
   defaultMessage: "Sign Out",
   description: "Title for the Sign Out in the menu"
-};
+});
 
 
 export const AccountSwitcher = () => {
@@ -49,7 +45,7 @@ export const AccountSwitcher = () => {
     : <span>{intl.formatMessage(titleMsg)}</span>
 
   return (
-    <Dropdown trigger={trigger}  >
+    <Dropdown trigger={trigger} className={styles.dropdown} >
       <Dropdown.Menu>
         <Dropdown.Header>
           <FormattedMessage {...myAccounts} />

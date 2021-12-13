@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import styles from './styles.module.less';
-import { AccountSwitcher } from '../../../containers/AccountSwitcher';
+import { AccountSwitcher } from '@thecointech/site-base/components/AccountSwitcher';
 import { LanguageSwitcher} from '@thecointech/site-base/containers/LanguageSwitcher';
 import { defineMessages, FormattedMessage } from "react-intl";
 import Logo from './images/logo.svg';
