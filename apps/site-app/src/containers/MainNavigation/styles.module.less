@@ -38,17 +38,28 @@
     }
   }
 
-  .burgerMenu {
-    font-size    : 16px;
+  .burgerIcon {
+    font-size    : 20px;
     padding-right: 16px;
+  }
+}
 
-    i {
-      font-size: 20px;
-    }
+#mobileMenu {
+  a {
+    color: @theCoinPrimaryGreenDark;
+  }
 
-    :global(.menu) {
-      padding-left : 10px;
-      padding-right: 6px;
-    }
+  .mobileIcon {
+    position: relative;
+    top: -6px;
+  }
+
+  :global(.active) {
+    background-color: fade(@theCoinPalettePaleGreen2, 10%);
+    font-weight: bold;
+  }
+
+  :hover {
+    background-color: fade(@theCoinPalettePaleGreen2, 30%);
   }
 }
