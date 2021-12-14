@@ -37,7 +37,7 @@ export const MainNavigation = () => (
         <Menu.Item>
           <LanguageSwitcher />
         </Menu.Item>
-        <Menu.Item className='onlySmallScreen'>
+        <Menu.Item className={`onlySmallScreen ${styles.burgerMenu}`}>
           <Dropdown icon='content' direction="left" className='icon'>
             <Dropdown.Menu>
               {Object.entries(menuItems).map(([key, msg]) =>

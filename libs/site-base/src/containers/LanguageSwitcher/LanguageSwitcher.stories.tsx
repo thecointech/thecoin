@@ -4,7 +4,7 @@ import { LanguageSwitcher as LanguageComponent } from '.';
 import { withStore, withLanguageProvider } from '@thecointech/storybookutils';
 
 export default {
-  title: 'App/Language',
+  title: 'Base/Language',
   component: LanguageComponent,
   decorators: [
     withLanguageProvider,
