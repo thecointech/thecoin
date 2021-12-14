@@ -12,3 +12,7 @@
 /* Active Hovered Item */
 @activeHoverItemBackground: @activeItemBackground;
 @activeHoverItemColor: @activeItemTextColor;
+
+// Override the default size of menu text
+//
+@medium: 12px;

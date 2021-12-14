@@ -1,5 +1,17 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
+/** linear interpolate value from small to big as screen goes from small-size to big-size */
+.scalable-unit(@property, @small, @big, @unit) {
+  @{property}: clamp(unit(@small, @unit),
+      calc(unit(@small, @unit) + (@big - @small) * ((100vw - @tabletBreakpoint) / (@desktopWidth - @tabletWidth))),
+      unit(@big, @unit),
+    );
+}
+
+.scalable(@property, @small, @big) {
+  .scalable-unit(@property, @small, @big, px)
+}
+
 .background {
   background-color: white;
   grid-row-start: header;
@@ -12,22 +24,19 @@
 
 #mainMenu {
   grid-area: header;
-}
 
-#logoLink{
-  border-bottom: none;
-  #logo{
-      width: 150px;
-      padding-left: 10px;
-      margin-right: 10px;
-      opacity: 0.8;
-      transition: opacity .25s ease-in-out;
-      -moz-transition: opacity .25s ease-in-out;
-      -webkit-transition: opacity .25s ease-in-out;
 
-      &:hover{
-          opacity: 1;
-      }
+  .logoLink{
+    cursor: pointer;
+    height: 30px;
+    .logo{
+        transition        : opacity @pageTransitionDuration @defaultEasing;
+        -moz-transition   : opacity @pageTransitionDuration @defaultEasing;
+        -webkit-transition: opacity @pageTransitionDuration @defaultEasing;
+
+        &:hover {
+          opacity: 0.7;
+        }
+    }
   }
 }
-
