@@ -291,7 +291,7 @@ export class Processor {
   }
 
   async cloneSell(original: TypedAction<"Bill" | "Sell">) {
-    const clone = await getActionFromInitial(original.address, "Sell", original.data);
+    const clone = await getActionFromInitial(original.address, original.type, original.data);
     await this.deleteHistory(clone);
 
     const { from, to, fee, timestamp } = original.data.initial.transfer;
