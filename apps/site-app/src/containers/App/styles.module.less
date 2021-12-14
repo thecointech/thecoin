@@ -1,17 +1,41 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#mainContent{
-  padding: 10px;
-  padding-left: 66px;
-  margin: auto;
-  width: 62%;
-  padding-top: 70px;
-}
+#app {
+  display: grid;
+  grid-template-columns: [full-start] auto [page-start] 173px [content-start] minmax(auto, 837px) [content-end] 173px [page-end] auto [full-end];
+  grid-template-rows: [header-start] 60px [header-end content-start] 1fr [content-end footer-start] 32px [footer-end];
+  .smallScreen({
+    grid-template-rows: [header-start] 80px [header-end content-start] 1fr [content-end footer-start] 32px [footer-end];
+  });
 
-.contentContainer{
-  max-width: 1300px;
-  margin: auto;
+  grid-template-areas:
+    "lgap header header header rgap"
+    "lgap left   main   right  rgap"
+    "lgap footer footer footer rgap";
+
+  .contentContainer {
+    grid-area: main;
+  }
+
+  .mainContent{
+    // Explicitly define a min-height to prevent our content
+    // resizer from collapsing down if our content is too small
+    min-height: 300px;
+    margin: 28px;
+  }
 }
+// #mainContent{
+//   padding: 10px;
+//   padding-left: 66px;
+//   margin: auto;
+//   width: 62%;
+//   padding-top: 70px;
+// }
+
+// .contentContainer{
+//   max-width: 1300px;
+//   margin: auto;
+// }
 
 .pageMainInner {
   min-height: 450px;
@@ -23,7 +47,7 @@
   width: 100%;
   background-color: @white;
   box-shadow: @subtleShadow;
-  
+
   position: fixed;
   z-index: 200;
 }

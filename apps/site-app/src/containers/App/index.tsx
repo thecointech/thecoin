@@ -37,30 +37,31 @@ export const App = () => {
   return (
     <MediaContextProvider>
       <style>{mediaStyles}</style>
-      <div id={styles.headerDecoration}>
+
+      <div id={styles.app}>
         <MainNavigation />
-      </div>
 
-      <div className={`${styles.contentContainer}`}>
-        <Container style={{ width: '100%' }} className={``}>
-          <MainPageTransition>
-            <GreaterThanMobileSegment>
-              <Rail internal position='left'>
-                <Sticky context={contextRef}>
-                  <PageSidebar />
-                </Sticky>
-              </Rail>
-            </GreaterThanMobileSegment>
+        <div className={`${styles.contentContainer}`}>
+          <Container style={{ width: '100%' }} className={``}>
+            <MainPageTransition>
+              <GreaterThanMobileSegment>
+                <Rail internal position='left'>
+                  <Sticky context={contextRef}>
+                    <PageSidebar />
+                  </Sticky>
+                </Rail>
+              </GreaterThanMobileSegment>
 
-            <Ref innerRef={contextRef}>
-              <section id={styles.mainContent} className={styles.pageMainInner}>
-                <Routes />
-              </section>
-            </Ref>
-          </MainPageTransition>
-        </Container>
+              <Ref innerRef={contextRef}>
+                <section id={styles.mainContent} className={styles.pageMainInner}>
+                  <Routes />
+                </section>
+              </Ref>
+            </MainPageTransition>
+          </Container>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </MediaContextProvider>
   );
 }

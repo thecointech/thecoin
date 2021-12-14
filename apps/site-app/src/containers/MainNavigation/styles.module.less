@@ -1,9 +1,54 @@
-.mainMenu{
-    width: auto;
-    display: inline-block;
-    height: 40px;
-    margin-bottom: 50px;
-    .ui.secondary.pointing.menu{
-        border-bottom: none;   
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.background {
+  background-color : white;
+  grid-row-start   : header;
+  grid-row-end     : header;
+  grid-column-start: lgap;
+  grid-column-end  : rgap;
+  filter           : drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.mainMenu {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+
+  .logoLink {
+    cursor: pointer;
+    height: 30px;
+
+    .logo {
+      height            : 100%;
+      width: 174px;
+      background-repeat  : no-repeat;
+      transition        : opacity @pageTransitionDuration @defaultEasing;
+      -moz-transition   : opacity @pageTransitionDuration @defaultEasing;
+      -webkit-transition: opacity @pageTransitionDuration @defaultEasing;
+      background-image: url(./logoAndName.svg);
+
+      .smallScreen({
+        background-image: url(./logo.svg);
+        width: 30px;
+      });
+
+      &:hover {
+        opacity: 0.7;
+      }
     }
+  }
+
+  .burgerMenu {
+    font-size    : 16px;
+    padding-right: 16px;
+
+    i {
+      font-size: 20px;
+    }
+
+    :global(.menu) {
+      padding-left : 10px;
+      padding-right: 6px;
+    }
+  }
 }

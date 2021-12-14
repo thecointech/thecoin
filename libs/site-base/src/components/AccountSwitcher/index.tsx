@@ -28,7 +28,7 @@ export const AccountSwitcher = () => {
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const intl = useIntl();
   const trigger = activeAccount
-    ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name.substring(0, 16)}</span></>
+    ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
     : intl.formatMessage(titleMsg)
   const onClick = (_: unknown, data: DropdownItemProps) => accountsApi.setActiveAccount(data.address)
   return (

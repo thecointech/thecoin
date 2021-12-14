@@ -1,17 +1,5 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-/** linear interpolate value from small to big as screen goes from small-size to big-size */
-.scalable-unit(@property, @small, @big, @unit) {
-  @{property}: clamp(unit(@small, @unit),
-      calc(unit(@small, @unit) + (@big - @small) * ((100vw - @tabletBreakpoint) / (@desktopWidth - @tabletWidth))),
-      unit(@big, @unit),
-    );
-}
-
-.scalable(@property, @small, @big) {
-  .scalable-unit(@property, @small, @big, px)
-}
-
 .background {
   background-color: white;
   grid-row-start: header;
@@ -24,7 +12,6 @@
 
 #mainMenu {
   grid-area: header;
-
 
   .logoLink{
     cursor: pointer;
