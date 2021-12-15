@@ -7,6 +7,7 @@
     padding: 10px;
     color: @white;
     border-radius: @absoluteBorderRadius;
+
     h3,h4{
         display: inline;
         margin: 0 !important;
@@ -14,15 +15,12 @@
         color: @white !important;
     }
     .textZone{
-        max-width: 200px;
-        display: inline-block;
 
-        .smallerThanDesktop({
+        .smallScreen({
             width: 50%;
         });
     }
-    .smallerThanDesktop({
-        margin: auto;
+    .smallScreen({
         height:174px;
         width: 100%;
         h5{
@@ -32,68 +30,49 @@
      });
 }
 
-.decoration{
-    height: 174px;
-    width: 171px;
-    bottom: 0;
-    right: 11px;
-    position: relative;
-    top: -53px;
-    .smallerThanDesktop({
-        float: right;
-        bottom: -67px;
-        position: relative;
-        top: -58px;
-        right: -10px;
-     });
+.setBackground(@color, @url) {
+  background         : @color;
+  background-image   : url(@url);
+  background-repeat  : no-repeat;
+  background-position: bottom right;
 }
 
-.water{
-    background-color: @theCoinPaletteBlue1;
-    h5{
-        color: @theCoinPaletteGreen5;
-    }
-    .decoration{
-        background: url("./images/img_water.svg");
-    }
+.water {
+  .setBackground(@theCoinPaletteBlue1, "./images/img_water.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen5;
+  }
 }
 
-.wind{
-    background-color: @theCoinPaletteGold2;
-    h5{
-        color: @theCoinPaletteGreen4;
-    }
-    .decoration{
-        background: url("./images/img_energy.svg");
-    }
+.wind {
+  .setBackground(@theCoinPaletteGold2, "./images/img_energy.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen4;
+  }
 }
 
-.earth{
-    background-color: @theCoinPalettePaleGreen2;
-    h5{
-        color: @theCoinPaletteGreen4;
-    }
-    .decoration{
-        background: url("./images/img_co2.svg");
-    }
+.earth {
+  .setBackground(@theCoinPalettePaleGreen2, "./images/img_co2.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen4;
+  }
 }
 
-.trees{
-    background-color: @theCoinPaletteGreen4;
-    h5{
-        color: @theCoinPalettePaleGreen2;
-    }
-    .decoration{
-        background: url("./images/img_trees.svg");
-    }
+.trees {
+  .setBackground(@theCoinPaletteGreen4, "./images/img_trees.svg");
+
+  h5 {
+    color: @theCoinPalettePaleGreen2;
+  }
 }
 
-.farm{
-    background-color: @theCoinPaletteGold4;
-    h5{
-        color: @theCoinPaletteGreen5;
-    }
-    .decoration{
-        background: url("./images/img_farm.svg");
-    }
+.farm {
+  .setBackground(@theCoinPaletteGold4, "./images/img_farm.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen5;
+  }
 }

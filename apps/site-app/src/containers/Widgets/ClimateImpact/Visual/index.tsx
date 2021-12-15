@@ -6,17 +6,17 @@ import styles from "./styles.module.less";
 export type VisualProps = {
     title: MessageDescriptor,
     quantity: string,
-    item: {   
+    item: {
             key: string,
-            class: string, 
-            unityToTranslate: MessageDescriptor, 
+            class: string,
+            unityToTranslate: MessageDescriptor,
             textToTranslate: MessageDescriptor
         }
 }
 
 export const Visual = (props: VisualProps) => {
   return (
-    <div className={ `${styles.climateImpact} ${props.item.class}` }>  
+    <div className={ `${styles.climateImpact} ${props.item.class}` }>
       <Header as="h5">
         <FormattedMessage {...props.title} />
       </Header>
@@ -30,7 +30,6 @@ export const Visual = (props: VisualProps) => {
         <br  />
         <FormattedMessage {...props.item.textToTranslate} />
       </div>
-      <div className={styles.decoration}></div>
     </div>
   )
 }

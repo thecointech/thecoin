@@ -62,7 +62,7 @@ export const ClimateImpact = () => {
   const quantity = "80";
   const randomItem = options[Math.floor(Math.random()*options.length)];
   return (
-    <AvailableSoon>
+    <AvailableSoon fill={true}>
       <Visual title={translate.title} quantity={quantity} item={randomItem} />
     </AvailableSoon>
   )
