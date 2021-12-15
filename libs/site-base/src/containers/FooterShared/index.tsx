@@ -24,32 +24,29 @@ const translate = defineMessages({
   }
 });
 
-export const FooterShared = () => {
-
-  return (
-    <>
-      <div className={styles.background} />
-      <div className={styles.footerContent}>
-        <div className={styles.registered}>
-          <FormattedMessage tagName="span" {...translate.registered1} />
-          <FormattedMessage tagName="span" {...translate.registered2} />
-        </div>
-        <div className={styles.links}>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-            <img src={facebook} />
-          </a>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-            <img src={twitter} />
-          </a>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-            <img src={instagram} />
-          </a>
-        </div>
-        <div className={styles.copyright}>
-          <FormattedMessage  tagName="span" {...translate.copyright1} />
-          <FormattedMessage  tagName="span" {...translate.copyright2} />
-        </div>
+export const FooterShared = () => (
+  <>
+    <div className={styles.background} />
+    <div className={styles.footerContent}>
+      <div className={styles.registered}>
+        <FormattedMessage tagName="span" {...translate.registered1} />
+        <FormattedMessage tagName="span" {...translate.registered2} />
       </div>
-    </>
-  );
-}
+      <div className={styles.links}>
+        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <img src={facebook} />
+        </a>
+        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <img src={twitter} />
+        </a>
+        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <img src={instagram} />
+        </a>
+      </div>
+      <div className={styles.copyright}>
+        <FormattedMessage tagName="span" {...translate.copyright1} />
+        <FormattedMessage tagName="span" {...translate.copyright2} />
+      </div>
+    </div>
+  </>
+);

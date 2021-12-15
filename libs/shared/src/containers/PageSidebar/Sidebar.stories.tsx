@@ -1,7 +1,7 @@
 import "@thecointech/site-semantic-theme/semantic.less"
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { PageSidebar, Props } from '.';
+import { PageSidebar } from '.';
 import { withStore, withReducer } from '@thecointech/storybookutils';
 import ConstantSidebarItems from './Sidebar.stories.data.json';
 import { SemanticICONS } from 'semantic-ui-react';
@@ -24,10 +24,16 @@ export default {
   args: {
     inverted: false,
     width: "wide",
+    visible: true,
+    direction: "left"
   },
   argTypes: {
     width: {
       options: ['very thin', 'thin', 'wide', 'very wide'],
+      control: { type: 'select' },
+    },
+    direction: {
+      options: ["left", "top", "right", "bottom"],
       control: { type: 'select' },
     }
   },
@@ -52,4 +58,10 @@ export default {
   ]
 } as Meta;
 
-export const Sidebar = (args: Props) => <PageSidebar {...args} />
+export const Sidebar = (args: any) => {
+  const sidebar = SidebarItemsReducer.useApi();
+  sidebar.setVisible(args.visible);
+  return <PageSidebar {...args} />
+}
+
+
