@@ -3,37 +3,44 @@
 .columnRightTop {
   grid-area: right-top;
 }
-
-
-.balanceAndProfit{
-  width:171px;
-  text-align: center;
-  padding: 10px;
-  color: @theCoinPaletteGreen5;
-  font-size: @fontSizeVeryVeryBig;
+.balanceAndProfit {
+  padding    : 15px;
+  color      : @theCoinPaletteGreen5;
+  font-size  : @fontSizeVeryBig;
   font-family: @headerFont;
-  .balanceZone{
-      border-bottom: 1px solid @theCoinPaletteGreen4Faded30;
-  }
-  .cadBalanceCurrency{
-      font-size: @fontSizeSmall;
-      color: @theCoinPaletteGray1;
-      font-family: @pageFont;
-      text-align: center;
-      font-weight: bold;
-  }
-  h5{
-      margin: 0 !important;
-  }
-  hr{
-      color: @theCoinPalettePaleGreen2;
-  }
-  .smallerThanDesktop({
-      width:auto;
-  });
+  text-align : center;
 
-  .illustrationMobile{
-      display:none;
+  .balanceZone {
+    border-bottom: 1px solid @theCoinPaletteGreen4Faded30;
+
+    .cadBalance {
+      line-height : 24px;
+    }
+    .cadBalanceCurrency {
+      font-size  : @fontSizeSmall;
+      color      : @theCoinPaletteGray1;
+      font-family: @pageFont;
+      font-weight: bold;
+    }
+  }
+
+  h5 {
+    text-align: left;
+    margin    : 0 !important;
+  }
+
+  hr {
+    color: @theCoinPalettePaleGreen2;
+  }
+
+  .smallerThanDesktop( {
+      width:auto;
+    }
+
+  );
+
+  .illustrationMobile {
+    display: none;
   }
 }
 

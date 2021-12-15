@@ -37,7 +37,7 @@ export const BalanceAndProfit = () => {
   const profitCut = profit.toFixed(1);
   const profitDisplay = (profit < 1 ? "< .1" : profitCut.toString())
   return (
-    <div className={ `${styles.balanceAndProfit} x2spaceAfter` }>
+    <div className={styles.balanceAndProfit}>
       <div className={styles.illustrationMobile}>
         <img src={illustrationMobile} />
       </div>
