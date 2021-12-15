@@ -1,7 +1,5 @@
 import React from "react";
 import { Header, Icon } from "semantic-ui-react";
-import illustration from "./images/illust_balance.svg";
-import illustrationMobile from "./images/mob_illust_balance.svg";
 import { useFxRates } from "@thecointech/shared/containers/FxRate";
 import { calculateProfit } from "@thecointech/shared/containers/Account/profit";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";

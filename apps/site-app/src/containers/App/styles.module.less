@@ -12,15 +12,16 @@
     "lgap footer footer footer        rgap";
 
   .smallScreen({
-    grid-gap: 18px;
+    grid-gap: 0px;
+    row-gap: 15px;
     grid-template-rows: 80px 125px 1fr 115px 250px;
-    grid-template-columns: 1fr;
+    grid-template-columns: 15px 1fr 10px;
     grid-template-areas:
-    "header"
-    "widget-top"
-    "main"
-    "widget-bottom"
-    "footer"
+    "lgap header        rgap"
+    "lgap widget-top    rgap"
+    "lgap main          rgap"
+    "lgap widget-bottom rgap"
+    "lgap footer        rgap"
   });
 
   .contentContainer {
