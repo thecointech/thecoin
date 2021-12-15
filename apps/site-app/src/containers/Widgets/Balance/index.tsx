@@ -3,7 +3,7 @@ import { BalanceAndProfit } from "@thecointech/shared/containers/Widgets/Balance
 import styles from './styles.module.less';
 import { AppContainerWithShadowWithoutPadding } from "components/AppContainers";
 
-export const ColumnRightTop = () => (
+export const BalanceWidget = () => (
   <div className={styles.columnRightTop}>
     <AppContainerWithShadowWithoutPadding>
       <BalanceAndProfit />

@@ -26,8 +26,8 @@ import { Sidebar } from '../Sidebar/Sidebar';
 //import '../../semantic/semantic.css';
 import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-import { ColumnRightTop } from '../ColumnRight/Top';
-import { ColumnRightBottom } from '../ColumnRight/Bottom';
+import { BalanceWidget } from '../Widgets/Balance';
+import { ClimateImpactWidget } from '../Widgets/ClimateImpact';
 
 init();
 
