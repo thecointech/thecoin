@@ -1,19 +1,19 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-.columnRightTop{
-    float: right;
-    top: 80px;
-    position: fixed;
-    left: 82%;
-    .smallerThanDesktop({
-        top: 110px;
-        margin: auto;
-        position: initial;
-        float: initial;
-        margin-top: 30px;
-    });
+.columnRightTop {
+  grid-area: right-top;
 
-    .biggerThanMostComputer({
-        left: 71%;
-    });
+  .smallerThanDesktop( {
+      top       : 110px;
+      margin    : auto;
+      position  : initial;
+      float     : initial;
+      margin-top: 30px;
+    }
+  );
+
+  .biggerThanMostComputer( {
+      left: 71%;
+    }
+  );
 }

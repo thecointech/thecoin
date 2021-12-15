@@ -8,8 +8,6 @@ import { useState } from 'react';
 import { Answer } from './Messages';
 import { PageHeader } from '../../components/PageHeader';
 import styles from './styles.module.less';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
@@ -34,8 +32,8 @@ export const ContactUs = () => {
   const [message, setMessage] = useState('');
   const [successHidden] = useState(true);
   const [errorHidden] = useState(true);
-  
-  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => { 
+
+  const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     if (e) e.preventDefault();
     console.log(message);
     setMessage("");
@@ -44,8 +42,7 @@ export const ContactUs = () => {
 
   return (
     <React.Fragment>
-      <ColumnRightTop />
-      <PageHeader 
+      <PageHeader
           illustration={illustration}
           title={translations.title}
           description= {translations.description}
@@ -67,23 +64,22 @@ export const ContactUs = () => {
               />
               </div>
             </div>
-            {/*<UserMessage 
-              message={"Hi"} 
-              messageComplement={"you - 2 days ago"} 
-              contactAvatar={getAvatarLink("14")} 
-            contactVerified={false} 
+            {/*<UserMessage
+              message={"Hi"}
+              messageComplement={"you - 2 days ago"}
+              contactAvatar={getAvatarLink("14")}
+            contactVerified={false}
             /> */}
-            <Answer 
-              message={"Welcome to the contact us page"} 
-              messageComplement={"Admin - 2 days ago"}  
-              contactAvatar={coin} 
-              contactVerified={true} 
+            <Answer
+              message={"Welcome to the contact us page"}
+              messageComplement={"Admin - 2 days ago"}
+              contactAvatar={coin}
+              contactVerified={true}
             />
         </div>
 
         </AvailableSoon>
       </AppContainerWithShadow>
-      <ColumnRightBottom />
     </React.Fragment>
   );
 }

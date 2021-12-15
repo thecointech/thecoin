@@ -26,7 +26,8 @@ import { Sidebar } from '../Sidebar/Sidebar';
 //import '../../semantic/semantic.css';
 import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-
+import { ColumnRightTop } from '../ColumnRight/Top';
+import { ColumnRightBottom } from '../ColumnRight/Bottom';
 
 init();
 
@@ -53,6 +54,9 @@ export const App = () => {
             </Ref>
           </MainPageTransition>
         </div>
+
+        <ColumnRightTop />
+        <ColumnRightBottom />
 
         <Footer />
       </div>

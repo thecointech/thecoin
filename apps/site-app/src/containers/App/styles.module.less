@@ -2,16 +2,17 @@
 
 #app {
   display: grid;
-  grid-template-columns: [full-start] auto [page-start] 203px [content-start] minmax(auto, 837px) [content-end] 203px [page-end] auto [full-end];
-  grid-template-rows: [header-start] 60px [header-end content-start] 1fr [content-end footer-start] 32px [footer-end];
+  grid-template-columns: auto 203px minmax(auto, 837px) 203px auto;
+  grid-template-rows: 60px 270px 1fr 32px;
   .smallScreen({
-    grid-template-rows: [header-start] 80px [header-end content-start] 1fr [content-end footer-start] 250px [footer-end];
+    grid-template-rows: 80px 1fr 250px;
   });
   grid-gap: 30px;
   grid-template-areas:
-    "lgap header header header rgap"
-    "lgap left   main   right  rgap"
-    "lgap footer footer footer rgap";
+    "lgap header header header        rgap"
+    "lgap left   main   right-top     rgap"
+    "lgap left   main   right-bottom  rgap"
+    "lgap footer footer footer        rgap";
 
   .contentContainer {
     grid-area: main;
