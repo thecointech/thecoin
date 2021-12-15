@@ -55,8 +55,8 @@ export const App = () => {
           </MainPageTransition>
         </div>
 
-        <ColumnRightTop />
-        <ColumnRightBottom />
+        <BalanceWidget />
+        <ClimateImpactWidget />
 
         <Footer />
       </div>

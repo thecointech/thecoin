@@ -1,14 +1,14 @@
-import { AccountMap } from "../../AccountMap";
 import React from "react";
 import { Header, Icon } from "semantic-ui-react";
 import illustration from "./images/illust_balance.svg";
 import illustrationMobile from "./images/mob_illust_balance.svg";
-import styles from "./styles.module.less";
-import { useFxRates } from "../../FxRate";
-import { calculateProfit } from "../../Account/profit";
+import { useFxRates } from "@thecointech/shared/containers/FxRate";
+import { calculateProfit } from "@thecointech/shared/containers/Account/profit";
+import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { toHuman } from "@thecointech/utilities/Conversion";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { getFxRate } from '@thecointech/fx-rates';
+import styles from "./styles.module.less";
 
 const translate = defineMessages({
     balanceTitle : {

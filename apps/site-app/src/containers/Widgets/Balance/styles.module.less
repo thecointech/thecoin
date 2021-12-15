@@ -2,18 +2,80 @@
 
 .columnRightTop {
   grid-area: right-top;
-
-  .smallerThanDesktop( {
-      top       : 110px;
-      margin    : auto;
-      position  : initial;
-      float     : initial;
-      margin-top: 30px;
-    }
-  );
-
-  .biggerThanMostComputer( {
-      left: 71%;
-    }
-  );
 }
+
+
+.balanceAndProfit{
+  width:171px;
+  text-align: center;
+  padding: 10px;
+  color: @theCoinPaletteGreen5;
+  font-size: @fontSizeVeryVeryBig;
+  font-family: @headerFont;
+  .balanceZone{
+      border-bottom: 1px solid @theCoinPaletteGreen4Faded30;
+  }
+  .cadBalanceCurrency{
+      font-size: @fontSizeSmall;
+      color: @theCoinPaletteGray1;
+      font-family: @pageFont;
+      text-align: center;
+      font-weight: bold;
+  }
+  h5{
+      margin: 0 !important;
+  }
+  hr{
+      color: @theCoinPalettePaleGreen2;
+  }
+  .smallerThanDesktop({
+      width:auto;
+  });
+
+  .illustrationMobile{
+      display:none;
+  }
+}
+
+.smallerThanDesktop({
+  .balanceAndProfit {
+      height: 124px;
+      text-align: left;
+     & > div{
+          display: inline-table;
+          margin-top: 10px;
+          margin-left: 10px;
+      }
+      h5{
+          text-align: left;
+      }
+      .balanceZone{
+          float: left;
+          width: 45%;
+          margin-top: 10px;
+          text-align: center;
+      }
+      .profitZone{
+          float: left;
+          width: 35%;
+      }
+      .balanceZone{
+          border-right: 1px solid @theCoinPaletteGreen4Faded30;
+          border-bottom: 0px solid transparent;
+      }
+      .illustrationDesktop{
+          display: none;
+      }
+      .illustrationMobile{
+          display: block;
+          float: right;
+          right: 0;
+          position: absolute;
+          top: 110px;
+          img{
+              float: right;
+              right: 0;
+          }
+      }
+  }
+});

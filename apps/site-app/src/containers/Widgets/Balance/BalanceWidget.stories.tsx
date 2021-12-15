@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
 import { BalanceWidget as Component } from '.';
-import styles from '../../containers/App/styles.module.less';
+import styles from '../../App/styles.module.less';
 import { withAccounts } from '@thecointech/storybookutils';
 
 export default {

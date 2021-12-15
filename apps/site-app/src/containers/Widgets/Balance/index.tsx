@@ -1,5 +1,5 @@
 import React from "react";
-import { BalanceAndProfit } from "@thecointech/shared/containers/Widgets/BalanceAndProfit";
+import { BalanceAndProfit } from "./Widget";
 import styles from './styles.module.less';
 import { AppContainerWithShadowWithoutPadding } from "components/AppContainers";
 
