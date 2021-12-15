@@ -38,18 +38,14 @@ export const BalanceAndProfit = () => {
   const profitDisplay = (profit < 1 ? "< .1" : profitCut.toString())
   return (
     <div className={styles.balanceAndProfit}>
-      <div className={styles.illustrationMobile}>
-        <img src={illustrationMobile} />
-      </div>
       <div className={`${styles.balanceZone}`}>
         <Header as="h5" className={"appTitles"} >
             <FormattedMessage {...translate.balanceTitle} />
         </Header>
-        <img src={illustration} className={styles.illustrationDesktop}/>
         <div className={styles.cadBalance}>{cadBalance}</div>
-        <div className={`${styles.cadBalanceCurrency} x1spaceAfter`}><FormattedMessage {...translate.cad} /></div>
+        <div className={`${styles.cadBalanceCurrency}`}><FormattedMessage {...translate.cad} /></div>
       </div>
-      <div className={ `${styles.profitZone} x1spaceBefore` }>
+      <div className={ `${styles.profitZone}` }>
         <Header as="h5" className={"appTitles"}>
             <FormattedMessage {...translate.profitTitle} />
         </Header>

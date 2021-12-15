@@ -1,7 +1,7 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .columnRightTop {
-  grid-area: right-top;
+  grid-area: widget-top;
 }
 .balanceAndProfit {
   padding    : 15px;
@@ -11,18 +11,29 @@
   font-family: @headerFont;
   text-align : center;
 
+  background-image: url('./images/illust_balance.svg');
+  background-repeat: no-repeat;
+  background-position: center 45px;
+
   .balanceZone {
     border-bottom: 1px solid @theCoinPaletteGreen4Faded30;
+    padding-bottom: 8px;
 
     .cadBalance {
+      // Allow space for the background image
+      padding-top: 75px;
       line-height : 24px;
     }
     .cadBalanceCurrency {
+      padding-top: 4px;
       font-size  : @fontSizeSmall;
       color      : @theCoinPaletteGray1;
       font-family: @pageFont;
       font-weight: bold;
     }
+  }
+  .profitZone {
+    padding-top: 8px;
   }
 
   h5 {
@@ -34,56 +45,36 @@
     color: @theCoinPalettePaleGreen2;
   }
 
-  .smallerThanDesktop( {
-      width:auto;
+  .smallScreen({
+    text-align         : left;
+    background-image   : url('./images/mob_illust_balance.svg');
+    background-position: right bottom;
+    display: flex;
+    > * {
+      flex-grow: 1;
+    }
+    h5 {
+      text-align: left;
     }
 
-  );
+    .balanceZone {
 
-  .illustrationMobile {
-    display: none;
-  }
+      text-align   : center;
+      border-right : 1px solid @theCoinPaletteGreen4Faded30;
+      border-bottom: 0px solid transparent;
+
+      .cadBalance {
+        padding-top: 8px;
+      }
+    }
+
+    .profitZone {
+      padding-top: 0px;
+      padding-left: 16px;
+      > div {
+        padding-top: 8px;
+        line-height: 24px;
+      }
+    }
+  });
 }
-
-.smallerThanDesktop({
-  .balanceAndProfit {
-      height: 124px;
-      text-align: left;
-     & > div{
-          display: inline-table;
-          margin-top: 10px;
-          margin-left: 10px;
-      }
-      h5{
-          text-align: left;
-      }
-      .balanceZone{
-          float: left;
-          width: 45%;
-          margin-top: 10px;
-          text-align: center;
-      }
-      .profitZone{
-          float: left;
-          width: 35%;
-      }
-      .balanceZone{
-          border-right: 1px solid @theCoinPaletteGreen4Faded30;
-          border-bottom: 0px solid transparent;
-      }
-      .illustrationDesktop{
-          display: none;
-      }
-      .illustrationMobile{
-          display: block;
-          float: right;
-          right: 0;
-          position: absolute;
-          top: 110px;
-          img{
-              float: right;
-              right: 0;
-          }
-      }
-  }
-});
