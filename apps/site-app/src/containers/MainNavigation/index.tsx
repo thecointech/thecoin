@@ -38,7 +38,7 @@ export const MainNavigation = () => {
 
 const LeftMenuItems = () => (
   <Menu text className={styles.mainMenu} >
-    <Menu.Item>
+    <Menu.Item style={{marginLeft: 0}}>
       <a href={process.env.URL_SITE_LANDING} className={styles.logoLink}>
         <div className={styles.logo} />
       </a>
@@ -68,8 +68,8 @@ const RightMenuItems = () => {
       <Menu.Item>
         <LanguageSwitcher />
       </Menu.Item>
-      <Menu.Item>
-        <Icon name="content" onClick={() => setModalVisible(true)} className={`onlySmallScreen ${styles.burgerIcon}`} />
+      <Menu.Item className="onlySmallScreen">
+        <Icon name="content" onClick={() => setModalVisible(true)} className={styles.burgerIcon} />
         <ModalOperation isOpen={modalVisible} closeIconFct={() => setModalVisible(false)}>
           <Menu vertical id={styles.mobileMenu}>
             {Object.entries(sidebarData.items.links).map(([key, link]) =>

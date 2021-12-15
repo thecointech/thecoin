@@ -1,40 +1,44 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
-import { Visual, VisualProps } from './Visual';
+import { Visual } from './Visual/index';
 import { options } from './Widget';
-import { defineMessages, IntlProvider } from 'react-intl';
+import { defineMessage } from 'react-intl';
+import appstyles from '../../App/styles.module.less';
+import styles from './styles.module.less';
 
+const title = defineMessage({
+  id: "shared.widgets.climateimpact.title",
+  defaultMessage: "Climate Impact",
+});
 
-const translate = defineMessages({
-  title : {
-    id: "shared.widgets.climateimpact.title",
-    defaultMessage: "Climate Impact",
-    description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
-  }});
-
+const args = {
+  quantity: "80",
+  title,
+  itemChosen: 0,
+}
 export default {
-  title: 'App/ClimateImpact',
+  title: 'App/Widgets/Impact',
   component: Visual,
-  args: {
-    quantity: "80",
-    title: {...translate.title}
-  },
+  args,
   argTypes: {
     itemChosen: {
-        control: {
-          type: 'select',
-          options: Object.keys(options)
-        },
+      control: {
+        type: 'select',
+        options: Object.keys(options)
+      },
     },
   },
 } as Meta;
 
 
-const Template: Story<VisualProps> = (args) => {
-    const selectedOption = options[args.itemChosen] ? options[args.itemChosen] : options[0];
-    return <IntlProvider locale="en"><Visual title={args.title} quantity={args.quantity} item={selectedOption} /></IntlProvider>;
+export const Impact: Story<typeof args> = (args) => {
+  const selectedOption = options[args.itemChosen] ? options[args.itemChosen] : options[0];
+  return (
+    <div id={appstyles.app}>
+      <div className={styles.columnRightBottom}>
+        <Visual title={args.title} quantity={args.quantity} item={selectedOption} />
+      </div>
+    </div>
+  )
 }
 
-export const Basic = Template.bind({});
-Basic.args = {}
