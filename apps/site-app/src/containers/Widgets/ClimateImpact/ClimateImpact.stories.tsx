@@ -2,12 +2,12 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { Visual, VisualProps } from './Visual';
-import { options } from '.';
+import { options } from './Widget';
 import { defineMessages, IntlProvider } from 'react-intl';
 
 
-const translate = defineMessages({ 
-  title : { 
+const translate = defineMessages({
+  title : {
     id: "shared.widgets.climateimpact.title",
     defaultMessage: "Climate Impact",
     description: "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
