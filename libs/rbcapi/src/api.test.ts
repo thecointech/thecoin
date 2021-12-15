@@ -1,54 +1,42 @@
 import { RbcApi } from './index';
 import { RbcStore } from './store';
 import PouchDB from 'pouchdb';
-import { initBrowser } from './action';
+import { ApiAction, closeBrowser, initBrowser } from './action';
 import { ConfigStore } from '@thecointech/store';
-import { describe } from '@thecointech/jestutils';
+import { describe, IsManualRun } from '@thecointech/jestutils';
+import { getEnvVars } from '../../../tools/setenv';
 
-beforeAll(() => {
-  PouchDB.plugin(require('pouchdb-adapter-memory'));
-
-  RbcStore.initialize({
-    adapter: "memory"
-  });
-  ConfigStore.initialize({
-    adapter: "memory"
-  })
-  jest.setTimeout(500000);
-});
-
-afterAll(() => {
-  RbcStore.release();
-  ConfigStore.release();
-});
-
+PouchDB.plugin(require('pouchdb-adapter-memory'));
+const env = getEnvVars("prod");
+let api: RbcApi; // Intialized below
 
 // This test-suite checks that using Puppeteer allows us to complete
 // the requested actions.
 describe('Rbc Puppeteer-based API', () => {
 
-  // test("Can fetch transactions", async () => {
-  //     jest.setTimeout(500000);
-  //     const api = new RbcApi();
-  //     const from = new Date(202cls0, 1, 1);
-  //     const to = new Date(2020, 2, 1);
-  //     const tx = await api.getTransactions(from, to);
-
-  //     expect(tx.length).toBeGreaterThan(0);
-  // });
+  jest.setTimeout(500000);
+  beforeEach(initialize)
+  afterEach(release)
 
   test("Get's stored transactions ", async () => {
     const { txs } = await RbcStore.fetchStoredTransactions();
     expect(txs.length).toBe(0);
   });
 
+  test("Can login", async () => {
+    const act = await ApiAction.New('login', true);
+    expect(act.page).toBeTruthy();
+  });
+
+  test("Can fetch transactions", async () => {
+      const from = new Date(2020, 1, 1);
+      const to = new Date(2020, 2, 1);
+      const tx = await api.getTransactions(from, to);
+      expect(tx.length).toBeGreaterThan(0);
+  });
+
   test("Get's new transactions but no more", async () => {
-
-    const browser = await initBrowser()
-
-    const api = new RbcApi();
     const txs1 = await api.fetchLatestTransactions();
-
     expect(txs1.length).toBeGreaterThan(0);
     const tx2 = await api.fetchLatestTransactions();
     expect(txs1.length).toBe(tx2.length);
@@ -56,34 +44,31 @@ describe('Rbc Puppeteer-based API', () => {
     const { txs, syncedTill } = await RbcStore.fetchStoredTransactions();
     expect(txs.length).toBe(txs1.length);
     expect(syncedTill.getTime() - Date.now()).toBeLessThan(48 * 60 * 60 * 1000);
-
-    await browser.close();
   });
 
   test("Gets CAD transactions", async () => {
-
-    const browser = await initBrowser()
-
-    const api = new RbcApi();
     const txscad = await api.getTransactions(new Date(2014, 5));
-
     expect(txscad.length).toBeGreaterThan(0);
     expect(txscad.every(tx => typeof tx.CAD === 'number')).toBeTruthy();
-
-    await browser.close();
   });
 
-  test("Gets USD transactions", async () => {
+}, !!env.RBCAPI_CREDENTIALS_PATH)
 
-    const browser = await initBrowser()
+async function initialize() {
 
-    const api = new RbcApi();
-    const txsusd = await api.getTransactions(new Date(2014, 5), new Date(), process.env.RBCAPI_CREDENTIALS_USD_ACC);
-
-    expect(txsusd.length).toBeGreaterThan(0);
-    expect(txsusd.every(tx => typeof tx.USD === 'number')).toBeTruthy();
-
-    await browser.close();
+  RbcStore.initialize({
+    adapter: "memory"
   });
-}, !!process.env.RBCAPI_CREDENTIALS_USD_ACC)
+  ConfigStore.initialize({
+    adapter: "memory"
+  })
+  const browserArgs = { headless: !IsManualRun }
+  await initBrowser(browserArgs);
+  api = new RbcApi({ authFile: env.RBCAPI_CREDENTIALS_PATH });
+}
 
+async function release() {
+  RbcStore.release();
+  ConfigStore.release();
+  await closeBrowser();
+}
