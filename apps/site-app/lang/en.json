@@ -107,10 +107,6 @@
     "defaultMessage": "Recipient email",
     "description": "app.accounts.redeem.form.emailLabel: Label for the form the make a payment page / etransfert tab"
   },
-  "FdZABx": {
-    "defaultMessage": "LOG IN",
-    "description": "app.accountSwitcher.login: label for button"
-  },
   "GGCxth": {
     "defaultMessage": "Personal Details",
     "description": "app.settings.personaldetails.title: Title for the page setting / tab personal details in the app"
@@ -155,17 +151,9 @@
     "defaultMessage": "Settings",
     "description": "app.accounts.sidebar.settings: Title for the Settings entry in the menu"
   },
-  "It9lF6": {
-    "defaultMessage": "Settings",
-    "description": "app.MainNavigation.settings: Title for the entry in the sidebar menu"
-  },
   "JHN0Qb": {
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
     "description": "app.topup.description: Description for the topup page in the app"
-  },
-  "K7rhf2": {
-    "defaultMessage": "Settings",
-    "description": "app.accountSwitcher.settings: Title for the Settings in the menu"
   },
   "KID9KZ": {
     "defaultMessage": "Email",
@@ -191,10 +179,6 @@
     "defaultMessage": "The following is your personalized e-Transfer info:",
     "description": "app.accounts.purchase.yourTransferCode"
   },
-  "NGrDIx": {
-    "defaultMessage": "See",
-    "description": "app.accountSwitcher.see: Title for the See in the menu"
-  },
   "NKupBU": {
     "defaultMessage": "Overview",
     "description": "app.accounts.sidebar.home: Title for the Home entry in the menu"
@@ -202,10 +186,6 @@
   "OFfaj+": {
     "defaultMessage": "All",
     "description": "app.historyGraph.All: button for Show entire history"
-  },
-  "ONzPU8": {
-    "defaultMessage": "My Accounts",
-    "description": "app.accountSwitcher.myAccounts: Title for the My Accounts title in the menu"
   },
   "OoWP7t": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please contact support@thecoin.io and describe what happened",
@@ -275,10 +255,6 @@
     "defaultMessage": "Top up balance",
     "description": "app.accounts.sidebar.transferin: Title for the transfer entry in the menu"
   },
-  "VTi6+m": {
-    "defaultMessage": "Overview",
-    "description": "app.MainNavigation.home: Title for the entry in the sidebar menu"
-  },
   "WYLa4b": {
     "defaultMessage": "We are generating your individual e-Transfer recipient info",
     "description": "app.accounts.purchase.fetchTransferCode"
@@ -294,10 +270,6 @@
   "XEmqRg": {
     "defaultMessage": "No Account Loaded",
     "description": "app.accounts.sidebar.profile: Default account name to show in sidebar when no accounts loaded"
-  },
-  "XNv52p": {
-    "defaultMessage": "Top up balance",
-    "description": "app.MainNavigation.transferin: Title for the entry in the sidebar menu"
   },
   "Y0jYZ8": {
     "defaultMessage": "Step 2 of 3: Sending sell order to our servers...",
@@ -330,10 +302,6 @@
   "aY5nL9": {
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
-  },
-  "anIZrC": {
-    "defaultMessage": "Add an Account",
-    "description": "app.accountSwitcher.addAccount: Title for the Add an Account in the menu"
   },
   "cQy1PG": {
     "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
@@ -407,17 +375,9 @@
     "defaultMessage": "e-Transfer",
     "description": "app.makepayments.tabs.etransfer: Title for the tabs the Make a payment page in the app"
   },
-  "lxxI/g": {
-    "defaultMessage": "Sign Out",
-    "description": "app.accountSwitcher.signout: Title for the sign out in the menu"
-  },
   "m0DPoc": {
     "defaultMessage": "Home",
     "description": "app.MainNavigation.home: Title for the Home entry in the menu"
-  },
-  "mJoiFU": {
-    "defaultMessage": "Contact Us",
-    "description": "app.MainNavigation.contact: Title for the entry in the sidebar menu"
   },
   "nUylG3": {
     "defaultMessage": "Please wait...",
@@ -474,10 +434,6 @@
   "sHCZI2": {
     "defaultMessage": "The following invalid characters were found: {chars}",
     "description": "error message on invalid characters"
-  },
-  "t19+gS": {
-    "defaultMessage": "Make payments",
-    "description": "app.MainNavigation.makepayments: Title for the entry in the sidebar menu"
   },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",

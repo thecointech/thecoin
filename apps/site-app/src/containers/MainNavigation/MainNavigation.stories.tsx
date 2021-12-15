@@ -2,8 +2,8 @@ import React from 'react';
 import { Meta } from '@storybook/react';
 import { MainNavigation } from '.';
 import { withAccounts, withLanguageProvider, withMediaContext, withReducer } from '@thecointech/storybookutils';
-import styles from '../App/styles.module.less';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import styles from '../App/styles.module.less';
 
 export default {
   title: 'App/Navigation',

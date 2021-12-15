@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
+import { Rail, Ref, Sticky } from 'semantic-ui-react';
 import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
@@ -42,7 +42,6 @@ export const App = () => {
         <MainNavigation />
 
         <div className={`${styles.contentContainer}`}>
-          <Container style={{ width: '100%' }} className={``}>
             <MainPageTransition>
               <GreaterThanMobileSegment>
                 <Rail internal position='left'>
@@ -58,7 +57,6 @@ export const App = () => {
                 </section>
               </Ref>
             </MainPageTransition>
-          </Container>
         </div>
         <Footer />
       </div>
