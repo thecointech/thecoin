@@ -18,8 +18,8 @@ import { MediaContextProvider, mediaStyles } from '@thecointech/shared/component
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
-import '../../semantic/semantic.css';
-//import '@thecointech/site-semantic-theme/semantic.less';
+//import '../../semantic/semantic.css';
+import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
 export const App = () => {

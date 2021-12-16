@@ -24,28 +24,35 @@ const translate = defineMessages({
   }
 });
 
-export const FooterShared = () => (
+type Props = {
+  background?: string;
+  id?: string;
+}
+export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
   <>
-    <div className={styles.background} />
-    <div className={styles.footerContent}>
-      <div className={styles.registered}>
-        <FormattedMessage tagName="span" {...translate.registered1} />
-        <FormattedMessage tagName="span" {...translate.registered2} />
-      </div>
-      <div className={styles.links}>
-        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-          <img src={facebook} />
-        </a>
-        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-          <img src={twitter} />
-        </a>
-        <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-          <img src={instagram} />
-        </a>
-      </div>
-      <div className={styles.copyright}>
-        <FormattedMessage tagName="span" {...translate.copyright1} />
-        <FormattedMessage tagName="span" {...translate.copyright2} />
+    <div className={`${styles.background} ${background ?? ''}`} />
+    <div className={styles.footerContainer}>
+      {children}
+      <div id={id} className={styles.footerContent}>
+        <div className={`${styles.textPortion} ${styles.registered}`}>
+          <FormattedMessage tagName="span" {...translate.registered1} />
+          <FormattedMessage tagName="span" {...translate.registered2} />
+        </div>
+        <div className={styles.links}>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={facebook} />
+          </a>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={twitter} />
+          </a>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={instagram} />
+          </a>
+        </div>
+        <div className={`${styles.textPortion} ${styles.copyright}`}>
+          <FormattedMessage tagName="span" {...translate.copyright1} />
+          <FormattedMessage tagName="span" {...translate.copyright2} />
+        </div>
       </div>
     </div>
   </>

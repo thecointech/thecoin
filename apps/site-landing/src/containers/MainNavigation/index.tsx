@@ -1,28 +1,33 @@
 import React from 'react';
-import { Dropdown, Menu } from 'semantic-ui-react';
+import { Icon, Menu, SemanticICONS } from 'semantic-ui-react';
 import { defineMessage, defineMessages, FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
+import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import styles from './styles.module.less';
 
 const menuItems = defineMessages({
   healthier: {
     defaultMessage: 'In-depth',
-    description: 'site.MainNavigation.indepth: Title for the In-depth entry in the menu'
+    description: 'site.MainNavigation.indepth: Title for the In-depth entry in the menu',
+    icon: "magnify"
   },
   wedomore: {
     defaultMessage: 'We do more',
-    description: 'site.MainNavigation.wedomore: Title for the We do more entry in the menu'
+    description: 'site.MainNavigation.wedomore: Title for the We do more entry in the menu',
+    icon: "plus",
   },
   compare: {
     defaultMessage: 'Your benefits',
-    description: 'site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu'
+    description: 'site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu',
+    icon: "arrow up",
   },
   help: {
     defaultMessage: 'Help',
-    description: 'site.MainNavigation.faq: Help Link'
+    description: 'site.MainNavigation.faq: Help Link',
+    icon: "question mark"
   },
 });
 
@@ -66,8 +71,11 @@ const LeftMenuItems = () => (
   </Menu>
 )
 
-const RightMenuItems = () => (
-  <Menu text>
+const RightMenuItems = () => {
+  const [modalVisible, setModalVisible] = React.useState(false);
+
+  return (
+    <Menu text>
     <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
       <FormattedMessage {...loginLink} />
     </HeaderLink>
@@ -77,58 +85,19 @@ const RightMenuItems = () => (
     <Menu.Item>
       <LanguageSwitcher />
     </Menu.Item>
-    <Menu.Item className='onlySmallScreen'>
-      <Dropdown icon='content' direction="left" className='icon'>
-        <Dropdown.Menu>
+    <Menu.Item className="onlySmallScreen">
+      <Icon name="content" onClick={() => setModalVisible(true)} className={styles.burgerIcon} />
+      <ModalOperation isOpen={modalVisible} closeIconFct={() => setModalVisible(false)}>
+      <Menu vertical id={styles.mobileMenu}>
           {Object.entries(menuItems).map(([key, msg]) =>
-            <Dropdown.Item as={NavLink} key={key} to={`/${key}`}>
+            <Menu.Item as={NavLink} key={key} to={`/${key}`} onClick={() => setModalVisible(false)}>
+              <Icon name={msg.icon as SemanticICONS} size={"big"} className={styles.mobileIcon} />
               <FormattedMessage {...msg} />
-            </Dropdown.Item>
+            </Menu.Item>
           )}
-        </Dropdown.Menu>
-      </Dropdown>
+        </Menu>
+      </ModalOperation>
     </Menu.Item>
   </Menu>
-)
-/*
-export const MainNavigation = () => {
-  return (
-    <div className={styles.navContainer}>
-      <Menu.Menu>
-        <Link to="/" className={styles.logoLink}>
-          <div className={styles.logo} />
-        </Link>
-        {Object.entries(menuItems).map(([key, msg])=>
-          <HeaderLink key={key} to={`/${key}`} className="onlyBigScreen">
-            <FormattedMessage {...msg}>
-              {replaceSpaces}
-            </FormattedMessage>
-          </HeaderLink>
-        )}
-      </Menu.Menu>
-      <Menu.Menu position="right" className={styles.menuRight}>
-        <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
-          <FormattedMessage {...loginLink} />
-        </HeaderLink>
-        <Menu.Item className={`${styles.createButton} onlyBigScreen`}>
-          <CreateAccountButton />
-        </Menu.Item>
-        <Menu.Item>
-          <LanguageSwitcher />
-        </Menu.Item>
-        <Menu.Item className='onlySmallScreen'>
-          <Dropdown icon='content' direction="left" className='icon'>
-            <Dropdown.Menu>
-              {Object.entries(menuItems).map(([key, msg]) =>
-                <Dropdown.Item as={NavLink} key={key} to={`/${key}`}>
-                  <FormattedMessage {...msg} />
-                </Dropdown.Item>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Menu.Item>
-      </Menu.Menu>
-    </div>
-  );
+  )
 }
-*/

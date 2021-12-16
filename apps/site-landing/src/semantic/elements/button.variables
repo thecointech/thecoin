@@ -1,0 +1,12 @@
+
+@secondaryColor: @theCoinPaletteGreen3;
+// This colors should be added to the palette, however I
+// am finding the palette pretty crowded already (ie, not useful).
+// Will leave here until we can figure out a more efficient way
+// to label our colors
+@secondaryColorHover: #42CBA3;
+@secondaryColorDown: #1CA47F;
+// set an invalid color for focus to prevent
+// the button from changing color after click
+@secondaryColorFocus: '';
+@textTransform: uppercase;
