@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, Menu } from 'semantic-ui-react';
 import { defineMessage, defineMessages, FormattedMessage } from 'react-intl';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
@@ -52,8 +52,8 @@ export const MainNavigation = () => {
 };
 
 const LeftMenuItems = () => (
-  <Menu text className={styles.mainMenu} >
-      <a href="/" className={styles.logoLink}>
+  <Menu text className={styles.leftMenu}>
+      <a href="#/" className={styles.logoLink}>
         <div className={styles.logo} />
       </a>
     {Object.entries(menuItems).map(([key, msg]) =>

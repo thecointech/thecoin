@@ -1,14 +1,18 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
+// Separate out the column declaration to allow re-use throughout the app
+.layoutColumns {
+  grid-template-columns: auto .scalable(20, 131)[@result] minmax(auto, 1173px) .scalable(20, 131)[@result] auto;
+}
+
 #landing {
 
   display: grid;
-  grid-template-columns: auto .scalable(20, 136)[@result] minmax(auto, 1173px) .scalable(20, 131)[@result] auto;
   grid-template-rows: .scalable(80, 90)[@result] 1fr 451px;
   grid-template-areas:
-    "lgap left header right rgap"
-    "lgap left main   right  rgap"
-    "lgap left footer right rgap";
+    "lgap lefth header righth rgap"
+    "lgap main  main   main   rgap"
+    "lgap leftf footer rightf rgap";
 
   .smallScreen({
     grid-gap: 0px;
@@ -23,23 +27,12 @@
     "lgap footer        rgap"
   });
 
+  .contentContainer {
+    grid-area: main;
 
-  max-width: @maxContentWidth;
-  margin: auto;
-
-  > div:nth-child(1) {
-    border-bottom: 1px solid @linkColor;
-    box-shadow: 0px 5px grey;
-    width: 100%;
-
-    -webkit-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-    -moz-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-    box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-  }
-
-  .appContainer{
-    margin: 0;
-    width: 100%;
+    // Explicitly define a min-height to prevent our content
+    // resizer from collapsing down if our content is too small
+    min-height: 450px;
   }
 
   .pageMainInner {
