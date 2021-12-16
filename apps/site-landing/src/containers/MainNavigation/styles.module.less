@@ -1,7 +1,70 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
+.background {
+  background-color : white;
+  grid-row-start   : header;
+  grid-row-end     : header;
+  grid-column-start: lgap;
+  grid-column-end  : rgap;
 
-/** linear interpolate value from small to big as screen goes from small-size to big-size */
+  border-bottom   : 1px solid fade(@theCoinPrimaryGreenPale, 20%);
+  box-shadow      : 1px 1px 2px 0px #00000040;
+}
+
+#mainMenu {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  >* {
+    >* {
+      &:not(:first-child) {
+        margin-left: .scalable(0, 10)[@result];
+      }
+    }
+  }
+
+  .logoLink {
+    cursor: pointer;
+    height: 50px;
+
+    .logo {
+      height: 100%;
+      width: .scalable(105, 174)[@result];
+      background-repeat  : no-repeat;
+      transition        : opacity @pageTransitionDuration @defaultEasing;
+      -moz-transition   : opacity @pageTransitionDuration @defaultEasing;
+      -webkit-transition: opacity @pageTransitionDuration @defaultEasing;
+      background-image: url(./images/logoAndName.svg);
+      background-position: left center;
+      background-size: contain;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .createButton {
+    white-space: nowrap;
+    height: 100%;
+
+    >a {
+      text-transform: uppercase;
+      padding: 1.25em;
+      padding-left: .scalable(5, 30)[@result];
+      padding-right: .scalable(5, 30)[@result];
+    }
+  }
+
+  .burgerIcon {
+    font-size    : 20px;
+    padding-right: 16px;
+  }
+}
+
+/** linear interpolate value from small to big as screen goes from small-size to big-size
 .scalable-unit(@property, @small, @big, @unit) {
   @{property}: clamp(unit(@small, @unit),
       calc(unit(@small, @unit) + (@big - @small) * ((100vw - @tabletBreakpoint) / (@desktopWidth - @tabletWidth))),
@@ -12,6 +75,7 @@
 .scalable(@property, @small, @big) {
   .scalable-unit(@property, @small, @big, px)
 }
+
 
 .navContainer {
   .scalable(padding-left, 15, 135);
@@ -96,3 +160,4 @@
     }
   }
 }
+*/

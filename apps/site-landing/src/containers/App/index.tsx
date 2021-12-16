@@ -28,7 +28,7 @@ export const App = () => {
   Prismic.useStore();
 
   return (
-    <div id={styles.app}>
+    <div id={styles.landing}>
       <MediaContextProvider>
         <style>{mediaStyles}</style>
         <MainNavigation />

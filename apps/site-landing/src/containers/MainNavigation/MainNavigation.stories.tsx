@@ -2,9 +2,10 @@ import React from 'react';
 import { Meta } from '@storybook/react';
 import { MainNavigation } from '.';
 import { withStore, withLanguageProvider, withMediaContext } from '@thecointech/storybookutils';
+import styles from '../App/styles.module.less';
 
 export default {
-  title: 'Landing/Header',
+  title: 'Landing/Navigation',
   component: MainNavigation,
   decorators: [
     withMediaContext,
@@ -13,4 +14,8 @@ export default {
   ]
 } as Meta;
 
-export const Header = () => <MainNavigation />;
+export const Navigation = () => (
+  <div id={styles.landing}>
+    <MainNavigation />
+  </div>
+);

@@ -41,6 +41,58 @@ const replaceSpaces = (chunks:  React.ReactNode) => (
 
 export const MainNavigation = () => {
   return (
+    <>
+      <div className={styles.background} />
+      <div id={styles.mainMenu}>
+        <LeftMenuItems />
+        <RightMenuItems />
+      </div>
+    </>
+  )
+};
+
+const LeftMenuItems = () => (
+  <Menu text className={styles.mainMenu} >
+      <a href="/" className={styles.logoLink}>
+        <div className={styles.logo} />
+      </a>
+    {Object.entries(menuItems).map(([key, msg]) =>
+      <HeaderLink key={key} to={`/${key}`} className="onlyBigScreen">
+        <FormattedMessage {...msg}>
+          {replaceSpaces}
+        </FormattedMessage>
+      </HeaderLink>
+    )}
+  </Menu>
+)
+
+const RightMenuItems = () => (
+  <Menu text>
+    <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
+      <FormattedMessage {...loginLink} />
+    </HeaderLink>
+    <Menu.Item className={`${styles.createButton} onlyBigScreen`}>
+      <CreateAccountButton />
+    </Menu.Item>
+    <Menu.Item>
+      <LanguageSwitcher />
+    </Menu.Item>
+    <Menu.Item className='onlySmallScreen'>
+      <Dropdown icon='content' direction="left" className='icon'>
+        <Dropdown.Menu>
+          {Object.entries(menuItems).map(([key, msg]) =>
+            <Dropdown.Item as={NavLink} key={key} to={`/${key}`}>
+              <FormattedMessage {...msg} />
+            </Dropdown.Item>
+          )}
+        </Dropdown.Menu>
+      </Dropdown>
+    </Menu.Item>
+  </Menu>
+)
+/*
+export const MainNavigation = () => {
+  return (
     <div className={styles.navContainer}>
       <Menu.Menu>
         <Link to="/" className={styles.logoLink}>
@@ -79,3 +131,4 @@ export const MainNavigation = () => {
     </div>
   );
 }
+*/
