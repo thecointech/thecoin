@@ -1,10 +1,15 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { Footer as FooterComponent } from '.';
+import { Footer as Component } from '.';
+import styles from '../../containers/App/styles.module.less';
 
 export default {
   title: 'App/Footer',
-  component: FooterComponent,
+  component: Component,
 } as Meta;
 
-export const Footer = () => <FooterComponent />;
+export const Footer = () => (
+  <div id={styles.app}>
+    <Component />
+  </div>
+);

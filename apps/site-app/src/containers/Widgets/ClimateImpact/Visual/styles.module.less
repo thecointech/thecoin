@@ -1,0 +1,78 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.climateImpact{
+    width:175px;
+    height:330px;
+    text-align: center;
+    padding: 10px;
+    color: @white;
+    border-radius: @absoluteBorderRadius;
+
+    h3,h4{
+        display: inline;
+        margin: 0 !important;
+        padding: 0 !important;
+        color: @white !important;
+    }
+    .textZone{
+
+        .smallScreen({
+            width: 50%;
+        });
+    }
+    .smallScreen({
+        height:174px;
+        width: 100%;
+        h5{
+            text-align: left;
+            padding-left: 10px;
+        }
+     });
+}
+
+.setBackground(@color, @url) {
+  background         : @color;
+  background-image   : url(@url);
+  background-repeat  : no-repeat;
+  background-position: bottom right;
+}
+
+.water {
+  .setBackground(@theCoinPaletteBlue1, "./images/img_water.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen5;
+  }
+}
+
+.wind {
+  .setBackground(@theCoinPaletteGold2, "./images/img_energy.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen4;
+  }
+}
+
+.earth {
+  .setBackground(@theCoinPalettePaleGreen2, "./images/img_co2.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen4;
+  }
+}
+
+.trees {
+  .setBackground(@theCoinPaletteGreen4, "./images/img_trees.svg");
+
+  h5 {
+    color: @theCoinPalettePaleGreen2;
+  }
+}
+
+.farm {
+  .setBackground(@theCoinPaletteGold4, "./images/img_farm.svg");
+
+  h5 {
+    color: @theCoinPaletteGreen5;
+  }
+}

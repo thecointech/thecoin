@@ -8,24 +8,26 @@
  */
 
 import * as React from 'react';
-import { Container, Rail, Ref, Sticky } from 'semantic-ui-react';
+import { Ref } from 'semantic-ui-react';
 import {MainNavigation} from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
-import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate/reducer';
-import { GreaterThanMobileSegment, MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { createRef } from 'react';
 import { useSidebar } from '../Sidebar';
 import { init } from './init'
 import { Routes } from './Routes';
+import { Sidebar } from '../Sidebar/Sidebar';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
-import '../../semantic/semantic.css';
-//import '@thecointech/site-semantic-theme/semantic.less';
+//import '../../semantic/semantic.css';
+import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
+import { BalanceWidget } from '../Widgets/Balance';
+import { ClimateImpactWidget } from '../Widgets/ClimateImpact';
 
 init();
 
@@ -37,30 +39,27 @@ export const App = () => {
   return (
     <MediaContextProvider>
       <style>{mediaStyles}</style>
-      <div id={styles.headerDecoration}>
+
+      <div id={styles.app}>
         <MainNavigation />
-      </div>
 
-      <div className={`${styles.contentContainer}`}>
-        <Container style={{ width: '100%' }} className={``}>
+        <Sidebar />
+
+        <div className={styles.contentContainer}>
           <MainPageTransition>
-            <GreaterThanMobileSegment>
-              <Rail internal position='left'>
-                <Sticky context={contextRef}>
-                  <PageSidebar />
-                </Sticky>
-              </Rail>
-            </GreaterThanMobileSegment>
-
             <Ref innerRef={contextRef}>
               <section id={styles.mainContent} className={styles.pageMainInner}>
                 <Routes />
               </section>
             </Ref>
           </MainPageTransition>
-        </Container>
+        </div>
+
+        <BalanceWidget />
+        <ClimateImpactWidget />
+
+        <Footer />
       </div>
-      <Footer />
     </MediaContextProvider>
   );
 }

@@ -9,6 +9,10 @@
       "path": "libs\\site-base"
     },
     {
+      "name": "site-semantic-theme",
+      "path": "libs\\site-semantic-theme"
+    },
+    {
       "name": "nft-service",
       "path": "apps\\nft-service"
     },

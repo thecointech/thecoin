@@ -10,7 +10,7 @@ type VisualProps={
 
 export const PageHeader = (props:VisualProps) => {
   return (
-    <Grid className={ `x2spaceBefore x4spaceAfter` } >
+    <Grid className="x4spaceAfter" >
         <Grid.Row>
           <Grid.Column width={2}>
             <img src={props.illustration} />

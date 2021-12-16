@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { LanguageProviderReducer } from "@thecointech/shared/containers/LanguageProvider/reducer";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import { Locale } from "@thecointech/shared/containers/LanguageProvider/types";
+import styles from './styles.module.less';
 
 const options = [
   { key: 1, text: 'EN', value: "en" },
@@ -19,6 +20,6 @@ export const LanguageSwitcher = () => {
   }, [langProvider]);
 
   return (
-    <Dropdown selection compact onChange={handleChange} value={locale} options={options} />
+    <Dropdown id={styles.switcherMenu} selection compact onChange={handleChange} value={locale} options={options} />
   )
 }
