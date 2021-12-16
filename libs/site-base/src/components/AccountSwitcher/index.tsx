@@ -1,6 +1,6 @@
 import React from "react";
 import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -23,10 +23,16 @@ export const AccountSwitcher = () => {
 
   const accounts = AccountMap.useAsArray();
   const accountsApi = AccountMap.useApi();
-  const activeAccount = AccountMap.useActive();
+  const active = AccountMap.useActive();
+  const location = useLocation();
+  const intl = useIntl();
+
+  // should not show account name during account creation
+  const activeAccount = location.pathname.startsWith("/addAccount")
+    ? null
+    : active;
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
-  const intl = useIntl();
   const trigger = activeAccount
     ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
     : intl.formatMessage(titleMsg)
