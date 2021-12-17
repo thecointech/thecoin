@@ -435,6 +435,62 @@
     "defaultMessage": "The following invalid characters were found: {chars}",
     "description": "error message on invalid characters"
   },
+  "shared.widgets.balanceandprofit.balance": {
+    "defaultMessage": "Balance",
+    "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
+  },
+  "shared.widgets.balanceandprofit.cad": {
+    "defaultMessage": "$CAD",
+    "description": "shared.widgets.balanceandprofit.cad: Title for widget Balance and profit"
+  },
+  "shared.widgets.balanceandprofit.profit": {
+    "defaultMessage": "Profit",
+    "description": "shared.widgets.balanceandprofit.profit: Title for widget Balance and profit"
+  },
+  "shared.widgets.climateimpact.earthText": {
+    "defaultMessage": "of CO2 offseted thanks to you",
+    "description": "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.earthUnity": {
+    "defaultMessage": "tonns",
+    "description": "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.farmText": {
+    "defaultMessage": "were planted thanks to you",
+    "description": "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.farmUnity": {
+    "defaultMessage": "trees",
+    "description": "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.title": {
+    "defaultMessage": "Climate Impact",
+    "description": "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.treesText": {
+    "defaultMessage": "were planted thanks to you",
+    "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.treesUnity": {
+    "defaultMessage": "trees",
+    "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.waterText": {
+    "defaultMessage": "of water was cleaned thanks to you",
+    "description": "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.waterUnity": {
+    "defaultMessage": "litres",
+    "description": "shared.widgets.climateimpact.waterUnity: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.windText": {
+    "defaultMessage": "of CO2 offseted thanks to you",
+    "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
+  },
+  "shared.widgets.climateimpact.windUnity": {
+    "defaultMessage": "tonnes",
+    "description": "shared.widgets.climateimpact.windUnity: Text for the Widget Climate impact in the app"
+  },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",
     "description": "app.accounts.transfer.step2: Message for step2 for the make a payment page / transfer tab"
