@@ -26,8 +26,7 @@ import { Sidebar } from '../Sidebar/Sidebar';
 //import '../../semantic/semantic.css';
 import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-import { BalanceWidget } from '../Widgets/Balance';
-import { ClimateImpactWidget } from '../Widgets/ClimateImpact';
+import { WidgetWrapper, BalanceAndProfit, ClimateImpact} from '../Widgets'
 
 init();
 
@@ -55,8 +54,12 @@ export const App = () => {
           </MainPageTransition>
         </div>
 
-        <BalanceWidget />
-        <ClimateImpactWidget />
+        <WidgetWrapper area='top'>
+          <BalanceAndProfit />
+        </WidgetWrapper>
+        <WidgetWrapper area='bottom'>
+          <ClimateImpact />
+        </WidgetWrapper>
 
         <Footer />
       </div>
