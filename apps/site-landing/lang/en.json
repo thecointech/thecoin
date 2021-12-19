@@ -43,6 +43,10 @@
     "defaultMessage": "Subscribe to our newsletter:",
     "description": "Footer CTA Part2"
   },
+  "4+OlAD": {
+    "defaultMessage": "Save, invest and spend money with TheCoin,",
+    "description": "home page tagline part1"
+  },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
@@ -181,6 +185,10 @@
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
+  },
+  "VA10q2": {
+    "defaultMessage": "get 100% of benefits and save our Planet.",
+    "description": "home page tagline part2"
   },
   "W8cvxr": {
     "defaultMessage": "We Do More",

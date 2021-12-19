@@ -1,14 +1,20 @@
 const path = require('path');
 const siteBaseRoot = path.resolve(__dirname, '..');
+const basePath = path.join(siteBaseRoot, 'src', 'semantic', 'na', 'na');
+
+// Given a resource path, search up to find the owning 'src' path
+const findSitePath = (fullPath) => {
+  const parts = fullPath.split(path.sep);
+  let idx = parts.lastIndexOf('src');
+  if (idx < 0) idx = parts.length;
+  return path.join(...parts.slice(0, idx), 'src', 'semantic');
+}
 
 // Vars to pass to LESS
-module.exports = {
-  paths: [
-    path.join(siteBaseRoot, 'src', 'semantic', 'na', 'na'),
-  ],
+module.exports = (resourcePath) => ({
+  paths: [basePath],
   modifyVars: {
     projectRoot: `"${siteBaseRoot}"`,
-    // We use the CWD to find the path to the currently compiling project
-    siteFolder: `"${path.join(process.cwd(), 'src', 'semantic')}"`,
+    siteFolder: `"${findSitePath(resourcePath)}"`,
   }
-}
+})

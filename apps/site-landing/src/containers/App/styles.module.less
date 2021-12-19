@@ -4,6 +4,7 @@
 #landing {
 
   display: grid;
+  grid-gap: 0px;
   grid-template-rows: .scalable(80, 90)[@result] 1fr 451px;
   grid-template-columns: auto @pageGridContent auto;
   grid-template-areas:
@@ -12,7 +13,6 @@
     "lgap leftf footer rightf rgap";
 
   .smallScreen({
-    grid-gap: 0px;
     grid-template-rows: 80px 1fr 630px;
     grid-template-columns: 15px 1fr 10px;
     grid-template-areas:

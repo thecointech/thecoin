@@ -19,6 +19,10 @@
     "defaultMessage": "Email money to anyone with an interac e-Transfer.",
     "description": "app.accounts.redeem.description: Description for the make a payment page / etransfert tab"
   },
+  "024I2T": {
+    "defaultMessage": "Balance",
+    "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
+  },
   "09nd3/": {
     "defaultMessage": "Step 1 of 3: Checking transfer availability...",
     "description": "app.accounts.transfer.step1: Message for step1 for the make a payment page / transfer tab"
@@ -51,6 +55,10 @@
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.billPayments.transferOutProgress: Message for the form the make a payment page / bill payment tab"
   },
+  "4mI50N": {
+    "defaultMessage": "Climate Impact",
+    "description": "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
+  },
   "5Ft5py": {
     "defaultMessage": "Security answer",
     "description": "app.accounts.redeem.form.answerLabel: Label for the form the make a payment page / etransfert tab"
@@ -70,6 +78,10 @@
   "6Kkk3Z": {
     "defaultMessage": "Account verified",
     "description": "app.settings.verified.titleVerified: Title for the verfified section in the setting page in the app"
+  },
+  "6ch8JH": {
+    "defaultMessage": "were planted thanks to you",
+    "description": "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"
   },
   "6x8xv9": {
     "defaultMessage": "Processing Transfer...",
@@ -103,9 +115,21 @@
     "defaultMessage": "Your account backed up with:",
     "description": "Description for the tab Storage options in the setting page in the app"
   },
+  "DBPJIB": {
+    "defaultMessage": "litres",
+    "description": "shared.widgets.climateimpact.waterUnity: Text for the Widget Climate impact in the app"
+  },
+  "DR7wHb": {
+    "defaultMessage": "tonnes",
+    "description": "shared.widgets.climateimpact.windUnity: Text for the Widget Climate impact in the app"
+  },
   "Drc6Pk": {
     "defaultMessage": "Recipient email",
     "description": "app.accounts.redeem.form.emailLabel: Label for the form the make a payment page / etransfert tab"
+  },
+  "EMxzDE": {
+    "defaultMessage": "were planted thanks to you",
+    "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
   },
   "GGCxth": {
     "defaultMessage": "Personal Details",
@@ -118,6 +142,10 @@
   "H+LMwK": {
     "defaultMessage": "Templates",
     "description": "app.makepayments.tabs.templates: Title for the tabs the Make a payment page in the app"
+  },
+  "HOPoKy": {
+    "defaultMessage": "trees",
+    "description": "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"
   },
   "I+PK92": {
     "defaultMessage": "Destination Address",
@@ -171,6 +199,10 @@
     "defaultMessage": "Personal Details",
     "description": "app.settings.tabs.personaldetails: Title for the tabs the setting page in the app"
   },
+  "Munucn": {
+    "defaultMessage": "of CO2 offseted thanks to you",
+    "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
+  },
   "N81UTF": {
     "defaultMessage": "You have entered {len} numbers, but your account requires {max}",
     "description": "app.accounts.billPayments.invalidNumericChars: Error message for the bill payement page"
@@ -182,6 +214,10 @@
   "NKupBU": {
     "defaultMessage": "Overview",
     "description": "app.accounts.sidebar.home: Title for the Home entry in the menu"
+  },
+  "NOGO9X": {
+    "defaultMessage": "$CAD",
+    "description": "shared.widgets.balanceandprofit.cad: Title for widget Balance and profit"
   },
   "OFfaj+": {
     "defaultMessage": "All",
@@ -235,6 +271,10 @@
     "defaultMessage": "Step 1 of 3: Checking payment availability...",
     "description": "app.accounts.billPayments.step1: Message for the form the make a payment page / bill payment tab"
   },
+  "T4t7Q/": {
+    "defaultMessage": "of water was cleaned thanks to you",
+    "description": "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"
+  },
   "TMGzGh": {
     "defaultMessage": "Topup balance",
     "description": "app.topup.title: Main title for the topup page in the app"
@@ -270,6 +310,10 @@
   "XEmqRg": {
     "defaultMessage": "No Account Loaded",
     "description": "app.accounts.sidebar.profile: Default account name to show in sidebar when no accounts loaded"
+  },
+  "Xc4r1i": {
+    "defaultMessage": "trees",
+    "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
   },
   "Y0jYZ8": {
     "defaultMessage": "Step 2 of 3: Sending sell order to our servers...",
@@ -359,6 +403,10 @@
     "defaultMessage": "Invalid characters are: < or >, '{ or }', [ or ], %, &, #, \\ or \"",
     "description": "app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab"
   },
+  "kMr8B/": {
+    "defaultMessage": "Profit",
+    "description": "shared.widgets.balanceandprofit.profit: Title for widget Balance and profit"
+  },
   "knRmks": {
     "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
     "description": "app.makepayments.description: Description for the Make a payment page in the app"
@@ -435,61 +483,8 @@
     "defaultMessage": "The following invalid characters were found: {chars}",
     "description": "error message on invalid characters"
   },
-  "shared.widgets.balanceandprofit.balance": {
-    "defaultMessage": "Balance",
-    "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
-  },
-  "shared.widgets.balanceandprofit.cad": {
-    "defaultMessage": "$CAD",
-    "description": "shared.widgets.balanceandprofit.cad: Title for widget Balance and profit"
-  },
-  "shared.widgets.balanceandprofit.profit": {
-    "defaultMessage": "Profit",
-    "description": "shared.widgets.balanceandprofit.profit: Title for widget Balance and profit"
-  },
-  "shared.widgets.climateimpact.earthText": {
-    "defaultMessage": "of CO2 offseted thanks to you",
-    "description": "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.earthUnity": {
-    "defaultMessage": "tonns",
-    "description": "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.farmText": {
-    "defaultMessage": "were planted thanks to you",
-    "description": "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.farmUnity": {
-    "defaultMessage": "trees",
-    "description": "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"
-  },
   "shared.widgets.climateimpact.title": {
-    "defaultMessage": "Climate Impact",
-    "description": "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.treesText": {
-    "defaultMessage": "were planted thanks to you",
-    "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.treesUnity": {
-    "defaultMessage": "trees",
-    "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.waterText": {
-    "defaultMessage": "of water was cleaned thanks to you",
-    "description": "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.waterUnity": {
-    "defaultMessage": "litres",
-    "description": "shared.widgets.climateimpact.waterUnity: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.windText": {
-    "defaultMessage": "of CO2 offseted thanks to you",
-    "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
-  },
-  "shared.widgets.climateimpact.windUnity": {
-    "defaultMessage": "tonnes",
-    "description": "shared.widgets.climateimpact.windUnity: Text for the Widget Climate impact in the app"
+    "defaultMessage": "Climate Impact"
   },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",
@@ -498,6 +493,10 @@
   "tbPsAT": {
     "defaultMessage": "Security question",
     "description": "app.accounts.redeem.form.questionLabel: Label for the form the make a payment page / etransfert tab"
+  },
+  "tnlU5d": {
+    "defaultMessage": "of CO2 offseted thanks to you",
+    "description": "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"
   },
   "tzrpPi": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
@@ -550,5 +549,9 @@
   "yfANOQ": {
     "defaultMessage": "Help",
     "description": "app.MainNavigation.help: Title for the help entry in the menu"
+  },
+  "yyDRED": {
+    "defaultMessage": "tonns",
+    "description": "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"
   }
 }
