@@ -1,6 +1,25 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#underwaterPart{
+.background {
+  grid-row-start: healthier;
+  grid-row-end: healthier;
+  grid-column-start: left;
+  grid-column-end: right;
+}
+
+.content{
+  grid-area: healthier;
+
+  .water{
+    position: relative;
+    z-index: -1;
+    margin-top: -520px;
+  }
+  .header{
+    text-align: center;
+    z-index: 10;
+  }
+
   h2, h2.ui.header{
     margin-bottom: 0px;
     padding-bottom: 0px;
@@ -23,27 +42,6 @@
   width: 50%;
   margin-bottom: -240px;
   z-index: 3;
-}
-.content{
-  z-index: 10;
-  padding-top: 120px;
-  div{
-    margin: auto;
-    max-width: 950px;
-  }
-}
-
-.landscape{
-  padding-top: 80px;
-  .water{
-    position: relative;
-    z-index: -1;
-    margin-top: -520px;
-  }
-  .header{
-    text-align: center;
-    z-index: 10;
-  }
 }
 
 .illustrationDeco{

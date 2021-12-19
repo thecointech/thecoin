@@ -1,31 +1,31 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { Stickers } from '../stickers';
-
-import styles from '../styles.module.less';
 import landscapeGreenPartMobile from '../images/illustration_header_mob.svg';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
+import {translations} from '../translations';
+import { FormattedMessage } from 'react-intl';
+import styles from '../styles.module.less';
 
-
-export const LandscapeMobile = (Props: { mainTitle: React.ReactNode; mainDescription: React.ReactNode; mainButton: React.ReactNode; }) => {
+export const LandscapeMobile = () => {
   return (
     <div className={styles.landscapeContent} >
       <Grid padded doubling stackable className={ `x8spaceBefore` }>
         <Grid.Row >
           <Grid.Column id={styles.headingWrapper}>
               <Header as="h1">
-                {Props.mainTitle}
+                <FormattedMessage {...translations.title} />
                 <Header.Subheader>
-                  {Props.mainDescription}
+                  <FormattedMessage {...translations.description} />
                 </Header.Subheader>
               </Header>
               <ButtonPrimary className={`${styles.overTheLandscape} x2spaceBefore` } as="a" href={`${process.env.URL_SITE_APP}`} size='large'>
-                {Props.mainButton}
+                <FormattedMessage {...translations.button} />
               </ButtonPrimary>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Stickers Mobile={true} />
+      <Stickers />
       <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
     </div>
   );

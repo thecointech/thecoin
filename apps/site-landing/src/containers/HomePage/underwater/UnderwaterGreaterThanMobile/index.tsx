@@ -51,57 +51,59 @@ const translations = defineMessages({
 export const Underwater = () => {
 
   return (
-    <React.Fragment>
-      <img className={ `${styles.illustration} x4spaceBefore` } src={illustration} />
-      <div id={styles.underwaterPart} className={ `${styles.landscape} x10spaceBefore` }>
-        <div className={ `${styles.header} x22spaceBefore x8spaceAfter` }>
-              <Header as='h2' id={ `x32spaceBefore` }>
-                <FormattedMessage {...translations.title} />
-                <Header.Subheader className={`x5spaceBefore`}>
-                  <FormattedMessage {...translations.description} />
-                </Header.Subheader>
-              </Header>
-          </div>
-        <Grid className={styles.content} padded doubling stackable>
+    <>
+      <div className={styles.background}>
+        <img className={styles.illustration} src={illustration} />
+      </div>
+      <div className={styles.content}>
+        <div className={`${styles.header} x22spaceBefore x8spaceAfter`}>
+          <Header as='h2' id={`x32spaceBefore`}>
+            <FormattedMessage {...translations.title} />
+            <Header.Subheader className={`x5spaceBefore`}>
+              <FormattedMessage {...translations.description} />
+            </Header.Subheader>
+          </Header>
+        </div>
+        <Grid padded doubling stackable>
           <Grid.Row columns="3" >
             <Grid.Column>
-                <img src={co2} />
-                <Header as='h4'>
-                  <FormattedMessage {...translations.differenceTitle} />
-                </Header>
-                <p>
-                  <FormattedMessage {...translations.differenceDescription} />
-                </p>
-                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.differenceLink} /></LearnMoreLink>
+              <img src={co2} />
+              <Header as='h4'>
+                <FormattedMessage {...translations.differenceTitle} />
+              </Header>
+              <p>
+                <FormattedMessage {...translations.differenceDescription} />
+              </p>
+              <LearnMoreLink to="/healthier"><FormattedMessage {...translations.differenceLink} /></LearnMoreLink>
             </Grid.Column>
 
             <Grid.Column columns={3} >
-                <img src={science} />
-                <Header as='h4'>
-                  <FormattedMessage {...translations.scienceTitle} />
-                </Header>
-                <p>
-                  <FormattedMessage {...translations.scienceDescription} />
-                </p>
-                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.scienceLink} /></LearnMoreLink>
+              <img src={science} />
+              <Header as='h4'>
+                <FormattedMessage {...translations.scienceTitle} />
+              </Header>
+              <p>
+                <FormattedMessage {...translations.scienceDescription} />
+              </p>
+              <LearnMoreLink to="/healthier"><FormattedMessage {...translations.scienceLink} /></LearnMoreLink>
             </Grid.Column>
 
             <Grid.Column columns={3} >
-                <img src={trees} />
-                <Header as='h4'>
-                  <FormattedMessage {...translations.treesTitle} />
-                </Header>
-                <p>
-                  <FormattedMessage {...translations.treesDescription} />
-                </p>
-                <LearnMoreLink to="/healthier"><FormattedMessage {...translations.treesLink} /></LearnMoreLink>
+              <img src={trees} />
+              <Header as='h4'>
+                <FormattedMessage {...translations.treesTitle} />
+              </Header>
+              <p>
+                <FormattedMessage {...translations.treesDescription} />
+              </p>
+              <LearnMoreLink to="/healthier"><FormattedMessage {...translations.treesLink} /></LearnMoreLink>
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <img className={styles.water} src={background} />
-        <img src={illustrationDeco} className={styles.illustrationDeco}/>
+        <img src={illustrationDeco} className={styles.illustrationDeco} />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

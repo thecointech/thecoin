@@ -1,14 +1,11 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 // Separate out the column declaration to allow re-use throughout the app
-.layoutColumns {
-  grid-template-columns: auto .scalable(20, 131)[@result] minmax(auto, 1173px) .scalable(20, 131)[@result] auto;
-}
-
 #landing {
 
   display: grid;
   grid-template-rows: .scalable(80, 90)[@result] 1fr 451px;
+  grid-template-columns: auto @pageGridContent auto;
   grid-template-areas:
     "lgap lefth header righth rgap"
     "lgap main  main   main   rgap"

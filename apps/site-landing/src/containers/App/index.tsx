@@ -28,7 +28,7 @@ export const App = () => {
   return (
     <MediaContextProvider>
       <style>{mediaStyles}</style>
-      <div id={styles.landing} className={styles.layoutColumns}>
+      <div id={styles.landing} >
         <MainNavigation />
 
         <div className={styles.contentContainer}>
