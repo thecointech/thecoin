@@ -3,7 +3,7 @@ import { Header } from 'semantic-ui-react';
 import styles from './content.module.less';
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { Stickers } from '../stickers';
+import { Stickers } from './stickers';
 
 
 const title = defineMessage({

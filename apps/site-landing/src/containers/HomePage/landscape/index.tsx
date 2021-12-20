@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { LandscapeGreaterThanMobile } from './LandscapeGreaterThanMobile';
+import { Background } from './Background';
+import { Content } from './Content';
 
 export const Landscape = () => {
-
   return (
-    <LandscapeGreaterThanMobile />
-
+    <>
+      <Background />
+      <Content />
+    </>
   );
 }
 
