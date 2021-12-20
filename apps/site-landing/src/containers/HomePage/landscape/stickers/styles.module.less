@@ -3,9 +3,8 @@
 .stickers{
 
   display: flex;
-  margin-top: 86px;
 
-  .card{
+  .card {
     background-color: @white;
     border-radius: 15px;
     border: 0.2px solid @theCoinPalettePaleGreen2;
@@ -17,5 +16,17 @@
       margin-bottom: 10px;
     }
   }
+
+  .smallScreen({
+    .card {
+      margin-top: 30px;
+      margin-right: 0px;
+      max-width: 75%;
+      min-width: 319px;
+      padding: 30px 25px 30px 30px;
+    }
+    flex-direction: column;
+    align-items: center;
+  });
 }
 

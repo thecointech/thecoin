@@ -1,14 +1,33 @@
 
+@import "~@thecointech/site-semantic-theme/variables.less";
+
 #content {
   grid-area: landscape;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-top: 64px;
+  margin-bottom: 102px;
 
   .tagline {
-    margin-top: 32px
+    margin-top: 32px;
+    > span {
+      display: block;
+      .smallScreen({
+        display: unset;
+        &::after {
+          content: ' '
+        }
+      })
+    }
   }
   .startNow {
     margin-top: 24px;
     font-size: 12px;
     padding: .85rem 3.25rem;
   }
+
+  .smallScreen({
+    margin-top: 35px;
+  })
 }

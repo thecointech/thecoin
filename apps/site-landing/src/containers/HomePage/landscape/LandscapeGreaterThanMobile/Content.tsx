@@ -26,17 +26,18 @@ const button = defineMessage({
 
 export const Content = () => (
   <div id={styles.content}>
-    <Header as="h1">
-      <FormattedMessage {...title} />
-      <Header.Subheader className={styles.tagline}>
-        <FormattedMessage {...description1} />
-        <br />
-        <FormattedMessage {...description2} />
-      </Header.Subheader>
-    </Header>
-    <ButtonPrimary className={styles.startNow} as="a" href={`${process.env.URL_SITE_APP}`} size='large'>
-      <FormattedMessage {...button} />
-    </ButtonPrimary>
+    <div>
+      <Header as="h1">
+        <FormattedMessage {...title} />
+        <Header.Subheader className={styles.tagline}>
+          <FormattedMessage tagName={"span"} {...description1} />
+          <FormattedMessage tagName={"span"} {...description2} />
+        </Header.Subheader>
+      </Header>
+      <ButtonPrimary className={styles.startNow} as="a" href={`${process.env.URL_SITE_APP}`} size='large'>
+        <FormattedMessage {...button} />
+      </ButtonPrimary>
+    </div>
     <Stickers />
   </div>
 );

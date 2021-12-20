@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import { Stickers } from '../stickers';
-import landscapeGreenPartMobile from '../images/illustration_header_mob.svg';
+
 import { ButtonPrimary } from '@thecointech/site-base/components/Buttons';
 import {translations} from '../translations';
 import { FormattedMessage } from 'react-intl';
@@ -26,7 +26,6 @@ export const LandscapeMobile = () => {
         </Grid.Row>
       </Grid>
       <Stickers />
-      <img className={styles.landscapeMobile} src={landscapeGreenPartMobile} />
     </div>
   );
 }
