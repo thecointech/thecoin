@@ -12,7 +12,7 @@ const f = async () => {
   const siteRoot = path.join(process.cwd(), "src");
 
   const {paths, modifyVars} = options(siteRoot)
-  const outputFolder = modifyVars.siteFolder.replace(/"/g, '');
+  const outputFolder = path.join(process.cwd(), 'src', 'semantic');
   var outputFilename = path.join(outputFolder, "semantic.css");
 
   try {
@@ -25,6 +25,7 @@ const f = async () => {
       globalVars: modifyVars,
     })
 
+    console.log("Checking out: " + outputFolder);
     if (!fs.existsSync(outputFolder))
       fs.mkdirSync(outputFolder);
 
