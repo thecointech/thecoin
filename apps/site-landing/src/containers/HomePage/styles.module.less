@@ -2,7 +2,7 @@
 
 .pageContainer {
   display: grid;
-  grid-template-columns: @pageGridContent;
+  grid-template-columns: @pageGridLeft minmax(0, 1fr) @pageGridRight;
   grid-template-rows: auto;
   grid-template-areas:
     "left landscape  right"

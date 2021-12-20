@@ -7,6 +7,6 @@
 // A common definition for columns because we can't use a single grid for
 // the entire page, so this provides single source for columns
 @pageGridLeft: .scalable(20, 131)[@result];
-@pageGridCenter: minmax(auto, 1173px);
+@pageGridCenter: minmax(auto, 1178px);
 @pageGridRight: .scalable(20, 131)[@result];
 @pageGridContent: @pageGridLeft @pageGridCenter @pageGridRight;
