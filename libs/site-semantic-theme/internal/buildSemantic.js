@@ -11,9 +11,9 @@ const f = async () => {
   const semanticLess = path.join(semanticRoot, "semantic.less");
   const siteRoot = path.join(process.cwd(), "src");
 
-  var outputFilename = path.join(outputFolder, "semantic.css");
   const {paths, modifyVars} = options(siteRoot)
   const outputFolder = modifyVars.siteFolder.replace(/"/g, '');
+  var outputFilename = path.join(outputFolder, "semantic.css");
 
   try {
     const content = fs.readFileSync(semanticLess).toString();
