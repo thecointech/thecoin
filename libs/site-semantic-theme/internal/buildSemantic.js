@@ -12,8 +12,8 @@ const f = async () => {
   const siteRoot = path.join(process.cwd(), "src");
 
   const {paths, modifyVars} = options(siteRoot)
-  const outputFolder = path.join(process.cwd(), 'src', 'semantic');
-  var outputFilename = path.join(outputFolder, "semantic.css");
+  const outputFolder = path.join(siteRoot, 'semantic');
+  const outputFilename = path.join(outputFolder, "semantic.css");
 
   try {
     const content = fs.readFileSync(semanticLess).toString();
@@ -25,7 +25,6 @@ const f = async () => {
       globalVars: modifyVars,
     })
 
-    console.log("Checking out: " + outputFolder);
     if (!fs.existsSync(outputFolder))
       fs.mkdirSync(outputFolder);
 
