@@ -1,15 +1,15 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { LandscapeGreaterThanMobile } from './LandscapeGreaterThanMobile';
+import { Landscape as Component } from '.';
 import styles from '../styles.module.less';
 
 export default {
   title: 'Landing/Homepage/Landscape',
-  component: LandscapeGreaterThanMobile,
+  component: Component,
 } as Meta;
 
 export const Landscape: Story = () => (
   <div className={styles.pageContainer}>
-    <LandscapeGreaterThanMobile />
+    <Component />
   </div>
 );
