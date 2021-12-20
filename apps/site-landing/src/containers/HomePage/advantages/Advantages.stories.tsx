@@ -1,18 +1,15 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
-import { Advantages } from '.';
-
-import { ProviderProps } from 'react-redux';
-import { AnyAction } from 'redux';
+import { Advantages as Component } from '.';
+import styles from '../styles.module.less';
 
 export default {
   title: 'Landing/Homepage/Advantages',
-  component: Advantages,
-  argTypes: {}
+  component: Component,
 } as Meta;
 
-const Template = () => <Advantages />;
-
-export const Both: Story<ProviderProps<AnyAction>> = Template.bind({});
-Both.args = {};
+export const Advantages: Story = () => (
+  <div className={styles.pageContainer}>
+    <Component />
+  </div>
+);

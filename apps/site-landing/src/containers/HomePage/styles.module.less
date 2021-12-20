@@ -2,6 +2,7 @@
 
 .pageContainer {
   display: grid;
+  max-width: @maxContentWidth;
   grid-template-columns: @pageGridLeft minmax(0, 1fr) @pageGridRight;
   grid-template-rows: auto;
   grid-template-areas:

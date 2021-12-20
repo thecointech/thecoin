@@ -1,23 +1,37 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
 #advantages{
-  grid-area: advantages;
+  grid-area: advantages advantages;
+  grid-column-start: left;
+  grid-column-end: right;
   background-image: url('./images/background.svg');
   background-repeat: repeat;
+  background-position: center;
   color: #FFFFFF;
-  #advantageContent{
-    padding-top: 4%;
-  }
-  h1,h2,h3,h4{
-    display: inline;
+
+  .smallScreen({
+    background-color: @theCoinPaletteGreen4;
+    background-image: url('./images/2block_pattern.svg');
+  });
+
+  .content {
+    height: 100%;
     margin: 0;
-    color: #FFFFFF;
-  }
-  div{
-    &.row{
-      padding: 0;
+    padding: 50px 0;
+
+    .smallScreen({
+      padding: 40px 0;
+    });
+
+    h1,h2,h3,h4{
+      display: inline;
     }
-  }
-  hr.advantagesLines{
-    color: #ffffff;
+    div {
+      white-space: nowrap;
+    }
+    hr.advantagesLines{
+      color: #ffffff;
+    }
   }
 }
 

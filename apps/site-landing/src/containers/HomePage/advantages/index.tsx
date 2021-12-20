@@ -19,8 +19,8 @@ const translations = defineMessages({
 export const Advantages = () => {
 
   return (
-    <div id={styles.advantages} className={`x2spaceBefore`}>
-      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable id={styles.advantageContent}>
+    <div id={styles.advantages}>
+      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable className={styles.content}>
         <Grid.Row>
           <Grid.Column width={2}>
             <h2>0</h2><h4>%</h4><br />
