@@ -1,62 +1,20 @@
 .background {
 
   // Cover entire landscape area
-  grid-area: left / landscape / landscape / right;
+  grid-area: landscape;
+  grid-column-start: left;
+  grid-column-end: right;
   z-index: -10;
+  height: 701px;
+  position: relative;
 
-  .birds{
-    position: absolute;
-    top: 120px;
-    right: 20%;
-    z-index:0;
-  }
-  .sky{
-    position: absolute;
-    z-index:-1;
-    top: 30px;
-    right:0;
-  }
 
-  .cloudsHigh{
+  > img {
     position: absolute;
-    top: 20px;
-    z-index:-1;
-    right: 10%;
-  }
-  .cloudsLeft{
-    position: absolute;
-    top: 230px;
-    z-index:0;
-    left:0;
-  }
-  .cloudsRight{
-    position: absolute;
-    top: 340px;
-    z-index:-1;
-    right: 0px;
-  }
-  .sun{
-    position: absolute;
-    right: 9%;
-    top: 230px;
-    z-index:0;
-    width: 40%;
+    right: 0%;
+    transform: translateX(0%);
   }
   .sunAura{
-    filter: invert(var(--value, 100%));
-    position: absolute;
-    right: -5%;
-    top: 20px;
-    opacity: 0.1;
-    z-index:0;
-    width: 75%;
-  }
-
-  .greenery{
-    position: absolute;
-    z-index:9;
-    top: 250px;
-    right: 0;
-    float: right;
+    mix-blend-mode: screen;
   }
 }
