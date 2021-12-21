@@ -19,28 +19,26 @@ const translations = defineMessages({
 export const Advantages = () => {
 
   return (
-    <React.Fragment>
-      <div id={styles.advantages} className={ `x2spaceBefore` }>
-        <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable id={styles.advantageContent}>
-          <Grid.Row>
-            <Grid.Column width={2}>
-              <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage {...translations.monthlyFees} />
-            </Grid.Column>
-            <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
-            <Grid.Column width={2}>
-              <h2>0</h2><h4>%</h4><br />
-              <FormattedMessage {...translations.minimum} />
-            </Grid.Column>
-            <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
-            <Grid.Column width={3}>
-              <h2>100</h2><h4>%</h4><br />
-              <FormattedMessage {...translations.benefits} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-       </div>
-    </React.Fragment>
+    <div id={styles.advantages} className={`x2spaceBefore`}>
+      <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable id={styles.advantageContent}>
+        <Grid.Row>
+          <Grid.Column width={2}>
+            <h2>0</h2><h4>%</h4><br />
+            <FormattedMessage {...translations.monthlyFees} />
+          </Grid.Column>
+          <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
+          <Grid.Column width={2}>
+            <h2>0</h2><h4>%</h4><br />
+            <FormattedMessage {...translations.minimum} />
+          </Grid.Column>
+          <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
+          <Grid.Column width={3}>
+            <h2>100</h2><h4>%</h4><br />
+            <FormattedMessage {...translations.benefits} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </div>
   );
 }
 

@@ -1,28 +1,21 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#stickers{
-  margin-left: 5%;
-  &.cardContainer{
-    padding-left: 10px;
-  }
-  &.cardContainerMobile{
-    top: 50%;
-    position: absolute;
-    padding-left: 5%;
-    padding-right: 5%;
-    .card{
-      max-width: 100%;
-      padding: 30px !important;
-      margin-top: 25px !important;
+.stickers{
+
+  display: flex;
+  margin-top: 86px;
+
+  .card{
+    background-color: @white;
+    border-radius: 15px;
+    border: 0.2px solid @theCoinPalettePaleGreen2;
+    padding: 34px 0px 34px 40px;
+    max-width: 320px;
+    margin-right: 32px;
+
+    > h4 {
+      margin-bottom: 10px;
     }
   }
 }
 
-.card{
-  background-color: @white;
-  border-radius: 15px;
-  border: 0.2px solid @theCoinPalettePaleGreen2;
-  padding: 40px;
-  z-index:10;
-  max-width: 300px;
-}

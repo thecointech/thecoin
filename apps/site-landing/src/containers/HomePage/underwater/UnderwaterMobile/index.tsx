@@ -2,7 +2,6 @@ import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
-import sharedStyles from '../styles.module.less';
 import co2 from '../images/icon_5_1.svg';
 import science from '../images/icon_5_2.svg';
 import trees from '../images/icon_5_3.svg';
@@ -53,7 +52,7 @@ export const UnderwaterMobile = () => {
 
   return (
     <>
-      <div id={sharedStyles.underwaterPart} className={styles.landscapeUnderwater}>
+      <div className={styles.background}>
         <div className={ `${styles.header} x30spaceBefore` }>
               <Header as='h2' className={ `x1spaceAfter` }>
                 <FormattedMessage {...translations.title} />

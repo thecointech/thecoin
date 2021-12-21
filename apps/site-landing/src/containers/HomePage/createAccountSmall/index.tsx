@@ -13,7 +13,7 @@ const translations = defineMessages({
 export const CreateAccountSmall = () => {
 
   return (
-      <Grid textAlign='center' verticalAlign='middle' padded className={ `${styles.content} x10spaceBefore x6spaceLeft` }>
+      <Grid textAlign='center' verticalAlign='middle' padded className={ `${styles.content}` }>
         <Grid.Row>
           <Grid.Column>
             <Header as='h3'>

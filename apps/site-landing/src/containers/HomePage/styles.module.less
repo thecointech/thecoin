@@ -1,0 +1,18 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.pageContainer {
+  display: grid;
+  grid-template-columns: @pageGridContent;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "left landscape  right"
+    "left advantages right"
+    "left wealthier  right"
+    "left ctaSmall   right"
+    "left healthier  right"
+    "left benefits   right";
+}
+
+.benefits {
+  grid-area: benefits;
+}

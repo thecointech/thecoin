@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessage, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 import illustrationPeople from './images/illust_grow.svg';
 import illustrationPlant from './images/illust_flowers.svg';
@@ -12,37 +12,39 @@ export enum TypeCreateAccountBanner {
     Plants
 }
 
-export type Props = {
-    Type: TypeCreateAccountBanner;
+const images = {
+  [TypeCreateAccountBanner.People]: illustrationPeople,
+  [TypeCreateAccountBanner.Plants]: illustrationPlant,
 }
 
-const translations = defineMessages({
-    title : {
-        defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
-        description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'}
-    });
+export type Props = {
+  Type: TypeCreateAccountBanner;
+  className?: string;
+}
+
+const title = defineMessage({
+  defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
+  description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'
+});
 
 export const CreateAccountBanner = (props: Props) => {
 
-    let illustration = illustrationPlant;
-    if (props.Type === 0) {
-        illustration = illustrationPeople;
-    }
-   return (
-        <Grid className={ `${styles.content} x20spaceBefore` } id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
-            <Grid.Row>
-                <Grid.Column>
-                    <Header as='h3'>
-                        <FormattedMessage {...translations.title} />
-                    </Header>
-                    <CreateAccountButton size='large' />
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column textAlign='left'>
-                    <img src={ illustration } />
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    );
+  const illustration = images[props.Type];
+  return (
+    <Grid className={`${styles.content} ${props.className ?? ''} x20spaceBefore`} id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
+      <Grid.Row>
+        <Grid.Column>
+          <Header as='h3'>
+            <FormattedMessage {...title} />
+          </Header>
+          <CreateAccountButton size='large' />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column textAlign='left'>
+          <img src={illustration} />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
 }

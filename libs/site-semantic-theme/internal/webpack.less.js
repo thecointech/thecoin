@@ -3,7 +3,7 @@
 // This file defines the LESS loaders common to our site build and
 // to our storybook webpack based at the root
 //
-const { paths, modifyVars } = require('./vars.js');
+const options = require('./vars.js');
 
 // In dev mode, leave the modules classnames intact so we can debug easier
 const modules = process.env.NODE_ENV !== 'production'
@@ -31,9 +31,7 @@ module.exports = {
         loader: 'less-loader',
         options: {
           sourceMap: true,
-          lessOptions: {
-            modifyVars,
-          }
+          lessOptions: (loaderContext) => options(loaderContext.resourcePath),
         },
       },
     ],
@@ -56,10 +54,7 @@ module.exports = {
         loader: 'less-loader',
         options: {
           sourceMap: true,
-          lessOptions: {
-            paths,
-            modifyVars,
-          }
+          lessOptions: (loaderContext) => options(loaderContext.resourcePath),
         },
       },
     ],

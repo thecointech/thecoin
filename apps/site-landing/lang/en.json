@@ -39,6 +39,14 @@
     "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
     "description": "site.compare.description: Main description for the How much will you make? graph page"
   },
+  "3vm1hM": {
+    "defaultMessage": "Subscribe to our newsletter:",
+    "description": "Footer CTA Part2"
+  },
+  "4+OlAD": {
+    "defaultMessage": "Save, invest and spend money with TheCoin,",
+    "description": "home page tagline part1"
+  },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
@@ -50,10 +58,6 @@
   "4MHk2t": {
     "defaultMessage": "We Do More",
     "description": "site.wedomore.title: Title for the We Do More page"
-  },
-  "4N/YNr": {
-    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter",
-    "description": "site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter"
   },
   "4fyTGb": {
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
@@ -82,6 +86,10 @@
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
+  },
+  "D7Hm8s": {
+    "defaultMessage": "The future is better because of you & us.",
+    "description": "Footer CTA Part1"
   },
   "FAWgn/": {
     "defaultMessage": "Show me the Potential!"
@@ -177,6 +185,10 @@
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
+  },
+  "VA10q2": {
+    "defaultMessage": "get 100% of benefits and save our Planet.",
+    "description": "home page tagline part2"
   },
   "W8cvxr": {
     "defaultMessage": "We Do More",

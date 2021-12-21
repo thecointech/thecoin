@@ -8,9 +8,8 @@ import styles from './styles.module.less';
 export const Footer = () => {
 
   return (
-    <div id={styles.footerContainer} className={styles.desktopContent}>
-        <Subscribe />
-        <FooterShared />
-    </div>
+    <FooterShared id={styles.footerOverrides} background={styles.background}>
+      <Subscribe />
+    </FooterShared>
   );
 }

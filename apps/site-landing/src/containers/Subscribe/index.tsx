@@ -6,9 +6,12 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Result, StatusMessage } from './status';
 
 const translations = defineMessages({
-  description : {
-    defaultMessage: 'The future is better because of you & us. Subscribe to our newsletter',
-    description: 'site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter'},
+  description1 : {
+    defaultMessage: 'The future is better because of you & us.',
+    description: 'Footer CTA Part1'},
+  description2 : {
+      defaultMessage: 'Subscribe to our newsletter:',
+      description: 'Footer CTA Part2'},
   button : {
     defaultMessage: 'Subscribe',
     description: 'site.subscribe.button: Button for the bottom subscription part for the site'}
@@ -33,15 +36,15 @@ export const Subscribe = () => {
     }
   }, [email]);
 
-
   return (
     <div id={styles.subscribeBlock}>
-      <span className={ `${styles.subContainer} x2spaceBefore x6spaceAfter` }>
+      <span className={styles.message}>
           <h3>
-            <FormattedMessage {...translations.description} />
+            <FormattedMessage tagName="div" {...translations.description1} />
+            <FormattedMessage tagName="div" {...translations.description2} />
           </h3>
       </span>
-      <span className={styles.search}>
+      <span className={styles.subscribeForm}>
         <StatusMessage result={result} />
         <Input
           onChange={(_e, data) => setEmail(data.value)}

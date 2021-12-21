@@ -28,6 +28,20 @@
 @pageBackground: @white;
 @maxContentWidth: 1440px;
 
+// Scalable settings run from small to big depending on screen size
+.scalable-unit(@small, @big, @unit) {
+  @result: calc(unit(@small, @unit) + (@big - @small) * ((100vw - @tabletBreakpoint) / (@desktopWidth - @tabletWidth)))
+}
+.scalable-clamped(@small, @big, @unit) {
+  @result: clamp(unit(@small, @unit),
+    .scalable-unit(@small, @big, @unit)[@result],
+    unit(@big, @unit)
+  );
+}
+.scalable(@small, @big) {
+  .scalable-clamped(@small, @big, px)
+}
+
 /*-------------------
        Fonts
 --------------------*/
