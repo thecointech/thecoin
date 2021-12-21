@@ -11,7 +11,7 @@ import { Landscape } from './landscape';
 import { Advantages } from './advantages';
 import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
-import { Underwater } from './underwater/UnderwaterGreaterThanMobile';
+import { Healthier } from './underwater';
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 import  styles from './styles.module.less';
 
@@ -22,7 +22,7 @@ export const HomePage = () => {
       <Advantages />
       <Wealthier />
       <CreateAccountSmall />
-      <Underwater />
+      <Healthier />
       <CreateAccountBanner className={styles.benefits} Type={TypeCreateAccountBanner.Plants} />
     </div>
   );

@@ -8,7 +8,7 @@ import startnow from './images/icon3_01.svg';
 import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
-import { LearnMoreLink } from 'components/LearnMoreLink';
+import { SectionItem } from '../SectionItem';
 
 const translations = defineMessages({
   title: {
@@ -96,22 +96,7 @@ const items = {
   }
 }
 
-const ItemDisplay = (props: typeof items['startNow']) => (
-  <div className={styles.item}>
-    <div>
-      <img src={props.img} />
-      <Header as='h4'>
-        <FormattedMessage {...props.text.title} />
-      </Header>
-      <p>
-        <FormattedMessage {...props.text.description} />
-      </p>
-    </div>
-    <div>
-      <LearnMoreLink to={props.to}><FormattedMessage {...props.text.link} /></LearnMoreLink>
-    </div>
-  </div>
-)
+
 
 export const Wealthier = () => (
   <>
@@ -125,13 +110,13 @@ export const Wealthier = () => (
           </Header.Subheader>
         </Header>
       </div>
-      <ItemDisplay {...items.startNow} />
-      <ItemDisplay {...items.investment} />
+      <SectionItem {...items.startNow} />
+      <SectionItem {...items.investment} />
       <div className={styles.illustration}>
         <img src={coffeePerson} />
       </div>
-      <ItemDisplay {...items.growth} />
-      <ItemDisplay {...items.profits} />
+      <SectionItem {...items.growth} />
+      <SectionItem {...items.profits} />
     </div>
   </>
 )

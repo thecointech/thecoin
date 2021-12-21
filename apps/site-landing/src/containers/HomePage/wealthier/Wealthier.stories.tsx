@@ -6,7 +6,6 @@ import styles from '../styles.module.less';
 export default {
   title: 'Landing/Homepage/Wealthier',
   component: Component,
-  argTypes: {}
 } as Meta;
 
 
