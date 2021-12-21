@@ -2,12 +2,16 @@ const path = require('path');
 const siteBaseRoot = path.resolve(__dirname, '..');
 const basePath = path.join(siteBaseRoot, 'src', 'semantic', 'na', 'na');
 
+// Minimum depth of our repo
+const repoPathDepth = path.join(siteBaseRoot, '..', '..').split(path.sep).length;
+
 // Given a resource path, search up to find the owning 'src' path
-const findSitePath = (fullPath) => {
-  const parsed = path.parse(fullPath);
-  if (parsed.base == 'src') return parsed.dir;
-  if (!parsed.dir) return false;
-  return findSitePath(parsed.dir);
+const findSitePath = (fullPath, basePath) => {
+  const split = fullPath.split(path.sep);
+  const idx = split.lastIndexOf('src');
+  // Limit to within our repo
+  if (idx < repoPathDepth) return false;
+  return split.slice(0, idx).join(path.sep);
 }
 
 const getSemanticPath = (rsrcPath)  => {
