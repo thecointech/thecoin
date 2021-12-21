@@ -1,20 +1,86 @@
-.content {
-  grid-area     : wealthier;
-  padding-top   : 80px !important;
-  padding-bottom: 80px !important;
-  z-index       : 10;
+@import "~@thecointech/site-semantic-theme/variables.less";
 
-  div {
-    margin   : auto;
-    max-width: 1100px;
-  }
+.background {
+  grid-area        : wealthier;
+  grid-column-start: left;
+  grid-column-end  : right;
 
-  img.illustration {
-    max-width  : 400px;
-    margin-left: -50px;
-  }
+  .bigScreen({
+    background-image   : url(../images/logo_lines.svg), url(../images/logo_lines.svg);
+    background-repeat  : no-repeat;
+    background-position: -202px -150px, right -350px top 230px;
+  });
 }
 
-.illustrationMobile {
-  margin-left: -150px;
+.content {
+  grid-area   : wealthier;
+  margin-top :.scalable(50, 130)[@result];
+  margin-left: .scalable(0, 90)[@result];
+  padding-bottom: 40px;
+  padding-right: .scalable(0, 40)[@result];
+
+  display: grid;
+  grid-gap: .scalable(0, 40)[@result];
+  grid-auto-flow: row;
+  grid-template-rows: auto auto;
+  grid-template-columns: 370px auto auto;
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    a {
+      padding-top: 1rem;
+    }
+  }
+
+  .illustration {
+    // Don't let the image size affect the grid
+    > img {
+      position: absolute;
+      transform: translate(-104px, -50px);
+    }
+  }
+
+  // Mid-sized rules.  2-column/3-row
+  .tabletScreen({
+    grid-auto-flow: column;
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto auto;
+
+    .illustration > img {
+      transform: translate(-40px, -60px) scale(.8);
+    }
+    .item {
+      padding-right: 20px;
+    }
+  });
+
+  .mobileScreen({
+    padding-top : 50px;
+    grid-template-rows: auto 1fr 1fr 200px 1fr 1fr;
+    grid-template-columns: 100%;
+
+    .item {
+      padding-bottom: 20px;
+    }
+
+    .illustration > img {
+      transform: translate(-22%, -50px) scale(.8);
+    }
+
+    :nth-child(5), :nth-child(6) {
+      text-align: right;
+
+      // tweak bottom border
+      a {
+        position: relative;
+        div {
+          position: absolute;
+          right: 0;
+        }
+      }
+    }
+  });
 }
