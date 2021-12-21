@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run start date
-        run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
+      run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
     - uses: actions/checkout@v2
       # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
