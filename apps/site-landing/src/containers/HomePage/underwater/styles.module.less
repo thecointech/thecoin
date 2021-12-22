@@ -1,61 +1,92 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .background {
-  grid-row-start: healthier;
-  grid-row-end: healthier;
+  grid-row-start   : healthier;
+  grid-row-end     : healthier;
   grid-column-start: left;
-  grid-column-end: right;
+  grid-column-end  : right;
 }
 
-.content{
-  grid-area: healthier;
+.content {
+  grid-area        : healthier;
+  grid-column-start: left;
+  grid-column-end  : right;
 
-  .water{
-    position: relative;
-    z-index: -1;
-    margin-top: -520px;
-  }
-  .header{
+  .headerImage {
+    max-height: 258px;
     text-align: center;
-    z-index: 10;
-  }
 
-  h2, h2.ui.header{
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-  }
-  a{
-    color: @theCoinPaletteDarkBlue2;
-    &:hover{
-      color: @theCoinPaletteDarkBlue1;
-    }
-    &:active{
-      color: @theCoinPaletteDarkBlue3;
+    >img {
+      max-width : 100%;
+      max-height: 100%;
+      margin    : auto;
     }
   }
-}
 
-.illustration{
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  width: 50%;
-  margin-bottom: -240px;
-  z-index: 3;
-}
+  .body {
+    margin-top    : -8px;
+    padding-top   : .scalable(20, 150)[@result];
+    padding-bottom: 150px;
+    padding-left  : 30px;
+    padding-right : 30px;
 
-.illustrationDeco{
-  position: absolute;
-  right: 20px;
-}
-/* Chrome for the coral decoration specifically. May need another solution */
-@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
-  .illustrationDeco{
-    margin-top: -200px;
-  }
-}
-@-moz-document url-prefix() {
-  .illustrationDeco{
-    margin-top: 0px;
+    background-image   : url('./images/smallillustration_right.svg'), url('./images/full_background.svg'), linear-gradient(#C5DFFE, #C5DFFE);
+    background-repeat  : no-repeat;
+    background-position: right 94px bottom 20px, center bottom, center top;
+
+    .title {
+      text-align: center;
+
+      span {
+        display: block;
+      }
+    }
+
+    .items {
+      display        : flex;
+      margin         : auto;
+      margin-top     : 2.5rem;
+      max-width      : 80%;
+      justify-content: space-between;
+
+      >div {
+        width: 30%;
+
+        a {
+          color: @theCoinPaletteDarkBlue2;
+
+          &:hover {
+            color: @theCoinPaletteDarkBlue1;
+          }
+
+          &:active {
+            color: @theCoinPaletteDarkBlue3;
+          }
+        }
+      }
+    }
+
+    .mobileScreen({
+      .title span {
+        display: unset;
+        &::after {
+          content: ' '
+        }
+      }
+      .items {
+        margin-bottom : 50px;
+        flex-direction: column;
+        text-align    : center;
+        align-items   : center;
+
+        > div {
+          width: 100%;
+
+          a > div {
+            margin: auto;
+          }
+        }
+      }
+    });
   }
 }
